@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>CASPER Library Reference Manual</TITLE>
+<META NAME="description" CONTENT="CASPER Library Reference Manual">
+<META NAME="keywords" CONTENT="sys_sram">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sys_sram.css">
+
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
+<BR>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<H1 ALIGN="CENTER"><B>CASPER Library</B> 
+<BR>
+Reference Manual</H1>
+<DIV>
+
+<P ALIGN="CENTER"><STRONG>Last Updated May 7, 2008</STRONG></P>
+</DIV>
+
+<P>
+
+<H1><A NAME="SECTION00010000000000000000"></A> <A NAME="sram"></A>
+<BR>
+SRAM <I>(sram)</I>
+</H1> <B>Block Author</B>: Pierre Yves Droz, Henry Chen 
+<BR><B>Document Author</B>: Ben Blackman 
+<H2><A NAME="SECTION00011000000000000000">
+Summary</A>
+</H2>The sram block represents a 36x512k SRAM chip on the IBOB. It stores 36-bit words and requires 19 bits to access its address space.
+
+<P>
+
+<H2><A NAME="SECTION00012000000000000000">
+Mask Parameters</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
+<TH ALIGN="LEFT"><B>Variable</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT">SRAM</TD>
+<TD ALIGN="LEFT"><I>sram</I></TD>
+<TD ALIGN="LEFT">Selects which SRAM chip this block represents.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Data Type</TD>
+<TD ALIGN="LEFT"><I>arith_type</I></TD>
+<TD ALIGN="LEFT">Type to which the data is cast on both the input and output.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Data binary point (bitwidth is 36)</TD>
+<TD ALIGN="LEFT"><I>bin_pt</I></TD>
+<TD ALIGN="LEFT">Position of the binary point of the data.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Sample period</TD>
+<TD ALIGN="LEFT"><I>sample_period</I></TD>
+<TD ALIGN="LEFT">Sets the period with reference to the clock frequency.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Simulate SRAM using ModelSim</TD>
+<TD ALIGN="LEFT"><I>use_sim</I></TD>
+<TD ALIGN="LEFT">Turns ModelSim simulation on or off.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00013000000000000000">
+Ports</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Port</B></TD>
+<TH ALIGN="LEFT"><B>Dir.</B></TH>
+<TH ALIGN="LEFT"><B>Data Type</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT"><I>we</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">boolean</TD>
+<TD ALIGN="LEFT">A signal that when high, causes the data on data_in to be written to address.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>be</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">unsigned_4_0</TD>
+<TD ALIGN="LEFT">A signal that enables different 9-bit bytes of data_in to be written.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>address</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">unsigned_19_0</TD>
+<TD ALIGN="LEFT">A signal that specifies the address where either data_in is to be stored or from where data_out is to be read.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>data_in</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">arith_type_36</TD>
+<TD ALIGN="LEFT">A signal that contains the data to be stored.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>data_out</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">arith_type_36</TD>
+<TD ALIGN="LEFT">A signal that contains the data coming out of address.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>data_valid</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">boolean</TD>
+<TD ALIGN="LEFT">A signal that is high when data_out is valid.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00014000000000000000">
+Description</A>
+</H2>
+
+<H4><A NAME="SECTION00014010000000000000">
+Usage</A>
+</H4>
+The SRAM block is 36x512k, signifying that its input and output are 36-bit words and it can store 512k words. Each clock cyle, if <I>we</I> is high, then each bit of be determines whether each 9-bit chunk will be written to address. <I>be</I> is 4 bits with the highest bit corresponding to the most significant chunk (so if <I>be</I> is 1100, only the top 18 bits will be written). If <I>we</I> is low, then the SRAM block ignores <I>data_in</I> and be and reads the word stored at <I>address</I>.
+
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG><B>CASPER Library</B> 
+<BR>
+Reference Manual</STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-local_icons -split 1 sys_sram.tex</TT>
+<P>
+The translation was initiated by  on 2008-05-07<HR>
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
+<BR>
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2008-05-07
+</ADDRESS>
+</BODY>
+</HTML>

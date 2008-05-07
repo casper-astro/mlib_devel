@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Adder Tree (adder_tree)</TITLE>
+<META NAME="description" CONTENT="Adder Tree (adder_tree)">
+<META NAME="keywords" CONTENT="index">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="index.css">
+
+<LINK REL="next" HREF="node4.html">
+<LINK REL="previous" HREF="node2.html">
+<LINK REL="up" HREF="node2.html">
+<LINK REL="next" HREF="node4.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html663"
+  HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html659"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html653"
+  HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html661"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html664"
+  HREF="node4.html">Barrel Switcher (barrel_switcher)</A>
+<B> Up:</B> <A NAME="tex2html660"
+  HREF="node2.html">Signal Processing Blocks</A>
+<B> Previous:</B> <A NAME="tex2html654"
+  HREF="node2.html">Signal Processing Blocks</A>
+ &nbsp; <B>  <A NAME="tex2html662"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html665"
+  HREF="node3.html#SECTION00211000000000000000">Summary</A>
+<LI><A NAME="tex2html666"
+  HREF="node3.html#SECTION00212000000000000000">Mask Parameters</A>
+<LI><A NAME="tex2html667"
+  HREF="node3.html#SECTION00213000000000000000">Ports</A>
+<LI><A NAME="tex2html668"
+  HREF="node3.html#SECTION00214000000000000000">Description</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION00210000000000000000"></A><A NAME="addertree"></A>
+<BR>
+Adder Tree <I>(adder_tree)</I>
+</H1> <B>Block Author</B>: Aaron Parsons 
+<BR><B>Document Author</B>: Aaron Parsons 
+<H2><A NAME="SECTION00211000000000000000">
+Summary</A>
+</H2>Sums all inputs using a tree of adds and delays.
+
+<P>
+
+<H2><A NAME="SECTION00212000000000000000">
+Mask Parameters</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
+<TH ALIGN="LEFT"><B>Variable</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT">No. of inputs.</TD>
+<TD ALIGN="LEFT"><I>n_inputs</I></TD>
+<TD ALIGN="LEFT">The number of inputs to be summed.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Add Latency</TD>
+<TD ALIGN="LEFT"><I>latency</I></TD>
+<TD ALIGN="LEFT">The latency of each stage through the adder tree.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00213000000000000000">
+Ports</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Port</B></TD>
+<TH ALIGN="LEFT"><B>Dir.</B></TH>
+<TH ALIGN="LEFT"><B>Data Type</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT"><I>sync</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Boolean</TD>
+<TD ALIGN="LEFT">Indicates the next clock cycle containing valid data</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>din</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">A number to be summed.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00214000000000000000">
+Description</A>
+</H2>Sums all inputs using a tree of adds and delays. Total latency is <!-- MATH
+ $ceil(log_{2}(n\_inputs))*latency$
+ -->
+<IMG
+ WIDTH="208" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.png"
+ ALT="$ceil(log_{2}(n\_inputs))*latency$">
+
+<BR><HR>
+<ADDRESS>
+
+2008-05-07
+</ADDRESS>
+</BODY>
+</HTML>

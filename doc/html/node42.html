@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>RC Multiplier (rcmult)</TITLE>
+<META NAME="description" CONTENT="RC Multiplier (rcmult)">
+<META NAME="keywords" CONTENT="index">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="index.css">
+
+<LINK REL="next" HREF="node43.html">
+<LINK REL="previous" HREF="node41.html">
+<LINK REL="up" HREF="node2.html">
+<LINK REL="next" HREF="node43.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1298"
+  HREF="node43.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1294"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1288"
+  HREF="node41.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1296"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1299"
+  HREF="node43.html">Reorder (reorder)</A>
+<B> Up:</B> <A NAME="tex2html1295"
+  HREF="node2.html">Signal Processing Blocks</A>
+<B> Previous:</B> <A NAME="tex2html1289"
+  HREF="node41.html">The Pulse Extender Block</A>
+ &nbsp; <B>  <A NAME="tex2html1297"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html1300"
+  HREF="node42.html#SECTION002401000000000000000">Summary</A>
+<LI><A NAME="tex2html1301"
+  HREF="node42.html#SECTION002402000000000000000">Mask Parameters</A>
+<LI><A NAME="tex2html1302"
+  HREF="node42.html#SECTION002403000000000000000">Ports</A>
+<LI><A NAME="tex2html1303"
+  HREF="node42.html#SECTION002404000000000000000">Description</A>
+<UL>
+<LI><A NAME="tex2html1304"
+  HREF="node42.html#SECTION002404010000000000000">Usage</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION002400000000000000000"></A><A NAME="rcmult"></A>
+<BR>
+RC Multiplier <I>(rcmult)</I>
+</H1> <B>Block Author</B>: Aaron Parsons 
+<BR><B>Document Author</B>: Ben Blackman 
+<H2><A NAME="SECTION002401000000000000000">
+Summary</A>
+</H2>Takes an input and sine and cosine value and gives out both real and imaginary outputs.
+
+<P>
+
+<H2><A NAME="SECTION002402000000000000000">
+Mask Parameters</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
+<TH ALIGN="LEFT"><B>Variable</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT">Latency</TD>
+<TD ALIGN="LEFT"><I>latency</I></TD>
+<TD ALIGN="LEFT">The latency of the multipliers and of the <I>rcmult</I> block.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION002403000000000000000">
+Ports</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Port</B></TD>
+<TH ALIGN="LEFT"><B>Dir.</B></TH>
+<TH ALIGN="LEFT"><B>Data Type</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT"><I>d</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The input to be multiplied by sine and cosine values.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>sin</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The sine value used to multiply <I>d</I> and generate the <I>imag</I> output.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>cos</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The cosine value used to multiply <I>d</I> and generate the <I>real</I> output.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>real</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The result of multiplying <I>d</I> with <I>cos</I>.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>imag</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The result of multiplying <I>d</I> with <I>sin</I>.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION002404000000000000000">
+Description</A>
+</H2>
+
+<H4><A NAME="SECTION002404010000000000000">
+Usage</A>
+</H4>
+This <I>rcmult</I> block takes an input value, <I>d</I>, and computes the real and imaginary components by multiplying by the <I>cos</I> and <I>sin</I>, respectively. The block has a delay of <I>latency</I> associated with it.
+ 
+
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1298"
+  HREF="node43.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1294"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1288"
+  HREF="node41.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1296"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1299"
+  HREF="node43.html">Reorder (reorder)</A>
+<B> Up:</B> <A NAME="tex2html1295"
+  HREF="node2.html">Signal Processing Blocks</A>
+<B> Previous:</B> <A NAME="tex2html1289"
+  HREF="node41.html">The Pulse Extender Block</A>
+ &nbsp; <B>  <A NAME="tex2html1297"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2008-05-07
+</ADDRESS>
+</BODY>
+</HTML>

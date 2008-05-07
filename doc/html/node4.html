@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Barrel Switcher (barrel_switcher)</TITLE>
+<META NAME="description" CONTENT="Barrel Switcher (barrel_switcher)">
+<META NAME="keywords" CONTENT="index">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="index.css">
+
+<LINK REL="next" HREF="node5.html">
+<LINK REL="previous" HREF="node3.html">
+<LINK REL="up" HREF="node2.html">
+<LINK REL="next" HREF="node5.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html679"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html675"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html669"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html677"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html680"
+  HREF="node5.html">Bit reverser (bit_reverse)</A>
+<B> Up:</B> <A NAME="tex2html676"
+  HREF="node2.html">Signal Processing Blocks</A>
+<B> Previous:</B> <A NAME="tex2html670"
+  HREF="node3.html">Adder Tree (adder_tree)</A>
+ &nbsp; <B>  <A NAME="tex2html678"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html681"
+  HREF="node4.html#SECTION00221000000000000000">Summary</A>
+<LI><A NAME="tex2html682"
+  HREF="node4.html#SECTION00222000000000000000">Mask Parameters</A>
+<LI><A NAME="tex2html683"
+  HREF="node4.html#SECTION00223000000000000000">Ports</A>
+<LI><A NAME="tex2html684"
+  HREF="node4.html#SECTION00224000000000000000">Description</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION00220000000000000000"></A><A NAME="barrelswitcher"></A>
+<BR>
+Barrel Switcher <I>(barrel_switcher)</I>
+</H1> <B>Block Author</B>: Aaron Parsons 
+<BR><B>Document Author</B>: Aaron Parsons 
+<H2><A NAME="SECTION00221000000000000000">
+Summary</A>
+</H2>Maps a number of inputs to a number of outputs by rotating In(N) to Out(N+M) (where M is specified on the sel input), wrapping around to Out1 when necessary.
+
+<P>
+
+<H2><A NAME="SECTION00222000000000000000">
+Mask Parameters</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
+<TH ALIGN="LEFT"><B>Variable</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT">Number of inputs</TD>
+<TD ALIGN="LEFT"><I>n_inputs</I></TD>
+<TD ALIGN="LEFT">The number of parallel inputs (and outputs).</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00223000000000000000">
+Ports</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Port</B></TD>
+<TH ALIGN="LEFT"><B>Dir.</B></TH>
+<TH ALIGN="LEFT"><B>Data Type</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT"><I>sync</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Boolean</TD>
+<TD ALIGN="LEFT">Indicates the next clock cycle contains valid data</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>In</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The stream(s) to be transposed.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>sync_out</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">Boolean</TD>
+<TD ALIGN="LEFT">Indicates that data out will be valid next clock cycle.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>Out</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The transposed stream(s).</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00224000000000000000">
+Description</A>
+</H2>Maps a number of inputs to a number of outputs by rotating In(N) to Out(N+M) (where M is specified on the sel input), wrapping around to Out1 when necessary.
+
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html679"
+  HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html675"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html669"
+  HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html677"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html680"
+  HREF="node5.html">Bit reverser (bit_reverse)</A>
+<B> Up:</B> <A NAME="tex2html676"
+  HREF="node2.html">Signal Processing Blocks</A>
+<B> Previous:</B> <A NAME="tex2html670"
+  HREF="node3.html">Adder Tree (adder_tree)</A>
+ &nbsp; <B>  <A NAME="tex2html678"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2008-05-07
+</ADDRESS>
+</BODY>
+</HTML>

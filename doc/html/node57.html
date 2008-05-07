@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>DAC (dac)</TITLE>
+<META NAME="description" CONTENT="DAC (dac)">
+<META NAME="keywords" CONTENT="index">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="index.css">
+
+<LINK REL="next" HREF="node58.html">
+<LINK REL="previous" HREF="node56.html">
+<LINK REL="up" HREF="node55.html">
+<LINK REL="next" HREF="node58.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1610"
+  HREF="node58.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1606"
+  HREF="node55.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1600"
+  HREF="node56.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1608"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1611"
+  HREF="node58.html">DRAM (dram)</A>
+<B> Up:</B> <A NAME="tex2html1607"
+  HREF="node55.html">System Blocks</A>
+<B> Previous:</B> <A NAME="tex2html1601"
+  HREF="node56.html">ADC (adc)</A>
+ &nbsp; <B>  <A NAME="tex2html1609"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html1612"
+  HREF="node57.html#SECTION00421000000000000000">Summary</A>
+<LI><A NAME="tex2html1613"
+  HREF="node57.html#SECTION00422000000000000000">Mask Parameters</A>
+<LI><A NAME="tex2html1614"
+  HREF="node57.html#SECTION00423000000000000000">Ports</A>
+<LI><A NAME="tex2html1615"
+  HREF="node57.html#SECTION00424000000000000000">Description</A>
+<UL>
+<LI><A NAME="tex2html1616"
+  HREF="node57.html#SECTION00424010000000000000">Usage</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION00420000000000000000"></A><A NAME="dac"></A>
+<BR>
+DAC <I>(dac)</I>
+</H1> <B>Block Author</B>: Henry Chen 
+<BR><B>Document Author</B>: Ben Blackman 
+<H2><A NAME="SECTION00421000000000000000">
+Summary</A>
+</H2>The DAC block converts 4 digital inputs to 1 analog output. The <I>dac</I> runs at 4x FPGA clock frequency, outputting analog converted samples 0 through 3 each FPGA clock cycle.
+
+<P>
+
+<H2><A NAME="SECTION00422000000000000000">
+Mask Parameters</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
+<TH ALIGN="LEFT"><B>Variable</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT">DAC board</TD>
+<TD ALIGN="LEFT"><I>dac_brd</I></TD>
+<TD ALIGN="LEFT">Select which IBOB port to run this <I>dac</I>.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">DAC clock rate (MHz)</TD>
+<TD ALIGN="LEFT"><I>dac_clk_rate</I></TD>
+<TD ALIGN="LEFT">The clock rate to run the <I>dac</I>. Must be 4x FPGA clock rate.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Sample period</TD>
+<TD ALIGN="LEFT"><I>sample_period</I></TD>
+<TD ALIGN="LEFT">Sets the period at which the <I>dac</I> outputs samples (ie 2 means every other cycle).</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Show Implementation Parameters</TD>
+<TD ALIGN="LEFT"><I>show_param</I></TD>
+<TD ALIGN="LEFT">Allows the user to set the implementation parameters.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Invert output clock phase</TD>
+<TD ALIGN="LEFT"><I>invert_clock</I></TD>
+<TD ALIGN="LEFT">When unchecked, the <I>dac</I> samples the data aligned with the clock. When checked, the <I>dac</I> samples the data aligned with an inverted clock.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00423000000000000000">
+Ports</A>
+</H2>
+<TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
+<TR><TD ALIGN="LEFT"><B>Port</B></TD>
+<TH ALIGN="LEFT"><B>Dir.</B></TH>
+<TH ALIGN="LEFT"><B>Data Type</B></TH>
+<TH ALIGN="LEFT"><B>Description</B></TH>
+</TR>
+<TR><TD ALIGN="LEFT"><I>dataX</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Fix_9_8</TD>
+<TD ALIGN="LEFT">One of 4 digital inputs to be converted to analog.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>sim_out</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">double</TD>
+<TD ALIGN="LEFT">Analog output of <I>dac</I>. Note: For simulation only.</TD>
+</TR>
+</TABLE>
+<P>
+
+<H2><A NAME="SECTION00424000000000000000">
+Description</A>
+</H2>
+
+<H4><A NAME="SECTION00424010000000000000">
+Usage</A>
+</H4>
+The <I>dac</I> takes 4 <I>Fix_9_8</I> inputs and outputs an analog stream. The <I>dac</I> runs at 4x the FPGA clock speed.
+
+<BR>
+<BR>
+To be updated.
+
+
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1610"
+  HREF="node58.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1606"
+  HREF="node55.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1600"
+  HREF="node56.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1608"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1611"
+  HREF="node58.html">DRAM (dram)</A>
+<B> Up:</B> <A NAME="tex2html1607"
+  HREF="node55.html">System Blocks</A>
+<B> Previous:</B> <A NAME="tex2html1601"
+  HREF="node56.html">ADC (adc)</A>
+ &nbsp; <B>  <A NAME="tex2html1609"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+
+2008-05-07
+</ADDRESS>
+</BODY>
+</HTML>
