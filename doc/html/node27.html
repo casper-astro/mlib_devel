@@ -44,7 +44,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Up:</B> <A NAME="tex2html1047"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1041"
-  HREF="node26.html">FFT (fft)</A>
+  HREF="node26.html">Real-sampled Biplex FFT (with</A>
  &nbsp; <B>  <A NAME="tex2html1049"
   HREF="node1.html">Contents</A></B> 
 <BR>
@@ -75,7 +75,7 @@ Real-sampled Wideband FFT <I>(fft_wideband_real)</I>
 Summary</A>
 </H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a single real stream using half the normal resources (this requires at least 4 time samples in parallel).  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts), so there the number of output ports is half the number of input ports.  Uses a biplex FFT architecture under the hood which has been extended to handled time samples in parallel.  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
  WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
- SRC="img6.png"
+ SRC="img11.png"
  ALT="$2^{N-1}-1$">.
 
 <P>
@@ -90,7 +90,7 @@ Mask Parameters</A>
 </TR>
 <TR><TD ALIGN="LEFT">Size of FFT: (<IMG
  WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img7.png"
+ SRC="img10.png"
  ALT="$2^?$">)</TD>
 <TD ALIGN="LEFT"><I>FFTSize</I></TD>
 <TD ALIGN="LEFT">The number of channels in the complex FFT core.  The number of positive frequency channels output is half of this.</TD>
@@ -101,7 +101,7 @@ Mask Parameters</A>
 </TR>
 <TR><TD ALIGN="LEFT">Number of Simultaneous Inputs: (<IMG
  WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img7.png"
+ SRC="img10.png"
  ALT="$2^?$">)</TD>
 <TD ALIGN="LEFT"><I>n_inputs</I></TD>
 <TD ALIGN="LEFT">The number of parallel time samples which are presented to the FFT core each clock.  This must be at least <IMG
@@ -178,7 +178,7 @@ Ports</A>
 Description</A>
 </H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a single real stream using half the normal resources (this requires at least 4 time samples in parallel).  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts), so there the number of output ports is half the number of input ports.  Uses a biplex FFT architecture under the hood which has been extended to handled time samples in parallel.  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
  WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
- SRC="img6.png"
+ SRC="img11.png"
  ALT="$2^{N-1}-1$">.
 
 
@@ -203,13 +203,13 @@ Description</A>
 <B> Up:</B> <A NAME="tex2html1047"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1041"
-  HREF="node26.html">FFT (fft)</A>
+  HREF="node26.html">Real-sampled Biplex FFT (with</A>
  &nbsp; <B>  <A NAME="tex2html1049"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

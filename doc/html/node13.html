@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Complex to Real-Imag Block (c_to_ri)</TITLE>
-<META NAME="description" CONTENT="Complex to Real-Imag Block (c_to_ri)">
+<TITLE>Complex Adder/Subtractor (complex_addsub)</TITLE>
+<META NAME="description" CONTENT="Complex Adder/Subtractor (complex_addsub)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -26,26 +26,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html824"
+<A NAME="tex2html823"
   HREF="node14.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html820"
+<A NAME="tex2html819"
   HREF="node2.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html814"
+<A NAME="tex2html813"
   HREF="node12.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html822"
+<A NAME="tex2html821"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html825"
+<B> Next:</B> <A NAME="tex2html824"
   HREF="node14.html">DDS (dds)</A>
-<B> Up:</B> <A NAME="tex2html821"
+<B> Up:</B> <A NAME="tex2html820"
   HREF="node2.html">Signal Processing Blocks</A>
-<B> Previous:</B> <A NAME="tex2html815"
-  HREF="node12.html">Complex Adder/Subtractor (complex_addsub)</A>
- &nbsp; <B>  <A NAME="tex2html823"
+<B> Previous:</B> <A NAME="tex2html814"
+  HREF="node12.html">Conjugating Complex 4-bit Multiplier</A>
+ &nbsp; <B>  <A NAME="tex2html822"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
@@ -54,26 +54,29 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL>
-<LI><A NAME="tex2html826"
+<LI><A NAME="tex2html825"
   HREF="node13.html#SECTION002111000000000000000">Summary</A>
-<LI><A NAME="tex2html827"
+<LI><A NAME="tex2html826"
   HREF="node13.html#SECTION002112000000000000000">Mask Parameters</A>
-<LI><A NAME="tex2html828"
+<LI><A NAME="tex2html827"
   HREF="node13.html#SECTION002113000000000000000">Ports</A>
-<LI><A NAME="tex2html829"
+<LI><A NAME="tex2html828"
   HREF="node13.html#SECTION002114000000000000000">Description</A>
-</UL>
+<UL>
+<LI><A NAME="tex2html829"
+  HREF="node13.html#SECTION002114010000000000000">Usage</A>
+</UL></UL>
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002110000000000000000"></A><A NAME="ctori"></A>
+<H1><A NAME="SECTION002110000000000000000"></A><A NAME="complexaddsub"></A>
 <BR>
-Complex to Real-Imag Block <I>(c_to_ri)</I>
+Complex Adder/Subtractor <I>(complex_addsub)</I>
 </H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Aaron Parsons 
+<BR><B>Document Author</B>: Ben Blackman 
 <H2><A NAME="SECTION002111000000000000000">
 Summary</A>
-</H2>Outputs real and imaginary components of a complex input. Useful for simplifying interconnects. See also Real-Imag to Complex. (ri_to_c, <A HREF="node44.html#ritoc">1.42</A>)
+</H2>This block does a complex addition and subtraction of 2 complex numbers, <I>a</I> and <I>b</I>, and spits out 2 complex numbers, <I>a+b</I> and <I>a-b</I>.
 
 <P>
 
@@ -86,12 +89,12 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
 <TR><TD ALIGN="LEFT">Bit Width</TD>
-<TD ALIGN="LEFT"><I>n_bits</I></TD>
-<TD ALIGN="LEFT">Specifies width of real/imag components. Assumed equal for both components.</TD>
+<TD ALIGN="LEFT"><I>BitWidth</I></TD>
+<TD ALIGN="LEFT">The number of bits in its input.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Binary Point</TD>
-<TD ALIGN="LEFT"><I>bin_pt</I></TD>
-<TD ALIGN="LEFT">Specifies the binary point location in the real/imaginary components. Assumed equal for both components.</TD>
+<TR><TD ALIGN="LEFT">Add Latency</TD>
+<TD ALIGN="LEFT"><I>add_latency</I></TD>
+<TD ALIGN="LEFT">The latency of the adders/subtractors.</TD>
 </TR>
 </TABLE>
 <P>
@@ -105,57 +108,68 @@ Ports</A>
 <TH ALIGN="LEFT"><B>Data Type</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>c</I></TD>
+<TR><TD ALIGN="LEFT"><I>a</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">UFix_x_0</TD>
-<TD ALIGN="LEFT">Complex input, real in MSB, imaginary in LSB.</TD>
+<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
+<TD ALIGN="LEFT">The first complex number whose higher BitWidth bits are its real part and lower BitWidth bits are its imaginary part.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>r</I></TD>
-<TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">Fix_x_y</TD>
-<TD ALIGN="LEFT">Real signed output, binary point specified by parameter.</TD>
+<TR><TD ALIGN="LEFT"><I>b</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
+<TD ALIGN="LEFT">The second complex number whose higher BitWidth bits are its real part and lower BitWidth bits are its imaginary part.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>i</I></TD>
+<TR><TD ALIGN="LEFT"><I>a+b</I></TD>
 <TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">Fix_x_y</TD>
-<TD ALIGN="LEFT">Imaginary signed output, binary point specified by parameter.</TD>
+<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
+<TD ALIGN="LEFT">Upper BitWidth bits are real(<I>a</I>)+real(<I>b</I>). Lower BitWidth bits are imaginary(<I>a</I>)-imaginary(<I>b</I>).</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>a-b</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
+<TD ALIGN="LEFT">Upper BitWidth bits are imaginary(<I>a</I>)+imaginary(<I>b</I>). Lower BitWidth bits are real(<I>b</I>)-real(<I>a</I>).</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION002114000000000000000">
 Description</A>
-</H2>Outputs real and imaginary components of a complex input. Useful for simplifying interconnects. See also Real-Imag to Complex.
+</H2>
+
+<H4><A NAME="SECTION002114010000000000000">
+Usage</A>
+</H4>
+The top output, <I>a+b</I>, is a complex output whose real part equals the sum of the real parts of <I>a</I> and <I>b</I>. The imaginary part of <I>a+b</I> equals the difference of the imaginary parts of <I>a</I> and <I>b</I>. The bottom output, <I>a-b</I>, is a complex output whose real part equals the sum of the imaginary parts of <I>a</I> and <I>b</I>.The imaginary part of <I>a-b</I> equals the difference of the real parts of <I>b</I> and <I>a</I>. The latency of this block is 2*<I>add_latency</I>.
+ 
 
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html824"
+<A NAME="tex2html823"
   HREF="node14.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html820"
+<A NAME="tex2html819"
   HREF="node2.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html814"
+<A NAME="tex2html813"
   HREF="node12.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html822"
+<A NAME="tex2html821"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html825"
+<B> Next:</B> <A NAME="tex2html824"
   HREF="node14.html">DDS (dds)</A>
-<B> Up:</B> <A NAME="tex2html821"
+<B> Up:</B> <A NAME="tex2html820"
   HREF="node2.html">Signal Processing Blocks</A>
-<B> Previous:</B> <A NAME="tex2html815"
-  HREF="node12.html">Complex Adder/Subtractor (complex_addsub)</A>
- &nbsp; <B>  <A NAME="tex2html823"
+<B> Previous:</B> <A NAME="tex2html814"
+  HREF="node12.html">Conjugating Complex 4-bit Multiplier</A>
+ &nbsp; <B>  <A NAME="tex2html822"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

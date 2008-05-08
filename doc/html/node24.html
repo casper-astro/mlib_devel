@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)</TITLE>
-<META NAME="description" CONTENT="Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)">
+<TITLE>FFT (fft)</TITLE>
+<META NAME="description" CONTENT="FFT (fft)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -66,17 +66,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002220000000000000000"></A><A NAME="fftbiplexreal2x"></A>
+<H1><A NAME="SECTION002220000000000000000"></A><A NAME="fft"></A>
 <BR>
-Real-sampled Biplex FFT (with output demuxed by 2) <I>(fft_biplex_real_2x)</I>
+FFT <I>(fft)</I>
 </H1> <B>Block Author</B>: Aaron Parsons 
 <BR><B>Document Author</B>: Aaron Parsons 
 <H2><A NAME="SECTION002221000000000000000">
 Summary</A>
-</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
- WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+</H2>Computes the Fast Fourier Transform with <IMG
+ WIDTH="24" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
  SRC="img6.png"
- ALT="$2^{N-1}-1$">.  Real inputs 1 and 2 share one output port (with the data for 1 coming first, then the data for 2), and likewise for inputs 3 and 4.
+ ALT="$2^N$"> channels for time samples presented <IMG
+ WIDTH="22" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$2^P$"> at a time in parallel.  Uses a biplex FFT architecture under the hood which has been extended to handled time samples in parallel.  For <IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img8.png"
+ ALT="$P=0$">, this block accepts two independent, parallel streams (labelled as pols) and computes the FFT of each independently (the biplex architecture provides this for free).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
+ WIDTH="51" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$2^N-1$"> (which can be interpreted as channel -1).  When multiple time samples are presented in parallel on the input, multiple frequency samples are output in parallel.
 
 <P>
 
@@ -90,14 +99,21 @@ Mask Parameters</A>
 </TR>
 <TR><TD ALIGN="LEFT">Size of FFT: (<IMG
  WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img7.png"
+ SRC="img10.png"
  ALT="$2^?$">)</TD>
 <TD ALIGN="LEFT"><I>FFTSize</I></TD>
-<TD ALIGN="LEFT">The number of channels computed in the complex FFT core.  The number of channels output for each real stream is half of this.</TD>
+<TD ALIGN="LEFT">The number of channels in the FFT.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Bit Width</TD>
 <TD ALIGN="LEFT"><I>BitWidth</I></TD>
 <TD ALIGN="LEFT">The number of bits in each real and imaginary sample as they are carried through the FFT.  Each FFT stage will round numbers back down to this number of bits after performing a butterfly computation.</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Number of Simultaneous Inputs: (<IMG
+ WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$2^?$">)</TD>
+<TD ALIGN="LEFT"><I>n_inputs</I></TD>
+<TD ALIGN="LEFT">The number of parallel time samples which are presented to the FFT core each clock.  The number of output ports are set to this same value.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Quantization Behavior</TD>
 <TD ALIGN="LEFT"><I>quantization</I></TD>
@@ -141,7 +157,7 @@ Ports</A>
 <TD ALIGN="LEFT">Unsigned</TD>
 <TD ALIGN="LEFT">Sets the shifting schedule through the FFT.  Bit 0 specifies the behavior of stage 0, bit 1 of stage 1, and so on.  If a stage is set to shift (with bit = 1), that every sample is divided by 2 at the output of that stage.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>pol</I></TD>
+<TR><TD ALIGN="LEFT"><I>In</I></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The time-domain stream(s) to channelized.</TD>
@@ -156,7 +172,7 @@ Ports</A>
 <TD ALIGN="LEFT">Boolean</TD>
 <TD ALIGN="LEFT">Indicates an overflow occurred at some stage in the FFT.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>pol_out</I></TD>
+<TR><TD ALIGN="LEFT"><I>Out</I></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The frequency channels.</TD>
@@ -166,10 +182,19 @@ Ports</A>
 
 <H2><A NAME="SECTION002224000000000000000">
 Description</A>
-</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
- WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+</H2>Computes the Fast Fourier Transform with <IMG
+ WIDTH="24" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
  SRC="img6.png"
- ALT="$2^{N-1}-1$">.  Real inputs 1 and 2 share one output port (with the data for 1 coming first, then the data for 2), and likewise for inputs 3 and 4.
+ ALT="$2^N$"> channels for time samples presented <IMG
+ WIDTH="22" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$2^P$"> at a time in parallel.  Uses a biplex FFT architecture under the hood which has been extended to handled time samples in parallel.  For <IMG
+ WIDTH="45" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img8.png"
+ ALT="$P=0$">, this block accepts two independent, parallel streams (labelled as pols) and computes the FFT of each independently (the biplex architecture provides this for free).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
+ WIDTH="51" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img9.png"
+ ALT="$2^N-1$"> (which can be interpreted as channel -1).  When multiple time samples are presented in parallel on the input, multiple frequency samples are output in parallel.
 
 <HR>
 <!--Navigation Panel-->
@@ -197,7 +222,7 @@ Description</A>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

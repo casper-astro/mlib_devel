@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Complex Adder/Subtractor (complex_addsub)</TITLE>
-<META NAME="description" CONTENT="Complex Adder/Subtractor (complex_addsub)">
+<TITLE>Conjugating Complex 4-bit Multiplier Implemented in Slices (cmult_4bit_sl*)</TITLE>
+<META NAME="description" CONTENT="Conjugating Complex 4-bit Multiplier Implemented in Slices (cmult_4bit_sl*)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -40,7 +40,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html808"
-  HREF="node13.html">Complex to Real-Imag Block</A>
+  HREF="node13.html">Complex Adder/Subtractor (complex_addsub)</A>
 <B> Up:</B> <A NAME="tex2html804"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html798"
@@ -62,21 +62,18 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   HREF="node12.html#SECTION002103000000000000000">Ports</A>
 <LI><A NAME="tex2html812"
   HREF="node12.html#SECTION002104000000000000000">Description</A>
-<UL>
-<LI><A NAME="tex2html813"
-  HREF="node12.html#SECTION002104010000000000000">Usage</A>
-</UL></UL>
+</UL>
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002100000000000000000"></A><A NAME="complexaddsub"></A>
+<H1><A NAME="SECTION002100000000000000000"></A><A NAME="cmult4bitsl_"></A>
 <BR>
-Complex Adder/Subtractor <I>(complex_addsub)</I>
+Conjugating Complex 4-bit Multiplier Implemented in Slices <I>(cmult_4bit_sl*)</I>
 </H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Ben Blackman 
+<BR><B>Document Author</B>: Vinayak Nagpal 
 <H2><A NAME="SECTION002101000000000000000">
 Summary</A>
-</H2>This block does a complex addition and subtraction of 2 complex numbers, <I>a</I> and <I>b</I>, and spits out 2 complex numbers, <I>a+b</I> and <I>a-b</I>.
+</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in Slices.
 
 <P>
 
@@ -88,13 +85,13 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Variable</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Bit Width</TD>
-<TD ALIGN="LEFT"><I>BitWidth</I></TD>
-<TD ALIGN="LEFT">The number of bits in its input.</TD>
+<TR><TD ALIGN="LEFT">Multiplier Latency</TD>
+<TD ALIGN="LEFT"><I>mult_latency</I></TD>
+<TD ALIGN="LEFT">The latency through a multiplier.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Add Latency</TD>
 <TD ALIGN="LEFT"><I>add_latency</I></TD>
-<TD ALIGN="LEFT">The latency of the adders/subtractors.</TD>
+<TD ALIGN="LEFT">The latency through an adder.</TD>
 </TR>
 </TABLE>
 <P>
@@ -110,36 +107,40 @@ Ports</A>
 </TR>
 <TR><TD ALIGN="LEFT"><I>a</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
-<TD ALIGN="LEFT">The first complex number whose higher BitWidth bits are its real part and lower BitWidth bits are its imaginary part.</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The real component of input 1.</TD>
 </TR>
 <TR><TD ALIGN="LEFT"><I>b</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
-<TD ALIGN="LEFT">The second complex number whose higher BitWidth bits are its real part and lower BitWidth bits are its imaginary part.</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The imaginary component of input 1.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>a+b</I></TD>
-<TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
-<TD ALIGN="LEFT">Upper BitWidth bits are real(<I>a</I>)+real(<I>b</I>). Lower BitWidth bits are imaginary(<I>a</I>)-imaginary(<I>b</I>).</TD>
+<TR><TD ALIGN="LEFT"><I>c</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The real component of input 2.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>a-b</I></TD>
+<TR><TD ALIGN="LEFT"><I>d</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">The imaginary component of input 2.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>real</I></TD>
 <TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">2*BitWidth Fixed point</TD>
-<TD ALIGN="LEFT">Upper BitWidth bits are imaginary(<I>a</I>)+imaginary(<I>b</I>). Lower BitWidth bits are real(<I>b</I>)-real(<I>a</I>).</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">ac+bd</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>imag</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">Inherited</TD>
+<TD ALIGN="LEFT">-ad+bc</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION002104000000000000000">
 Description</A>
-</H2>
-
-<H4><A NAME="SECTION002104010000000000000">
-Usage</A>
-</H4>
-The top output, <I>a+b</I>, is a complex output whose real part equals the sum of the real parts of <I>a</I> and <I>b</I>. The imaginary part of <I>a+b</I> equals the difference of the imaginary parts of <I>a</I> and <I>b</I>. The bottom output, <I>a-b</I>, is a complex output whose real part equals the sum of the imaginary parts of <I>a</I> and <I>b</I>.The imaginary part of <I>a-b</I> equals the difference of the real parts of <I>b</I> and <I>a</I>. The latency of this block is 2*<I>add_latency</I>.
- 
+</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in Slices.
 
 
 <P>
@@ -159,7 +160,7 @@ The top output, <I>a+b</I>, is a complex output whose real part equals the sum o
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html808"
-  HREF="node13.html">Complex to Real-Imag Block</A>
+  HREF="node13.html">Complex Adder/Subtractor (complex_addsub)</A>
 <B> Up:</B> <A NAME="tex2html804"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html798"
@@ -169,7 +170,7 @@ The top output, <I>a+b</I>, is a complex output whose real part equals the sum o
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

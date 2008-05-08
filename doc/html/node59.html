@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>64 Bit Snapshot (snap64)</TITLE>
-<META NAME="description" CONTENT="64 Bit Snapshot (snap64)">
+<TITLE>Snapshot Capture (snap)</TITLE>
+<META NAME="description" CONTENT="Snapshot Capture (snap)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -40,7 +40,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1649"
-  HREF="node60.html">Snapshot Capture (snap)</A>
+  HREF="node60.html">64 Bit Snapshot (snap64)</A>
 <B> Up:</B> <A NAME="tex2html1645"
   HREF="node55.html">System Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1639"
@@ -69,14 +69,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION00440000000000000000"></A><A NAME="snap64"></A>
+<H1><A NAME="SECTION00440000000000000000"></A><A NAME="snap"></A>
 <BR>
-64 Bit Snapshot <I>(snap64)</I>
+Snapshot Capture <I>(snap)</I>
 </H1> <B>Block Author</B>: Aaron Parsons 
 <BR><B>Document Author</B>: Aaron Parsons, Ben Blackman 
 <H2><A NAME="SECTION00441000000000000000">
 Summary</A>
-</H2>The snap block provides a packaged solution to capturing data from the FPGA fabric and making it accessible from the CPU. snap64 captures to 2x32 bit wide shared BRAMs to effect a 64 bit capture.
+</H2>The snap block provides a packaged solution to capturing data from the FPGA fabric and making it accessible from the CPU. snap captures to a 32 bit wide shared BRAM.
 
 <P>
 
@@ -90,10 +90,10 @@ Mask Parameters</A>
 </TR>
 <TR><TD ALIGN="LEFT">No. of Samples (<IMG
  WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img7.png"
+ SRC="img10.png"
  ALT="$2^?$">)</TD>
 <TD ALIGN="LEFT"><I>nsamples</I></TD>
-<TD ALIGN="LEFT">Specifies the depth of the Shared BRAM(s); i.e. the number of 64bit samples which are stored per capture.</TD>
+<TD ALIGN="LEFT">Specifies the depth of the Shared BRAM(s); i.e. the number of 32bit samples which are stored per capture.</TD>
 </TR>
 </TABLE>
 <P>
@@ -109,8 +109,8 @@ Ports</A>
 </TR>
 <TR><TD ALIGN="LEFT"><I>din</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">unsigned_64_0</TD>
-<TD ALIGN="LEFT">The data to be captured. Regardless of type, the bit-level representation of these numbers are written as 64bit values to the Shared BRAMs.</TD>
+<TD ALIGN="LEFT">unsigned_32_0</TD>
+<TD ALIGN="LEFT">The data to be captured. Regardless of type, the bit-level representation of these numbers are written as 32bit values to the Shared BRAM.</TD>
 </TR>
 <TR><TD ALIGN="LEFT"><I>trig</I></TD>
 <TD ALIGN="LEFT">in</TD>
@@ -132,7 +132,7 @@ Description</A>
 <H4><A NAME="SECTION00444010000000000000">
 Usage</A>
 </H4>
-Under TinySH/BORPH, this device will have 3 sub-devices: <I>ctrl</I>, <I>bram_msb</I>, <I>bram_lsb</I>, and <I>addr</I>. <I>ctrl</I> is an input register. Bit 0, when driven from low to high, enables a trigger/data capture to occur. Bit 1, when high, overrides <I>trig</I> to trigger instantly. Bit 2, when high, overrides <I>we</I> to always write data to bram. <I>addr</I> is an output register and records the last address of bram to which data was written. <I>bram_msb</I> and <I>bram_lsb</I> are 32 bit wide Shared BRAMs of the depth specified in <I>Parameters</I>. <I>bram_msb</I> holds the upper 32 bits of <I>din</I> while <I>bram_lsb</I> holds the lower 32 bits of <I>din</I>.
+Under TinySH/BORPH, this device will have 3 sub-devices: <I>ctrl</I>, <I>bram</I>, and <I>addr</I>. <I>ctrl</I> is an input register. Bit 0, when driven from low to high, enables a trigger/data capture to occur. Bit 1, when high, overrides <I>trig</I> to trigger instantly. Bit 2, when high, overrides <I>we</I> to always write data to bram. <I>addr</I> is an output register and records the last address of <I>bram</I> to which data was written. <I>bram</I> is a 32 bit wide Shared BRAM of the depth specified in <I>Parameters</I>.
 
 
 
@@ -153,7 +153,7 @@ Under TinySH/BORPH, this device will have 3 sub-devices: <I>ctrl</I>, <I>bram_ms
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1649"
-  HREF="node60.html">Snapshot Capture (snap)</A>
+  HREF="node60.html">64 Bit Snapshot (snap64)</A>
 <B> Up:</B> <A NAME="tex2html1645"
   HREF="node55.html">System Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1639"
@@ -163,7 +163,7 @@ Under TinySH/BORPH, this device will have 3 sub-devices: <I>ctrl</I>, <I>bram_ms
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

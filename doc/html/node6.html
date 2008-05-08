@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Conjugating Complex 4-bit Multiplier Implemented in Block RAM (cmult_4bit_br*)</TITLE>
-<META NAME="description" CONTENT="Conjugating Complex 4-bit Multiplier Implemented in Block RAM (cmult_4bit_br*)">
+<TITLE>Complex to Real-Imag Block (c_to_ri)</TITLE>
+<META NAME="description" CONTENT="Complex to Real-Imag Block (c_to_ri)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -66,14 +66,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION00240000000000000000"></A><A NAME="cmult4bitbr_"></A>
+<H1><A NAME="SECTION00240000000000000000"></A><A NAME="ctori"></A>
 <BR>
-Conjugating Complex 4-bit Multiplier Implemented in Block RAM <I>(cmult_4bit_br*)</I>
-</H1> <B>Block Author</B>: Block Author 
-<BR><B>Document Author</B>: Document Author 
+Complex to Real-Imag Block <I>(c_to_ri)</I>
+</H1> <B>Block Author</B>: Aaron Parsons 
+<BR><B>Document Author</B>: Aaron Parsons 
 <H2><A NAME="SECTION00241000000000000000">
 Summary</A>
-</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in Block RAM.
+</H2>Outputs real and imaginary components of a complex input. Useful for simplifying interconnects. See also Real-Imag to Complex. (ri_to_c, <A HREF="node44.html#ritoc">1.42</A>)
 
 <P>
 
@@ -85,13 +85,13 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Variable</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Multiplier Latency</TD>
-<TD ALIGN="LEFT"><I>mult_latency</I></TD>
-<TD ALIGN="LEFT">The latency through a multiplier.</TD>
+<TR><TD ALIGN="LEFT">Bit Width</TD>
+<TD ALIGN="LEFT"><I>n_bits</I></TD>
+<TD ALIGN="LEFT">Specifies width of real/imag components. Assumed equal for both components.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Add Latency</TD>
-<TD ALIGN="LEFT"><I>add_latency</I></TD>
-<TD ALIGN="LEFT">The latency through an adder.</TD>
+<TR><TD ALIGN="LEFT">Binary Point</TD>
+<TD ALIGN="LEFT"><I>bin_pt</I></TD>
+<TD ALIGN="LEFT">Specifies the binary point location in the real/imaginary components. Assumed equal for both components.</TD>
 </TR>
 </TABLE>
 <P>
@@ -105,44 +105,27 @@ Ports</A>
 <TH ALIGN="LEFT"><B>Data Type</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>a</I></TD>
-<TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The real component of input 1.</TD>
-</TR>
-<TR><TD ALIGN="LEFT"><I>b</I></TD>
-<TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The imaginary component of input 1.</TD>
-</TR>
 <TR><TD ALIGN="LEFT"><I>c</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The real component of input 2.</TD>
+<TD ALIGN="LEFT">UFix_x_0</TD>
+<TD ALIGN="LEFT">Complex input, real in MSB, imaginary in LSB.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>d</I></TD>
-<TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The imaginary component of input 2.</TD>
-</TR>
-<TR><TD ALIGN="LEFT"><I>real</I></TD>
+<TR><TD ALIGN="LEFT"><I>r</I></TD>
 <TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">ac+bd</TD>
+<TD ALIGN="LEFT">Fix_x_y</TD>
+<TD ALIGN="LEFT">Real signed output, binary point specified by parameter.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>imag</I></TD>
+<TR><TD ALIGN="LEFT"><I>i</I></TD>
 <TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">-ad+bc</TD>
+<TD ALIGN="LEFT">Fix_x_y</TD>
+<TD ALIGN="LEFT">Imaginary signed output, binary point specified by parameter.</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION00244000000000000000">
 Description</A>
-</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in Block RAM. Each 4 bit real multiplier is implemented as a lookup table with 4b+4b=8b of address. 
-
-<P>
+</H2>Outputs real and imaginary components of a complex input. Useful for simplifying interconnects. See also Real-Imag to Complex.
 
 
 <P>
@@ -172,7 +155,7 @@ Description</A>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

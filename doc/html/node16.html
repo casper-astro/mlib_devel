@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>The Enabled Delay in BRAM Block (delay_bram_en_plus)</TITLE>
-<META NAME="description" CONTENT="The Enabled Delay in BRAM Block (delay_bram_en_plus)">
+<TITLE>The Delay in BRAM Block (delay_bram)</TITLE>
+<META NAME="description" CONTENT="The Delay in BRAM Block (delay_bram)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -40,7 +40,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html875"
-  HREF="node17.html">The Programmable Delay in</A>
+  HREF="node17.html">The Enabled Delay in</A>
 <B> Up:</B> <A NAME="tex2html871"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html865"
@@ -66,14 +66,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002140000000000000000"></A><A NAME="delaybramenplus"></A>
+<H1><A NAME="SECTION002140000000000000000"></A><A NAME="delaybram"></A>
 <BR>
-The Enabled Delay in BRAM Block <I>(delay_bram_en_plus)</I>
+The Delay in BRAM Block <I>(delay_bram)</I>
 </H1> <B>Block Author</B>: Aaron Parsons 
 <BR><B>Document Author</B>: Aaron Parsons 
 <H2><A NAME="SECTION002141000000000000000">
 Summary</A>
-</H2>A delay block that uses BRAM for its storage and only shifts when enabled. However, BRAM latency cannot be enabled, so output appears bram_latency clocks after an enable.
+</H2>A delay block that uses BRAM for its storage.
 
 <P>
 
@@ -85,11 +85,11 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Variable</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Enabled Delays</TD>
+<TR><TD ALIGN="LEFT">Delay Length (DelayLen)</TD>
 <TD ALIGN="LEFT"><I>DelayLen</I></TD>
 <TD ALIGN="LEFT">The length of the delay.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Extra (unenabled) delay for BRAM Latency</TD>
+<TR><TD ALIGN="LEFT">BRAM Latency</TD>
 <TD ALIGN="LEFT"><I>bram_latency</I></TD>
 <TD ALIGN="LEFT">The latency of the underlying storage BRAM.</TD>
 </TR>
@@ -110,55 +110,22 @@ Ports</A>
 <TD ALIGN="LEFT">???</TD>
 <TD ALIGN="LEFT">The signal to be delayed.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>en</I></TD>
-<TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">???</TD>
-<TD ALIGN="LEFT">To be asserted when input is valid.</TD>
-</TR>
 <TR><TD ALIGN="LEFT"><I>out</I></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">???</TD>
 <TD ALIGN="LEFT">The delayed signal.</TD>
-</TR>
-<TR><TD ALIGN="LEFT"><I>valid</I></TD>
-<TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">???</TD>
-<TD ALIGN="LEFT">Asserted when output is valid.</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION002144000000000000000">
 Description</A>
-</H2>A delay block that uses BRAM for its storage and only shifts when enabled. However, BRAM latency cannot be enabled, so output appears bram_latency clocks after an enable.
+</H2>A delay block that uses BRAM for its storage.
 
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html874"
-  HREF="node17.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html870"
-  HREF="node2.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html864"
-  HREF="node15.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html872"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html875"
-  HREF="node17.html">The Programmable Delay in</A>
-<B> Up:</B> <A NAME="tex2html871"
-  HREF="node2.html">Signal Processing Blocks</A>
-<B> Previous:</B> <A NAME="tex2html865"
-  HREF="node15.html">Decimating FIR Filter (dec_fir)</A>
- &nbsp; <B>  <A NAME="tex2html873"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

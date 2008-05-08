@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Polyphase Real FIR Filter (pfb_fir_real)</TITLE>
-<META NAME="description" CONTENT="Polyphase Real FIR Filter (pfb_fir_real)">
+<TITLE>Polyphase FIR Filter (frontend for a full PFB) (pfb_fir)</TITLE>
+<META NAME="description" CONTENT="Polyphase FIR Filter (frontend for a full PFB) (pfb_fir)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -40,7 +40,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1217"
-  HREF="node38.html">Polyphase FIR Filter (frontend</A>
+  HREF="node38.html">Polyphase Real FIR Filter</A>
 <B> Up:</B> <A NAME="tex2html1213"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1207"
@@ -62,21 +62,18 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   HREF="node37.html#SECTION002353000000000000000">Ports</A>
 <LI><A NAME="tex2html1221"
   HREF="node37.html#SECTION002354000000000000000">Description</A>
-<UL>
-<LI><A NAME="tex2html1222"
-  HREF="node37.html#SECTION002354010000000000000">Usage</A>
-</UL></UL>
+</UL>
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002350000000000000000"></A><A NAME="pfbfirreal"></A>
+<H1><A NAME="SECTION002350000000000000000"></A><A NAME="pfbfir"></A>
 <BR>
-Polyphase Real FIR Filter <I>(pfb_fir_real)</I>
-</H1> <B>Block Author</B>: Henry Chen 
-<BR><B>Document Author</B>: Ben Blackman 
+Polyphase FIR Filter (frontend for a full PFB) <I>(pfb_fir)</I>
+</H1> <B>Block Author</B>: Aaron Parsons 
+<BR><B>Document Author</B>: Aaron Parsons 
 <H2><A NAME="SECTION002351000000000000000">
 Summary</A>
-</H2>This block, combined with an FFT, implements a real Polyphase Filter Bank which uses longer windows of data to improve the shape of channels within a spectrum.
+</H2>This block, combined with an FFT, implements a Polyphase Filter Bank which uses longer windows of data to improve the shape of channels within a spectrum.
 
 <P>
 
@@ -88,50 +85,50 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Variable</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Size of PFB (2<IMG
- WIDTH="11" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img4.png"
- ALT="$^?$"> pnts)</TD>
+<TR><TD ALIGN="LEFT">Size of PFB: (<IMG
+ WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$2^?$">)</TD>
 <TD ALIGN="LEFT"><I>PFBSize</I></TD>
 <TD ALIGN="LEFT">The number of channels in the PFB (this should also be the size of the FFT which follows).</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Total Number of Taps</TD>
+<TR><TD ALIGN="LEFT">Total Number of Taps:</TD>
 <TD ALIGN="LEFT"><I>TotalTaps</I></TD>
-<TD ALIGN="LEFT">The number of taps in the PFB FIR filter. Each tap uses 2 real multiplier cores and requires buffering the real and imaginary streams for 2<IMG
- WIDTH="60" HEIGHT="18" ALIGN="BOTTOM" BORDER="0"
+<TD ALIGN="LEFT">The number of taps in the PFB FIR filter.  Each tap uses 2 real multiplier cores and requires buffering the real and imaginary streams for <IMG
+ WIDTH="68" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
  SRC="img17.png"
- ALT="$^{PFBSize}$"> samples.</TD>
+ ALT="$2^{PFBSize}$"> samples.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Windowing Function</TD>
 <TD ALIGN="LEFT"><I>WindowType</I></TD>
 <TD ALIGN="LEFT">Which windowing function to use (this allows trading passband ripple for steepness of rolloff, etc).</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Number of Simultaneous Inputs (2<IMG
- WIDTH="11" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img4.png"
- ALT="$^?$">)</TD>
+<TR><TD ALIGN="LEFT">Number of Simultaneous Inputs: (<IMG
+ WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$2^?$">)</TD>
 <TD ALIGN="LEFT"><I>n_inputs</I></TD>
-<TD ALIGN="LEFT">The number of parallel time samples which are presented to the FFT core each clock. The number of output ports are set to this same value.</TD>
+<TD ALIGN="LEFT">The number of parallel time samples which are presented to the FFT core each clock.  The number of output ports are set to this same value.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Make Biplex</TD>
 <TD ALIGN="LEFT"><I>MakeBiplex</I></TD>
 <TD ALIGN="LEFT">Double up the inputs to match with a biplex FFT.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Input Bitwidth</TD>
+<TR><TD ALIGN="LEFT">Input Bit Width</TD>
 <TD ALIGN="LEFT"><I>BitWidthIn</I></TD>
 <TD ALIGN="LEFT">The number of bits in each real and imaginary sample input to the PFB.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Output Bitwidth</TD>
+<TR><TD ALIGN="LEFT">Output Bit Width</TD>
 <TD ALIGN="LEFT"><I>BitWidthOut</I></TD>
-<TD ALIGN="LEFT">The number of bits in each real and imaginary sample output from the PFB. This should match the bit width in the FFT that follows.</TD>
+<TD ALIGN="LEFT">The number of bits in each real and imaginary sample output from the PFB.  This should match the bit width in the FFT that follows.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Coefficient Bitwidth</TD>
+<TR><TD ALIGN="LEFT">Coefficient Bit Width</TD>
 <TD ALIGN="LEFT"><I>CoeffBitWidth</I></TD>
-<TD ALIGN="LEFT">The number of bits in each coefficient. This is usually chosen to match the input bit width.</TD>
+<TD ALIGN="LEFT">The number of bits in each coefficient.  This is usually chosen to match the input bit width.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Use Distributed Memory for Coeffs</TD>
+<TR><TD ALIGN="LEFT">Use Distributed Memory for Coefficients</TD>
 <TD ALIGN="LEFT"><I>CoeffDistMem</I></TD>
-<TD ALIGN="LEFT">Store the FIR coefficients in distributed memory (if = 1). Otherwise, BRAMs are used to hold the coefficients.</TD>
+<TD ALIGN="LEFT">Store the FIR coefficients in distributed memory (if = 1).  Otherwise, BRAMs are used to hold the coefficients.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Add Latency</TD>
 <TD ALIGN="LEFT"><I>add_latency</I></TD>
@@ -149,15 +146,9 @@ Mask Parameters</A>
 <TD ALIGN="LEFT"><I>quantization</I></TD>
 <TD ALIGN="LEFT">Specifies the rounding behavior used at the end of each butterfly computation to return to the number of bits specified above.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Bin Width Scaling (normal=1)</TD>
+<TR><TD ALIGN="LEFT">Bin Width Scaling (normal = 1)</TD>
 <TD ALIGN="LEFT"><I>fwidth</I></TD>
-<TD ALIGN="LEFT">PFBs give enhanced control over the width of frequency channels. By adjusting this parameter, you can scale bins to be wider (for values <IMG
- WIDTH="16" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="img18.png"
- ALT="$&gt;$"> 1) or narrower (for values <IMG
- WIDTH="16" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="img19.png"
- ALT="$&lt;$"> 1).</TD>
+<TD ALIGN="LEFT">PFBs give enhanced control over the width of frequency channels.  By adjusting this parameter, you can scale bins to be wider (for values &gt; 1) or narrower (for values &lt; 1).</TD>
 </TR>
 </TABLE>
 <P>
@@ -179,7 +170,7 @@ Ports</A>
 <TR><TD ALIGN="LEFT"><I>pol_in</I></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The (real) time-domain stream(s).</TD>
+<TD ALIGN="LEFT">The (complex) time-domain stream(s).</TD>
 </TR>
 <TR><TD ALIGN="LEFT"><I>sync_out</I></TD>
 <TD ALIGN="LEFT">out</TD>
@@ -189,21 +180,17 @@ Ports</A>
 <TR><TD ALIGN="LEFT"><I>pol_out</I></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The (real) PFB FIR output, which is still a time-domain signal.</TD>
+<TD ALIGN="LEFT">The (complex) PFB FIR output, which is still a time-domain signal.</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION002354000000000000000">
 Description</A>
-</H2>
+</H2>This block, combined with an FFT, implements a Polyphase Filter Bank which uses longer windows of data to improve the shape of channels within a spectrum.
 
-<H4><A NAME="SECTION002354010000000000000">
-Usage</A>
-</H4>
-This block, combined with an FFT, implements a real Polyphase Filter Bank which uses longer windows of data to improve the shape of channels within a spectrum.
- 
 
+<P>
 <HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1216"
@@ -220,7 +207,7 @@ This block, combined with an FFT, implements a real Polyphase Filter Bank which 
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1217"
-  HREF="node38.html">Polyphase FIR Filter (frontend</A>
+  HREF="node38.html">Polyphase Real FIR Filter</A>
 <B> Up:</B> <A NAME="tex2html1213"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1207"
@@ -230,7 +217,7 @@ This block, combined with an FFT, implements a real Polyphase Filter Bank which 
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

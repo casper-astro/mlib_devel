@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Real-sampled Biplex FFT (with output demuxed by 4) (fft_biplex_real_4x)</TITLE>
-<META NAME="description" CONTENT="Real-sampled Biplex FFT (with output demuxed by 4) (fft_biplex_real_4x)">
+<TITLE>Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)</TITLE>
+<META NAME="description" CONTENT="Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -40,11 +40,11 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1019"
-  HREF="node26.html">FFT (fft)</A>
+  HREF="node26.html">Real-sampled Biplex FFT (with</A>
 <B> Up:</B> <A NAME="tex2html1015"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1009"
-  HREF="node24.html">Real-sampled Biplex FFT (with</A>
+  HREF="node24.html">FFT (fft)</A>
  &nbsp; <B>  <A NAME="tex2html1017"
   HREF="node1.html">Contents</A></B> 
 <BR>
@@ -66,17 +66,17 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002230000000000000000"></A><A NAME="fftbiplexreal4x"></A>
+<H1><A NAME="SECTION002230000000000000000"></A><A NAME="fftbiplexreal2x"></A>
 <BR>
-Real-sampled Biplex FFT (with output demuxed by 4) <I>(fft_biplex_real_4x)</I>
+Real-sampled Biplex FFT (with output demuxed by 2) <I>(fft_biplex_real_2x)</I>
 </H1> <B>Block Author</B>: Aaron Parsons 
 <BR><B>Document Author</B>: Aaron Parsons 
 <H2><A NAME="SECTION002231000000000000000">
 Summary</A>
-</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  All frequencies (both positive and negative) are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
- WIDTH="51" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
- SRC="img8.png"
- ALT="$2^N-1$">.
+</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
+ WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img11.png"
+ ALT="$2^{N-1}-1$">.  Real inputs 1 and 2 share one output port (with the data for 1 coming first, then the data for 2), and likewise for inputs 3 and 4.
 
 <P>
 
@@ -90,10 +90,10 @@ Mask Parameters</A>
 </TR>
 <TR><TD ALIGN="LEFT">Size of FFT: (<IMG
  WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img7.png"
+ SRC="img10.png"
  ALT="$2^?$">)</TD>
 <TD ALIGN="LEFT"><I>FFTSize</I></TD>
-<TD ALIGN="LEFT">The number of channels computed in the FFT core.</TD>
+<TD ALIGN="LEFT">The number of channels computed in the complex FFT core.  The number of channels output for each real stream is half of this.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Bit Width</TD>
 <TD ALIGN="LEFT"><I>BitWidth</I></TD>
@@ -166,10 +166,10 @@ Ports</A>
 
 <H2><A NAME="SECTION002234000000000000000">
 Description</A>
-</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  All frequencies (both positive and negative) are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
- WIDTH="51" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
- SRC="img8.png"
- ALT="$2^N-1$">.
+</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
+ WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img11.png"
+ ALT="$2^{N-1}-1$">.  Real inputs 1 and 2 share one output port (with the data for 1 coming first, then the data for 2), and likewise for inputs 3 and 4.
 
 <HR>
 <!--Navigation Panel-->
@@ -187,17 +187,17 @@ Description</A>
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1019"
-  HREF="node26.html">FFT (fft)</A>
+  HREF="node26.html">Real-sampled Biplex FFT (with</A>
 <B> Up:</B> <A NAME="tex2html1015"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1009"
-  HREF="node24.html">Real-sampled Biplex FFT (with</A>
+  HREF="node24.html">FFT (fft)</A>
  &nbsp; <B>  <A NAME="tex2html1017"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

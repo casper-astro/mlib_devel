@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Conjugating Complex 4-bit Multiplier Implemented in Dedicated Multipliers. (cmult_4bit_em*)</TITLE>
-<META NAME="description" CONTENT="Conjugating Complex 4-bit Multiplier Implemented in Dedicated Multipliers. (cmult_4bit_em*)">
+<TITLE>Conjugating Complex 4-bit Multiplier Implemented in Block RAM (cmult_4bit_br*)</TITLE>
+<META NAME="description" CONTENT="Conjugating Complex 4-bit Multiplier Implemented in Block RAM (cmult_4bit_br*)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -66,14 +66,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION00260000000000000000"></A><A NAME="cmult4bitem_"></A>
+<H1><A NAME="SECTION00260000000000000000"></A><A NAME="cmult4bitbr_"></A>
 <BR>
-Conjugating Complex 4-bit Multiplier Implemented in Dedicated Multipliers. <I>(cmult_4bit_em*)</I>
+Conjugating Complex 4-bit Multiplier Implemented in Block RAM <I>(cmult_4bit_br*)</I>
 </H1> <B>Block Author</B>: Block Author 
-<BR><B>Document Author</B>: Vinayak Nagpal 
+<BR><B>Document Author</B>: Document Author 
 <H2><A NAME="SECTION00261000000000000000">
 Summary</A>
-</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in dedicated multipliers.
+</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in Block RAM.
 
 <P>
 
@@ -89,7 +89,7 @@ Mask Parameters</A>
 <TD ALIGN="LEFT"><I>mult_latency</I></TD>
 <TD ALIGN="LEFT">The latency through a multiplier.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">dd Latency</TD>
+<TR><TD ALIGN="LEFT">Add Latency</TD>
 <TD ALIGN="LEFT"><I>add_latency</I></TD>
 <TD ALIGN="LEFT">The latency through an adder.</TD>
 </TR>
@@ -140,7 +140,7 @@ Ports</A>
 
 <H2><A NAME="SECTION00264000000000000000">
 Description</A>
-</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in dedicated multipliers.
+</H2>Perform a conjugating complex multiplication <I>(a+bi)(c-di)=(ac+bd)+(bc-ad)i</I>. Implements the logic in Block RAM. Each 4 bit real multiplier is implemented as a lookup table with 4b+4b=8b of address. 
 
 <P>
 
@@ -170,7 +170,7 @@ Description</A>
 <!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

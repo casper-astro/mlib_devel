@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>The Enabled Sync Delay Block (sync_delay_en)</TITLE>
-<META NAME="description" CONTENT="The Enabled Sync Delay Block (sync_delay_en)">
+<TITLE>Display name for Block (simulink_name_for_block)</TITLE>
+<META NAME="description" CONTENT="Display name for Block (simulink_name_for_block)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -40,7 +40,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1380"
-  HREF="node48.html">The Programmable Sync Delay</A>
+  HREF="node48.html">The Enabled Sync Delay</A>
 <B> Up:</B> <A NAME="tex2html1376"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1370"
@@ -66,14 +66,20 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002450000000000000000"></A><A NAME="syncdelayen"></A>
+<H1><A NAME="SECTION002450000000000000000"></A><A NAME="blocklabel"></A>
 <BR>
-The Enabled Sync Delay Block <I>(sync_delay_en)</I>
-</H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Aaron Parsons 
+Display name for Block <I>(simulink_name_for_block)</I>
+</H1> <B>Block Author</B>: Block Author 
+<BR><B>Document Author</B>: Document Author 
 <H2><A NAME="SECTION002451000000000000000">
 Summary</A>
-</H2>Delay an infrequent boolean pulse by the specified number of enabled clocks.
+</H2>Block Summary can contain arbitrary L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X like lists 
+<UL>
+<LI>list item 1
+</LI>
+<LI>list item 2
+</LI>
+</UL> 
 
 <P>
 
@@ -85,9 +91,13 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Variable</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Delay Length</TD>
-<TD ALIGN="LEFT"><I>DelayLen</I></TD>
-<TD ALIGN="LEFT">The length of the delay.</TD>
+<TR><TD ALIGN="LEFT">Parameter Name</TD>
+<TD ALIGN="LEFT"><I>Variable Name</I></TD>
+<TD ALIGN="LEFT">Parameter Description</TD>
+</TR>
+<TR><TD ALIGN="LEFT">Parameter Name</TD>
+<TD ALIGN="LEFT"><I>Variable Name</I></TD>
+<TD ALIGN="LEFT">Parameter Description</TD>
 </TR>
 </TABLE>
 <P>
@@ -101,32 +111,39 @@ Ports</A>
 <TH ALIGN="LEFT"><B>Data Type</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>in</I></TD>
-<TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">boolean</TD>
-<TD ALIGN="LEFT">The boolean signal to be delayed.</TD>
+<TR><TD ALIGN="LEFT"><I>Port Name</I></TD>
+<TD ALIGN="LEFT">port direction</TD>
+<TD ALIGN="LEFT">Port data type</TD>
+<TD ALIGN="LEFT">Port Description</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>en</I></TD>
+<TR><TD ALIGN="LEFT"><I>Port Name</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">boolean</TD>
-<TD ALIGN="LEFT">To be asserted when input is valid.</TD>
+<TD ALIGN="LEFT">ufix_x_y</TD>
+<TD ALIGN="LEFT">Port Description</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>out</I></TD>
-<TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">boolean</TD>
-<TD ALIGN="LEFT">The delayed boolean signal, output 1 clock after en.</TD>
+<TR><TD ALIGN="LEFT"><I>Port Name</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">inherited</TD>
+<TD ALIGN="LEFT">Port Description</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION002454000000000000000">
 Description</A>
-</H2>Delay an infrequent boolean pulse by the specified number of enabled clocks. If the input pulse repeats before the output pulse is generated, an internal counter resets and that output pulse is never generated.
+</H2>Block Description can also include arbitrary L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X 
+ like math <!-- MATH
+ $a^{2}+b^{2}=\phi^{2}$
+ -->
+<IMG
+ WIDTH="91" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+ SRC="img5.png"
+ ALT="$a^{2}+b^{2}=\phi^{2}$">.
 
 <BR><HR>
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

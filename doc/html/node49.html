@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Display name for Block (simulink_name_for_block)</TITLE>
-<META NAME="description" CONTENT="Display name for Block (simulink_name_for_block)">
+<TITLE>The Programmable Sync Delay Block (sync_delay_prog)</TITLE>
+<META NAME="description" CONTENT="The Programmable Sync Delay Block (sync_delay_prog)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,7 +44,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Up:</B> <A NAME="tex2html1408"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1402"
-  HREF="node48.html">The Programmable Sync Delay</A>
+  HREF="node48.html">The Enabled Sync Delay</A>
  &nbsp; <B>  <A NAME="tex2html1410"
   HREF="node1.html">Contents</A></B> 
 <BR>
@@ -66,20 +66,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002470000000000000000"></A><A NAME="blocklabel"></A>
+<H1><A NAME="SECTION002470000000000000000"></A><A NAME="syncdelayprog"></A>
 <BR>
-Display name for Block <I>(simulink_name_for_block)</I>
-</H1> <B>Block Author</B>: Block Author 
-<BR><B>Document Author</B>: Document Author 
+The Programmable Sync Delay Block <I>(sync_delay_prog)</I>
+</H1> <B>Block Author</B>: Aaron Parsons 
+<BR><B>Document Author</B>: Aaron Parsons 
 <H2><A NAME="SECTION002471000000000000000">
 Summary</A>
-</H2>Block Summary can contain arbitrary L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X like lists 
-<UL>
-<LI>list item 1
-</LI>
-<LI>list item 2
-</LI>
-</UL> 
+</H2>Delay an infrequent boolean pulse by a run-time programmable number of enabled clocks. If the input pulse repeats before the output pulse is generated, an internal counter resets and that output pulse is never generated. When delay is changed, some randomly determined samples will be inserted/dropped from the buffered stream.
 
 <P>
 
@@ -91,13 +85,12 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Variable</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Parameter Name</TD>
-<TD ALIGN="LEFT"><I>Variable Name</I></TD>
-<TD ALIGN="LEFT">Parameter Description</TD>
-</TR>
-<TR><TD ALIGN="LEFT">Parameter Name</TD>
-<TD ALIGN="LEFT"><I>Variable Name</I></TD>
-<TD ALIGN="LEFT">Parameter Description</TD>
+<TR><TD ALIGN="LEFT">Max Delay (2<IMG
+ WIDTH="11" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="img4.png"
+ ALT="$^?$">):</TD>
+<TD ALIGN="LEFT"><I>MaxDelay</I></TD>
+<TD ALIGN="LEFT">The maximum length of the delay.</TD>
 </TR>
 </TABLE>
 <P>
@@ -111,39 +104,55 @@ Ports</A>
 <TH ALIGN="LEFT"><B>Data Type</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>Port Name</I></TD>
-<TD ALIGN="LEFT">port direction</TD>
-<TD ALIGN="LEFT">Port data type</TD>
-<TD ALIGN="LEFT">Port Description</TD>
-</TR>
-<TR><TD ALIGN="LEFT"><I>Port Name</I></TD>
+<TR><TD ALIGN="LEFT"><I>sync</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">ufix_x_y</TD>
-<TD ALIGN="LEFT">Port Description</TD>
+<TD ALIGN="LEFT">???</TD>
+<TD ALIGN="LEFT">The boolean signal to be delayed.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>Port Name</I></TD>
+<TR><TD ALIGN="LEFT"><I>delay</I></TD>
 <TD ALIGN="LEFT">in</TD>
-<TD ALIGN="LEFT">inherited</TD>
-<TD ALIGN="LEFT">Port Description</TD>
+<TD ALIGN="LEFT">???</TD>
+<TD ALIGN="LEFT">The run-time programmable delay length.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>sync_out</I></TD>
+<TD ALIGN="LEFT">out</TD>
+<TD ALIGN="LEFT">???</TD>
+<TD ALIGN="LEFT">The delayed boolean signal.</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION002474000000000000000">
 Description</A>
-</H2>Block Description can also include arbitrary L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X 
- like math <!-- MATH
- $a^{2}+b^{2}=\phi^{2}$
- -->
-<IMG
- WIDTH="91" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
- SRC="img5.png"
- ALT="$a^{2}+b^{2}=\phi^{2}$">.
+</H2>Delay an infrequent boolean pulse by a run-time programmable number of enabled clocks. If the input pulse repeats before the output pulse is generated, an internal counter resets and that output pulse is never generated. When delay is changed, some randomly determined samples will be inserted/dropped from the buffered stream.
 
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1411"
+  HREF="node50.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1407"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1401"
+  HREF="node48.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1409"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1412"
+  HREF="node50.html">Windowed X-Engine (win_x_engine)</A>
+<B> Up:</B> <A NAME="tex2html1408"
+  HREF="node2.html">Signal Processing Blocks</A>
+<B> Previous:</B> <A NAME="tex2html1402"
+  HREF="node48.html">The Enabled Sync Delay</A>
+ &nbsp; <B>  <A NAME="tex2html1410"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>

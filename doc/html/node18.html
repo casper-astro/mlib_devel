@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>The Delay in BRAM Block (delay_bram)</TITLE>
-<META NAME="description" CONTENT="The Delay in BRAM Block (delay_bram)">
+<TITLE>The Programmable Delay in BRAM Block (delay_bram_prog)</TITLE>
+<META NAME="description" CONTENT="The Programmable Delay in BRAM Block (delay_bram_prog)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -44,7 +44,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Up:</B> <A NAME="tex2html903"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html897"
-  HREF="node17.html">The Programmable Delay in</A>
+  HREF="node17.html">The Enabled Delay in</A>
  &nbsp; <B>  <A NAME="tex2html905"
   HREF="node1.html">Contents</A></B> 
 <BR>
@@ -66,14 +66,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002160000000000000000"></A><A NAME="delaybram"></A>
+<H1><A NAME="SECTION002160000000000000000"></A><A NAME="delaybramprog"></A>
 <BR>
-The Delay in BRAM Block <I>(delay_bram)</I>
+The Programmable Delay in BRAM Block <I>(delay_bram_prog)</I>
 </H1> <B>Block Author</B>: Aaron Parsons 
 <BR><B>Document Author</B>: Aaron Parsons 
 <H2><A NAME="SECTION002161000000000000000">
 Summary</A>
-</H2>A delay block that uses BRAM for its storage.
+</H2>A delay block that uses BRAM for its storage and has a run-time programmable delay. When delay is changed, some randomly determined samples will be inserted/dropped from the buffered stream.
 
 <P>
 
@@ -85,9 +85,12 @@ Mask Parameters</A>
 <TH ALIGN="LEFT"><B>Variable</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Delay Length (DelayLen)</TD>
-<TD ALIGN="LEFT"><I>DelayLen</I></TD>
-<TD ALIGN="LEFT">The length of the delay.</TD>
+<TR><TD ALIGN="LEFT">Max Delay (2<IMG
+ WIDTH="11" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="img4.png"
+ ALT="$^?$">)</TD>
+<TD ALIGN="LEFT"><I>MaxDelay</I></TD>
+<TD ALIGN="LEFT">The maximum length of the delay (i.e. the BRAM Size).</TD>
 </TR>
 <TR><TD ALIGN="LEFT">BRAM Latency</TD>
 <TD ALIGN="LEFT"><I>bram_latency</I></TD>
@@ -105,13 +108,18 @@ Ports</A>
 <TH ALIGN="LEFT"><B>Data Type</B></TH>
 <TH ALIGN="LEFT"><B>Description</B></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>in</I></TD>
+<TR><TD ALIGN="LEFT"><I>din</I></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">???</TD>
 <TD ALIGN="LEFT">The signal to be delayed.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>out</I></TD>
-<TD ALIGN="LEFT">out</TD>
+<TR><TD ALIGN="LEFT"><I>delay</I></TD>
+<TD ALIGN="LEFT">in</TD>
+<TD ALIGN="LEFT">???</TD>
+<TD ALIGN="LEFT">The run-time programmable delay length.</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><I>dout</I></TD>
+<TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">???</TD>
 <TD ALIGN="LEFT">The delayed signal.</TD>
 </TR>
@@ -120,12 +128,35 @@ Ports</A>
 
 <H2><A NAME="SECTION002164000000000000000">
 Description</A>
-</H2>A delay block that uses BRAM for its storage.
+</H2>A delay block that uses BRAM for its storage and has a run-time programmable delay. When delay is changed, some randomly determined samples will be inserted/dropped from the buffered stream.
 
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html906"
+  HREF="node19.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html902"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html896"
+  HREF="node17.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html904"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html907"
+  HREF="node19.html">The Complex Delay Block</A>
+<B> Up:</B> <A NAME="tex2html903"
+  HREF="node2.html">Signal Processing Blocks</A>
+<B> Previous:</B> <A NAME="tex2html897"
+  HREF="node17.html">The Enabled Delay in</A>
+ &nbsp; <B>  <A NAME="tex2html905"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 
-2008-05-07
+2008-05-08
 </ADDRESS>
 </BODY>
 </HTML>
