@@ -1,3 +1,4 @@
 % reorder test_reorder map [1,2,3,4]
 % blah test_reorder
 bit_reverse bit_reverse_test n_bits 5
+adder_tree adder_tree_test n_inputs 5 latency 3
