@@ -1,3 +1,15 @@
+% Rewrites mask parameters as strings.
+%
+% backpopulate_mask( blk, varargin )
+%
+% blk - The block whose mask will be modified
+% varargin - {'var', 'value', ...} pairs
+%
+% Cycles through the list of mask parameter variable names. Appends a new cell
+% with the variable value (extracted from varargin) as a string. Overwrites the
+% MaskValues parameter with this new cell array. Essentially converts any pointers
+% or references to strings in the mask.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,12 +33,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function backpopulate_mask(blk,varargin)
-% Back populate a block's mask's values.
-%
-% backpopulate_mask( blk, varargin )
-%
-% blk - The block whose mask will be modified
-% varargin - {'var', 'value', ...} pairs
 
   % Match mask names to {variables, values} in varargin
   masknames = get_param(blk, 'MaskNames');

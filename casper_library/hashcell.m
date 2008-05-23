@@ -1,3 +1,12 @@
+% Compute a hash of a cell
+%
+% hashcell(c)
+%
+% c - The cell array to hash
+% 
+% Converts a cell cell array to a text string using flatstrcell and then
+% returns a unique hash of that string using hashcode.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -20,11 +29,6 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function hash = hashcell(c)
-% Compute a hash of a cell
-%
-% hashcell(c)
-%
-% c - The cell to hash
     val = flatstrcell(c);
     hash = hashcode(val);
 end

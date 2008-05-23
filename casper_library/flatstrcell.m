@@ -1,3 +1,12 @@
+% Flattens a cell array into a string
+%
+% flatstrcell(c)
+%
+% c - The cell to flatten
+%
+% Recursively iterates through cell array provided, converting contents to
+% strings and appending to a new string.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -20,11 +29,6 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function flat = flatstrcell(c)
-% Flattens a cell into a string
-%
-% flatstrcell(c)
-%
-% c - The cell to flatten
     flat = '';
     for i=1:length(c),
         if iscell(c{i}),

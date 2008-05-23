@@ -1,3 +1,9 @@
+%Generates 32-bit hash from character array
+%
+%hash = hashcode(str)
+%
+%str = character array
+
 function hash = hashcode(str)
     str = uint32(str(:))';
     hash = uint32(1234);
