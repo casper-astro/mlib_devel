@@ -1,3 +1,14 @@
+% Create a tree of adders.
+%
+% adder_tree_init(blk, varargin)
+%
+% blk = The block to be configured.
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames for this block are:
+% n_inputs = Number of inputs
+% latency = Latency per adder
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,20 +32,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function adder_tree_init(blk,varargin)
-% Create a tree of adders.
-%
-% adder_tree_init(blk, varargin)
-%
-% blk = The block to be configured.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames for this block are:
-% n_inputs = Number of inputs
-% latency = Latency per adder
+
+check_mask_type(blk, 'adder_tree');
 
 defaults = {'latency', 2};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
-check_mask_type(blk, 'adder_tree');
 munge_block(blk, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 latency = get_var('latency', 'defaults', defaults, varargin{:});

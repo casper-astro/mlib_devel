@@ -1,3 +1,13 @@
+% Initialize and populate a bit_reverse block.
+%
+% bit_reverse_init(blk, varargin)
+%
+% blk = The block to initialize.
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames for this block are:
+% n_bits = The number of input bits to reverse
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,18 +31,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function bit_reverse_init(blk,varargin)
-% Initialize and populate a bit_reverse block.
-%
-% bit_reverse_init(blk, varargin)
-%
-% blk = The block to initialize.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames for this block are:
-% n_bits = The number of input bits to reverse
 
-if same_state(blk, varargin{:}), return, end
 check_mask_type(blk, 'bit_reverse');
+if same_state(blk, varargin{:}), return, end
 munge_block(blk, varargin{:});
 n_bits = get_var('n_bits',varargin{:});
 
