@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.48"
+    ComputedModelVersion    "1.68"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue May 20 15:46:24 2008"
+  LastModifiedDate	  "Thu May 29 14:58:55 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:48>"
+  ModelVersionFormat	  "1.%<AutoIncrement:68>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -647,7 +647,7 @@ Model {
   }
   System {
     Name		    "adder_tree_test"
-    Location		    [2209, 137, 3415, 1000]
+    Location		    [523, 131, 1708, 994]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -753,7 +753,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway In"
       Ports		      [1, 1]
-      Position		      [385, 550, 450, 570]
+      Position		      [385, 550, 425, 570]
       SourceBlock	      "xbsIndex_r4/Gateway In"
       SourceType	      "Xilinx Gateway In Block"
       infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
@@ -773,14 +773,14 @@ Model {
       sggui_pos		      "524,107,348,408"
       block_type	      "gatewayin"
       block_version	      "10.1.1"
-      sg_icon_stat	      "65,20,1,1,white,yellow,0,bc55d28f,right"
+      sg_icon_stat	      "40,20,1,1,white,yellow,0,bc55d28f,right"
       sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
     }
     Block {
       BlockType		      Reference
       Name		      "Gateway In1"
       Ports		      [1, 1]
-      Position		      [385, 590, 450, 610]
+      Position		      [385, 590, 425, 610]
       SourceBlock	      "xbsIndex_r4/Gateway In"
       SourceType	      "Xilinx Gateway In Block"
       infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
@@ -800,14 +800,14 @@ Model {
       sggui_pos		      "2054,205,348,408"
       block_type	      "gatewayin"
       block_version	      "10.1.1"
-      sg_icon_stat	      "65,20,1,1,white,yellow,0,bc55d28f,right"
+      sg_icon_stat	      "40,20,1,1,white,yellow,0,bc55d28f,right"
       sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
     }
     Block {
       BlockType		      Reference
       Name		      "Gateway In2"
       Ports		      [1, 1]
-      Position		      [385, 630, 450, 650]
+      Position		      [385, 631, 430, 649]
       SourceBlock	      "xbsIndex_r4/Gateway In"
       SourceType	      "Xilinx Gateway In Block"
       infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
@@ -827,7 +827,7 @@ Model {
       sggui_pos		      "2332,146,348,408"
       block_type	      "gatewayin"
       block_version	      "10.1.1"
-      sg_icon_stat	      "65,20,1,1,white,yellow,0,bc55d28f,right"
+      sg_icon_stat	      "45,18,1,1,white,yellow,0,bc55d28f,right"
       sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
     }
     Block {
@@ -936,7 +936,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out1"
       Ports		      [1, 1]
-      Position		      [600, 570, 660, 590]
+      Position		      [600, 590, 660, 610]
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
       infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
@@ -957,7 +957,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out2"
       Ports		      [1, 1]
-      Position		      [580, 439, 615, 451]
+      Position		      [610, 794, 645, 806]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -979,7 +979,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out3"
       Ports		      [1, 1]
-      Position		      [580, 454, 615, 466]
+      Position		      [610, 809, 645, 821]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -1001,7 +1001,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out4"
       Ports		      [1, 1]
-      Position		      [580, 469, 615, 481]
+      Position		      [610, 824, 645, 836]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -1023,7 +1023,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out5"
       Ports		      [1, 1]
-      Position		      [580, 484, 615, 496]
+      Position		      [610, 839, 645, 851]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -1045,7 +1045,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out6"
       Ports		      [1, 1]
-      Position		      [580, 499, 615, 511]
+      Position		      [610, 854, 645, 866]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -1067,7 +1067,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out7"
       Ports		      [1, 1]
-      Position		      [580, 514, 615, 526]
+      Position		      [610, 869, 645, 881]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -1106,7 +1106,7 @@ Model {
       BlockType		      Scope
       Name		      "Scope"
       Ports		      [8]
-      Position		      [715, 441, 755, 554]
+      Position		      [745, 796, 785, 909]
       Floating		      off
       Location		      [167, 85, 1847, 1082]
       Open		      off
@@ -1146,7 +1146,7 @@ Model {
     Block {
       BlockType		      ToFile
       Name		      "To File1"
-      Position		      [755, 587, 905, 613]
+      Position		      [755, 607, 905, 633]
       Filename		      "adder_tree_test_output.mat"
       MatrixName	      "output"
     }
@@ -1189,7 +1189,7 @@ Model {
       BlockType		      Concatenate
       Name		      "Vector\nConcatenate1"
       Ports		      [2, 1]
-      Position		      [700, 559, 720, 641]
+      Position		      [700, 579, 720, 661]
       Mode		      "Vector"
     }
     Block {
@@ -1207,7 +1207,7 @@ Model {
       FunctionWithSeparateData off
       MaskType		      "adder_tree"
       MaskDescription	      "Sums all inputs using a tree of adds and delays."
-      MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sp_adder_tree\\sp_adder_tree.html''])')"
+      MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\htmlblocks\\sp_adder_tree\\sp_adder_tree.html''])')"
       MaskPromptString	      "Number of Inputs|Add Latency"
       MaskStyleString	      "edit,edit"
       MaskTunableValueString  "on,on"
@@ -1583,9 +1583,9 @@ Model {
     Line {
       SrcBlock		      "Gateway In"
       SrcPort		      1
-      Points		      [0, 0]
+      Points		      [25, 0]
       Branch {
-	Points			[0, -115]
+	Points			[0, 240]
 	DstBlock		"Gateway Out2"
 	DstPort			1
       }
@@ -1597,9 +1597,9 @@ Model {
     Line {
       SrcBlock		      "Gateway In1"
       SrcPort		      1
-      Points		      [5, 0]
+      Points		      [30, 0]
       Branch {
-	Points			[0, -140]
+	Points			[0, 215]
 	DstBlock		"Gateway Out3"
 	DstPort			1
       }
@@ -1611,9 +1611,9 @@ Model {
     Line {
       SrcBlock		      "Gateway In2"
       SrcPort		      1
-      Points		      [10, 0]
+      Points		      [30, 0]
       Branch {
-	Points			[0, -165]
+	Points			[0, 190]
 	DstBlock		"Gateway Out4"
 	DstPort			1
       }
@@ -1627,7 +1627,7 @@ Model {
       SrcPort		      1
       Points		      [15, 0]
       Branch {
-	Points			[0, -190]
+	Points			[0, 165]
 	DstBlock		"Gateway Out5"
 	DstPort			1
       }
@@ -1639,7 +1639,6 @@ Model {
     Line {
       SrcBlock		      "adder_tree"
       SrcPort		      1
-      Points		      [0, -20]
       DstBlock		      "Gateway Out1"
       DstPort		      1
     }
@@ -1658,7 +1657,7 @@ Model {
 	DstPort			1
       }
       Branch {
-	Points			[0, -45]
+	Points			[10, 0; 0, 290]
 	DstBlock		"Scope"
 	DstPort			7
       }
@@ -1666,13 +1665,14 @@ Model {
     Line {
       SrcBlock		      "Gateway Out"
       SrcPort		      1
-      Points		      [0, -100; 15, 0]
+      Points		      [0, 0]
       Branch {
+	Points			[25, 0]
 	DstBlock		"Vector\nConcatenate1"
 	DstPort			2
       }
       Branch {
-	Points			[0, -70]
+	Points			[0, 185]
 	DstBlock		"Scope"
 	DstPort			8
       }
@@ -1789,7 +1789,7 @@ Model {
 	DstPort			5
       }
       Branch {
-	Points			[0, -215]
+	Points			[0, 140]
 	DstBlock		"Gateway Out6"
 	DstPort			1
       }
@@ -1817,7 +1817,7 @@ Model {
 	DstPort			6
       }
       Branch {
-	Points			[0, -240]
+	Points			[0, 115]
 	DstBlock		"Gateway Out7"
 	DstPort			1
       }
@@ -1850,7 +1850,7 @@ MatData {
   NumRecords		  2
   DataRecord {
     Tag			    DataTag1
-    Data		    "  %)30     .    ,     8    (    #0         %    \"     $    !     0         &  0 $!6@ P"
+    Data		    "  %)30     .    & (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ! 5H ,.    B $   8    (     @         %    \"     $    !     0         %  0 \"0    $    ;    9&5F875L=', ;E]I;G!U=', ;&%T96YC>0         .    J     8    (     0         %    \"     $    \"     0         .    .     8    (    !          %    \"     $    '     0         0    !P   &QA=&5N8WD #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    (    !@         %    \"     $    !     0         )    \"             A "
   }
   DataRecord {
     Tag			    DataTag0
