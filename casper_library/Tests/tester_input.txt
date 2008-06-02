@@ -4,3 +4,8 @@ bit_reverse bit_reverse_test n_bits 5
 adder_tree adder_tree_test n_inputs 5 latency 3
 c_to_ri c_to_ri_test n_bits 8 bin_pt 4
 complex_addsub complex_addsub_test BitWidth 12 add_latency 3
+edge edge_test
+freeze_cntr freeze_cntr_test CounterBits 6
+negedge negedge_test
+posedge posedge_test
+power power_test BitWidth 8
