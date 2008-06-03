@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.8"
+    ComputedModelVersion    "1.15"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri May 30 17:08:22 2008"
+  LastModifiedDate	  "Tue Jun 03 17:30:14 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:8>"
+  ModelVersionFormat	  "1.%<AutoIncrement:15>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -682,7 +682,7 @@ Model {
   }
   System {
     Name		    "power_test"
-    Location		    [2400, 159, 3447, 932]
+    Location		    [436, 213, 1483, 986]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200

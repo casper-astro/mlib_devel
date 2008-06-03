@@ -1,11 +1,14 @@
 % reorder test_reorder map [1,2,3,4]
 % blah test_reorder
-bit_reverse bit_reverse_test n_bits 5
-adder_tree adder_tree_test n_inputs 5 latency 3
-c_to_ri c_to_ri_test n_bits 8 bin_pt 4
-complex_addsub complex_addsub_test BitWidth 12 add_latency 3
-edge edge_test
-freeze_cntr freeze_cntr_test CounterBits 6
-negedge negedge_test
-posedge posedge_test
-power power_test BitWidth 8
+bit_reverse casper_library/Misc/bit_reverse bit_reverse_test n_bits 5
+adder_tree casper_library/Misc/adder_tree adder_tree_test n_inputs 5 latency 3
+c_to_ri casper_library/Misc/c_to_ri c_to_ri_test n_bits 8 bin_pt 4
+complex_addsub casper_library/Misc/complex_addsub complex_addsub_test BitWidth 12 add_latency 3
+edge casper_library/Misc/edge edge_test
+freeze_cntr casper_library/Misc/freeze_cntr freeze_cntr_test CounterBits 6
+negedge casper_library/Misc/negedge negedge_test
+posedge casper_library/Misc/posedge posedge_test
+power casper_library/Misc/power power_test BitWidth 8
+pulse_ext casper_library/Misc/pulse_ext pulse_ext_test pulse_len 7
+ri_to_c casper_library/Misc/ri_to_c ri_to_c_test
+lo_const casper_library/Downconverter/lo_const lo_const_test n_bits 13 phase (8*pi+1)/16
