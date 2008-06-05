@@ -104,6 +104,6 @@ fclose(fid);
 close_system('../casper_library',0);
 
 fprintf(['\n']);
-fprintf(['number model tests ignored: ',num2str(ignore),'\n']);
-fprintf(['number models failed: ',num2str(fail),'\n']);
+fprintf(['number model test lines ignored: ',num2str(ignore),'\n']);
+fprintf(['number model tests failed: ',num2str(fail),'\n']);
 if( fail|ignore ), fprintf(['Please see output for more details\n']); end

@@ -12,3 +12,13 @@ power casper_library/Misc/power power_test BitWidth 8
 pulse_ext casper_library/Misc/pulse_ext pulse_ext_test pulse_len 7
 ri_to_c casper_library/Misc/ri_to_c ri_to_c_test
 lo_const casper_library/Downconverter/lo_const lo_const_test n_bits 13 phase (8*pi+1)/16
+rcmult casper_library/Downconverter/rcmult rcmult_test latency 2
+% Test using small counter_width as initialisation code should increase size of address bus
+% to block RAM to prevent error produced by too narrow address bus (sysgen 10.1)
+lo_osc casper_library/Downconverter/lo_osc lo_osc_small_counter_test n_bits 8 counter_step 1 counter_start 2 counter_width 2 latency 2
+% Test using larger counter to see this is done as normal
+lo_osc casper_library/Downconverter/lo_osc lo_osc_normal_counter_test n_bits 10 counter_step 4 counter_start 3 counter_width 8 latency 3
+% Test using parameters to generate oscillators generating sinusoids rather than constants
+dds casper_library/Downconverter/dds dds_osc_test freq_div 4 freq 1 num_lo 2 n_bits 8 latency 3 
+% Test using parameters to generate constants
+dds casper_library/Downconverter/dds dds_const_test freq_div 4 freq 2 num_lo 4 n_bits 10 latency 1 
