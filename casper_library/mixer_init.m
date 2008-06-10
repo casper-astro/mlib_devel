@@ -1,3 +1,16 @@
+% mixer_init(blk, varargin)
+%
+% blk = The block to initialize.
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames for this block are:
+% freq_div = The (power of 2) denominator of the mixing frequency.
+% freq = The numerator of the mixing frequency
+% nstreams = The number of parallel streams provided
+% n_bits = The bitwidth of samples out
+% bram_latency = The latency of sine/cos lookup table
+% mult_latency = The latency of mixer multiplier
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,23 +34,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function mixer_init(blk,varargin)
-% mixer_init(blk, varargin)
-%
-% blk = The block to initialize.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames for this block are:
-% freq_div = The (power of 2) denominator of the mixing frequency.
-% freq = The numerator of the mixing frequency
-% nstreams = The number of parallel streams provided
-% n_bits = The bitwidth of samples out
-% bram_latency = The latency of sine/cos lookup table
-% mult_latency = The latency of mixer multiplier
 
 % Declare any default values for arguments you might like.
 defaults = {'n_bits', 8, 'bram_latency', 2, 'mult_latency', 3};
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'mixer');
+if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
 freq_div = get_var('freq_div','defaults', defaults, varargin{:});
 freq = get_var('freq','defaults', defaults, varargin{:});

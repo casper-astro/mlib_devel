@@ -1,3 +1,12 @@
+% Determines if a block's state matches the arguments.
+%
+% blk = The block to check
+% varargin = A cell array of things to compare.
+%
+% The compares the block's UserData parameter with the contents of
+% varargin.  If they match, this function returns true.  If they do not
+% match, this function returns false.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,18 +30,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function match = same_state(blk,varargin)
-% Determines if a block's state matches the arguments.
-%
-% blk = The block to check
-% varargin = The things to compare.
-%
-% The compares the block's UserData parameter with the contents of
-% varargin.  If they match, this function returns true.  If they do not
-% match, this function returns false.
 
 try
-    match = get_param(blk,'UserData') == hashcell(varargin);
+    match = getfield( get_param(blk,'UserData'), 'state') == hashcell(varargin);
 catch
     match = 0;
 end
+
+%forces update of mask
+backpopulate_mask(blk,varargin{:});
 

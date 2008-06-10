@@ -1,3 +1,14 @@
+% Saves blk's new state and parameters.
+%
+% save_state(blk,varargin)
+%
+% blk = The block to check
+% varargin = The things to compare.
+%
+% The block's UserData 'state' parameter is updated with the contents of the hash of
+% varargin, and the parameters saved in the 'parameters' struct.
+% the block's UserDataPersistent parameter is set to 'on'.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,16 +32,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function save_state(blk,varargin)
-% Saves blk's new state if it differs from the current state.
-%
-% save_state(blk,varargin)
-%
-% blk = The block to check
-% varargin = The things to compare.
-%
-% The block's UserData parameter is updated with the contents of
-% varargin, the block's UserDataPersistent parameter is set to 'on'.
-set_param(blk,'UserData',hashcell(varargin));
+
+%check varargin contains even number of variables
+if( mod(length(varargin),2) ~= 0 ) disp('Non-even parameter list'); return; end;
+	
+struct.state = hashcell(varargin);
+struct.parameters = [];
+%construct struct of parameter values
+for j = 1:length(varargin)/2,
+	struct.parameters = setfield( struct.parameters, varargin{j*2-1}, varargin{j*2} );
+end
+
+set_param(blk,'UserData',struct);
 set_param(blk,'UserDataPersistent','on');
-backpopulate_mask(blk,varargin{:});
+%backpopulate_mask(blk,varargin{:});
 

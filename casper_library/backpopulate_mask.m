@@ -1,4 +1,4 @@
-% Rewrites mask parameters as strings.
+% Rewrites mask parameters as strings if short enough, otherwise call to extract.
 %
 % backpopulate_mask( blk, varargin )
 %
@@ -6,15 +6,17 @@
 % varargin - {'var', 'value', ...} pairs
 %
 % Cycles through the list of mask parameter variable names. Appends a new cell
-% with the variable value (extracted from varargin) as a string. Overwrites the
-% MaskValues parameter with this new cell array. Essentially converts any pointers
+% with the variable value (extracted from varargin) as a string to a cell array if
+% value short enough, otherwise a call to its value in 'UserData'. Overwrites the
+% 'MaskValues' parameter with this new cell array. Essentially converts any pointers
 % or references to strings in the mask.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
 %   http://seti.ssl.berkeley.edu/casper/                                      %
-%   Copyright (C) 2006 David MacMahon, Aaron Parsons                          %
+%   Copyright (C) 2006 David MacMahon, Aaron Parsons,                         %
+%   Copyright (C) 2008 Andrew Martens                                         %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
@@ -32,18 +34,35 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 function backpopulate_mask(blk,varargin)
 
   % Match mask names to {variables, values} in varargin
   masknames = get_param(blk, 'MaskNames');
   mv = {};
   for i=1:length(masknames),
+
       varname = masknames{i};
       value = get_var(varname, varargin{:});
+
       if isnan(value),
-          error(['No value specified for ',varname]);
+      	error(['No value specified for ',varname]);
       end
-      mv{i} = mat2str(value);
+
+     %if parameter too large
+      if( length(mat2str(value)) > 100 ),
+      	mv{i} = ['getfield( getfield( get_param( gcb,''UserData'' ), ''parameters''),''',varname,''')'];
+      else
+      	
+	      if( isnumeric(value) ), 
+		      mv{i} = mat2str(value); 
+	      else 
+		      mv{i} = value;
+	      end
+      end
+
   end
-  % Back populate mask parameter values
+ 
+  %Back populate mask parameter values
   set_param(blk,'MaskValues',mv);       % This call echos blk name if mv contains a matrix ???
+

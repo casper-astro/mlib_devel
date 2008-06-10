@@ -1,3 +1,26 @@
+% Performs various munges on a block.
+%
+% munge_block(blk,varargin)
+%
+% blk - The block whose mask will be dumbed down or turned off
+% varargin - A cell array of strings indicating the munges to do.
+%
+% Supported munges:
+%
+% 'dumbdown'
+%
+%   Dumbing down a block's mask makes the block's mask informative only;
+%   the mask can no longer be used to configure the subsystem.  Here is
+%   a list of what happens to a mask that is dumbed down...
+%
+%   o MaskInitialization code is deleted.
+%   o All mask parameters are marked as disabled, non-tunable, and
+%     do-not-evaluate. 
+%
+% 'unmask'
+%
+%   Turns off the block's mask.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,28 +44,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function munge_block(blk,varargin)
-% Performs various munges on a block.
-%
-% munge_block(blk,varargin)
-%
-% blk - The block whose mask will be dumbed down or turned off
-% varargin - A cell array of strings indicating the munges to do.
-%
-% Supported munges:
-%
-% 'dumbdown'
-%
-%   Dumbing down a block's mask makes the block's mask informative only;
-%   the mask can no longer be used to configure the subsystem.  Here is
-%   a list of what happens to a mask that is dumbed down...
-%
-%   o MaskInitialization code is deleted.
-%   o All mask parameters are marked as disabled, non-tunable, and
-%     do-not-evaluate. 
-%
-% 'unmask'
-%
-%   Turns off the block's mask.
 
   % Don't munge if blk lives in a library
   if is_library_block(blk), return, end
