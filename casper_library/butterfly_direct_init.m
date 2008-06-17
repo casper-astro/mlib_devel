@@ -65,6 +65,9 @@ br_coeff_gen = [coeff_gen,'/br_coeff_gen'];
 block_type = get_param(twiddle, 'BlockChoice');
 % Compute the complex, bit-reversed values of the twiddle factors
 br_indices = bit_rev(Coeffs, FFTSize-1);
+fprintf([num2str(FFTSize),'\n'])
+fprintf([num2str(2^FFTSize),'\n'])
+fprintf([num2str(-2*pi*1j*br_indices/2^FFTSize),'\n'])
 br_indices = -2*pi*1j*br_indices/2^FFTSize;
 ActualCoeffs = exp(br_indices);
 

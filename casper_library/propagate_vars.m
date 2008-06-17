@@ -37,7 +37,11 @@ for i=1:length(params),
     found = get_var(params{i},varargin{:});  
     % if parameter of the same name is found, copy
     if ~isnan(found),
-        set_param(blk, params{i}, mat2str(found));
+        if isnumeric(found),
+            set_param(blk, params{i}, mat2str(found));
+        else,
+            set_param(blk, params{i}, found);
+        end
     end
 end
 
