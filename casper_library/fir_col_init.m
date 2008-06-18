@@ -1,3 +1,14 @@
+% fir_col_init(blk, varargin)
+%
+% blk = The block to initialize.
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames for this block are:
+% n_inputs = The number of parallel input samples.
+% coeff = The FIR coefficients, top-to-bottom.
+% add_latency = The latency of adders.
+% mult_latency = The latency of multipliers.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,16 +32,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function fir_col_init(blk,varargin)
-% fir_col_init(blk, varargin)
-%
-% blk = The block to initialize.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames for this block are:
-% n_inputs = The number of parallel input samples.
-% coeff = The FIR coefficients, top-to-bottom.
-% add_latency = The latency of adders.
-% mult_latency = The latency of multipliers.
 
 % Declare any default values for arguments you might like.
 defaults = {'add_latency', 2, 'mult_latency', 3};
