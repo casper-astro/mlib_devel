@@ -1,0 +1,9 @@
+ The following files will be modified:
+  system.mhs
+  system.mss
+
+--------------------------------------
+ The following changes will be made:
+ Core dcm_module 1.00.a will be replaced by 1.00.b
+
+ Driver uartlite 1.00.b will be replaced by 1.02.a
