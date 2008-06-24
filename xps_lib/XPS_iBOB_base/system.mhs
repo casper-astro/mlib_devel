@@ -237,13 +237,13 @@ END
 
 BEGIN diffclk_buf
  PARAMETER INSTANCE = diffclk_buf_0
- PARAMETER HW_VER = 1.00.a
+ PARAMETER HW_VER = 1.01.a
  PORT Clkin_p = sysclk_p
  PORT Clkin_m = sysclk_m
  PORT Clkout = dcm_clk_s
 END
-PORT sysclk_p = sysclk_p, DIR = IN
-PORT sysclk_m = sysclk_m, DIR = IN
+PORT sysclk_p = sysclk_p, DIR = IN, SIGIS = CLK, CLK_FREQ = 100000000
+PORT sysclk_m = sysclk_m, DIR = IN, SIGIS = CLK, CLK_FREQ = 100000000
 
 BEGIN opb_uartlite
  PARAMETER INSTANCE = RS232_UART_1
