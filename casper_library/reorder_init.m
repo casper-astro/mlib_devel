@@ -31,6 +31,8 @@ if n_inputs < 1
 end
 
 map_length = length(map);
+fprintf([mat2str(map),'\n']);
+fprintf([num2str(map_length),'\n']);
 map_bits = ceil(log2(map_length));
 order = compute_order(map);
 order_bits = ceil(log2(order));

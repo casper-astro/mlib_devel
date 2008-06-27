@@ -65,12 +65,12 @@ br_coeff_gen = [coeff_gen,'/br_coeff_gen'];
 block_type = get_param(twiddle, 'BlockChoice');
 % Compute the complex, bit-reversed values of the twiddle factors
 br_indices = bit_rev(Coeffs, FFTSize-1);
-fprintf([num2str(FFTSize),'\n'])
-fprintf([num2str(2^FFTSize),'\n'])
-fprintf([num2str(-2*pi*1j*br_indices/2^FFTSize),'\n'])
 br_indices = -2*pi*1j*br_indices/2^FFTSize;
 ActualCoeffs = exp(br_indices);
-
+ActualCoeffsStr = 'exp(-2*pi*1j*(bit_rev(Coeffs, FFTSize-1))/2^FFTSize)';
+fprintf(['coeffs: ', mat2str(ActualCoeffs),'\n']);
+fprintf([ActualCoeffsStr,'\n']);
+fprintf(['size: ', num2str(length(ActualCoeffs)), ' optimizing twiddle\n']);
 % Optimize twiddler for coeff = 0, 1, or alternating 0-1
 if length(Coeffs) == 1,
     if Coeffs(1) == 0,
@@ -91,6 +91,7 @@ elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-
 else,
     set_param(twiddle, 'BlockChoice', 'twiddle_general_3mult');
     block_type = 'twiddle_general_3mult';
+    set_param([twiddle,'/',block_type], 'Coeffs', ['[',ActualCoeffsStr,']']);
    
     set_param(coeff_gen, 'BlockChoice', 'br_coeff_gen');
     br_coeff_gen = [coeff_gen, '/br_coeff_gen'];
@@ -105,7 +106,7 @@ end
 
 propagate_vars([twiddle,'/',block_type],'defaults', defaults, varargin{:});
 if(strcmp(block_type,'twiddle_general_3mult')),
-    set_param([twiddle,'/',block_type], 'Coeffs', ['[',num2str(ActualCoeffs),']']);
+    set_param([twiddle,'/',block_type], 'Coeffs', ['[',ActualCoeffsStr,']']);
 end
 
 % Propagate quantization behavior
