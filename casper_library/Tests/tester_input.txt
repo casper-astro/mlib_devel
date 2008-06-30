@@ -1,24 +1,41 @@
 % reorder test_reorder map [1,2,3,4]
 % blah test_reorder
-bit_reverse casper_library/Misc/bit_reverse bit_reverse_test n_bits 5
-adder_tree casper_library/Misc/adder_tree adder_tree_test n_inputs 5 latency 3
-c_to_ri casper_library/Misc/c_to_ri c_to_ri_test n_bits 8 bin_pt 4
-complex_addsub casper_library/Misc/complex_addsub complex_addsub_test BitWidth 12 add_latency 3
-edge casper_library/Misc/edge edge_test
-freeze_cntr casper_library/Misc/freeze_cntr freeze_cntr_test CounterBits 6
-negedge casper_library/Misc/negedge negedge_test
-posedge casper_library/Misc/posedge posedge_test
-power casper_library/Misc/power power_test BitWidth 8
-pulse_ext casper_library/Misc/pulse_ext pulse_ext_test pulse_len 7
-ri_to_c casper_library/Misc/ri_to_c ri_to_c_test
-lo_const casper_library/Downconverter/lo_const lo_const_test n_bits 13 phase (8*pi+1)/16
-rcmult casper_library/Downconverter/rcmult rcmult_test latency 2
-% Test using small counter_width as initialisation code should increase size of address bus
-% to block RAM to prevent error produced by too narrow address bus (sysgen 10.1)
-lo_osc casper_library/Downconverter/lo_osc lo_osc_small_counter_test n_bits 8 counter_step 1 counter_start 2 counter_width 2 latency 2
-% Test using larger counter to see this is done as normal
-lo_osc casper_library/Downconverter/lo_osc lo_osc_normal_counter_test n_bits 10 counter_step 4 counter_start 3 counter_width 8 latency 3
-% Test using parameters to generate oscillators generating sinusoids rather than constants
-dds casper_library/Downconverter/dds dds_osc_test freq_div 4 freq 1 num_lo 2 n_bits 8 latency 3 
-% Test using parameters to generate constants
-dds casper_library/Downconverter/dds dds_const_test freq_div 4 freq 2 num_lo 4 n_bits 10 latency 1 
+% bit_reverse casper_library/Misc/bit_reverse bit_reverse_test n_bits 5
+% adder_tree casper_library/Misc/adder_tree adder_tree_test n_inputs 5 latency 3
+% c_to_ri casper_library/Misc/c_to_ri c_to_ri_test n_bits 8 bin_pt 4
+% complex_addsub casper_library/Misc/complex_addsub complex_addsub_test BitWidth 12 add_latency 3
+% edge casper_library/Misc/edge edge_test
+% freeze_cntr casper_library/Misc/freeze_cntr freeze_cntr_test CounterBits 6
+% negedge casper_library/Misc/negedge negedge_test
+% posedge casper_library/Misc/posedge posedge_test
+% power casper_library/Misc/power power_test BitWidth 8
+% pulse_ext casper_library/Misc/pulse_ext pulse_ext_test pulse_len 7
+% ri_to_c casper_library/Misc/ri_to_c ri_to_c_test
+% lo_const casper_library/Downconverter/lo_const lo_const_test n_bits 13 phase (8*pi+1)/16
+% rcmult casper_library/Downconverter/rcmult rcmult_test latency 2
+% % Test using small counter_width as initialisation code should increase size of address bus
+% % to block RAM to prevent error produced by too narrow address bus (sysgen 10.1)
+% lo_osc casper_library/Downconverter/lo_osc lo_osc_small_counter_test n_bits 8 counter_step 1 counter_start 2 counter_width 2 latency 2
+% % Test using larger counter to see this is done as normal
+% lo_osc casper_library/Downconverter/lo_osc lo_osc_normal_counter_test n_bits 10 counter_step 4 counter_start 3 counter_width 8 latency 3
+% % Test using parameters to generate oscillators generating sinusoids rather than constants
+% dds casper_library/Downconverter/dds dds_osc_test freq_div 4 freq 1 num_lo 2 n_bits 8 latency 3
+% % Test using parameters to generate constants
+% dds casper_library/Downconverter/dds dds_const_test freq_div 4 freq 2 num_lo 4 n_bits 10 latency 1
+% mixer casper_library/Downconverter/mixer mixer_test freq_div 8 freq 1 nstreams 4 n_bits 10 bram_latency 3 mult_latency 3
+% fir_tap casper_library/Downconverter/fir_tap fir_tap_test latency 2 factor 0.12345
+% fir_dbl_tap casper_library/Downconverter/fir_dbl_tap fir_dbl_tap_test factor 0.1234 add_latency 3 mult_latency 4  
+% fir_col casper_library/Downconverter/fir_col fir_col_test n_inputs 4 coeff [0.1,0.2,0.3,0.4] add_latency 4 mult_latency 3
+% fir_dbl_col casper_library/Downconverter/fir_dbl_col fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4]' add_latency 2 mult_latency 2
+% dec_fir casper_library/Downconverter/dec_fir dec_fir_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8]' n_bits 16 quantization 'Round  (unbiased: +/- Inf)' add_latency 3 mult_latency 4
+% dec_fir casper_library/Downconverter/dec_fir dec_fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1]' n_bits 10 quantization 'Round  (unbiased: Even Values)' add_latency 2 mult_latency 3
+% sync_delay casper_library/Delays/sync_delay sync_delay_test DelayLen 7
+% sync_delay_en casper_library/Delays/sync_delay_en sync_delay_en_test DelayLen 7
+% sync_delay_prog casper_library/Delays/sync_delay_prog sync_delay_prog_test MaxDelay 5
+% delay_bram_en_plus casper_library/Delays/delay_bram_en_plus delay_bram_en_plus_test DelayLen 9 bram_latency 3
+% delay_bram_prog casper_library/Delays/delay_bram_prog delay_bram_prog_test MaxDelay 5 bram_latency 3
+% delay_bram casper_library/Delays/delay_bram delay_bram_test DelayLen 6 bram_latency 3
+% delay_slr casper_library/Delays/delay_slr delay_slr_test DelayLen 5
+partial_delay_prog casper_library/Delays/partial_delay_prog partial_delay_prog_test n_inputs 4 mux_latency 2
+delay_complex casper_library/Delays/delay_complex delay_complex_bram_test delay 7 n_bits 11 bin_pt 10 use_bram 1 bram_latency 3
+delay_complex casper_library/Delays/delay_complex delay_complex_slr_test delay 7 n_bits 13 bin_pt 12 use_bram 0 bram_latency 4

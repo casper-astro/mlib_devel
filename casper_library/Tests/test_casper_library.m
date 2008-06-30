@@ -65,36 +65,55 @@ while(ischar(line))
     if( err ),
         fprintf(['Ignoring line ',num2str(linenum),'\n']);
 	ignore = ignore + 1;
+    	close_system(model,0);
     else, 
 
-        add_block( libloc,[model,'/',blk,'1']);
-        %read in block parameters
-        [name,remainder] = strtok(remainder);
-        [value, remainder] = strtok(remainder);
+        try,
+		add_block( libloc,[model,'/',blk,'1']);
+	catch,
+		err = 1;
+		close_system(model,0);
+	end
+
+	%read in block parameters
+        [name,remainder] = get_token(remainder);
+        [value, remainder] = get_token(remainder);
         while(~isempty(name) & ~isempty(value)),
+            fprintf(['setting ',name,' to ',value,'\n']);
+	    try, 	
             set_param([model,'/',blk,'1'],name, value);
-            fprintf(['setting ',name,' ',value,'\n']);
-            [name,remainder] = strtok(remainder);
-            [value, remainder] = strtok(remainder); 
+	    catch,
+		err = 1;    
+    		disp(['Error setting ',name,' to ',value]);
+	    end		
+            [name,remainder] = get_token(remainder);
+            [value, remainder] = get_token(remainder); 
         end
-        
-        replace_block(model,'Name',blk,[model,'/',blk,'1'],'noprompt');
+       
+        %replace existing block with new one	
+	if( ~err ), replace_block(model,'Name',blk,[model,'/',blk,'1'],'noprompt'); end
         delete_block([model,'/',blk,'1']);
      
-        fprintf('testing... ',blk,'\n');
-        sim(model);
-        load([model,'_reference']);
-        load([model,'_output']);
+	if( ~err ),
+		fprintf('testing... ',blk,'\n');
+		sim(model);
+		load([model,'_reference']);
+		load([model,'_output']);
+	
+
+		if(isequal(reference,output)),
+		    fprintf([model,' passed\n']);
+		else,
+		    fprintf([model,' failed, line: ', num2str(linenum), '. Output and reference files differ\n']);
+		    fail = fail + 1;
+		end
+		delete([model,'_output.mat']);
+	else,
+	        fprintf(['Ignoring line ',num2str(linenum),'\n']);
+		ignore = ignore + 1;
+	end
         
-        if(isequal(reference,output)),
-            fprintf([model,' passed\n']);
-        else,
-            fprintf([model,' failed, line: ', num2str(linenum), '. Output and reference files differ\n']);
-	    fail = fail + 1;
-        end
-        delete([model,'_output.mat']);
-        
-        close_system(model,1);
+        close_system(model,0);
 	fprintf(['\n']);
     end
 
