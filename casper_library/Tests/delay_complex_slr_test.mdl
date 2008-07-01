@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.6"
+    ComputedModelVersion    "1.7"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Jun 30 14:58:43 2008"
+  LastModifiedDate	  "Tue Jul 01 12:02:50 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:6>"
+  ModelVersionFormat	  "1.%<AutoIncrement:7>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -539,6 +539,9 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
+      BlockType		      Reference
+    }
+    Block {
       BlockType		      Scope
       ModelBased	      off
       TickLabels	      "OneTimeTick"
@@ -909,8 +912,8 @@ Model {
       BlockType		      ToFile
       Name		      "To File"
       Position		      [635, 177, 840, 203]
-      Filename		      "delay_complex_slr_test_reference.mat"
-      MatrixName	      "reference"
+      Filename		      "delay_complex_slr_test_output.mat"
+      MatrixName	      "output"
     }
     Block {
       BlockType		      Reference
@@ -1044,7 +1047,7 @@ Model {
 	  SourceType		  "c_to_ri"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -1130,7 +1133,7 @@ Model {
 	      SourceType	      "delay_slr"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData off
+	      FunctionWithSeparateData "off"
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -1237,7 +1240,7 @@ Model {
 	      SourceType	      "delay_slr"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData off
+	      FunctionWithSeparateData "off"
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -1295,7 +1298,7 @@ Model {
 	  SourceType		  "ri_to_c"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"

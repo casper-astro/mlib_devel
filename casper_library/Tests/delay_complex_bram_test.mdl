@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.9"
+    ComputedModelVersion    "1.10"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Jun 30 14:57:40 2008"
+  LastModifiedDate	  "Tue Jul 01 12:02:25 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  ModelVersionFormat	  "1.%<AutoIncrement:10>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -909,8 +909,8 @@ Model {
       BlockType		      ToFile
       Name		      "To File"
       Position		      [600, 237, 805, 263]
-      Filename		      "delay_complex_bram_test_reference.mat"
-      MatrixName	      "reference"
+      Filename		      "delay_complex_bram_test_output.mat"
+      MatrixName	      "output"
     }
     Block {
       BlockType		      Reference
@@ -970,7 +970,7 @@ Model {
       FunctionWithSeparateData off
       MaskType		      "delay_complex"
       MaskDescription	      "A delay block that treats its input as complex, splits it into real and imaginary components, delays each component by a specified amount, and then re-joins them into a complex output.  The underlying storage is user-selectable (either BRAM or SLR16 elements).  The reason for this is wide (36 bit) delays make adjacent multipliers in multiplier-bram pairs unusable."
-      MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\htmlblocks\\sp_delay_complex\\sp_delay_complex.html''])')"
+      MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\casper_library\\doc\\delay_complex_usage.html''])')"
       MaskPromptString	      "Delay Length|Sample Bit Width|Binary Point|Use BRAM (0=no, 1=yes)|BRAM Latency"
       MaskStyleString	      "edit,edit,edit,edit,edit"
       MaskTunableValueString  "on,on,on,on,on"
@@ -1078,7 +1078,7 @@ Model {
 	    }
 	    BlockName		    "delay_bram/Single Port RAM"
 	    DialogParameters {
-	      sg_icon_stat	      "65,54,1,1,white,blue,0,fe218027,right"
+	      sg_icon_stat	      "65,54,3,1,white,blue,0,fe218027,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 54 54 ],[0.77 0.82 0.91]);\npatch([16 7 20 7 16 30 34 38 53 41 29 21 35 21 29 41 53 38 34 30 16 ],[6 15 28 41 50 50 46 50 50 38 50 42 28 14 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 54 54 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');port_label('input',2,'data');\ncolor('black');port_label('input',3,'we');\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    BlockName		    "delay_slr"
@@ -1181,7 +1181,7 @@ Model {
 	    }
 	    BlockName		    "delay_bram/Single Port RAM"
 	    DialogParameters {
-	      sg_icon_stat	      "65,54,1,1,white,blue,0,fe218027,right"
+	      sg_icon_stat	      "65,54,3,1,white,blue,0,fe218027,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 54 54 ],[0.77 0.82 0.91]);\npatch([16 7 20 7 16 30 34 38 53 41 29 21 35 21 29 41 53 38 34 30 16 ],[6 15 28 41 50 50 46 50 50 38 50 42 28 14 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 54 54 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');port_label('input',2,'data');\ncolor('black');port_label('input',3,'we');\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    BlockName		    "delay_slr"
@@ -1303,31 +1303,10 @@ Model {
 	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "ri_to_c"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  DstBlock		  "Out1"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "In1"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  DstBlock		  "c_to_ri"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "delay2"
+	  SrcBlock		  "c_to_ri"
 	  SrcPort		  1
 	  Points		  [10, 0; 0, -25]
-	  DstBlock		  "ri_to_c"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "c_to_ri"
-	  SrcPort		  2
-	  Points		  [10, 0; 0, 25]
-	  DstBlock		  "delay2"
+	  DstBlock		  "delay1"
 	  DstPort		  1
 	}
 	Line {
@@ -1339,9 +1318,30 @@ Model {
 	}
 	Line {
 	  SrcBlock		  "c_to_ri"
+	  SrcPort		  2
+	  Points		  [10, 0; 0, 25]
+	  DstBlock		  "delay2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "delay2"
 	  SrcPort		  1
 	  Points		  [10, 0; 0, -25]
-	  DstBlock		  "delay1"
+	  DstBlock		  "ri_to_c"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "In1"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "c_to_ri"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "ri_to_c"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "Out1"
 	  DstPort		  1
 	}
       }
