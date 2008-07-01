@@ -1,3 +1,13 @@
+% Initialize and configure the barrel switcher.
+%
+% barrel_switcher_init(blk, varargin)
+%
+% blk = The block to configure.
+% varargin = {'varname', 'value', ...} pairs
+% 
+% Valid varnames for this block are:
+% n_inputs = Number of inputs
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,15 +31,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function barrel_switcher_init(blk, varargin)
-% Initialize and configure the barrel switcher.
-%
-% barrel_switcher_init(blk, varargin)
-%
-% blk = The block to configure.
-% varargin = {'varname', 'value', ...} pairs
-% 
-% Valid varnames for this block are:
-% n_inputs = Number of inputs
+
 
 % Declare any default values for arguments you might like.
 defaults = {};
