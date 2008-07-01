@@ -38,5 +38,5 @@ catch
 end
 
 %forces update of mask
-backpopulate_mask(blk,varargin{:});
+%backpopulate_mask(blk,varargin{:});
 

@@ -35,8 +35,8 @@ function fir_col_init(blk,varargin)
 
 % Declare any default values for arguments you might like.
 defaults = {'add_latency', 2, 'mult_latency', 3};
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'fir_col');
+if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
 n_inputs = get_var('n_inputs','defaults', defaults, varargin{:});
 coeff = get_var('coeff','defaults', defaults, varargin{:});

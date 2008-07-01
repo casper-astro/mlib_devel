@@ -1,3 +1,17 @@
+% dec_fir_init(blk, varargin)
+%
+% blk = The block to initialize.
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames for this block are:
+% n_inputs = The number of parallel input samples.
+% coeff = The FIR coefficients, top-to-bottom.
+% n_bits = Bit width out.
+% quantization = Quantization behavior [Truncate, Round (unbiased: +/- Inf),
+%    or Round (unbiased: Even Values)]
+% add_latency = The latency of adders.
+% mult_latency = The latency of multipliers.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,24 +35,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function dec_fir_init(blk,varargin)
-% dec_fir_init(blk, varargin)
-%
-% blk = The block to initialize.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames for this block are:
-% n_inputs = The number of parallel input samples.
-% coeff = The FIR coefficients, top-to-bottom.
-% n_bits = Bit width out.
-% quantization = Quantization behavior [Truncate, Round (unbiased: +/- Inf),
-%    or Round (unbiased: Even Values)]
-% add_latency = The latency of adders.
-% mult_latency = The latency of multipliers.
 
 % Declare any default values for arguments you might like.
 defaults = {'n_bits', 8, 'quantization', 'Round (unbiased: Even Values)', 'add_latency', 2, 'mult_latency', 3};
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'dec_fir');
+
+if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+
 munge_block(blk, varargin{:});
 n_inputs = get_var('n_inputs','defaults', defaults, varargin{:});
 coeff = get_var('coeff','defaults', defaults, varargin{:});
@@ -90,15 +93,18 @@ for i=1:num_fir_col,
     reuse_block(blk, blk_name, ['casper_library/Downconverter/',fir_col_type], ...
         'Position', [200*i+200 50 200*i+300 250], 'n_inputs', num2str(n_inputs),...
         'coeff',mat2str(coeff(i*n_inputs:-1:(i-1)*n_inputs+1)),...
-        'mult_latency', num2str(mult_latency));
-    if coeff_sym
-        set_param([blk,'/',blk_name], 'add_latency', num2str(add_latency));
-    end
+	'mult_latency', num2str(mult_latency),...
+	'add_latency', num2str(add_latency));
+%replaced by Andrew as parameters not fully specified
+%	'mult_latency', num2str(mult_latency));
+%    if coeff_sym
+%        set_param([blk,'/',blk_name], 'add_latency', num2str(add_latency));
+%    end
 
     if i == 1,
         for j=1:n_inputs,
-            disp(blk_name);
-            disp(j);
+    %        disp(blk_name);
+    %        disp(j);
             add_line(blk, ['real',num2str(j),'/1'], [blk_name,'/',num2str(2*j-1)]);
             add_line(blk, ['imag',num2str(j),'/1'], [blk_name,'/',num2str(2*j)]);
         end
@@ -142,10 +148,16 @@ reuse_block(blk, 'sync_out', 'built-in/outport', ...
 reuse_block(blk, 'dout', 'built-in/outport', ...
     'Position', [200*num_fir_col+680 400 200*num_fir_col+710 415], 'Port', '2');
 
+%delay of sync
 if coeff_sym,
-    sync_latency = 2*num_fir_col + mult_latency + ceil(log2(num_fir_col))* add_latency + 2*add_latency;
+%    sync_latency = 2*num_fir_col + mult_latency + ceil(log2(num_fir_col))* add_latency + 2*add_latency;
+    sync_latency = (2*num_fir_col)-1 + mult_latency + ceil(log2(n_inputs))* add_latency + 2*add_latency;
 else
-    sync_latency = num_fir_col + mult_latency + ceil(log2(num_fir_col))* add_latency + add_latency;
+    %replaced as does not make sense	
+%    sync_latency = num_fir_col + mult_latency + ceil(log2(num_fir_col))* add_latency + add_latency;
+    %registers in fir_cols + multiplier + adder tree in fir_col + convert block
+    sync_latency = (num_fir_col-1) + mult_latency + ceil(log2(n_inputs))* add_latency + add_latency;
+%
 end
 reuse_block(blk, 'delay', 'xbsIndex_r4/Delay', ...
     'Position', [60 90*n_inputs+100 90 90*n_inputs+130], ...
