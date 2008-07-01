@@ -246,17 +246,18 @@ if run_copy
     if exist(xps_path,'dir')
         rmdir(xps_path,'s');
     end
-    if exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base.zip'],'file')
-        cd(work_path);
-        [unzip_result,unzip_message] = dos(['unzip ',XPS_LIB_PATH,'\XPS_',hw_sys,'_base.zip']);
-        if unzip_result
+    if exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
+        mkdir(xps_path);
+%        disp(['xcopy /Q /E /Y ', getenv('BEE2_XPS_LIB_PATH'), '\XPS_',hw_sys,'\base ', xps_path,'\.']);
+        [copy_result,copy_message] = dos(['xcopy /Q /E /Y ', getenv('BEE2_XPS_LIB_PATH'), '\XPS_',hw_sys,'_base ', xps_path,'\.']);
+        if copy_result
             cd(simulink_path);
             error('Unpackage base system files failed.');
         else
             cd(simulink_path);
         end
     else
-        error(['Base XPS zip file "','XPS_',hw_sys,'_base.zip" does not exist.']);
+        error(['Base XPS package "','XPS_',hw_sys,'_base" does not exist.']);
     end
 end
 time_copy = now - start_time;

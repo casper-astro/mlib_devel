@@ -46,12 +46,22 @@ if nargin == 0  % LAUNCH GUI
 
     %get the Xilinx Sysgen version
     xsg = xlVersion;
-    xsg = strtok(xsg{1},' ');
+
+    try
+        xsg = strtok(xsg{1},' ');
+    catch
+        xsg = get_xlVersion('full');
+    end
+
     switch xsg
         case {'8.2.02'}
             set(handles.xsg_version,'String','8.2');
         case {'9.1.01'}
             set(handles.xsg_version,'String','9.1');
+        case {'10.1.1.1182'}
+            set(handles.xsg_version,'String','10.1');
+        case {'10.1.2.1250'}
+            set(handles.xsg_version,'String','10.1');
         otherwise
             errordlg(['Unsupported Xilinx System Generator version: ',xsg]);
             return;
