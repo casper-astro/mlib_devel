@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.87"
+    ComputedModelVersion    "1.91"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 17 13:57:59 2008"
+  LastModifiedDate	  "Thu Jun 19 15:08:31 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:87>"
+  ModelVersionFormat	  "1.%<AutoIncrement:91>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -499,6 +499,9 @@ Model {
       SampleTime	      "-1"
     }
     Block {
+      BlockType		      Ground
+    }
+    Block {
       BlockType		      Inport
       Port		      "1"
       UseBusObject	      off
@@ -572,9 +575,6 @@ Model {
       SampleTime	      "-1"
     }
     Block {
-      BlockType		      Reference
-    }
-    Block {
       BlockType		      Scope
       ModelBased	      off
       TickLabels	      "OneTimeTick"
@@ -642,6 +642,22 @@ Model {
       LockScale		      off
       RndMeth		      "Floor"
       SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Switch
+      Criteria		      "u2 >= Threshold"
+      Threshold		      "0"
+      InputSameDT	      on
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "fixdt(1,16,0)"
+      OutScaling	      "[]"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      ZeroCross		      on
       SampleTime	      "-1"
     }
     Block {
@@ -729,7 +745,7 @@ Model {
   System {
     Name		    "mixer_test"
     Location		    [129, 121, 1462, 1069]
-    Open		    on
+    Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -1935,7 +1951,7 @@ Model {
 	      SourceType	      "lo_osc"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
+	      FunctionWithSeparateData off
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -1972,7 +1988,7 @@ Model {
 	      SourceType	      "lo_osc"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
+	      FunctionWithSeparateData off
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -2009,7 +2025,7 @@ Model {
 	      SourceType	      "lo_osc"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
+	      FunctionWithSeparateData off
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -2046,7 +2062,7 @@ Model {
 	      SourceType	      "lo_osc"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
+	      FunctionWithSeparateData off
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -2179,11 +2195,11 @@ Model {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "3"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -2271,14 +2287,14 @@ Model {
 	      bin_pt		      "2"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      en		      "off"
+	      en		      off
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      use_behavioral_HDL      "off"
-	      use_embedded	      "on"
+	      dbl_ovrd		      off
+	      use_behavioral_HDL      off
+	      use_embedded	      on
 	      opt		      "Speed"
-	      optimum_pipeline	      "off"
-	      xl_use_area	      "off"
+	      optimum_pipeline	      off
+	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      pipeline		      "on"
 	      use_rpm		      "off"
@@ -2304,14 +2320,14 @@ Model {
 	      bin_pt		      "2"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      en		      "off"
+	      en		      off
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      use_behavioral_HDL      "off"
-	      use_embedded	      "on"
+	      dbl_ovrd		      off
+	      use_behavioral_HDL      off
+	      use_embedded	      on
 	      opt		      "Speed"
-	      optimum_pipeline	      "off"
-	      xl_use_area	      "off"
+	      optimum_pipeline	      off
+	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      pipeline		      "on"
 	      use_rpm		      "off"
@@ -2460,14 +2476,14 @@ Model {
 	      bin_pt		      "2"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      en		      "off"
+	      en		      off
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      use_behavioral_HDL      "off"
-	      use_embedded	      "on"
+	      dbl_ovrd		      off
+	      use_behavioral_HDL      off
+	      use_embedded	      on
 	      opt		      "Speed"
-	      optimum_pipeline	      "off"
-	      xl_use_area	      "off"
+	      optimum_pipeline	      off
+	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      pipeline		      "on"
 	      use_rpm		      "off"
@@ -2493,14 +2509,14 @@ Model {
 	      bin_pt		      "2"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      en		      "off"
+	      en		      off
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      use_behavioral_HDL      "off"
-	      use_embedded	      "on"
+	      dbl_ovrd		      off
+	      use_behavioral_HDL      off
+	      use_embedded	      on
 	      opt		      "Speed"
-	      optimum_pipeline	      "off"
-	      xl_use_area	      "off"
+	      optimum_pipeline	      off
+	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      pipeline		      "on"
 	      use_rpm		      "off"
@@ -2592,7 +2608,7 @@ Model {
 	  SourceType		  "rcmult"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2622,7 +2638,7 @@ Model {
 	  SourceType		  "rcmult"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
