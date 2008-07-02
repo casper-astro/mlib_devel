@@ -38,3 +38,4 @@ partial_delay_prog casper_library/Delays/partial_delay_prog partial_delay_prog_t
 delay_complex casper_library/Delays/delay_complex delay_complex_bram_test delay 7 n_bits 11 bin_pt 10 use_bram 1 bram_latency 3
 delay_complex casper_library/Delays/delay_complex delay_complex_slr_test delay 7 n_bits 13 bin_pt 12 use_bram 0 bram_latency 4
 dbl_buffer casper_library/Reorder/dbl_buffer dbl_buffer_test depth 64 latency 3
+barrel_switcher casper_library/Reorder/barrel_switcher barrel_switcher_test n_inputs 2
