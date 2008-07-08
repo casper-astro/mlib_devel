@@ -67,10 +67,10 @@ mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ',num2str(s.clk_rate*1e6));
 
 if strcmp(s.hw_sys, 'iBOB') & ~isempty(strmatch('usr_clk', s.clk_src))
     if ~isempty(strmatch(s.gpioclk_grp, {'zdok0', 'zdok1', 'mdr'}));
-        ext_ports.usrclk_in_p = {1 'in' 'usrclk_in_p'   [iobname,'_p([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVDS_25')  };
-        ext_ports.usrclk_in_n = {1 'in' 'usrclk_in_n'   [iobname,'_n([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVDS_25')  };
+        ext_ports.usrclk_in_p = {1 'in' 'usrclk_in_p' [iobname,'_p([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD', 'LVDS_25') };
+        ext_ports.usrclk_in_n = {1 'in' 'usrclk_in_n' [iobname,'_n([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD', 'LVDS_25') };
     else
-        ext_ports.usrclk_in =   {1 'in' 'usrclk_in'     [iobname,  '([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVCMOS25') };
+        ext_ports.usrclk_in   = {1 'in' 'usrclk_in'   [iobname,  '([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVCMOS25') };
     end % if ~isempty(strmatch(s.gpioclk_grp, {'zdok0', 'zdok1', 'mdr'}));
     b = set(b,'ext_ports',ext_ports);
-end
+end % if strcmp(s.hw_sys, 'iBOB') & ~isempty(strmatch('usr_clk', s.clk_src))

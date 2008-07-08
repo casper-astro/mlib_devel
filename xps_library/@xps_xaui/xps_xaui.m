@@ -48,56 +48,64 @@ b = set(b,'ip_name','XAUI_interface');
 misc_ports.app_clk     = {1 'in' get(xsg_obj,'clk_src')};
 
 switch s.board
-	case 'CORR'
-		misc_ports.mgt_clk     = {1 'in' 'bref_clk'};
-	case 'iBOB'
-		switch s.port
-			case '0'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_top'};
-			case '1'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_bottom'};
-		end
-	case 'BEE2_usr'
-		switch s.port
-			case '0'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_top'};
-			case '1'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_top'};
-			case '2'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_bottom'};
-			case '3'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_bottom'};
-		end
-	case 'BEE2_ctrl'
-		switch s.port
-			case '0'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_top'};
-			case '1'
-				misc_ports.mgt_clk     = {1 'in' 'bref_clk_top'};
-		end
-
-end
+    case 'CORR'
+        misc_ports.mgt_clk          = {1 'in' 'bref_clk'};
+    % end case 'CORR'
+    case 'iBOB'
+        switch s.port
+            case '0'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
+            case '1'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_bottom'};
+        end % switch s.port
+    % end case 'iBOB'
+    case 'BEE2_usr'
+        switch s.port
+            case '0'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
+            case '1'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
+            case '2'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_bottom'};
+            case '3'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_bottom'};
+        end % switch s.port
+    % end case 'BEE2_usr'
+    case 'BEE2_ctrl'
+        switch s.port
+            case '0'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
+            case '1'
+                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
+        end % switch s.port
+    % end case 'BEE2_ctrl'
+end % switch s.board
 
 b = set(b,'misc_ports',misc_ports);
 
-%parameters
+% parameters
 parameters.DEMUX = get_param(blk_name,'demux');
 b = set(b,'parameters',parameters);
-ext_ports.mgt_tx_l0_p    = {1 'out' ['XAUI',s.port,'_tx_l0_p'] [s.board, '.XAUI',s.port, '.tx_l0_p'] 'null' 'vector=false'};
-ext_ports.mgt_tx_l0_n    = {1 'out' ['XAUI',s.port,'_tx_l0_n'] [s.board, '.XAUI',s.port, '.tx_l0_n'] 'null' 'vector=false'};
-ext_ports.mgt_tx_l1_p    = {1 'out' ['XAUI',s.port,'_tx_l1_p'] [s.board, '.XAUI',s.port, '.tx_l1_p'] 'null' 'vector=false'};
-ext_ports.mgt_tx_l1_n    = {1 'out' ['XAUI',s.port,'_tx_l1_n'] [s.board, '.XAUI',s.port, '.tx_l1_n'] 'null' 'vector=false'};
-ext_ports.mgt_tx_l2_p    = {1 'out' ['XAUI',s.port,'_tx_l2_p'] [s.board, '.XAUI',s.port, '.tx_l2_p'] 'null' 'vector=false'};
-ext_ports.mgt_tx_l2_n    = {1 'out' ['XAUI',s.port,'_tx_l2_n'] [s.board, '.XAUI',s.port, '.tx_l2_n'] 'null' 'vector=false'};
-ext_ports.mgt_tx_l3_p    = {1 'out' ['XAUI',s.port,'_tx_l3_p'] [s.board, '.XAUI',s.port, '.tx_l3_p'] 'null' 'vector=false'};
-ext_ports.mgt_tx_l3_n    = {1 'out' ['XAUI',s.port,'_tx_l3_n'] [s.board, '.XAUI',s.port, '.tx_l3_n'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l0_p    = {1 'in'  ['XAUI',s.port,'_rx_l0_p'] [s.board, '.XAUI',s.port, '.rx_l0_p'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l0_n    = {1 'in'  ['XAUI',s.port,'_rx_l0_n'] [s.board, '.XAUI',s.port, '.rx_l0_n'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l1_p    = {1 'in'  ['XAUI',s.port,'_rx_l1_p'] [s.board, '.XAUI',s.port, '.rx_l1_p'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l1_n    = {1 'in'  ['XAUI',s.port,'_rx_l1_n'] [s.board, '.XAUI',s.port, '.rx_l1_n'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l2_p    = {1 'in'  ['XAUI',s.port,'_rx_l2_p'] [s.board, '.XAUI',s.port, '.rx_l2_p'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l2_n    = {1 'in'  ['XAUI',s.port,'_rx_l2_n'] [s.board, '.XAUI',s.port, '.rx_l2_n'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l3_p    = {1 'in'  ['XAUI',s.port,'_rx_l3_p'] [s.board, '.XAUI',s.port, '.rx_l3_p'] 'null' 'vector=false'};
-ext_ports.mgt_rx_l3_n    = {1 'in'  ['XAUI',s.port,'_rx_l3_n'] [s.board, '.XAUI',s.port, '.rx_l3_n'] 'null' 'vector=false'};
+
+% external ports
+portnum  = ['XAUI', s.port];
+xauiport = [s.board,'.',portnum];
+
+ext_ports.mgt_tx_l0_p = {1 'out' [portnum,'_tx_l0_p'] [xauiport, '.tx_l0_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l0_n = {1 'out' [portnum,'_tx_l0_n'] [xauiport, '.tx_l0_n'] 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l1_p = {1 'out' [portnum,'_tx_l1_p'] [xauiport, '.tx_l1_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l1_n = {1 'out' [portnum,'_tx_l1_n'] [xauiport, '.tx_l1_n'] 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l2_p = {1 'out' [portnum,'_tx_l2_p'] [xauiport, '.tx_l2_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l2_n = {1 'out' [portnum,'_tx_l2_n'] [xauiport, '.tx_l2_n'] 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l3_p = {1 'out' [portnum,'_tx_l3_p'] [xauiport, '.tx_l3_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l3_n = {1 'out' [portnum,'_tx_l3_n'] [xauiport, '.tx_l3_n'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l0_p = {1 'in'  [portnum,'_rx_l0_p'] [xauiport, '.rx_l0_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l0_n = {1 'in'  [portnum,'_rx_l0_n'] [xauiport, '.rx_l0_n'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l1_p = {1 'in'  [portnum,'_rx_l1_p'] [xauiport, '.rx_l1_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l1_n = {1 'in'  [portnum,'_rx_l1_n'] [xauiport, '.rx_l1_n'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l2_p = {1 'in'  [portnum,'_rx_l2_p'] [xauiport, '.rx_l2_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l2_n = {1 'in'  [portnum,'_rx_l2_n'] [xauiport, '.rx_l2_n'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l3_p = {1 'in'  [portnum,'_rx_l3_p'] [xauiport, '.rx_l3_p'] 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l3_n = {1 'in'  [portnum,'_rx_l3_n'] [xauiport, '.rx_l3_n'] 'vector=false' struct() struct()};
 
 b = set(b,'ext_ports',ext_ports);

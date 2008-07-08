@@ -37,36 +37,41 @@ if ~isempty(ext_ports)
 		if length(cur_ext_port) > 3
             locs = cur_ext_port{4};
 
-            if length(cur_ext_port) > 6 && ~isempty(cur_ext_port{7})
-                misc_constraints = sprintf(' | %s', cur_ext_port{7}{:});
-            else
-                misc_constraints = '';
-            end
+	        try
+	            ucf_constraints = cur_ext_port{7};
+	            ucf_constraints_fields = fieldnames(ucf_constraints);
+	            ucf_constraints_str = '';
+
+	            for n = 1:length(ucf_constraints_fields)
+	                ucf_constraint_value = eval(['ucf_constraints.',ucf_constraints_fields{n}]);
+
+	                if isempty(ucf_constraint_value)
+	                    ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}];
+	                else
+	                    ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}, ' = \"', ucf_constraint_value, '\"'];
+	                end % if isempty(ucf_constraint_value)
+	            end % for n = 1:length(ucf_constraints_fields)
+            catch
+                ucf_constraints_str = '';
+            end % try
 
             if ~strcmp(locs,'null')
                 if isstr(locs)
                     locs = eval(locs);
-                end
+                end % if isstr(locs)
+
                 if length(locs) ~= cur_ext_port{1}
                     error(['Number of pin locations for external port ',ext_port_names{j},' does not correspond to bitwidth']);
-                end
-                if cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{6},'vector=true')
-                    if ~strcmp(cur_ext_port{5},'null')
-                        str = [str,'NET \"',cur_ext_port{3},'\" LOC = \"', locs{1}, '\" | IOSTANDARD = \"',cur_ext_port{5},'\"', misc_constraints, ';\n'];
-                    else
-                        str = [str,'NET \"',cur_ext_port{3},'\" LOC = \"', locs{1}, '\"', misc_constraints, ';\n'];
-                    end
+                end % length(locs) ~= cur_ext_port{1}
+
+                if cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{5},'vector=true')
+                    str = [str,'NET \"',cur_ext_port{3},'\" LOC = \"', locs{1}, '\"', ucf_constraints_str, ' ;\n'];
                 else
                     for i = [1:cur_ext_port{1}]
-                        if ~strcmp(cur_ext_port{5},'null')
-                            str = [str,'NET \"',cur_ext_port{3},'<',num2str(i-1),'>\" LOC = \"', locs{i}, '\" | IOSTANDARD = \"',cur_ext_port{5},'\"', misc_constraints, ';\n'];
-                        else
-                            str = [str,'NET \"',cur_ext_port{3},'<',num2str(i-1),'>\" LOC = \"', locs{i}, '\"', misc_constraints, ';\n'];
-                        end
-                    end
-                end
-            end
-		end
-	end
-end
-
+                        str = [str,'NET \"',cur_ext_port{3},'<',num2str(i-1),'>\" LOC = \"', locs{i}, '\"', ucf_constraints_str, ' ;\n'];
+                    end % i = [1:cur_ext_port{1}]
+                end % cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{5},'vector=true')
+            end % if ~strcmp(locs,'null')
+		end % if length(cur_ext_port) > 3
+	end % for j = 1:length(ext_port_names)
+end % ~isempty(ext_ports)

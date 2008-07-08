@@ -60,20 +60,22 @@ misc_ports.clk = {1 'in' get(xsg_obj,'clk_src')};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
-ext_ports.vsi_bs_p      = {32 'out' [s.vsi_str,'_bs_p']      ['iBOB.',s.vsi_str,'.bs_p']      'LVDS_25' 'vector=true'};
-ext_ports.vsi_onepps_p  = {1  'out' [s.vsi_str,'_onepps_p']  ['iBOB.',s.vsi_str,'.onepps_p']  'LVDS_25' 'vector=false'};
-ext_ports.vsi_pvalid_p  = {1  'out' [s.vsi_str,'_pvalid_p']  ['iBOB.',s.vsi_str,'.pvalid_p']  'LVDS_25' 'vector=false'};
-ext_ports.vsi_clock_p   = {1  'out' [s.vsi_str,'_clock_p']   ['iBOB.',s.vsi_str,'.clock_p']   'LVDS_25' 'vector=false'};
-ext_ports.vsi_pctrl_p   = {1  'out' [s.vsi_str,'_pctrl_p']   ['iBOB.',s.vsi_str,'.pctrl_p']   'LVDS_25' 'vector=false'};
-ext_ports.vsi_pdata_p   = {1  'out' [s.vsi_str,'_pdata_p']   ['iBOB.',s.vsi_str,'.pdata_p']   'LVDS_25' 'vector=false'};
-ext_ports.vsi_pspare1_p = {1  'out' [s.vsi_str,'_pspare1_p'] ['iBOB.',s.vsi_str,'.pspare1_p'] 'LVDS_25' 'vector=false'};
-ext_ports.vsi_pspare2_p = {1  'out' [s.vsi_str,'_pspare2_p'] ['iBOB.',s.vsi_str,'.pspare2_p'] 'LVDS_25' 'vector=false'};
-ext_ports.vsi_bs_n      = {32 'out' [s.vsi_str,'_bs_n']      ['iBOB.',s.vsi_str,'.bs_n']      'LVDS_25' 'vector=true'};
-ext_ports.vsi_onepps_n  = {1  'out' [s.vsi_str,'_onepps_n']  ['iBOB.',s.vsi_str,'.onepps_n']  'LVDS_25' 'vector=false'};
-ext_ports.vsi_pvalid_n  = {1  'out' [s.vsi_str,'_pvalid_n']  ['iBOB.',s.vsi_str,'.pvalid_n']  'LVDS_25' 'vector=false'};
-ext_ports.vsi_clock_n   = {1  'out' [s.vsi_str,'_clock_n']   ['iBOB.',s.vsi_str,'.clock_n']   'LVDS_25' 'vector=false'};
-ext_ports.vsi_pctrl_n   = {1  'out' [s.vsi_str,'_pctrl_n']   ['iBOB.',s.vsi_str,'.pctrl_n']   'LVDS_25' 'vector=false'};
-ext_ports.vsi_pdata_n   = {1  'out' [s.vsi_str,'_pdata_n']   ['iBOB.',s.vsi_str,'.pdata_n']   'LVDS_25' 'vector=false'};
-ext_ports.vsi_pspare1_n = {1  'out' [s.vsi_str,'_pspare1_n'] ['iBOB.',s.vsi_str,'.pspare1_n'] 'LVDS_25' 'vector=false'};
-ext_ports.vsi_pspare2_n = {1  'out' [s.vsi_str,'_pspare2_n'] ['iBOB.',s.vsi_str,'.pspare2_n'] 'LVDS_25' 'vector=false'};
+ucf_constraints = struct('IOSTANDARD', 'LVDS_25');
+
+ext_ports.vsi_bs_p      = {32 'out' [s.vsi_str,'_bs_p']      ['iBOB.',s.vsi_str,'.bs_p']      'vector=true'  struct() ucf_constraints};
+ext_ports.vsi_onepps_p  = {1  'out' [s.vsi_str,'_onepps_p']  ['iBOB.',s.vsi_str,'.onepps_p']  'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pvalid_p  = {1  'out' [s.vsi_str,'_pvalid_p']  ['iBOB.',s.vsi_str,'.pvalid_p']  'vector=false' struct() ucf_constraints};
+ext_ports.vsi_clock_p   = {1  'out' [s.vsi_str,'_clock_p']   ['iBOB.',s.vsi_str,'.clock_p']   'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pctrl_p   = {1  'out' [s.vsi_str,'_pctrl_p']   ['iBOB.',s.vsi_str,'.pctrl_p']   'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pdata_p   = {1  'out' [s.vsi_str,'_pdata_p']   ['iBOB.',s.vsi_str,'.pdata_p']   'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pspare1_p = {1  'out' [s.vsi_str,'_pspare1_p'] ['iBOB.',s.vsi_str,'.pspare1_p'] 'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pspare2_p = {1  'out' [s.vsi_str,'_pspare2_p'] ['iBOB.',s.vsi_str,'.pspare2_p'] 'vector=false' struct() ucf_constraints};
+ext_ports.vsi_bs_n      = {32 'out' [s.vsi_str,'_bs_n']      ['iBOB.',s.vsi_str,'.bs_n']      'vector=true'  struct() ucf_constraints};
+ext_ports.vsi_onepps_n  = {1  'out' [s.vsi_str,'_onepps_n']  ['iBOB.',s.vsi_str,'.onepps_n']  'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pvalid_n  = {1  'out' [s.vsi_str,'_pvalid_n']  ['iBOB.',s.vsi_str,'.pvalid_n']  'vector=false' struct() ucf_constraints};
+ext_ports.vsi_clock_n   = {1  'out' [s.vsi_str,'_clock_n']   ['iBOB.',s.vsi_str,'.clock_n']   'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pctrl_n   = {1  'out' [s.vsi_str,'_pctrl_n']   ['iBOB.',s.vsi_str,'.pctrl_n']   'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pdata_n   = {1  'out' [s.vsi_str,'_pdata_n']   ['iBOB.',s.vsi_str,'.pdata_n']   'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pspare1_n = {1  'out' [s.vsi_str,'_pspare1_n'] ['iBOB.',s.vsi_str,'.pspare1_n'] 'vector=false' struct() ucf_constraints};
+ext_ports.vsi_pspare2_n = {1  'out' [s.vsi_str,'_pspare2_n'] ['iBOB.',s.vsi_str,'.pspare2_n'] 'vector=false' struct() ucf_constraints};
 b = set(b,'ext_ports',ext_ports);

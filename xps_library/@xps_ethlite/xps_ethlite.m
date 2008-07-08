@@ -52,13 +52,15 @@ parameters.C_OPB_CLK_PERIOD_PS = '10000';
 b = set(b,'parameters',parameters);
 
 % external ports
-ext_ports.PHY_col       = {1 'in'  'opb_ethlite_phy_col'     {'J32'}                   'LVCMOS25' 'vector=false'};
-ext_ports.PHY_crs       = {1 'in'  'opb_ethlite_phy_crs'     {'J31'}                   'LVCMOS25' 'vector=false'};
-ext_ports.PHY_dv        = {1 'in'  'opb_ethlite_phy_dv'      {'F33'}                   'LVCMOS25' 'vector=false'};
-ext_ports.PHY_rx_clk    = {1 'in'  'opb_ethlite_phy_rx_clk'  {'H29'}                   'LVCMOS25' 'vector=false'};
-ext_ports.PHY_rx_data   = {4 'in'  'opb_ethlite_phy_rx_data' {'G30' 'G29' 'G32' 'G31'} 'LVCMOS25' 'vector=false'};
-ext_ports.PHY_rx_er     = {1 'in'  'opb_ethlite_phy_rx_err'  {'F34'}                   'LVCMOS25' 'vector=false'};
-ext_ports.PHY_tx_clk    = {1 'in'  'opb_ethlite_phy_tx_clk'  {'H30'}                   'LVCMOS25' 'vector=false'};
-ext_ports.PHY_tx_data   = {4 'out' 'opb_ethlite_phy_tx_data' {'J30' 'J29' 'G34' 'G33'} 'LVCMOS25' 'vector=false'};
-ext_ports.PHY_tx_en     = {1 'out' 'opb_ethlite_phy_tx_en'   {'L26'}                   'LVCMOS25' 'vector=false'};
+ucf_constraints = struct('IOSTANDARD', 'LVCMOS25');
+
+ext_ports.PHY_col       = {1 'in'  'opb_ethlite_phy_col'     {'J32'}                   'vector=false' struct() ucf_constraints};
+ext_ports.PHY_crs       = {1 'in'  'opb_ethlite_phy_crs'     {'J31'}                   'vector=false' struct() ucf_constraints};
+ext_ports.PHY_dv        = {1 'in'  'opb_ethlite_phy_dv'      {'F33'}                   'vector=false' struct() ucf_constraints};
+ext_ports.PHY_rx_clk    = {1 'in'  'opb_ethlite_phy_rx_clk'  {'H29'}                   'vector=false' struct() ucf_constraints};
+ext_ports.PHY_rx_data   = {4 'in'  'opb_ethlite_phy_rx_data' {'G30' 'G29' 'G32' 'G31'} 'vector=false' struct() ucf_constraints};
+ext_ports.PHY_rx_er     = {1 'in'  'opb_ethlite_phy_rx_err'  {'F34'}                   'vector=false' struct() ucf_constraints};
+ext_ports.PHY_tx_clk    = {1 'in'  'opb_ethlite_phy_tx_clk'  {'H30'}                   'vector=false' struct() ucf_constraints};
+ext_ports.PHY_tx_data   = {4 'out' 'opb_ethlite_phy_tx_data' {'J30' 'J29' 'G34' 'G33'} 'vector=false' struct() ucf_constraints};
+ext_ports.PHY_tx_en     = {1 'out' 'opb_ethlite_phy_tx_en'   {'L26'}                   'vector=false' struct() ucf_constraints};
 b = set(b,'ext_ports',ext_ports);

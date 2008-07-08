@@ -65,18 +65,21 @@ misc_ports.user_data_clk90 = {1 'out' [s.dac_str,'_clk90']};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
-ext_ports.dac_dsp_clk_p  = {1 'in'  [s.dac_str,'_dsp_clk_p']  ['iBOB.',s.dac_str,'.dsp_clk_p']  'LVDS_25' 'vector=false'};
-ext_ports.dac_dsp_clk_n  = {1 'in'  [s.dac_str,'_dsp_clk_n']  ['iBOB.',s.dac_str,'.dsp_clk_n']  'LVDS_25' 'vector=false'};
 
-ext_ports.dac_data_clk_p = {1 'out' [s.dac_str,'_data_clk_p'] ['iBOB.',s.dac_str,'.data_clk_p'] 'LVDS_25' 'vector=false'};
-ext_ports.dac_data_clk_n = {1 'out' [s.dac_str,'_data_clk_n'] ['iBOB.',s.dac_str,'.data_clk_n'] 'LVDS_25' 'vector=false'};
-ext_ports.dac_data_a_p   = {9 'out' [s.dac_str,'_data_a_p']   ['iBOB.',s.dac_str,'.data_a_p']   'LVDS_25' 'vector=true'};
-ext_ports.dac_data_a_n   = {9 'out' [s.dac_str,'_data_a_n']   ['iBOB.',s.dac_str,'.data_a_n']   'LVDS_25' 'vector=true'};
-ext_ports.dac_data_b_p   = {9 'out' [s.dac_str,'_data_b_p']   ['iBOB.',s.dac_str,'.data_b_p']   'LVDS_25' 'vector=true'};
-ext_ports.dac_data_b_n   = {9 'out' [s.dac_str,'_data_b_n']   ['iBOB.',s.dac_str,'.data_b_n']   'LVDS_25' 'vector=true'};
-ext_ports.dac_data_c_p   = {9 'out' [s.dac_str,'_data_c_p']   ['iBOB.',s.dac_str,'.data_c_p']   'LVDS_25' 'vector=true'};
-ext_ports.dac_data_c_n   = {9 'out' [s.dac_str,'_data_c_n']   ['iBOB.',s.dac_str,'.data_c_n']   'LVDS_25' 'vector=true'};
-ext_ports.dac_data_d_p   = {9 'out' [s.dac_str,'_data_d_p']   ['iBOB.',s.dac_str,'.data_d_p']   'LVDS_25' 'vector=true'};
-ext_ports.dac_data_d_n   = {9 'out' [s.dac_str,'_data_d_n']   ['iBOB.',s.dac_str,'.data_d_n']   'LVDS_25' 'vector=true'};
+ucf_constraints = struct('IOSTANDARD', 'LVDS_25');
+
+ext_ports.dac_dsp_clk_p  = {1 'in'  [s.dac_str,'_dsp_clk_p']  ['iBOB.',s.dac_str,'.dsp_clk_p']  'vector=false' struct() ucf_constraints};
+ext_ports.dac_dsp_clk_n  = {1 'in'  [s.dac_str,'_dsp_clk_n']  ['iBOB.',s.dac_str,'.dsp_clk_n']  'vector=false' struct() ucf_constraints};
+
+ext_ports.dac_data_clk_p = {1 'out' [s.dac_str,'_data_clk_p'] ['iBOB.',s.dac_str,'.data_clk_p'] 'vector=false' struct() ucf_constraints};
+ext_ports.dac_data_clk_n = {1 'out' [s.dac_str,'_data_clk_n'] ['iBOB.',s.dac_str,'.data_clk_n'] 'vector=false' struct() ucf_constraints};
+ext_ports.dac_data_a_p   = {9 'out' [s.dac_str,'_data_a_p']   ['iBOB.',s.dac_str,'.data_a_p']   'vector=true'  struct() ucf_constraints};
+ext_ports.dac_data_a_n   = {9 'out' [s.dac_str,'_data_a_n']   ['iBOB.',s.dac_str,'.data_a_n']   'vector=true'  struct() ucf_constraints};
+ext_ports.dac_data_b_p   = {9 'out' [s.dac_str,'_data_b_p']   ['iBOB.',s.dac_str,'.data_b_p']   'vector=true'  struct() ucf_constraints};
+ext_ports.dac_data_b_n   = {9 'out' [s.dac_str,'_data_b_n']   ['iBOB.',s.dac_str,'.data_b_n']   'vector=true'  struct() ucf_constraints};
+ext_ports.dac_data_c_p   = {9 'out' [s.dac_str,'_data_c_p']   ['iBOB.',s.dac_str,'.data_c_p']   'vector=true'  struct() ucf_constraints};
+ext_ports.dac_data_c_n   = {9 'out' [s.dac_str,'_data_c_n']   ['iBOB.',s.dac_str,'.data_c_n']   'vector=true'  struct() ucf_constraints};
+ext_ports.dac_data_d_p   = {9 'out' [s.dac_str,'_data_d_p']   ['iBOB.',s.dac_str,'.data_d_p']   'vector=true'  struct() ucf_constraints};
+ext_ports.dac_data_d_n   = {9 'out' [s.dac_str,'_data_d_n']   ['iBOB.',s.dac_str,'.data_d_n']   'vector=true'  struct() ucf_constraints};
 
 b = set(b, 'ext_ports', ext_ports);

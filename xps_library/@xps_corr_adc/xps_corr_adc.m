@@ -44,7 +44,7 @@ switch s.hw_sys
         end
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
-end
+end % switch s.hw_sys
 b = class(s,'xps_corr_adc',blk_obj);
 
 % ip name
@@ -61,5 +61,5 @@ misc_ports.clk90 = {1 'in' get(xsg_obj,'clk90_src')};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
-ext_ports.adc_din     = {12 'in'    [s.adc_str]    ['CORR.',s.adc_str]  'null'  'vector=true'};
+ext_ports.adc_din     = {12 'in'    [s.adc_str]    ['CORR.',s.adc_str]  'vector=true'   struct()    struct()};
 b = set(b,'ext_ports',ext_ports);

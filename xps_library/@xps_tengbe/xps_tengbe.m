@@ -74,25 +74,24 @@ interfaces.XAUI_SYS = ['xaui_sys',s.port];
 b = set(b,'interfaces',interfaces);
 
 % external ports
-ext_ports.mgt_tx_l0_p    = {1 'out' ['XAUI',s.port,'_tx_l0_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_tx_l0_n    = {1 'out' ['XAUI',s.port,'_tx_l0_n'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_tx_l1_p    = {1 'out' ['XAUI',s.port,'_tx_l1_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_tx_l1_n    = {1 'out' ['XAUI',s.port,'_tx_l1_n'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_tx_l2_p    = {1 'out' ['XAUI',s.port,'_tx_l2_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_tx_l2_n    = {1 'out' ['XAUI',s.port,'_tx_l2_n'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_tx_l3_p    = {1 'out' ['XAUI',s.port,'_tx_l3_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_tx_l3_n    = {1 'out' ['XAUI',s.port,'_tx_l3_n'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l0_p    = {1 'in'  ['XAUI',s.port,'_rx_l0_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l0_n    = {1 'in'  ['XAUI',s.port,'_rx_l0_n'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l1_p    = {1 'in'  ['XAUI',s.port,'_rx_l1_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l1_n    = {1 'in'  ['XAUI',s.port,'_rx_l1_n'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l2_p    = {1 'in'  ['XAUI',s.port,'_rx_l2_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l2_n    = {1 'in'  ['XAUI',s.port,'_rx_l2_n'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l3_p    = {1 'in'  ['XAUI',s.port,'_rx_l3_p'] 'null' 'null' 'vector=false'};
-ext_ports.mgt_rx_l3_n    = {1 'in'  ['XAUI',s.port,'_rx_l3_n'] 'null' 'null' 'vector=false'};
+ext_ports.mgt_tx_l0_p    = {1 'out' ['XAUI',s.port,'_tx_l0_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l0_n    = {1 'out' ['XAUI',s.port,'_tx_l0_n'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l1_p    = {1 'out' ['XAUI',s.port,'_tx_l1_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l1_n    = {1 'out' ['XAUI',s.port,'_tx_l1_n'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l2_p    = {1 'out' ['XAUI',s.port,'_tx_l2_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l2_n    = {1 'out' ['XAUI',s.port,'_tx_l2_n'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l3_p    = {1 'out' ['XAUI',s.port,'_tx_l3_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_tx_l3_n    = {1 'out' ['XAUI',s.port,'_tx_l3_n'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l0_p    = {1 'in'  ['XAUI',s.port,'_rx_l0_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l0_n    = {1 'in'  ['XAUI',s.port,'_rx_l0_n'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l1_p    = {1 'in'  ['XAUI',s.port,'_rx_l1_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l1_n    = {1 'in'  ['XAUI',s.port,'_rx_l1_n'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l2_p    = {1 'in'  ['XAUI',s.port,'_rx_l2_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l2_n    = {1 'in'  ['XAUI',s.port,'_rx_l2_n'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l3_p    = {1 'in'  ['XAUI',s.port,'_rx_l3_p'] 'null' 'vector=false' struct() struct()};
+ext_ports.mgt_rx_l3_n    = {1 'in'  ['XAUI',s.port,'_rx_l3_n'] 'null' 'vector=false' struct() struct()};
 b = set(b,'ext_ports',ext_ports);
 
 % borf parameters
 b = set(b,'mode',7);
 b = set(b,'size',1);
-

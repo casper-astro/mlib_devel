@@ -61,24 +61,27 @@ misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
-ext_ports.adc_clk_p         = {1 'in'  [s.adc_str,'clk_p']         ['iBOB.',s.adc_str,'.clk_p']         'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_clk_n         = {1 'in'  [s.adc_str,'clk_n']         ['iBOB.',s.adc_str,'.clk_n']         'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_sync_p        = {1 'in'  [s.adc_str,'sync_p']        ['iBOB.',s.adc_str,'.sync_p']        'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_sync_n        = {1 'in'  [s.adc_str,'sync_n']        ['iBOB.',s.adc_str,'.sync_n']        'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_outofrangei_p = {1 'in'  [s.adc_str,'outofrangei_p'] ['iBOB.',s.adc_str,'.outofrangei_p'] 'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_outofrangei_n = {1 'in'  [s.adc_str,'outofrangei_n'] ['iBOB.',s.adc_str,'.outofrangei_n'] 'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_outofrangeq_p = {1 'in'  [s.adc_str,'outofrangeq_p'] ['iBOB.',s.adc_str,'.outofrangeq_p'] 'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_outofrangeq_n = {1 'in'  [s.adc_str,'outofrangeq_n'] ['iBOB.',s.adc_str,'.outofrangeq_n'] 'LVDS_25_DT' 'vector=false'};
-ext_ports.adc_dataeveni_p   = {8 'in'  [s.adc_str,'dataeveni_p']   ['iBOB.',s.adc_str,'.dataeveni_p']   'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_dataeveni_n   = {8 'in'  [s.adc_str,'dataeveni_n']   ['iBOB.',s.adc_str,'.dataeveni_n']   'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_dataoddi_p    = {8 'in'  [s.adc_str,'dataoddi_p']    ['iBOB.',s.adc_str,'.dataoddi_p']    'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_dataoddi_n    = {8 'in'  [s.adc_str,'dataoddi_n']    ['iBOB.',s.adc_str,'.dataoddi_n']    'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_dataevenq_p   = {8 'in'  [s.adc_str,'dataevenq_p']   ['iBOB.',s.adc_str,'.dataevenq_p']   'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_dataevenq_n   = {8 'in'  [s.adc_str,'dataevenq_n']   ['iBOB.',s.adc_str,'.dataevenq_n']   'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_dataoddq_p    = {8 'in'  [s.adc_str,'dataoddq_p']    ['iBOB.',s.adc_str,'.dataoddq_p']    'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_dataoddq_n    = {8 'in'  [s.adc_str,'dataoddq_n']    ['iBOB.',s.adc_str,'.dataoddq_n']    'LVDS_25_DT' 'vector=true'};
-ext_ports.adc_ddrb_p        = {1 'out' [s.adc_str,'ddrb_p']        ['iBOB.',s.adc_str,'.ddrb_p']        'LVDS_25'    'vector=false'};
-ext_ports.adc_ddrb_n        = {1 'out' [s.adc_str,'ddrb_n']        ['iBOB.',s.adc_str,'.ddrb_n']        'LVDS_25'    'vector=false'};
+mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ',num2str(s.adc_clk_rate*1e6));
+
+ext_ports.adc_clk_p         = { 1 'in'  [s.adc_str,'clk_p']         ['iBOB.',s.adc_str,'.clk_p']         'vector=false' mhs_constraints struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_clk_n         = { 1 'in'  [s.adc_str,'clk_n']         ['iBOB.',s.adc_str,'.clk_n']         'vector=false' mhs_constraints struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_sync_p        = { 1 'in'  [s.adc_str,'sync_p']        ['iBOB.',s.adc_str,'.sync_p']        'vector=false' struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_sync_n        = { 1 'in'  [s.adc_str,'sync_n']        ['iBOB.',s.adc_str,'.sync_n']        'vector=false' struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_outofrangei_p = { 1 'in'  [s.adc_str,'outofrangei_p'] ['iBOB.',s.adc_str,'.outofrangei_p'] 'vector=false' struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_outofrangei_n = { 1 'in'  [s.adc_str,'outofrangei_n'] ['iBOB.',s.adc_str,'.outofrangei_n'] 'vector=false' struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_outofrangeq_p = { 1 'in'  [s.adc_str,'outofrangeq_p'] ['iBOB.',s.adc_str,'.outofrangeq_p'] 'vector=false' struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_outofrangeq_n = { 1 'in'  [s.adc_str,'outofrangeq_n'] ['iBOB.',s.adc_str,'.outofrangeq_n'] 'vector=false' struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataeveni_p   = { 8 'in'  [s.adc_str,'dataeveni_p']   ['iBOB.',s.adc_str,'.dataeveni_p']   'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataeveni_n   = { 8 'in'  [s.adc_str,'dataeveni_n']   ['iBOB.',s.adc_str,'.dataeveni_n']   'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataoddi_p    = { 8 'in'  [s.adc_str,'dataoddi_p']    ['iBOB.',s.adc_str,'.dataoddi_p']    'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataoddi_n    = { 8 'in'  [s.adc_str,'dataoddi_n']    ['iBOB.',s.adc_str,'.dataoddi_n']    'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataevenq_p   = { 8 'in'  [s.adc_str,'dataevenq_p']   ['iBOB.',s.adc_str,'.dataevenq_p']   'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataevenq_n   = { 8 'in'  [s.adc_str,'dataevenq_n']   ['iBOB.',s.adc_str,'.dataevenq_n']   'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataoddq_p    = { 8 'in'  [s.adc_str,'dataoddq_p']    ['iBOB.',s.adc_str,'.dataoddq_p']    'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_dataoddq_n    = { 8 'in'  [s.adc_str,'dataoddq_n']    ['iBOB.',s.adc_str,'.dataoddq_n']    'vector=true'  struct()        struct('IOSTANDARD','LVDS_25_DT') };
+ext_ports.adc_ddrb_p        = { 1 'out' [s.adc_str,'ddrb_p']        ['iBOB.',s.adc_str,'.ddrb_p']        'vector=false' struct()        struct('IOSTANDARD','LVDS_25'   ) };
+ext_ports.adc_ddrb_n        = { 1 'out' [s.adc_str,'ddrb_n']        ['iBOB.',s.adc_str,'.ddrb_n']        'vector=false' struct()        struct('IOSTANDARD','LVDS_25'   ) };
 b = set(b,'ext_ports',ext_ports);
+
 % Software parameters
 b = set(b,'c_params',['adc = ',s.adc_str,' / interleave = ',s.adc_interleave]);

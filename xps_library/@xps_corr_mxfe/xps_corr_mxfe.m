@@ -46,11 +46,11 @@ parameters.CLK_PHASE = num2str(s.reg_clk_phase);
 b = set(b,'parameters',parameters);
 
 % external ports
-ext_ports.mxfe_rst      = {1  'out' 'mxfe_rst'      'CORR.mxfe.rst'      'null' 'vector=false'};
-ext_ports.mxfe_clk      = {1  'out' 'mxfe_clk'      'CORR.mxfe.clk'      'null' 'vector=false'};
-ext_ports.mxfe_sdio     = {1  'out' 'mxfe_sdio'     'CORR.mxfe.sdio'     'null' 'vector=false'};
-ext_ports.mxfe_le       = {1  'out' 'mxfe_le'       'CORR.mxfe.le'       'null' 'vector=false'};
-ext_ports.mxfe_clk_sel  = {1  'out' 'mxfe_clk_sel'  'CORR.mxfe.clk_sel'  'null' 'vector=false'};
-ext_ports.mxfe_fpga_clk = {1  'out' 'mxfe_fpga_clk' 'CORR.mxfe.fpga_clk' 'null' 'vector=false'};
-ext_ports.mxfe_sdo      = {1  'in'  'mxfe_sdo'      'CORR.mxfe.sdo'      'null' 'vector=false'};
+ext_ports.mxfe_rst      = {1  'out' 'mxfe_rst'      'CORR.mxfe.rst'      'vector=false' struct() struct()};
+ext_ports.mxfe_clk      = {1  'out' 'mxfe_clk'      'CORR.mxfe.clk'      'vector=false' struct() struct()};
+ext_ports.mxfe_sdio     = {1  'out' 'mxfe_sdio'     'CORR.mxfe.sdio'     'vector=false' struct() struct()};
+ext_ports.mxfe_le       = {1  'out' 'mxfe_le'       'CORR.mxfe.le'       'vector=false' struct() struct()};
+ext_ports.mxfe_clk_sel  = {1  'out' 'mxfe_clk_sel'  'CORR.mxfe.clk_sel'  'vector=false' struct() struct()};
+ext_ports.mxfe_fpga_clk = {1  'out' 'mxfe_fpga_clk' 'CORR.mxfe.fpga_clk' 'vector=false' struct() struct()};
+ext_ports.mxfe_sdo      = {1  'in'  'mxfe_sdo'      'CORR.mxfe.sdo'      'vector=false' struct() struct()};
 b = set(b,'ext_ports',ext_ports);

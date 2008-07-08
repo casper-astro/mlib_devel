@@ -40,11 +40,11 @@ misc_ports.sys_clk = {1 'in' get(xsg_obj,'clk_src')};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
-ext_ports.rf_pll_clk  = {1  'out' 'rf_pll_clk'  'CORR.rf.pll_clk ' 'null' 'vector=false'};
-ext_ports.rf_pll_data = {1  'out' 'rf_pll_data' 'CORR.rf.pll_data' 'null' 'vector=false'};
-ext_ports.rf_pll_le   = {1  'out' 'rf_le'       'CORR.rf.pll_le'   'null' 'vector=false'};
-ext_ports.rf_tx_power = {3  'out' 'rf_tx_power' 'CORR.rf.tx_power' 'null' 'vector=true'};
-ext_ports.rf_lna_gain = {1  'out' 'rf_lna_gain' 'CORR.rf.lna_gain' 'null' 'vector=false'};
-ext_ports.rf_ant_sel  = {1  'out' 'rf_ant_sel'  'CORR.rf.ant_sel'  'null' 'vector=false'};
-ext_ports.rf_tx_on    = {1  'out' 'rf_tx_on'    'CORR.rf.tx_on'    'null' 'vector=false'};
+ext_ports.rf_pll_clk  = {1  'out' 'rf_pll_clk'  'CORR.rf.pll_clk ' 'vector=false' struct() struct()};
+ext_ports.rf_pll_data = {1  'out' 'rf_pll_data' 'CORR.rf.pll_data' 'vector=false' struct() struct()};
+ext_ports.rf_pll_le   = {1  'out' 'rf_le'       'CORR.rf.pll_le'   'vector=false' struct() struct()};
+ext_ports.rf_tx_power = {3  'out' 'rf_tx_power' 'CORR.rf.tx_power' 'vector=true'  struct() struct()};
+ext_ports.rf_lna_gain = {1  'out' 'rf_lna_gain' 'CORR.rf.lna_gain' 'vector=false' struct() struct()};
+ext_ports.rf_ant_sel  = {1  'out' 'rf_ant_sel'  'CORR.rf.ant_sel'  'vector=false' struct() struct()};
+ext_ports.rf_tx_on    = {1  'out' 'rf_tx_on'    'CORR.rf.tx_on'    'vector=false' struct() struct()};
 b = set(b,'ext_ports',ext_ports);

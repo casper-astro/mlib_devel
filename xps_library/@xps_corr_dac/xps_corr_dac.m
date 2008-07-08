@@ -47,6 +47,6 @@ misc_ports.sys_clk90 = {1 'in' get(xsg_obj,'clk90_src')};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
-ext_ports.dac_data = {14 'out' 'dac_data' 'CORR.dac.data' 'null' 'vector=true'};
-ext_ports.dac_sync = {1  'out' 'dac_sync' 'CORR.dac.sync' 'null' 'vector=false'};
+ext_ports.dac_data = {14 'out' 'dac_data' 'CORR.dac.data' 'vector=true'  struct() struct()};
+ext_ports.dac_sync = {1  'out' 'dac_sync' 'CORR.dac.sync' 'vector=false' struct() struct()};
 b = set(b,'ext_ports',ext_ports);

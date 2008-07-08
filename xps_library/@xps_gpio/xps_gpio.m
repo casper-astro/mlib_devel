@@ -49,10 +49,8 @@ if ~isempty(strmatch(s.termtype, {'Pullup', 'Pulldown'}))
     termination = s.termtype;
 else
     termination = '';
-end
+end % ~isempty(strmatch(s.termtype, {'Pullup', 'Pulldown'}))
 
-misc_constraints = {};
-misc_constraints = [misc_constraints, termination];
 
 % ip name
 if use_diffio
@@ -108,25 +106,38 @@ switch s.hw_sys
         iostandard = 'LVCMOS25';
 end
 
+ucf_fields = {};
+ucf_values = {};
+
+%ucf_fields = [ucf_fields, 'IOSTANDARD', termination];
+%ucf_values = [ucf_values, iostandard, ''];
+
+if ~isempty(termination)
+    ucf_constraints = struct('IOSTANDARD',iostandard, termination,'');
+else
+    ucf_constraints = struct('IOSTANDARD',iostandard);
+end % if ~isempty(termination)
 
 switch s.use_ddr
-	case 0
-	    switch use_diffio
-	        case 0
-		        ext_ports.io_pad =   {s.io_bitwidth s.io_dir    [clear_name(blk_name),'_ext']   [s.hw_sys,'.',s.io_group,'([',num2str(s.bit_index),']+1)']      iostandard  'vector=true'   misc_constraints};
-		    case 1
-		        ext_ports.io_pad_p = {s.io_bitwidth s.io_dir    [clear_name(blk_name),'_ext_p'] [s.hw_sys,'.',s.io_group,'_p([',num2str(s.bit_index),']+1)']    iostandard  'vector=true'   misc_constraints};
-		        ext_ports.io_pad_n = {s.io_bitwidth s.io_dir    [clear_name(blk_name),'_ext_n'] [s.hw_sys,'.',s.io_group,'_n([',num2str(s.bit_index),']+1)']    iostandard  'vector=true'   misc_constraints};
-		end
-	case 1
-	    switch use_diffio
-	        case 0
-		        ext_ports.io_pad =   {s.io_bitwidth/2 s.io_dir  [clear_name(blk_name),'_ext']   [s.hw_sys,'.',s.io_group,'([',num2str(s.bit_index),']+1)']      iostandard  'vector=true'   misc_constraints};
-		    case 1
-		        ext_ports.io_pad_p = {s.io_bitwidth/2 s.io_dir  [clear_name(blk_name),'_ext_p'] [s.hw_sys,'.',s.io_group,'_p([',num2str(s.bit_index),']+1)']    iostandard  'vector=true'   misc_constraints};
-		        ext_ports.io_pad_n = {s.io_bitwidth/2 s.io_dir  [clear_name(blk_name),'_ext_n'] [s.hw_sys,'.',s.io_group,'_n([',num2str(s.bit_index),']+1)']    iostandard  'vector=true'   misc_constraints};
-		end
-end
+    case 0
+        pad_bitwidth = s.io_bitwidth;
+    case 1
+        pad_bitwidth = s.io_bitwidth/2;
+end % switch s.use_ddr
+
+extportname = [clear_name(blk_name), '_ext'];
+iobname = [s.hw_sys, '.', s.io_group];
+
+%ucf_constraints = cell2struct(ucf_values, ucf_fields, length(ucf_fields));
+
+switch use_diffio
+    case 0
+        ext_ports.io_pad =   {pad_bitwidth  s.io_dir    extportname         [iobname,'  ([',num2str(s.bit_index),']+1)']    'vector=true'   struct()    ucf_constraints };
+    case 1
+        ext_ports.io_pad_p = {pad_bitwidth  s.io_dir    [extportname, '_p'] [iobname,'_p([',num2str(s.bit_index),']+1)']    'vector=true'   struct()    ucf_constraints };
+        ext_ports.io_pad_n = {pad_bitwidth  s.io_dir    [extportname, '_n'] [iobname,'_n([',num2str(s.bit_index),']+1)']    'vector=true'   struct()    ucf_constraints };
+end % switch use_diffio
+
 b = set(b,'ext_ports',ext_ports);
 
 % parameters
@@ -137,7 +148,7 @@ if strcmp(s.reg_iob,'on')
 	parameters.REG_IOB = 'true';
 else
 	parameters.REG_IOB = 'false';
-end
+end % if strcmp(s.reg_iob,'on')
 b = set(b,'parameters',parameters);
 
 % misc ports

@@ -41,15 +41,15 @@ misc_ports.clk = {1 'in' get(xsg_obj,'clk_src')};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
-ext_ports.pads_address  = {19 'out'   ['sram',s.sram,'_address']  ['iBOB.sram',s.sram,'.address']   'null' 'vector=true'};
-ext_ports.pads_bw_b     = {4  'out'   ['sram',s.sram,'_bw_b']     ['iBOB.sram',s.sram,'.bw_b']      'null' 'vector=true'};
-ext_ports.pads_we_b     = {1  'out'   ['sram',s.sram,'_we_b']     ['iBOB.sram',s.sram,'.we_b']      'null' 'vector=false'};
-ext_ports.pads_adv_ld_b = {1  'out'   ['sram',s.sram,'_adv_ld_b'] ['iBOB.sram',s.sram,'.adv_ld_b']  'null' 'vector=false'};
-ext_ports.pads_clk      = {1  'out'   ['sram',s.sram,'_clk']      ['iBOB.sram',s.sram,'.clk']       'null' 'vector=false'};
-ext_ports.pads_ce       = {1  'out'   ['sram',s.sram,'_ce']       ['iBOB.sram',s.sram,'.ce']        'null' 'vector=false'};
-ext_ports.pads_oe_b     = {1  'out'   ['sram',s.sram,'_oe_b']     ['iBOB.sram',s.sram,'.oe_b']      'null' 'vector=false'};
-ext_ports.pads_cen_b    = {1  'out'   ['sram',s.sram,'_cen_b']    ['iBOB.sram',s.sram,'.cen_b']     'null' 'vector=false'};
-ext_ports.pads_dq       = {36 'inout' ['sram',s.sram,'_dq']       ['iBOB.sram',s.sram,'.dq']        'null' 'vector=true'};
-ext_ports.pads_mode     = {1  'out'   ['sram',s.sram,'_mode']     ['iBOB.sram',s.sram,'.mode']      'null' 'vector=false'};
-ext_ports.pads_zz       = {1  'out'   ['sram',s.sram,'_zz']       ['iBOB.sram',s.sram,'.zz']        'null' 'vector=false'};
+ext_ports.pads_address  = {19 'out'   ['sram',s.sram,'_address']  ['iBOB.sram',s.sram,'.address']  'vector=true'  struct() struct()};
+ext_ports.pads_bw_b     = {4  'out'   ['sram',s.sram,'_bw_b']     ['iBOB.sram',s.sram,'.bw_b']     'vector=true'  struct() struct()};
+ext_ports.pads_we_b     = {1  'out'   ['sram',s.sram,'_we_b']     ['iBOB.sram',s.sram,'.we_b']     'vector=false' struct() struct()};
+ext_ports.pads_adv_ld_b = {1  'out'   ['sram',s.sram,'_adv_ld_b'] ['iBOB.sram',s.sram,'.adv_ld_b'] 'vector=false' struct() struct()};
+ext_ports.pads_clk      = {1  'out'   ['sram',s.sram,'_clk']      ['iBOB.sram',s.sram,'.clk']      'vector=false' struct() struct()};
+ext_ports.pads_ce       = {1  'out'   ['sram',s.sram,'_ce']       ['iBOB.sram',s.sram,'.ce']       'vector=false' struct() struct()};
+ext_ports.pads_oe_b     = {1  'out'   ['sram',s.sram,'_oe_b']     ['iBOB.sram',s.sram,'.oe_b']     'vector=false' struct() struct()};
+ext_ports.pads_cen_b    = {1  'out'   ['sram',s.sram,'_cen_b']    ['iBOB.sram',s.sram,'.cen_b']    'vector=false' struct() struct()};
+ext_ports.pads_dq       = {36 'inout' ['sram',s.sram,'_dq']       ['iBOB.sram',s.sram,'.dq']       'vector=true'  struct() struct()};
+ext_ports.pads_mode     = {1  'out'   ['sram',s.sram,'_mode']     ['iBOB.sram',s.sram,'.mode']     'vector=false' struct() struct()};
+ext_ports.pads_zz       = {1  'out'   ['sram',s.sram,'_zz']       ['iBOB.sram',s.sram,'.zz']       'vector=false' struct() struct()};
 b = set(b,'ext_ports',ext_ports);
