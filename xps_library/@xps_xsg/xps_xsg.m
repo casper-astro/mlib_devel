@@ -21,16 +21,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function b = xps_ppc(blk_obj)
+
 if ~isa(blk_obj,'xps_block')
     error('XPS_PPC class requires a xps_block class object');
-end
+end % if ~isa(blk_obj,'xps_block')
+
 if ~strcmp(get(blk_obj,'type'),'xps_xsg')
     error(['Wrong XPS block type: ',get(blk_obj,'type')]);
-end
+end % if ~strcmp(get(blk_obj,'type'),'xps_xsg')
+
 blk_name = get(blk_obj,'simulink_name');
+
 s.hw_sys = get_param(blk_name,'hw_sys');
 s.ibob_linux = get_param(blk_name,'ibob_linux');
 s.mpc_type = get_param(blk_name,'mpc_type');
+
 switch s.hw_sys
 	case 'CORR'
 		s.sw_os = 'tinySH';
@@ -40,9 +45,12 @@ switch s.hw_sys
 		s.sw_os = 'tinySH';
 	case 'BEE2_usr'
 		s.sw_os = 'tinySH';
+	case 'ROACH'
+	    s.sw_os = 'none';
     otherwise
   		error(['Unsupported Platform: ',s.hw_sys]);
-end
+end % switch s.hw_sys
+
 s.clk_src = get_param(blk_name,'clk_src');
 s.clk90_src = [s.clk_src,'90'];
 s.clk_rate = eval_param(blk_name,'clk_rate');
@@ -52,12 +60,17 @@ s.gpioclkbit = eval_param(blk_name,'gpio_clk_bit_index');
 
 b = class(s,'xps_xsg',blk_obj);
 
+iobname = [s.gpioclk_hw_sys, '.', s.gpioclk_grp];
+iobindex = num2str(s.gpioclkbit);
+
+mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ',num2str(s.clk_rate*1e6));
+
 if strcmp(s.hw_sys, 'iBOB') & ~isempty(strmatch('usr_clk', s.clk_src))
     if ~isempty(strmatch(s.gpioclk_grp, {'zdok0', 'zdok1', 'mdr'}));
-        ext_ports.usrclk_in_p = {1 'in' 'usrclk_in_p' [s.gpioclk_hw_sys, '.', s.gpioclk_grp,'_p([',num2str(s.gpioclkbit),']+1)'] 'LVDS_25' 'vector=false'};
-        ext_ports.usrclk_in_n = {1 'in' 'usrclk_in_n' [s.gpioclk_hw_sys, '.', s.gpioclk_grp,'_n([',num2str(s.gpioclkbit),']+1)'] 'LVDS_25' 'vector=false'};
+        ext_ports.usrclk_in_p = {1 'in' 'usrclk_in_p'   [iobname,'_p([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVDS_25')  };
+        ext_ports.usrclk_in_n = {1 'in' 'usrclk_in_n'   [iobname,'_n([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVDS_25')  };
     else
-        ext_ports.usrclk_in = {1 'in' 'usrclk_in' [s.gpioclk_hw_sys, '.', s.gpioclk_grp,'([',num2str(s.gpioclkbit),']+1)'] 'LVCMOS25' 'vector=false'};
-    end
+        ext_ports.usrclk_in =   {1 'in' 'usrclk_in'     [iobname,  '([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVCMOS25') };
+    end % if ~isempty(strmatch(s.gpioclk_grp, {'zdok0', 'zdok1', 'mdr'}));
     b = set(b,'ext_ports',ext_ports);
 end
