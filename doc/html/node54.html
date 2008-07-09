@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -24,7 +24,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html1510"
   HREF="node55.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -47,12 +48,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  &nbsp; <B>  <A NAME="tex2html1509"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html1512"
   HREF="node54.html#SECTION00321000000000000000">Summary</A>
 <LI><A NAME="tex2html1513"
@@ -72,9 +73,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION00320000000000000000"></A><A NAME="XAUI"></A>
 <BR>
-XAUI Transceiver <I>(XAUI)</I>
-</H1> <B>Block Author</B>: Pierre Yves Droz, Henry Chen 
-<BR><B>Document Author</B>: Jason Manley 
+XAUI Transceiver <SPAN  CLASS="textit">(XAUI)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Pierre Yves Droz, Henry Chen 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Jason Manley 
 <H2><A NAME="SECTION00321000000000000000">
 Summary</A>
 </H2>XAUI block for sending and receiving point-to-point, streaming data over the BEE2 and iBOB's CX4 connectors. NOTE: A new version of this block is in development.
@@ -85,24 +86,24 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">Demux</TD>
-<TD ALIGN="LEFT"><I>demux</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">demux</SPAN></TD>
 <TD ALIGN="LEFT">Selects the width of the data bus. 1 for 64 bits, 2 for 32 bits.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Port</TD>
-<TD ALIGN="LEFT"><I>port</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">port</SPAN></TD>
 <TD ALIGN="LEFT">Selects the physical CX4 port on the iBOB or BEE2. The iBOB has two ports; the BEE2 has two for the control FPGA and four for each of the user FPGAs. CORR is not used by CASPER.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Pre-emphasis</TD>
-<TD ALIGN="LEFT"><I>pre_emph</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">pre_emph</SPAN></TD>
 <TD ALIGN="LEFT">Selects the pre-emaphasis to use over the physical link. Default: 3 (see Xilinx documentation)</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Differential Swing</TD>
-<TD ALIGN="LEFT"><I>swing</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">swing</SPAN></TD>
 <TD ALIGN="LEFT">Selects the size of the differential swing to use in mV. Default: 800 (see Xilinx documentation)</TD>
 </TR>
 </TABLE>
@@ -112,67 +113,67 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_get</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_get</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Used to request the next data word from the RX buffer.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_reset</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_reset</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Resets the receive subsystem.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>tx_data</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">tx_data</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">ufix_64_0 or ufix_32_0</TD>
 <TD ALIGN="LEFT">Accepts the next data word (64 or 32 bits) to be transmitted.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>tx_outofband</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">tx_outofband</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">ufix_8_0 or ufix_4_0</TD>
 <TD ALIGN="LEFT">Accepts the next data word (8 bits if demux=1, 4 bits if demux=2) to be transmitted through the out-of-band channel.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>tx_valid</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">tx_valid</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Clocks the transmit data into the transceiver. Data is clocked into the buffer while this line is high.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_data</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_data</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">ufix_64_0</TD>
 <TD ALIGN="LEFT">Outputs the received data stream.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_outofband</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_outofband</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">ufix_8_0 or ufix_4_0</TD>
 <TD ALIGN="LEFT">Outputs the out-of-band received data stream.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_empty</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_empty</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Indicates that the receive buffer is empty.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_valid</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_valid</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Indicates that data has been received.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_linkdown</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_linkdown</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Indicates that the link is down (eg. faulty cable).</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>tx_full</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">tx_full</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Indicates the transmit buffer is full.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rx_almost_full</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rx_almost_full</SPAN></TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">inherited</TD>
 <TD ALIGN="LEFT">Indicates the receive buffer is full.</TD>
@@ -187,18 +188,19 @@ Description</A>
 <H4><A NAME="SECTION00324010000000000000">
 Demux</A>
 </H4>
-Perhaps a misnomer, this parameter describes the width of the data bus rather than a selection of two muxed streams on one channel. At 156MHz XAUI clock, the maximum transmission speed is 64bits * 156.25 MHz = 10Gbit/s. For BEE or iBOB designs clocked at rates above 156MHz, clocking-in 64 bit data on every clock cycle would cause the XAUI block's FIFO buffers to overflow. The <I>demux</I> option is provided which halves the input data bus width to 32 bits and enables data to be clocked-in on every FPGA clock cycle. Along with the data bus width, the <I>out of band</I> bus width is also halved to 4 bits.
+Perhaps a misnomer, this parameter describes the width of the data bus rather than a selection of two muxed streams on one channel. At 156MHz XAUI clock, the maximum transmission speed is 64bits * 156.25 MHz = 10Gbit/s. For BEE or iBOB designs clocked at rates above 156MHz, clocking-in 64 bit data on every clock cycle would cause the XAUI block's FIFO buffers to overflow. The <SPAN  CLASS="textit">demux</SPAN> option is provided which halves the input data bus width to 32 bits and enables data to be clocked-in on every FPGA clock cycle. Along with the data bus width, the <SPAN  CLASS="textit">out of band</SPAN> bus width is also halved to 4 bits.
 
 <P>
 
 <H4><A NAME="SECTION00324020000000000000">
 Out of band signals</A>
 </H4>
-Out of band signals are guaranteed to arrive at the same time as the data word with which they were sent. Out-of-band data is only transmitted across the physical link if the input to <I>tx_outofband</I> changes and is clocked in as valid (<I>tx_valid</I>). In other words, if you keep <I>tx_outofband</I> constant, no additional bandwidth is consumed (the in-band signals are transmitted as normal). When data is clocked into the transmitter, it will appear out the receiver as if the <I>tx_outofband</I> and <I>tx_data</I> arrived simultaneously. Care should be taken to ensure that the data clocked into <I>tx_outofband</I> and <I>tx_data</I> does not exceed the XAUI's maximum transmission rate (approximately 10Gbps for 156.25MHz clock). Each change of <I>tx_outofband</I> (be it one bit or eight bits) requires 64 bits (a full word) to transmit. This bus width is 8 bits if <I>demux</I> is not selected (set to 1), and 4 bits if it is set to 2.
+Out of band signals are guaranteed to arrive at the same time as the data word with which they were sent. Out-of-band data is only transmitted across the physical link if the input to <SPAN  CLASS="textit">tx_outofband</SPAN> changes and is clocked in as valid (<SPAN  CLASS="textit">tx_valid</SPAN>). In other words, if you keep <SPAN  CLASS="textit">tx_outofband</SPAN> constant, no additional bandwidth is consumed (the in-band signals are transmitted as normal). When data is clocked into the transmitter, it will appear out the receiver as if the <SPAN  CLASS="textit">tx_outofband</SPAN> and <SPAN  CLASS="textit">tx_data</SPAN> arrived simultaneously. Care should be taken to ensure that the data clocked into <SPAN  CLASS="textit">tx_outofband</SPAN> and <SPAN  CLASS="textit">tx_data</SPAN> does not exceed the XAUI's maximum transmission rate (approximately 10Gbps for 156.25MHz clock). Each change of <SPAN  CLASS="textit">tx_outofband</SPAN> (be it one bit or eight bits) requires 64 bits (a full word) to transmit. This bus width is 8 bits if <SPAN  CLASS="textit">demux</SPAN> is not selected (set to 1), and 4 bits if it is set to 2.
 
 
 <P>
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1510"
   HREF="node55.html">
@@ -220,11 +222,11 @@ Out of band signals are guaranteed to arrive at the same time as the data word w
 <B> Previous:</B> <A NAME="tex2html1503"
   HREF="node53.html">10GbE Transceiver (ten_GbE)</A>
  &nbsp; <B>  <A NAME="tex2html1509"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

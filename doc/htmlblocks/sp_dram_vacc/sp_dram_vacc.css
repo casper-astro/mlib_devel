@@ -28,3 +28,9 @@ TD.eqno			{ }	/* equation-number cells */
 
 
 /* document-specific styles come next */
+DIV.logo-LaTeX		{   }
+DIV.navigation		{   }
+DIV.LaTeX		{   }
+SPAN.textbf		{ font-weight: bold  }
+SPAN.arabic		{   }
+SPAN.textit		{ font-style: italic  }

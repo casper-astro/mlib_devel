@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)</TITLE>
-<META NAME="description" CONTENT="Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)">
+<TITLE>Real-sampled Biplex FFT (with output demuxed by 4) (fft_biplex_real_4x)</TITLE>
+<META NAME="description" CONTENT="Real-sampled Biplex FFT (with output demuxed by 4) (fft_biplex_real_4x)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html1018"
   HREF="node26.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -40,20 +41,20 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1019"
-  HREF="node26.html">Real-sampled Biplex FFT (with</A>
+  HREF="node26.html">FFT (fft)</A>
 <B> Up:</B> <A NAME="tex2html1015"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1009"
-  HREF="node24.html">FFT (fft)</A>
+  HREF="node24.html">Real-sampled Biplex FFT (with</A>
  &nbsp; <B>  <A NAME="tex2html1017"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html1020"
   HREF="node25.html#SECTION002231000000000000000">Summary</A>
 <LI><A NAME="tex2html1021"
@@ -66,17 +67,17 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002230000000000000000"></A><A NAME="fftbiplexreal2x"></A>
+<H1><A NAME="SECTION002230000000000000000"></A><A NAME="fftbiplexreal4x"></A>
 <BR>
-Real-sampled Biplex FFT (with output demuxed by 2) <I>(fft_biplex_real_2x)</I>
-</H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Aaron Parsons 
+Real-sampled Biplex FFT (with output demuxed by 4) <SPAN  CLASS="textit">(fft_biplex_real_4x)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Aaron Parsons 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Aaron Parsons 
 <H2><A NAME="SECTION002231000000000000000">
 Summary</A>
-</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
- WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
- SRC="img11.png"
- ALT="$2^{N-1}-1$">.  Real inputs 1 and 2 share one output port (with the data for 1 coming first, then the data for 2), and likewise for inputs 3 and 4.
+</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  All frequencies (both positive and negative) are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <SPAN CLASS="MATH"><IMG
+ WIDTH="51" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$2^N-1$"></SPAN>.
 
 <P>
 
@@ -84,39 +85,39 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Size of FFT: (<IMG
+<TR><TD ALIGN="LEFT">Size of FFT: (<SPAN CLASS="MATH"><IMG
  WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
- SRC="img10.png"
- ALT="$2^?$">)</TD>
-<TD ALIGN="LEFT"><I>FFTSize</I></TD>
-<TD ALIGN="LEFT">The number of channels computed in the complex FFT core.  The number of channels output for each real stream is half of this.</TD>
+ SRC="img7.png"
+ ALT="$2^?$"></SPAN>)</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">FFTSize</SPAN></TD>
+<TD ALIGN="LEFT">The number of channels computed in the FFT core.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Bit Width</TD>
-<TD ALIGN="LEFT"><I>BitWidth</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">BitWidth</SPAN></TD>
 <TD ALIGN="LEFT">The number of bits in each real and imaginary sample as they are carried through the FFT.  Each FFT stage will round numbers back down to this number of bits after performing a butterfly computation.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Quantization Behavior</TD>
-<TD ALIGN="LEFT"><I>quantization</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">quantization</SPAN></TD>
 <TD ALIGN="LEFT">Specifies the rounding behavior used at the end of each butterfly computation to return to the number of bits specified above.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Overflow Behavior</TD>
-<TD ALIGN="LEFT"><I>overflow</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">overflow</SPAN></TD>
 <TD ALIGN="LEFT">Indicates the behavior of the FFT core when the value of a sample exceeds what can be expressed in the specified bit width.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Add Latency</TD>
-<TD ALIGN="LEFT"><I>add_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">add_latency</SPAN></TD>
 <TD ALIGN="LEFT">Latency through adders in the FFT.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Mult Latency</TD>
-<TD ALIGN="LEFT"><I>mult_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">mult_latency</SPAN></TD>
 <TD ALIGN="LEFT">Latency through multipliers in the FFT.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">BRAM Latency</TD>
-<TD ALIGN="LEFT"><I>bram_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">bram_latency</SPAN></TD>
 <TD ALIGN="LEFT">Latency through BRAM in the FFT.</TD>
 </TR>
 </TABLE>
@@ -126,37 +127,37 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>sync</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">sync</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Boolean</TD>
 <TD ALIGN="LEFT">Indicates the next clock cycle contains valid data</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>shift</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">shift</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Unsigned</TD>
 <TD ALIGN="LEFT">Sets the shifting schedule through the FFT.  Bit 0 specifies the behavior of stage 0, bit 1 of stage 1, and so on.  If a stage is set to shift (with bit = 1), that every sample is divided by 2 at the output of that stage.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>pol</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">pol</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The time-domain stream(s) to channelized.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>sync_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">sync_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Boolean</TD>
 <TD ALIGN="LEFT">Indicates that data out will be valid next clock cycle.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>of</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">of</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Boolean</TD>
 <TD ALIGN="LEFT">Indicates an overflow occurred at some stage in the FFT.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>pol_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">pol_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The frequency channels.</TD>
@@ -166,12 +167,13 @@ Ports</A>
 
 <H2><A NAME="SECTION002234000000000000000">
 Description</A>
-</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  Only positive frequencies are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <IMG
- WIDTH="68" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
- SRC="img11.png"
- ALT="$2^{N-1}-1$">.  Real inputs 1 and 2 share one output port (with the data for 1 coming first, then the data for 2), and likewise for inputs 3 and 4.
+</H2>Computes the real-sampled Fast Fourier Transform using the standard Hermitian conjugation trick to use a complex core to transform a two real streams.  Thus, a biplex core (which can do 2 complex FFTs) can transform 4 real streams.  All frequencies (both positive and negative) are output (negative frequencies are the mirror images of their positive counterparts).  Data is output in normal frequency order, meaning that channel 0 (corresponding to DC) is output first, followed by channel 1, on up to channel <SPAN CLASS="MATH"><IMG
+ WIDTH="51" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img8.png"
+ ALT="$2^N-1$"></SPAN>.
 
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1018"
   HREF="node26.html">
@@ -187,17 +189,17 @@ Description</A>
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1019"
-  HREF="node26.html">Real-sampled Biplex FFT (with</A>
+  HREF="node26.html">FFT (fft)</A>
 <B> Up:</B> <A NAME="tex2html1015"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1009"
-  HREF="node24.html">FFT (fft)</A>
+  HREF="node24.html">Real-sampled Biplex FFT (with</A>
  &nbsp; <B>  <A NAME="tex2html1017"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

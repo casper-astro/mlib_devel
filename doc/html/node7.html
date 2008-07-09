@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html727"
   HREF="node8.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -44,16 +45,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Up:</B> <A NAME="tex2html724"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html718"
-  HREF="node6.html">Complex to Real-Imag Block</A>
+  HREF="node6.html">Conjugating Complex 4-bit Multiplier</A>
  &nbsp; <B>  <A NAME="tex2html726"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html729"
   HREF="node7.html#SECTION00251000000000000000">Summary</A>
 <LI><A NAME="tex2html730"
@@ -68,12 +69,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION00250000000000000000"></A><A NAME="cmult4bitbr"></A>
 <BR>
-Complex 4-bit Multiplier Implemented in Block RAM <I>(cmult_4bit_br)</I>
-</H1> <B>Block Author</B>: Block Author 
-<BR><B>Document Author</B>: Document Author 
+Complex 4-bit Multiplier Implemented in Block RAM <SPAN  CLASS="textit">(cmult_4bit_br)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Block Author 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Document Author 
 <H2><A NAME="SECTION00251000000000000000">
 Summary</A>
-</H2>Perform a complex multiplication <I>(a+bi)(c-di)=(ac-bd)+(ad+bc)i</I>. Implements the logic in Block RAM.
+</H2>Perform a complex multiplication <SPAN  CLASS="textit">(a+bi)(c-di)=(ac-bd)+(ad+bc)i</SPAN>. Implements the logic in Block RAM.
 
 <P>
 
@@ -81,16 +82,16 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">Multiplier Latency</TD>
-<TD ALIGN="LEFT"><I>mult_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">mult_latency</SPAN></TD>
 <TD ALIGN="LEFT">The latency through a multiplier.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Add Latency</TD>
-<TD ALIGN="LEFT"><I>add_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">add_latency</SPAN></TD>
 <TD ALIGN="LEFT">The latency through an adder.</TD>
 </TR>
 </TABLE>
@@ -100,37 +101,37 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>a</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">a</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The real component of input 1.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>b</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">b</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The imaginary component of input 1.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>c</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">c</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The real component of input 2.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>d</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">d</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">The imaginary component of input 2.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>real</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">real</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">ac-bd</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>imag</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">imag</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
 <TD ALIGN="LEFT">ad-bc</TD>
@@ -140,7 +141,7 @@ Ports</A>
 
 <H2><A NAME="SECTION00254000000000000000">
 Description</A>
-</H2>Perform a complex multiplication <I>(a+bi)(c-di)=(ac-bd)+(ad+bc)i</I>. Implements the logic in Block RAM. 
+</H2>Perform a complex multiplication <SPAN  CLASS="textit">(a+bi)(c-di)=(ac-bd)+(ad+bc)i</SPAN>. Implements the logic in Block RAM. 
 
 <P>
 Each 4 bit real multiplier is implemented as a lookup table with 4b+4b=8b of address.
@@ -148,8 +149,7 @@ Each 4 bit real multiplier is implemented as a lookup table with 4b+4b=8b of add
 <P>
 
 
-<P>
-<HR>
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html727"
   HREF="node8.html">
@@ -169,13 +169,13 @@ Each 4 bit real multiplier is implemented as a lookup table with 4b+4b=8b of add
 <B> Up:</B> <A NAME="tex2html724"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html718"
-  HREF="node6.html">Complex to Real-Imag Block</A>
+  HREF="node6.html">Conjugating Complex 4-bit Multiplier</A>
  &nbsp; <B>  <A NAME="tex2html726"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

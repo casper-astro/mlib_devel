@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -21,29 +21,30 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
 <BR>
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
-<H1 ALIGN="CENTER"><B>CASPER Library</B> 
+<H1 ALIGN="CENTER"><SPAN  CLASS="textbf">CASPER Library</SPAN> 
 <BR>
 Reference Manual</H1>
-<DIV>
+<DIV CLASS="author_info">
 
-<P ALIGN="CENTER"><STRONG>Last Updated July 8, 2008</STRONG></P>
+<P ALIGN="CENTER"><STRONG>Last Updated July 9, 2008</STRONG></P>
 </DIV>
 
 <P>
 
 <H1><A NAME="SECTION00010000000000000000"></A> <A NAME="snap64"></A>
 <BR>
-64 Bit Snapshot <I>(snap64)</I>
-</H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Aaron Parsons, Ben Blackman 
+64 Bit Snapshot <SPAN  CLASS="textit">(snap64)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Aaron Parsons 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Aaron Parsons, Ben Blackman 
 <H2><A NAME="SECTION00011000000000000000">
 Summary</A>
 </H2>The snap block provides a packaged solution to capturing data from the FPGA fabric and making it accessible from the CPU. snap64 captures to 2x32 bit wide shared BRAMs to effect a 64 bit capture.
@@ -54,15 +55,15 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT">No. of Samples (<IMG
+<TR><TD ALIGN="LEFT">No. of Samples (<SPAN CLASS="MATH"><IMG
  WIDTH="19" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
  SRC="img1.png"
- ALT="$2^?$">)</TD>
-<TD ALIGN="LEFT"><I>nsamples</I></TD>
+ ALT="$2^?$"></SPAN>)</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">nsamples</SPAN></TD>
 <TD ALIGN="LEFT">Specifies the depth of the Shared BRAM(s); i.e. the number of 64bit samples which are stored per capture.</TD>
 </TR>
 </TABLE>
@@ -72,22 +73,22 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>din</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">din</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">unsigned_64_0</TD>
 <TD ALIGN="LEFT">The data to be captured. Regardless of type, the bit-level representation of these numbers are written as 64bit values to the Shared BRAMs.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>trig</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">trig</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">When high, triggers the beginning of a data capture. Thereafter, every enabled data is written to the shared BRAM until it is full.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>we</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">we</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">After a trigger is begun, enables a write to Shared BRAM.</TD>
@@ -102,7 +103,7 @@ Description</A>
 <H4><A NAME="SECTION00014010000000000000">
 Usage</A>
 </H4>
-Under TinySH/BORPH, this device will have 3 sub-devices: <I>ctrl</I>, <I>bram_msb</I>, <I>bram_lsb</I>, and <I>addr</I>. <I>ctrl</I> is an input register. Bit 0, when driven from low to high, enables a trigger/data capture to occur. Bit 1, when high, overrides <I>trig</I> to trigger instantly. Bit 2, when high, overrides <I>we</I> to always write data to bram. <I>addr</I> is an output register and records the last address of bram to which data was written. <I>bram_msb</I> and <I>bram_lsb</I> are 32 bit wide Shared BRAMs of the depth specified in <I>Parameters</I>. <I>bram_msb</I> holds the upper 32 bits of <I>din</I> while <I>bram_lsb</I> holds the lower 32 bits of <I>din</I>.
+Under TinySH/BORPH, this device will have 3 sub-devices: <SPAN  CLASS="textit">ctrl</SPAN>, <SPAN  CLASS="textit">bram_msb</SPAN>, <SPAN  CLASS="textit">bram_lsb</SPAN>, and <SPAN  CLASS="textit">addr</SPAN>. <SPAN  CLASS="textit">ctrl</SPAN> is an input register. Bit 0, when driven from low to high, enables a trigger/data capture to occur. Bit 1, when high, overrides <SPAN  CLASS="textit">trig</SPAN> to trigger instantly. Bit 2, when high, overrides <SPAN  CLASS="textit">we</SPAN> to always write data to bram. <SPAN  CLASS="textit">addr</SPAN> is an output register and records the last address of bram to which data was written. <SPAN  CLASS="textit">bram_msb</SPAN> and <SPAN  CLASS="textit">bram_lsb</SPAN> are 32 bit wide Shared BRAMs of the depth specified in <SPAN  CLASS="textit">Parameters</SPAN>. <SPAN  CLASS="textit">bram_msb</SPAN> holds the upper 32 bits of <SPAN  CLASS="textit">din</SPAN> while <SPAN  CLASS="textit">bram_lsb</SPAN> holds the lower 32 bits of <SPAN  CLASS="textit">din</SPAN>.
 
 
 <P>
@@ -110,14 +111,14 @@ Under TinySH/BORPH, this device will have 3 sub-devices: <I>ctrl</I>, <I>bram_ms
 <H1><A NAME="SECTION00020000000000000000">
 About this document ...</A>
 </H1>
- <STRONG><B>CASPER Library</B> 
+ <STRONG><SPAN  CLASS="textbf">CASPER Library</SPAN> 
 <BR>
 Reference Manual</STRONG><P>
 This document was generated using the
 <A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
 <P>
 Copyright &#169; 1993, 1994, 1995, 1996,
-<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
+Nikos Drakos, 
 Computer Based Learning Unit, University of Leeds.
 <BR>
 Copyright &#169; 1997, 1998, 1999,
@@ -127,16 +128,17 @@ Mathematics Department, Macquarie University, Sydney.
 The command line arguments were: <BR>
  <STRONG>latex2html</STRONG> <TT>-local_icons -split 1 sys_snap64.tex</TT>
 <P>
-The translation was initiated by  on 2008-07-08<HR>
+The translation was initiated by Documentor on 2008-07-09
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

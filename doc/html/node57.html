@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html1610"
   HREF="node58.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -48,12 +49,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  &nbsp; <B>  <A NAME="tex2html1609"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html1612"
   HREF="node57.html#SECTION00421000000000000000">Summary</A>
 <LI><A NAME="tex2html1613"
@@ -71,12 +72,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION00420000000000000000"></A><A NAME="dac"></A>
 <BR>
-DAC <I>(dac)</I>
-</H1> <B>Block Author</B>: Henry Chen 
-<BR><B>Document Author</B>: Ben Blackman 
+DAC <SPAN  CLASS="textit">(dac)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Henry Chen 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Ben Blackman 
 <H2><A NAME="SECTION00421000000000000000">
 Summary</A>
-</H2>The DAC block converts 4 digital inputs to 1 analog output. The <I>dac</I> runs at 4x FPGA clock frequency, outputting analog converted samples 0 through 3 each FPGA clock cycle.
+</H2>The DAC block converts 4 digital inputs to 1 analog output. The <SPAN  CLASS="textit">dac</SPAN> runs at 4x FPGA clock frequency, outputting analog converted samples 0 through 3 each FPGA clock cycle.
 
 <P>
 
@@ -84,29 +85,29 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">DAC board</TD>
-<TD ALIGN="LEFT"><I>dac_brd</I></TD>
-<TD ALIGN="LEFT">Select which IBOB port to run this <I>dac</I>.</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">dac_brd</SPAN></TD>
+<TD ALIGN="LEFT">Select which IBOB port to run this <SPAN  CLASS="textit">dac</SPAN>.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">DAC clock rate (MHz)</TD>
-<TD ALIGN="LEFT"><I>dac_clk_rate</I></TD>
-<TD ALIGN="LEFT">The clock rate to run the <I>dac</I>. Must be 4x FPGA clock rate.</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">dac_clk_rate</SPAN></TD>
+<TD ALIGN="LEFT">The clock rate to run the <SPAN  CLASS="textit">dac</SPAN>. Must be 4x FPGA clock rate.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Sample period</TD>
-<TD ALIGN="LEFT"><I>sample_period</I></TD>
-<TD ALIGN="LEFT">Sets the period at which the <I>dac</I> outputs samples (ie 2 means every other cycle).</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">sample_period</SPAN></TD>
+<TD ALIGN="LEFT">Sets the period at which the <SPAN  CLASS="textit">dac</SPAN> outputs samples (ie 2 means every other cycle).</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Show Implementation Parameters</TD>
-<TD ALIGN="LEFT"><I>show_param</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">show_param</SPAN></TD>
 <TD ALIGN="LEFT">Allows the user to set the implementation parameters.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Invert output clock phase</TD>
-<TD ALIGN="LEFT"><I>invert_clock</I></TD>
-<TD ALIGN="LEFT">When unchecked, the <I>dac</I> samples the data aligned with the clock. When checked, the <I>dac</I> samples the data aligned with an inverted clock.</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">invert_clock</SPAN></TD>
+<TD ALIGN="LEFT">When unchecked, the <SPAN  CLASS="textit">dac</SPAN> samples the data aligned with the clock. When checked, the <SPAN  CLASS="textit">dac</SPAN> samples the data aligned with an inverted clock.</TD>
 </TR>
 </TABLE>
 <P>
@@ -115,20 +116,20 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>dataX</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">dataX</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Fix_9_8</TD>
 <TD ALIGN="LEFT">One of 4 digital inputs to be converted to analog.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>sim_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">sim_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">double</TD>
-<TD ALIGN="LEFT">Analog output of <I>dac</I>. Note: For simulation only.</TD>
+<TD ALIGN="LEFT">Analog output of <SPAN  CLASS="textit">dac</SPAN>. Note: For simulation only.</TD>
 </TR>
 </TABLE>
 <P>
@@ -140,7 +141,7 @@ Description</A>
 <H4><A NAME="SECTION00424010000000000000">
 Usage</A>
 </H4>
-The <I>dac</I> takes 4 <I>Fix_9_8</I> inputs and outputs an analog stream. The <I>dac</I> runs at 4x the FPGA clock speed.
+The <SPAN  CLASS="textit">dac</SPAN> takes 4 <SPAN  CLASS="textit">Fix_9_8</SPAN> inputs and outputs an analog stream. The <SPAN  CLASS="textit">dac</SPAN> runs at 4x the FPGA clock speed.
 
 <BR>
 <BR>
@@ -149,7 +150,8 @@ To be updated.
 
 
 <P>
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1610"
   HREF="node58.html">
@@ -171,11 +173,11 @@ To be updated.
 <B> Previous:</B> <A NAME="tex2html1601"
   HREF="node56.html">ADC (adc)</A>
  &nbsp; <B>  <A NAME="tex2html1609"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

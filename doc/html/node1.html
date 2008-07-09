@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html317"
   HREF="node2.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -43,7 +44,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Previous:</B> <A NAME="tex2html310"
   HREF="index.html">CASPER Library Reference Manual</A>
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <BR>
 
@@ -52,7 +53,7 @@ Contents</A>
 </H2>
 <!--Table of Contents-->
 
-<UL>
+<UL CLASS="TofC">
 <LI><A NAME="tex2html319"
   HREF="node2.html">Signal Processing Blocks</A>
 <UL>
@@ -63,31 +64,31 @@ Contents</A>
 <LI><A NAME="tex2html322"
   HREF="node5.html">Bit reverser (bit_reverse)</A>
 <LI><A NAME="tex2html323"
-  HREF="node6.html">Complex to Real-Imag Block (c_to_ri)</A>
+  HREF="node6.html">Conjugating Complex 4-bit Multiplier Implemented in Block RAM (cmult_4bit_br*)</A>
 <LI><A NAME="tex2html324"
   HREF="node7.html">Complex 4-bit Multiplier Implemented in Block RAM (cmult_4bit_br)</A>
 <LI><A NAME="tex2html325"
-  HREF="node8.html">Conjugating Complex 4-bit Multiplier Implemented in Block RAM (cmult_4bit_br*)</A>
+  HREF="node8.html">Conjugating Complex 4-bit Multiplier Implemented in Dedicated Multipliers. (cmult_4bit_em*)</A>
 <LI><A NAME="tex2html326"
   HREF="node9.html">Complex 4-bit Multiplier Implemented in Embedded Multipliers (cmult_4bit_em)</A>
 <LI><A NAME="tex2html327"
-  HREF="node10.html">Conjugating Complex 4-bit Multiplier Implemented in Dedicated Multipliers. (cmult_4bit_em*)</A>
+  HREF="node10.html">Conjugating Complex 4-bit Multiplier Implemented in Slices (cmult_4bit_sl*)</A>
 <LI><A NAME="tex2html328"
   HREF="node11.html">Complex 4-bit Multiplier Implemented in Slices (cmult_4bit_sl)</A>
 <LI><A NAME="tex2html329"
-  HREF="node12.html">Conjugating Complex 4-bit Multiplier Implemented in Slices (cmult_4bit_sl*)</A>
+  HREF="node12.html">Complex Adder/Subtractor (complex_addsub)</A>
 <LI><A NAME="tex2html330"
-  HREF="node13.html">Complex Adder/Subtractor (complex_addsub)</A>
+  HREF="node13.html">Complex to Real-Imag Block (c_to_ri)</A>
 <LI><A NAME="tex2html331"
   HREF="node14.html">DDS (dds)</A>
 <LI><A NAME="tex2html332"
   HREF="node15.html">Decimating FIR Filter (dec_fir)</A>
 <LI><A NAME="tex2html333"
-  HREF="node16.html">The Delay in BRAM Block (delay_bram)</A>
+  HREF="node16.html">The Enabled Delay in BRAM Block (delay_bram_en_plus)</A>
 <LI><A NAME="tex2html334"
-  HREF="node17.html">The Enabled Delay in BRAM Block (delay_bram_en_plus)</A>
+  HREF="node17.html">The Programmable Delay in BRAM Block (delay_bram_prog)</A>
 <LI><A NAME="tex2html335"
-  HREF="node18.html">The Programmable Delay in BRAM Block (delay_bram_prog)</A>
+  HREF="node18.html">The Delay in BRAM Block (delay_bram)</A>
 <LI><A NAME="tex2html336"
   HREF="node19.html">The Complex Delay Block (delay_complex)</A>
 <LI><A NAME="tex2html337"
@@ -99,11 +100,11 @@ Contents</A>
 <LI><A NAME="tex2html340"
   HREF="node23.html">The Edge Detect Block (edge)</A>
 <LI><A NAME="tex2html341"
-  HREF="node24.html">FFT (fft)</A>
+  HREF="node24.html">Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)</A>
 <LI><A NAME="tex2html342"
-  HREF="node25.html">Real-sampled Biplex FFT (with output demuxed by 2) (fft_biplex_real_2x)</A>
+  HREF="node25.html">Real-sampled Biplex FFT (with output demuxed by 4) (fft_biplex_real_4x)</A>
 <LI><A NAME="tex2html343"
-  HREF="node26.html">Real-sampled Biplex FFT (with output demuxed by 4) (fft_biplex_real_4x)</A>
+  HREF="node26.html">FFT (fft)</A>
 <LI><A NAME="tex2html344"
   HREF="node27.html">Real-sampled Wideband FFT (fft_wideband_real)</A>
 <LI><A NAME="tex2html345"
@@ -125,9 +126,9 @@ Contents</A>
 <LI><A NAME="tex2html353"
   HREF="node36.html">The Partial Delay Block (partial_delay)</A>
 <LI><A NAME="tex2html354"
-  HREF="node37.html">Polyphase FIR Filter (frontend for a full PFB) (pfb_fir)</A>
+  HREF="node37.html">Polyphase Real FIR Filter (pfb_fir_real)</A>
 <LI><A NAME="tex2html355"
-  HREF="node38.html">Polyphase Real FIR Filter (pfb_fir_real)</A>
+  HREF="node38.html">Polyphase FIR Filter (frontend for a full PFB) (pfb_fir)</A>
 <LI><A NAME="tex2html356"
   HREF="node39.html">The Positive Edge Detect Block (posedge)</A>
 <LI><A NAME="tex2html357"
@@ -145,11 +146,11 @@ Contents</A>
 <LI><A NAME="tex2html363"
   HREF="node46.html">Stopwatch (stopwatch)</A>
 <LI><A NAME="tex2html364"
-  HREF="node47.html">Display name for Block (simulink_name_for_block)</A>
+  HREF="node47.html">The Enabled Sync Delay Block (sync_delay_en)</A>
 <LI><A NAME="tex2html365"
-  HREF="node48.html">The Enabled Sync Delay Block (sync_delay_en)</A>
+  HREF="node48.html">The Programmable Sync Delay Block (sync_delay_prog)</A>
 <LI><A NAME="tex2html366"
-  HREF="node49.html">The Programmable Sync Delay Block (sync_delay_prog)</A>
+  HREF="node49.html">Display name for Block (simulink_name_for_block)</A>
 <LI><A NAME="tex2html367"
   HREF="node50.html">Windowed X-Engine (win_x_engine)</A>
 <LI><A NAME="tex2html368"
@@ -175,9 +176,9 @@ Contents</A>
 <LI><A NAME="tex2html375"
   HREF="node58.html">DRAM (dram)</A>
 <LI><A NAME="tex2html376"
-  HREF="node59.html">Snapshot Capture (snap)</A>
+  HREF="node59.html">64 Bit Snapshot (snap64)</A>
 <LI><A NAME="tex2html377"
-  HREF="node60.html">64 Bit Snapshot (snap64)</A>
+  HREF="node60.html">Snapshot Capture (snap)</A>
 <LI><A NAME="tex2html378"
   HREF="node61.html">Software Register (software register)</A>
 <LI><A NAME="tex2html379"
@@ -189,8 +190,8 @@ Contents</A>
 <P>
 <BR><HR>
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

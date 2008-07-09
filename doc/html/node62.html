@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html1698"
   HREF="node63.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -48,12 +49,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  &nbsp; <B>  <A NAME="tex2html1697"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html1700"
   HREF="node62.html#SECTION00471000000000000000">Summary</A>
 <LI><A NAME="tex2html1701"
@@ -71,9 +72,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION00470000000000000000"></A><A NAME="sram"></A>
 <BR>
-SRAM <I>(sram)</I>
-</H1> <B>Block Author</B>: Pierre Yves Droz, Henry Chen 
-<BR><B>Document Author</B>: Ben Blackman 
+SRAM <SPAN  CLASS="textit">(sram)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Pierre Yves Droz, Henry Chen 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Ben Blackman 
 <H2><A NAME="SECTION00471000000000000000">
 Summary</A>
 </H2>The sram block represents a 36x512k SRAM chip on the IBOB. It stores 36-bit words and requires 19 bits to access its address space.
@@ -84,28 +85,28 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">SRAM</TD>
-<TD ALIGN="LEFT"><I>sram</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">sram</SPAN></TD>
 <TD ALIGN="LEFT">Selects which SRAM chip this block represents.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Data Type</TD>
-<TD ALIGN="LEFT"><I>arith_type</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">arith_type</SPAN></TD>
 <TD ALIGN="LEFT">Type to which the data is cast on both the input and output.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Data binary point (bitwidth is 36)</TD>
-<TD ALIGN="LEFT"><I>bin_pt</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">bin_pt</SPAN></TD>
 <TD ALIGN="LEFT">Position of the binary point of the data.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Sample period</TD>
-<TD ALIGN="LEFT"><I>sample_period</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">sample_period</SPAN></TD>
 <TD ALIGN="LEFT">Sets the period with reference to the clock frequency.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Simulate SRAM using ModelSim</TD>
-<TD ALIGN="LEFT"><I>use_sim</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">use_sim</SPAN></TD>
 <TD ALIGN="LEFT">Turns ModelSim simulation on or off.</TD>
 </TR>
 </TABLE>
@@ -115,37 +116,37 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>we</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">we</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">A signal that when high, causes the data on data_in to be written to address.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>be</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">be</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">unsigned_4_0</TD>
 <TD ALIGN="LEFT">A signal that enables different 9-bit bytes of data_in to be written.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>address</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">address</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">unsigned_19_0</TD>
 <TD ALIGN="LEFT">A signal that specifies the address where either data_in is to be stored or from where data_out is to be read.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>data_in</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">data_in</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">arith_type_36</TD>
 <TD ALIGN="LEFT">A signal that contains the data to be stored.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>data_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">data_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">arith_type_36</TD>
 <TD ALIGN="LEFT">A signal that contains the data coming out of address.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>data_valid</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">data_valid</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">A signal that is high when data_out is valid.</TD>
@@ -160,12 +161,13 @@ Description</A>
 <H4><A NAME="SECTION00474010000000000000">
 Usage</A>
 </H4>
-The SRAM block is 36x512k, signifying that its input and output are 36-bit words and it can store 512k words. Each clock cyle, if <I>we</I> is high, then each bit of be determines whether each 9-bit chunk will be written to address. <I>be</I> is 4 bits with the highest bit corresponding to the most significant chunk (so if <I>be</I> is 1100, only the top 18 bits will be written). If <I>we</I> is low, then the SRAM block ignores <I>data_in</I> and be and reads the word stored at <I>address</I>.
+The SRAM block is 36x512k, signifying that its input and output are 36-bit words and it can store 512k words. Each clock cyle, if <SPAN  CLASS="textit">we</SPAN> is high, then each bit of be determines whether each 9-bit chunk will be written to address. <SPAN  CLASS="textit">be</SPAN> is 4 bits with the highest bit corresponding to the most significant chunk (so if <SPAN  CLASS="textit">be</SPAN> is 1100, only the top 18 bits will be written). If <SPAN  CLASS="textit">we</SPAN> is low, then the SRAM block ignores <SPAN  CLASS="textit">data_in</SPAN> and be and reads the word stored at <SPAN  CLASS="textit">address</SPAN>.
 
 
 
 <P>
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1698"
   HREF="node63.html">
@@ -187,11 +189,11 @@ The SRAM block is 36x512k, signifying that its input and output are 36-bit words
 <B> Previous:</B> <A NAME="tex2html1689"
   HREF="node61.html">Software Register (software register)</A>
  &nbsp; <B>  <A NAME="tex2html1697"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

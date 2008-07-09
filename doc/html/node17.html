@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -7,8 +7,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>The Enabled Delay in BRAM Block (delay_bram_en_plus)</TITLE>
-<META NAME="description" CONTENT="The Enabled Delay in BRAM Block (delay_bram_en_plus)">
+<TITLE>The Programmable Delay in BRAM Block (delay_bram_prog)</TITLE>
+<META NAME="description" CONTENT="The Programmable Delay in BRAM Block (delay_bram_prog)">
 <META NAME="keywords" CONTENT="index">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html890"
   HREF="node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -40,20 +41,20 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html891"
-  HREF="node18.html">The Programmable Delay in</A>
+  HREF="node18.html">The Delay in BRAM</A>
 <B> Up:</B> <A NAME="tex2html887"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html881"
-  HREF="node16.html">The Delay in BRAM</A>
+  HREF="node16.html">The Enabled Delay in</A>
  &nbsp; <B>  <A NAME="tex2html889"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html892"
   HREF="node17.html#SECTION002151000000000000000">Summary</A>
 <LI><A NAME="tex2html893"
@@ -66,14 +67,14 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002150000000000000000"></A><A NAME="delaybramenplus"></A>
+<H1><A NAME="SECTION002150000000000000000"></A><A NAME="delaybramprog"></A>
 <BR>
-The Enabled Delay in BRAM Block <I>(delay_bram_en_plus)</I>
-</H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Aaron Parsons 
+The Programmable Delay in BRAM Block <SPAN  CLASS="textit">(delay_bram_prog)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Aaron Parsons 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Aaron Parsons 
 <H2><A NAME="SECTION002151000000000000000">
 Summary</A>
-</H2>A delay block that uses BRAM for its storage and only shifts when enabled. However, BRAM latency cannot be enabled, so output appears bram_latency clocks after an enable.
+</H2>A delay block that uses BRAM for its storage and has a run-time programmable delay. When delay is changed, some randomly determined samples will be inserted/dropped from the buffered stream.
 
 <P>
 
@@ -81,16 +82,19 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT">Enabled Delays</TD>
-<TD ALIGN="LEFT"><I>DelayLen</I></TD>
-<TD ALIGN="LEFT">The length of the delay.</TD>
+<TR><TD ALIGN="LEFT">Max Delay (2<SPAN CLASS="MATH"><IMG
+ WIDTH="11" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="img4.png"
+ ALT="$^?$"></SPAN>)</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">MaxDelay</SPAN></TD>
+<TD ALIGN="LEFT">The maximum length of the delay (i.e. the BRAM Size).</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Extra (unenabled) delay for BRAM Latency</TD>
-<TD ALIGN="LEFT"><I>bram_latency</I></TD>
+<TR><TD ALIGN="LEFT">BRAM Latency</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">bram_latency</SPAN></TD>
 <TD ALIGN="LEFT">The latency of the underlying storage BRAM.</TD>
 </TR>
 </TABLE>
@@ -100,39 +104,35 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>in</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">din</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">???</TD>
 <TD ALIGN="LEFT">The signal to be delayed.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>en</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">delay</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">???</TD>
-<TD ALIGN="LEFT">To be asserted when input is valid.</TD>
+<TD ALIGN="LEFT">The run-time programmable delay length.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>out</I></TD>
-<TD ALIGN="LEFT">out</TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">dout</SPAN></TD>
+<TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">???</TD>
 <TD ALIGN="LEFT">The delayed signal.</TD>
-</TR>
-<TR><TD ALIGN="LEFT"><I>valid</I></TD>
-<TD ALIGN="LEFT">out</TD>
-<TD ALIGN="LEFT">???</TD>
-<TD ALIGN="LEFT">Asserted when output is valid.</TD>
 </TR>
 </TABLE>
 <P>
 
 <H2><A NAME="SECTION002154000000000000000">
 Description</A>
-</H2>A delay block that uses BRAM for its storage and only shifts when enabled. However, BRAM latency cannot be enabled, so output appears bram_latency clocks after an enable.
+</H2>A delay block that uses BRAM for its storage and has a run-time programmable delay. When delay is changed, some randomly determined samples will be inserted/dropped from the buffered stream.
 
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html890"
   HREF="node18.html">
@@ -148,17 +148,17 @@ Description</A>
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html891"
-  HREF="node18.html">The Programmable Delay in</A>
+  HREF="node18.html">The Delay in BRAM</A>
 <B> Up:</B> <A NAME="tex2html887"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html881"
-  HREF="node16.html">The Delay in BRAM</A>
+  HREF="node16.html">The Enabled Delay in</A>
  &nbsp; <B>  <A NAME="tex2html889"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

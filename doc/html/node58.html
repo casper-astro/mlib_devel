@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html1627"
   HREF="node59.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -40,7 +41,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1628"
-  HREF="node59.html">Snapshot Capture (snap)</A>
+  HREF="node59.html">64 Bit Snapshot (snap64)</A>
 <B> Up:</B> <A NAME="tex2html1624"
   HREF="node55.html">System Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1618"
@@ -48,12 +49,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  &nbsp; <B>  <A NAME="tex2html1626"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html1629"
   HREF="node58.html#SECTION00431000000000000000">Summary</A>
 <LI><A NAME="tex2html1630"
@@ -79,9 +80,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION00430000000000000000"></A><A NAME="dram"></A>
 <BR>
-DRAM <I>(dram)</I>
-</H1> <B>Block Author</B>: Pierre Yves Droz 
-<BR><B>Document Author</B>: Jason Manley 
+DRAM <SPAN  CLASS="textit">(dram)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Pierre Yves Droz 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Jason Manley 
 <H2><A NAME="SECTION00431000000000000000">
 Summary</A>
 </H2>This block interfaces to the BEE2's 1GB DDR2 ECC DRAM modules. Commands that are clocked-in are executed with an unknown delay, however, execution order is maintained.
@@ -92,44 +93,44 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">DIMM</TD>
-<TD ALIGN="LEFT"><I>dimm</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">dimm</SPAN></TD>
 <TD ALIGN="LEFT">Selects which physical DIMM to use (four per user FPGA).</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Data Type</TD>
-<TD ALIGN="LEFT"><I>arith_type</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">arith_type</SPAN></TD>
 <TD ALIGN="LEFT">Inform Simulink how it should interpret the stored data.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Data binary point</TD>
-<TD ALIGN="LEFT"><I>bin_pt</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">bin_pt</SPAN></TD>
 <TD ALIGN="LEFT">Inform Simulink how it should interpret the stored data - specifically, the bit position in the word where it should place the binary point.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Datapath clock rate (MHz)</TD>
-<TD ALIGN="LEFT"><I>ip_clock</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">ip_clock</SPAN></TD>
 <TD ALIGN="LEFT">Clock rate for DRAM. Default: 200MHz (400DDR).</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Sample period</TD>
-<TD ALIGN="LEFT"><I>sample_period</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">sample_period</SPAN></TD>
 <TD ALIGN="LEFT">Is significant for clocking the block. Default: 1</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Simulate DRAM using ModelSim</TD>
-<TD ALIGN="LEFT"><I>use_sim</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">use_sim</SPAN></TD>
 <TD ALIGN="LEFT">Requires the addition of the ``ModelSim'' block at the top level of the design. Used to simulate DRAM block only.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Enable bank management</TD>
-<TD ALIGN="LEFT"><I>bank_mgt</I></TD>
-<TD ALIGN="LEFT"><I>Advise leave off</I> Changes the way the banks are addressed. Clarification required.</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">bank_mgt</SPAN></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">Advise leave off</SPAN> Changes the way the banks are addressed. Clarification required.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Use wide data bus (288 bits)</TD>
-<TD ALIGN="LEFT"><I>wide_data</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">wide_data</SPAN></TD>
 <TD ALIGN="LEFT">Burst writes require 288 bits. If not selected, provide a 144 bit bus which needs to be supplied with data in consecutive clock cycles to form the 288 bits. 288 bit bus can make for challenging routing!</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Use half-burst</TD>
-<TD ALIGN="LEFT"><I>half_burst</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">half_burst</SPAN></TD>
 <TD ALIGN="LEFT">Only store 144 bits per burst (wastes half capacity as the second 144 bits are unusable). If enabled, requires at least two clock cycles to store 144 bits. Second clock cycle's data is forfeited.</TD>
 </TR>
 </TABLE>
@@ -139,70 +140,70 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rst</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rst</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Resets the block when pulsed high</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>address</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">address</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">UFix_32_0</TD>
 <TD ALIGN="LEFT">A signal which accepts the address. See below for details.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>data_in</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">data_in</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">144 or 288 bit unsigned</TD>
 <TD ALIGN="LEFT">Accepts data to be saved to DRAM.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>wr_be</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">wr_be</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">UFix_18_0 or UFix_36_0</TD>
 <TD ALIGN="LEFT">Selects bytes for writing (write byte enable). It is normally 18 bits wide for a 144 bit data bus, but if 288 bit data bus is selected, this becomes a 36 bit variable.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>RWn</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">RWn</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
-<TD ALIGN="LEFT">Selects read or not-write. <I>1</I> for read, <I>0</I> for write.</TD>
+<TD ALIGN="LEFT">Selects read or not-write. <SPAN  CLASS="textit">1</SPAN> for read, <SPAN  CLASS="textit">0</SPAN> for write.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>cmd_tag</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">cmd_tag</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">UFix_32_0</TD>
 <TD ALIGN="LEFT">Accepts a user-defined tag for labelling entered commands.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>cmd_valid</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">cmd_valid</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Clocks data into the command buffer.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rd_ack</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rd_ack</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
-<TD ALIGN="LEFT">Used to acknowledge that the last <I>data_out</I> value has been read.</TD>
+<TD ALIGN="LEFT">Used to acknowledge that the last <SPAN  CLASS="textit">data_out</SPAN> value has been read.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>cmd_ack</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">cmd_ack</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Acknowledges that the last command was accepted (when buffer is full, will not accept additional commands).</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>data_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">data_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">UFix_144_0</TD>
 <TD ALIGN="LEFT">Outputs data from DRAM, 144 bits at a time. Reads are in groups of 288 bits (ie 2 clocks).</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rd_tag</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rd_tag</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">UFix_32_0</TD>
-<TD ALIGN="LEFT">Outputs the identifier for the data on <I>data_out</I> (as submitted on <I>cmd_tag</I> when the command was issued).</TD>
+<TD ALIGN="LEFT">Outputs the identifier for the data on <SPAN  CLASS="textit">data_out</SPAN> (as submitted on <SPAN  CLASS="textit">cmd_tag</SPAN> when the command was issued).</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>rd_valid</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">rd_valid</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
-<TD ALIGN="LEFT">Indicates that the data on <I>data_out</I> is valid.</TD>
+<TD ALIGN="LEFT">Indicates that the data on <SPAN  CLASS="textit">data_out</SPAN> is valid.</TD>
 </TR>
 </TABLE>
 <P>
@@ -230,7 +231,7 @@ The 1GB storage DIMMs have 18 512Mbit chips each. They are arranged as 64Mbit x 
 </H4>
 
 <P>
-From Micron's datasheet on the <I>MT47H64M8CD-37E</I> (as used by CASPER in its Crucial 1GB <I>CT12872AA53E</I> modules): The double data rate architecture is essentially a 4n-prefetch architecture, with an interface designed to transfer two data words per clock cycle at the I/O balls. A single read or write access effectively consists of a single 4n-bit-wide, one-clock-cycle data transfer at the internal DRAM core and four corresponding n-bit-wide, one-half-clock-cycle data transfers at the I/O balls.
+From Micron's datasheet on the <SPAN  CLASS="textit">MT47H64M8CD-37E</SPAN> (as used by CASPER in its Crucial 1GB <SPAN  CLASS="textit">CT12872AA53E</SPAN> modules): The double data rate architecture is essentially a 4n-prefetch architecture, with an interface designed to transfer two data words per clock cycle at the I/O balls. A single read or write access effectively consists of a single 4n-bit-wide, one-clock-cycle data transfer at the internal DRAM core and four corresponding n-bit-wide, one-half-clock-cycle data transfers at the I/O balls.
 
 <P>
 Reads and writes must thus occur four-at-a-time. 4 x 72bits = 288 bits. Although the mapping of the logical to physical addressing is abstracted from the user, it is useful to know how the DRAM block's address bus is derived, as it impacts performance:
@@ -243,9 +244,11 @@ Reads and writes must thus occur four-at-a-time. 4 x 72bits = 288 bits. Although
 Address bit assignments</CAPTION>
 <TR><TD>
 <P>
-<DIV ALIGN="CENTER"></DIV>
+<DIV ALIGN="CENTER">
+
+</DIV>
 <P>
-<DIV ALIGN="CENTER"><TABLE CELLPADDING=3 BORDER="1">
+<TABLE CELLPADDING=3 BORDER="1">
 <TR><TD ALIGN="CENTER"><P>
 Addressing</TD>
 <TD ALIGN="CENTER">Assignment</TD>
@@ -270,26 +273,25 @@ Column</TD>
 <TD ALIGN="CENTER">&nbsp;</TD>
 </TR>
 </TABLE>
-</DIV>
+
 <P>
-<DIV ALIGN="CENTER">
-</DIV>
+
 <P>
-<DIV ALIGN="CENTER"><A NAME="tab:AddressBitAssignments"></A></DIV>
+<A NAME="tab:AddressBitAssignments"></A>
 <P>
-<DIV ALIGN="CENTER"></DIV></TD></TR>
+</TD></TR>
 </TABLE>
 </DIV><P></P>
 <BR>
 
 <P>
-Each group of 8 addresses selects a 144 bit logical location (the lowest 3 bits are ignored). For example, address <I>0x00</I> through <I>0x7</I> all address the same 144 bit location. To address consecutive locations, increment the address port by eight. There are thus a total of <IMG
+Each group of 8 addresses selects a 144 bit logical location (the lowest 3 bits are ignored). For example, address <SPAN  CLASS="textit">0x00</SPAN> through <SPAN  CLASS="textit">0x7</SPAN> all address the same 144 bit location. To address consecutive locations, increment the address port by eight. There are thus a total of <SPAN CLASS="MATH"><IMG
  WIDTH="25" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
  SRC="img83.png"
- ALT="$2^{27}$"> possible addresses. The block supports 2GB DIMMs (UNCONFIRMED) since 14 bits of addressing are reserved for row selection. The 1GB DIMMs using Micron 512Mb chips, however, only use 13 bits for row selection which results in <IMG
+ ALT="$2^{27}$"></SPAN> possible addresses. The block supports 2GB DIMMs (UNCONFIRMED) since 14 bits of addressing are reserved for row selection. The 1GB DIMMs using Micron 512Mb chips, however, only use 13 bits for row selection which results in <SPAN CLASS="MATH"><IMG
  WIDTH="25" HEIGHT="16" ALIGN="BOTTOM" BORDER="0"
  SRC="img84.png"
- ALT="$2^{26}$"> possible address locations. Care should be taken when addressing the 1GB DIMMS as bit 27 of the address range is not valid. However, bits 28 and 29 are mapped. Since bit 27 is ignored, it results in overlapping memory spaces.
+ ALT="$2^{26}$"></SPAN> possible address locations. Care should be taken when addressing the 1GB DIMMS as bit 27 of the address range is not valid. However, bits 28 and 29 are mapped. Since bit 27 is ignored, it results in overlapping memory spaces.
 
 <P>
 
@@ -319,7 +321,7 @@ Performance Issues</A>
 The performance of the DRAM block is dependant on the relative location of the addressed data and whether or not the mode (read/write) is changed. For example, consecutive column addresses can be written without delay, however, changing rows or banks incur delay penalties. See above for the address bit assignment.
 
 <P>
-To obtain optimum performance, it is recommended that the least significant bits be changed first (ie address the memory from 0x00 through to address 0x20000000). This will increment column addresses first, followed by rank change, both of which incur little delay. Changing rows or banks can take twice as long. Further information can be found in Micron's datasheet for the <I>MT47H64M8</I>.
+To obtain optimum performance, it is recommended that the least significant bits be changed first (ie address the memory from 0x00 through to address 0x20000000). This will increment column addresses first, followed by rank change, both of which incur little delay. Changing rows or banks can take twice as long. Further information can be found in Micron's datasheet for the <SPAN  CLASS="textit">MT47H64M8</SPAN>.
 
 <P>
 
@@ -327,7 +329,8 @@ To obtain optimum performance, it is recommended that the least significant bits
 
 
 <P>
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1627"
   HREF="node59.html">
@@ -343,17 +346,17 @@ To obtain optimum performance, it is recommended that the least significant bits
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A NAME="tex2html1628"
-  HREF="node59.html">Snapshot Capture (snap)</A>
+  HREF="node59.html">64 Bit Snapshot (snap64)</A>
 <B> Up:</B> <A NAME="tex2html1624"
   HREF="node55.html">System Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1618"
   HREF="node57.html">DAC (dac)</A>
  &nbsp; <B>  <A NAME="tex2html1626"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

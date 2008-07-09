@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html1427"
   HREF="node51.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -44,16 +45,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Up:</B> <A NAME="tex2html1424"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1418"
-  HREF="node49.html">The Programmable Sync Delay</A>
+  HREF="node49.html">Display name for Block</A>
  &nbsp; <B>  <A NAME="tex2html1426"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html1429"
   HREF="node50.html#SECTION002481000000000000000">Summary</A>
 <LI><A NAME="tex2html1430"
@@ -75,9 +76,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION002480000000000000000"></A><A NAME="winxeng"></A>
 <BR>
-Windowed X-Engine <I>(win_x_engine)</I>
-</H1> <B>Block Author</B>: Jason Manley, Aaron Parsons, Terry Filiba 
-<BR><B>Document Author</B>: Jason Manley 
+Windowed X-Engine <SPAN  CLASS="textit">(win_x_engine)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Jason Manley, Aaron Parsons, Terry Filiba 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Jason Manley 
 <H2><A NAME="SECTION002481000000000000000">
 Summary</A>
 </H2>CASPER X engine with added internal valid data masking functionality. Based on Aaron Parsons' design.
@@ -88,40 +89,40 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">Number of antennas</TD>
-<TD ALIGN="LEFT"><I>n_ants</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">n_ants</SPAN></TD>
 <TD ALIGN="LEFT">Number of antennas to process.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Bit width of samples in</TD>
-<TD ALIGN="LEFT"><I>n_bits</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">n_bits</SPAN></TD>
 <TD ALIGN="LEFT">Bit width of each input sample number. Usually set to 4, resulting in 16 bit input numbers (2 polarizations, complex numbers).</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Accumulation length</TD>
-<TD ALIGN="LEFT"><I>acc_len</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">acc_len</SPAN></TD>
 <TD ALIGN="LEFT">Specified per antenna.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Adder latency</TD>
-<TD ALIGN="LEFT"><I>add_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">add_latency</SPAN></TD>
 <TD ALIGN="LEFT">Used to set the latency of internal adders.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Multiplier latency</TD>
-<TD ALIGN="LEFT"><I>mult_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">mult_latency</SPAN></TD>
 <TD ALIGN="LEFT">Used to set the latency of internal multipliers.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">BRAM latency</TD>
-<TD ALIGN="LEFT"><I>bram_latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">bram_latency</SPAN></TD>
 <TD ALIGN="LEFT">Used to set the latency of internal BRAMs.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Implementation: Multiplier type</TD>
-<TD ALIGN="LEFT"><I>use_ded_mult</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">use_ded_mult</SPAN></TD>
 <TD ALIGN="LEFT">Select the type of multipliers to use. Can be a single number or array - see below.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Implementation: Delay type</TD>
-<TD ALIGN="LEFT"><I>use_bram_delay</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">use_bram_delay</SPAN></TD>
 <TD ALIGN="LEFT">Selects the type of delays to implement. Single number configures all internal taps.</TD>
 </TR>
 </TABLE>
@@ -131,37 +132,37 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>ant</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">ant</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">variable width. see below.</TD>
 <TD ALIGN="LEFT">Input port for incoming antenna data.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>sync_in</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">sync_in</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Synchronization pulse. New window begins clock cycle after sync received.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>window_valid</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">window_valid</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Indicates incoming antenna data is valid. Must remain constant for acc_len*n_ants.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>acc</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">acc</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">variable width. see below.</TD>
 <TD ALIGN="LEFT">Output data.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>valid</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">valid</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Indicates data on acc is valid.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>sync_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">sync_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">boolean</TD>
 <TD ALIGN="LEFT">Passthrough for sync pulses.</TD>
@@ -183,171 +184,173 @@ The CASPER X engine is a streaming architecture block where complex antenna data
 <H4><A NAME="SECTION002484020000000000000">
 Input format</A>
 </H4>
-Data is input serially: <I>antenna A, antenna B, antenna C</I> etc. Each antenna's data consists of dual polarization, complex data. The bit width of each component number can be set as a parameter, <I>n_bits</I>. The X-engine thus expects these four numbers of <I>n_bits</I> to be concatenated into a single, unsigned number. CASPER convention dictates that complex numbers are represented with higher bits as real and lower bits as imaginary. The top half of the input number is polarization one and the lower half polarization two.
+Data is input serially: <SPAN  CLASS="textit">antenna A, antenna B, antenna C</SPAN> etc. Each antenna's data consists of dual polarization, complex data. The bit width of each component number can be set as a parameter, <SPAN  CLASS="textit">n_bits</SPAN>. The X-engine thus expects these four numbers of <SPAN  CLASS="textit">n_bits</SPAN> to be concatenated into a single, unsigned number. CASPER convention dictates that complex numbers are represented with higher bits as real and lower bits as imaginary. The top half of the input number is polarization one and the lower half polarization two.
 
 <P>
 The internals of the block are reset with the reception of a sync pulse. A new window begins on the very next clock cycle. Each window is <!-- MATH
  $int\_len \times n\_ants$
  -->
-<IMG
+<SPAN CLASS="MATH"><IMG
  WIDTH="118" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img22.png"
- ALT="$int\_len \times n\_ants$"> clock cycles long. The data for each antenna is input for <I>acc_len</I> clock cycles. 
+ ALT="$int\_len \times n\_ants$"></SPAN> clock cycles long. The data for each antenna is input for <SPAN  CLASS="textit">acc_len</SPAN> clock cycles. 
 
 <P>
-For example, for <I>n_bits</I> of 4 and <I>acc_len</I> of 2, the input to the X-engine would be 16 bits every clock cycle mapped as follows:
+For example, for <SPAN  CLASS="textit">n_bits</SPAN> of 4 and <SPAN  CLASS="textit">acc_len</SPAN> of 2, the input to the X-engine would be 16 bits every clock cycle mapped as follows:
 <BR><P></P>
 <DIV ALIGN="CENTER"><A NAME="5229"></A>
 <TABLE>
 <CAPTION><STRONG>Table 1.2:</STRONG>
-X-engine input with <I>acc_len</I> of 2.</CAPTION>
+X-engine input with <SPAN  CLASS="textit">acc_len</SPAN> of 2.</CAPTION>
 <TR><TD>
-<DIV ALIGN="CENTER"><TABLE CELLPADDING=3 BORDER="1">
+<DIV ALIGN="CENTER">
+
+</DIV><TABLE CELLPADDING=3 BORDER="1">
 <TR><TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img23.png"
- ALT="$t_4$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$t_4$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img24.png"
- ALT="$t_3$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$t_3$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img25.png"
- ALT="$t_2$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$t_2$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img26.png"
- ALT="$t_1$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$t_1$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="17" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img27.png"
- ALT="$t_0$"></TD>
-<TD ALIGN="RIGHT"><IMG
+ ALT="$t_0$"></SPAN></TD>
+<TD ALIGN="RIGHT"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
 <TR><TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img28.png"
- ALT="$C_{1 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$C_{1 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img29.png"
- ALT="$B_{1 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{1 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img29.png"
- ALT="$B_{1 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{1 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img30.png"
- ALT="$A_{1 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$A_{1 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img30.png"
- ALT="$A_{1 real}$"></TD>
+ ALT="$A_{1 real}$"></SPAN></TD>
 <TD ALIGN="RIGHT"><!-- MATH
  $most\_sig 4b\rightarrow$
  -->
-<IMG
+<SPAN CLASS="MATH"><IMG
  WIDTH="101" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img31.png"
- ALT="$most\_sig 4b\rightarrow$"></TD>
+ ALT="$most\_sig 4b\rightarrow$"></SPAN></TD>
 </TR>
 <TR><TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img32.png"
- ALT="$C_{1 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$C_{1 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img33.png"
- ALT="$B_{1 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{1 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img33.png"
- ALT="$B_{1 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{1 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img34.png"
- ALT="$A_{1 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$A_{1 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img34.png"
- ALT="$A_{1 imag}$"></TD>
-<TD ALIGN="RIGHT"><IMG
+ ALT="$A_{1 imag}$"></SPAN></TD>
+<TD ALIGN="RIGHT"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
  SRC="img35.png"
- ALT="$4b\rightarrow$"></TD>
+ ALT="$4b\rightarrow$"></SPAN></TD>
 </TR>
 <TR><TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img36.png"
- ALT="$C_{2 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$C_{2 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img37.png"
- ALT="$B_{2 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{2 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img37.png"
- ALT="$B_{2 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{2 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img38.png"
- ALT="$A_{2 real}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$A_{2 real}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="46" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img38.png"
- ALT="$A_{2 real}$"></TD>
-<TD ALIGN="RIGHT"><IMG
+ ALT="$A_{2 real}$"></SPAN></TD>
+<TD ALIGN="RIGHT"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
  SRC="img35.png"
- ALT="$4b\rightarrow$"></TD>
+ ALT="$4b\rightarrow$"></SPAN></TD>
 </TR>
 <TR><TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img39.png"
- ALT="$C_{2 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$C_{2 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img40.png"
- ALT="$B_{2 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{2 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img40.png"
- ALT="$B_{2 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$B_{2 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img41.png"
- ALT="$A_{2 imag}$"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$A_{2 imag}$"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="52" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img41.png"
- ALT="$A_{2 imag}$"></TD>
+ ALT="$A_{2 imag}$"></SPAN></TD>
 <TD ALIGN="RIGHT"><!-- MATH
  $least\_sig 4b\rightarrow$
  -->
-<IMG
+<SPAN CLASS="MATH"><IMG
  WIDTH="100" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img42.png"
- ALT="$least\_sig 4b\rightarrow$"></TD>
+ ALT="$least\_sig 4b\rightarrow$"></SPAN></TD>
 </TR>
 </TABLE>
 
-<A NAME="tab:fourbitxenginput"></A></DIV></TD></TR>
+<A NAME="tab:fourbitxenginput"></A></TD></TR>
 </TABLE>
 </DIV><P></P>
 <BR>
 
 <P>
-The <I>window_valid</I> line is expected to remain constant for the duration of each window. If it is high, the output is considered valid and captured into the output FIFO buffer. With the close of that window, the output will be presented to the user as valid data on every second clock pulse. If <I>window_valid</I> was held low, the data is ignored.
+The <SPAN  CLASS="textit">window_valid</SPAN> line is expected to remain constant for the duration of each window. If it is high, the output is considered valid and captured into the output FIFO buffer. With the close of that window, the output will be presented to the user as valid data on every second clock pulse. If <SPAN  CLASS="textit">window_valid</SPAN> was held low, the data is ignored.
 
 <P>
 With the close of one window, anther begins directly afterwards. Data can thus be streamed in and out continuously, while a sync pulse will force the start of a new window.
@@ -360,199 +363,201 @@ Output Format</A>
 The windowed X-engine will produce <!-- MATH
  $num\_baselines = n\_ants \times \frac{n\_ants + 1}{2}$
  -->
-<IMG
+<SPAN CLASS="MATH"><IMG
  WIDTH="253" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
  SRC="img43.png"
- ALT="$num\_baselines = n\_ants \times \frac{n\_ants + 1}{2}$"> valid outputs. The unwindowed x engine produces  <!-- MATH
+ ALT="$num\_baselines = n\_ants \times \frac{n\_ants + 1}{2}$"></SPAN> valid outputs. The unwindowed x engine produces  <!-- MATH
  $num\_baselines = n\_ants \times (\frac{n\_ants}{2} + 1)$
  -->
-<IMG
- WIDTH="277" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+<SPAN CLASS="MATH"><IMG
+ WIDTH="277" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
  SRC="img44.png"
- ALT="$num\_baselines = n\_ants \times (\frac{n\_ants}{2} + 1)$"> results. The extra valids are a result of the algorithm employed and are masked out by the internal <I>x_engine_mask</I>.
+ ALT="$num\_baselines = n\_ants \times (\frac{n\_ants}{2} + 1)$"></SPAN> results. The extra valids are a result of the algorithm employed and are masked out by the internal <SPAN  CLASS="textit">x_engine_mask</SPAN>.
 
 <P>
-Generally, the output of the X-engine configured for <I>N</I> antennas can be mapped into a table with <!-- MATH
+Generally, the output of the X-engine configured for <SPAN  CLASS="textit">N</SPAN> antennas can be mapped into a table with <!-- MATH
  $\frac{n\_ants}{2} + 1$
  -->
-<IMG
- WIDTH="74" HEIGHT="34" ALIGN="MIDDLE" BORDER="0"
+<SPAN CLASS="MATH"><IMG
+ WIDTH="74" HEIGHT="36" ALIGN="MIDDLE" BORDER="0"
  SRC="img45.png"
- ALT="$\frac{n\_ants}{2} + 1$"> columns and <IMG
+ ALT="$\frac{n\_ants}{2} + 1$"></SPAN> columns and <SPAN CLASS="MATH"><IMG
  WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
  SRC="img46.png"
- ALT="$N$"> rows as follows:
+ ALT="$N$"></SPAN> rows as follows:
 <BR><P></P>
 <DIV ALIGN="CENTER"><A NAME="5253"></A>
 <TABLE>
 <CAPTION><STRONG>Table 1.3:</STRONG>
 Each table entry represents a valid output. Data is read out right to left, top to bottom. Bracketed values are from previous window.</CAPTION>
 <TR><TD>
-<DIV ALIGN="CENTER"><TABLE CELLPADDING=3>
-<TR><TD ALIGN="CENTER"><IMG
+<DIV ALIGN="CENTER">
+
+</DIV><TABLE CELLPADDING=3>
+<TR><TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="23" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
  SRC="img47.png"
- ALT="$ 1^{st} $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 1^{st} $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img48.png"
- ALT="$ 0\times0 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 0\times0 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="58" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="img49.png"
- ALT="$ (0\times N) $"></TD>
+ ALT="$ (0\times N) $"></SPAN></TD>
 <TD ALIGN="CENTER"><!-- MATH
  $(0\times (N-1))$
  -->
-<IMG
+<SPAN CLASS="MATH"><IMG
  WIDTH="98" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="img50.png"
- ALT="$ (0\times (N-1)) $"></TD>
+ ALT="$ (0\times (N-1)) $"></SPAN></TD>
 <TD ALIGN="CENTER"><!-- MATH
  $(0\times (N-2))$
  -->
-<IMG
+<SPAN CLASS="MATH"><IMG
  WIDTH="98" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="img51.png"
- ALT="$ (0\times (N-2)) $"></TD>
+ ALT="$ (0\times (N-2)) $"></SPAN></TD>
 <TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
-<TR><TD ALIGN="CENTER"><IMG
+<TR><TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="27" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
  SRC="img52.png"
- ALT="$ 2^{nd} $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 2^{nd} $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img53.png"
- ALT="$ 1\times1 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 1\times1 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img54.png"
- ALT="$ 0\times1 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 0\times1 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="58" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="img55.png"
- ALT="$ (1\times N) $"></TD>
+ ALT="$ (1\times N) $"></SPAN></TD>
 <TD ALIGN="CENTER"><!-- MATH
  $(1\times (N-1))$
  -->
-<IMG
+<SPAN CLASS="MATH"><IMG
  WIDTH="98" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="img56.png"
- ALT="$ (1\times (N-1)) $"></TD>
+ ALT="$ (1\times (N-1)) $"></SPAN></TD>
 <TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
-<TR><TD ALIGN="CENTER"><IMG
+<TR><TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="25" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
  SRC="img57.png"
- ALT="$ 3^{rd} $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 3^{rd} $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img58.png"
- ALT="$ 2\times2 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 2\times2 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img59.png"
- ALT="$ 1\times2 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 1\times2 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img60.png"
- ALT="$ 0\times2 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 0\times2 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="58" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
  SRC="img61.png"
- ALT="$ (2\times N) $"></TD>
+ ALT="$ (2\times N) $"></SPAN></TD>
 <TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
-<TR><TD ALIGN="CENTER"><IMG
+<TR><TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="25" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
  SRC="img62.png"
- ALT="$ 4^{th} $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 4^{th} $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img63.png"
- ALT="$ 3\times3 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 3\times3 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img64.png"
- ALT="$ 2\times3 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 2\times3 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img65.png"
- ALT="$ 1\times3 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 1\times3 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img66.png"
- ALT="$ 0\times3 $"></TD>
+ ALT="$ 0\times3 $"></SPAN></TD>
 <TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
-<TR><TD ALIGN="CENTER"><IMG
+<TR><TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="25" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
  SRC="img67.png"
- ALT="$ 5^{th} $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 5^{th} $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img68.png"
- ALT="$ 4\times4 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 4\times4 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img69.png"
- ALT="$ 3\times4 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 3\times4 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img70.png"
- ALT="$ 2\times4 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 2\times4 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img71.png"
- ALT="$ 1\times4 $"></TD>
+ ALT="$ 1\times4 $"></SPAN></TD>
 <TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
-<TR><TD ALIGN="CENTER"><IMG
+<TR><TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="25" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
  SRC="img72.png"
- ALT="$ 6^{th} $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 6^{th} $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img73.png"
- ALT="$ 5\times5 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 5\times5 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img74.png"
- ALT="$ 4\times5 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 4\times5 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img75.png"
- ALT="$ 3\times5 $"></TD>
-<TD ALIGN="CENTER"><IMG
+ ALT="$ 3\times5 $"></SPAN></TD>
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="39" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img76.png"
- ALT="$ 2\times5 $"></TD>
+ ALT="$ 2\times5 $"></SPAN></TD>
 <TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
 <TR><TD ALIGN="CENTER">...</TD>
 <TD ALIGN="CENTER">...</TD>
@@ -560,14 +565,14 @@ Each table entry represents a valid output. Data is read out right to left, top 
 <TD ALIGN="CENTER">...</TD>
 <TD ALIGN="CENTER">...</TD>
 <TD ALIGN="CENTER">...</TD>
-<TD ALIGN="CENTER"><IMG
+<TD ALIGN="CENTER"><SPAN CLASS="MATH"><IMG
  WIDTH="20" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img16.png"
- ALT="$\rightarrow$"></TD>
+ ALT="$\rightarrow$"></SPAN></TD>
 </TR>
 </TABLE>
 
-<A NAME="tab:xengout"></A></DIV></TD></TR>
+<A NAME="tab:xengout"></A></TD></TR>
 </TABLE>
 </DIV><P></P>
 <BR>
@@ -582,34 +587,36 @@ As an example, consider the output for a 4 antenna system (with antennas numbere
 <CAPTION><STRONG>Table 1.4:</STRONG>
 Boldfaced type represents current valid window of data. Data is read out right to left, top to bottom. Non-boldfaced data is masked.</CAPTION>
 <TR><TD>
-<DIV ALIGN="CENTER"><TABLE CELLPADDING=3>
+<DIV ALIGN="CENTER">
+
+</DIV><TABLE CELLPADDING=3>
 <TR><TD ALIGN="CENTER">1st</TD>
-<TH ALIGN="CENTER"><B>AA</B></TH>
+<TH ALIGN="CENTER"><SPAN  CLASS="textbf">AA</SPAN></TH>
 <TD ALIGN="CENTER">prev win DA</TD>
 <TD ALIGN="CENTER">prev win CA</TD>
 <TD ALIGN="CENTER">&nbsp;</TD>
 </TR>
 <TR><TD ALIGN="CENTER">2nd</TD>
-<TD ALIGN="CENTER"><B>BB</B></TD>
-<TD ALIGN="CENTER"><B>AB</B></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">BB</SPAN></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">AB</SPAN></TD>
 <TD ALIGN="CENTER">prev win BD</TD>
 <TD ALIGN="CENTER">&nbsp;</TD>
 </TR>
 <TR><TD ALIGN="CENTER">3rd</TD>
-<TD ALIGN="CENTER"><B>CC</B></TD>
-<TD ALIGN="CENTER"><B>BC</B></TD>
-<TD ALIGN="CENTER"><B>AC</B></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">CC</SPAN></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">BC</SPAN></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">AC</SPAN></TD>
 <TD ALIGN="CENTER">&nbsp;</TD>
 </TR>
 <TR><TD ALIGN="CENTER">4th</TD>
-<TD ALIGN="CENTER"><B>DD</B></TD>
-<TD ALIGN="CENTER"><B>CD	</B></TD>
-<TD ALIGN="CENTER"><B>BD</B></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">DD</SPAN></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">CD	</SPAN></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">BD</SPAN></TD>
 <TD ALIGN="CENTER">&nbsp;</TD>
 </TR>
 <TR><TD ALIGN="CENTER">5th</TD>
 <TD ALIGN="CENTER">next win AA</TD>
-<TD ALIGN="CENTER"><B>DA</B></TD>
+<TD ALIGN="CENTER"><SPAN  CLASS="textbf">DA</SPAN></TD>
 <TD ALIGN="CENTER">CA</TD>
 <TD ALIGN="CENTER">&nbsp;</TD>
 </TR>
@@ -621,18 +628,19 @@ Boldfaced type represents current valid window of data. Data is read out right t
 </TR>
 </TABLE>
 
-<A NAME="tab:fourantxengout"></A></DIV></TD></TR>
+<A NAME="tab:fourantxengout"></A></TD></TR>
 </TABLE>
 </DIV><P></P>
 <BR>
 
 <P>
-Thanks to the inclusion of the <I>x_engine_mask</I> block, X-engine output duplicates (observed in rows 5 and 6 of Table <A HREF="#tab:fourantxengout">1.4</A>) are automatically removed. The output of a 4 antenna windowed X-engine is thus <I>AA, AB, BB, AC, BC, CC, BD, CD, DD, DA</I>.
+Thanks to the inclusion of the <SPAN  CLASS="textit">x_engine_mask</SPAN> block, X-engine output duplicates (observed in rows 5 and 6 of Table <A HREF="#tab:fourantxengout">1.4</A>) are automatically removed. The output of a 4 antenna windowed X-engine is thus <SPAN  CLASS="textit">AA, AB, BB, AC, BC, CC, BD, CD, DD, DA</SPAN>.
 
 <P>
 
 
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1427"
   HREF="node51.html">
@@ -652,13 +660,13 @@ Thanks to the inclusion of the <I>x_engine_mask</I> block, X-engine output dupli
 <B> Up:</B> <A NAME="tex2html1424"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html1418"
-  HREF="node49.html">The Programmable Sync Delay</A>
+  HREF="node49.html">Display name for Block</A>
  &nbsp; <B>  <A NAME="tex2html1426"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

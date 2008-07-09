@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html1100"
   HREF="node31.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -48,12 +49,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
  &nbsp; <B>  <A NAME="tex2html1099"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html1102"
   HREF="node30.html#SECTION002281000000000000000">Summary</A>
 <LI><A NAME="tex2html1103"
@@ -71,12 +72,12 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION002280000000000000000"></A><A NAME="firtap"></A>
 <BR>
-FIR Tap <I>(fir_tap)</I>
-</H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Ben Blackman 
+FIR Tap <SPAN  CLASS="textit">(fir_tap)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Aaron Parsons 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Ben Blackman 
 <H2><A NAME="SECTION002281000000000000000">
 Summary</A>
-</H2>This block multiplies both inputs by <I>factor</I> and outputs the result immediately after the multiply and outputs a delayed copy of the input by 1 cycle,
+</H2>This block multiplies both inputs by <SPAN  CLASS="textit">factor</SPAN> and outputs the result immediately after the multiply and outputs a delayed copy of the input by 1 cycle,
 
 <P>
 
@@ -84,16 +85,16 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">Factor</TD>
-<TD ALIGN="LEFT"><I>factor</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">factor</SPAN></TD>
 <TD ALIGN="LEFT">The value that multiplies both inputs.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Mult latency</TD>
-<TD ALIGN="LEFT"><I>latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">latency</SPAN></TD>
 <TD ALIGN="LEFT">The latency of the multiplier.</TD>
 </TR>
 </TABLE>
@@ -103,40 +104,40 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>a</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">a</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The first number to be multiplied by <I>factor</I>. It usually is the real component of an input.</TD>
+<TD ALIGN="LEFT">The first number to be multiplied by <SPAN  CLASS="textit">factor</SPAN>. It usually is the real component of an input.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>b</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">b</SPAN></TD>
 <TD ALIGN="LEFT">in</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The second number to be multiplied by <I>factor</I>. It usually is the imaginary component of an input.</TD>
+<TD ALIGN="LEFT">The second number to be multiplied by <SPAN  CLASS="textit">factor</SPAN>. It usually is the imaginary component of an input.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>a_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">a_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The input <I>a</I> delayed by 1 cycle.</TD>
+<TD ALIGN="LEFT">The input <SPAN  CLASS="textit">a</SPAN> delayed by 1 cycle.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>b_out</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">b_out</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The input <I>b</I> delayed by 1 cycle.</TD>
+<TD ALIGN="LEFT">The input <SPAN  CLASS="textit">b</SPAN> delayed by 1 cycle.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>real</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">real</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The result of the multiplication of <I>a</I> with <I>factor</I>.</TD>
+<TD ALIGN="LEFT">The result of the multiplication of <SPAN  CLASS="textit">a</SPAN> with <SPAN  CLASS="textit">factor</SPAN>.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>imag</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">imag</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Inherited</TD>
-<TD ALIGN="LEFT">The result of the multiplication of <I>b</I> with <I>factor</I>.</TD>
+<TD ALIGN="LEFT">The result of the multiplication of <SPAN  CLASS="textit">b</SPAN> with <SPAN  CLASS="textit">factor</SPAN>.</TD>
 </TR>
 </TABLE>
 <P>
@@ -148,10 +149,11 @@ Description</A>
 <H4><A NAME="SECTION002284010000000000000">
 Usage</A>
 </H4>
-<I>a_out</I> and <I>b_out</I> are 1 cycle delayed versions of <I>a</I> and <I>b</I>, respectively. <I>real</I> and <I>imag</I> are the results of <I>a</I> * <I>factor</I> and <I>b</I> * <I>factor</I>, respectively. The delay from <I>a</I> to <I>real</I> or <I>b</I> to <I>imag</I> is equal to <I>latency</I>. 
+<SPAN  CLASS="textit">a_out</SPAN> and <SPAN  CLASS="textit">b_out</SPAN> are 1 cycle delayed versions of <SPAN  CLASS="textit">a</SPAN> and <SPAN  CLASS="textit">b</SPAN>, respectively. <SPAN  CLASS="textit">real</SPAN> and <SPAN  CLASS="textit">imag</SPAN> are the results of <SPAN  CLASS="textit">a</SPAN> * <SPAN  CLASS="textit">factor</SPAN> and <SPAN  CLASS="textit">b</SPAN> * <SPAN  CLASS="textit">factor</SPAN>, respectively. The delay from <SPAN  CLASS="textit">a</SPAN> to <SPAN  CLASS="textit">real</SPAN> or <SPAN  CLASS="textit">b</SPAN> to <SPAN  CLASS="textit">imag</SPAN> is equal to <SPAN  CLASS="textit">latency</SPAN>. 
  
 
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html1100"
   HREF="node31.html">
@@ -173,11 +175,11 @@ Usage</A>
 <B> Previous:</B> <A NAME="tex2html1091"
   HREF="node29.html">FIR Double Column (fir_dbl_col)</A>
  &nbsp; <B>  <A NAME="tex2html1099"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--Converted with LaTeX2HTML 2002-2-1 (1.71)
 original version by:  Nikos Drakos, CBLU, University of Leeds
@@ -25,7 +25,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </HEAD>
 
 <BODY >
-<!--Navigation Panel-->
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
 <A NAME="tex2html840"
   HREF="node15.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
@@ -44,16 +45,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <B> Up:</B> <A NAME="tex2html837"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html831"
-  HREF="node13.html">Complex Adder/Subtractor (complex_addsub)</A>
+  HREF="node13.html">Complex to Real-Imag Block</A>
  &nbsp; <B>  <A NAME="tex2html839"
   HREF="node1.html">Contents</A></B> 
 <BR>
-<BR>
+<BR></DIV>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<UL>
+<UL CLASS="ChildLinks">
 <LI><A NAME="tex2html842"
   HREF="node14.html#SECTION002121000000000000000">Summary</A>
 <LI><A NAME="tex2html843"
@@ -71,9 +72,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <H1><A NAME="SECTION002120000000000000000"></A><A NAME="dds"></A>
 <BR>
-DDS <I>(dds)</I>
-</H1> <B>Block Author</B>: Aaron Parsons 
-<BR><B>Document Author</B>: Ben Blackman 
+DDS <SPAN  CLASS="textit">(dds)</SPAN>
+</H1> <SPAN  CLASS="textbf">Block Author</SPAN>: Aaron Parsons 
+<BR><SPAN  CLASS="textbf">Document Author</SPAN>: Ben Blackman 
 <H2><A NAME="SECTION002121000000000000000">
 Summary</A>
 </H2>Generates sines and cosines of different phases and outputs them in parallel.
@@ -84,34 +85,34 @@ Summary</A>
 Mask Parameters</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Parameter</B></TD>
-<TH ALIGN="LEFT"><B>Variable</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Parameter</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Variable</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
 <TR><TD ALIGN="LEFT">Frequency Divisions (M)</TD>
-<TD ALIGN="LEFT"><I>freq_div</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">freq_div</SPAN></TD>
 <TD ALIGN="LEFT">Denominator of the frequency.</TD>
 </TR>
-<TR><TD ALIGN="LEFT">Frequency (? /M<IMG
+<TR><TD ALIGN="LEFT">Frequency (? /M<SPAN CLASS="MATH"><IMG
  WIDTH="12" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img2.png"
- ALT="$*$">2<IMG
+ ALT="$*$"></SPAN>2<SPAN CLASS="MATH"><IMG
  WIDTH="12" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
  SRC="img2.png"
- ALT="$*$">pi)</TD>
-<TD ALIGN="LEFT"><I>freq</I></TD>
+ ALT="$*$"></SPAN>pi)</TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">freq</SPAN></TD>
 <TD ALIGN="LEFT">Numerator of the frequency.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Parallel LOs</TD>
-<TD ALIGN="LEFT"><I>num_lo</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">num_lo</SPAN></TD>
 <TD ALIGN="LEFT">Number of parallel local oscillators.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Bit Width</TD>
-<TD ALIGN="LEFT"><I>n_bits</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">n_bits</SPAN></TD>
 <TD ALIGN="LEFT">Bit width of the outputs.</TD>
 </TR>
 <TR><TD ALIGN="LEFT">Latency</TD>
-<TD ALIGN="LEFT"><I>latency</I></TD>
+<TD ALIGN="LEFT"><SPAN  CLASS="textit">latency</SPAN></TD>
 <TD ALIGN="LEFT">Description</TD>
 </TR>
 </TABLE>
@@ -121,17 +122,17 @@ Mask Parameters</A>
 Ports</A>
 </H2>
 <TABLE CELLPADDING=3 BORDER="1" WIDTH=468>
-<TR><TD ALIGN="LEFT"><B>Port</B></TD>
-<TH ALIGN="LEFT"><B>Dir.</B></TH>
-<TH ALIGN="LEFT"><B>Data Type</B></TH>
-<TH ALIGN="LEFT"><B>Description</B></TH>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textbf">Port</SPAN></TD>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Dir.</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Data Type</SPAN></TH>
+<TH ALIGN="LEFT"><SPAN  CLASS="textbf">Description</SPAN></TH>
 </TR>
-<TR><TD ALIGN="LEFT"><I>sinX</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">sinX</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Fix_(n_bits)_(n_bits-1)</TD>
 <TD ALIGN="LEFT">Sine output corresponding to the Xth local oscillator.</TD>
 </TR>
-<TR><TD ALIGN="LEFT"><I>cosX</I></TD>
+<TR><TD ALIGN="LEFT"><SPAN  CLASS="textit">cosX</SPAN></TD>
 <TD ALIGN="LEFT">out</TD>
 <TD ALIGN="LEFT">Fix_(n_bits)_(n_bits-1)</TD>
 <TD ALIGN="LEFT">Cosine output corresponding to the Xth local oscillator.</TD>
@@ -146,15 +147,16 @@ Description</A>
 <H4><A NAME="SECTION002124010000000000000">
 Usage</A>
 </H4>
-There are <I>sin</I> and <I>cos</I> outputs each equal to the minimum of <I>num_lo</I> and <I>freq_div</I>. If <I>num_lo</I> <IMG
+There are <SPAN  CLASS="textit">sin</SPAN> and <SPAN  CLASS="textit">cos</SPAN> outputs each equal to the minimum of <SPAN  CLASS="textit">num_lo</SPAN> and <SPAN  CLASS="textit">freq_div</SPAN>. If <SPAN  CLASS="textit">num_lo</SPAN> <SPAN CLASS="MATH"><IMG
  WIDTH="29" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
  SRC="img3.png"
- ALT="$&gt;=$"> <I>freq_div</I>/<I>freq</I>, then the outputs will be <I>lo_const</I>s. Otherwise each output will oscillate depending on the values of <I>freq_div</I> and <I>freq</I>. If the outputs oscillate, then there will be a latency of <I>latency</I> and otherwise there will be zero latency.
+ ALT="$&gt;=$"></SPAN> <SPAN  CLASS="textit">freq_div</SPAN>/<SPAN  CLASS="textit">freq</SPAN>, then the outputs will be <SPAN  CLASS="textit">lo_const</SPAN>s. Otherwise each output will oscillate depending on the values of <SPAN  CLASS="textit">freq_div</SPAN> and <SPAN  CLASS="textit">freq</SPAN>. If the outputs oscillate, then there will be a latency of <SPAN  CLASS="textit">latency</SPAN> and otherwise there will be zero latency.
  
 
 
 <P>
-<HR>
+
+<DIV CLASS="navigation"><HR>
 <!--Navigation Panel-->
 <A NAME="tex2html840"
   HREF="node15.html">
@@ -174,13 +176,13 @@ There are <I>sin</I> and <I>cos</I> outputs each equal to the minimum of <I>num_
 <B> Up:</B> <A NAME="tex2html837"
   HREF="node2.html">Signal Processing Blocks</A>
 <B> Previous:</B> <A NAME="tex2html831"
-  HREF="node13.html">Complex Adder/Subtractor (complex_addsub)</A>
+  HREF="node13.html">Complex to Real-Imag Block</A>
  &nbsp; <B>  <A NAME="tex2html839"
-  HREF="node1.html">Contents</A></B> 
+  HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>
-
-2008-07-08
+Documentor
+2008-07-09
 </ADDRESS>
 </BODY>
 </HTML>
