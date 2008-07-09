@@ -1,0 +1,80 @@
+# ##############################################################################
+# Target Board:  ROACH v1.0
+# Family:	     virtex5
+# Device:	     xc5vlx110t
+# Package:	     ff1136
+# Speed Grade:	 -1
+# ##############################################################################
+
+CONFIG STEPPING="0";
+
+## System level constraints
+NET sys_clk_p   TNM_NET = sys_clk_p | LOC = "J14" | IOSTANDARD = "LVDS_25" ;
+NET sys_clk_n   TNM_NET = sys_clk_n | LOC = "H13" | IOSTANDARD = "LVDS_25" ;
+TIMESPEC TS_sys_clk_p = PERIOD sys_clk_p 100 MHz ;
+TIMESPEC TS_sys_clk_n = PERIOD sys_clk_n 100 MHz ;
+
+NET dly_clk_p   TNM_NET = dly_clk_p | LOC = "J16" | IOSTANDARD = "LVDS_25" ;
+NET dly_clk_n   TNM_NET = dly_clk_n | LOC = "J17" | IOSTANDARD = "LVDS_25" ;
+TIMESPEC TS_dly_clk_p = PERIOD dly_clk_p 200 MHz ;
+TIMESPEC TS_dly_clk_n = PERIOD dly_clk_n 200 MHz ;
+
+NET epb_clk_buf TNM_NET = epb_clk_buf | LOC = "H12" | CLOCK_DEDICATED_ROUTE = FALSE ;
+TIMESPEC TS_epb_clk_buf = PERIOD epb_clk_buf 100 MHz ;
+
+
+## PPC External Peripheral Bus [EPB]
+# transparent endian change
+NET epb_data<15>    LOC = AD19 ;
+NET epb_data<14>    LOC = AF15 ;
+NET epb_data<13>    LOC = AE19 ;
+NET epb_data<12>    LOC = AE16 ;
+NET epb_data<11>    LOC = AH19 ;
+NET epb_data<10>    LOC = AF16 ;
+NET epb_data<9>     LOC = AD20 ;
+NET epb_data<8>     LOC = AE17 ;
+NET epb_data<7>     LOC = AH12 ;
+NET epb_data<6>     LOC = AH20 ;
+NET epb_data<5>     LOC = AG13 ;
+NET epb_data<4>     LOC = AE21 ;
+NET epb_data<3>     LOC = AG22 ;
+NET epb_data<2>     LOC = AH13 ;
+NET epb_data<1>     LOC = AH22 ;
+NET epb_data<0>     LOC = AH14 ;
+# transparent endian change
+NET epb_addr<0>     LOC = AE23 ;
+NET epb_addr<1>     LOC = AE22 ;
+NET epb_addr<2>     LOC = AG18 ;
+NET epb_addr<3>     LOC = AG12 ;
+NET epb_addr<4>     LOC = AG15 ;
+NET epb_addr<5>     LOC = AG23 ;
+NET epb_addr<6>     LOC = AF19 ;
+NET epb_addr<7>     LOC = AE12 ;
+NET epb_addr<8>     LOC = AG16 ;
+NET epb_addr<9>     LOC = AF13 ;
+NET epb_addr<10>    LOC = AG20 ;
+NET epb_addr<11>    LOC = AF23 ;
+NET epb_addr<12>    LOC = AH17 ;
+NET epb_addr<13>    LOC = AH15 ;
+NET epb_addr<14>    LOC = L20  ;
+NET epb_addr<15>    LOC = J22  ;
+NET epb_addr<16>    LOC = H22  ;
+NET epb_addr<17>    LOC = L15  ;
+NET epb_addr<18>    LOC = L16  ;
+NET epb_addr<19>    LOC = K22  ;
+NET epb_addr<20>    LOC = K21  ;
+NET epb_addr<21>    LOC = K16  ;
+NET epb_addr<22>    LOC = J15  ;
+# EPB multi purpose pins
+NET epb_addr_gp<0>  LOC = L21  ; # DMA_REQ_2
+NET epb_addr_gp<1>  LOC = G22  ; # DMA_ACK_2
+NET epb_addr_gp<2>  LOC = K23  ; # EOT_TC_2
+NET epb_addr_gp<3>  LOC = K14  ; # DMA_REQ_3
+NET epb_addr_gp<4>  LOC = L14  ; # DMA_ACK_3
+NET epb_addr_gp<5>  LOC = J12  ; # EOT_TC_3
+NET epb_cs_n        LOC = K13  ;
+NET epb_be_n<1>     LOC = AF18 ;
+NET epb_be_n<0>     LOC = AF14 ;
+NET epb_r_w_n       LOC = AF20 ;
+NET epb_oe_n        LOC = AF21 ;
+NET epb_rdy         LOC = K12  ;

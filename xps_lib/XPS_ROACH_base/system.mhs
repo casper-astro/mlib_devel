@@ -1,0 +1,196 @@
+# ##############################################################################
+# Target Board:  ROACH v1.0
+# Family:	     virtex5
+# Device:	     xc5vlx110t
+# Package:	     ff1136
+# Speed Grade:	 -1
+# Processor:     None
+# System clock frequency: 100.000000 MHz
+# ##############################################################################
+
+
+PARAMETER VERSION = 2.1.0
+
+##########################################
+#         SYSTEM INFRASTRUCTURE          #
+##########################################
+
+# Clock Ports
+PORT sys_clk_p  = sys_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+PORT sys_clk_n  = sys_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+PORT dly_clk_n  = dly_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
+PORT dly_clk_p  = dly_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
+PORT aux_clk0_p = aux_clk0_p, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
+PORT aux_clk0_n = aux_clk0_n, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
+PORT aux_clk1_p = aux_clk1_p, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
+PORT aux_clk1_n = aux_clk1_n, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
+
+# EPB Ports
+PORT epb_clk_buf = epb_clk_buf, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+PORT epb_data    = epb_data,    DIR = IO, VEC = [15:0]
+PORT epb_addr    = epb_addr,    DIR = I,  VEC = [22:0]
+PORT epb_addr_gp = epb_addr_gp, DIR = I,  VEC =  [5:0]
+PORT epb_cs_n    = epb_cs_n,    DIR = I
+PORT epb_be_n    = epb_be_n,    DIR = I,  VEC =  [1:0]
+PORT epb_r_w_n   = epb_r_w_n,   DIR = I
+PORT epb_oe_n    = epb_oe_n,    DIR = I
+PORT epb_rdy     = epb_rdy,     DIR = O
+
+BEGIN roach_infrastructure
+  PARAMETER INSTANCE = infrastructure_inst
+  PARAMETER HW_VER   = 1.00.a
+  PORT sys_clk_n     = sys_clk_n
+  PORT sys_clk_p     = sys_clk_p
+  PORT dly_clk_n     = dly_clk_n
+  PORT dly_clk_p     = dly_clk_p
+  PORT aux_clk_0_n   = aux_clk0_n
+  PORT aux_clk_0_p   = aux_clk0_p
+  PORT aux_clk_1_n   = aux_clk1_n
+  PORT aux_clk_1_p   = aux_clk1_p
+  PORT epb_clk_buf   = epb_clk_buf
+  PORT sys_clk       = sys_clk_s
+  PORT dly_clk       = dly_clk
+  PORT aux_clk_0     = aux_clk0
+  PORT aux_clk_1     = aux_clk1
+  PORT epb_clk       = epb_clk
+  PORT idelay_rst    = sys_reset
+  PORT idelay_rdy    = idelay_rdy
+END
+
+BEGIN dcm_module
+ PARAMETER INSTANCE = dcm_0
+ PARAMETER HW_VER = 1.00.c
+ PARAMETER C_FAMILY = VIRTEX5
+ PARAMETER C_CLK0_BUF = TRUE
+ PARAMETER C_CLK90_BUF = TRUE
+ PARAMETER C_CLK2X_BUF = TRUE
+ PARAMETER C_CLKIN_PERIOD = 10.000000
+ PARAMETER C_CLK_FEEDBACK = 1X
+ PARAMETER C_DLL_FREQUENCY_MODE = LOW
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PORT CLKIN  = sys_clk_s
+ PORT CLK0   = sys_clk
+ PORT CLK90  = sys_clk90
+ PORT CLK2X  = sys_clk2x_s
+ PORT CLKFB  = sys_clk
+ PORT RST    = net_gnd
+ PORT LOCKED = dcm_0_lock
+END
+
+BEGIN dcm_module
+ PARAMETER INSTANCE = dcm_1
+ PARAMETER HW_VER = 1.00.c
+ PARAMETER C_FAMILY = VIRTEX5
+ PARAMETER C_CLK0_BUF = TRUE
+ PARAMETER C_CLK90_BUF = TRUE
+ PARAMETER C_CLKIN_PERIOD = 5.000000
+ PARAMETER C_CLK_FEEDBACK = 1X
+ PARAMETER C_DLL_FREQUENCY_MODE = HIGH
+ PARAMETER C_EXT_RESET_HIGH = 0
+ PORT CLKIN  = sys_clk2x_s
+ PORT CLK0   = sys_clk2x
+ PORT CLK90  = sys_clk2x90
+ PORT CLKFB  = sys_clk2x
+ PORT RST    = dcm_0_lock
+ PORT LOCKED = dcm_1_lock
+END
+
+# BEGIN dcm_module
+#  PARAMETER INSTANCE = dcm_2
+#  PARAMETER HW_VER = 1.00.c
+#  PARAMETER C_FAMILY = VIRTEX5
+#  PARAMETER C_CLK0_BUF = TRUE
+#  PARAMETER C_CLK90_BUF = TRUE
+#  PARAMETER C_CLK2x_BUF = TRUE
+#  PARAMETER C_CLK_FEEDBACK = 1X
+#  PARAMETER C_DLL_FREQUENCY_MODE = HIGH
+#  PARAMETER C_EXT_RESET_HIGH = 0
+#  PORT CLKIN  = aux_clk0
+#  PORT CLK0   = aux_clk0_1x
+#  PORT CLK90  = aux_clk0_1x_90
+#  PORT CLK2X  = aux_clk0_2x
+#  PORT CLKFB  = aux_clk0
+#  PORT RST    = dcm_1_lock
+#  PORT LOCKED = dcm_2_lock
+# END
+#
+# BEGIN dcm_module
+#  PARAMETER INSTANCE = dcm_3
+#  PARAMETER HW_VER = 1.00.c
+#  PARAMETER C_FAMILY = VIRTEX5
+#  PARAMETER C_CLK0_BUF = TRUE
+#  PARAMETER C_CLK90_BUF = TRUE
+#  PARAMETER C_CLK2x_BUF = TRUE
+#  PARAMETER C_CLK_FEEDBACK = 1X
+#  PARAMETER C_DLL_FREQUENCY_MODE = HIGH
+#  PARAMETER C_EXT_RESET_HIGH = 0
+#  PORT CLKIN  = aux_clk1
+#  PORT CLK0   = aux_clk1_1x
+#  PORT CLK90  = aux_clk1_1x_90
+#  PORT CLK2X  = aux_clk1_2x
+#  PORT CLKFB  = aux_clk1
+#  PORT RST    = dcm_2_lock
+#  PORT LOCKED = dcm_3_lock
+# END
+
+BEGIN reset_block
+  PARAMETER INSTANCE = reset_block_inst
+  PARAMETER HW_VER   = 1.00.a
+  PARAMETER DELAY    = 10
+  PARAMETER WIDTH    = 50
+  PORT clk           = sys_clk
+  PORT async_reset_i = 0b0
+  PORT reset_i       = 0b0
+  PORT reset_o       = sys_reset
+END
+
+BEGIN opb_v20
+  PARAMETER INSTANCE = opb0
+  PARAMETER HW_VER = 1.10.c
+  PARAMETER C_EXT_RESET_HIGH = 1
+  PORT SYS_Rst = sys_reset
+  PORT OPB_Clk = epb_clk
+END
+
+BEGIN epb_opb_bridge
+  PARAMETER INSTANCE = epb_opb_bridge_inst
+  PARAMETER HW_VER   = 1.00.a
+  BUS_INTERFACE MOPB = opb0
+  PORT OPB_Clk       = epb_clk
+  PORT sys_reset     = sys_reset
+  PORT epb_clk       = epb_clk
+  PORT epb_data_oe_n = epb_data_oe_n
+  PORT epb_cs_n      = epb_cs_n_int
+  PORT epb_oe_n      = epb_oe_n_int
+  PORT epb_r_w_n     = epb_r_w_n_int
+  PORT epb_be_n      = epb_be_n_int
+  PORT epb_addr      = epb_addr_int
+  PORT epb_addr_gp   = epb_addr_gp_int
+  PORT epb_data_i    = epb_data_i
+  PORT epb_data_o    = epb_data_o
+  PORT epb_rdy       = epb_rdy
+  PORT debug         = ""
+END
+
+BEGIN epb_infrastructure
+  PARAMETER INSTANCE   = epb_infrastructure_inst
+  PARAMETER HW_VER     = 1.00.a
+  PORT epb_data_buf    = epb_data
+  PORT epb_data_oe_n_i = epb_data_oe_n
+  PORT epb_data_out_i  = epb_data_o
+  PORT epb_data_in_o   = epb_data_i
+  PORT epb_oe_n_buf    = epb_oe_n
+  PORT epb_oe_n        = epb_oe_n_int
+  PORT epb_cs_n_buf    = epb_cs_n
+  PORT epb_cs_n        = epb_cs_n_int
+  PORT epb_be_n_buf    = epb_be_n
+  PORT epb_be_n        = epb_be_n_int
+  PORT epb_r_w_n_buf   = epb_r_w_n
+  PORT epb_r_w_n       = epb_r_w_n_int
+  PORT epb_addr_buf    = epb_addr
+  PORT epb_addr        = epb_addr_int
+  PORT epb_addr_gp_buf = epb_addr_gp
+  PORT epb_addr_gp     = epb_addr_gp_int
+END
+
+
