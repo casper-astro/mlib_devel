@@ -1,80 +1,354 @@
-# ##############################################################################
-# Target Board:  ROACH v1.0
-# Family:	     virtex5
-# Device:	     xc5vlx110t
-# Package:	     ff1136
-# Speed Grade:	 -1
-# ##############################################################################
-
-CONFIG STEPPING="0";
-
-## System level constraints
-NET sys_clk_p   TNM_NET = sys_clk_p | LOC = "J14" | IOSTANDARD = "LVDS_25" ;
-NET sys_clk_n   TNM_NET = sys_clk_n | LOC = "H13" | IOSTANDARD = "LVDS_25" ;
-TIMESPEC TS_sys_clk_p = PERIOD sys_clk_p 100 MHz ;
-TIMESPEC TS_sys_clk_n = PERIOD sys_clk_n 100 MHz ;
-
-NET dly_clk_p   TNM_NET = dly_clk_p | LOC = "J16" | IOSTANDARD = "LVDS_25" ;
-NET dly_clk_n   TNM_NET = dly_clk_n | LOC = "J17" | IOSTANDARD = "LVDS_25" ;
-TIMESPEC TS_dly_clk_p = PERIOD dly_clk_p 200 MHz ;
-TIMESPEC TS_dly_clk_n = PERIOD dly_clk_n 200 MHz ;
-
-NET epb_clk_buf TNM_NET = epb_clk_buf | LOC = "H12" | CLOCK_DEDICATED_ROUTE = FALSE ;
-TIMESPEC TS_epb_clk_buf = PERIOD epb_clk_buf 100 MHz ;
+#
+# Timing Constraints
+#
+Net sys_clk TNM_NET = sys_clk;
+TIMESPEC TS_sys_clk = PERIOD sys_clk 100 MHz;
 
 
-## PPC External Peripheral Bus [EPB]
+#IF# strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')# Net mgt_clk TNM_NET = mgt_clk;
+#IF# strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')# TIMESPEC TS_mgt_clk = PERIOD mgt_clk 157 MHz;
+
+###################Local bufg routing [for roach V0]
+NET epb_clk_buf CLOCK_DEDICATED_ROUTE = FALSE;
+
+###################ROACH constraints
+
+#
+# System signals
+#
+
+NET "mstr_clk_n"   LOC = H13;
+NET "mstr_clk_p"   LOC = J14;
+
+NET "dly_clk_n"   LOC = J17;
+NET "dly_clk_p"   LOC = J16;
+
+NET "aux_clk_0_n"  LOC = G16;
+NET "aux_clk_0_p"  LOC = G15;
+NET "aux_clk_1_n"  LOC = H15;
+NET "aux_clk_1_p"  LOC = H14;
+
+#
+# PPC External Peripheral Bus [EPB]
+#
+
 # transparent endian change
-NET epb_data<15>    LOC = AD19 ;
-NET epb_data<14>    LOC = AF15 ;
-NET epb_data<13>    LOC = AE19 ;
-NET epb_data<12>    LOC = AE16 ;
-NET epb_data<11>    LOC = AH19 ;
-NET epb_data<10>    LOC = AF16 ;
-NET epb_data<9>     LOC = AD20 ;
-NET epb_data<8>     LOC = AE17 ;
-NET epb_data<7>     LOC = AH12 ;
-NET epb_data<6>     LOC = AH20 ;
-NET epb_data<5>     LOC = AG13 ;
-NET epb_data<4>     LOC = AE21 ;
-NET epb_data<3>     LOC = AG22 ;
-NET epb_data<2>     LOC = AH13 ;
-NET epb_data<1>     LOC = AH22 ;
-NET epb_data<0>     LOC = AH14 ;
+NET "epb_data<15>"   LOC = AD19;
+NET "epb_data<14>"   LOC = AF15;
+NET "epb_data<13>"   LOC = AE19;
+NET "epb_data<12>"   LOC = AE16;
+NET "epb_data<11>"   LOC = AH19;
+NET "epb_data<10>"   LOC = AF16;
+NET "epb_data<9>"    LOC = AD20;
+NET "epb_data<8>"    LOC = AE17;
+NET "epb_data<7>"    LOC = AH12;
+NET "epb_data<6>"    LOC = AH20;
+NET "epb_data<5>"    LOC = AG13;
+NET "epb_data<4>"    LOC = AE21;
+NET "epb_data<3>"    LOC = AG22;
+NET "epb_data<2>"    LOC = AH13;
+NET "epb_data<1>"    LOC = AH22;
+NET "epb_data<0>"    LOC = AH14;
 # transparent endian change
-NET epb_addr<0>     LOC = AE23 ;
-NET epb_addr<1>     LOC = AE22 ;
-NET epb_addr<2>     LOC = AG18 ;
-NET epb_addr<3>     LOC = AG12 ;
-NET epb_addr<4>     LOC = AG15 ;
-NET epb_addr<5>     LOC = AG23 ;
-NET epb_addr<6>     LOC = AF19 ;
-NET epb_addr<7>     LOC = AE12 ;
-NET epb_addr<8>     LOC = AG16 ;
-NET epb_addr<9>     LOC = AF13 ;
-NET epb_addr<10>    LOC = AG20 ;
-NET epb_addr<11>    LOC = AF23 ;
-NET epb_addr<12>    LOC = AH17 ;
-NET epb_addr<13>    LOC = AH15 ;
-NET epb_addr<14>    LOC = L20  ;
-NET epb_addr<15>    LOC = J22  ;
-NET epb_addr<16>    LOC = H22  ;
-NET epb_addr<17>    LOC = L15  ;
-NET epb_addr<18>    LOC = L16  ;
-NET epb_addr<19>    LOC = K22  ;
-NET epb_addr<20>    LOC = K21  ;
-NET epb_addr<21>    LOC = K16  ;
-NET epb_addr<22>    LOC = J15  ;
+NET "epb_addr<0>"    LOC = AE23;
+NET "epb_addr<1>"    LOC = AE22;
+NET "epb_addr<2>"    LOC = AG18;
+NET "epb_addr<3>"    LOC = AG12;
+NET "epb_addr<4>"    LOC = AG15;
+NET "epb_addr<5>"    LOC = AG23;
+NET "epb_addr<6>"    LOC = AF19;
+NET "epb_addr<7>"    LOC = AE12;
+NET "epb_addr<8>"    LOC = AG16;
+NET "epb_addr<9>"    LOC = AF13;
+NET "epb_addr<10>"   LOC = AG20;
+NET "epb_addr<11>"   LOC = AF23;
+NET "epb_addr<12>"   LOC = AH17;
+NET "epb_addr<13>"   LOC = AH15;
+NET "epb_addr<14>"   LOC = L20;
+NET "epb_addr<15>"   LOC = J22;
+NET "epb_addr<16>"   LOC = H22;
+NET "epb_addr<17>"   LOC = L15;
+NET "epb_addr<18>"   LOC = L16;
+NET "epb_addr<19>"   LOC = K22;
+NET "epb_addr<20>"   LOC = K21;
+NET "epb_addr<21>"   LOC = K16;
+NET "epb_addr<22>"   LOC = J15;
 # EPB multi purpose pins
-NET epb_addr_gp<0>  LOC = L21  ; # DMA_REQ_2
-NET epb_addr_gp<1>  LOC = G22  ; # DMA_ACK_2
-NET epb_addr_gp<2>  LOC = K23  ; # EOT_TC_2
-NET epb_addr_gp<3>  LOC = K14  ; # DMA_REQ_3
-NET epb_addr_gp<4>  LOC = L14  ; # DMA_ACK_3
-NET epb_addr_gp<5>  LOC = J12  ; # EOT_TC_3
-NET epb_cs_n        LOC = K13  ;
-NET epb_be_n<1>     LOC = AF18 ;
-NET epb_be_n<0>     LOC = AF14 ;
-NET epb_r_w_n       LOC = AF20 ;
-NET epb_oe_n        LOC = AF21 ;
-NET epb_rdy         LOC = K12  ;
+NET "epb_addr_gp<0>" LOC = L21; # DMA_REQ_2
+NET "epb_addr_gp<1>" LOC = G22; # DMA_ACK_2
+NET "epb_addr_gp<2>" LOC = K23; # EOT_TC_2
+NET "epb_addr_gp<3>" LOC = K14; # DMA_REQ_3
+NET "epb_addr_gp<4>" LOC = L14; # DMA_ACK_3
+NET "epb_addr_gp<5>" LOC = J12; # EOT_TC_3
+NET "epb_cs_n"       LOC = K13;
+NET "epb_be_n<1>"    LOC = AF18;
+NET "epb_be_n<0>"    LOC = AF14;
+NET "epb_r_w_n"      LOC = AF20;
+NET "epb_oe_n"       LOC = AF21;
+#NET "epb_blast_n"    LOC = H23;
+NET "epb_rdy"        LOC = K12;
+NET "epb_clk_buf"    LOC = H12;
+
+#
+# MGT signals
+#
+
+# Clock on tile 7
+NET "mgt_ref_clk_top_n"    LOC = C8;
+NET "mgt_ref_clk_top_p"    LOC = D8;
+
+# Clock on tile 3
+NET "mgt_ref_clk_bottom_n" LOC = Y3;
+NET "mgt_ref_clk_bottom_p" LOC = Y4;
+
+# Tile 7
+NET "mgt_rx_top_1_n<1>"    LOC = A7;
+NET "mgt_rx_top_1_p<1>"    LOC = A6;
+NET "mgt_rx_top_1_n<0>"    LOC = A8;
+NET "mgt_rx_top_1_p<0>"    LOC = A9;
+NET "mgt_tx_top_1_n<1>"    LOC = B6;
+NET "mgt_tx_top_1_p<1>"    LOC = B5;
+NET "mgt_tx_top_1_n<0>"    LOC = B9;
+NET "mgt_tx_top_1_p<0>"    LOC = B10;
+# Tile 6
+NET "mgt_rx_top_1_n<3>"    LOC = C1;
+NET "mgt_rx_top_1_p<3>"    LOC = D1;
+NET "mgt_rx_top_1_n<2>"    LOC = A2;
+NET "mgt_rx_top_1_p<2>"    LOC = A3;
+NET "mgt_tx_top_1_n<3>"    LOC = D2;
+NET "mgt_tx_top_1_p<3>"    LOC = E2;
+NET "mgt_tx_top_1_n<2>"    LOC = B3;
+NET "mgt_tx_top_1_p<2>"    LOC = B4;
+# Tile 5
+NET "mgt_rx_top_0_n<1>"    LOC = J1;
+NET "mgt_rx_top_0_p<1>"    LOC = K1;
+NET "mgt_rx_top_0_n<0>"    LOC = H1;
+NET "mgt_rx_top_0_p<0>"    LOC = G1;
+NET "mgt_tx_top_0_n<1>"    LOC = K2;
+NET "mgt_tx_top_0_p<1>"    LOC = L2;
+NET "mgt_tx_top_0_n<0>"    LOC = G2;
+NET "mgt_tx_top_0_p<0>"    LOC = F2;
+# Tile 4
+NET "mgt_rx_top_0_n<3>"    LOC = R1;
+NET "mgt_rx_top_0_p<3>"    LOC = T1;
+NET "mgt_rx_top_0_n<2>"    LOC = P1;
+NET "mgt_rx_top_0_p<2>"    LOC = N1;
+NET "mgt_tx_top_0_n<3>"    LOC = T2;
+NET "mgt_tx_top_0_p<3>"    LOC = U2;
+NET "mgt_tx_top_0_n<2>"    LOC = N2;
+NET "mgt_tx_top_0_p<2>"    LOC = M2;
+# Tile 3
+NET "mgt_rx_bottom_1_n<1>" LOC = AA1;
+NET "mgt_rx_bottom_1_p<1>" LOC = AB1;
+NET "mgt_rx_bottom_1_n<0>" LOC = Y1;
+NET "mgt_rx_bottom_1_p<0>" LOC = W1;
+NET "mgt_tx_bottom_1_n<1>" LOC = AB2;
+NET "mgt_tx_bottom_1_p<1>" LOC = AC2;
+NET "mgt_tx_bottom_1_n<0>" LOC = W2;
+NET "mgt_tx_bottom_1_p<0>" LOC = V2;
+# Tile 2
+NET "mgt_rx_bottom_1_n<3>" LOC = AG1;
+NET "mgt_rx_bottom_1_p<3>" LOC = AH1;
+NET "mgt_rx_bottom_1_n<2>" LOC = AF1;
+NET "mgt_rx_bottom_1_p<2>" LOC = AE1;
+NET "mgt_tx_bottom_1_n<3>" LOC = AH2;
+NET "mgt_tx_bottom_1_p<3>" LOC = AJ2;
+NET "mgt_tx_bottom_1_n<2>" LOC = AE2;
+NET "mgt_tx_bottom_1_p<2>" LOC = AD2;
+# Tile 1
+NET "mgt_rx_bottom_0_n<1>" LOC = AP2;
+NET "mgt_rx_bottom_0_p<1>" LOC = AP3;
+NET "mgt_rx_bottom_0_n<0>" LOC = AM1;
+NET "mgt_rx_bottom_0_p<0>" LOC = AL1;
+NET "mgt_tx_bottom_0_n<1>" LOC = AN3;
+NET "mgt_tx_bottom_0_p<1>" LOC = AN4;
+NET "mgt_tx_bottom_0_n<0>" LOC = AL2;
+NET "mgt_tx_bottom_0_p<0>" LOC = AK2;
+# Tile 0
+NET "mgt_rx_bottom_0_n<3>" LOC = AP8;
+NET "mgt_rx_bottom_0_p<3>" LOC = AP9;
+NET "mgt_rx_bottom_0_n<2>" LOC = AP7;
+NET "mgt_rx_bottom_0_p<2>" LOC = AP6;
+NET "mgt_tx_bottom_0_n<3>" LOC = AN9;
+NET "mgt_tx_bottom_0_p<3>" LOC = AN10;
+NET "mgt_tx_bottom_0_n<2>" LOC = AN6;
+NET "mgt_tx_bottom_0_p<2>" LOC = AN5;
+
+# 
+# ZDOK Interfaces
+#
+
+# 
+# ZDOK 0
+#
+
+NET "zdok0_dp_n<0>"  LOC = N30;
+NET "zdok0_dp_n<1>"  LOC = N28;
+NET "zdok0_dp_n<2>"  LOC = M26;
+NET "zdok0_dp_n<3>"  LOC = L28;
+NET "zdok0_dp_n<4>"  LOC = L24;
+NET "zdok0_dp_n<5>"  LOC = J29;
+NET "zdok0_dp_n<6>"  LOC = G28;
+NET "zdok0_dp_n<7>"  LOC = E31;
+NET "zdok0_dp_n<8>"  LOC = F28;
+NET "zdok0_dp_n<9>"  LOC = D32;
+NET "zdok0_dp_n<10>" LOC = K34;
+NET "zdok0_dp_n<11>" LOC = K32;
+NET "zdok0_dp_n<12>" LOC = H33;
+NET "zdok0_dp_n<13>" LOC = K26;
+NET "zdok0_dp_n<14>" LOC = G31;
+NET "zdok0_dp_n<15>" LOC = J25;
+NET "zdok0_dp_n<16>" LOC = H27;
+NET "zdok0_dp_n<17>" LOC = G26;
+NET "zdok0_dp_n<18>" LOC = E27;
+NET "zdok0_dp_n<19>" LOC = A33;
+NET "zdok0_dp_n<20>" LOC = M27;
+NET "zdok0_dp_n<21>" LOC = K29;
+NET "zdok0_dp_n<22>" LOC = L26;
+NET "zdok0_dp_n<23>" LOC = J31;
+NET "zdok0_dp_n<24>" LOC = F34;
+NET "zdok0_dp_n<25>" LOC = F30;
+NET "zdok0_dp_n<26>" LOC = H24;
+NET "zdok0_dp_n<27>" LOC = F29;
+NET "zdok0_dp_n<28>" LOC = D34;
+NET "zdok0_dp_n<29>" LOC = M30;
+NET "zdok0_dp_n<30>" LOC = L31;
+NET "zdok0_dp_n<31>" LOC = J34;
+NET "zdok0_dp_n<32>" LOC = J26;
+NET "zdok0_dp_n<33>" LOC = H32;
+NET "zdok0_dp_n<34>" LOC = E34;
+NET "zdok0_dp_n<35>" LOC = E33;
+NET "zdok0_dp_n<36>" LOC = F26;
+NET "zdok0_dp_n<37>" LOC = C33;
+
+NET "zdok0_dp_p<0>"  LOC = M31;
+NET "zdok0_dp_p<1>"  LOC = M28;
+NET "zdok0_dp_p<2>"  LOC = M25;
+NET "zdok0_dp_p<3>"  LOC = K28;
+NET "zdok0_dp_p<4>"  LOC = K24;
+NET "zdok0_dp_p<5>"  LOC = H29;
+NET "zdok0_dp_p<6>"  LOC = H28;
+NET "zdok0_dp_p<7>"  LOC = F31;
+NET "zdok0_dp_p<8>"  LOC = E28;
+NET "zdok0_dp_p<9>"  LOC = C32;
+NET "zdok0_dp_p<10>" LOC = L34;
+NET "zdok0_dp_p<11>" LOC = K33;
+NET "zdok0_dp_p<12>" LOC = J32;
+NET "zdok0_dp_p<13>" LOC = K27;
+NET "zdok0_dp_p<14>" LOC = H30;
+NET "zdok0_dp_p<15>" LOC = J24;
+NET "zdok0_dp_p<16>" LOC = G27;
+NET "zdok0_dp_p<17>" LOC = G25;
+NET "zdok0_dp_p<18>" LOC = E26;
+NET "zdok0_dp_p<19>" LOC = B32;
+NET "zdok0_dp_p<20>" LOC = N27;
+NET "zdok0_dp_p<21>" LOC = L29;
+NET "zdok0_dp_p<22>" LOC = L25;
+NET "zdok0_dp_p<23>" LOC = J30;
+NET "zdok0_dp_p<24>" LOC = G33;
+NET "zdok0_dp_p<25>" LOC = G30;
+NET "zdok0_dp_p<26>" LOC = H25;
+NET "zdok0_dp_p<27>" LOC = E29;
+NET "zdok0_dp_p<28>" LOC = C34;
+NET "zdok0_dp_p<29>" LOC = L30;
+NET "zdok0_dp_p<30>" LOC = K31;
+NET "zdok0_dp_p<31>" LOC = H34;
+NET "zdok0_dp_p<32>" LOC = J27;
+NET "zdok0_dp_p<33>" LOC = G32;
+NET "zdok0_dp_p<34>" LOC = F33;
+NET "zdok0_dp_p<35>" LOC = E32;
+NET "zdok0_dp_p<36>" LOC = F25;
+NET "zdok0_dp_p<37>" LOC = B33;
+
+NET "zdok0_clk0_n"   LOC = J21;
+NET "zdok0_clk0_p"   LOC = J20;
+NET "zdok0_clk1_n"   LOC = H20;
+NET "zdok0_clk1_p"   LOC = H19;
+
+# 
+# ZDOK 1
+#
+
+NET "zdok1_dp_n<0>"  LOC = AN33;
+NET "zdok1_dp_n<1>"  LOC = AJ29;
+NET "zdok1_dp_n<2>"  LOC = AK31;
+NET "zdok1_dp_n<3>"  LOC = AK32;
+NET "zdok1_dp_n<4>"  LOC = AJ34;
+NET "zdok1_dp_n<5>"  LOC = AE26;
+NET "zdok1_dp_n<6>"  LOC = AD25;
+NET "zdok1_dp_n<7>"  LOC = AE34;
+NET "zdok1_dp_n<8>"  LOC = AE32;
+NET "zdok1_dp_n<9>"  LOC = AD34;
+NET "zdok1_dp_n<10>" LOC = AP32;
+NET "zdok1_dp_n<11>" LOC = AM32;
+NET "zdok1_dp_n<12>" LOC = AJ26;
+NET "zdok1_dp_n<13>" LOC = AG30;
+NET "zdok1_dp_n<14>" LOC = AF26;
+NET "zdok1_dp_n<15>" LOC = AE24;
+NET "zdok1_dp_n<16>" LOC = AF28;
+NET "zdok1_dp_n<17>" LOC = AC24;
+NET "zdok1_dp_n<18>" LOC = AD27;
+NET "zdok1_dp_n<19>" LOC = AC30;
+NET "zdok1_dp_n<20>" LOC = AH25;
+NET "zdok1_dp_n<21>" LOC = AL33;
+NET "zdok1_dp_n<22>" LOC = AK33;
+NET "zdok1_dp_n<23>" LOC = AG26;
+NET "zdok1_dp_n<24>" LOC = AF30;
+NET "zdok1_dp_n<25>" LOC = AH33;
+NET "zdok1_dp_n<26>" LOC = AD29;
+NET "zdok1_dp_n<27>" LOC = AC29;
+NET "zdok1_dp_n<28>" LOC = AC27;
+NET "zdok1_dp_n<29>" LOC = AJ27;
+NET "zdok1_dp_n<30>" LOC = AK27;
+NET "zdok1_dp_n<31>" LOC = AH30;
+NET "zdok1_dp_n<32>" LOC = AG25;
+NET "zdok1_dp_n<33>" LOC = AH28;
+NET "zdok1_dp_n<34>" LOC = AH32;
+NET "zdok1_dp_n<35>" LOC = AG31;
+NET "zdok1_dp_n<36>" LOC = AE33;
+NET "zdok1_dp_n<37>" LOC = AE31;
+
+NET "zdok1_dp_p<0>"  LOC = AN34;
+NET "zdok1_dp_p<1>"  LOC = AK29;
+NET "zdok1_dp_p<2>"  LOC = AJ31;
+NET "zdok1_dp_p<3>"  LOC = AJ32;
+NET "zdok1_dp_p<4>"  LOC = AH34;
+NET "zdok1_dp_p<5>"  LOC = AE27;
+NET "zdok1_dp_p<6>"  LOC = AD26;
+NET "zdok1_dp_p<7>"  LOC = AF34;
+NET "zdok1_dp_p<8>"  LOC = AD32;
+NET "zdok1_dp_p<9>"  LOC = AC34;
+NET "zdok1_dp_p<10>" LOC = AN32;
+NET "zdok1_dp_p<11>" LOC = AM33;
+NET "zdok1_dp_p<12>" LOC = AH27;
+NET "zdok1_dp_p<13>" LOC = AH29;
+NET "zdok1_dp_p<14>" LOC = AF25;
+NET "zdok1_dp_p<15>" LOC = AD24;
+NET "zdok1_dp_p<16>" LOC = AE28;
+NET "zdok1_dp_p<17>" LOC = AC25;
+NET "zdok1_dp_p<18>" LOC = AC28;
+NET "zdok1_dp_p<19>" LOC = AB30;
+NET "zdok1_dp_p<20>" LOC = AJ25;
+NET "zdok1_dp_p<21>" LOC = AL34;
+NET "zdok1_dp_p<22>" LOC = AK34;
+NET "zdok1_dp_p<23>" LOC = AG27;
+NET "zdok1_dp_p<24>" LOC = AF29;
+NET "zdok1_dp_p<25>" LOC = AG33;
+NET "zdok1_dp_p<26>" LOC = AE29;
+NET "zdok1_dp_p<27>" LOC = AD30;
+NET "zdok1_dp_p<28>" LOC = AB27;
+NET "zdok1_dp_p<29>" LOC = AK26;
+NET "zdok1_dp_p<30>" LOC = AK28;
+NET "zdok1_dp_p<31>" LOC = AJ30;
+NET "zdok1_dp_p<32>" LOC = AF24;
+NET "zdok1_dp_p<33>" LOC = AG28;
+NET "zdok1_dp_p<34>" LOC = AG32;
+NET "zdok1_dp_p<35>" LOC = AF31;
+NET "zdok1_dp_p<36>" LOC = AF33;
+NET "zdok1_dp_p<37>" LOC = AD31;
+
+NET "zdok1_clk0_p"   LOC = H17;
+NET "zdok1_clk0_n"   LOC = H18;
+NET "zdok1_clk1_p"   LOC = K17;
+NET "zdok1_clk1_n"   LOC = L18;
+

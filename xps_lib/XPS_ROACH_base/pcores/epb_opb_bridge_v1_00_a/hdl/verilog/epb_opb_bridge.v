@@ -1,7 +1,6 @@
 module epb_opb_bridge(
     sys_reset,
 
-    epb_clk,
     epb_data_oe_n,
     epb_cs_n, epb_r_w_n, epb_be_n, 
     epb_oe_n,
@@ -30,7 +29,6 @@ module epb_opb_bridge(
   output reg [3:0] debug;
   input  sys_reset;
 
-  input  epb_clk;
   output epb_data_oe_n;
   input  epb_cs_n, epb_oe_n, epb_r_w_n;
   input   [1:0] epb_be_n;
@@ -60,7 +58,7 @@ module epb_opb_bridge(
 
   /***** EPB CS edge detection *****/
   reg prev_cs_n;
-  always @(posedge OPB_Clk) begin //epb_clk must equal OPB_Clk
+  always @(posedge OPB_Clk) begin 
     prev_cs_n <= epb_cs_n;
   end
 
@@ -73,7 +71,7 @@ module epb_opb_bridge(
 
   /***** OPB Output Assignments *****/
   assign M_request = 1'b1;
-  assign M_busLock = 1'b1;
+  assign M_busLock = 1'b0;
   assign M_seqAddr = 1'b0; //TODO: implement bursting
 
   assign M_RNW  = M_select ? epb_r_w_n : 1'b0;

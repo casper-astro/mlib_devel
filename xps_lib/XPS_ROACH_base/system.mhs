@@ -1,32 +1,18 @@
-# ##############################################################################
-# Target Board:  ROACH v1.0
-# Family:	     virtex5
-# Device:	     xc5vlx110t
-# Package:	     ff1136
-# Speed Grade:	 -1
-# Processor:     None
-# System clock frequency: 100.000000 MHz
-# ##############################################################################
-
-
+# EDK MHS File
 PARAMETER VERSION = 2.1.0
 
-##########################################
-#         SYSTEM INFRASTRUCTURE          #
-##########################################
+#System Ports
+PORT mstr_clk_n  = mstr_clk_n,  DIR = I
+PORT mstr_clk_p  = mstr_clk_p,  DIR = I
+PORT dly_clk_n   = dly_clk_n,   DIR = I
+PORT dly_clk_p   = dly_clk_p,   DIR = I
+PORT aux_clk_0_n = aux_clk_0_n, DIR = I
+PORT aux_clk_0_p = aux_clk_0_p, DIR = I
+PORT aux_clk_1_n = aux_clk_1_n, DIR = I
+PORT aux_clk_1_p = aux_clk_1_p, DIR = I
 
-# Clock Ports
-PORT sys_clk_p  = sys_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
-PORT sys_clk_n  = sys_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
-PORT dly_clk_n  = dly_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
-PORT dly_clk_p  = dly_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
-PORT aux_clk0_p = aux_clk0_p, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
-PORT aux_clk0_n = aux_clk0_n, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
-PORT aux_clk1_p = aux_clk1_p, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
-PORT aux_clk1_n = aux_clk1_n, DIR = I, SIGIS = CLK, CLK_FREQ = 375000000
-
-# EPB Ports
-PORT epb_clk_buf = epb_clk_buf, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+#EPB Ports
+PORT epb_clk_buf = epb_clk_buf, DIR = I
 PORT epb_data    = epb_data,    DIR = IO, VEC = [15:0]
 PORT epb_addr    = epb_addr,    DIR = I,  VEC = [22:0]
 PORT epb_addr_gp = epb_addr_gp, DIR = I,  VEC =  [5:0]
@@ -34,104 +20,69 @@ PORT epb_cs_n    = epb_cs_n,    DIR = I
 PORT epb_be_n    = epb_be_n,    DIR = I,  VEC =  [1:0]
 PORT epb_r_w_n   = epb_r_w_n,   DIR = I
 PORT epb_oe_n    = epb_oe_n,    DIR = I
+#PORT epb_blast_n = epb_blast_n, DIR = I
 PORT epb_rdy     = epb_rdy,     DIR = O
 
-BEGIN roach_infrastructure
+#
+# ZDOK Signals
+#
+
+PORT zdok0_dp_n  = zdok0_dp_n,  DIR = IO, VEC = [37:0]
+PORT zdok0_dp_p  = zdok0_dp_p,  DIR = IO, VEC = [37:0]
+PORT zdok0_clk_n = zdok0_clk_n, DIR = I,  VEC =  [1:0]
+PORT zdok0_clk_p = zdok0_clk_p, DIR = I,  VEC =  [1:0]
+
+PORT zdok1_dp_n  = zdok1_dp_n,  DIR = IO, VEC = [37:0]
+PORT zdok1_dp_p  = zdok1_dp_p,  DIR = IO, VEC = [37:0]
+PORT zdok1_clk_n = zdok1_clk_n, DIR = I,  VEC =  [1:0]
+PORT zdok1_clk_p = zdok1_clk_p, DIR = I,  VEC =  [1:0]
+
+#
+# MGT signals
+#
+
+PORT mgt_ref_clk_top_n    = xaui2_ref_clk_n, DIR = I
+PORT mgt_ref_clk_top_p    = xaui2_ref_clk_p, DIR = I
+PORT mgt_ref_clk_bottom_n = xaui0_ref_clk_n, DIR = I
+PORT mgt_ref_clk_bottom_p = xaui0_ref_clk_p, DIR = I
+PORT mgt_rx_top_1_n       = xaui3_mgt_rx_n,  DIR = I, VEC = [3:0]
+PORT mgt_rx_top_1_p       = xaui3_mgt_rx_p,  DIR = I, VEC = [3:0]
+PORT mgt_tx_top_1_n       = xaui3_mgt_tx_n,  DIR = O, VEC = [3:0]
+PORT mgt_tx_top_1_p       = xaui3_mgt_tx_p,  DIR = O, VEC = [3:0]
+PORT mgt_rx_top_0_n       = xaui2_mgt_rx_n,  DIR = I, VEC = [3:0]
+PORT mgt_rx_top_0_p       = xaui2_mgt_rx_p,  DIR = I, VEC = [3:0]
+PORT mgt_tx_top_0_n       = xaui2_mgt_tx_n,  DIR = O, VEC = [3:0]
+PORT mgt_tx_top_0_p       = xaui2_mgt_tx_p,  DIR = O, VEC = [3:0]
+PORT mgt_rx_bottom_1_n    = xaui1_mgt_rx_n,  DIR = I, VEC = [3:0]
+PORT mgt_rx_bottom_1_p    = xaui1_mgt_rx_p,  DIR = I, VEC = [3:0]
+PORT mgt_tx_bottom_1_n    = xaui1_mgt_tx_n,  DIR = O, VEC = [3:0]
+PORT mgt_tx_bottom_1_p    = xaui1_mgt_tx_p,  DIR = O, VEC = [3:0]
+PORT mgt_rx_bottom_0_n    = xaui0_mgt_rx_n,  DIR = I, VEC = [3:0]
+PORT mgt_rx_bottom_0_p    = xaui0_mgt_rx_p,  DIR = I, VEC = [3:0]
+PORT mgt_tx_bottom_0_n    = xaui0_mgt_tx_n,  DIR = O, VEC = [3:0]
+PORT mgt_tx_bottom_0_p    = xaui0_mgt_tx_p,  DIR = O, VEC = [3:0]
+
+BEGIN infrastructure
   PARAMETER INSTANCE = infrastructure_inst
   PARAMETER HW_VER   = 1.00.a
-  PORT sys_clk_n     = sys_clk_n
-  PORT sys_clk_p     = sys_clk_p
+  PORT mstr_clk_n    = mstr_clk_n
+  PORT mstr_clk_p    = mstr_clk_p
   PORT dly_clk_n     = dly_clk_n
   PORT dly_clk_p     = dly_clk_p
-  PORT aux_clk_0_n   = aux_clk0_n
-  PORT aux_clk_0_p   = aux_clk0_p
-  PORT aux_clk_1_n   = aux_clk1_n
-  PORT aux_clk_1_p   = aux_clk1_p
+  PORT aux_clk_0_n   = aux_clk_0_n
+  PORT aux_clk_0_p   = aux_clk_0_p
+  PORT aux_clk_1_n   = aux_clk_1_n
+  PORT aux_clk_1_p   = aux_clk_1_p
   PORT epb_clk_buf   = epb_clk_buf
-  PORT sys_clk       = sys_clk_s
+  PORT mstr_clk      = mstr_clk
   PORT dly_clk       = dly_clk
-  PORT aux_clk_0     = aux_clk0
-  PORT aux_clk_1     = aux_clk1
-  PORT epb_clk       = epb_clk
+  PORT aux_clk_0     = aux_clk_0
+  PORT aux_clk_1     = aux_clk_1
+  PORT epb_clk       = sys_clk
+  PORT epb_clk90     = sys_clk90
   PORT idelay_rst    = sys_reset
   PORT idelay_rdy    = idelay_rdy
 END
-
-BEGIN dcm_module
- PARAMETER INSTANCE = dcm_0
- PARAMETER HW_VER = 1.00.c
- PARAMETER C_FAMILY = VIRTEX5
- PARAMETER C_CLK0_BUF = TRUE
- PARAMETER C_CLK90_BUF = TRUE
- PARAMETER C_CLK2X_BUF = TRUE
- PARAMETER C_CLKIN_PERIOD = 10.000000
- PARAMETER C_CLK_FEEDBACK = 1X
- PARAMETER C_DLL_FREQUENCY_MODE = LOW
- PARAMETER C_EXT_RESET_HIGH = 1
- PORT CLKIN  = sys_clk_s
- PORT CLK0   = sys_clk
- PORT CLK90  = sys_clk90
- PORT CLK2X  = sys_clk2x_s
- PORT CLKFB  = sys_clk
- PORT RST    = net_gnd
- PORT LOCKED = dcm_0_lock
-END
-
-BEGIN dcm_module
- PARAMETER INSTANCE = dcm_1
- PARAMETER HW_VER = 1.00.c
- PARAMETER C_FAMILY = VIRTEX5
- PARAMETER C_CLK0_BUF = TRUE
- PARAMETER C_CLK90_BUF = TRUE
- PARAMETER C_CLKIN_PERIOD = 5.000000
- PARAMETER C_CLK_FEEDBACK = 1X
- PARAMETER C_DLL_FREQUENCY_MODE = HIGH
- PARAMETER C_EXT_RESET_HIGH = 0
- PORT CLKIN  = sys_clk2x_s
- PORT CLK0   = sys_clk2x
- PORT CLK90  = sys_clk2x90
- PORT CLKFB  = sys_clk2x
- PORT RST    = dcm_0_lock
- PORT LOCKED = dcm_1_lock
-END
-
-# BEGIN dcm_module
-#  PARAMETER INSTANCE = dcm_2
-#  PARAMETER HW_VER = 1.00.c
-#  PARAMETER C_FAMILY = VIRTEX5
-#  PARAMETER C_CLK0_BUF = TRUE
-#  PARAMETER C_CLK90_BUF = TRUE
-#  PARAMETER C_CLK2x_BUF = TRUE
-#  PARAMETER C_CLK_FEEDBACK = 1X
-#  PARAMETER C_DLL_FREQUENCY_MODE = HIGH
-#  PARAMETER C_EXT_RESET_HIGH = 0
-#  PORT CLKIN  = aux_clk0
-#  PORT CLK0   = aux_clk0_1x
-#  PORT CLK90  = aux_clk0_1x_90
-#  PORT CLK2X  = aux_clk0_2x
-#  PORT CLKFB  = aux_clk0
-#  PORT RST    = dcm_1_lock
-#  PORT LOCKED = dcm_2_lock
-# END
-#
-# BEGIN dcm_module
-#  PARAMETER INSTANCE = dcm_3
-#  PARAMETER HW_VER = 1.00.c
-#  PARAMETER C_FAMILY = VIRTEX5
-#  PARAMETER C_CLK0_BUF = TRUE
-#  PARAMETER C_CLK90_BUF = TRUE
-#  PARAMETER C_CLK2x_BUF = TRUE
-#  PARAMETER C_CLK_FEEDBACK = 1X
-#  PARAMETER C_DLL_FREQUENCY_MODE = HIGH
-#  PARAMETER C_EXT_RESET_HIGH = 0
-#  PORT CLKIN  = aux_clk1
-#  PORT CLK0   = aux_clk1_1x
-#  PORT CLK90  = aux_clk1_1x_90
-#  PORT CLK2X  = aux_clk1_2x
-#  PORT CLKFB  = aux_clk1
-#  PORT RST    = dcm_2_lock
-#  PORT LOCKED = dcm_3_lock
-# END
 
 BEGIN reset_block
   PARAMETER INSTANCE = reset_block_inst
@@ -149,16 +100,15 @@ BEGIN opb_v20
   PARAMETER HW_VER = 1.10.c
   PARAMETER C_EXT_RESET_HIGH = 1
   PORT SYS_Rst = sys_reset
-  PORT OPB_Clk = epb_clk
+  PORT OPB_Clk = sys_clk
 END
 
 BEGIN epb_opb_bridge
   PARAMETER INSTANCE = epb_opb_bridge_inst
   PARAMETER HW_VER   = 1.00.a
   BUS_INTERFACE MOPB = opb0
-  PORT OPB_Clk       = epb_clk
+  PORT OPB_Clk = sys_clk
   PORT sys_reset     = sys_reset
-  PORT epb_clk       = epb_clk
   PORT epb_data_oe_n = epb_data_oe_n
   PORT epb_cs_n      = epb_cs_n_int
   PORT epb_oe_n      = epb_oe_n_int
@@ -175,6 +125,7 @@ END
 BEGIN epb_infrastructure
   PARAMETER INSTANCE   = epb_infrastructure_inst
   PARAMETER HW_VER     = 1.00.a
+
   PORT epb_data_buf    = epb_data
   PORT epb_data_oe_n_i = epb_data_oe_n
   PORT epb_data_out_i  = epb_data_o
@@ -193,4 +144,36 @@ BEGIN epb_infrastructure
   PORT epb_addr_gp     = epb_addr_gp_int
 END
 
-
+BEGIN xaui_infrastructure
+  PARAMETER INSTANCE   = xaui_infrastructure_inst
+  PARAMETER HW_VER     = 1.00.a
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#  PARAMETER DISABLE_0 = 0
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#  PARAMETER DISABLE_1 = 0
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'2') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')#  PARAMETER DISABLE_2 = 0
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'3') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')#  PARAMETER DISABLE_3 = 0
+  PORT mgt_refclk_t_n = xaui2_ref_clk_n
+  PORT mgt_refclk_t_p = xaui2_ref_clk_p
+  PORT mgt_refclk_b_n = xaui0_ref_clk_n
+  PORT mgt_refclk_b_p = xaui0_ref_clk_p
+  PORT mgt_rx_t1_n  = xaui3_mgt_rx_n
+  PORT mgt_rx_t1_p  = xaui3_mgt_rx_p
+  PORT mgt_tx_t1_n  = xaui3_mgt_tx_n
+  PORT mgt_tx_t1_p  = xaui3_mgt_tx_p
+  PORT mgt_rx_t0_n  = xaui2_mgt_rx_n
+  PORT mgt_rx_t0_p  = xaui2_mgt_rx_p
+  PORT mgt_tx_t0_n  = xaui2_mgt_tx_n
+  PORT mgt_tx_t0_p  = xaui2_mgt_tx_p
+  PORT mgt_rx_b1_n  = xaui1_mgt_rx_n
+  PORT mgt_rx_b1_p  = xaui1_mgt_rx_p
+  PORT mgt_tx_b1_n  = xaui1_mgt_tx_n
+  PORT mgt_tx_b1_p  = xaui1_mgt_tx_p
+  PORT mgt_rx_b0_n  = xaui0_mgt_rx_n
+  PORT mgt_rx_b0_p  = xaui0_mgt_rx_p
+  PORT mgt_tx_b0_n  = xaui0_mgt_tx_n
+  PORT mgt_tx_b0_p  = xaui0_mgt_tx_p
+#IF# strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')# PORT mgt_clk = mgt_clk
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#  BUS_INTERFACE XAUI_SYS_0 = xaui_sys0
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#  BUS_INTERFACE XAUI_SYS_1 = xaui_sys1
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'2') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')#  BUS_INTERFACE XAUI_SYS_2 = xaui_sys2
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'3') || strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')#  BUS_INTERFACE XAUI_SYS_2 = xaui_sys3
+END

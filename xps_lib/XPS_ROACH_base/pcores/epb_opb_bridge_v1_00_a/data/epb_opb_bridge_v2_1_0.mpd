@@ -12,7 +12,6 @@ BUS_INTERFACE BUS = MOPB, BUS_STD = OPB, BUS_TYPE = MASTER
 PORT sys_reset     = "", DIR = I
 
 PORT debug       = "", DIR = O, VEC=[3:0]
-PORT epb_clk       = "", DIR = I
 PORT epb_data_oe_n = "", DIR = O
 PORT epb_cs_n      = "", DIR = I
 PORT epb_oe_n      = "", DIR = I
