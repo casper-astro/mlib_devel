@@ -384,7 +384,7 @@ if run_edkgen
             opb_slaves = 0;
 
             opb_addr = hex2dec('00800000');
-            plb_addr = hex2dec('02000000');
+            plb_addr = hex2dec('04000000');
         % end case 'ROACH'
         otherwise
             plb_slaves = 2; % the memory and the opb bridge
@@ -859,13 +859,15 @@ if run_software
                 commandsdefs_str = [commandsdefs_str, commanddef_str];
                 commandsadds_str = [commandsadds_str, commandadd_str];
             end % for n = 1:length(commands)
+
             for n = 1:length(inits)
-                init = inits{i};
+                init = inits{n};
                 init_str         = ['\t',init{n},'();\n'];
                 inits_str        = [inits_str  , init_str ];
             end % for n = 1:length(inits)
+
             for n = 1:length(repeats)
-                repeat = repeats{i};
+                repeat = repeats{n};
                 repeat_str       = ['\t\t',repeat{n},'();\n'];
                 repeats_str      = [repeats_str  , repeat_str ];
             end % for n = 1:length(repeats)

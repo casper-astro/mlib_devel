@@ -34,9 +34,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "hchen05"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jul 08 14:09:49 2008"
+  LastModifiedDate	  "Thu Jul 10 16:38:31 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:331>"
+  ModelVersionFormat	  "1.%<AutoIncrement:334>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -177,6 +177,12 @@ Library {
       BlockType		      Reference
     }
     Block {
+      BlockType		      "S-Function"
+      FunctionName	      "system"
+      SFunctionModules	      "''"
+      PortCounts	      "[]"
+    }
+    Block {
       BlockType		      SubSystem
       ShowPortLabels	      "FromPortIcon"
       Permissions	      "ReadWrite"
@@ -227,6 +233,15 @@ Library {
       OutScaling	      "[]"
       SampleTime	      "inf"
       FramePeriod	      "inf"
+    }
+    Block {
+      BlockType		      RelationalOperator
+      Operator		      ">="
+      InputSameDT	      on
+      LogicOutDataTypeMode    "Logical (see Configuration Parameters: Optimization)"
+      LogicDataType	      "uint(8)"
+      ZeroCross		      on
+      SampleTime	      "-1"
     }
   }
   AnnotationDefaults {
@@ -2122,8 +2137,8 @@ Library {
       MaskPromptString	      "Hardware Platform|Include Linux add-on board support|User IP Clock source|GPIO Clock Pin I/O group|GPIO Clock Pin bit index|User IP Clock Rate (MHz)|Sample Period|Synthesis Tool:|Processor:"
       MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH|CORR),checkbox,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off"
-      MaskCallbackString      "myname=gcb;\nif strcmp(get_param(myname,'hw_sys'), 'iBOB')\n    if strmatch('usr_clk', get_param(myname,'clk_src'))\n        set_param(myname, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','off'});\n    else\n        set_param(myname, 'MaskVisibilities', {'on','on','on','off','off','on','on','on','off'});\n    end\nelse\n    set_param(myname, 'MaskVisibilities', {'on','off','on','off','off','on','on','on','off'});\nend||myname=gcb;\nif strcmp(get_param(myname,'hw_sys'), 'iBOB')\n    if strmatch('usr_clk', get_param(myname,'clk_src'))\n        set_param(myname, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','off'});\n    else\n        set_param(myname, 'MaskVisibilities', {'on','on','on','off','off','on','on','on','off'});\n    end\nelse\n    set_param(myname, 'MaskVisibilities', {'on','off','on','off','off','on','on','on','off'});\nend||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "myname=gcb;\nif strcmp(get_param(myname,'hw_sys'), 'iBOB')\n    if strmatch('usr_clk', get_param(myname,'clk_src'))\n        set_param(myname, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','off'});\n    else\n        set_param(myname, 'MaskVisibilities', {'on','on','on','off','off','on','on','on','off'});\n    end\nelse\n    set_param(myname, 'MaskVisibilities', {'on','off','on','off','off','on','on','on','off'});\nend||myname=gcb;\n\nswitch get_param(myname, 'hw_sys')\n    case 'iBOB'\n        switch get_param(myname, 'clk_src')\n            case 'sys_clk'\n                set_param(myname, 'MaskVisibilities', {'on','on','on','off','off','on','on','on','off'});\n                set_param(myname, 'clk_rate', '100');\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','off','on','on','on'});\n            % end case 'sys_clk'\n            case 'sys_clk2x'\n                set_param(myname, 'MaskVisibilities', {'on','on','on','off','off','on','on','on','off'});\n                set_param(myname, 'clk_rate', '200');\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','off','on','on','on'});\n            % end case 'sys_clk2x'\n            case 'usr_clk'\n                set_param(myname, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','off'});\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on'});\n            % end case 'usr_clk'\n            case 'usr_clk2x'\n                set_param(myname, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','off'});\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on'});\n            % end case 'usr_clk2x'\n            otherwise\n                set_param(myname, 'MaskVisibilities', {'on','on','on','off','off','on','on','on','off'});\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on'});\n        end % switch get_param(myname, 'clk_src')\n    % end case 'iBOB'\n    otherwise\n        switch get_param(myname, 'clk_src')\n            case 'sys_clk'\n                set_param(myname, 'MaskVisibilities', {'on','off','on','off','off','on','on','on','off'});\n                set_param(myname, 'clk_rate', '100');\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','off','on','on','on'});\n            case 'sys_clk2x'\n                set_param(myname, 'MaskVisibilities', {'on','off','on','off','off','on','on','on','off'});\n                set_param(myname, 'clk_rate', '200');\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','off','on','on','on'});\n            otherwise\n                set_param(myname, 'MaskVisibilities', {'on','off','on','off','off','on','on','on','off'});\n                set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on'});\n        end % switch get_param(myname, 'clk_src')\n    % end otherwise\nend % switch get_param(myname, 'hw_sys')\n\n%if strcmp(get_param(myname,'hw_sys'), 'iBOB')\n%    if strmatch('usr_clk', get_param(myname,'clk_src'))\n%        set_param(myname, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','off'});\n%    else\n%        set_param(myname, 'MaskVisibilities', {'on','on','on','off','off','on','on','on','off'});\n%    end\n%else\n%    set_param(myname, 'MaskVisibilities', {'on','off','on','off','off','on','on','on','off'});\n%end||||||"
+      MaskEnableString	      "on,on,on,on,on,off,on,on,on"
       MaskVisibilityString    "on,on,on,off,off,on,on,on,off"
       MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
       MaskVarAliasString      ",,,,,,,,"
@@ -2135,7 +2150,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "iBOB|off|sys_clk|iBOB:sma|0|100|1|XST|powerpc440_ext"
+      MaskValueString	      "iBOB|off|sys_clk|iBOB:sma|0|100|1|XST|powerpc405"
       MaskTabNameString	      ",,,,,,,,"
       System {
 	Name			"XSG core config"
@@ -2168,7 +2183,7 @@ Library {
       MaskDescription	      "The ADC block converts analog inputs to digital outputs. Every clock cycle, the inputs are sampled and digitized to 8 bit binary point numbers in the range of [-1, 1) and are then output by the adc."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_adc\\sys_adc.html''])')"
       MaskPromptString	      "ADC board|ADC clock rate (MHz)|ADC interleave mode|Sample period"
-      MaskStyleString	      "popup(iBOB:adc0|iBOB:adc1),edit,checkbox,edit"
+      MaskStyleString	      "popup(adc0|adc1),edit,checkbox,edit"
       MaskTunableValueString  "on,on,on,on"
       MaskCallbackString      "|||"
       MaskEnableString	      "on,on,on,on"
@@ -2183,7 +2198,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "iBOB:adc0|800|on|1"
+      MaskValueString	      "adc0|800|on|1"
       MaskTabNameString	      ",,,"
       System {
 	Name			"adc"
@@ -2237,9 +2252,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2248,7 +2263,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2258,9 +2273,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2269,7 +2284,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2279,9 +2294,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2290,7 +2305,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2300,9 +2315,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2311,7 +2326,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2321,9 +2336,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2332,7 +2347,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2342,9 +2357,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2353,7 +2368,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2363,9 +2378,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2374,7 +2389,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2384,9 +2399,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2395,7 +2410,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2405,9 +2420,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2416,7 +2431,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2426,9 +2441,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2437,7 +2452,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2447,9 +2462,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2458,7 +2473,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2468,9 +2483,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2479,7 +2494,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2489,9 +2504,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2500,7 +2515,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2510,9 +2525,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2521,7 +2536,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2531,9 +2546,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2542,7 +2557,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -2552,9 +2567,9 @@ Library {
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
-	  ShowPortLabels	  "on"
+	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -2563,7 +2578,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -4419,7 +4434,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_data_valid"
+	  Name			  "xps_library_adc_user_data_valid"
 	  Ports			  [1, 1]
 	  Position		  [840, 1188, 895, 1212]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4431,22 +4446,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_datai0"
+	  Name			  "xps_library_adc_user_datai0"
 	  Ports			  [1, 1]
 	  Position		  [840, 98, 895, 122]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4458,22 +4473,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_datai1"
+	  Name			  "xps_library_adc_user_datai1"
 	  Ports			  [1, 1]
 	  Position		  [840, 148, 895, 172]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4485,22 +4500,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_datai2"
+	  Name			  "xps_library_adc_user_datai2"
 	  Ports			  [1, 1]
 	  Position		  [840, 198, 895, 222]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4512,22 +4527,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_datai3"
+	  Name			  "xps_library_adc_user_datai3"
 	  Ports			  [1, 1]
 	  Position		  [840, 248, 895, 272]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4539,22 +4554,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_dataq0"
+	  Name			  "xps_library_adc_user_dataq0"
 	  Ports			  [1, 1]
 	  Position		  [840, 523, 895, 547]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4566,22 +4581,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_dataq1"
+	  Name			  "xps_library_adc_user_dataq1"
 	  Ports			  [1, 1]
 	  Position		  [840, 573, 895, 597]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4593,22 +4608,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_dataq2"
+	  Name			  "xps_library_adc_user_dataq2"
 	  Ports			  [1, 1]
 	  Position		  [840, 623, 895, 647]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4620,22 +4635,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_dataq3"
+	  Name			  "xps_library_adc_user_dataq3"
 	  Ports			  [1, 1]
 	  Position		  [840, 673, 895, 697]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4647,22 +4662,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_outofrangei0"
+	  Name			  "xps_library_adc_user_outofrangei0"
 	  Ports			  [1, 1]
 	  Position		  [840, 313, 895, 337]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4674,22 +4689,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_outofrangei1"
+	  Name			  "xps_library_adc_user_outofrangei1"
 	  Ports			  [1, 1]
 	  Position		  [840, 408, 895, 432]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4701,22 +4716,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_outofrangeq0"
+	  Name			  "xps_library_adc_user_outofrangeq0"
 	  Ports			  [1, 1]
 	  Position		  [840, 738, 895, 762]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4728,22 +4743,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_outofrangeq1"
+	  Name			  "xps_library_adc_user_outofrangeq1"
 	  Ports			  [1, 1]
 	  Position		  [840, 833, 895, 857]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4755,22 +4770,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_sync0"
+	  Name			  "xps_library_adc_user_sync0"
 	  Ports			  [1, 1]
 	  Position		  [840, 968, 895, 992]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4782,22 +4797,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_sync1"
+	  Name			  "xps_library_adc_user_sync1"
 	  Ports			  [1, 1]
 	  Position		  [840, 1018, 895, 1042]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4809,22 +4824,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_sync2"
+	  Name			  "xps_library_adc_user_sync2"
 	  Ports			  [1, 1]
 	  Position		  [840, 1068, 895, 1092]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4836,22 +4851,22 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "untitled_adc_user_sync3"
+	  Name			  "xps_library_adc_user_sync3"
 	  Ports			  [1, 1]
 	  Position		  [840, 1118, 895, 1142]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -4863,18 +4878,18 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 24 24 ],[0.95 0.93 0.65]);\npatch([21 17 23 17 21 27 29 31 38 33 28 24 30 24 28 33 38 31 29 27 21 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport
@@ -5031,7 +5046,7 @@ Library {
 	Line {
 	  SrcBlock		  "delaysync1"
 	  SrcPort		  1
-	  DstBlock		  "untitled_adc_user_sync1"
+	  DstBlock		  "xps_library_adc_user_sync1"
 	  DstPort		  1
 	}
 	Line {
@@ -5039,7 +5054,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [90, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_dataq3"
+	    DstBlock		    "xps_library_adc_user_dataq3"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5060,7 +5075,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [85, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_dataq2"
+	    DstBlock		    "xps_library_adc_user_dataq2"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5081,7 +5096,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [80, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_dataq1"
+	    DstBlock		    "xps_library_adc_user_dataq1"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5102,7 +5117,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [85, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_datai3"
+	    DstBlock		    "xps_library_adc_user_datai3"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5123,7 +5138,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [80, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_datai2"
+	    DstBlock		    "xps_library_adc_user_datai2"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5144,7 +5159,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [75, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_datai1"
+	    DstBlock		    "xps_library_adc_user_datai1"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5173,7 +5188,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_dataq3"
+	  SrcBlock		  "xps_library_adc_user_dataq3"
 	  SrcPort		  1
 	  DstBlock		  "conv7"
 	  DstPort		  1
@@ -5185,7 +5200,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_dataq2"
+	  SrcBlock		  "xps_library_adc_user_dataq2"
 	  SrcPort		  1
 	  DstBlock		  "conv6"
 	  DstPort		  1
@@ -5197,7 +5212,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_dataq1"
+	  SrcBlock		  "xps_library_adc_user_dataq1"
 	  SrcPort		  1
 	  DstBlock		  "conv5"
 	  DstPort		  1
@@ -5209,7 +5224,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_dataq0"
+	  SrcBlock		  "xps_library_adc_user_dataq0"
 	  SrcPort		  1
 	  DstBlock		  "conv4"
 	  DstPort		  1
@@ -5243,31 +5258,31 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_sync0"
+	  SrcBlock		  "xps_library_adc_user_sync0"
 	  SrcPort		  1
 	  DstBlock		  "sync0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_outofrangei0"
+	  SrcBlock		  "xps_library_adc_user_outofrangei0"
 	  SrcPort		  1
 	  DstBlock		  "outofrange1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_datai3"
+	  SrcBlock		  "xps_library_adc_user_datai3"
 	  SrcPort		  1
 	  DstBlock		  "conv3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_datai2"
+	  SrcBlock		  "xps_library_adc_user_datai2"
 	  SrcPort		  1
 	  DstBlock		  "conv2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_datai1"
+	  SrcBlock		  "xps_library_adc_user_datai1"
 	  SrcPort		  1
 	  DstBlock		  "conv1"
 	  DstPort		  1
@@ -5313,7 +5328,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [70, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_datai0"
+	    DstBlock		    "xps_library_adc_user_datai0"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5340,7 +5355,7 @@ Library {
 	  SrcPort		  1
 	  Points		  [75, 0]
 	  Branch {
-	    DstBlock		    "untitled_adc_user_dataq0"
+	    DstBlock		    "xps_library_adc_user_dataq0"
 	    DstPort		    1
 	  }
 	  Branch {
@@ -5357,7 +5372,7 @@ Library {
 	  }
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_outofrangei1"
+	  SrcBlock		  "xps_library_adc_user_outofrangei1"
 	  SrcPort		  1
 	  DstBlock		  "outofrange3"
 	  DstPort		  1
@@ -5389,7 +5404,7 @@ Library {
 	Line {
 	  SrcBlock		  "Logical\nOperator"
 	  SrcPort		  1
-	  DstBlock		  "untitled_adc_user_outofrangei0"
+	  DstBlock		  "xps_library_adc_user_outofrangei0"
 	  DstPort		  1
 	}
 	Line {
@@ -5419,18 +5434,18 @@ Library {
 	Line {
 	  SrcBlock		  "Logical\nOperator1"
 	  SrcPort		  1
-	  DstBlock		  "untitled_adc_user_outofrangei1"
+	  DstBlock		  "xps_library_adc_user_outofrangei1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_outofrangeq0"
+	  SrcBlock		  "xps_library_adc_user_outofrangeq0"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  DstBlock		  "outofrange0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_outofrangeq1"
+	  SrcBlock		  "xps_library_adc_user_outofrangeq1"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  DstBlock		  "outofrange2"
@@ -5464,7 +5479,7 @@ Library {
 	  SrcBlock		  "Logical\nOperator2"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "untitled_adc_user_outofrangeq0"
+	  DstBlock		  "xps_library_adc_user_outofrangeq0"
 	  DstPort		  1
 	}
 	Line {
@@ -5495,7 +5510,7 @@ Library {
 	  SrcBlock		  "Logical\nOperator3"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "untitled_adc_user_outofrangeq1"
+	  DstBlock		  "xps_library_adc_user_outofrangeq1"
 	  DstPort		  1
 	}
 	Line {
@@ -5541,11 +5556,11 @@ Library {
 	Line {
 	  SrcBlock		  "delaysync0"
 	  SrcPort		  1
-	  DstBlock		  "untitled_adc_user_sync0"
+	  DstBlock		  "xps_library_adc_user_sync0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_sync1"
+	  SrcBlock		  "xps_library_adc_user_sync1"
 	  SrcPort		  1
 	  DstBlock		  "sync1"
 	  DstPort		  1
@@ -5567,29 +5582,29 @@ Library {
 	Line {
 	  SrcBlock		  "delaysync2"
 	  SrcPort		  1
-	  DstBlock		  "untitled_adc_user_sync2"
+	  DstBlock		  "xps_library_adc_user_sync2"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "delaysync3"
 	  SrcPort		  1
-	  DstBlock		  "untitled_adc_user_sync3"
+	  DstBlock		  "xps_library_adc_user_sync3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_sync2"
+	  SrcBlock		  "xps_library_adc_user_sync2"
 	  SrcPort		  1
 	  DstBlock		  "sync2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_sync3"
+	  SrcBlock		  "xps_library_adc_user_sync3"
 	  SrcPort		  1
 	  DstBlock		  "sync3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_data_valid"
+	  SrcBlock		  "xps_library_adc_user_data_valid"
 	  SrcPort		  1
 	  DstBlock		  "data_valid"
 	  DstPort		  1
@@ -5597,11 +5612,11 @@ Library {
 	Line {
 	  SrcBlock		  "sim_data_valid"
 	  SrcPort		  1
-	  DstBlock		  "untitled_adc_user_data_valid"
+	  DstBlock		  "xps_library_adc_user_data_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "untitled_adc_user_datai0"
+	  SrcBlock		  "xps_library_adc_user_datai0"
 	  SrcPort		  1
 	  DstBlock		  "conv"
 	  DstPort		  1
@@ -7365,6 +7380,7 @@ Library {
 	  ShowName		  off
 	  IconShape		  "round"
 	  Inputs		  "|+-"
+	  CollapseMode		  "All dimensions"
 	  InputSameDT		  off
 	  OutDataTypeMode	  "Inherit via internal rule"
 	  OutDataType		  "sfix(16)"
@@ -7379,6 +7395,7 @@ Library {
 	  ShowName		  off
 	  IconShape		  "round"
 	  Inputs		  "|+-"
+	  CollapseMode		  "All dimensions"
 	  InputSameDT		  off
 	  OutDataTypeMode	  "Inherit via internal rule"
 	  OutDataType		  "sfix(16)"
@@ -7393,6 +7410,7 @@ Library {
 	  ShowName		  off
 	  IconShape		  "round"
 	  Inputs		  "|+-"
+	  CollapseMode		  "All dimensions"
 	  InputSameDT		  off
 	  OutDataTypeMode	  "Inherit via internal rule"
 	  OutDataType		  "sfix(16)"
@@ -7407,6 +7425,7 @@ Library {
 	  ShowName		  off
 	  IconShape		  "round"
 	  Inputs		  "|+-"
+	  CollapseMode		  "All dimensions"
 	  InputSameDT		  off
 	  OutDataTypeMode	  "Inherit via internal rule"
 	  OutDataType		  "sfix(16)"
@@ -12558,7 +12577,7 @@ Library {
       MaskDescription	      "This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-determined frame breaks. The data stream is wrapped in a UDP frame for transmission. Incoming UDP packets are unwrapped and the data presented as a 64 bit wide stream."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\com_ten_GbE\\com_ten_GbE.html''])')"
       MaskPromptString	      "Port|Use light-weight MAC: Warning --> it DOES NOT check any CRC on receive|---------------------- Show Implementation Parameters -----------------------------------------------------------------------------------|Pre-emphasis|Differential swing"
-      MaskStyleString	      "popup(BEE2_ctrl:0|BEE2_ctrl:1|BEE2_usr:0|BEE2_usr:1|BEE2_usr:2|BEE2_usr:3),checkbox,checkbox,popup(0|1|2|3),popup(400|500|600|700|800)"
+      MaskStyleString	      "popup(BEE2_ctrl:0|BEE2_ctrl:1|BEE2_usr:0|BEE2_usr:1|BEE2_usr:2|BEE2_usr:3|iBOB:0|iBOB:1|ROACH:0|ROACH:1|ROACH:2|ROACH:3),checkbox,checkbox,popup(0|1|2|3),popup(400|500|600|700|800)"
       MaskTunableValueString  "off,off,off,off,off"
       MaskCallbackString      "||myname=gcb;\nif strcmp(get_param(myname, 'show_param'), 'on')\n    set_param(myname, 'MaskVisibilities', {'on','on','on','on', 'on'});\nelse\n    set_param(myname, 'MaskVisibilities', {'on','on','on','off','off'});\nend||"
       MaskEnableString	      "on,on,on,on,on"
@@ -12811,8 +12830,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -12836,8 +12855,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -12861,8 +12880,8 @@ Library {
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -12886,8 +12905,8 @@ Library {
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -12911,8 +12930,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -12936,8 +12955,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -12961,8 +12980,8 @@ Library {
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -12986,8 +13005,8 @@ Library {
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.77 0.82 0.91]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13013,8 +13032,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13040,8 +13059,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13067,8 +13086,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13088,8 +13107,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13109,8 +13128,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13136,8 +13155,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13163,8 +13182,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13190,8 +13209,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13217,8 +13236,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13244,8 +13263,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13271,8 +13290,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13298,8 +13317,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([46 43 47 43 46 50 51 52 57 53 50 48 52 48 50 53 57 52 51 50 46 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 100 100 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13319,8 +13338,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13340,8 +13359,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13361,8 +13380,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13382,8 +13401,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13403,8 +13422,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -13424,8 +13443,8 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,f0cec300"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 50 50 0 ],[0 16 16 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\npatch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Constant
