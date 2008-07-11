@@ -174,181 +174,27 @@ NET "mgt_tx_bottom_0_p<3>" LOC = AN10;
 NET "mgt_tx_bottom_0_n<2>" LOC = AN6;
 NET "mgt_tx_bottom_0_p<2>" LOC = AN5;
 
-# 
-# ZDOK Interfaces
-#
-
-# 
-# ZDOK 0
-#
-
-NET "zdok0_dp_n<0>"  LOC = N30;
-NET "zdok0_dp_n<1>"  LOC = N28;
-NET "zdok0_dp_n<2>"  LOC = M26;
-NET "zdok0_dp_n<3>"  LOC = L28;
-NET "zdok0_dp_n<4>"  LOC = L24;
-NET "zdok0_dp_n<5>"  LOC = J29;
-NET "zdok0_dp_n<6>"  LOC = G28;
-NET "zdok0_dp_n<7>"  LOC = E31;
-NET "zdok0_dp_n<8>"  LOC = F28;
-NET "zdok0_dp_n<9>"  LOC = D32;
-NET "zdok0_dp_n<10>" LOC = K34;
-NET "zdok0_dp_n<11>" LOC = K32;
-NET "zdok0_dp_n<12>" LOC = H33;
-NET "zdok0_dp_n<13>" LOC = K26;
-NET "zdok0_dp_n<14>" LOC = G31;
-NET "zdok0_dp_n<15>" LOC = J25;
-NET "zdok0_dp_n<16>" LOC = H27;
-NET "zdok0_dp_n<17>" LOC = G26;
-NET "zdok0_dp_n<18>" LOC = E27;
-NET "zdok0_dp_n<19>" LOC = A33;
-NET "zdok0_dp_n<20>" LOC = M27;
-NET "zdok0_dp_n<21>" LOC = K29;
-NET "zdok0_dp_n<22>" LOC = L26;
-NET "zdok0_dp_n<23>" LOC = J31;
-NET "zdok0_dp_n<24>" LOC = F34;
-NET "zdok0_dp_n<25>" LOC = F30;
-NET "zdok0_dp_n<26>" LOC = H24;
-NET "zdok0_dp_n<27>" LOC = F29;
-NET "zdok0_dp_n<28>" LOC = D34;
-NET "zdok0_dp_n<29>" LOC = M30;
-NET "zdok0_dp_n<30>" LOC = L31;
-NET "zdok0_dp_n<31>" LOC = J34;
-NET "zdok0_dp_n<32>" LOC = J26;
-NET "zdok0_dp_n<33>" LOC = H32;
-NET "zdok0_dp_n<34>" LOC = E34;
-NET "zdok0_dp_n<35>" LOC = E33;
-NET "zdok0_dp_n<36>" LOC = F26;
-NET "zdok0_dp_n<37>" LOC = C33;
-
-NET "zdok0_dp_p<0>"  LOC = M31;
-NET "zdok0_dp_p<1>"  LOC = M28;
-NET "zdok0_dp_p<2>"  LOC = M25;
-NET "zdok0_dp_p<3>"  LOC = K28;
-NET "zdok0_dp_p<4>"  LOC = K24;
-NET "zdok0_dp_p<5>"  LOC = H29;
-NET "zdok0_dp_p<6>"  LOC = H28;
-NET "zdok0_dp_p<7>"  LOC = F31;
-NET "zdok0_dp_p<8>"  LOC = E28;
-NET "zdok0_dp_p<9>"  LOC = C32;
-NET "zdok0_dp_p<10>" LOC = L34;
-NET "zdok0_dp_p<11>" LOC = K33;
-NET "zdok0_dp_p<12>" LOC = J32;
-NET "zdok0_dp_p<13>" LOC = K27;
-NET "zdok0_dp_p<14>" LOC = H30;
-NET "zdok0_dp_p<15>" LOC = J24;
-NET "zdok0_dp_p<16>" LOC = G27;
-NET "zdok0_dp_p<17>" LOC = G25;
-NET "zdok0_dp_p<18>" LOC = E26;
-NET "zdok0_dp_p<19>" LOC = B32;
-NET "zdok0_dp_p<20>" LOC = N27;
-NET "zdok0_dp_p<21>" LOC = L29;
-NET "zdok0_dp_p<22>" LOC = L25;
-NET "zdok0_dp_p<23>" LOC = J30;
-NET "zdok0_dp_p<24>" LOC = G33;
-NET "zdok0_dp_p<25>" LOC = G30;
-NET "zdok0_dp_p<26>" LOC = H25;
-NET "zdok0_dp_p<27>" LOC = E29;
-NET "zdok0_dp_p<28>" LOC = C34;
-NET "zdok0_dp_p<29>" LOC = L30;
-NET "zdok0_dp_p<30>" LOC = K31;
-NET "zdok0_dp_p<31>" LOC = H34;
-NET "zdok0_dp_p<32>" LOC = J27;
-NET "zdok0_dp_p<33>" LOC = G32;
-NET "zdok0_dp_p<34>" LOC = F33;
-NET "zdok0_dp_p<35>" LOC = E32;
-NET "zdok0_dp_p<36>" LOC = F25;
-NET "zdok0_dp_p<37>" LOC = B33;
-
-NET "zdok0_clk0_n"   LOC = J21;
-NET "zdok0_clk0_p"   LOC = J20;
-NET "zdok0_clk1_n"   LOC = H20;
-NET "zdok0_clk1_p"   LOC = H19;
-
-# 
-# ZDOK 1
-#
-
-NET "zdok1_dp_n<0>"  LOC = AN33;
-NET "zdok1_dp_n<1>"  LOC = AJ29;
-NET "zdok1_dp_n<2>"  LOC = AK31;
-NET "zdok1_dp_n<3>"  LOC = AK32;
-NET "zdok1_dp_n<4>"  LOC = AJ34;
-NET "zdok1_dp_n<5>"  LOC = AE26;
-NET "zdok1_dp_n<6>"  LOC = AD25;
-NET "zdok1_dp_n<7>"  LOC = AE34;
-NET "zdok1_dp_n<8>"  LOC = AE32;
-NET "zdok1_dp_n<9>"  LOC = AD34;
-NET "zdok1_dp_n<10>" LOC = AP32;
-NET "zdok1_dp_n<11>" LOC = AM32;
-NET "zdok1_dp_n<12>" LOC = AJ26;
-NET "zdok1_dp_n<13>" LOC = AG30;
-NET "zdok1_dp_n<14>" LOC = AF26;
-NET "zdok1_dp_n<15>" LOC = AE24;
-NET "zdok1_dp_n<16>" LOC = AF28;
-NET "zdok1_dp_n<17>" LOC = AC24;
-NET "zdok1_dp_n<18>" LOC = AD27;
-NET "zdok1_dp_n<19>" LOC = AC30;
-NET "zdok1_dp_n<20>" LOC = AH25;
-NET "zdok1_dp_n<21>" LOC = AL33;
-NET "zdok1_dp_n<22>" LOC = AK33;
-NET "zdok1_dp_n<23>" LOC = AG26;
-NET "zdok1_dp_n<24>" LOC = AF30;
-NET "zdok1_dp_n<25>" LOC = AH33;
-NET "zdok1_dp_n<26>" LOC = AD29;
-NET "zdok1_dp_n<27>" LOC = AC29;
-NET "zdok1_dp_n<28>" LOC = AC27;
-NET "zdok1_dp_n<29>" LOC = AJ27;
-NET "zdok1_dp_n<30>" LOC = AK27;
-NET "zdok1_dp_n<31>" LOC = AH30;
-NET "zdok1_dp_n<32>" LOC = AG25;
-NET "zdok1_dp_n<33>" LOC = AH28;
-NET "zdok1_dp_n<34>" LOC = AH32;
-NET "zdok1_dp_n<35>" LOC = AG31;
-NET "zdok1_dp_n<36>" LOC = AE33;
-NET "zdok1_dp_n<37>" LOC = AE31;
-
-NET "zdok1_dp_p<0>"  LOC = AN34;
-NET "zdok1_dp_p<1>"  LOC = AK29;
-NET "zdok1_dp_p<2>"  LOC = AJ31;
-NET "zdok1_dp_p<3>"  LOC = AJ32;
-NET "zdok1_dp_p<4>"  LOC = AH34;
-NET "zdok1_dp_p<5>"  LOC = AE27;
-NET "zdok1_dp_p<6>"  LOC = AD26;
-NET "zdok1_dp_p<7>"  LOC = AF34;
-NET "zdok1_dp_p<8>"  LOC = AD32;
-NET "zdok1_dp_p<9>"  LOC = AC34;
-NET "zdok1_dp_p<10>" LOC = AN32;
-NET "zdok1_dp_p<11>" LOC = AM33;
-NET "zdok1_dp_p<12>" LOC = AH27;
-NET "zdok1_dp_p<13>" LOC = AH29;
-NET "zdok1_dp_p<14>" LOC = AF25;
-NET "zdok1_dp_p<15>" LOC = AD24;
-NET "zdok1_dp_p<16>" LOC = AE28;
-NET "zdok1_dp_p<17>" LOC = AC25;
-NET "zdok1_dp_p<18>" LOC = AC28;
-NET "zdok1_dp_p<19>" LOC = AB30;
-NET "zdok1_dp_p<20>" LOC = AJ25;
-NET "zdok1_dp_p<21>" LOC = AL34;
-NET "zdok1_dp_p<22>" LOC = AK34;
-NET "zdok1_dp_p<23>" LOC = AG27;
-NET "zdok1_dp_p<24>" LOC = AF29;
-NET "zdok1_dp_p<25>" LOC = AG33;
-NET "zdok1_dp_p<26>" LOC = AE29;
-NET "zdok1_dp_p<27>" LOC = AD30;
-NET "zdok1_dp_p<28>" LOC = AB27;
-NET "zdok1_dp_p<29>" LOC = AK26;
-NET "zdok1_dp_p<30>" LOC = AK28;
-NET "zdok1_dp_p<31>" LOC = AJ30;
-NET "zdok1_dp_p<32>" LOC = AF24;
-NET "zdok1_dp_p<33>" LOC = AG28;
-NET "zdok1_dp_p<34>" LOC = AG32;
-NET "zdok1_dp_p<35>" LOC = AF31;
-NET "zdok1_dp_p<36>" LOC = AF33;
-NET "zdok1_dp_p<37>" LOC = AD31;
-
-NET "zdok1_clk0_p"   LOC = H17;
-NET "zdok1_clk0_n"   LOC = H18;
-NET "zdok1_clk1_p"   LOC = K17;
-NET "zdok1_clk1_n"   LOC = L18;
-
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = F28  ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = D32  ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_strobe    LOC = C32  ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_modepin            LOC = E28  ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_clk       LOC = AE32 ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_data      LOC = AD34 ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_strobe    LOC = AC34 ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = AD32 ;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC0_HALF_R LOC   = SLICE_X68Y88;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC0_HALF_R BEL   = FFY;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC1_ADC0   LOC   = SLICE_X66Y88;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC1_ADC0   BEL   = FFY;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')##NET  opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/adc0_toggle_R  ROUTE = "{3;1;2vp50ff1152;99486c99!-1;4960;1544;S!0;-2075;-536!1;-1548;304!2;167;0;L!}";
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')##NET  opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/adc0_toggle_R  MAXDELAY = 350ps;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC1_HALF_R LOC   = SLICE_X68Y86;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC1_HALF_R BEL   = FFY;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC0_ADC1   LOC   = SLICE_X66Y86;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')##INST opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/FD_ADC0_ADC1   BEL   = FFY;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')##NET  opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/adc1_toggle_R  ROUTE = "{3;1;2vp50ff1152;1cdf0353!-1;4960;-2080;S!0;-2075;-536!1;-1548;304!2;167;0;L!}";
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')##NET  opb_adccontroller_0/opb_adccontroller_0/USER_LOGIC_I/adc1_toggle_R  MAXDELAY = 350ps;
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adn'),'adc1')#
