@@ -2,8 +2,8 @@
 PARAMETER VERSION = 2.1.0
 
 #System Ports
-PORT mstr_clk_n  = mstr_clk_n,  DIR = I
-PORT mstr_clk_p  = mstr_clk_p,  DIR = I
+PORT sys_clk_n   = sys_clk_n,  DIR = I
+PORT sys_clk_p   = sys_clk_p,  DIR = I
 PORT dly_clk_n   = dly_clk_n,   DIR = I
 PORT dly_clk_p   = dly_clk_p,   DIR = I
 PORT aux_clk_0_n = aux_clk_0_n, DIR = I
@@ -60,8 +60,8 @@ PORT mgt_tx_bottom_0_p    = xaui0_mgt_tx_p,  DIR = O, VEC = [3:0]
 BEGIN infrastructure
   PARAMETER INSTANCE = infrastructure_inst
   PARAMETER HW_VER   = 1.00.a
-  PORT mstr_clk_n    = mstr_clk_n
-  PORT mstr_clk_p    = mstr_clk_p
+  PORT sys_clk_n     = sys_clk_n
+  PORT sys_clk_p     = sys_clk_p
   PORT dly_clk_n     = dly_clk_n
   PORT dly_clk_p     = dly_clk_p
   PORT aux_clk_0_n   = aux_clk_0_n
@@ -69,12 +69,12 @@ BEGIN infrastructure
   PORT aux_clk_1_n   = aux_clk_1_n
   PORT aux_clk_1_p   = aux_clk_1_p
   PORT epb_clk_buf   = epb_clk_buf
-  PORT mstr_clk      = mstr_clk
+  PORT sys_clk       = sys_clk
+  PORT sys_clk90     = sys_clk90
   PORT dly_clk       = dly_clk
   PORT aux_clk_0     = aux_clk_0
   PORT aux_clk_1     = aux_clk_1
-  PORT epb_clk       = sys_clk
-  PORT epb_clk90     = sys_clk90
+  PORT epb_clk       = epb_clk
   PORT idelay_rst    = sys_reset
   PORT idelay_rdy    = idelay_rdy
 END
@@ -95,14 +95,14 @@ BEGIN opb_v20
   PARAMETER HW_VER = 1.10.c
   PARAMETER C_EXT_RESET_HIGH = 1
   PORT SYS_Rst = sys_reset
-  PORT OPB_Clk = sys_clk
+  PORT OPB_Clk = epb_clk
 END
 
 BEGIN epb_opb_bridge
   PARAMETER INSTANCE = epb_opb_bridge_inst
   PARAMETER HW_VER   = 1.00.a
   BUS_INTERFACE MOPB = opb0
-  PORT OPB_Clk = sys_clk
+  PORT OPB_Clk       = epb_clk
   PORT sys_reset     = sys_reset
   PORT epb_data_oe_n = epb_data_oe_n
   PORT epb_cs_n      = epb_cs_n_int
@@ -179,7 +179,7 @@ END
 #IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_BASEADDR = 0x0000de00
 #IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_HIGHADDR = 0x0000deff
 #IF# strcmp(get(b,'type'),'xps_adc')# BUS_INTERFACE SOPB = opb0
-#IF# strcmp(get(b,'type'),'xps_adc')# PORT OPB_Clk = sys_clk
+#IF# strcmp(get(b,'type'),'xps_adc')# PORT OPB_Clk = epb_clk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_data = adc0_adc3wire_data
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe

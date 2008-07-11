@@ -3,6 +3,8 @@
 #
 Net sys_clk TNM_NET = sys_clk;
 TIMESPEC TS_sys_clk = PERIOD sys_clk 100 MHz;
+Net epb_clk TNM_NET = epb_clk;
+TIMESPEC TS_epb_clk = PERIOD epb_clk 100 MHz;
 
 
 #IF# strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')# Net mgt_clk TNM_NET = mgt_clk;
@@ -17,11 +19,11 @@ NET epb_clk_buf CLOCK_DEDICATED_ROUTE = FALSE;
 # System signals
 #
 
-NET "mstr_clk_n"   LOC = H13;
-NET "mstr_clk_p"   LOC = J14;
+NET "sys_clk_n"    LOC = H13;
+NET "sys_clk_p"    LOC = J14;
 
-NET "dly_clk_n"   LOC = J17;
-NET "dly_clk_p"   LOC = J16;
+NET "dly_clk_n"    LOC = J17;
+NET "dly_clk_p"    LOC = J16;
 
 NET "aux_clk_0_n"  LOC = G16;
 NET "aux_clk_0_p"  LOC = G15;
