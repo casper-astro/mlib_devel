@@ -48,7 +48,7 @@ if ~isempty(ext_ports)
                     if isempty(ucf_constraint_value)
                         ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}];
                     else
-                        ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}, ' = \"', ucf_constraint_value, '\"'];
+                        ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}, ' = ', ucf_constraint_value];
                     end % if isempty(ucf_constraint_value)
                 end % for n = 1:length(ucf_constraints_fields)
             catch
@@ -65,10 +65,10 @@ if ~isempty(ext_ports)
                 end % length(locs) ~= cur_ext_port{1}
 
                 if cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{5},'vector=true')
-                    str = [str,'NET \"',cur_ext_port{3},'\" LOC = \"', locs{1}, '\"', ucf_constraints_str, ' ;\n'];
+                    str = [str,'NET \"',cur_ext_port{3},'\" LOC = ', locs{1}, ucf_constraints_str, ' ;\n'];
                 else
                     for i = [1:cur_ext_port{1}]
-                        str = [str,'NET \"',cur_ext_port{3},'<',num2str(i-1),'>\" LOC = \"', locs{i}, '\"', ucf_constraints_str, ' ;\n'];
+                        str = [str,'NET \"',cur_ext_port{3},'<',num2str(i-1),'>\" LOC = ', locs{i}, ucf_constraints_str, ' ;\n'];
                     end % i = [1:cur_ext_port{1}]
                 end % cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{5},'vector=true')
             end % if ~strcmp(locs,'null')
