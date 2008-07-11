@@ -68,6 +68,18 @@ catch
 end
 
 try
+    opb_clk = blk_obj.opb_clk;
+catch
+    opb_clk = '';
+end
+
+try
+    plb_clk = blk_obj.plb_clk;
+catch
+    plb_clk = '';
+end
+
+try
 	range_opb = blk_obj.opb_address_offset;
 catch
 	range_opb = 0;
@@ -93,11 +105,20 @@ end
 if ~isempty(ip_name)
 	str = [str, 'BEGIN ', get(blk_obj, 'ip_name'),'\n'];
 	str = [str, ' PARAMETER INSTANCE = ',clear_name(get(blk_obj,'simulink_name')),'\n'];
+
     if isempty(ip_version)
     	str = [str, ' PARAMETER HW_VER = 1.00.a\n'];
     else
     	str = [str, ' PARAMETER HW_VER = ',ip_version,'\n'];
-    end
+    end % if is empty(ip_version)
+
+    if isempty(opb_clk)
+        opb_clk = 'sys_clk';
+    end % if isempty(opb_clk)
+
+    if isempty(plb_clk)
+        plb_clk = 'sys_clk';
+    end % if isempty(plb_clk)
 
 	if ~isempty(parameters)
 		prop_names = fieldnames(parameters);
@@ -105,12 +126,12 @@ if ~isempty(ip_name)
 		for n = 1:length(prop_names)
 		    cur_prop = getfield(parameters,prop_names{n});
 		    str = [str, ' PARAMETER ',prop_names{n},' = ',cur_prop,'\n'];
-		end % for j = 1:length(prop_names)
+		end % for n = 1:length(prop_names)
 	end % if ~isempty(parameters)
 
 	if range_opb ~= 0
 		if range_plb ~= 0
-			error('The default gen_mhs_ip does not support multiple busses attachments. You should write your own gen_mhs_ip for this interface.');
+			error('The default gen_mhs_ip does not support multiple bus attachments. You should write your own gen_mhs_ip for this interface.');
 		end % if range_plb ~= 0
 
         if align_opb ~= 0
@@ -122,12 +143,12 @@ if ~isempty(ip_name)
 	    str = [str, ' PARAMETER C_BASEADDR = 0x',dec2hex(opb_addr_start, 8),'\n'];
 	    str = [str, ' PARAMETER C_HIGHADDR = 0x',dec2hex(opb_addr_end-1, 8),'\n'];
 	    str = [str, ' BUS_INTERFACE SOPB = ',opb_name,'\n'];
-	    str = [str, ' PORT OPB_Clk = sys_clk\n'];
+	    str = [str, ' PORT OPB_Clk = ', opb_clk, '\n'];
 	end % if range_opb ~= 0
 
 	if range_plb ~= 0
 		if range_opb ~= 0
-			error('The default gen_mhs_ip does not support multiple busses attachments. You should write your own gen_mhs_ip for this interface.');
+			error('The default gen_mhs_ip does not support multiple bus attachments. You should write your own gen_mhs_ip for this interface.');
 		end % if range_opb ~= 0
 
 		if align_plb ~= 0
@@ -139,8 +160,8 @@ if ~isempty(ip_name)
 	    str = [str, ' PARAMETER C_BASEADDR = 0x',dec2hex(plb_addr_start, 8),'\n'];
 	    str = [str, ' PARAMETER C_HIGHADDR = 0x',dec2hex(plb_addr_end-1, 8),'\n'];
 	    str = [str, ' BUS_INTERFACE SPLB = ',plb_name,'\n'];
-	    str = [str, ' PORT PLB_Clk = sys_clk\n'];
-    end
+	    str = [str, ' PORT PLB_Clk = ', plb_clk, '\n'];
+    end % if range_plb ~=0
 
 	if ~isempty(interfaces)
 		interfaces_names = fieldnames(interfaces);
@@ -151,7 +172,6 @@ if ~isempty(ip_name)
 		end % for n = 1:length(interfaces_names)
     end % if ~isempty(interfaces)
 
-    ports = blk_obj.ports;
 	if ~isempty(ports)
 		port_names = fieldnames(ports);
 
@@ -160,7 +180,6 @@ if ~isempty(ip_name)
 		    str = [str, ' PORT ',cur_port{3},' = ',port_names{n},'\n'];
 		end
 	end % if ~isempty(ports)
-
 
 	if ~isempty(ext_ports)
 		ext_port_names = fieldnames(ext_ports);

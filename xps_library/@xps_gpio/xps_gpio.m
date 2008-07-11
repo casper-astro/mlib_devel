@@ -43,7 +43,7 @@ s.use_ddr = strcmp(get_param(blk_name,'use_ddr'),'on');
 s.termtype = get_param(blk_name,'termination');
 b = class(s,'xps_gpio',blk_obj);
 
-use_diffio = ~isempty(strmatch(s.io_group, {'zdok0', 'zdok1', 'mdr'}));
+use_diffio = ~isempty(strmatch(s.io_group, {'zdok0', 'zdok1', 'mdr', 'qsh'}));
 
 if ~isempty(strmatch(s.termtype, {'Pullup', 'Pulldown'}))
     termination = s.termtype;
@@ -83,6 +83,7 @@ switch s.hw_sys
             otherwise
                 iostandard = 'LVCMOS18';
         end
+    % end case 'BEE2_usr'
     case 'BEE2_ctrl'
         switch s.io_group
             case 'downlink1'
@@ -96,15 +97,28 @@ switch s.hw_sys
             otherwise
                 iostandard = 'LVCMOS18';
         end
+    % end case 'BEE2_ctrl'
     case 'iBOB'
         if use_diffio
             iostandard = 'LVDS_25';
         else
             iostandard = 'LVCMOS25';
         end
+    % end case 'iBOB'
+    case 'ROACH'
+        if use_diffio
+            iostandard = 'LVDS_25';
+        else
+            if strcmp(s.io_group, 'gpio_a') && (s.bit_index >= 4) || strcmp(s.io_group, 'led')
+                iostandard = 'LVCMOS18';
+            else
+                iostandard = 'LVCMOS25';
+            end % if strcmp(s.io_group, 'gpio_a') && (s.bit_index >= 4) || strcmp(s.io_group, 'led')
+        end % if use_diffio
+    % end case 'ROACH'
     otherwise
         iostandard = 'LVCMOS25';
-end
+end % switch 'hw_sys'
 
 ucf_fields = {};
 ucf_values = {};

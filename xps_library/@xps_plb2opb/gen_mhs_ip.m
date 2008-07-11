@@ -21,6 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [str,opb_addr_end,plb_addr_end] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+
 str = '';
 opb_addr_end = opb_addr_start;
 plb_addr_end = plb_addr_start;
@@ -28,14 +29,23 @@ plb_addr_end = plb_addr_start;
 opb_name = blk_obj.opb_name;
 opb_addr_start = blk_obj.opb_addr_start;
 addr_size = blk_obj.addr_size;
+opb_clk = blk_obj.opb_clk;
+plb_clk = blk_obj.plb_clk;
 
+if isempty(opb_clk)
+    opb_clk = 'sys_clk';
+end
+
+if isempty(plb_clk)
+    plb_clk = 'sys_clk';
+end
 
 str = [str, 'BEGIN opb_v20\n'];
 str = [str, ' PARAMETER INSTANCE = ',opb_name,'\n'];
 str = [str, ' PARAMETER HW_VER = 1.10.c\n'];
 str = [str, ' PARAMETER C_EXT_RESET_HIGH = 1\n'];
 str = [str, ' PORT SYS_Rst = sys_bus_reset\n'];
-str = [str, ' PORT OPB_Clk = sys_clk\n'];
+str = [str, ' PORT OPB_Clk = ', opb_clk, '\n'];
 str = [str, 'END\n'];
 str = [str, '\n'];
 str = [str, 'BEGIN plb2opb_bridge\n'];
@@ -47,9 +57,6 @@ str = [str, ' PARAMETER C_RNG0_BASEADDR = 0x',dec2hex(opb_addr_start),'\n'];
 str = [str, ' PARAMETER C_RNG0_HIGHADDR = 0x',dec2hex(opb_addr_start+addr_size-1),'\n'];
 str = [str, ' BUS_INTERFACE SPLB = ',plb_name,'\n'];
 str = [str, ' BUS_INTERFACE MOPB = ',opb_name,'\n'];
-str = [str, ' PORT PLB_Clk = sys_clk\n'];
-str = [str, ' PORT OPB_Clk = sys_clk\n'];
+str = [str, ' PORT PLB_Clk = ', plb_clk, '\n'];
+str = [str, ' PORT OPB_Clk = ', opb_clk, '\n'];
 str = [str, 'END\n'];
-
-
-

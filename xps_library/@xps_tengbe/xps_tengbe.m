@@ -44,18 +44,43 @@ b = class(s,'xps_tengbe',blk_obj);
 
 % ip name & version
 b = set(b,'ip_name','ten_gb_eth');
-b = set(b,'ip_version','2.00.a');
+
+switch s.hw_sys
+    case 'BEE2_ctrl'
+        b = set(b,'ip_version','2.00.a');
+    case 'BEE2_usr'
+        b = set(b,'ip_version','2.00.a');
+    case 'iBOB'
+        b = set(b,'ip_version','2.00.b');
+    case 'ROACH'
+        b = set(b,'ip_version','2.00.b');
+    otherwise
+        error(['10GbE not supported for platform ', s.board]);
+end
 
 % bus offset
-b = set(b,'plb_address_offset',16384);
-b = set(b,'plb_address_align', hex2dec('4000'));
 
-% misc ports
-misc_ports.clk     = {1 'in' get(xsg_obj,'clk_src')};
-b = set(b,'misc_ports',misc_ports);
+% ROACH has an OPB Ten Gig Eth interface
+switch s.hw_sys
+    case 'ROACH'
+        b = set(b,'opb_clk','epb_clk');
+        b = set(b,'opb_address_offset',16384);
+        b = set(b,'opb_address_align', hex2dec('4000'));
+    % end case 'ROACH'
+    otherwise
+        b = set(b,'plb_clk','sys_clk');
+        b = set(b,'plb_address_offset',16384);
+        b = set(b,'plb_address_align', hex2dec('4000'));
+    % end otherwise
+end % switch s.hw_sys
 
 % parameters
-parameters.CONNECTOR = s.port;
+switch s.hw_sys
+    case 'ROACH'
+    otherwise
+        parameters.CONNECTOR = s.port;
+end % switch s.hw_sys
+
 parameters.SWING = s.swing;
 parameters.PREEMPHASYS = s.preemph;
 
@@ -73,23 +98,36 @@ b = set(b,'parameters',parameters);
 interfaces.XAUI_SYS = ['xaui_sys',s.port];
 b = set(b,'interfaces',interfaces);
 
-% external ports
-ext_ports.mgt_tx_l0_p    = {1 'out' ['XAUI',s.port,'_tx_l0_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l0_n    = {1 'out' ['XAUI',s.port,'_tx_l0_n'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l1_p    = {1 'out' ['XAUI',s.port,'_tx_l1_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l1_n    = {1 'out' ['XAUI',s.port,'_tx_l1_n'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l2_p    = {1 'out' ['XAUI',s.port,'_tx_l2_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l2_n    = {1 'out' ['XAUI',s.port,'_tx_l2_n'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l3_p    = {1 'out' ['XAUI',s.port,'_tx_l3_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l3_n    = {1 'out' ['XAUI',s.port,'_tx_l3_n'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l0_p    = {1 'in'  ['XAUI',s.port,'_rx_l0_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l0_n    = {1 'in'  ['XAUI',s.port,'_rx_l0_n'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l1_p    = {1 'in'  ['XAUI',s.port,'_rx_l1_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l1_n    = {1 'in'  ['XAUI',s.port,'_rx_l1_n'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l2_p    = {1 'in'  ['XAUI',s.port,'_rx_l2_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l2_n    = {1 'in'  ['XAUI',s.port,'_rx_l2_n'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l3_p    = {1 'in'  ['XAUI',s.port,'_rx_l3_p'] 'null' 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l3_n    = {1 'in'  ['XAUI',s.port,'_rx_l3_n'] 'null' 'vector=false' struct() struct()};
+% miscellaneous and external ports
+
+misc_ports.clk     = {1 'in' get(xsg_obj,'clk_src')};
+
+ext_ports = {};
+
+switch s.hw_sys
+    case 'ROACH'
+        misc_ports.mgt_clk =    {1 'in'  'mgt_clk'};
+    otherwise
+        ext_ports.mgt_tx_l0_p = {1 'out' ['XAUI',s.port,'_tx_l0_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_tx_l0_n = {1 'out' ['XAUI',s.port,'_tx_l0_n'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_tx_l1_p = {1 'out' ['XAUI',s.port,'_tx_l1_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_tx_l1_n = {1 'out' ['XAUI',s.port,'_tx_l1_n'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_tx_l2_p = {1 'out' ['XAUI',s.port,'_tx_l2_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_tx_l2_n = {1 'out' ['XAUI',s.port,'_tx_l2_n'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_tx_l3_p = {1 'out' ['XAUI',s.port,'_tx_l3_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_tx_l3_n = {1 'out' ['XAUI',s.port,'_tx_l3_n'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l0_p = {1 'in'  ['XAUI',s.port,'_rx_l0_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l0_n = {1 'in'  ['XAUI',s.port,'_rx_l0_n'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l1_p = {1 'in'  ['XAUI',s.port,'_rx_l1_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l1_n = {1 'in'  ['XAUI',s.port,'_rx_l1_n'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l2_p = {1 'in'  ['XAUI',s.port,'_rx_l2_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l2_n = {1 'in'  ['XAUI',s.port,'_rx_l2_n'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l3_p = {1 'in'  ['XAUI',s.port,'_rx_l3_p'] 'null' 'vector=false' struct() struct()};
+        ext_ports.mgt_rx_l3_n = {1 'in'  ['XAUI',s.port,'_rx_l3_n'] 'null' 'vector=false' struct() struct()};
+    % end otherwise
+end % switch s.hw_sys
+
+b = set(b,'misc_ports',misc_ports);
 b = set(b,'ext_ports',ext_ports);
 
 % borf parameters

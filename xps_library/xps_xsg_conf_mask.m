@@ -42,6 +42,7 @@ switch hw_sys
             'testbench', 'off',...
             'package', 'ff1152');
         set_param(gcb,'mpc_type','powerpc405');
+    % end case 'iBOB'
     case 'CORR'
         xlsetparam(xsg_blk,'xilinxfamily', 'Virtex2P',...
             'part', 'xc2vp20',...
@@ -49,6 +50,7 @@ switch hw_sys
             'testbench', 'off',...
             'package', 'ff896');
         set_param(gcb,'mpc_type','powerpc405');
+    % end case 'CORR'
     case 'BEE2_ctrl'
         xlsetparam(xsg_blk,'xilinxfamily', 'Virtex2P',...
             'part', 'xc2vp70',...
@@ -56,6 +58,7 @@ switch hw_sys
             'testbench', 'off',...
             'package', 'ff1704');
         set_param(gcb,'mpc_type','powerpc405');
+    % end case 'BEE2_ctrl'
     case 'BEE2_usr'
         xlsetparam(xsg_blk,'xilinxfamily', 'Virtex2P',...
             'part', 'xc2vp70',...
@@ -63,6 +66,7 @@ switch hw_sys
             'testbench', 'off',...
             'package', 'ff1704');
         set_param(gcb,'mpc_type','powerpc405');
+    % end case 'BEE2_usr'
     case 'ML402'
         xlsetparam(xsg_blk,'xilinxfamily', 'Virtex4',...
             'part', 'xc4vsx35',...
@@ -70,6 +74,7 @@ switch hw_sys
             'testbench', 'off',...
             'package', 'ff668');
         set_param(gcb,'mpc_type','microblaze');
+    % end case 'ML402'
     case 'ROACH'
         xlsetparam(xsg_blk,'xilinxfamily', 'Virtex5',...
             'part', 'xc5vlx110t',...
@@ -77,9 +82,11 @@ switch hw_sys
             'testbench', 'off',...
             'package', 'ff1136');
         set_param(gcb,'mpc_type','powerpc440_ext');
+    % end case 'ROACH'
     otherwise
         errordlg(['Unsupported hardware system: ',hw_sys]);
-end
+    % end 'otherwise'
+end % switch hw_sys
 
 xlsetparam(xsg_blk,...
     'directory', ['./',clear_name(get_param(gcb,'parent')),'/sysgen'],...
@@ -101,13 +108,9 @@ switch clk_src
             errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
         end
     case {'adc0_clk' 'adc1_clk' 'dac0_clk' 'dac1_clk'}
-        if ~strcmp(hw_sys,'iBOB')
+        if isempty(find(strcmp(hw_sys,{'iBOB', 'ROACH'})))
             errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
-        end
-        if clk_rate <1 | clk_rate > 256
-            errordlg(['User clock rate has to be between 1~256MHz, currently is set to ',num2str(clk_rate),'MHz']);
         end
     otherwise
         errordlg(['Unsupported clock source: ',clk_src]);
 end
-

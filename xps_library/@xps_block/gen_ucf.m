@@ -24,33 +24,33 @@ function str = gen_ucf(blk_obj)
 str = '';
 
 try
-	ext_ports = blk_obj.ext_ports;
+    ext_ports = blk_obj.ext_ports;
 catch
-	ext_ports = {};
+    ext_ports = {};
 end
 
 if ~isempty(ext_ports)
-	load bee2_hw_routes;
-	ext_port_names = fieldnames(ext_ports);
-	for j = 1:length(ext_port_names)
-	    cur_ext_port = getfield(ext_ports,ext_port_names{j});
-		if length(cur_ext_port) > 3
+    load BEE2_hw_routes.mat;
+    ext_port_names = fieldnames(ext_ports);
+    for j = 1:length(ext_port_names)
+        cur_ext_port = getfield(ext_ports,ext_port_names{j});
+        if length(cur_ext_port) > 3
             locs = cur_ext_port{4};
 
-	        try
-	            ucf_constraints = cur_ext_port{7};
-	            ucf_constraints_fields = fieldnames(ucf_constraints);
-	            ucf_constraints_str = '';
+            try
+                ucf_constraints = cur_ext_port{7};
+                ucf_constraints_fields = fieldnames(ucf_constraints);
+                ucf_constraints_str = '';
 
-	            for n = 1:length(ucf_constraints_fields)
-	                ucf_constraint_value = eval(['ucf_constraints.',ucf_constraints_fields{n}]);
+                for n = 1:length(ucf_constraints_fields)
+                    ucf_constraint_value = eval(['ucf_constraints.',ucf_constraints_fields{n}]);
 
-	                if isempty(ucf_constraint_value)
-	                    ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}];
-	                else
-	                    ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}, ' = \"', ucf_constraint_value, '\"'];
-	                end % if isempty(ucf_constraint_value)
-	            end % for n = 1:length(ucf_constraints_fields)
+                    if isempty(ucf_constraint_value)
+                        ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}];
+                    else
+                        ucf_constraints_str = [ucf_constraints_str, ' | ', ucf_constraints_fields{n}, ' = \"', ucf_constraint_value, '\"'];
+                    end % if isempty(ucf_constraint_value)
+                end % for n = 1:length(ucf_constraints_fields)
             catch
                 ucf_constraints_str = '';
             end % try
@@ -72,6 +72,6 @@ if ~isempty(ext_ports)
                     end % i = [1:cur_ext_port{1}]
                 end % cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{5},'vector=true')
             end % if ~strcmp(locs,'null')
-		end % if length(cur_ext_port) > 3
-	end % for j = 1:length(ext_port_names)
+        end % if length(cur_ext_port) > 3
+    end % for j = 1:length(ext_port_names)
 end % ~isempty(ext_ports)

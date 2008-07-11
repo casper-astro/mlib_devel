@@ -21,15 +21,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function b = xps_sw_register(blk_obj)
+
 if ~isa(blk_obj,'xps_block')
     error('XPS_SW_REG class requires a xps_block class object');
 end
+
 if ~strcmp(get(blk_obj,'type'),'xps_sw_reg')
     error(['Wrong XPS block type: ',get(blk_obj,'type')]);
 end
+
 blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 s.hw_sys = 'any';
+
 switch get_param(blk_name,'io_dir')
     case 'From Processor'
         s.io_dir = 'in';
@@ -37,6 +41,7 @@ switch get_param(blk_name,'io_dir')
         s.io_dir = 'out';
 end
 b = class(s,'xps_sw_reg',blk_obj);
+
 % ip name
 switch get_param(blk_name,'io_dir')
     case 'From Processor'
@@ -44,13 +49,25 @@ switch get_param(blk_name,'io_dir')
     case 'To Processor'
 		b = set(b,'ip_name','opb_register_simulink2ppc');
 end
+
+% bus clock
+switch get(xsg_obj,'hw_sys')
+    case 'ROACH'
+        b = set(b,'opb_clk','epb_clk');
+    otherwise
+        b = set(b,'opb_clk','sys_clk');
+end % switch get(xsg_obj,'hw_sys')
+
 % bus offset
 b = set(b,'opb_address_offset',256);
+
 % misc ports
 misc_ports.user_clk     = {1 'in'  get(xsg_obj,'clk_src')};
 b = set(b,'misc_ports',misc_ports);
+
 % software parameters
 b = set(b,'c_params',s.io_dir);
+
 % borf parameters
 switch get_param(blk_name,'io_dir')
     case 'From Processor'
@@ -58,4 +75,5 @@ switch get_param(blk_name,'io_dir')
     case 'To Processor'
         b = set(b,'mode',1);
 end
+
 b = set(b,'size',4);

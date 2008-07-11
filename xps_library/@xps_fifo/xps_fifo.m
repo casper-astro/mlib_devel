@@ -21,51 +21,62 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function b = xps_fifo(blk_obj)
+
 if ~isa(blk_obj,'xps_block')
     error('XPS_FIFO class requires a xps_block class object');
 end
+
 if ~strcmp(get(blk_obj,'type'),'xps_fifo')
     error(['Wrong XPS block type: ',get(blk_obj,'type')]);
 end
+
 blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 s.hw_sys = 'any';
+
 switch get_param(blk_name,'io_dir')
     case 'From Processor'
         s.io_dir = 'in';
     case 'To Processor'
         s.io_dir = 'out';
-end
+end % switch get_param(blk_name','io_dir')
+
 b = class(s,'xps_fifo',blk_obj);
-% ip name
-switch get_param(blk_name,'io_dir')
-    case 'From Processor'
-		b = set(b,'ip_name','opb_asyncfifo_ppc2simulink'); 
-    case 'To Processor'
-		b = set(b,'ip_name','opb_asyncfifo_simulink2ppc'); 
-end
+
+% opb clk
+
+% bus clock
+switch get(xsg_obj,'hw_sys')
+    case 'ROACH'
+        b = set(b,'opb_clk','epb_clk');
+    otherwise
+        b = set(b,'opb_clk','sys_clk');
+end % switch get(xsg_obj,'hw_sys')
+
 % address offset
 b = set(b,'opb_address_offset',256);
+
 % misc ports
-misc_ports.user_clk     = {1 'in'  get(xsg_obj,'clk_src')};
+misc_ports.user_clk = {1 'in'  get(xsg_obj,'clk_src')};
 b = set(b,'misc_ports',misc_ports);
-% software parameters
+
+% %ip name, software parameters, borph mode
 switch get_param(blk_name,'io_dir')
     case 'From Processor'
+        b = set(b,'ip_name','opb_asyncfifo_ppc2simulink');
 		b = set(b,'c_params','in');
+		b = set(b,'mode',6);
     case 'To Processor'
 		b = set(b,'c_params','out');
-end
+		b = set(b,'ip_name','opb_asyncfifo_simulink2ppc');
+		b = set(b,'mode',5);
+end % switch get_param('blk_name,'io_dir')
+
 %parameters
 parameters.FIFO_LENGTH = num2str(eval_param(blk_name,'fifo_length'));
 parameters.FIFO_WIDTH = num2str(eval_param(blk_name,'data_width'));
 
 b = set(b,'parameters',parameters);
-% borf parameters
-switch get_param(blk_name,'io_dir')
-    case 'From Processor'
-        b = set(b,'mode',6);
-    case 'To Processor'
-        b = set(b,'mode',5);
-end
+
+% borph parameters
 b = set(b,'size',512);
