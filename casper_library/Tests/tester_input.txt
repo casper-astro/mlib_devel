@@ -39,3 +39,7 @@ delay_complex casper_library/Delays/delay_complex delay_complex_bram_test delay 
 delay_complex casper_library/Delays/delay_complex delay_complex_slr_test delay 7 n_bits 13 bin_pt 12 use_bram 0 bram_latency 4
 dbl_buffer casper_library/Reorder/dbl_buffer dbl_buffer_test depth 64 latency 3
 barrel_switcher casper_library/Reorder/barrel_switcher barrel_switcher_test n_inputs 2
+reorder casper_library/Reorder/reorder reorder_bram_test map '[2 3 4 5 6 7 0 1]' n_inputs 2 bram_latency 1 map_latency 2 double_buffer 0
+reorder casper_library/Reorder/reorder reorder_double_buffer_test map '[2 3 4 5 6 7 0 1]' n_inputs 2 bram_latency 1 map_latency 2 double_buffer 1
+square_transposer casper_library/Reorder/square_transposer square_transposer_test n_inputs 2
+cmult_4bit_sl casper_library/Multipliers/cmult_4bit_sl cmult_4bit_sl_test mult_latency 2 add_latency 2
