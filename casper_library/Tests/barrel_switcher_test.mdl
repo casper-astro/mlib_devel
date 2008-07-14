@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.14"
+    ComputedModelVersion    "1.15"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jul 02 14:00:48 2008"
+  LastModifiedDate	  "Tue Jul 08 17:38:20 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:14>"
+  ModelVersionFormat	  "1.%<AutoIncrement:15>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -1329,8 +1329,8 @@ Model {
       BlockType		      ToFile
       Name		      "To File"
       Position		      [550, 224, 725, 256]
-      Filename		      "barrel_switcher_test_reference.mat"
-      MatrixName	      "reference"
+      Filename		      "barrel_switcher_test_output.mat"
+      MatrixName	      "output"
     }
     Block {
       BlockType		      UniformRandomNumber
@@ -1355,7 +1355,7 @@ Model {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       MaskType		      "barrel_switcher"
-      MaskDescription	      "If MSB of sel is '1' shifts all inputs 'up' one\nso that In1 appears at Out2 etc and Inn appears\nat Out1"
+      MaskDescription	      "Shifts input to right by amount specified on sel,\nwrapping around into higher order bits."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\htmlblocks\\sp_barrel_switcher\\sp_barrel_switcher.html''])')"
       MaskPromptString	      "Number of Inputs: (2^?)"
       MaskStyleString	      "edit"
@@ -1373,7 +1373,7 @@ Model {
       MaskValueString	      "2"
       System {
 	Name			"barrel_switcher"
-	Location		[628, 266, 1171, 920]
+	Location		[2118, 207, 2661, 861]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1454,7 +1454,7 @@ Model {
 	  block_type		  "delay"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "30,30,1,1,white,blue,0,fc531c0e,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([7 2 9 2 7 15 17 19 27 20 14 9 15 9 14 20 27 19 17 15 7 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 30 30 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1527,7 +1527,7 @@ Model {
 	  block_type		  "mux"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "25,66,1,1,white,blue,3,03f9c9b9,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 14.8571 89.1429 104 ],[0.77 0.82 0.91]);\npatch([10 3 14 3 10 22 25 28 41 31 21 14 25 14 21 31 41 28 25 22 10 ],[34 41 52 63 70 70 67 70 70 60 70 63 52 41 34 44 34 34 37 34 34 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 14.8571 89.1429 104 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 ],[0 9.42857 56.5714 66 ],[0.77 0.82 0.91]);\npatch([6 2 8 2 6 13 15 17 24 18 13 9 14 9 13 18 24 17 15 13 6 ],[23 27 33 39 43 43 41 43 43 37 42 38 33 28 24 29 23 23 25 23 23 ],[0.98 0.96 0.92]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1579,7 +1579,7 @@ Model {
 	  block_type		  "mux"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "25,66,1,1,white,blue,3,03f9c9b9,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 14.8571 89.1429 104 ],[0.77 0.82 0.91]);\npatch([10 3 14 3 10 22 25 28 41 31 21 14 25 14 21 31 41 28 25 22 10 ],[34 41 52 63 70 70 67 70 70 60 70 63 52 41 34 44 34 34 37 34 34 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 14.8571 89.1429 104 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 ],[0 9.42857 56.5714 66 ],[0.77 0.82 0.91]);\npatch([6 2 8 2 6 13 15 17 24 18 13 9 14 9 13 18 24 17 15 13 6 ],[23 27 33 39 43 43 41 43 43 37 42 38 33 28 24 29 23 23 25 23 23 ],[0.98 0.96 0.92]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1605,7 +1605,7 @@ Model {
 	  block_type		  "mux"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "25,66,1,1,white,blue,3,03f9c9b9,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 14.8571 89.1429 104 ],[0.77 0.82 0.91]);\npatch([10 3 14 3 10 22 25 28 41 31 21 14 25 14 21 31 41 28 25 22 10 ],[34 41 52 63 70 70 67 70 70 60 70 63 52 41 34 44 34 34 37 34 34 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 14.8571 89.1429 104 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 ],[0 9.42857 56.5714 66 ],[0.77 0.82 0.91]);\npatch([6 2 8 2 6 13 15 17 24 18 13 9 14 9 13 18 24 17 15 13 6 ],[23 27 33 39 43 43 41 43 43 37 42 38 33 28 24 29 23 23 25 23 23 ],[0.98 0.96 0.92]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1631,7 +1631,7 @@ Model {
 	  block_type		  "mux"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "25,66,1,1,white,blue,3,03f9c9b9,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 14.8571 89.1429 104 ],[0.77 0.82 0.91]);\npatch([10 3 14 3 10 22 25 28 41 31 21 14 25 14 21 31 41 28 25 22 10 ],[34 41 52 63 70 70 67 70 70 60 70 63 52 41 34 44 34 34 37 34 34 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 14.8571 89.1429 104 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 ],[0 9.42857 56.5714 66 ],[0.77 0.82 0.91]);\npatch([6 2 8 2 6 13 15 17 24 18 13 9 14 9 13 18 24 17 15 13 6 ],[23 27 33 39 43 43 41 43 43 37 42 38 33 28 24 29 23 23 25 23 23 ],[0.98 0.96 0.92]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1657,7 +1657,7 @@ Model {
 	  block_type		  "mux"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "25,66,1,1,white,blue,3,03f9c9b9,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 14.8571 89.1429 104 ],[0.77 0.82 0.91]);\npatch([10 3 14 3 10 22 25 28 41 31 21 14 25 14 21 31 41 28 25 22 10 ],[34 41 52 63 70 70 67 70 70 60 70 63 52 41 34 44 34 34 37 34 34 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 14.8571 89.1429 104 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 ],[0 9.42857 56.5714 66 ],[0.77 0.82 0.91]);\npatch([6 2 8 2 6 13 15 17 24 18 13 9 14 9 13 18 24 17 15 13 6 ],[23 27 33 39 43 43 41 43 43 37 42 38 33 28 24 29 23 23 25 23 23 ],[0.98 0.96 0.92]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1683,7 +1683,7 @@ Model {
 	  block_type		  "mux"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "25,66,1,1,white,blue,3,03f9c9b9,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 14.8571 89.1429 104 ],[0.77 0.82 0.91]);\npatch([10 3 14 3 10 22 25 28 41 31 21 14 25 14 21 31 41 28 25 22 10 ],[34 41 52 63 70 70 67 70 70 60 70 63 52 41 34 44 34 34 37 34 34 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 14.8571 89.1429 104 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 ],[0 9.42857 56.5714 66 ],[0.77 0.82 0.91]);\npatch([6 2 8 2 6 13 15 17 24 18 13 9 14 9 13 18 24 17 15 13 6 ],[23 27 33 39 43 43 41 43 43 37 42 38 33 28 24 29 23 23 25 23 23 ],[0.98 0.96 0.92]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1725,11 +1725,11 @@ Model {
 	  base0			  "LSB of Input"
 	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,533,427"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
 	  block_version		  "10.1.1"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,b1026674,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 28 28 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 22 24 26 34 28 22 18 26 18 22 28 34 26 24 22 15 ],[3 8 15 22 27 27 25 27 27 21 27 23 15 7 3 9 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport
@@ -1772,27 +1772,172 @@ Model {
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  SrcBlock		  "sync_in"
-	  SrcPort		  1
-	  DstBlock		  "Delay_sync"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Delay_sync"
-	  SrcPort		  1
-	  DstBlock		  "sync_out"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "sel"
+	  SrcBlock		  "Mux41"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
-	    DstBlock		    "Slice1"
+	    DstBlock		    "Mux32"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux42"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux31"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux22"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux32"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux21"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux12"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux22"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux11"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux42"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux12"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux42"
+	  SrcPort		  1
+	  DstBlock		  "Out4"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "In4"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux21"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux41"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux32"
+	  SrcPort		  1
+	  DstBlock		  "Out3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "In3"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux11"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux31"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux22"
+	  SrcPort		  1
+	  DstBlock		  "Out2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "In2"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux41"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux21"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux12"
+	  SrcPort		  1
+	  DstBlock		  "Out1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "In1"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux31"
+	    DstPort		    3
+	  }
+	  Branch {
+	    DstBlock		    "Mux11"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Slice2"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux42"
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "Delay1"
+	    DstBlock		    "Mux32"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Mux22"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Mux12"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Slice1"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "Mux41"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Mux31"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Mux21"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Mux11"
 	    DstPort		    1
 	  }
 	}
@@ -1803,174 +1948,29 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Slice1"
+	  SrcBlock		  "sel"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
-	    DstBlock		    "Mux11"
+	    DstBlock		    "Delay1"
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "Mux21"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "Mux31"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "Mux41"
+	    DstBlock		    "Slice1"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  SrcBlock		  "Slice2"
+	  SrcBlock		  "Delay_sync"
 	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux12"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "Mux22"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "Mux32"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "Mux42"
-	    DstPort		    1
-	  }
-	}
-	Line {
-	  SrcBlock		  "In1"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux11"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux31"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux12"
-	  SrcPort		  1
-	  DstBlock		  "Out1"
+	  DstBlock		  "sync_out"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "In2"
+	  SrcBlock		  "sync_in"
 	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux21"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux41"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux22"
-	  SrcPort		  1
-	  DstBlock		  "Out2"
+	  DstBlock		  "Delay_sync"
 	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "In3"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux31"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux11"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux32"
-	  SrcPort		  1
-	  DstBlock		  "Out3"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "In4"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux41"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux21"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux42"
-	  SrcPort		  1
-	  DstBlock		  "Out4"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Mux11"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux12"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux42"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux21"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux22"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux12"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux31"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux32"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux22"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux41"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux42"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux32"
-	    DstPort		    3
-	  }
 	}
       }
     }
