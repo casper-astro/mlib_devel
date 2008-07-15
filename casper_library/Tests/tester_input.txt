@@ -43,3 +43,8 @@ reorder casper_library/Reorder/reorder reorder_bram_test map '[2 3 4 5 6 7 0 1]'
 reorder casper_library/Reorder/reorder reorder_double_buffer_test map '[2 3 4 5 6 7 0 1]' n_inputs 2 bram_latency 1 map_latency 2 double_buffer 1
 square_transposer casper_library/Reorder/square_transposer square_transposer_test n_inputs 2
 cmult_4bit_sl casper_library/Multipliers/cmult_4bit_sl cmult_4bit_sl_test mult_latency 2 add_latency 2
+cmult_4bit_sl* casper_library/Multipliers/cmult_4bit_sl* cmult_4bit_sl_conj_test mult_latency 2 add_latency 2
+cmult_4bit_em* casper_library/Multipliers/cmult_4bit_em* cmult_4bit_em_conj_test mult_latency 2 add_latency 2
+cmult_4bit_em casper_library/Multipliers/cmult_4bit_em cmult_4bit_em_test mult_latency 2 add_latency 2
+cmult_4bit_br* casper_library/Multipliers/cmult_4bit_br* cmult_4bit_br_conj_test mult_latency 2 add_latency 2
+cmult_4bit_br casper_library/Multipliers/cmult_4bit_br cmult_4bit_br_test mult_latency 2 add_latency 2
