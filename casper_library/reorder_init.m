@@ -37,6 +37,11 @@ map_bits = ceil(log2(map_length));
 order = compute_order(map);
 order_bits = ceil(log2(order));
 
+if (double_buffer < 0 || double_buffer > 1) ,
+	disp('Double Buffer must be 0 or 1');
+	error('Double Buffer must be 0 or 1');
+end
+
 % At some point, when Xilinx supports muxes wider than 16, this can be
 % fixed.
 if order > 16 && double_buffer == 0,
