@@ -48,3 +48,5 @@ cmult_4bit_em* casper_library/Multipliers/cmult_4bit_em* cmult_4bit_em_conj_test
 cmult_4bit_em casper_library/Multipliers/cmult_4bit_em cmult_4bit_em_test mult_latency 2 add_latency 2
 cmult_4bit_br* casper_library/Multipliers/cmult_4bit_br* cmult_4bit_br_conj_test mult_latency 2 add_latency 2
 cmult_4bit_br casper_library/Multipliers/cmult_4bit_br cmult_4bit_br_test mult_latency 2 add_latency 2
+static_coeff_gen casper_library/FFTs/Twiddle/coeff_gen/static_coeff_gen static_coeff_gen_test Coeffs [0.1-0.2i] BitWidth 12 bram_latency 3
+br_coeff_gen casper_library/FFTs/Twiddle/coeff_gen/br_coeff_gen br_coeff_gen_test Coeffs '[0-0.1i 0.1-0.2i 0.2-0.3i 0.3-0.4i 0.4-0.5i 0.5-0.6i 0.6-0.7i 0.7-0.8i]' StepPeriod 1 BitWidth 16 bram_latency 2
