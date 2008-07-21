@@ -992,14 +992,24 @@ if run_software
 
         otherwise
             error(['Unsupported OS: ',sw_os]);
-    end % switch 'sw_os'
+    end % switch sw_os
 
     win_fid = fopen([xps_path,'\gen_prog_files.bat'],'w');
     unix_fid = fopen([xps_path,'\gen_prog_files'],'w');
     fprintf(unix_fid,['#!/bin/bash\n']);
     time_stamp = clear_name(datestr(now, 'yyyy-mmm-dd HHMM'));
-    fprintf(win_fid,['copy implementation\\download.bit ..\\bit_files\\',design_name,'_',time_stamp,'.bit\n']);
-    fprintf(unix_fid,['cp implementation/download.bit ../bit_files/',design_name,'_',time_stamp,'.bit\n']);
+
+    switch sw_os
+        case 'none'
+            fprintf(win_fid,['copy implementation\\system.bit ..\\bit_files\\',design_name,'_',time_stamp,'.bit\n']);
+            fprintf(unix_fid,['cp implementation/system.bit ../bit_files/',design_name,'_',time_stamp,'.bit\n']);
+        % end case 'none'
+        otherwise
+            fprintf(win_fid,['copy implementation\\download.bit ..\\bit_files\\',design_name,'_',time_stamp,'.bit\n']);
+            fprintf(unix_fid,['cp implementation/download.bit ../bit_files/',design_name,'_',time_stamp,'.bit\n']);
+        % end otherwise
+    end % switch sw_os
+
     if strcmp(hw_sys, 'iBOB')
         fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 4 -c -v implementation\\download.bit\n');
         fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 4 -c -v implementation/download.bit\n');
@@ -1038,8 +1048,10 @@ if run_software
         fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_fpga4_',time_stamp,'.bof\n']);
         fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga4_',time_stamp,'.bof\n']);
     end % if strcmp(hw_sys, 'BEE2_usr')
+
     fclose(win_fid);
     fclose(unix_fid);
+
 end % if run_software
 time_software = now - start_time;
 
@@ -1049,6 +1061,7 @@ if run_edk
     disp('## Running EDK backend ##');
     disp('#########################');
     % erase download.bit to make sure a failing compilation will report an error
+    delete([xps_path,'\implementation\system.bit']);
     delete([xps_path,'\implementation\download.bit']);
     fid = fopen([xps_path,'\run_xps.tcl'],'w');
 
