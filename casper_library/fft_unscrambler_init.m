@@ -27,7 +27,7 @@ function fft_unscrambler_init(blk, varargin)
 %
 % blk = The block to configure.
 % varargin = {'varname', 'value', ...} pairs
-% 
+%
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points).
 % n_inputs = Number of parallel input streams
@@ -69,7 +69,9 @@ reuse_block(blk, 'square_transposer', 'casper_library/Reorder/square_transposer'
     'n_inputs', num2str(n_inputs), 'Position', [85 30 170 2^n_inputs*20+80]);
 reuse_block(blk, 'reorder', 'casper_library/Reorder/reorder', ...
     'map', map_str, 'bram_latency', num2str(bram_latency), ...
-    'n_inputs', num2str(2^n_inputs), 'map_latency', num2str(1), 'Position', [265 37 360 93]);
+    'n_inputs', num2str(2^n_inputs), 'map_latency', num2str(1),...
+    'double_buffer', '0',...
+    'Position', [265 37 360 93]);
 reuse_block(blk, 'const', 'xbsIndex_r4/Constant', ...
     'arith_type', 'Boolean', 'explicit_period', 'on', 'Position', [225 57 250 73]);
 
