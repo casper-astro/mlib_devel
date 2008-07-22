@@ -28,14 +28,14 @@ function fft_stage_n_init(blk, varargin)
 %
 % blk = The block to configure.
 % varargin = {'varname', 'value', ...} pairs
-% 
+%
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points).
 % FFTStage = Stage this block should be configured as.
 % BitWidth = Bitwidth of input data.
 % use_bram = Use bram or slr delays
 % CoeffBram = Store coefficients in bram
-% MaxCoeffNum = 
+% MaxCoeffNum =
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
 % add_latency = The latency of adders in the system.
@@ -79,7 +79,7 @@ StepPeriod = FFTSize-FFTStage+max(0, FFTStage-MaxCoeffNum);
 
 if(FFTStage ~= 1),
     % Propagate parameters to the butterfly
-    propagate_vars([blk,'/butterfly_direct'], 'defaults', defaults, varargin{:}); 
+    propagate_vars([blk,'/butterfly_direct'], 'defaults', defaults, varargin{:});
     set_param([blk,'/butterfly_direct'], 'Coeffs', mat2str(Coeffs));
     set_param([blk,'/butterfly_direct'], 'StepPeriod', num2str(StepPeriod));
 end
@@ -87,9 +87,9 @@ end
 % Take care of storing coefficients in BRAM
 roms = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','masktype', 'Xilinx Single Port Read-Only Memory');
 if CoeffBram,
-    dist_mem = 'off';
+    dist_mem = 'Block RAM';
 else,
-    dist_mem = 'on';
+    dist_mem = 'Distributed memory';
 end
 if length(roms) > 0 && ~strcmp(get_param(roms{1}, 'distributed_mem'), dist_mem),
     for i=1:length(roms),

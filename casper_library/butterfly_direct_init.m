@@ -27,7 +27,7 @@ function butterfly_direct_init(blk, varargin)
 %
 % blk = The block to configure.
 % varargin = {'varname', 'value', ...} pairs
-% 
+%
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points).
 % Coeffs = Coefficients for twiddle blocks
@@ -37,7 +37,7 @@ function butterfly_direct_init(blk, varargin)
 % mult_latency = The latency of multipliers in the system.
 % bram_latency = The latency of BRAM in the system.
 % use_bram = Use bram or slr delays
-% dist_mem = 
+% dist_mem =
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
 
@@ -92,12 +92,12 @@ else,
     set_param(twiddle, 'BlockChoice', 'twiddle_general_3mult');
     block_type = 'twiddle_general_3mult';
     set_param([twiddle,'/',block_type], 'Coeffs', ['[',ActualCoeffsStr,']']);
-   
+
     set_param(coeff_gen, 'BlockChoice', 'br_coeff_gen');
     br_coeff_gen = [coeff_gen, '/br_coeff_gen'];
-    
-    if use_bram, dist_mem = 'Distributed memory';
-    else, dist_mem = 'Block RAM';
+
+    if use_bram, dist_mem = 'Block RAM';
+    else, dist_mem = 'Distributed memory';
     end
 
     set_param([br_coeff_gen,'/ROM'], 'distributed_mem', dist_mem);
