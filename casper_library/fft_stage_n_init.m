@@ -82,6 +82,7 @@ if(FFTStage ~= 1),
     propagate_vars([blk,'/butterfly_direct'], 'defaults', defaults, varargin{:});
     set_param([blk,'/butterfly_direct'], 'Coeffs', mat2str(Coeffs));
     set_param([blk,'/butterfly_direct'], 'StepPeriod', num2str(StepPeriod));
+    set_param([blk,'/butterfly_direct'], 'use_bram', num2str(CoeffBram));
 end
 
 % Take care of storing coefficients in BRAM
