@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.7"
+    ComputedModelVersion    "1.9"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jul 23 10:09:11 2008"
+  LastModifiedDate	  "Wed Jul 23 11:03:22 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:7>"
+  ModelVersionFormat	  "1.%<AutoIncrement:9>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -682,7 +682,7 @@ Model {
   }
   System {
     Name		    "twiddle_coeff_1_test"
-    Location		    [2021, 137, 3060, 877]
+    Location		    [2101, 155, 3140, 895]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -746,7 +746,7 @@ Model {
       BlockType		      Demux
       Name		      "Demux"
       Ports		      [1, 5]
-      Position		      [360, 443, 365, 557]
+      Position		      [295, 438, 300, 552]
       BackgroundColor	      "black"
       ShowName		      off
       Outputs		      "5"
@@ -755,7 +755,7 @@ Model {
     Block {
       BlockType		      FromFile
       Name		      "From File"
-      Position		      [145, 488, 325, 512]
+      Position		      [80, 483, 260, 507]
       FileName		      "twiddle_coeff_1_test_reference.mat"
       SampleTime	      "1"
     }
@@ -763,7 +763,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway In"
       Ports		      [1, 1]
-      Position		      [200, 235, 235, 255]
+      Position		      [135, 230, 170, 250]
       SourceBlock	      "xbsIndex_r4/Gateway In"
       SourceType	      "Xilinx Gateway In Block"
       infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
@@ -790,7 +790,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway In1"
       Ports		      [1, 1]
-      Position		      [320, 284, 355, 306]
+      Position		      [255, 279, 290, 301]
       SourceBlock	      "xbsIndex_r4/Gateway In"
       SourceType	      "Xilinx Gateway In Block"
       infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
@@ -817,7 +817,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out"
       Ports		      [1, 1]
-      Position		      [575, 230, 610, 250]
+      Position		      [510, 225, 545, 245]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -839,7 +839,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out1"
       Ports		      [1, 1]
-      Position		      [530, 245, 565, 265]
+      Position		      [465, 240, 500, 260]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -861,7 +861,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out2"
       Ports		      [1, 1]
-      Position		      [575, 260, 610, 280]
+      Position		      [510, 255, 545, 275]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -883,7 +883,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out3"
       Ports		      [1, 1]
-      Position		      [530, 275, 565, 295]
+      Position		      [465, 270, 500, 290]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -905,7 +905,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out4"
       Ports		      [1, 1]
-      Position		      [575, 290, 610, 310]
+      Position		      [510, 285, 545, 305]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -927,7 +927,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out5"
       Ports		      [1, 1]
-      Position		      [575, 350, 610, 370]
+      Position		      [510, 345, 545, 365]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -949,7 +949,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway Out6"
       Ports		      [1, 1]
-      Position		      [575, 370, 610, 390]
+      Position		      [510, 365, 545, 385]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway Out"
       SourceType	      "Xilinx Gateway Out Block"
@@ -971,7 +971,7 @@ Model {
       BlockType		      Mux
       Name		      "Mux"
       Ports		      [5, 1]
-      Position		      [705, 227, 710, 313]
+      Position		      [640, 222, 645, 308]
       ShowName		      off
       Inputs		      "5"
       DisplayOption	      "bar"
@@ -980,7 +980,7 @@ Model {
       BlockType		      DiscretePulseGenerator
       Name		      "Pulse\nGenerator"
       Ports		      [0, 1]
-      Position		      [185, 278, 230, 312]
+      Position		      [120, 273, 165, 307]
       Period		      "256"
       PhaseDelay	      "7"
     }
@@ -988,7 +988,7 @@ Model {
       BlockType		      Reference
       Name		      "Ramp"
       Ports		      [0, 1]
-      Position		      [135, 230, 165, 260]
+      Position		      [70, 225, 100, 255]
       SourceBlock	      "simulink/Sources/Ramp"
       SourceType	      "Ramp"
       ShowPortLabels	      "FromPortIcon"
@@ -1008,7 +1008,7 @@ Model {
       BlockType		      Scope
       Name		      "Scope"
       Ports		      [8]
-      Position		      [775, 355, 885, 505]
+      Position		      [710, 350, 820, 500]
       Floating		      off
       Location		      [5, 58, 1925, 1165]
       Open		      off
@@ -1035,7 +1035,7 @@ Model {
       BlockType		      Scope
       Name		      "Scope1"
       Ports		      [8]
-      Position		      [775, 560, 885, 710]
+      Position		      [710, 555, 820, 705]
       Floating		      off
       Location		      [5, 58, 1925, 1165]
       Open		      off
@@ -1061,15 +1061,15 @@ Model {
     Block {
       BlockType		      ToFile
       Name		      "To File"
-      Position		      [750, 257, 940, 283]
-      Filename		      "twiddle_coeff_1_test_reference.mat"
-      MatrixName	      "reference"
+      Position		      [685, 252, 875, 278]
+      Filename		      "twiddle_coeff_1_test_output.mat"
+      MatrixName	      "output"
     }
     Block {
       BlockType		      Reference
       Name		      "ri_to_c"
       Ports		      [2, 1]
-      Position		      [325, 228, 365, 257]
+      Position		      [260, 223, 300, 252]
       ShowName		      off
       LinkData {
 	BlockName		"concat"
@@ -1105,7 +1105,7 @@ Model {
       BlockType		      Reference
       Name		      "twiddle_coeff_1"
       Ports		      [3, 5]
-      Position		      [415, 230, 505, 310]
+      Position		      [350, 225, 440, 305]
       BackgroundColor	      "gray"
       LinkData {
 	BlockName		"Delay"

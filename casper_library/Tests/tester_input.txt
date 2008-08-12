@@ -50,3 +50,11 @@ cmult_4bit_br* casper_library/Multipliers/cmult_4bit_br* cmult_4bit_br_conj_test
 cmult_4bit_br casper_library/Multipliers/cmult_4bit_br cmult_4bit_br_test mult_latency 2 add_latency 2
 static_coeff_gen casper_library/FFTs/Twiddle/coeff_gen/static_coeff_gen static_coeff_gen_test Coeffs [0.1-0.2i] BitWidth 12 bram_latency 3
 br_coeff_gen casper_library/FFTs/Twiddle/coeff_gen/br_coeff_gen br_coeff_gen_test Coeffs '[0-0.1i 0.1-0.2i 0.2-0.3i 0.3-0.4i 0.4-0.5i 0.5-0.6i 0.6-0.7i 0.7-0.8i]' StepPeriod 1 BitWidth 16 bram_latency 2
+twiddle_stage_2 casper_library/FFTs/Twiddle/twiddle_stage_2 twiddle_stage_2_test FFTSize 6 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2
+twiddle_general_4mult casper_library/FFTs/Twiddle/twiddle_general_4mult twiddle_general_4mult_test Coeffs '[0-0.05i 0.05-0.1i 0.1-0.15i 0.15-0.2i 0.2-0.25i 0.25-0.3i 0.3-0.35i 0.35-0.4i]' StepPeriod 1 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2
+twiddle_general_3mult casper_library/FFTs/Twiddle/twiddle_general_3mult twiddle_general_3mult_test Coeffs '[0-0.05i 0.05-0.1i 0.1-0.15i 0.15-0.2i 0.2-0.25i 0.25-0.3i 0.3-0.35i 0.35-0.4i]' StepPeriod 1 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2
+twiddle_coeff_1 casper_library/FFTs/Twiddle/twiddle_coeff_1 twiddle_coeff_1_test BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2
+twiddle_coeff_0 casper_library/FFTs/Twiddle/twiddle_ceoff_0 twiddle_coeff_0_test BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2
+butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_coeff_0_test FFTSize 5 Coeffs '[0]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2 use_bram 0 quantization 'Round  (unbiased: +/-Inf)' overflow 'Saturate'
+butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_coeff_1_test FFTSize 6 Coeffs '[1]' StepPeriod 0 BitWidth 5 add_latency 3 mult_latency 2 bram_latency 3 use_bram 1 quantization 'Truncate' overflow 'Wrap'
+

@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.9"
+    ComputedModelVersion    "1.10"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jul 17 15:47:09 2008"
+  LastModifiedDate	  "Wed Jul 23 10:33:15 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  ModelVersionFormat	  "1.%<AutoIncrement:10>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -839,8 +839,8 @@ Model {
       BlockType		      ToFile
       Name		      "To File"
       Position		      [470, 214, 650, 246]
-      Filename		      "static_coeff_gen_test_reference.mat"
-      MatrixName	      "reference"
+      Filename		      "static_coeff_gen_test_output.mat"
+      MatrixName	      "output"
     }
     Block {
       BlockType		      Reference
@@ -896,43 +896,11 @@ Model {
 	DialogParameters {
 	  sg_icon_stat		  "70,32,1,1,white,blue,0,fdc7f730,right"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 26 26 ],[0.77 0.82 0.91]);\npatch([20 16 22 16 20 27 29 31 38 32 26 22 28 22 26 32 38 31 29 27 20 ],[3 7 13 19 23 23 21 23 23 17 23 19 13 7 3 9 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 26 26 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'0.10009765625');\nfprintf('','COMMENT: end icon text');\n"
-	  sggui_pos		  "186,99,477,379"
-	  arith_type		  "Signed (2's comp)"
-	  const			  "round(real(Coeffs(1)) * 2^(BitWidth-1)) / 2^(BitWidth-1)"
-	  n_bits		  "BitWidth"
-	  bin_pt		  "BitWidth - 1"
-	  explicit_period	  "on"
-	  period		  "1"
-	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
-	  equ			  "P=C"
-	  opselect		  "C"
-	  inp2			  "PCIN>>17"
-	  opr			  "+"
-	  inp1			  "P"
-	  carry			  "CIN"
-	  dbl_ovrd		  "off"
-	  has_advanced_control	  "0"
 	}
 	BlockName		"Constant1"
 	DialogParameters {
 	  sg_icon_stat		  "70,32,1,1,white,blue,0,8c1c1667,right"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 26 26 ],[0.77 0.82 0.91]);\npatch([20 16 22 16 20 27 29 31 38 32 26 22 28 22 26 32 38 31 29 27 20 ],[3 7 13 19 23 23 21 23 23 17 23 19 13 7 3 9 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 26 26 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'-0.2001953125');\nfprintf('','COMMENT: end icon text');\n"
-	  sggui_pos		  "20,20,477,379"
-	  arith_type		  "Signed (2's comp)"
-	  const			  "round(imag(Coeffs(1)) * 2^(BitWidth-1)) / 2^(BitWidth-1)"
-	  n_bits		  "BitWidth"
-	  bin_pt		  "BitWidth - 1"
-	  explicit_period	  "on"
-	  period		  "1"
-	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
-	  equ			  "P=C"
-	  opselect		  "C"
-	  inp2			  "PCIN>>17"
-	  opr			  "+"
-	  inp1			  "P"
-	  carry			  "CIN"
-	  dbl_ovrd		  "off"
-	  has_advanced_control	  "0"
 	}
 	BlockName		"ri_to_c/concat"
 	DialogParameters {

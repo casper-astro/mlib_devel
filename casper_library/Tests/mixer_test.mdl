@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.91"
+    ComputedModelVersion    "1.92"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 19 15:08:31 2008"
+  LastModifiedDate	  "Thu Aug 07 14:22:02 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:91>"
+  ModelVersionFormat	  "1.%<AutoIncrement:92>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -745,7 +745,7 @@ Model {
   System {
     Name		    "mixer_test"
     Location		    [129, 121, 1462, 1069]
-    Open		    off
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -880,13 +880,6 @@ Model {
       ShowName		      off
       Outputs		      "9"
       DisplayOption	      "bar"
-    }
-    Block {
-      BlockType		      FromFile
-      Name		      "From File"
-      Position		      [45, 577, 155, 603]
-      FileName		      "mixer_test_input.mat"
-      SampleTime	      "1"
     }
     Block {
       BlockType		      FromFile
@@ -1770,13 +1763,6 @@ Model {
     }
     Block {
       BlockType		      ToFile
-      Name		      "To File"
-      Position		      [790, 353, 900, 377]
-      Filename		      "mixer_test_input.mat"
-      MatrixName	      "input"
-    }
-    Block {
-      BlockType		      ToFile
       Name		      "To File1"
       Position		      [945, 599, 1075, 621]
       Filename		      "mixer_test_output.mat"
@@ -1944,7 +1930,15 @@ Model {
 		BlockName		"SineCosine"
 		DialogParameters {
 		  sg_icon_stat		  "50,60,1,1,white,blue,0,76ddd963,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\nfprintf('','COMMENT: end icon text');\n"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\ncolor('black');port_label('output',2,'cos');\nfprintf('','COMMENT: end icon text');\n"
+		}
+		BlockName		"counter"
+		DialogParameters {
+		  start_count		  "counter_start"
+		  cnt_by_val		  "counter_step"
+		  n_bits		  "counter_width"
+		  sg_icon_stat		  "50,50,1,1,white,blue,0,a170c862,right"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 0.91]);\npatch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54 45 30 15 6 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'out');\nfprintf('','COMMENT: end icon text');\n"
 		}
 	      }
 	      SourceBlock	      "casper_library/Downconverter/lo_osc"
@@ -1973,7 +1967,7 @@ Model {
 		BlockName		"SineCosine"
 		DialogParameters {
 		  sg_icon_stat		  "50,60,1,1,white,blue,0,76ddd963,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\nfprintf('','COMMENT: end icon text');\n"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\ncolor('black');port_label('output',2,'cos');\nfprintf('','COMMENT: end icon text');\n"
 		}
 		BlockName		"counter"
 		DialogParameters {
@@ -2010,7 +2004,7 @@ Model {
 		BlockName		"SineCosine"
 		DialogParameters {
 		  sg_icon_stat		  "50,60,1,1,white,blue,0,76ddd963,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\nfprintf('','COMMENT: end icon text');\n"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\ncolor('black');port_label('output',2,'cos');\nfprintf('','COMMENT: end icon text');\n"
 		}
 		BlockName		"counter"
 		DialogParameters {
@@ -2047,7 +2041,7 @@ Model {
 		BlockName		"SineCosine"
 		DialogParameters {
 		  sg_icon_stat		  "50,60,1,1,white,blue,0,76ddd963,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\nfprintf('','COMMENT: end icon text');\n"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 34 34 ],[0.77 0.82 0.91]);\npatch([19 13 21 13 19 28 30 32 42 34 27 22 30 22 27 34 42 32 30 28 19 ],[4 10 18 26 32 32 30 32 32 24 31 26 18 10 5 12 4 4 6 4 4 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 34 34 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'theta');\ncolor('black');port_label('output',1,'sin');\ncolor('black');port_label('output',2,'cos');\nfprintf('','COMMENT: end icon text');\n"
 		}
 		BlockName		"counter"
 		DialogParameters {
@@ -2303,7 +2297,7 @@ Model {
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "mult"
 	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
@@ -2336,7 +2330,7 @@ Model {
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "mult"
 	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
@@ -2492,7 +2486,7 @@ Model {
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "mult"
 	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
@@ -2525,7 +2519,7 @@ Model {
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "mult"
 	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
@@ -2595,12 +2589,12 @@ Model {
 	  LinkData {
 	    BlockName		    "Mult"
 	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    BlockName		    "Mult1"
 	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	  }
@@ -2625,12 +2619,12 @@ Model {
 	  LinkData {
 	    BlockName		    "Mult"
 	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    BlockName		    "Mult1"
 	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,9c0d74db,right"
+	      sg_icon_stat	      "50,51,1,1,white,blue,0,9c0d74db,right"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	  }
@@ -2855,12 +2849,7 @@ Model {
     Line {
       SrcBlock		      "Mux"
       SrcPort		      1
-      DstBlock		      "To File"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "From File"
-      SrcPort		      1
+      Points		      [0, 65; -610, 0; 0, 160]
       DstBlock		      "Demux"
       DstPort		      1
     }
