@@ -53,12 +53,7 @@ function backpopulate_mask(blk,varargin)
       if( length(mat2str(value)) > 100 ),
       	mv{i} = ['getfield( getfield( get_param( gcb,''UserData'' ), ''parameters''),''',varname,''')'];
       else
-      	
-	      if( isnumeric(value) ), 
-		      mv{i} = mat2str(value); 
-	      else 
-		      mv{i} = value;
-	      end
+      	mv{i} = tostring(value);
       end
 
   end

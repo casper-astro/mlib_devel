@@ -51,7 +51,7 @@ map_mat = [];
 for i=0:2^n_inputs-1,
     map_mat = [map_mat, part_mat+i];
 end
-map_str = mat2str(map_mat);
+map_str = tostring(map_mat);
 
 
 delete_lines(blk);

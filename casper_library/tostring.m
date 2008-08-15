@@ -10,7 +10,7 @@ if isa(something, 'numeric'),
     string = mat2str(something);
     return;
 end
-disp('Error in data passed to tostring function')
+disp('tostring:Data passed not string or number')
     
     
     

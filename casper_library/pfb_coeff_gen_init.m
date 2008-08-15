@@ -56,6 +56,13 @@ nput = get_var('nput', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 
 % Set coefficient vector
+try, 
+	window('hamming',1024);
+catch,
+	disp('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
+	error('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
+	return;
+end
 alltaps = TotalTaps*2^PFBSize;
 windowval = transpose(window(WindowType, alltaps));
 total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
@@ -98,8 +105,8 @@ for a=1:TotalTaps,
     blkname = ['ROM', num2str(a)];
     pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a)
     vecstr = ['pfb_coeff_gen_calc(', num2str(PFBSize), ', ', ...
-        num2str(TotalTaps), ',', mat2str(WindowType), ',', ...
-        num2str(n_inputs), ', ', num2str(nput), ',', ...
+        num2str(TotalTaps), ',', tostring(WindowType), ',', ...
+        num2str(n_inputs), ', ', tostring(nput), ',', ...
         num2str(fwidth), ',', num2str(a), ')'];
     %v = mat2str(buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs)));
     %v

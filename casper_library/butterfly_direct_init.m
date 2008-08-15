@@ -68,7 +68,7 @@ br_indices = bit_rev(Coeffs, FFTSize-1);
 br_indices = -2*pi*1j*br_indices/2^FFTSize;
 ActualCoeffs = exp(br_indices);
 ActualCoeffsStr = 'exp(-2*pi*1j*(bit_rev(Coeffs, FFTSize-1))/2^FFTSize)';
-fprintf(['coeffs: ', mat2str(ActualCoeffs),'\n']);
+fprintf(['coeffs: ', tostring(ActualCoeffs),'\n']);
 fprintf([ActualCoeffsStr,'\n']);
 fprintf(['size: ', num2str(length(ActualCoeffs)), ' optimizing twiddle\n']);
 % Optimize twiddler for coeff = 0, 1, or alternating 0-1

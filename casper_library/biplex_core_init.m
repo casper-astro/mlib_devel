@@ -110,7 +110,7 @@ for a=1:FFTSize,
     propagate_vars(stage_name, 'defaults', defaults, varargin{:});
     set_param(stage_name, 'use_bram', use_bram);
     set_param(stage_name, 'CoeffBram', CoeffBram);   
-    set_param(stage_name, 'MaxCoeffNum', mat2str(MaxCoeffNum));
+    set_param(stage_name, 'MaxCoeffNum', tostring(MaxCoeffNum));
 end
 
 clean_blocks(blk);

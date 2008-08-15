@@ -31,7 +31,7 @@ if n_inputs < 1
 end
 
 map_length = length(map);
-fprintf([mat2str(map),'\n']);
+fprintf([tostring(map),'\n']);
 fprintf([num2str(map_length),'\n']);
 map_bits = ceil(log2(map_length));
 order = compute_order(map);
@@ -146,7 +146,7 @@ elseif double_buffer == 0,
     for i=1:order-1,
         mapname = ['map', num2str(i)];
         reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
-            'depth', num2str(map_length), 'initVector', mat2str(map), 'latency', num2str(map_latency), ...
+            'depth', num2str(map_length), 'initVector', tostring(map), 'latency', num2str(map_latency), ...
             'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', ...
             'distributed_mem', 'Distributed memory', 'Position', [230  125+50*i   270    145+50*i]);
         reuse_block(blk, ['delay_',mapname], 'xbsIndex_r4/Delay', ...
