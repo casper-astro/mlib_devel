@@ -1,5 +1,6 @@
 #Please do not modify this file by hand
-XmpVersion: 7.1
+XmpVersion: 10.1.01
+VerMgmt:    10.1.01
 IntStyle: default
 MHS File: system.mhs
 MSS File: system.mss
@@ -12,25 +13,29 @@ UseProjNav: 0
 AddToNPL: 0
 PNImportBitFile: projnav/system.bit
 PNImportBmmFile: implementation/system_bd.bmm
-UserCmd1: 
+UserCmd1:
 UserCmd1Type: 0
-UserCmd2: 
+UserCmd2:
 UserCmd2Type: 0
-SynProj: xst
-ReloadPbde: 0
-MainMhsEditor: 0
+TopInst: system_i
+GenSimTB: 0
 InsertNoPads: 0
+WarnForEAArch: 1
 HdlLang: VHDL
 Simulator: mti
 SimModel: BEHAVIORAL
-SimXLib: 
-SimEdkLib: 
+SimXLib:
+SimEdkLib:
 MixLangSim: 1
 UcfFile: data/system.ucf
-Processor: ppc405_1
+FpgaImpMode: 0
+EnableParTimingError: 0
+EnableResetOptimization: 0
+ShowLicenseDialog: 1
+Processor: ppc405_0
 BootLoop: 0
 XmdStub: 0
-Processor: ppc405_0
+Processor: ppc405_1
 BootLoop: 0
 XmdStub: 0
 SwProj: test_bench
@@ -47,11 +52,12 @@ Active: 1
 CompilerOptLevel: 2
 GlobPtrOpt: 0
 DebugSym: 1
-PrepOpt: -DSOFT_IIC
-AsmOpt: 
-LinkOpt: 
-ProgStart: 
-StackSize: 
-HeapSize: 
+ProfileFlag: 0
+ProgStart:
+StackSize:
+HeapSize:
 LinkerScript: Software/LinkerScript
-ProgCCFlags: 
+ProgCCFlags: -Wp,-DSOFT_IIC
+# Preprocessor option
+CompileInXps: 1
+NonXpsApp: 0
