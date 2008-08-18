@@ -862,7 +862,7 @@ if run_software
 
             for n = 1:length(inits)
                 init = inits{n};
-                init_str         = ['\t',init{n},'();\n'];
+                init_str         = ['\t',init{1},'();\n'];
                 inits_str        = [inits_str  , init_str ];
             end % for n = 1:length(inits)
 
