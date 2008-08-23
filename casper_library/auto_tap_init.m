@@ -17,15 +17,21 @@ use_ded_mult = get_var('use_ded_mult', varargin{:});
 
 % Configure all multipliers in this block to use dedicated multipliers 
 %(or not)
-multipliers = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', 'masktype', 'cmult*');
+multipliers = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','Name', 'cmult*');
 for i=1:length(multipliers),
     if use_ded_mult==2,
-        set_param(multipliers{i}, 'BlockChoice', 'cmult_4bit_br*');
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library/Multipliers/cmult_4bit_br*','noprompt');
     elseif use_ded_mult==1,
-        set_param(multipliers{i}, 'BlockChoice', 'cmult_4bit_em*');
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library/Multipliers/cmult_4bit_em*','noprompt');
     else,
-        set_param(multipliers{i}, 'BlockChoice', 'cmult_4bit_sl*');
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library/Multipliers/cmult_4bit_sl*','noprompt');
     end
+    set_param(multipliers{i},'LinkStatus','inactive');
+    set_param(multipliers{i},'mult_latency','mult_latency');
+    set_param(multipliers{i},'add_latency','add_latency');
 end
 % multipliers = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', 'masktype', 'Xilinx Multiplier');
 % for i=1:length(multipliers),

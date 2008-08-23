@@ -65,12 +65,14 @@ delays = {'delay_f', 'delay_b'};
 for i=1:length(delays),
     full_path = [blk,'/',delays{i}];
     if use_bram,
-        set_param(full_path, 'BlockChoice', 'delay_bram');
-	set_param([full_path,'/delay_bram'], 'bram_latency', 'bram_latency');
-        set_param([full_path,'/delay_bram'], 'DelayLen', '2^(FFTSize-FFTStage)');
+        replace_block(blk,'Name',delays{i},'casper_library/Delays/delay_bram','noprompt');
+        set_param(full_path,'LinkStatus','inactive');
+        set_param(full_path, 'DelayLen', '2^(FFTSize-FFTStage)');
+        set_param(full_path, 'bram_latency', 'bram_latency');
     else,
-        set_param(full_path, 'BlockChoice', 'delay_slr');
-        set_param([full_path,'/delay_slr'], 'DelayLen', '2^(FFTSize-FFTStage)');
+        replace_block(blk,'Name',delays{i},'casper_library/Delays/delay_slr','noprompt');
+        set_param(full_path,'LinkStatus','inactive');
+        set_param(full_path, 'DelayLen', '2^(FFTSize-FFTStage)');
     end
 end
 

@@ -69,12 +69,14 @@ delays = {'delay0', 'delay1'};
 for i=1:length(delays),
     full_path = [blk,'/bi_real_unscr_4x/',delays{i}];
     if 2^(FFTSize-1) > 16,
-        delay_type = 'delay_bram';
+        replace_block([blk,'/bi_real_unscr_4x'],'Name',delays{i},'casper_library/Delays/delay_bram','noprompt');
+        set_param(full_path,'LinkStatus','inactive');
+        set_param(full_path, 'DelayLen', '2^(FFTSize-1)');
+        set_param(full_path, 'bram_latency', 'bram_latency');
     else,
-        delay_type = 'delay_slr';
-    end
-    if ~strcmp(get_param(full_path, 'BlockChoice'), delay_type),
-        set_param(full_path, 'BlockChoice', delay_type)
+        replace_block([blk,'/bi_real_unscr_4x'],'Name',delays{i},'casper_library/Delays/delay_slr','noprompt');
+        set_param(full_path,'LinkStatus','inactive');
+        set_param(full_path, 'DelayLen', '2^(FFTSize-1)');
     end
 end
 

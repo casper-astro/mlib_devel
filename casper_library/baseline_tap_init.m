@@ -22,24 +22,29 @@ use_bram_delay = get_var('use_bram_delay', varargin{:});
 
 % Configure all multipliers in this block to use dedicated multipliers 
 %(or not)
-multipliers = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', 'masktype', 'cmult*');
+multipliers = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','Name', 'cmult*');
 for i=1:length(multipliers),
    if mult_type==2,
-       set_param(multipliers{i}, 'BlockChoice', 'cmult_4bit_br*');
-   elseif mult_type==1,
-       set_param(multipliers{i}, 'BlockChoice', 'cmult_4bit_em*');
-   else
-       set_param(multipliers{i}, 'BlockChoice', 'cmult_4bit_sl*');
-   end
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library/Multipliers/cmult_4bit_br*','noprompt');
+    elseif mult_type==1,
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library/Multipliers/cmult_4bit_em*','noprompt');
+    else,
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library/Multipliers/cmult_4bit_sl*','noprompt');
+    end
+    set_param(multipliers{i},'LinkStatus','inactive');
+    set_param(multipliers{i},'mult_latency','mult_latency');
+    set_param(multipliers{i},'add_latency','add_latency');
 end
 
 % Configure the delay to use bram or slrs
 if use_bram_delay,
-    delay_type = 'delay_bram';
+    replace_block(blk,'Name','delay','casper_library/Delays/delay_bram','noprompt');
 else,
-    delay_type = 'delay_slr';
+    replace_block(blk,'Name','delay','casper_library/Delays/delay_slr','noprompt');
 end
-set_param([blk,'/delay'], 'BlockChoice', delay_type);
 
 fmtstr = sprintf('ant_sep=%d, mult=%d, bram=%d', ant_sep, mult_type, use_bram_delay);
 set_param(blk, 'AttributesFormatString', fmtstr);

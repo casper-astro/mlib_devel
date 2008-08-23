@@ -60,9 +60,7 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 
 twiddle = [blk, '/twiddle'];
 
-coeff_gen = [twiddle,'/twiddle_general_3mult/coeff_gen'];
-br_coeff_gen = [coeff_gen,'/br_coeff_gen'];
-block_type = get_param(twiddle, 'BlockChoice');
+coeff_gen = [twiddle,'/coeff_gen'];
 % Compute the complex, bit-reversed values of the twiddle factors
 br_indices = bit_rev(Coeffs, FFTSize-1);
 br_indices = -2*pi*1j*br_indices/2^FFTSize;
@@ -74,39 +72,47 @@ fprintf(['size: ', num2str(length(ActualCoeffs)), ' optimizing twiddle\n']);
 % Optimize twiddler for coeff = 0, 1, or alternating 0-1
 if length(Coeffs) == 1,
     if Coeffs(1) == 0,
-        set_param(twiddle, 'BlockChoice', 'twiddle_coeff_0');
+        replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_coeff_0','noprompt');
+        set_param(twiddle,'LinkStatus','inactive')
         block_type = 'twiddle_coeff_0';
     elseif Coeffs(1) == 1,
 
-        set_param(twiddle, 'BlockChoice', 'twiddle_coeff_1');
+        replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_coeff_1','noprompt');
+        set_param(twiddle,'LinkStatus','inactive')
         block_type = 'twiddle_coeff_1';
     else,
-        set_param(twiddle, 'BlockChoice', 'twiddle_general_3mult');
+        replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_general_3mult','noprompt');
+        set_param(twiddle,'LinkStatus','inactive')
         block_type = 'twiddle_general_3mult';
-        set_param(coeff_gen, 'BlockChoice', 'static_coeff_gen');
+        replace_block(twiddle,'Name','coeff_gen','casper_library/FFTs/Twiddle/coeff_gen/static_coeff_gen','noprompt');
+        set_param([twiddle,'/coeff_gen'],'LinkStatus','inactive');
     end
 elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-2,
-    set_param(twiddle, 'BlockChoice', 'twiddle_stage_2');
+    replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_stage_2','noprompt');
+    set_param(twiddle,'LinkStatus','inactive');
     block_type = 'twiddle_stage_2';
 else,
-    set_param(twiddle, 'BlockChoice', 'twiddle_general_3mult');
+    replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_general_3mult','noprompt');
+    set_param(twiddle,'LinkStatus','inactive');
     block_type = 'twiddle_general_3mult';
-    set_param([twiddle,'/',block_type], 'Coeffs', ['[',ActualCoeffsStr,']']);
+    set_param(twiddle, 'Coeffs', ['[',ActualCoeffsStr,']']);
 
-    set_param(coeff_gen, 'BlockChoice', 'br_coeff_gen');
-    br_coeff_gen = [coeff_gen, '/br_coeff_gen'];
-
+    replace_block(twiddle,'Name','coeff_gen','casper_library/FFTs/Twiddle/coeff_gen/br_coeff_gen','noprompt');
+    set_param([twiddle,'/coeff_gen'],'LinkStatus','inactive');
+    
     if use_bram, dist_mem = 'Block RAM';
     else, dist_mem = 'Distributed memory';
     end
 
-    set_param([br_coeff_gen,'/ROM'], 'distributed_mem', dist_mem);
-    set_param([br_coeff_gen,'/ROM1'], 'distributed_mem', dist_mem);
+    set_param([coeff_gen,'/ROM'], 'distributed_mem', dist_mem);
+    set_param([coeff_gen,'/ROM1'], 'distributed_mem', dist_mem);
 end
 
-propagate_vars([twiddle,'/',block_type],'defaults', defaults, varargin{:});
+propagate_vars(twiddle,'defaults', defaults, varargin{:});
 if(strcmp(block_type,'twiddle_general_3mult')),
-    set_param([twiddle,'/',block_type], 'Coeffs', ['[',ActualCoeffsStr,']']);
+    set_param(twiddle, 'Coeffs', ['[',ActualCoeffsStr,']']);
+    propagate_vars([twiddle,'/coeff_gen'],'defaults', defaults, varargin{:});
+    set_param([twiddle,'/coeff_gen'], 'Coeffs', 'Coeffs');
 end
 
 % Propagate quantization behavior
