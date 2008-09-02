@@ -71,5 +71,5 @@ butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_coeff_0_t
 % Tests the use of twiddle_coeff_1
 butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_coeff_1_test FFTSize 6 Coeffs '[1]' StepPeriod 0 BitWidth 5 add_latency 3 mult_latency 2 bram_latency 3 use_bram 1 quantization 'Truncate' overflow 'Saturate'
 % Tests the use of twiddle_general_3mult for use with single coefficient
-% butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3mult_test FFTSize 5 Coeffs '[2]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2 use_bram 1 quantization 'Round  (unbiased: Even Values)' overflow 'Wrap'
+butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3mult_test FFTSize 5 Coeffs '[2]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2 use_bram 1 quantization 'Round  (unbiased: Even Values)' overflow 'Wrap'
 
