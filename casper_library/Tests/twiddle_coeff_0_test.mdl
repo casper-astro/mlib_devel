@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.5"
+    ComputedModelVersion    "1.6"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jul 23 10:57:04 2008"
+  LastModifiedDate	  "Fri Aug 15 14:55:19 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:5>"
+  ModelVersionFormat	  "1.%<AutoIncrement:6>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -1062,8 +1062,8 @@ Model {
       BlockType		      ToFile
       Name		      "To File"
       Position		      [655, 242, 845, 268]
-      Filename		      "twiddle_coeff_0_test_reference.mat"
-      MatrixName	      "reference"
+      Filename		      "twiddle_coeff_0_test_output.mat"
+      MatrixName	      "output"
     }
     Block {
       BlockType		      Reference
