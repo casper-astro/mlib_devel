@@ -92,7 +92,7 @@ GlobPtrOpt: 0
 DebugSym: 0
 ProfileFlag: 0
 AsmOpt:
-LinkOpt: #IF# strcmp(get(b,'type'),'xps_lwip') #LinkOpt: -llwip4
+LFlags: #IF# strcmp(get(b,'type'),'xps_lwip') #LFlags: lwip4
 ProgStart:
 StackSize:
 HeapSize:
