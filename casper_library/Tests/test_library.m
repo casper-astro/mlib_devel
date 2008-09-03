@@ -1,3 +1,7 @@
+% function test_library(test_file, section)
+% test_file - The file (in the current directory) containing the library and module components to test
+% section - The section in the file to test (denoted by by line starting with '% #') or 'all' for everything
+
 function test_library(test_file, section)
 
 %variables used to track number of failures and lines ignored
