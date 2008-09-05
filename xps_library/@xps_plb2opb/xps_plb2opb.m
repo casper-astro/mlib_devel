@@ -21,10 +21,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function b = xps_plb2opb(opb_name,opb_addr,addr_size)
+
 s.hw_sys = 'any';
 s.opb_name = opb_name;
 s.opb_addr_start = ceil(opb_addr/addr_size)*addr_size;
 s.addr_size = addr_size;
+s.opb_clk = 'sys_clk';
+s.plb_clk = 'sys_clk';
+
 b = class(s,'xps_plb2opb',xps_block([]));
 b = set(b, 'type','xps_plb2opb');
 b = set(b, 'plb_address_offset',addr_size);

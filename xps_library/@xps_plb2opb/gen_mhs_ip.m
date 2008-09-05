@@ -29,8 +29,18 @@ plb_addr_end = plb_addr_start;
 opb_name = blk_obj.opb_name;
 opb_addr_start = blk_obj.opb_addr_start;
 addr_size = blk_obj.addr_size;
-opb_clk = blk_obj.opb_clk;
-plb_clk = blk_obj.plb_clk;
+
+try
+    opb_clk = blk_obj.opb_clk;
+catch
+    opb_clk = '';
+end
+
+try
+    plb_clk = blk_obj.plb_clk;
+catch
+    plb_clk = '';
+end
 
 if isempty(opb_clk)
     opb_clk = 'sys_clk';
