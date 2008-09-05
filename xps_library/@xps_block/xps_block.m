@@ -115,7 +115,7 @@ if ~isempty(blk)
 			    convert_block = find_system(parent,'FollowLinks','on','lookundermasks','all','Handle',portconnectivity(1).SrcBlock,'masktype','Xilinx Type Converter Block');
 
 			    if isempty(convert_block)
-                    error(['The gateway : ', gateways_blk_out{i}, ' is not preceded by a Xilinx converter block as it should be.']);
+                    error(['The gateway : ', gateways_blk_out{n}, ' is not preceded by a Xilinx converter block as it should be.']);
 				end
 			end % if isempty(convert_block)
 
