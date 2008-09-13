@@ -1,6 +1,12 @@
 //#define VERBOSE
 //#define PRETTY
 
+//GJONES 2007.12.23	- Fixed error where a reset or aborted connection was not dealt with correctly.
+//		The telnet_err function is called when the tcp stack encounters an error. Previously this function did
+//		nothing except echo the error code to the serial port. Now the function checks if the pcb structure is still
+//		existant, then closes the connection. Looking at the error codes defined in lwip/err.h, it seems like any
+//		connection with one of these error codes should be closed anyway.
+
 #include "lwip/debug.h"
 #include "lwip/stats.h"
 #include "lwip/tcp.h"
@@ -14,7 +20,7 @@
 #include "lwip/udp.h"
 
 #include "fifo.h"
-
+ 
 // Defined in main.c
 void display_welcome_msg(void);
 void process_inputs(int feed_tinysh);
@@ -39,6 +45,9 @@ struct conn_state {
   //Xuint32 PostState;
   //char byte[4];
 };
+
+void close_conn(struct conn_state *ws);
+
 #define FAILED_MAX 8
 
 /* printmode switch, default = serial, 1 for tcp */
@@ -131,7 +140,7 @@ send_buf()
   unsigned int counter=0;
 
   if(!telnetstate) {
-    //uart_printf("%s: telnetstate is NULL!\n\r", __FUNCTION__);
+    uart_printf("%s: telnetstate is NULL!\n\r", __FUNCTION__);
     return;
   }
 
@@ -223,6 +232,14 @@ telnet_err(void *arg, err_t err)
   struct conn_state *ws = arg;
 
   uart_printf("tcp_err: %d\n\r", err);
+  if(ws == NULL) {
+	  uart_printf("ws was NULL\n\r");			//If the connection is no longer valid it must have been closed already
+  }
+  else {
+	  uart_printf("closing connection\n\r");
+	  close_conn(telnetstate);
+  }
+
   // TODO Is it OK to free?
   //if(arg != NULL) {
   //  mem_free(arg);
@@ -329,7 +346,7 @@ telnet_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
     //if(ws->tpcb != pcb) {
     //  uart_printf("Weirdo-");
     //}
-    //uart_printf("Connection closed by foreign host.\n\r");
+    uart_printf("Connection closed by foreign host.\n\r");
     close_conn(telnetstate);
   } else {
     // Determine client type
