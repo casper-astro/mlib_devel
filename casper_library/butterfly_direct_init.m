@@ -115,17 +115,27 @@ if(strcmp(block_type,'twiddle_general_3mult')),
     set_param([twiddle,'/coeff_gen'], 'Coeffs', 'Coeffs');
 end
 
-% Propagate quantization behavior
-set_param([blk,'/Convert'], 'quantization', quantization);
-set_param([blk,'/Convert1'], 'quantization', quantization);
-set_param([blk,'/Convert2'], 'quantization', quantization);
-set_param([blk,'/Convert3'], 'quantization', quantization);
+%set up overflow indication blocks
+bw = BitWidth+6; 
+bd = BitWidth+1;
+if strcmp(block_type, 'twiddle_general_3mult'),
+	bw = BitWidth+6; 
+	bd = BitWidth+1;
+elseif (strcmp(block_type, 'twiddle_stage_2') || strcmp(block_type, 'twiddle_coeff_0') || strcmp(block_type, 'twiddle_coeff_1')),
+	bw = BitWidth+2;
+	bd = BitWidth;
+else
+	fprintf('butterfly_direct_init: Unknown twiddle %s\n',block_type);
+end
 
-% Propagate overflow behavior
-set_param([blk,'/Convert'],  'overflow', overflow);
-set_param([blk,'/Convert1'], 'overflow', overflow);
-set_param([blk,'/Convert2'], 'overflow', overflow);
-set_param([blk,'/Convert3'], 'overflow', overflow);
+for i = 1:4 ,
+	set_param([blk,'/convert_of',num2str(i)], ...
+	'quantization', quantization, 'overflow', overflow, ...
+	'bit_width_i', tostring(bw), 'binary_point_i', tostring(bd), ...
+	'bit_width_o', tostring(BitWidth), ...
+       	'binary_point_o', tostring(BitWidth-1));
+end
+%disp('convert_of params set');
 
 clean_blocks(blk);
 
