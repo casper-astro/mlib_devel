@@ -75,4 +75,4 @@ butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3
 % Tests generation twiddle_stage_2
 butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_stage_2_test FFTSize 4 Coeffs '[0 1]' StepPeriod 2 BitWidth 5 add_latency 3 mult_latency 4 bram_latency 3 use_bram 0 quantization 'Truncate' overflow 'Wrap'
 % Tests generation of twiddle_general_3mult when there are more than 2 coefficients or there are 2 coefficients that arent [0 1]
-% butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3mult_1_test FFTSize 4 Coeffs '[0 1 2 3]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 2 bram_latency 1 use_bram 1 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate'
+butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3mult_1_test FFTSize 4 Coeffs '[0 1 2 3]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 2 bram_latency 1 use_bram 1 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate'
