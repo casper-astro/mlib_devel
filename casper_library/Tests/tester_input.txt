@@ -69,10 +69,10 @@ twiddle_coeff_0 casper_library/FFTs/Twiddle/twiddle_coeff_0 twiddle_coeff_0_test
 % Tests the use of twiddle_coeff_0
 butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_coeff_0_test FFTSize 5 Coeffs '[0]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2 use_bram 0 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate'
 % Tests the use of twiddle_coeff_1
-butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_coeff_1_test FFTSize 6 Coeffs '[1]' StepPeriod 0 BitWidth 5 add_latency 3 mult_latency 2 bram_latency 3 use_bram 1 quantization 'Truncate' overflow 'Saturate'
+butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_coeff_1_test FFTSize 6 Coeffs '[1]' StepPeriod 0 BitWidth 5 add_latency 3 mult_latency 2 bram_latency 3 use_bram 1 quantization 'Truncate' overflow 'Wrap'
 % Tests the use of twiddle_general_3mult for use with single coefficient
 butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3mult_test FFTSize 5 Coeffs '[2]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 3 bram_latency 2 use_bram 1 quantization 'Round  (unbiased: Even Values)' overflow 'Wrap'
 % Tests generation twiddle_stage_2
 butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_stage_2_test FFTSize 4 Coeffs '[0 1]' StepPeriod 2 BitWidth 5 add_latency 3 mult_latency 4 bram_latency 3 use_bram 0 quantization 'Truncate' overflow 'Wrap'
 % Tests generation of twiddle_general_3mult when there are more than 2 coefficients or there are 2 coefficients that arent [0 1]
-butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3mult_1_test FFTSize 4 Coeffs '[0 1 2 3]' StepPeriod 0 BitWidth 5 add_latency 1 mult_latency 2 bram_latency 1 use_bram 1 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate'
+% butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3mult_1_test FFTSize 4 Coeffs '[0 1 2 3]' StepPeriod 0 BitWidth 5 add_latency 2 mult_latency 2 bram_latency 1 use_bram 1 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate'
