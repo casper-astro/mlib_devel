@@ -80,3 +80,5 @@ butterfly_direct casper_library/FFTs/butterfly_direct butterfly_direct_general_3
 fft_stage_n casper_library/FFTs/fft_stage_n fft_stage_n_delay_bram_test FFTSize 5 FFTStage 3 BitWidth 12 use_bram 1 CoeffBram 0 MaxCoeffNum 10 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate' add_latency 2 mult_latency 3 bram_latency 2
 % Test generation of fft_stage_n when using logic for implementing delays
 fft_stage_n casper_library/FFTs/fft_stage_n fft_stage_n_delay_slr_test FFTSize 6 FFTStage 2 BitWidth 16 use_bram 0 CoeffBram 0 MaxCoeffNum 11 quantization 'Truncate' overflow 'Wrap' add_latency 2 mult_latency 3 bram_latency 1
+% Biplex core test. Large FFT to test implementation of delays and coeffs in BRAM
+biplex_core casper_library/FFTs/biplex_core biplex_core_test FFTSize 14 BitWidth 16 quantization 'Round  (unbiased: Even Values)' overflow 'Saturate' add_latency 3 mult_latency 3 bram_latency 2
