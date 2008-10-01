@@ -1,3 +1,23 @@
+% Initialize and configure the direct FFT.
+%
+% fft_direct_init(blk, varargin)
+%
+% blk = The block to configure.
+% varargin = {'varname', 'value', ...} pairs
+% 
+% Valid varnames for this block are:
+% FFTSize = Size of the FFT (2^FFTSize points). 
+% BitWidth = Bitwidth of input data.
+% add_latency = The latency of adders in the system.
+% mult_latency = The latency of multipliers in the system.
+% bram_latency = The latency of BRAM in the system.
+% quantization = Quantization behavior.
+% overflow = Overflow behavior.
+% MapTail = 
+% LargerFFTSize = Size of the entire FFT.
+% StartStage = First stage in this FFT.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,24 +41,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function fft_direct_init(blk, varargin)
-% Initialize and configure the direct FFT.
-%
-% fft_direct_init(blk, varargin)
-%
-% blk = The block to configure.
-% varargin = {'varname', 'value', ...} pairs
-% 
-% Valid varnames for this block are:
-% FFTSize = Size of the FFT (2^FFTSize points). 
-% BitWidth = Bitwidth of input data.
-% add_latency = The latency of adders in the system.
-% mult_latency = The latency of multipliers in the system.
-% bram_latency = The latency of BRAM in the system.
-% quantization = Quantization behavior.
-% overflow = Overflow behavior.
-% MapTail = 
-% LargerFFTSize = Size of the entire FFT.
-% StartStage = First stage in this FFT.
 
 % Declare any default values for arguments you might like.
 defaults = {};
