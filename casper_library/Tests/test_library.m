@@ -122,28 +122,31 @@ while( ischar(line) )
 
 	%read in block parameters
 	extension = '';
+	vars = {};
+	i = 0;
         [name,remainder] = get_token(remainder);
         [value, remainder] = get_token(remainder);
         while(~isempty(name) & ~isempty(value)),
             fprintf(['setting ', name, ' to ',value,'\n']);
-	    try, 	
-            set_param([model,'/',blk, '1', extension],name, value);
-	    catch,
-		err = 1;    
-    		disp(['Error setting ',name,' to ',value]);
-	    end
-	    %if are dealing with Configurable Subsystem, modify blk name to include block choice or 
-	    %parameters won't take
+	    vars{(i*2)+1} = ['',name,''];
+	    vars{(i*2)+2} = value;
+
+	    %if are dealing with Configurable Subsystem
 	    if( strcmp( 'BlockChoice', name ) ),
-		    fprintf(['Reconfigurable Subsystem detected\n'])
-		    extension = ['/',value];
+		    fprintf(['Reconfigurable Subsystem detected, unable to do those\n'])
 	    end   
             [name,remainder] = get_token(remainder);
-            [value, remainder] = get_token(remainder); 
+            [value, remainder] = get_token(remainder);
+	    i = i+1; 
         end
-       
+    
+        set_mask([model,'/',blk, '1'], vars{:});
+
         %replace existing block with new one	
-	if( ~err ), replace_block(model,'Name',blk,[model,'/',blk,'1'],'noprompt'); end
+	if( ~err ), 
+	%	fprintf(['Replacing block\n']);
+		replace_block(model,'Name',blk,[model,'/',blk,'1'],'noprompt'); 
+	end
         delete_block([model,'/',blk, '1']);
      
 	if( ~err ),
@@ -156,10 +159,12 @@ while( ischar(line) )
 		if(isequal(reference,output)),
 		    fprintf([model,' passed\n']);
 		else,
+	            fprintf(['\n*******************************************************************\n']);
 		    fprintf([model,' failed, line: ', num2str(linenum), '. Output and reference files differ\n']);
+		    fprintf(['*******************************************************************\n\n']);
 		    fail = fail + 1;
 		end
-		delete([model,'_output.mat']);
+		%delete([model,'_output.mat']);
 	else,
 	        fprintf(['Ignoring line ',num2str(linenum),'\n']);
 		ignore = ignore + 1;

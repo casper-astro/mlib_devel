@@ -18,5 +18,7 @@ if token(1) == '''',
 	[token,remainder] = strtok(string,'''');
 	%remove the final apostrophe
 	[temp,remainder] = strtok(remainder);
+	token = ['',token,''];
 end
+
 
