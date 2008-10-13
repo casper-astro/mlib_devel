@@ -55,6 +55,7 @@ opb_addr_start = ceil(opb_addr_start / (4*2^blk_obj.addr_width))*4*2^blk_obj.add
 str = [str, 'BEGIN opb_bram_if_cntlr\n'];
 str = [str, ' PARAMETER INSTANCE = ',inst_name,'\n'];
 str = [str, ' PARAMETER HW_VER = 1.00.a\n'];
+str = [str, ' PARAMETER C_OPB_CLK_PERIOD_PS = 10000\n'];
 str = [str, ' PARAMETER C_BASEADDR = 0x',dec2hex(opb_addr_start),'\n'];
 str = [str, ' PARAMETER C_HIGHADDR = 0x',dec2hex(opb_addr_start+4*2^blk_obj.addr_width-1),'\n'];
 str = [str, ' BUS_INTERFACE SOPB = ',opb_name,'\n'];
