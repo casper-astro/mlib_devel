@@ -38,7 +38,7 @@ b = class(s,'xps_ethlite',blk_obj);
 
 % ip name & version
 b = set(b,'ip_name','opb_ethernetlite');
-b = set(b,'ip_version','1.01.a');
+b = set(b,'ip_version','1.01.b');
 
 % software driver
 b = set(b, 'soft_driver', {'emaclite','1.01.a'});
