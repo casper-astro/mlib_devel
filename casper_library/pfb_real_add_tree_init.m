@@ -75,7 +75,6 @@ reuse_block(blk, 'convert1', 'xbsIndex_r4/Convert', ...
 reuse_block(blk, 'delay1', 'xbsIndex_r4/Delay', ...
     'latency', num2str(add_latency), ...
     'Position', [400 50+25*TotalTaps 430 80+25*TotalTaps]);
-
     % Scale Blocks are required before casting to n_(n-1) format
     % Input to adder tree seemes to be n_(n-2) format
     % each level in the adder tree requires one more shift
@@ -91,26 +90,28 @@ reuse_block(blk, 'scale2', 'xbsIndex_r4/Scale', ...
     'scale_factor', num2str(-scale_factor), ...
     'Position', [400 158+25*TotalTaps 430 172+25*TotalTaps]);
 
-
 % Add lines
 %add_line(blk, 'adder_tree1/2', 'convert1/1');
 add_line(blk, 'adder_tree1/2', 'scale1/1');
 add_line(blk, 'scale1/1', 'convert1/1');
 add_line(blk, 'convert1/1', 'dout/1');
 
-%What is this delay block doing here. it looks like it was
-% the old sync delay circuit
-reuse_block(blk, 'delay', 'xbsIndex_r4/Delay', ...
-    'latency', '(log2(TotalTaps)+1)*add_latency', ...
-    'Position', [80 14 120 56]);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% removed by Andrew as causes errors due to latency not working out to an integer,
+% causing script to fail even though, especially as the block is never used
+
+% %What is this delay block doing here. it looks like it was
+% % the old sync delay circuit
+% reuse_block(blk, 'delay', 'xbsIndex_r4/Delay', ...
+%    'latency', '(log2(TotalTaps)+1)*add_latency', ...
+%    'Position', [80 14 120 56]);
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 
 add_line(blk, 'sync/1', 'adder_tree1/1');
 %add_line(blk, 'adder_tree1/1', 'sync_out/1');
 
 add_line(blk, 'adder_tree1/1', 'delay1/1');
 add_line(blk, 'delay1/1', 'sync_out/1');
-
 
 for i=0:TotalTaps-1,
     slice_name = ['Slice', num2str(i)];
