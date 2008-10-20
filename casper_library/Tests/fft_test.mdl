@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.66"
+    ComputedModelVersion    "1.85"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "User"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Oct 17 14:34:33 2008"
+  LastModifiedDate	  "Mon Oct 20 16:18:29 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:66>"
+  ModelVersionFormat	  "1.%<AutoIncrement:85>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -635,7 +635,7 @@ Model {
   }
   System {
     Name		    "fft_test"
-    Location		    [392, 184, 1578, 1125]
+    Location		    [2211, 104, 3395, 1004]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -697,25 +697,8 @@ Model {
     }
     Block {
       BlockType		      Constant
-      Name		      "Constant"
-      Position		      [170, 188, 240, 212]
-      Value		      "(2^11)-1"
-      OutDataType	      "sfix(16)"
-      OutScaling	      "2^0"
-    }
-    Block {
-      BlockType		      Constant
       Name		      "Constant1"
       Position		      [65, 380, 95, 410]
-      ShowName		      off
-      Value		      "0"
-      OutDataType	      "sfix(16)"
-      OutScaling	      "2^0"
-    }
-    Block {
-      BlockType		      Constant
-      Name		      "Constant2"
-      Position		      [65, 425, 95, 455]
       ShowName		      off
       Value		      "0"
       OutDataType	      "sfix(16)"
@@ -733,7 +716,7 @@ Model {
     Block {
       BlockType		      Constant
       Name		      "Constant4"
-      Position		      [65, 460, 95, 490]
+      Position		      [65, 495, 95, 525]
       ShowName		      off
       Value		      "0"
       OutDataType	      "sfix(16)"
@@ -743,6 +726,24 @@ Model {
       BlockType		      Constant
       Name		      "Constant5"
       Position		      [55, 255, 85, 285]
+      ShowName		      off
+      Value		      "0"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Constant6"
+      Position		      [210, 180, 240, 210]
+      ShowName		      off
+      Value		      "2+8+16"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Constant7"
+      Position		      [65, 460, 95, 490]
       ShowName		      off
       Value		      "0"
       OutDataType	      "sfix(16)"
@@ -823,7 +824,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway In2"
       Ports		      [1, 1]
-      Position		      [130, 154, 165, 176]
+      Position		      [130, 159, 165, 181]
       ShowName		      off
       SourceBlock	      "xbsIndex_r4/Gateway In"
       SourceType	      "Xilinx Gateway In Block"
@@ -851,7 +852,7 @@ Model {
       BlockType		      Reference
       Name		      "Gateway In3"
       Ports		      [1, 1]
-      Position		      [300, 189, 335, 211]
+      Position		      [300, 184, 335, 206]
       SourceBlock	      "xbsIndex_r4/Gateway In"
       SourceType	      "Xilinx Gateway In Block"
       infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
@@ -1458,7 +1459,7 @@ Model {
       BlockType		      Mux
       Name		      "Mux"
       Ports		      [9, 1]
-      Position		      [815, 380, 820, 500]
+      Position		      [820, 380, 825, 500]
       ShowName		      off
       Inputs		      "9"
       DisplayOption	      "bar"
@@ -1467,7 +1468,7 @@ Model {
       BlockType		      DiscretePulseGenerator
       Name		      "Pulse\nGenerator"
       Ports		      [0, 1]
-      Position		      [65, 154, 100, 176]
+      Position		      [65, 159, 100, 181]
       ShowName		      off
       Period		      "2^7"
       PhaseDelay	      "11"
@@ -1476,29 +1477,19 @@ Model {
       BlockType		      DiscretePulseGenerator
       Name		      "Pulse\nGenerator1"
       Ports		      [0, 1]
-      Position		      [55, 212, 90, 238]
+      Position		      [55, 292, 90, 318]
       ShowName		      off
       Amplitude		      "0.5"
       Period		      "2^4"
       PhaseDelay	      "12"
     }
     Block {
-      BlockType		      DiscretePulseGenerator
-      Name		      "Pulse\nGenerator2"
-      Ports		      [0, 1]
-      Position		      [55, 292, 90, 318]
-      ShowName		      off
-      Amplitude		      "0.5"
-      Period		      "2^5"
-      PhaseDelay	      "12"
-    }
-    Block {
       BlockType		      Scope
       Name		      "Scope"
       Ports		      [9]
-      Position		      [830, 157, 890, 353]
+      Position		      [835, 157, 895, 353]
       Floating		      off
-      Location		      [201, 143, 1689, 973]
+      Location		      [121, 87, 1609, 917]
       Open		      off
       NumInputPorts	      "9"
       ZoomMode		      "xonly"
@@ -1580,8 +1571,8 @@ Model {
       BlockType		      ToFile
       Name		      "To File"
       Position		      [855, 426, 1000, 454]
-      Filename		      "fft_test_reference.mat"
-      MatrixName	      "reference"
+      Filename		      "fft_test_output.mat"
+      MatrixName	      "output"
     }
     Block {
       BlockType		      Reference
@@ -51276,33 +51267,25 @@ Model {
       SrcPort		      1
       Points		      [200, 0]
       Branch {
-	Points			[20, 0]
 	DstBlock		"fft"
 	DstPort			1
       }
       Branch {
-	Points			[0, 385]
+	Points			[0, 380]
 	DstBlock		"Gateway Out5"
 	DstPort			1
       }
-    }
-    Line {
-      SrcBlock		      "Constant"
-      SrcPort		      1
-      DstBlock		      "Gateway In3"
-      DstPort		      1
     }
     Line {
       SrcBlock		      "Gateway In3"
       SrcPort		      1
       Points		      [20, 0]
       Branch {
-	Points			[30, 0]
 	DstBlock		"fft"
 	DstPort			2
       }
       Branch {
-	Points			[0, 370]
+	Points			[0, 375]
 	DstBlock		"Gateway Out6"
 	DstPort			1
       }
@@ -51360,6 +51343,7 @@ Model {
 	DstPort			1
       }
       Branch {
+	Points			[0, 205]
 	DstBlock		"Mux"
 	DstPort			1
       }
@@ -51521,24 +51505,10 @@ Model {
       DstPort		      6
     }
     Line {
-      SrcBlock		      "Constant2"
-      SrcPort		      1
-      DstBlock		      "Gateway In7"
-      DstPort		      1
-    }
-    Line {
       SrcBlock		      "Constant4"
       SrcPort		      1
-      Points		      [10, 0]
-      Branch {
-	DstBlock		"Gateway In8"
-	DstPort			1
-      }
-      Branch {
-	Points			[0, 35]
-	DstBlock		"Gateway In9"
-	DstPort			1
-      }
+      DstBlock		      "Gateway In9"
+      DstPort		      1
     }
     Line {
       SrcBlock		      "Gateway In6"
@@ -51810,18 +51780,6 @@ Model {
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Constant1"
-      SrcPort		      1
-      DstBlock		      "Gateway In6"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Pulse\nGenerator2"
-      SrcPort		      1
-      DstBlock		      "Gateway In4"
-      DstPort		      1
-    }
-    Line {
       SrcBlock		      "Constant5"
       SrcPort		      1
       Points		      [15, 0]
@@ -51832,6 +51790,38 @@ Model {
       Branch {
 	Points			[0, -45]
 	DstBlock		"Gateway In"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Constant6"
+      SrcPort		      1
+      DstBlock		      "Gateway In3"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Constant1"
+      SrcPort		      1
+      DstBlock		      "Gateway In6"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Constant7"
+      SrcPort		      1
+      DstBlock		      "Gateway In8"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Pulse\nGenerator1"
+      SrcPort		      1
+      Points		      [10, 0]
+      Branch {
+	DstBlock		"Gateway In4"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 135]
+	DstBlock		"Gateway In7"
 	DstPort			1
       }
     }
