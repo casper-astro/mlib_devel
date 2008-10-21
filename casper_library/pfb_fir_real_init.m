@@ -99,16 +99,27 @@ for p=1:pols,
             if t==1,
                 src_blk = 'casper_library/PFBs/first_tap_real';
                 name = ['pol',num2str(p),'_in',num2str(i),'_first_tap'];
+	        reuse_block(blk, name, src_blk, ...
+        		'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
+	        propagate_vars([blk,'/',name],'defaults', defaults, varargin{:});
             elseif t==TotalTaps,
                 src_blk = 'casper_library/PFBs/last_tap_real';
                 name = ['pol',num2str(p),'_in',num2str(i),'_last_tap'];
+	        reuse_block(blk, name, src_blk, ...
+        		'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
+	        propagate_vars([blk,'/',name],'defaults', defaults, varargin{:});
             else,
                 src_blk = 'casper_library/PFBs/tap_real';
                 name = ['pol',num2str(p),'_in',num2str(i),'_tap',num2str(t)];
+	        reuse_block(blk, name, src_blk, ...
+			'data_width', tostring(BitWidthIn), ...
+			'coeff_frac_width', tostring(CoeffBitWidth-1), ...
+			'delay',tostring(2^(PFBSize-n_inputs)), ...
+        		'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
             end
-            reuse_block(blk, name, src_blk, ...
-                'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
-            propagate_vars([blk,'/',name],'defaults', defaults, varargin{:});
+%            reuse_block(blk, name, src_blk, ...
+%                'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
+%            propagate_vars([blk,'/',name],'defaults', defaults, varargin{:});
             if t==1,
                 set_param([blk,'/',name], 'nput', num2str(i-1));
             end
