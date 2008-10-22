@@ -53,7 +53,7 @@ switch s.hw_sys
     case 'iBOB'
         b = set(b,'ip_version','2.00.b');
     case 'ROACH'
-        b = set(b,'ip_version','2.00.b');
+        b = set(b,'ip_version','3.00.a');
     otherwise
         error(['10GbE not supported for platform ', s.board]);
 end
@@ -95,8 +95,17 @@ end
 b = set(b,'parameters',parameters);
 
 % bus interfaces
-interfaces.XAUI_SYS = ['xaui_sys',s.port];
-b = set(b,'interfaces',interfaces);
+switch s.hw_sys
+    case 'ROACH'
+    % end case 'ROACH'
+        interfaces.XAUI_CONF = ['xaui_conf',s.port];
+        interfaces.XGMII     = ['xgmii',s.port];
+        b = set(b,'interfaces',interfaces);
+    otherwise
+        interfaces.XAUI_CONF = ['xaui_sys',s.port];
+        b = set(b,'interfaces',interfaces);
+    % end otherwise
+end % switch s.hw_sys
 
 % miscellaneous and external ports
 
@@ -106,7 +115,11 @@ ext_ports = {};
 
 switch s.hw_sys
     case 'ROACH'
-        misc_ports.mgt_clk =    {1 'in'  'mgt_clk'};
+        if strcmp(s.port, '0') || strcmp(s.port, '1')
+            misc_ports.xaui_clk =    {1 'in'  'mgt_clk_0'};
+        else
+            misc_ports.xaui_clk =    {1 'in'  'mgt_clk_1'};
+        end
     otherwise
         ext_ports.mgt_tx_l0_p = {1 'out' ['XAUI',s.port,'_tx_l0_p'] 'null' 'vector=false' struct() struct()};
         ext_ports.mgt_tx_l0_n = {1 'out' ['XAUI',s.port,'_tx_l0_n'] 'null' 'vector=false' struct() struct()};

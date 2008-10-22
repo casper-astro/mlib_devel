@@ -530,63 +530,66 @@ if run_edkgen
     fclose(bof_fid);
 
     % modifying MSS file
-    if ~exist([xps_path,'\system.mss.bac'],'file')
-        copyfile([xps_path,'\system.mss'],[xps_path,'\system.mss.bac']);
-    end
-    in_fid = fopen([xps_path,'/system.mss.bac'],'r');
-    mss_fid = fopen([xps_path,'/system.mss'],'w');
 
-    while 1
-        line = fgets(in_fid);
-        if ~ischar(line)
-            break;
-        else
-            toks = regexp(line,'(.*)#IF#(.*)#(.*)','tokens');
-            if isempty(toks)
-                fprintf(mss_fid,line);
+    if ~strcmp(sw_os,'none')
+        if ~exist([xps_path,'\system.mss.bac'],'file')
+            copyfile([xps_path,'\system.mss'],[xps_path,'\system.mss.bac']);
+        end
+        in_fid = fopen([xps_path,'/system.mss.bac'],'r');
+        mss_fid = fopen([xps_path,'/system.mss'],'w');
+
+        while 1
+            line = fgets(in_fid);
+            if ~ischar(line)
+                break;
             else
-                default   = toks{1}{1};
-                condition = toks{1}{2};
-                real_line = toks{1}{3};
-                condition_met = 0;
-                for n = 1:length(xps_objs)
-                    b = xps_objs{n};
-                    try
-                        if eval(condition)
-                            condition_met = 1;
-                            fprintf(mss_fid,real_line);
-                            break;
+                toks = regexp(line,'(.*)#IF#(.*)#(.*)','tokens');
+                if isempty(toks)
+                    fprintf(mss_fid,line);
+                else
+                    default   = toks{1}{1};
+                    condition = toks{1}{2};
+                    real_line = toks{1}{3};
+                    condition_met = 0;
+                    for n = 1:length(xps_objs)
+                        b = xps_objs{n};
+                        try
+                            if eval(condition)
+                                condition_met = 1;
+                                fprintf(mss_fid,real_line);
+                                break;
+                            end
                         end
                     end
-                end
-                if ~condition_met && ~isempty(default)
-                    fprintf(mss_fid, [default, '\n']);
+                    if ~condition_met && ~isempty(default)
+                        fprintf(mss_fid, [default, '\n']);
+                    end
                 end
             end
         end
-    end
-    fclose(in_fid);
+        fclose(in_fid);
 
-    fprintf(mss_fid,'############################\n');
-    fprintf(mss_fid,'# Simulink interfaces      #\n');
-    fprintf(mss_fid,'############################\n');
-    fprintf(mss_fid,'\n');
+        fprintf(mss_fid,'############################\n');
+        fprintf(mss_fid,'# Simulink interfaces      #\n');
+        fprintf(mss_fid,'############################\n');
+        fprintf(mss_fid,'\n');
 
-    for n = 1:length(xps_objs)
-        blk_obj = xps_objs{n};
-        try
-            fprintf(mss_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
-            fprintf(mss_fid,gen_mss(blk_obj));
-            fprintf(mss_fid,'\n');
-        catch
-            disp('Problem with block : ')
-            display(blk_obj);
-            disp(lasterr);
-            error('Error found during generation in MSS (gen_mss).');
+        for n = 1:length(xps_objs)
+            blk_obj = xps_objs{n};
+            try
+                fprintf(mss_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
+                fprintf(mss_fid,gen_mss(blk_obj));
+                fprintf(mss_fid,'\n');
+            catch
+                disp('Problem with block : ')
+                display(blk_obj);
+                disp(lasterr);
+                error('Error found during generation in MSS (gen_mss).');
+            end
         end
-    end
-    fprintf(mss_fid,'\n');
-    fclose(mss_fid);
+        fprintf(mss_fid,'\n');
+        fclose(mss_fid);
+    end %if ~strcmp(sw_os,'none')
 
     % modifying UCF file
     if ~exist([xps_path,'\data\system.ucf.bac'],'file')
