@@ -1,0 +1,28 @@
+BEGIN infrastructure
+
+OPTION IPTYPE           = PERIPHERAL
+OPTION IMP_NETLIST      = TRUE
+OPTION HDL              = MIXED
+OPTION IP_GROUP         = USER
+#OPTION ARCH_SUPPORT_MAP = ACTIVE
+
+PORT sys_clk_n   = "", DIR = IN
+PORT sys_clk_p   = "", DIR = IN
+PORT dly_clk_n   = "", DIR = IN
+PORT dly_clk_p   = "", DIR = IN
+PORT aux_clk_0_n = "", DIR = IN
+PORT aux_clk_0_p = "", DIR = IN
+PORT aux_clk_1_n = "", DIR = IN
+PORT aux_clk_1_p = "", DIR = IN
+PORT epb_clk_buf = "", DIR = IN
+PORT sys_clk     = "", DIR = OUT
+PORT sys_clk90   = "", DIR = OUT
+PORT dly_clk     = "", DIR = OUT
+PORT aux_clk_0   = "", DIR = OUT
+PORT aux_clk_1   = "", DIR = OUT
+PORT epb_clk     = "", DIR = OUT
+
+PORT idelay_rst  = "", DIR = IN
+PORT idelay_rdy  = "", DIR = OUT
+
+END

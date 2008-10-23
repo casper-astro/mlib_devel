@@ -1,0 +1,2 @@
+lib xaui_phy_v1_00_a xaui_phy.v verilog
+lib xaui_phy_v1_00_a xaui_v7_2.v verilog
