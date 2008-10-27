@@ -96,3 +96,11 @@ fft casper_libarary/FFTs/fft fft_one_input_test FFTSize 2 BitWidth 8 n_inputs 0 
 fft casper_library/FFTs/fft fft_inputs_equal_size_test FFTSize 2 BitWidth 8 n_inputs 2 quantization 'Saturate' overflow 'Wrap' add_latency 2 mult_latency 3 bram_latency 1
 fft casper_libarary/FFTs/fft fft_test FFTSize 6 BitWidth 8 n_inputs 2 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate' add_latency 2 mult_latency 3 bram_latency 1
 % # PFBs
+tap casper_library/PFBs/tap tap_test mult_latency 2 coeff_width 16 coeff_frac_width 5 delay 8 data_width 8 bram_latency 2
+tap_real casper_library/PFBs/tap_real tap_real_test mult_latency 3 coeff_width 18 coeff_frac_width 16 delay 8 data_width 8 bram_latency 1
+% Tests the use of distributed memory for storing coefficients
+pfb_coeff_gen casper_library/PFBs/pfb_coeff_gen pfb_coeff_gen_dist_mem_test PFBSize 4 CoeffBitWidth 6 TotalTaps 4 CoeffDistMem 1 WindowType 'blackman' bram_latency 1 n_inputs 0 nput 0 fwidth 1
+% Tests the use of BRAMs for storing coefficients
+pfb_coeff_gen casper_library/PFBs/pfb_coeff_gen pfb_coeff_gen_bram_test PFBSize 4 CoeffBitWidth 6 TotalTaps 7 CoeffDistMem 0 WindowType 'blackman' bram_latency 2 n_inputs 1 nput 1 fwidth 0.5
+first_tap casper_library/PFBs/first_tap first_tap_test nput 0 PFBSize 5 CoeffBitWidth 6 TotalTaps 5 BitWidthIn 8 CoeffDistMem 1 WindowType 'bartlett' mult_latency 3 bram_latency 2 n_inputs 1 fwidth 1 
+first_tap_real casper_library/PFBs/first_tap_real first_tap_real_test nput 0 PFBSize 4 CoeffBitWidth 10 TotalTaps 6 BitWidthIn 16 CoeffDistMem 1 WindowType 'chebwin' mult_latency 3 bram_latency 1 n_inputs 2 fwidth 0.5 
