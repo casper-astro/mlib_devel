@@ -1,3 +1,21 @@
+% Initialize and configure the Polyphase Filter Bank coefficient generator.
+%
+% pfb_coeff_gen_init(blk, varargin)
+%
+% blk = The block to configure.
+% varargin = {'varname', 'value', ...} pairs
+% 
+% Valid varnames for this block are:
+% PFBSize = Size of the FFT (2^FFTSize points).
+% CoeffBitWidth = Bit width of coefficients.
+% TotalTaps = Total number of taps in the PFB
+% CoeffDistMem = Implement coefficients in distributed memory
+% WindowType = The type of windowing function to use.
+% bram_latency = The latency of BRAM in the system.
+% n_inputs = Number of parallel input streams
+% nput = Which input this is (of the n_inputs parallel).
+% fwidth = The scaling of the bin width (1 is normal).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,23 +39,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function pfb_coeff_gen_init(blk, varargin)
-% Initialize and configure the Polyphase Filter Bank coefficient generator.
-%
-% pfb_coeff_gen_init(blk, varargin)
-%
-% blk = The block to configure.
-% varargin = {'varname', 'value', ...} pairs
-% 
-% Valid varnames for this block are:
-% PFBSize = Size of the FFT (2^FFTSize points).
-% CoeffBitWidth = Bit width of coefficients.
-% TotalTaps = Total number of taps in the PFB
-% CoeffDistMem = Implement coefficients in distributed memory
-% WindowType = The type of windowing function to use.
-% bram_latency = The latency of BRAM in the system.
-% n_inputs = Number of parallel input streams
-% nput = Which input this is (of the n_inputs parallel).
-% fwidth = The scaling of the bin width (1 is normal).
+
 
 % Declare any default values for arguments you might like.
 defaults = {};
@@ -103,7 +105,7 @@ add_line(blk, 'Register/1', 'coeff/1');
 % Add Dynamic Blocks
 for a=1:TotalTaps,
     blkname = ['ROM', num2str(a)];
-    pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a)
+    pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a);
     vecstr = ['pfb_coeff_gen_calc(', num2str(PFBSize), ', ', ...
         num2str(TotalTaps), ',''', tostring(WindowType), ''',', ...
         num2str(n_inputs), ', ', tostring(nput), ',', ...
