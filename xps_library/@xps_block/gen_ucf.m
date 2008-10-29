@@ -57,18 +57,18 @@ if ~isempty(ext_ports)
 
             if ~strcmp(locs,'null')
                 if isstr(locs)
-                    locs = eval(locs);
+                    pin = eval(locs);
                 end % if isstr(locs)
 
-                if length(locs) ~= cur_ext_port{1}
+                if length(pin) ~= cur_ext_port{1}
                     error(['Number of pin locations for external port ',ext_port_names{j},' does not correspond to bitwidth']);
                 end % length(locs) ~= cur_ext_port{1}
 
                 if cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{5},'vector=true')
-                    str = [str,'NET \"',cur_ext_port{3},'\" LOC = ', locs{1}, ucf_constraints_str, ' ;\n'];
+                    str = [str,'NET \"',cur_ext_port{3},'\" LOC = ', pin{1}, ucf_constraints_str, ' ;\n'];
                 else
                     for i = [1:cur_ext_port{1}]
-                        str = [str,'NET \"',cur_ext_port{3},'<',num2str(i-1),'>\" LOC = ', locs{i}, ucf_constraints_str, ' ;\n'];
+                        str = [str,'NET \"',cur_ext_port{3},'<',num2str(i-1),'>\" LOC = ', pin{i}, ucf_constraints_str, ' ;\n'];
                     end % i = [1:cur_ext_port{1}]
                 end % cur_ext_port{1} == 1 & ~strcmp(cur_ext_port{5},'vector=true')
             end % if ~strcmp(locs,'null')

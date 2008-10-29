@@ -83,7 +83,8 @@ entity adc_interface is
         -- dcm clock shift
         dcm_psclk         : in std_logic := '0';
         dcm_psen          : in std_logic := '0';
-        dcm_psincdec      : in std_logic := '0'
+        dcm_psincdec      : in std_logic := '0';
+        dcm_psdone        : out std_logic
 
     );
 end entity adc_interface;
@@ -550,7 +551,7 @@ CLKSHIFT_DCM : DCM
         CLK180                => open,
         CLK270                => open,
         LOCKED                => ctrl_dcm_locked,
-        PSDONE                => open,
+        PSDONE                => dcm_psdone,
         STATUS                => open);
 
 end IMP;

@@ -83,5 +83,6 @@ PORT ctrl_dcm_locked = "", DIR = O
 PORT dcm_psclk       = "", DIR = I
 PORT dcm_psen        = "", DIR = I
 PORT dcm_psincdec    = "", DIR = I
+PORT dcm_psdone      = "", DIR = O
 
 END

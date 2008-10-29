@@ -65,6 +65,7 @@ PARAMETER C_FAMILY = virtex2p, DT = STRING
   PORT adc0_psclk           = "", DIR = O
   PORT adc0_psen            = "", DIR = O
   PORT adc0_psincdec        = "", DIR = O
+  PORT adc0_psdone          = "", DIR = I
   PORT adc0_clk             = "", DIR = I
 	
 	######################################
@@ -79,6 +80,7 @@ PARAMETER C_FAMILY = virtex2p, DT = STRING
   PORT adc1_psclk           = "", DIR = O
   PORT adc1_psen            = "", DIR = O
   PORT adc1_psincdec        = "", DIR = O
+  PORT adc1_psdone          = "", DIR = I
   PORT adc1_clk             = "", DIR = I
 
 END

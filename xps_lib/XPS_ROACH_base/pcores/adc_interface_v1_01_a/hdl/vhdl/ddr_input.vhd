@@ -20,35 +20,6 @@ entity ddr_input is
   );
 end ddr_input;
 
---Describe input DDR registers (behaviorally) to be inferred
-architecture behavioral of ddr_input is
-
-  attribute iob : string;
-  attribute iob of qrisereg : label is "true";
-  attribute iob of qfallreg : label is "true";
-
-begin
-
-  qrisereg : process (clk, d, rst)
-  begin
-    if rst='1' then --asynchronous reset, active high
-      qrise <= '0';
-    elsif clk'event and clk='1' then --Clock event - posedge
-      qrise <= d;
-    end if;
-  end process;
-
-  qfallreg : process (clk, d, rst)
-  begin
-    if rst='1' then --asynchronous reset, active high
-      qfall <= '0';
-    elsif clk'event and clk='0' then --Clock event - negedge
-      qfall <= d;
-    end if;
-  end process;
-
-end behavioral;
-
 -- Describe input DDR registers (structurally)
 architecture structural of ddr_input is
 

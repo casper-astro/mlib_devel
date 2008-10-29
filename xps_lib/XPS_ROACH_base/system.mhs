@@ -35,31 +35,27 @@ PORT epb_rdy     = epb_rdy,     DIR = O
 PORT ppc_irq_n   = ppc_irq_n,   DIR = O
 
 # MGT Ports
-PORT mgt_ref_clk_top_n    = xaui2_ref_clk_n, DIR = I
-PORT mgt_ref_clk_top_p    = xaui2_ref_clk_p, DIR = I
-PORT mgt_ref_clk_bottom_n = xaui0_ref_clk_n, DIR = I
-PORT mgt_ref_clk_bottom_p = xaui0_ref_clk_p, DIR = I
-PORT mgt_rx_top_1_n       = xaui3_mgt_rx_n,  DIR = I, VEC = [3:0]
-PORT mgt_rx_top_1_p       = xaui3_mgt_rx_p,  DIR = I, VEC = [3:0]
-PORT mgt_tx_top_1_n       = xaui3_mgt_tx_n,  DIR = O, VEC = [3:0]
-PORT mgt_tx_top_1_p       = xaui3_mgt_tx_p,  DIR = O, VEC = [3:0]
-PORT mgt_rx_top_0_n       = xaui2_mgt_rx_n,  DIR = I, VEC = [3:0]
-PORT mgt_rx_top_0_p       = xaui2_mgt_rx_p,  DIR = I, VEC = [3:0]
-PORT mgt_tx_top_0_n       = xaui2_mgt_tx_n,  DIR = O, VEC = [3:0]
-PORT mgt_tx_top_0_p       = xaui2_mgt_tx_p,  DIR = O, VEC = [3:0]
-PORT mgt_rx_bottom_1_n    = xaui1_mgt_rx_n,  DIR = I, VEC = [3:0]
-PORT mgt_rx_bottom_1_p    = xaui1_mgt_rx_p,  DIR = I, VEC = [3:0]
-PORT mgt_tx_bottom_1_n    = xaui1_mgt_tx_n,  DIR = O, VEC = [3:0]
-PORT mgt_tx_bottom_1_p    = xaui1_mgt_tx_p,  DIR = O, VEC = [3:0]
-PORT mgt_rx_bottom_0_n    = xaui0_mgt_rx_n,  DIR = I, VEC = [3:0]
-PORT mgt_rx_bottom_0_p    = xaui0_mgt_rx_p,  DIR = I, VEC = [3:0]
-PORT mgt_tx_bottom_0_n    = xaui0_mgt_tx_n,  DIR = O, VEC = [3:0]
-PORT mgt_tx_bottom_0_p    = xaui0_mgt_tx_p,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_ref_clk_top_n    = xaui2_ref_clk_n, DIR = I
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_ref_clk_top_p    = xaui2_ref_clk_p, DIR = I
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_ref_clk_bottom_n = xaui0_ref_clk_n, DIR = I
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_ref_clk_bottom_p = xaui0_ref_clk_p, DIR = I
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_top_1_n       = xaui3_mgt_rx_n,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_top_1_p       = xaui3_mgt_rx_p,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_top_1_n       = xaui3_mgt_tx_n,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_top_1_p       = xaui3_mgt_tx_p,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_top_0_n       = xaui2_mgt_rx_n,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_top_0_p       = xaui2_mgt_rx_p,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_top_0_n       = xaui2_mgt_tx_n,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_top_0_p       = xaui2_mgt_tx_p,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_bottom_1_n    = xaui1_mgt_rx_n,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_bottom_1_p    = xaui1_mgt_rx_p,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_bottom_1_n    = xaui1_mgt_tx_n,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_bottom_1_p    = xaui1_mgt_tx_p,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_bottom_0_n    = xaui0_mgt_rx_n,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_rx_bottom_0_p    = xaui0_mgt_rx_p,  DIR = I, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_bottom_0_n    = xaui0_mgt_tx_n,  DIR = O, VEC = [3:0]
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_tx_bottom_0_p    = xaui0_mgt_tx_p,  DIR = O, VEC = [3:0]
 
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#PORT bref_clk_top_p = bref_clk_top_p, DIR = I
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#PORT bref_clk_top_n = bref_clk_top_n, DIR = I
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#PORT bref_clk_bottom_p = bref_clk_bottom_p, DIR = I
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#PORT bref_clk_bottom_n = bref_clk_bottom_n, DIR = I
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_clk = adc0_adc3wire_clk, DIR = O
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_data = adc0_adc3wire_data, DIR = O
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe, DIR = O
@@ -171,42 +167,36 @@ BEGIN sys_block
   PORT app_irq    = 0x0000
 END
 
-BEGIN xaui_infrastructure
-  PARAMETER INSTANCE = xaui_infrastructure_inst
-  PARAMETER HW_VER = 1.00.a
-
-  PARAMETER DIFF_BOOST = "TRUE"
-
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#BEGIN xaui_infrastructure
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PARAMETER INSTANCE = xaui_infrastructure_inst
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PARAMETER HW_VER = 1.00.a
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PARAMETER DIFF_BOOST = "TRUE"
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#  PARAMETER DISABLE_0  = 0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#  PARAMETER DISABLE_1  = 0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#  PARAMETER DISABLE_2  = 0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#  PARAMETER DISABLE_3  = 0
-  
-  PORT mgt_refclk_t_n = xaui2_ref_clk_n
-  PORT mgt_refclk_t_p = xaui2_ref_clk_p
-  PORT mgt_refclk_b_n = xaui0_ref_clk_n
-  PORT mgt_refclk_b_p = xaui0_ref_clk_p
-  PORT mgt_rx_t1_n    = xaui3_mgt_rx_n
-  PORT mgt_rx_t1_p    = xaui3_mgt_rx_p
-  PORT mgt_tx_t1_n    = xaui3_mgt_tx_n
-  PORT mgt_tx_t1_p    = xaui3_mgt_tx_p
-  PORT mgt_rx_t0_n    = xaui2_mgt_rx_n
-  PORT mgt_rx_t0_p    = xaui2_mgt_rx_p
-  PORT mgt_tx_t0_n    = xaui2_mgt_tx_n
-  PORT mgt_tx_t0_p    = xaui2_mgt_tx_p
-  PORT mgt_rx_b1_n    = xaui1_mgt_rx_n
-  PORT mgt_rx_b1_p    = xaui1_mgt_rx_p
-  PORT mgt_tx_b1_n    = xaui1_mgt_tx_n
-  PORT mgt_tx_b1_p    = xaui1_mgt_tx_p
-  PORT mgt_rx_b0_n    = xaui0_mgt_rx_n
-  PORT mgt_rx_b0_p    = xaui0_mgt_rx_p
-  PORT mgt_tx_b0_n    = xaui0_mgt_tx_n
-  PORT mgt_tx_b0_p    = xaui0_mgt_tx_p
-
-  PORT reset          = sys_reset
-  PORT mgt_clk_0      = mgt_clk_0
-  PORT mgt_clk_1      = mgt_clk_1
-
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_refclk_t_n = xaui2_ref_clk_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_refclk_t_p = xaui2_ref_clk_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_refclk_b_n = xaui0_ref_clk_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_refclk_b_p = xaui0_ref_clk_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_t1_n    = xaui3_mgt_rx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_t1_p    = xaui3_mgt_rx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_t1_n    = xaui3_mgt_tx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_t1_p    = xaui3_mgt_tx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_t0_n    = xaui2_mgt_rx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_t0_p    = xaui2_mgt_rx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_t0_n    = xaui2_mgt_tx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_t0_p    = xaui2_mgt_tx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_b1_n    = xaui1_mgt_rx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_b1_p    = xaui1_mgt_rx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_b1_n    = xaui1_mgt_tx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_b1_p    = xaui1_mgt_tx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_b0_n    = xaui0_mgt_rx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_rx_b0_p    = xaui0_mgt_rx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_b0_n    = xaui0_mgt_tx_n
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_tx_b0_p    = xaui0_mgt_tx_p
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT reset          = sys_reset
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#  PORT mgt_clk_0      = mgt_clk_0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#  BUS_INTERFACE XAUI_SYS_0  = xaui_sys0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#  BUS_INTERFACE XAUI_SYS_1  = xaui_sys1
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#  BUS_INTERFACE XAUI_SYS_2  = xaui_sys2
@@ -215,7 +205,8 @@ BEGIN xaui_infrastructure
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#  BUS_INTERFACE XAUI_CONF_1 = xaui_conf1
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#  BUS_INTERFACE XAUI_CONF_2 = xaui_conf2
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#  BUS_INTERFACE XAUI_CONF_3 = xaui_conf3
-END
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#END
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#
 
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#BEGIN xaui_phy
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#  PARAMETER INSTANCE = xaui_phy_0
@@ -256,10 +247,10 @@ END
 #IF# strcmp(get(b,'type'),'xps_adc')#BEGIN opb_adccontroller
 #IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER INSTANCE = opb_adccontroller_0
 #IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER HW_VER = 1.00.a
-#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_BASEADDR = 0xd0ffde00
-#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_HIGHADDR = 0xd0ffdeff
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_BASEADDR = 0x00020000
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_HIGHADDR = 0x0002ffff
 #IF# strcmp(get(b,'type'),'xps_adc')# BUS_INTERFACE SOPB = opb0
-#IF# strcmp(get(b,'type'),'xps_adc')# PORT OPB_Clk = sys_clk
+#IF# strcmp(get(b,'type'),'xps_adc')# PORT OPB_Clk = epb_clk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_data = adc0_adc3wire_data
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe
@@ -271,14 +262,16 @@ END
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_modepin = adc1_modepin
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_ddrb = adc1_ddrb
-#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc1_dcm_reset = adc1_dcm_reset
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_dcm_reset = adc1_dcm_reset
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psclk = adc0_psclk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psen = adc0_psen
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psincdec = adc0_psincdec
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psdone = adc0_psdone
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_clk = adc0_clk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psclk = adc1_psclk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psen = adc1_psen
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psincdec = adc1_psincdec
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psdone = adc1_psdone
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
 #IF# strcmp(get(b,'type'),'xps_adc')#END
 #IF# strcmp(get(b,'type'),'xps_adc')#

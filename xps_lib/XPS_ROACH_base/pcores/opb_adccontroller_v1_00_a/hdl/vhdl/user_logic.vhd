@@ -68,6 +68,7 @@ entity user_logic is
       adc0_psclk           : out std_logic := '0';
       adc0_psen            : out std_logic := '0';
       adc0_psincdec        : out std_logic := '0';
+      adc0_psdone          : in  std_logic := '0';
       adc0_clk             : in  std_logic := '0';
 
       --------------------------------------
@@ -82,6 +83,7 @@ entity user_logic is
       adc1_psclk           : out std_logic := '0';
       adc1_psen            : out std_logic := '0';
       adc1_psincdec        : out std_logic := '0';
+      adc1_psdone          : in  std_logic := '0';
       adc1_clk             : in  std_logic := '0';
 
       -- Bus protocol ports
@@ -186,9 +188,6 @@ architecture IMP of user_logic is
   signal dcm_reset_counter_0  : std_logic_vector(4 downto 0);
   signal dcm_reset_counter_1  : std_logic_vector(4 downto 0);
 
-  signal wtf0 : std_logic;
-  signal wtf1 : std_logic;
-
 begin
 
   DCM_RESET_EXTEND : process( Bus2IP_Clk ) is
@@ -218,12 +217,8 @@ begin
     end if;
   end process DCM_RESET_EXTEND;
 
-  wtf0 <= '1' when dcm_reset_counter_0 = "00000" else '0';
-  wtf1 <= '1' when dcm_reset_counter_1 = "00000" else '0';
-
-
-  adc0_dcm_reset <= '1' when wtf0 = '0' else '0';
-  adc1_dcm_reset <= '1' when wtf0 = '0' else '0';
+  adc0_dcm_reset <= '0' when dcm_reset_counter_0 = "00000" else '1';
+  adc1_dcm_reset <= '0' when dcm_reset_counter_1 = "00000" else '1';
  
 
   slv_reg_write_select <= Bus2IP_WrCE(0 to 2);
@@ -405,7 +400,7 @@ begin
   REG_READ_PROC : process( slv_reg_read_select, adc0_data, adc0_address, adc0_modepin_int, adc0_do_shift, adc1_data, adc1_address, adc1_modepin_int, adc1_do_shift , adc0_adc1_sample_RR, adc1_adc0_sample_RR) is
   begin
     case slv_reg_read_select is
-      when "100" => slv_ip2bus_data <= "000000" & adc1_adc0_sample_RR & adc0_adc1_sample_RR & "00000000" & "000000" & adc1_modepin_int & adc0_modepin_int & "00000000";
+      when "100" => slv_ip2bus_data <= "00" & adc1_psdone & adc0_psdone & "00" & adc1_adc0_sample_RR & adc0_adc1_sample_RR & "00000000" & "000000" & adc1_modepin_int & adc0_modepin_int & "00000000";
       when "010" => slv_ip2bus_data <= adc0_data & "00000" & adc0_address & "0000000" & adc0_do_shift;
       when "001" => slv_ip2bus_data <= adc1_data & "00000" & adc1_address & "0000000" & adc1_do_shift;
       when others => slv_ip2bus_data <= (others => '0');

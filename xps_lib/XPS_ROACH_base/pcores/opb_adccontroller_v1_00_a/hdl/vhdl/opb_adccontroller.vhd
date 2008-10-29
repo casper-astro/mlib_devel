@@ -72,6 +72,7 @@ entity opb_adccontroller is
       adc0_psclk           : out std_logic := '0';
       adc0_psen            : out std_logic := '0';
       adc0_psincdec        : out std_logic := '0';
+      adc0_psdone          : in  std_logic := '0';
       adc0_clk             : in  std_logic := '0';
 
       --------------------------------------
@@ -86,6 +87,7 @@ entity opb_adccontroller is
       adc1_psclk           : out std_logic := '0';
       adc1_psen            : out std_logic := '0';
       adc1_psincdec        : out std_logic := '0';
+      adc1_psdone          : in  std_logic := '0';
       adc1_clk             : in  std_logic := '0';
 
       -- Bus protocol ports
@@ -359,6 +361,7 @@ begin
       adc0_psclk           => adc0_psclk          ,
       adc0_psen            => adc0_psen           ,
       adc0_psincdec        => adc0_psincdec       ,
+      adc0_psdone          => adc0_psdone         ,
       adc0_clk             => adc0_clk            ,
 
       --------------------------------------
@@ -373,6 +376,7 @@ begin
       adc1_psclk           => adc1_psclk          ,
       adc1_psen            => adc1_psen           ,
       adc1_psincdec        => adc1_psincdec       ,
+      adc1_psdone          => adc1_psdone         ,
       adc1_clk             => adc1_clk            ,
 
       -- Bus protocol ports
