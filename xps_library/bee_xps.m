@@ -62,6 +62,8 @@ if nargin == 0  % LAUNCH GUI
             set(handles.xsg_version,'String','10.1');
         case {'10.1.2.1250'}
             set(handles.xsg_version,'String','10.1');
+        case {'10.1.3.1386'}
+            set(handles.xsg_version,'String','10.1');
         otherwise
             errordlg(['Unsupported Xilinx System Generator version: ',xsg]);
             return;
