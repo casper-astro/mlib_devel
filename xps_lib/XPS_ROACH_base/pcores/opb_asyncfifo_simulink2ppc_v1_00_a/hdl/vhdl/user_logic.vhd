@@ -196,6 +196,7 @@ architecture IMP of user_logic is
 	constant IDLE                 : std_logic_vector(2 downto 0) := "000";
 	constant GET_DATA             : std_logic_vector(2 downto 0) := "001";
 
+  constant DCOUNT               : integer := (min(log2(FIFO_LENGTH*FIFO_WIDTH/32),log2(FIFO_LENGTH)));
 
 	component asyncfifo
 		port (
@@ -210,13 +211,21 @@ architecture IMP of user_logic is
 			empty            : OUT std_logic;
 			full             : OUT std_logic;
 			prog_full        : OUT std_logic;
-			rd_data_count    : OUT std_logic_vector((min(log2(FIFO_LENGTH*FIFO_WIDTH/32),log2(FIFO_LENGTH))-1) downto 0)
+			rd_data_count    : OUT std_logic_vector(DCOUNT - 1 downto 0)
 		);
 	end component;
+  attribute box_type : string;
+  attribute box_type of asyncfifo: component is "user_black_box";
+  attribute read_cores: string;
+  attribute read_cores of asyncfifo : component is "no";
+  --attributes to prevent xst borking designs with multiple instantiations
+
+
+
 	signal fifo_user_level        : std_logic_vector((log2(FIFO_LENGTH)-1) downto 0);
 	signal data_count_aligned     : std_logic_vector(15 downto 0);
-	signal data_count             : std_logic_vector((min(log2(FIFO_LENGTH*FIFO_WIDTH/32),log2(FIFO_LENGTH))-1) downto 0);
-        signal fake_bits_nb           : std_logic_vector(7 downto 0);
+	signal data_count             : std_logic_vector(DCOUNT - 1 downto 0);
+  signal fake_bits_nb           : std_logic_vector(7 downto 0);
 	
 begin
 
@@ -316,7 +325,7 @@ begin
 		);
 
 	SMALL_WIDTH : if (FIFO_WIDTH < 33) generate
-		signal padding : std_logic_vector((16-log2(FIFO_LENGTH*FIFO_WIDTH/32)-1) downto 0);
+		signal padding : std_logic_vector(16 - DCOUNT - 1 downto 0);
 	begin
 		padding <= (others => '0');
 		data_count_aligned <= padding & data_count;
@@ -329,7 +338,7 @@ begin
 	begin
 		lsb_padding        <= (others => '0');
 		msb_padding        <= (others => '0');
-                fake_bits_nb       <= conv_std_logic_vector(log2(FIFO_LENGTH*FIFO_WIDTH/32)-log2(FIFO_LENGTH),8);
+    fake_bits_nb       <= conv_std_logic_vector(log2(FIFO_LENGTH*FIFO_WIDTH/32)-log2(FIFO_LENGTH),8);
 		data_count_aligned <= msb_padding & data_count & lsb_padding;
 	end generate;
 

@@ -48,6 +48,12 @@ b = set(b,'ip_name','XAUI_interface');
 misc_ports.app_clk     = {1 'in' get(xsg_obj,'clk_src')};
 
 switch s.board
+    case 'ROACH'
+        if strcmp(s.port, '0') || strcmp(s.port, '1')
+            misc_ports.xaui_clk =    {1 'in'  'mgt_clk_0'};
+        else
+            misc_ports.xaui_clk =    {1 'in'  'mgt_clk_1'};
+        end
     case 'CORR'
         misc_ports.mgt_clk          = {1 'in' 'bref_clk'};
     % end case 'CORR'
@@ -91,21 +97,29 @@ b = set(b,'parameters',parameters);
 portnum  = ['XAUI', s.port];
 xauiport = [s.board,'.',portnum];
 
-ext_ports.mgt_tx_l0_p = {1 'out' [portnum,'_tx_l0_p'] [xauiport, '.tx_l0_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l0_n = {1 'out' [portnum,'_tx_l0_n'] [xauiport, '.tx_l0_n'] 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l1_p = {1 'out' [portnum,'_tx_l1_p'] [xauiport, '.tx_l1_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l1_n = {1 'out' [portnum,'_tx_l1_n'] [xauiport, '.tx_l1_n'] 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l2_p = {1 'out' [portnum,'_tx_l2_p'] [xauiport, '.tx_l2_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l2_n = {1 'out' [portnum,'_tx_l2_n'] [xauiport, '.tx_l2_n'] 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l3_p = {1 'out' [portnum,'_tx_l3_p'] [xauiport, '.tx_l3_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_tx_l3_n = {1 'out' [portnum,'_tx_l3_n'] [xauiport, '.tx_l3_n'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l0_p = {1 'in'  [portnum,'_rx_l0_p'] [xauiport, '.rx_l0_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l0_n = {1 'in'  [portnum,'_rx_l0_n'] [xauiport, '.rx_l0_n'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l1_p = {1 'in'  [portnum,'_rx_l1_p'] [xauiport, '.rx_l1_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l1_n = {1 'in'  [portnum,'_rx_l1_n'] [xauiport, '.rx_l1_n'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l2_p = {1 'in'  [portnum,'_rx_l2_p'] [xauiport, '.rx_l2_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l2_n = {1 'in'  [portnum,'_rx_l2_n'] [xauiport, '.rx_l2_n'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l3_p = {1 'in'  [portnum,'_rx_l3_p'] [xauiport, '.rx_l3_p'] 'vector=false' struct() struct()};
-ext_ports.mgt_rx_l3_n = {1 'in'  [portnum,'_rx_l3_n'] [xauiport, '.rx_l3_n'] 'vector=false' struct() struct()};
+if ~strcmp(s.board,'ROACH')
+    ext_ports.mgt_tx_l0_p = {1 'out' [portnum,'_tx_l0_p'] [xauiport, '.tx_l0_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_tx_l0_n = {1 'out' [portnum,'_tx_l0_n'] [xauiport, '.tx_l0_n'] 'vector=false' struct() struct()};
+    ext_ports.mgt_tx_l1_p = {1 'out' [portnum,'_tx_l1_p'] [xauiport, '.tx_l1_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_tx_l1_n = {1 'out' [portnum,'_tx_l1_n'] [xauiport, '.tx_l1_n'] 'vector=false' struct() struct()};
+    ext_ports.mgt_tx_l2_p = {1 'out' [portnum,'_tx_l2_p'] [xauiport, '.tx_l2_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_tx_l2_n = {1 'out' [portnum,'_tx_l2_n'] [xauiport, '.tx_l2_n'] 'vector=false' struct() struct()};
+    ext_ports.mgt_tx_l3_p = {1 'out' [portnum,'_tx_l3_p'] [xauiport, '.tx_l3_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_tx_l3_n = {1 'out' [portnum,'_tx_l3_n'] [xauiport, '.tx_l3_n'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l0_p = {1 'in'  [portnum,'_rx_l0_p'] [xauiport, '.rx_l0_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l0_n = {1 'in'  [portnum,'_rx_l0_n'] [xauiport, '.rx_l0_n'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l1_p = {1 'in'  [portnum,'_rx_l1_p'] [xauiport, '.rx_l1_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l1_n = {1 'in'  [portnum,'_rx_l1_n'] [xauiport, '.rx_l1_n'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l2_p = {1 'in'  [portnum,'_rx_l2_p'] [xauiport, '.rx_l2_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l2_n = {1 'in'  [portnum,'_rx_l2_n'] [xauiport, '.rx_l2_n'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l3_p = {1 'in'  [portnum,'_rx_l3_p'] [xauiport, '.rx_l3_p'] 'vector=false' struct() struct()};
+    ext_ports.mgt_rx_l3_n = {1 'in'  [portnum,'_rx_l3_n'] [xauiport, '.rx_l3_n'] 'vector=false' struct() struct()};
+    b = set(b,'ext_ports',ext_ports);
+end
 
-b = set(b,'ext_ports',ext_ports);
+if strcmp(s.board,'ROACH')
+    interfaces.XAUI_CONF = ['xaui_conf',s.port];
+    interfaces.XGMII     = ['xgmii',s.port];
+    b = set(b,'interfaces',interfaces);
+end
+

@@ -652,6 +652,7 @@ if run_edkgen
     fprintf(ucf_fid,'\n');
     try
         for n = 1:length(xps_objs)
+            n
             blk_obj = xps_objs{n};
             fprintf(ucf_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
             fprintf(ucf_fid,gen_ucf(blk_obj));
@@ -661,7 +662,7 @@ if run_edkgen
         disp('Problem with block : ')
         display(blk_obj);
         disp(lasterr);
-        error('Error found during IP UCF generation in MHS');
+        error('?Error found during IP UCF generation in MHS');
     end
     fprintf(ucf_fid,'\n');
     fclose(ucf_fid);

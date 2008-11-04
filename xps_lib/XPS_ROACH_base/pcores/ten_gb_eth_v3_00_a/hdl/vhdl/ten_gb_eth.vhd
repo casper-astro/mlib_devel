@@ -59,11 +59,12 @@ entity ten_gb_eth is
 		C_HIGHADDR             : std_logic_vector	:= X"0000FFFF";
 		C_OPB_AWIDTH           : integer	:= 32;
 		C_OPB_DWIDTH           : integer	:= 32;
-    DEFAULT_FABRIC_MAC     : std_logic_vector := x"ffffffffffff";
-    DEFAULT_FABRIC_IP      : std_logic_vector := x"ffffffff";
-    DEFAULT_FABRIC_GATEWAY : std_logic_vector := x"ff";
-    DEFAULT_FABRIC_PORT    : std_logic_vector := x"ffff";
+    DEFAULT_FABRIC_MAC     : std_logic_vector := x"01234567";
+    DEFAULT_FABRIC_IP      : std_logic_vector := x"c0a80498";
+    DEFAULT_FABRIC_GATEWAY : std_logic_vector := x"1";
+    DEFAULT_FABRIC_PORT    : std_logic_vector := x"1000";
     FABRIC_RUN_ON_STARTUP  : integer := 1;
+    CONNECTOR              : integer := 1;
 		PREEMPHASYS            : string  := "4";
 		SWING                  : string  := "800"
 	);

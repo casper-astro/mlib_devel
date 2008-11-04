@@ -75,11 +75,7 @@ switch s.hw_sys
 end % switch s.hw_sys
 
 % parameters
-switch s.hw_sys
-    case 'ROACH'
-    otherwise
-        parameters.CONNECTOR = s.port;
-end % switch s.hw_sys
+parameters.CONNECTOR = s.port;
 
 parameters.SWING = s.swing;
 parameters.PREEMPHASYS = s.preemph;

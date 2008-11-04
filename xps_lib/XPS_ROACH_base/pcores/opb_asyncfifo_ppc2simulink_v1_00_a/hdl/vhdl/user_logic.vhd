@@ -205,6 +205,13 @@ architecture IMP of user_logic is
 			wr_data_count    : OUT std_logic_vector((min(log2(FIFO_LENGTH*FIFO_WIDTH/32),log2(FIFO_LENGTH))-1) downto 0)
 		);
 	end component;
+  attribute box_type : string;
+  attribute box_type of asyncfifo: component is "user_black_box";
+  attribute read_cores: string;
+  attribute read_cores of asyncfifo : component is "no";
+  --attributes to prevent xst borking designs with multiple instantiations
+
+
 	signal fifo_user_level        : std_logic_vector((log2(FIFO_LENGTH)-1) downto 0);
 	signal data_count_aligned     : std_logic_vector(15 downto 0);
 	signal data_count             : std_logic_vector((min(log2(FIFO_LENGTH*FIFO_WIDTH/32),log2(FIFO_LENGTH))-1) downto 0);

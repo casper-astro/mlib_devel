@@ -27,16 +27,18 @@ port  = blk_obj.port;
 str = gen_ucf(blk_obj.xps_block);
 simulink_name = clear_name(get(blk_obj,'simulink_name'));
 
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver0/mgt" CHAN_BOND_MODE = "MASTER";       \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver1/mgt" CHAN_BOND_MODE = "SLAVE_1_HOP";  \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver2/mgt" CHAN_BOND_MODE = "SLAVE_1_HOP";  \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver3/mgt" CHAN_BOND_MODE = "SLAVE_1_HOP";  \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" REF_CLK_V_SEL = "1";             \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" RX_LOSS_OF_SYNC_FSM = "TRUE";    \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" CHAN_BOND_ONE_SHOT = "FALSE";    \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" TX_PREEMPHASIS = "', blk_obj.preemph, '";            \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" TX_DIFF_CTRL = "', blk_obj.swing, '";            \n'];
-str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/reclock_align" ASYNC_REG = TRUE;      \n'];
+if ~strcmp(board, 'ROACH')
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver0/mgt" CHAN_BOND_MODE = "MASTER";       \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver1/mgt" CHAN_BOND_MODE = "SLAVE_1_HOP";  \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver2/mgt" CHAN_BOND_MODE = "SLAVE_1_HOP";  \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver3/mgt" CHAN_BOND_MODE = "SLAVE_1_HOP";  \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" REF_CLK_V_SEL = "1";             \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" RX_LOSS_OF_SYNC_FSM = "TRUE";    \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" CHAN_BOND_ONE_SHOT = "FALSE";    \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" TX_PREEMPHASIS = "', blk_obj.preemph, '";            \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/mgt" TX_DIFF_CTRL = "', blk_obj.swing, '";            \n'];
+  str = [str, 'INST "', simulink_name, '/', simulink_name, '/transceiver?/reclock_align" ASYNC_REG = TRUE;      \n'];
+end
 
 switch board;
 	case 'iBOB'

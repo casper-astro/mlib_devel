@@ -18,6 +18,7 @@ BEGIN ten_gb_eth
 ## Parameters
   PARAMETER SWING           = 1       , DT = string
   PARAMETER PREEMPHASYS     = 1       , DT = string
+  PARAMETER CONNECTOR       = 0       , DT = integer
   PARAMETER USE_XILINX_MAC  = 1       , DT = integer , RANGE = [0:1]
   PARAMETER USE_UCB_MAC     = 0       , DT = integer , RANGE = [0:1]
 

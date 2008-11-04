@@ -96,7 +96,7 @@ if strcmp(s.hw_sys,'ROACH')
 
   adcport = [s.hw_sys, '.', 'adc', s.adc_str(length(s.adc_str))];
   ext_ports.adc_clk_p         = {1 'in'  [s.adc_str,'clk_p']         ['{',adcport,'.clk_p}']                                'vector=false'  mhs_constraints ucf_constraints_clock };
-  ext_ports.adc_clk_n         = {1 'in'  [s.adc_str,'clk_n']         ['{',adcport,'.clk_n}']                                'vector=false'  mhs_constraints ucf_constraints_clock };
+  ext_ports.adc_clk_n         = {1 'in'  [s.adc_str,'clk_n']         ['{',adcport,'.clk_n}']                                'vector=false'  mhs_constraints ucf_constraints_term };
   ext_ports.adc_sync_p        = {1 'in'  [s.adc_str,'sync_p']        ['{',adcport,'.sync_p}']                               'vector=false'  struct()        ucf_constraints_term };
   ext_ports.adc_sync_n        = {1 'in'  [s.adc_str,'sync_n']        ['{',adcport,'.sync_n}']                               'vector=false'  struct()        ucf_constraints_term };
   ext_ports.adc_outofrangei_p = {1 'in'  [s.adc_str,'outofrangei_p'] ['{',adcport,'.outofrangei_p}']                        'vector=false'  struct()        ucf_constraints_term };
