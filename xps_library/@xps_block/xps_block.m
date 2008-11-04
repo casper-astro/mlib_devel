@@ -34,6 +34,8 @@ if ~isempty(blk)
     s.type = ['xps_',tmp{1}{1}];
 	s.ip_name = {};
 	s.ip_version = {};
+	s.pcores_used = {};
+	s.pcore_versions = {};
 	s.opb_clk = '';
 	s.plb_clk = '';
 	s.opb_address_offset = 0;
