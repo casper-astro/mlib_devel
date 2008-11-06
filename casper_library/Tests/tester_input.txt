@@ -107,3 +107,5 @@ first_tap_real casper_library/PFBs/first_tap_real first_tap_real_test nput 0 PFB
 last_tap_real casper_library/PFBs/last_tap_real last_tap_real_test TotalTaps 5 BitWidthIn 10 BitWidthOut 18 CoeffBitWidth 10 add_latency 1 mult_latency 2 quantization 'Round  (unbiased: +/- Inf)'
 pfb_fir casper_library/PFBs/pfb_fir pfb_fir_test PFBSize 6 TotalTaps 6 WindowType 'nuttallwin' n_inputs 0 MakeBiplex 1 BitWidthIn 12 BitWidthOut 20 CoeffBitWidth 8 CoeffDistMem 1 add_latency 1 mult_latency 2 bram_latency 1 quantization 'Round  (unbiased: +/- Inf)' fwidth 0.75
 pfb_fir_real casper_library/PFBs/pfb_fir_real pfb_fir_real_test PFBSize 5 TotalTaps 5 WindowType 'chebwin' n_inputs 0 MakeBiplex 1 BitWidthIn 10 BitWidthOut 22 CoeffBitWidth 10 CoeffDistMem 0 add_latency 2 mult_latency 3 bram_latency 1 quantization 'Truncate' fwidth 0.8
+% # Correlator
+xeng_tvg casper_library/Correlator/xeng_tvg xeng_tvg_test ant_bits 4 bits_in 8 x_int_bits 4 sync_period 9
