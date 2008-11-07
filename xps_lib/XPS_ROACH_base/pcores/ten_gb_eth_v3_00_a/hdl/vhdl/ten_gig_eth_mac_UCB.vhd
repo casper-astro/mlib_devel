@@ -11,8 +11,7 @@
 --          in the documentation and/or other materials provided with the
 --          distribution.
 --      - Neither the name of the University of California, Berkeley nor the
---          names of its contributors may be used to endorse or promote
---          products derived from this software without specific prior
+--          names of its contributors may be used to endorse or --          products derived from this software without specific prior
 --          written permission.
 --
 --  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
@@ -62,9 +61,8 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
-library unisim;
-use unisim.all;
-
+--library unisim;
+--use unisim.all;
 
 entity ten_gig_eth_mac_UCB is
 	port (
@@ -107,6 +105,16 @@ architecture ten_gig_eth_mac_UCB_arch of ten_gig_eth_mac_UCB is
 -- #        ####   #    #   ####      #       #     ####   #    #   ####
 
 -- bit reverse a signal
+function byte_reverse (a: in std_logic_vector) return std_logic_vector is
+	variable result: std_logic_vector(a'RANGE);
+	alias    aa    : std_logic_vector(a'RANGE) is a;
+begin
+	for i in aa'RANGE loop
+    result(i) := aa( (i/8)*8 + 7 - i mod 8 );
+	end loop;
+	return result;
+end;
+
 function bit_reverse (a: in std_logic_vector) return std_logic_vector is
 	variable result: std_logic_vector(a'RANGE);
 	alias    aa    : std_logic_vector(a'REVERSE_RANGE) is a;
@@ -116,6 +124,25 @@ begin
 	end loop;
 	return result;
 end;
+
+--Virtex-5 Hard CRC Macro
+
+component CRC64
+        generic
+        (
+                CRC_INIT : std_logic_vector := X"FFFFFFFF"
+        );
+        port
+        (
+                CRCOUT       : out std_logic_vector(31 downto 0);
+                CRCCLK       : in std_ulogic;
+                CRCDATAVALID : in std_ulogic;
+                CRCDATAWIDTH : in std_logic_vector(2 downto 0);
+                CRCIN        : in std_logic_vector(64-1 downto 0);
+                CRCRESET     : in std_ulogic
+        );
+end component;
+
 
 --  ####    ####   #    #   ####    #####
 -- #    #  #    #  ##   #  #          #
@@ -150,12 +177,17 @@ end;
 
 	-- TX controller signals
 	signal tx_state                                : tx_fsm_state := IDLE;
+	signal tx_state_z                              : tx_fsm_state := IDLE;
 	signal tx_start_latched                        : std_logic := '0';
 	signal xgmii_tx0                               : std_logic_vector(63 downto 0);
-	signal xgmii_txR                               : std_logic_vector(63 downto 0);
-	signal xgmii_partR                             : std_logic_vector(15 downto 0);
-	signal tx_crc                                  : std_logic_vector(31 downto 0);
-	signal tx_partial_crc                          : std_logic_vector(31 downto 0);
+
+	signal xgmii_txd_int                           : std_logic_vector(63 downto 0);
+	signal xgmii_txc_int                           : std_logic_vector( 7 downto 0);
+	signal xgmii_txd_z                             : std_logic_vector(63 downto 0);
+	signal xgmii_txc_z                             : std_logic_vector( 7 downto 0);
+	signal xgmii_txd_zz                            : std_logic_vector(63 downto 0);
+	signal xgmii_txc_zz                            : std_logic_vector( 7 downto 0);
+  signal partial_crc_insert                      : std_logic;
 
 	-- RX controller signals
 	signal rx_state                                : rx_fsm_state := IDLE;
@@ -169,7 +201,32 @@ end;
 	signal rx_enable                               : std_logic_vector(7 downto 0);
 	signal rx_good_frame0                          : std_logic;
 
+  -- CRC Signals
+  signal tx_crc_data                             : std_logic_vector(31 downto 0);
+  signal tx_crc_data_revd                        : std_logic_vector(31 downto 0);
+  signal tx_crc_width                            : std_logic_vector( 2 downto 0);
+  signal tx_crc_reset                            : std_logic;
+
+  signal tx_data_revd                            : std_logic_vector(63 downto 0);
+
 begin
+
+  TX_CRC : CRC64 generic map(
+    CRC_INIT                => x"FFFFFFFF"
+  ) port map (
+    CRCOUT             =>   tx_crc_data,
+    CRCCLK             =>   tx_clk0,
+    CRCDATAVALID       =>   '1',
+    CRCDATAWIDTH       =>   tx_crc_width,
+    CRCIN              =>   tx_data_revd,
+    CRCRESET           =>   tx_crc_reset
+  );
+
+  -- bit and byte reversal as required by core
+  tx_data_revd     <= byte_reverse(bit_reverse(xgmii_tx0));
+  tx_crc_data_revd <= bit_reverse(byte_reverse(tx_crc_data));
+
+
 	-- statistic vectors are not supported
 	rx_statistics_vector <= (others => '0');
 	rx_statistics_valid  <= '0';
@@ -187,291 +244,10 @@ begin
 	tx_proc: process(tx_clk0)
 	begin
 		if tx_clk0'event and tx_clk0 = '1' then
+      -- single cycle reset
+      tx_crc_reset <= '0';
 			-- register the data coming from the user
 			xgmii_tx0 <= tx_data;
-
-			-- Transmit CRC computation		
-			tx_crc(0) <= 
-				xgmii_txR(63) xor xgmii_txR(61) xor xgmii_txR(60) xor xgmii_txR(58) xor xgmii_txR(55) xor xgmii_txR(54) xor 
-		        xgmii_txR(53) xor xgmii_txR(50) xor xgmii_txR(48) xor xgmii_txR(47) xor xgmii_txR(45) xor xgmii_txR(44) xor 
-				xgmii_txR(37) xor xgmii_txR(34) xor xgmii_txR(32) xor xgmii_txR(31) xor xgmii_txR(30) xor xgmii_txR(29) xor 
-				xgmii_txR(28) xor xgmii_txR(26) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(16) xor xgmii_txR(12) xor 
-				xgmii_txR(10) xor xgmii_txR(9)  xor xgmii_txR(6)  xor xgmii_txR(0)  xor tx_crc(0)     xor tx_crc(2)     xor 
-				tx_crc(5)     xor tx_crc(12)    xor tx_crc(13)    xor tx_crc(15)    xor tx_crc(16)    xor tx_crc(18)    xor 
-				tx_crc(21)    xor tx_crc(22)    xor tx_crc(23)    xor tx_crc(26)    xor tx_crc(28)    xor tx_crc(29)    xor 
-				tx_crc(31);
-			tx_crc(1) <=
-				xgmii_txR(63) xor xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(56) xor 
-				xgmii_txR(53) xor xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(47) xor xgmii_txR(46) xor 
-				xgmii_txR(44) xor xgmii_txR(38) xor xgmii_txR(37) xor xgmii_txR(35) xor xgmii_txR(34) xor xgmii_txR(33) xor 
-				xgmii_txR(28) xor xgmii_txR(27) xor xgmii_txR(24) xor xgmii_txR(17) xor xgmii_txR(16) xor xgmii_txR(13) xor 
-				xgmii_txR(12) xor xgmii_txR(11) xor xgmii_txR(9)  xor xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(1)  xor 
-				xgmii_txR(0)  xor tx_crc(1)     xor tx_crc(2)     xor tx_crc(3)     xor tx_crc(5)     xor tx_crc(6)     xor 
-				tx_crc(12)    xor tx_crc(14)    xor tx_crc(15)    xor tx_crc(17)    xor tx_crc(18)    xor tx_crc(19)    xor 
-				tx_crc(21)    xor tx_crc(24)    xor tx_crc(26)    xor tx_crc(27)    xor tx_crc(28)    xor tx_crc(30)    xor 
-				tx_crc(31);
-			tx_crc(2) <=
-				xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(55) xor xgmii_txR(53) xor xgmii_txR(52) xor 
-				xgmii_txR(51) xor xgmii_txR(44) xor xgmii_txR(39) xor xgmii_txR(38) xor xgmii_txR(37) xor xgmii_txR(36) xor 
-				xgmii_txR(35) xor xgmii_txR(32) xor xgmii_txR(31) xor xgmii_txR(30) xor xgmii_txR(26) xor xgmii_txR(24) xor 
-				xgmii_txR(18) xor xgmii_txR(17) xor xgmii_txR(16) xor xgmii_txR(14) xor xgmii_txR(13) xor xgmii_txR(9)  xor 
-				xgmii_txR(8)  xor xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(2)  xor xgmii_txR(1)  xor xgmii_txR(0)  xor 
-				tx_crc(0)     xor tx_crc(3)     xor tx_crc(4)     xor tx_crc(5)     xor tx_crc(6)     xor tx_crc(7)     xor 
-				tx_crc(12)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(21)    xor tx_crc(23)    xor tx_crc(25)    xor 
-				tx_crc(26)    xor tx_crc(27);
-			tx_crc(3) <=
-				xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(56) xor xgmii_txR(54) xor xgmii_txR(53) xor 
-				xgmii_txR(52) xor xgmii_txR(45) xor xgmii_txR(40) xor xgmii_txR(39) xor xgmii_txR(38) xor xgmii_txR(37) xor 
-				xgmii_txR(36) xor xgmii_txR(33) xor xgmii_txR(32) xor xgmii_txR(31) xor xgmii_txR(27) xor xgmii_txR(25) xor 
-				xgmii_txR(19) xor xgmii_txR(18) xor xgmii_txR(17) xor xgmii_txR(15) xor xgmii_txR(14) xor xgmii_txR(10) xor 
-				xgmii_txR(9)  xor xgmii_txR(8)  xor xgmii_txR(7)  xor xgmii_txR(3)  xor xgmii_txR(2)  xor xgmii_txR(1)  xor 
-				tx_crc(0)     xor tx_crc(1)     xor tx_crc(4)     xor tx_crc(5)     xor tx_crc(6)     xor tx_crc(7)     xor 
-				tx_crc(8)     xor tx_crc(13)    xor tx_crc(20)    xor tx_crc(21)    xor tx_crc(22)    xor tx_crc(24)    xor 
-				tx_crc(26)    xor tx_crc(27)    xor tx_crc(28);
-			tx_crc(4) <=
-				xgmii_txR(63) xor xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(50) xor xgmii_txR(48) xor 
-				xgmii_txR(47) xor xgmii_txR(46) xor xgmii_txR(45) xor xgmii_txR(44) xor xgmii_txR(41) xor xgmii_txR(40) xor 
-				xgmii_txR(39) xor xgmii_txR(38) xor xgmii_txR(33) xor xgmii_txR(31) xor xgmii_txR(30) xor xgmii_txR(29) xor 
-				xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(20) xor xgmii_txR(19) xor xgmii_txR(18) xor xgmii_txR(15) xor 
-				xgmii_txR(12) xor xgmii_txR(11) xor xgmii_txR(8)  xor xgmii_txR(6)  xor xgmii_txR(4)  xor xgmii_txR(3)  xor 
-				xgmii_txR(2)  xor xgmii_txR(0)  xor tx_crc(1)     xor tx_crc(6)     xor tx_crc(7)     xor tx_crc(8)     xor 
-				tx_crc(9)     xor tx_crc(12)    xor tx_crc(13)    xor tx_crc(14)    xor tx_crc(15)    xor tx_crc(16)    xor 
-				tx_crc(18)    xor tx_crc(25)    xor tx_crc(26)    xor tx_crc(27)    xor tx_crc(31);
-			tx_crc(5) <=
-				xgmii_txR(63) xor xgmii_txR(61) xor xgmii_txR(59) xor xgmii_txR(55) xor xgmii_txR(54) xor xgmii_txR(53) xor 
-				xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(46) xor xgmii_txR(44) xor xgmii_txR(42) xor 
-				xgmii_txR(41) xor xgmii_txR(40) xor xgmii_txR(39) xor xgmii_txR(37) xor xgmii_txR(29) xor xgmii_txR(28) xor 
-				xgmii_txR(24) xor xgmii_txR(21) xor xgmii_txR(20) xor xgmii_txR(19) xor xgmii_txR(13) xor xgmii_txR(10) xor 
-				xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(5)  xor xgmii_txR(4)  xor xgmii_txR(3)  xor xgmii_txR(1)  xor 
-				xgmii_txR(0)  xor tx_crc(5)     xor tx_crc(7)     xor tx_crc(8)     xor tx_crc(9)     xor tx_crc(10)    xor 
-				tx_crc(12)    xor tx_crc(14)    xor tx_crc(17)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(21)    xor 
-				tx_crc(22)    xor tx_crc(23)    xor tx_crc(27)    xor tx_crc(29)    xor tx_crc(31);
-			tx_crc(6) <= 
-				xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(56) xor xgmii_txR(55) xor xgmii_txR(54) xor xgmii_txR(52) xor 
-				xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(47) xor xgmii_txR(45) xor xgmii_txR(43) xor xgmii_txR(42) xor 
-				xgmii_txR(41) xor xgmii_txR(40) xor xgmii_txR(38) xor xgmii_txR(30) xor xgmii_txR(29) xor xgmii_txR(25) xor 
-				xgmii_txR(22) xor xgmii_txR(21) xor xgmii_txR(20) xor xgmii_txR(14) xor xgmii_txR(11) xor xgmii_txR(8)  xor 
-				xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(5)  xor xgmii_txR(4)  xor xgmii_txR(2)  xor xgmii_txR(1)  xor 
-				tx_crc(6)     xor tx_crc(8)     xor tx_crc(9)     xor tx_crc(10)    xor tx_crc(11)    xor tx_crc(13)    xor 
-				tx_crc(15)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(22)    xor tx_crc(23)    xor 
-				tx_crc(24)    xor tx_crc(28)    xor tx_crc(30);
-			tx_crc(7) <=
-				xgmii_txR(60) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(56) xor xgmii_txR(54) xor xgmii_txR(52) xor 
-				xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(47) xor xgmii_txR(46) xor xgmii_txR(45) xor xgmii_txR(43) xor 
-				xgmii_txR(42) xor xgmii_txR(41) xor xgmii_txR(39) xor xgmii_txR(37) xor xgmii_txR(34) xor xgmii_txR(32) xor 
-				xgmii_txR(29) xor xgmii_txR(28) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(23) xor xgmii_txR(22) xor 
-				xgmii_txR(21) xor xgmii_txR(16) xor xgmii_txR(15) xor xgmii_txR(10) xor xgmii_txR(8)  xor xgmii_txR(7)  xor 
-				xgmii_txR(5)  xor xgmii_txR(3)  xor xgmii_txR(2)  xor xgmii_txR(0)  xor tx_crc(0)     xor tx_crc(2)     xor 
-				tx_crc(5)     xor tx_crc(7)     xor tx_crc(9)     xor tx_crc(10)    xor tx_crc(11)    xor tx_crc(13)    xor 
-				tx_crc(14)    xor tx_crc(15)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(22)    xor 
-				tx_crc(24)    xor tx_crc(25)    xor tx_crc(26)    xor tx_crc(28);
-			tx_crc(8) <=
-				xgmii_txR(63) xor xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(57) xor xgmii_txR(54) xor xgmii_txR(52) xor 
-				xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(46) xor xgmii_txR(45) xor xgmii_txR(43) xor xgmii_txR(42) xor 
-				xgmii_txR(40) xor xgmii_txR(38) xor xgmii_txR(37) xor xgmii_txR(35) xor xgmii_txR(34) xor xgmii_txR(33) xor 
-				xgmii_txR(32) xor xgmii_txR(31) xor xgmii_txR(28) xor xgmii_txR(23) xor xgmii_txR(22) xor xgmii_txR(17) xor 
-				xgmii_txR(12) xor xgmii_txR(11) xor xgmii_txR(10) xor xgmii_txR(8)  xor xgmii_txR(4)  xor xgmii_txR(3)  xor 
-				xgmii_txR(1)  xor xgmii_txR(0)  xor tx_crc(0)     xor tx_crc(1)     xor tx_crc(2)     xor tx_crc(3)     xor 
-				tx_crc(5)     xor tx_crc(6)     xor tx_crc(8)     xor tx_crc(10)    xor tx_crc(11)    xor tx_crc(13)    xor 
-				tx_crc(14)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(22)    xor tx_crc(25)    xor 
-				tx_crc(27)    xor tx_crc(28)    xor tx_crc(31);
-			tx_crc(9) <=
-				xgmii_txR(61) xor xgmii_txR(60) xor xgmii_txR(58) xor xgmii_txR(55) xor xgmii_txR(53) xor xgmii_txR(52) xor 
-				xgmii_txR(51) xor xgmii_txR(47) xor xgmii_txR(46) xor xgmii_txR(44) xor xgmii_txR(43) xor xgmii_txR(41) xor 
-				xgmii_txR(39) xor xgmii_txR(38) xor xgmii_txR(36) xor xgmii_txR(35) xor xgmii_txR(34) xor xgmii_txR(33) xor 
-				xgmii_txR(32) xor xgmii_txR(29) xor xgmii_txR(24) xor xgmii_txR(23) xor xgmii_txR(18) xor xgmii_txR(13) xor 
-				xgmii_txR(12) xor xgmii_txR(11) xor xgmii_txR(9)  xor xgmii_txR(5)  xor xgmii_txR(4)  xor xgmii_txR(2)  xor 
-				xgmii_txR(1)  xor tx_crc(0)     xor tx_crc(1)     xor tx_crc(2)     xor tx_crc(3)     xor tx_crc(4)     xor 
-				tx_crc(6)     xor tx_crc(7)     xor tx_crc(9)     xor tx_crc(11)    xor tx_crc(12)    xor tx_crc(14)    xor 
-				tx_crc(15)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(21)    xor tx_crc(23)    xor tx_crc(26)    xor 
-				tx_crc(28)    xor tx_crc(29);
-			tx_crc(10) <=
-				xgmii_txR(63) xor xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(56) xor 
-				xgmii_txR(55) xor xgmii_txR(52) xor xgmii_txR(50) xor xgmii_txR(42) xor xgmii_txR(40) xor xgmii_txR(39) xor 
-				xgmii_txR(36) xor xgmii_txR(35) xor xgmii_txR(33) xor xgmii_txR(32) xor xgmii_txR(31) xor xgmii_txR(29) xor 
-				xgmii_txR(28) xor xgmii_txR(26) xor xgmii_txR(19) xor xgmii_txR(16) xor xgmii_txR(14) xor xgmii_txR(13) xor 
-				xgmii_txR(9)  xor xgmii_txR(5)  xor xgmii_txR(3)  xor xgmii_txR(2)  xor xgmii_txR(0)  xor tx_crc(0)     xor 
-				tx_crc(1)     xor tx_crc(3)     xor tx_crc(4)     xor tx_crc(7)     xor tx_crc(8)     xor tx_crc(10)    xor 
-				tx_crc(18)    xor tx_crc(20)    xor tx_crc(23)    xor tx_crc(24)    xor tx_crc(26)    xor tx_crc(27)    xor 
-				tx_crc(28)    xor tx_crc(30)    xor tx_crc(31);
-		    tx_crc(11) <=
-		    	xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(56) xor xgmii_txR(55) xor xgmii_txR(54) xor 
-				xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(48) xor xgmii_txR(47) xor xgmii_txR(45) xor xgmii_txR(44) xor 
-				xgmii_txR(43) xor xgmii_txR(41) xor xgmii_txR(40) xor xgmii_txR(36) xor xgmii_txR(33) xor xgmii_txR(31) xor 
-				xgmii_txR(28) xor xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(20) xor 
-				xgmii_txR(17) xor xgmii_txR(16) xor xgmii_txR(15) xor xgmii_txR(14) xor xgmii_txR(12) xor xgmii_txR(9)  xor 
-				xgmii_txR(4)  xor xgmii_txR(3)  xor xgmii_txR(1)  xor xgmii_txR(0)  xor tx_crc(1)     xor tx_crc(4)     xor 
-				tx_crc(8)     xor tx_crc(9)     xor tx_crc(11)    xor tx_crc(12)    xor tx_crc(13)    xor tx_crc(15)    xor 
-				tx_crc(16)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(22)    xor tx_crc(23)    xor tx_crc(24)    xor 
-				tx_crc(25)    xor tx_crc(26)    xor tx_crc(27);
-			tx_crc(12) <=
-				xgmii_txR(63) xor xgmii_txR(61) xor xgmii_txR(59) xor xgmii_txR(57) xor xgmii_txR(56) xor xgmii_txR(54) xor 
-				xgmii_txR(53) xor xgmii_txR(52) xor xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(47) xor 
-				xgmii_txR(46) xor xgmii_txR(42) xor xgmii_txR(41) xor xgmii_txR(31) xor xgmii_txR(30) xor xgmii_txR(27) xor 
-				xgmii_txR(24) xor xgmii_txR(21) xor xgmii_txR(18) xor xgmii_txR(17) xor xgmii_txR(15) xor xgmii_txR(13) xor 
-				xgmii_txR(12) xor xgmii_txR(9)  xor xgmii_txR(6)  xor xgmii_txR(5)  xor xgmii_txR(4)  xor xgmii_txR(2)  xor 
-				xgmii_txR(1)  xor xgmii_txR(0)  xor tx_crc(9)     xor tx_crc(10)    xor tx_crc(14)    xor tx_crc(15)    xor 
-				tx_crc(17)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(21)    xor tx_crc(22)    xor 
-				tx_crc(24)    xor tx_crc(25)    xor tx_crc(27)    xor tx_crc(29)    xor tx_crc(31);
-			tx_crc(13) <=
-				xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(55) xor xgmii_txR(54) xor 
-				xgmii_txR(53) xor xgmii_txR(52) xor xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(48) xor xgmii_txR(47) xor 
-				xgmii_txR(43) xor xgmii_txR(42) xor xgmii_txR(32) xor xgmii_txR(31) xor xgmii_txR(28) xor xgmii_txR(25) xor 
-				xgmii_txR(22) xor xgmii_txR(19) xor xgmii_txR(18) xor xgmii_txR(16) xor xgmii_txR(14) xor xgmii_txR(13) xor 
-				xgmii_txR(10) xor xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(5)  xor xgmii_txR(3)  xor xgmii_txR(2)  xor 
-				xgmii_txR(1)  xor tx_crc(0)     xor tx_crc(10)    xor tx_crc(11)    xor tx_crc(15)    xor tx_crc(16)    xor 
-				tx_crc(18)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(21)    xor tx_crc(22)    xor tx_crc(23)    xor 
-				tx_crc(25)    xor tx_crc(26)    xor tx_crc(28)    xor tx_crc(30);
-			tx_crc(14) <=
-				xgmii_txR(63) xor xgmii_txR(61) xor xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(56) xor xgmii_txR(55) xor 
-				xgmii_txR(54) xor xgmii_txR(53) xor xgmii_txR(52) xor xgmii_txR(51) xor xgmii_txR(49) xor xgmii_txR(48) xor 
-				xgmii_txR(44) xor xgmii_txR(43) xor xgmii_txR(33) xor xgmii_txR(32) xor xgmii_txR(29) xor xgmii_txR(26) xor 
-				xgmii_txR(23) xor xgmii_txR(20) xor xgmii_txR(19) xor xgmii_txR(17) xor xgmii_txR(15) xor xgmii_txR(14) xor 
-				xgmii_txR(11) xor xgmii_txR(8)  xor xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(4)  xor xgmii_txR(3)  xor 
-				xgmii_txR(2)  xor tx_crc(0)     xor tx_crc(1)     xor tx_crc(11)    xor tx_crc(12)    xor tx_crc(16)    xor 
-				tx_crc(17)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(21)    xor tx_crc(22)    xor tx_crc(23)    xor 
-				tx_crc(24)    xor tx_crc(26)    xor tx_crc(27)    xor tx_crc(29)    xor tx_crc(31);
-			tx_crc(15) <=
-				xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(57) xor xgmii_txR(56) xor xgmii_txR(55) xor 
-				xgmii_txR(54) xor xgmii_txR(53) xor xgmii_txR(52) xor xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(45) xor 
-				xgmii_txR(44) xor xgmii_txR(34) xor xgmii_txR(33) xor xgmii_txR(30) xor xgmii_txR(27) xor xgmii_txR(24) xor 
-				xgmii_txR(21) xor xgmii_txR(20) xor xgmii_txR(18) xor xgmii_txR(16) xor xgmii_txR(15) xor xgmii_txR(12) xor 
-				xgmii_txR(9)  xor xgmii_txR(8)  xor xgmii_txR(7)  xor xgmii_txR(5)  xor xgmii_txR(4)  xor xgmii_txR(3)  xor 
-				tx_crc(1)     xor tx_crc(2)     xor tx_crc(12)    xor tx_crc(13)    xor tx_crc(17)    xor tx_crc(18)    xor 
-				tx_crc(20)    xor tx_crc(21)    xor tx_crc(22)    xor tx_crc(23)    xor tx_crc(24)    xor tx_crc(25)    xor 
-				tx_crc(27)    xor tx_crc(28)    xor tx_crc(30);
-			tx_crc(16) <=
-				xgmii_txR(57) xor xgmii_txR(56) xor xgmii_txR(51) xor xgmii_txR(48) xor xgmii_txR(47) xor xgmii_txR(46) xor 
-				xgmii_txR(44) xor xgmii_txR(37) xor xgmii_txR(35) xor xgmii_txR(32) xor xgmii_txR(30) xor xgmii_txR(29) xor 
-				xgmii_txR(26) xor xgmii_txR(24) xor xgmii_txR(22) xor xgmii_txR(21) xor xgmii_txR(19) xor xgmii_txR(17) xor 
-				xgmii_txR(13) xor xgmii_txR(12) xor xgmii_txR(8)  xor xgmii_txR(5)  xor xgmii_txR(4)  xor xgmii_txR(0)  xor 
-				tx_crc(0)     xor tx_crc(3)     xor tx_crc(5)     xor tx_crc(12)    xor tx_crc(14)    xor tx_crc(15)    xor 
-				tx_crc(16)    xor tx_crc(19)    xor tx_crc(24)    xor tx_crc(25);
-			tx_crc(17) <=
-				xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(52) xor xgmii_txR(49) xor xgmii_txR(48) xor xgmii_txR(47) xor 
-				xgmii_txR(45) xor xgmii_txR(38) xor xgmii_txR(36) xor xgmii_txR(33) xor xgmii_txR(31) xor xgmii_txR(30) xor 
-				xgmii_txR(27) xor xgmii_txR(25) xor xgmii_txR(23) xor xgmii_txR(22) xor xgmii_txR(20) xor xgmii_txR(18) xor 
-				xgmii_txR(14) xor xgmii_txR(13) xor xgmii_txR(9)  xor xgmii_txR(6)  xor xgmii_txR(5)  xor xgmii_txR(1)  xor 
-				tx_crc(1)     xor tx_crc(4)     xor tx_crc(6)     xor tx_crc(13)    xor tx_crc(15)    xor tx_crc(16)    xor 
-				tx_crc(17)    xor tx_crc(20)    xor tx_crc(25)    xor tx_crc(26);
-			tx_crc(18) <=
-				xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(53) xor xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(48) xor 
-				xgmii_txR(46) xor xgmii_txR(39) xor xgmii_txR(37) xor xgmii_txR(34) xor xgmii_txR(32) xor xgmii_txR(31) xor 
-				xgmii_txR(28) xor xgmii_txR(26) xor xgmii_txR(24) xor xgmii_txR(23) xor xgmii_txR(21) xor xgmii_txR(19) xor 
-				xgmii_txR(15) xor xgmii_txR(14) xor xgmii_txR(10) xor xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(2)  xor 
-				tx_crc(0)     xor tx_crc(2)     xor tx_crc(5)     xor tx_crc(7)     xor tx_crc(14)    xor tx_crc(16)    xor 
-				tx_crc(17)    xor tx_crc(18)    xor tx_crc(21)    xor tx_crc(26)    xor tx_crc(27);
-			tx_crc(19) <=
-				xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(54) xor xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(49) xor 
-				xgmii_txR(47) xor xgmii_txR(40) xor xgmii_txR(38) xor xgmii_txR(35) xor xgmii_txR(33) xor xgmii_txR(32) xor 
-				xgmii_txR(29) xor xgmii_txR(27) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(22) xor xgmii_txR(20) xor 
-				xgmii_txR(16) xor xgmii_txR(15) xor xgmii_txR(11) xor xgmii_txR(8)  xor xgmii_txR(7)  xor xgmii_txR(3)  xor 
-				tx_crc(0)     xor tx_crc(1)     xor tx_crc(3)     xor tx_crc(6)     xor tx_crc(8)     xor tx_crc(15)    xor 
-				tx_crc(17)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(22)    xor tx_crc(27)    xor tx_crc(28);
-			tx_crc(20) <=
-				xgmii_txR(61) xor xgmii_txR(60) xor xgmii_txR(55) xor xgmii_txR(52) xor xgmii_txR(51) xor xgmii_txR(50) xor 
-				xgmii_txR(48) xor xgmii_txR(41) xor xgmii_txR(39) xor xgmii_txR(36) xor xgmii_txR(34) xor xgmii_txR(33) xor 
-				xgmii_txR(30) xor xgmii_txR(28) xor xgmii_txR(26) xor xgmii_txR(25) xor xgmii_txR(23) xor xgmii_txR(21) xor 
-				xgmii_txR(17) xor xgmii_txR(16) xor xgmii_txR(12) xor xgmii_txR(9)  xor xgmii_txR(8)  xor xgmii_txR(4)  xor 
-				tx_crc(1)     xor tx_crc(2)     xor tx_crc(4)     xor tx_crc(7)     xor tx_crc(9)     xor tx_crc(16)    xor 
-				tx_crc(18)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(23)    xor tx_crc(28)    xor tx_crc(29);
-			tx_crc(21) <=
-				xgmii_txR(62) xor xgmii_txR(61) xor xgmii_txR(56) xor xgmii_txR(53) xor xgmii_txR(52) xor xgmii_txR(51) xor 
-				xgmii_txR(49) xor xgmii_txR(42) xor xgmii_txR(40) xor xgmii_txR(37) xor xgmii_txR(35) xor xgmii_txR(34) xor 
-				xgmii_txR(31) xor xgmii_txR(29) xor xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(24) xor xgmii_txR(22) xor 
-				xgmii_txR(18) xor xgmii_txR(17) xor xgmii_txR(13) xor xgmii_txR(10) xor xgmii_txR(9)  xor xgmii_txR(5)  xor 
-				tx_crc(2)     xor tx_crc(3)     xor tx_crc(5)     xor tx_crc(8)     xor tx_crc(10)    xor tx_crc(17)    xor 
-				tx_crc(19)    xor tx_crc(20)    xor tx_crc(21)    xor tx_crc(24)    xor tx_crc(29)    xor tx_crc(30);
-			tx_crc(22) <=
-				xgmii_txR(62) xor xgmii_txR(61) xor xgmii_txR(60) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(55) xor 
-				xgmii_txR(52) xor xgmii_txR(48) xor xgmii_txR(47) xor xgmii_txR(45) xor xgmii_txR(44) xor xgmii_txR(43) xor 
-				xgmii_txR(41) xor xgmii_txR(38) xor xgmii_txR(37) xor xgmii_txR(36) xor xgmii_txR(35) xor xgmii_txR(34) xor 
-				xgmii_txR(31) xor xgmii_txR(29) xor xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(24) xor xgmii_txR(23) xor 
-				xgmii_txR(19) xor xgmii_txR(18) xor xgmii_txR(16) xor xgmii_txR(14) xor xgmii_txR(12) xor xgmii_txR(11) xor 
-				xgmii_txR(9)  xor xgmii_txR(0)  xor tx_crc(2)     xor tx_crc(3)     xor tx_crc(4)     xor tx_crc(5)     xor 
-				tx_crc(6)     xor tx_crc(9)     xor tx_crc(11)    xor tx_crc(12)    xor tx_crc(13)    xor tx_crc(15)    xor 
-				tx_crc(16)    xor tx_crc(20)    xor tx_crc(23)    xor tx_crc(25)    xor tx_crc(26)    xor tx_crc(28)    xor 
-				tx_crc(29)    xor tx_crc(30);
-			tx_crc(23) <=
-				xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(56) xor xgmii_txR(55) xor xgmii_txR(54) xor 
-				xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(47) xor xgmii_txR(46) xor xgmii_txR(42) xor xgmii_txR(39) xor 
-				xgmii_txR(38) xor xgmii_txR(36) xor xgmii_txR(35) xor xgmii_txR(34) xor xgmii_txR(31) xor xgmii_txR(29) xor 
-				xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(20) xor xgmii_txR(19) xor xgmii_txR(17) xor xgmii_txR(16) xor 
-				xgmii_txR(15) xor xgmii_txR(13) xor xgmii_txR(9)  xor xgmii_txR(6)  xor xgmii_txR(1)  xor xgmii_txR(0)  xor 
-				tx_crc(2)     xor tx_crc(3)     xor tx_crc(4)     xor tx_crc(6)     xor tx_crc(7)     xor tx_crc(10)    xor 
-				tx_crc(14)    xor tx_crc(15)    xor tx_crc(17)    xor tx_crc(18)    xor tx_crc(22)    xor tx_crc(23)    xor 
-				tx_crc(24)    xor tx_crc(27)    xor tx_crc(28)    xor tx_crc(30);
-			tx_crc(24) <=
-				xgmii_txR(63) xor xgmii_txR(61) xor xgmii_txR(60) xor xgmii_txR(57) xor xgmii_txR(56) xor xgmii_txR(55) xor 
-				xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(48) xor xgmii_txR(47) xor xgmii_txR(43) xor xgmii_txR(40) xor 
-				xgmii_txR(39) xor xgmii_txR(37) xor xgmii_txR(36) xor xgmii_txR(35) xor xgmii_txR(32) xor xgmii_txR(30) xor 
-				xgmii_txR(28) xor xgmii_txR(27) xor xgmii_txR(21) xor xgmii_txR(20) xor xgmii_txR(18) xor xgmii_txR(17) xor 
-				xgmii_txR(16) xor xgmii_txR(14) xor xgmii_txR(10) xor xgmii_txR(7)  xor xgmii_txR(2)  xor xgmii_txR(1)  xor 
-				tx_crc(0)     xor tx_crc(3)     xor tx_crc(4)     xor tx_crc(5)     xor tx_crc(7)     xor tx_crc(8)     xor 
-				tx_crc(11)    xor tx_crc(15)    xor tx_crc(16)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(23)    xor 
-				tx_crc(24)    xor tx_crc(25)    xor tx_crc(28)    xor tx_crc(29)    xor tx_crc(31);
-			tx_crc(25) <=
-				xgmii_txR(62) xor xgmii_txR(61) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(56) xor xgmii_txR(52) xor 
-				xgmii_txR(51) xor xgmii_txR(49) xor xgmii_txR(48) xor xgmii_txR(44) xor xgmii_txR(41) xor xgmii_txR(40) xor 
-				xgmii_txR(38) xor xgmii_txR(37) xor xgmii_txR(36) xor xgmii_txR(33) xor xgmii_txR(31) xor xgmii_txR(29) xor 
-				xgmii_txR(28) xor xgmii_txR(22) xor xgmii_txR(21) xor xgmii_txR(19) xor xgmii_txR(18) xor xgmii_txR(17) xor 
-				xgmii_txR(15) xor xgmii_txR(11) xor xgmii_txR(8)  xor xgmii_txR(3)  xor xgmii_txR(2)  xor tx_crc(1)     xor 
-				tx_crc(4)     xor tx_crc(5)     xor tx_crc(6)     xor tx_crc(8)     xor tx_crc(9)     xor tx_crc(12)    xor 
-				tx_crc(16)    xor tx_crc(17)    xor tx_crc(19)    xor tx_crc(20)    xor tx_crc(24)    xor tx_crc(25)    xor 
-				tx_crc(26)    xor tx_crc(29)    xor tx_crc(30);
-			tx_crc(26) <=
-				xgmii_txR(62) xor xgmii_txR(61) xor xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(57) xor xgmii_txR(55) xor 
-				xgmii_txR(54) xor xgmii_txR(52) xor xgmii_txR(49) xor xgmii_txR(48) xor xgmii_txR(47) xor xgmii_txR(44) xor 
-				xgmii_txR(42) xor xgmii_txR(41) xor xgmii_txR(39) xor xgmii_txR(38) xor xgmii_txR(31) xor xgmii_txR(28) xor 
-				xgmii_txR(26) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(23) xor xgmii_txR(22) xor xgmii_txR(20) xor 
-				xgmii_txR(19) xor xgmii_txR(18) xor xgmii_txR(10) xor xgmii_txR(6)  xor xgmii_txR(4)  xor xgmii_txR(3)  xor 
-				xgmii_txR(0)  xor tx_crc(6)     xor tx_crc(7)     xor tx_crc(9)     xor tx_crc(10)    xor tx_crc(12)    xor 
-				tx_crc(15)    xor tx_crc(16)    xor tx_crc(17)    xor tx_crc(20)    xor tx_crc(22)    xor tx_crc(23)    xor 
-				tx_crc(25)    xor tx_crc(27)    xor tx_crc(28)    xor tx_crc(29)    xor tx_crc(30);
-			tx_crc(27) <=
-				xgmii_txR(63) xor xgmii_txR(62) xor xgmii_txR(61) xor xgmii_txR(60) xor xgmii_txR(58) xor xgmii_txR(56) xor 
-				xgmii_txR(55) xor xgmii_txR(53) xor xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(48) xor xgmii_txR(45) xor 
-				xgmii_txR(43) xor xgmii_txR(42) xor xgmii_txR(40) xor xgmii_txR(39) xor xgmii_txR(32) xor xgmii_txR(29) xor 
-				xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(23) xor xgmii_txR(21) xor 
-				xgmii_txR(20) xor xgmii_txR(19) xor xgmii_txR(11) xor xgmii_txR(7)  xor xgmii_txR(5)  xor xgmii_txR(4)  xor 
-				xgmii_txR(1)  xor tx_crc(0)     xor tx_crc(7)     xor tx_crc(8)     xor tx_crc(10)    xor tx_crc(11)    xor 
-				tx_crc(13)    xor tx_crc(16)    xor tx_crc(17)    xor tx_crc(18)    xor tx_crc(21)    xor tx_crc(23)    xor 
-				tx_crc(24)    xor tx_crc(26)    xor tx_crc(28)    xor tx_crc(29)    xor tx_crc(30)    xor tx_crc(31);
-			tx_crc(28) <=
-				xgmii_txR(63) xor xgmii_txR(62) xor xgmii_txR(61) xor xgmii_txR(59) xor xgmii_txR(57) xor xgmii_txR(56) xor 
-				xgmii_txR(54) xor xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(49) xor xgmii_txR(46) xor xgmii_txR(44) xor 
-				xgmii_txR(43) xor xgmii_txR(41) xor xgmii_txR(40) xor xgmii_txR(33) xor xgmii_txR(30) xor xgmii_txR(28) xor 
-				xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(22) xor xgmii_txR(21) xor 
-				xgmii_txR(20) xor xgmii_txR(12) xor xgmii_txR(8)  xor xgmii_txR(6)  xor xgmii_txR(5)  xor xgmii_txR(2)  xor 
-				tx_crc(1)     xor tx_crc(8)     xor tx_crc(9)     xor tx_crc(11)    xor tx_crc(12)    xor tx_crc(14)    xor 
-				tx_crc(17)    xor tx_crc(18)    xor tx_crc(19)    xor tx_crc(22)    xor tx_crc(24)    xor tx_crc(25)    xor 
-				tx_crc(27)    xor tx_crc(29)    xor tx_crc(30)    xor tx_crc(31);
-			tx_crc(29) <=
-				xgmii_txR(63) xor xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(58) xor xgmii_txR(57) xor xgmii_txR(55) xor 
-				xgmii_txR(52) xor xgmii_txR(51) xor xgmii_txR(50) xor xgmii_txR(47) xor xgmii_txR(45) xor xgmii_txR(44) xor 
-				xgmii_txR(42) xor xgmii_txR(41) xor xgmii_txR(34) xor xgmii_txR(31) xor xgmii_txR(29) xor xgmii_txR(28) xor 
-				xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(25) xor xgmii_txR(23) xor xgmii_txR(22) xor xgmii_txR(21) xor 
-				xgmii_txR(13) xor xgmii_txR(9)  xor xgmii_txR(7)  xor xgmii_txR(6)  xor xgmii_txR(3)  xor tx_crc(2)     xor 
-				tx_crc(9)     xor tx_crc(10)    xor tx_crc(12)    xor tx_crc(13)    xor tx_crc(15)    xor tx_crc(18)    xor 
-				tx_crc(19)    xor tx_crc(20)    xor tx_crc(23)    xor tx_crc(25)    xor tx_crc(26)    xor tx_crc(28)    xor 
-				tx_crc(30)    xor tx_crc(31);
-			tx_crc(30) <=
-				xgmii_txR(63) xor xgmii_txR(61) xor xgmii_txR(59) xor xgmii_txR(58) xor xgmii_txR(56) xor xgmii_txR(53) xor 
-				xgmii_txR(52) xor xgmii_txR(51) xor xgmii_txR(48) xor xgmii_txR(46) xor xgmii_txR(45) xor xgmii_txR(43) xor 
-				xgmii_txR(42) xor xgmii_txR(35) xor xgmii_txR(32) xor xgmii_txR(30) xor xgmii_txR(29) xor xgmii_txR(28) xor 
-				xgmii_txR(27) xor xgmii_txR(26) xor xgmii_txR(24) xor xgmii_txR(23) xor xgmii_txR(22) xor xgmii_txR(14) xor 
-				xgmii_txR(10) xor xgmii_txR(8)  xor xgmii_txR(7)  xor xgmii_txR(4)  xor tx_crc(0)     xor tx_crc(3)     xor 
-				tx_crc(10)    xor tx_crc(11)    xor tx_crc(13)    xor tx_crc(14)    xor tx_crc(16)    xor tx_crc(19)    xor 
-				tx_crc(20)    xor tx_crc(21)    xor tx_crc(24)    xor tx_crc(26)    xor tx_crc(27)    xor tx_crc(29)    xor 
-				tx_crc(31);
-			tx_crc(31) <=
-				xgmii_txR(62) xor xgmii_txR(60) xor xgmii_txR(59) xor xgmii_txR(57) xor xgmii_txR(54) xor xgmii_txR(53) xor 
-				xgmii_txR(52) xor xgmii_txR(49) xor xgmii_txR(47) xor xgmii_txR(46) xor xgmii_txR(44) xor xgmii_txR(43) xor 
-				xgmii_txR(36) xor xgmii_txR(33) xor xgmii_txR(31) xor xgmii_txR(30) xor xgmii_txR(29) xor xgmii_txR(28) xor 
-				xgmii_txR(27) xor xgmii_txR(25) xor xgmii_txR(24) xor xgmii_txR(23) xor xgmii_txR(15) xor xgmii_txR(11) xor 
-				xgmii_txR(9)  xor xgmii_txR(8)  xor xgmii_txR(5)  xor tx_crc(1)     xor tx_crc(4)     xor tx_crc(11)    xor 
-				tx_crc(12)    xor tx_crc(14)    xor tx_crc(15)    xor tx_crc(17)    xor tx_crc(20)    xor tx_crc(21)    xor 
-				tx_crc(22)    xor tx_crc(25)    xor tx_crc(27)    xor tx_crc(28)    xor tx_crc(30);
 
 			if reset = '1' then
 				tx_state         <= IDLE;
@@ -494,8 +270,9 @@ begin
 							tx_state         <= SEND_PREAMBLE;
 						end if;
 					when SEND_PREAMBLE   =>
-						tx_crc <= (others => '1');
 						tx_state <= SEND_DATA;
+            -- reset the CRC macro, reset is asserted on same cycle as first data
+            tx_crc_reset <= '1';
 					when SEND_DATA       =>
 						case tx_data_valid is
 							when "11111111" =>
@@ -506,6 +283,7 @@ begin
 							when others =>
 								-- this version of the mac does not support any other enable pattern. if we receive an unsupported one then we send a shorter frame and corrupt the CRC.
 								tx_state         <= SEND_CORRUPTED_CRC;
+
 						end case;
 					when SEND_END_ALIGNED       =>
 						tx_state <= INTERFRAME;
@@ -524,147 +302,64 @@ begin
 		end if;
 	end process;
 
-	-- Compute a partial CRC used when receiveing a partial word
-	tx_partial_crc(0) <=
-		xgmii_partR(12) xor xgmii_partR(10) xor xgmii_partR(9)  xor xgmii_partR(6) xor xgmii_partR(0) xor tx_crc(16)     xor 
-		tx_crc(22)      xor tx_crc(25)      xor tx_crc(26)      xor tx_crc(28);
-	tx_partial_crc(1) <=
-		xgmii_partR(13) xor xgmii_partR(12) xor xgmii_partR(11) xor xgmii_partR(9) xor xgmii_partR(7) xor xgmii_partR(6) xor 
-		xgmii_partR(1)  xor xgmii_partR(0)  xor tx_crc(16)      xor tx_crc(17)     xor tx_crc(22)     xor tx_crc(23)     xor 
-		tx_crc(25)      xor tx_crc(27)      xor tx_crc(28)      xor tx_crc(29);
-	tx_partial_crc(2) <=
-		xgmii_partR(14) xor xgmii_partR(13) xor xgmii_partR(9)  xor xgmii_partR(8) xor xgmii_partR(7) xor xgmii_partR(6) xor 
-		xgmii_partR(2)  xor xgmii_partR(1)  xor xgmii_partR(0)  xor tx_crc(16)     xor tx_crc(17)     xor tx_crc(18)     xor 
-		tx_crc(22)      xor tx_crc(23)      xor tx_crc(24)      xor tx_crc(25)     xor tx_crc(29)     xor tx_crc(30);
-	tx_partial_crc(3) <=
-		xgmii_partR(15) xor xgmii_partR(14) xor xgmii_partR(10) xor xgmii_partR(9) xor xgmii_partR(8) xor xgmii_partR(7) xor 
-		xgmii_partR(3)  xor xgmii_partR(2)  xor xgmii_partR(1)  xor tx_crc(17)     xor tx_crc(18)     xor tx_crc(19)     xor 
-		tx_crc(23)      xor tx_crc(24)      xor tx_crc(25)      xor tx_crc(26)     xor tx_crc(30)     xor tx_crc(31);
-	tx_partial_crc(4) <=
-		xgmii_partR(15) xor xgmii_partR(12) xor xgmii_partR(11) xor xgmii_partR(8) xor xgmii_partR(6) xor xgmii_partR(4) xor 
-		xgmii_partR(3)  xor xgmii_partR(2)  xor xgmii_partR(0)  xor tx_crc(16)     xor tx_crc(18)     xor tx_crc(19)     xor 
-		tx_crc(20)      xor tx_crc(22)      xor tx_crc(24)      xor tx_crc(27)     xor tx_crc(28)     xor tx_crc(31);
-	tx_partial_crc(5) <=
-		xgmii_partR(13) xor xgmii_partR(10) xor xgmii_partR(7)  xor xgmii_partR(6) xor xgmii_partR(5) xor xgmii_partR(4) xor 
-		xgmii_partR(3)  xor xgmii_partR(1)  xor xgmii_partR(0)  xor tx_crc(16)     xor tx_crc(17)     xor tx_crc(19)     xor 
-		tx_crc(20)      xor tx_crc(21)      xor tx_crc(22)      xor tx_crc(23)     xor tx_crc(26)     xor tx_crc(29);
-	tx_partial_crc(6) <=
-		xgmii_partR(14) xor xgmii_partR(11) xor xgmii_partR(8)  xor xgmii_partR(7) xor xgmii_partR(6) xor xgmii_partR(5) xor 
-		xgmii_partR(4)  xor xgmii_partR(2)  xor xgmii_partR(1)  xor tx_crc(17)     xor tx_crc(18)     xor tx_crc(20)     xor 
-		tx_crc(21)      xor tx_crc(22)      xor tx_crc(23)      xor tx_crc(24)     xor tx_crc(27)     xor tx_crc(30);
-	tx_partial_crc(7) <=
-		xgmii_partR(15) xor xgmii_partR(10) xor xgmii_partR(8)  xor xgmii_partR(7) xor xgmii_partR(5) xor xgmii_partR(3) xor 
-		xgmii_partR(2)  xor xgmii_partR(0)  xor tx_crc(16)      xor tx_crc(18)     xor tx_crc(19)     xor tx_crc(21)     xor 
-		tx_crc(23)      xor tx_crc(24)      xor tx_crc(26)      xor tx_crc(31);
-	tx_partial_crc(8) <=
-		xgmii_partR(12) xor xgmii_partR(11) xor xgmii_partR(10) xor xgmii_partR(8) xor xgmii_partR(4) xor xgmii_partR(3) xor 
-		xgmii_partR(1)  xor xgmii_partR(0)  xor tx_crc(16)      xor tx_crc(17)     xor tx_crc(19)     xor tx_crc(20)     xor 
-		tx_crc(24)      xor tx_crc(26)      xor tx_crc(27)      xor tx_crc(28);
-	tx_partial_crc(9) <=
-		xgmii_partR(13) xor xgmii_partR(12) xor xgmii_partR(11) xor xgmii_partR(9) xor xgmii_partR(5) xor xgmii_partR(4) xor 
-		xgmii_partR(2)  xor xgmii_partR(1)  xor tx_crc(17)      xor tx_crc(18)     xor tx_crc(20)     xor tx_crc(21)     xor 
-		tx_crc(25)      xor tx_crc(27)      xor tx_crc(28)      xor tx_crc(29);
-	tx_partial_crc(10) <=
-		xgmii_partR(14) xor xgmii_partR(13) xor xgmii_partR(9)  xor xgmii_partR(5) xor xgmii_partR(3) xor xgmii_partR(2) xor 
-		xgmii_partR(0)  xor tx_crc(16)      xor tx_crc(18)      xor tx_crc(19)     xor tx_crc(21)     xor tx_crc(25)     xor 
-		tx_crc(29)      xor tx_crc(30);
-	tx_partial_crc(11) <=
-		xgmii_partR(15) xor xgmii_partR(14) xor xgmii_partR(12) xor xgmii_partR(9) xor xgmii_partR(4) xor xgmii_partR(3) xor 
-		xgmii_partR(1)  xor xgmii_partR(0)  xor tx_crc(16)      xor tx_crc(17)     xor tx_crc(19)     xor tx_crc(20)     xor 
-		tx_crc(25)      xor tx_crc(28)      xor tx_crc(30)      xor tx_crc(31);
-	tx_partial_crc(12) <=
-		xgmii_partR(15) xor xgmii_partR(13) xor xgmii_partR(12) xor xgmii_partR(9) xor xgmii_partR(6) xor xgmii_partR(5) xor 
-		xgmii_partR(4)  xor xgmii_partR(2)  xor xgmii_partR(1)  xor xgmii_partR(0) xor tx_crc(16)     xor tx_crc(17)     xor 
-		tx_crc(18)      xor tx_crc(20)      xor tx_crc(21)      xor tx_crc(22)     xor tx_crc(25)     xor tx_crc(28)     xor 
-		tx_crc(29)      xor tx_crc(31);
-	tx_partial_crc(13) <=
-		xgmii_partR(14) xor xgmii_partR(13) xor xgmii_partR(10) xor xgmii_partR(7) xor xgmii_partR(6) xor xgmii_partR(5) xor 
-		xgmii_partR(3)  xor xgmii_partR(2)  xor xgmii_partR(1)  xor tx_crc(17)     xor tx_crc(18)     xor tx_crc(19)     xor 
-		tx_crc(21)      xor tx_crc(22)      xor tx_crc(23)      xor tx_crc(26)     xor tx_crc(29)     xor tx_crc(30);
-	tx_partial_crc(14) <=
-		xgmii_partR(15) xor xgmii_partR(14) xor xgmii_partR(11) xor xgmii_partR(8) xor xgmii_partR(7) xor xgmii_partR(6) xor 
-		xgmii_partR(4)  xor xgmii_partR(3)  xor xgmii_partR(2)  xor tx_crc(18)     xor tx_crc(19)     xor tx_crc(20)     xor 
-		tx_crc(22)      xor tx_crc(23)      xor tx_crc(24)      xor tx_crc(27)     xor tx_crc(30)     xor tx_crc(31);
-	tx_partial_crc(15) <=
-		xgmii_partR(15) xor xgmii_partR(12) xor xgmii_partR(9)  xor xgmii_partR(8) xor xgmii_partR(7) xor xgmii_partR(5) xor 
-		xgmii_partR(4)  xor xgmii_partR(3)  xor tx_crc(19)      xor tx_crc(20)     xor tx_crc(21)     xor tx_crc(23)     xor 
-		tx_crc(24)      xor tx_crc(25)      xor tx_crc(28)      xor tx_crc(31);
-	tx_partial_crc(16) <=
-		xgmii_partR(13) xor xgmii_partR(12) xor xgmii_partR(8)  xor xgmii_partR(5) xor xgmii_partR(4) xor xgmii_partR(0) xor 
-		tx_crc(0)       xor tx_crc(16)      xor tx_crc(20)      xor tx_crc(21)     xor tx_crc(24)     xor tx_crc(28)     xor 
-		tx_crc(29);
-	tx_partial_crc(17) <=
-		xgmii_partR(14) xor xgmii_partR(13) xor xgmii_partR(9)  xor xgmii_partR(6) xor xgmii_partR(5) xor xgmii_partR(1) xor 
-		tx_crc(1)       xor tx_crc(17)      xor tx_crc(21)      xor tx_crc(22)     xor tx_crc(25)     xor tx_crc(29)     xor 
-		tx_crc(30);
-	tx_partial_crc(18) <=
-		xgmii_partR(15) xor xgmii_partR(14) xor xgmii_partR(10) xor xgmii_partR(7) xor xgmii_partR(6) xor xgmii_partR(2) xor 
-		tx_crc(2)       xor tx_crc(18)      xor tx_crc(22)      xor tx_crc(23)     xor tx_crc(26)     xor tx_crc(30)     xor 
-		tx_crc(31);
-	tx_partial_crc(19) <=
-		xgmii_partR(15) xor xgmii_partR(11) xor xgmii_partR(8)  xor xgmii_partR(7) xor xgmii_partR(3) xor tx_crc(3)      xor 
-		tx_crc(19)      xor tx_crc(23)      xor tx_crc(24)      xor tx_crc(27)     xor tx_crc(31);
-	tx_partial_crc(20) <=
-		xgmii_partR(12) xor xgmii_partR(9)  xor xgmii_partR(8)  xor xgmii_partR(4) xor tx_crc(4)      xor tx_crc(20)     xor 
-		tx_crc(24)      xor tx_crc(25)      xor tx_crc(28);
-	tx_partial_crc(21) <=
-		xgmii_partR(13) xor xgmii_partR(10) xor xgmii_partR(9)  xor xgmii_partR(5) xor tx_crc(5)      xor tx_crc(21)     xor 
-		tx_crc(25)      xor tx_crc(26)      xor tx_crc(29);
-	tx_partial_crc(22) <=
-		xgmii_partR(14) xor xgmii_partR(12) xor xgmii_partR(11) xor xgmii_partR(9) xor xgmii_partR(0) xor tx_crc(6)      xor 
-		tx_crc(16)      xor tx_crc(25)      xor tx_crc(27)      xor tx_crc(28)     xor tx_crc(30);
-	tx_partial_crc(23) <=
-		xgmii_partR(15) xor xgmii_partR(13) xor xgmii_partR(9)  xor xgmii_partR(6) xor xgmii_partR(1) xor xgmii_partR(0) xor 
-		tx_crc(7)       xor tx_crc(16)      xor tx_crc(17)      xor tx_crc(22)     xor tx_crc(25)     xor tx_crc(29)     xor 
-		tx_crc(31);
-	tx_partial_crc(24) <=
-		xgmii_partR(14) xor xgmii_partR(10) xor xgmii_partR(7)  xor xgmii_partR(2) xor xgmii_partR(1) xor tx_crc(8)      xor 
-		tx_crc(17)      xor tx_crc(18)      xor tx_crc(23)      xor tx_crc(26)     xor tx_crc(30);
-	tx_partial_crc(25) <=
-		xgmii_partR(15) xor xgmii_partR(11) xor xgmii_partR(8)  xor xgmii_partR(3) xor xgmii_partR(2) xor tx_crc(9)      xor 
-		tx_crc(18)      xor tx_crc(19)      xor tx_crc(24)      xor tx_crc(27)     xor tx_crc(31);
-	tx_partial_crc(26) <=
-		xgmii_partR(10) xor xgmii_partR(6)  xor xgmii_partR(4)  xor xgmii_partR(3) xor xgmii_partR(0) xor tx_crc(10)     xor 
-		tx_crc(16)      xor tx_crc(19)      xor tx_crc(20)      xor tx_crc(22)     xor tx_crc(26);
-	tx_partial_crc(27) <=
-		xgmii_partR(11) xor xgmii_partR(7)  xor xgmii_partR(5)  xor xgmii_partR(4) xor xgmii_partR(1) xor tx_crc(11)     xor 
-		tx_crc(17)      xor tx_crc(20)      xor tx_crc(21)      xor tx_crc(23)     xor tx_crc(27);
-	tx_partial_crc(28) <=
-		xgmii_partR(12) xor xgmii_partR(8)  xor xgmii_partR(6)  xor xgmii_partR(5) xor xgmii_partR(2) xor tx_crc(12)     xor 
-		tx_crc(18)      xor tx_crc(21)      xor tx_crc(22)      xor tx_crc(24)     xor tx_crc(28);
-	tx_partial_crc(29) <=
-		xgmii_partR(13) xor xgmii_partR(9)  xor xgmii_partR(7)  xor xgmii_partR(6) xor xgmii_partR(3) xor tx_crc(13)     xor 
-		tx_crc(19)      xor tx_crc(22)      xor tx_crc(23)      xor tx_crc(25)     xor tx_crc(29);
-	tx_partial_crc(30) <=
-		xgmii_partR(14) xor xgmii_partR(10) xor xgmii_partR(8)  xor xgmii_partR(7) xor xgmii_partR(4) xor tx_crc(14)     xor 
-		tx_crc(20)      xor tx_crc(23)      xor tx_crc(24)      xor tx_crc(26)     xor tx_crc(30);
-	tx_partial_crc(31) <=
-		xgmii_partR(15) xor xgmii_partR(11) xor xgmii_partR(9)  xor xgmii_partR(8) xor xgmii_partR(5) xor tx_crc(15) xor 
-		tx_crc(21)      xor tx_crc(24)      xor tx_crc(25)      xor tx_crc(27)     xor tx_crc(31);
-
 	-- Assign the data to be sent to the XGMII depending on the current state
-	with tx_state select xgmii_txd <= 
-		X"0707070707070707"                                                  when IDLE,
-		X"0707070707070707"                                                  when INTERFRAME,
-		X"D5555555555555FB"                                                  when SEND_PREAMBLE,
-		xgmii_tx0                                                            when SEND_DATA,
-		X"070707FD" & (not bit_reverse(tx_crc))                              when SEND_END_ALIGNED,
-		X"07FD" & (not bit_reverse(tx_partial_crc)) & xgmii_tx0(15 downto 0) when SEND_END_NON_ALIGNED,
-		X"070707FD" & (not bit_reverse(tx_crc) xor X"00000001")              when SEND_CORRUPTED_CRC,
-		(others => '0')                                                      when others;
-	with tx_state select xgmii_txc <= 
-		"11111111"                                                           when IDLE,
-		"11111111"                                                           when INTERFRAME,
-		"00000001"                                                           when SEND_PREAMBLE,
-		"00000000"                                                           when SEND_DATA,
-		"11110000"                                                           when SEND_END_ALIGNED,
-		"11000000"                                                           when SEND_END_NON_ALIGNED,
-		"11110000"                                                           when SEND_CORRUPTED_CRC,
-		(others => '0')                                                      when others;	
+	with tx_state select xgmii_txd_int <= 
+		X"0707070707070707"                              when IDLE,
+		X"0707070707070707"                              when INTERFRAME,
+		X"D5555555555555FB"                              when SEND_PREAMBLE,
+		xgmii_tx0                                        when SEND_DATA,
+		X"070707FD" & X"00000000"                        when SEND_END_ALIGNED,
+		X"07FD" & X"00000000" & xgmii_tx0(15 downto 0)   when SEND_END_NON_ALIGNED,
+		X"070707FD" & X"00000000"                        when SEND_CORRUPTED_CRC,
+		(others => '0')                                  when others;
+	with tx_state select xgmii_txc_int <= 
+		"11111111"                                       when IDLE,
+		"11111111"                                       when INTERFRAME,
+		"00000001"                                       when SEND_PREAMBLE,
+		"00000000"                                       when SEND_DATA,
+		"11110000"                                       when SEND_END_ALIGNED,
+		"11000000"                                       when SEND_END_NON_ALIGNED,
+		"11110000"                                       when SEND_CORRUPTED_CRC,
+		(others => '0')                                  when others;	
 
-	-- Bit reverse the data before feeding it to the CRC computation block. We also need to use the bit reverse version of the data generated by the CRC block.
-	xgmii_txR      <= bit_reverse(xgmii_tx0);
-	xgmii_partR    <= bit_reverse(xgmii_tx0(15 downto 0));
+  -- the data needs to be pipelined twice in order to compensate for extra latency due to the CRC macro
+  -- the in the aligned case the CRC is inserted in the first pipe
+  -- in the non-aligned case the CRC is inserted in the second pipe along with the outgoing data that has been crc'd
+	xgmii_tx_buf: process(tx_clk0)
+	begin
+		if tx_clk0'event and tx_clk0 = '1' then
+      -- signal cycle strobe
+      partial_crc_insert <= '0';
+      -- delay the control and data bits
+	    xgmii_txc_z  <= xgmii_txc_int;
+	    xgmii_txd_z  <= xgmii_txd_int;
+	    xgmii_txc_zz <= xgmii_txc_z;
+      tx_state_z   <= tx_state;
+      if reset = '1' then
+      else
+				case tx_state_z is
+					when SEND_END_ALIGNED       =>
+	          xgmii_txd_zz <= xgmii_txd_z or (X"00000000" & tx_crc_data_revd);
+					when SEND_CORRUPTED_CRC     =>
+	          xgmii_txd_zz <= xgmii_txd_z or (X"00000000" & (tx_crc_data_revd xor X"00000001")) ;
+					when others => 
+	          xgmii_txd_zz <= xgmii_txd_z;
+				end case;
+
+        if tx_state_z = SEND_END_NON_ALIGNED then
+          partial_crc_insert <= '1';
+        end if;
+      end if;
+    end if;
+  end process;
+
+  tx_crc_width <= "001" when tx_state = SEND_END_NON_ALIGNED else "111";
+  -- when state == SEND_END_NON_ALIGNED, xgmii_tx0 contains the 16bits of data
+
+  xgmii_txc <= xgmii_txc_zz;
+  xgmii_txd <= xgmii_txd_zz or (X"0000" & tx_crc_data_revd & X"0000") when partial_crc_insert = '1' else xgmii_txd_zz;
+  -- slip in the CRC in the non-aligned case
+
 
 	-- #####   #    #
 	-- #    #   #  #
