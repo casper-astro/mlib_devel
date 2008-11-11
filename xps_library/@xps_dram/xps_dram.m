@@ -33,7 +33,10 @@ end
 blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 
-s.hw_sys = 'BEE2';
+% replaced by Andrew to allow ROACH with DRAMs (check now done in drc.m
+% s.hw_sys = 'BEE2';
+s.hw_sys = 'any';
+%
 s.dimm       = get_param(blk_name, 'dimm');
 s.half_burst = num2str(strcmp(get_param(blk_name, 'half_burst'),'on'));
 s.bank_mgt   = num2str(strcmp(get_param(blk_name, 'bank_mgt'),'on'));
