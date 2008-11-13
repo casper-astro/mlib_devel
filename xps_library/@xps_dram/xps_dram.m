@@ -33,21 +33,52 @@ end
 blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 
-% replaced by Andrew to allow ROACH with DRAMs (check now done in drc.m
-% s.hw_sys = 'BEE2';
-s.hw_sys = 'any';
-%
-s.dimm       = get_param(blk_name, 'dimm');
+xsg_obj_name = get(xsg_obj,'simulink_name');
+xsg_hw_sys = get_param(xsg_obj_name,'hw_sys');
+
 s.half_burst = num2str(strcmp(get_param(blk_name, 'half_burst'),'on'));
 s.bank_mgt   = num2str(strcmp(get_param(blk_name, 'bank_mgt'),'on'));
 s.wide_data  = num2str(strcmp(get_param(blk_name, 'wide_data'),'on'));
+if( strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
+	s.hw_sys = xsg_hw_sys;
+	s.dimm  = get_param(blk_name, 'dimm');
+else
+	s.hw_sys = 'ROACH'; %assuming ROACH if not BEE2, should cause failure if something else
+	s.dimm = 1;
+end
 b = class(s, 'xps_dram', blk_obj);
 
-% ip name
-b = set(b, 'ip_name', 'plb_ddr2_sniffer');
+if( strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
+	% ip name
+	b = set(b, 'ip_name', 'plb_ddr2_sniffer');
 
-% plb bus offset
-b = set(b, 'plb_address_offset', hex2dec('100'));
+	% plb bus offset
+	b = set(b, 'plb_address_offset', hex2dec('100'));
+
+	% interfaces
+	interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];
+	interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
+	b = set(b,'interfaces',interfaces);
+else 
+	% ip name
+	b = set(b, 'ip_name', 'opb_dram_sniffer');
+
+	% plb bus offset
+	b = set(b, 'opb_address_offset', hex2dec('100'));
+
+	% interfaces
+	interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];
+	interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
+	b = set(b,'interfaces',interfaces);
+end
+
+% borph parameters
+b = set(b, 'mode', 3);  % read/write mode
+b = set(b, 'size', 2^30);
+
+% misc ports
+misc_ports.ddr_clk = {1 'in' 'ddr2_user_clk'};
+b = set(b,'misc_ports',misc_ports);
 
 % bus connections
 buses.MEM_CMD.busif = {[clear_name(blk_name), '_MEM_CMD']};
@@ -64,16 +95,3 @@ buses.MEM_CMD.ports = [buses.MEM_CMD.ports, 'Mem_Rd_Valid'];
 buses.MEM_CMD.ports = [buses.MEM_CMD.ports, 'Mem_Wr_Din'];
 buses.MEM_CMD.ports = [buses.MEM_CMD.ports, 'Mem_Wr_BE'];
 b = set(b, 'buses', buses);
-
-% misc ports
-misc_ports.ddr_clk = {1 'in' 'ddr2_user_clk'};
-b = set(b,'misc_ports',misc_ports);
-
-% interfaces
-interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];
-interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
-b = set(b,'interfaces',interfaces);
-
-% borph parameters
-b = set(b, 'mode', 3);  % read/write mode
-b = set(b, 'size', 2^30);
