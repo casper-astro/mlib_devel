@@ -34,9 +34,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "dave"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Nov 12 12:45:42 2008"
+  LastModifiedDate	  "Thu Nov 13 15:23:24 2008"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:338>"
+  ModelVersionFormat	  "1.%<AutoIncrement:346>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -9627,7 +9627,7 @@ Library {
 	  block_type		  "reinterpret"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "35,20,1,1,white,blue,0,8982c1db,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 ],[0 0 20 20 ],[0.77 0.82 0.91]);\npatch([12 9 14 9 12 17 18 19 25 21 17 14 19 14 17 21 25 19 18 17 12 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 35 35 0 ],[0 20 20 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 27 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  SubSystem
@@ -11615,8 +11615,8 @@ Library {
       BlockType		      SubSystem
       Name		      "qdr"
       Tag		      "xps:qdr"
-      Ports		      [5, 2]
-      Position		      [915, 18, 1030, 202]
+      Ports		      [5, 4]
+      Position		      [915, 13, 1030, 197]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       RTWSystemCode	      "Auto"
@@ -11624,21 +11624,22 @@ Library {
       MaskType		      "qdr"
       MaskDescription	      "Interface to the QDR II SRAM device on ROACH"
       MaskPromptString	      "QDR Chip"
-      MaskStyleString	      "popup(QDR0|QDR1)"
+      MaskStyleString	      "popup(qdr0|qdr1)"
       MaskTunableValueString  "on"
       MaskEnableString	      "on"
       MaskVisibilityString    "on"
       MaskToolTipString	      "on"
       MaskVariables	      "which_qdr=@1;"
       MaskInitialization      "qdr_mask;"
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "QDR1"
+      MaskValueString	      "QDR0"
       System {
 	Name			"qdr"
-	Location		[7, 75, 1201, 984]
+	Location		[7, 75, 1201, 877]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -11697,8 +11698,23 @@ Library {
 	}
 	Block {
 	  BlockType		  Constant
-	  Name			  "Constant"
+	  Name			  "Constant0"
 	  Position		  [555, 340, 585, 370]
+	  Value			  "0"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant1"
+	  Position		  [555, 400, 585, 430]
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant2"
+	  Position		  [555, 455, 585, 485]
 	  Value			  "0"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
@@ -11713,7 +11729,7 @@ Library {
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  off
-	  latency		  "7"
+	  latency		  "8"
 	  dbl_ovrd		  off
 	  reg_retiming		  off
 	  xl_use_area		  off
@@ -11722,8 +11738,8 @@ Library {
 	  sggui_pos		  "20,20,348,255"
 	  block_type		  "delay"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "30,20,1,1,white,blue,0,4c76d8d2,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-7}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "30,20,1,1,white,blue,0,a6538547,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-8}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -11902,6 +11918,25 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
+	  Name			  "force_cal_fail"
+	  Ports			  [1, 1]
+	  Position		  [760, 454, 800, 486]
+	  SourceBlock		  "xbsIndex_r4/Reinterpret"
+	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in binary)."
+	  force_arith_type	  on
+	  arith_type		  "Unsigned"
+	  force_bin_pt		  on
+	  bin_pt		  "0"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,312"
+	  block_type		  "reinterpret"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "40,32,1,1,white,blue,0,8982c1db,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 27 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
 	  Name			  "force_data_out"
 	  Ports			  [1, 1]
 	  Position		  [760, 339, 800, 371]
@@ -11921,7 +11956,26 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "qdr_dev_qdr0_address"
+	  Name			  "force_phy_ready"
+	  Ports			  [1, 1]
+	  Position		  [760, 399, 800, 431]
+	  SourceBlock		  "xbsIndex_r4/Reinterpret"
+	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in binary)."
+	  force_arith_type	  on
+	  arith_type		  "Unsigned"
+	  force_bin_pt		  on
+	  bin_pt		  "0"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,312"
+	  block_type		  "reinterpret"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "40,32,1,1,white,blue,0,8982c1db,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 27 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "xps_library_qdr_address"
 	  Ports			  [1, 1]
 	  Position		  [400, 390, 440, 410]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -11942,7 +11996,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "qdr_dev_qdr0_be"
+	  Name			  "xps_library_qdr_be"
 	  Ports			  [1, 1]
 	  Position		  [400, 345, 440, 365]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -11963,7 +12017,34 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "qdr_dev_qdr0_data_in"
+	  Name			  "xps_library_qdr_cal_fail"
+	  Ports			  [1, 1]
+	  Position		  [640, 459, 695, 481]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "1"
+	  bin_pt		  "0"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  period		  "1"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,348,406"
+	  block_type		  "gatewayin"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "55,22,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "xps_library_qdr_data_in"
 	  Ports			  [1, 1]
 	  Position		  [400, 430, 440, 450]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -11984,7 +12065,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "qdr_dev_qdr0_data_out"
+	  Name			  "xps_library_qdr_data_out"
 	  Ports			  [1, 1]
 	  Position		  [640, 344, 695, 366]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -12011,7 +12092,34 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "qdr_dev_qdr0_rd_en"
+	  Name			  "xps_library_qdr_phy_ready"
+	  Ports			  [1, 1]
+	  Position		  [640, 404, 695, 426]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "36"
+	  bin_pt		  "0"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  period		  "1"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,348,406"
+	  block_type		  "gatewayin"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "55,22,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "xps_library_qdr_rd_en"
 	  Ports			  [1, 1]
 	  Position		  [400, 250, 440, 270]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -12032,7 +12140,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "qdr_dev_qdr0_wr_en"
+	  Name			  "xps_library_qdr_wr_en"
 	  Ports			  [1, 1]
 	  Position		  [400, 300, 440, 320]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -12045,7 +12153,7 @@ Library {
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,20,336,386"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,38220381,right"
@@ -12068,52 +12176,132 @@ Library {
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
 	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "phy_ready"
+	  Position		  [835, 408, 865, 422]
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "cal_fail"
+	  Position		  [835, 463, 865, 477]
+	  Port			  "4"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
 	Line {
-	  SrcBlock		  "convert_data_in"
+	  SrcBlock		  "xps_library_qdr_cal_fail"
 	  SrcPort		  1
-	  DstBlock		  "Reinterpret"
+	  DstBlock		  "force_cal_fail"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "data_in"
+	  SrcBlock		  "Constant2"
 	  SrcPort		  1
-	  DstBlock		  "convert_data_in"
+	  DstBlock		  "xps_library_qdr_cal_fail"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_address"
+	  SrcBlock		  "force_cal_fail"
 	  SrcPort		  1
-	  DstBlock		  "qdr_dev_qdr0_address"
+	  DstBlock		  "cal_fail"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "address"
+	  SrcBlock		  "xps_library_qdr_phy_ready"
 	  SrcPort		  1
-	  DstBlock		  "convert_address"
+	  DstBlock		  "force_phy_ready"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_be"
+	  SrcBlock		  "Constant1"
 	  SrcPort		  1
-	  DstBlock		  "qdr_dev_qdr0_be"
+	  DstBlock		  "xps_library_qdr_phy_ready"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "be"
+	  SrcBlock		  "force_phy_ready"
 	  SrcPort		  1
-	  DstBlock		  "convert_be"
+	  DstBlock		  "phy_ready"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_wr_en"
+	  SrcBlock		  "Delay"
 	  SrcPort		  1
-	  DstBlock		  "qdr_dev_qdr0_wr_en"
+	  DstBlock		  "data_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "wr_en"
+	  SrcBlock		  "xps_library_qdr_data_out"
 	  SrcPort		  1
-	  DstBlock		  "convert_wr_en"
+	  DstBlock		  "force_data_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_qdr_rd_en"
+	  SrcPort		  1
+	  DstBlock		  "Terminator4"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "rd_en"
+	  SrcPort		  1
+	  DstBlock		  "convert_rd_en"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_rd_en"
+	  SrcPort		  1
+	  Points		  [110, 0]
+	  Branch {
+	    Points		    [0, -110]
+	    DstBlock		    "Delay"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "xps_library_qdr_rd_en"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "xps_library_qdr_data_in"
+	  SrcPort		  1
+	  DstBlock		  "Terminator3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_qdr_address"
+	  SrcPort		  1
+	  DstBlock		  "Terminator2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_qdr_be"
+	  SrcPort		  1
+	  DstBlock		  "Terminator1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_qdr_wr_en"
+	  SrcPort		  1
+	  DstBlock		  "Terminator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant0"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_qdr_data_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Reinterpret"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_qdr_data_in"
 	  DstPort		  1
 	}
 	Line {
@@ -12123,77 +12311,51 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Reinterpret"
+	  SrcBlock		  "wr_en"
 	  SrcPort		  1
-	  DstBlock		  "qdr_dev_qdr0_data_in"
+	  DstBlock		  "convert_wr_en"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Constant"
+	  SrcBlock		  "convert_wr_en"
 	  SrcPort		  1
-	  DstBlock		  "qdr_dev_qdr0_data_out"
+	  DstBlock		  "xps_library_qdr_wr_en"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "qdr_dev_qdr0_wr_en"
+	  SrcBlock		  "be"
 	  SrcPort		  1
-	  DstBlock		  "Terminator"
+	  DstBlock		  "convert_be"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "qdr_dev_qdr0_be"
+	  SrcBlock		  "convert_be"
 	  SrcPort		  1
-	  DstBlock		  "Terminator1"
+	  DstBlock		  "xps_library_qdr_be"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "qdr_dev_qdr0_address"
+	  SrcBlock		  "address"
 	  SrcPort		  1
-	  DstBlock		  "Terminator2"
+	  DstBlock		  "convert_address"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "qdr_dev_qdr0_data_in"
+	  SrcBlock		  "convert_address"
 	  SrcPort		  1
-	  DstBlock		  "Terminator3"
+	  DstBlock		  "xps_library_qdr_address"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_rd_en"
+	  SrcBlock		  "data_in"
 	  SrcPort		  1
-	  Points		  [110, 0]
-	  Branch {
-	    DstBlock		    "qdr_dev_qdr0_rd_en"
-	    DstPort		    1
-	  }
-	  Branch {
-	    Points		    [0, -110]
-	    DstBlock		    "Delay"
-	    DstPort		    1
-	  }
-	}
-	Line {
-	  SrcBlock		  "rd_en"
-	  SrcPort		  1
-	  DstBlock		  "convert_rd_en"
+	  DstBlock		  "convert_data_in"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "qdr_dev_qdr0_rd_en"
+	  SrcBlock		  "convert_data_in"
 	  SrcPort		  1
-	  DstBlock		  "Terminator4"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_dev_qdr0_data_out"
-	  SrcPort		  1
-	  DstBlock		  "force_data_out"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Delay"
-	  SrcPort		  1
-	  DstBlock		  "data_valid"
+	  DstBlock		  "Reinterpret"
 	  DstPort		  1
 	}
       }

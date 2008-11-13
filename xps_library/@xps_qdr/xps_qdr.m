@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function b = xps_adc(blk_obj)
+function b = xps_qdr(blk_obj)
 
 if ~isa(blk_obj,'xps_block')
     error('XPS_ADC class requires a xps_block class object');
@@ -35,6 +35,8 @@ xsg_obj = get(blk_obj,'xsg_obj');
 
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.hw_qdr = get_param(blk_name,'which_qdr');
+s.clk_src = get(xsg_obj,'clk_src');
+s.clk_rate = get(xsg_obj,'clk_rate');
 
 switch s.hw_sys
     case 'ROACH'

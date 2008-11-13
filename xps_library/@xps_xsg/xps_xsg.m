@@ -51,9 +51,11 @@ switch s.hw_sys
   		error(['Unsupported Platform: ',s.hw_sys]);
 end % switch s.hw_sys
 
-s.clk_src = get_param(blk_name,'clk_src');
-s.clk90_src = [s.clk_src,'90'];
-s.clk_rate = eval_param(blk_name,'clk_rate');
+s.clk_src    = get_param(blk_name,'clk_src');
+s.clk90_src  = [s.clk_src,'90'];
+s.clk180_src = [s.clk_src,'180'];
+s.clk270_src = [s.clk_src,'270'];
+s.clk_rate   = eval_param(blk_name,'clk_rate');
 
 [s.gpioclk_hw_sys,s.gpioclk_grp] = xps_get_hw_info(get_param(blk_name,'gpio_clk_io_group'));
 s.gpioclkbit = eval_param(blk_name,'gpio_clk_bit_index');

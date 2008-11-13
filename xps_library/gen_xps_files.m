@@ -496,7 +496,7 @@ if run_edkgen
                     opb_slaves = opb_slaves + opb_cores;
                 end
             case 'powerpc440_ext'
-                if opb_cores + opb_slaves > 16
+                if opb_cores + opb_slaves > 64
                     opb_bus_inst = opb_bus_inst + 1;
                     opb_slaves = 0;
                     opb_name = ['opb',num2str(opb_bus_inst)];
