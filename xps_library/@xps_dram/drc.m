@@ -26,17 +26,6 @@ msg = '';
 
 for i=1:length(xps_objs)
 
-	%check added by Andrew
-	try
-		if( strcmp( get(xps_objs{i},'type'), 'xps_xsg') && ...
-		       	( strcmp( get(xps_objs{i},'hw_sys'), 'iBOB') || strcmp( get(xps_objs{i},'hw_sys'), 'CORR') )), 
-			msg = [get(xps_objs{i}, 'hw_sys'),' hardware platform does not support DRAM.'];
-			result = 1;
-		end
-
-	end
-	%
-
 	try
 	    if ( strcmp(get(xps_objs{i},'type'), 'xps_xsg') && strcmp(get(xps_objs{i},'hw_sys'), 'BEE2_ctrl') && strcmp(get(blk_obj,'dimm'), '1') )
 	        msg = ['DRAM ', get(blk_obj,'simulink_name'), ' is set to use DIMM 1, which is reserved on the BEE2 CTRL FPGA for Linux.'];
