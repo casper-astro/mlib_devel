@@ -79,6 +79,8 @@ entity adc_interface is
         ctrl_clk_in       : in std_logic;
         ctrl_clk_out      : out std_logic;
         ctrl_clk90_out    : out std_logic;
+        ctrl_clk180_out   : out std_logic;
+        ctrl_clk270_out   : out std_logic;
         ctrl_dcm_locked   : out std_logic;
         -- dcm clock shift
         dcm_psclk         : in std_logic := '0';
@@ -141,9 +143,13 @@ architecture IMP of adc_interface is
     ----------------------------------------
     signal adc_clk              : std_logic;
     signal adc_clk90            : std_logic;
+    signal adc_clk180           : std_logic;
+    signal adc_clk270           : std_logic;
     signal adc_clk_buf          : std_logic;
     signal adc_clk_dcm          : std_logic;
     signal adc_clk90_dcm        : std_logic;
+    signal adc_clk180_dcm       : std_logic;
+    signal adc_clk270_dcm       : std_logic;
 
     ----------------------------------------
     -- Keep constraints
@@ -507,11 +513,18 @@ IBUFDS_CLK : IBUFDS
     port map ( I => adc_clk_p, IB => adc_clk_n, O => adc_clk_buf);
 
 CLK_CLKBUF : BUFG
-    port map ( I => adc_clk_dcm, O => adc_clk);
+    port map ( I => adc_clk_dcm,    O => adc_clk);
 CLK90_CLKBUF : BUFG
-    port map ( I => adc_clk90_dcm, O => adc_clk90);
+    port map ( I => adc_clk90_dcm,  O => adc_clk90);
+CLK180_CLKBUF : BUFG
+    port map ( I => adc_clk180_dcm, O => adc_clk180);
+CLK270_CLKBUF : BUFG
+    port map ( I => adc_clk270_dcm, O => adc_clk270);
 
-ctrl_clk_out <= adc_clk;
+ctrl_clk_out    <= adc_clk;
+ctrl_clk90_out  <= adc_clk90;
+ctrl_clk180_out <= adc_clk180;
+ctrl_clk270_out <= adc_clk270;
 
 ----------------------------------------
 -- Clock DCM for phase shifting
@@ -525,7 +538,7 @@ CLKSHIFT_DCM : DCM
         CLKFX_MULTIPLY        => 4,
         CLKIN_DIVIDE_BY_2     => FALSE,
         CLKIN_PERIOD          => 3.906250,
-        CLKOUT_PHASE_SHIFT    => "VARIABLE",
+        CLKOUT_PHASE_SHIFT    => "VARIABLE_CENTER",
         DESKEW_ADJUST         => "SYSTEM_SYNCHRONOUS",
         DFS_FREQUENCY_MODE    => "HIGH",
         DLL_FREQUENCY_MODE    => "HIGH",
@@ -548,8 +561,8 @@ CLKSHIFT_DCM : DCM
         CLK2X                 => open,
         CLK2X180              => open,
         CLK90                 => adc_clk90_dcm,
-        CLK180                => open,
-        CLK270                => open,
+        CLK180                => adc_clk180_dcm,
+        CLK270                => adc_clk270_dcm,
         LOCKED                => ctrl_dcm_locked,
         PSDONE                => dcm_psdone,
         STATUS                => open);

@@ -17,6 +17,8 @@ PORT aux_clk_1_p = "", DIR = IN
 PORT epb_clk_buf = "", DIR = IN
 PORT sys_clk     = "", DIR = OUT
 PORT sys_clk90   = "", DIR = OUT
+PORT sys_clk180  = "", DIR = OUT
+PORT sys_clk270  = "", DIR = OUT
 PORT dly_clk     = "", DIR = OUT
 PORT aux_clk_0   = "", DIR = OUT
 PORT aux_clk_1   = "", DIR = OUT

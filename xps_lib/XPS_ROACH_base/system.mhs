@@ -79,6 +79,8 @@ BEGIN infrastructure
   PORT epb_clk_buf   = epb_clk_buf
   PORT sys_clk       = sys_clk
   PORT sys_clk90     = sys_clk90
+  PORT sys_clk180    = sys_clk180
+  PORT sys_clk270    = sys_clk270
   PORT dly_clk       = dly_clk
   PORT aux_clk_0     = aux_clk_0
   PORT aux_clk_1     = aux_clk_1

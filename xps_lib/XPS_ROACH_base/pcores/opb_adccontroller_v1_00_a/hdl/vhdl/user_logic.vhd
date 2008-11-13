@@ -173,6 +173,13 @@ architecture IMP of user_logic is
   signal adc0_ddrb_int       : std_logic                 := '0';
   signal adc1_ddrb_int       : std_logic                 := '0';
 
+  signal adc0_ddrb_reg       : std_logic                 := '0';
+  signal adc1_ddrb_reg       : std_logic                 := '0';
+  attribute iob: string; 
+  attribute iob of adc0_ddrb_reg : entity is "true"; --ensure IOB packing to ensure minimum skew
+  attribute iob of adc1_ddrb_reg : entity is "true"; 
+
+
   ----------------------------------------
   -- Signals for user logic slave model s/w accessible register
   ----------------------------------------
@@ -185,8 +192,8 @@ architecture IMP of user_logic is
   signal slv_read_ack         : std_logic;
   signal slv_write_ack        : std_logic;
 
-  signal dcm_reset_counter_0  : std_logic_vector(4 downto 0);
-  signal dcm_reset_counter_1  : std_logic_vector(4 downto 0);
+  signal dcm_reset_shifter_0  : std_logic_vector(4 downto 0);
+  signal dcm_reset_shifter_1  : std_logic_vector(4 downto 0);
 
 begin
 
@@ -194,31 +201,31 @@ begin
   begin
     if Bus2IP_Clk'event and Bus2IP_Clk = '1' then
       if Bus2IP_Reset = '1' then
-        dcm_reset_counter_0 <= "11111";
-        dcm_reset_counter_1 <= "11111";
+        dcm_reset_shifter_0 <= "11111";
+        dcm_reset_shifter_1 <= "11111";
       else
-        case dcm_reset_counter_0 is
+        case dcm_reset_shifter_0 is
           when "00000" =>
             if adc0_ddrb_int = '1' then
-              dcm_reset_counter_0 <= "11111";
+              dcm_reset_shifter_0 <= "11111";
             end if;
           when others =>
-            dcm_reset_counter_0 <= dcm_reset_counter_0 - 1;
+            dcm_reset_shifter_0 <= dcm_reset_shifter_0(3 downto 0) & '0';
         end case;
-        case dcm_reset_counter_1 is
+        case dcm_reset_shifter_1 is
           when "00000" =>
             if adc1_ddrb_int = '1' then
-              dcm_reset_counter_1 <= "11111";
+              dcm_reset_shifter_1 <= "11111";
             end if;
           when others =>
-            dcm_reset_counter_1 <= dcm_reset_counter_1 - 1;
+            dcm_reset_shifter_1 <= dcm_reset_shifter_1(3 downto 0) & '0';
         end case;
       end if;
     end if;
   end process DCM_RESET_EXTEND;
 
-  adc0_dcm_reset <= '0' when dcm_reset_counter_0 = "00000" else '1';
-  adc1_dcm_reset <= '0' when dcm_reset_counter_1 = "00000" else '1';
+  adc0_dcm_reset <= dcm_reset_shifter_0(4);
+  adc1_dcm_reset <= dcm_reset_shifter_1(4);
  
 
   slv_reg_write_select <= Bus2IP_WrCE(0 to 2);
@@ -248,8 +255,8 @@ begin
         adc0_data          <= (others => '0');
         adc0_strobe_n      <= '0';
         adc0_clk_mask      <= '0';
-		adc0_psen          <= '0';
-		adc0_psincdec      <= '0';
+        adc0_psen          <= '0';
+        adc0_psincdec      <= '0';
 
         -- adc1 control
         adc1_shift_count   <= (others => '0');
@@ -260,11 +267,8 @@ begin
         adc1_data          <= (others => '0');
         adc1_strobe_n      <= '0';
         adc1_clk_mask      <= '0';
-		adc1_psen          <= '0';
-		adc1_psincdec      <= '0';
-
-		-- phase measure
-
+        adc1_psen          <= '0';
+        adc1_psincdec      <= '0';
       else
 
         ---------------------------------
@@ -274,9 +278,11 @@ begin
         -- ensure that the reset bits are default low
         adc0_ddrb_int <= '0';
         adc1_ddrb_int <= '0';
+        adc0_ddrb_reg <= adc0_ddrb_int;
+        adc1_ddrb_reg <= adc0_ddrb_int;
         -- ensure that the psen bits are default low
-		adc0_psen <= '0';
-		adc1_psen <= '0';
+        adc0_psen <= '0';
+        adc1_psen <= '0';
 
         case slv_reg_write_select is
 
@@ -418,7 +424,7 @@ begin
   adc0_adc3wire_data   <= adc0_shift_register(0);
   adc0_adc3wire_strobe <= not(adc0_strobe_n);
   adc0_modepin         <= adc0_modepin_int;
-  adc0_ddrb            <= adc0_ddrb_int;
+  adc0_ddrb            <= adc0_ddrb_reg;
   adc0_psclk           <= Bus2IP_Clk;
 
   --------------------------------------
@@ -428,7 +434,7 @@ begin
   adc1_adc3wire_data   <= adc1_shift_register(0);
   adc1_adc3wire_strobe <= not(adc1_strobe_n);
   adc1_modepin         <= adc1_modepin_int;
-  adc1_ddrb            <= adc1_ddrb_int;
+  adc1_ddrb            <= adc1_ddrb_reg;
   adc1_psclk           <= Bus2IP_Clk;
 
   ----------------------------------------

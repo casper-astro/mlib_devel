@@ -1,6 +1,6 @@
 module infrastructure(
     sys_clk_n, sys_clk_p,
-    sys_clk, sys_clk90,
+    sys_clk, sys_clk90, sys_clk180, sys_clk270,
     dly_clk_n,  dly_clk_p,
     dly_clk,
     epb_clk_buf,
@@ -12,7 +12,7 @@ module infrastructure(
     aux_clk_1
   );
   input  sys_clk_n, sys_clk_p;
-  output sys_clk, sys_clk90;
+  output sys_clk, sys_clk90, sys_clk180, sys_clk270;
   input  dly_clk_n, dly_clk_p;
   output dly_clk;
   input  epb_clk_buf;
@@ -53,13 +53,13 @@ module infrastructure(
     .O ({sys_clk_int, aux_clk_1, aux_clk_0})
   );
 
-  wire sys_clk_dcm, sys_clk90_dcm;
+  wire sys_clk_dcm, sys_clk90_dcm, sys_clk180_dcm, sys_clk270_dcm;
   DCM_BASE #(
     .CLKIN_PERIOD(10.0)
   ) DCM_BASE_inst (
     .CLK0(sys_clk_dcm),
-    .CLK180(),
-    .CLK270(),
+    .CLK180(sys_clk180_dcm),
+    .CLK270(sys_clk270_dcm),
     .CLK2X(),
     .CLK2X180(),
     .CLK90(sys_clk90_dcm),
@@ -72,9 +72,9 @@ module infrastructure(
     .RST(1'b0)
   );
 
-  BUFG bufg_sys_clk[1:0](
-    .I({sys_clk_dcm, sys_clk90_dcm}),
-    .O({sys_clk, sys_clk90})
+  BUFG bufg_sys_clk[3:0](
+    .I({sys_clk_dcm, sys_clk90_dcm, sys_clk180_dcm, sys_clk270_dcm}),
+    .O({sys_clk,     sys_clk90,     sys_clk180,     sys_clk270})
   );
 
   /******** Delay Clock *********/

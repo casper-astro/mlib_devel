@@ -79,6 +79,8 @@ PORT ctrl_reset      = "", DIR = I
 PORT ctrl_clk_in     = "", DIR = I, SIGIS = CLK
 PORT ctrl_clk_out    = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p, CLK_FACTOR = 1
 PORT ctrl_clk90_out  = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p, CLK_FACTOR = 1
+PORT ctrl_clk180_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p, CLK_FACTOR = 1
+PORT ctrl_clk270_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p, CLK_FACTOR = 1
 PORT ctrl_dcm_locked = "", DIR = O
 PORT dcm_psclk       = "", DIR = I
 PORT dcm_psen        = "", DIR = I
