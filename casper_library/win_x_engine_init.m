@@ -37,31 +37,40 @@ mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 
 if n_ants < 2,
-    fprintf('xeng ERR: X Engine must have at least 2 antennas.');
+    errordlg('X engine ERR: X Engine must have at least 2 antennas.');
     error('X Engine must have at least 2 antennas.');
     set_param(blk, 'n_ants', '2');
     n_ants = 2;
 end
 
 if floor(n_ants/2 + 1) >= acc_len,
-    fprintf('xeng ERR: X Engine Accumulation length must be > floor(n_ants/2 + 1)');
-    error('X Engine Accumulation length must be > floor(n_ants/2 + 1)');
+    errordlg(sprintf('X engine ERR: X Engine Accumulation length must be > floor(n_ants/2 + 1)=%i',floor(n_ants/2 + 1)));
+    error(sprintf('X Engine Accumulation length must be > floor(n_ants/2 + 1)=%i',floor(n_ants/2 + 1)));
+    set_param(blk, 'acc_len', fprintf('%i',floor(n_ants/2 + 1)));
+    acc_len = floor(n_ants/2 + 1);
 end
 
 if length(use_ded_mult) ~= floor(n_ants/2)+1 && length(use_ded_mult) ~= 1,
-    fprintf('xeng ERR: Number of multiplier types must be 1 or floor(n_ants/2)+1\n');
-    error('Number of multiplier types must be 1 or floor(n_ants/2)+1\n');
+    errordlg(sprintf('X engine ERR: Number of multiplier types must be 1 or floor(n_ants/2)+1 = %i',floor(n_ants/2 + 1)));
+    error(sprintf('X engine ERR: Number of multiplier types must be 1 or floor(n_ants/2)+1 = %i',floor(n_ants/2 + 1)));
+    set_param(blk,'use_ded_mult','1');
+    use_ded_mult=1;
+    
 end    
 
 %fprintf('variables all done\n');
 
 % Begin redrawing
+%================
+
 delete_lines(blk);
 
 % Add taps
 x = 275;
 if length(use_ded_mult)==1
-    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult));
+    reuse_block(blk, 'auto_tap', 'casper_library/Correlator/auto_tap',...
+                'Position',[135, 51, 230, 169],...
+                'use_ded_mult', num2str(use_ded_mult));
     for i=1:floor(n_ants/2),
         name = ['baseline_tap', num2str(i)];
         reuse_block(blk, name, 'casper_library/Correlator/baseline_tap', ...
@@ -80,20 +89,42 @@ elseif length(use_ded_mult)==floor(n_ants/2)+1
     end
 end
 
+reuse_block(blk, 'xeng_mask', 'casper_library/Correlator/xeng_mask', 'Position', [x + 180, 110, x + 275, 168]);
+
+xeng_delay = add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1
+
+% Add Misc static blocks
+reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', 'Position', [15,89,85,121],...
+            'const','0',...
+            'arith_type','Unsigned',...
+            'n_bits','8 * n_bits_out');
+        
+reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', 'Position', [15,124,85,156],...
+            'const','0',...
+            'arith_type','Boolean',...
+            'n_bits','1');
+        
+reuse_block(blk, 'Logical', 'xbsIndex_r4/Logical', 'Position', [x + 115, 130, x + 145, 150],...
+                'latency','0',...
+                'logical_function','AND');
+            
+reuse_block(blk, 'window_delay', 'casper_library/Delays/window_delay',...
+            'Position', [135, 200, x-135+95, 230], ...
+            'delay',num2str(xeng_delay));
+        
+
 % Add ending terminators
 reuse_block(blk, 'Term1', 'built-in/Terminator', 'Position', [x, 25, x + 20, 45]);
 reuse_block(blk, 'Term2', 'built-in/Terminator', 'Position', [x, 65, x + 20, 85]);
 reuse_block(blk, 'Term3', 'built-in/Terminator', 'Position', [x, 130, x + 20, 150]);
-% Set port positions
+
+% Set output port positions
 set_param([blk, '/acc'], 'Position', [x + 300, 100, x + 330, 114]);
 set_param([blk, '/valid'], 'Position', [x + 300, 130, x + 330, 144]);
 set_param([blk, '/sync_out'], 'Position', [x + 300, 160, x + 330, 174]);
-%  Set windowing blocks' positions
-set_param([blk, '/x_engine_mask'], 'Position', [x + 180, 110, x + 275, 168]);
-set_param([blk, '/Logical'], 'Position', [x + 115, 130, x + 145, 150]);
-set_param([blk, '/window_delay'], 'Position', [135, 200, x-135+95, 230]);
 
 % Add lines
+%==========
 add_line(blk, 'ant/1', 'auto_tap/1', 'autorouting', 'on');
 add_line(blk, 'ant/1', 'auto_tap/2', 'autorouting', 'on');
 add_line(blk, 'Constant/1', 'auto_tap/4', 'autorouting', 'on');
@@ -101,11 +132,11 @@ add_line(blk, 'Constant1/1', 'auto_tap/5', 'autorouting', 'on');
 add_line(blk, 'sync_in/1', 'auto_tap/6', 'autorouting', 'on');
 add_line(blk, 'window_valid/1', 'window_delay/1', 'autorouting', 'on');
 add_line(blk, 'window_delay/1', 'Logical/2', 'autorouting', 'on');
-add_line(blk, 'Logical/1', 'x_engine_mask/2', 'autorouting', 'on');
+add_line(blk, 'Logical/1', 'xeng_mask/2', 'autorouting', 'on');
 
-add_line(blk, 'x_engine_mask/1', 'acc/1', 'autorouting', 'on');
-add_line(blk, 'x_engine_mask/2', 'valid/1', 'autorouting', 'on');
-add_line(blk, 'x_engine_mask/3', 'sync_out/1', 'autorouting', 'on');
+add_line(blk, 'xeng_mask/1', 'acc/1', 'autorouting', 'on');
+add_line(blk, 'xeng_mask/2', 'valid/1', 'autorouting', 'on');
+add_line(blk, 'xeng_mask/3', 'sync_out/1', 'autorouting', 'on');
 
 for i=1:floor(n_ants / 2)
     if i == 1
@@ -122,15 +153,19 @@ for i=1:floor(n_ants / 2)
     add_line(blk, [prevblk, '/6'], [thisblk, '/6'], 'autorouting', 'on');
     add_line(blk, [prevblk, '/7'], [thisblk, '/7'], 'autorouting', 'on');
 end
+
+
+
 i = floor(n_ants / 2);
 thisblk = ['baseline_tap', num2str(i)];
 add_line(blk, [thisblk, '/1'], 'auto_tap/3', 'autorouting', 'on');
 add_line(blk, [thisblk, '/2'], 'Term1/1', 'autorouting', 'on');
 add_line(blk, [thisblk, '/3'], 'Term2/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/4'], 'x_engine_mask/1', 'autorouting', 'on');
+add_line(blk, [thisblk, '/4'], 'xeng_mask/1', 'autorouting', 'on');
 add_line(blk, [thisblk, '/5'], 'Logical/1', 'autorouting', 'on');
 add_line(blk, [thisblk, '/6'], 'Term3/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/7'], 'x_engine_mask/3', 'autorouting', 'on');
+add_line(blk, [thisblk, '/7'], 'xeng_mask/3', 'autorouting', 'on');
+
 
 clean_blocks(blk);
 
