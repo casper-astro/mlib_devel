@@ -43,28 +43,58 @@ str = [str, ' PORT qdr_dll_off_n = ', hw_qdr, '_dll_off_n', '\n'];
 str = [str, ' PORT phy_rdy  = ', inst_name, '_phy_ready ', '\n'];
 str = [str, ' PORT cal_fail = ', inst_name, '_cal_fail',   '\n'];
 
-str = [str, ' PORT usr_addr    = ', inst_name, '_address',  '\n'];
-str = [str, ' PORT usr_wr_strb = ', inst_name, '_wr_en',    '\n'];
-str = [str, ' PORT usr_wr_data = ', inst_name, '_data_in',  '\n'];
-str = [str, ' PORT usr_wr_be   = ', inst_name, '_be',       '\n'];
-str = [str, ' PORT usr_rd_strb = ', inst_name, '_rd_en',    '\n'];
-str = [str, ' PORT usr_rd_data = ', inst_name, '_data_out', '\n'];
+str = [str, ' BUS_INTERFACE MQDR = ', inst_name,           '\n'];
 
 str = [str, 'END\n'];
+str = [str, '\n'];
 
 % QDR Controller Externals
 
-str = [str, ' PORT ', hw_qdr, '_k_n       = ', hw_qdr,'_k_n       , DIR = O',               '\n'];
-str = [str, ' PORT ', hw_qdr, '_k         = ', hw_qdr,'_k         , DIR = O',               '\n'];
-str = [str, ' PORT ', hw_qdr, '_d         = ', hw_qdr,'_d         , DIR = O, VEC = [17:0]', '\n'];
-str = [str, ' PORT ', hw_qdr, '_bw_n      = ', hw_qdr,'_bw_n      , DIR = O, VEC =  [1:0]', '\n'];
-str = [str, ' PORT ', hw_qdr, '_sa        = ', hw_qdr,'_sa        , DIR = O, VEC = [21:0]', '\n'];
-str = [str, ' PORT ', hw_qdr, '_w_n       = ', hw_qdr,'_w_n       , DIR = O',               '\n'];
-str = [str, ' PORT ', hw_qdr, '_r_n       = ', hw_qdr,'_r_n       , DIR = O',               '\n'];
-str = [str, ' PORT ', hw_qdr, '_q         = ', hw_qdr,'_q         , DIR = I, VEC = [17:0]', '\n'];
-str = [str, ' PORT ', hw_qdr, '_cq_n      = ', hw_qdr,'_cq_n      , DIR = I',               '\n'];
-str = [str, ' PORT ', hw_qdr, '_cq        = ', hw_qdr,'_cq        , DIR = I',               '\n'];
-str = [str, ' PORT ', hw_qdr, '_qvld      = ', hw_qdr,'_qvld      , DIR = I',               '\n'];
-str = [str, ' PORT ', hw_qdr, '_dll_off_n = ', hw_qdr,'_dll_off_n , DIR = O',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_k_n       = ', hw_qdr,'_k_n       , DIR = O',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_k         = ', hw_qdr,'_k         , DIR = O',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_d         = ', hw_qdr,'_d         , DIR = O, VEC = [17:0]', '\n'];
+str = [str, 'PORT ', hw_qdr, '_bw_n      = ', hw_qdr,'_bw_n      , DIR = O, VEC =  [1:0]', '\n'];
+str = [str, 'PORT ', hw_qdr, '_sa        = ', hw_qdr,'_sa        , DIR = O, VEC = [21:0]', '\n'];
+str = [str, 'PORT ', hw_qdr, '_w_n       = ', hw_qdr,'_w_n       , DIR = O',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_r_n       = ', hw_qdr,'_r_n       , DIR = O',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_q         = ', hw_qdr,'_q         , DIR = I, VEC = [17:0]', '\n'];
+str = [str, 'PORT ', hw_qdr, '_cq_n      = ', hw_qdr,'_cq_n      , DIR = I',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_cq        = ', hw_qdr,'_cq        , DIR = I',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_qvld      = ', hw_qdr,'_qvld      , DIR = I',               '\n'];
+str = [str, 'PORT ', hw_qdr, '_dll_off_n = ', hw_qdr,'_dll_off_n , DIR = O',               '\n'];
+
+%%%%% QDR Sniffer Entry %%%%%
+
+% pcore Instantiation
+str = [str, '\n'];
+str = [str, '\n'];
+str = [str, 'BEGIN opb_qdr_sniffer\n'];
+
+str = [str, ' PARAMETER INSTANCE   = ', hw_qdr,'_sniffer', '\n'];
+str = [str, ' PARAMETER HW_VER     = 1.00.a',              '\n'];
+if strcmp(hw_qdr, 'qdr0')
+  str = [str, ' PARAMETER C_BASEADDR = 0x02000000', '\n'];
+  str = [str, ' PARAMETER C_HIGHADDR = 0x02ffffff', '\n'];
+else
+  str = [str, ' PARAMETER C_BASEADDR = 0x03000000', '\n'];
+  str = [str, ' PARAMETER C_HIGHADDR = 0x03ffffff', '\n'];
+end
+
+str = [str, ' BUS_INTERFACE SQDR = ', inst_name, '\n'];
+str = [str, ' BUS_INTERFACE SOPB = opb0',        '\n'];
+
+str = [str, ' PORT qdr_clk       = ', clk_src,         '\n'];
+
+str = [str, ' PORT slave_addr    = ', inst_name, '_address',  '\n'];
+str = [str, ' PORT slave_wr_strb = ', inst_name, '_wr_en',    '\n'];
+str = [str, ' PORT slave_wr_data = ', inst_name, '_data_in',  '\n'];
+str = [str, ' PORT slave_wr_be   = ', inst_name, '_be',       '\n'];
+str = [str, ' PORT slave_rd_strb = ', inst_name, '_rd_en',    '\n'];
+str = [str, ' PORT slave_rd_data = ', inst_name, '_data_out', '\n'];
+str = [str, ' PORT slave_ack     = ', inst_name, '_ack',     '\n'];
+
+str = [str, 'END\n'];
+str = [str, '\n'];
+str = [str, '\n'];
 
 

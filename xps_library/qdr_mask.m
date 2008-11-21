@@ -25,7 +25,6 @@ myname = gcb;
 gateway_outs = find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Xilinx Gateway Out Block');
 for i =1:length(gateway_outs)
     gw = gateway_outs{i};
-    disp('foo?');
     if regexp(get_param(gw,'Name'),'(wr_en)$')
         toks = regexp(get_param(gw,'Name'),'(wr_en)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
@@ -49,8 +48,6 @@ end
 gateway_ins =find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Xilinx Gateway In Block');
 for i =1:length(gateway_ins)
     gw = gateway_ins{i};
-    disp('moop');
-    gw
     if regexp(get_param(gw,'Name'),'(data_out)$')
         toks = regexp(get_param(gw,'Name'),'(data_out)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
@@ -60,8 +57,10 @@ for i =1:length(gateway_ins)
     elseif regexp(get_param(gw,'Name'),'(cal_fail)$')
         toks = regexp(get_param(gw,'Name'),'(cal_fail)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
+    elseif regexp(get_param(gw,'Name'),'(ack)$')
+        toks = regexp(get_param(gw,'Name'),'(ack)$','tokens');
+        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
     else
-        disp('kak');
         error(['Unknown gateway name: ',gw]);
     end
 end
