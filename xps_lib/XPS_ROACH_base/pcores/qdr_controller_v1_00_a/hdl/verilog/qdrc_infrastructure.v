@@ -120,47 +120,51 @@ module qdrc_infrastructure(
   reg qdr_r_n_reg;
   reg qdr_dll_off_n_reg;
 
-  always @(posedge clk180) begin 
-  /* Sample SDR signals onto clk180 domain.
-   * The 180 clock is used to let the data lead the clock
-   * by 180 degrees behind the clock. The signals are registered
-   * to ease timing requirements.
-   */
+  always @(posedge clk270) begin 
+  /* Add delay to ease timing */
     qdr_sa_reg        <= qdr_sa_buf;
     qdr_w_n_reg       <= qdr_w_n_buf;
     qdr_r_n_reg       <= qdr_r_n_buf;
     qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
   end
 
-  /* TODO: placement constraints ? */
+  reg [ADDR_WIDTH - 1:0] qdr_sa_iob;
+  reg qdr_w_n_iob;
+  reg qdr_r_n_iob;
+  reg qdr_dll_off_n_iob;
+  //synthesis attribute IOB of qdr_sa_iob is "TRUE"
+  //synthesis attribute IOB of qdr_w_n_iob is "TRUE"
+  //synthesis attribute IOB of qdr_r_n_iob is "TRUE"
+  //synthesis attribute IOB of qdr_dll_off_n_iob is "TRUE"
 
-  ODDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE"),
-    .INIT         (1'b1),
-    .SRTYPE       ("SYNC")
-  ) ODDR_addr [ADDR_WIDTH - 1:0] (
-    .Q  (qdr_sa),
-    .C  (clk180),
-    .CE (1'b1),
-    .D1 (qdr_sa_reg), //Rising Edge
-    .D2 (qdr_sa_reg), //Falling Edge
-    .R  (1'b0),
-    .S  (1'b0)
+  always @(posedge clk180) begin 
+  /* Add delay to ease timing */
+    qdr_sa_iob        <= qdr_sa_reg;
+    qdr_w_n_iob       <= qdr_w_n_reg;
+    qdr_r_n_iob       <= qdr_r_n_reg;
+    qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
+  end
+
+  OBUF OBUF_addr[ADDR_WIDTH - 1:0](
+    .I (qdr_sa_iob),
+    .O (qdr_sa)
   );
 
-  ODDR #(
-    .DDR_CLK_EDGE ("SAME_EDGE"),
-    .INIT         (1'b1),
-    .SRTYPE       ("SYNC")
-  ) ODDR_misc_sdr [2:0] (
-    .Q  ({qdr_w_n,     qdr_r_n,     qdr_dll_off_n}),
-    .C  (clk180),
-    .CE (1'b1),
-    .D1 ({qdr_w_n_reg, qdr_r_n_reg, qdr_dll_off_n_reg}), //Rising Edge
-    .D2 ({qdr_w_n_reg, qdr_r_n_reg, qdr_dll_off_n_reg}), //Falling Edge
-    .R  (1'b0),
-    .S  (1'b0)
+  OBUF OBUF_w_n(
+    .I (qdr_w_n_iob),
+    .O (qdr_w_n)
   );
+
+  OBUF OBUF_r_n(
+    .I (qdr_r_n_iob),
+    .O (qdr_r_n)
+  );
+
+  OBUF OBUF_dll_off_n(
+    .I (qdr_dll_off_n_iob),
+    .O (qdr_dll_off_n)
+  );
+
 
   /******************* DDR Data Outputs ********************
    *

@@ -31,7 +31,7 @@ module qdrc_phy_sm(
   localparam STATE_BURST_ALIGN = 3'd3;
   localparam STATE_DONE        = 3'd4;
 
-  reg [12:0] wait_counter;
+  reg [13:0] wait_counter;
   /* qdr_dll_off needs to be deactivated for 2048 cycle after reset is
    * released
    */
@@ -49,24 +49,16 @@ module qdrc_phy_sm(
 
     if (reset) begin
       cal_fail     <= 1'b0;
-      wait_counter <= 13'b0;
+      wait_counter <= 14'b0;
       phy_state    <= STATE_DLLOFF;
     end else begin
       case (phy_state)
         STATE_DLLOFF:      begin
-          if (wait_counter == {13{1'b1}}) begin
-            phy_state    <= STATE_WAIT;
-            wait_counter <= 13'b0;
-          end else begin
-            wait_counter <= wait_counter + 1;
-          end
-        end
-        STATE_WAIT:        begin
-          if (wait_counter == {13{1'b1}}) begin
-            phy_state       <= STATE_BIT_ALIGN;
+          if (wait_counter[13] == 1'b1) begin
+            phy_state    <= STATE_BIT_ALIGN;
             bit_align_start <= 1'b1;
           end else begin
-            wait_counter    <= wait_counter + 1;
+            wait_counter <= wait_counter + 1;
           end
         end
         STATE_BIT_ALIGN:   begin

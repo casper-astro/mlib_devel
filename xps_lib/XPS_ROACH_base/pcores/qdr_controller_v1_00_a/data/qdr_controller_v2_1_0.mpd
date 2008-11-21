@@ -6,6 +6,8 @@ BEGIN qdr_controller
   OPTION IPTYPE      = IP
   OPTION IMP_NETLIST = TRUE
   OPTION HDL         = VERILOG
+## Bus Interfaces
+  BUS_INTERFACE BUS = MQDR, BUS_TYPE = INITIATOR, BUS_STD = QDR
 ## Peripheral parameter
   PARAMETER DATA_WIDTH   = 18,  DT = INTEGER
   PARAMETER BW_WIDTH     = 2,   DT = INTEGER
@@ -39,12 +41,12 @@ BEGIN qdr_controller
   PORT cal_fail = cal_fail, DIR = O
 
 ## QDR user interface
-  PORT usr_addr    = usr_addr,    DIR = I, VEC = [  ADDR_WIDTH - 1:0]
-  PORT usr_wr_strb = usr_wr_strb, DIR = I
-  PORT usr_wr_data = usr_wr_data, DIR = I, VEC = [2*DATA_WIDTH - 1:0]
-  PORT usr_wr_be   = usr_wr_be,   DIR = I, VEC = [  2*BW_WIDTH - 1:0]
-  PORT usr_rd_strb = usr_rd_strb, DIR = I
-  PORT usr_rd_data = usr_rd_data, DIR = O, VEC = [2*DATA_WIDTH - 1:0]
-  PORT usr_rd_dvld = usr_rd_dvld, DIR = O
+  PORT usr_addr    = qdr_addr,    BUS = MQDR, DIR = I, VEC = [  ADDR_WIDTH - 1:0]
+  PORT usr_wr_strb = qdr_wr_strb, BUS = MQDR, DIR = I
+  PORT usr_wr_data = qdr_wr_data, BUS = MQDR, DIR = I, VEC = [2*DATA_WIDTH - 1:0]
+  PORT usr_wr_be   = qdr_wr_be,   BUS = MQDR, DIR = I, VEC = [  2*BW_WIDTH - 1:0]
+  PORT usr_rd_strb = qdr_rd_strb, BUS = MQDR, DIR = I
+  PORT usr_rd_data = qdr_rd_data, BUS = MQDR, DIR = O, VEC = [2*DATA_WIDTH - 1:0]
+  PORT usr_rd_dvld = qdr_rd_dvld, BUS = MQDR, DIR = O
 
 END
