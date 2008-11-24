@@ -1,4 +1,4 @@
-//`timescale 1ns/10ps
+`timescale 1ns/10ps
 
 `define SIMLENGTH 1000000
 `define SYS_CLK_PERIOD 22
@@ -102,6 +102,7 @@ module TB_opb_qdr_sniffer();
   assign sys_rst = reset;
 
   initial begin
+    $dumpvars;
     qdr_clk_counter <= 32'b0;
     sys_clk_counter <= 32'b0;
 

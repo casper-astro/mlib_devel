@@ -57,102 +57,89 @@ module async_qdr_interface #(
   reg host_ack_reg;
   assign host_ack = host_ack_reg;
 
-  /* strobes for transaction and responses */
+  /* foo */
 
-  reg qdr_trans_strb;
-  reg qdr_resp_strb;
+  reg trans_reg;
+  reg trans_regR;
+  reg trans_regRR;
+  //synthesis attribute U_SET of trans_regR  is SET1
+  //synthesis attribute U_SET of trans_regRR is SET1
+  //synthesis attribute RLOC  of trans_regR  is X0Y0
+  //synthesis attribute RLOC  of trans_regRR is X0Y1
 
-  /* Transaction Handshake */
+  reg resp_reg;
+  reg resp_regR;
+  reg resp_regRR;
+  //synthesis attribute U_SET of resp_regR  is SET0
+  //synthesis attribute U_SET of resp_regRR is SET0
+  //synthesis attribute RLOC  of resp_regR  is X0Y0
+  //synthesis attribute RLOC  of resp_regRR is X0Y1
 
-  reg trans_got;
-  reg trans_got_reg;
-  reg trans_ack;
-  reg trans_ack_reg;
+
+  reg wait_clear;
 
   always @(posedge host_clk) begin
-    trans_ack_reg <= trans_ack;
+    host_ack_reg <= 1'b0;
+
+    resp_regR  <= resp_reg;
+    resp_regRR <= resp_regR;
+
     if (host_rst) begin
-      trans_got <= 1'b0;
+      trans_reg  <= 1'b0;
+      wait_clear <= 1'b0;
+      host_ack_reg <= 1'b0;
     end else begin
       if (host_en) begin
-          trans_got <= 1'b1;
-`ifdef DEBUG
-          $display("async_qdr: got host_en");
-`endif
+        trans_reg  <= 1'b1;
+        wait_clear <= 1'b0;
       end
-
-      if (trans_ack_reg) begin
-        trans_got <= 1'b0;
+      if (resp_regRR) begin
+        trans_reg  <= 1'b0;
+        wait_clear <= 1'b1;
+      end
+      if (wait_clear && !resp_regRR) begin
+        wait_clear   <= 1'b0;
+        host_ack_reg <= 1'b1;
       end
     end
   end
+
+  reg qdr_trans_strb, qdr_resp_ready;
+  reg hshake_state;
+
+  localparam RESP_IDLE = 1'b0;
+  localparam RESP_BUSY = 1'b1;
 
   always @(posedge qdr_clk) begin
     qdr_trans_strb <= 1'b0;
 
-    trans_got_reg  <= trans_got;
+    trans_regR  <= trans_reg;
+    trans_regRR <= trans_regR;
     if (qdr_rst) begin
-      trans_ack <= 1'b0;
+      hshake_state <= RESP_IDLE;
+      resp_reg   <= 1'b0;
     end else begin
-      if (trans_got_reg && !trans_ack) begin
-        trans_ack <= 1'b1; 
-        qdr_trans_strb <= 1'b1;
-        /* Latch stable data */
-        host_addr_reg  <= host_addr;
-        host_datai_reg <= host_datai;
-        host_be_reg    <= host_be;
-        host_rnw_reg   <= host_rnw;
-`ifdef DEBUG
-        $display("async_qdr: trans_got, set trans_ack");
-`endif
-      end
-      if (!trans_got_reg) begin
-        trans_ack <= 1'b0; 
-`ifdef DEBUG
-        $display("async_qdr: !trans_got, clear trans_ack, reg data");
-`endif
-      end
-    end
-  end
+      case (hshake_state)
+        RESP_IDLE: begin
+          if (trans_regRR) begin
+            qdr_trans_strb <= 1'b1;
+            host_addr_reg  <= host_addr;
+            host_datai_reg <= host_datai;
+            host_be_reg    <= host_be;
+            host_rnw_reg   <= host_rnw;
+            hshake_state   <= RESP_BUSY;
+          end
+        end
+        RESP_BUSY: begin
+          if (qdr_resp_ready)
+            resp_reg  <= 1'b1;
 
-  /* Response Handshake */
-
-  reg qdr_resp_ready;
-
-  reg resp_got;
-  reg resp_got_reg;
-  reg resp_ack;
-  reg resp_ack_reg;
-
-  always @(posedge qdr_clk) begin
-    resp_ack_reg <= resp_ack;
-    if (qdr_rst) begin
-      resp_got <= 1'b0;
-    end else begin
-      if (qdr_resp_ready) begin
-        resp_got <= 1'b1;
-      end
-      if (resp_ack_reg) begin
-        resp_got <= 1'b0;
-      end
-    end
-  end
-
-  always @(posedge host_clk) begin
-    host_ack_reg <= 1'b0;
-    qdr_resp_strb <= 1'b0;
-
-    resp_got_reg  <= resp_got;
-    if (host_rst) begin
-      resp_ack <= 1'b0;
-    end else begin
-      if (resp_got_reg) begin
-        resp_ack <= 1'b1; 
-        host_ack_reg <= 1'b1;
-      end
-      if (!resp_got_reg) begin
-        resp_ack <= 1'b0; 
-      end
+          if (!trans_regRR) begin
+            resp_reg  <= 1'b0;
+            hshake_state   <= RESP_IDLE;
+          end
+        end
+      endcase
     end
   end
 
@@ -161,10 +148,10 @@ module async_qdr_interface #(
   reg [QDR_LATENCY - 1:0] qvld_shifter;
 
   reg [1:0] resp_state;
-  localparam IDLE    = 0;
-  localparam WAIT    = 1;
-  localparam COLLECT = 2;
-  localparam FINAL   = 3;
+  localparam IDLE    = 2'd0;
+  localparam WAIT    = 2'd1;
+  localparam COLLECT = 2'd2;
+  localparam FINAL   = 2'd3;
 
   always @(posedge qdr_clk) begin
     qdr_resp_ready <= 1'b0;

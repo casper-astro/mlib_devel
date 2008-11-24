@@ -86,7 +86,7 @@ module opb_qdr_sniffer #(
     end
   end
 
-  assign Sl_toutSup = 1'b1; //need to supress timeout as reads can take a long time
+  assign Sl_toutSup = opb_sel_state;
   assign Sl_errAck  = 1'b0;
 
   wire [0:31] Sl_DBus_int;
