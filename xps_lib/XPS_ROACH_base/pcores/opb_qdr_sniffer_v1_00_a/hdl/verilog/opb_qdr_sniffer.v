@@ -119,55 +119,56 @@ module opb_qdr_sniffer #(
 
   /***************** QDR Arbitration ****************/
 
-  wire arb_sel;
-  localparam SLAVE    = 0;
-  localparam BACKDOOR = 1;
+  reg [3:0] arb_sel;
+  localparam SLAVE         = 4'h1;
+  localparam SLAVE_WAIT    = 4'h2;
+  localparam BACKDOOR      = 4'h4;
+  localparam BACKDOOR_WAIT = 4'h8;
 
-  reg arb_sel_reg;
-  reg slave_busy;
-  reg backdoor_busy;
 
   always @(posedge qdr_clk) begin
-    backdoor_busy <= 1'b0;
-    slave_busy    <= 1'b0;
     if (qdr_rst) begin
-      arb_sel_reg   <= SLAVE;
+      arb_sel   <= SLAVE;
     end else begin
-      case (arb_sel_reg)
+      case (arb_sel)
         SLAVE: begin
-          if (!backdoor_busy) begin
-            slave_busy <= slave_wr_strb || slave_rd_strb;
-            if (backdoor_req) begin
-              arb_sel_reg <= BACKDOOR;
+          if (backdoor_req && !(slave_wr_strb || slave_rd_strb)) begin
+              arb_sel <= BACKDOOR;
 `ifdef DEBUG
-              $display("sniff_arb: got backdoor_req");
+              $display("sniff_arb: got backdoor_req without pending slave xfer");
 `endif
-            end
+          end
+          if (backdoor_req && (slave_wr_strb || slave_rd_strb)) begin
+              arb_sel <= SLAVE_WAIT;
+`ifdef DEBUG
+              $display("sniff_arb: got backdoor_req with pending slave xfer");
+`endif
           end
         end
+        SLAVE_WAIT: begin
+          arb_sel <= BACKDOOR;
+        end
         BACKDOOR: begin
-          if (!slave_busy) begin
-            backdoor_busy <= backdoor_w || backdoor_r;
-            if (backdoor_w || backdoor_r) begin
-              arb_sel_reg <= SLAVE;
-            end
-          end
+          // We only give the backdoor interface one slot
+          arb_sel <= BACKDOOR_WAIT;
+        end
+        BACKDOOR_WAIT: begin
+          arb_sel <= SLAVE;
         end
       endcase
     end
   end
 
   /***************** QDR Assignments ****************/
-  assign arb_sel      = arb_sel_reg;
 
-  assign slave_ack    = arb_sel == SLAVE && !backdoor_busy;
-  assign backdoor_ack = arb_sel == BACKDOOR && !slave_busy;
+  assign slave_ack    = arb_sel == SLAVE;
+  assign backdoor_ack = arb_sel == BACKDOOR;
 
   assign master_wr_strb = slave_wr_strb && slave_ack || backdoor_w && backdoor_ack;
   assign master_rd_strb = slave_rd_strb && slave_ack || backdoor_r && backdoor_ack;
   assign master_addr    =               slave_ack ? slave_addr  : backdoor_addr;
-  assign master_wr_data = slave_ack || slave_busy ? slave_wr_data : backdoor_d;
-  assign master_wr_be   = slave_ack || slave_busy ? slave_wr_be   : backdoor_be;
+  assign master_wr_data = arb_sel == SLAVE || arb_sel == SLAVE_WAIT ? slave_wr_data : backdoor_d;
+  assign master_wr_be   = arb_sel == SLAVE || arb_sel == SLAVE_WAIT ? slave_wr_be   : backdoor_be;
 
   assign backdoor_q     = master_rd_data;
   assign slave_rd_data  = master_rd_data;
