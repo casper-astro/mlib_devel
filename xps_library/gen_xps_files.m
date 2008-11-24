@@ -661,7 +661,6 @@ if run_edkgen
     fprintf(ucf_fid,'\n');
     try
         for n = 1:length(xps_objs)
-            n
             blk_obj = xps_objs{n};
             fprintf(ucf_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
             fprintf(ucf_fid,gen_ucf(blk_obj));
