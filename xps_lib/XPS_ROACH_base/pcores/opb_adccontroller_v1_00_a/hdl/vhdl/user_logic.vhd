@@ -176,8 +176,8 @@ architecture IMP of user_logic is
   signal adc0_ddrb_reg       : std_logic                 := '0';
   signal adc1_ddrb_reg       : std_logic                 := '0';
   attribute iob: string; 
-  attribute iob of adc0_ddrb_reg : entity is "true"; --ensure IOB packing to ensure minimum skew
-  attribute iob of adc1_ddrb_reg : entity is "true"; 
+  attribute iob of adc0_ddrb_reg : signal is "true"; --ensure IOB packing to ensure minimum skew
+  attribute iob of adc1_ddrb_reg : signal is "true"; 
 
 
   ----------------------------------------
