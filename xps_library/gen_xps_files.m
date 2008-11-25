@@ -439,7 +439,6 @@ if run_edkgen
     end
     fclose(in_fid);
 
-
     fprintf(mhs_fid,'##############################################\n');
     fprintf(mhs_fid,'# User XSG IP core                           #\n');
     fprintf(mhs_fid,'##############################################\n');
