@@ -1,4 +1,4 @@
-This is pdfeTeX, Version 3.141592-1.30.5-2.2 (Web2C 7.5.5) (format=pdflatex 2008.6.24)  17 NOV 2008 02:07
+This is pdfeTeX, Version 3.141592-1.30.5-2.2 (Web2C 7.5.5) (format=pdflatex 2008.11.18)  25 NOV 2008 02:06
 entering extended mode
 **index.tex
 (./index.tex
@@ -202,7 +202,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 (./sys_xsg_core_config.tex) [79] (./index.aux) ) 
 Here is how much of TeX's memory you used:
  831 strings out of 95212
- 10365 string characters out of 1185453
+ 10365 string characters out of 1185452
  63129 words of memory out of 1000000
  3842 multiletter control sequences out of 10000+50000
  10119 words of font info for 35 fonts, out of 500000 for 2000
@@ -222,4 +222,4 @@ are/texmf-texlive/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/texmf-texlive/fo
 nts/type1/bluesky/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/c
 m/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/cm/cmr17.pfb></usr/sh
 are/texmf-texlive/fonts/type1/bluesky/cm/cmbx12.pfb>
-Output written on index.pdf (80 pages, 305499 bytes).
+Output written on index.pdf (80 pages, 305500 bytes).
