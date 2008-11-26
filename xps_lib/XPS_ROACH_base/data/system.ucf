@@ -344,3 +344,168 @@ NET "epb_clk_buf"    IOSTANDARD = LVCMOS33 | LOC = AH18;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_k_n"       IOSTANDARD = HSTL_I     | LOC = E14;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_qvld"      IOSTANDARD = HSTL_I     | LOC = A25;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#
+#
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<0> IOSTANDARD = SSTL18_II_DCI | LOC = AL30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<1> IOSTANDARD = SSTL18_II_DCI | LOC = AL31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<2> IOSTANDARD = SSTL18_II_DCI | LOC = AP31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<3> IOSTANDARD = SSTL18_II_DCI | LOC = AN30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<4> IOSTANDARD = SSTL18_II_DCI | LOC = AM31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<5> IOSTANDARD = SSTL18_II_DCI | LOC = AL29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<6> IOSTANDARD = SSTL18_II_DCI | LOC = AN29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<7> IOSTANDARD = SSTL18_II_DCI | LOC = AM27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<8> IOSTANDARD = SSTL18_II_DCI | LOC = AM28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<9> IOSTANDARD = SSTL18_II_DCI | LOC = AP30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<10> IOSTANDARD = SSTL18_II_DCI | LOC = AM22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<11> IOSTANDARD = SSTL18_II_DCI | LOC = AN22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<12> IOSTANDARD = SSTL18_II_DCI | LOC = AP29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<13> IOSTANDARD = SSTL18_II_DCI | LOC = AN28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<14> IOSTANDARD = SSTL18_II_DCI | LOC = AP27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<15> IOSTANDARD = SSTL18_II_DCI | LOC = AN23;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<16> IOSTANDARD = SSTL18_II_DCI | LOC = AJ19;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<17> IOSTANDARD = SSTL18_II_DCI | LOC = AK19;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<18> IOSTANDARD = SSTL18_II_DCI | LOC = AK22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<19> IOSTANDARD = SSTL18_II_DCI | LOC = AJ22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<20> IOSTANDARD = SSTL18_II_DCI | LOC = AH24;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<21> IOSTANDARD = SSTL18_II_DCI | LOC = AK24;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<22> IOSTANDARD = SSTL18_II_DCI | LOC = AL20;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<23> IOSTANDARD = SSTL18_II_DCI | LOC = AJ24;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<24> IOSTANDARD = SSTL18_II_DCI | LOC = AL19;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<25> IOSTANDARD = SSTL18_II_DCI | LOC = AM17;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<26> IOSTANDARD = SSTL18_II_DCI | LOC = AJ14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<27> IOSTANDARD = SSTL18_II_DCI | LOC = AK13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<28> IOSTANDARD = SSTL18_II_DCI | LOC = AH23;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<29> IOSTANDARD = SSTL18_II_DCI | LOC = AP17;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<30> IOSTANDARD = SSTL18_II_DCI | LOC = AK18;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<31> IOSTANDARD = SSTL18_II_DCI | LOC = AM15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<32> IOSTANDARD = SSTL18_II_DCI | LOC = AM13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<33> IOSTANDARD = SSTL18_II_DCI | LOC = AA10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<34> IOSTANDARD = SSTL18_II_DCI | LOC = AC10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<35> IOSTANDARD = SSTL18_II_DCI | LOC = AF11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<36> IOSTANDARD = SSTL18_II_DCI | LOC = AN14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<37> IOSTANDARD = SSTL18_II_DCI | LOC = AE11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<38> IOSTANDARD = SSTL18_II_DCI | LOC = AP14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<39> IOSTANDARD = SSTL18_II_DCI | LOC = AG11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<40> IOSTANDARD = SSTL18_II_DCI | LOC = AF9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<41> IOSTANDARD = SSTL18_II_DCI | LOC = AH10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<42> IOSTANDARD = SSTL18_II_DCI | LOC = AP12;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<43> IOSTANDARD = SSTL18_II_DCI | LOC = AM11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<44> IOSTANDARD = SSTL18_II_DCI | LOC = AB10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<45> IOSTANDARD = SSTL18_II_DCI | LOC = AC9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<46> IOSTANDARD = SSTL18_II_DCI | LOC = AN13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<47> IOSTANDARD = SSTL18_II_DCI | LOC = AJ9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<48> IOSTANDARD = SSTL18_II_DCI | LOC = AC8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<49> IOSTANDARD = SSTL18_II_DCI | LOC = AL10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<50> IOSTANDARD = SSTL18_II_DCI | LOC = AK8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<51> IOSTANDARD = SSTL18_II_DCI | LOC = AA9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<52> IOSTANDARD = SSTL18_II_DCI | LOC = AJ10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<53> IOSTANDARD = SSTL18_II_DCI | LOC = AB8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<54> IOSTANDARD = SSTL18_II_DCI | LOC = AH9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<55> IOSTANDARD = SSTL18_II_DCI | LOC = AK9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<56> IOSTANDARD = SSTL18_II_DCI | LOC = W11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<57> IOSTANDARD = SSTL18_II_DCI | LOC = V10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<58> IOSTANDARD = SSTL18_II_DCI | LOC = Y8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<59> IOSTANDARD = SSTL18_II_DCI | LOC = W9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<60> IOSTANDARD = SSTL18_II_DCI | LOC = Y11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<61> IOSTANDARD = SSTL18_II_DCI | LOC = U8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<62> IOSTANDARD = SSTL18_II_DCI | LOC = W10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<63> IOSTANDARD = SSTL18_II_DCI | LOC = V8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<64> IOSTANDARD = SSTL18_II_DCI | LOC = AP16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<65> IOSTANDARD = SSTL18_II_DCI | LOC = AJ12;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<66> IOSTANDARD = SSTL18_II_DCI | LOC = AL13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<67> IOSTANDARD = SSTL18_II_DCI | LOC = AP15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<68> IOSTANDARD = SSTL18_II_DCI | LOC = AL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<69> IOSTANDARD = SSTL18_II_DCI | LOC = AM16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<70> IOSTANDARD = SSTL18_II_DCI | LOC = AN15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<71> IOSTANDARD = SSTL18_II_DCI | LOC = AL14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<0> IOSTANDARD = SSTL18_II | LOC = AM30; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<1> IOSTANDARD = SSTL18_II | LOC = AN27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<2> IOSTANDARD = SSTL18_II | LOC = AK23;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<3> IOSTANDARD = SSTL18_II | LOC = V9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<4> IOSTANDARD = SSTL18_II | LOC = AK14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<5> IOSTANDARD = SSTL18_II | LOC = AA8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<6> IOSTANDARD = SSTL18_II | LOC = AG10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<7> IOSTANDARD = SSTL18_II | LOC = AM12;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<8> IOSTANDARD = SSTL18_II | LOC = AN17;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<0> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AL26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<1> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AM25;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<2> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AK21;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<3> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ20;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<4> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<5> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AD11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<6> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AD9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<7> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = V7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<8> IOSTANDARD = DIFF_SSTL18_II | LOC = AJ15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<0> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AM26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<1> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AN25;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<2> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AL21;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<3> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ21;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<4> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AK11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<5> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AD10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<6> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AE8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<7> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = W7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_p<8> IOSTANDARD = DIFF_SSTL18_II | LOC = AJ16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<15> IOSTANDARD = SSTL18_II | LOC = AE7; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<14> IOSTANDARD = SSTL18_II | LOC = AH7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<13> IOSTANDARD = SSTL18_II | LOC = AC4; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<12> IOSTANDARD = SSTL18_II | LOC = AJ7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<11> IOSTANDARD = SSTL18_II | LOC = Y7; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<10> IOSTANDARD = SSTL18_II | LOC = AD6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<9> IOSTANDARD = SSTL18_II | LOC = AK7; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<8> IOSTANDARD = SSTL18_II | LOC = AK6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<7> IOSTANDARD = SSTL18_II | LOC = AC7; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<6> IOSTANDARD = SSTL18_II | LOC = W6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<5> IOSTANDARD = SSTL18_II | LOC = AA6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<4> IOSTANDARD = SSTL18_II | LOC = AE6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<3> IOSTANDARD = SSTL18_II | LOC = Y6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<2> IOSTANDARD = SSTL18_II | LOC = AF6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<1> IOSTANDARD = SSTL18_II | LOC = AB6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<0> IOSTANDARD = SSTL18_II | LOC = AJ6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ba<2> IOSTANDARD = SSTL18_II | LOC = AB7; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ba<1> IOSTANDARD = SSTL18_II | LOC = AB5; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ba<0> IOSTANDARD = SSTL18_II | LOC = AA5; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ras_n IOSTANDARD = SSTL18_II | LOC = AD5; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cas_n IOSTANDARD = SSTL18_II | LOC = AD6; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_we_n IOSTANDARD = SSTL18_II | LOC = AC5; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_reset_n IOSTANDARD = SSTL18_II | LOC = AM18; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cke_0 IOSTANDARD = SSTL18_II | LOC = AL11; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cke_1 IOSTANDARD = SSTL18_II | LOC = AK12; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cs_n_0 IOSTANDARD = SSTL18_II | LOC = AM21; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cs_n_1 IOSTANDARD = SSTL18_II | LOC = AN19; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_odt_0 IOSTANDARD = SSTL18_II | LOC = AN20; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_odt_1 IOSTANDARD = SSTL18_II | LOC = AM20; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_0_n IOSTANDARD = DIFF_SSTL18_II | LOC = AF5;  
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_0_p IOSTANDARD = DIFF_SSTL18_II | LOC = AG5; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_1_n IOSTANDARD = DIFF_SSTL18_II | LOC = AL16; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_1_p IOSTANDARD = DIFF_SSTL18_II | LOC = AK16; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_2_n IOSTANDARD = DIFF_SSTL18_II | LOC = AH8; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_2_p IOSTANDARD = DIFF_SSTL18_II | LOC = AG8; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_scl IOSTANDARD = SSTL18_II | LOC = AP20 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_sda IOSTANDARD = SSTL18_II | LOC = AP19; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_par_in IOSTANDARD = SSTL18_II | LOC = AN18; 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_par_out IOSTANDARD = SSTL18_II | LOC = AD7; 
+
+#MIG 2.1: Eliminate Timegroup definitions for CLK0, and CLK90. Instead trace
+#          multicycle paths from originating flip-flop to ANY destination
+#          flip-flop (or in some cases, it can also be a BRAM)
+# MUX Select for either rising/falling CLK0 for 2nd stage read capture
+
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_rd_data_sel*.u_ff_rd_data_sel" TNM = "TNM_RD_DATA_SEL";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_RD_DATA_SEL" = FROM "TNM_RD_DATA_SEL" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')## MUX select for read data - optional delay on data to account for byte skews
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_usr_rd/gen_rden_sel_mux*.u_ff_rden_sel_mux" TNM = "TNM_RDEN_SEL_MUX";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_RDEN_SEL_MUX" = FROM "TNM_RDEN_SEL_MUX" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')## Calibration/Initialization complete status flag (for PHY logic only) - can
+#IF# strcmp(get(b,'type'),'xps_dram')## be used to drive both flip-flops and BRAMs
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_init/u_ff_phy_init_data_sel" TNM = "TNM_PHY_INIT_DATA_SEL";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_PHY_INIT_DATA_SEL_0" = FROM "TNM_PHY_INIT_DATA_SEL" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_PHY_INIT_DATA_SEL_90" = FROM "TNM_PHY_INIT_DATA_SEL" TO RAMS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')## Select (address) bits for SRL32 shift registers used in stage3/stage4
+#IF# strcmp(get(b,'type'),'xps_dram')## calibration
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_gate_dly*.u_ff_gate_dly" TNM = "TNM_GATE_DLY";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_GATE_DLY" = FROM "TNM_GATE_DLY" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_rden_dly*.u_ff_rden_dly" TNM = "TNM_RDEN_DLY";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_RDEN_DLY" = FROM "TNM_RDEN_DLY" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_cal_rden_dly*.u_ff_cal_rden_dly" TNM = "TNM_CAL_RDEN_DLY";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_CAL_RDEN_DLY" = FROM "TNM_CAL_RDEN_DLY" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#
+
