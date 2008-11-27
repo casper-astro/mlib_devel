@@ -135,15 +135,13 @@ entity opb_dram_sniffer is
     -- DDR2 controller ports                       
     ctrl_input_data  : out std_logic_vector(143 downto 0);
     ctrl_byte_enable : out std_logic_vector(17  downto 0);
-    ctrl_get_data    : in  std_logic;  
     ctrl_output_data : in  std_logic_vector(143 downto 0);
     ctrl_data_valid  : in  std_logic;  
     ctrl_address     : out std_logic_vector(31  downto 0);
-    ctrl_read        : out std_logic;
-    ctrl_write       : out std_logic;
-    ctrl_half_burst  : out std_logic;
-    ctrl_ready       : in  std_logic;
+    ctrl_fifo_ready  : in  std_logic;
     ctrl_reset       : out std_logic;
+    ctrl_valid       : out std_logic;
+    ctrl_rnw         : out std_logic;
     -- ADD USER PORTS ABOVE THIS LINE ------------------
 
     -- DO NOT EDIT BELOW THIS LINE ---------------------
@@ -442,14 +440,12 @@ begin
       user_reset                     => user_reset,
       ctrl_input_data                => ctrl_input_data,
       ctrl_byte_enable               => ctrl_byte_enable,
-      ctrl_get_data                  => ctrl_get_data,
       ctrl_output_data               => ctrl_output_data,
       ctrl_data_valid                => ctrl_data_valid,
       ctrl_address                   => ctrl_address,
-      ctrl_read                      => ctrl_read,
-      ctrl_write                     => ctrl_write,
-      ctrl_half_burst                => ctrl_half_burst,
-      ctrl_ready                     => ctrl_ready,
+      ctrl_valid                     => ctrl_valid,
+      ctrl_rnw                       => ctrl_rnw,
+      ctrl_fifo_ready                => ctrl_fifo_ready,
       ctrl_reset                     => ctrl_reset,
       
       -- MAP USER PORTS ABOVE THIS LINE ------------------

@@ -61,16 +61,14 @@ PORT user_ready       = user_ready,       BUS = DDR2_USER, DIR = O
 PORT user_reset       = user_reset,       BUS = DDR2_USER, DIR = I
 
 ## DDR2 controller ports                       
-PORT ctrl_input_data  = user_input_data,  BUS = DDR2_CTRL, DIR = O, VEC = [143:0]
-PORT ctrl_byte_enable = user_byte_enable, BUS = DDR2_CTRL, DIR = O, VEC = [17:0]
-PORT ctrl_get_data    = user_get_data,    BUS = DDR2_CTRL, DIR = I  
-PORT ctrl_output_data = user_output_data, BUS = DDR2_CTRL, DIR = I, VEC = [143:0]
-PORT ctrl_data_valid  = user_data_valid,  BUS = DDR2_CTRL, DIR = I  
-PORT ctrl_address     = user_address,     BUS = DDR2_CTRL, DIR = O, VEC = [31:0]
-PORT ctrl_read        = user_read,        BUS = DDR2_CTRL, DIR = O
-PORT ctrl_write       = user_write,       BUS = DDR2_CTRL, DIR = O
-PORT ctrl_half_burst  = user_half_burst,  BUS = DDR2_CTRL, DIR = O
-PORT ctrl_ready       = user_ready,       BUS = DDR2_CTRL, DIR = I
-PORT ctrl_reset       = user_reset,       BUS = DDR2_CTRL, DIR = O
+PORT ctrl_valid       = app_cmd_valid,   BUS = DDR2_CTRL, DIR = O
+PORT ctrl_address     = app_cmd_addr,    BUS = DDR2_CTRL, DIR = O, VEC = [31:0]
+PORT ctrl_rnw         = app_cmd_rnw,     BUS = DDR2_CTRL, DIR = O
+PORT ctrl_input_data  = app_wr_data,     BUS = DDR2_CTRL, DIR = O, VEC = [143:0]
+PORT ctrl_byte_enable = app_wr_be,       BUS = DDR2_CTRL, DIR = O, VEC = [17:0]
+PORT ctrl_output_data = app_rd_data,     BUS = DDR2_CTRL, DIR = I, VEC = [143:0]
+PORT ctrl_data_valid  = app_rd_valid,    BUS = DDR2_CTRL, DIR = I  
+PORT ctrl_fifo_ready  = app_fifo_ready,  BUS = DDR2_CTRL, DIR = I
+PORT ctrl_reset       = app_reset,       BUS = DDR2_CTRL, DIR = O
 
 END

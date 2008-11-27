@@ -119,14 +119,12 @@ entity user_logic is
     -- DDR2 controller ports
     ctrl_input_data  : out std_logic_vector(143 downto 0);
     ctrl_byte_enable : out std_logic_vector(17  downto 0);
-    ctrl_get_data    : in  std_logic;
     ctrl_output_data : in  std_logic_vector(143 downto 0);
     ctrl_data_valid  : in  std_logic;
     ctrl_address     : out std_logic_vector(31  downto 0);
-    ctrl_read        : out std_logic;
-    ctrl_write       : out std_logic;
-    ctrl_half_burst  : out std_logic;
-    ctrl_ready       : in  std_logic;
+    ctrl_rnw         : out std_logic;
+    ctrl_valid       : out std_logic;
+    ctrl_fifo_ready  : in  std_logic;
     ctrl_reset       : out std_logic;
     -- ADD USER PORTS ABOVE THIS LINE ------------------
 
@@ -227,6 +225,17 @@ architecture IMP of user_logic is
   signal extra_read               : std_logic;
   signal ddr_wr_fifo_in           : std_logic;
   signal ddr_rd_fifo_in           : std_logic;
+
+  -- ROACH ddr2_controller bridge signals
+  signal ctrl_read                : std_logic;
+  signal ctrl_write               : std_logic;
+  signal ctrl_ready               : std_logic;
+  signal cmd_issued_z             : std_logic;
+  signal wr_issued_z              : std_logic;
+  signal ctrl_half_burst          : std_logic;
+  signal ctrl_get_data            : std_logic;
+  signal halfburst_hack_sel       : std_logic;
+  signal ctrl_byte_enable_before_halfburst_hack : std_logic_vector( 17 downto 0);
 
 begin
 
@@ -440,16 +449,16 @@ begin
             );
   ddr_wr_fifo_in   <= switch_ctrl_ppc_R when extra_write = '0' else switch_ctrl_ppc_RR;
 
-  -- 200Mhz DDR2 signals
+  -- DDR2 signals
   ctrl_input_data(31  downto  0) <= Bus2IP_Data    when switch_wr_ppc_R   = '1' else user_input_data(31  downto  0);
   ctrl_input_data(143 downto 32) <=                                                  user_input_data(143 downto 32);
-  ctrl_byte_enable(3  downto 0)  <= Bus2IP_BE      when switch_wr_ppc_R   = '1' else user_byte_enable(3   downto 0);
-  ctrl_byte_enable(17 downto 4)  <=                                                  user_byte_enable(17  downto 4);
+  ctrl_byte_enable_before_halfburst_hack(3  downto 0)  <= Bus2IP_BE      when switch_wr_ppc_R   = '1' else user_byte_enable(3   downto 0);
+  ctrl_byte_enable_before_halfburst_hack(17 downto 4)  <=                                                  user_byte_enable(17  downto 4);
   ctrl_reset                     <=                                                  '0';
+  ctrl_half_burst                <=                                                  ctrl_half_burst_int;
   ctrl_address                   <=                                                  ctrl_address_int;
   ctrl_read                      <=                                                  ctrl_read_int;
   ctrl_write                     <=                                                  ctrl_write_int;
-  ctrl_half_burst                <=                                                  ctrl_half_burst_int;
   user_get_data                  <= '0'            when switch_wr_ppc     = '1' else ctrl_get_data;
   user_output_data               <=                                                  ctrl_output_data;
   user_data_valid                <= '0'            when switch_rd_ppc     = '1' else ctrl_data_valid;
@@ -461,5 +470,32 @@ begin
   ------------------------------------------
   IP2Bus_Error       <= '0';
   IP2Bus_Retry       <= '0';
+
+  -- ROACH ddr2 controller mapping
+
+  ctrl_ready <= (ctrl_fifo_ready) and (not cmd_issued_z);
+
+  DRAM_MAP: process(ddr_clk)
+  begin
+  	if ddr_clk'event and ddr_clk = '1' then
+      --default '0'
+      halfburst_hack_sel <= '0';
+
+  		if Bus2IP_Reset = '1' then
+        cmd_issued_z       <= '0';
+        wr_issued_z        <= '0';
+  		else
+        cmd_issued_z       <= (ctrl_read or ctrl_write) and ctrl_ready;
+        wr_issued_z        <= ctrl_write and ctrl_ready and (not ctrl_half_burst);
+        halfburst_hack_sel <= ctrl_half_burst and ctrl_write and ctrl_ready;
+      end if;
+  	end if;
+  end process;
+
+  ctrl_byte_enable <= ctrl_byte_enable_before_halfburst_hack when halfburst_hack_sel = '0' else "000000000000000000";
+  ctrl_get_data    <= (ctrl_write and ctrl_ready) or (wr_issued_z);
+
+  ctrl_valid       <= ctrl_read or ctrl_write;
+  ctrl_rnw         <= ctrl_read;
 
 end IMP;
