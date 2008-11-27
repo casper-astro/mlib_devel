@@ -92,9 +92,9 @@ fft_direct casper_library/FFTs/fft_direct fft_direct_maptail_test FFTSize 3 BitW
 fft_direct casper_library/FFTs/fft_direct fft_direct_test FFTSize 2 BitWidth 12 add_latency 1 mult_latency 2 bram_latency 1 quantization 'Truncate' overflow 'Saturate' MapTail 0 LargerFFTSize 2 StartStage 0
 fft_wideband_real casper_library/FFTs/fft_wideband_real fft_wideband_real_test FFTSize 5 BitWidth 12 n_inputs 2 quantization 'Round  (unbiased: Even Values)' overflow 'Saturate' add_latency 1 mult_latency 2 bram_latency 1
 % Tests only one input per channel 
-fft casper_libarary/FFTs/fft fft_one_input_test FFTSize 2 BitWidth 8 n_inputs 0 quantization 'Truncate' overflow 'Saturate' add_latency 2 mult_latency 2 bram_latency 1
+fft casper_library/FFTs/fft fft_one_input_test FFTSize 2 BitWidth 8 n_inputs 0 quantization 'Truncate' overflow 'Saturate' add_latency 2 mult_latency 2 bram_latency 1
 fft casper_library/FFTs/fft fft_inputs_equal_size_test FFTSize 2 BitWidth 8 n_inputs 2 quantization 'Saturate' overflow 'Wrap' add_latency 2 mult_latency 3 bram_latency 1
-fft casper_libarary/FFTs/fft fft_test FFTSize 6 BitWidth 8 n_inputs 2 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate' add_latency 2 mult_latency 3 bram_latency 1
+fft casper_library/FFTs/fft fft_test FFTSize 6 BitWidth 8 n_inputs 2 quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate' add_latency 2 mult_latency 3 bram_latency 1
 % # PFBs
 tap casper_library/PFBs/tap tap_test mult_latency 2 coeff_width 16 coeff_frac_width 5 delay 8 data_width 8 bram_latency 2
 tap_real casper_library/PFBs/tap_real tap_real_test mult_latency 3 coeff_width 18 coeff_frac_width 16 delay 8 data_width 8 bram_latency 1
