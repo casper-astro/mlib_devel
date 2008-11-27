@@ -54,23 +54,20 @@ if( strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
 
 	% plb bus offset
 	b = set(b, 'plb_address_offset', hex2dec('100'));
-
-	% interfaces
-	interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];
-	interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
-	b = set(b,'interfaces',interfaces);
+	b = set(b, 'opb_address_offset', 0);
 else 
 	% ip name
 	b = set(b, 'ip_name', 'opb_dram_sniffer');
 
-	% plb bus offset
+	% opb bus offset
 	b = set(b, 'opb_address_offset', hex2dec('100'));
-
-	% interfaces
-	interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];
-	interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
-	b = set(b,'interfaces',interfaces);
+	b = set(b, 'plb_address_offset', 0);
 end
+
+% interfaces
+interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];
+interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
+b = set(b,'interfaces',interfaces);
 
 % borph parameters
 b = set(b, 'mode', 3);  % read/write mode
