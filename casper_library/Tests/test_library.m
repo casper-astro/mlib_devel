@@ -108,7 +108,9 @@ while( ischar(line) )
     end
 
     if( err ),
-        fprintf(['Ignoring line ',num2str(linenum),'\n']);
+	fprintf(['\n************************************\n']);
+        fprintf(['* Ignoring line ',num2str(linenum),' *\n']);
+	fprintf(['************************************\n\n']);
 	ignore = ignore + 1;
     	close_system(model,0);
     else, 
@@ -166,7 +168,9 @@ while( ischar(line) )
 		end
 		%delete([model,'_output.mat']);
 	else,
-	        fprintf(['Ignoring line ',num2str(linenum),'\n']);
+		fprintf(['\n************************************\n']);
+	        fprintf(['* Ignoring line ',num2str(linenum),' *\n']);
+		fprintf(['************************************\n\n']);
 		ignore = ignore + 1;
 	end
         
