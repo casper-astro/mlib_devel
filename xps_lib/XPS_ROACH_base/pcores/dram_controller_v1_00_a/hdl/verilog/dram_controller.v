@@ -96,6 +96,7 @@ module dram_controller #(
     input   [17:0] app_wr_be,
     output [143:0] app_rd_data,
     output         app_rd_valid,
+    output         app_fifo_ready,
 
     output   [2:0] dram_ck,
     output   [2:0] dram_ck_n,
@@ -110,8 +111,11 @@ module dram_controller #(
     output   [8:0] dram_dm,
     inout    [8:0] dram_dqs,
     inout    [8:0] dram_dqs_n,
-    inout   [71:0] dram_dq
+    inout   [71:0] dram_dq,
+    output         dram_reset_n
   );
+
+  assign dram_reset_n = 1'b1;
 
   wire [3:0]                             dbg_calib_done_nc;
   wire [3:0]                             dbg_calib_err_nc;
@@ -141,8 +145,9 @@ module dram_controller #(
   localparam SIM_ONLY    = 0;       // = 1 to skip SDRAM power up delay
   localparam DEBUG_EN    = 0;       // Enable debug signals/controls
 
-  wire app_af_afull; //currently unused
+  wire app_af_afull;
   wire app_wdf_afull;
+  assign app_fifo_ready = !(app_af_afull || app_wdf_afull);
 
 
   ddr2_mem_if_top #
