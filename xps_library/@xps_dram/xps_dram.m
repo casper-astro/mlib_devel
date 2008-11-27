@@ -39,12 +39,15 @@ xsg_hw_sys = get_param(xsg_obj_name,'hw_sys');
 s.half_burst = num2str(strcmp(get_param(blk_name, 'half_burst'),'on'));
 s.bank_mgt   = num2str(strcmp(get_param(blk_name, 'bank_mgt'),'on'));
 s.wide_data  = num2str(strcmp(get_param(blk_name, 'wide_data'),'on'));
-if( strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
-	s.hw_sys = xsg_hw_sys;
+
+s.hw_sys   = xsg_hw_sys;
+
+if (strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
 	s.dimm  = get_param(blk_name, 'dimm');
+  s.clk_freq = 200;
 else
-	s.hw_sys = 'ROACH'; %assuming ROACH if not BEE2, should cause failure if something else
 	s.dimm = 1;
+  s.clk_freq = 266;
 end
 b = class(s, 'xps_dram', blk_obj);
 

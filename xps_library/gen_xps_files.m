@@ -176,7 +176,7 @@ for i = 1:length(xps_blks)
             eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
             xps_objs = [xps_objs,{blk_obj}];
 
-            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_plb2opb' 'xps_probe' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
+            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_plb2opb' 'xps_probe' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
             else
                 if isempty(find(strcmp(get(blk_obj, 'type'), core_types)))
@@ -381,10 +381,11 @@ if run_edkgen
     switch hw_sys
         case 'ROACH'
             plb_slaves = 0;
-            opb_slaves = 0;
+            opb_slaves = 2; % The system block and the adc controller
 
-            opb_addr = hex2dec('00800000');
-            plb_addr = hex2dec('04000000');
+            opb_addr        = hex2dec('01000000');
+            plb_addr        = hex2dec('04000000');
+            opb_bridge_size = hex2dec('00080000');
         % end case 'ROACH'
         otherwise
             plb_slaves = 2; % the memory and the opb bridge
@@ -392,13 +393,13 @@ if run_edkgen
 
             opb_addr = hex2dec('d0000000');
             plb_addr = hex2dec('40000000');
+            opb_bridge_size = 2^24;
         % end case otherwise
     end % switch hw_sys
 
     opb_bus_inst = 0;
     plb_name = 'plb';
     opb_name = 'opb0';
-    opb_bridge_size = 2^24;
 
     if ~exist([xps_path,'\system.mhs.bac'],'file')
         copyfile([xps_path,'\system.mhs'],[xps_path,'\system.mhs.bac']);
@@ -495,12 +496,13 @@ if run_edkgen
                     opb_slaves = opb_slaves + opb_cores;
                 end
             case 'powerpc440_ext'
-                if opb_cores + opb_slaves > 64
+                if opb_cores + opb_slaves > 32
                     opb_bus_inst = opb_bus_inst + 1;
                     opb_slaves = 0;
                     opb_name = ['opb',num2str(opb_bus_inst)];
-                    opb_addr = 524288 + 65535*opb_bus_inst;
-                    %TODO: add epb->wb16->opb32{0:opb_bus_inst-1}
+                    opb_addr = hex2dec('01000000') + opb_bus_inst * opb_bridge_size;
+                    opb_bridge_obj = xps_opb2opb(opb_name,opb_addr,opb_bridge_size);
+                    xps_objs = [xps_objs,{opb_bridge_obj}];
                 else
                     opb_slaves = opb_slaves + opb_cores;
                 end
@@ -719,7 +721,7 @@ if run_software
             fprintf(nfo_fid,'#include <xparameters.h> \n');
             fprintf(nfo_fid,'\n');
 
-            fprintf(nfo_fid,'typedef enum blk_types {xps_adc,xps_block,xps_bram,xps_corr_adc,xps_corr_dac,xps_corr_mxfe,xps_corr_rf,xps_dram,xps_ethlite,xps_framebuffer,xps_fifo,xps_gpio,xps_interchip,xps_lwip,xps_plb2opb,xps_probe,xps_sram,xps_sw_reg,xps_tengbe,xps_vsi,xps_xaui,xps_xsg,');
+            fprintf(nfo_fid,'typedef enum blk_types {xps_adc,xps_block,xps_bram,xps_corr_adc,xps_corr_dac,xps_corr_mxfe,xps_corr_rf,xps_dram,xps_ethlite,xps_framebuffer,xps_fifo,xps_gpio,xps_interchip,xps_lwip,xps_plb2opb,xps_opb2opb,xps_probe,xps_sram,xps_sw_reg,xps_tengbe,xps_vsi,xps_xaui,xps_xsg,');
 
             for n=1:length(custom_xps_objs)
                 fprintf(nfo_fid, [get(custom_xps_objs{n},'type'), ',']);
