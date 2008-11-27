@@ -4,13 +4,15 @@ module dram_infrastructure(
     clk_in_locked,
     dram_clk_0, dram_clk_90, dram_clk_div,
     dram_rst_0, dram_rst_90, dram_rst_div,
-    usr_rst, usr_clk
+    usr_rst, usr_clk,
+    clk_out
   );
   parameter CLK_FREQ = 266;
   input  reset, clk_in, clk_in_locked;
   output dram_clk_0, dram_clk_90, dram_clk_div;
   output dram_rst_0, dram_rst_90, dram_rst_div;
   input  usr_rst, usr_clk;
+  output clk_out;
 
   /************ Generate DDR2 Clock ****************/
   wire mem_clk;
@@ -19,23 +21,26 @@ module dram_infrastructure(
   localparam FX_MULT = CLK_FREQ == 150 ?  3 :
                        CLK_FREQ == 200 ?  2 :
                        CLK_FREQ == 266 ?  8 :
+                       CLK_FREQ == 300 ?  3 :
                        CLK_FREQ == 333 ? 10 :
                                           8;
 
   localparam FX_DIV  = CLK_FREQ == 150 ? 4 :
                        CLK_FREQ == 200 ? 2 :
                        CLK_FREQ == 266 ? 6 :
+                       CLK_FREQ == 300 ? 2 :
                        CLK_FREQ == 333 ? 6 :
                                          6;
 
   localparam CLK_PERIOD = CLK_FREQ == 150 ? 6666 :
                           CLK_FREQ == 200 ? 5000 :
                           CLK_FREQ == 266 ? 3760 :
+                          CLK_FREQ == 300 ? 3333 :
                           CLK_FREQ == 333 ? 3003 :
                                             3760;
 
 
-  wire fb_clk;
+  wire fb_clk_int, fb_clk;
   DCM_BASE #(
     .CLKFX_DIVIDE(FX_DIV),
     .CLKFX_MULTIPLY(FX_MULT),
@@ -43,7 +48,7 @@ module dram_infrastructure(
     .DFS_FREQUENCY_MODE("HIGH"),
     .DLL_FREQUENCY_MODE("HIGH")
   ) DCM_BASE_inst (
-    .CLK0(fb_clk),
+    .CLK0(fb_clk_int),
     .CLK180(),
     .CLK270(),
     .CLK2X(),
@@ -62,6 +67,11 @@ module dram_infrastructure(
   wire pll_locked;
 
   wire pll_fb;
+
+  BUFG bufg_fb(
+    .I(fb_clk_int),
+    .O(fb_clk)
+  );
 
   wire dram_clk_0_int, dram_clk_90_int, dram_clk_div_int;
   PLL_BASE #(
@@ -105,7 +115,7 @@ module dram_infrastructure(
     .O({dram_clk_0, dram_clk_90, dram_clk_div})
   );
 
-
+  assign clk_out = dram_clk_0;
 
   /************ Generate User Resets ****************/
 
