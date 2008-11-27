@@ -75,34 +75,35 @@ while( ischar(line) )
     err = 1;
     %if there is no block, library location or model file ignore this line
     if(isempty(blk) | isempty(libloc) | isempty(model)),
-        fprintf(['block, library location or model not specified in line: "',line,'.\n']);
+        fprintf(['Block, library location or model not specified in line: "',line,'.\n']);
     %if the model file does not exist, ignore this line
     elseif(exist(model,'file') ~= 4),
-        fprintf(['model file: "',model,'" does not exist.\n']);
+        fprintf(['Model file: "',model,'" does not exist.\n']);
     %load model and try to find block specified
     else
-	    load_system(model);
-	   
-	    %try to find block in model
-	    fprintf(['trying to find ',model,'/',blk,'\n']);
-	    thisblk = find_system( [model],'name',blk);
-	    if( isempty(thisblk) ),
+	load_system(model);
+	 
+	%try to find block in model
+	fprintf(['Trying to find ',model,'/',blk,'...\n']);
+	thisblk = find_system( [model],'name',blk);
+	if( isempty(thisblk) ),
 		fprintf(['block: "',blk,'" does not exist in ',model,'.\n']);
-	    else
-		    %everything is good
-		    err = 0;
-	    end
-	    
-    	%try to find library block specified
+	else
+	   	%everything is good
+		err = 0;
+	end
+	   
+	%try to find library block specified
+	fprintf(['Trying to find library block ',libloc,'...\n']);
 	try,
-	    lib = find_system( libloc );
+		lib = find_system( libloc );
 	catch, 
-		fprintf(['Error loading library block at ',libloc,'.\n']); 
+		fprintf(['Error loading library block ',libloc,'.\n']); 
 		err = 1;
 	end
 
     	if( isempty(lib) ),
-		fprintf(['Error loading library block at ',libloc,'.\n']); 
+		fprintf(['Error loading library block ',libloc,'.\n']); 
 		err = 1;
 	end
     end
