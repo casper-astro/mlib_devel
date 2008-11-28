@@ -62,18 +62,18 @@ module async_qdr_interface #(
   reg trans_reg;
   reg trans_regR;
   reg trans_regRR;
-  //synthesis attribute U_SET of trans_regR  is SET1
-  //synthesis attribute U_SET of trans_regRR is SET1
-  //synthesis attribute RLOC  of trans_regR  is X0Y0
-  //synthesis attribute RLOC  of trans_regRR is X0Y1
+  //synthesis attribute HU_SET of trans_regR  is SET1
+  //synthesis attribute HU_SET of trans_regRR is SET1
+  //synthesis attribute RLOC   of trans_regR  is X0Y0
+  //synthesis attribute RLOC   of trans_regRR is X0Y1
 
   reg resp_reg;
   reg resp_regR;
   reg resp_regRR;
-  //synthesis attribute U_SET of resp_regR  is SET0
-  //synthesis attribute U_SET of resp_regRR is SET0
-  //synthesis attribute RLOC  of resp_regR  is X0Y0
-  //synthesis attribute RLOC  of resp_regRR is X0Y1
+  //synthesis attribute HU_SET of resp_regR  is SET0
+  //synthesis attribute HU_SET of resp_regRR is SET0
+  //synthesis attribute RLOC   of resp_regR  is X0Y0
+  //synthesis attribute RLOC   of resp_regRR is X0Y1
 
 
   reg wait_clear;
