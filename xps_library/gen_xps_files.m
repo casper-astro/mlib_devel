@@ -174,6 +174,7 @@ for i = 1:length(xps_blks)
         try
             blk_obj = xps_block(xps_blks{i},xsg_obj);
             eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
+
             xps_objs = [xps_objs,{blk_obj}];
 
             if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_plb2opb' 'xps_probe' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))

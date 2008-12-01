@@ -21,6 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [str,opb_addr_end,plb_addr_end] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+
 str = '';
 opb_addr_end = opb_addr_start;
 plb_addr_end = plb_addr_start;
@@ -101,6 +102,7 @@ try
 catch
     align_plb = 0;
 end
+
 
 if ~isempty(ip_name)
 	str = [str, 'BEGIN ', get(blk_obj, 'ip_name'),'\n'];

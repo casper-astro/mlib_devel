@@ -40,6 +40,12 @@ s.mac_lite = get_param(blk_name, 'mac_lite');
 s.preemph = get_param(blk_name, 'pre_emph');
 s.swing = get_param(blk_name, 'swing');
 
+s.fab_mac  = ['0x', dec2hex(eval(get_param(blk_name, 'fab_mac')))  ];
+s.fab_ip   = ['0x', dec2hex(eval(get_param(blk_name, 'fab_ip')))   ];
+s.fab_udp  = ['0x', dec2hex(eval(get_param(blk_name, 'fab_udp')))  ];
+s.fab_gate = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
+s.fab_en   = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));  
+
 b = class(s,'xps_tengbe',blk_obj);
 
 % ip name & version
@@ -75,18 +81,31 @@ switch s.hw_sys
 end % switch s.hw_sys
 
 % parameters
-parameters.CONNECTOR = s.port;
-
-parameters.SWING = s.swing;
-parameters.PREEMPHASYS = s.preemph;
-
-if strcmp(s.mac_lite, 'on')
-    parameters.USE_XILINX_MAC = '0';
-    parameters.USE_UCB_MAC = '1';
-else
-    parameters.USE_XILINX_MAC = '1';
-    parameters.USE_UCB_MAC = '0';
-end
+switch s.hw_sys
+    case 'ROACH'
+      parameters.SWING                  = s.swing;
+      parameters.PREEMPHASYS            = s.preemph;
+      parameters.DEFAULT_FABRIC_MAC     = s.fab_mac;
+      parameters.DEFAULT_FABRIC_IP      = s.fab_ip;
+      parameters.DEFAULT_FABRIC_PORT    = s.fab_udp;
+      parameters.DEFAULT_FABRIC_GATEWAY = s.fab_gate;
+      parameters.FABRIC_RUN_ON_STARTUP  = s.fab_en;
+      
+    % end case 'ROACH'
+    otherwise
+      parameters.CONNECTOR = s.port;
+      parameters.SWING = s.swing;
+      parameters.PREEMPHASYS = s.preemph;
+      
+      if strcmp(s.mac_lite, 'on')
+          parameters.USE_XILINX_MAC = '0';
+          parameters.USE_UCB_MAC = '1';
+      else
+          parameters.USE_XILINX_MAC = '1';
+          parameters.USE_UCB_MAC = '0';
+      end
+    % end otherwise
+end % switch s.hw_sys
 
 b = set(b,'parameters',parameters);
 
