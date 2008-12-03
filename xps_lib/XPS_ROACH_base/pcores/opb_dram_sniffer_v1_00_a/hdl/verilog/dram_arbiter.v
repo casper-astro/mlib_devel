@@ -61,6 +61,7 @@ module dram_arbiter(
         end
         STATE_WAIT: begin
           if (master_fifo_ready) begin
+            prev_arb  <= 2'b00;
             case ({slave1_cmd_valid, slave0_cmd_valid})
               2'b00: begin
                 arb_state <= STATE_ARB0;
@@ -94,10 +95,16 @@ module dram_arbiter(
   assign master_cmd_valid = slave0_ack && slave0_cmd_valid || slave1_ack && slave1_cmd_valid;
   assign master_cmd_rnw   = slave0_ack ? slave0_cmd_rnw  : slave1_cmd_rnw;
   assign master_cmd_addr  = slave0_ack ? slave0_cmd_addr : slave1_cmd_addr;
-  assign master_wr_data   = slave0_ack ? slave0_wr_data  : slave1_wr_data;
-  assign master_wr_be     = slave0_ack ? slave0_wr_be    : slave1_wr_be;
+  assign master_wr_data   = slave0_ack || prev_arb[0] ? slave0_wr_data  : slave1_wr_data;
+  assign master_wr_be     = slave0_ack || prev_arb[0] ? slave0_wr_be    : slave1_wr_be;
 
+  /*
+  always @(*) begin
+    $display("sl1 %b %b %b %x %x %x", slave1_cmd_valid, slave1_cmd_rnw, slave1_ack, slave1_cmd_addr, slave1_wr_data, slave1_wr_be);
+  end
+  */
 
+  
   /* Read response collection/generation */
 
   /* read history fifo - 1-bit 128 entries fwft */
@@ -115,15 +122,14 @@ module dram_arbiter(
     end
   end
 
-  wire rd_sel;
 
   read_history_fifo read_history_fifo_inst(
     .clk     (clk),
     .rst     (rst),
     .wr_data (slave0_ack),
-    .wr_en   (master_cmd_valid),
+    .wr_en   (master_cmd_valid && master_cmd_rnw),
     .rd_data (rd_sel),
-    .rd_en   (master_rd_valid && new_strb)
+    .rd_en   (master_rd_valid && !new_strb)
     /* 
       rd_valid active for 2 cycles,
       only pop fifo on first part

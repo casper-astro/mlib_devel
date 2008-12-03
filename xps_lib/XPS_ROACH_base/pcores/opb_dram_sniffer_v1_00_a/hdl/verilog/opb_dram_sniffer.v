@@ -116,6 +116,9 @@ module opb_dram_sniffer #(
     .dram_rd_dvld (sniff_rd_dvld),
     .dram_ack     (sniff_ack)
   );
+  
+  wire [31:0] sniff_cmd_address = {software_address_bits[7:0], sniff_address[21:0], 2'b0};
+  /* TODO: finalize the software address width */
 
   dram_arbiter dram_arbiter(
     .clk(dram_clk),
@@ -130,23 +133,23 @@ module opb_dram_sniffer #(
     .master_rd_valid   (dram_rd_valid),
     .master_fifo_ready (dram_fifo_ready),
 
-    .slave0_cmd_addr  (sniff_cmd_address << 2),
-    .slave0_cmd_rnw   (sniff_cmd_rnw),
-    .slave0_cmd_valid (sniff_cmd_en),
-    .slave0_wr_data   (sniff_wr_data),
-    .slave0_wr_be     (sniff_wr_be),
-    .slave0_rd_data   (sniff_rd_data),
-    .slave0_rd_valid  (sniff_rd_valid),
-    .slave0_ack       (sniff_ack),
+    .slave1_cmd_addr  (sniff_cmd_address), //already shifted
+    .slave1_cmd_rnw   (sniff_cmd_rnw),
+    .slave1_cmd_valid (sniff_cmd_en),
+    .slave1_wr_data   (sniff_wr_data),
+    .slave1_wr_be     (sniff_wr_be),
+    .slave1_rd_data   (sniff_rd_data),
+    .slave1_rd_valid  (sniff_rd_dvld),
+    .slave1_ack       (sniff_ack),
 
-    .slave1_cmd_addr  (app_cmd_addr << 2),
-    .slave1_cmd_rnw   (app_cmd_rnw),
-    .slave1_cmd_valid (app_cmd_valid),
-    .slave1_wr_data   (app_wr_data),
-    .slave1_wr_be     (app_wr_be),
-    .slave1_rd_data   (app_rd_data),
-    .slave1_rd_valid  (app_rd_valid),
-    .slave1_ack       (app_cmd_ack)
+    .slave0_cmd_addr  (app_cmd_addr << 2),
+    .slave0_cmd_rnw   (app_cmd_rnw),
+    .slave0_cmd_valid (app_cmd_valid),
+    .slave0_wr_data   (app_wr_data),
+    .slave0_wr_be     (app_wr_be),
+    .slave0_rd_data   (app_rd_data),
+    .slave0_rd_valid  (app_rd_valid),
+    .slave0_ack       (app_cmd_ack)
   );
 
 endmodule
