@@ -155,48 +155,93 @@ probe_objs = {};
 blocks_types = {};
 custom_xps_objs = {};
 core_types = {};
+blk_pcores_used = {};
+blk_pcore_versions = {};
+pcores_used = {};
 j=0;
-for i = 1:length(xps_blks)
-    if strcmp(get_param(xps_blks(i),'tag'),'xps:xsg')
+
+for n = 1:length(xps_blks)
+    if strcmp(get_param(xps_blks(n),'tag'),'xps:xsg')
         try
-            xsg_obj = xps_block(xps_blks{i},{});
+            xsg_obj = xps_block(xps_blks{n},{});
             xsg_obj = xps_xsg(xsg_obj);
             nb_objs.xps_xsg = 1;
         catch
-            disp(['Problem with block: ',xps_blks{i}]);
+            disp(['Problem with block: ',xps_blks{n}]);
             disp(lasterr);
             error('Error found during Object creation.');
         end
     end
 end
-for i = 1:length(xps_blks)
-    if ~(strcmp(get_param(xps_blks(i),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(i),'tag'),'xps:pcore'))
+for n = 1:length(xps_blks)
+    if ~(strcmp(get_param(xps_blks(n),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'),'xps:pcore'))
         try
-            blk_obj = xps_block(xps_blks{i},xsg_obj);
+
+            % call class constructor
+            blk_obj = xps_block(xps_blks{n},xsg_obj);
             eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
 
             xps_objs = [xps_objs,{blk_obj}];
 
             if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_plb2opb' 'xps_probe' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
-            else
-                if isempty(find(strcmp(get(blk_obj, 'type'), core_types)))
-                    core_types = [core_types, {get(blk_obj, 'type')}];
-                end
-            end
+            end % if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_plb2opb' 'xps_probe' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
 
             try
                 eval(['nb_objs.',get(blk_obj,'type'),' = nb_objs.',get(blk_obj,'type'),' + 1;'])
             catch
                 eval(['nb_objs.',get(blk_obj,'type'),' = 1;'])
             end
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % determine pcores needed for ip
+            try
+                ip_name = get(blk_obj, 'ip_name');
+            catch
+                ip_name = '';
+            end
+
+            try
+                ip_version = get(blk_obj, 'ip_version');
+            catch
+                ip_version = '';
+            end
+
+            try
+                blk_pcores_used    = [{ip_name}, get(blk_obj, 'pcores_used')];
+                blk_pcore_versions = [{ip_version}, get(blk_obj, 'pcore_versions')];
+            catch
+                blk_pcores_used    = '';
+                blk_pcore_versions = '';
+            end
+
+            for k = 1:length(blk_pcores_used)
+                core_name = blk_pcores_used(k);
+                core_ver  = blk_pcore_versions(k);
+
+                if isempty(core_ver{1})
+                    core_ver{1} = '1.00.a';
+                end % if isempty(core_ver{1})
+
+                blk_pcore = clear_name([core_name{1}, '_v', core_ver{1}]);
+
+                try
+                    pcores_used = unique([blk_pcore, pcores_used]);
+                catch
+                    pcores_used = unique(pcores_used);
+                end
+            end
+        %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
         catch
-            disp(['Problem with block: ',xps_blks{i}]);
+            disp(['Problem with block: ',xps_blks{n}]);
             disp(lasterr);
             error('Error found during Object creation.');
         end
-    end
-end
+
+    end % if ~(strcmp(get_param(xps_blks(n),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'),'xps:pcore'))
+end % for n = 1:length(xps_blks)
 xps_objs = [{xsg_obj},xps_objs];
 
 hw_sys = get(xsg_obj,'hw_sys');
@@ -250,13 +295,41 @@ if run_copy
     end
     if exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
         mkdir(xps_path);
-        [copy_result,copy_message] = dos(['xcopy /Q /E /Y ', getenv('BEE2_XPS_LIB_PATH'), '\XPS_',hw_sys,'_base ', xps_path,'\.']);
+
+        % write exclude file for xcopy
+        xfid = fopen('xsvn.tmp', 'w');
+        fprintf(xfid, '.svn\n');
+        fclose(xfid);
+
+        % copy base package
+        [copy_result,copy_message] = dos(['xcopy /Q /E /Y /EXCLUDE:xsvn.tmp ', getenv('BEE2_XPS_LIB_PATH'), '\XPS_',hw_sys,'_base ', xps_path,'\.']);
+
         if copy_result
             cd(simulink_path);
-            error('Unpackage base system files failed.');
+            error(['Unpackage base system files failed: ', copy_message]);
         else
             cd(simulink_path);
         end
+
+%        % copy pcores
+%        if exist([XPS_LIB_PATH,'\pcores'])
+%
+%            mkdir([xps_path, '\pcores_copied']);
+%
+%            for p = 1:length(pcores_used)
+%
+%                disp(['Trying to copy pcore: ', pcores_used{p}]);
+%
+%                [copy_result,copy_message] = dos(['xcopy /C /I /Q /E /Y /EXCLUDE:xsvn.tmp ', getenv('BEE2_XPS_LIB_PATH'), '\pcores\', pcores_used{p}, ' ', xps_path,'\pcores_copied\', pcores_used{p}, '\.']);
+%
+%                if copy_result
+%                    warning(['Pcore copy had errors: ', copy_message]);
+%                end
+%            end
+%        end
+
+    delete('xsvn.tmp');
+
     else
         error(['Base XPS package "','XPS_',hw_sys,'_base" does not exist.']);
     end
