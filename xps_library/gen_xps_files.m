@@ -23,6 +23,16 @@
 function [time_total, time_struct] = gen_xps_files(sys,flow_vec)
 % Generate all necessary file and optionally run the Xilinx backed tools
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Initialization
+% At the end of initialization, the following variables are set:
+%   run_* : 1 if that step is needed
+%   xps_blks : All the blocks with tags xps:*
+%   xsg_blk : Point to the Xilinx System Generator block of the system
+%   xps_pcore_blks: All the pcore blocks tagged tiwh xps:pcore
+%   XPS_LIB_PATH: Sets to the value of the environment var of same name
+% Also, all the necessary directories have been created.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % close all previously opened files
 fclose('all');
 
@@ -136,6 +146,9 @@ if exist(netlist_path,'dir') ~= 7
     mkdir(work_path,'netlist');
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Task: System Update (run_update)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 start_time = now;
 if run_update
 disp('#############################');
@@ -155,93 +168,53 @@ probe_objs = {};
 blocks_types = {};
 custom_xps_objs = {};
 core_types = {};
-blk_pcores_used = {};
-blk_pcore_versions = {};
-pcores_used = {};
 j=0;
-
-for n = 1:length(xps_blks)
-    if strcmp(get_param(xps_blks(n),'tag'),'xps:xsg')
+% Find and creates xsg_obj (An object of xps_xsg)
+% ng_objs.xps_xsg updated
+for i = 1:length(xps_blks)
+    if strcmp(get_param(xps_blks(i),'tag'),'xps:xsg')
         try
-            xsg_obj = xps_block(xps_blks{n},{});
+            xsg_obj = xps_block(xps_blks{i},{});
             xsg_obj = xps_xsg(xsg_obj);
             nb_objs.xps_xsg = 1;
         catch
-            disp(['Problem with block: ',xps_blks{n}]);
+            disp(['Problem with block: ',xps_blks{i}]);
             disp(lasterr);
             error('Error found during Object creation.');
         end
     end
 end
-for n = 1:length(xps_blks)
-    if ~(strcmp(get_param(xps_blks(n),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'),'xps:pcore'))
-        try
 
-            % call class constructor
-            blk_obj = xps_block(xps_blks{n},xsg_obj);
+% Create objects for all blocks with xps:* tags
+% All objects are stored in xps_objs
+for i = 1:length(xps_blks)
+    if ~(strcmp(get_param(xps_blks(i),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(i),'tag'),'xps:pcore'))
+        try
+            blk_obj = xps_block(xps_blks{i},xsg_obj);
             eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
 
             xps_objs = [xps_objs,{blk_obj}];
 
             if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_plb2opb' 'xps_probe' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
-            end % if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_plb2opb' 'xps_probe' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
+            else
+                if isempty(find(strcmp(get(blk_obj, 'type'), core_types)))
+                    core_types = [core_types, {get(blk_obj, 'type')}];
+                end
+            end
 
             try
                 eval(['nb_objs.',get(blk_obj,'type'),' = nb_objs.',get(blk_obj,'type'),' + 1;'])
             catch
                 eval(['nb_objs.',get(blk_obj,'type'),' = 1;'])
             end
-
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % determine pcores needed for ip
-            try
-                ip_name = get(blk_obj, 'ip_name');
-            catch
-                ip_name = '';
-            end
-
-            try
-                ip_version = get(blk_obj, 'ip_version');
-            catch
-                ip_version = '';
-            end
-
-            try
-                blk_pcores_used    = [{ip_name}, get(blk_obj, 'pcores_used')];
-                blk_pcore_versions = [{ip_version}, get(blk_obj, 'pcore_versions')];
-            catch
-                blk_pcores_used    = '';
-                blk_pcore_versions = '';
-            end
-
-            for k = 1:length(blk_pcores_used)
-                core_name = blk_pcores_used(k);
-                core_ver  = blk_pcore_versions(k);
-
-                if isempty(core_ver{1})
-                    core_ver{1} = '1.00.a';
-                end % if isempty(core_ver{1})
-
-                blk_pcore = clear_name([core_name{1}, '_v', core_ver{1}]);
-
-                try
-                    pcores_used = unique([blk_pcore, pcores_used]);
-                catch
-                    pcores_used = unique(pcores_used);
-                end
-            end
-        %
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
         catch
-            disp(['Problem with block: ',xps_blks{n}]);
+            disp(['Problem with block: ',xps_blks{i}]);
             disp(lasterr);
             error('Error found during Object creation.');
         end
-
-    end % if ~(strcmp(get_param(xps_blks(n),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'),'xps:pcore'))
-end % for n = 1:length(xps_blks)
+    end
+end
 xps_objs = [{xsg_obj},xps_objs];
 
 hw_sys = get(xsg_obj,'hw_sys');
@@ -252,6 +225,10 @@ app_clk_rate = get(xsg_obj,'clk_rate');
 xsg_core_name = clear_name(get(xsg_obj,'parent'));
 xps_path = [work_path,'\XPS_',hw_sys,'_base'];
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Task: DRC (run_drc)
+% The drc() function of each object in xps_objs is called
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 start_time = now;
 if run_drc
     disp('######################');
@@ -269,6 +246,9 @@ if run_drc
 end
 time_drc = now - start_time;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Task: Ececute System Generator (run_xsg)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 start_time = now;
 if run_xsg
     if exist(xsg_path,'dir')
@@ -285,6 +265,9 @@ if run_xsg
 end
 time_xsg = now - start_time;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Task: Copy Base System
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 start_time = now;
 if run_copy
     disp('#########################');
@@ -295,47 +278,25 @@ if run_copy
     end
     if exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
         mkdir(xps_path);
-
-        % write exclude file for xcopy
-        xfid = fopen('xsvn.tmp', 'w');
-        fprintf(xfid, '.svn\n');
-        fclose(xfid);
-
-        % copy base package
-        [copy_result,copy_message] = dos(['xcopy /Q /E /Y /EXCLUDE:xsvn.tmp ', getenv('BEE2_XPS_LIB_PATH'), '\XPS_',hw_sys,'_base ', xps_path,'\.']);
-
+        [copy_result,copy_message] = dos(['xcopy /Q /E /Y ', getenv('BEE2_XPS_LIB_PATH'), '\XPS_',hw_sys,'_base ', xps_path,'\.']);
         if copy_result
             cd(simulink_path);
-            error(['Unpackage base system files failed: ', copy_message]);
+            error('Unpackage base system files failed.');
         else
             cd(simulink_path);
         end
-
-%        % copy pcores
-%        if exist([XPS_LIB_PATH,'\pcores'])
-%
-%            mkdir([xps_path, '\pcores_copied']);
-%
-%            for p = 1:length(pcores_used)
-%
-%                disp(['Trying to copy pcore: ', pcores_used{p}]);
-%
-%                [copy_result,copy_message] = dos(['xcopy /C /I /Q /E /Y /EXCLUDE:xsvn.tmp ', getenv('BEE2_XPS_LIB_PATH'), '\pcores\', pcores_used{p}, ' ', xps_path,'\pcores_copied\', pcores_used{p}, '\.']);
-%
-%                if copy_result
-%                    warning(['Pcore copy had errors: ', copy_message]);
-%                end
-%            end
-%        end
-
-    delete('xsvn.tmp');
-
     else
         error(['Base XPS package "','XPS_',hw_sys,'_base" does not exist.']);
     end
 end
 time_copy = now - start_time;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Task: Copy+Create custom IPs
+% Description: If the user specify a custom IP block, a EDK pcore
+% is automatically generated so that it can be integrated with the
+% rest of the system.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 start_time = now;
 if run_ip
     disp('########################');
@@ -445,6 +406,12 @@ if run_ip
 end
 time_ip = now - start_time;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Task: Create custom EDK
+% Description: Create custom system.mhs file based on the
+% yellowboxes that the user has used. At the end of this task three
+% files, system.mhs, core_info.m and core_info.tab are created.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 start_time = now;
 if run_edkgen
     disp('##########################');
@@ -539,7 +506,6 @@ if run_edkgen
     fprintf(mhs_fid,'\n');
 
     n = 1;
-    loc = 0;
     while n <= length(xps_objs)
         blk_obj = xps_objs{n};
         [plb_cores, opb_cores] = probe_bus_usage(blk_obj);
@@ -599,7 +565,7 @@ if run_edkgen
         fprintf(mhs_fid,str);
         fprintf(mhs_fid,'\n');
 
-        [str, loc] = gen_borf_info(loc, blk_obj);
+        str = gen_bof_info(blk_obj, n, hw_sys);
         fprintf(bof_fid,str);
 
         str = gen_m_core_info(blk_obj, str);
@@ -1135,6 +1101,23 @@ if run_software
         fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_fpga4_',time_stamp,'.bof\n']);
         fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga4_',time_stamp,'.bof\n']);
     end % if strcmp(hw_sys, 'BEE2_usr')
+    if strcmp(hw_sys, 'ROACH')
+        fprintf(win_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
+        fprintf(unix_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
+        fprintf(win_fid,['copy implementation\\cflash.ace ..\\bit_files\\',design_name,'_',time_stamp,'.ace\n']);
+        fprintf(unix_fid,['cp implementation/cflash.ace ../bit_files/',design_name,'_',time_stamp,'.ace\n']);
+        fprintf(win_fid, ...
+		['mkbof.exe -o implementation\\download.bof', ...
+		 ' -s core_info.tab -t 3 -v implementation\\download.bit\n']);
+        fprintf(unix_fid, ...
+		['./mkbof -o implementation/download.bof',... 
+		 ' -s core_info.tab -t 3 -v implementation/download.bit\n']);
+        fprintf(win_fid,['copy implementation\\download.bof' ...
+			 ' ..\\bit_files\\', design_name,'_', ...
+			 time_stamp,'.bof\n']);
+        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/', ...
+			  design_name,'_',time_stamp,'.bof\n']);	
+    end
 
     fclose(win_fid);
     fclose(unix_fid);
