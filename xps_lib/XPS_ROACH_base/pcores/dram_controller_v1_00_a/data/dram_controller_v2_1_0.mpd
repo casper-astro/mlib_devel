@@ -9,7 +9,7 @@ OPTION DESC = DRAM_CONTROLLER
 
 ## Bus Interface
 BUS_INTERFACE BUS = DRAM_SYS,  BUS_STD = DRAM_SYS,  BUS_TYPE = TARGET
-BUS_INTERFACE BUS = DDR2_USER, BUS_STD = DDR2_CTRL, BUS_TYPE = TARGET
+BUS_INTERFACE BUS = DRAM_USER, BUS_STD = DRAM_CTRL, BUS_TYPE = TARGET
 
 ## Parameters
 PARAMETER CLK_FREQ = 266, DT = INTEGER, RANGE = (150,200,266,300,333)
@@ -27,14 +27,14 @@ PORT rst90    = "dram_rst_90",   BUS = DRAM_SYS,    DIR = I
 PORT rstdiv0  = "dram_rst_div",  BUS = DRAM_SYS,    DIR = I
 
 ## USER BUS
-PORT app_cmd_addr   = "app_cmd_addr",   BUS = DDR2_USER,  DIR = I,  VEC = [31:0]
-PORT app_cmd_rnw    = "app_cmd_rnw",    BUS = DDR2_USER,  DIR = I
-PORT app_cmd_valid  = "app_cmd_valid",  BUS = DDR2_USER,  DIR = I 
-PORT app_wr_data    = "app_wr_data",    BUS = DDR2_USER,  DIR = I,  VEC = [143:0]
-PORT app_wr_be      = "app_wr_be",      BUS = DDR2_USER,  DIR = I,  VEC = [17:0]
-PORT app_rd_data    = "app_rd_data",    BUS = DDR2_USER,  DIR = O,  VEC = [143:0]
-PORT app_rd_valid   = "app_rd_valid",   BUS = DDR2_USER,  DIR = O
-PORT app_fifo_ready = "app_fifo_ready", BUS = DDR2_USER,  DIR = O
+PORT app_cmd_addr   = "app_cmd_addr",   BUS = DRAM_USER,  DIR = I,  VEC = [31:0]
+PORT app_cmd_rnw    = "app_cmd_rnw",    BUS = DRAM_USER,  DIR = I
+PORT app_cmd_valid  = "app_cmd_valid",  BUS = DRAM_USER,  DIR = I 
+PORT app_wr_data    = "app_wr_data",    BUS = DRAM_USER,  DIR = I,  VEC = [143:0]
+PORT app_wr_be      = "app_wr_be",      BUS = DRAM_USER,  DIR = I,  VEC = [17:0]
+PORT app_rd_data    = "app_rd_data",    BUS = DRAM_USER,  DIR = O,  VEC = [143:0]
+PORT app_rd_valid   = "app_rd_valid",   BUS = DRAM_USER,  DIR = O
+PORT app_fifo_ready = "app_fifo_ready", BUS = DRAM_USER,  DIR = O
 
 #pins
 PORT dram_ck      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [2:0]

@@ -61,6 +61,7 @@ PORT mem_OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB_MEM
 ## DRAM Controller Signals
 PORT dram_clk        = "",          DIR = I
 PORT dram_rst        = "",          DIR = I
+PORT phy_ready       = "",          DIR = I
 
 ## DRAM Controller Bus
 PORT dram_cmd_addr   = "app_cmd_addr",   BUS = DRAM_CTRL,  DIR = O,  VEC = [31:0]

@@ -4,14 +4,12 @@ module dram_infrastructure(
     clk_in_locked,
     dram_clk_0, dram_clk_90, dram_clk_div,
     dram_rst_0, dram_rst_90, dram_rst_div,
-    usr_rst, usr_clk,
     clk_out
   );
   parameter CLK_FREQ = 266;
   input  reset, clk_in, clk_in_locked;
   output dram_clk_0, dram_clk_90, dram_clk_div;
   output dram_rst_0, dram_rst_90, dram_rst_div;
-  input  usr_rst, usr_clk;
   output clk_out;
 
   /************ Generate DDR2 Clock ****************/
@@ -117,21 +115,7 @@ module dram_infrastructure(
 
   assign clk_out = dram_clk_0;
 
-  /************ Generate User Resets ****************/
-
-  reg [7:0] usr_rst_reg;
-
-  wire usr_rst_int = usr_rst_reg[7];
-
-  always @(posedge usr_clk) begin
-    if (usr_rst | reset) begin
-      usr_rst_reg <= 8'b1111_1111;
-    end else begin
-      usr_rst_reg <= usr_rst_reg << 1;
-    end
-  end
-
-  wire reset_int = reset | usr_rst_int | ~pll_locked;
+  wire reset_int = reset | !pll_locked;
 
   reg [7:0] dram_rst_0_reg;
   assign dram_rst_0 = dram_rst_0_reg[7];

@@ -17,7 +17,8 @@ module ctrl_opb_attach #(
     input  OPB_RNW,
     input  OPB_select,
     input  OPB_seqAddr,
-    output [15:0] software_address_bits
+    output [15:0] software_address_bits,
+    input  phy_ready
   );
 
 
@@ -29,6 +30,7 @@ module ctrl_opb_attach #(
    * which necessitates the use of the MSBs of the DRAM address to be control
    * by an indirect software register
    */
+  localparam REG_PHYREADY = 1;
 
   /**************** Control Registers OPB Attachment ******************/
   
@@ -74,6 +76,9 @@ module ctrl_opb_attach #(
       case (opb_data_sel) 
         REG_SOFTADDR: begin
           Sl_DBus_reg <= {16'h0, soft_addr_reg};
+        end
+        REG_PHYREADY: begin
+          Sl_DBus_reg <= {31'h0, phy_ready};
         end
         default: begin
           Sl_DBus_reg <= 32'h0;

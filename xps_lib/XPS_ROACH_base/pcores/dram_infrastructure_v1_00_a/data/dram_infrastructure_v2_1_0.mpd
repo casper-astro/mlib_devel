@@ -19,8 +19,6 @@ PARAMETER CLK_FREQ = 266, DT = INTEGER, RANGE = (150,200,266,300,333)
 ## System interface
 PORT reset         = "", DIR = I
 PORT clk_in        = "", DIR = I
-PORT usr_rst       = "", DIR = I
-PORT usr_clk       = "", DIR = I
 PORT clk_in_locked = "", DIR = I
 PORT clk_out       = "", DIR = O
 

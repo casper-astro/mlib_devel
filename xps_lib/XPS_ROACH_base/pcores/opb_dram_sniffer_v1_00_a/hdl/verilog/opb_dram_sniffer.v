@@ -34,6 +34,7 @@ module opb_dram_sniffer #(
 
     input  dram_clk,
     input  dram_rst,
+    input  phy_ready,
 
     output  [31:0] dram_cmd_addr,
     output dram_cmd_rnw,
@@ -74,7 +75,8 @@ module opb_dram_sniffer #(
     .OPB_select  (ctrl_OPB_select),
     .OPB_seqAddr (ctrl_OPB_seqAddr),
 
-    .software_address_bits (software_address_bits)
+    .software_address_bits (software_address_bits),
+    .phy_ready             (phy_ready)
   );
 
   wire sniff_cmd_en;

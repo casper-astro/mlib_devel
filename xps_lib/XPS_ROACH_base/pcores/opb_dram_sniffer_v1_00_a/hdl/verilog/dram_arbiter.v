@@ -35,6 +35,8 @@ module dram_arbiter(
   localparam STATE_ARB0 = 3'b001;
   localparam STATE_ARB1 = 3'b010;
   localparam STATE_WAIT = 3'b100;
+  /* This state machine is hand optimized to remove the need for decoding */
+  // synthesis attribute fsm_extract arb_state is no; 
 
   reg [1:0] prev_arb;
 
@@ -88,8 +90,8 @@ module dram_arbiter(
 
   /* Controller signal assignments */
 
-  assign slave0_ack = arb_state == STATE_ARB0;
-  assign slave1_ack = arb_state == STATE_ARB1;
+  assign slave0_ack = arb_state[0];
+  assign slave1_ack = arb_state[1];
 
 
   assign master_cmd_valid = slave0_ack && slave0_cmd_valid || slave1_ack && slave1_cmd_valid;
