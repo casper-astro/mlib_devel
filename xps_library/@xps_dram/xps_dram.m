@@ -36,9 +36,11 @@ xsg_obj = get(blk_obj,'xsg_obj');
 xsg_obj_name = get(xsg_obj,'simulink_name');
 xsg_hw_sys = get_param(xsg_obj_name,'hw_sys');
 
-s.half_burst = num2str(strcmp(get_param(blk_name, 'half_burst'),'on'));
-s.bank_mgt   = num2str(strcmp(get_param(blk_name, 'bank_mgt'),'on'));
-s.wide_data  = num2str(strcmp(get_param(blk_name, 'wide_data'),'on'));
+s.half_burst     = num2str(strcmp(get_param(blk_name, 'half_burst'),'on'));
+s.bank_mgt       = num2str(strcmp(get_param(blk_name, 'bank_mgt'),'on'));
+s.wide_data      = num2str(strcmp(get_param(blk_name, 'wide_data'),'on'));
+s.skinny_buffers = num2str(strcmp(get_param(blk_name, 'skinny_buffers'),'on'));
+s.disable_tag    = num2str(strcmp(get_param(blk_name, 'disable_tag'),'on'));
 
 s.hw_sys   = xsg_hw_sys;
 
