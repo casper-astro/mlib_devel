@@ -5,19 +5,24 @@ module async_dram #(
     //Use bram to make nice deep fifos which are needed for certain
     //applications.
     //Default is shallow, distributed RAM fifos
-    parameter         BRAM_FIFOS = 0
+    parameter         TAG_BUFFER_EN = 0,
+    parameter         BRAM_FIFOS    = 0,
+    parameter         C_WIDE_DATA   = 0,
+    parameter         C_HALF_BURST  = 0
     ) (
+    sys_rst,
        // -- Mem cmd ports ---------------
     Mem_Clk,
     Mem_Rst,
-    Mem_Rdy,
     Mem_Cmd_Address,
     Mem_Cmd_RNW,
     Mem_Cmd_Valid,
     Mem_Cmd_Ack,
+    Mem_Cmd_Tag,
     Mem_Rd_Dout,
     Mem_Rd_Ack,
     Mem_Rd_Valid,
+    Mem_Rd_Tag,
     Mem_Wr_Din,
     Mem_Wr_BE,
 
@@ -57,6 +62,7 @@ module async_dram #(
     input [31:0]        Mem_Cmd_Address;
     input               Mem_Cmd_RNW;
     input               Mem_Cmd_Valid;
+    input [31:0]        Mem_Cmd_Tag;
 
     output              Mem_Cmd_Ack;
 
@@ -64,6 +70,7 @@ module async_dram #(
 
     input               Mem_Rd_Ack;
     output              Mem_Rd_Valid;
+    input [31:0]        Mem_Rd_Tag;
 
     input [143:0]       Mem_Wr_Din;
     input [17:0]        Mem_Wr_BE;
@@ -159,7 +166,7 @@ module async_dram #(
     wire second_write;
     reg mem_reset;
 
-    always @ (posedge Mem_Clk) begin rem_reset <= sys_rst | Mem_Rst; end
+    always @ (posedge Mem_Clk) begin mem_reset <= sys_rst | Mem_Rst; end
 
     //keep track of when second write happens
     always @ (posedge Mem_Clk) 
