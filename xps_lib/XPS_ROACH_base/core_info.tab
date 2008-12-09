@@ -1,0 +1,48 @@
+# Core Info Table for ROACH
+# Format: name mode address length
+
+# System Block
+sys_board_id        3        0       2
+sys_rev             3        4       4 
+sys_rev_rcs         3        8       4  
+sys_scratchpad      3       10       4
+sys_monitor         3       14       8
+sys_irq_controller  3       1c      10
+
+#IF# strcmp(get(b,'type'),'xps_adc')## iADC Controller
+#IF# strcmp(get(b,'type'),'xps_adc')#iadc_controller     3    20000    10000
+#IF# strcmp(get(b,'type'),'xps_adc')#
+#IF# strcmp(get(b,'type'),'xps_dram')## DRAM Controller
+#IF# strcmp(get(b,'type'),'xps_dram')#dram_controller     3    50000    10000
+#IF# strcmp(get(b,'type'),'xps_dram')#dram_memory         3  4000000  4000000
+#IF# strcmp(get(b,'type'),'xps_dram')#
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_adc'),'qdr0')## QDR0 Controller Registers
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_adc'),'qdr0')#qdr0_memory         3  2000000  1000000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_adc'),'qdr0')#
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_adc'),'qdr1')## QDR1 Controller Registers
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_adc'),'qdr1')#qdr1_memory         3  2000000  1000000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_adc'),'qdr1')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')## Ten Gigabit Ethernet Controller 0
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#tge0_registers      3   200000      800
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#tge0_txbuffer       3   201000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#tge0_rxbuffer       3   202000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#tge0_rxbuffer       3   202000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')## Ten Gigabit Ethernet Controller 1
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#tge1_registers      3   280000      800
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#tge1_txbuffer       3   281000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#tge1_rxbuffer       3   282000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#tge1_rxbuffer       3   282000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')## Ten Gigabit Ethernet Controller 2
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')#tge2_registers      3   300000      800
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')#tge2_txbuffer       3   301000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')#tge2_rxbuffer       3   302000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')#tge2_rxbuffer       3   302000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'2')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')## Ten Gigabit Ethernet Controller 3
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')#tge3_registers      3   380000      800
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')#tge3_txbuffer       3   381000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')#tge3_rxbuffer       3   382000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')#tge3_rxbuffer       3   382000     1000
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'3')#
