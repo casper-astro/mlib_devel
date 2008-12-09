@@ -1,0 +1,2 @@
+sys: reset cleared
+FAILED: simulation timed out
