@@ -123,6 +123,57 @@ NET phy_reset_n             LOC = K27  | IOSTANDARD = LVCMOS25 ;
 #IF# strcmp(get(b,'type'),'xps_xsg') && strcmp(get(b,'ibob_linux'),'on') #NET "psram_ub_b"         LOC = "K18" | SLOW;
 #IF# strcmp(get(b,'type'),'xps_xsg') && strcmp(get(b,'ibob_linux'),'on') #NET "psram_wait"         LOC = "C26" | SLOW;
 
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_p"     TNM_NET = "brefclk_top_p";
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#TIMESPEC "TS_brefclk_top_p" = PERIOD "brefclk_top_p" 156.25 Mhz;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_m"     TNM_NET = "brefclk_top_m";
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#TIMESPEC "TS_brefclk_top_m" = PERIOD "brefclk_top_m" 156.25 Mhz;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_p"     TNM_NET = "brefclk_bottom_p";
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#TIMESPEC "TS_brefclk_bottom_p" = PERIOD "brefclk_bottom_p" 156.25 Mhz;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_m"     TNM_NET = "brefclk_bottom_m";
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#TIMESPEC "TS_brefclk_bottom_m" = PERIOD "brefclk_bottom_m" 156.25 Mhz;
+#IF# strcmp(get(b,'type'),'xps_tengbe')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_m"  LOC = "J18"  | IOSTANDARD = "LVDS_25"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_p"  LOC = "H18"  | IOSTANDARD = "LVDS_25"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_m"  LOC = "AL18" | IOSTANDARD = "LVDS_25"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_p"  LOC = "AK18" | IOSTANDARD = "LVDS_25"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l3_p        LOC = A7;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l3_n        LOC = A6;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l2_p        LOC = A15;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l2_n        LOC = A14;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l1_p        LOC = A19;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l1_n        LOC = A18;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l0_p        LOC = A27;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l0_n        LOC = A26;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l3_p        LOC = A8;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l3_n        LOC = A9;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l2_p        LOC = A16;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l2_n        LOC = A17;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l1_p        LOC = A20;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l1_n        LOC = A21;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l0_p        LOC = A28;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_tx_l0_n        LOC = A29;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l0_p        LOC = AP7;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l0_n        LOC = AP6;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l1_p        LOC = AP15;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l1_n        LOC = AP14;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l2_p        LOC = AP19;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l2_n        LOC = AP18;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l3_p        LOC = AP27;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_rx_l3_n        LOC = AP26;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l0_p        LOC = AP8;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l0_n        LOC = AP9;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l1_p        LOC = AP16;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l1_n        LOC = AP17;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l2_p        LOC = AP20;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l2_n        LOC = AP21;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l3_p        LOC = AP28;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET XAUI1_tx_l3_n        LOC = AP29;
+#IF# strcmp(get(b,'type'),'xps_tengbe') #
+
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#NET "bref_clk_top" TNM_NET="bref_clk_top";
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#TIMESPEC "TS_bref_clk_top" = PERIOD "bref_clk_top" 156.25 MHz;
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#

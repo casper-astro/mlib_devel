@@ -13,6 +13,10 @@
 
  PARAMETER VERSION = 2.1.0
 
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )#PORT brefclk_top_p     = brefclk_top_p,     DIR = I
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )#PORT brefclk_top_m     = brefclk_top_m,     DIR = I
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )#PORT brefclk_bottom_p  = brefclk_bottom_p,  DIR = I
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )#PORT brefclk_bottom_m  = brefclk_bottom_m,  DIR = I
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#PORT bref_clk_top_p = bref_clk_top_p, DIR = I
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#PORT bref_clk_top_n = bref_clk_top_n, DIR = I
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#PORT bref_clk_bottom_p = bref_clk_bottom_p, DIR = I
@@ -504,6 +508,17 @@ PORT phy_reset_n = net_vcc , DIR = OUT #IF# strcmp(get(b,'type'),'xps_xsg') && s
 #IF# strcmp(get(b,'type'),'xps_xsg') & ~isempty(strmatch('usr_clk', get(b,'clk_src'))) & ~isempty(strmatch(get(b,'gpioclk_grp'),{'zdok0', 'zdok1', 'mdr'}))# PORT Clkout  = usrclk_in
 #IF# strcmp(get(b,'type'),'xps_xsg') & ~isempty(strmatch('usr_clk', get(b,'clk_src'))) & ~isempty(strmatch(get(b,'gpioclk_grp'),{'zdok0', 'zdok1', 'mdr'}))#END
 #IF# strcmp(get(b,'type'),'xps_xsg') & ~isempty(strmatch('usr_clk', get(b,'clk_src'))) & ~isempty(strmatch(get(b,'gpioclk_grp'),{'zdok0', 'zdok1', 'mdr'}))#
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )#BEGIN XAUI_infrastructure
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )# PARAMETER INSTANCE = xaui_infrastructure_0
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )# PARAMETER HW_VER = 2.00.b
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )# PORT brefclk_top_p      = brefclk_top_p
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )# PORT brefclk_top_m      = brefclk_top_m
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )# PORT brefclk_bottom_p   = brefclk_bottom_p
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )# PORT brefclk_bottom_m   = brefclk_bottom_m
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') ) && strcmp(get(b,'port'),'0')# BUS_INTERFACE XAUI_SYS0 = xaui_sys0
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') ) && strcmp(get(b,'port'),'1')# BUS_INTERFACE XAUI_SYS1 = xaui_sys1
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )#END
+#IF# ( strcmp(get(b,'type'),'xps_tengbe') | strcmp(get(b,'type'),'xps_xaui_v2') )#
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#BEGIN diffclk_buf
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')# PARAMETER INSTANCE = diffclk_bref_clk_top
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')# PARAMETER HW_VER = 1.00.a
