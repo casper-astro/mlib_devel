@@ -445,40 +445,19 @@ if run_edkgen
     if ~exist([xps_path,'\system.mhs.bac'],'file')
         copyfile([xps_path,'\system.mhs'],[xps_path,'\system.mhs.bac']);
     end
-    in_fid = fopen([xps_path,'/system.mhs.bac'],'r');
+    if ~exist([xps_path,'\core_info.tab.bac'],'file')
+        copyfile([xps_path,'\core_info.tab'],[xps_path,'\core_info.tab.bac']);
+    end
     mhs_fid = fopen([xps_path,'/system.mhs'],'w');
     nfo_fid = fopen([work_path, '/core_info.m'],'w');
     bof_fid = fopen([xps_path, '/core_info.tab'],'w');
 
-    while 1
-        line = fgets(in_fid);
-        if ~ischar(line)
-            break;
-        else
-            toks = regexp(line,'(.*)#IF#(.*)#(.*)','tokens');
-            if isempty(toks)
-                fprintf(mhs_fid,line);
-            else
-                default   = toks{1}{1};
-                condition = toks{1}{2};
-                real_line = toks{1}{3};
-                condition_met = 0;
-                for i = 1:length(xps_objs)
-                    b = xps_objs{i};
-                    try
-                        if eval(condition)
-                            condition_met = 1;
-                            fprintf(mhs_fid,real_line);
-                            break;
-                        end
-                    end
-                end
-                if ~condition_met & ~isempty(default)
-                    fprintf(mhs_fid, [default, '\n']);
-                end
-            end
-        end
-    end
+    in_fid = fopen([xps_path,'/system.mhs.bac'],'r');
+    detokenize(in_fid, mhs_fid, xps_objs);
+    fclose(in_fid);
+
+    in_fid = fopen([xps_path,'/core_info.tab.bac'],'r');
+    detokenize(in_fid, bof_fid, xps_objs);
     fclose(in_fid);
 
     fprintf(mhs_fid,'##############################################\n');
@@ -588,35 +567,7 @@ if run_edkgen
         in_fid = fopen([xps_path,'/system.mss.bac'],'r');
         mss_fid = fopen([xps_path,'/system.mss'],'w');
 
-        while 1
-            line = fgets(in_fid);
-            if ~ischar(line)
-                break;
-            else
-                toks = regexp(line,'(.*)#IF#(.*)#(.*)','tokens');
-                if isempty(toks)
-                    fprintf(mss_fid,line);
-                else
-                    default   = toks{1}{1};
-                    condition = toks{1}{2};
-                    real_line = toks{1}{3};
-                    condition_met = 0;
-                    for n = 1:length(xps_objs)
-                        b = xps_objs{n};
-                        try
-                            if eval(condition)
-                                condition_met = 1;
-                                fprintf(mss_fid,real_line);
-                                break;
-                            end
-                        end
-                    end
-                    if ~condition_met && ~isempty(default)
-                        fprintf(mss_fid, [default, '\n']);
-                    end
-                end
-            end
-        end
+        detokenize(in_fid, mss_fid, xps_objs);
         fclose(in_fid);
 
         fprintf(mss_fid,'############################\n');
@@ -647,36 +598,7 @@ if run_edkgen
     end
     in_fid = fopen([xps_path,'/data/system.ucf.bac'],'r');
     ucf_fid = fopen([xps_path,'/data/system.ucf'],'w');
-
-    while 1
-        line = fgets(in_fid);
-        if ~ischar(line)
-            break;
-        else
-            toks = regexp(line,'(.*)#IF#(.*)#(.*)','tokens');
-            if isempty(toks)
-                fprintf(ucf_fid,line);
-            else
-                default   = toks{1}{1};
-                condition = toks{1}{2};
-                real_line = toks{1}{3};
-                condition_met = 0;
-                for n = 1:length(xps_objs)
-                    b = xps_objs{n};
-                    try
-                        if eval(condition)
-                            condition_met = 1;
-                            fprintf(ucf_fid,real_line);
-                            break;
-                        end
-                    end
-                end
-                if ~condition_met && ~isempty(default)
-                    fprintf(ucf_fid, [default, '\n']);
-                end
-            end
-        end
-    end
+    detokenize(in_fid, ucf_fid, xps_objs);
     fclose(in_fid);
 
     if ( strcmp(app_clk, 'usr_clk') || strcmp(app_clk, 'usr_clk2x') )
@@ -711,7 +633,7 @@ if run_edkgen
         disp('Problem with block : ')
         display(blk_obj);
         disp(lasterr);
-        error('?Error found during IP UCF generation in MHS');
+        error('Error found during IP UCF generation in MHS');
     end
     fprintf(ucf_fid,'\n');
     fclose(ucf_fid);

@@ -117,7 +117,7 @@ switch s.hw_sys
         interfaces.XGMII     = ['xgmii',s.port];
         b = set(b,'interfaces',interfaces);
     otherwise
-        interfaces.XAUI_CONF = ['xaui_sys',s.port];
+        interfaces.XAUI_SYS = ['xaui_sys',s.port];
         b = set(b,'interfaces',interfaces);
     % end otherwise
 end % switch s.hw_sys

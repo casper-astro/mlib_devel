@@ -76,4 +76,4 @@ switch get_param(blk_name,'io_dir')
         b = set(b,'mode',1);
 end
 
-b = set(b,'size',4);
+b = set(b,'size',256);

@@ -58,7 +58,9 @@ if ~isempty(ext_ports)
             if ~strcmp(locs,'null')
                 if isstr(locs)
                     pin = eval(locs);
-                end % if isstr(locs)
+                else
+                    pin = locs;
+                end% if isstr(locs)
 
                 if length(pin) ~= cur_ext_port{1}
                     error(['Number of pin locations for external port ',ext_port_names{j},' does not correspond to bitwidth']);

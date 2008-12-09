@@ -32,6 +32,12 @@ end
 
 inst_name = clear_name(short_name);
 
+% try 
+%   borph_info = blk_obj.borph_info;
+% catch
+%   borph_info = '';
+% end
+
 if blk_obj.size ~= 0 && blk_obj.mode ~= 0
   str = [str, sprintf('%s %d %s %s\n', inst_name, blk_obj.mode, dec2hex(loc), dec2hex(blk_obj.size))];
 else
