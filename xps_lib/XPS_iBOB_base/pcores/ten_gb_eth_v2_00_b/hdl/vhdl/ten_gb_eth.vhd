@@ -55,18 +55,23 @@ use unisim.all;
 
 entity ten_gb_eth is
 	generic(
-		CONNECTOR             : integer              := 0;
-		PREEMPHASYS           : string               := "3";
-		SWING                 : string               := "800";
-		USE_XILINX_MAC        : integer              := 1;
-		USE_UCB_MAC           : integer              := 0;
-		C_BASEADDR            : std_logic_vector     := X"00000000";
-		C_HIGHADDR            : std_logic_vector     := X"00000000";
-		C_PLB_AWIDTH          : integer              := 32;
-		C_PLB_DWIDTH          : integer              := 64;
-		C_PLB_NUM_MASTERS     : integer              := 8;
-		C_PLB_MID_WIDTH       : integer              := 3;
-		C_FAMILY              : string               := "virtex2p"
+		CONNECTOR              : integer          := 0;
+		PREEMPHASYS            : string           := "3";
+		SWING                  : string           := "800";
+		USE_XILINX_MAC         : integer          := 1;
+		USE_UCB_MAC            : integer          := 0;
+		C_BASEADDR             : std_logic_vector := X"00000000";
+		C_HIGHADDR             : std_logic_vector := X"00000000";
+		C_PLB_AWIDTH           : integer          := 32;
+		C_PLB_DWIDTH           : integer          := 64;
+		C_PLB_NUM_MASTERS      : integer          := 8;
+		C_PLB_MID_WIDTH        : integer          := 3;
+		C_FAMILY               : string           := "virtex2p";
+    DEFAULT_FABRIC_MAC     : std_logic_vector := X"FFFFFFFFFFFF";
+    DEFAULT_FABRIC_IP      : std_logic_vector := X"FFFFFFFF";
+    DEFAULT_FABRIC_GATEWAY : std_logic_vector := X"FFFF";
+    DEFAULT_FABRIC_PORT    : std_logic_vector := X"FF";
+    FABRIC_RUN_ON_STARTUP  : integer          := 0
 	);
 	port (
 		-- application clock
@@ -417,13 +422,18 @@ architecture ten_gb_eth_arch of ten_gb_eth is
 	-- plb attachment
 	component plb_attach
 		generic(
-			C_BASEADDR            : std_logic_vector     := X"FFFFFFFF";
-			C_HIGHADDR            : std_logic_vector     := X"00000000";
-			C_PLB_AWIDTH          : integer              := 32;
-			C_PLB_DWIDTH          : integer              := 64;
-			C_PLB_NUM_MASTERS     : integer              := 8;
-			C_PLB_MID_WIDTH       : integer              := 3;
-			C_FAMILY              : string               := "virtex2p"
+			C_BASEADDR             : std_logic_vector     := X"FFFFFFFF";
+			C_HIGHADDR             : std_logic_vector     := X"00000000";
+			C_PLB_AWIDTH           : integer              := 32;
+			C_PLB_DWIDTH           : integer              := 64;
+			C_PLB_NUM_MASTERS      : integer              := 8;
+			C_PLB_MID_WIDTH        : integer              := 3;
+			C_FAMILY               : string               := "virtex2p";
+      DEFAULT_FABRIC_MAC     : std_logic_vector     := X"FFFFFFFFFFFF";
+      DEFAULT_FABRIC_IP      : std_logic_vector     := X"FFFFFFFF";
+      DEFAULT_FABRIC_GATEWAY : std_logic_vector     := X"FFFF";
+      DEFAULT_FABRIC_PORT    : std_logic_vector     := X"FF";
+      FABRIC_RUN_ON_STARTUP  : integer              := 0
 		);
 		port (
 			-- local configuration
@@ -1450,13 +1460,18 @@ cpu_tx_cpu_buffer_select        <= tx_cpu_buffer_next;
 -- plb attachment
 plb : plb_attach
 	generic map (
-		C_BASEADDR            => C_BASEADDR             ,
-		C_HIGHADDR            => C_HIGHADDR             ,
-		C_PLB_AWIDTH          => C_PLB_AWIDTH           ,
-		C_PLB_DWIDTH          => C_PLB_DWIDTH           ,
-		C_PLB_NUM_MASTERS     => C_PLB_NUM_MASTERS      ,
-		C_PLB_MID_WIDTH       => C_PLB_MID_WIDTH        ,
-		C_FAMILY              => C_FAMILY
+		C_BASEADDR             => C_BASEADDR             ,
+		C_HIGHADDR             => C_HIGHADDR             ,
+		C_PLB_AWIDTH           => C_PLB_AWIDTH           ,
+		C_PLB_DWIDTH           => C_PLB_DWIDTH           ,
+		C_PLB_NUM_MASTERS      => C_PLB_NUM_MASTERS      ,
+		C_PLB_MID_WIDTH        => C_PLB_MID_WIDTH        ,
+		C_FAMILY               => C_FAMILY               ,
+    DEFAULT_FABRIC_MAC     => DEFAULT_FABRIC_MAC     ,
+    DEFAULT_FABRIC_IP      => DEFAULT_FABRIC_IP      ,
+    DEFAULT_FABRIC_GATEWAY => DEFAULT_FABRIC_GATEWAY ,
+    DEFAULT_FABRIC_PORT    => DEFAULT_FABRIC_PORT    ,
+    FABRIC_RUN_ON_STARTUP  => FABRIC_RUN_ON_STARTUP  
 	)
 	port map (
 		-- local configuration

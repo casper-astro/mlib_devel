@@ -29,6 +29,12 @@ OPTION CORE_STATE = DEVELOPMENT
 	PARAMETER PREEMPHASYS     = "3"     , DT = string
 	PARAMETER SWING           = "800"   , DT = string
 
+  PARAMETER DEFAULT_FABRIC_MAC     = 0xffffffffffff, DT = std_logic_vector
+  PARAMETER DEFAULT_FABRIC_IP      = 0xffffffff,     DT = std_logic_vector
+  PARAMETER DEFAULT_FABRIC_GATEWAY = 0xff,           DT = std_logic_vector
+  PARAMETER DEFAULT_FABRIC_PORT    = 0xffff,         DT = std_logic_vector
+  PARAMETER FABRIC_RUN_ON_STARTUP  = 0,              DT = integer
+
 	PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x4000, BUS = SPLB, ADDRESS = BASE, PAIR = C_HIGHADDR
 	PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SPLB, ADDRESS = HIGH, PAIR = C_BASEADDR
 	PARAMETER C_PLB_AWIDTH = 32, DT = INTEGER, BUS = SPLB

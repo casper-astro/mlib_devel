@@ -59,13 +59,18 @@ use plb_ipif_v1_00_e.all;
 
 entity plb_attach is
 	generic(
-		C_BASEADDR            : std_logic_vector     := X"FFFFFFFF";
-		C_HIGHADDR            : std_logic_vector     := X"00000000";
-		C_PLB_AWIDTH          : integer              := 32;
-		C_PLB_DWIDTH          : integer              := 64;
-		C_PLB_NUM_MASTERS     : integer              := 8;
-		C_PLB_MID_WIDTH       : integer              := 3;
-		C_FAMILY              : string               := "virtex2p"
+		C_BASEADDR             : std_logic_vector     := X"FFFFFFFF";
+		C_HIGHADDR             : std_logic_vector     := X"00000000";
+		C_PLB_AWIDTH           : integer              := 32;
+		C_PLB_DWIDTH           : integer              := 64;
+		C_PLB_NUM_MASTERS      : integer              := 8;
+		C_PLB_MID_WIDTH        : integer              := 3;
+		C_FAMILY               : string               := "virtex2p";
+    DEFAULT_FABRIC_MAC     : std_logic_vector     := X"FFFFFFFFFFFF";
+    DEFAULT_FABRIC_IP      : std_logic_vector     := X"FFFFFFFF";
+    DEFAULT_FABRIC_GATEWAY : std_logic_vector     := X"FFFF";
+    DEFAULT_FABRIC_PORT    : std_logic_vector     := X"FF";
+    FABRIC_RUN_ON_STARTUP  : integer              := 0
 	);
 	port (
 		-- local configuration
@@ -484,6 +489,15 @@ begin
 			rx_size                   <= (others => '0');
 			tx_cpu_free_buffer_R      <= '0';
 			rx_cpu_new_buffer_R       <= '0';
+	    local_mac_int             <= DEFAULT_FABRIC_MAC;
+	    local_ip_int              <= DEFAULT_FABRIC_IP;
+	    local_gateway_int         <= DEFAULT_FABRIC_GATEWAY;
+	    local_port_int            <= DEFAULT_FABRIC_PORT;
+      if FABRIC_RUN_ON_STARTUP = 1 then
+	      local_valid_int         <= '1';
+      else
+	      local_valid_int         <= '0';
+      end if;
 		else
 			-- single cycle activation signals
 			IP2Bus_WrAck <= '0';
