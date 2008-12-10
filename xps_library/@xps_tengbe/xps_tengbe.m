@@ -80,22 +80,38 @@ switch s.hw_sys
     % end otherwise
 end % switch s.hw_sys
 
+parameters.SWING                  = s.swing;
+parameters.PREEMPHASYS            = s.preemph;
+
 % parameters
 switch s.hw_sys
     case 'ROACH'
-      parameters.SWING                  = s.swing;
-      parameters.PREEMPHASYS            = s.preemph;
       parameters.DEFAULT_FABRIC_MAC     = s.fab_mac;
       parameters.DEFAULT_FABRIC_IP      = s.fab_ip;
       parameters.DEFAULT_FABRIC_PORT    = s.fab_udp;
       parameters.DEFAULT_FABRIC_GATEWAY = s.fab_gate;
       parameters.FABRIC_RUN_ON_STARTUP  = s.fab_en;
+
+    case 'iBOB'
+      parameters.DEFAULT_FABRIC_MAC     = s.fab_mac;
+      parameters.DEFAULT_FABRIC_IP      = s.fab_ip;
+      parameters.DEFAULT_FABRIC_PORT    = s.fab_udp;
+      parameters.DEFAULT_FABRIC_GATEWAY = s.fab_gate;
+      parameters.FABRIC_RUN_ON_STARTUP  = s.fab_en;
+
+      parameters.CONNECTOR = s.port;
+      if strcmp(s.mac_lite, 'on')
+          parameters.USE_XILINX_MAC = '0';
+          parameters.USE_UCB_MAC = '1';
+      else
+          parameters.USE_XILINX_MAC = '1';
+          parameters.USE_UCB_MAC = '0';
+      end
+      
       
     % end case 'ROACH'
     otherwise
       parameters.CONNECTOR = s.port;
-      parameters.SWING = s.swing;
-      parameters.PREEMPHASYS = s.preemph;
       
       if strcmp(s.mac_lite, 'on')
           parameters.USE_XILINX_MAC = '0';
