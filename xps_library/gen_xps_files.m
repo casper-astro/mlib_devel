@@ -544,8 +544,16 @@ if run_edkgen
         fprintf(mhs_fid,str);
         fprintf(mhs_fid,'\n');
 
-        str = gen_bof_info(blk_obj, n, hw_sys);
-        fprintf(bof_fid,str);
+        try
+            str = gen_borf_info(n, blk_obj);
+            %str = gen_borf_info(n, blk_obj, n, hw_sys);
+            fprintf(bof_fid,str);
+        catch
+            disp('Problem with block : ')
+            display(blk_obj);
+            disp(lasterr);
+            error('Error found during Peripheral generation in BOF (gen_bof_info).');
+        end
 
         str = gen_m_core_info(blk_obj, str);
         fprintf(nfo_fid,['%% ',get(blk_obj,'simulink_name'),'\n']);

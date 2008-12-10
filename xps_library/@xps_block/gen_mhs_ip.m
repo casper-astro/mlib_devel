@@ -137,8 +137,7 @@ if ~isempty(ip_name)
 		end % if range_plb ~= 0
 
 		if align_opb ~= 0
-			opb_addr_start = 
-			  ceil(opb_addr_start/align_opb) * align_opb;
+			opb_addr_start = ceil(opb_addr_start/align_opb) * align_opb;
 		end % if align_opb ~= 0
 
 		opb_addr_end = opb_addr_start + range_opb;
@@ -147,7 +146,7 @@ if ~isempty(ip_name)
 		str = [str, ' PARAMETER C_HIGHADDR = 0x',dec2hex(opb_addr_end-1, 8),'\n'];
 		str = [str, ' BUS_INTERFACE SOPB = ',opb_name,'\n'];
 		str = [str, ' PORT OPB_Clk = ', opb_clk, '\n'];
-		set(blk_obj,'base_address',opb_addr_start);
+		%TODO: resolve this set(blk_obj,'base_address',opb_addr_start);
 	end % if range_opb ~= 0
 
 	if range_plb ~= 0
@@ -166,7 +165,7 @@ if ~isempty(ip_name)
 	    str = [str, ' BUS_INTERFACE SPLB = ',plb_name,'\n'];
 	    str = [str, ' PORT PLB_Clk = ', plb_clk, '\n'];
 
-	    set(blk_obj,'base_address',plb_addr_start);
+	    %TODO: set(blk_obj,'base_address',plb_addr_start);
     end % if range_plb ~=0
 
 	if ~isempty(interfaces)
