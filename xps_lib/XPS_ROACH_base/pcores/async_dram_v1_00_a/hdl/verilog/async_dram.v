@@ -5,15 +5,18 @@ module async_dram #(
     //Use bram to make nice deep fifos which are needed for certain
     //applications.
     //Default is shallow, distributed RAM fifos
-    parameter         TAG_BUFFER_EN = 0,
+    parameter         BRAM_FIFOS = 0,
     parameter         BRAM_FIFOS    = 0,
     parameter         C_WIDE_DATA   = 0,
     parameter         C_HALF_BURST  = 0
+
     ) (
     sys_rst,
+
        // -- Mem cmd ports ---------------
     Mem_Clk,
     Mem_Rst,
+//    Mem_Rdy,
     Mem_Cmd_Address,
     Mem_Cmd_RNW,
     Mem_Cmd_Valid,
@@ -58,11 +61,11 @@ module async_dram #(
     input               Mem_Clk;
     input               Mem_Rst;
     output              Mem_Error;
-    output              Mem_Ready;
+//    output              Mem_Ready;
     input [31:0]        Mem_Cmd_Address;
     input               Mem_Cmd_RNW;
     input               Mem_Cmd_Valid;
-    input [31:0]        Mem_Cmd_Tag;
+    input[31:0]         Mem_Cmd_Tag;
 
     output              Mem_Cmd_Ack;
 
@@ -70,7 +73,7 @@ module async_dram #(
 
     input               Mem_Rd_Ack;
     output              Mem_Rd_Valid;
-    input [31:0]        Mem_Rd_Tag;
+    input[31:0]         Mem_Rd_Tag;
 
     input [143:0]       Mem_Wr_Din;
     input [17:0]        Mem_Wr_BE;
@@ -106,15 +109,11 @@ module async_dram #(
    
     //read data fifo
     wire[143:0]         rd_data_fifo_input, rd_data_fifo_output;
-    wire                rd_data_fifo_we, rd_data_fifo_re;
+    wire                rd_data_fifo_we, rd_data_fifo_re, rd_data_fifo_empty, rd_data_fifo_empty;
 
-    //----------------------------------------------------------------------------
-    // Implementation
-    //----------------------------------------------------------------------------
-    
-    /************************************************************************************/
-    /* dram_clk clk domain */
-    /************************************************************************************/
+/************************************************************************************/
+/* dram_clk clk domain */
+/************************************************************************************/
 
     // outputs to dram
     assign dram_address = add_fifo_output;
@@ -158,9 +157,9 @@ module async_dram #(
     assign rd_data_fifo_we = dram_data_valid;
     assign rd_data_fifo_input = dram_data_i;
 
-    /************************************************************************************/
-    /* Mem_Clk clk domain */
-    /************************************************************************************/
+/************************************************************************************/
+/* Mem_Clk clk domain */
+/************************************************************************************/
 
     reg write_toggle;
     wire second_write;
@@ -174,7 +173,6 @@ module async_dram #(
         if( mem_reset ) write_toggle <= 0;
         else if( Mem_Cmd_Valid & ~Mem_Cmd_RNW ) write_toggle <= ~second_write;
     end
-
     assign second_write = write_toggle & ~Mem_Cmd_RNW & Mem_Cmd_Valid;
 
     //ack if transaction accepted
@@ -192,15 +190,87 @@ module async_dram #(
     //register transaction on read or second write
     assign txn_fifo_we = (Mem_Cmd_Valid & Mem_Cmd_RNW) | second_write;
 
+/************************************************************************************/
+/* Send data back through on read */
+/************************************************************************************/
+
+    //read return data out of fifos when available and 
+    always @ (posedge Mem_Clk)
+    begin
+        if( mem_reset ) rd_rd_data_fifo <= 1'b0;
+        if( ~rd_data_fifo_empty )
+        begin
+            //if no previous transaction or previous acknowledged transaction
+            if( ~rd_rd_data_fifo && ~rd_rd_data_fifo_d1 || (rd_rd_data_fifo_d1 & Mem_Rd_Ack)) rd_rd_data_fifo <= 1'b1;
+            else rd_rd_data_fifo <= 1'b0;
+        end
+    end
+    assign rd_data_fifo_re = rd_rd_data_fifo;
+
+    assign Mem_Rd_Valid = rd_rd_data_fifo_d1;
+    assign Mem_Rd_Dout = rd_data_fifo_output;
+
+/*--------------------------------------------------------------*/
+// FIFOs
+/*--------------------------------------------------------------*/
+
+/*TODO use valid outputs of FIFOs control use of data*/
+
+    transaction_fifo(
+        .din( txn_fifo_input ),
+        .rd_clk( dram_clk ),
+        .rd_en( txn_fifo_re ),
+        .rst( mem_reset ),
+        .wr_clk( Mem_Clk ),
+        .wr_en( txn_fifo_we ),
+        .almost_full( txn_fifo_almost_full ),
+        .dout( txn_fifo_output ),
+        .empty( txn_fifo_empty ),
+        .full(),
+        .valid()
+    );
+
+    data_fifo(
+        .din( data_fifo_input ),
+        .rd_clk( dram_clk ),
+        .rd_en( data_fifo_re ),
+        .rst( mem_reset ),
+        .wr_clk( Mem_Clk ),
+        .wr_en( data_fifo_we ),
+        .dout( data_fifo_output ),
+        .empty( data_fifo_empty ),
+        .full(),
+        .prog_full( data_fifo_almost_full ),
+        .valid()   
+    ); 
+
+    address_fifo add_fifo(
+        .din( add_fifo_input ),
+        .rd_clk( dram_clk ),
+        .rd_en( add_fifo_re ),
+        .rst( mem_reset ),
+        .wr_clk( Mem_Clk) ,
+        .wr_en( add_fifo_we ),
+        .dout( add_fifo_output ),
+        .empty( add_fifo_empty ),
+        .full( ),
+        .prog_full( add_fifo_almost_full ),
+        .valid( )
+    )
+
+
+
+/*
     generate
         if (BRAM_FIFOS == 0) //making FIFOS from distributed memory
-        begin:shallow_fifo
+        begin:shallow_fifos
 
         end
         else //making FIFOs from BRAMs
-        begin:deep_fifo
+        begin:deep_fifos
 
         end
     endgenerate
+*/
 
 endmodule
