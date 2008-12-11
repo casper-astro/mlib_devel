@@ -1,9 +1,8 @@
-XmpVersion:              10.1.02
-VerMgmt:                 10.1.02
+XmpVersion:              10.1.03
+VerMgmt:                 10.1.03
 IntStyle:                default
 MHS File:                system.mhs
 MSS File:                system.mss
-NPL File:                projnav/system.ise
 Architecture:            virtex5
 Device:                  xc5vlx110t
 Package:                 ff1136

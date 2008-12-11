@@ -1261,6 +1261,8 @@ cpu_tx_cpu_buffer_select        <= tx_cpu_buffer_next;
 -- opb attachment
 opb_attach_inst : opb_attach
 	generic map (
+		C_BASEADDR             => C_BASEADDR,
+		C_HIGHADDR             => C_HIGHADDR,
     DEFAULT_FABRIC_MAC     => DEFAULT_FABRIC_MAC,
     DEFAULT_FABRIC_IP      => DEFAULT_FABRIC_IP,
     DEFAULT_FABRIC_GATEWAY => DEFAULT_FABRIC_GATEWAY,

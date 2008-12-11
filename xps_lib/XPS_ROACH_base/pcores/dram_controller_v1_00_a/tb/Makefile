@@ -1,4 +1,4 @@
-MODULE=ddr2_controller
+MODULE=dram_controller
 
 VCC=iverilog
 FLAGS=-Wall

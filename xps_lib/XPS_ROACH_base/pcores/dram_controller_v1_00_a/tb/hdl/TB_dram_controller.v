@@ -1,4 +1,4 @@
-module TB_ddr2_controller();
+module TB_dram_controller();
   initial begin
     $display("PASSED");
     $finish;
