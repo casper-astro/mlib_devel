@@ -247,10 +247,14 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#END
 
 #IF# strcmp(get(b,'type'),'xps_adc')#BEGIN opb_adccontroller
-#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER INSTANCE = opb_adccontroller_0
-#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER HW_VER = 1.00.a
-#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_BASEADDR = 0x00020000
-#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_HIGHADDR = 0x0002ffff
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER INSTANCE     = opb_adccontroller_0
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER HW_VER       = 1.00.a
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_BASEADDR   = 0x00020000
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER C_HIGHADDR   = 0x0002ffff
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER AUTOCONFIG_0 = 1
+#IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER AUTOCONFIG_1 = 1
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_0 = 1
+#IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_1 = 1
 #IF# strcmp(get(b,'type'),'xps_adc')# BUS_INTERFACE SOPB = opb0
 #IF# strcmp(get(b,'type'),'xps_adc')# PORT OPB_Clk = epb_clk
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
