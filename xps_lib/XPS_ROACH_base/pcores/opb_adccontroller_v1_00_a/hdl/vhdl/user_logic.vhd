@@ -50,6 +50,8 @@ use proc_common_v2_00_a.proc_common_pkg.all;
 entity user_logic is
   generic
     (
+      AUTOCONFIG_0 : integer := 1;
+      AUTOCONFIG_1 : integer := 1;
       -- Bus protocol parameters
       C_DWIDTH : integer := 32;
       C_NUM_CE : integer := 4
@@ -59,32 +61,34 @@ entity user_logic is
       --------------------------------------
       -- configuration signals to ADC 0
       --------------------------------------
-      adc0_adc3wire_clk    : out std_logic := '0';
-      adc0_adc3wire_data   : out std_logic := '0';
-      adc0_adc3wire_strobe : out std_logic := '0';
       adc0_modepin         : out std_logic := '0';
       adc0_ddrb            : out std_logic := '0';
-      adc0_dcm_reset       : out std_logic := '0';
       adc0_psclk           : out std_logic := '0';
       adc0_psen            : out std_logic := '0';
       adc0_psincdec        : out std_logic := '0';
       adc0_psdone          : in  std_logic := '0';
       adc0_clk             : in  std_logic := '0';
+      adc0_3wire_request   : out std_logic := '0';
+      adc0_3wire_start     : out std_logic := '0';
+      adc0_3wire_data      : out std_logic_vector(15 downto 0) := X"0000";
+      adc0_3wire_addr      : out std_logic_vector( 2 downto 0) := "000";
+      adc0_3wire_busy      : in  std_logic := '0';
 
       --------------------------------------
       -- configuration signals to ADC 1
       --------------------------------------
-      adc1_adc3wire_clk    : out std_logic := '0';
-      adc1_adc3wire_data   : out std_logic := '0';
-      adc1_adc3wire_strobe : out std_logic := '0';
       adc1_modepin         : out std_logic := '0';
       adc1_ddrb            : out std_logic := '0';
-      adc1_dcm_reset       : out std_logic := '0';
       adc1_psclk           : out std_logic := '0';
       adc1_psen            : out std_logic := '0';
       adc1_psincdec        : out std_logic := '0';
       adc1_psdone          : in  std_logic := '0';
       adc1_clk             : in  std_logic := '0';
+      adc1_3wire_request   : out std_logic := '0';
+      adc1_3wire_start     : out std_logic := '0';
+      adc1_3wire_data      : out std_logic_vector(15 downto 0) := X"0000";
+      adc1_3wire_addr      : out std_logic_vector( 2 downto 0) := "000";
+      adc1_3wire_busy      : in  std_logic := '0';
 
       -- Bus protocol ports
       Bus2IP_Clk     : in  std_logic;
@@ -132,27 +136,21 @@ architecture IMP of user_logic is
   -- adc control signals
   ----------------------------------------
 
-  signal clk_1mhz_count : std_logic_vector(0 to 6);
+  -- adc configration arbitration signal
+  signal adc0_3wire_request_int : std_logic                := '0';
+  signal adc1_3wire_request_int : std_logic                := '0';
 
   -- adc0
-  signal adc0_shift_count    : std_logic_vector(0 to 4)  := "00000";
-  signal adc0_shift_register : std_logic_vector(0 to 18) := "0000000000000000000";
-  signal adc0_do_shift       : std_logic                 := '0';
-  signal adc0_strobe_n       : std_logic                 := '0';
-  signal adc0_clk_mask       : std_logic                 := '0';
-  signal adc0_modepin_int    : std_logic                 := '0';
-  signal adc0_data           : std_logic_vector(0 to 15) := X"0000";
-  signal adc0_address        : std_logic_vector(0 to 2)  := "000";
+  signal adc0_modepin_int     : std_logic                 := '0';
+  signal adc0_3wire_start_int : std_logic                 := '0';
+  signal adc0_data            : std_logic_vector(0 to 15) := X"0000";
+  signal adc0_address         : std_logic_vector(0 to 2)  := "000";
 
   -- adc1
-  signal adc1_shift_count    : std_logic_vector(0 to 4)  := "00000";             
-  signal adc1_shift_register : std_logic_vector(0 to 18) := "0000000000000000000";
-  signal adc1_do_shift       : std_logic                 := '0';                 
-  signal adc1_strobe_n       : std_logic                 := '0';                 
-  signal adc1_clk_mask       : std_logic                 := '0';                 
-  signal adc1_modepin_int    : std_logic                 := '0';                 
-  signal adc1_data           : std_logic_vector(0 to 15) := X"0000";             
-  signal adc1_address        : std_logic_vector(0 to 2)  := "000";               
+  signal adc1_modepin_int     : std_logic                 := '0';                 
+  signal adc1_3wire_start_int : std_logic                 := '0';
+  signal adc1_data            : std_logic_vector(0 to 15) := X"0000";             
+  signal adc1_address         : std_logic_vector(0 to 2)  := "000";               
 
   -- clock phase detection
   signal adc0_adc1_sample    : std_logic;
@@ -173,60 +171,16 @@ architecture IMP of user_logic is
   signal adc0_ddrb_int       : std_logic                 := '0';
   signal adc1_ddrb_int       : std_logic                 := '0';
 
-  signal adc0_ddrb_reg       : std_logic                 := '0';
-  signal adc1_ddrb_reg       : std_logic                 := '0';
-  attribute iob: string; 
-  attribute iob of adc0_ddrb_reg : signal is "true"; --ensure IOB packing to ensure minimum skew
-  attribute iob of adc1_ddrb_reg : signal is "true"; 
-
-
   ----------------------------------------
   -- Signals for user logic slave model s/w accessible register
   ----------------------------------------
-  signal slv_reg0             : std_logic_vector(0 to C_DWIDTH-1);
-  signal slv_reg2             : std_logic_vector(0 to C_DWIDTH-1);
-  signal slv_reg3             : std_logic_vector(0 to C_DWIDTH-1);
   signal slv_reg_write_select : std_logic_vector(0 to 2);
   signal slv_reg_read_select  : std_logic_vector(0 to 2);
   signal slv_ip2bus_data      : std_logic_vector(0 to C_DWIDTH-1);
   signal slv_read_ack         : std_logic;
   signal slv_write_ack        : std_logic;
 
-  signal dcm_reset_shifter_0  : std_logic_vector(4 downto 0);
-  signal dcm_reset_shifter_1  : std_logic_vector(4 downto 0);
-
 begin
-
-  DCM_RESET_EXTEND : process( Bus2IP_Clk ) is
-  begin
-    if Bus2IP_Clk'event and Bus2IP_Clk = '1' then
-      if Bus2IP_Reset = '1' then
-        dcm_reset_shifter_0 <= "11111";
-        dcm_reset_shifter_1 <= "11111";
-      else
-        case dcm_reset_shifter_0 is
-          when "00000" =>
-            if adc0_ddrb_int = '1' then
-              dcm_reset_shifter_0 <= "11111";
-            end if;
-          when others =>
-            dcm_reset_shifter_0 <= dcm_reset_shifter_0(3 downto 0) & '0';
-        end case;
-        case dcm_reset_shifter_1 is
-          when "00000" =>
-            if adc1_ddrb_int = '1' then
-              dcm_reset_shifter_1 <= "11111";
-            end if;
-          when others =>
-            dcm_reset_shifter_1 <= dcm_reset_shifter_1(3 downto 0) & '0';
-        end case;
-      end if;
-    end if;
-  end process DCM_RESET_EXTEND;
-
-  adc0_dcm_reset <= dcm_reset_shifter_0(4);
-  adc1_dcm_reset <= dcm_reset_shifter_1(4);
- 
 
   slv_reg_write_select <= Bus2IP_WrCE(0 to 2);
   slv_reg_read_select  <= Bus2IP_RdCE(0 to 2);
@@ -236,6 +190,10 @@ begin
   OUTPUT_3WIRE_PROC : process( Bus2IP_Clk ) is
   begin
     if Bus2IP_Clk'event and Bus2IP_Clk = '1' then
+
+      -- Single cycle strobes
+      adc0_3wire_start_int <= '0';
+      adc1_3wire_start_int <= '0';
 
       ---------------------------------
       -- Reset state
@@ -247,28 +205,29 @@ begin
         adc1_ddrb_int      <= '0';
 
         -- adc0 control
-        adc0_shift_count   <= (others => '0');
-        adc0_shift_register<= (others => '0');
-        adc0_do_shift      <= '0';
         adc0_modepin_int   <= '0';
         adc0_address       <= (others => '0');
         adc0_data          <= (others => '0');
-        adc0_strobe_n      <= '0';
-        adc0_clk_mask      <= '0';
         adc0_psen          <= '0';
         adc0_psincdec      <= '0';
+        if (AUTOCONFIG_0 = 1) then
+          adc0_3wire_request_int <= '0';
+        else
+          adc0_3wire_request_int <= '1';
+        end if;
 
         -- adc1 control
-        adc1_shift_count   <= (others => '0');
-        adc1_shift_register<= (others => '0');
-        adc1_do_shift      <= '0';
         adc1_modepin_int   <= '0';
         adc1_address       <= (others => '0');
         adc1_data          <= (others => '0');
-        adc1_strobe_n      <= '0';
-        adc1_clk_mask      <= '0';
         adc1_psen          <= '0';
         adc1_psincdec      <= '0';
+        if (AUTOCONFIG_1 = 1) then
+          adc1_3wire_request_int <= '0';
+        else
+          adc1_3wire_request_int <= '1';
+        end if;
+
       else
 
         ---------------------------------
@@ -278,8 +237,6 @@ begin
         -- ensure that the reset bits are default low
         adc0_ddrb_int <= '0';
         adc1_ddrb_int <= '0';
-        adc0_ddrb_reg <= adc0_ddrb_int;
-        adc1_ddrb_reg <= adc0_ddrb_int;
         -- ensure that the psen bits are default low
         adc0_psen <= '0';
         adc1_psen <= '0';
@@ -297,8 +254,10 @@ begin
               end if;
             end if;
             if ( Bus2IP_BE(2) = '1' ) then
-              adc0_modepin_int <= Bus2IP_Data(23);
-              adc1_modepin_int <= Bus2IP_Data(22);
+              adc0_modepin_int       <= Bus2IP_Data(23);
+              adc1_modepin_int       <= Bus2IP_Data(22);
+              adc0_3wire_request_int <= not Bus2IP_Data(21);
+              adc1_3wire_request_int <= not Bus2IP_Data(20);
             end if;
             if ( Bus2IP_BE(1) = '1' ) then
               adc0_psincdec <= Bus2IP_Data(14);
@@ -314,7 +273,7 @@ begin
           -- adc0 control
           when "010" =>
             if ( Bus2IP_BE(3) = '1' ) then
-              adc0_do_shift      <= Bus2IP_Data(31);
+              adc0_3wire_start_int   <= Bus2IP_Data(31);
             end if;
             if ( Bus2IP_BE(2) = '1' ) then
               adc0_address       <= Bus2IP_Data(21 to 23);
@@ -329,7 +288,7 @@ begin
           -- adc1 control
           when "001" =>
             if ( Bus2IP_BE(3) = '1' ) then
-              adc1_do_shift      <= Bus2IP_Data(31);
+              adc1_3wire_start_int   <= Bus2IP_Data(31);
             end if;
             if ( Bus2IP_BE(2) = '1' ) then
               adc1_address       <= Bus2IP_Data(21 to 23);
@@ -343,72 +302,16 @@ begin
 
           when others => null;
         end case;
-
-        ---------------------------------
-        -- adc control state machines
-        ---------------------------------
-
-        if clk_1mhz_count = "1111111" then
-          clk_1mhz_count       <= "0000000";
-
-          -- adc0
-          if adc0_do_shift = '1' then
-            adc0_shift_count        <= adc0_shift_count + 1;
-            case adc0_shift_count is
-              when "00000" =>
-                adc0_shift_register <= adc0_address & adc0_data;
-                adc0_strobe_n       <= '0';
-                adc0_clk_mask       <= '1';
-              when "00001" =>
-                adc0_strobe_n       <= '1';
-              when "10101" =>
-                adc0_strobe_n       <= '0';
-              when "10110" =>
-                adc0_shift_count    <= "00000";
-                adc0_do_shift       <= '0';
-                adc0_strobe_n       <= '0';
-                adc0_clk_mask       <= '0';
-              when others  =>
-                adc0_shift_register <= adc0_shift_register(1 to 18) & '0';
-            end case;
-          end if;
-
-          -- adc1
-          if adc1_do_shift = '1' then
-            adc1_shift_count        <= adc1_shift_count + 1;
-            case adc1_shift_count is
-              when "00000" =>
-                adc1_shift_register <= adc1_address & adc1_data;
-                adc1_strobe_n       <= '0';
-                adc1_clk_mask       <= '1';
-              when "00001" =>
-                adc1_strobe_n       <= '1';
-              when "10101" =>
-                adc1_strobe_n       <= '0';
-              when "10110" =>
-                adc1_shift_count    <= "00000";
-                adc1_do_shift       <= '0';
-                adc1_strobe_n       <= '0';
-                adc1_clk_mask       <= '0';
-              when others  =>
-                adc1_shift_register <= adc1_shift_register(1 to 18) & '0';
-            end case;
-          end if;
-
-        else
-          clk_1mhz_count       <= clk_1mhz_count + 1;
-        end if;
-
       end if;
     end if;
   end process OUTPUT_3WIRE_PROC;
 
-  REG_READ_PROC : process( slv_reg_read_select, adc0_data, adc0_address, adc0_modepin_int, adc0_do_shift, adc1_data, adc1_address, adc1_modepin_int, adc1_do_shift , adc0_adc1_sample_RR, adc1_adc0_sample_RR) is
+  REG_READ_PROC : process( slv_reg_read_select, adc0_data, adc0_address, adc0_modepin_int, adc0_3wire_request_int, adc0_3wire_busy, adc1_data, adc1_address, adc1_modepin_int, adc1_3wire_busy, adc1_3wire_request_int, adc0_adc1_sample_RR, adc1_adc0_sample_RR, adc1_psdone, adc0_psdone) is
   begin
     case slv_reg_read_select is
-      when "100" => slv_ip2bus_data <= "00" & adc1_psdone & adc0_psdone & "00" & adc1_adc0_sample_RR & adc0_adc1_sample_RR & "00000000" & "000000" & adc1_modepin_int & adc0_modepin_int & "00000000";
-      when "010" => slv_ip2bus_data <= adc0_data & "00000" & adc0_address & "0000000" & adc0_do_shift;
-      when "001" => slv_ip2bus_data <= adc1_data & "00000" & adc1_address & "0000000" & adc1_do_shift;
+      when "100" => slv_ip2bus_data <= "00" & adc1_psdone & adc0_psdone & "00" & adc1_adc0_sample_RR & adc0_adc1_sample_RR & "00000000" & "0000" & (not adc0_3wire_request_int) & (not adc1_3wire_request_int) & adc1_modepin_int & adc0_modepin_int & "00000000";
+      when "010" => slv_ip2bus_data <= adc0_data & "00000" & adc0_address & "0000000" & adc0_3wire_busy;
+      when "001" => slv_ip2bus_data <= adc1_data & "00000" & adc1_address & "0000000" & adc1_3wire_busy;
       when others => slv_ip2bus_data <= (others => '0');
     end case;
   end process REG_READ_PROC;
@@ -420,22 +323,24 @@ begin
   --------------------------------------
   -- configuration signals to ADC 0
   --------------------------------------
-  adc0_adc3wire_clk    <= clk_1Mhz_count(0) and adc0_clk_mask;
-  adc0_adc3wire_data   <= adc0_shift_register(0);
-  adc0_adc3wire_strobe <= not(adc0_strobe_n);
   adc0_modepin         <= adc0_modepin_int;
-  adc0_ddrb            <= adc0_ddrb_reg;
+  adc0_ddrb            <= adc0_ddrb_int;
   adc0_psclk           <= Bus2IP_Clk;
+  adc0_3wire_request   <= adc0_3wire_request_int;
+  adc0_3wire_start     <= adc0_3wire_start_int;
+  adc0_3wire_data      <= adc0_data;
+  adc0_3wire_addr      <= adc0_address;
 
   --------------------------------------
   -- configuration signals to ADC 1
   --------------------------------------
-  adc1_adc3wire_clk    <= clk_1Mhz_count(0) and adc1_clk_mask;
-  adc1_adc3wire_data   <= adc1_shift_register(0);
-  adc1_adc3wire_strobe <= not(adc1_strobe_n);
   adc1_modepin         <= adc1_modepin_int;
-  adc1_ddrb            <= adc1_ddrb_reg;
+  adc1_ddrb            <= adc1_ddrb_int;
   adc1_psclk           <= Bus2IP_Clk;
+  adc1_3wire_request   <= adc1_3wire_request_int;
+  adc1_3wire_start     <= adc1_3wire_start_int;
+  adc1_3wire_data      <= adc1_data;
+  adc1_3wire_addr      <= adc1_address;
 
   ----------------------------------------
   -- Code to drive IP to Bus signals

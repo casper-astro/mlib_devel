@@ -52,11 +52,15 @@ entity opb_adccontroller is
   generic
     (
       -- Bus protocol parameters
-      C_BASEADDR   : std_logic_vector := X"00000000";
-      C_HIGHADDR   : std_logic_vector := X"0000FFFF";
-      C_OPB_AWIDTH : integer          := 32;
-      C_OPB_DWIDTH : integer          := 32;
-      C_FAMILY     : string           := "virtex2p"
+      C_BASEADDR    : std_logic_vector := X"00000000";
+      C_HIGHADDR    : std_logic_vector := X"0000FFFF";
+      C_OPB_AWIDTH  : integer          := 32;
+      C_OPB_DWIDTH  : integer          := 32;
+      C_FAMILY      : string           := "virtex2p";
+      AUTOCONFIG_0  : integer          := 0;
+      INTERLEAVED_0 : integer          := 0;
+      AUTOCONFIG_1  : integer          := 0;
+      INTERLEAVED_1 : integer          := 0
       );
   port
     (
@@ -231,6 +235,29 @@ architecture IMP of opb_adccontroller is
 
   constant USER00_CE_INDEX : integer := calc_start_ce_index(ARD_NUM_CE_ARRAY, USER00_CS_INDEX);
 
+	component adc_config_mux
+		generic(
+	    INTERLEAVED     : integer	:= 0
+		);
+		port (
+      clk             : in  std_logic;
+      rst             : in  std_logic;
+      request         : in  std_logic;
+      ddrb_i          : in  std_logic;
+      mode_i          : in  std_logic;
+      config_start_i  : in  std_logic;
+      config_busy_o   : out std_logic;
+      config_data_i   : in  std_logic_vector(15 downto 0);
+      config_addr_i   : in  std_logic_vector( 2 downto 0);
+      ddrb_o          : out std_logic;
+      dcm_reset_o     : out std_logic;
+      mode_o          : out std_logic;
+      ctrl_clk_o      : out std_logic;
+      ctrl_strb_o     : out std_logic;
+      ctrl_data_o     : out std_logic
+		);
+	end component;
+
   ----------------------------------------
   -- IP Interconnect (IPIC) signal declarations
   ----------------------------------------
@@ -254,6 +281,22 @@ architecture IMP of opb_adccontroller is
   signal uBus2IP_RdCE            : std_logic_vector(0 to USER_NUM_CE-1);
   signal uBus2IP_WrCE            : std_logic_vector(0 to USER_NUM_CE-1);
   signal uIP2Bus_Data            : std_logic_vector(0 to USER_DWIDTH-1);
+
+  signal adc0_3wire_request      : std_logic;
+  signal adc0_3wire_start        : std_logic;
+  signal adc0_3wire_data         : std_logic_vector(15 downto 0);
+  signal adc0_3wire_addr         : std_logic_vector( 2 downto 0);
+  signal adc0_3wire_busy         : std_logic;
+  signal adc0_ddrb_int           : std_logic;
+  signal adc0_modepin_int        : std_logic;
+
+  signal adc1_3wire_request      : std_logic;
+  signal adc1_3wire_start        : std_logic;
+  signal adc1_3wire_data         : std_logic_vector(15 downto 0);
+  signal adc1_3wire_addr         : std_logic_vector( 2 downto 0);
+  signal adc1_3wire_busy         : std_logic;
+  signal adc1_ddrb_int           : std_logic;
+  signal adc1_modepin_int        : std_logic;
 
 begin
 
@@ -344,20 +387,23 @@ begin
   USER_LOGIC_I : entity opb_adccontroller_v1_00_a.user_logic
     generic map
     (
-      C_DWIDTH => USER_DWIDTH,
-      C_NUM_CE => USER_NUM_CE
+      C_DWIDTH     => USER_DWIDTH,
+      C_NUM_CE     => USER_NUM_CE,
+      AUTOCONFIG_0 => AUTOCONFIG_0,
+      AUTOCONFIG_1 => AUTOCONFIG_1
       )
     port map
     (
       --------------------------------------
       -- configuration signals to ADC 0
       --------------------------------------
-      adc0_adc3wire_clk    => adc0_adc3wire_clk   ,
-      adc0_adc3wire_data   => adc0_adc3wire_data  ,
-      adc0_adc3wire_strobe => adc0_adc3wire_strobe,
-      adc0_modepin         => adc0_modepin        ,
-      adc0_ddrb            => adc0_ddrb           ,
-      adc0_dcm_reset       => adc0_dcm_reset      ,
+      adc0_3wire_request   => adc0_3wire_request  ,
+      adc0_3wire_start     => adc0_3wire_start    ,
+      adc0_3wire_data      => adc0_3wire_data     ,
+      adc0_3wire_addr      => adc0_3wire_addr     ,
+      adc0_3wire_busy      => adc0_3wire_busy     ,
+      adc0_ddrb            => adc0_ddrb_int       ,
+      adc0_modepin         => adc0_modepin_int    ,
       adc0_psclk           => adc0_psclk          ,
       adc0_psen            => adc0_psen           ,
       adc0_psincdec        => adc0_psincdec       ,
@@ -367,12 +413,13 @@ begin
       --------------------------------------
       -- configuration signals to ADC 1
       --------------------------------------
-      adc1_adc3wire_clk    => adc1_adc3wire_clk   ,
-      adc1_adc3wire_data   => adc1_adc3wire_data  ,
-      adc1_adc3wire_strobe => adc1_adc3wire_strobe,
-      adc1_modepin         => adc1_modepin        ,
-      adc1_ddrb            => adc1_ddrb           ,
-      adc1_dcm_reset       => adc1_dcm_reset      ,
+      adc1_3wire_request   => adc1_3wire_request  ,
+      adc1_3wire_start     => adc1_3wire_start    ,
+      adc1_3wire_data      => adc1_3wire_data     ,
+      adc1_3wire_addr      => adc1_3wire_addr     ,
+      adc1_3wire_busy      => adc1_3wire_busy     ,
+      adc1_ddrb            => adc1_ddrb_int       ,
+      adc1_modepin         => adc1_modepin_int    ,
       adc1_psclk           => adc1_psclk          ,
       adc1_psen            => adc1_psen           ,
       adc1_psincdec        => adc1_psincdec       ,
@@ -401,5 +448,59 @@ begin
   uBus2IP_RdCE <= iBus2IP_RdCE(USER00_CE_INDEX to USER00_CE_INDEX+USER_NUM_CE-1);
   uBus2IP_WrCE <= iBus2IP_WrCE(USER00_CE_INDEX to USER00_CE_INDEX+USER_NUM_CE-1);
   iIP2Bus_Data(0 to USER_DWIDTH-1) <= uIP2Bus_Data;
+
+  --- ADC Configuration Autoconfig/Multiplexors
+
+  adc_config_mux_0 : adc_config_mux
+    generic map
+    (
+      INTERLEAVED => INTERLEAVED_0
+    )
+    port map
+    (
+      clk              => iBus2IP_Clk,
+      rst              => iBus2IP_Reset,
+      request          => adc0_3wire_request ,
+      ddrb_i           => adc0_ddrb_int,
+      mode_i           => adc0_modepin_int,
+
+      config_start_i   => adc0_3wire_start,
+      config_busy_o    => adc0_3wire_busy ,
+      config_data_i    => adc0_3wire_data ,
+      config_addr_i    => adc0_3wire_addr ,
+
+      ddrb_o           => adc0_ddrb,
+      dcm_reset_o      => adc0_dcm_reset,
+      mode_o           => adc0_modepin,
+      ctrl_clk_o       => adc0_adc3wire_clk,
+      ctrl_strb_o      => adc0_adc3wire_strobe,
+      ctrl_data_o      => adc0_adc3wire_data
+  );
+
+  adc_config_mux_1 : adc_config_mux
+    generic map
+    (
+      INTERLEAVED => INTERLEAVED_0
+    )
+    port map
+    (
+      clk              => iBus2IP_Clk,
+      rst              => iBus2IP_Reset,
+      request          => adc1_3wire_request ,
+      ddrb_i           => adc1_ddrb_int,
+      mode_i           => adc1_modepin_int,
+
+      config_start_i   => adc1_3wire_start,
+      config_busy_o    => adc1_3wire_busy ,
+      config_data_i    => adc1_3wire_data ,
+      config_addr_i    => adc1_3wire_addr ,
+
+      ddrb_o           => adc1_ddrb,
+      dcm_reset_o      => adc1_dcm_reset,
+      mode_o           => adc1_modepin,
+      ctrl_clk_o       => adc1_adc3wire_clk,
+      ctrl_strb_o      => adc1_adc3wire_strobe,
+      ctrl_data_o      => adc1_adc3wire_data
+  );
 
 end IMP;
