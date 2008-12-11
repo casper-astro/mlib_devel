@@ -4,7 +4,7 @@
 `define SYS_CLK_PERIOD  22
 `define DRAM_CLK_PERIOD 6
 
-module TB_opb_qdr_sniffer();
+module TB_async_dram();
 
   localparam WIDE_DATA     = 0;
   localparam HALF_BURST    = 0;
@@ -40,9 +40,9 @@ module TB_opb_qdr_sniffer();
   wire          Mem_Rd_Ack;
   wire          Mem_Rd_Valid;
   wire   [31:0] Mem_Rd_Tag;
-  wire [(WIDE_DATA ? 144*2 : 144*1) - 1:0]
+  wire [((WIDE_DATA+1)*144) - 1:0]
                 Mem_Wr_Din;
-  wire [(WIDE_DATA ? 18*2 : 18*1) - 1:0]
+  wire [((WIDE_DATA+1)*18) - 1:0]
                 Mem_Wr_BE;
 
   async_dram #(
@@ -227,7 +227,7 @@ module TB_opb_qdr_sniffer();
   assign Mem_Cmd_Valid   = Mem_Cmd_Ack; //always issue commands
   assign Mem_Cmd_Tag     = cmd_progress;
 
-  reg [(WIDE_DATA ? 144*2 : 144*1) - 1:0]
+  reg [(WIDE_DATA+1*144) - 1:0]
          Mem_Wr_Din_reg;
 
   wire [143:0] foo_data = {5{cmd_progress}};

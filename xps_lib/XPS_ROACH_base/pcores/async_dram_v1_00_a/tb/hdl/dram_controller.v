@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module dram_controller #(
     parameter DRAM_DEPTH = 16384,
     parameter HARD_READY = 0
