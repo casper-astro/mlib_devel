@@ -28,7 +28,7 @@ module dram_controller #(
 
   integer i;
 
-  wire [31:0] mem_address = (dram_cmd_addr >> 2) << 1;
+  wire [31:0] mem_address = (dram_cmd_addr) << 1;
   /* word address: lower 2 bits truncated then 1 bit extended - two words per burst */
 
   reg [31:0] mem_address_z;

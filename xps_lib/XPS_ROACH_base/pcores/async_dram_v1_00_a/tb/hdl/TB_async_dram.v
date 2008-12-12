@@ -9,7 +9,7 @@ module TB_async_dram();
   localparam WIDE_DATA     = 0;
   localparam HALF_BURST    = 0;
   localparam TAG_BUFFER_EN = 0;
-  localparam TEST_LENGTH   = 8192;
+  localparam TEST_LENGTH   = 5;
 
   wire sys_rst;
   wire sys_clk;
@@ -65,8 +65,8 @@ module TB_async_dram();
     .Mem_Wr_Din      (Mem_Wr_Din),
     .Mem_Wr_BE       (Mem_Wr_BE),
 
-    .Mem_Rd_Tag      (Mem_Rd_Tag),
-    .Mem_Cmd_Tag     (Mem_Cmd_Tag),
+        .Mem_Rd_Tag      (Mem_Rd_Tag),
+        .Mem_Cmd_Tag     (Mem_Cmd_Tag),
 
     .dram_reset       (),
     .dram_clk         (dram_clk),
@@ -129,13 +129,14 @@ module TB_async_dram();
 
   /********** Mode Control ***********/
 
-  localparam MODE_WRITE = 2'd0;
-  localparam MODE_READ  = 2'd1;
+  localparam MODE_RESET = 2'b10;
+  localparam MODE_WRITE = 2'b00;
+  localparam MODE_READ  = 2'd01;
 
   localparam NUM_MODES = 2;
 
   reg [1:0] mode;
-  reg [NUM_MODES - 1:0] mode_done;
+  wire [NUM_MODES - 1:0] mode_done;
 
   reg [31:0] mode_data;
 
@@ -143,9 +144,12 @@ module TB_async_dram();
 
   always @(posedge sys_clk) begin
     if (sys_rst) begin
-      mode <= MODE_WRITE;
+      mode <= MODE_RESET;
     end else begin
       case (mode)
+        MODE_RESET: begin
+            mode <= MODE_WRITE;
+        end
         MODE_WRITE: begin
           if (mode_done[MODE_WRITE]) begin
             mode <= MODE_READ;
@@ -189,42 +193,57 @@ module TB_async_dram();
   reg [31:0] cmd_progress;
   reg second;
 
-  wire mode_wait = mode_done[MODE_WRITE] || mode_done[MODE_READ];
-
 
   /* Command Generation */
   always @(posedge sys_clk) begin
-    mode_done[MODE_WRITE] <= 1'b0;
-
-    second <= 1'b0;
 
     if (sys_rst) begin
       cmd_progress  <= 32'b0;
-    end else if (!mode_wait) begin
+      second <= 1'b0;
+    end else begin
       case (mode)
-        MODE_WRITE: begin
+        MODE_WRITE: begin 
           if (Mem_Cmd_Ack && !second) begin
-            cmd_progress <= cmd_progress + 1;
             if (!(HALF_BURST || WIDE_DATA)) begin
               second <= 1'b1;
+            end else begin  
+              cmd_progress <= cmd_progress + 1;
             end
+`ifdef DEBUG
+              $display("fab:write first data = %x, address = %x",Mem_Wr_Din, Mem_Cmd_Address);
+`endif
           end
-          if (cmd_progress == TEST_LENGTH) begin
-            cmd_progress <= 32'b0;
-            mode_done[MODE_WRITE] <= 1'b1;
+          if( second && Mem_Cmd_Ack ) begin 
+              second <= 1'b0; 
+              cmd_progress <= cmd_progress + 1;
+          
+              if (cmd_progress == TEST_LENGTH) begin
+                cmd_progress <= 32'b0;
+              end
+          
+`ifdef DEBUG
+              $display("fab:write second data = %x, address = %x",Mem_Wr_Din, Mem_Cmd_Address);
+`endif          
           end
+
         end
         MODE_READ:  begin
-          if (Mem_Cmd_Ack)
+`ifdef DEBUG
+              $display("fab:read address = %x",Mem_Cmd_Address);
+`endif
+          if (Mem_Cmd_Ack && cmd_progress <= TEST_LENGTH)
             cmd_progress <= cmd_progress + 1;
         end
+        
+
       endcase
     end
   end
 
+  assign mode_done[MODE_WRITE] = (mode == MODE_WRITE && cmd_progress == TEST_LENGTH && (second & Mem_Cmd_Ack | (WIDE_DATA || HALF_BURST) && Mem_Cmd_Ack));
   assign Mem_Cmd_Address = cmd_progress;
   assign Mem_Cmd_RNW     = mode == MODE_READ;
-  assign Mem_Cmd_Valid   = Mem_Cmd_Ack; //always issue commands
+  assign Mem_Cmd_Valid   = ((mode == MODE_READ || mode == MODE_WRITE) && cmd_progress <= TEST_LENGTH) ? 1'b1 : 1'b0; //always issue commands
   assign Mem_Cmd_Tag     = cmd_progress;
 
   reg [(WIDE_DATA+1*144) - 1:0]
@@ -252,7 +271,6 @@ module TB_async_dram();
   wire [143:0] rd_foo_data = {5{rd_progress}};
 
   always @(posedge sys_clk) begin
-    mode_done[MODE_READ] <= 1'b0;
     rd_second            <= 1'b0;
 
     if (sys_rst) begin
@@ -260,9 +278,6 @@ module TB_async_dram();
     end else begin
       if (rd_second) begin
         rd_progress <= rd_progress + 1;
-        if (rd_progress == TEST_LENGTH) begin
-          mode_done[MODE_READ] <= 1'b1;
-        end
 
         if (!HALF_BURST) begin
           if (Mem_Rd_Dout !== ~rd_foo_data) begin
@@ -270,7 +285,7 @@ module TB_async_dram();
             $finish;
           end
         end
-        if (Mem_Rd_Tag !== rd_progress) begin
+        if (Mem_Rd_Tag !== rd_progress && TAG_BUFFER_EN) begin
           $display("ERROR: tag mismatch - got %x, expected %x", Mem_Rd_Tag, rd_progress);
           $finish;
         end
@@ -286,5 +301,6 @@ module TB_async_dram();
 
   assign Mem_Clk = sys_clk;
   assign Mem_Rst = sys_rst;
+  assign mode_done[MODE_READ] = (rd_second && rd_progress == TEST_LENGTH);
   
 endmodule
