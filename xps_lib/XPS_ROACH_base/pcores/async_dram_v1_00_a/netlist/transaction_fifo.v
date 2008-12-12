@@ -48,6 +48,7 @@ module transaction_fifo(
 	dout,
 	empty,
 	full,
+	prog_full,
 	valid);
 
 
@@ -61,6 +62,7 @@ output almost_full;
 output [0 : 0] dout;
 output empty;
 output full;
+output prog_full;
 output valid;
 
 // synthesis translate_off
@@ -107,7 +109,7 @@ output valid;
 		.C_PROG_EMPTY_TYPE(0),
 		.C_PROG_FULL_THRESH_ASSERT_VAL(509),
 		.C_PROG_FULL_THRESH_NEGATE_VAL(508),
-		.C_PROG_FULL_TYPE(0),
+		.C_PROG_FULL_TYPE(1),
 		.C_RD_DATA_COUNT_WIDTH(9),
 		.C_RD_DEPTH(512),
 		.C_RD_FREQ(1),
@@ -136,6 +138,7 @@ output valid;
 		.DOUT(dout),
 		.EMPTY(empty),
 		.FULL(full),
+		.PROG_FULL(prog_full),
 		.VALID(valid),
 		.CLK(),
 		.INT_CLK(),
@@ -154,7 +157,6 @@ output valid;
 		.DATA_COUNT(),
 		.OVERFLOW(),
 		.PROG_EMPTY(),
-		.PROG_FULL(),
 		.RD_DATA_COUNT(),
 		.UNDERFLOW(),
 		.WR_ACK(),

@@ -51,13 +51,13 @@ module data_fifo(
 	valid);
 
 
-input [89 : 0] din;
+input [161 : 0] din;
 input rd_clk;
 input rd_en;
 input rst;
 input wr_clk;
 input wr_en;
-output [89 : 0] dout;
+output [161 : 0] dout;
 output empty;
 output full;
 output prog_full;
@@ -70,12 +70,12 @@ output valid;
 		.C_COUNT_TYPE(0),
 		.C_DATA_COUNT_WIDTH(9),
 		.C_DEFAULT_VALUE("BlankString"),
-		.C_DIN_WIDTH(90),
+		.C_DIN_WIDTH(162),
 		.C_DOUT_RST_VAL("0"),
-		.C_DOUT_WIDTH(90),
+		.C_DOUT_WIDTH(162),
 		.C_ENABLE_RLOCS(0),
 		.C_FAMILY("virtex5"),
-		.C_FULL_FLAGS_RST_VAL(0),
+		.C_FULL_FLAGS_RST_VAL(1),
 		.C_HAS_ALMOST_EMPTY(0),
 		.C_HAS_ALMOST_FULL(0),
 		.C_HAS_BACKUP(0),
@@ -92,9 +92,9 @@ output valid;
 		.C_HAS_WR_ACK(0),
 		.C_HAS_WR_DATA_COUNT(0),
 		.C_HAS_WR_RST(0),
-		.C_IMPLEMENTATION_TYPE(4),
+		.C_IMPLEMENTATION_TYPE(2),
 		.C_INIT_WR_PNTR_VAL(0),
-		.C_MEMORY_TYPE(4),
+		.C_MEMORY_TYPE(1),
 		.C_MIF_FILE_NAME("BlankString"),
 		.C_MSGON_VAL(1),
 		.C_OPTIMIZATION_MODE(0),
@@ -102,18 +102,18 @@ output valid;
 		.C_PRELOAD_LATENCY(1),
 		.C_PRELOAD_REGS(0),
 		.C_PRIM_FIFO_TYPE("512x72"),
-		.C_PROG_EMPTY_THRESH_ASSERT_VAL(5),
-		.C_PROG_EMPTY_THRESH_NEGATE_VAL(6),
+		.C_PROG_EMPTY_THRESH_ASSERT_VAL(2),
+		.C_PROG_EMPTY_THRESH_NEGATE_VAL(3),
 		.C_PROG_EMPTY_TYPE(0),
 		.C_PROG_FULL_THRESH_ASSERT_VAL(509),
 		.C_PROG_FULL_THRESH_NEGATE_VAL(508),
 		.C_PROG_FULL_TYPE(1),
 		.C_RD_DATA_COUNT_WIDTH(9),
 		.C_RD_DEPTH(512),
-		.C_RD_FREQ(266),
+		.C_RD_FREQ(1),
 		.C_RD_PNTR_WIDTH(9),
 		.C_UNDERFLOW_LOW(0),
-		.C_USE_DOUT_RST(0),
+		.C_USE_DOUT_RST(1),
 		.C_USE_ECC(0),
 		.C_USE_EMBEDDED_REG(0),
 		.C_USE_FIFO16_FLAGS(0),
@@ -122,7 +122,7 @@ output valid;
 		.C_WR_ACK_LOW(0),
 		.C_WR_DATA_COUNT_WIDTH(9),
 		.C_WR_DEPTH(512),
-		.C_WR_FREQ(256),
+		.C_WR_FREQ(1),
 		.C_WR_PNTR_WIDTH(9),
 		.C_WR_RESPONSE_LATENCY(1))
 	inst (

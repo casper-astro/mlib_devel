@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.37
-# Date: Fri Dec 05 12:38:14 2008
+# Date: Thu Dec 11 09:35:54 2008
 #
 ##############################################################
 #
@@ -58,7 +58,7 @@ CSET overflow_flag=false
 CSET overflow_sense=Active_High
 CSET performance_options=Standard_FIFO
 CSET programmable_empty_type=No_Programmable_Empty_Threshold
-CSET programmable_full_type=No_Programmable_Full_Threshold
+CSET programmable_full_type=Single_Programmable_Full_Threshold_Constant
 CSET read_clock_frequency=1
 CSET read_data_count=false
 CSET read_data_count_width=9
@@ -78,5 +78,5 @@ CSET write_data_count=false
 CSET write_data_count_width=9
 # END Parameters
 GENERATE
-# CRC: 2a1662e7
+# CRC: b08e737d
 
