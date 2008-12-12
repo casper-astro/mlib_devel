@@ -2,22 +2,24 @@ MODULE=async_dram
 
 VCC=iverilog
 FLAGS=-Wall
-DEFINES=-DSIMULATION 
-DEFINES+=-DDEBUG 
+DEFINES=-DDEBUG
 DEFINES+=-DDESPERATE_DEBUG
 VSIM=vvp
 
+LIB_DIR=/cygdrive/c/Xilinx/10.1/ISE/verilog/src/XilinxCoreLib
 SRC_DIR=../hdl/verilog
 TB_DIR=./hdl
-GEN_DIR=./gen
-INCLUDE=-I$(SRC_DIR)
+GEN_DIR=../netlist
+LOG_FILE=./gen
 
-SRC=$(SRC_DIR)/$(MODULE).v
-TB_SRC=$(TB_DIR)/TB_$(MODULE).v $(TB_DIR)/dram_controller.v
-OBJ=$(GEN_DIR)/$(MODULE).o
-TB_OBJ=$(GEN_DIR)/TB_$(MODULE).o
+INCLUDE=-I$(SRC_DIR) -I$(TB_DIR) -I$(LIB_DIR)
 
-MSG_FILE=$(GEN_DIR)/msgs.txt
+SRC=$(SRC_DIR)/$(MODULE).v 
+TB_SRC=$(TB_DIR)/TB_$(MODULE).v $(GEN_DIR)/address_fifo.v $(GEN_DIR)/rd_data_fifo.v $(GEN_DIR)/transaction_fifo.v $(GEN_DIR)/data_fifo.v $(TB_DIR)/dram_controller.v
+LIB_SRC=$(LIB_DIR)/FIFO_GENERATOR_V4_3.v 
+
+TB_OBJ=$(GEN_DIR)/TB_$(MODULE).o 
+MSG_FILE=$(LOG_FILE)/msgs.txt
 
 sim: $(MSG_FILE)
 
@@ -26,8 +28,8 @@ $(MSG_FILE): $(TB_OBJ)
 	@!(cat $@ | grep FAILED && rm -rf $^)
 	@(cat $@ | grep PASSED)
 
-$(TB_OBJ): $(TB_SRC) $(SRC)
+$(TB_OBJ): $(SRC) $(TB_SRC) $(LIB_SRC)
 	$(VCC) $(INCLUDE) $(FLAGS) $(DEFINES) -o $@ $^
 
 clean:
-	rm -rf $(TB_OBJ) $(OBJ) $(MSG_FILE)
+	rm -rf $(LIB_OBJ) $(TB_OBJ) $(OBJ) $(MSG_FILE)
