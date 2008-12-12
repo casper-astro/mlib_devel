@@ -1,0 +1,2 @@
+FILES
+data_fifo.ngc, rd_data_fifo.ngc, transaction_fifo.ngc, address_fifo.ngc
