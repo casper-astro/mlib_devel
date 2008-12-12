@@ -499,7 +499,13 @@ if run_edkgen
                     opb_bus_inst = opb_bus_inst + 1;
                     opb_slaves = 0;
                     opb_name = ['opb',num2str(opb_bus_inst)];
-                    opb_bridge_obj = xps_plb2opb(opb_name,opb_addr,opb_bridge_size);
+                    try
+                        opb_bridge_obj = xps_plb2opb(opb_name,opb_addr,opb_bridge_size);
+                    catch
+                        disp('Problem when generating plb2opb bridge: ')
+                        disp(lasterr);
+                        error('Error found during plb2opb bridge creation (xps_plb2opb).');
+                    end
                     opb_addr = get(opb_bridge_obj,'opb_addr_start');
                     xps_objs = [xps_objs,{opb_bridge_obj}];
                 else
@@ -520,7 +526,13 @@ if run_edkgen
                     opb_slaves = 0;
                     opb_name = ['opb',num2str(opb_bus_inst)];
                     opb_addr = hex2dec('01000000') + opb_bus_inst * opb_bridge_size;
-                    opb_bridge_obj = xps_opb2opb(opb_name,opb_addr,opb_bridge_size);
+                    try
+                        opb_bridge_obj = xps_opb2opb(opb_name,opb_addr,opb_bridge_size);
+                    catch
+                        disp('Problem when generating opb2opb bridge: ')
+                        disp(lasterr);
+                        error('Error found during opb2opb bridge creation (xps_opb2opb).');
+                    end
                     xps_objs = [xps_objs,{opb_bridge_obj}];
                 else
                     opb_slaves = opb_slaves + opb_cores;
