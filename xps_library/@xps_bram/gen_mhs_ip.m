@@ -63,3 +63,5 @@ opb_addr_end = opb_addr_start + 4*2^blk_obj.addr_width;
 
 str = [str, ' BUS_INTERFACE PORTA = ',inst_name,'_ramblk_portb\n'];
 str = [str, 'END\n\n'];
+
+set(blk_obj,'borph_info.base_address', opb_addr_start);

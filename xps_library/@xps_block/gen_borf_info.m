@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,loc] = gen_borf_info(loc,blk_obj)
+function [str,loc] = gen_borf_info(loc, blk_obj, real_address)
 str = '';
 
 short_name = regexp(blk_obj.simulink_name,'^\w*\/(.*)','tokens');
@@ -32,15 +32,20 @@ end
 
 inst_name = clear_name(short_name);
 
-% try 
-%   borph_info = blk_obj.borph_info;
-% catch
-%   borph_info = '';
-% end
-
-if blk_obj.size ~= 0 && blk_obj.mode ~= 0
-  str = [str, sprintf('%s %d %s %s\n', inst_name, blk_obj.mode, dec2hex(loc), dec2hex(blk_obj.size))];
-else
-  str = '';
+try 
+  borph_info = blk_obj.borph_info;
+catch
+  borph_info = {};
 end
+
+if isempty(borph_info)
+  str = '';
+else
+  if ~isempty(real_address)
+    str = [str, sprintf('%s %d %s %s\n', inst_name, borph_info.mode, dec2hex(real_address), dec2hex(borph_info.size))];
+  else
+    str = [str, sprintf('%s %d %s %s\n', inst_name, borph_info.mode, dec2hex(loc), dec2hex(blk_obj.size))];
+  end
+end
+
 loc = loc + 1;

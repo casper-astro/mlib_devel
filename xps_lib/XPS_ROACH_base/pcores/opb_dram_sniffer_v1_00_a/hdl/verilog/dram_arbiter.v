@@ -131,7 +131,7 @@ module dram_arbiter(
     .wr_data (slave0_ack),
     .wr_en   (master_cmd_valid && master_cmd_rnw),
     .rd_data (rd_sel),
-    .rd_en   (master_rd_valid && !new_strb)
+    .rd_en   (master_rd_valid && new_strb) /* cycle delay on next rd_sel */
     /* 
       rd_valid active for 2 cycles,
       only pop fifo on first part

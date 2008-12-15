@@ -53,5 +53,6 @@ interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
 b = set(b,'interfaces',interfaces);
 
 % borph parameters
-b = set(b, 'mode', 3);  % read/write mode
-b = set(b, 'size', 2^30);
+borph_info.size = 2^30;
+borph_info.mode = 3;
+b = set(b,'borph_info',borph_info);

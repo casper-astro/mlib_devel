@@ -60,7 +60,6 @@ module async_dram #(
     // -- Mem cmd ports -----------------
     input               Mem_Clk;
     input               Mem_Rst;
-    output              Mem_Error;
 //    output              Mem_Ready;
     input [31:0]        Mem_Cmd_Address;
     input               Mem_Cmd_RNW;

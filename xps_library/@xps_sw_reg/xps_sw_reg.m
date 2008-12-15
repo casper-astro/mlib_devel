@@ -71,9 +71,10 @@ b = set(b,'c_params',s.io_dir);
 % borf parameters
 switch get_param(blk_name,'io_dir')
     case 'From Processor'
-        b = set(b,'mode',3);
+        borph_info.mode = 3;
     case 'To Processor'
-        b = set(b,'mode',1);
+        borph_info.mode = 1;
 end
 
-b = set(b,'size',256);
+borph_info.size = 256;
+b = set(b,'borph_info',borph_info);

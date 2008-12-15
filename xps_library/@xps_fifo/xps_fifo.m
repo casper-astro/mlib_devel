@@ -64,12 +64,12 @@ b = set(b,'misc_ports',misc_ports);
 switch get_param(blk_name,'io_dir')
     case 'From Processor'
         b = set(b,'ip_name','opb_asyncfifo_ppc2simulink');
-		b = set(b,'c_params','in');
-		b = set(b,'mode',6);
+		    b = set(b,'c_params','in');
+		    borph_info.mode = 6;
     case 'To Processor'
-		b = set(b,'c_params','out');
-		b = set(b,'ip_name','opb_asyncfifo_simulink2ppc');
-		b = set(b,'mode',5);
+		    b = set(b,'c_params','out');
+		    b = set(b,'ip_name','opb_asyncfifo_simulink2ppc');
+		    borph_info.mode = 5;
 end % switch get_param('blk_name,'io_dir')
 
 %parameters
@@ -79,4 +79,5 @@ parameters.FIFO_WIDTH = num2str(eval_param(blk_name,'data_width'));
 b = set(b,'parameters',parameters);
 
 % borph parameters
-b = set(b,'size',512);
+borph_info.size = 512;
+b = set(b,'borph_info',borph_info);

@@ -49,7 +49,7 @@ if (strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
   s.clk_freq = 200;
 else
 	s.dimm = 1;
-  s.clk_freq = 266;
+  s.clk_freq = str2num(get_param(blk_name,'ip_clock'));
 end
 b = class(s, 'xps_dram', blk_obj);
 
@@ -75,8 +75,12 @@ interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
 b = set(b,'interfaces',interfaces);
 
 % borph parameters
-b = set(b, 'mode', 3);  % read/write mode
-b = set(b, 'size', 2^30);
+if xsg_hw_sys ~= 'ROACH'
+  borph_info.size = 2^30;
+  borph_info.mode = 3;
+  b = set(b,'borph_info',borph_info);
+end
+
 
 % misc ports
 misc_ports.ddr_clk = {1 'in' 'ddr2_user_clk'};

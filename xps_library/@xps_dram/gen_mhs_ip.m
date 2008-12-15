@@ -211,7 +211,7 @@ switch hw_sys
      str = [str, ' PARAMETER C_WIDE_DATA   = ', wide_data,                    '\n'];
      str = [str, ' PARAMETER C_HALF_BURST  = ', half_burst,                   '\n'];
      str = [str, ' PARAMETER BRAM_FIFOS    = ', skinny_buffers,               '\n'];
-     str = [str, ' PARAMETER DISABLE_TAG   = ', disable_tag,                  '\n'];
+     str = [str, ' PARAMETER TAG_BUFFER_EN = ', disable_tag,                  '\n'];
      str = [str, ' BUS_INTERFACE MEM_CMD   = ', inst_name, '_MEM_CMD',        '\n'];
      str = [str, ' BUS_INTERFACE DRAM_USER = dram_user_dimm', dimm, '_async', '\n'];
      str = [str, ' PORT Mem_Clk            = ', get(xsg_obj, 'clk_src'),      '\n'];

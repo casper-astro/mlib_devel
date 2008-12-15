@@ -20,6 +20,6 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,loc] = gen_borf_info(loc,blk_obj)
+function [str,loc] = gen_borf_info(loc, blk_obj, real_address)
 str = '';
 loc = loc;

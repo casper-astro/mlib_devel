@@ -545,6 +545,20 @@ if run_edkgen
         end
 
         try
+            if strcmp(hw_sys, 'ROACH')
+              str = gen_borf_info(n, blk_obj, opb_addr);
+            else
+              str = gen_borf_info(n, blk_obj, {});
+            end
+            fprintf(bof_fid,str);
+        catch
+            disp('Problem with block : ')
+            display(blk_obj);
+            disp(lasterr);
+            error('Error found during Peripheral generation in BOF (gen_borf_info).');
+        end
+
+        try
             [str, opb_addr, plb_addr] = gen_mhs_ip(blk_obj,opb_addr,plb_addr,plb_name,opb_name);
         catch
             disp('Problem with block : ')
@@ -555,17 +569,6 @@ if run_edkgen
         fprintf(mhs_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
         fprintf(mhs_fid,str);
         fprintf(mhs_fid,'\n');
-
-        try
-            str = gen_borf_info(n, blk_obj);
-            %str = gen_borf_info(n, blk_obj, n, hw_sys);
-            fprintf(bof_fid,str);
-        catch
-            disp('Problem with block : ')
-            display(blk_obj);
-            disp(lasterr);
-            error('Error found during Peripheral generation in BOF (gen_bof_info).');
-        end
 
         str = gen_m_core_info(blk_obj, str);
         fprintf(nfo_fid,['%% ',get(blk_obj,'simulink_name'),'\n']);
@@ -1044,21 +1047,17 @@ if run_software
         fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga4_',time_stamp,'.bof\n']);
     end % if strcmp(hw_sys, 'BEE2_usr')
     if strcmp(hw_sys, 'ROACH')
-        fprintf(win_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
-        fprintf(unix_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
-        fprintf(win_fid,['copy implementation\\cflash.ace ..\\bit_files\\',design_name,'_',time_stamp,'.ace\n']);
-        fprintf(unix_fid,['cp implementation/cflash.ace ../bit_files/',design_name,'_',time_stamp,'.ace\n']);
-        fprintf(win_fid, ...
-		['mkbof.exe -o implementation\\download.bof', ...
-		 ' -s core_info.tab -t 3 -v implementation\\download.bit\n']);
-        fprintf(unix_fid, ...
-		['./mkbof -o implementation/download.bof',... 
-		 ' -s core_info.tab -t 3 -v implementation/download.bit\n']);
-        fprintf(win_fid,['copy implementation\\download.bof' ...
-			 ' ..\\bit_files\\', design_name,'_', ...
-			 time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/', ...
-			  design_name,'_',time_stamp,'.bof\n']);	
+      fprintf(win_fid, ...
+	['mkbof.exe -o implementation\\system.bof', ...
+	 ' -s core_info.tab -t 3 -v implementation\\system.bin\n']);
+      fprintf(unix_fid, ...
+	['./mkbof -o implementation/system.bof',... 
+	 ' -s core_info.tab -t 3 -v implementation/system.bin\n']);
+      fprintf(win_fid,['copy implementation\\system.bof' ...
+		 ' ..\\bit_files\\', design_name,'_', ...
+		 time_stamp,'.bof\n']);
+      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', ...
+		  design_name,'_',time_stamp,'.bof\n']);	
     end
 
     fclose(win_fid);

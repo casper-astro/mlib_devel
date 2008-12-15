@@ -1,6 +1,6 @@
 module read_history_fifo #( 
-    parameter FIFO_DEPTH      = 128,
-    parameter FIFO_DEPTH_LOG2 = 7
+    parameter FIFO_DEPTH      = 256,
+    parameter FIFO_DEPTH_LOG2 = 8
   ) (
     input  clk,
     input  rst,
@@ -15,7 +15,11 @@ module read_history_fifo #(
   reg [FIFO_DEPTH_LOG2 - 1:0] head_index;
   reg [FIFO_DEPTH_LOG2 - 1:0] tail_index;
 
+  reg rd_data_reg;
+  assign rd_data = rd_data_reg;
+
   always @(posedge clk) begin
+    rd_data_reg <= fifo_data[tail_index]; /* add latency to improve timing */
     if (rst) begin
       head_index <= 0;
       tail_index <= 0;
@@ -33,6 +37,5 @@ module read_history_fifo #(
     end
   end
 
-  assign rd_data = fifo_data[tail_index];
 
 endmodule

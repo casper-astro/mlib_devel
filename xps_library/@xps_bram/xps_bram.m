@@ -40,5 +40,6 @@ b = set(b,'opb_address_offset',4*2^s.addr_width);
 % software parameters
 b = set(b,'c_params',num2str(2^s.addr_width));
 % borf parameters
-b = set(b,'mode',3);
-b = set(b,'size',4*2^s.addr_width);
+borph_info.size = 4*2^s.addr_width;
+borph_info.mode = 3;
+b = set(b,'borph_info',borph_info);

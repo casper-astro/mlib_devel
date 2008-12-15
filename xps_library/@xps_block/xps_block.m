@@ -48,10 +48,9 @@ if ~isempty(blk)
   s.parameters = {};
   s.soft_driver = {};
   s.c_params = '';
-  s.mode = 0;
-  s.size = 0;
   s.buses = {};
   s.interfaces = {};
+  s.borph_info = {};
 
   b = class(s,'xps_block');
 
@@ -165,10 +164,9 @@ else
   s.parameters = {};
   s.soft_driver = {};
   s.c_params = '';
-  s.mode = 0;
-  s.size = 0;
   s.buses = {};
   s.interfaces = {};
+  s.borph_info = {};
 
   b = class(s,'xps_block');
 end % if ~isempty(blk)

@@ -175,5 +175,13 @@ b = set(b,'misc_ports',misc_ports);
 b = set(b,'ext_ports',ext_ports);
 
 % borf parameters
-b = set(b,'mode',7);
-b = set(b,'size',1);
+switch s.hw_sys
+    case 'ROACH'
+        borph_info.size = hex2dec('4000');
+        borph_info.mode = 3;
+        b = set(b,'borph_info',borph_info);
+    otherwise
+        borph_info.size = 1;
+        borph_info.mode = 7;
+        b = set(b,'borph_info',borph_info);
+end
