@@ -45,6 +45,7 @@ module dram_arbiter(
     end else begin
       case (arb_state)
         STATE_ARB0: begin
+ //         if (slave0_cmd_valid || !master_fifo_ready) begin
           if (slave0_cmd_valid && !slave0_cmd_rnw || !master_fifo_ready) begin
             arb_state <= STATE_WAIT;
           end else if (slave1_cmd_valid) begin
@@ -80,14 +81,6 @@ module dram_arbiter(
 
   always @(posedge clk) begin
     prev_ack <= slave1_ack && slave1_cmd_valid;
-  end
-
-  always @(posedge clk) begin
-    if (STATE_ARB1 == arb_state || prev_ack) begin
-      $display("wtf - ready = %b", master_fifo_ready);
-      $display("foo - val = %b we %b, data %x addr %x be %x", slave1_cmd_valid, slave1_cmd_rnw, slave1_wr_data, slave1_cmd_addr, slave1_wr_be);
-      $display("moo - val = %b we %b, data %x addr %x be %x", master_cmd_valid, master_cmd_rnw, master_wr_data, master_cmd_addr, master_wr_be);
-    end
   end
 
   /* Controller signal assignments */
@@ -128,23 +121,28 @@ module dram_arbiter(
 
 
   wire rd_sel;
+  reg  rd_sel_z;
+  always @(posedge clk) begin
+    rd_sel_z <= rd_sel;
+  end
+
   read_history_fifo read_history_fifo_inst(
-    .clk     (clk),
-    .rst     (rst),
-    .wr_data (slave1_ack),
-    .wr_en   (master_cmd_valid && master_cmd_rnw),
-    .rd_data (rd_sel),
-    .rd_en   (master_rd_valid && new_strb) /* cycle delay on next rd_sel */
-    /* 
-      rd_valid active for 2 cycles,
-      only pop fifo on first part
-    */
+    .clk(clk),
+    .rst(rst),
+    .din(slave1_ack),
+    .rd_en(master_rd_valid && new_strb),
+    .wr_en(master_cmd_valid && master_cmd_rnw),
+    .dout(rd_sel),
+    .empty(),
+    .full(),
+    .overflow(),
+    .underflow()
   );
 
   assign slave0_rd_data = master_rd_data;
   assign slave1_rd_data = master_rd_data;
 
-  assign slave0_rd_valid = master_rd_valid && !rd_sel;
-  assign slave1_rd_valid = master_rd_valid && rd_sel;
+  assign slave0_rd_valid = master_rd_valid && !rd_sel_z;
+  assign slave1_rd_valid = master_rd_valid && rd_sel_z;
 
 endmodule
