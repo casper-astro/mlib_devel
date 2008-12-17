@@ -1,2 +1,590 @@
+Warning in TB_async_dram.async_dram.rd_data_fifo0.inst at time                    0: When using an asynchronous configuration for the FIFO Generator, the behavioral model is not cycle-accurate. You may wish to choose the structural simulation model instead of the behavioral model. This will ensure accurate behavi
+Warning in TB_async_dram.async_dram.transaction_fifo0.inst at time                    0: When using an asynchronous configuration for the FIFO Generator, the behavioral model is not cycle-accurate. You may wish to choose the structural simulation model instead of the behavioral model. This will ensure accurate behavi
 sys: reset cleared
+fab:write first data = 000000000000000000000000000000000000, address = 00000000
+                5060:async_dram: received write transaction 000000000000000000000000000000000000 masked with 3ffff to 00000000
+                5076:async_dram: reading transaction fifo
+                5082:async_dram: received write transaction ffffffffffffffffffffffffffffffffffff masked with 3ffff to 00000000
+fab:write second data = ffffffffffffffffffffffffffffffffffff, address = 00000000
+                5082:async_dram: reading transaction fifo
+dram: got write - addr = 00000000, data = 000000000000000000000000000000000000, be = 3ffff
+                5088:async_dram: issuing write of 000000000000000000000000000000000000 masked with 3ffff to 00000000
+dram: 2nd write - addr = 00000001, data = 000000000000000000000000000000000000, be = 3ffff
+                5100:async_dram: reading transaction fifo
+fab:write first data = 000100000001000000010000000100000001, address = 00000001
+                5104:async_dram: received write transaction 000100000001000000010000000100000001 masked with 3ffff to 00000001
+                5106:async_dram: reading transaction fifo
+dram: got write - addr = 00000000, data = ffffffffffffffffffffffffffffffffffff, be = 3ffff
+                5112:async_dram: issuing write of ffffffffffffffffffffffffffffffffffff masked with 3ffff to 00000000
+                5118:async_dram: reading transaction fifo
+dram: 2nd write - addr = 00000001, data = ffffffffffffffffffffffffffffffffffff, be = 3ffff
+                5124:async_dram: reading transaction fifo
+                5126:async_dram: received write transaction fffefffffffefffffffefffffffefffffffe masked with 3ffff to 00000001
+fab:write second data = fffefffffffefffffffefffffffefffffffe, address = 00000001
+                5130:async_dram: issuing write of 000100000001000000010000000100000001 masked with 3ffff to 00000001
+dram: got write - addr = 00000002, data = 000100000001000000010000000100000001, be = 3ffff
+dram: 2nd write - addr = 00000003, data = 000100000001000000010000000100000001, be = 3ffff
+                5142:async_dram: reading transaction fifo
+fab:write first data = 000200000002000000020000000200000002, address = 00000002
+                5148:async_dram: received write transaction 000200000002000000020000000200000002 masked with 3ffff to 00000002
+                5148:async_dram: reading transaction fifo
+                5154:async_dram: issuing write of fffefffffffefffffffefffffffefffffffe masked with 3ffff to 00000001
+dram: got write - addr = 00000002, data = fffefffffffefffffffefffffffefffffffe, be = 3ffff
+dram: 2nd write - addr = 00000003, data = fffefffffffefffffffefffffffefffffffe, be = 3ffff
+                5166:async_dram: reading transaction fifo
+                5170:async_dram: received write transaction fffdfffffffdfffffffdfffffffdfffffffd masked with 3ffff to 00000002
+fab:write second data = fffdfffffffdfffffffdfffffffdfffffffd, address = 00000002
+                5172:async_dram: reading transaction fifo
+                5178:async_dram: issuing write of 000200000002000000020000000200000002 masked with 3ffff to 00000002
+dram: got write - addr = 00000004, data = 000200000002000000020000000200000002, be = 3ffff
+dram: 2nd write - addr = 00000005, data = 000200000002000000020000000200000002, be = 3ffff
+                5184:async_dram: reading transaction fifo
+                5190:async_dram: reading transaction fifo
+fab:write first data = 000300000003000000030000000300000003, address = 00000003
+                5192:async_dram: received write transaction 000300000003000000030000000300000003 masked with 3ffff to 00000003
+dram: got write - addr = 00000004, data = fffdfffffffdfffffffdfffffffdfffffffd, be = 3ffff
+                5196:async_dram: issuing write of fffdfffffffdfffffffdfffffffdfffffffd masked with 3ffff to 00000002
+dram: 2nd write - addr = 00000005, data = fffdfffffffdfffffffdfffffffdfffffffd, be = 3ffff
+                5208:async_dram: reading transaction fifo
+                5214:async_dram: received write transaction fffcfffffffcfffffffcfffffffcfffffffc masked with 3ffff to 00000003
+fab:write second data = fffcfffffffcfffffffcfffffffcfffffffc, address = 00000003
+                5214:async_dram: reading transaction fifo
+dram: got write - addr = 00000006, data = 000300000003000000030000000300000003, be = 3ffff
+                5220:async_dram: issuing write of 000300000003000000030000000300000003 masked with 3ffff to 00000003
+dram: 2nd write - addr = 00000007, data = 000300000003000000030000000300000003, be = 3ffff
+                5232:async_dram: reading transaction fifo
+fab:write first data = 000400000004000000040000000400000004, address = 00000004
+                5236:async_dram: received write transaction 000400000004000000040000000400000004 masked with 3ffff to 00000004
+                5238:async_dram: reading transaction fifo
+dram: got write - addr = 00000006, data = fffcfffffffcfffffffcfffffffcfffffffc, be = 3ffff
+                5244:async_dram: issuing write of fffcfffffffcfffffffcfffffffcfffffffc masked with 3ffff to 00000003
+                5250:async_dram: reading transaction fifo
+dram: 2nd write - addr = 00000007, data = fffcfffffffcfffffffcfffffffcfffffffc, be = 3ffff
+                5256:async_dram: reading transaction fifo
+                5258:async_dram: received write transaction fffbfffffffbfffffffbfffffffbfffffffb masked with 3ffff to 00000004
+fab:write second data = fffbfffffffbfffffffbfffffffbfffffffb, address = 00000004
+                5262:async_dram: issuing write of 000400000004000000040000000400000004 masked with 3ffff to 00000004
+dram: got write - addr = 00000008, data = 000400000004000000040000000400000004, be = 3ffff
+dram: 2nd write - addr = 00000009, data = 000400000004000000040000000400000004, be = 3ffff
+                5274:async_dram: reading transaction fifo
+fab:write first data = 000500000005000000050000000500000005, address = 00000005
+                5280:async_dram: received write transaction 000500000005000000050000000500000005 masked with 3ffff to 00000005
+                5280:async_dram: reading transaction fifo
+                5286:async_dram: issuing write of fffbfffffffbfffffffbfffffffbfffffffb masked with 3ffff to 00000004
+dram: got write - addr = 00000008, data = fffbfffffffbfffffffbfffffffbfffffffb, be = 3ffff
+dram: 2nd write - addr = 00000009, data = fffbfffffffbfffffffbfffffffbfffffffb, be = 3ffff
+                5298:async_dram: reading transaction fifo
+                5302:async_dram: received write transaction fffafffffffafffffffafffffffafffffffa masked with 3ffff to 00000005
+mode: MODE_WRITE complete
+fab:write second data = fffafffffffafffffffafffffffafffffffa, address = 00000005
+                5304:async_dram: reading transaction fifo
+                5310:async_dram: issuing write of 000500000005000000050000000500000005 masked with 3ffff to 00000005
+dram: got write - addr = 0000000a, data = 000500000005000000050000000500000005, be = 3ffff
+dram: 2nd write - addr = 0000000b, data = 000500000005000000050000000500000005, be = 3ffff
+                5316:async_dram: reading transaction fifo
+                5322:async_dram: reading transaction fifo
+fab:read address = 00000000
+                5324:async_dram: received read transaction for 00000000
+dram: got write - addr = 0000000a, data = fffafffffffafffffffafffffffafffffffa, be = 3ffff
+                5328:async_dram: issuing write of fffafffffffafffffffafffffffafffffffa masked with 3ffff to 00000005
+dram: 2nd write - addr = 0000000b, data = fffafffffffafffffffafffffffafffffffa, be = 3ffff
+                5340:async_dram: reading transaction fifo
+                5346:async_dram: received read transaction for 00000001
+fab:read address = 00000001
+                5346:async_dram: reading transaction fifo
+dram: outputting read data, addr = 00000000, data = ffffffffffffffffffffffffffffffffffff
+                5352:async_dram: issuing read of 00000000
+dram: outputting read data, addr = 00000001, data = ffffffffffffffffffffffffffffffffffff
+                5364:async_dram: reading transaction fifo
+fab:read address = 00000002
+                5368:async_dram: received read transaction for 00000002
+                5370:async_dram: reading transaction fifo
+dram: outputting read data, addr = 00000002, data = fffefffffffefffffffefffffffefffffffe
+                5376:async_dram: issuing read of 00000001
+                5382:async_dram: reading transaction fifo
+dram: outputting read data, addr = 00000003, data = fffefffffffefffffffefffffffefffffffe
+                5388:async_dram: reading transaction fifo
+                5390:async_dram: received read transaction for 00000003
+fab:read address = 00000003
+                5394:async_dram: issuing read of 00000002
+dram: outputting read data, addr = 00000004, data = fffdfffffffdfffffffdfffffffdfffffffd
+dram: outputting read data, addr = 00000005, data = fffdfffffffdfffffffdfffffffdfffffffd
+                5406:async_dram: reading transaction fifo
+fab:read address = 00000004
+                5412:async_dram: received read transaction for 00000004
+                5412:async_dram: reading transaction fifo
+                5418:async_dram: issuing read of 00000003
+dram: outputting read data, addr = 00000006, data = fffcfffffffcfffffffcfffffffcfffffffc
+dram: outputting read data, addr = 00000007, data = fffcfffffffcfffffffcfffffffcfffffffc
+                5430:async_dram: reading transaction fifo
+                5434:async_dram: received read transaction for 00000005
+fab:read address = 00000005
+                5436:async_dram: reading transaction fifo
+                5442:async_dram: issuing read of 00000004
+dram: outputting read data, addr = 00000008, data = fffbfffffffbfffffffbfffffffbfffffffb
+dram: outputting read data, addr = 00000009, data = fffbfffffffbfffffffbfffffffbfffffffb
+                5448:async_dram: received read data ffffffffffffffffffffffffffffffffffff
+                5448:async_dram: reading transaction fifo
+                5454:async_dram: reading transaction fifo
+                5454:async_dram: received read data ffffffffffffffffffffffffffffffffffff
+fab:read address = 00000006
+dram: outputting read data, addr = 0000000a, data = fffafffffffafffffffafffffffafffffffa
+                5460:async_dram: issuing read of 00000005
+dram: outputting read data, addr = 0000000b, data = fffafffffffafffffffafffffffafffffffa
+                5472:async_dram: received read data fffefffffffefffffffefffffffefffffffe
+fab:read address = 00000006
+                5478:async_dram: received read data fffefffffffefffffffefffffffefffffffe
+                5490:async_dram: received read data fffdfffffffdfffffffdfffffffdfffffffd
+                5496:async_dram: received read data fffdfffffffdfffffffdfffffffdfffffffd
+fab:read address = 00000006
+async_dram: reading return data from read data fifo
+                5514:async_dram: received read data fffcfffffffcfffffffcfffffffcfffffffc
+                5520:async_dram: received read data fffcfffffffcfffffffcfffffffcfffffffc
+async_dram: reading return data from read data fifo
+fab:read address = 00000006
+                5538:async_dram: received read data fffbfffffffbfffffffbfffffffbfffffffb
+fab:read address = 00000006
+async_dram: reading return data from read data fifo
+                5544:async_dram: received read data fffbfffffffbfffffffbfffffffbfffffffb
+                5556:async_dram: received read data fffafffffffafffffffafffffffafffffffa
+                5562:async_dram: received read data fffafffffffafffffffafffffffafffffffa
+async_dram: reading return data from read data fifo
+fab:read address = 00000006
+fab:read address = 00000006
+async_dram: reading return data from read data fifo
+async_dram: reading return data from read data fifo
+fab:read address = 00000006
+fab:read address = 00000006
+async_dram: reading return data from read data fifo
+async_dram: reading return data from read data fifo
+fab:read address = 00000006
+fab:read address = 00000006
+async_dram: reading return data from read data fifo
+async_dram: reading return data from read data fifo
+fab:read address = 00000006
+fab:read address = 00000006
+async_dram: reading return data from read data fifo
+async_dram: reading return data from read data fifo
+fab:read address = 00000006
+fab:read address = 00000006
+async_dram: reading return data from read data fifo
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
+fab:read address = 00000006
 FAILED: simulation timed out

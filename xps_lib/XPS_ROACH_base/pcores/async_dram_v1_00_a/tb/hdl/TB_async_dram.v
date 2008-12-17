@@ -68,7 +68,6 @@ module TB_async_dram();
         .Mem_Rd_Tag      (Mem_Rd_Tag),
         .Mem_Cmd_Tag     (Mem_Cmd_Tag),
 
-    .dram_reset       (),
     .dram_clk         (dram_clk),
     .dram_data_o      (dram_data_o),
     .dram_byte_enable (dram_byte_enable),
