@@ -30,6 +30,7 @@ module async_dram #(
 
     // -- DDR2 ports ---------------
     dram_clk,
+    dram_reset,
     dram_data_o,
     dram_byte_enable,
     dram_data_i,
@@ -39,6 +40,7 @@ module async_dram #(
     dram_cmd_en,
     dram_ready
     );
+    output dram_reset;
 
     //sys ports
     input                   sys_rst;
@@ -76,6 +78,7 @@ module async_dram #(
     //registers and signals
 
     reg			        dram_rst;
+    assign dram_reset = dram_rst;
 
     reg                 Mem_Cmd_Valid_d1;
     reg                 dram_data_valid_d1, dram_data_i_d1;
