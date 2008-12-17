@@ -38,7 +38,6 @@ module dram_arbiter(
   /* This state machine is hand optimized to remove the need for decoding */
   // synthesis attribute fsm_extract arb_state is no; 
 
-  reg [1:0] prev_arb;
 
   always @(posedge clk) begin
     if (rst) begin
@@ -46,24 +45,17 @@ module dram_arbiter(
     end else begin
       case (arb_state)
         STATE_ARB0: begin
-          if (!master_fifo_ready || slave0_cmd_valid) begin
+          if (slave0_cmd_valid && !slave0_cmd_rnw || !master_fifo_ready) begin
             arb_state <= STATE_WAIT;
-            prev_arb  <= {1'b0, slave0_cmd_valid};
           end else if (slave1_cmd_valid) begin
             arb_state <= STATE_ARB1;
           end
         end
         STATE_ARB1: begin
-          if (!master_fifo_ready || slave1_cmd_valid) begin
-            arb_state <= STATE_WAIT;
-            prev_arb  <= {slave1_cmd_valid, 1'b0};
-          end else if (slave0_cmd_valid) begin
-            arb_state <= STATE_ARB0;
-          end
+          arb_state <= STATE_WAIT;
         end
         STATE_WAIT: begin
           if (master_fifo_ready) begin
-            prev_arb  <= 2'b00;
             case ({slave1_cmd_valid, slave0_cmd_valid})
               2'b00: begin
                 arb_state <= STATE_ARB0;
@@ -75,16 +67,26 @@ module dram_arbiter(
                 arb_state <= STATE_ARB1;
               end
               2'b11: begin
-                if (prev_arb[0]) begin
-                  arb_state <= STATE_ARB1;
-                end else begin
-                  arb_state <= STATE_ARB0;
-                end
+                arb_state <= STATE_ARB1;
               end
             endcase
           end
         end
       endcase
+    end
+  end
+
+  reg prev_ack;
+
+  always @(posedge clk) begin
+    prev_ack <= slave1_ack && slave1_cmd_valid;
+  end
+
+  always @(posedge clk) begin
+    if (STATE_ARB1 == arb_state || prev_ack) begin
+      $display("wtf - ready = %b", master_fifo_ready);
+      $display("foo - val = %b we %b, data %x addr %x be %x", slave1_cmd_valid, slave1_cmd_rnw, slave1_wr_data, slave1_cmd_addr, slave1_wr_be);
+      $display("moo - val = %b we %b, data %x addr %x be %x", master_cmd_valid, master_cmd_rnw, master_wr_data, master_cmd_addr, master_wr_be);
     end
   end
 
@@ -95,10 +97,10 @@ module dram_arbiter(
 
 
   assign master_cmd_valid = slave0_ack && slave0_cmd_valid || slave1_ack && slave1_cmd_valid;
-  assign master_cmd_rnw   = slave0_ack ? slave0_cmd_rnw  : slave1_cmd_rnw;
-  assign master_cmd_addr  = slave0_ack ? slave0_cmd_addr : slave1_cmd_addr;
-  assign master_wr_data   = slave0_ack || prev_arb[0] ? slave0_wr_data  : slave1_wr_data;
-  assign master_wr_be     = slave0_ack || prev_arb[0] ? slave0_wr_be    : slave1_wr_be;
+  assign master_cmd_rnw   = slave1_ack ? slave1_cmd_rnw  : slave0_cmd_rnw;
+  assign master_cmd_addr  = slave1_ack ? slave1_cmd_addr : slave0_cmd_addr;
+  assign master_wr_data   = slave1_ack || prev_ack ? slave1_wr_data  : slave0_wr_data;
+  assign master_wr_be     = slave1_ack || prev_ack ? slave1_wr_be    : slave0_wr_be;
 
   /*
   always @(*) begin
@@ -125,10 +127,11 @@ module dram_arbiter(
   end
 
 
+  wire rd_sel;
   read_history_fifo read_history_fifo_inst(
     .clk     (clk),
     .rst     (rst),
-    .wr_data (slave0_ack),
+    .wr_data (slave1_ack),
     .wr_en   (master_cmd_valid && master_cmd_rnw),
     .rd_data (rd_sel),
     .rd_en   (master_rd_valid && new_strb) /* cycle delay on next rd_sel */
@@ -141,7 +144,7 @@ module dram_arbiter(
   assign slave0_rd_data = master_rd_data;
   assign slave1_rd_data = master_rd_data;
 
-  assign slave0_rd_valid = master_rd_valid && rd_sel;
-  assign slave1_rd_valid = master_rd_valid && !rd_sel;
+  assign slave0_rd_valid = master_rd_valid && !rd_sel;
+  assign slave1_rd_valid = master_rd_valid && rd_sel;
 
 endmodule

@@ -49,7 +49,9 @@ module dram_controller #(
       case (dram_state)
         READY: begin
           if (dram_cmd_valid_real) begin
-            dram_state <= WAIT;
+            if (!dram_cmd_rnw) begin
+              dram_state <= WAIT;
+            end
           end
         end
         WAIT: begin

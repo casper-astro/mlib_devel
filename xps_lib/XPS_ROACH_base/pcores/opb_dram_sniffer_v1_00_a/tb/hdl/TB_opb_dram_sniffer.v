@@ -101,6 +101,7 @@ module TB_opb_qdr_sniffer();
 
     .dram_clk        (dram_clk),
     .dram_rst        (dram_rst),
+    .phy_ready       (1'b1),
     .dram_cmd_addr   (dram_cmd_addr),
     .dram_cmd_rnw    (dram_cmd_rnw),
     .dram_cmd_valid  (dram_cmd_valid),
@@ -392,14 +393,14 @@ module TB_opb_qdr_sniffer();
       if (!first_read) begin
         if (app_rd_data !== ~test_app_rd_data) begin
           $display("ERROR: fabric interface data mismatch - got %x, expected %x", app_rd_data, ~test_app_rd_data);
-          //$finish;
+          $finish;
         end
         read_progress <= read_progress + 1;
       end else begin
         if (app_rd_valid) begin
           if (app_rd_data !== test_app_rd_data) begin
             $display("ERROR: fabric interface data mismatch - got %x, expected %x", app_rd_data, test_app_rd_data);
-           // $finish;
+            $finish;
           end
           first_read <= 1'b0;
         end
