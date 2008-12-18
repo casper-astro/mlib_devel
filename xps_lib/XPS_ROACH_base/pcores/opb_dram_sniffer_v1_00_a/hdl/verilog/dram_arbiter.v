@@ -38,6 +38,10 @@ module dram_arbiter(
   /* This state machine is hand optimized to remove the need for decoding */
   // synthesis attribute fsm_extract arb_state is no; 
 
+  wire rd_history_afull;
+
+  wire arb_ready;
+  assign arb_ready = master_fifo_ready && !rd_history_afull;
 
   always @(posedge clk) begin
     if (rst) begin
@@ -45,8 +49,7 @@ module dram_arbiter(
     end else begin
       case (arb_state)
         STATE_ARB0: begin
- //         if (slave0_cmd_valid || !master_fifo_ready) begin
-          if (slave0_cmd_valid && !slave0_cmd_rnw || !master_fifo_ready) begin
+          if (slave0_cmd_valid && !slave0_cmd_rnw || !arb_ready) begin
             arb_state <= STATE_WAIT;
           end else if (slave1_cmd_valid) begin
             arb_state <= STATE_ARB1;
@@ -56,7 +59,7 @@ module dram_arbiter(
           arb_state <= STATE_WAIT;
         end
         STATE_WAIT: begin
-          if (master_fifo_ready) begin
+          if (arb_ready) begin
             case ({slave1_cmd_valid, slave0_cmd_valid})
               2'b00: begin
                 arb_state <= STATE_ARB0;
@@ -104,8 +107,7 @@ module dram_arbiter(
   
   /* Read response collection/generation */
 
-  /* read history fifo - 1-bit 128 entries fwft */
-  /* TODO: check this size, too small == errors (there is no overflow checking) */
+  /* read history fifo - 1-bit 1024 entries fwft */
 
   reg new_strb;
 
@@ -128,15 +130,14 @@ module dram_arbiter(
 
   read_history_fifo read_history_fifo_inst(
     .clk(clk),
-    .rst(rst),
+    .srst(rst),
     .din(slave1_ack),
     .rd_en(master_rd_valid && new_strb),
     .wr_en(master_cmd_valid && master_cmd_rnw),
     .dout(rd_sel),
     .empty(),
-    .full(),
-    .overflow(),
-    .underflow()
+    .almost_full(rd_history_afull),
+    .full()
   );
 
   assign slave0_rd_data = master_rd_data;
