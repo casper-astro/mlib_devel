@@ -114,10 +114,10 @@ module async_dram #(
     always @ (posedge dram_clk)
     begin
         if( dram_cmd_en && ~dram_rnw ) begin 
-            $display($time, ":async_dram: issuing write of 0x%x masked with %x to 0x%x", dram_data_o, dram_byte_enable, dram_address);
+            $display($time, ": async_dram: issuing write of 0x%x masked with %x to 0x%x", dram_data_o, dram_byte_enable, dram_address);
         end
         if( dram_cmd_en && dram_rnw ) begin 
-            $display($time, ":async_dram: issuing read of 0x%x",dram_address);
+            $display($time, ": async_dram: issuing read of 0x%x",dram_address);
         end
     end
 `endif
@@ -159,8 +159,8 @@ module async_dram #(
 `ifdef DESPERATE_DEBUG
     always @ (posedge dram_clk) 
     begin
-        if( add_fifo_re ) begin $display($time, " :Read transaction add = 0x%x txn = %x", add_fifo_output[(32+1)-1:1], add_fifo_output[0]); end
-        if( dat_fifo_re ) begin $display($time, " :Read data. Data = 0x%x, Mask = 0x%x", dat_fifo_output[(144+18)-1:18], dat_fifo_output[17:0]); end
+        if( add_fifo_re ) begin $display($time, ": async_dram: Read transaction add = 0x%x txn = %x", add_fifo_output[(32+1)-1:1], add_fifo_output[0]); end
+        if( dat_fifo_re ) begin $display($time, ": async_dram: Read data. Data = 0x%x, Mask = 0x%x", dat_fifo_output[(144+18)-1:18], dat_fifo_output[17:0]); end
     end
 `endif
 
@@ -173,7 +173,7 @@ module async_dram #(
     begin
         if(dram_data_valid)
         begin
-            $display($time,":async_dram: received read data %x",dram_data_i);
+            $display($time,": async_dram: received read data %x",dram_data_i);
         end
     end
 `endif
@@ -188,54 +188,49 @@ module async_dram #(
 
     generate
         if(C_WIDE_DATA == 0)
-        begin:asdf
+        begin:toggle_narrow
             always @( posedge Mem_Clk )
             begin
                 if(mem_reset) 
                 begin write_toggle <= 1'b0; 
                 end else begin 
-                    if( Mem_Cmd_Valid) 
+                    if( Mem_Cmd_Valid && ~Mem_Cmd_RNW) 
                     begin 
-                        if( Mem_Cmd_RNW )
-                        begin
-                            write_toggle <= 1'b0;
-                        end else begin
-                            write_toggle <= ~write_toggle; 
-                        end
+                        write_toggle <= ~write_toggle; 
                     end
                 end
             end
-        end else begin:asdf1
+        end else begin:toggle_wide
             always @ (posedge Mem_Clk ) begin write_toggle <= 1'b1; end
         end
     endgenerate
 
-    //ack if space in FIFOs
     assign Mem_Cmd_Ack = ~add_fifo_almost_full & ~dat_fifo_almost_full;
     
     assign add_fifo_input[(32+1)-1:0] = {Mem_Cmd_Address, Mem_Cmd_RNW};
 
     generate
         if( C_WIDE_DATA == 0 ) 
-        begin 
+        begin:data_narrow 
             assign dat_fifo_input[(144+18)-1:0] = {Mem_Wr_Din[144-1:0], Mem_Wr_BE[18-1:0]}; 
-        end else begin
+        end else begin:data_wide
             assign dat_fifo_input[(144*2+18*2)-1:0] = {Mem_Wr_Din[(144*2)-1:144], Mem_Wr_BE[(18*2)-1:18], Mem_Wr_Din[143:0], Mem_Wr_BE[17:0]};
         end
     endgenerate
     
-    //register transaction on read or second write
-    assign dat_fifo_we = Mem_Cmd_Valid & ~Mem_Cmd_RNW & Mem_Cmd_Ack;
+    //record data on a write
+    assign dat_fifo_we = Mem_Cmd_Ack & Mem_Cmd_Valid & ~Mem_Cmd_RNW;
+    //record transaction on a read or second write
     assign add_fifo_we = Mem_Cmd_Ack & Mem_Cmd_Valid & ((write_toggle & ~Mem_Cmd_RNW) | Mem_Cmd_RNW);
 
 `ifdef DEBUG
     always @ (posedge Mem_Clk)
     begin
         if(Mem_Cmd_Valid && ~Mem_Cmd_RNW) begin 
-            $display($time,":async_dram: received write transaction %x masked with %x to %x", Mem_Wr_Din, Mem_Wr_BE, Mem_Cmd_Address);
+            $display($time,": async_dram: received write transaction %x masked with %x to %x", Mem_Wr_Din, Mem_Wr_BE, Mem_Cmd_Address);
         end
         if(Mem_Cmd_Valid && Mem_Cmd_RNW) begin 
-            $display($time,":async_dram: received read transaction for %x",Mem_Cmd_Address);
+            $display($time,": async_dram: received read transaction for %x",Mem_Cmd_Address);
         end
     end
 `endif
@@ -255,7 +250,7 @@ module async_dram #(
     begin
         if( Mem_Rd_Valid)
         begin
-            $display("async_dram: sending back %x",Mem_Rd_Dout);
+            $display($time,": async_dram: sending back %x",Mem_Rd_Dout);
         end
     end
 `endif
