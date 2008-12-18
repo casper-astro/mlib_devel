@@ -113,14 +113,17 @@ module async_dram #(
 `ifdef DEBUG
     always @ (posedge dram_clk)
     begin
-        if(dram_cmd_en && ~dram_rnw) begin 
-            $display($time, ":async_dram: issuing write of %x masked with %x to %x", dram_data_o, dram_byte_enable, dram_address);
+        if( dram_cmd_en && ~dram_rnw ) begin 
+            $display($time, ":async_dram: issuing write of 0x%x masked with %x to 0x%x", dram_data_o, dram_byte_enable, dram_address);
         end
-        if(dram_cmd_en && dram_rnw) begin 
-            $display($time, ":async_dram: issuing read of %x",dram_address);
+        if( dram_cmd_en && dram_rnw ) begin 
+            $display($time, ":async_dram: issuing read of 0x%x",dram_address);
         end
     end
 `endif
+    
+    wire rnw;
+    assign rnw = add_fifo_output[0];
 
     //cross clk domain for reset
     always @ ( posedge dram_clk ) begin dram_rst <= Mem_Rst | sys_rst; end
@@ -129,8 +132,8 @@ module async_dram #(
     assign dram_data_o = dat_fifo_output[(144+18)-1:18];
     assign dram_byte_enable = dat_fifo_output[(18)-1:0];
     assign dram_address = add_fifo_output[(32+1)-1:1];
-    assign dram_rnw = add_fifo_output[0];
-    assign dram_cmd_en = ~add_fifo_empty;
+    assign dram_rnw = rnw;
+    assign dram_cmd_en = ~add_fifo_empty | second_write;
 
     reg second_write;
     always @ (posedge dram_clk) 
@@ -142,16 +145,16 @@ module async_dram #(
             second_write <= 1'b0;
             if( ~second_write ) 
             begin
-               if( ~add_fifo_empty & dram_ready & ~add_fifo_output) 
+               if( ~add_fifo_empty & dram_ready & ~rnw ) 
                begin
                    second_write <= 1'b1;
                end 
             end  
         end 
     end
-    
-    assign add_fifo_re = (~add_fifo_empty & dram_ready) & (~second_write | add_fifo_output[0]);
-    assign dat_fifo_re = (~add_fifo_empty & dram_ready) | second_write ;
+   
+    assign add_fifo_re = (~add_fifo_empty & dram_ready) & (second_write | rnw);
+    assign dat_fifo_re = (~add_fifo_empty | second_write) & dram_ready & ~rnw;
 
     always @ (posedge dram_clk) 
     begin
