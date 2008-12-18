@@ -188,7 +188,7 @@ module async_dram #(
 
     generate
         if(C_WIDE_DATA == 0)
-        begin
+        begin:asdf
             always @( posedge Mem_Clk )
             begin
                 if(mem_reset) 
@@ -205,7 +205,7 @@ module async_dram #(
                     end
                 end
             end
-        end else begin
+        end else begin:asdf1
             always @ (posedge Mem_Clk ) begin write_toggle <= 1'b1; end
         end
     endgenerate
@@ -225,8 +225,8 @@ module async_dram #(
     endgenerate
     
     //register transaction on read or second write
-    assign dat_fifo_we = Mem_Cmd_Valid & ~Mem_Cmd_RNW;
-    assign add_fifo_we = Mem_Cmd_Valid & ((write_toggle & ~Mem_Cmd_RNW) | Mem_Cmd_RNW);
+    assign dat_fifo_we = Mem_Cmd_Valid & ~Mem_Cmd_RNW & Mem_Cmd_Ack;
+    assign add_fifo_we = Mem_Cmd_Ack & Mem_Cmd_Valid & ((write_toggle & ~Mem_Cmd_RNW) | Mem_Cmd_RNW);
 
 `ifdef DEBUG
     always @ (posedge Mem_Clk)
