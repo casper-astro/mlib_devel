@@ -14,7 +14,7 @@ LOG_FILE=./gen
 INCLUDE=-I$(SRC_DIR) -I$(TB_DIR) -I$(LIB_DIR)
 
 SRC=$(SRC_DIR)/$(MODULE).v 
-TB_SRC=$(TB_DIR)/TB_$(MODULE).v $(SRC_DIR)/rd_fifo.v $(SRC_DIR)/transaction_fifo.v $(SRC_DIR)/operation_fifo.v $(TB_DIR)/dram_controller.v
+TB_SRC=$(TB_DIR)/TB_$(MODULE).v $(SRC_DIR)/rd_fifo.v $(SRC_DIR)/address_fifo_bram.v $(SRC_DIR)/data_fifo_bram.v $(TB_DIR)/dram_controller.v
 LIB_SRC=$(LIB_DIR)/FIFO_GENERATOR_V4_3.v 
 
 TB_OBJ=$(GEN_DIR)/TB_$(MODULE).o 
