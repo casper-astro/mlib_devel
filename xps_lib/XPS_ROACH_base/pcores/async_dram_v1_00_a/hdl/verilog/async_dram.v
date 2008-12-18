@@ -86,9 +86,6 @@ module async_dram #(
 
     reg write_toggle;
 
-    // fifo control
-    reg                 rd_rd_data_fifo, rd_rd_data_fifo_d1;
-
     //fifo interface
 
     //data and byte enable fifo
@@ -143,9 +140,9 @@ module async_dram #(
             second_write <= 1'b0;
         end else begin
             second_write <= 1'b0;
-            if( ~second_write ) 
+            if( !second_write ) 
             begin
-               if( ~add_fifo_empty & dram_ready & ~rnw ) 
+               if( !add_fifo_empty & dram_ready & !rnw ) 
                begin
                    second_write <= 1'b1;
                end 
@@ -153,14 +150,14 @@ module async_dram #(
         end 
     end
    
-    assign add_fifo_re = (~add_fifo_empty & dram_ready) & (second_write | rnw);
-    assign dat_fifo_re = (~add_fifo_empty | second_write) & dram_ready & ~rnw;
+    assign add_fifo_re = (!add_fifo_empty & dram_ready) & (second_write | rnw);
+    assign dat_fifo_re = (!add_fifo_empty & dram_ready & !rnw) | second_write;
 
 `ifdef DESPERATE_DEBUG
     always @ (posedge dram_clk) 
     begin
-        if( add_fifo_re ) begin $display($time, ": async_dram: Read transaction add = 0x%x txn = %x", add_fifo_output[(32+1)-1:1], add_fifo_output[0]); end
-        if( dat_fifo_re ) begin $display($time, ": async_dram: Read data. Data = 0x%x, Mask = 0x%x", dat_fifo_output[(144+18)-1:18], dat_fifo_output[17:0]); end
+        if( add_fifo_re ) begin $display($time, ": async_dram: Read address fifo. add = 0x%x txn = %x", add_fifo_output[(32+1)-1:1], add_fifo_output[0]); end
+        if( dat_fifo_re ) begin $display($time, ": async_dram: Read data fifo. data = 0x%x, Mask = 0x%x", dat_fifo_output[(144+18)-1:18], dat_fifo_output[17:0]); end
     end
 `endif
 
@@ -186,37 +183,36 @@ module async_dram #(
 
     always @ (posedge Mem_Clk) begin mem_reset <= sys_rst | Mem_Rst; end
 
-    generate
-        if(C_WIDE_DATA == 0)
-        begin:toggle_narrow
-            always @( posedge Mem_Clk )
-            begin
-                if(mem_reset) 
-                begin write_toggle <= 1'b0; 
-                end else begin 
-                    if( Mem_Cmd_Valid && ~Mem_Cmd_RNW) 
-                    begin 
-                        write_toggle <= ~write_toggle; 
-                    end
+generate if(C_WIDE_DATA == 0) 
+    begin:toggle_narrow
+        always @( posedge Mem_Clk )
+        begin
+            if(mem_reset) 
+            begin write_toggle <= 1'b0; 
+            end else begin 
+                if( Mem_Cmd_Valid && ~Mem_Cmd_RNW) 
+                begin 
+                    write_toggle <= ~write_toggle; 
                 end
             end
-        end else begin:toggle_wide
-            always @ (posedge Mem_Clk ) begin write_toggle <= 1'b1; end
         end
-    endgenerate
+    end else begin:toggle_wide
+        always @ (posedge Mem_Clk ) begin write_toggle <= 1'b1; end
+    end
+endgenerate
 
     assign Mem_Cmd_Ack = ~add_fifo_almost_full & ~dat_fifo_almost_full;
     
     assign add_fifo_input[(32+1)-1:0] = {Mem_Cmd_Address, Mem_Cmd_RNW};
 
-    generate
-        if( C_WIDE_DATA == 0 ) 
-        begin:data_narrow 
-            assign dat_fifo_input[(144+18)-1:0] = {Mem_Wr_Din[144-1:0], Mem_Wr_BE[18-1:0]}; 
-        end else begin:data_wide
-            assign dat_fifo_input[(144*2+18*2)-1:0] = {Mem_Wr_Din[(144*2)-1:144], Mem_Wr_BE[(18*2)-1:18], Mem_Wr_Din[143:0], Mem_Wr_BE[17:0]};
-        end
-    endgenerate
+generate
+    if( C_WIDE_DATA == 0 ) 
+    begin:data_narrow 
+        assign dat_fifo_input[(144+18)-1:0] = {Mem_Wr_Din[144-1:0], Mem_Wr_BE[18-1:0]}; 
+    end else begin:data_wide
+        assign dat_fifo_input[(144*2+18*2)-1:0] = {Mem_Wr_Din[(144*2)-1:144], Mem_Wr_BE[(18*2)-1:18], Mem_Wr_Din[143:0], Mem_Wr_BE[17:0]};
+    end
+endgenerate
     
     //record data on a write
     assign dat_fifo_we = Mem_Cmd_Ack & Mem_Cmd_Valid & ~Mem_Cmd_RNW;
