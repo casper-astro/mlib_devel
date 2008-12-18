@@ -25,6 +25,7 @@ module TB_async_dram();
   wire          dram_data_valid;
   wire   [31:0] dram_address;
   wire          dram_rnw;
+  wire          dram_reset;
   wire          dram_cmd_en;
   wire          dram_ready;
 
@@ -69,6 +70,7 @@ module TB_async_dram();
         .Mem_Cmd_Tag     (Mem_Cmd_Tag),
 
     .dram_clk         (dram_clk),
+    .dram_reset       (dram_reset),
     .dram_data_o      (dram_data_o),
     .dram_byte_enable (dram_byte_enable),
     .dram_data_i      (dram_data_i),
