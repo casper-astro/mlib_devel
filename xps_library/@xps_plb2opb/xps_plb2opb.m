@@ -29,7 +29,7 @@ s.addr_size = addr_size;
 s.opb_clk = 'sys_clk';
 s.plb_clk = 'sys_clk';
 
-b = class(s,'xps_plb2opb',xps_block([]));
+b = class(s,'xps_plb2opb',xps_block({},{}));
 b = set(b, 'type','xps_plb2opb');
 b = set(b, 'plb_address_offset',addr_size);
 b = set(b, 'simulink_name',['PLB to OPB bridge added at 0x',dec2hex(s.opb_addr_start)]);
