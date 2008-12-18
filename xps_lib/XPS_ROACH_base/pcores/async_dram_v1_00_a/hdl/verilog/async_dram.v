@@ -121,7 +121,8 @@ module async_dram #(
         end
     end
 `endif
-    
+
+    reg second_write;
     wire rnw;
     assign rnw = add_fifo_output[0];
 
@@ -135,7 +136,6 @@ module async_dram #(
     assign dram_rnw = rnw;
     assign dram_cmd_en = ~add_fifo_empty | second_write;
 
-    reg second_write;
     always @ (posedge dram_clk) 
     begin 
         if( dram_reset )
@@ -156,11 +156,13 @@ module async_dram #(
     assign add_fifo_re = (~add_fifo_empty & dram_ready) & (second_write | rnw);
     assign dat_fifo_re = (~add_fifo_empty | second_write) & dram_ready & ~rnw;
 
+`ifdef DESPERATE_DEBUG
     always @ (posedge dram_clk) 
     begin
         if( add_fifo_re ) begin $display($time, " :Read transaction add = 0x%x txn = %x", add_fifo_output[(32+1)-1:1], add_fifo_output[0]); end
         if( dat_fifo_re ) begin $display($time, " :Read data. Data = 0x%x, Mask = 0x%x", dat_fifo_output[(144+18)-1:18], dat_fifo_output[17:0]); end
     end
+`endif
 
     //read data in
     assign rd_data_fifo_we = dram_data_valid;
@@ -213,17 +215,15 @@ module async_dram #(
     
     assign add_fifo_input[(32+1)-1:0] = {Mem_Cmd_Address, Mem_Cmd_RNW};
 
-/*    generate
-    begin
+    generate
         if( C_WIDE_DATA == 0 ) 
         begin 
-        */
             assign dat_fifo_input[(144+18)-1:0] = {Mem_Wr_Din[144-1:0], Mem_Wr_BE[18-1:0]}; 
-/*        end else begin
+        end else begin
             assign dat_fifo_input[(144*2+18*2)-1:0] = {Mem_Wr_Din[(144*2)-1:144], Mem_Wr_BE[(18*2)-1:18], Mem_Wr_Din[143:0], Mem_Wr_BE[17:0]};
         end
     endgenerate
-  */  
+    
     //register transaction on read or second write
     assign dat_fifo_we = Mem_Cmd_Valid & ~Mem_Cmd_RNW;
     assign add_fifo_we = Mem_Cmd_Valid & ((write_toggle & ~Mem_Cmd_RNW) | Mem_Cmd_RNW);
@@ -305,36 +305,6 @@ module async_dram #(
         .full(),
         .prog_full( add_fifo_almost_full )
     );
-    /*
-    operation_fifo opn_fifo(
-        .din( opn_fifo_input ),
-        .rd_clk( dram_clk ),
-        .rd_en( opn_fifo_re ),
-        .rst( mem_reset ),
-        .wr_clk( Mem_Clk ),
-        .wr_en( opn_fifo_we ),
-        .dout( opn_fifo_output ),
-        .empty( opn_fifo_empty ),
-        .full(),
-        .prog_full( opn_fifo_almost_full )
-    );
-
-
-
-    transaction_fifo transaction_fifo0(
-        .din( txn_fifo_input ),
-        .rd_clk( dram_clk ),
-        .rd_en( txn_fifo_re ),
-        .rst( mem_reset ),
-        .wr_clk( Mem_Clk ),
-        .wr_en( txn_fifo_we ),
-        .dout( txn_fifo_output ),
-        .empty( txn_fifo_empty ),
-        .full(),
-        .prog_full( txn_fifo_almost_full ),
-        .valid( txn_fifo_valid )
-    );
-    */
 
 /*
     generate
