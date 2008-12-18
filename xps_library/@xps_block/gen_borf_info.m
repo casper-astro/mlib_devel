@@ -44,7 +44,7 @@ else
   if ~isempty(real_address)
     str = [str, sprintf('%s %d %s %s\n', inst_name, borph_info.mode, dec2hex(real_address), dec2hex(borph_info.size))];
   else
-    str = [str, sprintf('%s %d %s %s\n', inst_name, borph_info.mode, dec2hex(loc), dec2hex(blk_obj.size))];
+    str = [str, sprintf('%s %d %s %s\n', inst_name, borph_info.mode, dec2hex(loc), dec2hex(borph_info.size))];
   end
 end
 
