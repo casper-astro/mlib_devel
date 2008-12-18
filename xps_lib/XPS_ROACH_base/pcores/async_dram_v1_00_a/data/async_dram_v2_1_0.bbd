@@ -1,2 +1,2 @@
 FILES
-rd_fifo.ngc, transaction_fifo.ngc 
+rd_fifo.ngc, transaction_fifo.ngc, operation_fifo.ngc 
