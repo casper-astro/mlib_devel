@@ -150,7 +150,7 @@ module async_dram #(
         end 
     end
    
-    assign add_fifo_re = (!add_fifo_empty & dram_ready) & (second_write | rnw);
+    assign add_fifo_re = (!add_fifo_empty & dram_ready & rnw) | second_write;
     assign dat_fifo_re = (!add_fifo_empty & dram_ready & !rnw) | second_write;
 
 `ifdef DESPERATE_DEBUG
