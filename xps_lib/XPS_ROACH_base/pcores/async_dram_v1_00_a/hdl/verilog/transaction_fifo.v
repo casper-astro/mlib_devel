@@ -30,14 +30,14 @@
 // supported by Xilinx, Mentor Graphics and Synplicity synthesis
 // tools. Ensure they are correct for your synthesis tool(s).
 
-// You must compile the wrapper file rd_fifo.v when simulating
-// the core, rd_fifo. When compiling the wrapper file, be sure to
+// You must compile the wrapper file transaction_fifo.v when simulating
+// the core, transaction_fifo. When compiling the wrapper file, be sure to
 // reference the XilinxCoreLib Verilog simulation library. For detailed
 // instructions, please refer to the "CORE Generator Help".
 
 `timescale 1ns/1ps
 
-module rd_fifo(
+module transaction_fifo(
 	din,
 	rd_clk,
 	rd_en,
@@ -51,13 +51,13 @@ module rd_fifo(
 	valid);
 
 
-input [143 : 0] din;
+input [194 : 0] din;
 input rd_clk;
 input rd_en;
 input rst;
 input wr_clk;
 input wr_en;
-output [143 : 0] dout;
+output [194 : 0] dout;
 output empty;
 output full;
 output prog_full;
@@ -70,9 +70,9 @@ output valid;
 		.C_COUNT_TYPE(0),
 		.C_DATA_COUNT_WIDTH(9),
 		.C_DEFAULT_VALUE("BlankString"),
-		.C_DIN_WIDTH(144),
+		.C_DIN_WIDTH(195),
 		.C_DOUT_RST_VAL("0"),
-		.C_DOUT_WIDTH(144),
+		.C_DOUT_WIDTH(195),
 		.C_ENABLE_RLOCS(0),
 		.C_FAMILY("virtex5"),
 		.C_FULL_FLAGS_RST_VAL(1),

@@ -78,7 +78,7 @@ module async_dram #(
     //registers and signals
 
     reg			        dram_rst;
-    assign dram_reset = dram_rst;
+    assign              dram_reset = dram_rst;
 
     reg                 Mem_Cmd_Valid_d1;
     reg                 dram_data_valid_d1, dram_data_i_d1;
@@ -87,10 +87,10 @@ module async_dram #(
     // fifo storage 
     //----------------------------------------------------------------------------
 
-    reg                 txn_pending;
+    reg write_toggle;
 
     // fifo control
-    reg                 rd_txn_fifo;
+    wire                rd_txn_fifo;
     reg                 rd_rd_data_fifo, rd_rd_data_fifo_d1;
 
     //fifo interface
@@ -99,9 +99,13 @@ module async_dram #(
     wire[144+32+18+1-1:0]   txn_fifo_input, txn_fifo_output;
     wire                    txn_fifo_we, txn_fifo_re, txn_fifo_almost_full, txn_fifo_empty, txn_fifo_valid;
    
+    wire                    opn_fifo_input, opn_fifo_output;
+    wire                    opn_fifo_we, opn_fifo_re, opn_fifo_almost_full, opn_fifo_empty;
+
     //read data fifo
     wire[143:0]         rd_data_fifo_input, rd_data_fifo_output;
     wire                rd_data_fifo_we, rd_data_fifo_valid, rd_data_fifo_re, rd_data_fifo_empty, rd_data_fifo_almost_full;
+
 
 /************************************************************************************/
 /* dram_clk clk domain */
@@ -127,44 +131,36 @@ module async_dram #(
     assign dram_byte_enable = txn_fifo_output[(18+32+1)-1:(32+1)];
     assign dram_address = txn_fifo_output[(32+1)-1:1];
     assign dram_rnw = txn_fifo_output[0]; 
-    assign dram_cmd_en = dram_ready & (txn_pending | txn_fifo_valid);
+    assign dram_cmd_en = dram_ready & ~opn_fifo_empty;
 
-    always @( posedge dram_clk )
-    begin
-        if( dram_rst ) 
-        begin 
-            rd_txn_fifo <= 1'b0;
-            txn_pending <= 1'b0;
+    reg second_write;
+    always @ (posedge dram_clk) 
+    begin 
+        if( dram_reset )
+        begin
+            second_write <= 1'b0;
         end else begin
-
-            //Pull transactions out of transaction FIFO when there is stuff to be done 
-            //and (there is nothing in the pipeline or the pipeline is about to
-            //be cleared)
-            if( ~txn_fifo_empty && ( ~txn_pending || dram_ready ) ) 
+            second_write <= 1'b0;
+            if( ~second_write ) 
             begin
-                rd_txn_fifo <= 1'b1;
-`ifdef DESPERATE_DEBUG
-                $display($time,":async_dram: reading transaction fifo");
-`endif
-            end else begin
-                rd_txn_fifo <= 1'b0;
-            end
-
-            //hold record of transaction in progress if will not complete this
-            //cycle
-            if( txn_fifo_valid && ~dram_ready ) 
-            begin
-                txn_pending <= 1'b1;
-            end else begin
-                if( dram_ready ) 
-                begin 
-                    txn_pending <= 1'b0; 
-                end
-            end
-                
-        end
+               if( ~opn_fifo_empty & dram_ready & ~opn_fifo_output) 
+               begin
+                   second_write <= 1'b1;
+               end 
+            end  
+        end 
     end
+    //signal read of fifo if not writing second data chunk or read and fifo
+    //not empty
+    assign opn_fifo_re = (~opn_fifo_empty & dram_ready) & (~second_write | opn_fifo_output);
+
+    //read transaction if transactions outstanding and other side ready to
+    //receive or doing second write 
+    assign rd_txn_fifo = (~opn_fifo_empty & dram_ready) | second_write ;
     assign txn_fifo_re = rd_txn_fifo;
+
+    always @ (txn_fifo_re) if( txn_fifo_re ) begin $display("reading transaction fifo"); end
+    always @ (opn_fifo_re) if( opn_fifo_re ) begin $display("reading operation fifo"); end
 
     //read data in
     assign rd_data_fifo_we = dram_data_valid;
@@ -188,13 +184,32 @@ module async_dram #(
 
     always @ (posedge Mem_Clk) begin mem_reset <= sys_rst | Mem_Rst; end
 
+    always @( posedge Mem_Clk )
+    begin
+        if(mem_reset) 
+        begin write_toggle <= 1'b0; 
+        end else begin 
+            if( Mem_Cmd_Valid) 
+            begin 
+                if( Mem_Cmd_RNW )
+                begin
+                    write_toggle <= 1'b0;
+                end else begin
+                    write_toggle <= ~write_toggle; 
+                end
+            end
+        end
+    end
+
     //ack if space in FIFOs
-    assign Mem_Cmd_Ack = ~txn_fifo_almost_full;
+    assign Mem_Cmd_Ack = ~txn_fifo_almost_full & ~opn_fifo_almost_full;
     
     assign txn_fifo_input[(144+18+32+1)-1:0] = { Mem_Wr_Din[143:0], Mem_Wr_BE[17:0], Mem_Cmd_Address[31:0], Mem_Cmd_RNW };
+    assign opn_fifo_input = Mem_Cmd_RNW;
 
     //register transaction on read or second write
     assign txn_fifo_we = Mem_Cmd_Valid;
+    assign opn_fifo_we = Mem_Cmd_Valid & ((write_toggle & ~Mem_Cmd_RNW) | Mem_Cmd_RNW);
 
 `ifdef DEBUG
     always @ (posedge Mem_Clk)
@@ -212,41 +227,10 @@ module async_dram #(
 /* Send data back through on read */
 /************************************************************************************/
 
-    reg rd_pending;
-    
     //read return data out of fifos when available  
-    always @ (posedge Mem_Clk)
-    begin
-        if( mem_reset ) begin
-            rd_rd_data_fifo <= 1'b0;
-            rd_pending <= 1'b0;
-        end else begin
-            if( ~rd_data_fifo_empty && (~rd_pending || Mem_Rd_Ack) ) 
-            begin
-                //if no previous transaction or previous acknowledged transaction
-`ifdef DESPERATE_DEBUG
-                $display("async_dram: reading return data from read data fifo");
-`endif
-                rd_rd_data_fifo <= 1'b1;
-            end else begin
-                rd_rd_data_fifo <= 1'b0;
-            end
-        end
-    
-        if( rd_data_fifo_valid && ~Mem_Rd_Ack ) 
-        begin
-            rd_pending <= 1'b1;
-        end else begin
-            if( Mem_Rd_Ack ) 
-            begin
-                rd_pending <= 1'b0;
-            end
-        end
+    assign rd_data_fifo_re = ~rd_data_fifo_empty & Mem_Rd_Ack;
 
-    end
-    assign rd_data_fifo_re = rd_rd_data_fifo;
-
-    assign Mem_Rd_Valid = (rd_pending | rd_data_fifo_valid) & Mem_Rd_Ack; 
+    assign Mem_Rd_Valid = ~rd_data_fifo_empty & Mem_Rd_Ack; 
     assign Mem_Rd_Dout = rd_data_fifo_output;
 
 `ifdef DEBUG
@@ -278,6 +262,20 @@ module async_dram #(
 	    .full( rd_data_fifo_almost_full ),
     	.valid( rd_data_fifo_valid ) 
     );
+
+    operation_fifo opn_fifo(
+        .din( opn_fifo_input ),
+        .rd_clk( dram_clk ),
+        .rd_en( opn_fifo_re ),
+        .rst( mem_reset ),
+        .wr_clk( Mem_Clk ),
+        .wr_en( opn_fifo_we ),
+        .dout( opn_fifo_output ),
+        .empty( opn_fifo_empty ),
+        .full(),
+        .prog_full( opn_fifo_almost_full )
+    );
+
 
 
     transaction_fifo transaction_fifo0(

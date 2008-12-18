@@ -30,14 +30,14 @@
 // supported by Xilinx, Mentor Graphics and Synplicity synthesis
 // tools. Ensure they are correct for your synthesis tool(s).
 
-// You must compile the wrapper file rd_fifo.v when simulating
-// the core, rd_fifo. When compiling the wrapper file, be sure to
+// You must compile the wrapper file operation_fifo.v when simulating
+// the core, operation_fifo. When compiling the wrapper file, be sure to
 // reference the XilinxCoreLib Verilog simulation library. For detailed
 // instructions, please refer to the "CORE Generator Help".
 
 `timescale 1ns/1ps
 
-module rd_fifo(
+module operation_fifo(
 	din,
 	rd_clk,
 	rd_en,
@@ -47,32 +47,30 @@ module rd_fifo(
 	dout,
 	empty,
 	full,
-	prog_full,
-	valid);
+	prog_full);
 
 
-input [143 : 0] din;
+input [0 : 0] din;
 input rd_clk;
 input rd_en;
 input rst;
 input wr_clk;
 input wr_en;
-output [143 : 0] dout;
+output [0 : 0] dout;
 output empty;
 output full;
 output prog_full;
-output valid;
 
 // synthesis translate_off
 
       FIFO_GENERATOR_V4_3 #(
 		.C_COMMON_CLOCK(0),
 		.C_COUNT_TYPE(0),
-		.C_DATA_COUNT_WIDTH(9),
+		.C_DATA_COUNT_WIDTH(8),
 		.C_DEFAULT_VALUE("BlankString"),
-		.C_DIN_WIDTH(144),
+		.C_DIN_WIDTH(1),
 		.C_DOUT_RST_VAL("0"),
-		.C_DOUT_WIDTH(144),
+		.C_DOUT_WIDTH(1),
 		.C_ENABLE_RLOCS(0),
 		.C_FAMILY("virtex5"),
 		.C_FULL_FLAGS_RST_VAL(1),
@@ -88,30 +86,30 @@ output valid;
 		.C_HAS_RST(1),
 		.C_HAS_SRST(0),
 		.C_HAS_UNDERFLOW(0),
-		.C_HAS_VALID(1),
+		.C_HAS_VALID(0),
 		.C_HAS_WR_ACK(0),
 		.C_HAS_WR_DATA_COUNT(0),
 		.C_HAS_WR_RST(0),
 		.C_IMPLEMENTATION_TYPE(2),
 		.C_INIT_WR_PNTR_VAL(0),
-		.C_MEMORY_TYPE(1),
+		.C_MEMORY_TYPE(2),
 		.C_MIF_FILE_NAME("BlankString"),
 		.C_MSGON_VAL(1),
 		.C_OPTIMIZATION_MODE(0),
 		.C_OVERFLOW_LOW(0),
 		.C_PRELOAD_LATENCY(0),
 		.C_PRELOAD_REGS(1),
-		.C_PRIM_FIFO_TYPE("512x72"),
+		.C_PRIM_FIFO_TYPE("512x36"),
 		.C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
 		.C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
 		.C_PROG_EMPTY_TYPE(0),
-		.C_PROG_FULL_THRESH_ASSERT_VAL(511),
-		.C_PROG_FULL_THRESH_NEGATE_VAL(510),
+		.C_PROG_FULL_THRESH_ASSERT_VAL(255),
+		.C_PROG_FULL_THRESH_NEGATE_VAL(254),
 		.C_PROG_FULL_TYPE(1),
-		.C_RD_DATA_COUNT_WIDTH(9),
-		.C_RD_DEPTH(512),
+		.C_RD_DATA_COUNT_WIDTH(8),
+		.C_RD_DEPTH(256),
 		.C_RD_FREQ(1),
-		.C_RD_PNTR_WIDTH(9),
+		.C_RD_PNTR_WIDTH(8),
 		.C_UNDERFLOW_LOW(0),
 		.C_USE_DOUT_RST(1),
 		.C_USE_ECC(0),
@@ -120,10 +118,10 @@ output valid;
 		.C_USE_FWFT_DATA_COUNT(0),
 		.C_VALID_LOW(0),
 		.C_WR_ACK_LOW(0),
-		.C_WR_DATA_COUNT_WIDTH(9),
-		.C_WR_DEPTH(512),
+		.C_WR_DATA_COUNT_WIDTH(8),
+		.C_WR_DEPTH(256),
 		.C_WR_FREQ(1),
-		.C_WR_PNTR_WIDTH(9),
+		.C_WR_PNTR_WIDTH(8),
 		.C_WR_RESPONSE_LATENCY(1))
 	inst (
 		.DIN(din),
@@ -136,7 +134,6 @@ output valid;
 		.EMPTY(empty),
 		.FULL(full),
 		.PROG_FULL(prog_full),
-		.VALID(valid),
 		.CLK(),
 		.INT_CLK(),
 		.BACKUP(),
@@ -155,6 +152,7 @@ output valid;
 		.DATA_COUNT(),
 		.OVERFLOW(),
 		.PROG_EMPTY(),
+		.VALID(),
 		.RD_DATA_COUNT(),
 		.UNDERFLOW(),
 		.WR_ACK(),
