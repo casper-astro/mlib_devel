@@ -30,14 +30,14 @@
 // supported by Xilinx, Mentor Graphics and Synplicity synthesis
 // tools. Ensure they are correct for your synthesis tool(s).
 
-// You must compile the wrapper file address_fifo_bram.v when simulating
-// the core, address_fifo_bram. When compiling the wrapper file, be sure to
+// You must compile the wrapper file rd_fifo_bram.v when simulating
+// the core, rd_fifo_bram. When compiling the wrapper file, be sure to
 // reference the XilinxCoreLib Verilog simulation library. For detailed
 // instructions, please refer to the "CORE Generator Help".
 
 `timescale 1ns/1ps
 
-module address_fifo_bram(
+module rd_fifo_bram(
 	din,
 	rd_clk,
 	rd_en,
@@ -47,19 +47,21 @@ module address_fifo_bram(
 	dout,
 	empty,
 	full,
-	prog_full);
+	prog_full,
+	valid);
 
 
-input [32 : 0] din;
+input [143 : 0] din;
 input rd_clk;
 input rd_en;
 input rst;
 input wr_clk;
 input wr_en;
-output [32 : 0] dout;
+output [143 : 0] dout;
 output empty;
 output full;
 output prog_full;
+output valid;
 
 // synthesis translate_off
 
@@ -68,9 +70,9 @@ output prog_full;
 		.C_COUNT_TYPE(0),
 		.C_DATA_COUNT_WIDTH(9),
 		.C_DEFAULT_VALUE("BlankString"),
-		.C_DIN_WIDTH(33),
+		.C_DIN_WIDTH(144),
 		.C_DOUT_RST_VAL("0"),
-		.C_DOUT_WIDTH(33),
+		.C_DOUT_WIDTH(144),
 		.C_ENABLE_RLOCS(0),
 		.C_FAMILY("virtex5"),
 		.C_FULL_FLAGS_RST_VAL(1),
@@ -86,7 +88,7 @@ output prog_full;
 		.C_HAS_RST(1),
 		.C_HAS_SRST(0),
 		.C_HAS_UNDERFLOW(0),
-		.C_HAS_VALID(0),
+		.C_HAS_VALID(1),
 		.C_HAS_WR_ACK(0),
 		.C_HAS_WR_DATA_COUNT(0),
 		.C_HAS_WR_RST(0),
@@ -99,7 +101,7 @@ output prog_full;
 		.C_OVERFLOW_LOW(0),
 		.C_PRELOAD_LATENCY(0),
 		.C_PRELOAD_REGS(1),
-		.C_PRIM_FIFO_TYPE("512x36"),
+		.C_PRIM_FIFO_TYPE("512x72"),
 		.C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
 		.C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
 		.C_PROG_EMPTY_TYPE(0),
@@ -134,6 +136,7 @@ output prog_full;
 		.EMPTY(empty),
 		.FULL(full),
 		.PROG_FULL(prog_full),
+		.VALID(valid),
 		.CLK(),
 		.INT_CLK(),
 		.BACKUP(),
@@ -152,7 +155,6 @@ output prog_full;
 		.DATA_COUNT(),
 		.OVERFLOW(),
 		.PROG_EMPTY(),
-		.VALID(),
 		.RD_DATA_COUNT(),
 		.UNDERFLOW(),
 		.WR_ACK(),
