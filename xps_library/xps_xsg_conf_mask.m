@@ -28,8 +28,10 @@ else
 end
 
 hw_sys = get_param(gcb,'hw_sys');
-clk_src = get_param(gcb,'clk_src');
+clk_src = get_param(gcb, [hw_sys, '_clk_src']);
 syn_tool = get_param(gcb, 'synthesis_tool');
+
+set_param(gcb, 'clk_src', clk_src);
 
 ngc_config.include_clockwrapper = 1;
 ngc_config.include_cf = 0;
