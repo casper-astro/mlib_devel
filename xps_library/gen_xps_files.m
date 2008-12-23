@@ -333,7 +333,11 @@ if run_ip
     if ~exist([xsg_path,'\synth_model\',file_name],'file')
         error('Cannot find any compiled XSG netlist. Have you run the Xilinx System Generator on your design ?')
     end
-    copyfile([xsg_path,'\synth_model\',file_name],[xps_path,'\pcores\',xsg_core_name,'_v1_00_a\netlist\',xsg_core_name,'.ngc']);
+    [copystatus,copymessage,copymessageid] = copyfile([xsg_path,'\synth_model\',file_name],[xps_path,'\pcores\',xsg_core_name,'_v1_00_a\netlist\',xsg_core_name,'.ngc']);
+    if ~copystatus
+        disp('Error trying to copy pcore netlist:');
+        disp(copymessage);
+    end % if ~copystatus
 
     % create the BBD file in the data directory
     bbd_fid = fopen([xps_path,'\pcores\',xsg_core_name,'_v1_00_a\data\',xsg_core_name,'_v2_1_0.bbd'],'w');
@@ -443,11 +447,19 @@ if run_edkgen
     opb_name = 'opb0';
 
     if ~exist([xps_path,'\system.mhs.bac'],'file')
-        copyfile([xps_path,'\system.mhs'],[xps_path,'\system.mhs.bac']);
-    end
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\system.mhs'],[xps_path,'\system.mhs.bac']);
+        if ~copystatus
+            disp('Error trying to backup system.mhs:');
+            disp(copymessage)
+        end % if ~copystatus
+    end % if ~exist([xps_path,'\system.mhs.bac'],'file')
     if ~exist([xps_path,'\core_info.tab.bac'],'file')
-        copyfile([xps_path,'\core_info.tab'],[xps_path,'\core_info.tab.bac']);
-    end
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\core_info.tab'],[xps_path,'\core_info.tab.bac']);
+        if ~copystatus
+            disp('Error trying to backup core_info.tab:');
+            disp(copymessage);
+        end % if ~copystatus
+    end % if ~exist([xps_path,'\core_info.tab.bac'],'file')
     mhs_fid = fopen([xps_path,'/system.mhs'],'w');
     nfo_fid = fopen([work_path, '/core_info.m'],'w');
     bof_fid = fopen([xps_path, '/core_info.tab'],'w');
@@ -585,8 +597,12 @@ if run_edkgen
 
     if ~strcmp(sw_os,'none')
         if ~exist([xps_path,'\system.mss.bac'],'file')
-            copyfile([xps_path,'\system.mss'],[xps_path,'\system.mss.bac']);
-        end
+            [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\system.mss'],[xps_path,'\system.mss.bac']);
+            if ~copystatus
+                disp('Error trying to backup system.mss:');
+                disp(copymessage);
+            end % if ~copystatus
+        end % if ~exist([xps_path,'\system.mss.bac'],'file')
         in_fid = fopen([xps_path,'/system.mss.bac'],'r');
         mss_fid = fopen([xps_path,'/system.mss'],'w');
 
@@ -617,8 +633,12 @@ if run_edkgen
 
     % modifying UCF file
     if ~exist([xps_path,'\data\system.ucf.bac'],'file')
-        copyfile([xps_path,'\data\system.ucf'],[xps_path,'\data\system.ucf.bac']);
-    end
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\data\system.ucf'],[xps_path,'\data\system.ucf.bac']);
+        if ~copystatus
+            disp('Error trying to backup system.ucf:');
+            disp(copymessage);
+        end % if ~copystatus
+    end % if ~exist([xps_path,'\data\system.ucf.bac'],'file')
     in_fid = fopen([xps_path,'/data/system.ucf.bac'],'r');
     ucf_fid = fopen([xps_path,'/data/system.ucf'],'w');
     detokenize(in_fid, ucf_fid, xps_objs);
@@ -878,8 +898,12 @@ if run_software
             % write main.c file
             str = '';
             if ~exist([xps_path,'\Software\main.c.bac'],'file')
-                copyfile([xps_path,'\Software\main.c'],[xps_path,'\Software\main.c.bac']);
-            end
+                [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\Software\main.c'],[xps_path,'\Software\main.c.bac']);
+                if ~copystatus
+                    disp('Error trying to backup main.c:')
+                    disp(copymessage);
+                end % if ~copystatus
+            end %~exist([xps_path,'\Software\main.c.bac'],'file')
             in_fid = fopen([xps_path,'\Software\main.c.bac'],'r');
 
             while 1
@@ -922,8 +946,12 @@ if run_software
             % write project file
             str = '';
             if ~exist([xps_path,'\system.xmp.bac'],'file')
-                copyfile([xps_path,'\system.xmp'],[xps_path,'\system.xmp.bac']);
-            end
+                [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\system.xmp'],[xps_path,'\system.xmp.bac']);
+                if ~copystatus
+                    disp('Error trying to backup system.xmp:');
+                    disp(copymessage);
+                end % if ~copystatus
+            end % ~exist([xps_path,'\system.xmp.bac'],'file')
             in_fid = fopen([xps_path,'\system.xmp.bac'],'r');
 
             while 1
@@ -1051,13 +1079,13 @@ if run_software
 	['mkbof.exe -o implementation\\system.bof', ...
 	 ' -s core_info.tab -t 3 implementation\\system.bin\n']);
       fprintf(unix_fid, ...
-	['./mkbof -o implementation/system.bof',... 
+	['./mkbof -o implementation/system.bof',...
 	 ' -s core_info.tab -t 3 implementation/system.bin\n']);
       fprintf(win_fid,['copy implementation\\system.bof' ...
 		 ' ..\\bit_files\\', design_name,'_', ...
 		 time_stamp,'.bof\n']);
       fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', ...
-		  design_name,'_',time_stamp,'.bof\n']);	
+		  design_name,'_',time_stamp,'.bof\n']);
     end
 
     fclose(win_fid);
