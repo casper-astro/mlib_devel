@@ -106,7 +106,11 @@ end
 switch clk_src
     case {'sys_clk' 'sys_clk2x'}
     case {'usr_clk' 'usr_clk2x'}
-        if regexp(hw_sys,'^CORR')
+        if find(strcmp(hw_sys,{'CORR', 'ROACH'}))
+            errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
+        end
+    case {'aux_clk_0' 'aux_clk_1'}
+        if isempty(find(strcmp(hw_sys,{'ROACH'})))
             errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
         end
     case {'adc0_clk' 'adc1_clk' 'dac0_clk' 'dac1_clk'}
