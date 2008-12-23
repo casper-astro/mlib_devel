@@ -1,15 +1,16 @@
 `timescale 1ns/10ps
 
-`define SIMLENGTH       10000
+`define SIMLENGTH       1000000
 `define SYS_CLK_PERIOD  22
 `define DRAM_CLK_PERIOD 6
 
 module TB_async_dram();
 
+  localparam BRAM_FIFOS    = 0;
   localparam WIDE_DATA     = 0;
   localparam HALF_BURST    = 0;
   localparam TAG_BUFFER_EN = 0;
-  localparam TEST_LENGTH   = 5;
+  localparam TEST_LENGTH   = 1024;
 
   wire sys_rst;
   wire sys_clk;
@@ -48,7 +49,7 @@ module TB_async_dram();
 
   async_dram #(
     .TAG_BUFFER_EN (TAG_BUFFER_EN),
-    .BRAM_FIFOS    (0),
+    .BRAM_FIFOS    (BRAM_FIFOS),
     .C_WIDE_DATA   (WIDE_DATA),
     .C_HALF_BURST  (HALF_BURST)
   ) async_dram (
@@ -211,7 +212,7 @@ module TB_async_dram();
               cmd_progress <= cmd_progress + 1;
             end
 `ifdef DEBUG
-              $display("fab:write first data = %x, address = %x",Mem_Wr_Din, Mem_Cmd_Address);
+              $display($time,": fab: write first data = %x, address = %x",Mem_Wr_Din, Mem_Cmd_Address);
 `endif
           end
           if( second && Mem_Cmd_Ack ) begin 
@@ -223,14 +224,14 @@ module TB_async_dram();
               end
           
 `ifdef DEBUG
-              $display("fab:write second data = %x, address = %x",Mem_Wr_Din, Mem_Cmd_Address);
+              $display($time, ": fab: write second data = %x, address = %x",Mem_Wr_Din, Mem_Cmd_Address);
 `endif          
           end
 
         end
         MODE_READ:  begin
 `ifdef DEBUG
-              $display("fab:read address = %x",Mem_Cmd_Address);
+              $display($time, ": fab: read address = %x",Mem_Cmd_Address);
 `endif
           if (Mem_Cmd_Ack && cmd_progress <= TEST_LENGTH)
             cmd_progress <= cmd_progress + 1;
