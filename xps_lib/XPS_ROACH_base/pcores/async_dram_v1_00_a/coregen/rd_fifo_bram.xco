@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.37
-# Date: Mon Dec 22 09:07:27 2008
+# Date: Tue Dec 23 12:26:06 2008
 #
 ##############################################################
 #
@@ -48,8 +48,8 @@ CSET enable_ecc=false
 CSET enable_int_clk=false
 CSET fifo_implementation=Independent_Clocks_Block_RAM
 CSET full_flags_reset_value=1
-CSET full_threshold_assert_value=511
-CSET full_threshold_negate_value=510
+CSET full_threshold_assert_value=350
+CSET full_threshold_negate_value=349
 CSET input_data_width=144
 CSET input_depth=512
 CSET output_data_width=144
@@ -69,7 +69,7 @@ CSET underflow_sense=Active_High
 CSET use_dout_reset=true
 CSET use_embedded_registers=false
 CSET use_extra_logic=false
-CSET valid_flag=true
+CSET valid_flag=false
 CSET valid_sense=Active_High
 CSET write_acknowledge_flag=false
 CSET write_acknowledge_sense=Active_High
@@ -78,5 +78,5 @@ CSET write_data_count=false
 CSET write_data_count_width=9
 # END Parameters
 GENERATE
-# CRC: ca3e4840
+# CRC:   16314f
 
