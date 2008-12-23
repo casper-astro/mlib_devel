@@ -100,7 +100,7 @@ module async_dram #(
     //read data fifo
     wire[143:0]             rd_data_fifo_input; 
     wire[(144*(C_WIDE_DATA+1))-1:0] rd_data_fifo_output;
-    wire                    rd_data_fifo_we, rd_data_fifo_valid, rd_data_fifo_re, rd_data_fifo_empty, rd_data_fifo_almost_full;
+    wire                    rd_data_fifo_we, rd_data_fifo_re, rd_data_fifo_empty, rd_data_fifo_full, rd_data_fifo_almost_full;
 
 
 /************************************************************************************/
@@ -201,7 +201,9 @@ generate if(C_WIDE_DATA == 0)
     end
 endgenerate
 
-    assign Mem_Cmd_Ack = ~txn_fifo_almost_full & ~dat_fifo_almost_full;
+    //prevent transactions if transaction fifos almost full or if reads in
+    //danger of overflowing return buffer
+    assign Mem_Cmd_Ack = ~txn_fifo_almost_full & ~dat_fifo_almost_full & ~rd_data_fifo_almost_full;
     
     assign txn_fifo_input[(32+1)-1:0] = {Mem_Cmd_Address, Mem_Cmd_RNW};
 
@@ -257,65 +259,111 @@ endgenerate
 /*--------------------------------------------------------------*/
 
 `ifdef DEBUG
-    always @ (rd_data_fifo_almost_full)
+    always @ (rd_data_fifo_full)
     begin
-        if( rd_data_fifo_almost_full ) 
+        if( rd_data_fifo_full ) 
         begin
             $display($time,": async_dram: rd_data_fifo full");
         end
     end
 `endif
 
-    rd_fifo rd_data_fifo0(
-        .din( rd_data_fifo_input ),
-        .rd_clk ( Mem_Clk ),
-	    .rd_en( rd_data_fifo_re ),
-	    .rst( dram_rst ),
-	    .wr_clk( dram_clk ),
-	    .wr_en( rd_data_fifo_we ),
-	    .dout( rd_data_fifo_output ),
-	    .empty( rd_data_fifo_empty ),
-	    .full( rd_data_fifo_almost_full ),
-    	.valid( rd_data_fifo_valid ) 
-    );
-
-    data_fifo_bram dat_fifo(
-        .din( dat_fifo_input ),
-        .rd_clk( dram_clk ),
-        .rd_en( dat_fifo_re ),
-        .rst( mem_reset ),
-        .wr_clk( Mem_Clk ),
-        .wr_en( dat_fifo_we ),
-        .dout( dat_fifo_output ),
-        .empty( dat_fifo_empty ),
-        .full(),
-        .prog_full( dat_fifo_almost_full )
-    );
-    
-    transaction_fifo_bram txn_fifo(
-        .din( txn_fifo_input ),
-        .rd_clk( dram_clk ),
-        .rd_en( txn_fifo_re ),
-        .rst( mem_reset ),
-        .wr_clk( Mem_Clk ),
-        .wr_en( txn_fifo_we ),
-        .dout( txn_fifo_output ),
-        .empty( txn_fifo_empty ),
-        .full(),
-        .prog_full( txn_fifo_almost_full )
-    );
-
-
-    generate
-        if (BRAM_FIFOS == 0) //making FIFOS from distributed memory
-        begin:shallow_fifos
-
+`ifdef DEBUG
+    always @ (rd_data_fifo_almost_full)
+    begin
+        if( rd_data_fifo_almost_full ) 
+        begin
+            $display($time,": async_dram: rd_data_fifo almost full");
         end
-        else //making FIFOs from BRAMs
-        begin:deep_fifos
+    end
+`endif
 
-        end
-    endgenerate
+generate
+    if (BRAM_FIFOS == 0) //making FIFOS from distributed memory
+    begin:shallow_fifos
+         
+        rd_fifo_dist rd_data_fifo0(
+            .din( rd_data_fifo_input ),
+            .rd_clk ( Mem_Clk ),
+            .rd_en( rd_data_fifo_re ),
+            .rst( dram_rst ),
+            .wr_clk( dram_clk ),
+            .wr_en( rd_data_fifo_we ),
+            .dout( rd_data_fifo_output ),
+            .empty( rd_data_fifo_empty ),
+            .full( ),
+            .prog_full( rd_data_fifo_almost_full ) 
+        );
+
+        data_fifo_dist dat_fifo(
+            .din( dat_fifo_input ),
+            .rd_clk( dram_clk ),
+            .rd_en( dat_fifo_re ),
+            .rst( mem_reset ),
+            .wr_clk( Mem_Clk ),
+            .wr_en( dat_fifo_we ),
+            .dout( dat_fifo_output ),
+            .empty( dat_fifo_empty ),
+            .full( rd_data_fifo_full ),
+            .prog_full( dat_fifo_almost_full )
+        );
+        
+        transaction_fifo_dist txn_fifo(
+            .din( txn_fifo_input ),
+            .rd_clk( dram_clk ),
+            .rd_en( txn_fifo_re ),
+            .rst( mem_reset ),
+            .wr_clk( Mem_Clk ),
+            .wr_en( txn_fifo_we ),
+            .dout( txn_fifo_output ),
+            .empty( txn_fifo_empty ),
+            .full(),
+            .prog_full( txn_fifo_almost_full )
+        );
+
+    end else begin:deep_fifos
+
+        rd_fifo_bram rd_data_fifo0(
+            .din( rd_data_fifo_input ),
+            .rd_clk ( Mem_Clk ),
+            .rd_en( rd_data_fifo_re ),
+            .rst( dram_rst ),
+            .wr_clk( dram_clk ),
+            .wr_en( rd_data_fifo_we ),
+            .dout( rd_data_fifo_output ),
+            .empty( rd_data_fifo_empty ),
+            .full( rd_data_fifo_full ),
+            .prog_full( rd_data_fifo_almost_full ) 
+        );
+
+        data_fifo_bram dat_fifo(
+            .din( dat_fifo_input ),
+            .rd_clk( dram_clk ),
+            .rd_en( dat_fifo_re ),
+            .rst( mem_reset ),
+            .wr_clk( Mem_Clk ),
+            .wr_en( dat_fifo_we ),
+            .dout( dat_fifo_output ),
+            .empty( dat_fifo_empty ),
+            .full(),
+            .prog_full( dat_fifo_almost_full )
+        );
+        
+        transaction_fifo_bram txn_fifo(
+            .din( txn_fifo_input ),
+            .rd_clk( dram_clk ),
+            .rd_en( txn_fifo_re ),
+            .rst( mem_reset ),
+            .wr_clk( Mem_Clk ),
+            .wr_en( txn_fifo_we ),
+            .dout( txn_fifo_output ),
+            .empty( txn_fifo_empty ),
+            .full(),
+            .prog_full( txn_fifo_almost_full )
+        );
+        
+    end
+endgenerate
 
 
 endmodule

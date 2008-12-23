@@ -47,8 +47,7 @@ module rd_fifo_bram(
 	dout,
 	empty,
 	full,
-	prog_full,
-	valid);
+	prog_full);
 
 
 input [143 : 0] din;
@@ -61,7 +60,6 @@ output [143 : 0] dout;
 output empty;
 output full;
 output prog_full;
-output valid;
 
 // synthesis translate_off
 
@@ -88,7 +86,7 @@ output valid;
 		.C_HAS_RST(1),
 		.C_HAS_SRST(0),
 		.C_HAS_UNDERFLOW(0),
-		.C_HAS_VALID(1),
+		.C_HAS_VALID(0),
 		.C_HAS_WR_ACK(0),
 		.C_HAS_WR_DATA_COUNT(0),
 		.C_HAS_WR_RST(0),
@@ -105,8 +103,8 @@ output valid;
 		.C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
 		.C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
 		.C_PROG_EMPTY_TYPE(0),
-		.C_PROG_FULL_THRESH_ASSERT_VAL(511),
-		.C_PROG_FULL_THRESH_NEGATE_VAL(510),
+		.C_PROG_FULL_THRESH_ASSERT_VAL(350),
+		.C_PROG_FULL_THRESH_NEGATE_VAL(349),
 		.C_PROG_FULL_TYPE(1),
 		.C_RD_DATA_COUNT_WIDTH(9),
 		.C_RD_DEPTH(512),
@@ -136,7 +134,6 @@ output valid;
 		.EMPTY(empty),
 		.FULL(full),
 		.PROG_FULL(prog_full),
-		.VALID(valid),
 		.CLK(),
 		.INT_CLK(),
 		.BACKUP(),
@@ -155,6 +152,7 @@ output valid;
 		.DATA_COUNT(),
 		.OVERFLOW(),
 		.PROG_EMPTY(),
+		.VALID(),
 		.RD_DATA_COUNT(),
 		.UNDERFLOW(),
 		.WR_ACK(),
