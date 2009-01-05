@@ -1,4 +1,4 @@
-module infrastructure(
+module roach_infrastructure(
     sys_clk_n, sys_clk_p,
     sys_clk, sys_clk90, sys_clk180, sys_clk270,
     dly_clk_n,  dly_clk_p,

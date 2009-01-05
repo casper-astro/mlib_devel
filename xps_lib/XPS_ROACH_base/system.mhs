@@ -65,7 +65,7 @@ PORT ppc_irq_n   = ppc_irq_n,   DIR = O
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe, DIR = O
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_modepin = adc1_modepin, DIR = O
 
-BEGIN infrastructure
+BEGIN roach_infrastructure
   PARAMETER INSTANCE = infrastructure_inst
   PARAMETER HW_VER   = 1.00.a
   PORT sys_clk_n     = sys_clk_n

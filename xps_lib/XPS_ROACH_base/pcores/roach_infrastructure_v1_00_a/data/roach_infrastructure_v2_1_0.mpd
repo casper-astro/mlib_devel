@@ -1,4 +1,4 @@
-BEGIN infrastructure
+BEGIN roach_infrastructure
 
 OPTION IPTYPE           = PERIPHERAL
 OPTION IMP_NETLIST      = TRUE
