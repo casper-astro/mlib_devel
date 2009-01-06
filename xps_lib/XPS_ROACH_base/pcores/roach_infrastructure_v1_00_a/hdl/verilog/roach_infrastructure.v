@@ -45,7 +45,7 @@ module roach_infrastructure(
   IBUFGDS #(
     .IOSTANDARD("LVDS_25"),
     .DIFF_TERM("TRUE")
-  ) ibufgd_sys
+  ) ibufgd_sys (
     .I (sys_clk_p),
     .IB(sys_clk_n),
     .O (sys_clk_int)
@@ -54,7 +54,7 @@ module roach_infrastructure(
   wire sys_clk_dcm, sys_clk90_dcm;
   DCM_BASE #(
     .CLKIN_PERIOD(10.0)
-  ) SYS_CLK_DCM (
+  ) SYSCLK_DCM (
     .CLK0(sys_clk_dcm),
     .CLK180(),
     .CLK270(),
@@ -85,7 +85,7 @@ module roach_infrastructure(
   IBUFGDS #(
     .IOSTANDARD("LVDS_25"),
     .DIFF_TERM("TRUE")
-  ) ibufgd_aux_arr[1:0]
+  ) ibufgd_aux_arr[1:0] (
     .I ({aux_clk_0_p,   aux_clk_1_p}),
     .IB({aux_clk_0_n,   aux_clk_1_n}),
     .O ({aux_clk_0_int, aux_clk_1_int})
@@ -96,7 +96,7 @@ module roach_infrastructure(
 
   DCM_BASE #(
     .CLKIN_PERIOD(5.0)
-  ) AUX_CLK_0_DCM (
+  ) AUXCLK0_DCM (
     .CLK0(  aux_clk_0_dcm),
     .LOCKED(),
     .CLKFB( aux_clk_0),
@@ -106,7 +106,7 @@ module roach_infrastructure(
 
   DCM_BASE #(
     .CLKIN_PERIOD(5.0)
-  ) AUX_CLK_0\1_DCM (
+  ) AUXCLK1_DCM (
     .CLK0(  aux_clk_1_dcm),
     .LOCKED(),
     .CLKFB( aux_clk_1),
