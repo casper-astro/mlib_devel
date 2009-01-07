@@ -10,7 +10,7 @@ module TB_async_dram();
   localparam WIDE_DATA     = 0;
   localparam HALF_BURST    = 0;
   localparam TAG_BUFFER_EN = 0;
-  localparam TEST_LENGTH   = 1024;
+  localparam TEST_LENGTH   = 1000;
 
   wire sys_rst;
   wire sys_clk;
