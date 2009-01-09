@@ -7,9 +7,9 @@ module roach_infrastructure(
     epb_clk,
     idelay_rst, idelay_rdy,
     aux_clk_0_n, aux_clk_0_p,
-    aux_clk_0,
+    aux0_clk, aux0_clk90, aux0_clk180, aux0_clk270,
     aux_clk_1_n, aux_clk_1_p,
-    aux_clk_1
+    aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270
   );
   input  sys_clk_n, sys_clk_p;
   output sys_clk, sys_clk90, sys_clk180, sys_clk270;
@@ -18,9 +18,9 @@ module roach_infrastructure(
   input  epb_clk_buf;
   output epb_clk;
   input  aux_clk_0_n, aux_clk_0_p;
-  output aux_clk_0;
+  output aux0_clk, aux0_clk90, aux0_clk180, aux0_clk270;
   input  aux_clk_1_n, aux_clk_1_p;
-  output aux_clk_1;
+  output aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270;
 
   input  idelay_rst;
   output idelay_rdy;
@@ -75,7 +75,7 @@ module roach_infrastructure(
     .O({sys_clk,     sys_clk90})
   );
 
-  // rely on Xilinx internal clock inversion structures down the line
+  // rely on inference of Xilinx internal clock inversion structures down the line
   assign sys_clk180 = ~sys_clk;
   assign sys_clk270 = ~sys_clk90;
 
@@ -91,15 +91,18 @@ module roach_infrastructure(
     .O ({aux_clk_0_int, aux_clk_1_int})
   );
 
-  wire  aux_clk_0_dcm;
-  wire  aux_clk_1_dcm;
+  wire  aux0_clk_dcm;
+  wire  aux0_clk90_dcm;
+  wire  aux1_clk_dcm;
+  wire  aux1_clk90_dcm;
 
   DCM_BASE #(
     .CLKIN_PERIOD(5.0)
   ) AUXCLK0_DCM (
-    .CLK0(  aux_clk_0_dcm),
+    .CLK0(  aux0_clk_dcm),
+    .CLK90( aux0_clk90_dcm),
     .LOCKED(),
-    .CLKFB( aux_clk_0),
+    .CLKFB( aux0_clk),
     .CLKIN( aux_clk_0_int),
     .RST(   ~sysclk_dcm_locked)
   );
@@ -107,17 +110,25 @@ module roach_infrastructure(
   DCM_BASE #(
     .CLKIN_PERIOD(5.0)
   ) AUXCLK1_DCM (
-    .CLK0(  aux_clk_1_dcm),
+    .CLK0(  aux1_clk_dcm),
+    .CLK90( aux1_clk90_dcm),
     .LOCKED(),
-    .CLKFB( aux_clk_1),
+    .CLKFB( aux1_clk),
     .CLKIN( aux_clk_1_int),
     .RST(   ~sysclk_dcm_locked)
   );
 
-  BUFG bufg_aux_clk[1:0](
-    .I({aux_clk_0_dcm, aux_clk_1_dcm}),
-    .O({aux_clk_0,     aux_clk_1})
+  BUFG bufg_aux_clk[3:0](
+    .I({aux0_clk_dcm, aux0_clk90_dcm, aux1_clk_dcm, aux1_clk90_dcm}),
+    .O({aux0_clk,     aux0_clk90,     aux1_clk,     aux1_clk90})
   );
+
+  // rely on inference of Xilinx internal clock inversion structures down the line
+  assign aux0_clk180 = ~aux0_clk;
+  assign aux0_clk270 = ~aux0_clk90;
+  assign aux1_clk180 = ~aux1_clk;
+  assign aux1_clk270 = ~aux1_clk90;
+
 
   /* Delay Clock */
   wire dly_clk_int;

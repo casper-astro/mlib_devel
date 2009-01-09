@@ -12,14 +12,14 @@
 PARAMETER VERSION = 2.1.0
 
 # Clock Ports
-PORT sys_clk_n   = sys_clk_n,   DIR = I
-PORT sys_clk_p   = sys_clk_p,   DIR = I
-PORT dly_clk_n   = dly_clk_n,   DIR = I
-PORT dly_clk_p   = dly_clk_p,   DIR = I
-PORT aux_clk_0_n = aux_clk_0_n, DIR = I
-PORT aux_clk_0_p = aux_clk_0_p, DIR = I
-PORT aux_clk_1_n = aux_clk_1_n, DIR = I
-PORT aux_clk_1_p = aux_clk_1_p, DIR = I
+PORT sys_clk_n   = sys_clk_n,   DIR = I, SIGIS = CLK
+PORT sys_clk_p   = sys_clk_p,   DIR = I, SIGIS = CLK
+PORT dly_clk_n   = dly_clk_n,   DIR = I, SIGIS = CLK
+PORT dly_clk_p   = dly_clk_p,   DIR = I, SIGIS = CLK
+PORT aux_clk_0_n = aux_clk_0_n, DIR = I, SIGIS = CLK
+PORT aux_clk_0_p = aux_clk_0_p, DIR = I, SIGIS = CLK
+PORT aux_clk_1_n = aux_clk_1_n, DIR = I, SIGIS = CLK
+PORT aux_clk_1_p = aux_clk_1_p, DIR = I, SIGIS = CLK
 
 # EPB Ports
 PORT epb_clk_buf = epb_clk_buf, DIR = I
@@ -82,8 +82,14 @@ BEGIN roach_infrastructure
   PORT sys_clk180    = sys_clk180
   PORT sys_clk270    = sys_clk270
   PORT dly_clk       = dly_clk
-  PORT aux_clk_0     = aux_clk_0
-  PORT aux_clk_1     = aux_clk_1
+  PORT aux0_clk      = aux0_clk
+  PORT aux0_clk90    = aux0_clk90
+  PORT aux0_clk180   = aux0_clk180
+  PORT aux0_clk270   = aux0_clk270
+  PORT aux1_clk      = aux1_clk
+  PORT aux1_clk90    = aux1_clk90
+  PORT aux1_clk180   = aux1_clk180
+  PORT aux1_clk270   = aux1_clk270
   PORT epb_clk       = epb_clk
   PORT idelay_rst    = sys_reset
   PORT idelay_rdy    = idelay_rdy
