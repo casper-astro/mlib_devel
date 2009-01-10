@@ -79,7 +79,7 @@ if strcmp(blk_obj.hw_sys, 'iBOB') & strmatch('usr_clk', clk_src)
                 if ~isempty(find(get(xsg_obj,'gpioclkbit')==bit_index(n)))
                     msg = ['User clock input and GPIO ',get(blk_obj,'simulink_name'),' share the same I/O pin.'];
                     result = 1;
-                end % if ~isempty(find(get(xsg_obj,'gpioclkbit')==bit_index(j)))
+                end % if ~isempty(find(get(xsg_obj,'gpioclkbit')==bit_index(n)))
             end % for n=1:length(bit_index)
         end % if strcmp(get(xsg_obj, 'gpioclk_grp'), blk_obj.io_group)
     end % try
@@ -90,13 +90,41 @@ for n=1:length(xps_objs)
     try
         if strcmp(blk_obj.hw_sys,get(xps_objs{n},'hw_sys')) && strcmp(blk_obj.io_group,get(xps_objs{n},'io_group'))
             if ~strcmp(get(blk_obj,'simulink_name'),get(xps_objs{n},'simulink_name'))
+
                 bit_index = blk_obj.bit_index;
-                for k=1:length(bit_index)
-                    if ~isempty(find(get(xps_objs{n},'bit_index')==bit_index(k)))
-                        msg = ['GPIO ',get(blk_obj,'simulink_name'),' and GPIO ',get(xps_objs{n},'simulink_name'),' share the same I/O pin.'];
-                        result = 1;
-                    end % if ~isempty(find(get(xps_objs{n},'bit_index')==bit_index(k)))
-                end % for k=1:length(bit_index)
+
+			    % Check for single-ended/differential I/O conflicts
+                if ~isempty(find(strcmp(blk_obj.io_group,{'zdok0', 'zdok1', 'mdr'})))
+                    if strcmp(get(blk_obj,'single_ended'), 'on') & strcmp(get(xps_objs{n},'single_ended'), 'off')
+                        for k=1:length(bit_index)
+		    			    if ~isempty(find(get(xps_objs{n},'bit_index')==floor(bit_index(k)/2)))
+			    			    msg = ['GPIO ',get(blk_obj,'simulink_name'),' and GPIO ',get(xps_objs{n},'simulink_name'),' share the same I/O pin.'];
+				    		    result = 1;
+					        end % if ~isempty(find(get(xps_objs{n},'bit_index')==floor(bit_index(k)/2)))
+					    end % for k=1:length(bit_index)
+                    elseif strcmp(get(blk_obj,'single_ended'), 'off') & strcmp(get(xps_objs{n}, 'single_ended'), 'on')
+                        for k=1:length(bit_index)
+		    			    if ~isempty(find(get(xps_objs{i},'bit_index')==floor(bit_index(j)/2)))
+			    			    msg = ['GPIO ',get(blk_obj,'simulink_name'),' and GPIO ',get(xps_objs{n},'simulink_name'),' share the same I/O pin.'];
+				    		    result = 1;
+					        end % if ~isempty(find(get(xps_objs{i},'bit_index')==floor(bit_index(j)/2)))
+					    end % for k=1:length(bit_index)
+                    else
+	    			    for k=1:length(bit_index)
+		    			    if ~isempty(find(get(xps_objs{n},'bit_index')==bit_index(k)))
+			    			    msg = ['GPIO ',get(blk_obj,'simulink_name'),' and GPIO ',get(xps_objs{n},'simulink_name'),' share the same I/O pin.'];
+				    		    result = 1;
+					        end % if ~isempty(find(get(xps_objs{n},'bit_index')==bit_index(k)))
+				        end % for k=1:length(bit_index)
+				    end % if strcmp(get(blk_obj,'single_ended'), 'on') & strcmp(get(xps_objs{n},'single_ended'), 'off')
+				else
+                    for k=1:length(bit_index)
+                        if ~isempty(find(get(xps_objs{n},'bit_index')==bit_index(k)))
+                            msg = ['GPIO ',get(blk_obj,'simulink_name'),' and GPIO ',get(xps_objs{n},'simulink_name'),' share the same I/O pin.'];
+                            result = 1;
+                        end % if ~isempty(find(get(xps_objs{n},'bit_index')==bit_index(k)))
+                    end % for k=1:length(bit_index)
+                end % if ~isempty(find(strcmp(blk_obj.io_group,{'zdok0', 'zdok1', 'mdr'})))
             end % if ~strcmp(get(blk_obj,'simulink_name'),get(xps_objs{n},'simulink_name'))
         end % if strcmp(blk_obj.hw_sys,get(xps_objs{n},'hw_sys')) && strcmp(blk_obj.io_group,get(xps_objs{n},'io_group'))
     end % try

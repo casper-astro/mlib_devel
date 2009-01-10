@@ -41,9 +41,10 @@ end
 s.reg_clk_phase = get_param(blk_name,'reg_clk_phase');
 s.use_ddr = strcmp(get_param(blk_name,'use_ddr'),'on');
 s.termtype = get_param(blk_name,'termination');
+s.single_ended = get_param(blk_name,'use_single_ended');
 b = class(s,'xps_gpio',blk_obj);
 
-use_diffio = ~isempty(strmatch(s.io_group, {'zdok0', 'zdok1', 'mdr', 'qsh'}));
+use_diffio = ~isempty(strmatch(s.io_group, {'zdok0', 'zdok1', 'mdr', 'qsh'})) & strcmp(s.single_ended, 'off');
 
 if ~isempty(strmatch(s.termtype, {'Pullup', 'Pulldown'}))
     termination = s.termtype;

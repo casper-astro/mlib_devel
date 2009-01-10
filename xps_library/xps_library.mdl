@@ -34,9 +34,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "hchen05"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Dec 22 18:10:23 2008"
+  LastModifiedDate	  "Fri Jan 09 16:07:29 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:364>"
+  ModelVersionFormat	  "1.%<AutoIncrement:366>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -183,6 +183,12 @@ Library {
     }
     Block {
       BlockType		      Reference
+    }
+    Block {
+      BlockType		      "S-Function"
+      FunctionName	      "system"
+      SFunctionModules	      "''"
+      PortCounts	      "[]"
     }
     Block {
       BlockType		      SubSystem
@@ -2128,7 +2134,7 @@ Library {
       MaskDescription	      "The XSG Core Config block is used to configure the System Generator design\nfor the bee_xps toolflow. Settings here are used to configure the\nXilinx System Generator block parameters automatically, and control toolflow\nscript  execution. It needs to be at the top level of all designs being compiled\nwith the bee_xps toolflow."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_xsg_core_config\\sys_xsg_core_config.html''])')"
       MaskPromptString	      "Hardware Platform|Include Linux add-on board support|User IP Clock source|User IP Clock source|User IP Clock Source|User IP Clock Source|User IP Clock Source|User IP Clock Source|GPIO Clock Pin I/O group|GPIO Clock Pin bit index|User IP Clock Rate (MHz)|Sample Period|Synthesis Tool:|Processor:"
-      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|aux_clk_0|aux_clk_1|adc0_clk|adc1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
+      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|aux0_clk|aux1_clk|adc0_clk|adc1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "xps_xsg_conf_callback;|||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;||||||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,off,on,on,on"
@@ -15093,23 +15099,23 @@ Library {
       FunctionWithSeparateData off
       MaskType		      "gpio"
       MaskDescription	      "GPIO interfaces for BEE2, iBOB, ROACH and CORR boards."
-      MaskPromptString	      "I/O group|I/O direction|Data Type|Data bitwidth|Data binary point|GPIO bit index|Sample period|Use DDR|Pack register in the pad|Register clock phase|Termination method"
-      MaskStyleString	      "popup(iBOB:led|iBOB:dipsw|iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:zdok0|iBOB:zdok1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlink4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver|ROACH:led),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
-      MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off"
-      MaskCallbackString      "|||||||if strcmp(get_param(gcb,'use_ddr'),'on')\n    set_param(gcb,'reg_iob','on');\nend|||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,"
-      MaskVariables	      "io_group=@1;io_dir=@2;arith_type=@3;bitwidth=@4;bin_pt=@5;bit_index=@6;sample_period=@7;use_ddr=@8;reg_iob=@9;reg_clk_phase=@10;termination=@11;"
+      MaskPromptString	      "I/O group|I/O direction|Data Type|Data bitwidth|Data binary point|GPIO bit index|Sample period|Use as single-ended|Use DDR|Pack register in the pad|Register clock phase|Termination method"
+      MaskStyleString	      "popup(iBOB:led|iBOB:dipsw|iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:zdok0|iBOB:zdok1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlink4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:led|ROACH:zdok0|ROACH:zdok1|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
+      MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off"
+      MaskCallbackString      "if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'iBOB:zdok0' 'iBOB:zdok1' 'iBOB:mdr' 'ROACH:zdok0' 'ROACH:zdok1'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','on','on','on','on'});\nelse\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','off','on','on','on','on'});\nend||||||||if strcmp(get_param(gcb,'use_ddr'),'on')\n    set_param(gcb,'reg_iob','on');\n    set_param(gcb,'MaskEnables', {'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'off' 'on' 'on'});\nelse\n    set_param(gcb,'MaskEnables', {'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on'});\nend|||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,off,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,"
+      MaskVariables	      "io_group=@1;io_dir=@2;arith_type=@3;bitwidth=@4;bin_pt=@5;bit_index=@6;sample_period=@7;use_single_ended=@8;use_ddr=@9;reg_iob=@10;reg_clk_phase=@11;termination=@12;"
       MaskInitialization      "gpio_mask;"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "iBOB:led|out|Boolean|1|0|1|1|off|on|0|None"
-      MaskTabNameString	      ",,,,,,,,,,"
+      MaskValueString	      "iBOB:led|out|Boolean|1|0|1|1|off|off|on|0|None"
+      MaskTabNameString	      ",,,,,,,,,,,"
       System {
 	Name			"gpio"
 	Location		[460, 146, 919, 417]
@@ -15147,16 +15153,16 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "10.1.3"
 	  sg_icon_stat		  "30,20,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 ],[0 0 20 20 ],[0.77 0.82 0.91]);\npatch([9 6 11 6 9 14 15 16 22 18 14 11 16 11 14 18 22 16 15 14 9 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 30 30 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -15166,11 +15172,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
