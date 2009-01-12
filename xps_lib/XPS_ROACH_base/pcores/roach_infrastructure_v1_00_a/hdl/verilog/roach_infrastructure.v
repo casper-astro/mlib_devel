@@ -43,8 +43,8 @@ module roach_infrastructure(
   wire sysclk_dcm_locked;
 
   IBUFGDS #(
-    .IOSTANDARD("LVDS_25"),
-    .DIFF_TERM("TRUE")
+    .IOSTANDARD ("LVDS_25"),
+    .DIFF_TERM  ("TRUE")
   ) ibufgd_sys (
     .I (sys_clk_p),
     .IB(sys_clk_n),
@@ -53,21 +53,21 @@ module roach_infrastructure(
 
   wire sys_clk_dcm, sys_clk90_dcm;
   DCM_BASE #(
-    .CLKIN_PERIOD(10.0)
+    .CLKIN_PERIOD   (10.0)
   ) SYSCLK_DCM (
-    .CLK0(sys_clk_dcm),
-    .CLK180(),
-    .CLK270(),
-    .CLK2X(),
-    .CLK2X180(),
-    .CLK90(sys_clk90_dcm),
-    .CLKDV(),
-    .CLKFX(),
-    .CLKFX180(),
-    .LOCKED(sysclk_dcm_locked),
-    .CLKFB(sys_clk),
-    .CLKIN(sys_clk_int),
-    .RST(1'b0)
+    .CLK0       (sys_clk_dcm),
+    .CLK180     (),
+    .CLK270     (),
+    .CLK2X      (),
+    .CLK2X180   (),
+    .CLK90      (sys_clk90_dcm),
+    .CLKDV      (),
+    .CLKFX      (),
+    .CLKFX180   (),
+    .LOCKED     (sysclk_dcm_locked),
+    .CLKFB      (sys_clk),
+    .CLKIN      (sys_clk_int),
+    .RST        (1'b0)
   );
 
   BUFG bufg_sys_clk[1:0](
@@ -83,12 +83,12 @@ module roach_infrastructure(
   wire  aux_clk_0_int;
   wire  aux_clk_1_int;
   IBUFGDS #(
-    .IOSTANDARD("LVDS_25"),
-    .DIFF_TERM("TRUE")
+    .IOSTANDARD ("LVDS_25"),
+    .DIFF_TERM  ("TRUE")
   ) ibufgd_aux_arr[1:0] (
-    .I ({aux_clk_0_p,   aux_clk_1_p}),
-    .IB({aux_clk_0_n,   aux_clk_1_n}),
-    .O ({aux_clk_0_int, aux_clk_1_int})
+    .I  ({aux_clk_0_p,   aux_clk_1_p}),
+    .IB ({aux_clk_0_n,   aux_clk_1_n}),
+    .O  ({aux_clk_0_int, aux_clk_1_int})
   );
 
   wire  aux0_clk_dcm;
@@ -97,25 +97,27 @@ module roach_infrastructure(
   wire  aux1_clk90_dcm;
 
   DCM_BASE #(
-    .CLKIN_PERIOD(5.0)
+    .CLKIN_PERIOD       (5.0),
+    .DLL_FREQUENCY_MODE ("HIGH")
   ) AUXCLK0_DCM (
-    .CLK0(  aux0_clk_dcm),
-    .CLK90( aux0_clk90_dcm),
-    .LOCKED(),
-    .CLKFB( aux0_clk),
-    .CLKIN( aux_clk_0_int),
-    .RST(   ~sysclk_dcm_locked)
+    .CLK0   (aux0_clk_dcm),
+    .CLK90  (aux0_clk90_dcm),
+    .LOCKED (),
+    .CLKFB  (aux0_clk),
+    .CLKIN  (aux_clk_0_int),
+    .RST    (~sysclk_dcm_locked)
   );
 
   DCM_BASE #(
-    .CLKIN_PERIOD(5.0)
+    .CLKIN_PERIOD       (5.0),
+    .DLL_FREQUENCY_MODE ("HIGH")
   ) AUXCLK1_DCM (
-    .CLK0(  aux1_clk_dcm),
-    .CLK90( aux1_clk90_dcm),
-    .LOCKED(),
-    .CLKFB( aux1_clk),
-    .CLKIN( aux_clk_1_int),
-    .RST(   ~sysclk_dcm_locked)
+    .CLK0   (aux1_clk_dcm),
+    .CLK90  (aux1_clk90_dcm),
+    .LOCKED (),
+    .CLKFB  (aux1_clk),
+    .CLKIN  (aux_clk_1_int),
+    .RST    (~sysclk_dcm_locked)
   );
 
   BUFG bufg_aux_clk[3:0](
@@ -144,9 +146,9 @@ module roach_infrastructure(
   );
 
   IDELAYCTRL idelayctrl_inst(
-    .REFCLK(dly_clk),
-    .RST(idelay_rst),
-    .RDY(idelay_rdy)
+    .REFCLK (dly_clk),
+    .RST    (idelay_rst),
+    .RDY    (idelay_rdy)
   );
 
 
