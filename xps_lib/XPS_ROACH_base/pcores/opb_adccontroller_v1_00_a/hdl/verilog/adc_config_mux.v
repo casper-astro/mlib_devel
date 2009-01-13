@@ -127,13 +127,23 @@ module adc_config_mux #(
   localparam CONF_RESET      = 3'd4;
   localparam CONF_DONE       = 3'd5;
 
+  reg [9:0] clear_wait;
+  /* This wait needs to be long as there seems to be a TON of
+     capacitance on the mode line
+  */
+
   always @(posedge clk) begin
     if (rst) begin
       conf_state <= CONF_MODE_CLEAR;
+      clear_wait <= 10'b11_1111_1111;
     end else begin
       case (conf_state)
         CONF_MODE_CLEAR: begin
-          conf_state <= CONF_MODE_SET;
+          if (!clear_wait) begin
+            conf_state <= CONF_MODE_SET;
+          end else begin
+            clear_wait <= clear_wait - 1;
+          end
         end
         CONF_MODE_SET: begin
           conf_state <= CONF_LOAD;
@@ -155,7 +165,7 @@ module adc_config_mux #(
   end
 
   assign ddrb_int         = conf_state == CONF_RESET;
-  assign mode_int         = conf_state == CONF_MODE_CLEAR ? 1'b0 : 1'b1;
+  assign mode_int         = clear_wait < 10'b01_1111_1111;
   assign config_start_int = conf_state == CONF_LOAD;
   assign config_data_int  = INTERLEAVED ? 16'h7c2c : 16'h7cbc;
   assign config_addr_int  = 3'b0;
