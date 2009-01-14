@@ -16,10 +16,10 @@ PORT sys_clk_n   = sys_clk_n,   DIR = I, SIGIS = CLK
 PORT sys_clk_p   = sys_clk_p,   DIR = I, SIGIS = CLK
 PORT dly_clk_n   = dly_clk_n,   DIR = I, SIGIS = CLK
 PORT dly_clk_p   = dly_clk_p,   DIR = I, SIGIS = CLK
-PORT aux_clk_0_n = aux_clk_0_n, DIR = I, SIGIS = CLK
-PORT aux_clk_0_p = aux_clk_0_p, DIR = I, SIGIS = CLK
-PORT aux_clk_1_n = aux_clk_1_n, DIR = I, SIGIS = CLK
-PORT aux_clk_1_p = aux_clk_1_p, DIR = I, SIGIS = CLK
+PORT aux0_clk_n  = aux0_clk_n, DIR = I, SIGIS = CLK
+PORT aux0_clk_p  = aux0_clk_p, DIR = I, SIGIS = CLK
+PORT aux1_clk_n  = aux1_clk_n, DIR = I, SIGIS = CLK
+PORT aux1_clk_p  = aux1_clk_p, DIR = I, SIGIS = CLK
 
 # EPB Ports
 PORT epb_clk_buf = epb_clk_buf, DIR = I
@@ -72,10 +72,10 @@ BEGIN roach_infrastructure
   PORT sys_clk_p     = sys_clk_p
   PORT dly_clk_n     = dly_clk_n
   PORT dly_clk_p     = dly_clk_p
-  PORT aux_clk_0_n   = aux_clk_0_n
-  PORT aux_clk_0_p   = aux_clk_0_p
-  PORT aux_clk_1_n   = aux_clk_1_n
-  PORT aux_clk_1_p   = aux_clk_1_p
+  PORT aux0_clk_n    = aux0_clk_n
+  PORT aux0_clk_p    = aux0_clk_p
+  PORT aux1_clk_n    = aux1_clk_n
+  PORT aux1_clk_p    = aux1_clk_p
   PORT epb_clk_buf   = epb_clk_buf
   PORT sys_clk       = sys_clk
   PORT sys_clk90     = sys_clk90
@@ -90,6 +90,10 @@ BEGIN roach_infrastructure
   PORT aux1_clk90    = aux1_clk90
   PORT aux1_clk180   = aux1_clk180
   PORT aux1_clk270   = aux1_clk270
+  PORT aux0_clk2x    = aux0_clk2x
+  PORT aux0_clk2x90  = aux0_clk2x90
+  PORT aux0_clk2x180 = aux0_clk2x180
+  PORT aux0_clk2x270 = aux0_clk2x270
   PORT epb_clk       = epb_clk
   PORT idelay_rst    = sys_reset
   PORT idelay_rdy    = idelay_rdy

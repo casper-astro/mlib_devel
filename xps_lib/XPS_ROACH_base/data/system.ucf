@@ -23,17 +23,17 @@ TIMESPEC TS_epb_clk = PERIOD epb_clk 88 MHz;
 # System signals
 #
 
-NET "sys_clk_n"   LOC = H13;
-NET "sys_clk_p"   LOC = J14;
+NET "sys_clk_n"  LOC = H13;
+NET "sys_clk_p"  LOC = J14;
 
-NET "aux_clk_0_p" LOC = G15;
-NET "aux_clk_0_n" LOC = G16;
+NET "aux0_clk_p" LOC = G15;
+NET "aux0_clk_n" LOC = G16;
 
-NET "aux_clk_1_p" LOC = H14;
-NET "aux_clk_1_n" LOC = H15;
+NET "aux1_clk_p" LOC = H14;
+NET "aux1_clk_n" LOC = H15;
 
-NET "dly_clk_n"   LOC = J17;
-NET "dly_clk_p"   LOC = J16;
+NET "dly_clk_n"  LOC = J17;
+NET "dly_clk_p"  LOC = J16;
 
 #
 # PPC External Peripheral Bus [EPB]
