@@ -28,17 +28,27 @@ hw_sys  = blk_obj.hw_sys;
 app_clk = blk_obj.clk_src;
 app_clk_rate = blk_obj.clk_rate;
 
-if ~isempty(strmatch(app_clk, {'aux_clk_0', 'aux_clk_1'}))
+if ~isempty(strmatch(app_clk, {'aux_clk_0', 'aux_clk_1', 'aux0_clk2x'}))
+
+    toks = regexp(app_clk, '(.+_clk)2x', 'tokens');
+
+    if isempty(toks)
+        clk_rate_constraint = num2str(app_clk_rate);
+        timespec_clk = app_clk;
+    else
+        clk_rate_constraint = num2str(app_clk_rate/2);
+        timespec_clk = toks{1}{1};
+    end % if isempty(toks)
 
     str = [str, '##############################################\n'];
     str = [str, '# External Clock constraints                 #\n'];
     str = [str, '##############################################\n'];
     str = [str, '\n'];
-    str = [str, 'NET "', app_clk,'_p" TNM_NET = "', app_clk,'_p" ;\n'];
+    str = [str, 'NET "', timespec_clk,'_p" TNM_NET = "', timespec_clk,'_p" ;\n'];
 
-    str = [str, 'TIMESPEC "TS_', app_clk,'_p" = PERIOD "', app_clk, '_p" ', num2str(app_clk_rate),' MHz ;\n'];
+    str = [str, 'TIMESPEC "TS_', timespec_clk,'_p" = PERIOD "', timespec_clk, '_p" ', clk_rate_constraint,' MHz ;\n'];
 
     str = [str, '\n\n'];
-end
+end % if ~isempty(strmatch(app_clk, {'aux_clk_0', 'aux_clk_1', 'aux0_clk2x'}))
 
 str = [str, gen_ucf(blk_obj.xps_block)];
