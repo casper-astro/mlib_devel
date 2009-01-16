@@ -49,7 +49,7 @@ module dram_arbiter(
     end else begin
       case (arb_state)
         STATE_ARB0: begin
-          if (slave0_cmd_valid && !slave0_cmd_rnw || !arb_ready) begin
+          if (slave0_cmd_valid || !arb_ready) begin
             arb_state <= STATE_WAIT;
           end else if (slave1_cmd_valid) begin
             arb_state <= STATE_ARB1;
