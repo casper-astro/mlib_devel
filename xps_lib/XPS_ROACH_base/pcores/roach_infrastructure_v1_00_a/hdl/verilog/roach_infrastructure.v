@@ -1,9 +1,10 @@
 module roach_infrastructure(
     sys_clk_n, sys_clk_p,
     sys_clk, sys_clk90, sys_clk180, sys_clk270,
+    sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270,
     dly_clk_n,  dly_clk_p,
     dly_clk,
-    epb_clk_buf,
+    epb_clk_in,
     epb_clk,
     idelay_rst, idelay_rdy,
     aux0_clk_n, aux0_clk_p,
@@ -14,9 +15,10 @@ module roach_infrastructure(
   );
   input  sys_clk_n, sys_clk_p;
   output sys_clk, sys_clk90, sys_clk180, sys_clk270;
+  output sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270;
   input  dly_clk_n, dly_clk_p;
   output dly_clk;
-  input  epb_clk_buf;
+  input  epb_clk_in;
   output epb_clk;
   input  aux0_clk_n, aux0_clk_p;
   output aux0_clk, aux0_clk90, aux0_clk180, aux0_clk270;
@@ -29,20 +31,43 @@ module roach_infrastructure(
 
 
   /* EPB Clk */
-  wire epb_clk_ibuf;
+  wire  epb_clk_int;
+  wire  epb_clk_dcm;
+  wire  epb_clk_dcm_locked;
 
-  IBUF ibuf_epb(
-    .I(epb_clk_buf),
-    .O(epb_clk_ibuf)
+  IBUFG ibuf_epb(
+    .I(epb_clk_in),
+    .O(epb_clk_int)
   );
 
+    DCM_BASE #(
+        .CLKIN_PERIOD   (11.363)
+    ) EPB_CLK_DCM (
+        .CLKIN  (epb_clk_int),
+        .CLK0   (epb_clk_dcm),
+        .CLK90  (),
+        .CLK180 (),
+        .CLK270 (),
+        .CLK2X  (),
+        .CLKFB  (epb_clk),
+        .LOCKED (epb_clk_dcm_locked),
+        .RST    (1'b0)
+    );
+
   BUFG bufg_epb(
-    .I(epb_clk_ibuf), .O(epb_clk)
+    .I(epb_clk_dcm), .O(epb_clk)
   );
 
   /* system clock */
-  wire sys_clk_int;
-  wire sysclk_dcm_locked;
+  wire  sys_clk_int;
+  wire  sys_clk_dcm_locked;
+  wire  sys_clk_dcm, sys_clk90_dcm;
+
+  wire  sys_clk2x_int;
+  wire  sys_clk2x_buf;
+  wire  sys_clk2x_dcm;
+  wire  sys_clk2x90_dcm;
+  wire  sys_clk2x_dcm_locked;
 
   IBUFGDS #(
     .IOSTANDARD ("LVDS_25"),
@@ -53,33 +78,52 @@ module roach_infrastructure(
     .O (sys_clk_int)
   );
 
-  wire sys_clk_dcm, sys_clk90_dcm;
+
   DCM_BASE #(
     .CLKIN_PERIOD   (10.0)
-  ) SYSCLK_DCM (
+  ) SYS_CLK_DCM (
     .CLKIN      (sys_clk_int),
     .CLK0       (sys_clk_dcm),
     .CLK180     (),
     .CLK270     (),
-    .CLK2X      (),
+    .CLK2X      (sys_clk2x_int),
     .CLK2X180   (),
     .CLK90      (sys_clk90_dcm),
     .CLKDV      (),
     .CLKFX      (),
     .CLKFX180   (),
-    .LOCKED     (sysclk_dcm_locked),
+    .LOCKED     (sys_clk_dcm_locked),
     .CLKFB      (sys_clk),
     .RST        (1'b0)
   );
+
+    DCM_BASE #(
+        .CLKIN_PERIOD       (5.0),
+        .DLL_FREQUENCY_MODE ("HIGH")
+    ) SYS_CLK2X_DCM (
+        .CLKIN      (sys_clk2x_buf),
+        .CLK0       (sys_clk2x_dcm),
+        .CLK90      (sys_clk2x90_dcm),
+        .LOCKED     (sys_clk2x_dcm_locked),
+        .CLKFB      (sys_clk2x),
+        .RST        (~sys_clk_dcm_locked)
+    );
 
   BUFG bufg_sys_clk[1:0](
     .I({sys_clk_dcm, sys_clk90_dcm}),
     .O({sys_clk,     sys_clk90})
   );
 
+    BUFG bufg_sys_clk2x[2:0](
+        .I({sys_clk2x_int,  sys_clk2x_dcm,  sys_clk2x90_dcm}),
+        .O({sys_clk2x_buf,  sys_clk2x,      sys_clk2x90})
+    );
+
   // rely on inference of Xilinx internal clock inversion structures down the line
   assign sys_clk180 = ~sys_clk;
   assign sys_clk270 = ~sys_clk90;
+  assign sys_clk2x180 = ~sys_clk2x;
+  assign sys_clk2x270 = ~sys_clk2x90;
 
   /* Aux clocks */
   wire  aux0_clk_int;
@@ -109,7 +153,7 @@ module roach_infrastructure(
   DCM_BASE #(
     .CLKIN_PERIOD       (5.0),
     .DLL_FREQUENCY_MODE ("HIGH")
-  ) AUXCLK0_DCM (
+  ) AUX0_CLK_DCM (
     .CLKIN  (aux0_clk_int),
     .CLK0   (aux0_clk_dcm),
     .CLK90  (aux0_clk90_dcm),
@@ -122,7 +166,7 @@ module roach_infrastructure(
   DCM_BASE #(
     .CLKIN_PERIOD       (5.0),
     .DLL_FREQUENCY_MODE ("HIGH")
-  ) AUXCLK1_DCM (
+  ) AUX1_CLK_DCM (
     .CLKIN  (aux1_clk_int),
     .CLK0   (aux1_clk_dcm),
     .CLK90  (aux1_clk90_dcm),
@@ -134,7 +178,7 @@ module roach_infrastructure(
   DCM_BASE #(
     .CLKIN_PERIOD       (5.0),
     .DLL_FREQUENCY_MODE ("HIGH")
-  ) AUXCLK0_2x_DCM (
+  ) AUX0_CLK2X_DCM (
     .CLKIN  (aux0_clk2x_buf),
     .CLK0   (aux0_clk2x_dcm),
     .CLK90  (aux0_clk2x90_dcm),

@@ -102,7 +102,7 @@ NET "epb_oe_n"       IOSTANDARD = LVCMOS33 | LOC = AF21;
 #NET "epb_blast_n"    IOSTANDARD = LVCMOS33 | LOC = H23;
 NET "epb_rdy"        IOSTANDARD = LVCMOS33 | LOC = K12;
 
-NET "epb_clk_buf"    IOSTANDARD = LVCMOS33 | LOC = AH18;
+NET "epb_clk_in"    IOSTANDARD = LVCMOS33 | LOC = AH18;
 
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))############## MGT Signals #############
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#
