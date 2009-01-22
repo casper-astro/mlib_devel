@@ -31,31 +31,10 @@ module roach_infrastructure(
 
 
   /* EPB Clk */
-  wire  epb_clk_int;
-  wire  epb_clk_dcm;
-  wire  epb_clk_dcm_locked;
 
   IBUFG ibuf_epb(
     .I(epb_clk_in),
-    .O(epb_clk_int)
-  );
-
-    DCM_BASE #(
-        .CLKIN_PERIOD   (11.363)
-    ) EPB_CLK_DCM (
-        .CLKIN  (epb_clk_int),
-        .CLK0   (epb_clk_dcm),
-        .CLK90  (),
-        .CLK180 (),
-        .CLK270 (),
-        .CLK2X  (),
-        .CLKFB  (epb_clk),
-        .LOCKED (epb_clk_dcm_locked),
-        .RST    (1'b0)
-    );
-
-  BUFG bufg_epb(
-    .I(epb_clk_dcm), .O(epb_clk)
+    .O(epb_clk)
   );
 
   /* system clock */
