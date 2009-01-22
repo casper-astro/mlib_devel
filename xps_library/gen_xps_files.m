@@ -557,8 +557,27 @@ if run_edkgen
         end
 
         try
+            [str, opb_addr, plb_addr,this_opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr,plb_addr,plb_name,opb_name);
+        catch
+            disp('Problem with block : ')
+            display(blk_obj);
+            disp(lasterr);
+            error('Error found during Peripheral generation in MHS (gen_mhs_ip).');
+        end
+
+	fprintf(mhs_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
+        fprintf(mhs_fid,str);
+        fprintf(mhs_fid,'\n');
+
+        str = gen_m_core_info(blk_obj, str);
+        fprintf(nfo_fid,['%% ',get(blk_obj,'simulink_name'),'\n']);
+        fprintf(nfo_fid,str);
+        fprintf(nfo_fid,'\n');
+
+
+	try
             if strcmp(hw_sys, 'ROACH')
-              str = gen_borf_info(n, blk_obj, opb_addr);
+              str = gen_borf_info(n, blk_obj, this_opb_addr_start);
             else
               str = gen_borf_info(n, blk_obj, {});
             end
@@ -569,23 +588,6 @@ if run_edkgen
             disp(lasterr);
             error('Error found during Peripheral generation in BOF (gen_borf_info).');
         end
-
-        try
-            [str, opb_addr, plb_addr] = gen_mhs_ip(blk_obj,opb_addr,plb_addr,plb_name,opb_name);
-        catch
-            disp('Problem with block : ')
-            display(blk_obj);
-            disp(lasterr);
-            error('Error found during Peripheral generation in MHS (gen_mhs_ip).');
-        end
-        fprintf(mhs_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
-        fprintf(mhs_fid,str);
-        fprintf(mhs_fid,'\n');
-
-        str = gen_m_core_info(blk_obj, str);
-        fprintf(nfo_fid,['%% ',get(blk_obj,'simulink_name'),'\n']);
-        fprintf(nfo_fid,str);
-        fprintf(nfo_fid,'\n');
 
         n = n + 1;
     end
