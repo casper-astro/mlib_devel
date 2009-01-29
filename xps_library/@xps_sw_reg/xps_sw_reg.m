@@ -76,5 +76,5 @@ switch get_param(blk_name,'io_dir')
         borph_info.mode = 1;
 end
 
-borph_info.size = 256;
+borph_info.size = 4;
 b = set(b,'borph_info',borph_info);
