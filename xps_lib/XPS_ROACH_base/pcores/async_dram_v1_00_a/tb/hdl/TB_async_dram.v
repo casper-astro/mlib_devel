@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-`define SIMLENGTH       1000000
+`define SIMLENGTH       100000
 `define SYS_CLK_PERIOD  22
 `define DRAM_CLK_PERIOD 6
 
