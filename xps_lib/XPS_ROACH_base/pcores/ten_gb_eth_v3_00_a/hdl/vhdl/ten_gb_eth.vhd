@@ -233,7 +233,7 @@ architecture ten_gb_eth_arch of ten_gb_eth is
 	end component;
 
 	-- address_fifos
-	component addr_fifo
+	component address_fifo
 		port (
 			din                             : in  std_logic_vector(63 downto 0);
 			rd_clk                          : in  std_logic;
@@ -590,7 +590,7 @@ tx_buffer_cpu: packet_buffer_cpu
 	);
 
 -- transmit address fifo
-tx_address_fifo: addr_fifo
+tx_address_fifo: address_fifo
 	port map (
 		rst      => rst,
 
@@ -936,7 +936,7 @@ rx_buffer_cpu: packet_buffer_cpu
 	);
 
 -- receive address fifos
-rx_address_fifo: addr_fifo
+rx_address_fifo: address_fifo
 	port map (
 		rst      => rst,
 
