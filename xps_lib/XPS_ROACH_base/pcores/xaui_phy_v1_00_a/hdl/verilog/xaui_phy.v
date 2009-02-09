@@ -25,6 +25,8 @@ module xaui_phy(
     xaui_reset,
     xaui_status
   );
+  parameter USE_KAT_XAUI = 1;
+
   input  mgt_clk, reset;
   /* mgt signals */
   output [63:0] mgt_txdata;
@@ -61,7 +63,8 @@ module xaui_phy(
       1'b0        //loopback
     };
 
-  xaui_v7_2 xaui_inst(
+generate if (USE_KAT_XAUI) begin : use_kat_xaui
+  xaui_kat  xaui_inst(
     .reset  (reset),   
     .usrclk (mgt_clk),
     /* client side */
@@ -91,7 +94,38 @@ module xaui_phy(
     .mgt_rx_reset         (mgt_rx_reset),
     .signal_detect        (4'b1111)
   );
-  //sythesis attribute box_type of xaui_v7_2 is "user_block_box"
+end else begin : use_xilinx_xaui
+  xaui_v7_2  xaui_inst(
+    .reset  (reset),   
+    .usrclk (mgt_clk),
+    /* client side */
+    .xgmii_txd (xgmii_txd),
+    .xgmii_txc (xgmii_txc),
+    .xgmii_rxd (xgmii_rxd),
+    .xgmii_rxc (xgmii_rxc),
+    /* mgt side */
+    .mgt_txdata       (mgt_txdata),
+    .mgt_txcharisk    (mgt_txcharisk),
+    .mgt_rxdata       (mgt_rxdata),
+    .mgt_rxcharisk    (mgt_rxcharisk),
+    .mgt_codevalid    (mgt_code_valid),
+    .mgt_codecomma    (mgt_code_comma),
+    .mgt_enable_align (mgt_enable_align),
+    .mgt_enchansync   (mgt_en_chan_sync),
+    .mgt_syncok       (mgt_syncok),
+    .mgt_loopback     (mgt_loopback),
+    .mgt_powerdown    (mgt_powerdown),
+    .mgt_rxlock       (mgt_rxlock),
+    /* status & configuration*/
+    .configuration_vector (xaui_configuration_vector),
+    .status_vector        (xaui_status),
+    .align_status         (),
+    .sync_status          (),
+    .mgt_tx_reset         (mgt_tx_reset),
+    .mgt_rx_reset         (mgt_rx_reset),
+    .signal_detect        (4'b1111)
+  );
+end endgenerate
 
 
   /**************** Resets ***********************/
