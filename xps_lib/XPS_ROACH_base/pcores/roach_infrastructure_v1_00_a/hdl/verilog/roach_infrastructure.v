@@ -34,8 +34,14 @@ module roach_infrastructure(
 
   /* EPB Clk */
 
-  IBUFG ibuf_epb(
+  wire epb_clk_int;
+  IBUF ibuf_epb(
     .I(epb_clk_in),
+    .O(epb_clk_int)
+  );
+
+  BUFG bufg_epb(
+    .I(epb_clk_int),
     .O(epb_clk)
   );
 
