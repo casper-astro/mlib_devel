@@ -32,11 +32,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "sgowda"
+  LastModifiedBy	  "dave"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Feb 08 15:01:59 2009"
+  LastModifiedDate	  "Tue Feb 10 15:57:13 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:371>"
+  ModelVersionFormat	  "1.%<AutoIncrement:372>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -257,7 +257,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [143, 82, 1283, 754]
+    Location		    [298, 136, 1438, 808]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -2119,7 +2119,7 @@ Library {
       Name		      "XSG core config"
       Tag		      "xps:xsg"
       Ports		      []
-      Position		      [20, 209, 66, 252]
+      Position		      [25, 204, 71, 247]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       RTWSystemCode	      "Auto"
@@ -2128,7 +2128,7 @@ Library {
       MaskDescription	      "The XSG Core Config block is used to configure the System Generator design\nfor the bee_xps toolflow. Settings here are used to configure the\nXilinx System Generator block parameters automatically, and control toolflow\nscript  execution. It needs to be at the top level of all designs being compiled\nwith the bee_xps toolflow."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_xsg_core_config\\sys_xsg_core_config.html''])')"
       MaskPromptString	      "Hardware Platform|Include Linux add-on board support|User IP Clock source|User IP Clock source|User IP Clock Source|User IP Clock Source|User IP Clock Source|User IP Clock Source|GPIO Clock Pin I/O group|GPIO Clock Pin bit index|User IP Clock Rate (MHz)|Sample Period|Synthesis Tool:|Processor:"
-      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|aux0_clk|aux1_clk|adc0_clk|adc1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
+      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux1_clk|adc0_clk|adc1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "xps_xsg_conf_callback;|||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;||||||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,off,on,on,on"
@@ -2143,7 +2143,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "iBOB|off|sys_clk|sys_clk|sys_clk|sys_clk|sys_clk|sys_clk|iBOB:sma|0|100|1|XST|powerpc405"
+      MaskValueString	      "iBOB|off|arb_clk|sys_clk|sys_clk|sys_clk|arb_clk|sys_clk|iBOB:sma|0|100|1|XST|powerpc440_ext"
       MaskTabNameString	      ",,,,,,,,,,,,,"
       System {
 	Name			"XSG core config"
@@ -2154,8 +2154,8 @@ Library {
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
+	PaperType		"A4"
+	PaperUnits		"centimeters"
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off

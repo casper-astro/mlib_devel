@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function b = xps_ppc(blk_obj)
+function b = xps_xsg(blk_obj)
 
 if ~isa(blk_obj,'xps_block')
     error('XPS_PPC class requires a xps_block class object');

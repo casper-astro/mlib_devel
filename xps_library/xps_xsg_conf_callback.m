@@ -100,6 +100,10 @@ switch get_param(myname,'hw_sys')
                 set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','on','off','off','off','on','on','on','off'});
             	set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
             % end case 'aux_clk_1'
+            case 'arb_clk'
+                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','on','off','off','off','on','on','on','off'});
+              	set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
+            % end case 'arb_clk'
             otherwise
                 set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','on','off','off','off','on','on','on','off'});
                 set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
