@@ -160,6 +160,7 @@ architecture IMP of user_logic is
 	attribute keep of register_ready_recap   : signal is "true";
 	attribute keep of register_ready_pre     : signal is "true";
 
+	signal register_latched      : std_logic_vector(31 downto 0);
 
 begin
 
@@ -176,6 +177,11 @@ begin
 			lock <= '0';
 			request_transfer <= '1';
 		else
+      -- ROACH compatibility: latch the register on upper half read so lower half
+      -- and upper half are atomic
+      if slv_reg_read_select = "1000" and Bus2IP_BE(0) = '1' then
+        register_latched <= register_value; 
+      end if;
 			register_ready_pre   <= register_ready;
 			register_ready_recap <= register_ready_pre;
 			if request_transfer = '1' and register_ready = '1' then
@@ -199,11 +205,11 @@ begin
 	-- IP to Bus signals
 	----------------------------------------
 
-	IP2Bus_Data        <= register_sampled when
-                                 slv_reg_read_select = "1000" else 
-                            "0000000000000000000000000000000" & lock when
-                                 slv_reg_read_select = "0010" or slv_reg_read_select = "0001" else                                  
-                            X"00000000";
+  -- ROACH compatibility: read the registered value when reading the upper half
+  -- and the latched value on the lower half
+	IP2Bus_Data        <= register_sampled when slv_reg_read_select = "1000" and Bus2IP_BE(0) = '1'  else 
+	                      register_latched when slv_reg_read_select = "1000" and Bus2IP_BE(2) = '1'  else 
+                        "0000000000000000000000000000000" & lock when slv_reg_read_select = "0010" or slv_reg_read_select = "0001" else                                                X"00000000";
 
 	IP2Bus_Ack         <= '1' when (slv_reg_read_select = "1000") or (slv_reg_read_select = "0001") or (slv_reg_read_select = "0010") else '0';
 	IP2Bus_Error       <= '0';

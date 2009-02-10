@@ -1,6 +1,7 @@
 module roach_infrastructure(
     sys_clk_n, sys_clk_p,
     sys_clk, sys_clk90, sys_clk180, sys_clk270,
+    sys_clk_lock,
     sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270,
     dly_clk_n,  dly_clk_p,
     dly_clk,
@@ -15,6 +16,7 @@ module roach_infrastructure(
   );
   input  sys_clk_n, sys_clk_p;
   output sys_clk, sys_clk90, sys_clk180, sys_clk270;
+  output sys_clk_lock;
   output sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270;
   input  dly_clk_n, dly_clk_p;
   output dly_clk;
@@ -76,17 +78,19 @@ module roach_infrastructure(
     .RST        (1'b0)
   );
 
-    DCM_BASE #(
-        .CLKIN_PERIOD       (5.0),
-        .DLL_FREQUENCY_MODE ("HIGH")
-    ) SYS_CLK2X_DCM (
-        .CLKIN      (sys_clk2x_buf),
-        .CLK0       (sys_clk2x_dcm),
-        .CLK90      (sys_clk2x90_dcm),
-        .LOCKED     (sys_clk2x_dcm_locked),
-        .CLKFB      (sys_clk2x),
-        .RST        (~sys_clk_dcm_locked)
-    );
+  DCM_BASE #(
+    .CLKIN_PERIOD       (5.0),
+    .DLL_FREQUENCY_MODE ("HIGH")
+  ) SYS_CLK2X_DCM (
+    .CLKIN      (sys_clk2x_buf),
+    .CLK0       (sys_clk2x_dcm),
+    .CLK90      (sys_clk2x90_dcm),
+    .LOCKED     (sys_clk2x_dcm_locked),
+    .CLKFB      (sys_clk2x),
+    .RST        (~sys_clk_dcm_locked)
+  );
+
+  assign sys_clk_lock = sys_clk_dcm_locked;
 
   BUFG bufg_sys_clk[1:0](
     .I({sys_clk_dcm, sys_clk90_dcm}),

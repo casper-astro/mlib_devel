@@ -41,4 +41,6 @@ PORT soft_reset  = soft_reset,  DIR = O
 PORT irq_n       = irq_n,       DIR = O
 PORT app_irq     = app_irq,     DIR = I, VEC = [15:0]
 
+PORT fab_clk     = "",          DIR = I
+
 END

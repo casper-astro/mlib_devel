@@ -43,7 +43,7 @@ END Program map
 # Type "trce -h" for a detailed list of trce command line options
 #
 Program post_map_trce
--e 5;                       # Produce error report limited to 3 items per constraint
+-e 200;                     # Produce error report limited to 200 items per constraint
 #-o <design>_map.twr;       # Output trace report file
 -xml <design>_map.twx;      # Output XML version of the timing report
 #-tsi <design>_map.tsi;     # Produce Timing Specification Interaction report
@@ -70,7 +70,7 @@ END Program par
 # Type "trce -h" for a detailed list of trce command line options
 #
 Program post_par_trce
--e 5;                       # Produce error report limited to 3 items per constraint
+-e 200;                     # Produce error report limited to 200 items per constraint
 #-o <design>.twr;           # Output trace report file
 -xml <design>.twx;          # Output XML version of the timing report
 #-tsi <design>.tsi;         # Produce Timing Specification Interaction report

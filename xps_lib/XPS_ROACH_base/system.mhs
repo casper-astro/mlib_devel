@@ -81,6 +81,7 @@ BEGIN roach_infrastructure
   PORT sys_clk90     = sys_clk90
   PORT sys_clk180    = sys_clk180
   PORT sys_clk270    = sys_clk270
+  PORT sys_clk_lock  = sys_clk_lock
   PORT sys_clk2x     = sys_clk2x
   PORT sys_clk2x90   = sys_clk2x90
   PORT sys_clk2x180  = sys_clk2x180
@@ -119,7 +120,7 @@ BEGIN opb_v20
   PARAMETER HW_VER = 1.10.c
   PARAMETER C_EXT_RESET_HIGH = 1
   PARAMETER C_REG_GRANTS = 0
-  PORT SYS_Rst = sys_reset
+  PORT SYS_Rst = 0b0
   PORT OPB_Clk = epb_clk
 END
 
@@ -128,7 +129,7 @@ BEGIN epb_opb_bridge
   PARAMETER HW_VER   = 1.00.a
   BUS_INTERFACE MOPB = opb0
   PORT OPB_Clk       = epb_clk
-  PORT sys_reset     = sys_reset
+  PORT sys_reset     = 0b0
   PORT epb_data_oe_n = epb_data_oe_n
   PORT epb_cs_n      = epb_cs_n_int
   PORT epb_oe_n      = epb_oe_n_int
@@ -181,6 +182,8 @@ BEGIN sys_block
   PORT soft_reset = soft_reset
   PORT irq_n      = ppc_irq_n
   PORT app_irq    = 0x0000
+
+  PORT fab_clk    = fab_clk
 END
 
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#BEGIN xaui_infrastructure
