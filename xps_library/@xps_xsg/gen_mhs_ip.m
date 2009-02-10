@@ -13,7 +13,7 @@ if strcmp(clk_src, 'arb_clk')
   % create a matrix of all the possible frequencies
   freq = 100 * (M ./ D);
   % find the best frequency match greater than the target frequency
-  bestmatch = find(freq - 256 == min(abs(freq - 256) + ((freq - 256) < 0) * 1000000));
+  bestmatch = find(freq - target_rate == min(abs(freq - target_rate) + ((freq - target_rate) < 0) * 1000000));
   bestM = M(bestmatch);
   bestD = D(bestmatch);
 
