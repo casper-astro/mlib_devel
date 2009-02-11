@@ -7,7 +7,8 @@
 % 
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points).
-% BitWidth = Bitwidth of input data.
+% input_bit_width = Bit width of input and output data.
+% coeff_bit_width = Bit width of coefficients.
 % add_latency = The latency of adders in the system.
 % mult_latency = The latency of multipliers in the system.
 % bram_latency = The latency of BRAM in the system. 
@@ -45,12 +46,13 @@ check_mask_type(blk, 'fft_biplex');
 munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
+input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 
 propagate_vars([blk,'/biplex_core'],'defaults', defaults, varargin{:});
 propagate_vars([blk,'/biplex_cplx_unscrambler'],'defaults', defaults, varargin{:});
 
-fmtstr = sprintf('FFTSize=%d, BitWidth=%d', FFTSize, BitWidth);
+fmtstr = sprintf('FFTSize=%d,\n input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, input_bit_width, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 

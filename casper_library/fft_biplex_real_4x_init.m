@@ -30,7 +30,8 @@ function fft_biplex_real_4x_init(blk, varargin)
 % 
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points). 
-% BitWidth = Bitwidth of input data. 
+% input_bit_width = Bit width of input and output data. 
+% coeff_bit_width = Bit width of coefficients 
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
 % add_latency = The latency of adders in the system.
@@ -44,7 +45,8 @@ check_mask_type(blk, 'fft_biplex_real_4x');
 munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
+input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
@@ -59,7 +61,7 @@ propagate_vars(biplex_core, 'defaults', defaults, varargin{:});
 propagate_vars([gcb,'/bi_real_unscr_4x'], 'defaults', defaults, varargin{:});
 
 % Implement delays normally or in BRAM
-if (2^(FFTSize-1) * 2*BitWidth >= DelayBramThresh*BRAMSize),
+if (2^(FFTSize-1) * 2*input_bit_width >= DelayBramThresh*BRAMSize),
     delay_bram = 'on';
 else,
     delay_bram = 'off';
@@ -82,6 +84,6 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, BitWidth=%d', FFTSize, BitWidth);
+fmtstr = sprintf('FFTSize=%d, input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, input_bit_width, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

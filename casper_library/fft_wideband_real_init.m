@@ -29,7 +29,8 @@ function fft_wideband_real_init(blk, varargin)
 % 
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points).
-% BitWidth = Bitwidth of input data.
+% input_bit_width = Bit width of input and output data.
+% coeff_bit_width = Bit width of coefficient data.
 % n_inputs = Number of parallel input streams 
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
@@ -44,7 +45,8 @@ check_mask_type(blk, 'fft_wideband_real');
 munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
+input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
@@ -82,7 +84,8 @@ for i=0:2^(n_inputs-2)-1,
     pos = [100 200*i+100 220 200*i+220];
     name = ['fft_biplex_real_4x',num2str(i)];
     reuse_block(blk, name, 'casper_library/FFTs/fft_biplex_real_4x', ...
-        'FFTSize', tostring(FFTSize-n_inputs), 'BitWidth', tostring(BitWidth), ...
+        'FFTSize', tostring(FFTSize-n_inputs), 'input_bit_width', tostring(input_bit_width), ...
+        'coeff_bit_width',tostring(coeff_bit_width), ...
         'add_latency', tostring(add_latency), 'mult_latency', tostring(mult_latency), ...
         'bram_latency',tostring(bram_latency), 'Position', pos);
     add_line(blk, ['in',num2str(4*i),'/1'], [name,'/1']);
@@ -96,7 +99,8 @@ end
 % Add direct FFTs
 pos = [400 0 520 120];
 reuse_block(blk, 'fft_direct', 'casper_library/FFTs/fft_direct', ...
-    'FFTSize', num2str(n_inputs), 'BitWidth', num2str(BitWidth), ...
+    'FFTSize', num2str(n_inputs), 'input_bit_width', num2str(input_bit_width), ...
+    'coeff_bit_width',tostring(coeff_bit_width), ...
     'add_latency', num2str(add_latency), 'mult_latency', num2str(mult_latency), ...
     'bram_latency', num2str(bram_latency), 'MapTail', num2str(1), ...
     'LargerFFTSize', num2str(FFTSize), 'StartStage', num2str(FFTSize-n_inputs+1), 'Position', pos);
@@ -150,6 +154,6 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, n_inputs=%d', FFTSize, n_inputs);
+fmtstr = sprintf('FFTSize=%d, n_inputs=%d,\n input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, n_inputs, input_bit_width, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

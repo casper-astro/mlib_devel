@@ -32,7 +32,8 @@ function butterfly_direct_init(blk, varargin)
 % FFTSize = Size of the FFT (2^FFTSize points).
 % Coeffs = Coefficients for twiddle blocks
 % StepPeriod = Coefficient step period.
-% BitWidth = Bitwidth of input data.
+% input_bit_width = Bitwidth of input and output data.
+% coeff_bit_width = Bitwdith of coefficients
 % add_latency = The latency of adders in the system.
 % mult_latency = The latency of multipliers in the system.
 % bram_latency = The latency of BRAM in the system.
@@ -47,10 +48,12 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'butterfly_direct');
 munge_block(blk, varargin{:});
 
+pass_through = get_var('pass_through', 'defaults', defaults, varargin{:});
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
 Coeffs = get_var('Coeffs', 'defaults', defaults, varargin{:});
 StepPeriod = get_var('StepPeriod', 'defaults', defaults, varargin{:});
-BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
+input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -66,9 +69,9 @@ br_indices = bit_rev(Coeffs, FFTSize-1);
 br_indices = -2*pi*1j*br_indices/2^FFTSize;
 ActualCoeffs = exp(br_indices);
 ActualCoeffsStr = 'exp(-2*pi*1j*(bit_rev(Coeffs, FFTSize-1))/2^FFTSize)';
-fprintf(['coeffs: ', tostring(ActualCoeffs),'\n']);
-fprintf([ActualCoeffsStr,'\n']);
-fprintf(['size: ', num2str(length(ActualCoeffs)), ' optimizing twiddle\n']);
+%fprintf(['coeffs: ', tostring(ActualCoeffs),'\n']);
+%fprintf([ActualCoeffsStr,'\n']);
+%fprintf(['size: ', num2str(length(ActualCoeffs)), ' optimizing twiddle\n']);
 % Optimize twiddler for coeff = 0, 1, or alternating 0-1
 if length(Coeffs) == 1,
     if Coeffs(1) == 0,
@@ -76,7 +79,6 @@ if length(Coeffs) == 1,
         set_param(twiddle,'LinkStatus','inactive')
         block_type = 'twiddle_coeff_0';
     elseif Coeffs(1) == 1,
-
         replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_coeff_1','noprompt');
         set_param(twiddle,'LinkStatus','inactive')
         block_type = 'twiddle_coeff_1';
@@ -86,6 +88,12 @@ if length(Coeffs) == 1,
         block_type = 'twiddle_general_3mult';
         replace_block(twiddle,'Name','coeff_gen','casper_library/FFTs/Twiddle/coeff_gen/static_coeff_gen','noprompt');
         set_param([twiddle,'/coeff_gen'],'LinkStatus','inactive');
+    end
+
+    if( pass_through == 1 )
+        replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_pass_through','noprompt');
+        set_param(twiddle,'LinkStatus','inactive')
+        block_type = 'twiddle_pass_through';
     end
 elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-2,
     replace_block(blk, 'Name', 'twiddle', 'casper_library/FFTs/Twiddle/twiddle_stage_2','noprompt');
@@ -116,14 +124,14 @@ if(strcmp(block_type,'twiddle_general_3mult')),
 end
 
 %set up overflow indication blocks
-bw = BitWidth+6; 
-bd = BitWidth+1;
+bw = input_bit_width+6; 
+bd = input_bit_width+1;
 if strcmp(block_type, 'twiddle_general_3mult'),
-	bw = BitWidth+6; 
-	bd = BitWidth+1;
-elseif (strcmp(block_type, 'twiddle_stage_2') || strcmp(block_type, 'twiddle_coeff_0') || strcmp(block_type, 'twiddle_coeff_1')),
-	bw = BitWidth+2;
-	bd = BitWidth;
+	bw = input_bit_width+6; 
+	bd = input_bit_width+1;
+elseif (strcmp(block_type, 'twiddle_stage_2') || strcmp(block_type, 'twiddle_coeff_0') || strcmp(block_type, 'twiddle_coeff_1') || strcmp(block_type, 'twiddle_pass_through')),
+	bw = input_bit_width+2;
+	bd = input_bit_width;
 else
 	fprintf('butterfly_direct_init: Unknown twiddle %s\n',block_type);
 end
@@ -132,14 +140,14 @@ for i = 1:4 ,
 	set_param([blk,'/convert_of',num2str(i)], ...
 	'quantization', quantization, 'overflow', overflow, ...
 	'bit_width_i', tostring(bw), 'binary_point_i', tostring(bd), ...
-	'bit_width_o', tostring(BitWidth), ...
-       	'binary_point_o', tostring(BitWidth-1));
+	'bit_width_o', tostring(input_bit_width), ...
+       	'binary_point_o', tostring(input_bit_width-1));
 end
 %disp('convert_of params set');
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, Coeffs=[%s],\n StepPeriod=%d, BitWidth=%d', ...
-                  FFTSize, num2str(Coeffs), StepPeriod, BitWidth);
+fmtstr = sprintf('FFTSize=%d, Coeffs=[%s],\n StepPeriod=%d, input_bit_width=%d,\n coeff_bit_width=%d', ...
+                  FFTSize, num2str(Coeffs), StepPeriod, input_bit_width, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

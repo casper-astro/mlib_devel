@@ -32,7 +32,8 @@ function fft_stage_n_init(blk, varargin)
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points).
 % FFTStage = Stage this block should be configured as.
-% BitWidth = Bitwidth of input data.
+% input_bit_width = Bit width of input and output data.
+% coeff_bit_width = Bit width of coefficients
 % use_bram = Use bram or slr delays
 % CoeffBram = Store coefficients in bram
 % MaxCoeffNum =
@@ -50,7 +51,8 @@ munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
 FFTStage = get_var('FFTStage', 'defaults', defaults, varargin{:});
-BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
+input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 use_bram = get_var('use_bram', 'defaults', defaults, varargin{:});
 CoeffBram = get_var('CoeffBram', 'defaults', defaults, varargin{:});
 MaxCoeffNum = get_var('MaxCoeffNum', 'defaults', defaults, varargin{:});
@@ -76,16 +78,23 @@ for i=1:length(delays),
     end
 end
 
-Coeffs = 0:2^min(MaxCoeffNum,FFTStage-1)-1;
+if(FFTStage == 1 ),
+    Coeffs = 0;
+    pass_through = 1;
+else,
+    pass_through = 0;
+    Coeffs = 0:2^min(MaxCoeffNum,FFTStage-1)-1;
+end
 StepPeriod = FFTSize-FFTStage+max(0, FFTStage-MaxCoeffNum);
 
-if(FFTStage ~= 1),
+%if(FFTStage ~= 1),
     % Propagate parameters to the butterfly
     propagate_vars([blk,'/butterfly_direct'], 'defaults', defaults, varargin{:});
+    set_param([blk,'/butterfly_direct'], 'pass_through', tostring(pass_through));
     set_param([blk,'/butterfly_direct'], 'Coeffs', tostring(Coeffs));
     set_param([blk,'/butterfly_direct'], 'StepPeriod', num2str(StepPeriod));
     set_param([blk,'/butterfly_direct'], 'use_bram', num2str(CoeffBram));
-end
+%end
 
 % Take care of storing coefficients in BRAM
 roms = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','masktype', 'Xilinx Single Port Read-Only Memory');
@@ -102,6 +111,6 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, FFTStage=%d, BitWidth=%d', FFTSize, FFTStage, BitWidth);
+fmtstr = sprintf('FFTSize=%d, FFTStage=%d,\n input_bit_width=%d, coeff_bit_width=%d', FFTSize, FFTStage, input_bit_width, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

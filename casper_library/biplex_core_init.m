@@ -30,6 +30,8 @@ function biplex_core_init(blk, varargin)
 % 
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points).
+% input_bit_width = Input and output bit width
+% coeff_bit_width = Coefficient bit width
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
 % add_latency = The latency of adders in the system.
@@ -43,7 +45,8 @@ check_mask_type(blk, 'biplex_core');
 munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
+input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
@@ -71,8 +74,10 @@ if FFTSize ~= prev_stages,
     % Create/Delete Stages and set static parameters
     for a=2:FFTSize,
         stage_name = ['fft_stage_',num2str(a)];
+        
         reuse_block(blk, stage_name, 'casper_library/FFTs/fft_stage_n', ...
-            'FFTSize', 'FFTSize', 'FFTStage', num2str(a), 'BitWidth', 'BitWidth', ...
+            'FFTSize', 'FFTSize', 'FFTStage', num2str(a), 'input_bit_width', 'input_bit_width', ...
+            'coeff_bit_width', 'coeff_bit_width', ...
             'MaxCoeffNum', 'MaxCoeffNum', 'add_latency', 'add_latency', ...
             'mult_latency', 'mult_latency', 'bram_latency', 'bram_latency', ...
             'Position', [110*a, 27, 110*a+95, 113]);
@@ -85,8 +90,9 @@ if FFTSize ~= prev_stages,
     end
     add_line(blk, 'pol1/1', 'fft_stage_1/1');
     add_line(blk, 'pol2/1', 'fft_stage_1/2');
-    add_line(blk, 'sync/1', 'fft_stage_1/3');
-    add_line(blk, 'shift/1', 'fft_stage_1/4');
+    add_line(blk, 'Constant/1', 'fft_stage_1/3');
+    add_line(blk, 'sync/1', 'fft_stage_1/4');
+    add_line(blk, 'shift/1', 'fft_stage_1/5');
     % Reposition output ports
     last_stage = ['fft_stage_',num2str(FFTSize)];
     for a=1:length(outports),
@@ -104,7 +110,7 @@ for a=1:FFTSize,
     if (FFTSize - a >= 6), use_bram = '1';
     else, use_bram = '0';
     end
-    if (min(2^(a-1), 2^MaxCoeffNum) * BitWidth >= CoeffBramThresh*BRAMSize), CoeffBram = '1';
+    if (min(2^(a-1), 2^MaxCoeffNum) * input_bit_width >= CoeffBramThresh*BRAMSize), CoeffBram = '1';
  	else, CoeffBram = '0';
     end
     propagate_vars(stage_name, 'defaults', defaults, varargin{:});

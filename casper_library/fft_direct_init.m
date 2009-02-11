@@ -7,7 +7,8 @@
 % 
 % Valid varnames for this block are:
 % FFTSize = Size of the FFT (2^FFTSize points). 
-% BitWidth = Bitwidth of input data.
+% input_bit_width = Bitwidth of input and output data.
+% coeff_bit_width = Bitwidth of coefficients
 % add_latency = The latency of adders in the system.
 % mult_latency = The latency of multipliers in the system.
 % bram_latency = The latency of BRAM in the system.
@@ -49,7 +50,8 @@ check_mask_type(blk, 'fft_direct');
 munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-BitWidth = get_var('BitWidth', 'defaults', defaults, varargin{:});
+input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -99,8 +101,11 @@ for stage=1:FFTSize,
     for i=0:2^(FFTSize-1)-1,
         name = ['butterfly',num2str(stage),'_',num2str(i)];
         reuse_block(blk, name, 'casper_library/FFTs/butterfly_direct', ...
-            'StepPeriod', '0', 'BitWidth', 'BitWidth', 'mult_latency', 'mult_latency', ...
-            'add_latency', 'add_latency', 'bram_latency', 'bram_latency', ...
+            'pass_through', '0', ...
+            'StepPeriod', '0', 'input_bit_width', tostring(input_bit_width), ...
+            'coeff_bit_width', tostring(coeff_bit_width), ...
+            'mult_latency', tostring(mult_latency), 'add_latency', tostring(add_latency), ... 
+            'bram_latency', tostring(bram_latency), ...
             'use_bram', '1', 'Position', [300*(stage-1)+220 200*i+100 300*(stage-1)+300 200*i+175]);
         node_one_num = 2^(FFTSize-stage+1)*floor(i/2^(FFTSize-stage)) + mod(i, 2^(FFTSize-stage));
         node_two_num = node_one_num+2^(FFTSize-stage);
@@ -156,6 +161,6 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d', FFTSize);
+fmtstr = sprintf('FFTSize=%d, input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, input_bit_width, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
