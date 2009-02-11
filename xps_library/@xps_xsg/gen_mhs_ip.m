@@ -56,13 +56,14 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PORT CLK270 = arb_clk270',                                  '\n'];
   str = [str, 'END',                                                         '\n'];
   str = [str,                                                                '\n'];
+
+  str = [str, 'BEGIN signal_rename',                                         '\n'];
+  str = [str, '  PARAMETER INSTANCE = rename_fab_clk',                       '\n'];
+  str = [str, '  PARAMETER HW_VER = 1.00.a',                                 '\n'];
+  str = [str, '  PORT sig_in  = ',  clk_src                                  '\n'];
+  str = [str, '  PORT sig_out = fab_clk',                                    '\n'];
+  str = [str, 'END',                                                         '\n'];
+  str = [str,                                                                '\n'];
   
 end % if ~isempty(strcmp(s.clk_src, 'arbclk'))
 
-str = [str, 'BEGIN signal_rename',                                         '\n'];
-str = [str, '  PARAMETER INSTANCE = rename_fab_clk',                       '\n'];
-str = [str, '  PARAMETER HW_VER = 1.00.a',                                 '\n'];
-str = [str, '  PORT sig_in  = ',  clk_src                                  '\n'];
-str = [str, '  PORT sig_out = fab_clk',                                    '\n'];
-str = [str, 'END',                                                         '\n'];
-str = [str,                                                                '\n'];
