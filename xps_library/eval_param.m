@@ -27,7 +27,7 @@ try
     result = eval(result);
 catch
 
-	parents = {};	
+	parents = {};
 	parent = blk;
 	while ~isempty(parent)
 		parents = [{parent},parents];
@@ -53,9 +53,9 @@ catch
 			error('Unsupported block type');
 		end
 	end
-	
+
 	try
 	    result = eval(result);
 	end
-	
+
 end

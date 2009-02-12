@@ -55,7 +55,7 @@ try
 		fclose(s);
 		delete(s);
 		clear s;
-		return;            
+		return;
     end
     toks = regexp(request_string,'(\w+)', 'tokens');
     type = toks{1};
