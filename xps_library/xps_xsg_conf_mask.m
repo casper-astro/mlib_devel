@@ -106,10 +106,14 @@ end
 switch clk_src
     case {'sys_clk' 'sys_clk2x'}
     case {'usr_clk' 'usr_clk2x'}
-        if find(strcmp(hw_sys,{'CORR', 'ROACH'}))
+        if (strcmp(hw_sys,{'CORR', 'ROACH'}))
             errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
         end
+<<<<<<< .mine
+    case {'aux0_clk' 'aux1_clk' 'aux0_clk2x'}
+=======
     case {'aux0_clk' 'aux1_clk' 'arb_clk'}
+>>>>>>> .r1644
         if isempty(find(strcmp(hw_sys,{'ROACH'})))
             errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
         end
