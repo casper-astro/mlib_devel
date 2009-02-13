@@ -218,12 +218,14 @@ end
 xps_objs = [{xsg_obj},xps_objs];
 
 hw_sys = get(xsg_obj,'hw_sys');
+hw_subsys = get(xsg_obj,'hw_subsys');
 sw_os = get(xsg_obj,'sw_os');
 mpc_type = get(xsg_obj,'mpc_type');
 app_clk = get(xsg_obj,'clk_src');
 app_clk_rate = get(xsg_obj,'clk_rate');
 xsg_core_name = clear_name(get(xsg_obj,'parent'));
 xps_path = [work_path,'\XPS_',hw_sys,'_base'];
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Task: DRC (run_drc)
@@ -421,6 +423,27 @@ if run_edkgen
     disp('##########################');
     disp('## Creating EDK files   ##');
     disp('##########################');
+
+    % modifying XMP file
+    xmpfile = 'system.xmp'
+
+    if ~isempty(hw_subsys)
+        xmpfile = [xmpfile, '.', hw_subsys];
+    end % if ~isempty(hw_subsys)
+
+    if ~exist([xps_path,'\', xmpfile, '.bac'],'file')
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\',xmpfile],[xps_path,'\',xmpfile,'.bac']);
+        if ~copystatus
+            disp('Error trying to backup system.xmp:');
+            disp(copymessage);
+        end % if ~copystatus
+
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\',xmpfile,'.bac'],[xps_path,'\system.xmp']);
+        if ~copystatus
+            disp('Error trying to overwrite system.xmp:');
+            disp(copymessage);
+        end % if ~copystatus
+    end % if ~exist([xps_path,'\', xmpfile, '.bac'],'file')
 
     %modifying MHS file
     switch hw_sys
@@ -947,14 +970,14 @@ if run_software
 
             % write project file
             str = '';
-            if ~exist([xps_path,'\system.xmp.bac'],'file')
-                [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\system.xmp'],[xps_path,'\system.xmp.bac']);
-                if ~copystatus
-                    disp('Error trying to backup system.xmp:');
-                    disp(copymessage);
-                end % if ~copystatus
-            end % ~exist([xps_path,'\system.xmp.bac'],'file')
-            in_fid = fopen([xps_path,'\system.xmp.bac'],'r');
+
+            xmpfile = 'system.xmp'
+
+            if ~isempty(hw_subsys)
+                xmpfile = [xmpfile, '.', hw_subsys];
+            end % if ~isempty(hw_subsys)
+
+            in_fid = fopen([xps_path,'\',xmpfile,'.bac'],'r');
 
             while 1
                 line = fgets(in_fid);

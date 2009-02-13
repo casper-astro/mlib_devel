@@ -1,7 +1,10 @@
 myname=gcb;
-myclksrc = get_param(gcb, [get_param(gcb, 'hw_sys'), '_clk_src']);
 
-switch get_param(myname,'hw_sys')
+[hw_sys, hw_subsys] = xps_get_hw_plat(get_param(myname,'hw_sys'));
+
+myclksrc = get_param(gcb, [hw_sys, '_clk_src']);
+
+switch hw_sys
     case 'iBOB'
         switch myclksrc
             case 'sys_clk'

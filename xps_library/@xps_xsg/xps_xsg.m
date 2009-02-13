@@ -32,7 +32,10 @@ end % if ~strcmp(get(blk_obj,'type'),'xps_xsg')
 
 blk_name = get(blk_obj,'simulink_name');
 
-s.hw_sys = get_param(blk_name,'hw_sys');
+[hw_sys, hw_subsys] = xps_get_hw_plat(get_param(blk_name,'hw_sys'));
+
+s.hw_sys = hw_sys;
+s.hw_subsys = hw_subsys;
 s.ibob_linux = get_param(blk_name,'ibob_linux');
 s.mpc_type = get_param(blk_name,'mpc_type');
 

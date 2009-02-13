@@ -27,7 +27,7 @@ else
     error('XPS block must be on the same level as the Xilinx SysGen block');
 end
 
-hw_sys = get_param(gcb,'hw_sys');
+[hw_sys, hw_subsys] = xps_get_hw_plat(get_param(gcb,'hw_sys'));
 clk_src = get_param(gcb, [hw_sys, '_clk_src']);
 syn_tool = get_param(gcb, 'synthesis_tool');
 
