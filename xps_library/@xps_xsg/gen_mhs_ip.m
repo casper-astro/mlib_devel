@@ -5,6 +5,9 @@ opb_addr_end = opb_addr_start;
 plb_addr_end = plb_addr_start;
 
 clk_src = get(blk_obj, 'clk_src');
+hw_sys  = get(blk_obj, 'hw_sys');
+
+
 
 if strcmp(clk_src, 'arb_clk')
   target_rate = get(blk_obj, 'clk_rate');
@@ -56,7 +59,9 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PORT CLK270 = arb_clk270',                                  '\n'];
   str = [str, 'END',                                                         '\n'];
   str = [str,                                                                '\n'];
+end % if ~isempty(strcmp(s.clk_src, 'arbclk'))
 
+if strcmp(hw_sys, 'ROACH')
   str = [str, 'BEGIN signal_rename',                                         '\n'];
   str = [str, '  PARAMETER INSTANCE = rename_fab_clk',                       '\n'];
   str = [str, '  PARAMETER HW_VER = 1.00.a',                                 '\n'];
@@ -64,6 +69,6 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PORT sig_out = fab_clk',                                    '\n'];
   str = [str, 'END',                                                         '\n'];
   str = [str,                                                                '\n'];
+end
   
-end % if ~isempty(strcmp(s.clk_src, 'arbclk'))
 
