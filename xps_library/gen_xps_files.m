@@ -425,7 +425,7 @@ if run_edkgen
     disp('##########################');
 
     % modifying XMP file
-    xmpfile = 'system.xmp'
+    xmpfile = 'system.xmp';
 
     if ~isempty(hw_subsys)
         xmpfile = [xmpfile, '.', hw_subsys];

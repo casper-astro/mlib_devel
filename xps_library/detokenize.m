@@ -26,6 +26,9 @@ while 1
                 try
                     if eval(condition)
                         condition_met = 1;
+                        try
+                            real_line = eval(real_line);
+                        end
                         fprintf(out_fid,real_line);
                         break;
                     end

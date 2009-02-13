@@ -183,7 +183,7 @@ BEGIN sys_block
   PORT irq_n      = ppc_irq_n
   PORT app_irq    = 0x0000
 
-  PORT fab_clk    = fab_clk
+  PORT fab_clk    = sys_clk #IF# 1 # ['  PORT fab_clk    = ', app_clk, '\n']
 END
 
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#BEGIN xaui_infrastructure
@@ -226,7 +226,6 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#  BUS_INTERFACE XAUI_CONF_3 = xaui_conf3
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#
-
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#BEGIN xaui_phy
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#  PARAMETER INSTANCE = xaui_phy_0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#  PARAMETER HW_VER = 1.00.a
@@ -235,7 +234,7 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#  PORT reset   = sys_reset
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#  PORT mgt_clk = mgt_clk_0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#END
-
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'0')#
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#BEGIN xaui_phy
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#  PARAMETER INSTANCE = xaui_phy_1
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#  PARAMETER HW_VER = 1.00.a
@@ -244,7 +243,7 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#  PORT reset   = sys_reset
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#  PORT mgt_clk = mgt_clk_0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#END
-
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'1')#
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#BEGIN xaui_phy
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#  PARAMETER INSTANCE = xaui_phy_2
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#  PARAMETER HW_VER = 1.00.a
@@ -253,7 +252,7 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#  PORT reset   = sys_reset
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#  PORT mgt_clk = mgt_clk_1
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#END
-
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'2')#
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#BEGIN xaui_phy
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#  PARAMETER INSTANCE = xaui_phy_3
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#  PARAMETER HW_VER = 1.00.a
@@ -262,7 +261,7 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#  PORT reset   = sys_reset
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#  PORT mgt_clk = mgt_clk_1
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#END
-
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe')) && strcmp(get(b,'port'),'3')#
 #IF# strcmp(get(b,'type'),'xps_adc')#BEGIN opb_adccontroller
 #IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER INSTANCE     = opb_adccontroller_0
 #IF# strcmp(get(b,'type'),'xps_adc')# PARAMETER HW_VER       = 1.00.a
