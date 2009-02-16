@@ -53,6 +53,8 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
+mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
 biplexes = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','masktype', 'fft_biplex');
 outports = find_system(blk, 'lookUnderMasks', 'on', 'FollowLinks','on','SearchDepth',1,'BlockType', 'Outport');
@@ -85,7 +87,8 @@ if n_inputs < 1,
         'FFTSize', num2str(FFTSize-n_inputs), 'input_bit_width', num2str(input_bit_width), ...
         'coeff_bit_width', num2str(coeff_bit_width), ...
         'add_latency', num2str(add_latency), 'mult_latency', num2str(mult_latency), ...
-        'bram_latency', num2str(bram_latency), 'Position', pos);
+        'bram_latency', num2str(bram_latency), ... 
+        'Position', pos);
     add_line(blk, 'pol0/1', [name,'/1']);
     add_line(blk, 'pol1/1', [name,'/2']);
     add_line(blk, 'shift/1', [name,'/4']);
@@ -158,21 +161,34 @@ else,
 end
 
 % Propagate dynamic variables
+
+%generate vectors of multiplier use from vectors passed in
+vec_biplex = mult_spec(1:FFTSize-n_inputs);
+if( n_inputs >= 1 ),
+    vec_direct = mult_spec(FFTSize-n_inputs+1:FFTSize); 
+end
+
 if n_inputs < 1,
     name = [blk,'/fft_biplex0'];
-    set_param(name, 'quantization', quantization);
-    set_param(name, 'overflow', overflow);
+    set_param(name, 'quantization', tostring(quantization));
+    set_param(name, 'overflow', tostring(overflow));
+    set_param(name, 'specify_mult', tostring(specify_mult));
+    set_param(name, 'mult_spec', mat2str(vec_biplex));
 else,
     if n_inputs ~= FFTSize,
         for i=0:2^(n_inputs-1)-1,
             name = [blk,'/fft_biplex',num2str(i)];
-            set_param(name, 'quantization', quantization);
-            set_param(name, 'overflow', overflow);
+            set_param(name, 'quantization', tostring(quantization));
+            set_param(name, 'overflow', tostring(overflow));
+            set_param(name, 'specify_mult', tostring(specify_mult));
+            set_param(name, 'mult_spec', mat2str(vec_biplex));
         end
     end
     name = [blk,'/fft_direct'];
-    set_param(name, 'quantization', quantization);
-    set_param(name, 'overflow', overflow);
+    set_param(name, 'quantization', tostring(quantization));
+    set_param(name, 'overflow', tostring(overflow));
+    set_param(name, 'specify_mult', tostring(specify_mult));
+    set_param(name, 'mult_spec', mat2str(vec_direct));
 end
 
 clean_blocks(blk);
