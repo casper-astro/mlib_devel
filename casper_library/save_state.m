@@ -34,7 +34,7 @@
 function save_state(blk,varargin)
 
 %check varargin contains even number of variables
-if( mod(length(varargin),2) ~= 0 ) disp('Non-even parameter list'); return; end;
+if( mod(length(varargin),2) ~= 0 ) disp('save_state.m: Non-even parameter list'); return; end;
 	
 struct.state = hashcell(varargin);
 struct.parameters = [];
