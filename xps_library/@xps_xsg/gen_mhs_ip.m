@@ -5,9 +5,6 @@ opb_addr_end = opb_addr_start;
 plb_addr_end = plb_addr_start;
 
 clk_src = get(blk_obj, 'clk_src');
-hw_sys  = get(blk_obj, 'hw_sys');
-
-
 
 if strcmp(clk_src, 'arb_clk')
   target_rate = get(blk_obj, 'clk_rate');
@@ -19,6 +16,8 @@ if strcmp(clk_src, 'arb_clk')
   bestmatch = find(freq - target_rate == min(abs(freq - target_rate) + ((freq - target_rate) < 0) * 1000000),1);
   bestM = M(bestmatch);
   bestD = D(bestmatch);
+
+  fprintf('Closest matching frequency to %f MHz: %f MHz',target_rate,100*bestM/bestD);
 
   %TODO: this is really a waste as the sys_clk dcm can be used to generate the arb_clk_scm
   %      also phase dcm could be replaced with PLL on V5
@@ -48,7 +47,7 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PARAMETER C_CLK90_BUF = TRUE',                              '\n'];
   str = [str, '  PARAMETER C_CLK180_BUF = TRUE',                             '\n'];
   str = [str, '  PARAMETER C_CLK270_BUF = TRUE',                             '\n'];
-  str = [str, '  PARAMETER C_CLKIN_PERIOD = ', sprintf('%d',10*bestD/bestM), '\n'];
+  str = [str, '  PARAMETER C_CLKIN_PERIOD = ', sprintf('%f',10*bestD/bestM), '\n'];
   str = [str, '  PARAMETER C_DFS_FREQUENCY_MODE = HIGH',                     '\n'];
   str = [str, '  PORT RST = arb_clk_lock',                                   '\n'];
   str = [str, '  PORT CLKIN  = arb_clk_int',                                 '\n'];
@@ -59,9 +58,7 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PORT CLK270 = arb_clk270',                                  '\n'];
   str = [str, 'END',                                                         '\n'];
   str = [str,                                                                '\n'];
-end % if ~isempty(strcmp(s.clk_src, 'arbclk'))
 
-if strcmp(hw_sys, 'ROACH')
   str = [str, 'BEGIN signal_rename',                                         '\n'];
   str = [str, '  PARAMETER INSTANCE = rename_fab_clk',                       '\n'];
   str = [str, '  PARAMETER HW_VER = 1.00.a',                                 '\n'];
@@ -69,6 +66,7 @@ if strcmp(hw_sys, 'ROACH')
   str = [str, '  PORT sig_out = fab_clk',                                    '\n'];
   str = [str, 'END',                                                         '\n'];
   str = [str,                                                                '\n'];
-end
   
+end % if ~isempty(strcmp(s.clk_src, 'arbclk'))
+
 
