@@ -52,6 +52,8 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
+mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
 BRAMSize = 18432;
 MaxCoeffNum = 11;	        % This is the maximum that will fit in a BRAM
@@ -59,7 +61,7 @@ MaxCoeffNum = 11;	        % This is the maximum that will fit in a BRAM
 CoeffBramThresh = 1/8;      % Use bram when coefficients will fill this fraction of a BRAM
 
 if FFTSize < 2,
-    errordlg('Biplex FFT must have length of at least 2^2.');
+    errordlg('biplex_core_init.m: Biplex FFT must have length of at least 2^2.');
     set_param(blk, 'FFTSize', '2');
     FFTSize = 2;
 end
@@ -76,10 +78,10 @@ if FFTSize ~= prev_stages,
         stage_name = ['fft_stage_',num2str(a)];
         
         reuse_block(blk, stage_name, 'casper_library/FFTs/fft_stage_n', ...
-            'FFTSize', 'FFTSize', 'FFTStage', num2str(a), 'input_bit_width', 'input_bit_width', ...
-            'coeff_bit_width', 'coeff_bit_width', ...
-            'MaxCoeffNum', 'MaxCoeffNum', 'add_latency', 'add_latency', ...
-            'mult_latency', 'mult_latency', 'bram_latency', 'bram_latency', ...
+            'FFTSize', tostring(FFTSize), 'FFTStage', num2str(a), 'input_bit_width', tostring(input_bit_width), ...
+            'coeff_bit_width', tostring(coeff_bit_width), ...
+            'MaxCoeffNum', tostring(MaxCoeffNum), 'add_latency', tostring(add_latency), ...
+            'mult_latency', tostring(mult_latency), 'bram_latency', tostring(bram_latency), ...
             'Position', [110*a, 27, 110*a+95, 113]);
         prev_stage_name = ['fft_stage_',num2str(a-1)];
         add_line(blk, [prev_stage_name,'/1'], [stage_name,'/1']);
@@ -117,6 +119,23 @@ for a=1:FFTSize,
     set_param(stage_name, 'use_bram', use_bram);
     set_param(stage_name, 'CoeffBram', CoeffBram);   
     set_param(stage_name, 'MaxCoeffNum', tostring(MaxCoeffNum));
+
+    use_hdl = 'off';
+    use_embedded = 'on';
+    if( strcmp(specify_mult,'on')),
+        if( mult_spec(a) == 2 ), 
+            use_hdl = 'on'; 
+            use_embedded = 'off';
+        elseif( mult_spec(a) == 1), 
+            use_hdl = 'off';
+            use_embedded = 'on'; 
+        else
+            use_hdl = 'off';
+            use_embedded = 'off';
+        end
+    end
+    set_param(stage_name, 'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded)); 
+
 end
 
 clean_blocks(blk);

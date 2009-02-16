@@ -60,6 +60,8 @@ bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 use_bram = get_var('use_bram', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
+use_hdl = get_var('use_hdl', 'defaults', defaults, varargin{:});
+use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
 
 twiddle = [blk, '/twiddle'];
 

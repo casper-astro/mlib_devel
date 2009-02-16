@@ -60,6 +60,8 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 MapTail = get_var('MapTail', 'defaults', defaults, varargin{:});
 LargerFFTSize = get_var('LargerFFTSize', 'defaults', defaults, varargin{:});
 StartStage = get_var('StartStage', 'defaults', defaults, varargin{:});
+specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
+mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
 current_stages = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on',...
     'SearchDepth',1,'masktype', 'butterfly_direct');
@@ -98,6 +100,7 @@ for stage=0:FFTSize,
 end
 % Add butterflies
 for stage=1:FFTSize,
+    
     for i=0:2^(FFTSize-1)-1,
         name = ['butterfly',num2str(stage),'_',num2str(i)];
         reuse_block(blk, name, 'casper_library/FFTs/butterfly_direct', ...
@@ -128,6 +131,22 @@ end
 
 % Check dynamic settings
 for stage=1:FFTSize,
+
+    use_hdl = 'off';
+    use_embedded = 'on';
+    if(strcmp(specify_mult,'on')),
+        if( mult_spec(stage) == 2)
+            use_hdl = 'on'; 
+            use_embedded = 'off';
+        elseif( mult_spec(stage) == 1), 
+            use_hdl = 'off';
+            use_embedded = 'on'; 
+        else
+            use_hdl = 'off';
+            use_embedded = 'off';
+        end
+    end
+
     for i=0:2^(FFTSize-1)-1,
         butterfly = [blk,'/butterfly',num2str(stage),'_',num2str(i)];
         % Implement a normal FFT or the tail end of a larger FFT
@@ -144,18 +163,9 @@ for stage=1:FFTSize,
             coeffs = [coeffs, ']'];
             actual_fft_size = LargerFFTSize;
         end
-        if get_param(butterfly, 'FFTSize') ~= actual_fft_size,
-            set_param(butterfly, 'FFTSize', num2str(actual_fft_size));
-        end
-        if ~strcmp(get_param(butterfly, 'Coeffs'), coeffs),
-            set_param(butterfly, 'Coeffs', coeffs);
-        end
-        if ~strcmp(get_param(butterfly, 'quantization'), quantization),
-            set_param(butterfly, 'quantization', quantization);
-        end
-        if ~strcmp(get_param(butterfly, 'overflow'), overflow),
-            set_param(butterfly, 'overflow', overflow);
-        end
+            set_param(butterfly, 'FFTSize', num2str(actual_fft_size), ...
+            'Coeffs', coeffs, 'quantization', quantization, 'overflow', overflow, ...
+            'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded));
     end
 end
 

@@ -52,13 +52,15 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
+mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
 BRAMSize = 18432;
 DelayBramThresh = 1/4;  % Use bram when delays will fill this fraction of a BRAM
 
-biplex_core = [gcb,'/biplex_core'];
+biplex_core = [blk,'/biplex_core'];
 propagate_vars(biplex_core, 'defaults', defaults, varargin{:});
-propagate_vars([gcb,'/bi_real_unscr_4x'], 'defaults', defaults, varargin{:});
+propagate_vars([blk,'/bi_real_unscr_4x'], 'defaults', defaults, varargin{:});
 
 % Implement delays normally or in BRAM
 if (2^(FFTSize-1) * 2*input_bit_width >= DelayBramThresh*BRAMSize),

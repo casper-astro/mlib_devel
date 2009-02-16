@@ -61,6 +61,8 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+use_hdl = get_var('use_hdl', 'defaults', defaults, varargin{:});
+use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
 
 % Implement delays normally or in BRAM
 delays = {'delay_f', 'delay_b'};
@@ -111,6 +113,6 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, FFTStage=%d,\n input_bit_width=%d, coeff_bit_width=%d', FFTSize, FFTStage, input_bit_width, coeff_bit_width);
+fmtstr = sprintf('FFTSize=%d, FFTStage=%d,\n input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, FFTStage, input_bit_width, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

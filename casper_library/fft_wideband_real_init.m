@@ -53,11 +53,12 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
+mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
 if n_inputs < 2                                                
-	errordlg('REAL FFT: Number of inputs must be at least 4!');  
+	errordlg('fft_wideband_real_init.m: REAL FFT: Number of inputs must be at least 4!');  
 end                                                            
-
 
 biplexes = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','masktype', 'fft_biplex_real_4x');
 outports = find_system(blk, 'lookUnderMasks', 'on', 'FollowLinks','on','SearchDepth',1,'BlockType', 'Outport');
@@ -134,22 +135,28 @@ end
 clean_blocks(blk);
 
 % Propagate dynamic variables
+
+%generate vectors of multiplier use from vectors passed in
+vec_biplex = ones(1,FFTSize-n_inputs);
+vec_direct = ones(1,n_inputs);
+
+vec_biplex = mult_spec(1:FFTSize-n_inputs);
+vec_direct = mult_spec(FFTSize-n_inputs+1:FFTSize);
+
 for i=0:2^(n_inputs-2)-1,
     name = [blk,'/fft_biplex_real_4x',num2str(i)];
-    if ~strcmp(get_param(name, 'quantization'), quantization),
-        set_param(name, 'quantization', quantization);
-    end
-    if ~strcmp(get_param(name, 'overflow'), overflow),
-        set_param(name, 'overflow', overflow);
+    set_param(name, 'quantization', quantization, 'overflow', overflow, ...
+    'specify_mult', tostring(specify_mult));
+    if( strcmp(specify_mult,'on')),
+        set_param(name, 'mult_spec', mat2str(vec_biplex));
     end
 end
 
 name = [blk,'/fft_direct'];
-if ~strcmp(get_param(name, 'quantization'), quantization),
-    set_param(name, 'quantization', quantization);
-end
-if ~strcmp(get_param(name, 'overflow'), overflow),
-    set_param(name, 'overflow', overflow);
+set_param(name, 'quantization', quantization, 'overflow', overflow, ...
+'specify_mult', tostring(specify_mult));
+if( strcmp(specify_mult,'on')),
+    set_param(name, 'mult_spec', mat2str(vec_direct));
 end
 
 clean_blocks(blk);
