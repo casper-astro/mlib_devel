@@ -65,6 +65,8 @@ mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
+specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
+mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
 if MakeBiplex, pols = 2;
 else, pols = 1;
@@ -98,23 +100,36 @@ for p=1:pols,
         for t=1:TotalTaps,
             in_name = ['pol',num2str(p),'_in',num2str(i)];
             out_name = ['pol',num2str(p),'_out',num2str(i)];
+            use_hdl = 'off';
+            use_embedded = 'on';
+            if( strcmp(specify_mult,'on') ) 
+                if( mult_spec(t) == 0 ), 
+                    use_embedded = 'off';
+                elseif( mult_spec(t) == 2);
+                    use_hdl = 'on';
+                    use_embedded = 'off';
+                end
+            end
+
             if t==1,
                 blk_name = [in_name,'_first_tap'];
                 reuse_block(blk, blk_name, 'casper_library/PFBs/first_tap', ...
+                    'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
                     'nput', num2str(i-1), 'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
                 add_line(blk, [in_name,'/1'], [blk_name,'/1']);
                 add_line(blk, 'sync/1', [blk_name,'/2']);
             elseif t==TotalTaps,
                 blk_name = [in_name,'_last_tap'];
-		reuse_block(blk, blk_name, 'casper_library/PFBs/last_tap', ...
+		        reuse_block(blk, blk_name, 'casper_library/PFBs/last_tap', ...
+                    'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
                     'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
-		if t==2,
-                    prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap'];
-                else,
+		        %if t==2,
+                %    prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap'];
+                %else,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_tap',num2str(t-1)];
-                end
+                %end
                 for n=1:4, add_line(blk, [prev_blk_name,'/',num2str(n)], [blk_name,'/',num2str(n)]);
                 end
                 add_line(blk, [blk_name,'/1'], [out_name,'/1']);
@@ -127,13 +142,14 @@ for p=1:pols,
 
 %		reuse_block(blk, blk_name, 'casper_library/PFBs/tap', ...
 %                   'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
-		reuse_block(blk, blk_name, 'casper_library/PFBs/tap', ...
-		    'mult_latency',tostring(mult_latency), 'coeff_width', tostring(CoeffBitWidth), ...
-		    'coeff_frac_width',tostring(CoeffBitWidth-1), 'delay', tostring(2^(PFBSize-n_inputs)), ...
-		    'data_width',tostring(BitWidthIn), 'bram_latency', tostring(bram_latency), ...
+		        reuse_block(blk, blk_name, 'casper_library/PFBs/tap', ...
+                    'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
+		            'mult_latency',tostring(mult_latency), 'coeff_width', tostring(CoeffBitWidth), ...
+		            'coeff_frac_width',tostring(CoeffBitWidth-1), 'delay', tostring(2^(PFBSize-n_inputs)), ...
+		            'data_width',tostring(BitWidthIn), 'bram_latency', tostring(bram_latency), ...
                     'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
 %		    
-		if t==2,
+		        if t==2,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap'];
                 else,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_tap',num2str(t-1)];

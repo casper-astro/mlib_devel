@@ -46,6 +46,15 @@ munge_block(blk, varargin{:});
 
 propagate_vars([blk,'/pfb_add_tree'], 'defaults', defaults, varargin{:});
 
+use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
+use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
+
+set_param([blk,'/Mult'],'use_embedded',use_embedded);
+set_param([blk,'/Mult'],'use_behavioral_HDL',use_hdl);
+set_param([blk,'/Mult1'],'use_embedded',use_embedded);
+set_param([blk,'/Mult1'],'use_behavioral_HDL',use_hdl)
+
+
 TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
 
 fmtstr = sprintf('taps=%d', TotalTaps);
