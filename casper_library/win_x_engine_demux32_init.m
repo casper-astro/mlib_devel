@@ -165,10 +165,10 @@ add_line(blk, [thisblk, '/7'], 'xeng_mask_demux32/3', 'autorouting', 'on');
 %fprintf('setting block parameters...\n');
 
 % Set Params
-set_param([blk, '/xeng_mask_demux32'], 'num_ants', sprintf('%f',n_ants))
-set_param([blk, '/xeng_mask_demux32'], 'n_bits_in', sprintf('%f',n_bits))
-set_param([blk, '/x_to_32_cast'], 'n_bits_in', sprintf('%f',n_bits_out))
-set_param([blk, '/x_to_32_cast'], 'fix_pnt_pos', sprintf('%f',(n_bits-1)*2))
+set_param([blk, '/xeng_mask_demux32'], 'num_ants', sprintf('%d',n_ants));
+set_param([blk, '/xeng_mask_demux32'], 'n_bits_in', sprintf('%d',128));
+set_param([blk, '/x_to_32_cast'], 'n_bits_in', sprintf('%d',n_bits_out));
+set_param([blk, '/x_to_32_cast'], 'fix_pnt_pos', sprintf('%d',(n_bits-1)*2));
 
 %fprintf('all variables set. \n cleanup starting...\n');
 
