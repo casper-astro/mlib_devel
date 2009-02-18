@@ -80,8 +80,9 @@ end
 
 % Add Misc static blocks
 
-reuse_block(blk, 'x_to_32_cast', 'casper_library/Correlator/x_to_32_cast', 'Position', [x + 180, 110, x + 230, 135]);
-reuse_block(blk, 'xeng_mask_demux32', 'casper_library/Correlator/xeng_mask_demux32', 'Position', [x + 360, 105, x + 465, 163]);
+reuse_block(blk, 'x_to_32_cast', 'casper_library/Correlator/x_to_32_cast', 'Position', [x + 100, 100, x + 150, 125]);
+reuse_block(blk, 'xeng_mask_demux32', 'casper_library/Correlator/xeng_mask_demux32', 'Position', [x + 200, 105, x + 300, 163]);
+reuse_block(blk, 'xeng_conj_fix', 'casper_library/Correlator/xeng_conj_fix', 'Position', [x + 350, 105, x + 450, 163]);
 
 reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', 'Position', [15,89,85,121],...
             'const','0',...
@@ -93,7 +94,7 @@ reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', 'Position', [15,124,85,156
             'arith_type','Boolean',...
             'n_bits','1');
         
-reuse_block(blk, 'Logical', 'xbsIndex_r4/Logical', 'Position', [x + 115, 130, x + 145, 150],...
+reuse_block(blk, 'Logical', 'xbsIndex_r4/Logical', 'Position', [x + 50, 130, x + 80, 150],...
                 'latency','0',...
                 'logical_function','AND');
             
@@ -130,9 +131,13 @@ add_line(blk, 'window_delay/1', 'Logical/2', 'autorouting', 'on');
 add_line(blk, 'Logical/1', 'xeng_mask_demux32/2', 'autorouting', 'on');
 add_line(blk, 'x_to_32_cast/1', 'xeng_mask_demux32/1', 'autorouting', 'on');
 
-add_line(blk, 'xeng_mask_demux32/1', 'acc/1', 'autorouting', 'on');
-add_line(blk, 'xeng_mask_demux32/2', 'valid/1', 'autorouting', 'on');
-add_line(blk, 'xeng_mask_demux32/3', 'sync_out/1', 'autorouting', 'on');
+add_line(blk, 'xeng_mask_demux32/1', 'xeng_conj_fix/1', 'autorouting', 'on');
+add_line(blk, 'xeng_mask_demux32/2', 'xeng_conj_fix/2', 'autorouting', 'on');
+add_line(blk, 'xeng_mask_demux32/3', 'xeng_conj_fix/3', 'autorouting', 'on');
+
+add_line(blk, 'xeng_conj_fix/1', 'acc/1', 'autorouting', 'on');
+add_line(blk, 'xeng_conj_fix/2', 'valid/1', 'autorouting', 'on');
+add_line(blk, 'xeng_conj_fix/3', 'sync_out/1', 'autorouting', 'on');
 
 for i=1:floor(n_ants / 2)
     if i == 1
