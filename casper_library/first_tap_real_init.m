@@ -51,6 +51,11 @@ propagate_vars([blk,'/pfb_coeff_gen'], 'defaults', defaults, varargin{:});
 
 nput = get_var('nput', 'defaults', defaults, varargin{:});
 TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
+use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
+use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
+
+set_param([blk,'/Mult'],'use_embedded',use_embedded);
+set_param([blk,'/Mult'],'use_behavioral_HDL',use_hdl);
 
 fmtstr = sprintf('input=%d, taps=%d', nput, TotalTaps);
 set_param(blk, 'AttributesFormatString', fmtstr);
