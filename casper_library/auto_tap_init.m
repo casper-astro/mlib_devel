@@ -33,6 +33,18 @@ for i=1:length(multipliers),
     set_param(multipliers{i},'mult_latency','mult_latency');
     set_param(multipliers{i},'add_latency','add_latency');
 end
+
+if use_bram_delay,
+    replace_block(blk,'Name','delay','casper_library/Delays/delay_bram','noprompt');
+    set_param([blk,'/delay'],'LinkStatus','inactive');    
+    set_param([blk,'/delay'],'DelayLen','(acc_len - 1)*ceil(n_ants/2) + ceil(n_ants/2)-floor(n_ants/2)');
+    set_param([blk,'/delay'],'bram_latency','bram_latency');
+else,
+    replace_block(blk,'Name','delay','casper_library/Delays/delay_slr','noprompt');
+    set_param([blk,'/delay'],'LinkStatus','inactive');    
+    set_param([blk,'/delay'],'DelayLen','(acc_len - 1)*ceil(n_ants/2) + ceil(n_ants/2)-floor(n_ants/2)');    
+end
+
 % multipliers = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', 'masktype', 'Xilinx Multiplier');
 % for i=1:length(multipliers),
 %     if use_ded_mult,

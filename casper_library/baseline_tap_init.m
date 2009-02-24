@@ -42,12 +42,12 @@ end
 % Configure the delay to use bram or slrs
 if use_bram_delay,
     replace_block(blk,'Name','delay','casper_library/Delays/delay_bram','noprompt');
-    set_param(multipliers{i},'LinkStatus','inactive');    
+    set_param([blk,'/delay'],'LinkStatus','inactive');    
     set_param([blk,'/delay'],'DelayLen','acc_len');
     set_param([blk,'/delay'],'bram_latency','bram_latency');
 else,
     replace_block(blk,'Name','delay','casper_library/Delays/delay_slr','noprompt');
-    set_param(multipliers{i},'LinkStatus','inactive');    
+    set_param([blk,'/delay'],'LinkStatus','inactive');    
     set_param([blk,'/delay'],'DelayLen','acc_len');    
 end
 
