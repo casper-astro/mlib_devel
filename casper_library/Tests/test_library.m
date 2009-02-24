@@ -47,7 +47,8 @@ if(exist(['../',library],'file') ~= 4),
 	fprintf(['Error loading library ../',library,'. Aborting...\n']);
 	return;
 else,
-	load_system(['../',library]);
+    warning('off','Simulink:SL_LoadMdlParameterizedLink')
+    load_system(['../',library]);
 	fprintf([library,' loaded\n\n']);
 end
 
@@ -81,7 +82,9 @@ while( ischar(line) )
         fprintf(['Model file: "',model,'" does not exist.\n']);
     %load model and try to find block specified
     else
-	load_system(model);
+
+    warning('off','Simulink:SL_LoadMdlParameterizedLink')
+    load_system(model);
 	 
 	%try to find block in model
 	fprintf(['Trying to find ',model,'/',blk,'...\n']);
