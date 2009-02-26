@@ -109,13 +109,13 @@ reuse_block(blk, 'Term2', 'built-in/Terminator', 'Position', [x, 65, x + 20, 85]
 reuse_block(blk, 'Term3', 'built-in/Terminator', 'Position', [x, 130, x + 20, 150]);
      
 % Set output port positions
+reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 500, 160, x + 530, 174]);
 reuse_block(blk, 'acc', 'built-in/outport','Position', [x + 500, 100, x + 530, 114]);
 reuse_block(blk, 'valid', 'built-in/outport','Position', [x + 500, 130, x + 530, 144]);
-reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 500, 160, x + 530, 174]);
 
 % Set input port positions
-reuse_block(blk, 'ant', 'built-in/inport','Position', [55,53,85,67]);
 reuse_block(blk, 'sync_in', 'built-in/inport','Position', [55,178,85,192]);
+reuse_block(blk, 'ant', 'built-in/inport','Position', [55,53,85,67]);
 reuse_block(blk, 'window_valid', 'built-in/inport','Position', [55,223,85,237]);
 
 
@@ -135,9 +135,9 @@ add_line(blk, 'xeng_mask_demux32/1', 'xeng_conj_fix/1', 'autorouting', 'on');
 add_line(blk, 'xeng_mask_demux32/2', 'xeng_conj_fix/2', 'autorouting', 'on');
 add_line(blk, 'xeng_mask_demux32/3', 'xeng_conj_fix/3', 'autorouting', 'on');
 
+add_line(blk, 'xeng_conj_fix/3', 'sync_out/1', 'autorouting', 'on');
 add_line(blk, 'xeng_conj_fix/1', 'acc/1', 'autorouting', 'on');
 add_line(blk, 'xeng_conj_fix/2', 'valid/1', 'autorouting', 'on');
-add_line(blk, 'xeng_conj_fix/3', 'sync_out/1', 'autorouting', 'on');
 
 for i=1:floor(n_ants / 2)
     if i == 1
