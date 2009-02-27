@@ -31,12 +31,14 @@ if ~strcmp(get(blk_obj,'type'),'xps_qdr')
 end
 
 blk_name = get(blk_obj,'simulink_name');
-xsg_obj = get(blk_obj,'xsg_obj');
+xsg_obj  = get(blk_obj,'xsg_obj');
 
-s.hw_sys = get(xsg_obj,'hw_sys');
-s.hw_qdr = get_param(blk_name,'which_qdr');
-s.clk_src = get(xsg_obj,'clk_src');
+s.hw_sys   = get(xsg_obj,'hw_sys');
+s.clk_src  = get(xsg_obj,'clk_src');
 s.clk_rate = get(xsg_obj,'clk_rate');
+
+s.hw_qdr      = get_param(blk_name,'which_qdr');
+s.use_sniffer = get_param(blk_name,'use_sniffer'); 
 
 switch s.hw_sys
     case 'ROACH'

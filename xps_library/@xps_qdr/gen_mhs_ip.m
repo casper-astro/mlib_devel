@@ -8,6 +8,7 @@ xsg_obj   = get(blk_obj,'xsg_obj');
 hw_qdr   = get(blk_obj,'hw_qdr');
 clk_src  = get(blk_obj,'clk_src'); 
 clk_rate = get(blk_obj,'clk_rate'); 
+use_sniffer = get(blk_obj,'use_sniffer'); 
 
 str = '';
 
@@ -23,8 +24,8 @@ str = [str, ' PARAMETER HW_VER   = 1.00.a',                    '\n'];
 str = [str, ' PORT clk0    = ', clk_src,         '\n'];
 str = [str, ' PORT clk180  = ', clk_src, '180',  '\n'];
 str = [str, ' PORT clk270  = ', clk_src, '270',  '\n'];
-str = [str, ' PORT div_clk = sys_clk',           '\n'];
-str = [str, ' PORT reset   = sys_reset',         '\n'];
+str = [str, ' PORT div_clk = epb_clk',           '\n'];
+str = [str, ' PORT reset   = 0b0',               '\n'];
 
 
 str = [str, ' PORT qdr_k_n       = ', hw_qdr, '_k_n',       '\n'];
@@ -72,6 +73,7 @@ str = [str, 'BEGIN opb_qdr_sniffer\n'];
 
 str = [str, ' PARAMETER INSTANCE   = ', hw_qdr,'_sniffer', '\n'];
 str = [str, ' PARAMETER HW_VER     = 1.00.a',              '\n'];
+str = [str, ' PARAMETER ENABLE     = ', use_sniffer        '\n'];
 if strcmp(hw_qdr, 'qdr0')
   str = [str, ' PARAMETER C_BASEADDR = 0x02000000', '\n'];
   str = [str, ' PARAMETER C_HIGHADDR = 0x02ffffff', '\n'];

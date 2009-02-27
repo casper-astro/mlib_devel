@@ -83,8 +83,10 @@ misc_ports.ctrl_clk_out    = {1 'out' [s.adc_str,'_clk']};
 misc_ports.ctrl_clk90_out  = {1 'out' [s.adc_str,'_clk90']};
 misc_ports.ctrl_dcm_locked = {1 'out' [s.adc_str,'_dcm_locked']};
 if strcmp(get(b,'ip_version'), '1.01.a')
-    misc_ports.dcm_reset       = {1 'in'  [s.adc_str,'_dcm_reset']};
-    misc_ports.dcm_psdone      = {1 'out' [s.adc_str,'_psdone']};
+    misc_ports.dcm_reset        = {1 'in'  [s.adc_str,'_dcm_reset']};
+    misc_ports.dcm_psdone       = {1 'out' [s.adc_str,'_psdone']};
+    misc_ports.ctrl_clk180_out  = {1 'out' [s.adc_str,'_clk180']};
+    misc_ports.ctrl_clk270_out  = {1 'out' [s.adc_str,'_clk270']};
 end
 misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};
 misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
