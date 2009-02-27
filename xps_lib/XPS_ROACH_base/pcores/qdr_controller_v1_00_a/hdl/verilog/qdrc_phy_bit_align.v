@@ -232,8 +232,13 @@ end else begin                  :include_bit_align
   assign qdr_bw_n_rise  = {BW_WIDTH{1'b0}};
   assign qdr_bw_n_fall  = {BW_WIDTH{1'b0}};
 
-  assign qdr_w_n        = !(state == STATE_WRITE);
-  assign qdr_r_n        = !(state == STATE_TRAIN || state == STATE_ALIGN || state == STATE_WAIT);
+  reg qdr_w_n_reg, qdr_r_n_reg;
+  always @(posedge clk0) begin
+    qdr_w_n_reg <= !(state == STATE_WRITE);
+    qdr_r_n_reg <= !(state == STATE_TRAIN || state == STATE_ALIGN || state == STATE_WAIT);
+  end
+  assign qdr_w_n = qdr_w_n_reg;
+  assign qdr_r_n = qdr_r_n_reg;
 
   assign qdr_sa         = {ADDR_WIDTH{1'b0}};
 

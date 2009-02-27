@@ -43,6 +43,7 @@ module qdrc_infrastructure(
   parameter BW_WIDTH       = 2;
   parameter ADDR_WIDTH     = 21;
   parameter Q_CLK_270      = 0;
+  parameter CLK_FREQ       = 200;
 
   input clk0,   clk180,   clk270;
   input reset0, reset180, reset270;
@@ -120,7 +121,12 @@ module qdrc_infrastructure(
   reg qdr_r_n_reg;
   reg qdr_dll_off_n_reg;
 
-  always @(posedge clk270) begin 
+  /* This register stage is required as the IOB'ed registers
+   * cannot be combined into one slice, requiring two routes.
+   * These registers can be included in the same slice.
+   * */
+
+  always @(posedge clk0) begin 
   /* Add delay to ease timing */
     qdr_sa_reg        <= qdr_sa_buf;
     qdr_w_n_reg       <= qdr_w_n_buf;
@@ -128,16 +134,16 @@ module qdrc_infrastructure(
     qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
   end
 
-  reg [ADDR_WIDTH - 1:0] qdr_sa_iob;
-  reg qdr_w_n_iob;
-  reg qdr_r_n_iob;
-  reg qdr_dll_off_n_iob;
   //synthesis attribute IOB of qdr_sa_iob is "TRUE"
   //synthesis attribute IOB of qdr_w_n_iob is "TRUE"
   //synthesis attribute IOB of qdr_r_n_iob is "TRUE"
   //synthesis attribute IOB of qdr_dll_off_n_iob is "TRUE"
+  reg [ADDR_WIDTH - 1:0] qdr_sa_iob;
+  reg qdr_w_n_iob;
+  reg qdr_r_n_iob;
+  reg qdr_dll_off_n_iob;
 
-  always @(posedge clk180) begin 
+  always @(posedge clk0) begin 
   /* Add delay to ease timing */
     qdr_sa_iob        <= qdr_sa_reg;
     qdr_w_n_iob       <= qdr_w_n_reg;
@@ -145,23 +151,48 @@ module qdrc_infrastructure(
     qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
   end
 
+  wire [ADDR_WIDTH - 1:0] qdr_sa_odelay;
+  wire qdr_w_n_odelay;
+  wire qdr_r_n_odelay;
+  wire qdr_dll_off_n_odelay;
+
+  localparam DELAY_TAPS = 1000000/(CLK_FREQ * 2 * 78);
+  /* delay taps == 180 degrees */
+
+  IODELAY #(
+    .IDELAY_TYPE      ("FIXED"),
+    .DELAY_SRC        ("O"),
+    .ODELAY_VALUE     (DELAY_TAPS),
+    .REFCLK_FREQUENCY (200.0)
+  ) ODELAY_qdrctrl [ADDR_WIDTH + 3 - 1:0] (
+    .C       (1'b0),
+    .CE      (1'b0),
+    .INC     (1'b0),
+    .DATAIN  (1'b0),
+    .IDATAIN (),
+    .ODATAIN ({qdr_sa_iob,qdr_w_n_iob,qdr_r_n_iob,qdr_dll_off_n_iob}),
+    .RST     (1'b0),
+    .T       (1'b0),
+    .DATAOUT ({qdr_sa_odelay,qdr_w_n_odelay,qdr_r_n_odelay,qdr_dll_off_n_odelay})
+  );
+
   OBUF OBUF_addr[ADDR_WIDTH - 1:0](
-    .I (qdr_sa_iob),
+    .I (qdr_sa_odelay),
     .O (qdr_sa)
   );
 
   OBUF OBUF_w_n(
-    .I (qdr_w_n_iob),
+    .I (qdr_w_n_odelay),
     .O (qdr_w_n)
   );
 
   OBUF OBUF_r_n(
-    .I (qdr_r_n_iob),
+    .I (qdr_r_n_odelay),
     .O (qdr_r_n)
   );
 
   OBUF OBUF_dll_off_n(
-    .I (qdr_dll_off_n_iob),
+    .I (qdr_dll_off_n_odelay),
     .O (qdr_dll_off_n)
   );
 
@@ -175,18 +206,34 @@ module qdrc_infrastructure(
   reg   [BW_WIDTH - 1:0] qdr_bw_n_rise_reg0;
   reg   [BW_WIDTH - 1:0] qdr_bw_n_fall_reg0;
 
-  reg [DATA_WIDTH - 1:0] qdr_d_rise_reg;
-  reg [DATA_WIDTH - 1:0] qdr_d_fall_reg;
-  reg   [BW_WIDTH - 1:0] qdr_bw_n_rise_reg;
-  reg   [BW_WIDTH - 1:0] qdr_bw_n_fall_reg;
-
   always @(posedge clk0) begin
-  /* Delay the write data by one cycle */
+  /* Delay the write data by one cycle (qdr protocol,
+   * requires datat to lag control*/
     qdr_d_rise_reg0     <= qdr_d_rise;
     qdr_d_fall_reg0     <= qdr_d_fall;
     qdr_bw_n_rise_reg0  <= qdr_bw_n_rise;
     qdr_bw_n_fall_reg0  <= qdr_bw_n_fall;
   end
+
+  reg [DATA_WIDTH - 1:0] qdr_d_rise_reg1;
+  reg [DATA_WIDTH - 1:0] qdr_d_fall_reg1;
+  reg   [BW_WIDTH - 1:0] qdr_bw_n_rise_reg1;
+  reg   [BW_WIDTH - 1:0] qdr_bw_n_fall_reg1;
+
+  always @(posedge clk0) begin
+  /* Delay to match the extra cycle on control lines 
+   * due to extra iob delay route*/
+    qdr_d_rise_reg1     <= qdr_d_rise_reg0;
+    qdr_d_fall_reg1     <= qdr_d_fall_reg0;
+    qdr_bw_n_rise_reg1  <= qdr_bw_n_rise_reg0;
+    qdr_bw_n_fall_reg1  <= qdr_bw_n_fall_reg0;
+  end
+
+
+  reg [DATA_WIDTH - 1:0] qdr_d_rise_reg;
+  reg [DATA_WIDTH - 1:0] qdr_d_fall_reg;
+  reg   [BW_WIDTH - 1:0] qdr_bw_n_rise_reg;
+  reg   [BW_WIDTH - 1:0] qdr_bw_n_fall_reg;
 
   always @(posedge clk270) begin
   /* Sample DDR signals onto clk270 domain.
@@ -194,10 +241,10 @@ module qdrc_infrastructure(
    * 90 degrees behind the clock. The signals are registered
    * to ease timing requirements.
    */
-    qdr_d_rise_reg     <= qdr_d_rise_reg0;
-    qdr_d_fall_reg     <= qdr_d_fall_reg0;
-    qdr_bw_n_rise_reg  <= qdr_bw_n_rise_reg0;
-    qdr_bw_n_fall_reg  <= qdr_bw_n_fall_reg0;
+    qdr_d_rise_reg     <= qdr_d_rise_reg1;
+    qdr_d_fall_reg     <= qdr_d_fall_reg1;
+    qdr_bw_n_rise_reg  <= qdr_bw_n_rise_reg1;
+    qdr_bw_n_fall_reg  <= qdr_bw_n_fall_reg1;
   end
 
   ODDR #(

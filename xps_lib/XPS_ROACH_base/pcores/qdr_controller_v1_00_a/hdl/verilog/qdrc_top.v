@@ -95,7 +95,8 @@ module qdrc_top (
     .DATA_WIDTH (DATA_WIDTH),
     .BW_WIDTH   (BW_WIDTH),
     .ADDR_WIDTH (ADDR_WIDTH),
-    .Q_CLK_270  (Q_CLK_270)
+    .Q_CLK_270  (Q_CLK_270),
+    .CLK_FREQ   (CLK_FREQ)
   ) qdrc_infrastructure_inst(
     /* general signals */
     .clk0     (clk0),
