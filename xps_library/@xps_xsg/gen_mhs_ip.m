@@ -17,7 +17,7 @@ if strcmp(clk_src, 'arb_clk')
   bestM = M(bestmatch);
   bestD = D(bestmatch);
 
-  fprintf('Closest matching frequency to %f MHz: %f MHz',target_rate,100*bestM/bestD);
+  fprintf('Closest matching frequency to %f MHz: %f MHz\n',target_rate,100*bestM/bestD);
 
   %TODO: this is really a waste as the sys_clk dcm can be used to generate the arb_clk_scm
   %      also phase dcm could be replaced with PLL on V5
@@ -49,6 +49,7 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PARAMETER C_CLK270_BUF = TRUE',                             '\n'];
   str = [str, '  PARAMETER C_CLKIN_PERIOD = ', sprintf('%f',10*bestD/bestM), '\n'];
   str = [str, '  PARAMETER C_DFS_FREQUENCY_MODE = HIGH',                     '\n'];
+  str = [str, '  PARAMETER C_DLL_FREQUENCY_MODE = HIGH',                     '\n'];
   str = [str, '  PORT RST = arb_clk_lock',                                   '\n'];
   str = [str, '  PORT CLKIN  = arb_clk_int',                                 '\n'];
   str = [str, '  PORT CLKFB  = arb_clk',                                     '\n'];
