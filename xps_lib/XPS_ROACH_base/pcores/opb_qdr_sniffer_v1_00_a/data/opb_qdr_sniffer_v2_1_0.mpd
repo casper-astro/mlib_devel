@@ -16,6 +16,7 @@ BEGIN opb_qdr_sniffer
   PARAMETER QDR_DATA_WIDTH   = 18,  DT = INTEGER
   PARAMETER QDR_BW_WIDTH     = 2,   DT = INTEGER
   PARAMETER QDR_ADDR_WIDTH   = 22,  DT = INTEGER
+  PARAMETER ENABLE           = 0,   DT = INTEGER
 ## Generics for VHDL or Parameters for Verilog
   PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
   PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector,                   BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR

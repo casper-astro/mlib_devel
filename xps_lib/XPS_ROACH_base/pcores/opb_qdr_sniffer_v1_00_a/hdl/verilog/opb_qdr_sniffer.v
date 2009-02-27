@@ -5,7 +5,8 @@ module opb_qdr_sniffer #(
     parameter C_OPB_DWIDTH   = 0,
     parameter QDR_ADDR_WIDTH = 32,
     parameter QDR_DATA_WIDTH = 18,
-    parameter QDR_BW_WIDTH   = 2
+    parameter QDR_BW_WIDTH   = 2,
+    parameter ENABLE         = 0
   )(
     input  OPB_Clk,
     input  OPB_Rst,
@@ -43,6 +44,12 @@ module opb_qdr_sniffer #(
   );
 
   localparam QDR_LATENCY = 9;
+  localparam SLAVE         = 4'h1;
+  localparam SLAVE_WAIT    = 4'h2;
+  localparam BACKDOOR      = 4'h4;
+  localparam BACKDOOR_WAIT = 4'h8;
+
+generate if (ENABLE == 1) begin: qdr_enabled
 
   /* qdr_rst gen */
   reg qdr_rst_reg;
@@ -120,11 +127,7 @@ module opb_qdr_sniffer #(
   /***************** QDR Arbitration ****************/
 
   reg [3:0] arb_sel;
-  localparam SLAVE         = 4'h1;
-  localparam SLAVE_WAIT    = 4'h2;
-  localparam BACKDOOR      = 4'h4;
-  localparam BACKDOOR_WAIT = 4'h8;
-
+  /* TODO: arb_sel[1:0] are very high fan out signals, thus need to be duplicated to increase performance */
 
   always @(posedge qdr_clk) begin
     if (qdr_rst) begin
@@ -174,5 +177,22 @@ module opb_qdr_sniffer #(
   assign slave_rd_data  = master_rd_data;
 
   assign slave_rd_dvld  = master_rd_dvld;
+
+end else begin : qdr_disabled
+  assign Sl_errAck  = 1'b0;
+  assign Sl_retry   = 1'b0;
+  assign Sl_toutSup = 1'b0;
+  assign Sl_xferAck = 1'b0;
+  assign SL_DBus    = 32'b0;
+
+  assign master_addr    = slave_addr;
+  assign master_wr_strb = slave_wr_strb;
+  assign master_wr_data = slave_wr_data;
+  assign master_wr_be   = slave_wr_be;
+  assign master_rd_strb = slave_rd_strb;
+  assign slave_rd_data  = master_rd_data;
+  assign slave_rd_dvld  = master_rd_dvld;
+  assign slave_ack      = 1'b1;
+end endgenerate
 
 endmodule
