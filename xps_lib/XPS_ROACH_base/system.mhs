@@ -34,7 +34,7 @@ PORT epb_rdy     = epb_rdy,     DIR = O
 
 PORT ppc_irq_n   = ppc_irq_n,   DIR = O
 
-# MGT Ports
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))# # MGT Ports
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_ref_clk_top_n    = xaui2_ref_clk_n, DIR = I
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_ref_clk_top_p    = xaui2_ref_clk_p, DIR = I
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strcmp(get(b,'type'),'xps_tengbe'))#PORT mgt_ref_clk_bottom_n = xaui0_ref_clk_n, DIR = I
