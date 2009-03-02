@@ -134,14 +134,22 @@ module qdrc_infrastructure(
     qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
   end
 
-  //synthesis attribute IOB of qdr_sa_iob is "TRUE"
-  //synthesis attribute IOB of qdr_w_n_iob is "TRUE"
-  //synthesis attribute IOB of qdr_r_n_iob is "TRUE"
-  //synthesis attribute IOB of qdr_dll_off_n_iob is "TRUE"
   reg [ADDR_WIDTH - 1:0] qdr_sa_iob;
   reg qdr_w_n_iob;
   reg qdr_r_n_iob;
   reg qdr_dll_off_n_iob;
+  //synthesis attribute IOB of qdr_sa_iob        is "TRUE"
+  //synthesis attribute IOB of qdr_w_n_iob       is "TRUE"
+  //synthesis attribute IOB of qdr_r_n_iob       is "TRUE"
+  //synthesis attribute IOB of qdr_dll_off_n_iob is "TRUE"
+
+  //synthesis attribute S    of qdr_sa_iob is "TRUE"
+  //synthesis attribute KEEP of qdr_sa_iob is "TRUE"
+  /*
+    Tell map not to zap to avoid errors relating to loadless nets
+    IODELAYs.
+  */ 
+
 
   always @(posedge clk0) begin 
   /* Add delay to ease timing */
@@ -169,7 +177,6 @@ module qdrc_infrastructure(
     .CE      (1'b0),
     .INC     (1'b0),
     .DATAIN  (1'b0),
-    .IDATAIN (),
     .ODATAIN ({qdr_sa_iob,qdr_w_n_iob,qdr_r_n_iob,qdr_dll_off_n_iob}),
     .RST     (1'b0),
     .T       (1'b0),
