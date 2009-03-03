@@ -121,17 +121,26 @@ module qdrc_infrastructure(
   reg qdr_r_n_reg;
   reg qdr_dll_off_n_reg;
 
-  /* This register stage is required as the IOB'ed registers
-   * cannot be combined into one slice, requiring two routes.
-   * These registers can be included in the same slice.
-   * */
+  /* This signals are all sliced so use the register in the slice */
 
   always @(posedge clk0) begin 
-  /* Add delay to ease timing */
     qdr_sa_reg        <= qdr_sa_buf;
     qdr_w_n_reg       <= qdr_w_n_buf;
     qdr_r_n_reg       <= qdr_r_n_buf;
     qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
+  end
+
+  reg [ADDR_WIDTH - 1:0] qdr_sa_reg0;
+  reg qdr_w_n_reg0;
+  reg qdr_r_n_reg0;
+  reg qdr_dll_off_n_reg0;
+
+  always @(posedge clk270) begin 
+  /* Add delay to ease timing */
+    qdr_sa_reg0        <= qdr_sa_reg;
+    qdr_w_n_reg0       <= qdr_w_n_reg;
+    qdr_r_n_reg0       <= qdr_r_n_reg;
+    qdr_dll_off_n_reg0 <= qdr_dll_off_n_reg;
   end
 
   reg [ADDR_WIDTH - 1:0] qdr_sa_iob;
@@ -143,63 +152,32 @@ module qdrc_infrastructure(
   //synthesis attribute IOB of qdr_r_n_iob       is "TRUE"
   //synthesis attribute IOB of qdr_dll_off_n_iob is "TRUE"
 
-  //synthesis attribute S    of qdr_sa_iob is "TRUE"
-  //synthesis attribute KEEP of qdr_sa_iob is "TRUE"
-  /*
-    Tell map not to zap to avoid errors relating to loadless nets
-    IODELAYs.
-  */ 
 
-
-  always @(posedge clk0) begin 
+  always @(posedge clk180) begin 
   /* Add delay to ease timing */
-    qdr_sa_iob        <= qdr_sa_reg;
-    qdr_w_n_iob       <= qdr_w_n_reg;
-    qdr_r_n_iob       <= qdr_r_n_reg;
-    qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
+    qdr_sa_iob        <= qdr_sa_reg0;
+    qdr_w_n_iob       <= qdr_w_n_reg0;
+    qdr_r_n_iob       <= qdr_r_n_reg0;
+    qdr_dll_off_n_iob <= qdr_dll_off_n_reg0;
   end
 
-  wire [ADDR_WIDTH - 1:0] qdr_sa_odelay;
-  wire qdr_w_n_odelay;
-  wire qdr_r_n_odelay;
-  wire qdr_dll_off_n_odelay;
-
-  localparam DELAY_TAPS = 1000000/(CLK_FREQ * 2 * 78);
-  /* delay taps == 180 degrees */
-
-  IODELAY #(
-    .IDELAY_TYPE      ("FIXED"),
-    .DELAY_SRC        ("O"),
-    .ODELAY_VALUE     (DELAY_TAPS),
-    .REFCLK_FREQUENCY (200.0)
-  ) ODELAY_qdrctrl [ADDR_WIDTH + 3 - 1:0] (
-    .C       (1'b0),
-    .CE      (1'b0),
-    .INC     (1'b0),
-    .DATAIN  (1'b0),
-    .ODATAIN ({qdr_sa_iob,qdr_w_n_iob,qdr_r_n_iob,qdr_dll_off_n_iob}),
-    .RST     (1'b0),
-    .T       (1'b0),
-    .DATAOUT ({qdr_sa_odelay,qdr_w_n_odelay,qdr_r_n_odelay,qdr_dll_off_n_odelay})
-  );
-
   OBUF OBUF_addr[ADDR_WIDTH - 1:0](
-    .I (qdr_sa_odelay),
+    .I (qdr_sa_iob),
     .O (qdr_sa)
   );
 
   OBUF OBUF_w_n(
-    .I (qdr_w_n_odelay),
+    .I (qdr_w_n_iob),
     .O (qdr_w_n)
   );
 
   OBUF OBUF_r_n(
-    .I (qdr_r_n_odelay),
+    .I (qdr_r_n_iob),
     .O (qdr_r_n)
   );
 
   OBUF OBUF_dll_off_n(
-    .I (qdr_dll_off_n_odelay),
+    .I (qdr_dll_off_n_iob),
     .O (qdr_dll_off_n)
   );
 

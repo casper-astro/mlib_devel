@@ -48,7 +48,9 @@ module qdrc_phy_burst_align(
   output [DATA_WIDTH - 1:0] qdr_q_rise_cal;
   output [DATA_WIDTH - 1:0] qdr_q_fall_cal; 
 
-  localparam DEFAULT_LATENCY = 8;
+  localparam DEFAULT_LATENCY = 9;
+  //up to this point the latency is 9
+  //there is one additional cycle here
 
   function [DATA_WIDTH-1:0] bitwise_multiplex;
   input [DATA_WIDTH-1:0] in0;
