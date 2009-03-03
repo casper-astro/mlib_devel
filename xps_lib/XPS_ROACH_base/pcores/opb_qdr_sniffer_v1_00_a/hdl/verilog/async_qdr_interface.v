@@ -1,5 +1,5 @@
 module async_qdr_interface #(
-    parameter QDR_LATENCY = 9
+    parameter QDR_LATENCY = 10
   ) (
     input  host_clk,
     input  host_rst,

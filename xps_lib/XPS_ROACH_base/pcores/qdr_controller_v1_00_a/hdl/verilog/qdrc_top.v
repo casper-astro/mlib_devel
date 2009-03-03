@@ -36,7 +36,6 @@ module qdrc_top (
   parameter ADDR_WIDTH   = 21;
   parameter BURST_LENGTH = 4;
   parameter CLK_FREQ     = 200;
-  parameter Q_CLK_270    = 0;
 
   input clk0, clk180, clk270, div_clk;
   input reset;
@@ -95,7 +94,6 @@ module qdrc_top (
     .DATA_WIDTH (DATA_WIDTH),
     .BW_WIDTH   (BW_WIDTH),
     .ADDR_WIDTH (ADDR_WIDTH),
-    .Q_CLK_270  (Q_CLK_270),
     .CLK_FREQ   (CLK_FREQ)
   ) qdrc_infrastructure_inst(
     /* general signals */
@@ -151,12 +149,11 @@ module qdrc_top (
   wire   [ADDR_WIDTH - 1:0] phy_addr;
 
   qdrc_phy #(
-    .DATA_WIDTH(DATA_WIDTH),
-    .BW_WIDTH(BW_WIDTH),
-    .ADDR_WIDTH(ADDR_WIDTH),
-    .CLK_FREQ(CLK_FREQ),
-    .BURST_LENGTH(BURST_LENGTH),
-    .Q_CLK_270(Q_CLK_270)
+    .DATA_WIDTH   (DATA_WIDTH),
+    .BW_WIDTH     (BW_WIDTH),
+    .ADDR_WIDTH   (ADDR_WIDTH),
+    .CLK_FREQ     (CLK_FREQ),
+    .BURST_LENGTH (BURST_LENGTH)
   ) qdrc_phy_inst(
     /* general signals */
     .clk0    (clk0),

@@ -42,7 +42,6 @@ module qdrc_infrastructure(
   parameter DATA_WIDTH     = 18;
   parameter BW_WIDTH       = 2;
   parameter ADDR_WIDTH     = 21;
-  parameter Q_CLK_270      = 0;
   parameter CLK_FREQ       = 200;
 
   input clk0,   clk180,   clk270;

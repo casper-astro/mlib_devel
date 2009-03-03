@@ -192,5 +192,5 @@ module adc_config_mux #(
   end
   
   assign ddrb_o      = ddrb_reg;
-  assign dcm_reset_o = dcm_reset_extend[4];
+  assign dcm_reset_o = conf_state != CONF_DONE ? 1'b1 : dcm_reset_extend[4];
 endmodule

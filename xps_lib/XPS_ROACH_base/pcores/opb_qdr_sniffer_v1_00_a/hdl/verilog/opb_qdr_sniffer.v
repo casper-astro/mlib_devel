@@ -22,6 +22,20 @@ module opb_qdr_sniffer #(
     input  OPB_select,
     input  OPB_seqAddr,
 
+    input  OPB_Clk_config,
+    input  OPB_Rst_config,
+    output [0:31] Sl_DBus_config,
+    output Sl_errAck_config,
+    output Sl_retry_config,
+    output Sl_toutSup_config,
+    output Sl_xferAck_config,
+    input  [0:31] OPB_ABus_config,
+    input  [0:3]  OPB_BE_config,
+    input  [0:31] OPB_DBus_config,
+    input  OPB_RNW_config,
+    input  OPB_select_config,
+    input  OPB_seqAddr_config,
+
     input  qdr_clk,
     /* Master interface to QDR controller */
     output   [QDR_ADDR_WIDTH - 1:0] master_addr,
@@ -43,7 +57,7 @@ module opb_qdr_sniffer #(
     output slave_ack
   );
 
-  localparam QDR_LATENCY = 9;
+  localparam QDR_LATENCY   = 10;
   localparam SLAVE         = 4'h1;
   localparam SLAVE_WAIT    = 4'h2;
   localparam BACKDOOR      = 4'h4;

@@ -40,7 +40,6 @@ module qdrc_phy(
   parameter ADDR_WIDTH   = 21;
   parameter CLK_FREQ     = 200;
   parameter BURST_LENGTH = 4;
-  parameter Q_CLK_270    = 0;
 
   input  clk0, clk270, div_clk, reset;
 
@@ -112,7 +111,6 @@ module qdrc_phy(
     .ADDR_WIDTH   (ADDR_WIDTH),
     .CLK_FREQ     (CLK_FREQ),
     .BURST_LENGTH (BURST_LENGTH),
-    .Q_CLK_270    (Q_CLK_270),
     .BYPASS       (1'b0)
   ) qdrc_phy_bit_align_inst (
     /* Misc signals */

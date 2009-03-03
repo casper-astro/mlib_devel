@@ -15,22 +15,6 @@ module qdrc_phy_bit_correct(
   input  qdr_q_rise, qdr_q_fall;
   output qdr_q_rise_cal, qdr_q_fall_cal;
 
-  parameter USE_CLK270 = 0;
-
-
-generate if (USE_CLK270 == 1) begin :use_clk270
-
-  reg [1:0] data_buffer;
-
-  always @(posedge clk270) begin
-    data_buffer <= {qdr_q_rise, qdr_q_fall};
-  end
-
-  assign qdr_q_rise_cal = aligned ? data_buffer[1] : data_buffer[0];
-  assign qdr_q_fall_cal = aligned ? data_buffer[0] : qdr_q_rise;
-
-end else begin                      :use_clk0
-
   reg [1:0] data_buffer;
   reg [1:0] data_reg;
 
@@ -41,7 +25,5 @@ end else begin                      :use_clk0
 
   assign qdr_q_rise_cal = aligned ? data_buffer[1] : data_buffer[0];
   assign qdr_q_fall_cal = aligned ? data_buffer[0] : data_reg[1];
-
-end endgenerate
 
 endmodule
