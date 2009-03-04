@@ -34,7 +34,7 @@ blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 
 xsg_obj_name = get(xsg_obj,'simulink_name');
-xsg_hw_sys = get_param(xsg_obj_name,'hw_sys');
+[xsg_hw_sys, xsg_hw_subsys] = xps_get_hw_plat(get_param(xsg_obj_name,'hw_sys'));
 
 s.half_burst     = num2str(strcmp(get_param(blk_name, 'half_burst'),'on'));
 s.bank_mgt       = num2str(strcmp(get_param(blk_name, 'bank_mgt'),'on'));
@@ -60,7 +60,7 @@ if( strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
 	% plb bus offset
 	b = set(b, 'plb_address_offset', hex2dec('100'));
 	b = set(b, 'opb_address_offset', 0);
-else 
+else
 	% ip name
 	b = set(b, 'ip_name', 'opb_dram_sniffer');
 
