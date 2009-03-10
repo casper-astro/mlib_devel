@@ -1,0 +1,9 @@
+# Output products list for <async_fifo_64by1024>
+async_fifo_64by1024.ngc
+async_fifo_64by1024.v
+async_fifo_64by1024.veo
+async_fifo_64by1024.xco
+async_fifo_64by1024_fifo_generator_v4_3_xst_1.ngc_xst.xrpt
+async_fifo_64by1024_fifo_generator_v4_3_xst_1_vhdl.prj
+async_fifo_64by1024_flist.txt
+async_fifo_64by1024_xmdf.tcl
