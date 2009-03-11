@@ -110,4 +110,4 @@ pfb_fir casper_library/PFBs/pfb_fir pfb_fir_test PFBSize 6 TotalTaps 6 WindowTyp
 pfb_fir_real casper_library/PFBs/pfb_fir_real pfb_fir_real_test PFBSize 5 TotalTaps 5 WindowType 'chebwin' n_inputs 0 MakeBiplex 1 BitWidthIn 10 BitWidthOut 22 CoeffBitWidth 10 CoeffDistMem 0 add_latency 2 mult_latency 3 bram_latency 1 quantization 'Truncate' fwidth 0.8 specify_mult 'on' mult_spec '[0 1 2 0 1]'
 % # Correlator
 % xeng_tvg casper_library/Correlator/xeng_tvg xeng_tvg_test ant_bits 4 bits_in 8 x_int_bits 4 sync_period 9
-win_x_engine_demux32 casper_library/Correlator/win_x_engine_demux32 win_xeng_demux32_test n_ants 4 n_bits 4 acc_len 32 add_latency 1 mult_latency 1 bram_latency 1 use_ded_mult 1 use_bram_delay 1
+xeng casper_library/Correlator/xeng xeng_test n_ants 8 n_bits 4 acc_len 64 demux_factor 8 add_latency 1 mult_latency 1 bram_latency 1 use_ded_mult 1 use_bram_delay 1
