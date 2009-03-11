@@ -6,7 +6,7 @@ function win_x_engine_demux_init(blk, varargin)
 defaults = {'use_ded_mult', 1, 'use_bram_delay', 1, 'demux_factor', 4, 'n_bits', 4, ...
     'add_latency', 1, 'mult_latency', 1, 'bram_latency', 2};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
-check_mask_type(blk, 'win_x_engine_demux');
+check_mask_type(blk, 'xeng');
 munge_block(blk, varargin{:});
 
 %fprintf('starting variables processing\n');
@@ -25,7 +25,7 @@ xeng_delay = add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1;
 bit_growth = ceil(log2(acc_len));
 ant_bits = ceil(log2(n_ants));
 n_bits_xeng_out = (2*n_bits + 1 + bit_growth);
-n_bits_scaled_out = 2^(ceil(log2(n_bits_xeng_out)))
+n_bits_scaled_out = 2^(ceil(log2(n_bits_xeng_out)));
 
 if n_ants < 2,
     errordlg('X engine ERR: X Engine must have at least 2 antennas.');
@@ -48,6 +48,10 @@ if length(use_ded_mult) ~= floor(n_ants/2)+1 && length(use_ded_mult) ~= 1,
     use_ded_mult=1;
     
 end    
+
+if (mod(n_ants,2) ~= 0)
+    warndlg(sprintf('X engine is not tested for non-2^N antennas.'));
+end
 
 %fprintf('variables all done\n');
 
@@ -83,7 +87,7 @@ end
 % Add Misc static blocks
 
 reuse_block(blk, 'x_cast', 'casper_library/Correlator/x_cast', 'Position', [x + 100, 100, x + 150, 125]);
-reuse_block(blk, 'xeng_mask_demux', 'casper_library/Correlator/xeng_mask_demux', 'Position', [x + 200, 105, x + 300, 163]);
+reuse_block(blk, 'xeng_descramble', 'casper_library/Correlator/xeng_descramble', 'Position', [x + 200, 105, x + 300, 163]);
 reuse_block(blk, 'xeng_conj_fix', 'casper_library/Correlator/xeng_conj_fix', 'Position', [x + 350, 105, x + 450, 163]);
 
 reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', 'Position', [15,89,85,121],...
@@ -129,13 +133,12 @@ add_line(blk, 'Constant/1', 'auto_tap/4', 'autorouting', 'on');
 add_line(blk, 'Constant1/1', 'auto_tap/5', 'autorouting', 'on');
 add_line(blk, 'sync_in/1', 'auto_tap/6', 'autorouting', 'on');
 add_line(blk, 'window_valid/1', 'window_delay/1', 'autorouting', 'on');
-add_line(blk, 'window_delay/1', 'Logical/2', 'autorouting', 'on');
-add_line(blk, 'Logical/1', 'xeng_mask_demux/2', 'autorouting', 'on');
-add_line(blk, 'x_cast/1', 'xeng_mask_demux/1', 'autorouting', 'on');
+add_line(blk, 'window_delay/1', 'xeng_descramble/4', 'autorouting', 'on');
+add_line(blk, 'x_cast/1', 'xeng_descramble/1', 'autorouting', 'on');
 
-add_line(blk, 'xeng_mask_demux/1', 'xeng_conj_fix/1', 'autorouting', 'on');
-add_line(blk, 'xeng_mask_demux/2', 'xeng_conj_fix/2', 'autorouting', 'on');
-add_line(blk, 'xeng_mask_demux/3', 'xeng_conj_fix/3', 'autorouting', 'on');
+add_line(blk, 'xeng_descramble/1', 'xeng_conj_fix/1', 'autorouting', 'on');
+add_line(blk, 'xeng_descramble/2', 'xeng_conj_fix/2', 'autorouting', 'on');
+add_line(blk, 'xeng_descramble/3', 'xeng_conj_fix/3', 'autorouting', 'on');
 
 add_line(blk, 'xeng_conj_fix/3', 'sync_out/1', 'autorouting', 'on');
 add_line(blk, 'xeng_conj_fix/1', 'acc/1', 'autorouting', 'on');
@@ -165,9 +168,9 @@ add_line(blk, [thisblk, '/1'], 'auto_tap/3', 'autorouting', 'on');
 add_line(blk, [thisblk, '/2'], 'Term1/1', 'autorouting', 'on');
 add_line(blk, [thisblk, '/3'], 'Term2/1', 'autorouting', 'on');
 add_line(blk, [thisblk, '/4'], 'x_cast/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/5'], 'Logical/1', 'autorouting', 'on');
+add_line(blk, [thisblk, '/5'], 'xeng_descramble/2', 'autorouting', 'on');
 add_line(blk, [thisblk, '/6'], 'Term3/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/7'], 'xeng_mask_demux/3', 'autorouting', 'on');
+add_line(blk, [thisblk, '/7'], 'xeng_descramble/3', 'autorouting', 'on');
 
 %fprintf('setting block parameters...\n');
 
@@ -175,10 +178,11 @@ add_line(blk, [thisblk, '/7'], 'xeng_mask_demux/3', 'autorouting', 'on');
 set_param([blk, '/x_cast'], 'n_bits_in', sprintf('%d',n_bits_xeng_out));
 set_param([blk, '/x_cast'], 'n_bits_out', sprintf('%d',n_bits_scaled_out));
 set_param([blk, '/x_cast'], 'fix_pnt_pos', sprintf('%d',(n_bits-1)*2));
-set_param([blk, '/xeng_mask_demux'], 'num_ants', sprintf('%d',n_ants));
-set_param([blk, '/xeng_mask_demux'], 'n_bits_in', sprintf('%d',n_bits_scaled_out*8));
-set_param([blk, '/xeng_mask_demux'], 'demux_factor', sprintf('%d',demux_factor));
-set_param([blk, '/xeng_conj_fix'], 'n_bits_in', sprintf('%d',(n_bits_scaled_out*4)/demux_factor));
+set_param([blk, '/xeng_descramble'], 'num_ants', sprintf('%d',n_ants));
+set_param([blk, '/xeng_descramble'], 'n_bits_in', sprintf('%d',n_bits_scaled_out*8));
+set_param([blk, '/xeng_descramble'], 'demux_factor', sprintf('%d',demux_factor));
+set_param([blk, '/xeng_descramble'], 'acc_len', sprintf('%d',acc_len));
+set_param([blk, '/xeng_conj_fix'], 'n_bits_in', sprintf('%d',(n_bits_scaled_out)/demux_factor));
 set_param([blk, '/xeng_conj_fix'], 'n_ants', sprintf('%d',n_ants));
 set_param([blk, '/xeng_conj_fix'], 'demux_factor', sprintf('%d',demux_factor));
 
