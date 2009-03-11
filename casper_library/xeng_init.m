@@ -27,11 +27,11 @@ ant_bits = ceil(log2(n_ants));
 n_bits_xeng_out = (2*n_bits + 1 + bit_growth);
 n_bits_scaled_out = 2^(ceil(log2(n_bits_xeng_out)));
 
-if n_ants < 2,
-    errordlg('X engine ERR: X Engine must have at least 2 antennas.');
-    error('X Engine must have at least 2 antennas.');
-    set_param(blk, 'n_ants', '2');
-    n_ants = 2;
+if n_ants < 5,
+    errordlg('X engine ERR: X Engine must have more than 4 antennas.');
+    error('X Engine must have more than 4 antennas.');
+    set_param(blk, 'n_ants', '8');
+    n_ants = 8;
 end
 
 if floor(n_ants/2 + 1) >= acc_len,
