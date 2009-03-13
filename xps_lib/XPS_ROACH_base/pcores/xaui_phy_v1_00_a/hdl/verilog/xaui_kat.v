@@ -103,6 +103,15 @@ module xaui_kat(
     .mgt_txcharisk(mgt_txcharisk)
   );
 
+  reg [63:0] mgt_rxdata_z;
+  reg  [7:0] mgt_rxcharisk_z;
+  reg  [7:0] mgt_codevalid_z;
+  always @(posedge usrclk) begin
+    mgt_rxdata_z    <= mgt_rxdata;
+    mgt_rxcharisk_z <= mgt_rxcharisk;
+    mgt_codevalid_z <= mgt_codevalid;
+  end
+
   pcs_sync pcs_sync_0(
     .clk(usrclk),
     .reset(reset),
@@ -117,8 +126,8 @@ module xaui_kat(
 
   pcs_deskew pcs_deskew_0(
     .clk(usrclk), .reset(reset),
-    .mgt_rxdata(mgt_rxdata), .mgt_rxcharisk(mgt_rxcharisk),
-    .disp_err(~mgt_codevalid),
+    .mgt_rxdata(mgt_rxdata_z), .mgt_rxcharisk(mgt_rxcharisk_z),
+    .disp_err(~mgt_codevalid_z),
     .sync_status(sync_status),
     .enable_deskew(mgt_enchansync),
     .align_status(align_status_int)
@@ -127,8 +136,8 @@ module xaui_kat(
   pcs_rx pcs_rx_0(
     .clk(usrclk), .reset(reset),
     .align_status(align_status),
-    .mgt_rxdata(mgt_rxdata), .mgt_rxcharisk(mgt_rxcharisk),
-    .disperr(~mgt_codevalid),
+    .mgt_rxdata(mgt_rxdata_z), .mgt_rxcharisk(mgt_rxcharisk_z),
+    .disperr(~mgt_codevalid_z),
     .xgmii_rxd(xgmii_rxd_int), .xgmii_rxc(xgmii_rxc_int)
   );
 
