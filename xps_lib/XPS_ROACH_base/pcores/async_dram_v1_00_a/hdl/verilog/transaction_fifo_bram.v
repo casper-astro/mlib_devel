@@ -47,7 +47,9 @@ module transaction_fifo_bram(
 	dout,
 	empty,
 	full,
-	prog_full);
+	overflow,
+	prog_full,
+	underflow);
 
 
 input [32 : 0] din;
@@ -59,14 +61,16 @@ input wr_en;
 output [32 : 0] dout;
 output empty;
 output full;
+output overflow;
 output prog_full;
+output underflow;
 
 // synthesis translate_off
 
       FIFO_GENERATOR_V4_4 #(
 		.C_COMMON_CLOCK(0),
 		.C_COUNT_TYPE(0),
-		.C_DATA_COUNT_WIDTH(9),
+		.C_DATA_COUNT_WIDTH(10),
 		.C_DEFAULT_VALUE("BlankString"),
 		.C_DIN_WIDTH(33),
 		.C_DOUT_RST_VAL("0"),
@@ -80,12 +84,12 @@ output prog_full;
 		.C_HAS_DATA_COUNT(0),
 		.C_HAS_INT_CLK(0),
 		.C_HAS_MEMINIT_FILE(0),
-		.C_HAS_OVERFLOW(0),
+		.C_HAS_OVERFLOW(1),
 		.C_HAS_RD_DATA_COUNT(0),
 		.C_HAS_RD_RST(0),
 		.C_HAS_RST(1),
 		.C_HAS_SRST(0),
-		.C_HAS_UNDERFLOW(0),
+		.C_HAS_UNDERFLOW(1),
 		.C_HAS_VALID(0),
 		.C_HAS_WR_ACK(0),
 		.C_HAS_WR_DATA_COUNT(0),
@@ -99,17 +103,17 @@ output prog_full;
 		.C_OVERFLOW_LOW(0),
 		.C_PRELOAD_LATENCY(0),
 		.C_PRELOAD_REGS(1),
-		.C_PRIM_FIFO_TYPE("512x36"),
+		.C_PRIM_FIFO_TYPE("1kx36"),
 		.C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
 		.C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
 		.C_PROG_EMPTY_TYPE(0),
-		.C_PROG_FULL_THRESH_ASSERT_VAL(511),
-		.C_PROG_FULL_THRESH_NEGATE_VAL(510),
+		.C_PROG_FULL_THRESH_ASSERT_VAL(1023),
+		.C_PROG_FULL_THRESH_NEGATE_VAL(1022),
 		.C_PROG_FULL_TYPE(1),
-		.C_RD_DATA_COUNT_WIDTH(9),
-		.C_RD_DEPTH(512),
+		.C_RD_DATA_COUNT_WIDTH(10),
+		.C_RD_DEPTH(1024),
 		.C_RD_FREQ(1),
-		.C_RD_PNTR_WIDTH(9),
+		.C_RD_PNTR_WIDTH(10),
 		.C_UNDERFLOW_LOW(0),
 		.C_USE_DOUT_RST(1),
 		.C_USE_ECC(0),
@@ -118,10 +122,10 @@ output prog_full;
 		.C_USE_FWFT_DATA_COUNT(0),
 		.C_VALID_LOW(0),
 		.C_WR_ACK_LOW(0),
-		.C_WR_DATA_COUNT_WIDTH(9),
-		.C_WR_DEPTH(512),
+		.C_WR_DATA_COUNT_WIDTH(10),
+		.C_WR_DEPTH(1024),
 		.C_WR_FREQ(1),
-		.C_WR_PNTR_WIDTH(9),
+		.C_WR_PNTR_WIDTH(10),
 		.C_WR_RESPONSE_LATENCY(1))
 	inst (
 		.DIN(din),
@@ -133,7 +137,9 @@ output prog_full;
 		.DOUT(dout),
 		.EMPTY(empty),
 		.FULL(full),
+		.OVERFLOW(overflow),
 		.PROG_FULL(prog_full),
+		.UNDERFLOW(underflow),
 		.CLK(),
 		.INT_CLK(),
 		.BACKUP(),
@@ -150,11 +156,9 @@ output prog_full;
 		.ALMOST_EMPTY(),
 		.ALMOST_FULL(),
 		.DATA_COUNT(),
-		.OVERFLOW(),
 		.PROG_EMPTY(),
 		.VALID(),
 		.RD_DATA_COUNT(),
-		.UNDERFLOW(),
 		.WR_ACK(),
 		.WR_DATA_COUNT(),
 		.SBITERR(),

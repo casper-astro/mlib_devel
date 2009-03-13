@@ -28,6 +28,7 @@ PARAMETER MEM_C_BASEADDR  = 0xffffffff, DT = std_logic_vector, BUS = SOPB_MEM,  
 PARAMETER MEM_C_HIGHADDR  = 0x00000000, DT = std_logic_vector, BUS = SOPB_MEM,  ADDRESS = HIGH, PAIR = MEM_C_BASEADDR
 PARAMETER CTRL_C_BASEADDR = 0xffffffff, DT = std_logic_vector, BUS = SOPB_CTRL, ADDRESS = BASE, PAIR = CTRL_C_HIGHADDR
 PARAMETER CTRL_C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SOPB_CTRL, ADDRESS = HIGH, PAIR = CTRL_C_BASEADDR
+PARAMETER ENABLE          = 0,          DT = integer
 
 ## DRAM Control OPB Port
 PORT ctrl_OPB_Clk     = "",          DIR = I, BUS = SOPB_CTRL, SIGIS = CLK

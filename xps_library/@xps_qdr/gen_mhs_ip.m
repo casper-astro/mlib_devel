@@ -73,7 +73,7 @@ str = [str, 'BEGIN opb_qdr_sniffer\n'];
 
 str = [str, ' PARAMETER INSTANCE   = ', hw_qdr,'_sniffer', '\n'];
 str = [str, ' PARAMETER HW_VER     = 1.00.a',              '\n'];
-str = [str, ' PARAMETER ENABLE     = ', use_sniffer        '\n'];
+str = [str, ' PARAMETER ENABLE     = ', use_sniffer,       '\n'];
 if strcmp(hw_qdr, 'qdr0')
   str = [str, ' PARAMETER C_BASEADDR = 0x02000000', '\n'];
   str = [str, ' PARAMETER C_HIGHADDR = 0x02ffffff', '\n'];

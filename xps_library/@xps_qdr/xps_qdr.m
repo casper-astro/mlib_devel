@@ -38,7 +38,7 @@ s.clk_src  = get(xsg_obj,'clk_src');
 s.clk_rate = get(xsg_obj,'clk_rate');
 
 s.hw_qdr      = get_param(blk_name,'which_qdr');
-s.use_sniffer = get_param(blk_name,'use_sniffer'); 
+s.use_sniffer = num2str(strcmp(get_param(blk_name, 'use_sniffer'), 'on')); 
 
 switch s.hw_sys
     case 'ROACH'

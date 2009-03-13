@@ -128,11 +128,12 @@ module dram_controller #(
 
   wire wr_trans = app_cmd_valid && !app_cmd_rnw;
 
-  reg wr_trans_z;
-  always @(posedge clk0)
-    wr_trans_z <= wr_trans;
+  reg wr_trans_second;
+  always @(posedge clk0) begin
+    wr_trans_second <= wr_trans;
+  end
 
-  wire app_wdf_wren = wr_trans || wr_trans_z;
+  wire app_wdf_wren = wr_trans || wr_trans_second;
 
   // memory initialization/control logic
 

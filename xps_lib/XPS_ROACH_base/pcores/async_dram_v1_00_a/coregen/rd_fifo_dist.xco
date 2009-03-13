@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.39
-# Date: Thu Jan 15 12:29:53 2009
+# Date: Thu Mar 12 13:25:59 2009
 #
 ##############################################################
 #
@@ -27,7 +27,7 @@ SET implementationfiletype = Ngc
 SET package = ff1136
 SET removerpms = False
 SET simulationfiles = Behavioral
-SET speedgrade = -2
+SET speedgrade = -1
 SET verilogsim = True
 SET vhdlsim = False
 # END Project Options
@@ -54,7 +54,7 @@ CSET input_data_width=144
 CSET input_depth=32
 CSET output_data_width=144
 CSET output_depth=32
-CSET overflow_flag=false
+CSET overflow_flag=true
 CSET overflow_sense=Active_High
 CSET performance_options=First_Word_Fall_Through
 CSET programmable_empty_type=No_Programmable_Empty_Threshold
@@ -64,7 +64,7 @@ CSET read_data_count=false
 CSET read_data_count_width=5
 CSET reset_pin=true
 CSET reset_type=Asynchronous_Reset
-CSET underflow_flag=false
+CSET underflow_flag=true
 CSET underflow_sense=Active_High
 CSET use_dout_reset=true
 CSET use_embedded_registers=false
@@ -78,5 +78,5 @@ CSET write_data_count=false
 CSET write_data_count_width=5
 # END Parameters
 GENERATE
-# CRC: 5600b244
+# CRC: 2a46a0c7
 

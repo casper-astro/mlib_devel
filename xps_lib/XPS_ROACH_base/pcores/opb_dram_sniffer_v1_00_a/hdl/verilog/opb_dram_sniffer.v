@@ -1,4 +1,5 @@
 module opb_dram_sniffer #(
+    parameter ENABLE          = 0,
     parameter CTRL_C_BASEADDR = 0,
     parameter CTRL_C_HIGHADDR = 0,
     parameter MEM_C_BASEADDR  = 0,
@@ -54,6 +55,7 @@ module opb_dram_sniffer #(
     output [143:0] app_rd_data,
     output app_rd_valid
   );
+generate if (ENABLE) begin : sniffer_enabled
 
   wire [15:0] software_address_bits;
 
@@ -153,5 +155,30 @@ module opb_dram_sniffer #(
     .slave0_rd_valid  (app_rd_valid),
     .slave0_ack       (app_cmd_ack)
   );
+
+end else begin : sniffer_disabled
+    assign ctrl_Sl_DBus    = 32'b0;
+    assign ctrl_Sl_errAck  = 1'b0;
+    assign ctrl_Sl_retry   = 1'b0;
+    assign ctrl_Sl_toutSup = 1'b0;
+    assign ctrl_Sl_xferAck = 1'b0;
+
+    assign mem_Sl_DBus    = 32'b0;
+    assign mem_Sl_errAck  = 1'b0;
+    assign mem_Sl_retry   = 1'b0;
+    assign mem_Sl_toutSup = 1'b0;
+    assign mem_Sl_xferAck = 1'b0;
+
+    assign dram_cmd_addr  = app_cmd_addr << 2;
+    assign dram_cmd_rnw   = app_cmd_rnw;
+    assign dram_cmd_valid = app_cmd_valid;
+    assign dram_wr_data   = app_wr_data;
+    assign dram_wr_be     = app_wr_be;
+    assign app_rd_data    = dram_rd_data;
+    assign app_rd_valid   = dram_rd_valid;
+
+    assign app_cmd_ack    = dram_fifo_ready;
+
+end endgenerate
 
 endmodule

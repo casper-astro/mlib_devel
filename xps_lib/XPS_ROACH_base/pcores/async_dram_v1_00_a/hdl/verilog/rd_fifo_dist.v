@@ -47,7 +47,9 @@ module rd_fifo_dist(
 	dout,
 	empty,
 	full,
-	prog_full);
+	overflow,
+	prog_full,
+	underflow);
 
 
 input [143 : 0] din;
@@ -59,7 +61,9 @@ input wr_en;
 output [143 : 0] dout;
 output empty;
 output full;
+output overflow;
 output prog_full;
+output underflow;
 
 // synthesis translate_off
 
@@ -80,12 +84,12 @@ output prog_full;
 		.C_HAS_DATA_COUNT(0),
 		.C_HAS_INT_CLK(0),
 		.C_HAS_MEMINIT_FILE(0),
-		.C_HAS_OVERFLOW(0),
+		.C_HAS_OVERFLOW(1),
 		.C_HAS_RD_DATA_COUNT(0),
 		.C_HAS_RD_RST(0),
 		.C_HAS_RST(1),
 		.C_HAS_SRST(0),
-		.C_HAS_UNDERFLOW(0),
+		.C_HAS_UNDERFLOW(1),
 		.C_HAS_VALID(0),
 		.C_HAS_WR_ACK(0),
 		.C_HAS_WR_DATA_COUNT(0),
@@ -133,7 +137,9 @@ output prog_full;
 		.DOUT(dout),
 		.EMPTY(empty),
 		.FULL(full),
+		.OVERFLOW(overflow),
 		.PROG_FULL(prog_full),
+		.UNDERFLOW(underflow),
 		.CLK(),
 		.INT_CLK(),
 		.BACKUP(),
@@ -150,11 +156,9 @@ output prog_full;
 		.ALMOST_EMPTY(),
 		.ALMOST_FULL(),
 		.DATA_COUNT(),
-		.OVERFLOW(),
 		.PROG_EMPTY(),
 		.VALID(),
 		.RD_DATA_COUNT(),
-		.UNDERFLOW(),
 		.WR_ACK(),
 		.WR_DATA_COUNT(),
 		.SBITERR(),

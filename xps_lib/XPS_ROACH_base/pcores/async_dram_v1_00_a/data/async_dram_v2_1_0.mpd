@@ -13,6 +13,7 @@ OPTION HDL         = VERILOG
 OPTION STYLE       = MIX
 OPTION ARCH_SUPPORT_MAP = (OTHERS=DEVELOPMENT)
 
+# Parameters
 PARAMETER C_WIDE_DATA   = 0,  DT = INTEGER, RANGE = (0:1)
 PARAMETER C_HALF_BURST  = 0,  DT = INTEGER, RANGE = (0:1)
 PARAMETER BRAM_FIFOS    = 0,  DT = INTEGER, RANGE = (0:1)
@@ -21,9 +22,6 @@ PARAMETER TAG_BUFFER_EN = 0,  DT = INTEGER, RANGE = (0:1)
 ## Bus Interfaces
 BUS_INTERFACE BUS = DRAM_USER, BUS_STD = DRAM_APP,  BUS_TYPE = INITIATOR
 BUS_INTERFACE BUS = MEM_CMD,   BUS_STD = MEM_CMD,   BUS_TYPE = TARGET
-
-## System Ports
-PORT sys_rst         = "",          DIR = I
 
 ## DRAM Controller Signals
 PORT dram_clk        = "",          DIR = I
@@ -47,11 +45,11 @@ PORT Mem_Cmd_RNW     = Mem_Cmd_RNW,     DIR = I, BUS = MEM_CMD
 PORT Mem_Cmd_Valid   = Mem_Cmd_Valid,   DIR = I, BUS = MEM_CMD    
 PORT Mem_Cmd_Tag     = Mem_Cmd_Tag,     DIR = I, BUS = MEM_CMD,   VEC = [31:0]
 PORT Mem_Cmd_Ack     = Mem_Cmd_Ack,     DIR = O, BUS = MEM_CMD    
-PORT Mem_Rd_Dout     = Mem_Rd_Dout,     DIR = O, BUS = MEM_CMD,   VEC = [(144*(C_WIDE_DATA+1))-1:0]
+PORT Mem_Rd_Dout     = Mem_Rd_Dout,     DIR = O, BUS = MEM_CMD,   VEC = [144-1:0]
 PORT Mem_Rd_Tag      = Mem_Rd_Tag,      DIR = O, BUS = MEM_CMD,   VEC = [31:0]
 PORT Mem_Rd_Ack      = Mem_Rd_Ack,      DIR = I, BUS = MEM_CMD    
 PORT Mem_Rd_Valid    = Mem_Rd_Valid,    DIR = O, BUS = MEM_CMD    
-PORT Mem_Wr_Din      = Mem_Wr_Din,      DIR = I, BUS = MEM_CMD,   VEC = [(144*(C_WIDE_DATA+1))-1:0]
-PORT Mem_Wr_BE       = Mem_Wr_BE,       DIR = I, BUS = MEM_CMD,   VEC = [(18*(C_WIDE_DATA+1))-1:0]
+PORT Mem_Wr_Din      = Mem_Wr_Din,      DIR = I, BUS = MEM_CMD,   VEC = [144-1:0]
+PORT Mem_Wr_BE       = Mem_Wr_BE,       DIR = I, BUS = MEM_CMD,   VEC = [ 18-1:0]
 
 END
