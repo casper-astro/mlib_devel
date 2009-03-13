@@ -53,6 +53,10 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+arch = get_var('arch', 'defaults', defaults, varargin{:});
+opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
+coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
+delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
@@ -68,25 +72,34 @@ num_outports = length(outports);
 delete_lines(blk);
 
 % Add Ports
-reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 0 60 15], 'Port', '1');
-reuse_block(blk, 'shift', 'built-in/inport', 'Position', [30 45 60 60], 'Port', '2');
-reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [700 0 730 15], 'Port', '1');
+reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 32 60 48], 'Port', '1');
+reuse_block(blk, 'shift', 'built-in/inport', 'Position', [30 82 60 98], 'Port', '2');
+reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [725 35 755 50], 'Port', '1');
 
 for i=0:2^n_inputs-1,
-    reuse_block(blk, ['in',num2str(i)], 'built-in/inport', 'Position', [30 100*i+100 60 100*i+115], 'Port', num2str(i+3));
+    reuse_block(blk, ['in',num2str(i)], 'built-in/inport', 'Position', [30 45*i+125 60 45*i+140], 'Port', num2str(i+3));
 end
 
 for i=0:2^(n_inputs-1)-1,
-    reuse_block(blk, ['out',num2str(i)], 'built-in/outport', 'Position', [700 100*i+100 730 100*i+115], 'Port', num2str(i+2));
+    reuse_block(blk, ['out',num2str(i)], 'built-in/outport', 'Position', [725 45*i+80 755 45*i+100], 'Port', num2str(i+2));
 end
+reuse_block(blk, 'of', 'built-in/outport', 'Position', [725 45*2^(n_inputs-1)+120 755 45*(2^(n_inputs-1))+135], 'Port', num2str(2^(n_inputs-1)+2));
+
+reuse_block(blk, 'of_or', 'xbsIndex_r4/Logical', ...
+    'logical_function', 'OR', 'inputs', tostring(2^(n_inputs-2)+1), 'latency', '1', ...
+    'Position', [575 210 625 200+2^(n_inputs-1)*20]);
 
 % Add biplex_real_4x FFTs
 for i=0:2^(n_inputs-2)-1,
-    pos = [100 200*i+100 220 200*i+220];
+    pos = [100 200*i+100 220 200*i+255];
     name = ['fft_biplex_real_4x',num2str(i)];
     reuse_block(blk, name, 'casper_library/FFTs/fft_biplex_real_4x', ...
         'FFTSize', tostring(FFTSize-n_inputs), 'input_bit_width', tostring(input_bit_width), ...
+        'quantization', tostring(quantization), 'overflow', tostring(overflow), ...
+        'arch', tostring(arch), 'opt_target', tostring(opt_target), ...
         'coeff_bit_width',tostring(coeff_bit_width), ...
+        'coeffs_bit_limit', tostring(coeffs_bit_limit), ...
+        'delays_bit_limit', tostring(delays_bit_limit), ...
         'add_latency', tostring(add_latency), 'mult_latency', tostring(mult_latency), ...
         'bram_latency',tostring(bram_latency), 'Position', pos);
     add_line(blk, ['in',num2str(4*i),'/1'], [name,'/1']);
@@ -95,35 +108,43 @@ for i=0:2^(n_inputs-2)-1,
     add_line(blk, ['in',num2str(4*i+3),'/1'], [name,'/4']);
     add_line(blk, 'shift/1', [name,'/6']);
     add_line(blk, 'sync/1', [name,'/5']);
+    
+    add_line(blk, [name,'/5'], ['of_or/',num2str(i+2)]);
 end
 
-% Add direct FFTs
-pos = [400 0 520 120];
+% Add direct FFT
+pos = [400 20 520 175];
 reuse_block(blk, 'fft_direct', 'casper_library/FFTs/fft_direct', ...
     'FFTSize', num2str(n_inputs), 'input_bit_width', num2str(input_bit_width), ...
     'coeff_bit_width',tostring(coeff_bit_width), ...
-    'add_latency', num2str(add_latency), 'mult_latency', num2str(mult_latency), ...
-    'bram_latency', num2str(bram_latency), 'MapTail', num2str(1), ...
-    'LargerFFTSize', num2str(FFTSize), 'StartStage', num2str(FFTSize-n_inputs+1), 'Position', pos);
-pos = [400 200 520 200+120];
+    'add_latency', tostring(add_latency), 'mult_latency', num2str(mult_latency), ...
+    'quantization', tostring(quantization), 'overflow', tostring(overflow), ...
+    'bram_latency', tostring(bram_latency), 'map_tail', 'on', ...
+    'arch', tostring(arch), 'opt_target', tostring(opt_target), ...
+    'coeffs_bit_limit', tostring(coeffs_bit_limit), ...
+    'LargerFFTSize', tostring(FFTSize), 'StartStage', tostring(FFTSize-n_inputs+1), 'Position', pos);
 reuse_block(blk, 'slice', 'xbsIndex_r4/Slice', ...
     'mode', 'Lower Bit Location + Width', 'bit0', tostring(FFTSize-n_inputs), 'nbits', tostring(n_inputs), ...
-    'Position', [100 0 130 15]);
+    'Position', [100 82 130 100]);
 add_line(blk, 'shift/1', 'slice/1');
 add_line(blk, 'slice/1', 'fft_direct/2');
 add_line(blk, 'fft_biplex_real_4x0/6', 'fft_direct/1');
 for i=0:2^(n_inputs-2)-1,
     bi_name = ['fft_biplex_real_4x',num2str(i)];
     add_line(blk, [bi_name,'/1'], ['fft_direct/',num2str(3+4*i)]);                               
-        add_line(blk, [bi_name,'/2'], ['fft_direct/',num2str(3+4*i+1)]);                             
-        add_line(blk, [bi_name,'/3'], ['fft_direct/',num2str(3+4*i+2)]);                             
-        add_line(blk, [bi_name,'/4'], ['fft_direct/',num2str(3+4*i+3)]); 
+    add_line(blk, [bi_name,'/2'], ['fft_direct/',num2str(3+4*i+1)]);                             
+    add_line(blk, [bi_name,'/3'], ['fft_direct/',num2str(3+4*i+2)]);                             
+    add_line(blk, [bi_name,'/4'], ['fft_direct/',num2str(3+4*i+3)]); 
 end
+  
+%add overflow
+add_line(blk, ['fft_direct/',num2str(2^n_inputs+3-1)], 'of_or/1');
+add_line(blk, 'of_or/1', 'of/1');
 
 % Add Unscrambler
 reuse_block(blk, 'fft_unscrambler', 'casper_library/FFTs/fft_unscrambler', ...
     'FFTSize', num2str(FFTSize-1), 'n_inputs', num2str(n_inputs-1), 'bram_latency', num2str(bram_latency), ...
-    'Position', [550 0 670 120]);
+    'Position', [550 20 670 160]);
 
 for i=1:2^(n_inputs-1)+1,
     add_line(blk, ['fft_direct/',num2str(i)], ['fft_unscrambler/',num2str(i)]);
@@ -132,35 +153,22 @@ for i=1:2^(n_inputs-1)+1,
     end
 end
 
-clean_blocks(blk);
-
 % Propagate dynamic variables
 
 %generate vectors of multiplier use from vectors passed in
-vec_biplex = ones(1,FFTSize-n_inputs);
-vec_direct = ones(1,n_inputs);
-
 vec_biplex = mult_spec(1:FFTSize-n_inputs);
 vec_direct = mult_spec(FFTSize-n_inputs+1:FFTSize);
 
 for i=0:2^(n_inputs-2)-1,
     name = [blk,'/fft_biplex_real_4x',num2str(i)];
-    set_param(name, 'quantization', quantization, 'overflow', overflow, ...
-    'specify_mult', tostring(specify_mult));
-    if( strcmp(specify_mult,'on')),
-        set_param(name, 'mult_spec', mat2str(vec_biplex));
-    end
+    set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
 end
 
 name = [blk,'/fft_direct'];
-set_param(name, 'quantization', quantization, 'overflow', overflow, ...
-'specify_mult', tostring(specify_mult));
-if( strcmp(specify_mult,'on')),
-    set_param(name, 'mult_spec', mat2str(vec_direct));
-end
+set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_direct));
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, n_inputs=%d,\n input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, n_inputs, input_bit_width, coeff_bit_width);
+fmtstr = sprintf('FFTSize=%d', FFTSize);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

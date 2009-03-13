@@ -52,16 +52,23 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+arch = get_var('arch', 'defaults', defaults, varargin{:});
+opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
+coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
+delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
-BRAMSize = 18432;
-MaxCoeffNum = 11;	        % This is the maximum that will fit in a BRAM
-%DelayBramThresh = 1/8;      % Use bram when delays will fill this fraction of a BRAM
-CoeffBramThresh = 1/8;      % Use bram when coefficients will fill this fraction of a BRAM
+if strcmp(arch, 'Virtex2Pro'), 
+    MaxCoeffNum = 11;	        % This is the maximum that will fit in a BRAM for V2Pro
+elseif strcmp(arch, 'Virtex5'),
+    MaxCoeffNum = 12;      % This is the maximum that will fit in a BRAM for V5
+else,
+    error(['biplex_core_init.m: Unrecognized architecture ',arch,'\n']);
+end
 
 if FFTSize < 2,
-    errordlg('biplex_core_init.m: Biplex FFT must have length of at least 2^2.');
+    errordlg('biplex_core_init.m: Biplex FFT must have length of at least 2^2, forcing size to 2.');
     set_param(blk, 'FFTSize', '2');
     FFTSize = 2;
 end
@@ -70,26 +77,32 @@ current_stages = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', '
     'masktype', 'fft_stage');
 prev_stages = length(current_stages);
 
+reuse_block(blk, 'pol1', 'built-in/inport', 'Port', '1', 'Position', [15 33 45 47]);
+reuse_block(blk, 'pol2', 'built-in/inport', 'Port', '2', 'Position', [15 58 45 72]);
+reuse_block(blk, 'sync', 'built-in/inport', 'Port', '3', 'Position', [15 108 45 122]);
+reuse_block(blk, 'Constant', 'xbsindex_r4/Constant', 'arith_type', 'Boolean', 'const', '0', 'Position', [55 82 85 98]);
+reuse_block(blk, 'shift', 'built-in/inport', 'Port', '4', 'Position', [15 193 45 207]);
+
 if FFTSize ~= prev_stages,
     outports = {'out1', 'out2', 'of', 'sync_out'};
     delete_lines(blk);
     % Create/Delete Stages and set static parameters
-    for a=2:FFTSize,
+    for a=1:FFTSize,
         stage_name = ['fft_stage_',num2str(a)];
-        
+
         reuse_block(blk, stage_name, 'casper_library/FFTs/fft_stage_n', ...
-            'FFTSize', tostring(FFTSize), 'FFTStage', num2str(a), 'input_bit_width', tostring(input_bit_width), ...
-            'coeff_bit_width', tostring(coeff_bit_width), ...
-            'MaxCoeffNum', tostring(MaxCoeffNum), 'add_latency', tostring(add_latency), ...
-            'mult_latency', tostring(mult_latency), 'bram_latency', tostring(bram_latency), ...
-            'Position', [110*a, 27, 110*a+95, 113]);
+            'FFTStage', num2str(a), 'MaxCoeffNum', tostring(MaxCoeffNum), ...
+            'Position', [120*a, 32, 120*a+95, 148]);
         prev_stage_name = ['fft_stage_',num2str(a-1)];
-        add_line(blk, [prev_stage_name,'/1'], [stage_name,'/1']);
-        add_line(blk, [prev_stage_name,'/2'], [stage_name,'/2']);
-        add_line(blk, [prev_stage_name,'/3'], [stage_name,'/3']);
-        add_line(blk, [prev_stage_name,'/4'], [stage_name,'/4']);
-        add_line(blk, 'shift/1', [stage_name,'/5']);
+        if( a > 1 ),
+            add_line(blk, [prev_stage_name,'/1'], [stage_name,'/1']);
+            add_line(blk, [prev_stage_name,'/2'], [stage_name,'/2']);
+            add_line(blk, [prev_stage_name,'/3'], [stage_name,'/3']);
+            add_line(blk, [prev_stage_name,'/4'], [stage_name,'/4']);
+            add_line(blk, 'shift/1', [stage_name,'/5']);
+        end
     end
+
     add_line(blk, 'pol1/1', 'fft_stage_1/1');
     add_line(blk, 'pol2/1', 'fft_stage_1/2');
     add_line(blk, 'Constant/1', 'fft_stage_1/3');
@@ -98,8 +111,8 @@ if FFTSize ~= prev_stages,
     % Reposition output ports
     last_stage = ['fft_stage_',num2str(FFTSize)];
     for a=1:length(outports),
-    	x = 110*(FFTSize+1);
-    	y = 33 + 20*(a-1);
+    	x = 120*(FFTSize+1);
+    	y = 33 + 30*(a-1);
         set_param([blk,'/',outports{a}], 'Position', [x, y, x+30, y+14]);
         add_line(blk, [last_stage,'/',num2str(a)], [outports{a},'/1']);
     end
@@ -108,20 +121,22 @@ end
 % Set Dynamic Parameters
 for a=1:FFTSize,
     stage_name = [blk,'/fft_stage_',num2str(a)];
-    %if (2^(FFTSize - a) * BitWidth >= DelayBramThresh*BRAMSize), delay_bram = 'on';
-    if (FFTSize - a >= 6), use_bram = '1';
-    else, use_bram = '0';
-    end
-    if (min(2^(a-1), 2^MaxCoeffNum) * input_bit_width >= CoeffBramThresh*BRAMSize), CoeffBram = '1';
- 	else, CoeffBram = '0';
-    end
-    propagate_vars(stage_name, 'defaults', defaults, varargin{:});
-    set_param(stage_name, 'use_bram', use_bram);
-    set_param(stage_name, 'CoeffBram', CoeffBram);   
-    set_param(stage_name, 'MaxCoeffNum', tostring(MaxCoeffNum));
 
-    use_hdl = 'off';
-    use_embedded = 'on';
+    propagate_vars(stage_name, 'defaults', defaults, varargin{:});
+
+    %if delays occupy larger space than specified then implement in BRAM
+    if (2^(FFTSize-a) * input_bit_width * 2) >= (2^delays_bit_limit), delays_bram = 'on';
+    else, delays_bram = 'off';
+    end
+
+    %if coefficients occupy larger space than specified then store in BRAM
+    if min(2^(a-1),2^MaxCoeffNum) * coeff_bit_width >= 2^coeffs_bit_limit, coeffs_bram = 'on';
+    else, coeffs_bram = 'off';
+    end
+    set_param(stage_name, 'coeffs_bram', tostring(coeffs_bram), 'delays_bram', tostring(delays_bram)); 
+    
+    use_hdl = 'on';
+    use_embedded = 'off';
     if( strcmp(specify_mult,'on')),
         if( mult_spec(a) == 2 ), 
             use_hdl = 'on'; 
@@ -130,7 +145,7 @@ for a=1:FFTSize,
             use_hdl = 'off';
             use_embedded = 'on'; 
         else
-            use_hdl = 'off';
+            use_hdl = 'on';
             use_embedded = 'off';
         end
     end
@@ -140,6 +155,6 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d', FFTSize);
+fmtstr = sprintf('FFTSize=%d,\n opt_target=%s,\n arch=%s', FFTSize, opt_target, arch);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

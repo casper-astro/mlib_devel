@@ -52,18 +52,16 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
-
-BRAMSize = 18432;
-DelayBramThresh = 1/4;  % Use bram when delays will fill this fraction of a BRAM
 
 biplex_core = [blk,'/biplex_core'];
 propagate_vars(biplex_core, 'defaults', defaults, varargin{:});
 propagate_vars([blk,'/bi_real_unscr_4x'], 'defaults', defaults, varargin{:});
 
 % Implement delays normally or in BRAM
-if (2^(FFTSize-1) * 2*input_bit_width >= DelayBramThresh*BRAMSize),
+if (2^(FFTSize-1) * 2*input_bit_width >= 2^delays_bit_limit),
     delay_bram = 'on';
 else,
     delay_bram = 'off';
@@ -72,7 +70,7 @@ end
 delays = {'delay0', 'delay1'};
 for i=1:length(delays),
     full_path = [blk,'/bi_real_unscr_4x/',delays{i}];
-    if 2^(FFTSize-1) > 16,
+    if strcmp(delay_bram, 'on'),
         replace_block([blk,'/bi_real_unscr_4x'],'Name',delays{i},'casper_library/Delays/delay_bram','noprompt');
         set_param(full_path,'LinkStatus','inactive');
         set_param(full_path, 'DelayLen', '2^(FFTSize-1)');
@@ -86,6 +84,6 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, input_bit_width, coeff_bit_width);
+fmtstr = sprintf('FFTSize=%d', FFTSize);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

@@ -14,7 +14,7 @@
 % bram_latency = The latency of BRAM in the system.
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
-% MapTail = 
+% map_tail = 
 % LargerFFTSize = Size of the entire FFT.
 % StartStage = First stage in this FFT.
 
@@ -57,9 +57,12 @@ mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
-MapTail = get_var('MapTail', 'defaults', defaults, varargin{:});
+map_tail = get_var('map_tail', 'defaults', defaults, varargin{:});
 LargerFFTSize = get_var('LargerFFTSize', 'defaults', defaults, varargin{:});
 StartStage = get_var('StartStage', 'defaults', defaults, varargin{:});
+arch = get_var('arch', 'defaults', defaults, varargin{:});
+opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
+coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
@@ -76,6 +79,11 @@ for i=0:2^FFTSize-1,
     reuse_block(blk, ['in',num2str(i)], 'built-in/inport', 'Position', [30 100*i+100 60 100*i+115]);
     reuse_block(blk, ['out',num2str(i)], 'built-in/outport', 'Position', [300*FFTSize+150 100*i+100 300*FFTSize+180 100*i+115]);
 end
+reuse_block(blk, 'of', 'built-in/outport', 'Position', [300*FFTSize+210 100*(2^FFTSize)+100 300*FFTSize+240 100*(2^FFTSize)+115], 'Port', tostring((2^FFTSize)+2));
+reuse_block(blk, 'of_or', 'xbsIndex_r4/Logical', ...
+    'logical_function', 'OR', 'inputs', tostring(FFTSize), 'latency', '0', ...
+    'Position', [300*FFTSize+150 100*(2^FFTSize)+100 300*FFTSize+180 100*(2^FFTSize)+115+(FFTSize*10)]);
+add_line(blk, 'of_or/1', 'of/1');
 
 % Add nodes
 for stage=0:FFTSize,
@@ -97,19 +105,22 @@ for stage=0:FFTSize,
             'boolean_output', 'on', 'Position', [300*stage+90 70 300*stage+120 85]);
         add_line(blk,'shift/1', [name,'/1']);
     end
+
 end
+
 % Add butterflies
 for stage=1:FFTSize,
-    
+    %add overflow logic
+    reuse_block(blk, ['of_', num2str(stage)], 'xbsIndex_r4/Logical', ...
+        'logical_function', 'OR', 'inputs', tostring(2^(FFTSize-1)), 'latency', '1', ...
+        'Position', [300*stage+90 100*(2^FFTSize)+100+(stage*15) 300*stage+120 120+100*(2^FFTSize)+(FFTSize*5)+(stage*15)]);
+    add_line(blk, ['of_',num2str(stage),'/1'], ['of_or/',num2str(stage)]);
     for i=0:2^(FFTSize-1)-1,
         name = ['butterfly',num2str(stage),'_',num2str(i)];
         reuse_block(blk, name, 'casper_library/FFTs/butterfly_direct', ...
-            'pass_through', '0', ...
-            'StepPeriod', '0', 'input_bit_width', tostring(input_bit_width), ...
-            'coeff_bit_width', tostring(coeff_bit_width), ...
-            'mult_latency', tostring(mult_latency), 'add_latency', tostring(add_latency), ... 
-            'bram_latency', tostring(bram_latency), ...
-            'use_bram', '1', 'Position', [300*(stage-1)+220 200*i+100 300*(stage-1)+300 200*i+175]);
+            'biplex', 'off', 'StepPeriod', '0', ... 
+            'Position', [300*(stage-1)+220 200*i+100 300*(stage-1)+300 200*i+175]);
+        propagate_vars([blk,'/',name], 'defaults', defaults, varargin{:});
         node_one_num = 2^(FFTSize-stage+1)*floor(i/2^(FFTSize-stage)) + mod(i, 2^(FFTSize-stage));
         node_two_num = node_one_num+2^(FFTSize-stage);
         input_one = ['node',num2str(stage-1),'_',num2str(node_one_num),'/1'];
@@ -126,14 +137,17 @@ for stage=1:FFTSize,
         if stage == FFTSize && i == 0, add_line(blk, [name,'/4'], 'sync_out/1');
         end
         add_line(blk, ['slice',num2str(stage-1),'/1'], [name, '/4']);
+
+        %add lines for overflow logic
+        add_line(blk, [name,'/3'], ['of_',num2str(stage),'/',num2str(i+1)])
     end
 end
 
 % Check dynamic settings
 for stage=1:FFTSize,
 
-    use_hdl = 'off';
-    use_embedded = 'on';
+    use_hdl = 'on';
+    use_embedded = 'off';
     if(strcmp(specify_mult,'on')),
         if( mult_spec(stage) == 2)
             use_hdl = 'on'; 
@@ -150,9 +164,10 @@ for stage=1:FFTSize,
     for i=0:2^(FFTSize-1)-1,
         butterfly = [blk,'/butterfly',num2str(stage),'_',num2str(i)];
         % Implement a normal FFT or the tail end of a larger FFT
-        if ~MapTail,
+        if strcmp(map_tail,'off'),
             coeffs = ['[',num2str(floor(i/2^(FFTSize-stage))),']'];
             actual_fft_size = FFTSize;
+            num_coeffs = 1;
         else,
             redundancy = 2^(LargerFFTSize - FFTSize);
             coeffs = '[';
@@ -162,15 +177,19 @@ for stage=1:FFTSize,
             end
             coeffs = [coeffs, ']'];
             actual_fft_size = LargerFFTSize;
+            num_coeffs = redundancy;
         end
-            set_param(butterfly, 'FFTSize', num2str(actual_fft_size), ...
-            'Coeffs', coeffs, 'quantization', quantization, 'overflow', overflow, ...
-            'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded));
+        if (num_coeffs * coeff_bit_width) > (2^coeffs_bit_limit), coeffs_bram = 'on';
+        else, coeffs_bram = 'off';
+        end
+        set_param(butterfly, 'FFTSize', num2str(actual_fft_size), ...
+        'coeffs_bram', tostring(coeffs_bram), 'Coeffs', coeffs, 'use_hdl', tostring(use_hdl), ...
+        'use_embedded', tostring(use_embedded));
     end
 end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, input_bit_width, coeff_bit_width);
+fmtstr = sprintf('FFTSize=%d', FFTSize);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

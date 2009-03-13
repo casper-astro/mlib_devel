@@ -46,13 +46,13 @@ check_mask_type(blk, 'fft_biplex');
 munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
-coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
+arch = get_var('arch', 'defaults', defaults, varargin{:});
+opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 
 propagate_vars([blk,'/biplex_core'],'defaults', defaults, varargin{:});
 propagate_vars([blk,'/biplex_cplx_unscrambler'],'defaults', defaults, varargin{:});
 
-fmtstr = sprintf('FFTSize=%d,\n input_bit_width=%d,\n coeff_bit_width=%d', FFTSize, input_bit_width, coeff_bit_width);
+fmtstr = sprintf('FFTSize=%d,\n arch=%s,\n opt_target=%s', FFTSize, arch, opt_target);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 
