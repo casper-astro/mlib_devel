@@ -162,8 +162,8 @@ while( ischar(line) )
 		load([model,'_output']);
         
         %check for NaNs and replace with zeros before making comparison
-        reference(isnan(reference))=[0]
-        output(isnan(output))=[0]
+        reference(isnan(reference))=[0];
+        output(isnan(output))=[0];
 
 		if(isequal(reference,output)),
 		    fprintf([model,' passed\n']);
