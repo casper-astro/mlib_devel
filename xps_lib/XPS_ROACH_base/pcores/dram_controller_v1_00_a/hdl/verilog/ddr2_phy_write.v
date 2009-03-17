@@ -1,4 +1,4 @@
-//*****************************************************************************
+/*****************************************************************************
 // DISCLAIMER OF LIABILITY
 //
 // This text/file contains proprietary, confidential
@@ -60,7 +60,7 @@
 //   rise and fall buses.
 //Revision History:
 //   Rev 1.1 - For Dual Rank parts support ODT logic corrected. PK. 08/05/08
-//*****************************************************************************
+//*****************************************************************************/
 
 `timescale 1ns/1ps
 
@@ -89,7 +89,7 @@ module ddr2_phy_write #
    input                       phy_init_wren,
    input                       phy_init_data_sel,
    output reg                  dm_ce,
-   output reg [1:0]            dq_oe_n,
+   output reg [2*9 - 1:0]      dq_oe_n, //9xbuffer to reduce fan-out
    output reg                  dqs_oe_n ,
    output reg                  dqs_rst_n ,
    output                      wdf_rden,
@@ -406,8 +406,19 @@ module ddr2_phy_write #
 
   //***************************************************************************
 
-  always @(posedge clk90)
-    dq_oe_n   <= dq_oe_n_90_r1;
+  // synthesis attribute keep of dq_oe_n is true
+  // synthesis attribute equivalent_register_removal of dq_oe_n is "no"
+  always @(posedge clk90) begin
+    dq_oe_n[ 1:0 ] <= dq_oe_n_90_r1;
+    dq_oe_n[ 3:2 ] <= dq_oe_n_90_r1;
+    dq_oe_n[ 5:4 ] <= dq_oe_n_90_r1;
+    dq_oe_n[ 7:6 ] <= dq_oe_n_90_r1;
+    dq_oe_n[ 9:8 ] <= dq_oe_n_90_r1;
+    dq_oe_n[11:10] <= dq_oe_n_90_r1;
+    dq_oe_n[13:12] <= dq_oe_n_90_r1;
+    dq_oe_n[15:14] <= dq_oe_n_90_r1;
+    dq_oe_n[17:16] <= dq_oe_n_90_r1;
+  end
 
   always @(negedge clk0)
     dqs_oe_n  <= dqs_oe_n_180_r1;

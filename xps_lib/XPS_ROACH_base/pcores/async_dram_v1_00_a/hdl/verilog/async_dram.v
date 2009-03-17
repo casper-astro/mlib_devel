@@ -116,14 +116,14 @@ module async_dram #(
 
   /********** Transaction and Write Fifo Control ************/
   reg [144 + 18 - 1:0] dat_fifo_input_reg;
-  reg             dat_fifo_we_reg;
+  reg                  dat_fifo_we_reg;
   reg [144 + 18 - 1:0] txn_fifo_input_reg;
-  reg             txn_fifo_we_reg;
+  reg                  txn_fifo_we_reg;
 
   wire [144 + 18 - 1:0] dat_fifo_input_int;
-  wire             dat_fifo_we_int;
+  wire                  dat_fifo_we_int;
   wire [144 + 18 - 1:0] txn_fifo_input_int;
-  wire             txn_fifo_we_int;
+  wire                  txn_fifo_we_int;
 
   assign Mem_Cmd_Ack = !(dat_fifo_almost_full || txn_fifo_almost_full);
 
@@ -158,10 +158,10 @@ module async_dram #(
 
   /* Register to ease timing */
   always @(posedge Mem_Clk) begin
-    dat_fifo_input_reg <= dat_fifo_input_reg;
-    dat_fifo_we_reg    <= dat_fifo_we_reg;
-    txn_fifo_input_reg <= txn_fifo_input_reg;
-    txn_fifo_we_reg    <= txn_fifo_we_reg;
+    dat_fifo_input_reg <= dat_fifo_input_int;
+    dat_fifo_we_reg    <= dat_fifo_we_int;
+    txn_fifo_input_reg <= txn_fifo_input_int;
+    txn_fifo_we_reg    <= txn_fifo_we_int;
   end
 
   assign dram_data_o      = dat_fifo_output[144 - 1:0];
@@ -169,7 +169,21 @@ module async_dram #(
   assign dram_address     = txn_fifo_output[31:0];
   assign dram_rnw         = txn_fifo_output[32];
 
-  /**** Read controls ****/
+  /**** Transaction Fifo Read controls ****/
+
+  reg second_cycle;
+  /* Data Fifo Read Controls */
+  always @(posedge dram_clk) begin
+    second_cycle <= 1'b0;
+    if (dram_reset) begin
+    end else begin
+      if (!second_cycle && dram_ready && (!txn_fifo_empty)) begin
+        second_cycle <= 1'b1;
+      end
+    end
+  end
+
+  /* Transaction Fifo Read Controls */
 
   reg cycle_wait;
   /* Data Fifo Read Controls */
@@ -184,14 +198,24 @@ module async_dram #(
     end
   end
 
-  assign dat_fifo_re = (txn_ready || !cycle_wait) && (!dram_rnw);
+  assign dat_fifo_re = ((!txn_fifo_empty) && dram_ready || !cycle_wait) && (!dram_rnw);
   /* Transaction Fifo Read Controls */
   assign txn_fifo_re = !cycle_wait;
   assign dram_cmd_en = cycle_wait && txn_ready; 
 
+
   /******************** Read Data Fifo ******************/
-  assign rd_data_fifo_input = dram_data_i;
-  assign rd_data_fifo_we    = dram_data_valid;
+
+  reg [144 - 1:0] rd_data_fifo_input_reg;
+  reg             rd_data_fifo_we_reg;
+
+  always @(posedge dram_clk) begin
+    rd_data_fifo_input_reg <= dram_data_i;
+    rd_data_fifo_we_reg    <= dram_data_valid;
+  end
+
+  assign rd_data_fifo_input = rd_data_fifo_input_reg;
+  assign rd_data_fifo_we    = rd_data_fifo_we_reg;
   assign rd_data_fifo_re    = Mem_Rd_Valid && Mem_Rd_Ack;
   assign Mem_Rd_Dout        = rd_data_fifo_output;
   assign Mem_Rd_Valid       = !rd_data_fifo_empty;

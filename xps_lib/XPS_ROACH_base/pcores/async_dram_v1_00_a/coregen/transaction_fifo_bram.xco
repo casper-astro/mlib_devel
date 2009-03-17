@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.39
-# Date: Thu Mar 12 09:54:28 2009
+# Date: Tue Mar 17 14:07:12 2009
 #
 ##############################################################
 #
@@ -27,7 +27,7 @@ SET implementationfiletype = Ngc
 SET package = ff1136
 SET removerpms = False
 SET simulationfiles = Behavioral
-SET speedgrade = -1
+SET speedgrade = -2
 SET verilogsim = True
 SET vhdlsim = False
 # END Project Options
@@ -78,5 +78,5 @@ CSET write_data_count=false
 CSET write_data_count_width=10
 # END Parameters
 GENERATE
-# CRC: 2d3c72c5
+# CRC: 678dbeb9
 

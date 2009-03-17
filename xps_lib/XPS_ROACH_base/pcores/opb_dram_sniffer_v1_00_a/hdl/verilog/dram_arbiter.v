@@ -40,8 +40,11 @@ module dram_arbiter(
 
   wire rd_history_afull;
 
-  wire arb_ready;
-  assign arb_ready = master_fifo_ready && !rd_history_afull;
+  reg arb_ready;
+  /* register to ease timing */
+  always @(posedge clk) begin
+    arb_ready <= master_fifo_ready && !rd_history_afull;
+  end
 
   always @(posedge clk) begin
     if (rst) begin
@@ -107,7 +110,7 @@ module dram_arbiter(
   
   /* Read response collection/generation */
 
-  /* read history fifo - 1-bit 1024 entries fwft */
+  /************* read history fifo - 1-bit 1024 (TODO: optimize) entries fwft ********************/
 
   reg new_strb;
 
@@ -128,22 +131,39 @@ module dram_arbiter(
     rd_sel_z <= rd_sel;
   end
 
+  /* register write side to improve timing */
+  /* extra latency shouldn't be a problem */
+  reg read_history_fifo_rd_en;
+  reg read_history_fifo_wr_en;
+  reg read_history_fifo_din;
+  always @(posedge clk) begin
+    read_history_fifo_din   <= slave1_ack;
+    read_history_fifo_wr_en <= master_cmd_valid && master_cmd_rnw;
+    read_history_fifo_rd_en <= master_rd_valid && new_strb;
+  end
+
   read_history_fifo read_history_fifo_inst(
     .clk(clk),
     .srst(rst),
-    .din(slave1_ack),
-    .rd_en(master_rd_valid && new_strb),
-    .wr_en(master_cmd_valid && master_cmd_rnw),
+    .din(read_history_fifo_din),
+    .rd_en(read_history_fifo_rd_en),
+    .wr_en(read_history_fifo_wr_en),
     .dout(rd_sel),
     .empty(),
-    .almost_full(rd_history_afull),
+    .prog_full(rd_history_afull),
     .full()
   );
+  reg [144 - 1:0] master_rd_data_z;
+  reg             master_rd_valid_z;
+  always @(posedge clk) begin
+    master_rd_data_z  <= master_rd_data;
+    master_rd_valid_z <= master_rd_valid;
+  end
 
-  assign slave0_rd_data = master_rd_data;
-  assign slave1_rd_data = master_rd_data;
+  assign slave0_rd_data = master_rd_data_z;
+  assign slave1_rd_data = master_rd_data_z;
 
-  assign slave0_rd_valid = master_rd_valid && !rd_sel_z;
-  assign slave1_rd_valid = master_rd_valid && rd_sel_z;
+  assign slave0_rd_valid = master_rd_valid_z && !rd_sel_z;
+  assign slave1_rd_valid = master_rd_valid_z && rd_sel_z;
 
 endmodule

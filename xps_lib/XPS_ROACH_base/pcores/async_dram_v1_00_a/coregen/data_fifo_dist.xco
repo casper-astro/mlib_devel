@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.39
-# Date: Thu Mar 12 13:31:42 2009
+# Date: Tue Mar 17 14:02:27 2009
 #
 ##############################################################
 #
@@ -48,8 +48,8 @@ CSET enable_ecc=false
 CSET enable_int_clk=false
 CSET fifo_implementation=Independent_Clocks_Distributed_RAM
 CSET full_flags_reset_value=1
-CSET full_threshold_assert_value=30
-CSET full_threshold_negate_value=29
+CSET full_threshold_assert_value=29
+CSET full_threshold_negate_value=28
 CSET input_data_width=162
 CSET input_depth=32
 CSET output_data_width=162
@@ -78,5 +78,5 @@ CSET write_data_count=false
 CSET write_data_count_width=5
 # END Parameters
 GENERATE
-# CRC: 2175bf68
+# CRC:  c3221fb
 

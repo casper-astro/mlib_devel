@@ -50,9 +50,6 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
-library unisim;
-use unisim.all;
-
 entity ten_gb_eth is
 	generic(
 		C_BASEADDR             : std_logic_vector	:= X"00000000";
@@ -231,6 +228,7 @@ architecture ten_gb_eth_arch of ten_gb_eth is
 			doutb                           : out std_logic_vector(63 downto 0)
 		);
 	end component;
+  attribute box_type of packet_buffer_cpu: component is "user_black_box"; 
 
 	-- address_fifos
 	component address_fifo
@@ -247,7 +245,7 @@ architecture ten_gb_eth_arch of ten_gb_eth is
 			full                            : out std_logic
 		);
 	end component;
-  attribute box_type of packet_buffer_cpu: component is "user_black_box"; 
+  attribute box_type of address_fifo: component is "user_black_box"; 
 
 	-- ARP cache
 	component arp_cache
@@ -365,6 +363,7 @@ architecture ten_gb_eth_arch of ten_gb_eth is
 --  ####      #     ####   #    #  #    #  ######   ####
 
   -- MGT signals
+  signal usr_reset_stretch                       : std_logic_vector(7 downto 0);
   signal xaui_reset_int                          : std_logic;
   signal xaui_reset_0                            : std_logic;
   signal xaui_reset_1                            : std_logic;
@@ -401,13 +400,14 @@ architecture ten_gb_eth_arch of ten_gb_eth is
 	signal tx_state                                : tx_fsm_state := IDLE;
 	signal tx_buffer_write_data                    : std_logic_vector(64 downto 0);
 	signal tx_buffer_write_address                 : std_logic_vector(10 downto 0) := (others => '0');
+  signal tx_buffer_full_pre                      : std_logic;
 	signal tx_buffer_write_address_snapshot        : std_logic_vector(10 downto 0) := (others => '0');
 	signal tx_buffer_we                            : std_logic_vector(0  downto 0);
 	signal tx_buffer_read_address                  : std_logic_vector(10 downto 0) := (others => '0');
 	signal tx_buffer_read_data                     : std_logic_vector(64 downto 0);
 	signal tx_buffer_read_data_R                   : std_logic_vector(64 downto 0);
-	signal tx_buffer_read_address_minustwo         : std_logic_vector(10 downto 0);
-	signal tx_buffer_read_address_minustwo_retimed : std_logic_vector(10 downto 0);
+	signal tx_buffer_read_address_minusthree         : std_logic_vector(10 downto 0);
+	signal tx_buffer_read_address_minusthree_retimed : std_logic_vector(10 downto 0);
 	signal tx_buffer_new_read_address              : std_logic;
 	signal tx_buffer_full                          : std_logic;
 	signal tx_addrfifo_read_en                     : std_logic;
@@ -479,6 +479,9 @@ architecture ten_gb_eth_arch of ten_gb_eth is
 	signal rx_cpu_buffer_current                   : std_logic;
 	signal rx_cpu_buffer_last                      : std_logic := '0';
 	signal rx_cpu_buffer_valid                     : std_logic_vector(1 downto 0) := "00";
+  signal rx_got_prefetch                         : std_logic;
+  signal rx_buffer_read_dataR                    : std_logic_vector(64 downto 0);
+  signal rx_addrfifo_read_dataR                  : std_logic_vector(63 downto 0);
 
 	-- CPU signals
 	signal local_mac                               : std_logic_vector(47 downto 0);
@@ -534,10 +537,22 @@ begin
 -- #    #  ######   ####   ######     #
 
 -- generate an internal version of the reset
+
+usr_reset_proc: process(clk)
+begin
+	if clk'event and clk = '1' then
+    if rst = '1' then
+    	usr_reset_stretch <= X"FF";
+    else
+    	usr_reset_stretch <= usr_reset_stretch(6 downto 0) & '0' ;
+    end if;
+  end if;
+end process;
+
 reset_proc: process(xaui_clk)
 begin
 	if xaui_clk'event and xaui_clk = '1' then
-		if rst = '1' then
+		if usr_reset_stretch(7) = '1' then
 			xaui_reset_int <= '1';
 			xaui_reset_0   <= '1';
 			xaui_reset_1   <= '1';
@@ -552,6 +567,7 @@ begin
 		end if;
 	end if;
 end process;
+xaui_reset <= xaui_reset_int;
 
 --  #####  #    #           ####    #####  #####   #
 --    #     #  #           #    #     #    #    #  #
@@ -613,9 +629,9 @@ tx_read_address_retimer: retimer
 	)
 	port map (
 		src_clk       => xaui_clk,
-		src_data      => tx_buffer_read_address_minustwo,
+		src_data      => tx_buffer_read_address_minusthree,
 		dest_clk      => clk,
-		dest_data     => tx_buffer_read_address_minustwo_retimed,
+		dest_data     => tx_buffer_read_address_minusthree_retimed,
 		dest_new_data => tx_buffer_new_read_address
 	);
 
@@ -644,6 +660,11 @@ tx_arp_cache: arp_cache
 tx_user_proc: process(clk)
 begin
 	if clk'event and clk = '1' then
+    if tx_buffer_write_address = tx_buffer_read_address_minusthree_retimed then
+      tx_buffer_full_pre <= '1';
+    else
+      tx_buffer_full_pre <= '0';
+    end if;
 		if rst = '1' then
 			tx_buffer_write_address          <= (others => '0');
 			tx_buffer_write_address_snapshot <= (others => '0');
@@ -660,7 +681,7 @@ begin
 				-- increment the write counter
 				tx_buffer_write_address <= tx_buffer_write_address + 1;
 				-- the transmit buffer will be full on the next cycle whenever the write address is two slots behind the read address
-				if tx_buffer_write_address = tx_buffer_read_address_minustwo_retimed then
+				if tx_buffer_full_pre = '1' then
 					tx_buffer_full <= '1';
 				end if;
 				-- increment the data count
@@ -836,7 +857,7 @@ mac_tx_start          <= '1' when tx_state = IDLE and ((tx_addrfifo_empty = '0' 
 -- ath the end of a frame transmission, we can ack the adress from the address fifo
 tx_addrfifo_read_en   <= '1' when tx_state = SEND_LAST else '0';
 -- substracts 2 to the read address before sending it to the retimer
-tx_buffer_read_address_minustwo <= tx_buffer_read_address - 2;
+tx_buffer_read_address_minusthree <= tx_buffer_read_address - 3;
 -- selects what should be sent to the mac depending on the controller state
 with tx_state select mac_tx_data <= 
 		local_mac(39 downto 32) & local_mac(47 downto 40) &
@@ -975,31 +996,55 @@ begin
 	if clk'event and clk = '1' then
 		if rst = '1' then
 			rx_buffer_read_address_sequential <= (others => '0');
+      rx_got_prefetch <= '0';
 		else
 			-- increment the read counter
 			rx_buffer_read_address_sequential <= rx_buffer_read_address;
+
+      if rx_got_prefetch = '0' then
+        if rx_addrfifo_valid = '1' then
+          rx_got_prefetch <= '1';
+          rx_buffer_read_dataR <= rx_buffer_read_data;
+          rx_addrfifo_read_dataR <= rx_addrfifo_read_data;
+        end if;
+      else -- if rx_got_prefetch = '1'
+        if rx_ack = '1' then
+          rx_buffer_read_dataR <= rx_buffer_read_data;
+        end if;
+        if rx_ack = '1' and rx_buffer_read_dataR(64) = '1' then
+          if rx_addrfifo_valid = '0' then
+            rx_got_prefetch <= '0';
+          else
+            rx_addrfifo_read_dataR <= rx_addrfifo_read_data;
+          end if;
+        end if;
+      end if;
 		end if;
 	end if;
 end process;
 
 -- the read address is computed using combinatorial logic to implement first-word-fall-through
-rx_valid_ack           <= '1' when rx_ack = '1' and rx_addrfifo_valid = '1' else '0';
+rx_valid_ack           <= '1' when (rx_got_prefetch = '0' and rx_addrfifo_valid = '1') or
+                                   (rx_got_prefetch = '1' and rx_ack = '1' and (rx_buffer_read_dataR(64) = '0' or rx_addrfifo_valid = '1'))
+                              else '0';
 rx_buffer_read_address <= rx_buffer_read_address_sequential + ("0000000000" & rx_valid_ack);
 -- the data we read from the buffer contains the data going to the user plus the start of frame bit
-rx_data                         <= rx_buffer_read_data(63 downto 0);
-rx_end_of_frame                 <= rx_buffer_read_data(64);
+rx_data                         <= rx_buffer_read_dataR(63 downto 0);
+rx_end_of_frame                 <= rx_buffer_read_dataR(64);
 -- the interface is empty whenever the address fifo is empty
-rx_valid                        <= '1' when rx_addrfifo_valid = '1' else '0';
+rx_valid                        <= '1' when rx_got_prefetch = '1' else '0';
 
 -- we ack data from the address fifo whenever we get a valid end of frame read
-rx_addrfifo_read_en             <= '1' when rx_addrfifo_valid = '1' and rx_buffer_read_data(64) = '1' and rx_ack = '1' else '0';
+rx_addrfifo_read_en             <= '1' when (rx_addrfifo_valid = '1' and rx_got_prefetch = '0') or
+                                            (rx_addrfifo_valid = '1' and rx_got_prefetch = '1' and rx_buffer_read_dataR(64) = '1' and rx_ack = '1') 
+                                       else '0';
 -- we get both address and type from the address fifo
-rx_size                         <= rx_addrfifo_read_data(63 downto 48);
-rx_source_port                  <= rx_addrfifo_read_data(47 downto 32);
-rx_source_ip                    <= rx_addrfifo_read_data(31 downto  0);
+rx_size                         <= rx_addrfifo_read_dataR(63 downto 48);
+rx_source_port                  <= rx_addrfifo_read_dataR(47 downto 32);
+rx_source_ip                    <= rx_addrfifo_read_dataR(31 downto  0);
 
 -- substracts 1 to the read address before sending it to the retimer
-rx_buffer_read_address_minusone <= rx_buffer_read_address - 1;
+rx_buffer_read_address_minusone <= rx_buffer_read_address - 2;
 
 -- *
 -- * MAC side

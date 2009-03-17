@@ -148,7 +148,15 @@ module dram_controller #(
 
   wire app_af_afull;
   wire app_wdf_afull;
-  assign app_fifo_ready = !(app_af_afull || app_wdf_afull);
+
+  reg app_fifo_ready_reg;
+  reg app_af_afull_z, app_wdf_afull_z;
+  always @(posedge clk0) begin
+    app_af_afull_z     <= app_af_afull;
+    app_wdf_afull_z    <= app_wdf_afull;
+    app_fifo_ready_reg <= !(app_af_afull_z || app_wdf_afull_z);
+  end
+  assign app_fifo_ready = app_fifo_ready_reg;
 
 
   ddr2_mem_if_top #

@@ -124,20 +124,46 @@ generate if (ENABLE) begin : sniffer_enabled
   wire [31:0] sniff_cmd_address = {software_address_bits[7:0], sniff_address[21:0], 2'b0};
   /* TODO: finalize the software address width */
 
+  /* Pipeline to improve timing, almost full control permit this approach */
+  wire [144 - 1:0] dram_wr_data_int;
+  wire  [18 - 1:0] dram_wr_be_int;
+  wire             dram_cmd_valid_int;
+  wire  [32 - 1:0] dram_cmd_addr_int;
+  wire             dram_cmd_rnw_int;
+  reg  [144 - 1:0] dram_wr_data_reg;
+  reg   [18 - 1:0] dram_wr_be_reg;
+  reg              dram_cmd_valid_reg;
+  reg   [32 - 1:0] dram_cmd_addr_reg;
+  reg              dram_cmd_rnw_reg;
+
+  always @(posedge dram_clk) begin
+    dram_wr_data_reg   <= dram_wr_data_int;
+    dram_wr_be_reg     <= dram_wr_be_int;
+    dram_cmd_valid_reg <= dram_cmd_valid_int;
+    dram_cmd_addr_reg  <= dram_cmd_addr_int;
+    dram_cmd_rnw_reg   <= dram_cmd_rnw_int;
+  end
+  assign dram_wr_data   = dram_wr_data_reg;
+  assign dram_wr_be     = dram_wr_be_reg;
+  assign dram_cmd_valid = dram_cmd_valid_reg;
+  assign dram_cmd_addr  = dram_cmd_addr_reg;
+  assign dram_cmd_rnw   = dram_cmd_rnw_reg;
+
   dram_arbiter dram_arbiter(
     .clk(dram_clk),
     .rst(dram_rst),
 
-    .master_cmd_addr   (dram_cmd_addr),
-    .master_cmd_rnw    (dram_cmd_rnw),
-    .master_cmd_valid  (dram_cmd_valid),
-    .master_wr_data    (dram_wr_data),
-    .master_wr_be      (dram_wr_be),
+    .master_cmd_addr   (dram_cmd_addr_int),
+    .master_cmd_rnw    (dram_cmd_rnw_int),
+    .master_cmd_valid  (dram_cmd_valid_int),
+    .master_wr_data    (dram_wr_data_int),
+    .master_wr_be      (dram_wr_be_int),
+
     .master_rd_data    (dram_rd_data),
     .master_rd_valid   (dram_rd_valid),
     .master_fifo_ready (dram_fifo_ready),
 
-    .slave1_cmd_addr  (sniff_cmd_address), //already shifted
+    .slave1_cmd_addr  (sniff_cmd_address), //already shifted: TODO - should change
     .slave1_cmd_rnw   (sniff_cmd_rnw),
     .slave1_cmd_valid (sniff_cmd_en),
     .slave1_wr_data   (sniff_wr_data),

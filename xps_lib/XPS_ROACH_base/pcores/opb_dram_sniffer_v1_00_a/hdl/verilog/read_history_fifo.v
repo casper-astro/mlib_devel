@@ -43,10 +43,10 @@ module read_history_fifo(
 	rd_en,
 	srst,
 	wr_en,
-	almost_full,
 	dout,
 	empty,
-	full);
+	full,
+	prog_full);
 
 
 input clk;
@@ -54,10 +54,10 @@ input [0 : 0] din;
 input rd_en;
 input srst;
 input wr_en;
-output almost_full;
 output [0 : 0] dout;
 output empty;
 output full;
+output prog_full;
 
 // synthesis translate_off
 
@@ -73,7 +73,7 @@ output full;
 		.C_FAMILY("virtex5"),
 		.C_FULL_FLAGS_RST_VAL(0),
 		.C_HAS_ALMOST_EMPTY(0),
-		.C_HAS_ALMOST_FULL(1),
+		.C_HAS_ALMOST_FULL(0),
 		.C_HAS_BACKUP(0),
 		.C_HAS_DATA_COUNT(0),
 		.C_HAS_INT_CLK(0),
@@ -101,9 +101,9 @@ output full;
 		.C_PROG_EMPTY_THRESH_ASSERT_VAL(4),
 		.C_PROG_EMPTY_THRESH_NEGATE_VAL(5),
 		.C_PROG_EMPTY_TYPE(0),
-		.C_PROG_FULL_THRESH_ASSERT_VAL(1023),
-		.C_PROG_FULL_THRESH_NEGATE_VAL(1022),
-		.C_PROG_FULL_TYPE(0),
+		.C_PROG_FULL_THRESH_ASSERT_VAL(1020),
+		.C_PROG_FULL_THRESH_NEGATE_VAL(1019),
+		.C_PROG_FULL_TYPE(1),
 		.C_RD_DATA_COUNT_WIDTH(11),
 		.C_RD_DEPTH(1024),
 		.C_RD_FREQ(1),
@@ -127,10 +127,10 @@ output full;
 		.RD_EN(rd_en),
 		.SRST(srst),
 		.WR_EN(wr_en),
-		.ALMOST_FULL(almost_full),
 		.DOUT(dout),
 		.EMPTY(empty),
 		.FULL(full),
+		.PROG_FULL(prog_full),
 		.INT_CLK(),
 		.BACKUP(),
 		.BACKUP_MARKER(),
@@ -146,10 +146,10 @@ output full;
 		.WR_CLK(),
 		.WR_RST(),
 		.ALMOST_EMPTY(),
+		.ALMOST_FULL(),
 		.DATA_COUNT(),
 		.OVERFLOW(),
 		.PROG_EMPTY(),
-		.PROG_FULL(),
 		.VALID(),
 		.RD_DATA_COUNT(),
 		.UNDERFLOW(),

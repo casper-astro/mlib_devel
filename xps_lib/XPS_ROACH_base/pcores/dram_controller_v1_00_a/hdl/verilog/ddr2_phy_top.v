@@ -169,7 +169,7 @@ module ddr2_phy_top #
   wire                     calib_ref_req;
   wire [3:0]               calib_start;
   wire                     dm_ce;
-  wire [1:0]               dq_oe_n;
+  wire [2*9-1:0]           dq_oe_n;
   wire                     dqs_oe_n;
   wire                     dqs_rst_n;
   wire [(DQ_WIDTH/8)-1:0]  mask_data_fall;
