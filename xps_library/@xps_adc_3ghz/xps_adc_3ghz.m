@@ -57,7 +57,7 @@ switch s.hw_sys
             error(['Unsupported adc board: ',s.hw_adc]);
         end % if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
 
-        ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1500/s.adc_clk_rate*4),' ns']);
+        ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/s.adc_clk_rate*4),' ns']);
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
         ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
     % end case 'ROACH'
