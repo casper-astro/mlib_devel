@@ -33,18 +33,19 @@ blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 toks = regexp(get_param(blk_name,'port'),'^(.*):(.*)$','tokens');
 
-s.board = toks{1}{1};
-s.port = toks{1}{2};
-s.hw_sys = s.board;
-s.mac_lite = get_param(blk_name, 'mac_lite');
-s.preemph = get_param(blk_name, 'pre_emph');
-s.swing = get_param(blk_name, 'swing');
+s.board     = toks{1}{1};
+s.port      = toks{1}{2};
+s.hw_sys    = s.board;
+s.mac_lite  = num2str(strcmp(get_param(blk_name, 'mac_lite'), 'on'));
+s.open_phy  = num2str(strcmp(get_param(blk_name, 'open_phy'), 'on'));
+s.preemph   = get_param(blk_name, 'pre_emph');
+s.swing     = get_param(blk_name, 'swing');
 
 s.fab_mac  = ['0x', dec2hex(eval(get_param(blk_name, 'fab_mac')))  ];
 s.fab_ip   = ['0x', dec2hex(eval(get_param(blk_name, 'fab_ip')))   ];
 s.fab_udp  = ['0x', dec2hex(eval(get_param(blk_name, 'fab_udp')))  ];
 s.fab_gate = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
-s.fab_en   = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));  
+s.fab_en   = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));
 
 b = class(s,'xps_tengbe',blk_obj);
 
@@ -100,20 +101,20 @@ switch s.hw_sys
       parameters.FABRIC_RUN_ON_STARTUP  = s.fab_en;
 
       parameters.CONNECTOR = s.port;
-      if strcmp(s.mac_lite, 'on')
+      if strcmp(s.mac_lite, '1')
           parameters.USE_XILINX_MAC = '0';
           parameters.USE_UCB_MAC = '1';
       else
           parameters.USE_XILINX_MAC = '1';
           parameters.USE_UCB_MAC = '0';
       end
-      
-      
+
+
     % end case 'ROACH'
     otherwise
       parameters.CONNECTOR = s.port;
-      
-      if strcmp(s.mac_lite, 'on')
+
+      if strcmp(s.mac_lite, '1')
           parameters.USE_XILINX_MAC = '0';
           parameters.USE_UCB_MAC = '1';
       else
