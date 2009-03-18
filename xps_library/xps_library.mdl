@@ -32,11 +32,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "dave"
+  LastModifiedBy	  "Jason Manley"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Mar 18 11:33:09 2009"
+  LastModifiedDate	  "Wed Mar 18 15:19:30 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:387>"
+  ModelVersionFormat	  "1.%<AutoIncrement:388>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -183,6 +183,12 @@ Library {
     }
     Block {
       BlockType		      Reference
+    }
+    Block {
+      BlockType		      "S-Function"
+      FunctionName	      "system"
+      SFunctionModules	      "''"
+      PortCounts	      "[]"
     }
     Block {
       BlockType		      SubSystem
@@ -1276,7 +1282,7 @@ Library {
       Name		      "XAUI"
       Tag		      "xps:xaui"
       Ports		      [5, 7]
-      Position		      [565, 326, 705, 494]
+      Position		      [565, 356, 705, 524]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       RTWSystemCode	      "Auto"
@@ -1284,23 +1290,23 @@ Library {
       MaskType		      "xaui"
       MaskDescription	      "XAUI block for sending and receiving point-to-point, streaming data over the BEE2 and iBOB's CX4 connectors. NOTE: A new version of this block is in development."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\com_xaui\\com_xaui.html''])')"
-      MaskPromptString	      "Demux|Port|---------------------- Show Implementation Parameters -----------------------------------------------------------------------------------|Pre-emphasis|Differential swing"
-      MaskStyleString	      "popup(1|2),popup(iBOB:0|iBOB:1|BEE2_ctrl:0|BEE2_ctrl:1|BEE2_usr:0|BEE2_usr:1|BEE2_usr:2|BEE2_usr:3|CORR:0|ROACH:0|ROACH:1|ROACH:2|ROACH:3),checkbox,popup(0|1|2|3),popup(400|500|600|700|800)"
-      MaskTunableValueString  "off,off,off,off,off"
-      MaskCallbackString      "||myname=gcb;\nif strcmp(get_param(myname, 'show_param'), 'on')\n    set_param(myname, 'MaskVisibilities', {'on','on','on','on','on'});\nelse\n    set_param(myname, 'MaskVisibilities', {'on','on','on','off','off'});\nend||"
-      MaskEnableString	      "on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,off,off"
-      MaskToolTipString	      "on,on,on,on,on"
-      MaskVarAliasString      ",,,,"
-      MaskVariables	      "demux=@1;port=@2;show_param=&3;pre_emph=@4;swing=@5;"
+      MaskPromptString	      "Demux|Port|Use KAT open PHY|---------------------- Show Implementation Parameters -----------------------------------------------------------------------------------|Pre-emphasis|Differential swing"
+      MaskStyleString	      "popup(1|2),popup(iBOB:0|iBOB:1|BEE2_ctrl:0|BEE2_ctrl:1|BEE2_usr:0|BEE2_usr:1|BEE2_usr:2|BEE2_usr:3|CORR:0|ROACH:0|ROACH:1|ROACH:2|ROACH:3),checkbox,checkbox,popup(0|1|2|3),popup(400|500|600|700|800)"
+      MaskTunableValueString  "off,off,off,off,off,off"
+      MaskCallbackString      "|||myname=gcb;\nif strcmp(get_param(myname, 'show_param'), 'on')\n    set_param(myname, 'MaskVisibilities', {'on','on','on','on','on','on'});\nelse\n    set_param(myname, 'MaskVisibilities', {'on','on','on','on','off','off'});\nend||"
+      MaskEnableString	      "on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,off,off"
+      MaskToolTipString	      "on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,"
+      MaskVariables	      "demux=@1;port=@2;open_phy=@3;show_param=&4;pre_emph=@5;swing=@6;"
       MaskInitialization      "xaui_mask;"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "1|iBOB:0|off|3|800"
-      MaskTabNameString	      ",,,,"
+      MaskValueString	      "1|ROACH:0|on|off|3|800"
+      MaskTabNameString	      ",,,,,"
       System {
 	Name			"XAUI"
 	Location		[53, 101, 1065, 751]
@@ -1310,8 +1316,8 @@ Library {
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
+	PaperType		"A4"
+	PaperUnits		"centimeters"
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
@@ -1467,9 +1473,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1492,9 +1498,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1517,9 +1523,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,374,375"
@@ -1542,9 +1548,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,374,375"
@@ -1567,9 +1573,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1580,7 +1586,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_almost_full"
+	  Name			  "r_xaui_test_XAUI_rx_almost_full"
 	  Ports			  [1, 1]
 	  Position		  [585, 282, 685, 298]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -1592,11 +1598,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1607,7 +1613,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_data"
+	  Name			  "r_xaui_test_XAUI_rx_data"
 	  Ports			  [1, 1]
 	  Position		  [585, 52, 685, 68]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -1619,11 +1625,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -1634,7 +1640,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_empty"
+	  Name			  "r_xaui_test_XAUI_rx_empty"
 	  Ports			  [1, 1]
 	  Position		  [585, 152, 685, 168]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -1646,11 +1652,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1661,17 +1667,17 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_get"
+	  Name			  "r_xaui_test_XAUI_rx_get"
 	  Ports			  [1, 1]
 	  Position		  [310, 52, 360, 68]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1682,7 +1688,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_linkdown"
+	  Name			  "r_xaui_test_XAUI_rx_linkdown"
 	  Ports			  [1, 1]
 	  Position		  [585, 242, 685, 258]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -1694,11 +1700,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1709,7 +1715,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_outofband"
+	  Name			  "r_xaui_test_XAUI_rx_outofband"
 	  Ports			  [1, 1]
 	  Position		  [585, 102, 685, 118]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -1721,11 +1727,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1736,17 +1742,17 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_reset"
+	  Name			  "r_xaui_test_XAUI_rx_reset"
 	  Ports			  [1, 1]
 	  Position		  [310, 102, 360, 118]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1757,7 +1763,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_rx_valid"
+	  Name			  "r_xaui_test_XAUI_rx_valid"
 	  Ports			  [1, 1]
 	  Position		  [585, 197, 685, 213]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -1769,11 +1775,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1784,17 +1790,17 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_tx_data"
+	  Name			  "r_xaui_test_XAUI_tx_data"
 	  Ports			  [1, 1]
 	  Position		  [355, 332, 405, 348]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1805,7 +1811,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_tx_full"
+	  Name			  "r_xaui_test_XAUI_tx_full"
 	  Ports			  [1, 1]
 	  Position		  [585, 382, 685, 398]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -1817,11 +1823,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1832,17 +1838,17 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_tx_outofband"
+	  Name			  "r_xaui_test_XAUI_tx_outofband"
 	  Ports			  [1, 1]
 	  Position		  [355, 382, 405, 398]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1853,17 +1859,17 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_XAUI_tx_valid"
+	  Name			  "r_xaui_test_XAUI_tx_valid"
 	  Ports			  [1, 1]
 	  Position		  [355, 432, 405, 448]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1935,76 +1941,102 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "rx_get"
-	  SrcPort		  1
-	  DstBlock		  "convert_rx_get"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_rx_get"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_rx_get"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "rx_reset"
-	  SrcPort		  1
-	  DstBlock		  "convert_rx_reset"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_rx_reset"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_rx_reset"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_data"
-	  SrcPort		  1
-	  DstBlock		  "rx_data"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_outofband"
-	  SrcPort		  1
-	  DstBlock		  "rx_outofband"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_empty"
+	  SrcBlock		  "Constant1"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "rx_empty"
+	  DstBlock		  "r_xaui_test_XAUI_rx_almost_full"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_linkdown"
+	  SrcBlock		  "r_xaui_test_XAUI_rx_almost_full"
 	  SrcPort		  1
-	  DstBlock		  "rx_linkdown"
+	  Points		  [0, 0]
+	  DstBlock		  "rx_almost_full"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tx_data"
+	  SrcBlock		  "r_xaui_test_XAUI_rx_valid"
 	  SrcPort		  1
-	  DstBlock		  "convert_tx_data"
+	  DstBlock		  "rx_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_tx_data"
+	  SrcBlock		  "Constant7"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_tx_data"
+	  DstBlock		  "r_xaui_test_XAUI_rx_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tx_outofband"
+	  SrcBlock		  "r_xaui_test_XAUI_rx_reset"
 	  SrcPort		  1
-	  DstBlock		  "convert_tx_outofband"
+	  DstBlock		  "Terminator4"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_tx_outofband"
+	  SrcBlock		  "r_xaui_test_XAUI_rx_get"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_tx_outofband"
+	  DstBlock		  "Terminator3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant6"
+	  SrcPort		  1
+	  DstBlock		  "r_xaui_test_XAUI_rx_data"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant5"
+	  SrcPort		  1
+	  DstBlock		  "r_xaui_test_XAUI_rx_outofband"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant4"
+	  SrcPort		  1
+	  DstBlock		  "r_xaui_test_XAUI_rx_empty"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant3"
+	  SrcPort		  1
+	  DstBlock		  "r_xaui_test_XAUI_rx_linkdown"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant2"
+	  SrcPort		  1
+	  DstBlock		  "r_xaui_test_XAUI_tx_full"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "r_xaui_test_XAUI_tx_valid"
+	  SrcPort		  1
+	  DstBlock		  "Terminator2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "r_xaui_test_XAUI_tx_outofband"
+	  SrcPort		  1
+	  DstBlock		  "Terminator1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "r_xaui_test_XAUI_tx_data"
+	  SrcPort		  1
+	  DstBlock		  "Terminator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "r_xaui_test_XAUI_tx_full"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "tx_full"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_tx_valid"
+	  SrcPort		  1
+	  DstBlock		  "r_xaui_test_XAUI_tx_valid"
 	  DstPort		  1
 	}
 	Line {
@@ -2014,102 +2046,76 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_tx_valid"
+	  SrcBlock		  "convert_tx_outofband"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_tx_valid"
+	  DstBlock		  "r_xaui_test_XAUI_tx_outofband"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_XAUI_tx_full"
+	  SrcBlock		  "tx_outofband"
+	  SrcPort		  1
+	  DstBlock		  "convert_tx_outofband"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_tx_data"
+	  SrcPort		  1
+	  DstBlock		  "r_xaui_test_XAUI_tx_data"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "tx_data"
+	  SrcPort		  1
+	  DstBlock		  "convert_tx_data"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "r_xaui_test_XAUI_rx_linkdown"
+	  SrcPort		  1
+	  DstBlock		  "rx_linkdown"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "r_xaui_test_XAUI_rx_empty"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tx_full"
+	  DstBlock		  "rx_empty"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_XAUI_tx_data"
+	  SrcBlock		  "r_xaui_test_XAUI_rx_outofband"
 	  SrcPort		  1
-	  DstBlock		  "Terminator"
+	  DstBlock		  "rx_outofband"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_XAUI_tx_outofband"
+	  SrcBlock		  "r_xaui_test_XAUI_rx_data"
 	  SrcPort		  1
-	  DstBlock		  "Terminator1"
+	  DstBlock		  "rx_data"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_XAUI_tx_valid"
+	  SrcBlock		  "convert_rx_reset"
 	  SrcPort		  1
-	  DstBlock		  "Terminator2"
+	  DstBlock		  "r_xaui_test_XAUI_rx_reset"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Constant2"
+	  SrcBlock		  "rx_reset"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_tx_full"
+	  DstBlock		  "convert_rx_reset"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Constant3"
+	  SrcBlock		  "convert_rx_get"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_rx_linkdown"
+	  DstBlock		  "r_xaui_test_XAUI_rx_get"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Constant4"
+	  SrcBlock		  "rx_get"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_rx_empty"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant5"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_rx_outofband"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant6"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_rx_data"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_get"
-	  SrcPort		  1
-	  DstBlock		  "Terminator3"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_reset"
-	  SrcPort		  1
-	  DstBlock		  "Terminator4"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant7"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_XAUI_rx_valid"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_valid"
-	  SrcPort		  1
-	  DstBlock		  "rx_valid"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_XAUI_rx_almost_full"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  DstBlock		  "rx_almost_full"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant1"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  DstBlock		  "xps_library_XAUI_rx_almost_full"
+	  DstBlock		  "convert_rx_get"
 	  DstPort		  1
 	}
       }

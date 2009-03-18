@@ -38,6 +38,7 @@ s.port = toks{1}{2};
 s.hw_sys = s.board;
 s.preemph = get_param(blk_name, 'pre_emph');
 s.swing = get_param(blk_name, 'swing');
+s.open_phy  = num2str(strcmp(get_param(blk_name, 'open_phy'), 'on'));
 
 b = class(s,'xps_xaui',blk_obj);
 
