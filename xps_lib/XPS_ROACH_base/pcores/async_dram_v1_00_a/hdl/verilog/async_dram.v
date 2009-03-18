@@ -115,14 +115,13 @@ module async_dram #(
   assign dram_rnw         = txn_fifo_output[32];
 
   /********** Transaction and Write Fifo Control ************/
-  reg [144 + 18 - 1:0] dat_fifo_input_reg;
-  reg                  dat_fifo_we_reg;
-  reg [144 + 18 - 1:0] txn_fifo_input_reg;
-  reg                  txn_fifo_we_reg;
-
+  reg  [144 + 18 - 1:0] dat_fifo_input_reg;
+  reg                   dat_fifo_we_reg;
+  reg        [33 - 1:0] txn_fifo_input_reg;
+  reg                   txn_fifo_we_reg;
   wire [144 + 18 - 1:0] dat_fifo_input_int;
   wire                  dat_fifo_we_int;
-  wire [144 + 18 - 1:0] txn_fifo_input_int;
+  wire       [33 - 1:0] txn_fifo_input_int;
   wire                  txn_fifo_we_int;
 
   assign Mem_Cmd_Ack = !(dat_fifo_almost_full || txn_fifo_almost_full);
@@ -226,7 +225,7 @@ generate if (BRAM_FIFOS == 0) begin : shallow_fifos
     .din       (dat_fifo_input),
     .rd_clk    (dram_clk),
     .rd_en     (dat_fifo_re),
-    .rst       (Mem_Rst),
+    .rst       (dram_reset),
     .wr_clk    (Mem_Clk),
     .wr_en     (dat_fifo_we),
     .dout      (dat_fifo_output),
@@ -241,7 +240,7 @@ generate if (BRAM_FIFOS == 0) begin : shallow_fifos
     .din       (txn_fifo_input),
     .rd_clk    (dram_clk),
     .rd_en     (txn_fifo_re),
-    .rst       (Mem_Rst),
+    .rst       (dram_reset),
     .wr_clk    (Mem_Clk),
     .wr_en     (txn_fifo_we),
     .dout      (txn_fifo_output),
@@ -257,7 +256,7 @@ generate if (BRAM_FIFOS == 0) begin : shallow_fifos
     .rd_clk    (Mem_Clk),
     .rd_en     (rd_data_fifo_re),
     .rst       (dram_reset),
-    .wr_clk    (Mem_Rst),
+    .wr_clk    (dram_clk),
     .wr_en     (rd_data_fifo_we),
     .dout      (rd_data_fifo_output),
     .empty     (rd_data_fifo_empty),
@@ -273,7 +272,7 @@ end else begin : deep_fifos
     .din       (dat_fifo_input),
     .rd_clk    (dram_clk),
     .rd_en     (dat_fifo_re),
-    .rst       (Mem_Rst),
+    .rst       (dram_reset),
     .wr_clk    (Mem_Clk),
     .wr_en     (dat_fifo_we),
     .dout      (dat_fifo_output),
@@ -288,7 +287,7 @@ end else begin : deep_fifos
     .din       (txn_fifo_input),
     .rd_clk    (dram_clk),
     .rd_en     (txn_fifo_re),
-    .rst       (Mem_Rst),
+    .rst       (dram_reset),
     .wr_clk    (Mem_Clk),
     .wr_en     (txn_fifo_we),
     .dout      (txn_fifo_output),
@@ -303,7 +302,7 @@ end else begin : deep_fifos
     .din       (rd_data_fifo_input),
     .rd_clk    (Mem_Clk),
     .rd_en     (rd_data_fifo_re),
-    .rst       (Mem_Rst),
+    .rst       (dram_reset),
     .wr_clk    (dram_clk),
     .wr_en     (rd_data_fifo_we),
     .dout      (rd_data_fifo_output),
