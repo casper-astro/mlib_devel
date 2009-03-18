@@ -37,14 +37,9 @@ dimm           = num2str(get(blk_obj,'dimm'));
 half_burst     = get(blk_obj,'half_burst');
 wide_data      = get(blk_obj,'wide_data');
 bank_mgt       = get(blk_obj,'bank_mgt');
-skinny_buffers = get(blk_obj,'skinny_buffers');
+bram_fifos     = get(blk_obj,'bram_fifos');
 disable_tag    = get(blk_obj,'disable_tag');
 use_sniffer    = get(blk_obj,'use_sniffer'); 
-
-bram_fifos = '1';
-if strcmp(skinny_buffers,'1') 
-  bram_fifos = '0';
-end
 
 % Generate 'infrastructure' MHS entry
 
