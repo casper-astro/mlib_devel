@@ -89,8 +89,8 @@ module ddr2_phy_write #
    input                       phy_init_wren,
    input                       phy_init_data_sel,
    output reg                  dm_ce,
-   output reg [2*9 - 1:0]      dq_oe_n, //9xbuffer to reduce fan-out
-   output reg                  dqs_oe_n ,
+   output reg [2*9 - 1:0]      dq_oe_n,   //9xbuffer to reduce fan-out
+   output reg   [9 - 1:0]      dqs_oe_n , //9xbuffer to reduce fan-out
    output reg                  dqs_rst_n ,
    output                      wdf_rden,
    output reg [CS_NUM-1:0]     odt ,
@@ -420,8 +420,19 @@ module ddr2_phy_write #
     dq_oe_n[17:16] <= dq_oe_n_90_r1;
   end
 
-  always @(negedge clk0)
-    dqs_oe_n  <= dqs_oe_n_180_r1;
+  // synthesis attribute keep of dqs_oe_n is true
+  // synthesis attribute equivalent_register_removal of dqs_oe_n is "no"
+  always @(negedge clk0) begin
+    dqs_oe_n[0]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[1]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[2]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[3]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[4]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[5]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[6]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[7]  <= dqs_oe_n_180_r1;
+    dqs_oe_n[8]  <= dqs_oe_n_180_r1;
+  end
 
   always @(negedge clk0)
     dqs_rst_n <= dqs_rst_n_180_r1;
