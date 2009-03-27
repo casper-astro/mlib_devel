@@ -971,7 +971,7 @@ if run_software
             % write project file
             str = '';
 
-            xmpfile = 'system.xmp'
+            xmpfile = 'system.xmp';
 
             if ~isempty(hw_subsys)
                 xmpfile = [xmpfile, '.', hw_subsys];
