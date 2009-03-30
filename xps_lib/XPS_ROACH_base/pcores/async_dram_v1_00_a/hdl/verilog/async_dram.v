@@ -221,6 +221,40 @@ module async_dram #(
 
 generate if (BRAM_FIFOS == 0) begin : shallow_fifos
   //making FIFOS from distributed memory
+  rd_fifo_dist rd_data_fifo0(
+    .din       (rd_data_fifo_input),
+    .rd_clk    (Mem_Clk),
+    .rd_en     (rd_data_fifo_re),
+    .rst       (dram_reset),
+    .wr_clk    (dram_clk),
+    .wr_en     (rd_data_fifo_we),
+    .dout      (rd_data_fifo_output),
+    .empty     (rd_data_fifo_empty),
+    .full      (rd_data_fifo_full),
+    .prog_full (rd_data_fifo_almost_full),
+    .overflow  (rd_data_fifo_overflow),
+    .underflow (rd_data_fifo_underflow)
+  );
+
+end else begin : deep_fifos
+
+  rd_fifo_bram rd_data_fifo0(
+    .din       (rd_data_fifo_input),
+    .rd_clk    (Mem_Clk),
+    .rd_en     (rd_data_fifo_re),
+    .rst       (dram_reset),
+    .wr_clk    (dram_clk),
+    .wr_en     (rd_data_fifo_we),
+    .dout      (rd_data_fifo_output),
+    .empty     (rd_data_fifo_empty),
+    .full      (rd_data_fifo_full),
+    .prog_full (rd_data_fifo_almost_full),
+    .overflow  (rd_data_fifo_overflow),
+    .underflow (rd_data_fifo_underflow)
+  );
+end endgenerate
+
+  //making FIFOS from distributed memory
   data_fifo_dist dat_fifo(
     .din       (dat_fifo_input),
     .rd_clk    (dram_clk),
@@ -250,68 +284,5 @@ generate if (BRAM_FIFOS == 0) begin : shallow_fifos
     .overflow  (txn_fifo_overflow),
     .underflow (txn_fifo_underflow)
   );
-
-  rd_fifo_dist rd_data_fifo0(
-    .din       (rd_data_fifo_input),
-    .rd_clk    (Mem_Clk),
-    .rd_en     (rd_data_fifo_re),
-    .rst       (dram_reset),
-    .wr_clk    (dram_clk),
-    .wr_en     (rd_data_fifo_we),
-    .dout      (rd_data_fifo_output),
-    .empty     (rd_data_fifo_empty),
-    .full      (rd_data_fifo_full),
-    .prog_full (rd_data_fifo_almost_full),
-    .overflow  (rd_data_fifo_overflow),
-    .underflow (rd_data_fifo_underflow)
-  );
-
-end else begin : deep_fifos
-  //making FIFOS from brams
-  data_fifo_bram dat_fifo(
-    .din       (dat_fifo_input),
-    .rd_clk    (dram_clk),
-    .rd_en     (dat_fifo_re),
-    .rst       (dram_reset),
-    .wr_clk    (Mem_Clk),
-    .wr_en     (dat_fifo_we),
-    .dout      (dat_fifo_output),
-    .empty     (dat_fifo_empty),
-    .full      (),
-    .prog_full (dat_fifo_almost_full),
-    .overflow  (dat_fifo_overflow),
-    .underflow (dat_fifo_underflow)
-  );
-  
-  transaction_fifo_bram txn_fifo(
-    .din       (txn_fifo_input),
-    .rd_clk    (dram_clk),
-    .rd_en     (txn_fifo_re),
-    .rst       (dram_reset),
-    .wr_clk    (Mem_Clk),
-    .wr_en     (txn_fifo_we),
-    .dout      (txn_fifo_output),
-    .empty     (txn_fifo_empty),
-    .full      (),
-    .prog_full (txn_fifo_almost_full),
-    .overflow  (txn_fifo_overflow),
-    .underflow (txn_fifo_underflow)
-  );
-
-  rd_fifo_bram rd_data_fifo0(
-    .din       (rd_data_fifo_input),
-    .rd_clk    (Mem_Clk),
-    .rd_en     (rd_data_fifo_re),
-    .rst       (dram_reset),
-    .wr_clk    (dram_clk),
-    .wr_en     (rd_data_fifo_we),
-    .dout      (rd_data_fifo_output),
-    .empty     (rd_data_fifo_empty),
-    .full      (rd_data_fifo_full),
-    .prog_full (rd_data_fifo_almost_full),
-    .overflow  (rd_data_fifo_overflow),
-    .underflow (rd_data_fifo_underflow)
-  );
-end endgenerate
         
 endmodule
