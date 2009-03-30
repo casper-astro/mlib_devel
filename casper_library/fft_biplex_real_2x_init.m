@@ -45,6 +45,13 @@ check_mask_type(blk, 'fft_biplex_real_2x');
 munge_block(blk, varargin{:});
 
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
+specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
+mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
+
+if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
+    error('fft_biplex_real_2x_init.m: Multiplier use specification for stages does not match FFT size');
+    return
+end
 
 propagate_vars([blk,'/biplex_core'],'defaults', defaults, varargin{:});
 fmtstr = sprintf('FFTSize=%d', FFTSize);

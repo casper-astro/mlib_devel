@@ -60,6 +60,11 @@ delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:}
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
+if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
+    error('fft_wideband_real_init.m: Multiplier use specification for stages does not match FFT size');
+    return
+end
+
 if n_inputs < 2                                                
 	errordlg('fft_wideband_real_init.m: REAL FFT: Number of inputs must be at least 4!');  
 end                                                            
@@ -156,8 +161,14 @@ end
 % Propagate dynamic variables
 
 %generate vectors of multiplier use from vectors passed in
-vec_biplex = mult_spec(1:FFTSize-n_inputs);
-vec_direct = mult_spec(FFTSize-n_inputs+1:FFTSize);
+vec_biplex = 2.*ones(1, FFTSize-n_inputs);
+vec_direct = 2.*ones(1, n_inputs);
+
+if strcmp(specify_mult, 'on'),
+    %generate vectors of multiplier use from vectors passed in
+    vec_biplex(1:FFTSize-n_inputs) = mult_spec(1: FFTSize-n_inputs);
+    vec_direct = mult_spec(FFTSize-n_inputs+1:FFTSize); 
+end
 
 for i=0:2^(n_inputs-2)-1,
     name = [blk,'/fft_biplex_real_4x',num2str(i)];

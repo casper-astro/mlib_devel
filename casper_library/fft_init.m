@@ -60,6 +60,12 @@ delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:}
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
+if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
+    error('fft_init.m: Multiplier use specification for stages does not match FFT size');
+    return
+end
+
+
 biplexes = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','masktype', 'fft_biplex');
 outports = find_system(blk, 'lookUnderMasks', 'on', 'FollowLinks','on','SearchDepth',1,'BlockType', 'Outport');
 num_biplexes = length(biplexes);
@@ -193,13 +199,14 @@ else,
     end
 end
 
-
-
 % Propagate dynamic variables
 
-%generate vectors of multiplier use from vectors passed in
-vec_biplex = mult_spec(1:FFTSize-n_inputs);
-if( n_inputs >= 1 ),
+vec_biplex = 2.*ones(1, FFTSize-n_inputs);
+vec_direct = 2.*ones(1, n_inputs);
+
+if strcmp(specify_mult, 'on'),
+    %generate vectors of multiplier use from vectors passed in
+    vec_biplex(1:FFTSize-n_inputs) = mult_spec(1: FFTSize-n_inputs);
     vec_direct = mult_spec(FFTSize-n_inputs+1:FFTSize); 
 end
 

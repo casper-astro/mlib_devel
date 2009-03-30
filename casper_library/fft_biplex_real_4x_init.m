@@ -56,6 +56,11 @@ delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:}
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
+if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
+    error('fft_biplex_real_4x_init.m: Multiplier use specification for stages does not match FFT size');
+    return
+end
+
 biplex_core = [blk,'/biplex_core'];
 propagate_vars(biplex_core, 'defaults', defaults, varargin{:});
 propagate_vars([blk,'/bi_real_unscr_4x'], 'defaults', defaults, varargin{:});
