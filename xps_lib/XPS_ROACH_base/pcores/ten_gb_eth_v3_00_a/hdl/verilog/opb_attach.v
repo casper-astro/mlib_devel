@@ -179,25 +179,33 @@ module opb_attach(
         opb_ack <= 1'b1;
 
       // RX Buffer control handshake
-      if (~rx_cpu_buffer_cleared  & rx_cpu_new_buffer & ~rx_cpu_new_buffer_R) begin
+      if (!rx_cpu_buffer_cleared  && rx_cpu_new_buffer && !rx_cpu_new_buffer_R) begin
         rx_size <= rx_cpu_buffer_size;
         rx_cpu_buffer_select_int <= rx_cpu_buffer_select;
       end
-      if (~rx_cpu_buffer_cleared & rx_cpu_new_buffer & rx_cpu_new_buffer_R & rx_size == 8'h00) begin
+      if (!rx_cpu_buffer_cleared && rx_cpu_new_buffer && rx_cpu_new_buffer_R && rx_size == 8'h00) begin
         rx_cpu_buffer_cleared <= 1'b1;
       end
-      if (rx_cpu_buffer_cleared & ~rx_cpu_new_buffer) begin
+      if (rx_cpu_buffer_cleared && !rx_cpu_new_buffer) begin
         rx_cpu_buffer_cleared <= 1'b0;
       end
 
-      // TX Buffer control handshake
-      if (~tx_cpu_buffer_filled & tx_cpu_free_buffer & ~tx_cpu_free_buffer_R) begin
+      // When we see a positive edge on the free buffer signal we know that we
+      // have been given a new buffer so we may continue with the new buffer
+      if (!tx_cpu_buffer_filled && tx_cpu_free_buffer && !tx_cpu_free_buffer_R) begin
         tx_size <= 8'h00;
         tx_cpu_buffer_select_int <= tx_cpu_buffer_select;
       end
-      if (~tx_cpu_buffer_filled & tx_cpu_free_buffer & tx_cpu_free_buffer_R & tx_size != 8'h0) begin
+      // When we are ready to send (tx_size != 0 && tx_cpu_buffer_fille = 0) and there is a free buffer
+      // we tell the controller we have data ready to send
+      if (!tx_cpu_buffer_filled && tx_cpu_free_buffer && tx_cpu_free_buffer_R && tx_size != 8'h0) begin
         tx_cpu_buffer_filled <= 1'b1;
         tx_cpu_buffer_size <= tx_size;
+      end
+      // When we have filled the buffer and the free signal is deasserted, we dessert
+      // to let the controller switch to the new buffer
+      if (tx_cpu_buffer_filled && !tx_cpu_free_buffer) begin
+        tx_cpu_buffer_filled <= 1'b0;
       end
 
   /* most of the work is done in the next always block in coverting 16 bit to 64 bit buffer
