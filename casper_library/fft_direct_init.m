@@ -66,6 +66,11 @@ coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:}
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
+if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
+    error('fft_direct_init.m: Multiplier use specification for stages does not match FFT size');
+    return
+end
+
 current_stages = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on',...
     'SearchDepth',1,'masktype', 'butterfly_direct');
 prev_stages = length(current_stages);
@@ -80,10 +85,14 @@ for i=0:2^FFTSize-1,
     reuse_block(blk, ['out',num2str(i)], 'built-in/outport', 'Position', [300*FFTSize+150 100*i+100 300*FFTSize+180 100*i+115]);
 end
 reuse_block(blk, 'of', 'built-in/outport', 'Position', [300*FFTSize+210 100*(2^FFTSize)+100 300*FFTSize+240 100*(2^FFTSize)+115], 'Port', tostring((2^FFTSize)+2));
-reuse_block(blk, 'of_or', 'xbsIndex_r4/Logical', ...
-    'logical_function', 'OR', 'inputs', tostring(FFTSize), 'latency', '0', ...
-    'Position', [300*FFTSize+150 100*(2^FFTSize)+100 300*FFTSize+180 100*(2^FFTSize)+115+(FFTSize*10)]);
-add_line(blk, 'of_or/1', 'of/1');
+
+%FFTSize == 1 implies 1 input or block which generates an error
+if( FFTSize ~= 1 ),
+    reuse_block(blk, 'of_or', 'xbsIndex_r4/Logical', ...
+        'logical_function', 'OR', 'inputs', tostring(FFTSize), 'latency', '0', ...
+        'Position', [300*FFTSize+150 100*(2^FFTSize)+100 300*FFTSize+180 100*(2^FFTSize)+115+(FFTSize*10)]);
+    add_line(blk, 'of_or/1', 'of/1');
+end
 
 % Add nodes
 for stage=0:FFTSize,
@@ -111,10 +120,12 @@ end
 % Add butterflies
 for stage=1:FFTSize,
     %add overflow logic
-    reuse_block(blk, ['of_', num2str(stage)], 'xbsIndex_r4/Logical', ...
-        'logical_function', 'OR', 'inputs', tostring(2^(FFTSize-1)), 'latency', '1', ...
-        'Position', [300*stage+90 100*(2^FFTSize)+100+(stage*15) 300*stage+120 120+100*(2^FFTSize)+(FFTSize*5)+(stage*15)]);
-    add_line(blk, ['of_',num2str(stage),'/1'], ['of_or/',num2str(stage)]);
+    if( FFTSize ~= 1 ),
+        reuse_block(blk, ['of_', num2str(stage)], 'xbsIndex_r4/Logical', ...
+            'logical_function', 'OR', 'inputs', tostring(2^(FFTSize-1)), 'latency', '1', ...
+            'Position', [300*stage+90 100*(2^FFTSize)+100+(stage*15) 300*stage+120 120+100*(2^FFTSize)+(FFTSize*5)+(stage*15)]);
+        add_line(blk, ['of_',num2str(stage),'/1'], ['of_or/',num2str(stage)]);
+    end
     for i=0:2^(FFTSize-1)-1,
         name = ['butterfly',num2str(stage),'_',num2str(i)];
         reuse_block(blk, name, 'casper_library/FFTs/butterfly_direct', ...
@@ -139,11 +150,22 @@ for stage=1:FFTSize,
         add_line(blk, ['slice',num2str(stage-1),'/1'], [name, '/4']);
 
         %add lines for overflow logic
-        add_line(blk, [name,'/3'], ['of_',num2str(stage),'/',num2str(i+1)])
+        if( FFTSize ~= 1),
+            add_line(blk, [name,'/3'], ['of_',num2str(stage),'/',num2str(i+1)])
+        else
+            add_line(blk, [name,'/3'], 'of/1')
+        end
     end
 end
 
 % Check dynamic settings
+
+vec = 2.*ones(1, FFTSize);
+if strcmp(specify_mult, 'on'),
+    %generate vectors of multiplier use from vectors passed in
+    vec(1:FFTSize) = mult_spec(1:FFTSize);
+end
+
 for stage=1:FFTSize,
 
     use_hdl = 'on';

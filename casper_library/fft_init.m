@@ -65,7 +65,6 @@ if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
     return
 end
 
-
 biplexes = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','masktype', 'fft_biplex');
 outports = find_system(blk, 'lookUnderMasks', 'on', 'FollowLinks','on','SearchDepth',1,'BlockType', 'Outport');
 num_biplexes = length(biplexes);
