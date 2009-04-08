@@ -1,4 +1,3 @@
-
 module opb_attach(
     //OPB attachment
     OPB_Clk, OPB_Rst,
@@ -100,13 +99,13 @@ module opb_attach(
   localparam ARP_CACHE_HIGH   = 32'h37FF;
 
   wire reg_sel    = OPB_select && local_addr >= REGISTERS_OFFSET && local_addr <= REGISTERS_HIGH;
-  wire rxbuf_sel  = OPB_select && local_addr >= TX_BUFFER_OFFSET && local_addr <= TX_BUFFER_HIGH;
-  wire txbuf_sel  = OPB_select && local_addr >= RX_BUFFER_OFFSET && local_addr <= RX_BUFFER_HIGH;
+  wire rxbuf_sel  = OPB_select && local_addr >= RX_BUFFER_OFFSET && local_addr <= RX_BUFFER_HIGH;
+  wire txbuf_sel  = OPB_select && local_addr >= TX_BUFFER_OFFSET && local_addr <= TX_BUFFER_HIGH;
   wire arp_sel    = OPB_select && local_addr >= ARP_CACHE_OFFSET && local_addr <= ARP_CACHE_HIGH;
 
   wire [31:0] reg_addr   = local_addr - REGISTERS_OFFSET;
-  wire [31:0] rxbuf_addr = local_addr - TX_BUFFER_OFFSET;
-  wire [31:0] txbuf_addr = local_addr - RX_BUFFER_OFFSET;
+  wire [31:0] rxbuf_addr = local_addr - RX_BUFFER_OFFSET;
+  wire [31:0] txbuf_addr = local_addr - TX_BUFFER_OFFSET;
   wire [31:0] arp_addr   = local_addr - ARP_CACHE_OFFSET;
 
   /************** Registers ****************/
