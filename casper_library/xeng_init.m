@@ -95,6 +95,19 @@ reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', 'Position', [15,89,85,121],
             'arith_type','Unsigned',...
             'n_bits',sprintf('%d',8 * n_bits_xeng_out));
         
+reuse_block(blk, 'sample_and_hold1', 'casper_library/Misc/sample_and_hold', 'Position', [140,255,180,315],...
+            'period',sprintf('%d',n_ants * acc_len));
+
+reuse_block(blk, 'sample_and_hold2', 'casper_library/Misc/sample_and_hold', 'Position', [x + 200,190,x+240,250],...
+            'period',sprintf('%d',n_ants * acc_len));
+
+reuse_block(blk, 'sample_and_hold3', 'casper_library/Misc/sample_and_hold', 'Position', [x + 350,190,x+390,250],...
+            'period',sprintf('%d',n_ants * acc_len));
+
+reuse_block(blk, 'delay', 'xbsIndex_r4/Delay','Position', [x + 430, 220, x + 470, 230],...
+            'reg_retiming','on',...
+            'latency','1');
+
 reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', 'Position', [15,124,85,156],...
             'const','0',...
             'arith_type','Boolean',...
@@ -118,11 +131,13 @@ reuse_block(blk, 'Term3', 'built-in/Terminator', 'Position', [x, 130, x + 20, 15
 reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 500, 160, x + 530, 174]);
 reuse_block(blk, 'acc', 'built-in/outport','Position', [x + 500, 100, x + 530, 114]);
 reuse_block(blk, 'valid', 'built-in/outport','Position', [x + 500, 130, x + 530, 144]);
+reuse_block(blk, 'mnct_out', 'built-in/outport','Position', [x + 500, 130, x + 530, 204]);
 
 % Set input port positions
 reuse_block(blk, 'sync_in', 'built-in/inport','Position', [55,178,85,192]);
 reuse_block(blk, 'ant', 'built-in/inport','Position', [55,53,85,67]);
 reuse_block(blk, 'window_valid', 'built-in/inport','Position', [55,223,85,237]);
+reuse_block(blk, 'mcnt_in', 'built-in/inport','Position', [55,293,85,307]);
 
 
 % Add lines
@@ -143,6 +158,14 @@ add_line(blk, 'xeng_descramble/3', 'xeng_conj_fix/3', 'autorouting', 'on');
 add_line(blk, 'xeng_conj_fix/3', 'sync_out/1', 'autorouting', 'on');
 add_line(blk, 'xeng_conj_fix/1', 'acc/1', 'autorouting', 'on');
 add_line(blk, 'xeng_conj_fix/2', 'valid/1', 'autorouting', 'on');
+
+add_line(blk, 'sync_in/1', 'sample_and_hold1/1', 'autorouting', 'on');
+add_line(blk, 'mcnt_in/1', 'sample_and_hold1/2', 'autorouting', 'on');
+add_line(blk, 'sample_and_hold1/1', 'sample_and_hold2/2', 'autorouting', 'on');
+add_line(blk, 'xeng_descramble/3', 'sample_and_hold3/1', 'autorouting', 'on');
+add_line(blk, 'sample_and_hold2/1', 'sample_and_hold3/2', 'autorouting', 'on');
+add_line(blk, 'sample_and_hold3/1', 'delay/1', 'autorouting', 'on');
+add_line(blk, 'delay/1', 'mcnt_out/1', 'autorouting', 'on');
 
 for i=1:floor(n_ants / 2)
     if i == 1
@@ -171,6 +194,7 @@ add_line(blk, [thisblk, '/4'], 'x_cast/1', 'autorouting', 'on');
 add_line(blk, [thisblk, '/5'], 'xeng_descramble/2', 'autorouting', 'on');
 add_line(blk, [thisblk, '/6'], 'Term3/1', 'autorouting', 'on');
 add_line(blk, [thisblk, '/7'], 'xeng_descramble/3', 'autorouting', 'on');
+add_line(blk, [thisblk, '/7'], 'sample_and_hold2/1', 'autorouting', 'on');
 
 %fprintf('setting block parameters...\n');
 
