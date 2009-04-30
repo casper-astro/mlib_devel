@@ -9,7 +9,7 @@ module TB_kat_ten_gb_eth();
   /* Simulation constants */
 
   /* the size of the TX frame in 64-bit words */
-  localparam TX_FRAME_SIZE  = 32'd8;
+  localparam TX_FRAME_SIZE  = 32'd1;
 
   localparam FABRIC_MAC     = 48'h0123_4567_89ab;
   localparam FABRIC_IP      = {8'd192, 8'd168, 8'd4, 8'd20};
@@ -94,26 +94,26 @@ module TB_kat_ten_gb_eth();
     .FABRIC_ENABLE  (FABRIC_ENABLE ),
     .C_BASEADDR     (32'h0),
     .C_HIGHADDR     (32'hffff),
-    .RX_DIST_MEM    (1)
+    .RX_DIST_RAM    (1)
   ) kat_ten_gb_eth_inst (
-    .app_clk(app_clk),
-    .app_rst(app_rst),
-    .app_tx_valid(app_tx_valid),
-    .app_tx_end_of_frame(app_tx_end_of_frame),
-    .app_tx_data(app_tx_data),
-    .app_tx_dest_ip(app_tx_dest_ip),
-    .app_tx_dest_port(app_tx_dest_port),
-    .app_tx_overflow(app_tx_overflow), 
-    .app_tx_afull(app_tx_afull), 
-    .app_rx_valid(app_rx_valid),
-    .app_rx_end_of_frame(app_rx_end_of_frame),
-    .app_rx_data(app_rx_data),
-    .app_rx_source_ip(app_rx_source_ip),
-    .app_rx_source_port(app_rx_source_port),
-    .app_rx_bad_frame(app_rx_bad_frame),
-    .app_rx_overrun(app_rx_overrun), 
-    .app_rx_overrun_ack(app_rx_overrun_ack), 
-    .app_rx_ack(app_rx_ack),
+    .clk(app_clk),
+    .rst(app_rst),
+    .tx_valid(app_tx_valid),
+    .tx_end_of_frame(app_tx_end_of_frame),
+    .tx_data(app_tx_data),
+    .tx_dest_ip(app_tx_dest_ip),
+    .tx_dest_port(app_tx_dest_port),
+    .tx_overflow(app_tx_overflow), 
+    .tx_afull(app_tx_afull), 
+    .rx_valid(app_rx_valid),
+    .rx_end_of_frame(app_rx_end_of_frame),
+    .rx_data(app_rx_data),
+    .rx_source_ip(app_rx_source_ip),
+    .rx_source_port(app_rx_source_port),
+    .rx_bad_frame(app_rx_bad_frame),
+    .rx_overrun(app_rx_overrun), 
+    .rx_overrun_ack(app_rx_overrun_ack), 
+    .rx_ack(app_rx_ack),
     .led_up(led_up),
     .led_rx(led_rx),
     .led_tx(led_tx),

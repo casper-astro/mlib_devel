@@ -93,7 +93,7 @@ module tge_tx #(
       data_count <= 1'd1; /* pre-add last word */
     end else begin
       if (app_tx_end_of_frame && app_tx_valid) begin
-        data_count <= 1'd1;
+        data_count <= 16'd1;
 `ifdef DESPERATE_DEBUG
         $display("tge_tx: got fabric frame, size = %d", data_count);
 `endif
@@ -232,6 +232,12 @@ end endgenerate
     local_enable_retimed <= local_enable_R;
   end
 
+  reg app_overflowR;
+  wire app_overflow_retimed = app_overflowR;
+  always @(posedge mac_clk) begin
+    app_overflowR  <= tx_overflow_latch;
+  end
+
   /************** Primary transmit State Machine ***************/
 
   reg [3:0] tx_state;
@@ -296,7 +302,7 @@ end endgenerate
 
       case (tx_state)
         TX_IDLE:          begin
-          if (!packet_ctrl_empty && local_enable_retimed) begin
+          if (!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) begin
             mac_data_valid <= {8{1'b1}};
             tx_size        <= packet_ctrl_size - 1;
             tx_state       <= TX_SEND_HDR_1;
@@ -332,7 +338,7 @@ end endgenerate
           tx_state <= TX_SEND_HDR_5;
         end
         TX_SEND_HDR_5:    begin
-          /* We now start tick the data fifo */
+          /* We now start to tick the data fifo */
           tx_state  <= TX_SEND_HDR_6;
           packet_rd_reg <= 1'b1; /* tick */
         end
@@ -414,7 +420,7 @@ end endgenerate
   assign packet_ctrl_rd = tx_state == TX_SEND_LAST;
 
   /* Mac Start assign */
-  assign mac_tx_start = (tx_state == TX_IDLE) && ((!packet_ctrl_empty && local_enable_retimed) || (!mac_cpu_ack_reg && mac_cpu_pending && mac_cpu_size != 16'd0));
+  assign mac_tx_start = (tx_state == TX_IDLE) && ((!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) || (!mac_cpu_ack_reg && mac_cpu_pending && mac_cpu_size != 16'd0));
 
   /*** MAC data decode ***/
   reg [63:0] mac_data;
@@ -464,6 +470,7 @@ end endgenerate
                      mac_cpu_data[39:32], mac_cpu_data[47:40], mac_cpu_data[55:48], mac_cpu_data[63:56]};
       end
       default: begin
+        mac_data <= 64'b0;
       end
     endcase
   end

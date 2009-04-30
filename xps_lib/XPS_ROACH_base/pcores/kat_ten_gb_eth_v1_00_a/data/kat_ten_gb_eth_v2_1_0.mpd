@@ -24,7 +24,7 @@ BEGIN kat_ten_gb_eth
   PARAMETER FABRIC_GATEWAY = 0xff,           DT = std_logic_vector
   PARAMETER FABRIC_PORT    = 0xffff,         DT = std_logic_vector
   PARAMETER FABRIC_ENABLE  = 0,              DT = integer
-  PARAMETER RX_DIST_MEM    = 0,              DT = integer
+  PARAMETER RX_DIST_RAM    = 0,              DT = integer
   PARAMETER CPU_RX_ENABLE  = 0,              DT = integer
   PARAMETER CPU_TX_ENABLE  = 0,              DT = integer
 
@@ -36,30 +36,29 @@ BEGIN kat_ten_gb_eth
 ## Ports
 
   ## application clock
-  PORT clk                  = "", DIR = IN
+  PORT clk              = "", DIR = IN
   ## reset
-  PORT rst                  = "", DIR = IN
+  PORT rst              = "", DIR = IN
 
   ## tx ports
-  PORT app_tx_valid         = "", DIR = IN
-  PORT app_tx_afull         = "", DIR = OUT
-  PORT app_tx_overflow      = "", DIR = OUT
-  PORT app_tx_end_of_frame  = "", DIR = IN
-  PORT app_tx_data          = "", DIR = IN , VEC = [63:0]
-  PORT app_tx_dest_ip       = "", DIR = IN , VEC = [31:0]
-  PORT app_tx_dest_port     = "", DIR = IN , VEC = [15:0]
+  PORT tx_valid         = "", DIR = IN
+  PORT tx_afull         = "", DIR = OUT
+  PORT tx_overflow      = "", DIR = OUT
+  PORT tx_end_of_frame  = "", DIR = IN
+  PORT tx_data          = "", DIR = IN , VEC = [63:0]
+  PORT tx_dest_ip       = "", DIR = IN , VEC = [31:0]
+  PORT tx_dest_port     = "", DIR = IN , VEC = [15:0]
   
   ## rx port
-  PORT app_rx_valid         = "", DIR = OUT
-  PORT app_rx_end_of_frame  = "", DIR = OUT
-  PORT app_rx_data          = "", DIR = OUT, VEC = [63:0]
-  PORT app_rx_source_ip     = "", DIR = OUT, VEC = [31:0]
-  PORT app_rx_source_port   = "", DIR = OUT, VEC = [15:0]
-  PORT app_rx_size          = "", DIR = OUT, VEC = [15:0]
-  PORT app_rx_bad_frame     = "", DIR = OUT
-  PORT app_rx_overrun       = "", DIR = OUT
-  PORT app_rx_overrun_ack   = "", DIR = IN
-  PORT app_rx_ack           = "", DIR = IN
+  PORT rx_valid         = "", DIR = OUT
+  PORT rx_end_of_frame  = "", DIR = OUT
+  PORT rx_data          = "", DIR = OUT, VEC = [63:0]
+  PORT rx_source_ip     = "", DIR = OUT, VEC = [31:0]
+  PORT rx_source_port   = "", DIR = OUT, VEC = [15:0]
+  PORT rx_bad_frame     = "", DIR = OUT
+  PORT rx_overrun       = "", DIR = OUT
+  PORT rx_overrun_ack   = "", DIR = IN
+  PORT rx_ack           = "", DIR = IN
         
   ## status LEDs
   PORT led_up               = "", DIR = OUT

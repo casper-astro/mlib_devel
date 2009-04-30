@@ -34,10 +34,11 @@ module tge_rx #(
     input   [7:0] mac_rx_data_valid,
     input         mac_rx_good_frame,
     input         mac_rx_bad_frame,
-    input         mac_tx_ack,
     // PHY status
     input         phy_rx_up
   );
+
+  /* TODO: implement application traffic blocking on local_valid */
 
   /* Common CPU signals */
   wire [63:0] cpu_data;
@@ -322,13 +323,9 @@ end endgenerate
     end else begin
       if (cpu_ackRR) begin
         cpu_size <= 8'd0;
-        if (|cpu_size)
-          $display("tge_rx_cpu: clearing buffer_size");
       end
       if (cpu_state == CPU_WAIT && cpu_buffer_free) begin
         cpu_size <= cpu_addr;
-        /* If we got data frome a new frame tag the frame to be bypassed*/
-        $display("tge_rx_cpu: tranferred frame of size 0x%x", cpu_addr);
       end
     end
   end
@@ -418,21 +415,20 @@ end endgenerate
   assign ctrl_fifo_rd_en   = app_rx_ack && app_rx_end_of_frame;
   /* ^ In theory could add fifo_empty status to these controls */
 
-  wire overrun;
-
   reg [1:0] app_state;
-  localparam APP_IDLE  = 2'd0;
-  localparam APP_RUN   = 2'd1;
+  localparam APP_RUN   = 2'd0;
   localparam APP_OVER  = 2'd2;
   localparam APP_WAIT  = 2'd3;
+
+  reg first_word;
 
   wire rx_eof  = app_goodframe || app_badframe || app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full);
   wire rx_bad  = app_badframe;
   wire rx_over = packet_fifo_almost_full || ctrl_fifo_almost_full;
   assign packet_fifo_wr_data = {rx_over, rx_bad, rx_eof, app_data};
-  assign packet_fifo_wr_en   = app_dvld && (app_state != APP_OVER && app_state != APP_WAIT);
+  assign packet_fifo_wr_en   = app_dvld && (app_state == APP_RUN);
   assign ctrl_fifo_wr_data   = {app_source_port, app_source_ip};
-  assign ctrl_fifo_wr_en     = app_dvld && app_state == APP_IDLE;
+  assign ctrl_fifo_wr_en     = app_dvld && first_word && app_state == APP_RUN;
 
   wire overrun_ack;   
   reg overrun_ackR;   
@@ -441,18 +437,18 @@ end endgenerate
   always @(posedge mac_clk) begin
     overrun_ackR  <= overrun_ack;
     overrun_ackRR <= overrun_ackR;
+
     if (mac_rst) begin
-      app_state <= APP_IDLE;
+      app_state  <= APP_RUN;
+      first_word <= 1'b1;
     end else begin
       case (app_state)
-        APP_IDLE: begin
-          if (app_dvld) begin
-            app_state <= APP_RUN;
-          end
-        end
         APP_RUN: begin
-          if (app_goodframe || app_badframe) begin
-            app_state <= APP_IDLE;
+          if (app_dvld)
+            first_word <= 1'b0;
+
+          if (rx_eof) begin
+            first_word <= 1'b1;
           end
           if (app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full)) begin
             app_state <= APP_OVER;
@@ -465,7 +461,7 @@ end endgenerate
         end
         APP_WAIT: begin
           if (!overrun_ackRR) begin
-            app_state <= APP_IDLE;
+            app_state <= APP_RUN;
           end
         end
       endcase
@@ -493,6 +489,5 @@ end endgenerate
       end
     end
   end
-  /* TODO: verify */
 
 endmodule

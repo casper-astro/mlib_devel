@@ -8,7 +8,7 @@ DEFINES+=-DDEBUG
 #DEFINES+=-DDESPERATE_DEBUG
 VSIM=vvp
 
-SRC_DIR=../hdl
+SRC_DIR=../hdl/verilog
 TB_DIR=./hdl
 MODEL_DIR=./sim_models
 GEN_DIR=./gen

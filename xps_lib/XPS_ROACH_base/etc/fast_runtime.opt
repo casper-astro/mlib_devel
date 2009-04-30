@@ -29,6 +29,7 @@ End Program ngdbuild
 #
 Program map
 -timing;
+-ol high;
 -o <design>_map.ncd;        # Output Mapped ncd file
 -w;                         # Overwrite output files.
 -pr b;                      # Pack internal FF/latches into IOBs

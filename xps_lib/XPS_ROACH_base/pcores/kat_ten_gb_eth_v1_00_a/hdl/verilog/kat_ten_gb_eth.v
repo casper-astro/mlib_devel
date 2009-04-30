@@ -12,28 +12,28 @@ module kat_ten_gb_eth #(
     parameter PREEMPHASYS    = 1,
     parameter CPU_TX_ENABLE  = 1,
     parameter CPU_RX_ENABLE  = 1,
-    parameter RX_DIST_MEM    = 0
+    parameter RX_DIST_RAM    = 0
   ) (
-    input         app_clk,
-    input         app_rst,
+    input         clk,
+    input         rst,
 
-    input         app_tx_valid,
-    input         app_tx_end_of_frame,
-    input  [63:0] app_tx_data,
-    input  [31:0] app_tx_dest_ip,
-    input  [15:0] app_tx_dest_port,
-    output        app_tx_overflow, 
-    output        app_tx_afull, 
+    input         tx_valid,
+    input         tx_end_of_frame,
+    input  [63:0] tx_data,
+    input  [31:0] tx_dest_ip,
+    input  [15:0] tx_dest_port,
+    output        tx_overflow, 
+    output        tx_afull, 
 
-    output        app_rx_valid,
-    output        app_rx_end_of_frame,
-    output [63:0] app_rx_data,
-    output [31:0] app_rx_source_ip,
-    output [15:0] app_rx_source_port,
-    output        app_rx_bad_frame,
-    output        app_rx_overrun,
-    input         app_rx_overrun_ack,
-    input         app_rx_ack,
+    output        rx_valid,
+    output        rx_end_of_frame,
+    output [63:0] rx_data,
+    output [31:0] rx_source_ip,
+    output [15:0] rx_source_port,
+    output        rx_bad_frame,
+    output        rx_overrun,
+    input         rx_overrun_ack,
+    input         rx_ack,
 
     input         OPB_Clk,
     input         OPB_Rst,
@@ -216,7 +216,7 @@ module kat_ten_gb_eth #(
   /**************************** TGE transmit logic ******************************/
 
   tge_tx #(
-    .CPU_ENABLE          (CPU_TX_ENABLE),
+    .CPU_ENABLE          (CPU_TX_ENABLE)
   ) tge_tx_inst (
     // Local parameters
     .local_enable        (local_enable),
@@ -230,15 +230,15 @@ module kat_ten_gb_eth #(
     .arp_cache_wr_data   (arp_cache_wr_data),
     .arp_cache_wr_en     (arp_cache_wr_en),
     // Application Interface
-    .app_clk             (app_clk),
-    .app_rst             (app_rst),
-    .app_tx_valid        (app_tx_valid),
-    .app_tx_end_of_frame (app_tx_end_of_frame),
-    .app_tx_data         (app_tx_data),
-    .app_tx_dest_ip      (app_tx_dest_ip),
-    .app_tx_dest_port    (app_tx_dest_port),
-    .app_tx_overflow     (app_tx_overflow), 
-    .app_tx_afull        (app_tx_afull), 
+    .app_clk             (clk),
+    .app_rst             (rst),
+    .app_tx_valid        (tx_valid),
+    .app_tx_end_of_frame (tx_end_of_frame),
+    .app_tx_data         (tx_data),
+    .app_tx_dest_ip      (tx_dest_ip),
+    .app_tx_dest_port    (tx_dest_port),
+    .app_tx_overflow     (tx_overflow), 
+    .app_tx_afull        (tx_afull), 
     // CPU Interface
     .cpu_clk               (cpu_clk),
     .cpu_rst               (cpu_rst),
@@ -262,7 +262,7 @@ module kat_ten_gb_eth #(
 
   tge_rx #(
     .CPU_ENABLE          (CPU_RX_ENABLE),
-    .USE_DISTRIBUTED_RAM (RX_DIST_MEM)
+    .USE_DISTRIBUTED_RAM (RX_DIST_RAM)
   ) tge_rx_inst (
     // Local Parameters
     .local_enable (local_enable),
@@ -270,17 +270,17 @@ module kat_ten_gb_eth #(
     .local_ip     (local_ip),
     .local_port   (local_port),
     // Application Interface
-    .app_clk             (app_clk),
-    .app_rst             (app_rst),
-    .app_rx_valid        (app_rx_valid),
-    .app_rx_end_of_frame (app_rx_end_of_frame),
-    .app_rx_data         (app_rx_data),
-    .app_rx_source_ip    (app_rx_source_ip),
-    .app_rx_source_port  (app_rx_source_port),
-    .app_rx_bad_frame    (app_rx_bad_frame),
-    .app_rx_overrun      (app_rx_overrun),
-    .app_rx_overrun_ack  (app_rx_overrun_ack),
-    .app_rx_ack          (app_rx_ack),
+    .app_clk             (clk),
+    .app_rst             (rst),
+    .app_rx_valid        (rx_valid),
+    .app_rx_end_of_frame (rx_end_of_frame),
+    .app_rx_data         (rx_data),
+    .app_rx_source_ip    (rx_source_ip),
+    .app_rx_source_port  (rx_source_port),
+    .app_rx_bad_frame    (rx_bad_frame),
+    .app_rx_overrun      (rx_overrun),
+    .app_rx_overrun_ack  (rx_overrun_ack),
+    .app_rx_ack          (rx_ack),
     // CPU Interface
     .cpu_clk               (cpu_clk),
     .cpu_rst               (cpu_rst),
@@ -295,7 +295,6 @@ module kat_ten_gb_eth #(
     .mac_rx_data_valid (mac_rx_data_valid),
     .mac_rx_good_frame (mac_rx_good_frame),
     .mac_rx_bad_frame  (mac_rx_bad_frame),
-    .mac_tx_ack        (mac_tx_ack),
     // PHY status
     .phy_rx_up (xaui_status[6:2] == 5'b11111)
   );
@@ -342,7 +341,7 @@ module kat_ten_gb_eth #(
   reg led_rx_reg; 
   reg led_tx_reg; 
 
-  always @(posedge app_clk) begin
+  always @(posedge clk) begin
     led_up_reg <= down_stretch == 0;
     led_rx_reg <= rx_stretch   != 0;
     led_tx_reg <= tx_stretch   != 0;
