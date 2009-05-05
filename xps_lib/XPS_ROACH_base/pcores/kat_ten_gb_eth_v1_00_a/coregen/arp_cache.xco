@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version K.39
-# Date: Tue Apr 21 08:37:20 2009
+# Date: Tue May  5 12:09:42 2009
 #
 ##############################################################
 #
@@ -69,10 +69,10 @@ CSET use_regcea_pin=false
 CSET use_regceb_pin=false
 CSET use_ssra_pin=false
 CSET use_ssrb_pin=false
-CSET write_depth_a=256
+CSET write_depth_a=1024
 CSET write_width_a=48
 CSET write_width_b=48
 # END Parameters
 GENERATE
-# CRC: 37b84031
+# CRC:  5ca5bcc
 

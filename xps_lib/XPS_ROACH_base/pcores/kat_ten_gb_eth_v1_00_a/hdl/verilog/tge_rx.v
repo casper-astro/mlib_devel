@@ -38,8 +38,6 @@ module tge_rx #(
     input         phy_rx_up
   );
 
-  /* TODO: implement application traffic blocking on local_valid */
-
   /* Common CPU signals */
   wire [63:0] cpu_data;
   wire        cpu_dvld;
@@ -54,7 +52,9 @@ module tge_rx #(
   wire [31:0] app_source_ip;
   wire [15:0] app_source_port;
 
-  /* Primary State Machine */
+  wire local_enable_retimed;
+
+  /*************** Primary State Machine *************/
 
   reg [2:0] rx_state;
   localparam RX_IDLE       = 3'd0;
@@ -192,6 +192,9 @@ module tge_rx #(
           end
         end
       endcase
+      if (!local_enable_retimed) begin
+        application_frame <= 1'b0;
+      end
     end
   end 
 
@@ -403,7 +406,7 @@ end endgenerate
     .prog_full (ctrl_fifo_almost_full)
   );
 
-  assign app_rx_valid        = !ctrl_fifo_empty && !packet_fifo_empty;
+  assign app_rx_valid        = !packet_fifo_empty;
   assign app_rx_end_of_frame = packet_fifo_rd_data[64];
   assign app_rx_bad_frame    = packet_fifo_rd_data[65];
   assign app_rx_overrun      = packet_fifo_rd_data[66];
@@ -412,7 +415,8 @@ end endgenerate
   assign app_rx_source_port  = ctrl_fifo_rd_data[47:32];
 
   assign packet_fifo_rd_en = app_rx_ack;
-  assign ctrl_fifo_rd_en   = app_rx_ack && app_rx_end_of_frame;
+  assign ctrl_fifo_rd_en   = app_rx_ack && app_rx_end_of_frame && app_rx_valid;
+  //assign ctrl_fifo_rd_en   = app_rx_ack && app_rx_end_of_frame; /* this is better */
   /* ^ In theory could add fifo_empty status to these controls */
 
   reg [1:0] app_state;
@@ -422,7 +426,7 @@ end endgenerate
 
   reg first_word;
 
-  wire rx_eof  = app_goodframe || app_badframe || app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full);
+  wire rx_eof  = app_goodframe || app_badframe || (app_dvld && (packet_fifo_almost_full || ctrl_fifo_almost_full));
   wire rx_bad  = app_badframe;
   wire rx_over = packet_fifo_almost_full || ctrl_fifo_almost_full;
   assign packet_fifo_wr_data = {rx_over, rx_bad, rx_eof, app_data};
@@ -489,5 +493,14 @@ end endgenerate
       end
     end
   end
+
+  reg local_enableR;
+  reg local_enableRR;
+
+  always @(posedge mac_clk) begin
+    local_enableR  <= local_enable;
+    local_enableRR <= local_enableR;
+  end
+  assign local_enable_retimed = local_enableRR;
 
 endmodule

@@ -130,29 +130,48 @@ end endgenerate
 
   /**************** Resets ***********************/
 
-  reg [3:0] mgt_tx_reset_stretch;
-  assign mgt_tx_reset = {4{mgt_tx_reset_stretch != 4'b0}};
-  reg [3:0] mgt_rx_reset_stretch;
-  assign mgt_rx_reset = {4{mgt_rx_reset_stretch != 4'b0}};
+  assign mgt_tx_reset = 4'b0;
 
+  reg reset_state;
+  localparam LOOK = 0;
+  localparam WAIT = 1;
+
+  localparam WAIT_BITS = 24;
+
+  reg [WAIT_BITS - 1:0] wait_counter;
   always @(posedge mgt_clk) begin
     if (xaui_reset) begin
-      mgt_tx_reset_stretch <= 4'b1;
+      reset_state <= LOOK;
+      wait_counter <= 0;
     end else begin
-      if (mgt_tx_reset_stretch) begin
-        mgt_tx_reset_stretch <= mgt_tx_reset_stretch - 1;
-      end
+      case (reset_state)
+        LOOK: begin
+          if (xaui_status[6:2] != 5'b11111) begin
+            wait_counter <= {WAIT_BITS{1'b1}};
+            reset_state  <= WAIT;
+          end
+        end
+        WAIT: begin
+          if (|wait_counter) begin
+            wait_counter <= wait_counter - 1;
+          end else begin
+            reset_state  <= LOOK;
+          end
+        end
+      endcase
     end
   end
 
+  reg [3:0] mgt_rx_reset_stretch;
   always @(posedge mgt_clk) begin
-    if (xaui_reset || mgt_rxbufferr != 4'b0) begin
-      mgt_rx_reset_stretch <= 4'b1;
+    if (reset_state == LOOK && xaui_status[6:2] != 5'b11111) begin
+      mgt_rx_reset_stretch <= 4'b1111;
     end else begin
-      if (mgt_rx_reset_stretch) begin
+      if (mgt_rx_reset_stretch)
         mgt_rx_reset_stretch <= mgt_rx_reset_stretch - 1;
-      end
     end
   end
+
+  assign mgt_rx_reset = {4{mgt_rx_reset_stretch != 4'b0}};
 
 endmodule

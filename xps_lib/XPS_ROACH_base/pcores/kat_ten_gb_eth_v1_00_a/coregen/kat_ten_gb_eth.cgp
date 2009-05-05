@@ -1,10 +1,10 @@
-# Date: Thu Apr  2 10:00:10 2009
+# Date: Tue May  5 13:32:09 2009
 SET addpads = False
 SET asysymbol = False
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = Verilog
-SET device = xc5vlx110t
+SET device = xc5vsx95t
 SET devicefamily = virtex5
 SET flowvendor = Other
 SET formalverification = False

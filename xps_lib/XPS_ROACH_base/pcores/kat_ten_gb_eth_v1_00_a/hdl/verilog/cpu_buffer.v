@@ -35,6 +35,8 @@
 // reference the XilinxCoreLib Verilog simulation library. For detailed
 // instructions, please refer to the "CORE Generator Help".
 
+`timescale 1ns/1ps
+
 module cpu_buffer(
 	clka,
 	dina,
@@ -102,8 +104,8 @@ output [63 : 0] doutb;
 		.C_WEB_WIDTH(1),
 		.C_WRITE_DEPTH_A(512),
 		.C_WRITE_DEPTH_B(512),
-		.C_WRITE_MODE_A("READ_FIRST"),
-		.C_WRITE_MODE_B("READ_FIRST"),
+		.C_WRITE_MODE_A("WRITE_FIRST"),
+		.C_WRITE_MODE_B("WRITE_FIRST"),
 		.C_WRITE_WIDTH_A(64),
 		.C_WRITE_WIDTH_B(64),
 		.C_XDEVICEFAMILY("virtex5"))
@@ -118,12 +120,12 @@ output [63 : 0] doutb;
 		.ADDRB(addrb),
 		.WEB(web),
 		.DOUTB(doutb),
-		.ENA(1'b1),
-		.REGCEA(1'b0),
-		.SSRA(1'b0),
-		.ENB(1'b1),
-		.REGCEB(1'b0),
-		.SSRB(1'b0),
+		.ENA(),
+		.REGCEA(),
+		.SSRA(),
+		.ENB(),
+		.REGCEB(),
+		.SSRB(),
 		.DBITERR(),
 		.SBITERR());
 

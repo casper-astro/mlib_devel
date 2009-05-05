@@ -531,11 +531,11 @@ module ten_gig_eth_mac_ucb(
         if (xgmii_rxc_align[4])
           rx_crc_reg <= xgmii_rxd_align[31:0];
         if (xgmii_rxc_align[3])
-          rx_crc_reg <= {xgmii_rxd_align[23:0], rx_crc_reg[7:0]};
+          rx_crc_reg <= {xgmii_rxd_align[23:0], rx_crc_reg[31:24]};
         if (xgmii_rxc_align[2])
-          rx_crc_reg <= {xgmii_rxd_align[15:0], rx_crc_reg[15:0]};
+          rx_crc_reg <= {xgmii_rxd_align[15:0], rx_crc_reg[31:16]};
         if (xgmii_rxc_align[1])
-          rx_crc_reg <= {xgmii_rxd_align[7:0], rx_crc_reg[23:0]};
+          rx_crc_reg <= {xgmii_rxd_align[7:0], rx_crc_reg[31:8]};
         if (xgmii_rxc_align[0])
           rx_crc_reg <= rx_crc_reg[31:0];
       end

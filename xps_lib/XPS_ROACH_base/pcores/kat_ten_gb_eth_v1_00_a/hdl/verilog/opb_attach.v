@@ -76,10 +76,10 @@ module opb_attach #(
   reg opb_ack;
   wire opb_trans = opb_sel && OPB_select && !opb_ack;
 
-  wire reg_sel   = opb_trans && local_addr >= REGISTERS_OFFSET && local_addr <= REGISTERS_HIGH;
-  wire rxbuf_sel = opb_trans && local_addr >= RX_BUFFER_OFFSET && local_addr <= RX_BUFFER_HIGH;
-  wire txbuf_sel = opb_trans && local_addr >= TX_BUFFER_OFFSET && local_addr <= TX_BUFFER_HIGH;
-  wire arp_sel   = opb_trans && local_addr >= ARP_CACHE_OFFSET && local_addr <= ARP_CACHE_HIGH;
+  wire reg_sel   = opb_trans && (local_addr >= REGISTERS_OFFSET) && (local_addr <= REGISTERS_HIGH);
+  wire rxbuf_sel = opb_trans && (local_addr >= RX_BUFFER_OFFSET) && (local_addr <= RX_BUFFER_HIGH);
+  wire txbuf_sel = opb_trans && (local_addr >= TX_BUFFER_OFFSET) && (local_addr <= TX_BUFFER_HIGH);
+  wire arp_sel   = opb_trans && (local_addr >= ARP_CACHE_OFFSET) && (local_addr <= ARP_CACHE_HIGH);
 
   wire [31:0] reg_addr   = local_addr - REGISTERS_OFFSET;
   wire [31:0] rxbuf_addr = local_addr - RX_BUFFER_OFFSET;
@@ -130,14 +130,13 @@ module opb_attach #(
   assign cpu_tx_ready = cpu_tx_ready_reg;
   assign cpu_rx_ack   = cpu_rx_ack_reg;
 
+  reg opb_wait;
   always @(posedge OPB_Clk) begin
     //strobes
     opb_ack          <= 1'b0;
     use_arp_data     <= 1'b0;
     use_tx_data      <= 1'b0;
     use_rx_data      <= 1'b0;
-
-
 
     /* When the 10ge wrapper has sent the packet we tell the user by clearing 
        the size register */
@@ -170,20 +169,27 @@ module opb_attach #(
       mgt_txpreemphasis_reg <= 3'b000;
       mgt_txdiffctrl_reg    <= 3'b100;
 
+      opb_wait <= 1'b0;
+
+    end else if (opb_wait) begin
+      opb_wait <= 1'b0;
+      opb_ack  <= 1'b1;
     end else begin
       if (opb_trans)
         opb_ack <= 1'b1;
 
       // ARP Cache
-      if (arp_sel && opb_trans) begin 
+      if (arp_sel) begin 
         if (!OPB_RNW) begin
+          opb_ack  <= 1'b0;
+          opb_wait <= 1'b1;
         end else begin
           use_arp_data <= 1'b1;
         end
       end
 
       // RX Buffer 
-      if (rxbuf_sel && opb_trans) begin
+      if (rxbuf_sel) begin
         if (!OPB_RNW) begin
         end else begin
           use_rx_data <= 1'b1;
@@ -191,15 +197,17 @@ module opb_attach #(
       end
 
       // TX Buffer 
-      if (txbuf_sel && opb_trans) begin
+      if (txbuf_sel) begin
         if (!OPB_RNW) begin
+          opb_ack  <= 1'b0;
+          opb_wait <= 1'b1;
         end else begin
           use_tx_data <= 1'b1;
         end
       end
 
       // registers
-      if (reg_sel && opb_trans) begin
+      if (reg_sel) begin
         opb_data_src <= reg_addr[5:2];
         if (!OPB_RNW) begin
           case (reg_addr[5:2])
@@ -234,7 +242,7 @@ module opb_attach #(
                 local_ip_reg[31:24] <= OPB_DBus[31:24];
             end
             REG_BUFFER_SIZES: begin
-              if (OPB_BE[0]) begin
+              if (OPB_BE[0] && OPB_DBus[7:0] == 8'b0) begin
                 cpu_rx_ack_reg <= 1'b1;
               end
               if (OPB_BE[2]) begin
@@ -285,7 +293,7 @@ module opb_attach #(
     end else begin
       //populate write_data according to wishbone transaction info & contents
       //of memory
-      if (arp_sel && !OPB_RNW) begin
+      if (arp_sel && opb_wait) begin
         arp_cache_we <= 1'b1;
 
         write_data[ 7: 0] <= arp_addr[2] == 1'b1 & OPB_BE[0] ? OPB_DBus[ 7: 0] : arp_cache_rd_data[ 7: 0]; 
@@ -295,7 +303,7 @@ module opb_attach #(
         write_data[39:32] <= arp_addr[2] == 1'b0 & OPB_BE[0] ? OPB_DBus[ 7: 0] : arp_cache_rd_data[39:32]; 
         write_data[47:40] <= arp_addr[2] == 1'b0 & OPB_BE[1] ? OPB_DBus[15: 8] : arp_cache_rd_data[47:40]; 
       end
-      if (txbuf_sel && !OPB_RNW) begin
+      if (txbuf_sel && opb_wait) begin
         tx_buffer_we <= 1'b1;
 
         write_data[7:0]   <= txbuf_addr[2] == 1'b1 & OPB_BE[0] ? OPB_DBus[ 7: 0] : cpu_tx_buffer_rd_data[ 7: 0];
@@ -332,7 +340,7 @@ module opb_attach #(
                              opb_data_src == REG_LOCAL_IPADDR  ? local_ip[31:0] :
                              opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size, 8'b0, cpu_rx_ack ? 8'b0 : cpu_rx_size} :
                              opb_data_src == REG_VALID_PORTS   ? {15'b0, local_enable, local_port} :
-                             opb_data_src == REG_XAUI_STATUS   ? {8'b0, xaui_status} :
+                             opb_data_src == REG_XAUI_STATUS   ? {24'b0, xaui_status} :
                              opb_data_src == REG_PHY_CONFIG    ? {5'b0, mgt_txdiffctrl, 5'b0, mgt_txpreemphasis,
                                                                   4'b0, mgt_rxeqpole,   6'b0, mgt_rxeqmix} :
                                                                  16'b0;

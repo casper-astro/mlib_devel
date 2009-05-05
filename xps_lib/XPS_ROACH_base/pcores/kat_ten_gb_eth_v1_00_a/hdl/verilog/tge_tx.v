@@ -302,6 +302,8 @@ end endgenerate
 
       case (tx_state)
         TX_IDLE:          begin
+          mac_cpu_addr_reg <= 8'd0;
+
           if (!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) begin
             mac_data_valid <= {8{1'b1}};
             tx_size        <= packet_ctrl_size - 1;
