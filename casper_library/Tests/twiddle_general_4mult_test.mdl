@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.13"
+    ComputedModelVersion    "1.17"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Feb 27 10:19:36 2009"
+  LastModifiedDate	  "Wed May 06 15:10:00 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  ModelVersionFormat	  "1.%<AutoIncrement:17>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -560,9 +560,6 @@ Model {
       SampleTime	      "-1"
     }
     Block {
-      BlockType		      Reference
-    }
-    Block {
       BlockType		      Scope
       ModelBased	      off
       TickLabels	      "OneTimeTick"
@@ -685,7 +682,7 @@ Model {
   }
   System {
     Name		    "twiddle_general_4mult_test"
-    Location		    [399, 135, 1404, 742]
+    Location		    [276, 161, 1469, 768]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1013,7 +1010,7 @@ Model {
       Ports		      [8]
       Position		      [740, 340, 850, 490]
       Floating		      off
-      Location		      [5, 34, 1689, 1031]
+      Location		      [5, 47, 1689, 1044]
       Open		      off
       NumInputPorts	      "8"
       ZoomMode		      "xonly"
@@ -1040,7 +1037,7 @@ Model {
       Ports		      [8]
       Position		      [740, 545, 850, 695]
       Floating		      off
-      Location		      [5, 34, 1689, 1031]
+      Location		      [3, 66, 1687, 1063]
       Open		      off
       NumInputPorts	      "8"
       ZoomMode		      "xonly"
@@ -1111,7 +1108,7 @@ Model {
       Position		      [375, 216, 465, 309]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       AttributesFormatString  "arch=Virtex2Pro,\n input_bit_width=5,\n coeff_bit_width=5"
-      AncestorBlock	      "casper_library/FFTs/Twiddle/twiddle_general_4mult_new"
+      AncestorBlock	      "casper_library/FFTs/Twiddle/twiddle_general_4mult"
       UserDataPersistent      on
       UserData		      "DataTag2"
       MinAlgLoopOccurrences   off
@@ -1119,26 +1116,26 @@ Model {
       FunctionWithSeparateData off
       MaskType		      "twiddle_general_4mult"
       MaskDescription	      "Used in biplex pipelined FFT. Implements \n(a+bi)(c+di) as (ac-bd)+i(ad+bc) with four \nmultipliers"
-      MaskPromptString	      "Coefficients:|Coefficient Step Period (2^?)|Store coefficients in BRAM|Coefficient Bit Width|Input Bit Width|Add Latency|Mult Latency|BRAM Latency|Architecture|Use behavioural HDL for multipliers|Use embedded multipliers"
-      MaskStyleString	      "edit,edit,checkbox,edit,edit,edit,edit,edit,popup(Virtex2Pro|Virtex5),checkbox,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||||use_hdl = get_param(gcb,'use_hdl');\nvisibs = get_param(gcb, 'MaskVisibilities');\nif( strcmp(use_hdl,'on')),\n    set_param(gcb, 'use_embedded','off');\n    visibs{11} = 'off';\nelse,\n    visibs{11} = 'on';\nend\nset_param(gcb, 'MaskVisibilities', visibs);|"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,off"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,"
-      MaskVariables	      "Coeffs=@1;StepPeriod=@2;coeff_bram=&3;coeff_bit_width=@4;input_bit_width=@5;add_latency=@6;mult_latency=@7;bram_latency=@8;arch=&9;use_hdl=&10;use_embedded=&11;"
-      MaskInitialization      "twiddle_general_4mult_init(gcb, ...\n    'Coeffs', Coeffs, ...\n    'StepPeriod', StepPeriod, ...\n    'coeff_bram', coeff_bram, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    'input_bit_width', input_bit_width, ...\n    'add_latency', add_latency, ...\n    'mult_latency', mult_latency, ...\n    'bram_latency', bram_latency, ...\n    'arch', arch, ...\n    'use_hdl', use_hdl, ...\n    'use_embedded', use_embedded);"
+      MaskPromptString	      "Coefficients:|Coefficient Step Period (2^?)|Store coefficients in BRAM|Coefficient Bit Width|Input Bit Width|Add Latency|Mult Latency|BRAM Latency|Architecture|Use behavioural HDL for multipliers|Use embedded multipliers|Quantization Behavior|Overflow Behavior"
+      MaskStyleString	      "edit,edit,checkbox,edit,edit,edit,edit,edit,popup(Virtex2Pro|Virtex5),checkbox,checkbox,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),popup(Wrap|Saturate|Error)"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||||||||use_hdl = get_param(gcb,'use_hdl');\nvisibs = get_param(gcb, 'MaskVisibilities');\nif( strcmp(use_hdl,'on')),\n    set_param(gcb, 'use_embedded','off');\n    visibs{11} = 'off';\nelse,\n    visibs{11} = 'on';\nend\nset_param(gcb, 'MaskVisibilities', visibs);|||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,off,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,,"
+      MaskVariables	      "Coeffs=@1;StepPeriod=@2;coeffs_bram=&3;coeff_bit_width=@4;input_bit_width=@5;add_latency=@6;mult_latency=@7;bram_latency=@8;arch=&9;use_hdl=&10;use_embedded=&11;quantization=&12;overflow=&13;"
+      MaskInitialization      "twiddle_general_4mult_init(gcb, ...\n    'Coeffs', Coeffs, ...\n    'StepPeriod', StepPeriod, ...\n    'coeffs_bram', coeffs_bram, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    'input_bit_width', input_bit_width, ...\n    'add_latency', add_latency, ...\n    'mult_latency', mult_latency, ...\n    'bram_latency', bram_latency, ...\n    'arch', arch, ...\n    'use_hdl', use_hdl, ...\n    'use_embedded', use_embedded, ...\n    'quantization', quantization, ...\n    'overflow', overflow)"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "[0-i*0.05 0.05-i*0.1 0.1-i*0.15 0.15-i*0.2 0.2-i*0.25 0.25-i*0.3 0.3-i*0.35 0.35-i*0.4]|1|off|5|5|2|3|3|Virtex2Pro|on|off"
-      MaskTabNameString	      ",,,,,,,,,,"
+      MaskValueString	      "[0-i*0.05 0.05-i*0.1 0.1-i*0.15 0.15-i*0.2 0.2-i*0.25 0.25-i*0.3 0.3-i*0.35 0.35-i*0.4]|1|off|5|5|2|3|2|Virtex2Pro|on|off|Round  (unbiased: Even Values)|Wrap"
+      MaskTabNameString	      ",,,,,,,,,,,,"
       System {
 	Name			"twiddle_general_4mult"
-	Location		[227, 137, 990, 661]
+	Location		[34, 334, 797, 858]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1190,22 +1187,22 @@ Model {
 	  en			  off
 	  latency		  "2"
 	  precision		  "Full"
-	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "input_bit_width"
-	  bin_pt		  "input_bit_width - 1"
-	  quantization		  "Round  (unbiased: +/- Inf)"
+	  arith_type		  "Unsigned"
+	  n_bits		  "16"
+	  bin_pt		  "14"
+	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  dbl_ovrd		  off
 	  use_behavioral_HDL	  on
-	  pipelined		  on
+	  pipelined		  off
 	  use_rpm		  on
 	  hw_selection		  "Fabric"
 	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,348,342"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "addsub"
-	  block_version		  "9.1.01"
+	  block_version		  "10.1.3"
 	  sg_icon_stat		  "45,44,1,1,white,blue,0,2d46ec54,right"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 58 58 ],[0.77 0.82 0.91]);\npatch([15 5 19 5 15 30 34 38 54 41 29 20 34 20 29 41 54 38 34 30 15 ],[6 16 30 44 54 54 50 54 54 41 53 44 30 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 58 58 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bf{a - b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
@@ -1235,7 +1232,7 @@ Model {
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,348,342"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "addsub"
 	  block_version		  "10.1.3"
 	  sg_icon_stat		  "45,44,1,1,white,blue,0,89752214,right"
@@ -1250,7 +1247,7 @@ Model {
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  off
-	  latency		  "8"
+	  latency		  "7"
 	  dbl_ovrd		  off
 	  reg_retiming		  off
 	  xl_use_area		  off
@@ -1259,8 +1256,8 @@ Model {
 	  sggui_pos		  "20,20,348,254"
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "40,40,1,1,white,blue,0,a6538547,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-8}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "40,40,1,1,white,blue,0,4c76d8d2,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-7}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1271,17 +1268,17 @@ Model {
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  off
-	  latency		  "3"
+	  latency		  "2"
 	  dbl_ovrd		  off
 	  reg_retiming		  off
 	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "delay"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "40,40,1,1,white,blue,0,eabd56db,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "40,40,1,1,white,blue,0,0a7a6cf1,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1292,17 +1289,17 @@ Model {
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  off
-	  latency		  "8"
+	  latency		  "7"
 	  dbl_ovrd		  off
 	  reg_retiming		  off
 	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,348,254"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "delay"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "40,40,1,1,white,blue,0,a6538547,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-8}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "40,40,1,1,white,blue,0,4c76d8d2,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-7}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1340,9 +1337,9 @@ Model {
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeline for maximum performance'."
 	  precision		  "Full"
 	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "input_bit_width"
-	  bin_pt		  "input_bit_width-1"
-	  quantization		  "Round  (unbiased: +/- Inf)"
+	  n_bits		  "16"
+	  bin_pt		  "14"
+	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  en			  off
 	  latency		  "3"
@@ -1352,14 +1349,14 @@ Model {
 	  opt			  "Speed"
 	  optimum_pipeline	  off
 	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  xl_area		  "[0,0,0,0,0,0,0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
-	  placement_style	  "Rectangular shape"
+	  placement_style	  "Triangular"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "194,37,348,434"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mult"
-	  block_version		  "9.1.01"
+	  block_version		  "10.1.3"
 	  sg_icon_stat		  "45,44,1,1,white,blue,0,9c0d74db,right"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
@@ -1373,9 +1370,9 @@ Model {
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeline for maximum performance'."
 	  precision		  "Full"
 	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "input_bit_width"
-	  bin_pt		  "input_bit_width-1"
-	  quantization		  "Round  (unbiased: +/- Inf)"
+	  n_bits		  "16"
+	  bin_pt		  "14"
+	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  en			  off
 	  latency		  "3"
@@ -1385,14 +1382,14 @@ Model {
 	  opt			  "Speed"
 	  optimum_pipeline	  off
 	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  xl_area		  "[0,0,0,0,0,0,0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
-	  placement_style	  "Rectangular shape"
+	  placement_style	  "Triangular"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,348,434"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mult"
-	  block_version		  "9.1.01"
+	  block_version		  "10.1.3"
 	  sg_icon_stat		  "45,44,1,1,white,blue,0,9c0d74db,right"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
@@ -1406,9 +1403,9 @@ Model {
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeline for maximum performance'."
 	  precision		  "Full"
 	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "input_bit_width"
-	  bin_pt		  "input_bit_width-1"
-	  quantization		  "Round  (unbiased: +/- Inf)"
+	  n_bits		  "16"
+	  bin_pt		  "14"
+	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  en			  off
 	  latency		  "3"
@@ -1418,14 +1415,14 @@ Model {
 	  opt			  "Speed"
 	  optimum_pipeline	  off
 	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  xl_area		  "[0,0,0,0,0,0,0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
-	  placement_style	  "Rectangular shape"
+	  placement_style	  "Triangular"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,348,434"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mult"
-	  block_version		  "9.1.01"
+	  block_version		  "10.1.3"
 	  sg_icon_stat		  "45,44,1,1,white,blue,0,9c0d74db,right"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
@@ -1439,9 +1436,9 @@ Model {
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeline for maximum performance'."
 	  precision		  "Full"
 	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "input_bit_width"
-	  bin_pt		  "input_bit_width-1"
-	  quantization		  "Round  (unbiased: +/- Inf)"
+	  n_bits		  "16"
+	  bin_pt		  "14"
+	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  en			  off
 	  latency		  "3"
@@ -1451,14 +1448,14 @@ Model {
 	  opt			  "Speed"
 	  optimum_pipeline	  off
 	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  xl_area		  "[0,0,0,0,0,0,0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
-	  placement_style	  "Rectangular shape"
+	  placement_style	  "Triangular"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,348,434"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mult"
-	  block_version		  "9.1.01"
+	  block_version		  "10.1.3"
 	  sg_icon_stat		  "45,44,1,1,white,blue,0,9c0d74db,right"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 18 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
@@ -1614,14 +1611,14 @@ Model {
 	  MaskVisibilityString	  "on,on,on,on,on"
 	  MaskToolTipString	  "on,on,on,on,on"
 	  MaskVarAliasString	  ",,,,"
-	  MaskVariables		  "Coeffs=@1;coeff_bit_width=@2;StepPeriod=@3;bram_latency=@4;coeff_bram=&5;"
-	  MaskInitialization	  "coeff_gen_init( gcb, ...\n    'Coeffs', Coeffs, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    'StepPeriod', StepPeriod, ...\n    'bram_latency', bram_latency, ...\n    'coeff_bram', coeff_bram);\n"
+	  MaskVariables		  "Coeffs=@1;coeff_bit_width=@2;StepPeriod=@3;bram_latency=@4;coeffs_bram=&5;"
+	  MaskInitialization	  "coeff_gen_init( gcb, ...\n    'Coeffs', Coeffs, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    'StepPeriod', StepPeriod, ...\n    'bram_latency', bram_latency, ...\n    'coeffs_bram', coeffs_bram);\n"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "[0-i*0.05 0.05-i*0.1 0.1-i*0.15 0.15-i*0.2 0.2-i*0.25 0.25-i*0.3 0.3-i*0.35 0.35-i*0.4]|5|1|3|off"
+	  MaskValueString	  "[0-i*0.05 0.05-i*0.1 0.1-i*0.15 0.15-i*0.2 0.2-i*0.25 0.25-i*0.3 0.3-i*0.35 0.35-i*0.4]|5|1|2|off"
 	  MaskTabNameString	  ",,,,"
 	  System {
 	    Name		    "coeff_gen"
@@ -1691,7 +1688,7 @@ Model {
 	      rst		      off
 	      init_reg		      "0"
 	      en		      off
-	      latency		      "3"
+	      latency		      "2"
 	      arith_type	      "Signed  (2's comp)"
 	      n_bits		      "5"
 	      bin_pt		      "4"
@@ -1701,11 +1698,11 @@ Model {
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,20,348,308"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "sprom"
 	      block_version	      "10.1.3"
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,debe86a8,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,693875e4,right"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -1720,7 +1717,7 @@ Model {
 	      rst		      off
 	      init_reg		      "0"
 	      en		      off
-	      latency		      "3"
+	      latency		      "2"
 	      arith_type	      "Signed  (2's comp)"
 	      n_bits		      "5"
 	      bin_pt		      "4"
@@ -1730,11 +1727,11 @@ Model {
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,20,348,308"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "sprom"
 	      block_version	      "10.1.3"
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,debe86a8,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,693875e4,right"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -1913,9 +1910,9 @@ Model {
 	      quantization	      "Round  (unbiased: Even Values)"
 	      overflow		      "Wrap"
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,538,377"
@@ -1935,7 +1932,7 @@ Model {
 	      const		      "0"
 	      n_bits		      "16"
 	      bin_pt		      "14"
-	      explicit_period	      "on"
+	      explicit_period	      on
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -1944,7 +1941,7 @@ Model {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
@@ -2053,9 +2050,9 @@ Model {
 	      quantization	      "Round  (unbiased: Even Values)"
 	      overflow		      "Wrap"
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,538,377"
@@ -2075,7 +2072,7 @@ Model {
 	      const		      "0"
 	      n_bits		      "16"
 	      bin_pt		      "14"
-	      explicit_period	      "on"
+	      explicit_period	      on
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -2084,7 +2081,7 @@ Model {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
@@ -2193,9 +2190,9 @@ Model {
 	      quantization	      "Round  (unbiased: Even Values)"
 	      overflow		      "Wrap"
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,538,377"
@@ -2215,7 +2212,7 @@ Model {
 	      const		      "0"
 	      n_bits		      "16"
 	      bin_pt		      "14"
-	      explicit_period	      "on"
+	      explicit_period	      on
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -2224,7 +2221,7 @@ Model {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
@@ -2333,9 +2330,9 @@ Model {
 	      quantization	      "Round  (unbiased: Even Values)"
 	      overflow		      "Wrap"
 	      latency		      "latency"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,538,377"
@@ -2355,7 +2352,7 @@ Model {
 	      const		      "0"
 	      n_bits		      "16"
 	      bin_pt		      "14"
-	      explicit_period	      "on"
+	      explicit_period	      on
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -2364,7 +2361,7 @@ Model {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
@@ -2446,8 +2443,6 @@ Model {
 	  Position		  [340, 393, 370, 407]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
 	}
 	Block {
 	  BlockType		  Outport
@@ -2856,14 +2851,14 @@ Model {
       SrcPort		      1
       Points		      [10, 0]
       Branch {
-	Points			[15, 0]
-	DstBlock		"twiddle_general_4mult"
-	DstPort			1
-      }
-      Branch {
 	Points			[0, 35]
 	DstBlock		"twiddle_general_4mult"
 	DstPort			2
+      }
+      Branch {
+	Points			[15, 0]
+	DstBlock		"twiddle_general_4mult"
+	DstPort			1
       }
     }
     Line {
@@ -2939,7 +2934,7 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag6
-    Data		    "  %)30     .    $ ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,9R<0 .    @ (   8    (     @         %    \"     $    !     0         %  0 $     $   !@    9&5F875L=',          $-O969F<P            !C;V5F9E]B:71?=VED=&@ 4W1E<%!E<FEO9        &)R86U?;&%T96YC>0    !C;V5F9E]B<F%M        #@   \"@    &    \"     $         !0    @               $         #@   +@    &    \"     8(        !0    @    !    \"     $         \"0   $               )J9F9F9F:D_FIF9F9F9N3\\S,S,S,S/#/YJ9F9F9F<D_        T#\\S,S,S,S/3/V9F9F9F9M8_\"0   $    \":F9F9F9FIOYJ9F9F9F;F_,S,S,S,SP[^:F9F9F9G)OP       -\"_,S,S,S,ST[]F9F9F9F;6OYJ9F9F9F=F_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             A #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
+    Data		    "  %)30     .    $ ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !1OBP<.    @ (   8    (     @         %    \"     $    !     0         %  0 $     $   !@    9&5F875L=',          $-O969F<P            !C;V5F9E]B:71?=VED=&@ 4W1E<%!E<FEO9        &)R86U?;&%T96YC>0    !C;V5F9G-?8G)A;0      #@   \"@    &    \"     $         !0    @               $         #@   +@    &    \"     8(        !0    @    !    \"     $         \"0   $               )J9F9F9F:D_FIF9F9F9N3\\S,S,S,S/#/YJ9F9F9F<D_        T#\\S,S,S,S/3/V9F9F9F9M8_\"0   $    \":F9F9F9FIOYJ9F9F9F;F_,S,S,S,SP[^:F9F9F9G)OP       -\"_,S,S,S,ST[]F9F9F9F;6OYJ9F9F9F=F_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag5
@@ -2955,7 +2950,7 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag2
-    Data		    "  %)30     .    Z 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $  >&:04.    6 0   8    (     @         %    \"     $    !     0         %  0 $     $   #     9&5F875L=',          $-O969F<P            !3=&5P4&5R:6]D        8V]E9F9?8G)A;0       &-O969F7V)I=%]W:61T: !I;G!U=%]B:71?=VED=&@ 861D7VQA=&5N8WD      &UU;'1?;&%T96YC>0    !B<F%M7VQA=&5N8WD     87)C:                '5S95]H9&P           !U<V5?96UB961D960     #@   \"@    &    \"     $         !0    @               $         #@   +@    &    \"     8(        !0    @    !    \"     $         \"0   $               )J9F9F9F:D_FIF9F9F9N3\\S,S,S,S/#/YJ9F9F9F<D_        T#\\S,S,S,S/3/V9F9F9F9M8_\"0   $    \":F9F9F9FIOYJ9F9F9F;F_,S,S,S,SP[^:F9F9F9G)OP       -\"_,S,S,S,ST[]F9F9F9F;6OYJ9F9F9F=F_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    &          4    (     0    $    !          D    (            \"$ .    0     8    (    !          %    \"     $    *     0         0    \"@   %9I<G1E>#)0<F\\        .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
+    Data		    "  %)30     .    F 4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !:!]08.    \" 4   8    (     @         %    \"     $    !     0         %  0 $     $   #@    9&5F875L=',          $-O969F<P            !3=&5P4&5R:6]D        8V]E9F9S7V)R86T      &-O969F7V)I=%]W:61T: !I;G!U=%]B:71?=VED=&@ 861D7VQA=&5N8WD      &UU;'1?;&%T96YC>0    !B<F%M7VQA=&5N8WD     87)C:                '5S95]H9&P           !U<V5?96UB961D960     <75A;G1I>F%T:6]N     &]V97)F;&]W           .    *     8    (     0         %    \"                0         .    N     8    (    !@@        %    \"     $    (     0         )    0               FIF9F9F9J3^:F9F9F9FY/S,S,S,S,\\,_FIF9F9F9R3\\       #0/S,S,S,S,],_9F9F9F9FUC\\)    0    )J9F9F9F:F_FIF9F9F9N;\\S,S,S,S/#OYJ9F9F9F<F_        T+\\S,S,S,S/3OV9F9F9F9M:_FIF9F9F9V;\\.    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4    (     0    H    !         !     *    5FER=&5X,E!R;P        X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    4     8    (    !          %    \"     $    >     0         0    '@   %)O=6YD(\" H=6YB:6%S960Z($5V96X@5F%L=65S*0  #@   #     &    \"     0         !0    @    !    !     $         $  $ %=R87 "
   }
   DataRecord {
     Tag			    DataTag1
