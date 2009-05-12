@@ -185,7 +185,7 @@ if length(sysgen_blk) ~= 1
 end
 
 
-hw_sys = get_param(xsg_blk,'hw_sys');
+[hw_sys, hw_subsys] = xps_get_hw_plat(get_param(blk_name,'hw_sys'));
 work_path = [pwd,'\',clear_name(get_param(xsg_blk,'parent'))];
 xps_path = [work_path,'\XPS_',hw_sys,'_base'];
 xsg_path = [work_path,'\sysgen'];
