@@ -109,8 +109,9 @@ replace_block(blk, 'Name', 'twiddle', ['casper_library/FFTs/Twiddle/',block_type
 set_param(twiddle,'LinkStatus','inactive')
 
 propagate_vars(twiddle,'defaults', defaults, varargin{:});
-if(strcmp(block_type,'twiddle_general_3mult')),
-    set_param(twiddle, 'Coeffs', ['[',ActualCoeffsStr,']']);
+if(strcmp(block_type,'twiddle_general_3mult') || strcmp(block_type, 'twiddle_general_4mult')),
+%    set_param(twiddle, 'Coeffs', ['[',ActualCoeffsStr,']']);
+    set_param(twiddle, 'Coeffs', mat2str(ActualCoeffs));
 end
 
 %set up overflow indication blocks
