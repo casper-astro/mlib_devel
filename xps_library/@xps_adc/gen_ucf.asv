@@ -21,7 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function str = gen_ucf(blk_obj)
-disp('adc086000 gen_ucf')
+disp('
 
 hw_sys = blk_obj.hw_sys;
 adc_str = blk_obj.adc_str;
@@ -33,10 +33,10 @@ switch hw_sys
     case 'ROACH'
         switch adc_str
             case 'adc0'
-        %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 1ns;\n'];
+        		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 1ns;\n'];
             % end case 'adc0'
             case 'adc1'
-        %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 1ns;\n'];
+        		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 1ns;\n'];
             % end case 'adc1'
         end % switch adc_str
 
