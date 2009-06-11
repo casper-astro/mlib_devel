@@ -1,0 +1,9 @@
+# Output products list for <chipscope_ila_v1_02_a>
+chipscope_ila_v1_02_a.cdc
+chipscope_ila_v1_02_a.ncf
+chipscope_ila_v1_02_a.ngc
+chipscope_ila_v1_02_a.v
+chipscope_ila_v1_02_a.veo
+chipscope_ila_v1_02_a.xco
+chipscope_ila_v1_02_a_flist.txt
+chipscope_ila_v1_02_a_xmdf.tcl

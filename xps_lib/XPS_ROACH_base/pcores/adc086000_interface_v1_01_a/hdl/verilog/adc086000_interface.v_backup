@@ -1,0 +1,1048 @@
+`timescale 1ns / 1ps
+module adc086000_interface(
+				adc0_clk_p,
+				adc0_clk_n,
+				adc0_sync_p,
+				adc0_sync_n,
+				adc0_user_outofrange,
+				adc0_user_sync,
+				adc0_user_data_valid,
+				adc0_outofrange_p,
+				adc0_outofrange_n,
+				adc0_dataeveni_p,
+				adc0_dataeveni_n,
+				adc0_dataoddi_p,
+				adc0_dataoddi_n,
+				adc0_dataevenq_p,
+				adc0_dataevenq_n,
+				adc0_dataoddq_p,
+				adc0_dataoddq_n,
+				adc0_ddrb_p,
+				adc0_ddrb_n,
+				adc0_user_datai0,
+				adc0_user_datai1,
+				adc0_user_datai2,
+				adc0_user_datai3,
+				adc0_user_dataq0,
+				adc0_user_dataq1,
+				adc0_user_dataq2,
+				adc0_user_dataq3,
+
+				adc1_clk_p,
+				adc1_clk_n,
+				adc1_sync_p,
+				adc1_sync_n,
+				adc1_user_outofrange,
+				adc1_user_sync,
+				adc1_user_data_valid,
+				adc1_outofrange_p,
+				adc1_outofrange_n,
+				adc1_dataeveni_p,
+				adc1_dataeveni_n,
+				adc1_dataoddi_p,
+				adc1_dataoddi_n,
+				adc1_dataevenq_p,
+				adc1_dataevenq_n,
+				adc1_dataoddq_p,
+				adc1_dataoddq_n,
+				adc1_ddrb_p,
+				adc1_ddrb_n,
+				adc1_user_datai0,
+				adc1_user_datai1,
+				adc1_user_datai2,
+				adc1_user_datai3,
+				adc1_user_dataq0,
+				adc1_user_dataq1,
+				adc1_user_dataq2,
+				adc1_user_dataq3,
+
+				// dcm/ctrl signals
+				dcm_reset,
+				ctrl_reset,
+				ctrl_clk_in,
+				ctrl_clk_out,
+				ctrl_clk90_out,
+				ctrl_clk180_out,
+				ctrl_clk270_out,
+				ctrl_dcm_locked,
+				dcm_psclk,
+				dcm_psincdec,
+				dcm_psen,
+				dcm_psdone
+);
+
+// System Parameters
+//==================
+parameter DEBUG_MODE = 1;
+parameter USE_ASYNCH_FIFOS = 1;
+parameter CALIBRATION_MODE = 1;
+
+// Inputs and Outputs
+//===================
+input 				adc0_clk_p;
+input					adc0_clk_n;
+input [7:0]		adc0_dataeveni_p;
+input [7:0]		adc0_dataeveni_n;
+input [7:0]		adc0_dataoddi_p;
+input [7:0]		adc0_dataoddi_n;
+input [7:0]		adc0_dataevenq_p;
+input [7:0]		adc0_dataevenq_n;
+input [7:0]		adc0_dataoddq_p;
+input [7:0]		adc0_dataoddq_n;
+input					adc0_outofrange_p;
+input					adc0_outofrange_n;
+input					adc0_sync_p;
+input					adc0_sync_n;
+input 				adc1_clk_p;
+input					adc1_clk_n;
+input [7:0]		adc1_dataeveni_p;
+input [7:0]		adc1_dataeveni_n;
+input [7:0]		adc1_dataoddi_p;
+input [7:0]		adc1_dataoddi_n;
+input [7:0]		adc1_dataevenq_p;
+input [7:0]		adc1_dataevenq_n;
+input [7:0]		adc1_dataoddq_p;
+input [7:0]		adc1_dataoddq_n;
+input					adc1_outofrange_p;
+input					adc1_outofrange_n;
+input					adc1_sync_p;
+input					adc1_sync_n;
+input					dcm_reset;
+input					ctrl_reset;
+input					ctrl_clk_in;
+input					dcm_psclk;
+input					dcm_psen;
+input					dcm_psincdec;
+
+output				dcm_psdone;
+output				ctrl_clk_out;
+output				ctrl_clk90_out;
+output				ctrl_clk180_out;
+output				ctrl_clk270_out;
+output				ctrl_dcm_locked;
+output				adc1_user_outofrange;
+output				adc1_user_sync;
+output				adc1_user_data_valid;
+output				adc1_ddrb_p;
+output				adc1_ddrb_n;
+output [7:0]	adc1_user_datai0;
+output [7:0]	adc1_user_datai1;
+output [7:0]	adc1_user_datai2;
+output [7:0]	adc1_user_datai3;
+output [7:0]	adc1_user_dataq0;
+output [7:0]	adc1_user_dataq1;
+output [7:0]	adc1_user_dataq2;
+output [7:0]	adc1_user_dataq3;
+output				adc0_user_outofrange;
+output				adc0_user_sync;
+output				adc0_user_data_valid;
+output				adc0_ddrb_p;
+output				adc0_ddrb_n;
+output [7:0]	adc0_user_datai0;
+output [7:0]	adc0_user_datai1;
+output [7:0]	adc0_user_datai2;
+output [7:0]	adc0_user_datai3;
+output [7:0]	adc0_user_dataq0;
+output [7:0]	adc0_user_dataq1;
+output [7:0]	adc0_user_dataq2;
+output [7:0]	adc0_user_dataq3;
+
+// Wires and Regs
+//===============
+wire adc0_clk_buf;
+wire adc0_clk;
+wire adc0_clk90;
+wire adc0_clk180;
+wire adc0_clk270;
+wire adc0_clk_dcm;
+wire adc0_clk90_dcm;
+wire adc0_clk180_dcm;
+wire adc0_clk270_dcm;
+wire [7:0] adc0_data_eveni;
+wire [7:0] adc0_data_oddi;
+wire [7:0] adc0_data_evenq;
+wire [7:0] adc0_data_oddq;
+wire [7:0] adc0_user_datai0_asynch;
+wire [7:0] adc0_user_datai1_asynch;
+wire [7:0] adc0_user_datai2_asynch;
+wire [7:0] adc0_user_datai3_asynch;
+wire [7:0] adc0_user_dataq0_asynch;
+wire [7:0] adc0_user_dataq1_asynch;
+wire [7:0] adc0_user_dataq2_asynch;
+wire [7:0] adc0_user_dataq3_asynch;
+wire adc0_sync; // ddr
+wire adc0_sync_rise;
+wire adc0_sync_fall;
+wire adc0_data_fifo_full;
+wire adc0_data_fifo_empty;
+wire [63:0] adc0_fifo_din;
+wire [63:0] adc0_fifo_dout;
+wire adc1_clk_buf;
+wire adc1_clk; 
+wire adc1_clk90;
+wire adc1_clk180; 
+wire adc1_clk270;
+wire adc1_clk_dcm;
+wire adc1_clk90_dcm;
+wire adc1_clk180_dcm;
+wire adc1_clk270_dcm;
+wire [7:0] adc1_data_eveni;
+wire [7:0] adc1_data_oddi;
+wire [7:0] adc1_data_evenq;
+wire [7:0] adc1_data_oddq;
+wire [7:0] adc1_user_datai0_asynch;
+wire [7:0] adc1_user_datai1_asynch;
+wire [7:0] adc1_user_datai2_asynch;
+wire [7:0] adc1_user_datai3_asynch;
+wire [7:0] adc1_user_dataq0_asynch;
+wire [7:0] adc1_user_dataq1_asynch;
+wire [7:0] adc1_user_dataq2_asynch;
+wire [7:0] adc1_user_dataq3_asynch;
+wire adc1_sync; // ddr   
+wire adc1_sync_rise;
+wire adc1_sync_fall;
+wire adc1_data_fifo_full;
+wire adc1_data_fifo_empty;
+wire [63:0] adc1_fifo_din;
+wire [63:0] adc1_fifo_dout;
+wire adc0_dcm_locked;
+wire adc1_dcm_locked;
+wire adc1_dcm_psdone;
+reg adc1_reset;
+reg adc0_dcm_psen;
+wire adc_clocks_aligned;
+wire [7:0] shift_count;
+wire [127:0] debug_data;
+wire adc_clocks_locked;
+wire [3:0] clock_sync_fsm_state;
+wire falling_edge_detected;
+wire [7:0] dcm0_status;
+wire [7:0] dcm1_status;
+wire adc0_outofrange_fall;
+wire adc0_outofrange_rise;
+wire adc1_outofrange_fall;
+wire adc1_outofrange_rise;
+wire adc1_ps_overflow;
+reg adc1_dcm_psincdec;
+reg adc1_dcm_psen;
+reg adc1_dcm_reset;
+
+
+
+wire [9:0] stable_sample_count, sampling_timer_count;
+wire sample, sample_valid, sample_error;
+reg sample_shift, sample_load;
+wire [1:0] sample_pout;
+reg edge_found;
+reg clk_sample_req;
+
+wire [9:0] ps_shift_count;
+reg [4:0] SYNC_STATE, SYNC_NEXT_STATE;
+reg ps_shift_count_rst;
+reg ps_shift_count_en;
+reg shift_back_count_rst;
+reg shift_back_count_en;
+reg sync_done;
+wire [127:0] valid_ps_counts;
+reg phase_save_en;
+wire valid_interleave;
+
+
+OBUFDS ADC0_DDR_RST( 
+	.O(adc0_ddrb_p), 
+	.OB(adc0_ddrb_n), 
+	.I(ctrl_reset) 
+);
+OBUFDS ADC1_DDR_RST( 
+	.O(adc1_ddrb_p), 
+	.OB(adc1_ddrb_n), 
+	.I(ctrl_reset | adc1_reset)
+);
+
+// DCM(s) and CLock Management 
+// -----------------------------
+// Clock from ZDOK0 	
+ IBUFGDS #(// Buffer for input clk
+	.DIFF_TERM("TRUE"),       	// Differential Termination (Virtex-4/5, Spartan-3E/3A)
+	.IOSTANDARD("LVDS_25")    	// Specify the input I/O standard
+) IBUFGDS_3 (
+	.O(adc0_clk_buf),  						// Buffer output
+	.I(adc0_clk_p),  						// Diff_p buffer input (connect directly to top-level port)
+	.IB(adc0_clk_n) 						// Diff_n buffer input (connect directly to top-level port)
+);
+
+DCM #(
+	.CLK_FEEDBACK("1X"), 									// Specify clock feedback of NONE, 1X or 2X
+	.CLKDV_DIVIDE(2.0), 									// Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+	.CLKFX_DIVIDE(1), 										// Can be any integer from 1 to 32
+	.CLKFX_MULTIPLY(4), 									// Can be any integer from 2 to 32
+	.CLKIN_DIVIDE_BY_2("FALSE"), 					// TRUE/FALSE to enable CLKIN divide by two feature
+	.CLKIN_PERIOD(4.0000), 									// Specify period of input clock in ns from 1.25 to 1000.00
+	.CLKOUT_PHASE_SHIFT("NONE"), 					// Specify phase shift mode of NONE or FIXED
+	.DESKEW_ADJUST("SOURCE_SYNCHRONOUS"), // SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+	.DFS_FREQUENCY_MODE("HIGH"), 					// LOW or HIGH frequency mode for frequency synthesis
+	.DLL_FREQUENCY_MODE("HIGH"), 					// LOW, HIGH, or HIGH_SER frequency mode for DLL
+	.DUTY_CYCLE_CORRECTION("TRUE"), 			// Duty cycle correction, TRUE or FALSE
+	.FACTORY_JF(16'hf0f0), 								// FACTORY JF value suggested to be set to 16'hf0f0
+	.PHASE_SHIFT(0), 											// Amount of fixed phase shift from -255 to 1023
+	.STARTUP_WAIT("FALSE"), 								// Delay configuration DONE until DCM LOCK, TRUE/FALSE
+	.DSS_MODE("NONE")
+) DCM_ZDOK0 (
+	.CLKFB(adc0_clk),       		// DCM clock feedback
+	.CLKIN(adc0_clk_buf),      // Clock input (from IBUFG, BUFG or DCM)		 
+	.DSSEN(0),
+	.PSCLK(), // dcm_psclk
+	.PSEN( 1'b0 ),
+	.PSINCDEC( 1'b0 ),
+	.RST( ctrl_reset ),           // DCM asynchronous reset input
+	.CLKDV( ),       						// Divided DCM CLK out (CLKDV_DIVIDE)
+	.CLKFX( ),       						// DCM CLK synthesis out (M/D)
+	.CLKFX180( ), 							// 180 degree CLK synthesis out			
+	.CLK0( adc0_clk_dcm ),      	// 0 degree DCM CLK output
+	.CLK2X( ),       						// 2X DCM CLK output
+	.CLK2X180( ), 							// 2X, 180 degree DCM CLK out			
+	.CLK90( adc0_clk90_dcm ),    // 90 degree DCM CLK output
+	.CLK180( adc0_clk180_dcm ),	// 180 degree DCM CLK output
+	.CLK270( adc0_clk270_dcm ),  // 270 degree DCM CLK output
+	.LOCKED( adc0_dcm_locked ),  // DCM LOCK status output
+	.PSDONE( dcm_psdone ),
+	.STATUS( dcm0_status)
+);
+
+// Buffer outputs of DCM
+BUFG adc0_clk0_bufg (.I( adc0_clk_dcm ), .O( adc0_clk ));
+BUFG adc0_clk90_bufg (.I( adc0_clk90_dcm ), .O( adc0_clk90 ));
+BUFG adc0_clk180_bufg (.I( adc0_clk180_dcm ), .O( adc0_clk180 ));
+BUFG adc0_clk270_bufg (.I( adc0_clk270_dcm ), .O( adc0_clk270 ));
+
+// Clock from ZDOK1
+IBUFGDS #(// Buffer for input clk
+	.DIFF_TERM("TRUE"),       	// Differential Termination (Virtex-4/5, Spartan-3E/3A)
+	.IOSTANDARD("LVDS_25")    	// Specify the input I/O standard
+) IBUFGDS_adc1_clk (
+	.O(adc1_clk_buf),  						// Buffer output
+	.I(adc1_clk_p),  						// Diff_p buffer input (connect directly to top-level port)
+	.IB(adc1_clk_n) 						// Diff_n buffer input (connect directly to top-level port)
+);
+
+DCM #(
+	.CLK_FEEDBACK("1X"), 									// Specify clock feedback of NONE, 1X or 2X
+	.CLKDV_DIVIDE(2.0), 									// Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
+	.CLKFX_DIVIDE(1), 										// Can be any integer from 1 to 32
+	.CLKFX_MULTIPLY(4), 									// Can be any integer from 2 to 32
+	.CLKIN_DIVIDE_BY_2("FALSE"), 					// TRUE/FALSE to enable CLKIN divide by two feature
+	.CLKIN_PERIOD(4.0000), 									// Specify period of input clock in ns from 1.25 to 1000.00
+	.CLKOUT_PHASE_SHIFT("VARIABLE"), 					// Specify phase shift mode of NONE or FIXED
+	.DESKEW_ADJUST("SOURCE_SYNCHRONOUS"), // SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
+	.DFS_FREQUENCY_MODE("HIGH"), 					// LOW or HIGH frequency mode for frequency synthesis
+	.DLL_FREQUENCY_MODE("HIGH"), 					// LOW, HIGH, or HIGH_SER frequency mode for DLL
+	.DUTY_CYCLE_CORRECTION("TRUE"), 			// Duty cycle correction, TRUE or FALSE
+	.FACTORY_JF(16'hf0f0), 								// FACTORY JF value suggested to be set to 16'hf0f0
+	.PHASE_SHIFT(0), 											// Amount of fixed phase shift from -255 to 1023
+	.STARTUP_WAIT("FALSE"), 								// Delay configuration DONE until DCM LOCK, TRUE/FALSE
+	.DSS_MODE("NONE")
+) DCM_ZDOK1 (
+	.CLKFB( adc1_clk ),       		// DCM clock feedback
+	.CLKIN( adc1_clk_buf ),      // Clock input (from IBUFG, BUFG or DCM)		 
+	.DSSEN( 0 ),
+	.PSCLK( dcm_psclk ),
+	.PSEN( adc1_dcm_psen ),
+	.PSINCDEC( adc1_dcm_psincdec ),
+	.RST(ctrl_reset | adc1_dcm_reset ),           // DCM asynchronous reset input
+	.CLKDV( ),       						// Divided DCM CLK out (CLKDV_DIVIDE)
+	.CLKFX( ),       						// DCM CLK synthesis out (M/D)
+	.CLKFX180( ), 							// 180 degree CLK synthesis out			
+	.CLK0( adc1_clk_dcm ),      	// 0 degree DCM CLK output
+	.CLK2X( ),       						// 2X DCM CLK output
+	.CLK2X180( ), 							// 2X, 180 degree DCM CLK out			
+	.CLK90( adc1_clk90_dcm ),    // 90 degree DCM CLK output
+	.CLK180( adc1_clk180_dcm ),	// 180 degree DCM CLK output
+	.CLK270( adc1_clk270_dcm ),  // 270 degree DCM CLK output
+	.LOCKED( adc1_dcm_locked ),  // DCM LOCK status output
+	.PSDONE( adc1_dcm_psdone ),
+	.STATUS( dcm1_status)
+);
+
+// Buffer outputs of DCM
+BUFG adc1_clk0_bufg (.I( adc1_clk_dcm ), .O( adc1_clk ));
+BUFG adc1_clk90_bufg (.I( adc1_clk90_dcm ), .O( adc1_clk90 ));
+BUFG adc1_clk180_bufg (.I( adc1_clk180_dcm ), .O( adc1_clk180 ));
+BUFG adc1_clk270_bufg (.I( adc1_clk270_dcm ), .O( adc1_clk270 ));
+
+assign ctrl_clk_out = adc0_clk;
+assign ctrl_clk90_out = adc0_clk90;
+assign ctrl_clk180_out = adc0_clk180;
+assign ctrl_clk270_out = adc0_clk270;
+assign ctrl_dcm_locked = adc0_dcm_locked;
+
+wire [15:0] num_resets;
+Counter num_reset_counter( 
+	.Clock(dcm_psclk), 
+	.Reset(ctrl_reset),
+	.Set(0), 
+	.Load(0), 
+	.Enable(adc1_dcm_reset), 
+	.In(), 
+	.Count(num_resets)
+);
+defparam num_reset_counter.width = 16;
+defparam num_reset_counter.limited = 1;
+
+//wire [7:0] test_count;
+//Counter test_counter( 
+//	.Clock(ctrl_clk_out), 
+//	.Reset(ctrl_reset), 
+//	.Set(0), 
+//	.Load(0), 
+//	.Enable(1), 
+//	.In(8'b0), 
+//	.Count(test_count)
+//);
+//defparam test_counter.width = 8;
+//
+//
+//
+//wire [3:0] adc0_clk_count, adc1_clk_count;
+//Counter adc0_counter( .Clock(adc0_clk), .Reset(ctrl_reset), .Set(0), .Load(0), .Enable(1), .In(), .Count(adc0_clk_count));
+//Counter adc1_counter( .Clock(adc1_clk), .Reset(ctrl_reset), .Set(0), .Load(0), .Enable(1), .In(), .Count(adc1_clk_count));
+
+wire clk_sample;
+wire clk_sample_valid;
+wire shift_done; 
+wire shift_req;
+wire save_clk_sample;
+wire adc1_reset_req;
+wire adc1_reset_done;
+/*
+clock_sync_fsm clock_sync_fsm (
+  .dcm_psclk(dcm_psclk),
+  .adc0_clk(adc0_clk),
+  .adc1_clk(adc1_clk),
+  .ctrl_reset(ctrl_reset),
+  .adc0_dcm_locked(adc0_dcm_locked),
+  .adc1_dcm_locked(adc1_dcm_locked),
+  .dcm_psdone(adc1_dcm_psdone),
+  .adc1_reset(adc1_reset),
+  .adc1_dcm_psen(adc1_dcm_psen),
+  .adc1_dcm_psincdec(adc1_dcm_psincdec),
+  .adc_clocks_locked(adc_clocks_aligned),
+  .STATE(clock_sync_fsm_state),
+  .falling_edge_detected(falling_edge_detected),
+  .shift_count(shift_count),
+	.clk_sample_req(clk_sample_req),
+	.clk_sample(clk_sample),
+	.clk_sample_valid(clk_sample_valid),
+	.shift_done(shift_done),
+	.shift_req(shift_req),
+	.save_clk_sample(save_clk_sample),
+	.adc1_reset_req(adc1_reset_req),
+	.adc1_reset_done(adc1_reset_done)
+);*/
+
+assign adc1_ps_overflow = dcm1_status[0];
+Counter ps_shift_counter (
+	.Clock(dcm_psclk),
+	.Reset(ctrl_reset | adc1_dcm_reset ),
+	.Set(0),
+	.Load(0),
+	.Enable(ps_shift_count_en),
+	.In(10'b0),
+	.Count(ps_shift_count)
+);
+defparam ps_shift_counter.width = 10;
+
+ShiftRegister sample_shift_reg (
+	.Clock(dcm_psclk),
+	.Reset(ctrl_reset),
+	.Enable(sample_valid),
+	.Load(1'b0),
+	.SOut(),
+	.POut(sample_pout),
+	.SIn(sample),
+	.PIn()
+);
+defparam sample_shift_reg.pwidth = 2;
+defparam sample_shift_reg.swidth = 1;
+
+always @ (posedge dcm_psclk) begin
+	if (ctrl_reset) begin
+		edge_found <= 0;
+	end else if ((~sample_pout[0] & sample_pout[1]) && ps_shift_count > 1) begin
+		edge_found <= 1;
+	end
+end
+
+reg sample_high, sample_low;
+always @ (posedge dcm_psclk) begin
+	if (ctrl_reset) begin
+		sample_high <= 0;
+	end else if (sample && sample_valid) begin
+		sample_high <= 1;
+	end
+end
+
+always @ (posedge dcm_psclk) begin
+	if (ctrl_reset) begin
+		sample_low <= 0;
+	end else if (~sample && sample_valid) begin
+		sample_low <= 1;
+	end
+end
+always @ (posedge dcm_psclk) begin
+	if (ctrl_reset) begin
+		SYNC_STATE <= STATE_IDLE;
+	end else begin
+		SYNC_STATE <= SYNC_NEXT_STATE;
+	end
+end
+
+clock_sample clock_sample (
+	.clock(adc0_clk),
+	.din(adc1_clk),
+	.reset(ctrl_reset),
+	.dout(sample),
+	.sample_req(clk_sample_req),
+	.sample_valid(sample_valid),
+	.sample_error(sample_error),
+	.sampling_timer_count(sampling_timer_count),
+	.stable_sample_count(stable_sample_count)
+);
+
+wire [31:0] delay_count;
+Counter delay_counter (
+	.Clock(dcm_psclk),
+	.Reset(ctrl_reset),
+	.Set(0),
+	.Load(0),
+	.Enable(1'b1),
+	.In(10'b0),
+	.Count(delay_count)
+);
+
+
+wire [9:0] shift_back_count;
+Counter shift_back_counter (
+	.Clock(dcm_psclk),
+	.Reset(ctrl_reset | shift_back_count_rst),
+	.Set(0),
+	.Load(0),
+	.Enable(shift_back_count_en),
+	.In(10'b0),
+	.Count(shift_back_count)
+);
+
+ShiftRegister valid_phase_reg (
+	.Clock(dcm_psclk),
+	.Reset(ctrl_reset),
+	.Enable(phase_save_en),
+	.Load(1'b0),
+	.SOut(),
+	.POut(valid_ps_counts),
+	.SIn(ps_shift_count[7:0]),
+	.PIn()
+);
+defparam valid_phase_reg.pwidth = 128;
+defparam valid_phase_reg.swidth = 8;
+
+generate if (CALIBRATION_MODE) begin : calibrate_mode
+	// FSM:
+	parameter STATE_IDLE = 0;
+	parameter STATE_CHECK_INTERLEAVE = 1;
+	parameter STATE_BEGIN_FIND_PHASE = 2;
+	parameter STATE_SAVE_PHASE = 3;
+	parameter STATE_BEGIN_RESET = 4;
+	parameter STATE_WAIT = 5;
+	parameter STATE_SAMPLE = 6;
+	parameter STATE_WAIT_SAMPLE = 7;
+	parameter STATE_CHECK_EDGE_FOUND = 8;
+	parameter STATE_RESET_ADC1_DCM = 9;
+
+	always @ ( * ) begin
+		adc1_reset = 0;
+		adc1_dcm_reset = 0;
+		adc1_dcm_psen = 0;
+		adc1_dcm_psincdec = 1;
+		clk_sample_req = 0;
+		shift_back_count_en = 0;
+		ps_shift_count_en = 0;
+		shift_back_count_rst = 0;
+		sync_done = 0;
+		SYNC_NEXT_STATE = SYNC_STATE;
+		phase_save_en = 0;
+			
+		case (SYNC_STATE)
+			STATE_IDLE: begin
+				if (adc1_ps_overflow) begin
+					SYNC_NEXT_STATE = STATE_BEGIN_RESET;
+				end else if (adc0_dcm_locked && adc1_dcm_locked && ~adc1_ps_overflow) begin
+					SYNC_NEXT_STATE = STATE_SHIFT;
+				end
+			end
+
+			STATE_CHECK_INTERLEAVE: begin
+				sync_done = 1;
+				if (adc1_user_data_valid && adc0_user_data_valid && valid_interleave ) begin
+					SYNC_NEXT_STATE = STATE_BEGIN_FIND_PHASE;
+				end else begin
+					SYNC_NEXT_STATE = STATE_BEGIN_RESET;
+				end
+			end
+
+			STATE_SHIFT: begin
+				adc1_dcm_psen = 0;
+				ps_shift_count_en = 1;
+				SYNC_NEXT_STATE = STATE_WAIT;
+			end
+	
+			STATE_WAIT: begin
+				if (adc1_dcm_psdone) begin
+					SYNC_NEXT_STATE = STATE_SAMPLE;
+				end
+			end
+	
+			STATE_SAMPLE: begin
+				clk_sample_req = 1;
+				if (~sample_valid) begin
+					SYNC_NEXT_STATE = STATE_WAIT_SAMPLE;
+				end
+			end
+			
+			STATE_WAIT_SAMPLE: begin
+				if (sample_valid) begin
+					SYNC_NEXT_STATE = STATE_CHECK_EDGE_FOUND;
+				end
+			end
+	
+			STATE_CHECK_EDGE_FOUND: begin
+				if (edge_found)	begin
+					SYNC_NEXT_STATE = STATE_SAVE_PHASE;
+				end else begin
+					SYNC_NEXT_STATE = STATE_IDLE;
+				end
+			end
+
+			STATE_SAVE_PHASE: begin
+				phase_save_en = 1;
+				SYNC_NEXT_STATE = STATE_
+			end
+
+			STATE_BEGIN_RESET: begin
+				adc1_reset = 1;
+				if (~adc1_dcm_locked) begin
+					SYNC_NEXT_STATE = STATE_RESET_ADC1_DCM;
+				end
+			end
+	
+			STATE_RESET_ADC1_DCM: begin
+				adc1_dcm_reset = 1;
+				SYNC_NEXT_STATE = STATE_IDLE;
+			end
+			
+		endcase
+	end
+
+
+end else begin : regular_fsm_mode	
+	parameter STATE_IDLE = 0;
+	parameter STATE_SHIFT = 1;
+	parameter STATE_WAIT = 2;
+	parameter STATE_DONE = 3;
+	parameter STATE_SAMPLE = 4;
+	parameter STATE_WAIT_SAMPLE = 5;
+	parameter STATE_CHECK_EDGE_FOUND = 6;
+	parameter STATE_INIT = 7;
+	parameter STATE_CHECK_PHASE = 8;
+	parameter STATE_RESET_ADC1_DCM = 9;
+	parameter STATE_BEGIN_RESET = 10;
+	parameter STATE_SHIFT_CLK_BACK = 11;
+	parameter STATE_WAIT_SHIFT_BACK = 12;
+	parameter STATE_CHECK_SHIFT_BACK = 13;
+	
+	always @ ( * ) begin
+		adc1_reset = 0;
+		adc1_dcm_reset = 0;
+		adc1_dcm_psen = 0;
+		adc1_dcm_psincdec = 1;
+		clk_sample_req = 0;
+		shift_back_count_en = 0;
+		ps_shift_count_en = 0;
+		shift_back_count_rst = 0;
+		sync_done = 0;
+		SYNC_NEXT_STATE = SYNC_STATE;
+	
+		case (SYNC_STATE)	
+			STATE_INIT: begin
+				if (delay_count > 31'h7fffffff) begin
+					SYNC_NEXT_STATE = STATE_IDLE;
+				end
+			end
+	
+			STATE_IDLE: begin
+				if (adc1_ps_overflow) begin
+					SYNC_NEXT_STATE = STATE_BEGIN_RESET;
+				end else if (adc0_dcm_locked && adc1_dcm_locked && ~adc1_ps_overflow) begin
+					SYNC_NEXT_STATE = STATE_SHIFT;
+				end
+			end
+	
+			STATE_SHIFT: begin
+				adc1_dcm_psen = 0;
+				ps_shift_count_en = 1;
+				SYNC_NEXT_STATE = STATE_WAIT;
+			end
+	
+			STATE_WAIT: begin
+				if (adc1_dcm_psdone) begin
+					SYNC_NEXT_STATE = STATE_SAMPLE;
+				end
+			end
+	
+			STATE_SAMPLE: begin
+				clk_sample_req = 1;
+				if (~sample_valid) begin
+					SYNC_NEXT_STATE = STATE_WAIT_SAMPLE;
+				end
+			end
+			
+			STATE_WAIT_SAMPLE: begin
+				if (sample_valid) begin
+					SYNC_NEXT_STATE = STATE_CHECK_EDGE_FOUND;
+				end
+			end
+	
+			STATE_CHECK_EDGE_FOUND: begin
+				if (edge_found)	begin
+					SYNC_NEXT_STATE = STATE_DONE;//STATE_CHECK_PHASE;
+				end else begin
+					SYNC_NEXT_STATE = STATE_IDLE;
+				end
+			end
+	
+			STATE_CHECK_PHASE: begin
+				shift_back_count_rst = 1;
+				if ((ps_shift_count > 16) && (ps_shift_count <48)) begin
+					SYNC_NEXT_STATE = STATE_BEGIN_RESET;
+				end else begin
+					SYNC_NEXT_STATE = STATE_SHIFT_CLK_BACK;
+				end
+			end
+	
+			STATE_BEGIN_RESET: begin
+				adc1_reset = 1;
+				if (~adc1_dcm_locked) begin
+					SYNC_NEXT_STATE = STATE_RESET_ADC1_DCM;
+				end
+			end
+	
+			STATE_RESET_ADC1_DCM: begin
+				adc1_dcm_reset = 1;
+				SYNC_NEXT_STATE = STATE_IDLE;
+			end
+			
+			STATE_SHIFT_CLK_BACK: begin
+				adc1_dcm_psincdec = 0;
+				adc1_dcm_psen = 1;
+				shift_back_count_en = 1;
+				SYNC_NEXT_STATE = STATE_WAIT_SHIFT_BACK;
+			end
+		
+			STATE_WAIT_SHIFT_BACK: begin
+				if (adc1_dcm_psdone)
+					SYNC_NEXT_STATE = STATE_CHECK_SHIFT_BACK;
+			end
+	
+			STATE_CHECK_SHIFT_BACK: begin
+				if (ps_shift_count == shift_back_count)
+					SYNC_NEXT_STATE = STATE_DONE;
+				else
+					SYNC_NEXT_STATE = STATE_SHIFT_CLK_BACK;
+			end
+	
+			STATE_DONE: begin
+				sync_done = 1;
+				SYNC_NEXT_STATE = STATE_DONE;
+			end
+	
+			default: begin
+				SYNC_NEXT_STATE = STATE_IDLE;
+			end
+		endcase
+	end
+end
+endgenerate	
+
+// Counter to keep track of the number of phase shifts
+// Digitize LVDS pairs
+// -------------------
+// ADC0
+diff_in adc0_DI_dataeveni 	(.DP(adc0_dataeveni_p), .DN(adc0_dataeveni_n), .D(adc0_data_eveni));
+diff_in adc0_DI_dataoddi 	(.DP(adc0_dataoddi_p), .DN(adc0_dataoddi_n), .D(adc0_data_oddi));
+diff_in adc0_DI_dataevenq 	(.DP(adc0_dataevenq_p), .DN(adc0_dataevenq_n), .D(adc0_data_evenq));
+diff_in adc0_DI_dataoddq 	(.DP(adc0_dataoddq_p), .DN(adc0_dataoddq_n), .D(adc0_data_oddq));
+
+// Capture/Recapture Logic
+DDR_Reg adc0_DDRs04 (.clk(adc0_clk), .reset(1'b0), .din(adc0_data_eveni), .dout_rise(adc0_user_datai0_asynch), .dout_fall(adc0_user_datai2_asynch));
+DDR_Reg adc0_DDRs15 (.clk(adc0_clk), .reset(1'b0), .din(adc0_data_oddi), .dout_rise(adc0_user_datai1_asynch), .dout_fall(adc0_user_datai3_asynch));
+DDR_Reg adc0_DDRs26 (.clk(adc0_clk), .reset(1'b0), .din(adc0_data_evenq), .dout_rise(adc0_user_dataq0_asynch), .dout_fall(adc0_user_dataq2_asynch));
+DDR_Reg adc0_DDRs37 (.clk(adc0_clk), .reset(1'b0), .din(adc0_data_oddq), .dout_rise(adc0_user_dataq1_asynch), .dout_fall(adc0_user_dataq3_asynch));
+
+// ADC1
+diff_in adc1_DI_dataeveni 	(.DP(adc1_dataeveni_p), .DN(adc1_dataeveni_n), .D(adc1_data_eveni));
+diff_in adc1_DI_dataoddi 	(.DP(adc1_dataoddi_p), .DN(adc1_dataoddi_n), .D(adc1_data_oddi));
+diff_in adc1_DI_dataevenq 	(.DP(adc1_dataevenq_p), .DN(adc1_dataevenq_n), .D(adc1_data_evenq));
+diff_in adc1_DI_dataoddq 	(.DP(adc1_dataoddq_p), .DN(adc1_dataoddq_n), .D(adc1_data_oddq));
+
+// Capture/Recapture Logic
+DDR_Reg adc1_DDRs04 (.clk(adc1_clk), .reset(1'b0), .din(adc1_data_eveni), .dout_rise(adc1_user_datai0_asynch), .dout_fall(adc1_user_datai2_asynch));
+DDR_Reg adc1_DDRs15 (.clk(adc1_clk), .reset(1'b0), .din(adc1_data_oddi), .dout_rise(adc1_user_datai1_asynch), .dout_fall(adc1_user_datai3_asynch));
+DDR_Reg adc1_DDRs26 (.clk(adc1_clk), .reset(1'b0), .din(adc1_data_evenq), .dout_rise(adc1_user_dataq0_asynch), .dout_fall(adc1_user_dataq2_asynch));
+DDR_Reg adc1_DDRs37 (.clk(adc1_clk), .reset(1'b0), .din(adc1_data_oddq), .dout_rise(adc1_user_dataq1_asynch), .dout_fall(adc1_user_dataq3_asynch));
+
+
+// Module Declarations
+//====================
+wire adc0_sync0;
+wire adc0_sync1;
+wire adc0_sync2;
+wire adc0_sync3;
+wire adc1_sync0;
+wire adc1_sync1;
+wire adc1_sync2;
+wire adc1_sync3;
+wire adc0_outofrange0;
+wire adc0_outofrange1;
+wire adc0_outofrange2;
+wire adc0_outofrange3;
+wire adc1_outofrange0;
+wire adc1_outofrange1;
+wire adc1_outofrange2;
+wire adc1_outofrange3;
+
+ddr_capture adc0_sync_capture(
+	.clk_0(adc0_clk),
+	.clk_90(adc0_clk90),
+	.reset(ctrl_reset),
+	.data_p(adc0_sync_p),
+	.data_n(adc0_sync_n),
+	.data0(adc0_sync0),
+	.data90(adc0_sync1),
+	.data180(adc0_sync2),
+	.data270(adc0_sync3)
+);
+
+ddr_capture adc1_sync_capture(
+	.clk_0(adc1_clk),
+	.clk_90(adc1_clk90),
+	.reset(ctrl_reset),
+	.data_p(adc1_sync_p),
+	.data_n(adc1_sync_n),
+	.data0(adc1_sync0),
+	.data90(adc1_sync1),
+	.data180(adc1_sync2),
+	.data270(adc1_sync3)
+);
+assign adc0_user_sync = adc0_sync0 | adc0_sync1 | adc0_sync2 | adc0_sync3;
+assign adc1_user_sync = adc1_sync0 | adc1_sync1 | adc1_sync3 | adc1_sync3;
+
+ddr_capture adc0_outofrange(
+	.clk_0(adc0_clk),
+	.clk_90(adc0_clk90),
+	.reset(ctrl_reset),
+	.data_p(adc0_outofrange_p),
+	.data_n(adc0_outofrange_n),
+	.data0(adc0_outofrange0),
+	.data90(adc0_outofrange1),
+	.data180(adc0_outofrange2),
+	.data270(adc0_outofrange3)
+);
+
+ddr_capture adc1_outofrange(
+	.clk_0(adc1_clk),
+	.clk_90(adc1_clk90),
+	.reset(ctrl_reset),
+	.data_p(adc1_outofrange_p),
+	.data_n(adc1_outofrange_n),
+	.data0(adc1_outofrange0),
+	.data90(adc1_outofrange1),
+	.data180(adc1_outofrange2),
+	.data270(adc1_outofrange3)
+);
+assign adc0_user_outofrange = adc0_outofrange0 | adc0_outofrange1 | adc0_outofrange2 | adc0_outofrange3;
+assign adc1_user_outofrange = adc1_outofrange0 | adc1_outofrange1 | adc1_outofrange2 | adc1_outofrange3;
+
+
+
+
+// Conditional Builds
+//===================
+generate if (USE_ASYNCH_FIFOS) begin : use_asynch_fifos
+	// Asynchronous FIFO to support multiple clocks
+	// --------------------------------------------
+	assign adc0_fifo_din = {
+	 	adc0_user_datai0_asynch,
+		adc0_user_datai1_asynch,
+		adc0_user_datai2_asynch,
+		adc0_user_datai3_asynch,
+		adc0_user_dataq0_asynch,
+		adc0_user_dataq1_asynch,
+		adc0_user_dataq2_asynch,
+		adc0_user_dataq3_asynch
+	};
+	async_fifo_64by1024 adc0_data_fifo (
+		.din(adc0_fifo_din),
+		.rd_clk(adc0_clk),
+		.rd_en(~adc0_data_fifo_empty),
+		.rst(ctrl_reset),
+		.wr_clk(adc0_clk),
+		.wr_en(~adc0_data_fifo_full && sync_done),// && adc_clocks_aligned),
+		.dout(adc0_fifo_dout),
+		.empty(adc0_data_fifo_empty),
+		.full(adc0_data_fifo_full),
+		.valid(adc0_user_data_valid)
+	);
+	
+	assign adc1_fifo_din = {
+	 	adc1_user_datai0_asynch,
+		adc1_user_datai1_asynch,
+		adc1_user_datai2_asynch,
+		adc1_user_datai3_asynch,
+		adc1_user_dataq0_asynch,
+		adc1_user_dataq1_asynch,
+		adc1_user_dataq2_asynch,
+		adc1_user_dataq3_asynch
+	};
+	async_fifo_64by1024 adc1_data_fifo (
+		.din(adc1_fifo_din),
+		.rd_clk(adc0_clk),
+		.rd_en(~adc1_data_fifo_empty),
+		.rst(ctrl_reset),
+		.wr_clk(adc1_clk),
+		.wr_en(~adc1_data_fifo_full && sync_done),// && adc_clocks_aligned),
+		.dout(adc1_fifo_dout),
+		.empty(adc1_data_fifo_empty),
+		.full(adc1_data_fifo_full),
+		.valid(adc1_user_data_valid)
+	);
+	
+
+end
+endgenerate 
+
+/*
+assign debug_data = {
+	sample & sample_valid,
+	~sample & sample_valid,
+	~sample, // 51
+	sample_high, // 50
+	sample_low, // 49
+	ps_shift_count, // 48:39
+	adc1_ps_overflow, // 38
+	sample_error, // 37
+	sample_valid, // 36
+	sample, // 35
+	dcm_psdone, // 34
+	dcm1_status, // 33:26
+	adc1_dcm_psen, //25
+	1'b0,//(time_reset == 0), // 24
+	adc1_dcm_psdone, // 23
+	adc0_clk_count, // 22:19
+	adc1_clk_count, // 18:15
+	adc0_dcm_locked,//14
+	adc1_dcm_locked,//13
+	SYNC_STATE, // 12:8
+	test_count // 7:0
+};*/
+
+
+
+assign debug_data = {
+	adc1_ps_overflow,
+	sync_done,
+	adc1_fifo_dout[63:56],	// 100:93
+  adc0_fifo_dout[63:56], 	// 92:85
+  adc0_fifo_dout[31:24],	// 84:77
+  adc0_fifo_dout[55:48],	// 76:69
+  adc0_fifo_dout[23:16],	// 68:61
+  adc0_fifo_dout[47:40],	// 60:53
+  adc0_fifo_dout[15:8],		// 52:45
+  adc0_fifo_dout[39:32],	// 44:37
+  adc0_fifo_dout[7:0],		// 36:29
+	num_resets,							// 28:13
+	ps_shift_count,					// 12:5
+	SYNC_STATE 							// 4:0
+};
+
+generate if (DEBUG_MODE) begin : debug_mode
+  assign adc0_user_datai0 = debug_data[127:120]; 
+  assign adc1_user_datai0 = debug_data[119:112]; 
+  assign adc0_user_dataq0 = debug_data[111:104];
+  assign adc1_user_dataq0 = debug_data[103:96];
+  assign adc1_user_datai1 = debug_data[95:88];
+  assign adc0_user_datai1 = debug_data[87:80];
+  assign adc0_user_dataq1 = debug_data[79:72];
+  assign adc1_user_dataq1 = debug_data[71:64];
+  assign adc1_user_datai2 = debug_data[63:56];
+  assign adc0_user_datai2 = debug_data[55:48];
+  assign adc0_user_dataq2 = debug_data[47:40];
+  assign adc1_user_dataq2 = debug_data[39:32];
+  assign adc0_user_datai3 = debug_data[31:24];
+  assign adc1_user_datai3 = debug_data[23:16];
+  assign adc0_user_dataq3 = debug_data[15:8];
+  assign adc1_user_dataq3 = debug_data[7:0];
+end else if (CALIBRATION_MODE) begin : calib_mode
+  assign adc0_user_datai0 = valid_ps_counts[127:120]; 
+  assign adc1_user_datai0 = valid_ps_counts[119:112]; 
+  assign adc0_user_dataq0 = valid_ps_counts[111:104];
+  assign adc1_user_dataq0 = valid_ps_counts[103:96];
+  assign adc1_user_datai1 = valid_ps_counts[95:88];
+  assign adc0_user_datai1 = valid_ps_counts[87:80];
+  assign adc0_user_dataq1 = valid_ps_counts[79:72];
+  assign adc1_user_dataq1 = valid_ps_counts[71:64];
+  assign adc1_user_datai2 = valid_ps_counts[63:56];
+  assign adc0_user_datai2 = valid_ps_counts[55:48];
+  assign adc0_user_dataq2 = valid_ps_counts[47:40];
+  assign adc1_user_dataq2 = valid_ps_counts[39:32];
+  assign adc0_user_datai3 = valid_ps_counts[31:24];
+  assign adc1_user_datai3 = valid_ps_counts[23:16];
+  assign adc0_user_dataq3 = valid_ps_counts[15:8];
+  assign adc1_user_dataq3 = valid_ps_counts[7:0];
+end else if (USE_ASYNCH_FIFOS) begin : adc_asynch_mode
+  assign adc0_user_datai0 = adc0_fifo_dout[63:56]; 
+  assign adc1_user_datai0 = adc1_fifo_dout[63:56]; 
+  assign adc0_user_dataq0 = adc0_fifo_dout[31:24];
+  assign adc1_user_dataq0 = adc1_fifo_dout[31:24];
+  assign adc1_user_datai1 = adc1_fifo_dout[55:48];
+  assign adc0_user_datai1 = adc0_fifo_dout[55:48];
+  assign adc0_user_dataq1 = adc0_fifo_dout[23:16];
+  assign adc1_user_dataq1 = adc1_fifo_dout[23:16];
+  assign adc1_user_datai2 = adc1_fifo_dout[47:40];
+  assign adc0_user_datai2 = adc0_fifo_dout[47:40];
+  assign adc0_user_dataq2 = adc0_fifo_dout[15:8];
+  assign adc1_user_dataq2 = adc1_fifo_dout[15:8];
+  assign adc0_user_datai3 = adc0_fifo_dout[39:32];
+  assign adc1_user_datai3 = adc1_fifo_dout[39:32];
+  assign adc0_user_dataq3 = adc0_fifo_dout[7:0];
+  assign adc1_user_dataq3 = adc1_fifo_dout[7:0];
+end else begin 
+  assign adc0_user_datai0 = adc0_user_datai0_asynch; 
+  assign adc1_user_datai0 = adc1_user_datai0_asynch; 
+  assign adc0_user_dataq0 = adc0_user_dataq0_asynch; 
+  assign adc1_user_dataq0 = adc1_user_dataq0_asynch; 
+  assign adc1_user_datai1 = adc1_user_datai1_asynch; 
+  assign adc0_user_datai1 = adc0_user_datai1_asynch; 
+  assign adc0_user_dataq1 = adc0_user_dataq1_asynch; 
+  assign adc1_user_dataq1 = adc1_user_dataq1_asynch; 
+  assign adc1_user_datai2 = adc1_user_datai2_asynch; 
+  assign adc0_user_datai2 = adc0_user_datai2_asynch; 
+  assign adc0_user_dataq2 = adc0_user_dataq2_asynch; 
+  assign adc1_user_dataq2 = adc1_user_dataq2_asynch; 
+  assign adc0_user_datai3 = adc0_user_datai3_asynch; 
+  assign adc1_user_datai3 = adc1_user_datai3_asynch; 
+  assign adc0_user_dataq3 = adc0_user_dataq3_asynch; 
+  assign adc1_user_dataq3 = adc1_user_dataq3_asynch; 
+end
+endgenerate
+
+assign valid_interleave = (adc0_user_datai0 <= adc1_user_datai0 && adc1_user_data_i0 <= adc0_user_data_q0) || (adc0_user_datai0 >= adc1_user_datai0 && adc1_user_data_i0 >= adc0_user_data_q0);
+
+endmodule
