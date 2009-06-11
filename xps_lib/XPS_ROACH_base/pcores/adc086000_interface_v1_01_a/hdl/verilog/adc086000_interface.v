@@ -271,13 +271,14 @@ reg reset_start;
 wire reset_start0, reset_start90, reset_start180, reset_start270;
 wire adc1_reset0, adc1_reset90, adc1_reset180, adc1_reset270;
 reg adc1_reset_block_rst;
+reg sampler_rst;
 
 // Module Declarations
 //====================
 clock_sample clock_sample0 (
 	.clock(adc0_clk),
 	.din(adc1_clk),
-	.reset(ctrl_reset),
+	.reset(ctrl_reset | sampler_rst),
 	.dout(clk_sample0),
 	.sample_req(clk_sample_req0),
 	.sample_valid(clk_sample_valid0),
@@ -288,7 +289,7 @@ clock_sample clock_sample0 (
 clock_sample clock_sample90 (
 	.clock(adc0_clk90),
 	.din(adc1_clk),
-	.reset(ctrl_reset),
+	.reset(ctrl_reset | sampler_rst),
 	.dout(clk_sample90),
 	.sample_req(clk_sample_req90),
 	.sample_valid(clk_sample_valid90),
@@ -299,7 +300,7 @@ clock_sample clock_sample90 (
 clock_sample clock_sample180 (
 	.clock(adc0_clk180),
 	.din(adc1_clk),
-	.reset(ctrl_reset),
+	.reset(ctrl_reset | sampler_rst),
 	.dout(clk_sample180),
 	.sample_req(clk_sample_req180),
 	.sample_valid(clk_sample_valid180),
@@ -310,7 +311,7 @@ clock_sample clock_sample180 (
 clock_sample clock_sample270 (
 	.clock(adc0_clk270),
 	.din(adc1_clk),
-	.reset(ctrl_reset),
+	.reset(ctrl_reset | sampler_rst),
 	.dout(clk_sample270),
 	.sample_req(clk_sample_req270),
 	.sample_valid(clk_sample_valid270),
@@ -338,7 +339,7 @@ adc_reset adc1_reset_block0 (
   .reset_clk(adc0_clk),
   .system_reset(ctrl_reset | adc1_reset_block_rst),
   .reset_output(adc1_reset0),
-  .reset_start(reset_start0)
+  .reset_start(reset_start0 & reset_start)
   );
 
 adc_reset adc1_reset_block90 (
@@ -346,7 +347,7 @@ adc_reset adc1_reset_block90 (
   .reset_clk(adc0_clk90),
   .system_reset(ctrl_reset | adc1_reset_block_rst),
   .reset_output(adc1_reset90),
-  .reset_start(reset_start90)
+  .reset_start(reset_start90 & reset_start)
   );
 
 adc_reset adc1_reset_block180 (
@@ -354,7 +355,7 @@ adc_reset adc1_reset_block180 (
   .reset_clk(adc0_clk180),
   .system_reset(ctrl_reset | adc1_reset_block_rst),
   .reset_output(adc1_reset180),
-  .reset_start(reset_start180)
+  .reset_start(reset_start180 & reset_start)
 );
 
 adc_reset adc1_reset_block270 (
@@ -362,7 +363,7 @@ adc_reset adc1_reset_block270 (
   .reset_clk(adc0_clk270),
   .system_reset(ctrl_reset | adc1_reset_block_rst),
   .reset_output(adc1_reset270),
-  .reset_start(reset_start270)
+  .reset_start(reset_start270 & reset_start)
 );
 
 assign adc1_reset = adc1_reset0 | adc1_reset90 | adc1_reset180 | adc1_reset270;
@@ -394,6 +395,7 @@ always @ (posedge dcm_psclk) begin
 end
 
 always @ ( * ) begin
+  sampler_rst = 0;
   adc1_reset_block_rst = 0;
   reset_start = 0;
   sync_done = 0;
@@ -431,6 +433,7 @@ always @ ( * ) begin
     end
 
     state_wait_dcm: begin
+      sampler_rst = 1;
       if (adc0_dcm_locked && adc1_dcm_locked) begin
         next_state = state_sample_clocks;
       end
@@ -449,7 +452,7 @@ always @ ( * ) begin
     state_decide: begin
       adc1_reset_block_rst = 1;
       delay_count_rst = 1;
-      if (clk_sample180 && clk_sample90) begin
+      if ((clk_sample180 && clk_sample90) || (clk_sample0 && clk_sample90)) begin
         next_state = state_done;
       end else begin
         next_state = state_reset_adc;
