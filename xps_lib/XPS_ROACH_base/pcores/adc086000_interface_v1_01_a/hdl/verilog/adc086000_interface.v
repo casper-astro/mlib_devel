@@ -482,8 +482,8 @@ assign adc0_user_dataq2 = adc0_fifo_dout[15:8];
 assign adc1_user_dataq2 = adc1_fifo_dout[15:8];
 assign adc0_user_datai3 = adc0_fifo_dout[39:32];
 assign adc1_user_datai3 = adc1_fifo_dout[39:32];//{6'b0, edge_found, adc1_dcm_psdone};//
-assign adc0_user_dataq3 = {1'b0, reset_start, adc1_reset, sync_done, state};//adc0_fifo_dout[7:0];//{1'b0, adc1_ps_overflow,SYNC_STATE, adc1_dcm_psen};//
-assign adc1_user_dataq3 = sampler_data[7:0];//adc1_fifo_dout[7:0];//ps_shift_count[7:0];//{1'b0, calibration_state, interleaved_sampler_done,valid_interleave};//
+assign adc0_user_dataq3 = adc0_fifo_dout[7:0];//{1'b0, adc1_ps_overflow,SYNC_STATE, adc1_dcm_psen};//
+assign adc1_user_dataq3 = adc1_fifo_dout[7:0];//ps_shift_count[7:0];//{1'b0, calibration_state, interleaved_sampler_done,valid_interleave};//
 
 
 // Counter to keep track of the number of phase shifts
