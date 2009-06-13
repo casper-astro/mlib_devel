@@ -32,11 +32,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "sgowda"
+  LastModifiedBy	  "hchen05"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 11 12:58:20 2009"
+  LastModifiedDate	  "Fri Jun 12 19:51:23 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:391>"
+  ModelVersionFormat	  "1.%<AutoIncrement:392>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -185,12 +185,6 @@ Library {
       BlockType		      Reference
     }
     Block {
-      BlockType		      "S-Function"
-      FunctionName	      "system"
-      SFunctionModules	      "''"
-      PortCounts	      "[]"
-    }
-    Block {
       BlockType		      SubSystem
       ShowPortLabels	      "FromPortIcon"
       Permissions	      "ReadWrite"
@@ -263,7 +257,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [2, 70, 1262, 730]
+    Location		    [45, 100, 1305, 760]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -2134,7 +2128,7 @@ Library {
       MaskDescription	      "The XSG Core Config block is used to configure the System Generator design\nfor the bee_xps toolflow. Settings here are used to configure the\nXilinx System Generator block parameters automatically, and control toolflow\nscript  execution. It needs to be at the top level of all designs being compiled\nwith the bee_xps toolflow."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_xsg_core_config\\sys_xsg_core_config.html''])')"
       MaskPromptString	      "Hardware Platform|Include Linux add-on board support|User IP Clock source|User IP Clock source|User IP Clock Source|User IP Clock Source|User IP Clock Source|User IP Clock Source|GPIO Clock Pin I/O group|GPIO Clock Pin bit index|User IP Clock Rate (MHz)|Sample Period|Synthesis Tool:|Processor:"
-      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH:sx95t|ROACH:lx110t|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux1_clk|adc0_clk|adc1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
+      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH:sx95t|ROACH:lx110t|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux0_clk2x|aux1_clk|aux1_clk2x|adc0_clk|adc1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "xps_xsg_conf_callback;|||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;||||||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,off,on,on,on"
@@ -2143,13 +2137,13 @@ Library {
       MaskVarAliasString      ",,,,,,,,,,,,,"
       MaskVariables	      "hw_sys=@1;ibob_linux=@2;clk_src=@3;iBOB_clk_src=@4;BEE2_ctrl_clk_src=@5;BEE2_usr_clk_src=@6;ROACH_clk_src=@7;CORR_clk_src=@8;gpio_clk_io_group=@9;gpio_clk_bit_index=@10;clk_rate=@11;sample_period=@12;synthesis_tool=@13;mpc_type=@14;"
       MaskInitialization      "xps_xsg_conf_mask;"
-      MaskDisplay	      "fprintf('MSSGE');"
+      MaskDisplay	      "fprintf(['MSSGE\\n', hw_sys]);\n"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "iBOB|off|arb_clk|sys_clk|sys_clk|sys_clk|arb_clk|sys_clk|iBOB:sma|0|100|1|XST|powerpc440_ext"
+      MaskValueString	      "iBOB|off|sys_clk|sys_clk|sys_clk|sys_clk|sys_clk|sys_clk|iBOB:sma|0|100|1|XST|powerpc405"
       MaskTabNameString	      ",,,,,,,,,,,,,"
       System {
 	Name			"XSG core config"
@@ -2160,8 +2154,8 @@ Library {
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"A4"
-	PaperUnits		"centimeters"
+	PaperType		"usletter"
+	PaperUnits		"inches"
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
@@ -9148,11 +9142,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9175,11 +9169,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9202,11 +9196,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9229,11 +9223,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9256,11 +9250,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9283,11 +9277,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9310,11 +9304,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9337,11 +9331,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9364,11 +9358,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9391,11 +9385,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9418,11 +9412,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9445,11 +9439,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9472,11 +9466,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9499,11 +9493,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9526,11 +9520,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9553,11 +9547,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9580,11 +9574,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9607,11 +9601,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9634,11 +9628,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9661,11 +9655,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -9688,11 +9682,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9715,11 +9709,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "sample_period"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0 0 0 0 8 0 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
