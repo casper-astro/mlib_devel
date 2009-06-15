@@ -190,16 +190,16 @@ NET "epb_clk_in"    IOSTANDARD = LVCMOS33 | LOC = AH18;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')#
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')############## ADC Control Signals #############
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')#
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = F28 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = D32 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_strobe    LOC = C32 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_modepin            LOC = E28 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc0')#
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_clk       LOC = AE32 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_data      LOC = AD34 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_strobe    LOC = AC34 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = AD32 ;
-#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz') && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = F28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = D32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_strobe    LOC = C32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_modepin            LOC = E28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_clk       LOC = AE32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_data      LOC = AD34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_strobe    LOC = AC34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = AD32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#
 #IF# strcmp(get(b,'type'),'xps_qdr')#
 #IF# strcmp(get(b,'type'),'xps_qdr')############## QDR Signals #############
 #IF# strcmp(get(b,'type'),'xps_qdr')#
