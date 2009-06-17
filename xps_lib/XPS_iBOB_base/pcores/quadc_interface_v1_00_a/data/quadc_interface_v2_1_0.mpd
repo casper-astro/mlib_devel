@@ -45,7 +45,7 @@ PORT adc1_clk = "",         DIR = O
 PORT adc2_clk = "",         DIR = O
 PORT adc3_clk = "",         DIR = O
 
-PORT adc0_clk90 = ""        DIR = O
+PORT adc0_clk90 = "",       DIR = O
 
 PORT adc0_data = "",        DIR = O, VEC = [7:0]
 PORT adc1_data = "",        DIR = O, VEC = [7:0]
