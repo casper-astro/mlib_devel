@@ -27,6 +27,10 @@ use unisim.all;
 
 entity XAUI_interface is
 	generic(
+		C_BASEADDR        : std_logic_vector	:= X"00000000";
+		C_HIGHADDR        : std_logic_vector	:= X"0000FFFF";
+		C_OPB_AWIDTH      : integer	:= 32;
+		C_OPB_DWIDTH      : integer	:= 32;
 		DEMUX             : integer           := 1
 	);
 	port (
@@ -62,7 +66,22 @@ entity XAUI_interface is
     mgt_rxeqmix           : out std_logic_vector( 1 downto 0);
     mgt_rxeqpole          : out std_logic_vector( 3 downto 0);
     mgt_txpreemphasis     : out std_logic_vector( 2 downto 0);
-    mgt_txdiffctrl        : out std_logic_vector( 2 downto 0)
+    mgt_txdiffctrl        : out std_logic_vector( 2 downto 0);
+
+		-- OPB attachment
+		OPB_Clk	              : in	std_logic;
+		OPB_Rst	              : in	std_logic;
+		Sl_DBus	              : out	std_logic_vector(0 to C_OPB_DWIDTH-1);
+		Sl_errAck	            : out	std_logic;
+		Sl_retry	            : out	std_logic;
+		Sl_toutSup	          : out	std_logic;
+		Sl_xferAck	          : out	std_logic;
+		OPB_ABus	            : in	std_logic_vector(0 to C_OPB_AWIDTH-1);
+		OPB_BE	              : in	std_logic_vector(0 to C_OPB_DWIDTH/8-1);
+		OPB_DBus	            : in	std_logic_vector(0 to C_OPB_DWIDTH-1);
+		OPB_RNW	              : in	std_logic;
+		OPB_select            : in	std_logic;
+		OPB_seqAddr           : in	std_logic
 	);
 end entity XAUI_interface;
 
@@ -114,6 +133,45 @@ architecture XAUI_interface_arch of XAUI_interface is
 	constant PACKET_START1 : std_logic_vector(11 downto 0) := "000000000001";
 	constant PACKET_END0   : std_logic_vector(11 downto 0) := "111111111110";
 	constant PACKET_END1   : std_logic_vector(11 downto 0) := "111111111111";
+
+--  ####    ####   #    #  #####    ####   #    #  ######  #    #   #####   ####
+-- #    #  #    #  ##  ##  #    #  #    #  ##   #  #       ##   #     #    #
+-- #       #    #  # ## #  #    #  #    #  # #  #  #####   # #  #     #     ####
+-- #       #    #  #    #  #####   #    #  #  # #  #       #  # #     #         #
+-- #    #  #    #  #    #  #       #    #  #   ##  #       #   ##     #    #    #
+--  ####    ####   #    #  #        ####   #    #  ######  #    #     #     ####
+
+  -- OPB Attachment
+	-- 
+	component opb_attach
+		generic(
+	    C_BASEADDR             : std_logic_vector	:= X"00000000";
+	    C_HIGHADDR             : std_logic_vector	:= X"0000FFFF";
+	    C_OPB_AWIDTH           : integer	:= 32;
+	    C_OPB_DWIDTH           : integer	:= 32
+		);
+		port (
+	    -- OPB attachment
+	    OPB_Clk	              : in	std_logic;
+	    OPB_Rst	              : in	std_logic;
+	    Sl_DBus	              : out	std_logic_vector(0 to C_OPB_DWIDTH-1);
+	    Sl_errAck	            : out	std_logic;
+	    Sl_retry	            : out	std_logic;
+	    Sl_toutSup	          : out	std_logic;
+	    Sl_xferAck	          : out	std_logic;
+	    OPB_ABus	            : in	std_logic_vector(0 to C_OPB_AWIDTH-1);
+	    OPB_BE	              : in	std_logic_vector(0 to C_OPB_DWIDTH/8-1);
+	    OPB_DBus	            : in	std_logic_vector(0 to C_OPB_DWIDTH-1);
+	    OPB_RNW	              : in	std_logic;
+	    OPB_select            : in	std_logic;
+	    OPB_seqAddr           : in	std_logic;
+    -- mgt config signals     
+      rxeqmix               : out std_logic_vector( 1 downto 0);
+      rxeqpole              : out std_logic_vector( 3 downto 0);
+      txpreemphasis         : out std_logic_vector( 2 downto 0);
+      txdiffctrl            : out std_logic_vector( 2 downto 0)
+		);
+	end component;
 
 --            #                              ##           
 --                                            #           
@@ -635,12 +693,34 @@ begin
 	rx_data                <= rx_out(31 downto  0)               ;
 end generate RX_FIFO_GEN_DEMUX2;
 
+opb_attach_inst : opb_attach
+		generic map(
+	    C_BASEADDR    => C_BASEADDR,
+	    C_HIGHADDR    => C_HIGHADDR
+		)
+    port map (
+	    -- OPB attachment
+	    OPB_Clk	      => OPB_Clk,
+	    OPB_Rst	      => OPB_Rst,
+	    Sl_DBus	      => Sl_DBus,
+	    Sl_errAck	    => Sl_errAck,
+	    Sl_retry	    => Sl_retry,
+	    Sl_toutSup	  => Sl_toutSup,
+	    Sl_xferAck	  => Sl_xferAck,
+	    OPB_ABus	    => OPB_ABus,
+	    OPB_BE	      => OPB_BE,
+	    OPB_DBus	    => OPB_DBus,
+	    OPB_RNW	      => OPB_RNW,
+	    OPB_select    => OPB_select,
+	    OPB_seqAddr   => OPB_seqAddr,
+    -- mgt config signals     
+      rxeqmix       => mgt_rxeqmix,
+      rxeqpole      => mgt_rxeqpole,
+      txpreemphasis => mgt_txpreemphasis,
+      txdiffctrl    => mgt_txdiffctrl
+		);
 
 xgmii_txd         <= xgmii_txd_int;
 xgmii_txc         <= xgmii_txc_int;
-mgt_rxeqmix       <= "00";
-mgt_rxeqpole      <= "0000";
-mgt_txpreemphasis <= "000";
-mgt_txdiffctrl    <= "100";
 
 end architecture XAUI_interface_arch;

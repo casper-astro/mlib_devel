@@ -124,3 +124,17 @@ if strcmp(s.board,'ROACH')
     b = set(b,'interfaces',interfaces);
 end
 
+% Only ROACH has an OPB attachment for XAUI
+switch s.hw_sys
+    case 'ROACH'
+        b = set(b,'opb_clk','epb_clk');
+        b = set(b,'opb_address_offset', 256);
+end % switch s.hw_sys
+
+% borf parameters
+switch s.hw_sys
+    case 'ROACH'
+        borph_info.size = hex2dec('4');
+        borph_info.mode = 3;
+        b = set(b,'borph_info',borph_info);
+end
