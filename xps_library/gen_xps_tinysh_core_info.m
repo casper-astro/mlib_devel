@@ -3,22 +3,22 @@ function gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj
 %
 % gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj, mssge_paths)
 
-    disp('Running gen_xps_tinysh_core_info');
+    %disp('Running gen_xps_tinysh_core_info');
 
-    hw_sys          = mssge_proj.hw_sys;
-    hw_subsys       = mssge_proj.hw_subsys;
-    sw_os           = mssge_proj.sw_os;
-    mpc_type        = mssge_proj.mpc_type;
-    app_clk         = mssge_proj.app_clk;
-    app_clk_rate    = mssge_proj.app_clk_rate;
-    xsg_core_name   = mssge_proj.xsg_core_name;
+%   hw_sys          = mssge_proj.hw_sys;
+%   hw_subsys       = mssge_proj.hw_subsys;
+%   sw_os           = mssge_proj.sw_os;
+%   mpc_type        = mssge_proj.mpc_type;
+%   app_clk         = mssge_proj.app_clk;
+%   app_clk_rate    = mssge_proj.app_clk_rate;
+%   xsg_core_name   = mssge_proj.xsg_core_name;
 
-    XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
-    simulink_path   = mssge_paths.simulink_path;
-    work_path       = mssge_paths.work_path;
-    src_path        = mssge_paths.src_path;
-    xsg_path        = mssge_paths.xsg_path;
-    netlist_path    = mssge_paths.netlist_path;
+%   XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
+%   simulink_path   = mssge_paths.simulink_path;
+%   work_path       = mssge_paths.work_path;
+%   src_path        = mssge_paths.src_path;
+%   xsg_path        = mssge_paths.xsg_path;
+%   netlist_path    = mssge_paths.netlist_path;
     xps_path        = mssge_paths.xps_path;
 
     drivers_path = [xps_path,'\drivers'];

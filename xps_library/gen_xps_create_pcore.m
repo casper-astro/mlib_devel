@@ -17,7 +17,7 @@ function gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths)
 %   simulink_path   = mssge_paths.simulink_path;
 %   work_path       = mssge_paths.work_path;
 %   src_path        = mssge_paths.src_path;
-%   xsg_path        = mssge_paths.xsg_path;
+    xsg_path        = mssge_paths.xsg_path;
 %   netlist_path    = mssge_paths.netlist_path;
     xps_path        = mssge_paths.xps_path;
 

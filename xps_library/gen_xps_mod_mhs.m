@@ -5,6 +5,10 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
 
     %disp('Running gen_xps_mod_mhs');
 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Extract common design parameters
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %   hw_subsys       = mssge_proj.hw_subsys;
 %   sw_os           = mssge_proj.sw_os;
 %   app_clk         = mssge_proj.app_clk;
@@ -20,6 +24,11 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
 %   netlist_path    = mssge_paths.netlist_path;
     work_path       = mssge_paths.work_path;
     xps_path        = mssge_paths.xps_path;
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Initialize buses
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     switch hw_sys
         case 'ROACH'
@@ -43,6 +52,11 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
     opb_bus_inst = 0;
     plb_name = 'plb';
     opb_name = 'opb0';
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Backup and preprocess skeleton MHS and core_info.tab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist([xps_path,'\system.mhs.bac'],'file')
         [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\system.mhs'],[xps_path,'\system.mhs.bac']);
@@ -72,6 +86,11 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
     detokenize(in_fid, bof_fid, xps_objs);
     fclose(in_fid);
 
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Add Simulink design pcore to EDK project
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
     fprintf(mhs_fid,'##############################################\n');
     fprintf(mhs_fid,'# User XSG IP core                           #\n');
     fprintf(mhs_fid,'##############################################\n');
@@ -90,6 +109,11 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
         error('Error found during XSG IP core generation in MHS (gen_mhs_xsg).');
     end
     fprintf(mhs_fid,'END\n\n');
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Add yellow block pcores to EDK project
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     fprintf(mhs_fid,'############################\n');
     fprintf(mhs_fid,'# Simulink interfaces      #\n');
@@ -200,9 +224,10 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
         end
 
         n = n + 1;
-    end
+    end % while n <= length(xps_objs)
+
     fclose(mhs_fid);
     fclose(nfo_fid);
     fclose(bof_fid);
 
-% end gen_xps_mod_mhs
+% end function gen_xps_mod_mhs
