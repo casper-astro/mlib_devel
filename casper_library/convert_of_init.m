@@ -40,8 +40,6 @@
 
 function convert_of_init(blk,varargin)
 
-%disp('Entering');
-
 defaults = {'latency',2};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'convert_of');
@@ -63,7 +61,6 @@ delete_lines(blk);
 reuse_block(blk, 'din', 'built-in/inport', 'Port', '1', 'Position', [50 108 80 122]);
 reuse_block(blk, 'dout', 'built-in/outport', 'Port', '1', 'Position', [415 108 445 122]);
 reuse_block(blk, 'of', 'built-in/outport', 'Port', '2', 'Position', [415 188 445 202]);
-%disp('Input + output ports done');
 
 %draw convert block
 reuse_block(blk, 'convert', 'xbsIndex_r4/Convert', ...
@@ -72,8 +69,7 @@ reuse_block(blk, 'convert', 'xbsIndex_r4/Convert', ...
 	'quantization', tostring(quantization), ...
 	'overflow', tostring(overflow), ...
 	'latency', 'latency', ...
-	'Position', [245 100 290 130]);
-%disp('Convert block done');
+	'Position', [275 100 320 130]);
 
 %join input port to convert to output port
 add_line(blk, 'din/1', 'convert/1'); 
@@ -89,34 +85,53 @@ if wb_lost == 0,
         'explicit_period', 'on', 'period', '1', ...
 		'Position', [315 182 370 208]);
 	add_line(blk, 'never/1','of/1');
-%	fprintf('Constant done\n');
 else
-	%draw 'xor' block \
+	%draw 'and' blocks \
 	%2's complement numbers have overflow if most sig bits to be discarded
 	%are different (i.e not all 1's or all 0's)
-	reuse_block(blk, 'xor', 'xbsIndex_r4/Logical', ...
+	reuse_block(blk, 'all_0s', 'xbsIndex_r4/Logical', ...
 		'precision','Full', ...
 		'inputs', tostring(wb_lost+1), ...
 		'latency', 'latency', ...
-		'logical_function', 'XOR', ...
-		'Position', [245 185 295 245] );
-%	disp('XOR block drawn');
+		'logical_function', 'NAND', ...
+		'Position', [275 185 320 185+(wb_lost+1)*20] );
 
-	%draw slice blocks
+	reuse_block(blk, 'all_1s', 'xbsIndex_r4/Logical', ...
+		'precision','Full', ...
+		'inputs', tostring(wb_lost+1), ...
+		'latency', 'latency', ...
+		'logical_function', 'NAND', ...
+		'Position', [275 185+(wb_lost+2)*20 320 185+(wb_lost+2)*20+(wb_lost+1)*20] );
+	
+    %draw slice blocks and inversion blocks
 	for i = 1:(wb_lost+1),
 		reuse_block(blk, ['slice',num2str(i)], 'xbsIndex_r4/Slice', ...
 		'boolean_output','on', 'mode', 'Upper Bit Location + Width', ...
 		'bit1', num2str(-1*(i-1)), 'base1', 'MSB of Input', ...
 		'Position', [140 134+i*50 175 156+i*50]);
+		
+        add_line(blk, 'din/1', ['slice',num2str(i),'/1']);
+		add_line(blk, ['slice',num2str(i),'/1'], ['all_1s','/',num2str(i)]);
 
-%		disp(['Slice block ',num2str(i),' drawn']);
-		add_line(blk, 'din/1', ['slice',num2str(i),'/1']);
-		add_line(blk, ['slice',num2str(i),'/1'], ['xor','/',num2str(i)]);
-%		disp('Lines drawn');
+		reuse_block(blk, ['invert',num2str(i)], 'xbsIndex_r4/Inverter', ...
+		'Position', [200 134+i*50 235 156+i*50]);
+        
+        add_line(blk, ['slice',num2str(i),'/1'], ['invert',num2str(i),'/1']);
+        add_line(blk, ['invert',num2str(i),'/1'], ['all_0s','/',num2str(i)]);
+
 	end
-%	disp('Slice blocks drawn');
 
-	add_line(blk, 'xor/1', 'of/1'); 
+	reuse_block(blk, 'and', 'xbsIndex_r4/Logical', ...
+		'precision','Full', ...
+		'inputs', '2', ...
+		'latency', '0', ...
+		'logical_function', 'AND', ...
+		'Position', [350 185 390 220] );
+
+	add_line(blk, 'all_0s/1', 'and/1'); 
+	add_line(blk, 'all_1s/1', 'and/2');
+
+    add_line(blk, 'and/1', 'of/1'); 
 end
 
 clean_blocks(blk);
@@ -125,4 +140,3 @@ fmtstr = sprintf('[%d,%d]->[%d,%d]', bit_width_i, binary_point_i, bit_width_o, b
 set_param(blk, 'AttributesFormatString', fmtstr);
 
 save_state(blk, 'defaults', defaults, varargin{:});
-%fprintf(['Done\n']);
