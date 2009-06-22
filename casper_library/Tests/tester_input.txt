@@ -11,7 +11,7 @@ posedge casper_library/Misc/posedge posedge_test
 power casper_library/Misc/power power_test BitWidth 8
 pulse_ext casper_library/Misc/pulse_ext pulse_ext_test pulse_len 7
 ri_to_c casper_library/Misc/ri_to_c ri_to_c_test
-convert_of casper_library/Misc/convert_of convert_of_test bit_width_i 8 binary_point_i 6 bit_width_o 7 binary_point_o 6 latency 1 overflow 'Wrap' quantization 'Truncate'
+convert_of casper_library/Misc/convert_of convert_of_test bit_width_i 8 binary_point_i 4 bit_width_o 6 binary_point_o 3 latency 0 overflow 'Wrap' quantization 'Truncate'
 % # Downconverter
 lo_const casper_library/Downconverter/lo_const lo_const_test n_bits 13 phase (8*pi+1)/16
 rcmult casper_library/Downconverter/rcmult rcmult_test latency 2

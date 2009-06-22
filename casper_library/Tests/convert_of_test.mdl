@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.38"
+    ComputedModelVersion    "1.45"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -42,11 +42,11 @@ Model {
   Creator		  "User"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "User"
+  LastModifiedBy	  "Andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Sep 16 15:27:35 2008"
+  LastModifiedDate	  "Mon Jun 22 11:03:48 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:38>"
+  ModelVersionFormat	  "1.%<AutoIncrement:45>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -483,10 +483,6 @@ Model {
   }
   BlockParameterDefaults {
     Block {
-      BlockType		      Clock
-      DisplayTime	      off
-    }
-    Block {
       BlockType		      Demux
       Outputs		      "4"
       DisplayOption	      "none"
@@ -543,21 +539,12 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
-      BlockType		      Product
-      Inputs		      "2"
-      Multiplication	      "Element-wise(.*)"
-      CollapseMode	      "All dimensions"
-      CollapseDim	      "1"
-      InputSameDT	      on
-      OutMin		      "[]"
-      OutMax		      "[]"
-      OutDataTypeMode	      "Same as first input"
-      OutDataType	      "fixdt(1,16,0)"
-      OutScaling	      "[]"
-      LockScale		      off
-      RndMeth		      "Zero"
-      SaturateOnIntegerOverflow	on
+      BlockType		      RandomNumber
+      Mean		      "0"
+      Variance		      "1"
+      Seed		      "0"
       SampleTime	      "-1"
+      VectorParams1D	      on
     }
     Block {
       BlockType		      Scope
@@ -583,15 +570,6 @@ Model {
       PortCounts	      "[]"
     }
     Block {
-      BlockType		      Step
-      Time		      "1"
-      Before		      "0"
-      After		      "1"
-      SampleTime	      "-1"
-      VectorParams1D	      on
-      ZeroCross		      on
-    }
-    Block {
       BlockType		      SubSystem
       ShowPortLabels	      "FromPortIcon"
       Permissions	      "ReadWrite"
@@ -610,23 +588,6 @@ Model {
       MinMaxOverflowLogging   "UseLocalSettings"
     }
     Block {
-      BlockType		      Sum
-      IconShape		      "rectangular"
-      Inputs		      "++"
-      CollapseMode	      "All dimensions"
-      CollapseDim	      "1"
-      InputSameDT	      on
-      OutMin		      "[]"
-      OutMax		      "[]"
-      OutDataTypeMode	      "Same as first input"
-      OutDataType	      "fixdt(1,16,0)"
-      OutScaling	      "[]"
-      LockScale		      off
-      RndMeth		      "Floor"
-      SaturateOnIntegerOverflow	on
-      SampleTime	      "-1"
-    }
-    Block {
       BlockType		      ToFile
       Filename		      "untitled.mat"
       MatrixName	      "ans"
@@ -635,20 +596,6 @@ Model {
     }
     Block {
       BlockType		      Terminator
-    }
-    Block {
-      BlockType		      Constant
-      Value		      "1"
-      VectorParams1D	      on
-      SamplingMode	      "Sample based"
-      OutMin		      "[]"
-      OutMax		      "[]"
-      OutDataTypeMode	      "Inherit from 'Constant value'"
-      OutDataType	      "fixdt(1,16,0)"
-      ConRadixGroup	      "Use specified scaling"
-      OutScaling	      "[]"
-      SampleTime	      "inf"
-      FramePeriod	      "inf"
     }
     Block {
       BlockType		      DiscretePulseGenerator
@@ -682,7 +629,7 @@ Model {
   }
   System {
     Name		    "convert_of_test"
-    Location		    [2041, 136, 2813, 686]
+    Location		    [456, 204, 1228, 754]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -769,7 +716,7 @@ Model {
       infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
       arith_type	      "Signed  (2's comp)"
       n_bits		      "8"
-      bin_pt		      "6"
+      bin_pt		      "4"
       quantization	      "Truncate"
       overflow		      "Wrap"
       period		      "1"
@@ -859,24 +806,11 @@ Model {
       DisplayOption	      "bar"
     }
     Block {
-      BlockType		      Reference
-      Name		      "Ramp"
-      Ports		      [0, 1]
-      Position		      [120, 285, 150, 315]
-      SourceBlock	      "simulink/Sources/Ramp"
-      SourceType	      "Ramp"
-      ShowPortLabels	      "FromPortIcon"
-      SystemSampleTime	      "-1"
-      FunctionWithSeparateData off
-      RTWMemSecFuncInitTerm   "Inherit from model"
-      RTWMemSecFuncExecute    "Inherit from model"
-      RTWMemSecDataConstants  "Inherit from model"
-      RTWMemSecDataInternal   "Inherit from model"
-      RTWMemSecDataParameters "Inherit from model"
-      slope		      "1/2^6"
-      start		      "0"
-      X0		      "0"
-      VectorParams1D	      on
+      BlockType		      RandomNumber
+      Name		      "Random\nNumber"
+      Position		      [125, 285, 155, 315]
+      Variance		      "2^4"
+      SampleTime	      "0"
     }
     Block {
       BlockType		      Scope
@@ -884,9 +818,10 @@ Model {
       Ports		      [5]
       Position		      [535, 240, 615, 410]
       Floating		      off
-      Location		      [1, 58, 1921, 1165]
+      Location		      [-16, 55, 1668, 1052]
       Open		      off
       NumInputPorts	      "5"
+      ZoomMode		      "xonly"
       List {
 	ListType		AxesTitles
 	axes1			"din"
@@ -911,9 +846,9 @@ Model {
       BlockType		      SubSystem
       Name		      "convert_of"
       Ports		      [1, 2]
-      Position		      [300, 280, 350, 315]
+      Position		      [300, 282, 350, 318]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
-      AttributesFormatString  "[8,6]->[7,6]"
+      AttributesFormatString  "[8,4]->[6,3]"
       AncestorBlock	      "casper_library/Misc/convert_of"
       UserDataPersistent      on
       UserData		      "DataTag1"
@@ -936,7 +871,7 @@ Model {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "8|6|7|6|1|Wrap|Truncate"
+      MaskValueString	      "8|4|6|3|0|Wrap|Truncate"
       MaskTabNameString	      ",,,,,,"
       System {
 	Name			"convert_of"
@@ -963,9 +898,87 @@ Model {
 	}
 	Block {
 	  BlockType		  Reference
+	  Name			  "all_0s"
+	  Ports			  [2, 1]
+	  Position		  [275, 185, 320, 225]
+	  SourceBlock		  "xbsIndex_r4/Logical"
+	  SourceType		  "Xilinx Logical Block Block"
+	  logical_function	  "NAND"
+	  inputs		  "2"
+	  en			  off
+	  latency		  "latency"
+	  precision		  "Full"
+	  arith_type		  "Unsigned"
+	  n_bits		  "16"
+	  bin_pt		  "0"
+	  align_bp		  on
+	  dbl_ovrd		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "logical"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "45,40,1,1,white,blue,0,3118ca85,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 40 40 ],[0.77 0.82 0.91]);\npatch([12 5 14 5 12 23 26 29 40 31 22 16 26 16 22 31 40 29 26 23 12 ],[4 11 20 29 36 36 33 36 36 27 36 30 20 10 4 13 4 4 7 4 4 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 40 40 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('\\newlinenand\\newlinez^{-0}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "all_1s"
+	  Ports			  [2, 1]
+	  Position		  [275, 245, 320, 285]
+	  SourceBlock		  "xbsIndex_r4/Logical"
+	  SourceType		  "Xilinx Logical Block Block"
+	  logical_function	  "NAND"
+	  inputs		  "2"
+	  en			  off
+	  latency		  "latency"
+	  precision		  "Full"
+	  arith_type		  "Unsigned"
+	  n_bits		  "16"
+	  bin_pt		  "0"
+	  align_bp		  on
+	  dbl_ovrd		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "logical"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "45,40,1,1,white,blue,0,3118ca85,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 40 40 ],[0.77 0.82 0.91]);\npatch([12 5 14 5 12 23 26 29 40 31 22 16 26 16 22 31 40 29 26 23 12 ],[4 11 20 29 36 36 33 36 36 27 36 30 20 10 4 13 4 4 7 4 4 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 40 40 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('\\newlinenand\\newlinez^{-0}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "and"
+	  Ports			  [2, 1]
+	  Position		  [350, 185, 390, 220]
+	  SourceBlock		  "xbsIndex_r4/Logical"
+	  SourceType		  "Xilinx Logical Block Block"
+	  logical_function	  "AND"
+	  inputs		  "2"
+	  en			  off
+	  latency		  "0"
+	  precision		  "Full"
+	  arith_type		  "Unsigned"
+	  n_bits		  "16"
+	  bin_pt		  "0"
+	  align_bp		  on
+	  dbl_ovrd		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "logical"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "40,35,1,1,white,blue,0,087b5522,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 ],[0 0 35 35 ],[0.77 0.82 0.91]);\npatch([11 5 13 5 11 20 23 26 36 28 21 16 24 16 21 28 36 26 23 20 11 ],[4 10 18 26 32 32 29 32 32 24 31 26 18 10 5 12 4 4 7 4 4 ],[0.98 0.96 0.92]);\nplot([0 40 40 0 0 ],[0 0 35 35 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('\\newlineand\\newlinez^{-0}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
 	  Name			  "convert"
 	  Ports			  [1, 1]
-	  Position		  [245, 100, 290, 130]
+	  Position		  [275, 100, 320, 130]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -983,8 +996,48 @@ Model {
 	  sggui_pos		  "20,20,538,377"
 	  block_type		  "convert"
 	  block_version		  "10.1.1"
-	  sg_icon_stat		  "45,30,1,1,white,blue,0,ba4d1298,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "45,30,1,1,white,blue,0,74901e60,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "invert1"
+	  Ports			  [1, 1]
+	  Position		  [200, 184, 235, 206]
+	  SourceBlock		  "xbsIndex_r4/Inverter"
+	  SourceType		  "Xilinx Inverter Block"
+	  infoedit		  "Bitwise logical negation (one's complement) operator."
+	  en			  off
+	  latency		  "0"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "inv"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "35,22,1,1,white,blue,0,1ab4a85f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 ],[0 0 22 22 ],[0.77 0.82 0.91]);\npatch([12 8 13 8 12 18 20 22 28 23 18 15 21 15 18 23 28 22 20 18 12 ],[2 6 11 16 20 20 18 20 20 15 20 17 11 5 2 7 2 2 4 2 2 ],[0.98 0.96 0.92]);\nplot([0 35 35 0 0 ],[0 0 22 22 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('not');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "invert2"
+	  Ports			  [1, 1]
+	  Position		  [200, 234, 235, 256]
+	  SourceBlock		  "xbsIndex_r4/Inverter"
+	  SourceType		  "Xilinx Inverter Block"
+	  infoedit		  "Bitwise logical negation (one's complement) operator."
+	  en			  off
+	  latency		  "0"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "inv"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "35,22,1,1,white,blue,0,1ab4a85f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 ],[0 0 22 22 ],[0.77 0.82 0.91]);\npatch([12 8 13 8 12 18 20 22 28 23 18 15 21 15 18 23 28 22 20 18 12 ],[2 6 11 16 20 20 18 20 20 15 20 17 11 5 2 7 2 2 4 2 2 ],[0.98 0.96 0.92]);\nplot([0 35 35 0 0 ],[0 0 22 22 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('not');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1003,11 +1056,11 @@ Model {
 	  base0			  "LSB of Input"
 	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,533,427"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
-	  block_version		  "10.1.1"
+	  block_version		  "10.1.3"
 	  sg_icon_stat		  "35,22,1,1,white,blue,0,b1026674,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 ],[0 0 22 22 ],[0.77 0.82 0.91]);\npatch([12 8 13 8 12 18 20 22 28 23 18 15 21 15 18 23 28 22 20 18 12 ],[2 6 11 16 20 20 18 20 20 15 20 17 11 5 2 7 2 2 4 2 2 ],[0.98 0.96 0.92]);\nplot([0 35 35 0 0 ],[0 0 22 22 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1026,37 +1079,11 @@ Model {
 	  base0			  "LSB of Input"
 	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,533,427"
-	  block_type		  "slice"
-	  block_version		  "10.1.1"
-	  sg_icon_stat		  "35,22,1,1,white,blue,0,b1026674,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "xor"
-	  Ports			  [2, 1]
-	  Position		  [245, 185, 295, 245]
-	  SourceBlock		  "xbsIndex_r4/Logical"
-	  SourceType		  "Xilinx Logical Block Block"
-	  logical_function	  "XOR"
-	  inputs		  "2"
-	  en			  off
-	  latency		  "latency"
-	  precision		  "Full"
-	  arith_type		  "Unsigned"
-	  n_bits		  "16"
-	  bin_pt		  "0"
-	  align_bp		  on
-	  dbl_ovrd		  off
-	  xl_use_area		  off
-	  xl_area		  "[0,0,0,0,0,0,0]"
-	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "logical"
-	  block_version		  "10.1.1"
-	  sg_icon_stat		  "50,60,1,1,white,blue,0,52e2cb93,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 60 60 ],[0.77 0.82 0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[8 17 30 43 52 52 48 52 52 40 52 43 30 17 8 20 8 8 12 8 8 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('\\newlinexor\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  block_type		  "slice"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "35,22,1,1,white,blue,0,b1026674,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 ],[0 0 22 22 ],[0.77 0.82 0.91]);\npatch([12 8 13 8 12 18 20 22 28 23 18 15 21 15 18 23 28 22 20 18 12 ],[2 6 11 16 20 20 18 20 20 15 20 17 11 5 2 7 2 2 4 2 2 ],[0.98 0.96 0.92]);\nplot([0 35 35 0 0 ],[0 0 22 22 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport
@@ -1097,17 +1124,55 @@ Model {
 	Line {
 	  SrcBlock		  "slice1"
 	  SrcPort		  1
-	  DstBlock		  "xor"
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "all_1s"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "invert1"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "invert1"
+	  SrcPort		  1
+	  DstBlock		  "all_0s"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "slice2"
 	  SrcPort		  1
-	  DstBlock		  "xor"
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "all_1s"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "invert2"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "invert2"
+	  SrcPort		  1
+	  DstBlock		  "all_0s"
 	  DstPort		  2
 	}
 	Line {
-	  SrcBlock		  "xor"
+	  SrcBlock		  "all_0s"
+	  SrcPort		  1
+	  DstBlock		  "and"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "all_1s"
+	  SrcPort		  1
+	  DstBlock		  "and"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "and"
 	  SrcPort		  1
 	  DstBlock		  "of"
 	  DstPort		  1
@@ -1115,7 +1180,7 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Ramp"
+      SrcBlock		      "Random\nNumber"
       SrcPort		      1
       DstBlock		      "Gateway In"
       DstPort		      1
@@ -1143,7 +1208,7 @@ Model {
     Line {
       SrcBlock		      "convert_of"
       SrcPort		      2
-      Points		      [15, 0; 0, 20]
+      Points		      [15, 0; 0, 15]
       DstBlock		      "Gateway Out2"
       DstPort		      1
     }
@@ -1211,7 +1276,7 @@ MatData {
   NumRecords		  2
   DataRecord {
     Tag			    DataTag1
-    Data		    "  %)30     .    J ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ )\\N5@(.    & ,   8    (     @         %    \"     $    !     0         %  0 #P    $   !X    9&5F875L=',         8FET7W=I9'1H7VD     8FEN87)Y7W!O:6YT7VD 8FET7W=I9'1H7V\\     8FEN87)Y7W!O:6YT7V\\ ;&%T96YC>0          ;W9E<F9L;W<         <75A;G1I>F%T:6]N    #@   *@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !L871E;F-Y  X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            80 X    X    !@    @    &          4    (     0    $    !          D    (            '$ .    .     8    (    !@         %    \"     $    !     0         )    \"            !A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    P    !@    @    $          4    (     0    0    !         !  ! !7<F%P#@   #@    &    \"     0         !0    @    !    \"     $         $     @   !4<G5N8V%T90"
+    Data		    "  %)30     .    J ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /ZEBP0.    & ,   8    (     @         %    \"     $    !     0         %  0 #P    $   !X    9&5F875L=',         8FET7W=I9'1H7VD     8FEN87)Y7W!O:6YT7VD 8FET7W=I9'1H7V\\     8FEN87)Y7W!O:6YT7V\\ ;&%T96YC>0          ;W9E<F9L;W<         <75A;G1I>F%T:6]N    #@   *@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !L871E;F-Y  X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            00 X    X    !@    @    &          4    (     0    $    !          D    (            &$ .    .     8    (    !@         %    \"     $    !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    P    !@    @    $          4    (     0    0    !         !  ! !7<F%P#@   #@    &    \"     0         !0    @    !    \"     $         $     @   !4<G5N8V%T90"
   }
   DataRecord {
     Tag			    DataTag0
