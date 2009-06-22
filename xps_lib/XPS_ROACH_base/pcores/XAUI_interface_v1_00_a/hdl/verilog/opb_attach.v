@@ -98,6 +98,6 @@ module opb_attach(
                             a_trans[3:2] == 2 ? {29'b0, txpreemphasis} :
                                                 {29'b0, txdiffctrl};
 
-  assign Sl_DBus = Sl_xferAck ? Sl_DBus_int : 0;
+  assign Sl_DBus = Sl_xferAck ? Sl_DBus_int : 32'b0;
 
 endmodule
