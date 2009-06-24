@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module tge_rx #(
     parameter CPU_ENABLE          = 1,
     parameter USE_DISTRIBUTED_RAM = 0

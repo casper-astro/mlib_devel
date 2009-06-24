@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module ten_gig_eth_mac_UCB(
     input  reset,
     input  tx_clk0,

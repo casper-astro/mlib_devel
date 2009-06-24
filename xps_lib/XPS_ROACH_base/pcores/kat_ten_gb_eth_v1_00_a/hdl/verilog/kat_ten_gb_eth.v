@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module kat_ten_gb_eth #(
     parameter C_BASEADDR     = 32'h0,
     parameter C_HIGHADDR     = 32'hffff,
@@ -81,7 +82,6 @@ module kat_ten_gb_eth #(
   wire        mac_rx_good_frame;
   wire        mac_rx_bad_frame;
 
-
   ten_gig_eth_mac_ucb ten_gig_eth_mac_ucb_inst (
     .reset                (mac_rst  ),
     .tx_clk0              (mac_clk  ),
@@ -124,6 +124,8 @@ module kat_ten_gb_eth #(
   wire cpu_rst = OPB_Rst;
 
   // Local parameter register outputs
+  wire        soft_reset_cpu;
+  wire        soft_reset_ack_cpu;
   wire        local_enable;
   wire [47:0] local_mac;
   wire [31:0] local_ip;
@@ -204,6 +206,9 @@ module kat_ten_gb_eth #(
     .local_ip      (local_ip),
     .local_port    (local_port),
     .local_gateway (local_gateway),
+    //software tge reset (app_reset only)
+    .soft_reset     (soft_reset_cpu),
+    .soft_reset_ack (soft_reset_ack_cpu),
     //xaui status
     .xaui_status       (xaui_status),
     //MGT/GTP PMA Config
@@ -214,6 +219,7 @@ module kat_ten_gb_eth #(
   );
 
   /**************************** TGE transmit logic ******************************/
+  wire usr_rst; //software user reset
 
   tge_tx #(
     .CPU_ENABLE          (CPU_TX_ENABLE)
@@ -231,7 +237,7 @@ module kat_ten_gb_eth #(
     .arp_cache_wr_en     (arp_cache_wr_en),
     // Application Interface
     .app_clk             (clk),
-    .app_rst             (rst),
+    .app_rst             (rst || usr_rst),
     .app_tx_valid        (tx_valid),
     .app_tx_end_of_frame (tx_end_of_frame),
     .app_tx_data         (tx_data),
@@ -271,7 +277,7 @@ module kat_ten_gb_eth #(
     .local_port   (local_port),
     // Application Interface
     .app_clk             (clk),
-    .app_rst             (rst),
+    .app_rst             (rst || usr_rst),
     .app_rx_valid        (rx_valid),
     .app_rx_end_of_frame (rx_end_of_frame),
     .app_rx_data         (rx_data),
@@ -298,6 +304,75 @@ module kat_ten_gb_eth #(
     // PHY status
     .phy_rx_up (xaui_status[6:2] == 5'b11111)
   );
+
+  /*********************** Software Reset Logic **************************/
+
+  reg [1:0] swr_state;
+  
+  wire mac_reset_ack;
+  wire mac_reset;
+
+  reg mac_reset_ackR;
+  reg mac_reset_ackRR;
+
+  always @(posedge cpu_clk) begin
+    mac_reset_ackR  <= mac_reset_ack;
+    mac_reset_ackRR <= mac_reset_ackR;
+    if (cpu_rst) begin
+      swr_state <= 0;
+    end else begin
+      case (swr_state)
+        0: begin
+          if (soft_reset_cpu) begin
+            swr_state <= 1;
+          end
+        end
+        1: begin
+          if (mac_reset_ackRR) begin
+            swr_state <= 2;
+          end
+        end
+        2: begin
+          if (!mac_reset_ackRR) begin
+          /* could wait for soft_reset to clear here, but why bother. */
+            swr_state <= 0;
+          end
+        end
+      endcase
+    end
+  end
+
+  assign mac_reset          = swr_state == 1;
+  assign soft_reset_ack_cpu = swr_state == 1 && mac_reset_ackRR;
+
+  reg macr_state;
+
+  reg mac_resetR;
+  reg mac_resetRR;
+
+  always @(posedge mac_clk) begin
+    mac_resetR  <= mac_reset;
+    mac_resetRR <= mac_resetR;
+
+    if (mac_rst) begin
+      macr_state <= 1'b0;
+    end else begin
+      case (macr_state)
+        0: begin
+          if (mac_resetRR)
+            macr_state <= 1;
+        end
+        1: begin
+          if (!mac_resetRR)
+            macr_state <= 0;
+        end
+      endcase
+    end
+  end
+  assign usr_rst       = macr_state && !mac_resetRR;
+  assign mac_reset_ack = macr_state == 1;
+
+  /******************************** LEDs *********************************/
 
   localparam LED_WIDTH = 26;
 

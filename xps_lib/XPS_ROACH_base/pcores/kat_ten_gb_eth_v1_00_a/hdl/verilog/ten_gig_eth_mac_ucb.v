@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 /*
  *  Copyright (c) 2005-2006, Regents of the University of California
  *  All rights reserved.

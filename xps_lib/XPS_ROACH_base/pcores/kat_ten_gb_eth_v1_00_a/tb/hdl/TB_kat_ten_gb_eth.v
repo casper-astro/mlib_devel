@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-`define SIMLENGTH  16000
+`define SIMLENGTH  100000
 `define MGT_PERIOD 8
 `define USR_PERIOD 7
 `define OPB_PERIOD 12
@@ -9,7 +9,7 @@ module TB_kat_ten_gb_eth();
   /* Simulation constants */
 
   /* the size of the TX frame in 64-bit words */
-  localparam TX_FRAME_SIZE  = 32'd1;
+  localparam TX_FRAME_SIZE  = 32'd1024;
 
   localparam FABRIC_MAC     = 48'h0123_4567_89ab;
   localparam FABRIC_IP      = {8'd192, 8'd168, 8'd4, 8'd20};
@@ -309,7 +309,7 @@ module TB_kat_ten_gb_eth();
     end else begin
       /* after mode progress is non-zero add a half cycle delay when */
       if (mode_progress >= 1) begin
-        if (xgmii_txc_z == 8'b1111_1111 && xgmii_txd_z == {8{8'h07}}) begin
+        if (xgmii_txc == 8'b1111_1111 && xgmii_txd == {8{8'h07}}) begin
           xgmii_add_delay <= 1'b1;
         end
       end
@@ -443,7 +443,7 @@ module TB_kat_ten_gb_eth();
         /* wait 256 cycles -- long enough for the rx buffer to overflow (only with distributed memory) */
         RX_APP_WAIT: begin
           rx_app_progress <= rx_app_progress + 1;
-          if (rx_app_progress == 256) begin
+          if (rx_app_progress == 1100) begin
             rx_app_state    <= RX_APP_OVER;
             rx_app_progress <= 32'b0;
           end

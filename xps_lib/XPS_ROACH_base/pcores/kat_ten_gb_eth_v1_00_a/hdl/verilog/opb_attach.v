@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module opb_attach #(
     parameter C_BASEADDR     = 32'h0,
     parameter C_HIGHADDR     = 32'hffff,
@@ -49,6 +50,8 @@ module opb_attach #(
     output [31:0] local_ip,
     output [15:0] local_port,
     output  [7:0] local_gateway,
+    output        soft_reset,
+    input         soft_reset_ack,
     //xaui status
     input   [7:0] xaui_status,
     //MGT/GTP PMA Config
@@ -106,6 +109,7 @@ module opb_attach #(
   reg  [3:0] mgt_rxeqpole_reg;
   reg  [2:0] mgt_txpreemphasis_reg;
   reg  [2:0] mgt_txdiffctrl_reg;
+  reg        soft_reset_reg;
 
   assign local_mac         = local_mac_reg;
   assign local_ip          = local_ip_reg;
@@ -116,6 +120,7 @@ module opb_attach #(
   assign mgt_rxeqpole      = mgt_rxeqpole_reg;
   assign mgt_txpreemphasis = mgt_txpreemphasis_reg;
   assign mgt_txdiffctrl    = mgt_txdiffctrl_reg;
+  assign soft_reset        = soft_reset_reg;
 
   reg use_arp_data, use_tx_data, use_rx_data;
 
@@ -171,10 +176,17 @@ module opb_attach #(
 
       opb_wait <= 1'b0;
 
+      soft_reset_reg <= 1'b0;
+
     end else if (opb_wait) begin
       opb_wait <= 1'b0;
       opb_ack  <= 1'b1;
     end else begin
+
+      if (soft_reset_ack) begin
+        soft_reset_reg <= 1'b0;
+      end
+
       if (opb_trans)
         opb_ack <= 1'b1;
 
@@ -257,6 +269,8 @@ module opb_attach #(
                 local_port_reg[15:8] <= OPB_DBus[15:8];
               if (OPB_BE[2])
                 local_enable_reg     <= OPB_DBus[16];
+              if (OPB_BE[3] && OPB_DBus[24])
+                soft_reset_reg       <= 1'b1;
             end
             REG_XAUI_STATUS: begin
             end
@@ -339,7 +353,7 @@ module opb_attach #(
                              opb_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway} :
                              opb_data_src == REG_LOCAL_IPADDR  ? local_ip[31:0] :
                              opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size, 8'b0, cpu_rx_ack ? 8'b0 : cpu_rx_size} :
-                             opb_data_src == REG_VALID_PORTS   ? {15'b0, local_enable, local_port} :
+                             opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset, 7'b0, local_enable, local_port} :
                              opb_data_src == REG_XAUI_STATUS   ? {24'b0, xaui_status} :
                              opb_data_src == REG_PHY_CONFIG    ? {5'b0, mgt_txdiffctrl, 5'b0, mgt_txpreemphasis,
                                                                   4'b0, mgt_rxeqpole,   6'b0, mgt_rxeqmix} :

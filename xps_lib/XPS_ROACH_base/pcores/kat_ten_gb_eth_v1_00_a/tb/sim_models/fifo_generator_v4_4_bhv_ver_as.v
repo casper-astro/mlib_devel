@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 `define LOG2(x) ((x) == 8 ? 3 : (x) == 4 ? 2 : 1)
 module fifo_generator_v4_4_bhv_ver_as
   (

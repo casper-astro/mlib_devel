@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module tge_tx #(
     parameter CPU_ENABLE = 1'b1
   ) (
@@ -41,10 +42,11 @@ module tge_tx #(
     output        mac_tx_start,
     input         mac_tx_ack
   );
+  localparam LARGE_PACKETS = 1;
 
   /****************** Common Signals *******************/
   /* these signals are used by the primary tx state machine and various
-  /* peripheral logic
+  /* periphery logic
 
   /* Fabric data signals */
   wire [63:0] packet_data;
@@ -71,20 +73,6 @@ module tge_tx #(
   wire  [7:0] mac_cpu_addr;
 
   /************ Application Interface logic ************/
-  wire tx_packet_fifo_prog_full;
-
-  /* tx data fifo - 1024 deep*/
-  tx_packet_fifo tx_packet_fifo_inst(
-    .wr_clk    (app_clk),
-    .din       (app_tx_data),
-    .wr_en     (app_tx_valid),
-    .rd_clk    (mac_clk),
-    .dout      (packet_data),
-    .rd_en     (packet_rd),
-    .prog_full (tx_packet_fifo_prog_full),
-    .overflow  (packet_data_overflow),
-    .rst       (app_rst)
-  );
 
   /* keep track of data count for ctrl_fifo */
   reg [15:0] data_count;
@@ -103,21 +91,93 @@ module tge_tx #(
     end
   end
 
-  /* ip, port & data_count fifo - 16 deep*/
+  wire tx_packet_fifo_prog_full;
+
+  /* tx data fifo - 1024 deep*/
+
+  wire [63:0] packet_fifo_data;
+  wire        packet_fifo_rd;
+  wire        packet_fifo_empty;
+
+  tx_packet_fifo tx_packet_fifo_inst(
+    .wr_clk    (app_clk),
+    .din       (app_tx_data),
+    .wr_en     (app_tx_valid),
+    .rd_clk    (mac_clk),
+    .dout      (packet_fifo_data),
+    .rd_en     (packet_fifo_rd),
+    .prog_full (tx_packet_fifo_prog_full),
+    .empty     (packet_fifo_empty),
+    .overflow  (packet_data_overflow),
+    .rst       (app_rst)
+  );
+
+  /* ip, port & data_count fifo*/
   wire tx_packet_ctrl_fifo_prog_full;
+  wire [63:0] ctrl_fifo_data;
+  wire        ctrl_fifo_rd;
+  wire        ctrl_fifo_empty;
+
   tx_packet_ctrl_fifo tx_packet_ctrl_fifo_inst(
     .wr_clk    (app_clk),
     .din       ({data_count, app_tx_dest_port, app_tx_dest_ip}),
     .wr_en     (app_tx_valid && app_tx_end_of_frame),
     .rd_clk    (mac_clk),
-    .dout      ({packet_ctrl_size, packet_ctrl_port, packet_ctrl_ip}),
-    .rd_en     (packet_ctrl_rd),
+    .dout      (ctrl_fifo_data),
+    .rd_en     (ctrl_fifo_rd),
     .prog_full (tx_packet_ctrl_fifo_prog_full),
     .overflow  (packet_ctrl_overflow),
-    .empty     (packet_ctrl_empty),
+    .empty     (ctrl_fifo_empty),
     .rst       (app_rst)
   );
   assign app_tx_afull = tx_packet_fifo_prog_full || tx_packet_ctrl_fifo_prog_full;
+
+generate if (LARGE_PACKETS) begin : large_packet_gen
+  /* Depth extension Fifos - required to allow >= 8k packets */
+  wire data_fifo_ext_afull;
+
+  assign packet_fifo_rd = !data_fifo_ext_afull && !packet_fifo_empty;
+
+  tx_fifo_ext tx_data_fifo_ext(
+    .clk       (mac_clk),
+    .rst       (app_rst),
+    .din       (packet_fifo_data),
+    .wr_en     (packet_fifo_rd),
+    .dout      (packet_data),
+    .rd_en     (packet_rd),
+    .empty     (),
+    .full      (),
+    .prog_full (data_fifo_ext_afull)
+  );
+
+  wire ctrl_fifo_ext_afull;
+  assign ctrl_fifo_rd = !ctrl_fifo_ext_afull && !ctrl_fifo_empty;
+
+  tx_fifo_ext tx_ctrl_fifo_ext(
+    .clk       (mac_clk),
+    .rst       (app_rst),
+    .din       (ctrl_fifo_data),
+    .wr_en     (ctrl_fifo_rd),
+    .dout      ({packet_ctrl_size, packet_ctrl_port, packet_ctrl_ip}),
+    .rd_en     (packet_ctrl_rd),
+    .empty     (packet_ctrl_empty),
+    .full      (),
+    .prog_full (ctrl_fifo_ext_afull)
+  );
+
+end else begin : small_packet_gen
+
+  /* No extension Fifos */
+  assign packet_ctrl_size  = ctrl_fifo_data[63:48];
+  assign packet_ctrl_port  = ctrl_fifo_data[47:32];
+  assign packet_ctrl_ip    = ctrl_fifo_data[31:0];
+  assign ctrl_fifo_rd      = packet_ctrl_rd;
+  assign packet_ctrl_empty = ctrl_fifo_empty;
+
+  assign packet_data       = packet_fifo_data;
+  assign packet_fifo_rd    = packet_rd;
+
+end endgenerate
 
   /* Overflow Control */
   reg tx_overflow_latch;

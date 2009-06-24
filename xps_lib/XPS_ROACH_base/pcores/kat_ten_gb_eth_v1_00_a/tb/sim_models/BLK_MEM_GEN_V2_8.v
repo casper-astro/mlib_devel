@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 /******************************************************************************
  *
  * Block Memory Generator Core - Block Memory Behavioral Model

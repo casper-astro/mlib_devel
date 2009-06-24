@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 /*******************************************************************************
 *     This file is owned and controlled by Xilinx and must be used             *
 *     solely for design, simulation, implementation and creation of            *
@@ -120,12 +121,12 @@ output [63 : 0] doutb;
 		.ADDRB(addrb),
 		.WEB(web),
 		.DOUTB(doutb),
-		.ENA(),
-		.REGCEA(),
-		.SSRA(),
-		.ENB(),
-		.REGCEB(),
-		.SSRB(),
+		.ENA(0),
+		.REGCEA(0),
+		.SSRA(0),
+		.ENB(0),
+		.REGCEB(0),
+		.SSRB(0),
 		.DBITERR(),
 		.SBITERR());
 
