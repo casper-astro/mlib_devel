@@ -134,6 +134,17 @@ xsg_path        = [work_path,'\sysgen'];
 bit_path        = [work_path,'\bit_files'];
 netlist_path    = [work_path,'\netlist'];
 
+% check paths
+if ~isempty(strfind(simulink_path, ' '))
+    warndlg(['Working directory ', simulink_path, ' has a space in the pathname. This can cause problems with some of the tools. Please change your working directory.']);
+    error('Working directory has a space in the pathname.');
+end
+
+if ~isempty(strfind(XPS_LIB_PATH, ' '))
+    warndlg(['Directory specified by the BEE2_XPS_LIB_PATH environment variable (', XPS_LIB_PATH, ') has a space in the pathname. This can cause problems with some of the tools. Please change its directory.']);
+    error('Directory specified by the BEE2_XPS_LIB_PATH environment variable has a space in the pathname.');
+end
+
 % create design paths if non-existent
 if exist(work_path,'dir') ~= 7
     mkdir(pwd,clear_name(get_param(xsg_blk,'parent')));
