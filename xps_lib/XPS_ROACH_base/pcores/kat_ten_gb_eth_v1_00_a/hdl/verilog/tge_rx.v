@@ -280,7 +280,11 @@ end endgenerate
         /* Buffer data from tge interface */
         CPU_BUFFERING: begin
           if (cpu_dvld) begin
-            cpu_addr <= cpu_addr + 1;
+            if (cpu_addr == {8{1'b1}}) begin
+              frame_bypass <= 1'b1;
+            end else begin
+              cpu_addr <= cpu_addr + 1;
+            end
           end
           if (cpu_frame_invalid || cpu_frame_valid && frame_bypass) begin
             cpu_addr  <= 8'd0;
