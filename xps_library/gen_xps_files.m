@@ -469,12 +469,13 @@ if run_software
         % end otherwise
     end % switch sw_os
 
-    if strcmp(hw_sys, 'iBOB')
+    if strcmp(hw_sys, 'iBOB') && strcmp(get(xsg_obj,'ibob_linux'), 'on')
         fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 4 -c -v implementation\\download.bit\n');
         fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 4 -c -v implementation/download.bit\n');
         fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_',time_stamp,'.bof\n']);
         fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_',time_stamp,'.bof\n']);
-    end % if strcmp*hw_sys, 'iBOB')
+    end % if strcmp(hw_sys, 'iBOB') && strcmp(get(xsg_obj,'ibob_linux'), 'on')
+
     if strcmp(hw_sys, 'BEE2_ctrl')
         fprintf(win_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
         fprintf(unix_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
@@ -485,6 +486,7 @@ if run_software
         fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_',time_stamp,'.bof\n']);
         fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_',time_stamp,'.bof\n']);
     end % if strcmp(hw_sys, 'BEE2_ctrl')
+
     if strcmp(hw_sys, 'BEE2_usr')
         fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -v implementation\\download.bit\n');
         fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -v implementation/download.bit\n');
@@ -507,6 +509,7 @@ if run_software
         fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_fpga4_',time_stamp,'.bof\n']);
         fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga4_',time_stamp,'.bof\n']);
     end % if strcmp(hw_sys, 'BEE2_usr')
+
     if strcmp(hw_sys, 'ROACH')
       fprintf(win_fid, ...
 	['mkbof.exe -o implementation\\system.bof', ...
@@ -519,7 +522,7 @@ if run_software
 		 time_stamp,'.bof\n']);
       fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', ...
 		  design_name,'_',time_stamp,'.bof\n']);
-    end
+    end % strcmp(hw_sys, 'ROACH')
 
     fclose(win_fid);
     fclose(unix_fid);
