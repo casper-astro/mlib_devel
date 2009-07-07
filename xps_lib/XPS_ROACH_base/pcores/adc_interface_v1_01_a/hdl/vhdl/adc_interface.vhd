@@ -538,13 +538,13 @@ CLKSHIFT_DCM : DCM
         CLKFX_MULTIPLY        => 4,
         CLKIN_DIVIDE_BY_2     => FALSE,
         CLKIN_PERIOD          => 3.906250,
-        CLKOUT_PHASE_SHIFT    => "VARIABLE_CENTER",
+        CLKOUT_PHASE_SHIFT    => "VARIABLE_POSITIVE",
         DESKEW_ADJUST         => "SYSTEM_SYNCHRONOUS",
         DFS_FREQUENCY_MODE    => "HIGH",
         DLL_FREQUENCY_MODE    => "HIGH",
         DUTY_CYCLE_CORRECTION => TRUE,
         FACTORY_JF            => x"C080",
-        PHASE_SHIFT           => 0,
+        PHASE_SHIFT           => 64, -- 64 is a 90 degree offset
         STARTUP_WAIT          => FALSE)
     port map (
         CLKFB                 => adc_clk,
