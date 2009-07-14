@@ -74,18 +74,34 @@ module tge_tx #(
 
   /************ Application Interface logic ************/
 
+  reg         app_tx_validR;
+  reg         app_tx_end_of_frameR;
+  reg  [63:0] app_tx_dataR;
+  reg  [31:0] app_tx_dest_ipR;
+  reg  [15:0] app_tx_dest_portR;
+  reg         app_tx_ctrl_fifo_en;
+
+  always @(posedge app_clk) begin
+    app_tx_validR <= app_tx_valid;
+    app_tx_end_of_frameR <= app_tx_end_of_frame;
+    app_tx_dataR <= app_tx_data;
+    app_tx_dest_ipR <= app_tx_dest_ip;
+    app_tx_dest_portR <= app_tx_dest_port;
+    app_tx_ctrl_fifo_en <= app_tx_valid && app_tx_end_of_frame;
+  end
+
   /* keep track of data count for ctrl_fifo */
   reg [15:0] data_count;
   always @(posedge app_clk) begin
     if (app_rst) begin
       data_count <= 1'd1; /* pre-add last word */
     end else begin
-      if (app_tx_end_of_frame && app_tx_valid) begin
+      if (app_tx_ctrl_fifo_en) begin
         data_count <= 16'd1;
 `ifdef DESPERATE_DEBUG
         $display("tge_tx: got fabric frame, size = %d", data_count);
 `endif
-      end else if (app_tx_valid) begin
+      end else if (app_tx_validR) begin
         data_count <= data_count + 1;
       end
     end
@@ -101,8 +117,8 @@ module tge_tx #(
 
   tx_packet_fifo tx_packet_fifo_inst(
     .wr_clk    (app_clk),
-    .din       (app_tx_data),
-    .wr_en     (app_tx_valid),
+    .din       (app_tx_dataR),
+    .wr_en     (app_tx_validR),
     .rd_clk    (mac_clk),
     .dout      (packet_fifo_data),
     .rd_en     (packet_fifo_rd),
@@ -120,8 +136,8 @@ module tge_tx #(
 
   tx_packet_ctrl_fifo tx_packet_ctrl_fifo_inst(
     .wr_clk    (app_clk),
-    .din       ({data_count, app_tx_dest_port, app_tx_dest_ip}),
-    .wr_en     (app_tx_valid && app_tx_end_of_frame),
+    .din       ({data_count, app_tx_dest_portR, app_tx_dest_ipR}),
+    .wr_en     (app_tx_ctrl_fifo_en),
     .rd_clk    (mac_clk),
     .dout      (ctrl_fifo_data),
     .rd_en     (ctrl_fifo_rd),

@@ -380,33 +380,40 @@ module kat_ten_gb_eth #(
   reg [LED_WIDTH - 1:0] tx_stretch;
   reg [LED_WIDTH - 1:0] down_stretch;
 
+  reg down_trig;
+  reg rx_trig;
+  reg tx_trig;
+
   always @(posedge mac_clk) begin
+    down_trig <= xaui_status[6:2] != 5'b11111;
+    rx_trig   <= mac_rx_good_frame;
+    tx_trig   <= mac_tx_start;
     if (mac_rst) begin
       down_stretch <= {LED_WIDTH{1'b0}};
       rx_stretch   <= {LED_WIDTH{1'b0}};
       tx_stretch   <= {LED_WIDTH{1'b0}};
     end else begin
-      if (|down_stretch) begin
+      if (down_stretch[LED_WIDTH-1]) begin
         down_stretch <= down_stretch - 1;
       end
 
-      if (|rx_stretch) begin
+      if (rx_stretch[LED_WIDTH-1]) begin
         rx_stretch <= rx_stretch - 1;
       end
 
-      if (|tx_stretch) begin
+      if (tx_stretch[LED_WIDTH-1]) begin
         tx_stretch <= tx_stretch - 1;
       end
 
-      if (xaui_status[6:2] != 5'b11111) begin
+      if (down_trig) begin
         down_stretch <= {LED_WIDTH{1'b1}};
       end
 
-      if (mac_rx_good_frame) begin
+      if (rx_trig) begin
         rx_stretch <= {LED_WIDTH{1'b1}};
       end
 
-      if (mac_tx_start) begin
+      if (tx_trig) begin
         tx_stretch <= {LED_WIDTH{1'b1}};
       end
     end
@@ -417,9 +424,9 @@ module kat_ten_gb_eth #(
   reg led_tx_reg; 
 
   always @(posedge clk) begin
-    led_up_reg <= down_stretch == 0;
-    led_rx_reg <= rx_stretch   != 0;
-    led_tx_reg <= tx_stretch   != 0;
+    led_up_reg <= !down_stretch[LED_WIDTH-1];
+    led_rx_reg <= rx_stretch[LED_WIDTH-1];
+    led_tx_reg <= tx_stretch[LED_WIDTH-1];
   end
 
   assign led_up = led_up_reg;
