@@ -40,6 +40,7 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 latency = get_var('latency', 'defaults', defaults, varargin{:});
+behavioral = get_var('behavioral', 'defaults', defaults, varargin{:});
 
 stages = ceil(log2(n_inputs));
 
@@ -82,8 +83,8 @@ else
                 addr = ['addr',num2str(blk_cnt)];
                 blks{j} = addr;
                 reuse_block(blk, addr, 'xbsIndex_r4/AddSub', ...
-                    'latency', num2str(latency), 'use_behavioral_HDL', 'off',...
-                    'pipelined', 'on', 'use_rpm', 'on',...
+                    'latency', num2str(latency), 'use_behavioral_HDL', behavioral,...
+                    'pipelined', 'on', 'use_rpm', 'on', ...
                     'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
                 if stage == 1,
                     add_line(blk,['din',num2str((j*2-1)),'/1'],[addr,'/1']);

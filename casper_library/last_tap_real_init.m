@@ -31,20 +31,14 @@ function last_tap_real_init(blk, varargin)
 % Valid varnames for this block are:
 % TotalTaps = Total number of taps in the PFB
 % BitWidthIn = Input Bitwidth
-% BitWidthOut = Output Bitwidth
 % CoeffBitWidth = Bitwidth of Coefficients.
-% add_latency = Latency through each adder.
 % mult_latency = Latency through each multiplier
-% quantization = 'Truncate', 'Round  (unbiased: +/- Inf)', or 'Round
-% (unbiased: Even Values)'
 
 % Declare any default values for arguments you might like.
 defaults = {};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'last_tap_real');
 munge_block(blk, varargin{:});
-
-propagate_vars([blk,'/pfb_real_add_tree'], 'defaults', defaults, varargin{:});
 
 use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
