@@ -1,6 +1,6 @@
 #Please do not modify this file by hand
-XmpVersion: 10.1.02
-VerMgmt: 10.1.01
+XmpVersion: 10.1.03
+VerMgmt: 10.1.03
 IntStyle: default
 MHS File: system.mhs
 MSS File: system.mss
@@ -31,7 +31,7 @@ SimEdkLib:
 MixLangSim: 1
 UcfFile: data/system.ucf
 FpgaImpMode: 0
-EnableParTimingError: 0
+EnableParTimingError: 1
 EnableResetOptimization: 0
 ShowLicenseDialog: 1
 Processor: ppc405_1
