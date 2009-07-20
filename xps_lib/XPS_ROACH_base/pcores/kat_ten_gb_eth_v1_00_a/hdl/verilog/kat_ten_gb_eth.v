@@ -220,6 +220,10 @@ module kat_ten_gb_eth #(
 
   /**************************** TGE transmit logic ******************************/
   wire usr_rst; //software user reset
+  reg app_rst;
+  always @(posedge clk) begin
+    app_rst <= rst || usr_rst;
+  end
 
   tge_tx #(
     .CPU_ENABLE          (CPU_TX_ENABLE)
@@ -237,7 +241,7 @@ module kat_ten_gb_eth #(
     .arp_cache_wr_en     (arp_cache_wr_en),
     // Application Interface
     .app_clk             (clk),
-    .app_rst             (rst || usr_rst),
+    .app_rst             (app_rst),
     .app_tx_valid        (tx_valid),
     .app_tx_end_of_frame (tx_end_of_frame),
     .app_tx_data         (tx_data),
@@ -277,7 +281,7 @@ module kat_ten_gb_eth #(
     .local_port   (local_port),
     // Application Interface
     .app_clk             (clk),
-    .app_rst             (rst || usr_rst),
+    .app_rst             (app_rst),
     .app_rx_valid        (rx_valid),
     .app_rx_end_of_frame (rx_end_of_frame),
     .app_rx_data         (rx_data),

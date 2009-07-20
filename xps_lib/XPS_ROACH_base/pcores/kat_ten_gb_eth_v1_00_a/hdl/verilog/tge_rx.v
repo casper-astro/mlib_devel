@@ -70,6 +70,20 @@ module tge_rx #(
   reg application_frame;
 
   /* delayed data */
+
+  /* Register MAC signals to ease timing */
+  reg [63:0] mac_rx_data_z;
+  reg        mac_rx_good_frame_z;
+  reg  [7:0] mac_rx_data_valid_z;
+  reg        mac_rx_bad_frame_z;
+
+  always @(posedge mac_clk) begin
+    mac_rx_data_z       <= mac_rx_data;
+    mac_rx_data_valid_z <= mac_rx_data_valid;
+    mac_rx_good_frame_z <= mac_rx_good_frame;
+    mac_rx_bad_frame_z  <= mac_rx_bad_frame;
+  end
+
   reg [63:0] mac_rx_dataR;
   reg        mac_rx_good_frameR;
   reg        mac_rx_bad_frameR;
@@ -77,16 +91,16 @@ module tge_rx #(
   reg [47:0] rx_control_data;
 
   /* Eady reading assignments */
-  wire [47:0] destination_mac  = {mac_rx_data[ 7:0 ], mac_rx_data[15:8 ], mac_rx_data[23:16],
-                                  mac_rx_data[31:24], mac_rx_data[39:32], mac_rx_data[47:40]};
-  wire [15:0] destination_port = {mac_rx_data[39:32], mac_rx_data[47:40]};
-  wire [31:0] destination_ip   = {mac_rx_dataR[55:48], mac_rx_dataR[63:56], mac_rx_data[7:0], mac_rx_data[15:8]};
+  wire [47:0] destination_mac  = {mac_rx_data_z[ 7:0 ], mac_rx_data_z[15:8 ], mac_rx_data_z[23:16],
+                                  mac_rx_data_z[31:24], mac_rx_data_z[39:32], mac_rx_data_z[47:40]};
+  wire [15:0] destination_port = {mac_rx_data_z[39:32], mac_rx_data_z[47:40]};
+  wire [31:0] destination_ip   = {mac_rx_dataR[55:48], mac_rx_dataR[63:56], mac_rx_data_z[7:0], mac_rx_data_z[15:8]};
 
   always @(posedge mac_clk) begin
     /* Delay Data + frame signals */
-    mac_rx_dataR       <= mac_rx_data;
-    mac_rx_good_frameR <= mac_rx_good_frame;
-    mac_rx_bad_frameR  <= mac_rx_bad_frame;
+    mac_rx_dataR       <= mac_rx_data_z;
+    mac_rx_good_frameR <= mac_rx_good_frame_z;
+    mac_rx_bad_frameR  <= mac_rx_bad_frame_z;
 
     if (mac_rst) begin
       rx_control_data <= 64'd0;
@@ -97,7 +111,7 @@ module tge_rx #(
           cpu_frame         <= 1'b1;
           application_frame <= 1'b1;
 
-          if (mac_rx_data_valid == {8{1'b1}} && phy_rx_up) begin
+          if (mac_rx_data_valid_z == {8{1'b1}} && phy_rx_up) begin
             rx_state <= RX_HDR_WORD_2;
 `ifdef DESPERATE_DEBUG
             $display("tge_rx: got frame start ");
@@ -116,12 +130,12 @@ module tge_rx #(
         end
         RX_HDR_WORD_2: begin
          /* Check IPV4 info */
-          if ({mac_rx_data[39:32], mac_rx_data[47:40]} != 16'h0800 || mac_rx_data[55:48] != 8'h45) begin
+          if ({mac_rx_data_z[39:32], mac_rx_data_z[47:40]} != 16'h0800 || mac_rx_data_z[55:48] != 8'h45) begin
             /* If not IPv4 frame, with no options or padding no good for application */
             application_frame <= 1'b0;
             rx_state          <= RX_DATA;
 `ifdef DEBUG
-            $display("tge_rx: IPv4 stuff mismatch -- %x ?= 0x0800, %x ?= 0x45", {mac_rx_data[39:32], mac_rx_data[47:40]}, mac_rx_data[55:48]);
+            $display("tge_rx: IPv4 stuff mismatch -- %x ?= 0x0800, %x ?= 0x45", {mac_rx_data_z[39:32], mac_rx_data_z[47:40]}, mac_rx_data_z[55:48]);
 `endif
           end else begin
             rx_state          <= RX_HDR_WORD_3;
@@ -129,7 +143,7 @@ module tge_rx #(
         end
         RX_HDR_WORD_3: begin
          /* Check UDP protocol */
-          if (mac_rx_data[63:56] != 8'h11) begin
+          if (mac_rx_data_z[63:56] != 8'h11) begin
             application_frame <= 1'b0;
             rx_state          <= RX_DATA;
 `ifdef DEBUG
@@ -141,10 +155,10 @@ module tge_rx #(
         end
         RX_HDR_WORD_4: begin
           /* Store source IP address info */
-          rx_control_data[31:24] <= mac_rx_data[23:16];
-          rx_control_data[23:16] <= mac_rx_data[31:24];
-          rx_control_data[15:8 ] <= mac_rx_data[39:32];
-          rx_control_data[ 7:0 ] <= mac_rx_data[47:40];
+          rx_control_data[31:24] <= mac_rx_data_z[23:16];
+          rx_control_data[23:16] <= mac_rx_data_z[31:24];
+          rx_control_data[15:8 ] <= mac_rx_data_z[39:32];
+          rx_control_data[ 7:0 ] <= mac_rx_data_z[47:40];
           /* No IP checksum */
 
           rx_state               <= RX_HDR_WORD_5;
@@ -153,8 +167,8 @@ module tge_rx #(
           rx_state               <= RX_HDR_WORD_6;
 
           /* Store source port */
-          rx_control_data[47:40] <= mac_rx_data[23:16];
-          rx_control_data[39:32] <= mac_rx_data[31:24];
+          rx_control_data[47:40] <= mac_rx_data_z[23:16];
+          rx_control_data[39:32] <= mac_rx_data_z[31:24];
           /* Check destiniation port */
           if (destination_port != local_port) begin
 `ifdef DEBUG
@@ -215,10 +229,10 @@ module tge_rx #(
 
   /* Common Application signals */
   assign app_data        = {mac_rx_dataR[23:16], mac_rx_dataR[31:24], mac_rx_dataR[39:32], mac_rx_dataR[47:40],
-                            mac_rx_dataR[55:48], mac_rx_dataR[63:56],  mac_rx_data[ 7:0 ],  mac_rx_data[15:8 ]};
+                            mac_rx_dataR[55:48], mac_rx_dataR[63:56],  mac_rx_data_z[ 7:0 ],  mac_rx_data_z[15:8 ]};
   assign app_dvld        = application_frame && rx_state == RX_DATA && (!(mac_rx_good_frameR || mac_rx_bad_frameR));
-  assign app_goodframe   = application_frame && mac_rx_good_frame;
-  assign app_badframe    = application_frame && mac_rx_bad_frame;
+  assign app_goodframe   = application_frame && mac_rx_good_frame_z;
+  assign app_badframe    = application_frame && mac_rx_bad_frame_z;
   assign app_source_ip   = rx_control_data[31:0];
   assign app_source_port = rx_control_data[47:15];
   /* TODO: need neater way to align eof/dvld for cpu+app */
