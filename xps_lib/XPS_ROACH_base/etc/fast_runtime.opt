@@ -30,6 +30,8 @@ End Program ngdbuild
 Program map
 -timing;
 -ol high;
+-xe n;
+-register_duplication;
 -o <design>_map.ncd;        # Output Mapped ncd file
 -w;                         # Overwrite output files.
 -pr b;                      # Pack internal FF/latches into IOBs
@@ -58,6 +60,7 @@ END Program post_map_trce
 # Type "par -h" for a detailed list of par command line options
 #
 Program par
+-xe n;
 -w;                         # Overwrite existing placed and routed ncd
 -ol high;                   # Overall effort level
 <inputdir><design>_map.ncd; # Input mapped NCD file

@@ -75,7 +75,6 @@ module tge_tx #(
   /************ Application Interface logic ************/
 
   reg         app_tx_validR;
-  reg         app_tx_end_of_frameR;
   reg  [63:0] app_tx_dataR;
   reg  [31:0] app_tx_dest_ipR;
   reg  [15:0] app_tx_dest_portR;
@@ -83,7 +82,6 @@ module tge_tx #(
 
   always @(posedge app_clk) begin
     app_tx_validR <= app_tx_valid;
-    app_tx_end_of_frameR <= app_tx_end_of_frame;
     app_tx_dataR <= app_tx_data;
     app_tx_dest_ipR <= app_tx_dest_ip;
     app_tx_dest_portR <= app_tx_dest_port;

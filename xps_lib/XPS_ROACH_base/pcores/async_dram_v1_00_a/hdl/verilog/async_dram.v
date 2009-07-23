@@ -66,6 +66,9 @@ module async_dram #(
   input  [144 - 1:0] Mem_Wr_Din;
   input  [ 18 - 1:0] Mem_Wr_BE;
 
+  //synthesis attribute MAX_FANOUT of Mem_Rd_Ack is 20
+  //synthesis attribute MAX_FANOUT of Mem_Cmd_Ack is 20
+
   //reset extend
   reg [3:0] dram_reset_extend;
   always @(posedge Mem_Clk) begin
@@ -215,7 +218,8 @@ module async_dram #(
 
   assign rd_data_fifo_input = rd_data_fifo_input_reg;
   assign rd_data_fifo_we    = rd_data_fifo_we_reg;
-  assign rd_data_fifo_re    = Mem_Rd_Valid && Mem_Rd_Ack;
+  assign rd_data_fifo_re    = Mem_Rd_Ack;
+  //assign rd_data_fifo_re    = Mem_Rd_Valid && Mem_Rd_Ack;
   assign Mem_Rd_Dout        = rd_data_fifo_output;
   assign Mem_Rd_Valid       = !rd_data_fifo_empty;
 

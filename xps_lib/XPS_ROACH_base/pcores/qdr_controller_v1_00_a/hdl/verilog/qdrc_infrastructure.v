@@ -118,7 +118,6 @@ module qdrc_infrastructure(
   reg [ADDR_WIDTH - 1:0] qdr_sa_reg;
   reg qdr_w_n_reg;
   reg qdr_r_n_reg;
-  reg qdr_dll_off_n_reg;
 
   /* This signals are all sliced so use the register in the slice */
 
@@ -126,20 +125,17 @@ module qdrc_infrastructure(
     qdr_sa_reg        <= qdr_sa_buf;
     qdr_w_n_reg       <= qdr_w_n_buf;
     qdr_r_n_reg       <= qdr_r_n_buf;
-    qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
   end
 
   reg [ADDR_WIDTH - 1:0] qdr_sa_reg0;
   reg qdr_w_n_reg0;
   reg qdr_r_n_reg0;
-  reg qdr_dll_off_n_reg0;
 
-  always @(posedge clk270) begin 
+  always @(posedge clk180) begin 
   /* Add delay to ease timing */
     qdr_sa_reg0        <= qdr_sa_reg;
     qdr_w_n_reg0       <= qdr_w_n_reg;
     qdr_r_n_reg0       <= qdr_r_n_reg;
-    qdr_dll_off_n_reg0 <= qdr_dll_off_n_reg;
   end
 
   reg [ADDR_WIDTH - 1:0] qdr_sa_iob;
@@ -157,7 +153,11 @@ module qdrc_infrastructure(
     qdr_sa_iob        <= qdr_sa_reg0;
     qdr_w_n_iob       <= qdr_w_n_reg0;
     qdr_r_n_iob       <= qdr_r_n_reg0;
-    qdr_dll_off_n_iob <= qdr_dll_off_n_reg0;
+  end
+  reg qdr_dll_off_n_reg;
+  always @(posedge clk0) begin
+    qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
+    qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
   end
 
   OBUF OBUF_addr[ADDR_WIDTH - 1:0](
@@ -332,6 +332,91 @@ module qdrc_infrastructure(
     .CLR(1'b0)
     
   );
+
+// moo attribute HU_SET of qdr_w_n_reg  is SET_qdr_w_n
+// moo attribute HU_SET of qdr_w_n_reg0 is SET_qdr_w_n
+// moo attribute RLOC   of qdr_w_n_reg  is X0Y0
+// moo attribute RLOC   of qdr_w_n_reg0 is X1Y0
+// moo attribute HU_SET of qdr_r_n_reg  is SET_qdr_r_n
+// moo attribute HU_SET of qdr_r_n_reg0 is SET_qdr_r_n
+// moo attribute RLOC   of qdr_r_n_reg  is X0Y0
+// moo attribute RLOC   of qdr_r_n_reg0 is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[0]  is SET_qdr_sa0
+// moo attribute HU_SET of qdr_sa_reg0[0] is SET_qdr_sa0
+// moo attribute RLOC   of qdr_sa_reg[0]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[0] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[1]  is SET_qdr_sa1
+// moo attribute HU_SET of qdr_sa_reg0[1] is SET_qdr_sa1
+// moo attribute RLOC   of qdr_sa_reg[1]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[1] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[2]  is SET_qdr_sa2
+// moo attribute HU_SET of qdr_sa_reg0[2] is SET_qdr_sa2
+// moo attribute RLOC   of qdr_sa_reg[2]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[2] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[3]  is SET_qdr_sa3
+// moo attribute HU_SET of qdr_sa_reg0[3] is SET_qdr_sa3
+// moo attribute RLOC   of qdr_sa_reg[3]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[3] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[4]  is SET_qdr_sa4
+// moo attribute HU_SET of qdr_sa_reg0[4] is SET_qdr_sa4
+// moo attribute RLOC   of qdr_sa_reg[4]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[4] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[5]  is SET_qdr_sa5
+// moo attribute HU_SET of qdr_sa_reg0[5] is SET_qdr_sa5
+// moo attribute RLOC   of qdr_sa_reg[5]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[5] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[6]  is SET_qdr_sa6
+// moo attribute HU_SET of qdr_sa_reg0[6] is SET_qdr_sa6
+// moo attribute RLOC   of qdr_sa_reg[6]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[6] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[7]  is SET_qdr_sa7
+// moo attribute HU_SET of qdr_sa_reg0[7] is SET_qdr_sa7
+// moo attribute RLOC   of qdr_sa_reg[7]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[7] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[8]  is SET_qdr_sa8
+// moo attribute HU_SET of qdr_sa_reg0[8] is SET_qdr_sa8
+// moo attribute RLOC   of qdr_sa_reg[8]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[8] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[9]  is SET_qdr_sa9
+// moo attribute HU_SET of qdr_sa_reg0[9] is SET_qdr_sa9
+// moo attribute RLOC   of qdr_sa_reg[9]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[9] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[10]  is SET_qdr_sa10
+// moo attribute HU_SET of qdr_sa_reg0[10] is SET_qdr_sa10
+// moo attribute RLOC   of qdr_sa_reg[10]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[10] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[11]  is SET_qdr_sa11
+// moo attribute HU_SET of qdr_sa_reg0[11] is SET_qdr_sa11
+// moo attribute RLOC   of qdr_sa_reg[11]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[11] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[12]  is SET_qdr_sa12
+// moo attribute HU_SET of qdr_sa_reg0[12] is SET_qdr_sa12
+// moo attribute RLOC   of qdr_sa_reg[12]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[12] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[13]  is SET_qdr_sa13
+// moo attribute HU_SET of qdr_sa_reg0[13] is SET_qdr_sa13
+// moo attribute RLOC   of qdr_sa_reg[13]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[13] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[14]  is SET_qdr_sa14
+// moo attribute HU_SET of qdr_sa_reg0[14] is SET_qdr_sa14
+// moo attribute RLOC   of qdr_sa_reg[14]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[14] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[15]  is SET_qdr_sa15
+// moo attribute HU_SET of qdr_sa_reg0[15] is SET_qdr_sa15
+// moo attribute RLOC   of qdr_sa_reg[15]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[15] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[16]  is SET_qdr_sa16
+// moo attribute HU_SET of qdr_sa_reg0[16] is SET_qdr_sa16
+// moo attribute RLOC   of qdr_sa_reg[16]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[16] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[17]  is SET_qdr_sa17
+// moo attribute HU_SET of qdr_sa_reg0[17] is SET_qdr_sa17
+// moo attribute RLOC   of qdr_sa_reg[17]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[17] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[18]  is SET_qdr_sa18
+// moo attribute HU_SET of qdr_sa_reg0[18] is SET_qdr_sa18
+// moo attribute RLOC   of qdr_sa_reg[18]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[18] is X1Y0
 
 
 endmodule
