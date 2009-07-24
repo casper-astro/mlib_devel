@@ -1,9 +1,0 @@
-# Output products list for <chipscope_icon_v1_03_a>
-chipscope_icon_v1_03_a.ncf
-chipscope_icon_v1_03_a.ngc
-chipscope_icon_v1_03_a.v
-chipscope_icon_v1_03_a.veo
-chipscope_icon_v1_03_a.xco
-chipscope_icon_v1_03_a_flist.txt
-chipscope_icon_v1_03_a_xmdf.tcl
-chipscope_ila_v1_02_a.ncf

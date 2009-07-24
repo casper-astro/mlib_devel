@@ -1,8 +1,0 @@
-# Output products list for <async_fifo_64by16>
-async_fifo_64by16.ngc
-async_fifo_64by16.v
-async_fifo_64by16.veo
-async_fifo_64by16.xco
-async_fifo_64by16_fifo_generator_v4_4_xst_1.ngc_xst.xrpt
-async_fifo_64by16_flist.txt
-async_fifo_64by16_xmdf.tcl
