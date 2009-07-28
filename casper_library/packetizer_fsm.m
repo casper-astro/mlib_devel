@@ -95,6 +95,7 @@ switch double(state)
         end
         
     case state_init
+        fifo_re = false;
         bram_addr_en = false;
         bram_we = false;
         serializer_shift = false;
@@ -107,9 +108,7 @@ switch double(state)
         done = false;        
         if ~fifo_empty
             state = state_idle;
-            fifo_re = true;
         else
-            fifo_re = false;
             state = state_init;
         end
         
@@ -126,7 +125,7 @@ switch double(state)
         data_count_rst = false;
                 done = false;
         
-        state = state_init;
+        state = state_done;
         
         
         
