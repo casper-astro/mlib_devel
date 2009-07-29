@@ -5,7 +5,7 @@ function reorder_init(blk, varargin)
 %
 % blk = The block to be initialize.
 % varargin = {'varname', 'value', ...} pairs
-% 
+%
 % Valid varnames for this block are:
 % map = The desired output order.
 % map_latency = The latency of a map block.
@@ -13,9 +13,10 @@ function reorder_init(blk, varargin)
 % n_inputs = The number of parallel inputs to be reordered.
 % double_buffer = Whether to use two buffers to reorder data (instead of
 %                 doing it in-place).
+% bram_map = Whether to use BlockRAM for address mapping.
 
 % Declare any default values for arguments you might like.
-defaults = {'map_latency', 0, 'bram_latency', 2, 'n_inputs', 1, 'double_buffer', 0};
+defaults = {'map_latency', 0, 'bram_latency', 2, 'n_inputs', 1, 'double_buffer', 0, 'bram_map', 'off'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'reorder');
 munge_block(blk, varargin{:});
@@ -25,6 +26,7 @@ map_latency = get_var('map_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 double_buffer = get_var('double_buffer', 'defaults', defaults, varargin{:});
+bram_map = get_var('bram_map', 'defaults', defaults, varargin{:});
 
 if n_inputs < 1
     error('Number of inputs cannot be less than 1.');
@@ -36,6 +38,12 @@ map_length = length(map);
 map_bits = ceil(log2(map_length));
 order = compute_order(map);
 order_bits = ceil(log2(order));
+
+if (strcmp('on',bram_map))
+    map_memory_type = 'Block RAM';
+else
+    map_memory_type = 'Distributed memory';
+end
 
 if (double_buffer < 0 || double_buffer > 1) ,
 	disp('Double Buffer must be 0 or 1');
@@ -107,7 +115,7 @@ if order == 1,
         add_line(blk, 'delay_we/1', ['delay_din_bram',num2str(i-1),'/2']);
     end
 % Case for order != 1, single-buffered
-elseif double_buffer == 0,   
+elseif double_buffer == 0,
     reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
         'Position', [95    56   145   109],'n_bits', num2str(map_bits + order_bits), 'cnt_type', 'Count Limited', ...
         'arith_type', 'Unsigned', 'cnt_to', num2str(2^map_bits * order - 1), ...
@@ -148,11 +156,11 @@ elseif double_buffer == 0,
         reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
             'depth', num2str(map_length), 'initVector', 'map', 'latency', num2str(map_latency), ...
             'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', ...
-            'distributed_mem', 'Distributed memory', 'Position', [230  125+50*i   270    145+50*i]);
+            'distributed_mem', map_memory_type, 'Position', [230  125+50*i   270    145+50*i]);
         reuse_block(blk, ['delay_',mapname], 'xbsIndex_r4/Delay', ...
             'Position', [305   125+50*i    345   145+50*i], 'latency', [num2str(order-(i+1)),'*map_latency']);
     end
-    
+
     % Add static wires
     add_line(blk, 'sync/1', 'Counter/1');
     add_line(blk, 'en/1', 'Counter/2');
@@ -192,7 +200,7 @@ elseif double_buffer == 0,
         add_line(blk, ['delay_',mapname,'/1'], ['Mux/',num2str(i+2)]);
     end
 % case for order > 1, double-buffered
-else, 
+else,
     reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
         'Position', [95    56   145   109],'n_bits', num2str(map_bits + 1), 'cnt_type', 'Count Limited', ...
         'arith_type', 'Unsigned', 'cnt_to', num2str(2^map_bits * 2 - 1), ...
@@ -230,8 +238,8 @@ else,
     reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
         'depth', num2str(map_length), 'initVector', mat2str(map), 'latency', num2str(map_latency), ...
         'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', ...
-        'distributed_mem', 'Distributed memory', 'Position', [230  125+50   270    145+50]);
-    
+        'distributed_mem', map_memory_type, 'Position', [230  125+50   270    145+50]);
+
     % Add static wires
     add_line(blk, 'sync/1', 'Counter/1');
     add_line(blk, 'en/1', 'Counter/2');

@@ -32,7 +32,7 @@ function pipeline_init(blk, varargin)
 
 % Declare any default values for arguments you might like.
 defaults = {};
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+%if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'pipeline');
 munge_block(blk, varargin{:});
 
@@ -49,12 +49,10 @@ end
 reuse_block(blk, 'd', 'built-in/inport',  'Position', [15 48 45 62], 'Port', '1');
 reuse_block(blk, 'q', 'built-in/outport', 'Position', [latency*100+115 48 latency*100+145 62], 'Port', '1');
 
-% Add delay blocks
+% Add register blocks
 for z = 0:latency-1
-    reuse_block(blk, ['Delay',num2str(z)], 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, ['Register',num2str(z)], 'xbsIndex_r4/Register', ...
         'en', 'off', ...
-        'latency', '1', ...
-        'reg_retiming', 'off', ...
         'Position', [100*z+115 27 100*z+175 83]);
 end
 
@@ -63,11 +61,11 @@ if (latency == 0)
     add_line(blk, 'd/1', 'q/1');
 else
     for z = 1:latency-1
-        add_line(blk, ['Delay', num2str(z-1), '/1'], ['Delay', num2str(z), '/1']);
+        add_line(blk, ['Register', num2str(z-1), '/1'], ['Register', num2str(z), '/1']);
     end
 
-    add_line(blk, 'd/1', 'Delay0/1');
-    add_line(blk, ['Delay', num2str(latency-1), '/1'], 'q/1');
+    add_line(blk, 'd/1', 'Register0/1');
+    add_line(blk, ['Register', num2str(latency-1), '/1'], 'q/1');
 end
 
 clean_blocks(blk);
