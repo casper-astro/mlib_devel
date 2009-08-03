@@ -51,7 +51,7 @@ switch hw_sys
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/CLK90_CLKBUF"   LOC                = BUFGMUX3P;\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/CLKSHIFT_DCM"   LOC                = DCM_X2Y1;\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/CLKSHIFT_DCM"   CLKOUT_PHASE_SHIFT = VARIABLE;\n'];
-        		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 323ps;\n'];
+        		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 559ps;\n'];
         		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       ROUTE              = "{3;1;2vp50ff1152;46c47c12!-1;156520;5632;S!0;-159;0!1;-1884;-1248!1;-1884;744!2;-1548;992!2;-1548;304!3;-1548;-656!3;-1548;-1344!4;327;0;L!5;167;0;L!6;327;0;L!7;167;0;L!}";\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_ddr_3" LOC                = SLICE_X139Y91;\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_ddr_2" LOC                = SLICE_X138Y91;\n'];
@@ -136,7 +136,7 @@ switch hw_sys
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/CLK90_CLKBUF"   LOC                = BUFGMUX2P;\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/CLKSHIFT_DCM"   LOC                = DCM_X2Y0;\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/CLKSHIFT_DCM"   CLKOUT_PHASE_SHIFT = VARIABLE;\n'];
-        		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 323ps;\n'];
+        		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 559ps;\n'];
         		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       ROUTE              = "{3;1;2vp50ff1152;6b4b9e45!-1;156520;-144648;S!0;-159;0!1;-1884;-1248!1;-1884;744!2;-1548;992!2;-1548;304!3;-1548;-656!3;-1548;-1344!4;327;0;L!5;167;0;L!6;327;0;L!7;167;0;L!}";\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_ddr_3" LOC                = SLICE_X139Y3;\n'];
         		str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_ddr_2" LOC                = SLICE_X138Y3;\n'];
