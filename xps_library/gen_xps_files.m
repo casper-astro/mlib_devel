@@ -315,12 +315,59 @@ if run_copy
     disp('#########################');
     disp('## Copying base system ##');
     disp('#########################');
+
+    pcores_used = {};
+
+    for n = 1:length(xps_objs)
+
+        curr_obj = xps_objs{n};
+
+        obj_ip_name = get(curr_obj, 'ip_name');
+        obj_ip_ver  = get(curr_obj, 'ip_version');
+        obj_supp_ip_names = get(curr_obj, 'supp_ip_names');
+        obj_supp_ip_vers  = get(curr_obj, 'supp_ip_versions');
+
+        if isempty(obj_ip_ver)
+            obj_ip_ver = '1.00.a';
+        end
+
+        if isempty(obj_supp_ip_names)
+            try
+                pcore_used = clear_name([obj_ip_name, ' v', obj_ip_ver]);
+                pcores_used = [pcores_used, {pcore_used}];
+            end
+        else
+            for n=2:length(obj_supp_ip_names)
+                try
+                    pcore_used = clear_name([obj_supp_ip_names{n}, ' v', obj_supp_ip_vers{n}]);
+                    pcores_used = [pcores_used, {pcore_used}];
+                end
+            end
+
+            % supp_ip_names{1} used to override ip_name; also include ip_name if {1} is empty
+            if isempty(obj_supp_ip_names{1})
+                try
+                    pcore_used = clear_name([get(curr_obj, 'ip_name'), ' v', get(curr_obj, 'ip_version')]);
+                    pcores_used = [pcores_used, {pcore_used}];
+                end
+            else
+                try
+                    pcore_used = clear_name([obj_supp_ip_names{1}, ' v', obj_supp_ip_vers{1}]);
+                    pcores_used = [pcores_used, {pcore_used}];
+                end
+            end
+        end
+
+    end % for n = 1:length(xps_objs)
+
+    pcores_used = unique(pcores_used);
+
     if exist(xps_path,'dir')
         rmdir(xps_path,'s');
     end
     if exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
         mkdir(xps_path);
-        [copy_result,copy_message] = dos(['xcopy /Q /E /Y ', getenv('BEE2_XPS_LIB_PATH'), '\XPS_',hw_sys,'_base ', xps_path,'\.']);
+        [copy_result,copy_message] = dos(['xcopy /Q /E /Y ', XPS_LIB_PATH, '\XPS_',hw_sys,'_base ', xps_path,'\.']);
         if copy_result
             cd(simulink_path);
             error('Unpackage base system files failed.');
@@ -329,8 +376,37 @@ if run_copy
         end
     else
         error(['Base XPS package "','XPS_',hw_sys,'_base" does not exist.']);
-    end
-end
+    end % exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
+
+%%%%%   BEGIN PCORE COPYING CODE
+%%%%%
+%%%%%    if exist([XPS_LIB_PATH,'\pcores'], 'dir')
+%%%%%        if ~exist([xps_path, '\copied_pcores'], 'dir')
+%%%%%            mkdir([xps_path, '\copied_pcores']);
+%%%%%        end
+%%%%%
+%%%%%        for n=1:length(pcores_used)
+%%%%%            disp(pcores_used{n})
+%%%%%            pcore_path = [xps_path, '\copied_pcores\', pcores_used{n}];
+%%%%%            mkdir(pcore_path);
+%%%%%            [copy_result, copy_message] = dos(['xcopy /Q /E /Y ', XPS_LIB_PATH, '\pcores\', pcores_used{n}, ' ', pcore_path, '\.']);
+%%%%%
+%%%%%            if copy_result
+%%%%%                cd(simulink_path);
+%%%%%                disp(copy_message);
+%%%%%                error(['Pcore copy failed: ', pcores_used{n}]);
+%%%%%            else
+%%%%%                cd(simulink_path);
+%%%%%            end
+%%%%%        end % for n=1:length(pcores_used)
+%%%%%    else
+%%%%%        cd(simulink_path);
+%%%%%        error(['PCores directory "', XPS_LIB_PATH, '\pcores" does not exist']);
+%%%%%    end % if exist([XPS_LIB_PATH,'\pcores'], 'dir') - else
+%%%%%
+%%%%%   END PCORE COPYING CODE
+
+end % if run_copy
 time_copy = now - start_time;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

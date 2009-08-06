@@ -27,18 +27,24 @@ end
 if ~strcmp(get(blk_obj,'type'),'xps_bram')
     error(['Wrong XPS block type: ',get(blk_obj,'type')]);
 end
+
 blk_name = get(blk_obj,'simulink_name');
 s.hw_sys = 'any';
 s.addr_width = eval_param(blk_name,'addr_width');
 b = class(s,'xps_bram',blk_obj);
+
 % ip name
-b = set(b,'ip_name','bram_block');
+b = set(b,'ip_name','bram_if');
+
 % software driver
 b = set(b,'soft_driver',{'bram' '1.00.a'});
+
 % address offset
 b = set(b,'opb_address_offset',4*2^s.addr_width);
+
 % software parameters
 b = set(b,'c_params',num2str(2^s.addr_width));
+
 % borf parameters
 borph_info.size = 4*2^s.addr_width;
 borph_info.mode = 3;

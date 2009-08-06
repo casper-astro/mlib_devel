@@ -76,6 +76,12 @@ switch s.hw_sys
         b = set(b, 'ip_version', '1.01.a');
 end % switch s.hw_sys
 
+supp_ip_names    = {'', 'opb_adccontroller'};
+supp_ip_versions = {'', '1.00.a'};
+
+b = set(b, 'supp_ip_names', supp_ip_names);
+b = set(b, 'supp_ip_versions', supp_ip_versions);
+
 % misc ports
 misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_ddrb']};
 misc_ports.ctrl_clk_in     = {1 'in'  get(xsg_obj,'clk_src')};

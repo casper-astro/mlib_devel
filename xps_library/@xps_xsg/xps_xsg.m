@@ -39,17 +39,33 @@ s.hw_subsys = hw_subsys;
 s.ibob_linux = get_param(blk_name,'ibob_linux');
 s.mpc_type = get_param(blk_name,'mpc_type');
 
+supp_ip_names = {};
+supp_ip_versions = {};
+
 switch s.hw_sys
 	case 'CORR'
 		s.sw_os = 'tinySH';
+    % end case 'CORR'
+
 	case 'iBOB'
 		s.sw_os = 'tinySH';
+
+		supp_ip_names       = {'',  'opb_clockcontroller', 'diffclk_buf'};
+		supp_ip_versions    = {'',  '1.00.a',              '1.01.a'};
+    % end case 'iBOB'
+
 	case 'BEE2_ctrl'
 		s.sw_os = 'tinySH';
+    % end case 'BEE2_ctrl'
+
 	case 'BEE2_usr'
 		s.sw_os = 'tinySH';
+    % end case 'BEE2_usr'
+
 	case 'ROACH'
 	    s.sw_os = 'none';
+    % end case 'ROACH'
+
     otherwise
   		error(['Unsupported Platform: ',s.hw_sys]);
 end % switch s.hw_sys
@@ -64,6 +80,9 @@ s.clk_rate   = eval_param(blk_name,'clk_rate');
 s.gpioclkbit = eval_param(blk_name,'gpio_clk_bit_index');
 
 b = class(s,'xps_xsg',blk_obj);
+
+b = set(b, 'supp_ip_names', supp_ip_names);
+b = set(b, 'supp_ip_versions', supp_ip_versions);
 
 iobname = [s.gpioclk_hw_sys, '.', s.gpioclk_grp];
 iobindex = num2str(s.gpioclkbit);
