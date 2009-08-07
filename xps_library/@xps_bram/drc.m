@@ -24,10 +24,33 @@ function [result,msg] = drc(blk_obj, xps_objs)
 result = 0;
 msg = '';
 
+sysgen_blk = find_system(gcs, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','genX');
+if length(sysgen_blk) == 1
+    xsg_blk = sysgen_blk{1};
+else
+    error('XPS block must be on the same level as the Xilinx SysGen block');
+end
+
+fpga_arch = xlgetparam(xsg_blk,'xilinxfamily');
+
 addr_width = blk_obj.addr_width;
-if addr_width < 11
-    msg = 'Shared BRAM address width cannot be less than 11';
-	result = 1;
+
+switch fpga_arch
+  case 'Virtex5'
+    if addr_width < 10
+      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-5 boards';
+	    result = 1;
+    end
+  case 'Virtex2P'
+    if addr_width < 11
+      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
+	    result = 1;
+    end
+  otherwise
+    if addr_width < 11
+      msg = 'Shared BRAM address width cannot be less than 11';
+	    result = 1;
+    end
 end
 if addr_width > 16
     msg = 'Shared BRAM address width cannot be greater than 16';
