@@ -31,24 +31,34 @@ else
     error('XPS block must be on the same level as the Xilinx SysGen block');
 end
 
-fpga_arch = xlgetparam(xsg_blk,'xilinxfamily');
+hw_sys=get(xps_objs{1},'hw_sys');
 
 addr_width = blk_obj.addr_width;
 
-switch fpga_arch
-  case 'Virtex5'
-    if addr_width < 10
-      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-5 boards';
+switch hw_sys
+  case 'ROACH'
+    if addr_width < 2
+      msg = 'Shared BRAM address width cannot be less than 2 on on ROACH boards';
 	    result = 1;
     end
-  case 'Virtex2P'
+  case 'BEE2_ctrl'
+    if addr_width < 11
+      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
+	    result = 1;
+    end
+  case 'BEE2_usr'
+    if addr_width < 11
+      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
+	    result = 1;
+    end
+  case 'iBOB'
     if addr_width < 11
       msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
 	    result = 1;
     end
   otherwise
     if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11';
+      msg = 'Shared BRAM address width cannot be less than 11 on unknown platform';
 	    result = 1;
     end
 end

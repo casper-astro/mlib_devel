@@ -9,7 +9,8 @@
 %   the Free Software Foundation; either version 2 of the License, or         %
 %   (at your option) any later version.                                       %
 %                                                                             %
-%   This program is distributed in the hope that it will be useful,           %
+%   This program is distributed in the hope that it will be useful,
+%   %
 %   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
 %   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             %
 %   GNU General Public License for more details.                              %
@@ -42,18 +43,13 @@ end
 set_param([c_sys,'/convert_din'],'arith_type',gcb_arith_type);
 set_param([c_sys,'/mem/sim_data_in'],'arith_type',gcb_arith_type);
 
-sysgen_blk = find_system(gcs, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','genX');
-if length(sysgen_blk) == 1
-    xsg_blk = sysgen_blk{1};
-else
-    error('XPS block must be on the same level as the Xilinx SysGen block');
-end
-
+xsg_blk = [strtok(gcs,'/') '/ System Generator'];
 fpga_arch = xlgetparam(xsg_blk,'xilinxfamily');
+
 switch fpga_arch
   case 'Virtex5'
-    if addr_width < 10
-      errordlg('Shared BRAM address width cannot be less than 10 on Virtex-5 boards');
+    if addr_width < 2
+      errordlg('Shared BRAM address width cannot be less than 2 on Virtex-5 boards');
     end
   case 'Virtex2P'
     if addr_width < 11
@@ -61,7 +57,7 @@ switch fpga_arch
     end
   otherwise
     if addr_width < 11
-      errordlg('Shared BRAM address width cannot be less than 11 on selected board');
+      errordlg('Shared BRAM address width cannot be less than 11 on unknown board');
     end
 end
 
