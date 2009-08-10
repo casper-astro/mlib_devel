@@ -17,7 +17,7 @@ module adc086000_interface(
 				adc0_dataevenq_n,
 				adc0_dataoddq_p,
 				adc0_dataoddq_n,
-                adc0_reset,
+        adc0_reset,
 				adc0_user_datai0,
 				adc0_user_datai1,
 				adc0_user_datai2,
@@ -44,7 +44,7 @@ module adc086000_interface(
 				adc1_dataevenq_n,
 				adc1_dataoddq_p,
 				adc1_dataoddq_n,
-                adc1_reset,
+        adc1_reset,
 				adc1_user_datai0,
 				adc1_user_datai1,
 				adc1_user_datai2,
@@ -66,14 +66,11 @@ module adc086000_interface(
 				dcm_psclk,
 				dcm_psincdec,
 				dcm_psen,
-				dcm_psdone
+				dcm_psdone,
 );
 
 // System Parameters
 //==================
-parameter DEBUG_MODE = 0;
-parameter USE_ASYNCH_FIFOS = 1;
-parameter CALIBRATION_MODE = 1;
 
 // Inputs and Outputs
 //===================
@@ -143,7 +140,6 @@ output [7:0]	adc0_user_dataq3;
 
 output adc0_reset;
 output adc1_reset;
-
 
 // Wires and Regs
 //===============
@@ -272,6 +268,11 @@ wire reset_start0, reset_start90, reset_start180, reset_start270;
 wire adc1_reset0, adc1_reset90, adc1_reset180, adc1_reset270;
 reg adc1_reset_block_rst;
 reg sampler_rst;
+
+// Debug wires
+wire [15:0] total_resets;
+
+
 
 // Module Declarations
 //====================
@@ -452,7 +453,8 @@ always @ ( * ) begin
     state_decide: begin
       adc1_reset_block_rst = 1;
       delay_count_rst = 1;
-      if ((clk_sample180 && clk_sample90) || (clk_sample0 && clk_sample90)) begin
+      //if ((clk_sample180 && clk_sample90) || (clk_sample0 && clk_sample90)) begin
+      if (clk_sample180 && clk_sample90) begin
         next_state = state_done;
       end else begin
         next_state = state_reset_adc;
@@ -460,7 +462,6 @@ always @ ( * ) begin
     end
 
     state_done: begin
-      // assert some sort of done signal
       sync_done = 1;
       next_state = state_done;
     end
@@ -484,9 +485,9 @@ assign adc0_user_datai2 = adc0_fifo_dout[47:40];
 assign adc0_user_dataq2 = adc0_fifo_dout[15:8];
 assign adc1_user_dataq2 = adc1_fifo_dout[15:8];
 assign adc0_user_datai3 = adc0_fifo_dout[39:32];
-assign adc1_user_datai3 = adc1_fifo_dout[39:32];//{6'b0, edge_found, adc1_dcm_psdone};//
-assign adc0_user_dataq3 = adc0_fifo_dout[7:0];//{1'b0, adc1_ps_overflow,SYNC_STATE, adc1_dcm_psen};//
-assign adc1_user_dataq3 = adc1_fifo_dout[7:0];//ps_shift_count[7:0];//{1'b0, calibration_state, interleaved_sampler_done,valid_interleave};//
+assign adc1_user_datai3 = adc1_fifo_dout[39:32];
+assign adc0_user_dataq3 = adc0_fifo_dout[7:0];
+assign adc1_user_dataq3 = adc1_fifo_dout[7:0];
 
 
 // Counter to keep track of the number of phase shifts
@@ -735,7 +736,6 @@ assign ctrl_clk90_out = adc0_clk90;
 assign ctrl_clk180_out = adc0_clk180;
 assign ctrl_clk270_out = adc0_clk270;
 assign ctrl_dcm_locked = adc0_dcm_locked;
-
 
 
 endmodule
