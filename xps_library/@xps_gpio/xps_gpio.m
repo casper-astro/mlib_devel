@@ -110,11 +110,18 @@ switch s.hw_sys
         if use_diffio
             iostandard = 'LVDS_25';
         else
-            if strcmp(s.io_group, 'gpio_a') && (s.bit_index >= 4) || strcmp(s.io_group, 'led')
+            switch s.io_group
+              case 'led'
                 iostandard = 'LVCMOS18';
-            else
+              case 'gpioa_oe_n'
+                iostandard = 'LVCMOS33';
+              case 'gpiob_oe_n'
+                iostandard = 'LVCMOS33';
+              case 'gpioa'
+                iostandard = 'LVCMOS15';
+              otherwise
                 iostandard = 'LVCMOS25';
-            end % if strcmp(s.io_group, 'gpio_a') && (s.bit_index >= 4) || strcmp(s.io_group, 'led')
+            end               
         end % if use_diffio
     % end case 'ROACH'
     otherwise

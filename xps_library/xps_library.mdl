@@ -32,11 +32,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "hchen05"
+  LastModifiedBy	  "dave"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 16 17:25:42 2009"
+  LastModifiedDate	  "Fri Aug 14 09:24:15 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:393>"
+  ModelVersionFormat	  "1.%<AutoIncrement:394>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -10478,7 +10478,7 @@ Library {
       Name		      "adc_3ghz"
       Tag		      "xps:adc_3ghz"
       Ports		      [3, 11]
-      Position		      [385, 357, 530, 623]
+      Position		      [380, 357, 525, 623]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       RTWSystemCode	      "Auto"
@@ -22691,7 +22691,7 @@ Library {
       MaskType		      "gpio"
       MaskDescription	      "GPIO interfaces for BEE2, iBOB, ROACH and CORR boards."
       MaskPromptString	      "I/O group|I/O direction|Data Type|Data bitwidth|Data binary point|GPIO bit index|Sample period|Use as single-ended|Use DDR|Pack register in the pad|Register clock phase|Termination method"
-      MaskStyleString	      "popup(iBOB:led|iBOB:dipsw|iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:zdok0|iBOB:zdok1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlink4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:led|ROACH:gpioA|ROACH:gpioB|ROACH:zdok0|ROACH:zdok1|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
+      MaskStyleString	      "popup(iBOB:led|iBOB:dipsw|iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:zdok0|iBOB:zdok1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlink4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:led|ROACH:gpioa|ROACH:gpioa_oe_n|ROACH:gpiob|ROACH:gpiob_oe_n|ROACH:zdok0|ROACH:zdok1|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'iBOB:zdok0' 'iBOB:zdok1' 'iBOB:mdr' 'ROACH:zdok0' 'ROACH:zdok1'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','on','on','on','on'});\nelse\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','off','on','on','on','on'});\nend||||||||if strcmp(get_param(gcb,'use_ddr'),'on')\n    set_param(gcb,'reg_iob','on');\n    set_param(gcb,'MaskEnables', {'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'off' 'on' 'on'});\nelse\n    set_param(gcb,'MaskEnables', {'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on'});\nend|||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on"
@@ -22744,9 +22744,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -22763,11 +22763,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -26077,11 +26077,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -26104,11 +26104,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -26131,11 +26131,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -26158,11 +26158,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -26185,11 +26185,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -26212,11 +26212,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
