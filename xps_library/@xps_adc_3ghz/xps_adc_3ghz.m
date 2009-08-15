@@ -77,20 +77,20 @@ switch s.hw_sys
 end % switch s.hw_sys
 
 % misc ports
-misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_ddrb']};
-misc_ports.ctrl_clk_in     = {1 'in'  get(xsg_obj,'clk_src')};
+% misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_ddrb']};
+% misc_ports.ctrl_clk_in     = {1 'in'  get(xsg_obj,'clk_src')};
 misc_ports.ctrl_clk_out    = {1 'out' [s.adc_str,'_clk']};
 misc_ports.ctrl_clk90_out  = {1 'out' [s.adc_str,'_clk90']};
 misc_ports.ctrl_dcm_locked = {1 'out' [s.adc_str,'_dcm_locked']};
 if strcmp(get(b,'ip_version'), '1.01.a')
-    misc_ports.dcm_reset        = {1 'in'  [s.adc_str,'_dcm_reset']};
+%     misc_ports.dcm_reset        = {1 'in'  [s.adc_str,'_dcm_reset']};
     misc_ports.dcm_psdone       = {1 'out' [s.adc_str,'_psdone']};
     misc_ports.ctrl_clk180_out  = {1 'out' [s.adc_str,'_clk180']};
     misc_ports.ctrl_clk270_out  = {1 'out' [s.adc_str,'_clk270']};
 end
-misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};
-misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
-misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
+% misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};
+% misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
+% misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
@@ -108,7 +108,7 @@ ext_ports.adc_dataeveni_p   = {8 'in'  [s.adc_str,'dataeveni_p']   ['{',adcport,
 ext_ports.adc_dataeveni_n   = {8 'in'  [s.adc_str,'dataeveni_n']   ['{',adcport,'_n{[0 1 2 3 4 5 6 7]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 ext_ports.adc_dataoddi_p    = {8 'in'  [s.adc_str,'dataoddi_p']    ['{',adcport,'_p{[10 11 12 13 14 15 16 17]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 ext_ports.adc_dataoddi_n    = {8 'in'  [s.adc_str,'dataoddi_n']    ['{',adcport,'_n{[10 11 12 13 14 15 16 17]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
-ext_ports.adc_dataevenq_p   = {8 'in'  [s.adc_str,'dataevenq_p']   ['{',adcport,'_p{[20 21 22 23 24 25 26 27]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
+ext_ports.adc_dataevenq_p   = {8 'in'  [s.adc_str, 'dataevenq_p']   ['{',adcport,'_p{[20 21 22 23 24 25 26 27]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 ext_ports.adc_dataevenq_n   = {8 'in'  [s.adc_str,'dataevenq_n']   ['{',adcport,'_n{[20 21 22 23 24 25 26 27]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 ext_ports.adc_dataoddq_p    = {8 'in'  [s.adc_str,'dataoddq_p']    ['{',adcport,'_p{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 ext_ports.adc_dataoddq_n    = {8 'in'  [s.adc_str,'dataoddq_n']    ['{',adcport,'_n{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };

@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function b = xps_adc086000(blk_obj)
+function b = xps_adc083000x2(blk_obj)
 
 fprintf('Creating block object: xps_adc083000x2\n')
 

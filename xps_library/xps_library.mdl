@@ -32,11 +32,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "dave"
+  LastModifiedBy	  "sgowda"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Aug 14 09:24:15 2009"
+  LastModifiedDate	  "Sat Aug 15 01:37:55 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:394>"
+  ModelVersionFormat	  "1.%<AutoIncrement:395>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -263,7 +263,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [45, 100, 1305, 760]
+    Location		    [2, 70, 1262, 705]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -2173,7 +2173,7 @@ Library {
       Name		      "adc"
       Tag		      "xps:adc"
       Ports		      [3, 17]
-      Position		      [20, 334, 165, 596]
+      Position		      [15, 884, 160, 1146]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       RTWSystemCode	      "Auto"
@@ -5673,15 +5673,16 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "adc086000"
-      Tag		      "xps:adc086000"
-      Ports		      [1, 22]
-      Position		      [810, 647, 960, 1083]
+      Name		      "adc083000x2"
+      Tag		      "xps:adc083000x2"
+      Ports		      [1, 34]
+      Position		      [190, 883, 340, 1567]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
+      AncestorBlock	      "xps_library/adc086000"
       MinAlgLoopOccurrences   off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
-      MaskType		      "adc_086000"
+      MaskType		      "adc_083000x2"
       MaskDescription	      "The ADC block converts analog inputs to digital outputs. Every clock cycle, the inputs are sampled and digitized to 8 bit binary point numbers in the range of [-1, 1) and are then output by the adc."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_adc\\sys_adc.html''])')"
       MaskPromptString	      "ADC board|ADC clock rate (MHz)|ADC interleave mode|Sample period"
@@ -5693,18 +5694,18 @@ Library {
       MaskToolTipString	      "on,on,on,on"
       MaskVarAliasString      ",,,"
       MaskVariables	      "adc_brd=@1;adc_clk_rate=@2;adc_interleave=@3;sample_period=@4;"
-      MaskInitialization      "adc086000_mask;"
+      MaskInitialization      "adc083000x2_mask;"
       MaskDisplay	      "\n"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "adc0|1000|on|1"
+      MaskValueString	      "adc0|1480|on|1"
       MaskTabNameString	      ",,,"
       System {
-	Name			"adc086000"
-	Location		[6, 74, 1258, 701]
+	Name			"adc083000x2"
+	Location		[2, 74, 1254, 776]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5716,7 +5717,7 @@ Library {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"78"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim_data_in"
@@ -5729,7 +5730,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsamplei0"
 	  Ports			  [1, 1]
-	  Position		  [565, 98, 600, 132]
+	  Position		  [565, 113, 600, 147]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5742,7 +5743,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsamplei1"
 	  Ports			  [1, 1]
-	  Position		  [565, 148, 600, 182]
+	  Position		  [565, 163, 600, 197]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5755,7 +5756,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsamplei2"
 	  Ports			  [1, 1]
-	  Position		  [565, 198, 600, 232]
+	  Position		  [565, 213, 600, 247]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5768,7 +5769,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsamplei3"
 	  Ports			  [1, 1]
-	  Position		  [565, 248, 600, 282]
+	  Position		  [565, 263, 600, 297]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5833,7 +5834,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsampleq0"
 	  Ports			  [1, 1]
-	  Position		  [565, 298, 600, 332]
+	  Position		  [565, 313, 600, 347]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5846,7 +5847,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsampleq1"
 	  Ports			  [1, 1]
-	  Position		  [565, 348, 600, 382]
+	  Position		  [565, 363, 600, 397]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5859,7 +5860,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsampleq2"
 	  Ports			  [1, 1]
-	  Position		  [565, 398, 600, 432]
+	  Position		  [565, 413, 600, 447]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5872,7 +5873,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Downsampleq3"
 	  Ports			  [1, 1]
-	  Position		  [565, 448, 600, 482]
+	  Position		  [565, 463, 600, 497]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "16"
@@ -5934,6 +5935,924 @@ Library {
 	  fmode			  "Maintain input frame size"
 	}
 	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_data_valid"
+	  Ports			  [1, 1]
+	  Position		  [845, 1723, 900, 1747]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_datai0"
+	  Ports			  [1, 1]
+	  Position		  [850, 118, 905, 142]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_datai1"
+	  Ports			  [1, 1]
+	  Position		  [850, 318, 905, 342]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_datai2"
+	  Ports			  [1, 1]
+	  Position		  [850, 518, 905, 542]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_datai3"
+	  Ports			  [1, 1]
+	  Position		  [850, 718, 905, 742]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_dataq0"
+	  Ports			  [1, 1]
+	  Position		  [850, 218, 905, 242]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_dataq1"
+	  Ports			  [1, 1]
+	  Position		  [850, 418, 905, 442]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_dataq2"
+	  Ports			  [1, 1]
+	  Position		  [850, 618, 905, 642]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_dataq3"
+	  Ports			  [1, 1]
+	  Position		  [850, 818, 905, 842]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_outofrange0"
+	  Ports			  [1, 1]
+	  Position		  [845, 928, 900, 952]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_outofrange1"
+	  Ports			  [1, 1]
+	  Position		  [845, 1018, 900, 1042]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_outofrange2"
+	  Ports			  [1, 1]
+	  Position		  [845, 1108, 900, 1132]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_outofrange3"
+	  Ports			  [1, 1]
+	  Position		  [845, 1193, 900, 1217]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_sync0"
+	  Ports			  [1, 1]
+	  Position		  [845, 1293, 900, 1317]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_sync1"
+	  Ports			  [1, 1]
+	  Position		  [845, 1378, 900, 1402]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_sync2"
+	  Ports			  [1, 1]
+	  Position		  [845, 1468, 900, 1492]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc0_user_sync3"
+	  Ports			  [1, 1]
+	  Position		  [845, 1553, 900, 1577]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_data_valid"
+	  Ports			  [1, 1]
+	  Position		  [845, 1763, 900, 1787]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_datai0"
+	  Ports			  [1, 1]
+	  Position		  [850, 168, 905, 192]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_datai1"
+	  Ports			  [1, 1]
+	  Position		  [850, 368, 905, 392]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_datai2"
+	  Ports			  [1, 1]
+	  Position		  [850, 568, 905, 592]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_datai3"
+	  Ports			  [1, 1]
+	  Position		  [850, 768, 905, 792]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_dataq0"
+	  Ports			  [1, 1]
+	  Position		  [850, 268, 905, 292]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_dataq1"
+	  Ports			  [1, 1]
+	  Position		  [850, 468, 905, 492]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_dataq2"
+	  Ports			  [1, 1]
+	  Position		  [850, 668, 905, 692]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_dataq3"
+	  Ports			  [1, 1]
+	  Position		  [850, 868, 905, 892]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Unsigned"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,356,432"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_outofrange0"
+	  Ports			  [1, 1]
+	  Position		  [845, 968, 900, 992]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_outofrange1"
+	  Ports			  [1, 1]
+	  Position		  [845, 1058, 900, 1082]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_outofrange2"
+	  Ports			  [1, 1]
+	  Position		  [845, 1148, 900, 1172]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_outofrange3"
+	  Ports			  [1, 1]
+	  Position		  [845, 1233, 900, 1257]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_sync0"
+	  Ports			  [1, 1]
+	  Position		  [845, 1333, 900, 1357]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_sync1"
+	  Ports			  [1, 1]
+	  Position		  [845, 1418, 900, 1442]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_sync2"
+	  Ports			  [1, 1]
+	  Position		  [845, 1508, 900, 1532]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "adc_snap4_adc083000x2_adc1_user_sync3"
+	  Ports			  [1, 1]
+	  Position		  [845, 1593, 900, 1617]
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	  arith_type		  "Boolean"
+	  n_bits		  "8"
+	  bin_pt		  "0"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "sample_period"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0 0 0 0 8 0 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayin"
+	  block_version		  "8.2.02"
+	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
 	  BlockType		  Bias
 	  Name			  "bias"
 	  Position		  [370, 300, 400, 320]
@@ -5943,7 +6862,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv10"
 	  Ports			  [1, 1]
-	  Position		  [1015, 150, 1095, 180]
+	  Position		  [1015, 165, 1095, 195]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -6081,29 +7000,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -6114,16 +7019,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -6131,7 +7050,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv11"
 	  Ports			  [1, 1]
-	  Position		  [1015, 250, 1095, 280]
+	  Position		  [1015, 265, 1095, 295]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -6269,29 +7188,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -6302,16 +7207,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -6319,7 +7238,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv12"
 	  Ports			  [1, 1]
-	  Position		  [1015, 300, 1095, 330]
+	  Position		  [1015, 315, 1095, 345]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -6457,15 +7376,29 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "In1"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "Inverter"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -6476,30 +7409,16 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Slice"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
 	    }
 	  }
 	}
@@ -6507,7 +7426,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv13"
 	  Ports			  [1, 1]
-	  Position		  [1015, 350, 1095, 380]
+	  Position		  [1015, 365, 1095, 395]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -6645,29 +7564,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -6678,16 +7583,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -6695,7 +7614,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv14"
 	  Ports			  [1, 1]
-	  Position		  [1015, 400, 1095, 430]
+	  Position		  [1015, 415, 1095, 445]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -6833,15 +7752,29 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "In1"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "Inverter"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -6852,30 +7785,16 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Slice"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
 	    }
 	  }
 	}
@@ -6883,7 +7802,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv15"
 	  Ports			  [1, 1]
-	  Position		  [1015, 450, 1095, 480]
+	  Position		  [1015, 465, 1095, 495]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -7021,29 +7940,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7054,16 +7959,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -7209,15 +8128,29 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "In1"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "Inverter"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7228,30 +8161,16 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Slice"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
 	    }
 	  }
 	}
@@ -7397,29 +8316,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7430,16 +8335,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -7585,15 +8504,29 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "In1"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "Inverter"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7604,30 +8537,16 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Slice"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
 	    }
 	  }
 	}
@@ -7773,29 +8692,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7806,16 +8711,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -7961,15 +8880,29 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "In1"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "Inverter"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7980,30 +8913,16 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Slice"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
 	    }
 	  }
 	}
@@ -8149,29 +9068,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -8182,16 +9087,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -8337,15 +9256,29 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "In1"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "Inverter"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -8356,30 +9289,16 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Slice"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
 	    }
 	  }
 	}
@@ -8525,29 +9444,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -8558,16 +9463,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -8575,7 +9494,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv8"
 	  Ports			  [1, 1]
-	  Position		  [1015, 100, 1095, 130]
+	  Position		  [1015, 115, 1095, 145]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -8713,29 +9632,15 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "In1"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
@@ -8746,16 +9651,30 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      DstBlock		      "Inverter"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -8763,7 +9682,7 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "conv9"
 	  Ports			  [1, 1]
-	  Position		  [1015, 200, 1095, 230]
+	  Position		  [1015, 215, 1095, 245]
 	  MinAlgLoopOccurrences	  off
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
@@ -8901,15 +9820,29 @@ Library {
 	      OutScaling	      "2^0"
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret"
+	      SrcBlock		      "In1"
 	      SrcPort		      1
-	      DstBlock		      "Out1"
+	      Points		      [0, 0; 15, 0]
+	      Branch {
+		Points			[0, 55]
+		DstBlock		"Slice1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "Inverter"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Concat"
+	      SrcBlock		      "Inverter"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -8920,30 +9853,16 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "Inverter"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Slice"
+	      SrcBlock		      "Reinterpret"
 	      SrcPort		      1
-	      DstBlock		      "Inverter"
+	      DstBlock		      "Out1"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
 	    }
 	  }
 	}
@@ -8995,7 +9914,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq0"
 	  Ports			  [1, 1]
-	  Position		  [650, 302, 680, 328]
+	  Position		  [650, 317, 680, 343]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9006,7 +9925,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq1"
 	  Ports			  [1, 1]
-	  Position		  [650, 352, 680, 378]
+	  Position		  [650, 367, 680, 393]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9017,7 +9936,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq10"
 	  Ports			  [1, 1]
-	  Position		  [650, 152, 680, 178]
+	  Position		  [650, 167, 680, 193]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9028,7 +9947,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq11"
 	  Ports			  [1, 1]
-	  Position		  [650, 102, 680, 128]
+	  Position		  [650, 117, 680, 143]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9039,7 +9958,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq2"
 	  Ports			  [1, 1]
-	  Position		  [650, 402, 680, 428]
+	  Position		  [650, 417, 680, 443]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9050,7 +9969,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq3"
 	  Ports			  [1, 1]
-	  Position		  [650, 452, 680, 478]
+	  Position		  [650, 467, 680, 493]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9105,7 +10024,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq8"
 	  Ports			  [1, 1]
-	  Position		  [650, 252, 680, 278]
+	  Position		  [650, 267, 680, 293]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9116,7 +10035,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "delayq9"
 	  Ports			  [1, 1]
-	  Position		  [650, 202, 680, 228]
+	  Position		  [650, 217, 680, 243]
 	  SourceBlock		  "simulink/Discrete/Integer Delay"
 	  SourceType		  "Integer Delay"
 	  vinit			  "0.0"
@@ -9134,603 +10053,9 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_data_valid"
-	  Ports			  [1, 1]
-	  Position		  [845, 1133, 900, 1157]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Boolean"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_datai0"
-	  Ports			  [1, 1]
-	  Position		  [850, 103, 905, 127]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_datai1"
-	  Ports			  [1, 1]
-	  Position		  [850, 303, 905, 327]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_datai2"
-	  Ports			  [1, 1]
-	  Position		  [850, 518, 905, 542]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_datai3"
-	  Ports			  [1, 1]
-	  Position		  [850, 718, 905, 742]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_dataq0"
-	  Ports			  [1, 1]
-	  Position		  [850, 203, 905, 227]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_dataq1"
-	  Ports			  [1, 1]
-	  Position		  [850, 403, 905, 427]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_dataq2"
-	  Ports			  [1, 1]
-	  Position		  [850, 618, 905, 642]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_dataq3"
-	  Ports			  [1, 1]
-	  Position		  [850, 818, 905, 842]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_outofrange"
-	  Ports			  [1, 1]
-	  Position		  [845, 928, 900, 952]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Boolean"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc0_user_sync"
-	  Ports			  [1, 1]
-	  Position		  [845, 1028, 900, 1052]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Boolean"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_data_valid"
-	  Ports			  [1, 1]
-	  Position		  [845, 1173, 900, 1197]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Boolean"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_datai0"
-	  Ports			  [1, 1]
-	  Position		  [850, 153, 905, 177]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_datai1"
-	  Ports			  [1, 1]
-	  Position		  [850, 353, 905, 377]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_datai2"
-	  Ports			  [1, 1]
-	  Position		  [850, 568, 905, 592]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_datai3"
-	  Ports			  [1, 1]
-	  Position		  [850, 768, 905, 792]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_dataq0"
-	  Ports			  [1, 1]
-	  Position		  [850, 253, 905, 277]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_dataq1"
-	  Ports			  [1, 1]
-	  Position		  [850, 453, 905, 477]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_dataq2"
-	  Ports			  [1, 1]
-	  Position		  [850, 668, 905, 692]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_dataq3"
-	  Ports			  [1, 1]
-	  Position		  [850, 868, 905, 892]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,356,432"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_outofrange"
-	  Ports			  [1, 1]
-	  Position		  [845, 968, 900, 992]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Boolean"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "svn_check_adc086000_adc1_user_sync"
-	  Ports			  [1, 1]
-	  Position		  [845, 1068, 900, 1092]
-	  SourceBlock		  "xbsIndex_r4/Gateway In"
-	  SourceType		  "Xilinx Gateway In Block"
-	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Boolean"
-	  n_bits		  "8"
-	  bin_pt		  "0"
-	  quantization		  "Round  (unbiased: +/- Inf)"
-	  overflow		  "Saturate"
-	  period		  "sample_period"
-	  dbl_ovrd		  "off"
-	  timing_constraint	  "None"
-	  locs_specified	  "off"
-	  LOCs			  "{}"
-	  xl_use_area		  "off"
-	  xl_area		  "[0 0 0 0 8 0 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayin"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "55,24,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\npatch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
 	  BlockType		  Outport
 	  Name			  "o0"
-	  Position		  [1145, 108, 1175, 122]
+	  Position		  [1130, 123, 1160, 137]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
@@ -9738,7 +10063,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o1"
-	  Position		  [1145, 158, 1175, 172]
+	  Position		  [1130, 173, 1160, 187]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9747,7 +10072,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o2"
-	  Position		  [1145, 208, 1175, 222]
+	  Position		  [1130, 223, 1160, 237]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9756,7 +10081,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o3"
-	  Position		  [1145, 258, 1175, 272]
+	  Position		  [1130, 273, 1160, 287]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9765,7 +10090,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o4"
-	  Position		  [1145, 308, 1175, 322]
+	  Position		  [1130, 323, 1160, 337]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9774,7 +10099,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o5"
-	  Position		  [1145, 358, 1175, 372]
+	  Position		  [1130, 373, 1160, 387]
 	  Port			  "6"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9783,7 +10108,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o6"
-	  Position		  [1150, 408, 1180, 422]
+	  Position		  [1135, 423, 1165, 437]
 	  Port			  "7"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9792,7 +10117,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o7"
-	  Position		  [1145, 458, 1175, 472]
+	  Position		  [1130, 473, 1160, 487]
 	  Port			  "8"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9801,7 +10126,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o8"
-	  Position		  [1145, 523, 1175, 537]
+	  Position		  [1130, 523, 1160, 537]
 	  Port			  "9"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9810,7 +10135,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o9"
-	  Position		  [1145, 573, 1175, 587]
+	  Position		  [1130, 573, 1160, 587]
 	  Port			  "10"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9819,7 +10144,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o10"
-	  Position		  [1145, 623, 1175, 637]
+	  Position		  [1130, 623, 1160, 637]
 	  Port			  "11"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9828,7 +10153,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o11"
-	  Position		  [1145, 673, 1175, 687]
+	  Position		  [1130, 673, 1160, 687]
 	  Port			  "12"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9837,7 +10162,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o12"
-	  Position		  [1145, 723, 1175, 737]
+	  Position		  [1130, 723, 1160, 737]
 	  Port			  "13"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9846,7 +10171,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o13"
-	  Position		  [1145, 773, 1175, 787]
+	  Position		  [1130, 773, 1160, 787]
 	  Port			  "14"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9855,7 +10180,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o14"
-	  Position		  [1145, 823, 1175, 837]
+	  Position		  [1130, 823, 1160, 837]
 	  Port			  "15"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9864,7 +10189,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "o15"
-	  Position		  [1150, 873, 1180, 887]
+	  Position		  [1135, 873, 1165, 887]
 	  Port			  "16"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9872,7 +10197,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "adc0_outofrange"
+	  Name			  "adc0_outofrange0"
 	  Position		  [1075, 933, 1105, 947]
 	  Port			  "17"
 	  IconDisplay		  "Port number"
@@ -9881,7 +10206,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "adc1_outofrange"
+	  Name			  "adc1_outofrange0"
 	  Position		  [1080, 973, 1110, 987]
 	  Port			  "18"
 	  IconDisplay		  "Port number"
@@ -9890,8 +10215,8 @@ Library {
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "adc0_sync"
-	  Position		  [1080, 1033, 1110, 1047]
+	  Name			  "adc0_outofrange1"
+	  Position		  [1075, 1023, 1105, 1037]
 	  Port			  "19"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9899,8 +10224,8 @@ Library {
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "adc1_sync"
-	  Position		  [1080, 1073, 1110, 1087]
+	  Name			  "adc1_outofrange1"
+	  Position		  [1080, 1063, 1110, 1077]
 	  Port			  "20"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9908,8 +10233,8 @@ Library {
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "adc0_data_valid"
-	  Position		  [1080, 1138, 1110, 1152]
+	  Name			  "adc0_outofrange2"
+	  Position		  [1075, 1113, 1105, 1127]
 	  Port			  "21"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9917,95 +10242,125 @@ Library {
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "adc1_data_valid"
-	  Position		  [1080, 1178, 1110, 1192]
+	  Name			  "adc1_outofrange2"
+	  Position		  [1080, 1153, 1110, 1167]
 	  Port			  "22"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
 	}
-	Line {
-	  SrcBlock		  "conv8"
-	  SrcPort		  1
-	  DstBlock		  "o0"
-	  DstPort		  1
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc0_outofrange3"
+	  Position		  [1075, 1198, 1105, 1212]
+	  Port			  "23"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc1_outofrange3"
+	  Position		  [1080, 1238, 1110, 1252]
+	  Port			  "24"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc0_sync0"
+	  Position		  [1080, 1298, 1110, 1312]
+	  Port			  "25"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc1_sync0"
+	  Position		  [1080, 1338, 1110, 1352]
+	  Port			  "26"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc0_sync1"
+	  Position		  [1080, 1383, 1110, 1397]
+	  Port			  "27"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc1_sync1"
+	  Position		  [1080, 1423, 1110, 1437]
+	  Port			  "28"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc0_sync2"
+	  Position		  [1080, 1473, 1110, 1487]
+	  Port			  "29"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc1_sync2"
+	  Position		  [1080, 1513, 1110, 1527]
+	  Port			  "30"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc0_sync3"
+	  Position		  [1080, 1558, 1110, 1572]
+	  Port			  "31"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc1_sync3"
+	  Position		  [1080, 1598, 1110, 1612]
+	  Port			  "32"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc0_data_valid"
+	  Position		  [1080, 1728, 1110, 1742]
+	  Port			  "33"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "adc1_data_valid"
+	  Position		  [1080, 1768, 1110, 1782]
+	  Port			  "34"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "conv10"
+	  SrcBlock		  "conv23"
 	  SrcPort		  1
-	  DstBlock		  "o1"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv9"
-	  SrcPort		  1
-	  DstBlock		  "o2"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv11"
-	  SrcPort		  1
-	  DstBlock		  "o3"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv12"
-	  SrcPort		  1
-	  DstBlock		  "o4"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv13"
-	  SrcPort		  1
-	  DstBlock		  "o5"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv14"
-	  SrcPort		  1
-	  DstBlock		  "o6"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv15"
-	  SrcPort		  1
-	  DstBlock		  "o7"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv16"
-	  SrcPort		  1
-	  DstBlock		  "o8"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv17"
-	  SrcPort		  1
-	  DstBlock		  "o9"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv18"
-	  SrcPort		  1
-	  DstBlock		  "o10"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv19"
-	  SrcPort		  1
-	  DstBlock		  "o11"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv20"
-	  SrcPort		  1
-	  DstBlock		  "o12"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "conv21"
-	  SrcPort		  1
-	  DstBlock		  "o13"
+	  DstBlock		  "o15"
 	  DstPort		  1
 	}
 	Line {
@@ -10015,358 +10370,183 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "conv23"
+	  SrcBlock		  "conv21"
 	  SrcPort		  1
-	  DstBlock		  "o15"
+	  DstBlock		  "o13"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_datai0"
+	  SrcBlock		  "conv20"
 	  SrcPort		  1
-	  DstBlock		  "conv8"
+	  DstBlock		  "o12"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_datai0"
+	  SrcBlock		  "conv19"
 	  SrcPort		  1
-	  DstBlock		  "conv10"
+	  DstBlock		  "o11"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_dataq0"
+	  SrcBlock		  "conv18"
 	  SrcPort		  1
-	  DstBlock		  "conv9"
+	  DstBlock		  "o10"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_dataq0"
+	  SrcBlock		  "conv17"
 	  SrcPort		  1
-	  DstBlock		  "conv11"
+	  DstBlock		  "o9"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_datai1"
+	  SrcBlock		  "conv16"
 	  SrcPort		  1
-	  DstBlock		  "conv12"
+	  DstBlock		  "o8"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_datai1"
+	  SrcBlock		  "conv15"
 	  SrcPort		  1
-	  DstBlock		  "conv13"
+	  DstBlock		  "o7"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_dataq1"
+	  SrcBlock		  "conv14"
 	  SrcPort		  1
-	  DstBlock		  "conv14"
+	  DstBlock		  "o6"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_dataq1"
+	  SrcBlock		  "conv13"
 	  SrcPort		  1
-	  DstBlock		  "conv15"
+	  DstBlock		  "o5"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_datai2"
+	  SrcBlock		  "conv12"
 	  SrcPort		  1
-	  DstBlock		  "conv16"
+	  DstBlock		  "o4"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_datai2"
+	  SrcBlock		  "conv11"
 	  SrcPort		  1
-	  DstBlock		  "conv17"
+	  DstBlock		  "o3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_dataq2"
+	  SrcBlock		  "conv9"
 	  SrcPort		  1
-	  DstBlock		  "conv18"
+	  DstBlock		  "o2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_dataq2"
+	  SrcBlock		  "conv10"
 	  SrcPort		  1
-	  DstBlock		  "conv19"
+	  DstBlock		  "o1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_datai3"
+	  SrcBlock		  "conv8"
 	  SrcPort		  1
-	  DstBlock		  "conv20"
+	  DstBlock		  "o0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_datai3"
+	  SrcBlock		  "delayq7"
 	  SrcPort		  1
-	  DstBlock		  "conv21"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_dataq3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_dataq3"
+	  SrcBlock		  "delayq6"
 	  SrcPort		  1
-	  DstBlock		  "conv22"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_dataq3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_dataq3"
+	  SrcBlock		  "delayq5"
 	  SrcPort		  1
-	  DstBlock		  "conv23"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_datai3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_outofrange"
+	  SrcBlock		  "delayq4"
 	  SrcPort		  1
-	  DstBlock		  "adc0_outofrange"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_datai3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_outofrange"
+	  SrcBlock		  "delayi7"
 	  SrcPort		  1
-	  DstBlock		  "adc1_outofrange"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_dataq2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_sync"
+	  SrcBlock		  "delayi6"
 	  SrcPort		  1
-	  DstBlock		  "adc0_sync"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_dataq2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_sync"
+	  SrcBlock		  "delayi5"
 	  SrcPort		  1
-	  DstBlock		  "adc1_sync"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_datai2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc0_user_data_valid"
+	  SrcBlock		  "delayi4"
 	  SrcPort		  1
-	  DstBlock		  "adc0_data_valid"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_datai2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "svn_check_adc086000_adc1_user_data_valid"
+	  SrcBlock		  "delayq3"
 	  SrcPort		  1
-	  DstBlock		  "adc1_data_valid"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_dataq1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "bias"
+	  SrcBlock		  "delayq2"
 	  SrcPort		  1
-	  Points		  [15, 0]
-	  Branch {
-	    Points		    [0, -45]
-	    Branch {
-	      Points		      [0, -50]
-	      Branch {
-		Points			[0, -50]
-		Branch {
-		  Points		  [0, -50]
-		  DstBlock		  "Downsamplei0"
-		  DstPort		  1
-		}
-		Branch {
-		  DstBlock		  "Downsamplei1"
-		  DstPort		  1
-		}
-	      }
-	      Branch {
-		Points			[0, 0]
-		DstBlock		"Downsamplei2"
-		DstPort			1
-	      }
-	    }
-	    Branch {
-	      Points		      [0, 0]
-	      DstBlock		      "Downsamplei3"
-	      DstPort		      1
-	    }
-	  }
-	  Branch {
-	    Points		    [0, 0; 0, 5]
-	    Branch {
-	      DstBlock		      "Downsampleq0"
-	      DstPort		      1
-	    }
-	    Branch {
-	      Points		      [0, 50]
-	      Branch {
-		DstBlock		"Downsampleq1"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 50]
-		Branch {
-		  DstBlock		  "Downsampleq2"
-		  DstPort		  1
-		}
-		Branch {
-		  Points		  [0, 50]
-		  Branch {
-		    Points		    [0, 65]
-		    Branch {
-		    DstBlock		    "Downsamplei4"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsamplei5"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsamplei6"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsamplei7"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsampleq4"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsampleq5"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsampleq6"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    DstBlock		    "Downsampleq7"
-		    DstPort		    1
-		    }
-		    }
-		    }
-		    }
-		    }
-		    }
-		    }
-		  }
-		  Branch {
-		    DstBlock		    "Downsampleq3"
-		    DstPort		    1
-		  }
-		}
-	      }
-	    }
-	  }
-	}
-	Line {
-	  SrcBlock		  "gain"
-	  SrcPort		  1
-	  DstBlock		  "bias"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_dataq1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Downsampleq0"
+	  SrcBlock		  "delayq1"
 	  SrcPort		  1
-	  DstBlock		  "delayq0"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_datai1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Downsamplei1"
+	  SrcBlock		  "delayq0"
 	  SrcPort		  1
-	  DstBlock		  "delayq10"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_datai1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Downsamplei2"
+	  SrcBlock		  "delayq8"
 	  SrcPort		  1
-	  DstBlock		  "delayq9"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_dataq0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Downsamplei3"
+	  SrcBlock		  "delayq9"
 	  SrcPort		  1
-	  DstBlock		  "delayq8"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_dataq0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Downsampleq1"
+	  SrcBlock		  "delayq10"
 	  SrcPort		  1
-	  DstBlock		  "delayq1"
+	  DstBlock		  "adc_snap4_adc083000x2_adc1_user_datai0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Downsampleq2"
+	  SrcBlock		  "delayq11"
 	  SrcPort		  1
-	  DstBlock		  "delayq2"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsampleq3"
-	  SrcPort		  1
-	  DstBlock		  "delayq3"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "sim_data_in"
-	  SrcPort		  1
-	  DstBlock		  "gain"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsamplei0"
-	  SrcPort		  1
-	  DstBlock		  "delayq11"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsampleq4"
-	  SrcPort		  1
-	  DstBlock		  "delayq4"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsamplei5"
-	  SrcPort		  1
-	  DstBlock		  "delayi5"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsamplei6"
-	  SrcPort		  1
-	  DstBlock		  "delayi6"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsamplei7"
-	  SrcPort		  1
-	  DstBlock		  "delayi7"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsampleq5"
-	  SrcPort		  1
-	  DstBlock		  "delayq5"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsampleq6"
-	  SrcPort		  1
-	  DstBlock		  "delayq6"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Downsampleq7"
-	  SrcPort		  1
-	  DstBlock		  "delayq7"
+	  DstBlock		  "adc_snap4_adc083000x2_adc0_user_datai0"
 	  DstPort		  1
 	}
 	Line {
@@ -10376,99 +10556,429 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq11"
+	  SrcBlock		  "Downsampleq7"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_datai0"
+	  DstBlock		  "delayq7"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq10"
+	  SrcBlock		  "Downsampleq6"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_datai0"
+	  DstBlock		  "delayq6"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq9"
+	  SrcBlock		  "Downsampleq5"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_dataq0"
+	  DstBlock		  "delayq5"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq8"
+	  SrcBlock		  "Downsamplei7"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_dataq0"
+	  DstBlock		  "delayi7"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq0"
+	  SrcBlock		  "Downsamplei6"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_datai1"
+	  DstBlock		  "delayi6"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq1"
+	  SrcBlock		  "Downsamplei5"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_datai1"
+	  DstBlock		  "delayi5"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq2"
+	  SrcBlock		  "Downsampleq4"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_dataq1"
+	  DstBlock		  "delayq4"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq3"
+	  SrcBlock		  "Downsamplei0"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_dataq1"
+	  DstBlock		  "delayq11"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayi4"
+	  SrcBlock		  "sim_data_in"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_datai2"
+	  DstBlock		  "gain"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayi5"
+	  SrcBlock		  "Downsampleq3"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_datai2"
+	  DstBlock		  "delayq3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayi6"
+	  SrcBlock		  "Downsampleq2"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_dataq2"
+	  DstBlock		  "delayq2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayi7"
+	  SrcBlock		  "Downsampleq1"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_dataq2"
+	  DstBlock		  "delayq1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq4"
+	  SrcBlock		  "Downsamplei3"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_datai3"
+	  DstBlock		  "delayq8"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq5"
+	  SrcBlock		  "Downsamplei2"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_datai3"
+	  DstBlock		  "delayq9"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq6"
+	  SrcBlock		  "Downsamplei1"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc0_user_dataq3"
+	  DstBlock		  "delayq10"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "delayq7"
+	  SrcBlock		  "Downsampleq0"
 	  SrcPort		  1
-	  DstBlock		  "svn_check_adc086000_adc1_user_dataq3"
+	  DstBlock		  "delayq0"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "gain"
+	  SrcPort		  1
+	  DstBlock		  "bias"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "bias"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [0, 0; 0, 5]
+	    Branch {
+	      Points		      [0, 50]
+	      Branch {
+		Points			[0, 50]
+		Branch {
+		  Points		  [0, 50]
+		  Branch {
+		    Points		    [130, 0]
+		    DstBlock		    "Downsampleq3"
+		    DstPort		    1
+		  }
+		  Branch {
+		    Points		    [0, 65]
+		    Branch {
+		    Points		    [0, 50]
+		    Branch {
+		    Points		    [0, 50]
+		    Branch {
+		    Points		    [0, 50]
+		    Branch {
+		    Points		    [0, 50]
+		    Branch {
+		    Points		    [0, 50]
+		    Branch {
+		    Points		    [0, 50]
+		    Branch {
+		    Points		    [0, 50]
+		    DstBlock		    "Downsampleq7"
+		    DstPort		    1
+		    }
+		    Branch {
+		    DstBlock		    "Downsampleq6"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Downsampleq5"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Downsampleq4"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Downsamplei7"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Downsamplei6"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Downsamplei5"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "Downsamplei4"
+		    DstPort		    1
+		    }
+		  }
+		}
+		Branch {
+		  Points		  [130, 0]
+		  DstBlock		  "Downsampleq2"
+		  DstPort		  1
+		}
+	      }
+	      Branch {
+		Points			[130, 0]
+		DstBlock		"Downsampleq1"
+		DstPort			1
+	      }
+	    }
+	    Branch {
+	      Points		      [130, 0]
+	      DstBlock		      "Downsampleq0"
+	      DstPort		      1
+	    }
+	  }
+	  Branch {
+	    Points		    [0, -45]
+	    Branch {
+	      Points		      [0, 15]
+	      DstBlock		      "Downsamplei3"
+	      DstPort		      1
+	    }
+	    Branch {
+	      Points		      [0, -50]
+	      Branch {
+		Points			[0, 15]
+		DstBlock		"Downsamplei2"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, -50]
+		Branch {
+		  Points		  [130, 0]
+		  DstBlock		  "Downsamplei1"
+		  DstPort		  1
+		}
+		Branch {
+		  Points		  [0, -35]
+		  DstBlock		  "Downsamplei0"
+		  DstPort		  1
+		}
+	      }
+	    }
+	  }
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_data_valid"
+	  SrcPort		  1
+	  DstBlock		  "adc1_data_valid"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_data_valid"
+	  SrcPort		  1
+	  DstBlock		  "adc0_data_valid"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_sync0"
+	  SrcPort		  1
+	  DstBlock		  "adc1_sync0"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_sync0"
+	  SrcPort		  1
+	  DstBlock		  "adc0_sync0"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_outofrange0"
+	  SrcPort		  1
+	  DstBlock		  "adc1_outofrange0"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_outofrange0"
+	  SrcPort		  1
+	  DstBlock		  "adc0_outofrange0"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_dataq3"
+	  SrcPort		  1
+	  DstBlock		  "conv23"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_dataq3"
+	  SrcPort		  1
+	  DstBlock		  "conv22"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_datai3"
+	  SrcPort		  1
+	  DstBlock		  "conv21"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_datai3"
+	  SrcPort		  1
+	  DstBlock		  "conv20"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_dataq2"
+	  SrcPort		  1
+	  DstBlock		  "conv19"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_dataq2"
+	  SrcPort		  1
+	  DstBlock		  "conv18"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_datai2"
+	  SrcPort		  1
+	  DstBlock		  "conv17"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_datai2"
+	  SrcPort		  1
+	  DstBlock		  "conv16"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_dataq1"
+	  SrcPort		  1
+	  DstBlock		  "conv15"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_dataq1"
+	  SrcPort		  1
+	  DstBlock		  "conv14"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_datai1"
+	  SrcPort		  1
+	  DstBlock		  "conv13"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_datai1"
+	  SrcPort		  1
+	  DstBlock		  "conv12"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_dataq0"
+	  SrcPort		  1
+	  DstBlock		  "conv11"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_dataq0"
+	  SrcPort		  1
+	  DstBlock		  "conv9"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_datai0"
+	  SrcPort		  1
+	  DstBlock		  "conv10"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_datai0"
+	  SrcPort		  1
+	  DstBlock		  "conv8"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_outofrange1"
+	  SrcPort		  1
+	  DstBlock		  "adc1_outofrange1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_outofrange2"
+	  SrcPort		  1
+	  DstBlock		  "adc1_outofrange2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_outofrange3"
+	  SrcPort		  1
+	  DstBlock		  "adc1_outofrange3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_outofrange3"
+	  SrcPort		  1
+	  DstBlock		  "adc0_outofrange3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_outofrange2"
+	  SrcPort		  1
+	  DstBlock		  "adc0_outofrange2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_outofrange1"
+	  SrcPort		  1
+	  DstBlock		  "adc0_outofrange1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_sync1"
+	  SrcPort		  1
+	  DstBlock		  "adc1_sync1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_sync1"
+	  SrcPort		  1
+	  DstBlock		  "adc0_sync1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_sync2"
+	  SrcPort		  1
+	  DstBlock		  "adc1_sync2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_sync2"
+	  SrcPort		  1
+	  DstBlock		  "adc0_sync2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc1_user_sync3"
+	  SrcPort		  1
+	  DstBlock		  "adc1_sync3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "adc_snap4_adc083000x2_adc0_user_sync3"
+	  SrcPort		  1
+	  DstBlock		  "adc0_sync3"
 	  DstPort		  1
 	}
       }
@@ -22744,9 +23254,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -22763,11 +23273,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"

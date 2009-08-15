@@ -136,10 +136,10 @@ else
         set_param([myname,'/o6'],'Name', 'q3');
         set_param([myname,'/o7'],'Name', 'i3');
 
-        set_param([myname,'/outofrange0'],'Name', 'outofrangeq0');
-        set_param([myname,'/outofrange1'],'Name', 'outofrangei0');
-        set_param([myname,'/outofrange2'],'Name', 'outofrangeq1');
-        set_param([myname,'/outofrange3'],'Name', 'outofrangei1');
+        set_param([myname,'/outofrange'],'Name', 'outofrange');
+%        set_param([myname,'/outofrange1'],'Name', 'outofrangei0');
+%        set_param([myname,'/outofrange2'],'Name', 'outofrangeq1');
+%        set_param([myname,'/outofrange3'],'Name', 'outofrangei1');
 
         set_param([myname,'/i0'],'Port', '1');
         set_param([myname,'/i1'],'Port', '2');
@@ -150,10 +150,10 @@ else
         set_param([myname,'/q2'],'Port', '7');
         set_param([myname,'/q3'],'Port', '8');
 
-        set_param([myname,'/outofrangeq0'],'Port', '11');
-        set_param([myname,'/outofrangei0'],'Port', '9');
-        set_param([myname,'/outofrangeq1'],'Port', '12');
-        set_param([myname,'/outofrangei1'],'Port', '10');
+        set_param([myname,'/outofrange'],'Port', '11');
+  %      set_param([myname,'/outofrangei0'],'Port', '9');
+ %       set_param([myname,'/outofrangeq1'],'Port', '12');
+%        set_param([myname,'/outofrangei1'],'Port', '10');
 
         set_param([myname,'/Downsamplei0'],'phase','0');
         set_param([myname,'/Downsamplei1'],'phase','1');
@@ -165,9 +165,9 @@ else
         set_param([myname,'/Downsampleq3'],'phase','3');
 
         set_param([myname,'/Downsamplesync0'],'phase','0');
-        set_param([myname,'/Downsamplesync1'],'phase','1');
-        set_param([myname,'/Downsamplesync2'],'phase','2');
-        set_param([myname,'/Downsamplesync3'],'phase','3');
+   %     set_param([myname,'/Downsamplesync1'],'phase','1');
+   %     set_param([myname,'/Downsamplesync2'],'phase','2');
+   %     set_param([myname,'/Downsamplesync3'],'phase','3');
 
         set_param([myname,'/Downsamplei0'],'N','4');
         set_param([myname,'/Downsamplei1'],'N','4');
@@ -179,9 +179,9 @@ else
         set_param([myname,'/Downsampleq3'],'N','4');
 
         set_param([myname,'/Downsamplesync0'],'N','4');
-        set_param([myname,'/Downsamplesync1'],'N','4');
-        set_param([myname,'/Downsamplesync2'],'N','4');
-        set_param([myname,'/Downsamplesync3'],'N','4');
+   %     set_param([myname,'/Downsamplesync1'],'N','4');
+   %     set_param([myname,'/Downsamplesync2'],'N','4');
+   %     set_param([myname,'/Downsamplesync3'],'N','4');
 
         set_param([myname,'/delayi0'],'NumDelays','2');
 
@@ -229,17 +229,17 @@ end % if strcmp(adc_interleave,'on') else
 gateway_ins = find_system(gcb,'searchdepth',1,'FollowLinks', 'on', 'lookundermasks','all','masktype','Xilinx Gateway In Block');
 for n = 1:length(gateway_ins)
     gw = gateway_ins{n};
-    if regexp(get_param(gw,'Name'),'(adc\d+_user_data[iq]\d+)$')
-        toks = regexp(get_param(gw,'Name'),'(adc\d+_user_data[iq]\d+)$','tokens');
+    if regexp(get_param(gw,'Name'),'(user_data[iq]\d+)$')
+        toks = regexp(get_param(gw,'Name'),'(user_data[iq]\d+)$','tokens');
         set_param(gw,'Name',clear_name([gcb,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(adc\d+_user_outofrange)$')
-        toks = regexp(get_param(gw,'Name'),'(adc\d+_user_outofrange)$','tokens');
+    elseif regexp(get_param(gw,'Name'),'(user_outofrange)$')
+        toks = regexp(get_param(gw,'Name'),'(user_outofrange)$','tokens');
         set_param(gw,'Name',clear_name([gcb,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(adc\d+_user_sync)$')
-        toks = regexp(get_param(gw,'Name'),'(adc\d+_user_sync)$','tokens');
+    elseif regexp(get_param(gw,'Name'),'(user_sync)$')
+        toks = regexp(get_param(gw,'Name'),'(user_sync)$','tokens');
         set_param(gw,'Name',clear_name([gcb,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(adc\d+_user_data_valid)$')
-        toks = regexp(get_param(gw,'Name'),'(adc\d+_user_data_valid)$','tokens');
+    elseif regexp(get_param(gw,'Name'),'(user_data_valid)$')
+        toks = regexp(get_param(gw,'Name'),'(user_data_valid)$','tokens');
         set_param(gw,'Name',clear_name([gcb,'_',toks{1}{1}]));
     else
         error(['Unkown gateway name: ',gw]);

@@ -20,17 +20,14 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,opb_addr_end,plb_addr_end] = gen_mhs_xsg(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
-str = '';
-opb_addr_end = opb_addr_start;
-plb_addr_end = plb_addr_start;
+function result = get(b,field)
 
-str = [str, ' PARAMETER INSTANCE = ',clear_name(get(blk_obj,'simulink_name')),'\n'];
-str = [str, ' PARAMETER HW_VER = 1.00.a\n'];
-
-str = [str, ' PORT clk = ',blk_obj.clk_src,'\n'];
-%fprintf('\n\n\n\n\n\n\n\n\n\nNew call to gen_mhs_xsg\n');
-%fprintf(str);
-%fprintf('\n\n\n\n');
-end
-
+    try
+        eval(['result = b.',field,';']);
+    catch
+        try
+            result = get(b.xps_block,field);
+        catch 
+            error(['Field name unknow to block object: ', field]);
+        end
+    end
