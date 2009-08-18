@@ -12,7 +12,7 @@ function delay_wideband_prog_init(blk, varargin)
 defaults = {'max_delay',1024,'n_inputs_bits',2,'bram_latency',4};
  
 % if parameter is changed then only itwil redraw otherwise will exit
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+%if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 % Checks whether the block selected is correct with this called function.
 check_mask_type(blk, 'delay_wideband_prog');
  
@@ -92,23 +92,25 @@ reuse_block(blk,'bram_rd_addrs','xbsIndex_r4/Slice',...
             'base0', 'LSB of Input');
         
  
-reuse_block(blk,'sync_delay','casper_library/Delays/sync_delay',...
+reuse_block(blk,'sync_delay','xbsIndex_r4/Delay',...
             'Position',[300 699 340 741],...
-            'DelayLen',num2str((bram_latency+1)));
+            'latency',num2str((bram_latency+1)));
  
- 
+
+reuse_block(blk,'sync', 'built-in/Inport',...
+                    'Port', '1', 'Position',[15 178 45 192]) ;
 reuse_block(blk,'delay','built-in/Inport',...
-                    'Position',[15 178 45 192]) ;
-reuse_block(blk,'sync','built-in/Inport',...
-                    'Position',[15 713 45 727]) ;
+                    'Port', '2', 'Position',[15 178+100 45 192+100]) ;
+reuse_block(blk,'en', 'built-in/Inport',...
+                    'Port', '3', 'Position',[15 178+200 45 192+200]) ;
+
+reuse_block(blk,'data_in1', 'built-in/Inport',...
+                    'Port', '4', 'Position',[785 178+300 815 192+300]) ;
  
-reuse_block(blk,'data_in1','built-in/Inport',...
-                    'Position',[785 268 815 282]) ;
- 
-reuse_block(blk,'sync_out','built-in/Outport',...
-                    'Position',[1215 328 1245 342]);%[155 713 185 727]) ;
+reuse_block(blk,'sync_out', 'built-in/Outport',...
+                    'Port', '1', 'Position',[1215 328 1245 342]);%[155 713 185 727]) ;
 reuse_block(blk,'data_out1','built-in/Outport',...
-                    'Position',[1215 378 1245 392]);
+                    'Port', '2', 'Position',[1215 378 1245 392]);
                 
             
  
@@ -164,12 +166,12 @@ reuse_block(blk,'bs_sel','xbsIndex_r4/Slice',...
 %                     'Position',[750 y 780 y+10]) ;
                 
         name = ['data_in', num2str(i+1)];
-        reuse_block(blk,name,'built-in/Inport',...
-                    'Position',[785 y+3 815 y+17]) ;        
+        reuse_block(blk,name, 'built-in/Inport',...
+                    'Port', num2str(i+4),'Position',[785 y+3 815 y+17]) ;        
         
         name = ['data_out', num2str(i+1)];
         reuse_block(blk,name,'built-in/Outport',...
-                    'Position',[1215 y+88 1245 y+102]) ;   
+                    'Port', num2str(i+2), 'Position',[1215 y+88 1245 y+102]) ;   
         
         name = ['Convert', num2str(i)];
         reuse_block(blk,name,'xbsIndex_r4/Convert',...
@@ -209,7 +211,7 @@ end
 % % Add lines
  add_line(blk, 'delay/1', 'delay_reg/1', 'autorouting', 'on');
  add_line(blk, 'delay_reg/1', 'max_delay_chk/1', 'autorouting', 'on');
- add_line(blk, 'sync/1', 'delay_reg/2', 'autorouting', 'on');
+ add_line(blk, 'en/1', 'delay_reg/2', 'autorouting', 'on');
  
  add_line(blk, 'max_delay/1', 'max_delay_chk/2', 'autorouting', 'on');
  
