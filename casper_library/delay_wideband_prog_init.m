@@ -12,7 +12,7 @@ function delay_wideband_prog_init(blk, varargin)
 defaults = {'max_delay',1024,'n_inputs_bits',2,'bram_latency',4};
  
 % if parameter is changed then only itwil redraw otherwise will exit
-%if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 % Checks whether the block selected is correct with this called function.
 check_mask_type(blk, 'delay_wideband_prog');
  
