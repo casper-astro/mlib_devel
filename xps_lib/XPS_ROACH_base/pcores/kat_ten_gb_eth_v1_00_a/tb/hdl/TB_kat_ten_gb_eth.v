@@ -2,7 +2,7 @@
 
 `define SIMLENGTH  100000
 `define MGT_PERIOD 8
-`define USR_PERIOD 7
+`define USR_PERIOD 5
 `define OPB_PERIOD 12
 
 module TB_kat_ten_gb_eth();
@@ -412,7 +412,7 @@ module TB_kat_ten_gb_eth();
     end
   end
  
-  assign app_tx_data         = tx_test_data;
+  assign app_tx_data         = tx_test_data | {app_tx_end_of_frame, 63'b0};
   assign app_tx_valid        = !usr_rst && app_tx_state == APP_TX_STATE_RUN;
   wire [31:0] foo = tx_test_data; //iveirlog bug hack
   assign app_tx_end_of_frame = (foo % (TX_FRAME_SIZE)) == (TX_FRAME_SIZE - 1); 
@@ -433,17 +433,23 @@ module TB_kat_ten_gb_eth();
 
   reg [63:0] app_rx_data_reg;
 
+  reg [7:0] block_counter;
+  wire app_rx_block = block_counter < 10;
+
   always @(posedge app_clk) begin
     if (app_rst) begin
       rx_app_state    <= RX_APP_WAIT;
       rx_app_progress <= 32'd0;
       mode_done[MODE_XGMII_BREAK] <= 1'b0;
+      block_counter <= 0;
     end else begin
       case (rx_app_state)
         /* wait 256 cycles -- long enough for the rx buffer to overflow (only with distributed memory) */
         RX_APP_WAIT: begin
-          rx_app_progress <= rx_app_progress + 1;
-          if (rx_app_progress == 1100) begin
+          if (app_rx_valid)
+            rx_app_progress <= rx_app_progress + 1;
+
+          if (rx_app_progress == 256) begin
             rx_app_state    <= RX_APP_OVER;
             rx_app_progress <= 32'b0;
           end
@@ -456,8 +462,11 @@ module TB_kat_ten_gb_eth();
           end
         end
         RX_APP_RUN: begin
-          if (app_rx_valid) begin
-            app_rx_data_reg <= app_rx_data;
+          if (app_rx_valid)
+            block_counter <= block_counter + 1;
+
+          if (app_rx_valid && !app_rx_block) begin
+            app_rx_data_reg <= app_rx_data & {1'b0, {63{1'b1}}};
             if (mode == MODE_XGMII_BREAK) begin
               if (app_rx_end_of_frame && app_rx_bad_frame) begin
                 mode_done[MODE_XGMII_BREAK] <= 1'b1;
@@ -466,8 +475,8 @@ module TB_kat_ten_gb_eth();
             end else begin
               rx_app_progress <= rx_app_progress + 1;
               if (rx_app_progress != 32'd0) begin
-                if (app_rx_data != app_rx_data_reg + 1) begin
-                  $display("FAILED: application data mismatch - got = %x, expected = %x", app_rx_data, app_rx_data_reg + 1);
+                if (app_rx_data != ((app_rx_data_reg + 1) | {app_rx_end_of_frame, 63'b0})) begin
+                  $display("FAILED: application data mismatch - got = %x, expected = %x", app_rx_data, (app_rx_data_reg + 1 | {app_rx_end_of_frame, 63'b0}));
                   $finish;
                 end
               end
@@ -492,7 +501,7 @@ module TB_kat_ten_gb_eth();
   end
 
   assign app_rx_overrun_ack = rx_app_state == RX_APP_OVER && app_rx_overrun;
-  assign app_rx_ack         = rx_app_state != RX_APP_WAIT;
+  assign app_rx_ack         = !(rx_app_state == RX_APP_WAIT || (rx_app_state == RX_APP_RUN && app_rx_block));
 
 
 

@@ -7,6 +7,7 @@ module epb_opb_bridge(
     epb_addr, epb_addr_gp,
     epb_data_i, epb_data_o,
     epb_rdy,
+    epb_rdy_oe,
 
     OPB_Clk,
     OPB_Rst,
@@ -35,6 +36,7 @@ module epb_opb_bridge(
   input  [15:0] epb_data_i;
   output [15:0] epb_data_o;
   output epb_rdy;
+  output epb_rdy_oe;
 
   input  OPB_Clk, OPB_Rst;
   output M_request;
@@ -144,6 +146,7 @@ module epb_opb_bridge(
   /* Cut Through routed epb_rdy and epb_data_o */
   wire         epb_rdy_int = opb_state == OPB_STATE_WAIT && OPB_reply;
   wire [15:0] epb_data_int = epb_addr_reg[0] ? OPB_DBus[16:31] : OPB_DBus[0:15];
+  assign      epb_rdy_oe   = !epb_cs_n;
 
   reg [15:0] epb_data_o;
   reg epb_rdy;

@@ -7,7 +7,10 @@ module epb_infrastructure(
     epb_r_w_n_buf, epb_r_w_n, 
     epb_be_n_buf, epb_be_n,
     epb_addr_buf, epb_addr,
-    epb_addr_gp_buf, epb_addr_gp
+    epb_addr_gp_buf, epb_addr_gp,
+    epb_rdy_buf,
+    epb_rdy,
+    epb_rdy_oe
   );
   inout  [15:0] epb_data_buf;
   input  epb_data_oe_n_i;
@@ -26,11 +29,22 @@ module epb_infrastructure(
   input   [5:0] epb_addr_gp_buf;
   output  [5:0] epb_addr_gp;
 
+  output epb_rdy_buf;
+  input  epb_rdy;
+  input  epb_rdy_oe;
+
   IOBUF iob_data[15:0](
     .O (epb_data_in_o),
     .IO(epb_data_buf),
     .I (epb_data_out_i),
     .T (epb_data_oe_n_i)
+  );
+
+  IOBUF iob_epb_rdy(
+    .O (),
+    .IO(epb_rdy_buf),
+    .I (epb_rdy),
+    .T (!epb_rdy_oe)
   );
 
   assign epb_addr_gp = epb_addr_gp_buf;

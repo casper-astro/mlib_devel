@@ -23,5 +23,8 @@ PORT epb_addr_buf = "",    DIR = I, VEC = [22:0]
 PORT epb_addr = "",        DIR = O, VEC = [22:0] 
 PORT epb_addr_gp_buf = "", DIR = I, VEC =  [5:0] 
 PORT epb_addr_gp = "",     DIR = O, VEC =  [5:0] 
+PORT epb_rdy_buf = "",     DIR = O
+PORT epb_rdy = "",         DIR = I
+PORT epb_rdy_oe = "",      DIR = I
 
 END

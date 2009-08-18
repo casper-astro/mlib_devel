@@ -21,6 +21,7 @@ PORT epb_addr_gp   = "", DIR = I, VEC = [5:0]
 PORT epb_data_i    = "", DIR = I, VEC =[15:0] 
 PORT epb_data_o    = "", DIR = O, VEC =[15:0] 
 PORT epb_rdy       = "", DIR = O
+PORT epb_rdy_oe    = "", DIR = O
 
 PORT OPB_Clk       = "",          DIR = I,               BUS = MOPB
 PORT OPB_Rst       = OPB_Rst,     DIR = I,               BUS = MOPB

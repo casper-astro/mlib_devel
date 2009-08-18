@@ -139,13 +139,17 @@ BEGIN epb_opb_bridge
   PORT epb_addr_gp   = epb_addr_gp_int
   PORT epb_data_i    = epb_data_i
   PORT epb_data_o    = epb_data_o
-  PORT epb_rdy       = epb_rdy
+  PORT epb_rdy       = epb_rdy_buf
+  PORT epb_rdy_oe    = epb_rdy_oe
 END
 
 BEGIN epb_infrastructure
   PARAMETER INSTANCE   = epb_infrastructure_inst
   PARAMETER HW_VER     = 1.00.a
 
+  PORT epb_rdy_buf     = epb_rdy
+  PORT epb_rdy         = epb_rdy_buf
+  PORT epb_rdy_oe      = epb_rdy_oe
   PORT epb_data_buf    = epb_data
   PORT epb_data_oe_n_i = epb_data_oe_n
   PORT epb_data_out_i  = epb_data_o
