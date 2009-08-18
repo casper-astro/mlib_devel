@@ -18,8 +18,18 @@
 ## Date:              Fri Dec 03 21:08:57 2004 (by Create and Import Peripheral Wizard)
 ##############################################################################
 
-lib national_adc_interface_v1_01_a diff_in
-lib national_adc_interface_v1_01_a DDR_Reg
-lib national_adc_interface_v1_01_a ADC_interface
-lib national_adc_interface_v1_01_a async_fifo_64by1024
-lib national_adc_interface_v1_01_a Register
+lib adc083000x2_interface_v1_00_a adc083000x2_interface
+lib adc083000x2_interface_v1_00_a clock_sample
+lib adc083000x2_interface_v1_00_a adc_reset
+lib adc083000x2_interface_v1_00_a clock_sync_fsm
+lib basemodules_v1_00_a Counter
+lib basemodules_v1_00_a ShiftRegister
+lib basemodules_v1_00_a IOShiftRegister
+lib basemodules_v1_00_a Register
+lib basemodules_v1_00_a IORegister
+lib adc083000_interface_v1_00_a adc083000_interface
+lib adc083000_interface_v1_00_a async_fifo_64by16
+lib adc_generic_subblocks_v1_00_a diff_ddr_reg
+lib adc_generic_subblocks_v1_00_a recapture
+lib adc_generic_subblocks_v1_00_a diff_qdr_reg
+lib adc_generic_subblocks_v1_00_a qdr_capture

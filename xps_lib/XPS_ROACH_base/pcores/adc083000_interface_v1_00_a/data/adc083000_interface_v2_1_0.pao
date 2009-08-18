@@ -18,8 +18,10 @@
 ## Date:              Fri Dec 03 21:08:57 2004 (by Create and Import Peripheral Wizard)
 ##############################################################################
 
-lib national_adc_interface_v1_01_a diff_in
-lib national_adc_interface_v1_01_a DDR_Reg
-lib national_adc_interface_v1_01_a ADC_interface
-lib national_adc_interface_v1_01_a async_fifo_64by1024
-lib national_adc_interface_v1_01_a Register
+lib adc083000_interface_v1_01_a diff_in
+lib adc083000_interface_v1_01_a DDR_Reg
+lib adc083000_interface_v1_01_a adc083000_interface
+lib adc083000_interface_v1_01_a async_fifo_64by16
+lib adc083000_interface_v1_01_a Register 
+lib adc083000_interface_v1_01_a single_lvds
+lib adc083000_interface_v1_01_a ddr_capture

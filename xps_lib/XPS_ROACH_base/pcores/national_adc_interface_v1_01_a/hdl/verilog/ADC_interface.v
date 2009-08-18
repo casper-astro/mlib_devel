@@ -97,6 +97,34 @@ output				user_outofrange;
 output				user_sync;
 output				user_data_valid;
 
+// Wires and Regs
+//===============
+wire adc_clk_buf;
+wire adc_clk, adc_clk90, adc_clk180, adc_clk270;
+wire adc_clk_dcm, adc_clk90_dcm, adc_clk180_dcm, adc_clk270_dcm;
+wire [7:0] adc_data_eveni;
+wire [7:0] adc_data_oddi;
+wire [7:0] adc_data_evenq;
+wire [7:0] adc_data_oddq;
+wire [7:0] user_datai0_asynch, user_datai1_asynch, user_datai2_asynch, user_datai3_asynch;
+wire [7:0] user_dataq0_asynch, user_dataq1_asynch, user_dataq2_asynch, user_dataq3_asynch;
+wire adc_sync; // ddr
+wire adc_sync_rise, adc_sync_fall;
+wire adc_data_fifo_full;
+wire adc_data_fifo_empty;
+wire [63:0] adc_data_capture = {
+ 	user_datai0_asynch,
+	user_datai1_asynch,
+	user_datai2_asynch,
+	user_datai3_asynch,
+	user_dataq0_asynch,
+	user_dataq1_asynch,
+	user_dataq2_asynch,
+	user_dataq3_asynch};
+wire [63:0] adc_fifo_dout;
+wire [63:0] adc_data_recapture;
+
+
 
 
 //OBUFDS instance_name (.O (user_O),
@@ -111,7 +139,6 @@ OBUFDS ADC_DDR_RST( .O(adc_ddrb_p), .OB(adc_ddrb_n), .I(ctrl_reset) );
 // -----------------------------
 
 // Buffer for input clk
-wire adc_clk_buf;
    IBUFGDS #(
       .DIFF_TERM("TRUE"),       	// Differential Termination (Virtex-4/5, Spartan-3E/3A)
       .IOSTANDARD("LVDS_25")    	// Specify the input I/O standard
@@ -125,8 +152,6 @@ wire adc_clk_buf;
 //           Virtex-4/5
 // Xilinx HDL Language Template, version 9.1.3i
 
-wire adc_clk, adc_clk90, adc_clk180, adc_clk270;
-wire adc_clk_dcm, adc_clk90_dcm, adc_clk180_dcm, adc_clk270_dcm;
    DCM #(
       .CLKDV_DIVIDE(2.0), 									// Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5 7.0,7.5,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0 or 16.0
       .CLKFX_DIVIDE(1), 										// Can be any integer from 1 to 32
@@ -179,14 +204,6 @@ assign ctrl_clk90_out = adc_clk90;
 assign ctrl_clk180_out = adc_clk180;
 assign ctrl_clk270_out = adc_clk270;
 
-
-
-//----Wire Declarations
-wire [7:0] adc_data_eveni;
-wire [7:0] adc_data_oddi;
-wire [7:0] adc_data_evenq;
-wire [7:0] adc_data_oddq;
-
 // Digitize LVDS pairs
 diff_in DI_dataeveni 	(.DP(adc_dataeveni_p), .DN(adc_dataeveni_n), .D(adc_data_eveni));
 diff_in DI_dataoddi 	(.DP(adc_dataoddi_p), .DN(adc_dataoddi_n), .D(adc_data_oddi));
@@ -196,8 +213,6 @@ diff_in DI_dataoddq 	(.DP(adc_dataoddq_p), .DN(adc_dataoddq_n), .D(adc_data_oddq
 
 
 // Use DDR registers to parallelize samples at slower clockrate
-wire [7:0] user_datai0_asynch, user_datai1_asynch, user_datai2_asynch, user_datai3_asynch;
-wire [7:0] user_dataq0_asynch, user_dataq1_asynch, user_dataq2_asynch, user_dataq3_asynch;
 
 DDR_Reg DDRs04 (.clk(adc_clk), .reset(1'b0), .din(adc_data_eveni), .dout_rise(user_datai0_asynch), .dout_fall(user_datai2_asynch));
 DDR_Reg DDRs15 (.clk(adc_clk), .reset(1'b0), .din(adc_data_oddi), .dout_rise(user_datai1_asynch), .dout_fall(user_datai3_asynch));
@@ -205,7 +220,6 @@ DDR_Reg DDRs26 (.clk(adc_clk), .reset(1'b0), .din(adc_data_evenq), .dout_rise(us
 DDR_Reg DDRs37 (.clk(adc_clk), .reset(1'b0), .din(adc_data_oddq), .dout_rise(user_dataq1_asynch), .dout_fall(user_dataq3_asynch));
 
 
-wire adc_sync; // ddr
 // ADC sync output
    IBUFGDS #(
       .DIFF_TERM("TRUE"),       	// Differential Termination (Virtex-4/5, Spartan-3E/3A)
@@ -216,7 +230,6 @@ wire adc_sync; // ddr
       .IB(adc_sync_n) 						// Diff_n buffer input (connect directly to top-level port)
    );
    
-wire adc_sync_rise, adc_sync_fall;
    IDDR #(
       .DDR_CLK_EDGE("SAME_EDGE_PIPELINED"), // "OPPOSITE_EDGE", "SAME_EDGE" 
                                       //    or "SAME_EDGE_PIPELINED" 
@@ -245,21 +258,9 @@ assign user_sync = adc_sync_rise | adc_sync_fall;
    );
 
 // asynch fifo
-wire adc_data_fifo_full;
-wire adc_data_fifo_empty;
-wire [63:0] adc_fifo_din = {
- 	user_datai0_asynch,
-	user_datai1_asynch,
-	user_datai2_asynch,
-	user_datai3_asynch,
-	user_dataq0_asynch,
-	user_dataq1_asynch,
-	user_dataq2_asynch,
-	user_dataq3_asynch};
-wire [63:0] adc_fifo_dout;
 
 async_fifo_64by1024 adc_data_fifo (
-	.din(adc_fifo_din),
+	.din(adc_data_capture),
 	.rd_clk(adc_clk),
 	.rd_en(~adc_data_fifo_empty),
 	.rst(dcm_reset),
