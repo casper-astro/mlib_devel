@@ -56,14 +56,14 @@ PORT ppc_irq_n   = ppc_irq_n,   DIR = O
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#PORT mgt_tx_bottom_0_n    = xaui0_mgt_tx_n,  DIR = O, VEC = [3:0]
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#PORT mgt_tx_bottom_0_p    = xaui0_mgt_tx_p,  DIR = O, VEC = [3:0]
 
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_clk = adc0_adc3wire_clk, DIR = O
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_data = adc0_adc3wire_data, DIR = O
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe, DIR = O
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_modepin = adc0_modepin, DIR = O
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_clk = adc1_adc3wire_clk, DIR = O
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_data = adc1_adc3wire_data, DIR = O
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe, DIR = O
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_modepin = adc1_modepin, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_clk = adc0_adc3wire_clk, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_data = adc0_adc3wire_data, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_modepin = adc0_modepin, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_clk = adc1_adc3wire_clk, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_data = adc1_adc3wire_data, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe, DIR = O
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_modepin = adc1_modepin, DIR = O
 
 BEGIN roach_infrastructure
   PARAMETER INSTANCE = infrastructure_inst
@@ -230,38 +230,41 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#  BUS_INTERFACE XAUI_CONF_3 = xaui_conf3
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )#BEGIN opb_adccontroller
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# PARAMETER INSTANCE     = opb_adccontroller_0
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# PARAMETER HW_VER       = 1.00.a
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# PARAMETER C_BASEADDR   = 0x00020000
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# PARAMETER C_HIGHADDR   = 0x0002ffff
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# PARAMETER AUTOCONFIG_0 = 1
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# PARAMETER AUTOCONFIG_1 = 1
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_0 = 1
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_1 = 1
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# BUS_INTERFACE SOPB = opb0
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )# PORT OPB_Clk = epb_clk
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_data = adc0_adc3wire_data
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_modepin = adc0_modepin
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_ddrb = adc0_ddrb
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_dcm_reset = adc0_dcm_reset
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_clk = adc1_adc3wire_clk
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_data = adc1_adc3wire_data
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_modepin = adc1_modepin
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_ddrb = adc1_ddrb
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_dcm_reset = adc1_dcm_reset
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psclk = adc0_psclk
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psen = adc0_psen
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psincdec = adc0_psincdec
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psdone = adc0_psdone
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_clk = adc0_clk
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psclk = adc1_psclk
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psen = adc1_psen
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psincdec = adc1_psincdec
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psdone = adc1_psdone
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )#END
-#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc_3ghz') )#
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )#BEGIN opb_adccontroller
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# PARAMETER INSTANCE     = opb_adccontroller_0
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# PARAMETER HW_VER       = 1.00.a
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# PARAMETER C_BASEADDR   = 0x00020000
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# PARAMETER C_HIGHADDR   = 0x0002ffff
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# PARAMETER AUTOCONFIG_0 = 1
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# PARAMETER AUTOCONFIG_1 = 1
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_0 = 1
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_1 = 1
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# BUS_INTERFACE SOPB = opb0
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )# PORT OPB_Clk = epb_clk
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_data = adc0_adc3wire_data
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_modepin = adc0_modepin
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_ddrb = adc0_ddrb
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_dcm_reset = adc0_dcm_reset
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_clk = adc1_adc3wire_clk
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_data = adc1_adc3wire_data
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_modepin = adc1_modepin
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_ddrb = adc1_ddrb
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_dcm_reset = adc1_dcm_reset
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psclk = adc0_psclk
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psen = adc0_psen
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psincdec = adc0_psincdec
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psdone = adc0_psdone
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_clk = adc0_clk
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psclk = adc1_psclk
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psen = adc1_psen
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psincdec = adc1_psincdec
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psdone = adc1_psdone
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') ) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )#END
+
+
+
+#IF# ( strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'), 'xps_adc083000') )#
