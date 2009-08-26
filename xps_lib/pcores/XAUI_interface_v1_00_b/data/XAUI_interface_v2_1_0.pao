@@ -13,5 +13,5 @@
 ## ***************************************************************************
 ##
 
-lib XAUI_interface_v1_00_a transceiver
-lib XAUI_interface_v1_00_a XAUI_interface
+lib XAUI_interface_v1_00_b transceiver
+lib XAUI_interface_v1_00_b XAUI_interface
