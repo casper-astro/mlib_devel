@@ -25,7 +25,7 @@ module xaui_phy(
     xaui_reset,
     xaui_status
   );
-  parameter USE_KAT_XAUI = 0;
+  parameter USE_KAT_XAUI = 1;
 
   input  mgt_clk, reset;
   /* mgt signals */
@@ -63,7 +63,7 @@ module xaui_phy(
       1'b0        //loopback
     };
 
-generate if (USE_KAT_XAUI) begin : use_kat_xaui
+generate if (0) begin : use_kat_xaui
   xaui_kat  xaui_inst(
     .reset  (reset),   
     .usrclk (mgt_clk),
