@@ -65,22 +65,24 @@ for i=0:num_lo-1,
     sin_name = ['sin',num2str(i)];
     cos_name = ['cos',num2str(i)];
     % Add ports
-    reuse_block(blk, sin_name, 'built-in/outport', 'Position', [135 35+i*100 175 55+100*i]);
-    reuse_block(blk, cos_name, 'built-in/outport', 'Position', [135 65+i*100 175 85+100*i]);
+    reuse_block(blk, sin_name, 'built-in/outport', 'Position', [175 45+i*100 205 60+100*i]);
+    reuse_block(blk, cos_name, 'built-in/outport', 'Position', [175 70+i*100 205 85+100*i]);
     % Add LOs
     if counter_step == 0,
         lo_name = ['lo_const',num2str(i)];
-        reuse_block(blk, lo_name, 'casper_library/Downconverter/lo_const', 'Position', [30 i*100+30 70 i*100+90], ...
+        reuse_block(blk, lo_name, 'casper_library/Downconverter/lo_const', 'Position', [100 i*100+50 140 i*100+90], ...
             'n_bits', num2str(n_bits), 'phase', num2str(2*pi*freq*i/freq_div));
-    else,
+    else
         lo_name = ['lo_osc',num2str(i)];
-        reuse_block(blk, lo_name, 'casper_library/Downconverter/lo_osc', 'Position', [30 i*100+30 70 i*100+90], ...
+        reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 100 60 115]);
+        reuse_block(blk, lo_name, 'casper_library/Downconverter/lo_osc', 'Position', [100 i*100+50 140 i*100+90], ...
             'n_bits', num2str(n_bits), 'latency', num2str(latency), ...
             'counter_width', num2str(counter_width), 'counter_start', num2str(mod(i*freq,freq_div)), ...
             'counter_step', num2str(counter_step));
     end
     add_line(blk,[lo_name,'/1'],[sin_name,'/1']);
     add_line(blk,[lo_name,'/2'],[cos_name,'/1']);
+    add_line(blk,['sync','/1'],[lo_name,'/1']);
 end
 
 % When finished drawing blocks and lines, remove all unused blocks.
