@@ -79,10 +79,10 @@ for i=0:num_lo-1,
             'n_bits', num2str(n_bits), 'latency', num2str(latency), ...
             'counter_width', num2str(counter_width), 'counter_start', num2str(mod(i*freq,freq_div)), ...
             'counter_step', num2str(counter_step));
+         add_line(blk,['sync','/1'],[lo_name,'/1']);
     end
     add_line(blk,[lo_name,'/1'],[sin_name,'/1']);
-    add_line(blk,[lo_name,'/2'],[cos_name,'/1']);
-    add_line(blk,['sync','/1'],[lo_name,'/1']);
+    add_line(blk,[lo_name,'/2'],[cos_name,'/1']);  
 end
 
 % When finished drawing blocks and lines, remove all unused blocks.

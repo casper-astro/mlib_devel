@@ -47,6 +47,8 @@ n_bits = get_var('n_bits','defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency','defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency','defaults', defaults, varargin{:});
 
+counter_step = mod(nstreams*freq,freq_div);
+
 if log2(nstreams) ~= round(log2(nstreams)),
     error('The number of inputs must be a positive power of 2 integer');
 end
@@ -54,7 +56,7 @@ end
 delete_lines(blk);
 
 reuse_block(blk, 'sync', 'built-in/inport', ...
-    'Position', [130 20 160 35], 'Port', '1');
+    'Position', [50 20 80 35], 'Port', '1');
 reuse_block(blk, 'delay', 'xbsIndex_r4/Delay', ...
     'latency', num2str(mult_latency), 'Position', [190 20 220 50]);
 reuse_block(blk, 'sync_out', 'built-in/outport', ...
@@ -65,7 +67,10 @@ add_line(blk, 'delay/1', 'sync_out/1');
 reuse_block(blk, 'dds', 'casper_library/Downconverter/dds', ...
     'Position', [20 100 80 100+30*nstreams], 'num_lo', num2str(nstreams), 'freq', num2str(freq),...
     'freq_div', num2str(freq_div), 'n_bits', num2str(n_bits), 'latency','2');
-add_line(blk, 'sync/1', 'dds/1')
+
+if counter_step ~= 0,
+    add_line(blk, 'sync/1', 'dds/1')
+end
 
 for i=1:nstreams,
     rcmult = ['rcmult',num2str(i)];
