@@ -37,9 +37,21 @@ xsg_obj = get(blk_obj,'xsg_obj');
 
 % Most of these parameters are hacks on top of the existing toolflow...
 s.hw_sys = get(xsg_obj,'hw_sys');
-% s.hw_adc = get_param(blk_name,'adc_brd');
+s.use_adc0 = strcmp( get_param(blk_name, 'use_adc0'), 'on');
+s.use_adc1 = strcmp( get_param(blk_name, 'use_adc1'), 'on');
+s.demux_adc = strcmp( get_param(blk_name, 'demux_adc0'), 'on');
+if s.demux_adc
+    s.sysclk_rate = eval_param(blk_name,'adc_clk_rate')/8;
+else
+    s.sysclk_rate = eval_param(blk_name,'adc_clk_rate')/4;
+end
+if s.use_adc0
+    s.adc_str = 'adc0';
+else
+    s.adc_str = 'adc1';
+end
 s.adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
-s.adc_interleave = 'on'; 
+s.adc_interleave = strcmp( get_param(blk_name,'clock_sync'), 'on');
 s.adc_str = 'adc0'; % "dominant" ADC is in ZDOK 0
 
 switch s.hw_sys
@@ -126,6 +138,11 @@ ext_ports.adc1_reset       = {1 'out' ['adc1','_reset']        ['{',adc1port,'_p
 
 
 b = set(b,'ext_ports',ext_ports);
+parameters.DEMUX_DATA_OUT  = num2str(s.demux_adc);
+parameters.USE_ADC0 = num2str(s.use_adc0);
+parameters.USE_ADC1 = num2str(s.use_adc1);
+parameters.INTERLEAVE_BOARDS = num2str(s.adc_interleave);
 
+b = set(b,'parameters',parameters);
 % Software parameters
-b = set(b,'c_params',['adc = ',s.adc_str,' / interleave = ',s.adc_interleave]);
+b = set(b,'c_params',['adc = ',s.adc_str,' / interleave = ',num2str(s.adc_interleave)]);
