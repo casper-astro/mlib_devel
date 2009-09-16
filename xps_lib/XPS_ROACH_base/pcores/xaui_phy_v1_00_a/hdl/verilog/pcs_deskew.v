@@ -91,7 +91,7 @@ module pcs_deskew(
       state <= nstate(state, got_align, |disp_err);
     end
   end
-  assign enable_deskew = state = `DESKEW_STATE_LOSS_OF_ALIGNMENT;
+  assign enable_deskew = state == `DESKEW_STATE_LOSS_OF_ALIGNMENT;
 
   assign align_status = state == `DESKEW_STATE_ALIGN_ACQUIRED_1 ||
                         state == `DESKEW_STATE_ALIGN_ACQUIRED_2 ||

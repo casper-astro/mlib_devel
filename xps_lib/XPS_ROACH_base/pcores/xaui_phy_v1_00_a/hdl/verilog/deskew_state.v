@@ -59,7 +59,7 @@ module deskew_state(
   end
   endfunction
 
-  assign next_state = nstate(current_state, got_align, align_error);
+  assign next_state = nstate(current_state, got_align, disp_err);
 
   assign aligned = current_state == `DESKEW_STATE_ALIGN_ACQUIRED_1 || current_state == `DESKEW_STATE_ALIGN_ACQUIRED_2 ||
                              current_state == `DESKEW_STATE_ALIGN_ACQUIRED_3 || current_state == `DESKEW_STATE_ALIGN_ACQUIRED_4;
