@@ -8,7 +8,7 @@ sys_clkfreq         3       14        4
 #IF# strcmp(get(b,'type'),'xps_dram')#dram_controller     3    50000    10000
 #IF# strcmp(get(b,'type'),'xps_dram')#dram_memory         3  4000000  4000000
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_memory         3  2000000  1000000
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_memory         3  2000000  1000000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_memory         3  3000000  1000000
 #IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#tge0_registers      3   200000      800
 #IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#tge0_txbuffer       3   201000     1000
 #IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#tge0_rxbuffer       3   202000     1000
