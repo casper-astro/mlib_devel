@@ -1,7 +1,7 @@
 module sys_block(
     OPB_Clk,
     OPB_Rst,
-    SL_DBus,
+    Sl_DBus,
     Sl_errAck,
     Sl_retry,
     Sl_toutSup,
@@ -25,9 +25,11 @@ module sys_block(
   parameter RCS_UPTODATE = 16'b0;
   parameter C_BASEADDR   = 32'h00000000;
   parameter C_HIGHADDR   = 32'h0000FFFF;
+  parameter C_OPB_AWIDTH = 0;
+  parameter C_OPB_DWIDTH = 0;
 
   input  OPB_Clk, OPB_Rst;
-  output [0:31] SL_DBus;
+  output [0:31] Sl_DBus;
   output Sl_errAck;
   output Sl_retry;
   output Sl_toutSup;
@@ -111,33 +113,33 @@ module sys_block(
     end
   end
 
-  reg [0:31] SL_DBus;
+  reg [0:31] Sl_DBus;
 
   always @(*) begin
     if (!Sl_xferAck) begin
-      SL_DBus <= 32'b0;
+      Sl_DBus <= 32'b0;
     end else begin
       case (a_trans[5:2])
         0: begin
-          SL_DBus[ 0:15] <= BOARD_ID;
-          SL_DBus[16:31] <= REV_MAJOR;
+          Sl_DBus[ 0:15] <= BOARD_ID;
+          Sl_DBus[16:31] <= REV_MAJOR;
         end
         1: begin
-          SL_DBus[ 0:15] <= REV_MINOR;
-          SL_DBus[16:31] <= REV_RCS;
+          Sl_DBus[ 0:15] <= REV_MINOR;
+          Sl_DBus[16:31] <= REV_RCS;
         end
         2: begin
-          SL_DBus[ 0:15] <= {15'b0, RCS_UPTODATE};
-          SL_DBus[16:31] <= {15'b0, soft_reset};
+          Sl_DBus[ 0:15] <= {15'b0, RCS_UPTODATE};
+          Sl_DBus[16:31] <= {15'b0, soft_reset};
         end
         3: begin
-          SL_DBus <= scratch_pad;
+          Sl_DBus <= scratch_pad;
         end
         4: begin
-          SL_DBus <= fab_clk_counter_latched;
+          Sl_DBus <= fab_clk_counter_latched;
         end
         default: begin
-          SL_DBus <= 32'd0;
+          Sl_DBus <= 32'd0;
         end
       endcase
     end
