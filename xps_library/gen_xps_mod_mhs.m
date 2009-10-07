@@ -1,7 +1,7 @@
-function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
+function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 % Modifies the EDK project's MHS file to include design elements.
 %
-% gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
+% gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 
     %disp('Running gen_xps_mod_mhs');
 
@@ -58,31 +58,31 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths)
     % Backup and preprocess skeleton MHS and core_info.tab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    if ~exist([xps_path,'\system.mhs.bac'],'file')
-        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\system.mhs'],[xps_path,'\system.mhs.bac']);
+    if ~exist([xps_path, slash, 'system.mhs.bac'],'file')
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, 'system.mhs'],[xps_path, slash, 'system.mhs.bac']);
         if ~copystatus
             disp('Error trying to backup system.mhs:');
             disp(copymessage)
         end % if ~copystatus
-    end % if ~exist([xps_path,'\system.mhs.bac'],'file')
+    end % if ~exist([xps_path, slash, 'system.mhs.bac'],'file')
 
-    if ~exist([xps_path,'\core_info.tab.bac'],'file')
-        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\core_info.tab'],[xps_path,'\core_info.tab.bac']);
+    if ~exist([xps_path, slash, 'core_info.tab.bac'],'file')
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, 'core_info.tab'],[xps_path, slash, 'core_info.tab.bac']);
         if ~copystatus
             disp('Error trying to backup core_info.tab:');
             disp(copymessage);
         end % if ~copystatus
-    end % if ~exist([xps_path,'\core_info.tab.bac'],'file')
+    end % if ~exist([xps_path, slash, 'core_info.tab.bac'],'file')
 
-    mhs_fid = fopen([xps_path,'/system.mhs'],'w');
-    nfo_fid = fopen([work_path, '/core_info.m'],'w');
-    bof_fid = fopen([xps_path, '/core_info.tab'],'w');
+    mhs_fid = fopen([xps_path, slash, 'system.mhs'],'w');
+    nfo_fid = fopen([work_path, slash, 'core_info.m'],'w');
+    bof_fid = fopen([xps_path, slash, 'core_info.tab'],'w');
 
-    in_fid = fopen([xps_path,'/system.mhs.bac'],'r');
+    in_fid = fopen([xps_path, slash, 'system.mhs.bac'],'r');
     detokenize(in_fid, mhs_fid, xps_objs);
     fclose(in_fid);
 
-    in_fid = fopen([xps_path,'/core_info.tab.bac'],'r');
+    in_fid = fopen([xps_path, slash, 'core_info.tab.bac'],'r');
     detokenize(in_fid, bof_fid, xps_objs);
     fclose(in_fid);
 

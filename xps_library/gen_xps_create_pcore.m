@@ -1,4 +1,4 @@
-function gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths)
+function gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 % Generates the EDK pcore from the compiled Simulink/System Generator design.
 %
 % gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths)
@@ -26,30 +26,30 @@ function gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths)
     disp('##########################');
 
     % delete old IP directory in the pcores directory
-    if exist([xps_path,'\pcores\',xsg_core_name,'_v1_00_a'],'dir')
-        rmdir([xps_path,'\pcores\',xsg_core_name,'_v1_00_a'],'s');
+    if exist([xps_path, slash, 'pcores', slash, xsg_core_name,'_v1_00_a'],'dir')
+        rmdir([xps_path, slash, 'pcores', slash, xsg_core_name,'_v1_00_a'],'s');
     end
 
     % create IP directory in the pcores directory
-    mkdir([xps_path,'\pcores\',xsg_core_name,'_v1_00_a']);
-    mkdir([xps_path,'\pcores\',xsg_core_name,'_v1_00_a'],'netlist');
-    mkdir([xps_path,'\pcores\',xsg_core_name,'_v1_00_a'],'data');
+    mkdir([xps_path, slash, 'pcores', slash, xsg_core_name,'_v1_00_a']);
+    mkdir([xps_path, slash, 'pcores', slash, xsg_core_name,'_v1_00_a'],'netlist');
+    mkdir([xps_path, slash, 'pcores', slash, xsg_core_name,'_v1_00_a'],'data');
 
     % copy the XSG netlist into the netlist directory
     file_name = [xsg_core_name,'_cw_complete.ngc'];
-    if ~exist([xsg_path,'\synth_model\',file_name],'file')
+    if ~exist([xsg_path, slash, 'synth_model', slash, file_name],'file')
         error('Cannot find any compiled XSG netlist. Have you run the Xilinx System Generator on your design ?')
     end
-    [copystatus,copymessage,copymessageid] = copyfile([xsg_path,'\synth_model\',file_name],[xps_path,'\pcores\',xsg_core_name,'_v1_00_a\netlist\',xsg_core_name,'.ngc']);
+    [copystatus,copymessage,copymessageid] = copyfile([xsg_path, slash, 'synth_model', slash,file_name],[xps_path, slash, 'pcores', slash, xsg_core_name,'_v1_00_a', slash, 'netlist', slash, xsg_core_name,'.ngc']);
     if ~copystatus
         disp('Error trying to copy pcore netlist:');
         disp(copymessage);
     end % if ~copystatus
 
     % create the BBD file in the data directory
-    bbd_fid = fopen([xps_path,'\pcores\',xsg_core_name,'_v1_00_a\data\',xsg_core_name,'_v2_1_0.bbd'],'w');
+    bbd_fid = fopen([xps_path, slash,'pcores', slash,xsg_core_name,'_v1_00_a', slash,'data', slash,xsg_core_name,'_v2_1_0.bbd'],'w');
     if bbd_fid == -1
-        error(['Cannot open file ',xps_path,'\pcores\',xsg_core_name,'_v1_00_a\data\',xsg_core_name,'_v2_1_0.bbd for writing.'])
+        error(['Cannot open file ',xps_path, slash, 'pcores',slash,xsg_core_name,'_v1_00_a',slash,'data',slash,xsg_core_name,'_v2_1_0.bbd for writing.'])
     end
 
     fprintf(bbd_fid, '#############################################################################\n');
@@ -66,9 +66,9 @@ function gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths)
     fclose(bbd_fid);
 
     % create the MPD file in the data directory
-    mpd_fid = fopen([xps_path,'\pcores\',xsg_core_name,'_v1_00_a\data\',xsg_core_name,'_v2_1_0.mpd'],'w');
+    mpd_fid = fopen([xps_path, slash, 'pcores', slash,xsg_core_name,'_v1_00_a',slash, 'data', slash, xsg_core_name,'_v2_1_0.mpd'],'w');
     if mpd_fid == -1
-        error(['Cannot open file ',xps_path,'\pcores\',xsg_core_name,'_v1_00_a\data\',xsg_core_name,'_v2_1_0.mpd for writing.'])
+        error(['Cannot open file ',xps_path, slash,'pcores', slash,xsg_core_name,'_v1_00_a', slash,'data',slash,xsg_core_name,'_v2_1_0.mpd for writing.'])
     end
 
     fprintf(mpd_fid, '#############################################################################\n');

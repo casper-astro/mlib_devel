@@ -72,6 +72,26 @@ time_software = 0;
 time_edk      = 0;
 time_download = 0;
 
+slash = '\';
+[s,w] = system('uname -a');
+
+if s ~= 0
+  [s,w] = system('ver');
+  if s ~= 0 
+    disp(sprint('Could not detect OS, assuming Windows'));
+  elseif ~isempty(regexp(w,'Windows'))
+    disp(sprintf('Detected Windows OS'));
+  else
+    disp(sprintf('Detected Unknown Windows-like OS'));
+  end
+elseif ~isempty(regexp(w,'Linux'))
+  slash = '/';
+  disp(sprintf('Detected Linux OS'));
+else
+  slash = '/';
+  disp(sprintf('Detected Unknown Unix-like OS'));
+end
+
 xps_blks        = find_system(sys,'FollowLinks','on','LookUnderMasks','all','RegExp','on','Tag','^xps:');
 xps_xsg_blks    = find_system(sys,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
 xps_pcore_blks  = find_system(sys,'FollowLinks','on','LookUnderMasks','all','Tag','xps:pcore');
@@ -128,11 +148,11 @@ end
 
 simulink_path   = pwd;
 design_name     = clear_name(get_param(xsg_blk,'parent'));
-work_path       = [simulink_path,'\',clear_name(get_param(xsg_blk,'parent'))];
-src_path        = [work_path,'\src'];
-xsg_path        = [work_path,'\sysgen'];
-bit_path        = [work_path,'\bit_files'];
-netlist_path    = [work_path,'\netlist'];
+work_path       = [simulink_path, slash, clear_name(get_param(xsg_blk,'parent'))];
+src_path        = [work_path, slash, 'src'];
+xsg_path        = [work_path, slash, 'sysgen'];
+bit_path        = [work_path, slash, 'bit_files'];
+netlist_path    = [work_path, slash, 'netlist'];
 
 % check paths
 if ~isempty(strfind(simulink_path, ' '))
@@ -242,7 +262,7 @@ mpc_type        = get(xsg_obj,'mpc_type');
 app_clk         = get(xsg_obj,'clk_src');
 app_clk_rate    = get(xsg_obj,'clk_rate');
 xsg_core_name   = clear_name(get(xsg_obj,'parent'));
-xps_path        = [work_path,'\XPS_',hw_sys,'_base'];
+xps_path        = [work_path, slash, 'XPS_',hw_sys,'_base'];
 
 % Create structure of commonly-used design parameters
 mssge_proj                  = {};
@@ -307,6 +327,7 @@ if run_xsg
 end
 time_xsg = now - start_time;
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Task: Copy Base System
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -365,10 +386,11 @@ if run_copy
     if exist(xps_path,'dir')
         rmdir(xps_path,'s');
     end
-    if exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
-        mkdir(xps_path);
-        [copy_result,copy_message] = dos(['xcopy /Q /E /Y ', XPS_LIB_PATH, '\XPS_',hw_sys,'_base ', xps_path,'\.']);
-        if copy_result
+    if exist([XPS_LIB_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
+        destination_dir = [xps_path];
+        source_dir = [XPS_LIB_PATH, slash, 'XPS_', hw_sys, '_base'];
+        [copy_result, msg, msgid] = copyfile(source_dir,destination_dir,'f');
+        if copy_result == 0
             cd(simulink_path);
             error('Unpackage base system files failed.');
         else
@@ -409,6 +431,7 @@ if run_copy
 end % if run_copy
 time_copy = now - start_time;
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Task: Copy+Create custom IPs
 % Description: If the user specify a custom IP block, a EDK pcore
@@ -426,13 +449,17 @@ if run_ip
         path_param = get_param(xps_pcore_blks(n), 'pcore_path');
         pcore_path = clear_path(path_param{1});
 
-        if dos(['xcopy /E /Y ', pcore_path, ' ', work_path, '\XPS_', hw_sys, '_base\pcores\']);
+        destination_dir = [xps_path, slash, 'pcores', slash];
+
+        [copy_result, msg, msgid] = copyfile(pcore_path, destination_dir, 'f');
+
+        if copy_result == 0;
             cd(simulink_path);
             error(['Error copying custom pcores from ', pcore_path]);
         end
     end
 
-    gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths);
+    gen_xps_create_pcore(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
 end % if run_ip
 time_ip = now - start_time;
@@ -456,28 +483,28 @@ if run_edkgen
         xmpfile = [xmpfile, '.', hw_subsys];
     end % if ~isempty(hw_subsys)
 
-    if ~exist([xps_path,'\', xmpfile, '.bac'],'file')
-        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\',xmpfile],[xps_path,'\',xmpfile,'.bac']);
+    if ~exist([xps_path, slash, xmpfile, '.bac'],'file')
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, xmpfile],[xps_path, slash, xmpfile,'.bac']);
         if ~copystatus
             disp('Error trying to backup system.xmp:');
             disp(copymessage);
         end % if ~copystatus
 
-        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\',xmpfile,'.bac'],[xps_path,'\system.xmp']);
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, xmpfile,'.bac'],[xps_path, slash, 'system.xmp']);
         if ~copystatus
             disp('Error trying to overwrite system.xmp:');
             disp(copymessage);
         end % if ~copystatus
-    end % if ~exist([xps_path,'\', xmpfile, '.bac'],'file')
+    end % if ~exist([xps_path, slash, xmpfile, '.bac'],'file')
 
     % modifying MHS file
-    gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths);
+    gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
     % modifying MSS file
-    gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths);
+    gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
     % modifying UCF file
-    gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths);
+    gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
 end % if run_edkgen
 time_edkgen = now - start_time;
@@ -507,6 +534,7 @@ if run_software
 
     switch sw_os
         case 'tinySH'
+            %TODO: these functions might experience OS 'slash' errors
             % Creating software core info files
             gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj, mssge_paths);
 
@@ -529,8 +557,8 @@ if run_software
             error(['Unsupported OS: ',sw_os]);
     end % switch sw_os
 
-    win_fid = fopen([xps_path,'\gen_prog_files.bat'],'w');
-    unix_fid = fopen([xps_path,'\gen_prog_files'],'w');
+    win_fid = fopen([xps_path, slash, 'gen_prog_files.bat'],'w');
+    unix_fid = fopen([xps_path, slash, 'gen_prog_files'],'w');
     fprintf(unix_fid,['#!/bin/bash\n']);
     time_stamp = clear_name(datestr(now, 'yyyy-mmm-dd HHMM'));
 
@@ -587,17 +615,11 @@ if run_software
     end % if strcmp(hw_sys, 'BEE2_usr')
 
     if strcmp(hw_sys, 'ROACH')
-      fprintf(win_fid, ...
-	['mkbof.exe -o implementation\\system.bof', ...
-	 ' -s core_info.tab -t 3 implementation\\system.bin\n']);
-      fprintf(unix_fid, ...
-	['./mkbof -o implementation/system.bof',...
-	 ' -s core_info.tab -t 3 implementation/system.bin\n']);
-      fprintf(win_fid,['copy implementation\\system.bof' ...
-		 ' ..\\bit_files\\', design_name,'_', ...
-		 time_stamp,'.bof\n']);
-      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', ...
-		  design_name,'_',time_stamp,'.bof\n']);
+      fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
+      fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
+      fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
+      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
     end % strcmp(hw_sys, 'ROACH')
 
     fclose(win_fid);
@@ -612,9 +634,9 @@ if run_edk
     disp('## Running EDK backend ##');
     disp('#########################');
     % erase download.bit to make sure a failing compilation will report an error
-    delete([xps_path,'\implementation\system.bit']);
-    delete([xps_path,'\implementation\download.bit']);
-    fid = fopen([xps_path,'\run_xps.tcl'],'w');
+    delete([xps_path, slash, 'implementation', slash, 'system.bit']);
+    delete([xps_path, slash, 'implementation', slash, 'download.bit']);
+    fid = fopen([xps_path, slash, 'run_xps.tcl'],'w');
 
     mpc_type = get(xsg_obj,'mpc_type');
 
@@ -630,31 +652,47 @@ if run_edk
     fclose(fid);
 
     eval(['cd ',xps_path]);
-    if(dos(['xps -nw -scr run_xps.tcl system.xmp']))
+    status = system(['xps -nw -scr run_xps.tcl system.xmp']);
+    if status ~= 0
         cd(simulink_path);
         error('XPS failed.');
     else
-        if dos ('gen_prog_files.bat')
-            cd(simulink_path);
-            error('Programation files generation failed, EDK compilation probably also failed.');
-        end % if dos ('gen_prog_files.bat')
+        if (strcmp(slash, '\')) 
+            % Windows case
+            [status, message] = dos('gen_prog_files.bat');
+            if status ~= 0
+                cd(simulink_path);
+                error('Programation files generation failed, EDK compilation probably also failed.');
+            end % if dos('gen_prog_files.bat')
+        else
+            % Linux case
+            [status, message] = unix('chmod +x gen_prog_files');
+            [status, message] = unix('./gen_prog_files');
+            if status ~= 0
+                cd(simulink_path);
+                disp(message);
+                error('Programation files generation failed, EDK compilation probably also failed.');
+            end % if unix('gen_prog_files.bat')
+        end %if (strcmp(slash, '\'))
     end % if(dos(['xps -nw -scr run_xps.tcl system.xmp']))
 
     cd(simulink_path);
+
 end % if run_edk
 time_edk = now - start_time;
 
 start_time = now;
 if run_download
-    fid = fopen([xps_path,'/run_download.tcl'],'w');
+    fid = fopen([xps_path, slash, 'run_download.tcl'],'w');
     fprintf(fid,['run download\n']);
     fprintf(fid,['exit\n']);
     fclose(fid);
     eval(['cd ',xps_path]);
-    if(dos(['xps -nw -scr run_download.tcl system.xmp']))
+    [status, message] = system(['xps -nw -scr run_download.tcl system.xmp']);
+    if status ~= 0
         cd(simulink_path);
         error('Download failed.');
-    end % if(dos(['xps -nw -scr run_download.tcl system.xmp']))
+    end % if(system(['xps -nw -scr run_download.tcl system.xmp']))
     cd(simulink_path);
 end % if run_download
 time_download = now - start_time;

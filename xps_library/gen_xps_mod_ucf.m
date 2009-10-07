@@ -1,7 +1,7 @@
-function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths)
+function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 % Modifies the EDK project's UCF file to include design elements.
 %
-% gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths)
+% gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_pathsm, slash)
 
     %disp('Running gen_xps_mod_ucf');
 
@@ -31,16 +31,16 @@ function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths)
     % Backup and preprocess skeleton UCF
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    if ~exist([xps_path,'\data\system.ucf.bac'],'file')
-        [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\data\system.ucf'],[xps_path,'\data\system.ucf.bac']);
+    if ~exist([xps_path, slash, 'data', slash, 'system.ucf.bac'],'file')
+        [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, 'data', slash, 'system.ucf'],[xps_path, slash, 'data', slash, 'system.ucf.bac']);
         if ~copystatus
             disp('Error trying to backup system.ucf:');
             disp(copymessage);
         end % if ~copystatus
-    end % if ~exist([xps_path,'\data\system.ucf.bac'],'file')
+    end % if ~exist([xps_path, slash, 'data', slash, 'system.ucf.bac'],'file')
 
-    in_fid = fopen([xps_path,'/data/system.ucf.bac'],'r');
-    ucf_fid = fopen([xps_path,'/data/system.ucf'],'w');
+    in_fid = fopen([xps_path, slash, 'data', slash, 'system.ucf.bac'],'r');
+    ucf_fid = fopen([xps_path, slash, 'data', slash, 'system.ucf'],'w');
 
     detokenize(in_fid, ucf_fid, xps_objs);
 

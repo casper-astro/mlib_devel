@@ -1,4 +1,4 @@
-function gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths)
+function gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 % Modifies the EDK project's MSS file to include design elements.
 %
 % gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths)
@@ -27,16 +27,16 @@ function gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths)
     xps_path        = mssge_paths.xps_path;
 
     if ~strcmp(sw_os,'none')
-        if ~exist([xps_path,'\system.mss.bac'],'file')
-            [copystatus,copymessage,copymessageid] = copyfile([xps_path,'\system.mss'],[xps_path,'\system.mss.bac']);
+        if ~exist([xps_path, slash, 'system.mss.bac'],'file')
+            [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, 'system.mss'],[xps_path, slash, 'system.mss.bac']);
             if ~copystatus
                 disp('Error trying to backup system.mss:');
                 disp(copymessage);
             end % if ~copystatus
-        end % if ~exist([xps_path,'\system.mss.bac'],'file')
+        end % if ~exist([xps_path, slash, 'system.mss.bac'],'file')
 
-        in_fid = fopen([xps_path,'/system.mss.bac'],'r');
-        mss_fid = fopen([xps_path,'/system.mss'],'w');
+        in_fid = fopen([xps_path, slash, 'system.mss.bac'],'r');
+        mss_fid = fopen([xps_path, slash, 'system.mss'],'w');
 
         detokenize(in_fid, mss_fid, xps_objs);
         fclose(in_fid);
