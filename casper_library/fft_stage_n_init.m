@@ -67,6 +67,7 @@ arch = get_var('arch', 'defaults', defaults, varargin{:});
 opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl', 'defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
+dsp48_adders = get_var('use_embedded', 'defaults', defaults, varargin{:});
 
 % Implement delays normally or in BRAM
 delays = {'delay_f', 'delay_b'};
@@ -103,6 +104,6 @@ reuse_block( blk, 'butterfly_direct', 'casper_library/FFTs/butterfly_direct', ..
 
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, FFTStage=%d,\n Coeffs=%s,\n coeffs_bram=%s,\n delays_bram=%s\n', FFTSize, FFTStage, tostring(Coeffs), tostring(coeffs_bram), tostring(delays_bram));
+fmtstr = sprintf('FFTSize=%d, FFTStage=%d,\n coeffs_bram=%s,\n delays_bram=%s\n', FFTSize, FFTStage, tostring(coeffs_bram), tostring(delays_bram));
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

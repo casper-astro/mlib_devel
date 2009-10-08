@@ -65,6 +65,7 @@ opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 coeffs_bram = get_var('coeffs_bram', 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl', 'defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
+dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
 twiddle = [blk, '/twiddle'];
 
@@ -138,9 +139,22 @@ for i = 1:4 ,
     'binary_point_o', tostring(input_bit_width-1));
 end
 
+%set up adders
+if strcmp( dsp48_adders, 'on' ),
+    set_param( [blk,'/AddSub'], 'use_behavioral_HDL', 'off', 'pipelined', 'on', 'use_rpm', 'on', 'hw_selection', 'DSP48');
+    set_param( [blk,'/AddSub1'], 'use_behavioral_HDL', 'off', 'pipelined', 'on', 'use_rpm', 'on', 'hw_selection', 'DSP48');
+    set_param( [blk,'/AddSub2'], 'use_behavioral_HDL', 'off', 'pipelined', 'on', 'use_rpm', 'on', 'hw_selection', 'DSP48');
+    set_param( [blk,'/AddSub3'], 'use_behavioral_HDL', 'off', 'pipelined', 'on', 'use_rpm', 'on', 'hw_selection', 'DSP48');
+else,    
+    set_param( [blk,'/AddSub'], 'use_behavioral_HDL', 'on');
+    set_param( [blk,'/AddSub1'], 'use_behavioral_HDL', 'on');
+    set_param( [blk,'/AddSub2'], 'use_behavioral_HDL', 'on');
+    set_param( [blk,'/AddSub3'], 'use_behavioral_HDL', 'on');
+end
+
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d, Coeffs=[%s],\n coeff_bit_width=%d', ...
-                  FFTSize, num2str(Coeffs), coeff_bit_width);
+fmtstr = sprintf('FFTSize=%d, coeff_bit_width=%d', ...
+                  FFTSize, coeff_bit_width);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

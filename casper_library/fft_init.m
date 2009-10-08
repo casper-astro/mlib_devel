@@ -59,7 +59,8 @@ coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:}
 delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
-
+dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
+ 
 if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
     error('fft_init.m: Multiplier use specification for stages does not match FFT size');
     return
@@ -211,16 +212,19 @@ end
 
 if n_inputs < 1,
     name = [blk,'/fft_biplex0'];
-    set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
+    set_param(name, 'dsp48_adders', tostring(dsp48_adders), ...
+        'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
 else,
     if n_inputs ~= FFTSize,
         for i=0:2^(n_inputs-1)-1,
             name = [blk,'/fft_biplex',num2str(i)];
-            set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
+            set_param(name, 'dsp48_adders', tostring(dsp48_adders), ...
+                'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
         end
     end
     name = [blk,'/fft_direct'];
-    set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_direct));
+    set_param(name, 'dsp48_adders', tostring(dsp48_adders), ...
+        'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_direct));
 end
 
 clean_blocks(blk);

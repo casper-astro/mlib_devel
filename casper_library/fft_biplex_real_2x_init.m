@@ -53,6 +53,7 @@ if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
     return
 end
 
+propagate_vars([blk,'/bi_real_unscr_2x'],'defaults', defaults, varargin{:});
 propagate_vars([blk,'/biplex_core'],'defaults', defaults, varargin{:});
 fmtstr = sprintf('FFTSize=%d', FFTSize);
 set_param(blk, 'AttributesFormatString', fmtstr);

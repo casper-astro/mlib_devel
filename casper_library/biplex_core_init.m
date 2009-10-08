@@ -58,11 +58,15 @@ coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:}
 delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
+dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+%making these very large as seems to be broken, needs to be looked at
 if strcmp(arch, 'Virtex2Pro'), 
-    MaxCoeffNum = 11;	        % This is the maximum that will fit in a BRAM for V2Pro
+%    MaxCoeffNum = 11;	        % This is the maximum that will fit in a BRAM for V2Pro
+     MaxCoeffNum = 16;	        
 elseif strcmp(arch, 'Virtex5'),
-    MaxCoeffNum = 12;      % This is the maximum that will fit in a BRAM for V5
+%    MaxCoeffNum = 12;      % This is the maximum that will fit in a BRAM for V5
+     MaxCoeffNum = 20;      
 else,
     error(['biplex_core_init.m: Unrecognized architecture ',arch,'\n']);
 end

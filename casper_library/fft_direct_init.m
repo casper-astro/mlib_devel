@@ -65,6 +65,7 @@ opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
+dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
 if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
     error('fft_direct_init.m: Multiplier use specification for stages does not match FFT size');
