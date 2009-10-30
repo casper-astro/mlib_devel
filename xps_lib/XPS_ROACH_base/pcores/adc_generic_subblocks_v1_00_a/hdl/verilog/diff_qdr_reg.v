@@ -1,16 +1,8 @@
-// Module Name: diff_dqr_reg
-// Original Module Author: Suraj Gowda
-// Inputs:
-// 	Bus of LVDS DDR data pairs (width is parameterizable, see below).
-// Circuit overview:
-// 	Turns the LVDS bus into a single ended bus and captures the data on
-// 	all 4 edges of the clock.  
-
-// TODO: block has not yet been compiled for bus widths greater than 1
-
 module diff_qdr_reg(
   clk_0,
 	clk_90,
+	clk_180,
+	clk_270,
 	data_p,
 	data_n,
 	data_rise_0,
@@ -26,6 +18,8 @@ parameter width = 8;
 //===================
 input clk_0;
 input clk_90;
+input clk_180;
+input clk_270;
 input [width-1:0] data_p;
 input [width-1:0] data_n;
 output [width-1:0] data_rise_0;

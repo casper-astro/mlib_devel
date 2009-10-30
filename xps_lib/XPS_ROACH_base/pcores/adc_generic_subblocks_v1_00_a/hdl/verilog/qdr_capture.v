@@ -1,70 +1,41 @@
-module qdr_capture (
-  clk_0,
-	clk_90,
-	reset,
-	data_p,
-	data_n,
-  data0,
-	data90,
-	data180,
-	data270
+module qdr_capture #(
+	// Module Parameters
+	parameter width = 8
+) (
+	// Input-Output ports
+  input clk_0,
+	input clk_90,
+	input clk_180,
+	input clk_270,
+	input reset,
+	input [width-1:0] data_p,
+	input [width-1:0] data_n,
+  output [width-1:0] data0,
+	output [width-1:0] data90,
+	output [width-1:0] data180,
+	output [width-1:0] data270
 );
-
-// System Parameters
-// =================
-parameter width = 8;
-
-// Inputs and Outputs
-//===================
-input clk_0;
-input clk_90;
-input reset;
-input data_p;
-input data_n;
-output data0;
-output data90;
-output data180;
-output data270;
 
 // Wires and Regs
 //===============
-wire data_rise_0;
-wire data_rise_90;
-wire data_fall_0;
-wire data_fall_90;
-reg data0;
-reg data90;
-reg data180;
-reg data270;
+wire [width-1:0] data;
 
-// Module Declarations
-//====================
-// capture
-diff_qdr_reg data_capture(
-	.clk_0(clk_0),
-	.clk_90(clk_90),
+//make the input bus single ended
+diff_to_se data_se_out (
 	.data_p(data_p),
 	.data_n(data_n),
-	.data_rise_0(data_rise_0),
-	.data_fall_0(data_fall_0),
-	.data_rise_90(data_rise_90),
-	.data_fall_90(data_fall_90)
+	.data(data)
 );
-defparam data_capture.width = width;
+defparam data_se_out.width = width;
 
-// recapture
-always @ (posedge clk_0) begin
-	if (reset) begin
-		data0 <= 0;
-		data90 <= 0;
-		data180 <= 0;
-		data270 <= 0;
-	end else begin
-		data0 <= data_rise_0;
-		data90 <= data_fall_0;
-		data180 <= data_rise_90;
-		data270 <= data_fall_90;
-	end
-end	
+//capture on all 4 clocks using IO registers
+IORegister capture0 (.Clock(clk_0), .Reset(reset), .Set(), .Enable(1'b1), .In(data), .Out(data0));
+IORegister capture90 (.Clock(clk_90), .Reset(reset), .Set(), .Enable(1'b1), .In(data), .Out(data90));
+IORegister capture180 (.Clock(clk_180), .Reset(reset), .Set(), .Enable(1'b1), .In(data), .Out(data180));
+IORegister capture270 (.Clock(clk_270), .Reset(reset), .Set(), .Enable(1'b1), .In(data), .Out(data270));
+defparam capture0.width = 1;
+defparam capture90.width = 1;
+defparam capture180.width = 1;
+defparam capture270.width = 1;
 
 endmodule

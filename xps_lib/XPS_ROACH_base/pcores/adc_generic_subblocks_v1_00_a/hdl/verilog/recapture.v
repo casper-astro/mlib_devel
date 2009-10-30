@@ -5,29 +5,32 @@
 // Circuit overview:
 // 	Runs the input data (din) through an IO shift register to ease IO
 // 	timing requirements.  Registers are packed into the IOB.
-module recapture ( clk, reset, din, dout );
-
-// System Parameters
-//==================
-parameter width = 8;
-parameter delay = 2;
-
-// Inputs and Outputs
-input clk;
-input reset;
-input [width-1:0] din;
-output [width-1:0] dout;
+module recapture #(
+	parameter width = 8,
+	parameter delay = 1
+) ( 
+	input clk,
+	input ctrl_clk_out,
+	input reset,
+	input [width-1:0] din,
+	output [width-1:0] dout
+);
 
 //Wires and regs
 //==============
-wire [width-1:0] recapture0;
+wire [width-1:0] stage_0_out;
+wire [width-1:0] stage_1_in;
 
 // Module Declarations
 //====================
+IORegister pipeline1(.Clock(clk), .Reset(reset), .Set(1'b0), .Enable(1'b1), .In(din), .Out(recapture0));
+IORegister pipeline2(.Clock(ctrl_clk_out), .Reset(reset), .Set(1'b0), .Enable(1'b1), .In(recapture0), .Out(dout));
 
-//module IOShiftRegister(PIn, SIn, POut, SOut, Load, Enable, Clock, Reset);
-IOShiftRegister recapture_pipeline ( .Clock(clk), .Reset(reset), .PIn(), .SIn(din), .SOut(dout), .Load(), .Enable(1'b1));
-defparam recapture_pipeline.pwidth = width * delay;
-defparam recapture_pipeline.swidth = width;
+// Bitwise MAXDELAY constraint generation
+genvar i;
+generate for (i = 0; i < width; i = i + 1) begin: max_delay_gen
+	(* MAXDELAY = "2 ns" *) wire int = stage_0_out[i];
+	assign stage_1_in[i] = int;
+end endgenerate
 
 endmodule
