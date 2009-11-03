@@ -73,23 +73,27 @@ time_edk      = 0;
 time_download = 0;
 
 slash = '\';
+system_os = '';
 [s,w] = system('uname -a');
 
 if s ~= 0
   [s,w] = system('ver');
-  if s ~= 0 
+  if s ~= 0
     disp(sprint('Could not detect OS, assuming Windows'));
   elseif ~isempty(regexp(w,'Windows'))
     disp(sprintf('Detected Windows OS'));
   else
     disp(sprintf('Detected Unknown Windows-like OS'));
   end
+  system_os = 'windows';
 elseif ~isempty(regexp(w,'Linux'))
   slash = '/';
   disp(sprintf('Detected Linux OS'));
+  system_os = 'linux';
 else
   slash = '/';
   disp(sprintf('Detected Unknown Unix-like OS'));
+  system_os = 'linux';
 end
 
 xps_blks        = find_system(sys,'FollowLinks','on','LookUnderMasks','all','RegExp','on','Tag','^xps:');
@@ -387,15 +391,26 @@ if run_copy
         rmdir(xps_path,'s');
     end
     if exist([XPS_LIB_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
+
+        source_dir      = [XPS_LIB_PATH, slash, 'XPS_', hw_sys, '_base'];
         destination_dir = [xps_path];
-        source_dir = [XPS_LIB_PATH, slash, 'XPS_', hw_sys, '_base'];
-        [copy_result, msg, msgid] = copyfile(source_dir,destination_dir,'f');
-        if copy_result == 0
+
+        if strcmp(system_os, 'windows')
+            copy_fail = 1; % xcopy failure returns 1
+            mkdir(xps_path);
+            % use xcopy to avoid copying .svn directories
+            [copy_result,copy_message] = dos(['xcopy /Q /E /Y ', source_dir, ' ', destination_dir,'\.']);
+        else
+            copy_fail = 0; % copyfile failure returns 0
+            [copy_result, msg, msgid] = copyfile(source_dir,destination_dir,'f');
+        end % if strcmp(system_os, 'windows')
+
+        if copy_result == copy_fail
             cd(simulink_path);
             error('Unpackage base system files failed.');
         else
             cd(simulink_path);
-        end
+        end % copy_result == copy_fail
     else
         error(['Base XPS package "','XPS_',hw_sys,'_base" does not exist.']);
     end % exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
@@ -657,7 +672,7 @@ if run_edk
         cd(simulink_path);
         error('XPS failed.');
     else
-        if (strcmp(slash, '\')) 
+        if (strcmp(slash, '\'))
             % Windows case
             [status, message] = dos('gen_prog_files.bat');
             if status ~= 0
