@@ -23,8 +23,8 @@ wire [width-1:0] stage_1_in;
 
 // Module Declarations
 //====================
-IORegister pipeline1(.Clock(clk), .Reset(reset), .Set(1'b0), .Enable(1'b1), .In(din), .Out(recapture0));
-IORegister pipeline2(.Clock(ctrl_clk_out), .Reset(reset), .Set(1'b0), .Enable(1'b1), .In(recapture0), .Out(dout));
+IORegister pipeline1(.Clock(clk), .Reset(reset), .Set(1'b0), .Enable(1'b1), .In(din), .Out(stage_0_out));
+IORegister pipeline2(.Clock(ctrl_clk_out), .Reset(reset), .Set(1'b0), .Enable(1'b1), .In(stage_1_in), .Out(dout));
 
 // Bitwise MAXDELAY constraint generation
 genvar i;
