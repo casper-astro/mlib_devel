@@ -61,9 +61,10 @@ module epb_opb_bridge(
   reg  [22:0] epb_addr_reg;
   reg   [5:0] epb_addr_gp_reg;
   reg  [15:0] epb_data_i_reg;
+  (* MAXDELAY = "6 ns" *) wire epb_cs_n_int;
 
   always @(posedge OPB_Clk) begin
-    epb_cs_n_reg    <= epb_cs_n;
+    epb_cs_n_reg    <= epb_cs_n_int;
     epb_oe_n_reg    <= epb_oe_n;
     epb_r_w_n_reg   <= epb_r_w_n;
     epb_be_n_reg    <= epb_be_n;
@@ -71,12 +72,12 @@ module epb_opb_bridge(
     epb_addr_gp_reg <= epb_addr_gp;
     epb_data_i_reg  <= epb_data_i;
   end
+  assign epb_cs_n_int = epb_cs_n;
 
   //synthesis attribute IOB of epb_data_i_reg is true
   //synthesis attribute IOB of epb_addr_gp_reg is true
   //synthesis attribute IOB of epb_addr_reg is true
   //synthesis attribute IOB of epb_be_n_reg is true
-  //synthesis attribute IOB of epb_cs_n_reg is true
   //synthesis attribute IOB of epb_oe_n_reg is true
   //synthesis attribute IOB of epb_r_w_n_reg is true
 
@@ -134,30 +135,35 @@ module epb_opb_bridge(
 
   /******************** EPB/OPB State Machine ********************/
 
-  reg [1:0] opb_state;
-  localparam OPB_STATE_IDLE = 2'd0; 
-  localparam OPB_STATE_ARB  = 2'd1; 
-  localparam OPB_STATE_WAIT = 2'd2; 
+  reg opb_state;
+  localparam OPB_STATE_IDLE = 1'd0; 
+  localparam OPB_STATE_WAIT = 1'd1; 
 
   /* Cut Through routed M_select */
   reg M_select_reg;
-  assign M_select = M_select_reg || (opb_state == OPB_STATE_ARB && OPB_MGrant) || (opb_state == OPB_STATE_IDLE && epb_trans_strb);
+  assign M_select = M_select_reg || (opb_state == OPB_STATE_IDLE && epb_trans_strb);
  
   /* Cut Through routed epb_rdy and epb_data_o */
   wire         epb_rdy_int = opb_state == OPB_STATE_WAIT && OPB_reply;
   wire [15:0] epb_data_int = epb_addr_reg[0] ? OPB_DBus[16:31] : OPB_DBus[0:15];
-  assign      epb_rdy_oe   = !epb_cs_n;
 
   reg [15:0] epb_data_o;
   reg epb_rdy;
 
   always @(posedge OPB_Clk) begin
-    epb_rdy   <= epb_rdy_int;
     if (epb_rdy_int)
       epb_data_o <= epb_data_int;
   end
+  //synthesis attribute IOB of epb_data_o is TRUE
+
+  reg [9:0] timeout_counter;
+
+  reg opb_state_z;
 
   always @(posedge OPB_Clk) begin
+    timeout_counter <= timeout_counter + 1;
+    opb_state_z <= opb_state;
+
     //strobes
     if (OPB_Rst | sys_reset) begin
       M_select_reg <= 1'b0;
@@ -166,28 +172,19 @@ module epb_opb_bridge(
       case (opb_state)
         OPB_STATE_IDLE: begin
           if (epb_trans_strb) begin
-            if (1'b1) begin
-              M_select_reg <= 1'b1;
-              opb_state    <= OPB_STATE_WAIT;
-            end else begin
-              opb_state    <= OPB_STATE_ARB;
-            end
-          end
-        end
-        OPB_STATE_ARB: begin
-          if (!epb_trans) begin //if epb gives up, give up too
-            M_select_reg <= 1'b0;
-            opb_state    <= OPB_STATE_IDLE;
-          end else if (OPB_MGrant) begin
-            M_select_reg  <= 1'b1;
-            opb_state     <= OPB_STATE_WAIT;
+            M_select_reg    <= 1'b1;
+            opb_state       <= OPB_STATE_WAIT;
+            timeout_counter <= 0;
           end
         end
         OPB_STATE_WAIT: begin
-          if (!epb_trans) begin //if epb gives up, give up too
+
+          if (timeout_counter[9]) begin
             M_select_reg <= 1'b0;
             opb_state    <= OPB_STATE_IDLE;
-          end else if (OPB_reply) begin
+          end
+
+          if (OPB_reply) begin
             M_select_reg <= 1'b0;
             opb_state    <= OPB_STATE_IDLE;
           end
@@ -195,5 +192,16 @@ module epb_opb_bridge(
       endcase
     end
   end
+
+  always @(posedge OPB_Clk) begin
+    if (epb_cs_n_int) begin
+      epb_rdy <= 1'b0;
+    end else begin
+      epb_rdy <= epb_rdy | (opb_state == OPB_STATE_WAIT && (timeout_counter[9] || OPB_reply));
+    end
+  end
+  //synthesis attribute IOB of epb_rdy is TRUE
+
+  assign epb_rdy_oe = !epb_cs_n_int;
 
 endmodule
