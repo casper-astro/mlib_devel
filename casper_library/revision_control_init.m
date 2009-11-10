@@ -9,12 +9,12 @@ error_on_norcs = get_var('error_on_norcs', 'defaults', defaults, varargin{:});
 error_on_dirty = get_var('error_on_dirty', 'defaults', defaults, varargin{:});
 
 got_rcs = 0;
-dirty = 0;
-lib_dirty = 0;
+dirty = 1;
+lib_dirty = 1;
 rcs = 0;
 lib_rcs = 0;
 
-path = which(blk);
+path = which(gcs);
 
 % First try tortoiseSVN
 [r,m] = system(sprintf('%s %s', 'SubWCRev.exe', path));
@@ -26,7 +26,12 @@ if (r == 0) %success
     if (~isempty(temp))
         rcs = str2num(temp{1}{1});
         got_rcs = 1;
-    end
+    else 
+        temp=regexp(m,'Last committed at revision (?<rev>\d+)','tokens');
+        if (~isempty(temp))
+            rcs = str2num(temp{1}{1});
+        end
+    end    
 else % if that failed try straight 'svn'
     [r,m] = system(sprintf('%s %s', 'svn info', path));
     if (r == 0)
@@ -45,11 +50,11 @@ else % if that failed try straight 'svn'
 end
 
 if (got_rcs == 0)
-    disp('Warning: could not establish RCS version for user design');
-else
-    set_param([blk, '/const_uptodate'], 'const', num2str(dirty));
-    set_param([blk, '/const_rcs'], 'const', num2str(rcs));
+    disp('Warning: could not establish clean RCS version for user design');
 end
+
+set_param([blk, '/const_uptodate'], 'const', num2str(dirty));
+set_param([blk, '/const_rcs'], 'const', num2str(rcs));
 
 if ((~got_rcs) && strcmp(error_on_norcs, 'on') == 0)
     error('Failed to retrieve Revision Control information for user design');
@@ -60,6 +65,7 @@ if (dirty ~=0 && strcmp(error_on_dirty, 'on') == 0)
 end
 
 path = getenv('MLIB_ROOT');
+got_rcs = 0;
 
 % First try tortoiseSVN
 [r,m] = system(sprintf('%s %s', 'SubWCRev.exe', path));
@@ -71,6 +77,11 @@ if (r == 0) %success
     if (~isempty(temp))
         lib_rcs = str2num(temp{1}{1});
         got_rcs = 1;
+    else 
+        temp=regexp(m,'Last committed at revision (?<rev>\d+)','tokens');
+        if (~isempty(temp))
+            lib_rcs = str2num(temp{1}{1});
+        end
     end
 else % if that failed try straight 'svn'
     [r,m] = system(sprintf('%s %s', 'svn info', path));
@@ -90,11 +101,11 @@ else % if that failed try straight 'svn'
 end
 
 if (got_rcs == 0)
-    disp('Warning: could not establish RCS version for libraries');
-else
-    set_param([blk, '/const_lib_uptodate'], 'const', num2str(lib_dirty));
-    set_param([blkk, '/const_lib_rcs'], 'const', num2str(lib_rcs));
+    disp('Warning: could not establish clean RCS version for libraries');
 end
+    
+set_param([blk, '/const_lib_uptodate'], 'const', num2str(lib_dirty));
+set_param([blk, '/const_lib_rcs'], 'const', num2str(lib_rcs));
 
 if ((~got_rcs) && strcmp(error_on_norcs, 'on') == 0)
     error('Failed to retrieve Revision Control information for libraries');
