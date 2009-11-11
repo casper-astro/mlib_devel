@@ -36,7 +36,7 @@ switch hw_sys
         str = [str, 'BEGIN xaui_phy',                                   '\n'];
         str = [str, '  PARAMETER INSTANCE = xaui_phy_', xaui_port,      '\n'];
         str = [str, '  PARAMETER HW_VER = 1.00.a',                      '\n'];
-        str = [str, '  PARAMETER USE_KAT_XAUI = 1',                     '\n'];
+        str = [str, '  PARAMETER USE_KAT_XAUI = 0',                     '\n'];
         str = [str, '  BUS_INTERFACE XAUI_SYS = xaui_sys', xaui_port,   '\n'];
         str = [str, '  BUS_INTERFACE XGMII    = xgmii', xaui_port,      '\n'];
         str = [str, '  PORT reset   = sys_reset'            ,           '\n'];
