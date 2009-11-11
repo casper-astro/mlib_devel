@@ -234,7 +234,7 @@ module tge_rx #(
   assign app_goodframe   = application_frame && mac_rx_good_frame_z;
   assign app_badframe    = application_frame && mac_rx_bad_frame_z;
   assign app_source_ip   = rx_control_data[31:0];
-  assign app_source_port = rx_control_data[47:15];
+  assign app_source_port = rx_control_data[47:32];
   /* TODO: need neater way to align eof/dvld for cpu+app */
 
   /********** CPU Interface Logic *************/
