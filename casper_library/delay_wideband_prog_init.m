@@ -1,6 +1,6 @@
 function delay_wideband_prog_init(blk, varargin)
 % Initialize and configure the delay wideband programmable block .
-% By Jason + Mekhala, modified by Andrew
+% By Jason + Mekhala
 %
 % delay_wideband_prog_init(blk, varargin)
 %
@@ -9,7 +9,7 @@ function delay_wideband_prog_init(blk, varargin)
 % 
 % Declare any default values for arguments you might like.
  
-defaults = {'max_delay_bits',10,'n_inputs_bits',2,'bram_latency',4};
+defaults = {'max_delay',1024,'n_inputs_bits',2,'bram_latency',4};
  
 % if parameter is changed then only itwil redraw otherwise will exit
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
@@ -21,9 +21,9 @@ check_mask_type(blk, 'delay_wideband_prog');
 munge_block(blk, varargin{:});
  
 % sets the variable needed
-max_delay_bits = get_var('max_delay_bits', 'defaults', defaults, varargin{:});
+max_delay = get_var('max_delay', 'defaults', defaults, varargin{:});
 n_inputs_bits = get_var('n_inputs_bits', 'defaults', defaults, varargin{:});
-ram_bits= max_delay_bits - n_inputs_bits;
+ram_bits= ceil(log2(max_delay/(2^n_inputs_bits)));
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 bram_type = get_var('bram_type', 'defaults', defaults,varargin{:});
  
@@ -36,9 +36,9 @@ delete_lines(blk);
  
 if(strcmp(bram_type,'Single Port'))
     reuse_block(blk,'delay_sp','casper_library/Delays/delay_bram_prog',...
-             'MaxDelay', 'max_delay_bits - n_inputs_bits',...
-             'bram_latency', 'bram_latency',...
-             'Position',[845 285 885 325]);
+             'MaxDelay',num2str(ram_bits),...
+             'bram_latency',num2str(bram_latency),...
+             'Position',[845 265 885 305]);
     
     reuse_block(blk,'delay_offset','xbsIndex_r4/Constant',...
             'Position',[240 391 255 409],...
@@ -55,19 +55,19 @@ if(strcmp(bram_type,'Single Port'))
            'mode', 'Addition');
 else
     reuse_block(blk,'delay_dp','casper_library/Delays/delay_bram_prog_dp',...
-             'ram_bits', 'max_delay_bits - n_inputs_bits',...
-             'bram_latency', 'bram_latency',...
-             'Position',[845 285 885 325]);
+             'ram_bits',num2str(ram_bits),...
+             'bram_latency',num2str(bram_latency),...
+             'Position',[845 265 885 305]);
 end
  
-%reuse_block(blk,'max_delay','xbsIndex_r4/Constant',...
-%           'Position',[80 265 110 285],...
-%           'const',num2str((2^ram_bits * 2^n_inputs_bits)-1),...
-%           'arith_type','Unsigned',...
-%           'n_bits','32',...
-%           'bin_pt', '0',...
-%           'explicit_period','on',...
-%            'period','1');
+reuse_block(blk,'max_delay','xbsIndex_r4/Constant',...
+           'Position',[80 265 110 285],...
+           'const',num2str((2^ram_bits * 2^n_inputs_bits)-1),...
+           'arith_type','Unsigned',...
+           'n_bits','32',...
+           'bin_pt', '0',...
+           'explicit_period','on',...
+            'period','1');
        
          
 reuse_block(blk,'delay_reg','xbsIndex_r4/Register',...
@@ -75,13 +75,13 @@ reuse_block(blk,'delay_reg','xbsIndex_r4/Register',...
             'en', 'on');
 
             
-%reuse_block(blk,'max_delay_chk','xbsIndex_r4/Relational',...
-%            'Position',[170 244 210 286],...
-%             'mode', 'a<=b');
+reuse_block(blk,'max_delay_chk','xbsIndex_r4/Relational',...
+            'Position',[170 244 210 286],...
+             'mode', 'a<=b');
  
-%reuse_block (blk,'mux_delay','xbsIndex_r4/Mux',...
-%             'Position',[240 245 270 365],...
-%              'inputs', '2');
+reuse_block (blk,'mux_delay','xbsIndex_r4/Mux',...
+             'Position',[240 245 270 365],...
+              'inputs', '2');
           
  
 reuse_block(blk,'bram_rd_addrs','xbsIndex_r4/Slice',...
@@ -93,8 +93,8 @@ reuse_block(blk,'bram_rd_addrs','xbsIndex_r4/Slice',...
         
  
 reuse_block(blk,'sync_delay','xbsIndex_r4/Delay',...
-            'Position',[300 178 340 220],...
-            'latency','bram_latency+1');
+            'Position',[300 699 340 741],...
+            'latency',num2str((bram_latency+1)));
  
 
 reuse_block(blk,'sync', 'built-in/Inport',...
@@ -105,7 +105,7 @@ reuse_block(blk,'en', 'built-in/Inport',...
                     'Port', '3', 'Position',[15 178+200 45 192+200]) ;
 
 reuse_block(blk,'data_in1', 'built-in/Inport',...
-                    'Port', '4', 'Position',[785 365-80+3 815 365-80+15]) ;
+                    'Port', '4', 'Position',[785 178+300 815 192+300]) ;
  
 reuse_block(blk,'sync_out', 'built-in/Outport',...
                     'Port', '1', 'Position',[1215 328 1245 342]);%[155 713 185 727]) ;
@@ -128,13 +128,10 @@ reuse_block(blk,'bs_sel','xbsIndex_r4/Slice',...
             'bit0', '0',...
             'base0', 'LSB of Input');
          
-    
-    if (strcmp(bram_type,'Single Port')) latency = 'bram_latency+2';
-    else latency = 'bram_latency+1';
-    end
-    reuse_block(blk,'delay_sel','xbsIndex_r4/Delay',...
-              'latency', latency,...
-              'position',[845 227 885 253]);
+ 
+  reuse_block(blk,'delay_sel','xbsIndex_r4/Delay',...
+              'latency', '5',...
+              'position',[845 327 885 353]);
 
    for i=1:((2^n_inputs_bits)-1)
         
@@ -213,28 +210,26 @@ end
  
 % % Add lines
  add_line(blk, 'delay/1', 'delay_reg/1', 'autorouting', 'on');
-% add_line(blk, 'delay_reg/1', 'max_delay_chk/1', 'autorouting', 'on');
+ add_line(blk, 'delay_reg/1', 'max_delay_chk/1', 'autorouting', 'on');
  add_line(blk, 'en/1', 'delay_reg/2', 'autorouting', 'on');
  
-% add_line(blk, 'max_delay/1', 'max_delay_chk/2', 'autorouting', 'on');
+ add_line(blk, 'max_delay/1', 'max_delay_chk/2', 'autorouting', 'on');
  
-% add_line(blk, 'max_delay_chk/1', 'mux_delay/1', 'autorouting', 'on');
-% add_line(blk, 'max_delay/1', 'mux_delay/2', 'autorouting', 'on');
-% add_line(blk, 'delay_reg/1', 'mux_delay/3', 'autorouting', 'on');
+ add_line(blk, 'max_delay_chk/1', 'mux_delay/1', 'autorouting', 'on');
+ add_line(blk, 'max_delay/1', 'mux_delay/2', 'autorouting', 'on');
+ add_line(blk, 'delay_reg/1', 'mux_delay/3', 'autorouting', 'on');
   add_line(blk,'sync/1','sync_delay/1','autorouting','on');
  
  if(strcmp(bram_type,'Single Port'))
      add_line(blk, 'data_in1/1', 'delay_sp/1', 'autorouting', 'on');
      add_line(blk, 'bram_rd_addrs/1', 'delay_sp/2', 'autorouting', 'on');
-%     add_line(blk, 'mux_delay/1', 'delay_adder/1', 'autorouting', 'on');
-     add_line(blk, 'delay_reg/1', 'delay_adder/1', 'autorouting', 'on');
+     add_line(blk, 'mux_delay/1', 'delay_adder/1', 'autorouting', 'on');
      add_line(blk, 'delay_offset/1', 'delay_adder/2', 'autorouting', 'on');
      add_line(blk, 'delay_adder/1', 'bram_rd_addrs/1', 'autorouting', 'on');
  else
       add_line(blk, 'data_in1/1', 'delay_dp/1', 'autorouting', 'on');
      add_line(blk, 'bram_rd_addrs/1', 'delay_dp/2', 'autorouting', 'on');
-%      add_line(blk, 'mux_delay/1', 'bram_rd_addrs/1', 'autorouting', 'on');
-      add_line(blk, 'delay_reg/1', 'bram_rd_addrs/1', 'autorouting', 'on');
+      add_line(blk, 'mux_delay/1', 'bram_rd_addrs/1', 'autorouting', 'on');
  end
  
  if (n_inputs_bits>0) 
@@ -244,30 +239,30 @@ end
         add_line(blk, ['Relational',num2str(i),'/1'], ['Convert',num2str(i),'/1'], 'autorouting', 'on');
         add_line(blk, ['Convert',num2str(i),'/1'], ['AddSub',num2str(i),'/2'], 'autorouting', 'on');
         add_line(blk, 'bram_rd_addrs/1', ['AddSub',num2str(i),'/1'], 'autorouting', 'on');
-        add_line(blk, ['barrel_switcher/',num2str(i+1)], ['data_out',num2str((2^n_inputs_bits)-i+1),'/1'],'autorouting', 'off');
+        add_line(blk, ['barrel_switcher/',num2str(i+1)], ['data_out',num2str((2^n_inputs_bits)-i+1),'/1'],'autorouting', 'on');
         if (strcmp(bram_type,'Single Port'))
              add_line(blk, ['AddSub',num2str(i),'/1'], ['delay_sp',num2str(i),'/2'], 'autorouting', 'on');
              add_line(blk, ['data_in',num2str(i+1),'/1'],  ['delay_sp',num2str(i),'/1'], 'autorouting', 'on');
-             add_line(blk, ['delay_sp',num2str(i),'/1'],  ['barrel_switcher/',num2str((2^n_inputs_bits)-i+2)], 'autorouting', 'off');
+             add_line(blk, ['delay_sp',num2str(i),'/1'],  ['barrel_switcher/',num2str((2^n_inputs_bits)-i+2)], 'autorouting', 'on');
         else
              add_line(blk, ['AddSub',num2str(i),'/1'], ['delay_dp',num2str(i),'/2'], 'autorouting', 'on');
              add_line(blk, ['data_in',num2str(i+1),'/1'],  ['delay_dp',num2str(i),'/1'], 'autorouting', 'on');
-             add_line(blk, ['delay_dp',num2str(i),'/1'],  ['barrel_switcher/',num2str((2^n_inputs_bits)-i+2)], 'autorouting', 'off');
+             add_line(blk, ['delay_dp',num2str(i),'/1'],  ['barrel_switcher/',num2str((2^n_inputs_bits)-i+2)], 'autorouting', 'on');
         end
     
     end
     add_line(blk, 'bs_sel/1',  'delay_sel/1', 'autorouting', 'on');
     add_line(blk, 'delay_sel/1',  'barrel_switcher/1', 'autorouting', 'on');
     add_line(blk,'barrel_switcher/1','sync_out/1','autorouting','on');
-    add_line(blk, ['barrel_switcher/',num2str(2^n_inputs_bits+1)], 'data_out1/1','autorouting', 'off');
+    add_line(blk, ['barrel_switcher/',num2str(2^n_inputs_bits+1)], 'data_out1/1','autorouting', 'on');
     add_line(blk, 'sync_delay/1', 'barrel_switcher/2', 'autorouting', 'on');
     
     if (strcmp(bram_type,'Single Port'))   
-        add_line(blk, 'delay_sp/1',  ['barrel_switcher/',num2str((2^n_inputs_bits)+2)], 'autorouting', 'off');
+        add_line(blk, 'delay_sp/1',  ['barrel_switcher/',num2str((2^n_inputs_bits)+2)], 'autorouting', 'on');
         add_line(blk, 'delay_adder/1', 'bs_sel/1', 'autorouting', 'on');
     else
-        add_line(blk, 'delay_dp/1',  ['barrel_switcher/',num2str((2^n_inputs_bits)+2)], 'autorouting', 'off');
-        add_line(blk, 'delay_reg/1', 'bs_sel/1', 'autorouting', 'on');
+        add_line(blk, 'delay_dp/1',  ['barrel_switcher/',num2str((2^n_inputs_bits)+2)], 'autorouting', 'on');
+        add_line(blk, 'mux_delay/1', 'bs_sel/1', 'autorouting', 'on');
     end
  
  else
