@@ -13,7 +13,7 @@ TIMESPEC TS_epb_clk = PERIOD epb_clk 88 MHz;
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))# Net mgt_clk_0 TNM_NET = mgt_clk_0;
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))# TIMESPEC TS_mgt_clk_0 = PERIOD mgt_clk_0 156.25 MHz;
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))#
-#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))# Net mgt_clk_0 TNM_NET = mgt_clk_1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))# Net mgt_clk_1 TNM_NET = mgt_clk_1;
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))# TIMESPEC TS_mgt_clk_1 = PERIOD mgt_clk_1 156.25 MHz;
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))#
 ################### Pin constraints
