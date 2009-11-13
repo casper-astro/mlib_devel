@@ -61,9 +61,6 @@ if( got_rcs == 0 && strcmp(error_on_norcs, 'on') == 1)
     error('Failed to retrieve revision control information for user design');
 end
 
-if (dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
-    error('Files in revision control system out-of-date for user design');
-end
 
 path = getenv('MLIB_ROOT');
 got_rcs = 0;
@@ -114,7 +111,10 @@ if ((~got_rcs) && strcmp(error_on_norcs, 'on') == 1)
 end
 
 if (lib_dirty ~=0 && strcmp(error_on_dirty, 'on') == 1)
-    error('Files in revision control system out-of-date for user design');
+    error('Files in revision control system out-of-date for libraries');
 end
 
+if (dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
+    error('Files in revision control system out-of-date for user design');
+end
 
