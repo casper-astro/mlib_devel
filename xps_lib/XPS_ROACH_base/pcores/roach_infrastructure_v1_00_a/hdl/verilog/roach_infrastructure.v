@@ -35,15 +35,54 @@ module roach_infrastructure(
   /* EPB Clk */
 
   wire epb_clk_int;
-  IBUF ibuf_epb(
+  IBUFG ibuf_epb(
     .I(epb_clk_in),
     .O(epb_clk_int)
   );
 
+  wire epb_clk_dcm;
+
+  DCM #(
+    .CLK_FEEDBACK          ("1X"),
+    .CLKDV_DIVIDE          (2.000000),
+    .CLKFX_DIVIDE          (1),
+    .CLKFX_MULTIPLY        (4),
+    .CLKIN_PERIOD          (12.0),
+    .CLKOUT_PHASE_SHIFT    ("FIXED"),
+    .DESKEW_ADJUST         ("SYSTEM_SYNCHRONOUS"),
+    .DFS_FREQUENCY_MODE    ("LOW"),
+    .DLL_FREQUENCY_MODE    ("LOW"),
+    .FACTORY_JF            (16'hC080),
+    .PHASE_SHIFT           (127), // 127 is a 180 degree offset
+    .STARTUP_WAIT          (1'b0)
+  ) dcm_epb_inst (
+    .CLKFB                 (epb_clk),
+    .CLKIN                 (epb_clk_int),
+    .DSSEN                 (0),
+    .PSCLK                 (1'b0),
+    .PSEN                  (1'b0),
+    .PSINCDEC              (1'b0),
+    .RST                   (1'b0),
+    .CLKDV                 (),
+    .CLKFX                 (),
+    .CLKFX180              (),
+    .CLK0                  (epb_clk_dcm),
+    .CLK2X                 (),
+    .CLK2X180              (),
+    .CLK90                 (),
+    .CLK180                (),
+    .CLK270                (),
+    .LOCKED                (),
+    .PSDONE                (),
+    .STATUS                ()
+  );
+
+
   BUFG bufg_epb(
-    .I(epb_clk_int),
+    .I(epb_clk_dcm),
     .O(epb_clk)
   );
+
 
   /* system clock */
   wire  sys_clk_int;
