@@ -333,7 +333,8 @@ end endgenerate
   /* CPU Handshaking */
 
   reg [7:0] cpu_size;
-  reg cpu_ackR, cpu_ackRR;
+  (* shreg_extract = "NO" *) reg cpu_ackR;
+  (* shreg_extract = "NO" *) reg cpu_ackRR;
   assign cpu_buffer_free = cpu_size == 8'd0 && !cpu_ackRR;
 
   always @(posedge mac_clk) begin
@@ -353,8 +354,8 @@ end endgenerate
   end
 
   /* FIXME: this is pretty dumb (registering on size), should add handshake signal */
-  reg [7:0] cpu_sizeR;
-  reg [7:0] cpu_sizeRR;
+  (* shreg_extract = "NO" *) reg [7:0] cpu_sizeR;
+  (* shreg_extract = "NO" *) reg [7:0] cpu_sizeRR;
   assign cpu_rx_size = cpu_sizeRR;
 
   always @(posedge cpu_clk) begin
@@ -454,8 +455,8 @@ end endgenerate
   assign ctrl_fifo_wr_en     = app_dvld && first_word && app_state == APP_RUN;
 
   wire overrun_ack;   
-  reg overrun_ackR;   
-  reg overrun_ackRR;   
+  (* shreg_extract = "NO" *) reg overrun_ackR;   
+  (* shreg_extract = "NO" *) reg overrun_ackRR;   
 
   always @(posedge mac_clk) begin
     overrun_ackR  <= overrun_ack;
@@ -491,8 +492,8 @@ end endgenerate
     end
   end
 
-  reg overrunR;
-  reg overrunRR;
+  (* shreg_extract = "NO" *) reg overrunR;
+  (* shreg_extract = "NO" *) reg overrunRR;
 
   reg app_overrun_ack;
   assign overrun_ack = app_overrun_ack;
@@ -513,8 +514,8 @@ end endgenerate
     end
   end
 
-  reg local_enableR;
-  reg local_enableRR;
+  (* shreg_extract = "NO" *) reg local_enableR;
+  (* shreg_extract = "NO" *) reg local_enableRR;
 
   always @(posedge mac_clk) begin
     local_enableR  <= local_enable;

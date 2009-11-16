@@ -11,9 +11,9 @@ module TB_kat_ten_gb_eth();
   /* the size of the TX frame in 64-bit words */
   localparam TX_FRAME_SIZE  = 32'd1024;
 
-  localparam FABRIC_MAC     = 48'h0123_4567_89ab;
-  localparam FABRIC_IP      = {8'd192, 8'd168, 8'd4, 8'd20};
-  localparam FABRIC_PORT    = 16'd10000;
+  localparam FABRIC_MAC     = 48'h0202_0a00_0080;
+  localparam FABRIC_IP      = {8'd10, 8'd0, 8'd0, 8'd128};
+  localparam FABRIC_PORT    = 16'd8888;
   localparam FABRIC_GATEWAY = 8'd1;
   localparam FABRIC_ENABLE  = 1;
 
