@@ -61,7 +61,7 @@ module epb_opb_bridge(
   reg  [22:0] epb_addr_reg;
   reg   [5:0] epb_addr_gp_reg;
   reg  [15:0] epb_data_i_reg;
-  (* MAXDELAY = "6 ns" *) wire epb_cs_n_int;
+  (* MAXDELAY = "4.0 ns" *) wire epb_cs_n_int;
 
   always @(posedge OPB_Clk) begin
     epb_cs_n_reg    <= epb_cs_n_int;
@@ -147,15 +147,6 @@ module epb_opb_bridge(
   wire         epb_rdy_int = opb_state == OPB_STATE_WAIT && OPB_reply;
   wire [15:0] epb_data_int = epb_addr_reg[0] ? OPB_DBus[16:31] : OPB_DBus[0:15];
 
-  reg [15:0] epb_data_o;
-  reg epb_rdy;
-
-  always @(posedge OPB_Clk) begin
-    if (epb_rdy_int)
-      epb_data_o <= epb_data_int;
-  end
-  //synthesis attribute IOB of epb_data_o is TRUE
-
   reg [9:0] timeout_counter;
 
   reg opb_state_z;
@@ -193,13 +184,35 @@ module epb_opb_bridge(
     end
   end
 
+  reg [15:0] epb_data_o_reg;
+  reg epb_rdy_reg;
+
+  always @(posedge OPB_Clk) begin
+    epb_data_o_reg <= 16'hC0DE;
+
+    if (timeout_counter[9] && opb_state == OPB_STATE_WAIT)
+      epb_data_o_reg <= 16'hdead;
+
+    if (epb_rdy_int)
+      epb_data_o_reg <= epb_data_int;
+  end
+
   always @(posedge OPB_Clk) begin
     if (epb_cs_n_int) begin
-      epb_rdy <= 1'b0;
+      epb_rdy_reg <= 1'b0;
     end else begin
-      epb_rdy <= epb_rdy | (opb_state == OPB_STATE_WAIT && (timeout_counter[9] || OPB_reply));
+      epb_rdy_reg <= epb_rdy_reg | (opb_state == OPB_STATE_WAIT && (timeout_counter[9] || OPB_reply));
     end
   end
+
+  reg [15:0] epb_data_o;
+  reg epb_rdy;
+
+  always @(negedge OPB_Clk) begin
+    epb_data_o <= epb_data_o_reg;
+    epb_rdy <= epb_rdy_reg;
+  end
+  //synthesis attribute IOB of epb_data_o is TRUE
   //synthesis attribute IOB of epb_rdy is TRUE
 
   assign epb_rdy_oe = !epb_cs_n_int;
