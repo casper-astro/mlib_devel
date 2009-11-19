@@ -76,7 +76,7 @@ interfaces.DDR2_CTRL = ['ddr2_user_dimm', s.dimm, '_ctrl'];
 b = set(b,'interfaces',interfaces);
 
 % borph parameters
-if xsg_hw_sys ~= 'ROACH'
+if ~(strcmp(xsg_hw_sys,'ROACH'))
   borph_info.size = 2^30;
   borph_info.mode = 3;
   b = set(b,'borph_info',borph_info);
