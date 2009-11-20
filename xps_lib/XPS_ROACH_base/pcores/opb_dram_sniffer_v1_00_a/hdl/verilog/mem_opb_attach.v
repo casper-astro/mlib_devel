@@ -123,14 +123,14 @@ module mem_opb_attach #(
   reg [31:0] SL_DBus_reg;
   always @(posedge OPB_Clk) begin
     case (opb_addr[4:2])
-      3'd0: SL_DBus_reg <= cache_data[31:0];
-      3'd1: SL_DBus_reg <= cache_data[63:32];
-      3'd2: SL_DBus_reg <= cache_data[95:64];
-      3'd3: SL_DBus_reg <= cache_data[127:96];
-      3'd4: SL_DBus_reg <= cache_data[159:128];
-      3'd5: SL_DBus_reg <= cache_data[191:160];
-      3'd6: SL_DBus_reg <= cache_data[223:192];
-      3'd7: SL_DBus_reg <= cache_data[255:224];
+      3'd3: SL_DBus_reg <= cache_data[31:0];
+      3'd2: SL_DBus_reg <= cache_data[63:32];
+      3'd1: SL_DBus_reg <= cache_data[95:64];
+      3'd0: SL_DBus_reg <= cache_data[127:96];
+      3'd7: SL_DBus_reg <= cache_data[159:128];
+      3'd6: SL_DBus_reg <= cache_data[191:160];
+      3'd5: SL_DBus_reg <= cache_data[223:192];
+      3'd4: SL_DBus_reg <= cache_data[255:224];
     endcase
   end
   assign Sl_DBus = Sl_xferAck ? SL_DBus_reg : 32'b0;
@@ -257,10 +257,10 @@ module mem_opb_attach #(
   reg [143:0] dram_wr_data_reg;
   always @(*) begin
     case (dram_word_sel)
-      2'd0: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 0;
-      2'd1: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 32;
-      2'd2: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 72;
-      2'd3: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 104;
+      2'd3: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 0;
+      2'd2: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 32;
+      2'd1: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 72;
+      2'd0: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 104;
     endcase
   end
   assign dram_wr_data = dram_wr_data_reg;
@@ -269,10 +269,10 @@ module mem_opb_attach #(
   always @(*) begin
     if (second_wr_cycle || dram_cmd_en && !second_cycle_sel) begin
       case (dram_word_sel)
-        2'd0: dram_wr_be_reg <= {14'b0, opb_be_reg} << 0;
-        2'd1: dram_wr_be_reg <= {14'b0, opb_be_reg} << 4;
-        2'd2: dram_wr_be_reg <= {14'b0, opb_be_reg} << 9;
-        2'd3: dram_wr_be_reg <= {14'b0, opb_be_reg} << 13;
+        2'd3: dram_wr_be_reg <= {14'b0, opb_be_reg} << 0;
+        2'd2: dram_wr_be_reg <= {14'b0, opb_be_reg} << 4;
+        2'd1: dram_wr_be_reg <= {14'b0, opb_be_reg} << 9;
+        2'd0: dram_wr_be_reg <= {14'b0, opb_be_reg} << 13;
       endcase
     end else begin
       dram_wr_be_reg <= 18'b0;
