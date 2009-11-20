@@ -79,9 +79,9 @@ for i=1:length(delays),
         set_param(full_path, 'DelayLen', '2^(FFTSize-FFTStage)');
         set_param(full_path, 'bram_latency', 'bram_latency');
 	%reduce logic in Virtex5 using DSP48E slice
-	if strcmp(arch,'Virtex5') && strcmp(opt_target,'Logic'),
-		set_param(full_path, 'use_dsp48', 'on');
-	end
+%	if strcmp(arch,'Virtex5') && strcmp(opt_target,'Logic'),
+%		set_param(full_path, 'use_dsp48', 'on');
+%	end
     else,
         replace_block(blk,'Name',delays{i},'casper_library/Delays/delay_slr','noprompt');
         set_param(full_path,'LinkStatus','inactive');
