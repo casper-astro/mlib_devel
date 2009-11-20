@@ -147,9 +147,11 @@ module epb_opb_bridge(
   wire         epb_rdy_int = opb_state == OPB_STATE_WAIT && OPB_reply;
   wire [15:0] epb_data_int = epb_addr_reg[0] ? OPB_DBus[16:31] : OPB_DBus[0:15];
 
-  reg [9:0] timeout_counter;
+  reg [10:0] timeout_counter;
 
   reg opb_state_z;
+
+  wire bus_timeout = timeout_counter[10:8] == 3'b111;
 
   always @(posedge OPB_Clk) begin
     timeout_counter <= timeout_counter + 1;
@@ -170,7 +172,7 @@ module epb_opb_bridge(
         end
         OPB_STATE_WAIT: begin
 
-          if (timeout_counter[9]) begin
+          if (bus_timeout) begin
             M_select_reg <= 1'b0;
             opb_state    <= OPB_STATE_IDLE;
           end
@@ -190,7 +192,7 @@ module epb_opb_bridge(
   always @(posedge OPB_Clk) begin
     epb_data_o_reg <= 16'hC0DE;
 
-    if (timeout_counter[9] && opb_state == OPB_STATE_WAIT)
+    if (bus_timeout && opb_state == OPB_STATE_WAIT)
       epb_data_o_reg <= 16'hdead;
 
     if (epb_rdy_int)
@@ -201,7 +203,7 @@ module epb_opb_bridge(
     if (epb_cs_n_int) begin
       epb_rdy_reg <= 1'b0;
     end else begin
-      epb_rdy_reg <= epb_rdy_reg | (opb_state == OPB_STATE_WAIT && (timeout_counter[9] || OPB_reply));
+      epb_rdy_reg <= epb_rdy_reg | (opb_state == OPB_STATE_WAIT && (bus_timeout || OPB_reply));
     end
   end
 
