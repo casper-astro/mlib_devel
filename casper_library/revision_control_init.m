@@ -1,5 +1,7 @@
 function revision_control_init(blk, varargin)
 
+disp('entering');
+if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'revision_control');
 
 defaults = {};
@@ -117,4 +119,6 @@ end
 if (dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
     error('Files in revision control system out-of-date for user design');
 end
+
+save_state(blk, 'defaults', defaults, varargin{:});
 
