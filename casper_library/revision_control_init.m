@@ -1,11 +1,9 @@
 function revision_control_init(blk, varargin)
 
-disp('entering');
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'revision_control');
 
 defaults = {};
-munge_block(blk, varargin{:});
+%set_param(blk,'LinkStatus','inactive');
 error_on_norcs = get_var('error_on_norcs', 'defaults', defaults, varargin{:});
 error_on_dirty = get_var('error_on_dirty', 'defaults', defaults, varargin{:});
 
@@ -119,6 +117,4 @@ end
 if (dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
     error('Files in revision control system out-of-date for user design');
 end
-
-save_state(blk, 'defaults', defaults, varargin{:});
 
