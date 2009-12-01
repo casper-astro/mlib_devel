@@ -104,6 +104,12 @@ NET "epb_rdy"        IOSTANDARD = LVCMOS33 | LOC = K12;
 
 NET "epb_clk_in"    IOSTANDARD = LVCMOS33 | LOC = AH18;
 
+# ADC card 3 wire control
+#NET "adc0_adc3wire_clk"       IOSTANDARD = LVCMOS25 | LOC = F28;
+#NET "adc0_adc3wire_data"      IOSTANDARD = LVCMOS25 | LOC = D32;
+#NET "adc0_adc3wire_strobe"    IOSTANDARD = LVCMOS25 | LOC = C32;
+#NET "adc0_modepin"            IOSTANDARD = LVCMOS25 | LOC = E28;
+
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))############## MGT Signals #############
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Clock on tile 7
@@ -200,6 +206,30 @@ NET "epb_clk_in"    IOSTANDARD = LVCMOS33 | LOC = AH18;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_strobe    LOC = AC34 ;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = AD32 ;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#
+
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))############## ADC10D1000 Control Signals #############
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc0_adc3wire_clk       LOC = E31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc0_adc3wire_data      LOC = F28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc0_adc3wire_strobe    LOC = C32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_syns_rst_o          LOC = F31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_syns_errflag_i      LOC = E28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_scsb_o		 LOC = AH33 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_sclk_o		 LOC = AE29 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_sdi		 LOC = AF30 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_sdo		 LOC = AD29 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_ece_o		 LOC = AG33 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_calrun_i		 LOC = AF29 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_i_le		 LOC = AB27 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_i_data	 LOC = H17 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_i_clk	 LOC = AC27 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_q_le		 LOC = G33 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_q_data	 LOC = J30 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_q_clk	 LOC = J31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_temp_cs		 LOC = AJ31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_temp_sck		 LOC = AJ32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_temp_sdo		 LOC = AK31 ;
+
 #IF# strcmp(get(b,'type'),'xps_qdr')#
 #IF# strcmp(get(b,'type'),'xps_qdr')############## QDR Signals #############
 #IF# strcmp(get(b,'type'),'xps_qdr')#
