@@ -1,120 +1,135 @@
 function revision_control_init(blk, varargin)
 
+disp('entering');
 check_mask_type(blk, 'revision_control');
 
 defaults = {};
-%set_param(blk,'LinkStatus','inactive');
 error_on_norcs = get_var('error_on_norcs', 'defaults', defaults, varargin{:});
 error_on_dirty = get_var('error_on_dirty', 'defaults', defaults, varargin{:});
 
-got_rcs = 0;
-dirty = 0;
+got_lib_rcs = 0;
+got_usr_rcs = 0;
+usr_dirty = 0;
 lib_dirty = 0;
-rcs = 0;
+usr_rcs = 0;
 lib_rcs = 0;
 
+% First try tortoiseSVN
 path = which(gcs);
 
-% First try tortoiseSVN
-[r,m] = system(sprintf('%s %s', 'SubWCRev.exe', path));
-if (r == 0) %success
-    if (~isempty(regexp(m,'Local modifications'))) % we have local mods
-        dirty = 1;
+[usr_r,usr_rev] = system(sprintf('%s %s', 'SubWCRev.exe', path));
+
+if (usr_r == 0) %success
+    if (~isempty(regexp(usr_rev,'Local modifications'))) % we have local mods
+        usr_dirty = 1;
     end
 
-    temp=regexp(m,'Updated to revision (?<rev>\d+)','tokens');
+    temp=regexp(usr_rev,'Updated to revision (?<rev>\d+)','tokens');
     if (~isempty(temp))
-        rcs = str2num(temp{1}{1});
-        got_rcs = 1;
+        usr_rcs = str2num(temp{1}{1});
+        got_usr_rcs = 1;
     else 
-        temp=regexp(m,'Last committed at revision (?<rev>\d+)','tokens');
+        temp=regexp(usr_rev,'Last committed at revision (?<rev>\d+)','tokens');
         if (~isempty(temp))
-            rcs = str2num(temp{1}{1});
-            got_rcs = 1;
+            usr_rcs = str2num(temp{1}{1});
+            got_usr_rcs = 1;
         end
     end    
 else % if that failed try straight 'svn'
-    [r,m] = system(sprintf('%s %s', 'svn info', path));
-    if (r == 0)
-        temp=regexp(m,'Revision: (?<rev>\d+)','tokens');
+    [usr_r,usr_rev] = system(sprintf('%s %s', 'svn info', path));
+    if (usr_r == 0)
+        temp=regexp(usr_rev,'Revision: (?<rev>\d+)','tokens');
         if (~isempty(temp))
-            rcs = str2num(temp{1}{1});
-            got_rcs = 1;
+            usr_rcs = str2num(temp{1}{1});
+            got_usr_rcs = 1;
         end
     end
-    [r,m] = system(sprintf('%s %s', 'svn status 2>/dev/null | grep ''^[AMD]'' | wc -l', path));
-    if (r==0)
-        if (str2num(m) > 0)
-            dirty = 1;
+    [usr_r,usr_rev] = system(sprintf('%s %s', 'svn status 2>/dev/null | grep ''^[AMD]'' | wc -l', path));
+    if (usr_r==0)
+        if (str2num(usr_rev) > 0)
+            usr_dirty = 1;
         end
     end
 end
-
-if (got_rcs == 0)
-    disp('Warning: could not establish version for user design in revision control system');
-end
-
-set_param([blk, '/const_uptodate'], 'const', num2str(dirty));
-set_param([blk, '/const_rcs'], 'const', num2str(rcs));
-
-if( got_rcs == 0 && strcmp(error_on_norcs, 'on') == 1)
-    error('Failed to retrieve revision control information for user design');
-end
-
 
 path = getenv('MLIB_ROOT');
-got_rcs = 0;
 
 % First try tortoiseSVN
-[r,m] = system(sprintf('%s %s', 'SubWCRev.exe', path));
-if (r == 0) %success
-    if (~isempty(regexp(m,'Local modifications'))) % we have local mods
+[lib_r,lib_rev] = system(sprintf('%s %s', 'SubWCRev.exe', path));
+
+if (lib_r == 0) %success
+    if (~isempty(regexp(lib_rev ,'Local modifications'))) % we have local mods
         lib_dirty = 1;
     end
-    temp=regexp(m,'Updated to revision (?<rev>\d+)','tokens');
+    temp=regexp(lib_rev ,'Updated to revision (?<rev>\d+)','tokens');
     if (~isempty(temp))
         lib_rcs = str2num(temp{1}{1});
-        got_rcs = 1;
+        got_lib_rcs = 1;
     else 
-        temp=regexp(m,'Last committed at revision (?<rev>\d+)','tokens');
+        temp=regexp(lib_rev ,'Last committed at revision (?<rev>\d+)','tokens');
         if (~isempty(temp))
             lib_rcs = str2num(temp{1}{1});
-            got_rcs = 1;
+            got_lib_rcs = 1;
         end
     end
 else % if that failed try straight 'svn'
-    [r,m] = system(sprintf('%s %s', 'svn info', path));
-    if (r == 0)
-        temp=regexp(m,'Revision: (?<rev>\d+)','tokens');
+    [lib_r,lib_rev] = system(sprintf('%s %s', 'svn info', path));
+    if (lib_r == 0)
+        temp=regexp(lib_rev ,'Revision: (?<rev>\d+)','tokens');
         if (~isempty(temp))
             lib_rcs = str2num(temp{1}{1});
-            got_rcs = 1;
+            got_lib_rcs = 1;
         end
     end
-    [r,m] = system(sprintf('%s %s', 'svn status 2>/dev/null | grep ''^[AMD]'' | wc -l', path));
-    if (r==0)
-        if (str2num(m) > 0)
+    [lib_r,lib_rev] = system(sprintf('%s %s', 'svn status 2>/dev/null | grep ''^[AMD]'' | wc -l', path));
+    if (lib_r==0)
+        if (str2num(lib_rev) > 0)
             lib_dirty = 1;
         end
     end
 end
 
-if (got_rcs == 0)
+vec = {varargin{:}, 'usr_rev', usr_rcs, 'usr_dirty', usr_dirty, 'lib_rev', lib_rcs, 'lib_dirty', lib_dirty};
+
+if same_state(blk, 'defaults', defaults, vec{:}), return, end
+%disp('munging');
+munge_block(blk, vec{:});
+%disp('got_usr_rcs');
+if (got_usr_rcs == 0)
+    disp('Warning: could not establish version for user design in revision control system');
+end
+
+%disp('usr_dirty');
+set_param([blk, '/const_uptodate'], 'const', num2str(usr_dirty));
+%disp('usr_rcs');
+set_param([blk, '/const_rcs'], 'const', num2str(usr_rcs));
+
+%disp('lib');
+if (got_lib_rcs == 0)
     disp('Warning: could not establish version for libraries in revision control system');
 end
-    
+%disp('lib_dirty');    
 set_param([blk, '/const_lib_uptodate'], 'const', num2str(lib_dirty));
+%disp('lib_rcs');
 set_param([blk, '/const_lib_rcs'], 'const', num2str(lib_rcs));
 
-if ((~got_rcs) && strcmp(error_on_norcs, 'on') == 1)
+%disp('saving state');
+save_state(blk, 'defaults', defaults, vec{:});
+
+if ( got_lib_rcs == 0  && strcmp(error_on_norcs, 'on') == 1)
     error('Failed to retrieve revision control information for libraries');
 end
-
-if (lib_dirty ~=0 && strcmp(error_on_dirty, 'on') == 1)
-    error('Files in revision control system out-of-date for libraries');
+if ( got_usr_rcs == 0  && strcmp(error_on_norcs, 'on') == 1)
+    error('Failed to retrieve revision control information for user design');
 end
 
-if (dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
+%disp('lib dirty');
+if (lib_dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
+    error('Files in revision control system out-of-date for libraries');
+end
+%disp('usr dirty');
+if (usr_dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
     error('Files in revision control system out-of-date for user design');
 end
 
+disp('exiting');
