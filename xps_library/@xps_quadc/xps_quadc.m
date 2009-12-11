@@ -47,6 +47,8 @@ switch s.hw_sys
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25_DT', 'PERIOD', [num2str(1000/s.adc_clk_rate),' ns']);
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25_DT');
         ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
+
+        parameters = '';
     % end case 'iBOB'
     case 'ROACH'
         if isempty(find(strcmp(s.adc_brd, {'0', '1'})))
@@ -56,6 +58,8 @@ switch s.hw_sys
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/s.adc_clk_rate),' ns']);
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
         ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
+
+        parameters.CLK_FREQ    = num2str(s.adc_clk_rate);
     % end case 'ROACH'
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
@@ -68,6 +72,9 @@ b = set(b,'ip_name','quadc_interface');
 b = set(b,'ip_version','1.00.a');
 
 % parameters
+
+b = set(b,'parameters',parameters);
+
 
 % misc ports
 misc_ports.user_clk  =  {1 'in' get(xsg_obj,'clk_src')};

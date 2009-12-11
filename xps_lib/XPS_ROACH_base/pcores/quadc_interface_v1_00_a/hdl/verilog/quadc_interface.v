@@ -41,6 +41,8 @@ module quadc_interface (
                 sync
             );
 
+    parameter       CLK_FREQ = 200;
+
     input           adc0_clk_in_p;
     input           adc0_clk_in_n;
     input           adc1_clk_in_p;
@@ -234,39 +236,88 @@ module quadc_interface (
             .O(adc0_clk_2x)
         );
 
-    DCM #(
-            .CLKIN_DIVIDE_BY_2    ("FALSE"),                // TRUE/FALSE to enable clk_in divide by two feature
-            .CLKIN_PERIOD         (5),                      // Specify period of input clock
-            .CLKOUT_PHASE_SHIFT   ("NONE"),                 // Specify phase shift of NONE, FIXED or VARIABLE
-            .CLK_FEEDBACK         ("1X"),                   // Specify clock feedback of NONE, 1X or 2X
-            .DESKEW_ADJUST        ("SYSTEM_SYNCHRONOUS"),   // SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or
-                                                            // an integer from 0 to 15
-            .DFS_FREQUENCY_MODE   ("LOW"),                  // HIGH or LOW frequency mode for frequency synthesis
-            .DLL_FREQUENCY_MODE   ("LOW"),                  // HIGH or LOW frequency mode for DLL
-            .DUTY_CYCLE_CORRECTION("TRUE"),                 // Duty cycle correction, TRUE or FALSE
-            .FACTORY_JF           (16'hC080),               // FACTORY JF values
-            .PHASE_SHIFT          (0),                      // Amount of fixed phase shift from -255 to 255
-            .STARTUP_WAIT         ("FALSE")                 // Delay configuration DONE until DCM LOCK, TRUE/FALSE
-        ) DCM_ADC0CLK (
-            .CLKIN   (adc0_clk_in),                         // Clock input (from IBUFG, BUFG or DCM)
-            .CLK0    (adc0_clk_buf),                        // 0 degree DCM CLK output
-            .CLK90   (adc0_clk_90_buf),                     // 90 degree DCM CLK output
-            .CLK180  (),                                    // 180 degree DCM CLK output
-            .CLK270  (),                                    // 270 degree DCM CLK output
-            .CLK2X   (adc0_clk_2x_buf),                     // 2X DCM CLK output
-            .CLK2X180(),                                    // 2X, 180 degree DCM CLK out
-            .CLKDV   (),                                    // Divided DCM CLK out (CLKDV_DIVIDE)
-            .CLKFX   (),                                    // DCM CLK synthesis out (M/D)
-            .CLKFX180(),                                    // 180 degree CLK synthesis out
-            .CLKFB   (adc0_clk),                            // DCM clock feedback
-            .LOCKED  (dcm_adc0_locked),                     // DCM LOCK status output
-            .PSDONE  (),                                    // Dynamic phase adjust done output
-            .STATUS  (dcm_adc0_status),                     // 8-bit DCM status bits output
-            .PSCLK   (),                                    // Dynamic phase adjust clock input
-            .PSEN    (),                                    // Dynamic phase adjust enable input
-            .PSINCDEC(),                                    // Dynamic phase adjust increment/decrement
-            .RST     (dcm_reset | reset)                    // DCM asynchronous reset input
-        );
+
+// =====================================================================
+// Generated DCM instantiation based on target clock frequency; use
+// "LOW" DFS/DLL frequency mode if < 120MHz (V5-specific target)
+
+generate
+    begin: GEN_DCM
+        if (CLK_FREQ < 120) begin
+            DCM #(
+                .CLKIN_DIVIDE_BY_2    ("FALSE"),                // TRUE/FALSE to enable clk_in divide by two feature
+                .CLKOUT_PHASE_SHIFT   ("NONE"),                 // Specify phase shift of NONE, FIXED or VARIABLE
+                .CLKIN_PERIOD         (1000/CLK_FREQ),          // Specify period of input clock
+                .CLK_FEEDBACK         ("1X"),                   // Specify clock feedback of NONE, 1X or 2X
+                .DESKEW_ADJUST        ("SYSTEM_SYNCHRONOUS"),   // SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or
+                                                                // an integer from 0 to 15
+                .DFS_FREQUENCY_MODE   ("LOW"),                  // HIGH or LOW frequency mode for frequency synthesis
+                .DLL_FREQUENCY_MODE   ("LOW"),                  // HIGH or LOW frequency mode for DLL
+                .DUTY_CYCLE_CORRECTION("TRUE"),                 // Duty cycle correction, TRUE or FALSE
+                .FACTORY_JF           (16'hC080),               // FACTORY JF values
+                .PHASE_SHIFT          (0),                      // Amount of fixed phase shift from -255 to 255
+                .STARTUP_WAIT         ("FALSE")                 // Delay configuration DONE until DCM LOCK, TRUE/FALSE
+            ) DCM_ADC0CLK (
+                .CLKIN   (adc0_clk_in),                         // Clock input (from IBUFG, BUFG or DCM)
+                .CLK0    (adc0_clk_buf),                        // 0 degree DCM CLK output
+                .CLK90   (adc0_clk_90_buf),                     // 90 degree DCM CLK output
+                .CLK180  (),                                    // 180 degree DCM CLK output
+                .CLK270  (),                                    // 270 degree DCM CLK output
+                .CLK2X   (adc0_clk_2x_buf),                     // 2X DCM CLK output
+                .CLK2X180(),                                    // 2X, 180 degree DCM CLK out
+                .CLKDV   (),                                    // Divided DCM CLK out (CLKDV_DIVIDE)
+                .CLKFX   (),                                    // DCM CLK synthesis out (M/D)
+                .CLKFX180(),                                    // 180 degree CLK synthesis out
+                .CLKFB   (adc0_clk),                            // DCM clock feedback
+                .LOCKED  (dcm_adc0_locked),                     // DCM LOCK status output
+                .PSDONE  (),                                    // Dynamic phase adjust done output
+                .STATUS  (dcm_adc0_status),                     // 8-bit DCM status bits output
+                .PSCLK   (),                                    // Dynamic phase adjust clock input
+                .PSEN    (),                                    // Dynamic phase adjust enable input
+                .PSINCDEC(),                                    // Dynamic phase adjust increment/decrement
+                .RST     (dcm_reset | reset)                    // DCM asynchronous reset input
+            );
+        end // if (CLK_FREQ < 100
+        else begin
+            DCM #(
+                .CLKIN_DIVIDE_BY_2    ("FALSE"),                // TRUE/FALSE to enable clk_in divide by two feature
+                .CLKOUT_PHASE_SHIFT   ("NONE"),                 // Specify phase shift of NONE, FIXED or VARIABLE
+                .CLKIN_PERIOD         (1000/CLK_FREQ),          // Specify period of input clock
+                .CLK_FEEDBACK         ("1X"),                   // Specify clock feedback of NONE, 1X or 2X
+                .DESKEW_ADJUST        ("SYSTEM_SYNCHRONOUS"),   // SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or
+                                                                // an integer from 0 to 15
+                .DFS_FREQUENCY_MODE   ("HIGH"),                 // HIGH or LOW frequency mode for frequency synthesis
+                .DLL_FREQUENCY_MODE   ("HIGH"),                 // HIGH or LOW frequency mode for DLL
+                .DUTY_CYCLE_CORRECTION("TRUE"),                 // Duty cycle correction, TRUE or FALSE
+                .FACTORY_JF           (16'hC080),               // FACTORY JF values
+                .PHASE_SHIFT          (0),                      // Amount of fixed phase shift from -255 to 255
+                .STARTUP_WAIT         ("FALSE")                 // Delay configuration DONE until DCM LOCK, TRUE/FALSE
+            ) DCM_ADC0CLK (
+                .CLKIN   (adc0_clk_in),                         // Clock input (from IBUFG, BUFG or DCM)
+                .CLK0    (adc0_clk_buf),                        // 0 degree DCM CLK output
+                .CLK90   (adc0_clk_90_buf),                     // 90 degree DCM CLK output
+                .CLK180  (),                                    // 180 degree DCM CLK output
+                .CLK270  (),                                    // 270 degree DCM CLK output
+                .CLK2X   (adc0_clk_2x_buf),                     // 2X DCM CLK output
+                .CLK2X180(),                                    // 2X, 180 degree DCM CLK out
+                .CLKDV   (),                                    // Divided DCM CLK out (CLKDV_DIVIDE)
+                .CLKFX   (),                                    // DCM CLK synthesis out (M/D)
+                .CLKFX180(),                                    // 180 degree CLK synthesis out
+                .CLKFB   (adc0_clk),                            // DCM clock feedback
+                .LOCKED  (dcm_adc0_locked),                     // DCM LOCK status output
+                .PSDONE  (),                                    // Dynamic phase adjust done output
+                .STATUS  (dcm_adc0_status),                     // 8-bit DCM status bits output
+                .PSCLK   (),                                    // Dynamic phase adjust clock input
+                .PSEN    (),                                    // Dynamic phase adjust enable input
+                .PSINCDEC(),                                    // Dynamic phase adjust increment/decrement
+                .RST     (dcm_reset | reset)                    // DCM asynchronous reset input
+            );
+        end // else
+   end // GEN_DCM
+endgenerate
+
+// Generated DCM instantiation
+// =====================================================================
 
     async_fifo_generator_v2_2_33x16 async_fifo_adc_data (
         	.wr_clk  (adc0_clk),

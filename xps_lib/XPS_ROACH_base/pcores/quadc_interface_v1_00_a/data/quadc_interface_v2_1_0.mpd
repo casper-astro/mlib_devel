@@ -12,7 +12,10 @@ OPTION STYLE = MIX
 
 ## Bus Interfaces
 
+
 ## Generics for VHDL or Parameters for Verilog
+PARAMETER CLK_FREQ = 200, DT = INTEGER
+
 
 ## Ports
 PORT adc0_clk_in_p = "",    DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
