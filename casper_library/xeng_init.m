@@ -1,10 +1,10 @@
-function win_x_engine_demux_init(blk, varargin)
+function xeng_init(blk, varargin)
 % Initialize and configure the windowed CASPER X Engine with configurable output demux.
 %
 
 % Declare any default values for arguments you might like.
-defaults = {'use_ded_mult', 1, 'use_bram_delay', 1, 'demux_factor', 4, 'n_bits', 4, ...
-    'add_latency', 1, 'mult_latency', 1, 'bram_latency', 2};
+defaults = {'use_ded_mult', 1, 'use_bram_delay', 1, 'demux_factor', '4', 'n_bits', 4, ...
+    'add_latency', 1, 'mult_latency', 1, 'bram_latency', 2, 'acc_len',128};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'xeng');
 munge_block(blk, varargin{:});
@@ -19,7 +19,7 @@ n_bits = get_var('n_bits', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
-demux_factor = get_var('demux_factor', 'defaults', defaults, varargin{:});
+demux_factor = eval(get_var('demux_factor', 'defaults', defaults, varargin{:}));
 
 xeng_delay = add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1;
 bit_growth = ceil(log2(acc_len));
@@ -128,10 +128,10 @@ reuse_block(blk, 'Term2', 'built-in/Terminator', 'Position', [x, 65, x + 20, 85]
 reuse_block(blk, 'Term3', 'built-in/Terminator', 'Position', [x, 130, x + 20, 150]);
      
 % Set output port positions
-reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 500, 160, x + 530, 174]);
 reuse_block(blk, 'acc', 'built-in/outport','Position', [x + 500, 100, x + 530, 114]);
 reuse_block(blk, 'valid', 'built-in/outport','Position', [x + 500, 130, x + 530, 144]);
-reuse_block(blk, 'mnct_out', 'built-in/outport','Position', [x + 500, 130, x + 530, 204]);
+reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 500, 160, x + 530, 174]);
+reuse_block(blk, 'mcnt_out', 'built-in/outport','Position', [x + 500, 190, x + 530, 204]);
 
 % Set input port positions
 reuse_block(blk, 'sync_in', 'built-in/inport','Position', [55,178,85,192]);
@@ -200,6 +200,7 @@ add_line(blk, [thisblk, '/7'], 'sample_and_hold2/1', 'autorouting', 'on');
 
 % Set Params
 set_param([blk, '/x_cast'], 'n_bits_in', sprintf('%d',n_bits_xeng_out));
+set_param([blk, '/x_cast'], 'demux_factor', sprintf('%d',demux_factor));
 set_param([blk, '/x_cast'], 'n_bits_out', sprintf('%d',n_bits_scaled_out));
 set_param([blk, '/x_cast'], 'fix_pnt_pos', sprintf('%d',(n_bits-1)*2));
 set_param([blk, '/xeng_descramble'], 'num_ants', sprintf('%d',n_ants));
