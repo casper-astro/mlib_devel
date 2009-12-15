@@ -121,7 +121,7 @@ generate if (ENABLE) begin : sniffer_enabled
     .dram_ack     (sniff_ack)
   );
   
-  wire [31:0] sniff_cmd_address = {software_address_bits[7:0], sniff_address[21:0], 2'b0};
+  wire [31:0] sniff_cmd_address = {software_address_bits[8:0], sniff_address[20:0], 2'b0};
   /* TODO: finalize the software address width */
 
   /* Pipeline to improve timing, almost full control permit this approach */
