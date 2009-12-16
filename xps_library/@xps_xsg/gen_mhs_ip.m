@@ -6,6 +6,9 @@ plb_addr_end = plb_addr_start;
 
 clk_src = get(blk_obj, 'clk_src');
 
+[str,dummy_opb_addr_end,dummy_plb_addr_end,dummy_opb_addr_start] = gen_mhs_ip(blk_obj.xps_block,opb_addr_start,plb_addr_start,plb_name,opb_name);
+str = [str, '\n'];
+
 if strcmp(clk_src, 'arb_clk')
   target_rate = get(blk_obj, 'clk_rate');
   D=floor((0:(31*32 - 1))/31) + 1;
@@ -28,8 +31,8 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PARAMETER C_CLK0_BUF = TRUE',                               '\n'];
   str = [str, '  PARAMETER C_CLKFX_BUF = TRUE',                              '\n'];
   str = [str, '  PARAMETER C_CLKIN_PERIOD = 10.000000',                      '\n'];
-  str = [str, '  PARAMETER C_CLKFX_DIVIDE = ', sprintf('%d', bestD),         '\n']; 
-  str = [str, '  PARAMETER C_CLKFX_MULTIPLY = ', sprintf('%d', bestM),       '\n'];  
+  str = [str, '  PARAMETER C_CLKFX_DIVIDE = ', sprintf('%d', bestD),         '\n'];
+  str = [str, '  PARAMETER C_CLKFX_MULTIPLY = ', sprintf('%d', bestM),       '\n'];
   str = [str, '  PARAMETER C_DFS_FREQUENCY_MODE = HIGH',                     '\n'];
   str = [str, '  PORT RST    = sys_clk_lock',                                '\n'];
   str = [str, '  PORT CLKIN  = sys_clk',                                     '\n'];
@@ -67,7 +70,7 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PORT sig_out = fab_clk',                                    '\n'];
   str = [str, 'END',                                                         '\n'];
   str = [str,                                                                '\n'];
-  
+
 end % if ~isempty(strcmp(s.clk_src, 'arbclk'))
 
 
