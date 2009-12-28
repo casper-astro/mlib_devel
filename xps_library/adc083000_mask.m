@@ -22,6 +22,7 @@
 
 lib_block_name = 'adc083000';
 fprintf('Running mask script for %s\n', lib_block_name);
+load_system('xbsBasic_r4');
 cur_block_name = gcb;
 disp(cur_block_name)
 demux_adc0 = strcmp( get_param(cur_block_name, 'demux_adc0'), 'on');
