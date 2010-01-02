@@ -61,22 +61,22 @@ PORT adc0_reset = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
 
 ## demuxed data from the ADC
 # Data
-PORT adc0_user_datai0 = "", VEC = [7:0], DIR = O
-PORT adc0_user_datai1 = "", VEC = [7:0], DIR = O
-PORT adc0_user_datai2 = "", VEC = [7:0], DIR = O
-PORT adc0_user_datai3 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq0 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq1 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq2 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq3 = "", VEC = [7:0], DIR = O
-PORT adc0_user_datai4 = "", VEC = [7:0], DIR = O
-PORT adc0_user_datai5 = "", VEC = [7:0], DIR = O
-PORT adc0_user_datai6 = "", VEC = [7:0], DIR = O
-PORT adc0_user_datai7 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq4 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq5 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq6 = "", VEC = [7:0], DIR = O
-PORT adc0_user_dataq7 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s0 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s2 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s4 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s6 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s1 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s3 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s5 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s7 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s8 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s10 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s12 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s14 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s9 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s11 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s13 = "", VEC = [7:0], DIR = O
+PORT adc0_user_s15 = "", VEC = [7:0], DIR = O
 # Out of range
 PORT adc0_user_outofrange = "", VEC = [3+4*DEMUX_DATA_OUT:0], DIR = O
 
@@ -112,22 +112,22 @@ PORT adc1_reset = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
 
 ## demuxed data from the ADC
 # Data
-PORT adc1_user_datai0 = "", VEC = [7:0], DIR = O
-PORT adc1_user_datai1 = "", VEC = [7:0], DIR = O
-PORT adc1_user_datai2 = "", VEC = [7:0], DIR = O
-PORT adc1_user_datai3 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq0 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq1 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq2 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq3 = "", VEC = [7:0], DIR = O
-PORT adc1_user_datai4 = "", VEC = [7:0], DIR = O
-PORT adc1_user_datai5 = "", VEC = [7:0], DIR = O
-PORT adc1_user_datai6 = "", VEC = [7:0], DIR = O
-PORT adc1_user_datai7 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq4 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq5 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq6 = "", VEC = [7:0], DIR = O
-PORT adc1_user_dataq7 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s0 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s2 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s4 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s6 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s1 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s3 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s5 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s7 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s8 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s10 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s12 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s14 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s9 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s11 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s13 = "", VEC = [7:0], DIR = O
+PORT adc1_user_s15 = "", VEC = [7:0], DIR = O
 # Out of range
 PORT adc1_user_outofrange = "", VEC = [3+4*DEMUX_DATA_OUT:0], DIR = O
 
