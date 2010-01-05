@@ -14,6 +14,7 @@ if same_state(blk, varargin{:}), return, end
 check_mask_type(blk, 'auto_tap');
 munge_block(blk, varargin{:});
 use_ded_mult = get_var('use_ded_mult', varargin{:});
+use_bram_delay = get_var('use_bram_delay', varargin{:});
 
 % Configure all multipliers in this block to use dedicated multipliers 
 %(or not)
@@ -54,7 +55,7 @@ end
 %     end
 % end
 
-fmtstr = sprintf('mult=%d', use_ded_mult);
+fmtstr = sprintf('mult=%d, delay=%d', use_ded_mult,use_bram_delay);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, varargin{:});
 

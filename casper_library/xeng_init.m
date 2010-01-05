@@ -3,7 +3,7 @@ function xeng_init(blk, varargin)
 %
 
 % Declare any default values for arguments you might like.
-defaults = {'use_ded_mult', 1, 'use_bram_delay', 1, 'demux_factor', '4', 'n_bits', 4, ...
+defaults = {'n_ants',8,'n_bits',4,'use_ded_mult', 1, 'use_bram_delay', 1, 'demux_factor', '1', 'n_bits', 4, ...
     'add_latency', 1, 'mult_latency', 1, 'bram_latency', 2, 'acc_len',128};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'xeng');
@@ -65,7 +65,7 @@ x = 275;
 if length(use_ded_mult)==1
     reuse_block(blk, 'auto_tap', 'casper_library/Correlator/auto_tap',...
                 'Position',[135, 51, 230, 169],...
-                'use_ded_mult', num2str(use_ded_mult));
+            	'use_ded_mult', num2str(use_ded_mult), 'use_bram_delay', num2str(use_bram_delay));
     for i=1:floor(n_ants/2),
         name = ['baseline_tap', num2str(i)];
         reuse_block(blk, name, 'casper_library/Correlator/baseline_tap', ...
