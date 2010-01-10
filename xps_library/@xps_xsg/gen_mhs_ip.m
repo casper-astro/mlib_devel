@@ -20,6 +20,20 @@ if strcmp(clk_src, 'arb_clk')
   bestM = M(bestmatch);
   bestD = D(bestmatch);
 
+  DFS_FREQ_MODE = '';
+  DLL_FREQ_MODE = '';
+
+  if (target_rate < 120)
+    DFS_FREQ_MODE = 'LOW';
+    DLL_FREQ_MODE = 'LOW';
+  elseif ( (target_rate >= 120) && (target_rate < 140) )
+    DFS_FREQ_MODE = 'LOW';
+    DLL_FREQ_MODE = 'HIGH';
+  else
+    DFS_FREQ_MODE = 'HIGH';
+    DLL_FREQ_MODE = 'HIGH';
+  end
+
   fprintf('Closest matching frequency to %f MHz: %f MHz\n',target_rate,100*bestM/bestD);
 
   %TODO: this is really a waste as the sys_clk dcm can be used to generate the arb_clk_scm
@@ -33,7 +47,7 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PARAMETER C_CLKIN_PERIOD = 10.000000',                      '\n'];
   str = [str, '  PARAMETER C_CLKFX_DIVIDE = ', sprintf('%d', bestD),         '\n'];
   str = [str, '  PARAMETER C_CLKFX_MULTIPLY = ', sprintf('%d', bestM),       '\n'];
-  str = [str, '  PARAMETER C_DFS_FREQUENCY_MODE = HIGH',                     '\n'];
+  str = [str, '  PARAMETER C_DFS_FREQUENCY_MODE = ', DFS_FREQ_MODE,          '\n'];
   str = [str, '  PORT RST    = sys_clk_lock',                                '\n'];
   str = [str, '  PORT CLKIN  = sys_clk',                                     '\n'];
   str = [str, '  PORT CLKFB  = arb_clk_fb',                                  '\n'];
@@ -51,8 +65,8 @@ if strcmp(clk_src, 'arb_clk')
   str = [str, '  PARAMETER C_CLK180_BUF = TRUE',                             '\n'];
   str = [str, '  PARAMETER C_CLK270_BUF = TRUE',                             '\n'];
   str = [str, '  PARAMETER C_CLKIN_PERIOD = ', sprintf('%f',10*bestD/bestM), '\n'];
-  str = [str, '  PARAMETER C_DFS_FREQUENCY_MODE = HIGH',                     '\n'];
-  str = [str, '  PARAMETER C_DLL_FREQUENCY_MODE = HIGH',                     '\n'];
+  str = [str, '  PARAMETER C_DFS_FREQUENCY_MODE = ', DFS_FREQ_MODE,          '\n'];
+  str = [str, '  PARAMETER C_DLL_FREQUENCY_MODE = ', DLL_FREQ_MODE,          '\n'];
   str = [str, '  PORT RST = arb_clk_lock',                                   '\n'];
   str = [str, '  PORT CLKIN  = arb_clk_int',                                 '\n'];
   str = [str, '  PORT CLKFB  = arb_clk',                                     '\n'];

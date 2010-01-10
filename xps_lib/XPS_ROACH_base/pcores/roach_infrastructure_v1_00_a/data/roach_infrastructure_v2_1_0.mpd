@@ -6,6 +6,8 @@ OPTION HDL              = MIXED
 OPTION IP_GROUP         = USER
 OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
 
+PARAMETER CLK_FREQ  = 100, DT = INTEGER
+
 PORT sys_clk_n      = "", DIR = IN, SIGIS = CLK
 PORT sys_clk_p      = "", DIR = IN, SIGIS = CLK
 PORT dly_clk_n      = "", DIR = IN, SIGIS = CLK

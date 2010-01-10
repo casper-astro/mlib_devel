@@ -14,6 +14,9 @@ module roach_infrastructure(
     aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270,
     aux0_clk2x, aux0_clk2x90, aux0_clk2x180, aux0_clk2x270
   );
+
+  parameter CLK_FREQ = 100;
+
   input  sys_clk_n, sys_clk_p;
   output sys_clk, sys_clk90, sys_clk180, sys_clk270;
   output sys_clk_lock;
@@ -178,42 +181,90 @@ module roach_infrastructure(
   wire  aux0_clk2x_dcm;
   wire  aux0_clk2x90_dcm;
 
-  DCM_BASE #(
-    .CLKIN_PERIOD       (5.0),
-    .DLL_FREQUENCY_MODE ("HIGH")
-  ) AUX0_CLK_DCM (
-    .CLKIN  (aux0_clk_int),
-    .CLK0   (aux0_clk_dcm),
-    .CLK90  (aux0_clk90_dcm),
-    .CLK2X  (aux0_clk2x_int),
-    .LOCKED (aux0_clk_dcm_locked),
-    .CLKFB  (aux0_clk),
-    .RST    (~sysclk_dcm_locked)
-  );
+// =====================================================================
+// Generated DCM instantiation based on target clock frequency; use
+// "LOW" DLL frequency mode if < 120MHz (V5-specific target)
 
-  DCM_BASE #(
-    .CLKIN_PERIOD       (5.0),
-    .DLL_FREQUENCY_MODE ("HIGH")
-  ) AUX1_CLK_DCM (
-    .CLKIN  (aux1_clk_int),
-    .CLK0   (aux1_clk_dcm),
-    .CLK90  (aux1_clk90_dcm),
-    .LOCKED (aux1_clk_dcm_locked),
-    .CLKFB  (aux1_clk),
-    .RST    (~sysclk_dcm_locked)
-  );
+generate
+    begin: GEN_DCM
+        if (CLK_FREQ < 120) begin
+            DCM_BASE #(
+              .CLKIN_PERIOD       (1000/CLK_FREQ),
+              .DLL_FREQUENCY_MODE ("LOW")
+            ) AUX0_CLK_DCM (
+              .CLKIN  (aux0_clk_int),
+              .CLK0   (aux0_clk_dcm),
+              .CLK90  (aux0_clk90_dcm),
+              .CLK2X  (aux0_clk2x_int),
+              .LOCKED (aux0_clk_dcm_locked),
+              .CLKFB  (aux0_clk),
+              .RST    (~sysclk_dcm_locked)
+            );
 
-  DCM_BASE #(
-    .CLKIN_PERIOD       (5.0),
-    .DLL_FREQUENCY_MODE ("HIGH")
-  ) AUX0_CLK2X_DCM (
-    .CLKIN  (aux0_clk2x_buf),
-    .CLK0   (aux0_clk2x_dcm),
-    .CLK90  (aux0_clk2x90_dcm),
-    .LOCKED (),
-    .CLKFB  (aux0_clk2x),
-    .RST    (~aux0_clk_dcm_locked)
-  );
+            DCM_BASE #(
+              .CLKIN_PERIOD       (1000/CLK_FREQ),
+              .DLL_FREQUENCY_MODE ("LOW")
+            ) AUX1_CLK_DCM (
+              .CLKIN  (aux1_clk_int),
+              .CLK0   (aux1_clk_dcm),
+              .CLK90  (aux1_clk90_dcm),
+              .LOCKED (aux1_clk_dcm_locked),
+              .CLKFB  (aux1_clk),
+              .RST    (~sysclk_dcm_locked)
+            );
+
+            DCM_BASE #(
+              .CLKIN_PERIOD       (1000/CLK_FREQ),
+              .DLL_FREQUENCY_MODE ("LOW")
+            ) AUX0_CLK2X_DCM (
+              .CLKIN  (aux0_clk2x_buf),
+              .CLK0   (aux0_clk2x_dcm),
+              .CLK90  (aux0_clk2x90_dcm),
+              .LOCKED (),
+              .CLKFB  (aux0_clk2x),
+              .RST    (~aux0_clk_dcm_locked)
+            );
+        end // if (CLK_FREQ < 120)
+        else begin
+            DCM_BASE #(
+              .CLKIN_PERIOD       (1000/CLK_FREQ),
+              .DLL_FREQUENCY_MODE ("HIGH")
+            ) AUX0_CLK_DCM (
+              .CLKIN  (aux0_clk_int),
+              .CLK0   (aux0_clk_dcm),
+              .CLK90  (aux0_clk90_dcm),
+              .CLK2X  (aux0_clk2x_int),
+              .LOCKED (aux0_clk_dcm_locked),
+              .CLKFB  (aux0_clk),
+              .RST    (~sysclk_dcm_locked)
+            );
+
+            DCM_BASE #(
+              .CLKIN_PERIOD       (1000/CLK_FREQ),
+              .DLL_FREQUENCY_MODE ("HIGH")
+            ) AUX1_CLK_DCM (
+              .CLKIN  (aux1_clk_int),
+              .CLK0   (aux1_clk_dcm),
+              .CLK90  (aux1_clk90_dcm),
+              .LOCKED (aux1_clk_dcm_locked),
+              .CLKFB  (aux1_clk),
+              .RST    (~sysclk_dcm_locked)
+            );
+
+            DCM_BASE #(
+              .CLKIN_PERIOD       (1000/CLK_FREQ),
+              .DLL_FREQUENCY_MODE ("HIGH")
+            ) AUX0_CLK2X_DCM (
+              .CLKIN  (aux0_clk2x_buf),
+              .CLK0   (aux0_clk2x_dcm),
+              .CLK90  (aux0_clk2x90_dcm),
+              .LOCKED (),
+              .CLKFB  (aux0_clk2x),
+              .RST    (~aux0_clk_dcm_locked)
+            );
+        end // else
+   end // GEN_DCM
+endgenerate
 
 
   BUFG bufg_aux_clk[3:0](

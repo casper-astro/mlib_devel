@@ -12,14 +12,14 @@
 PARAMETER VERSION = 2.1.0
 
 # Clock Ports
-PORT sys_clk_n   = sys_clk_n,   DIR = I, SIGIS = CLK
-PORT sys_clk_p   = sys_clk_p,   DIR = I, SIGIS = CLK
-PORT dly_clk_n   = dly_clk_n,   DIR = I, SIGIS = CLK
-PORT dly_clk_p   = dly_clk_p,   DIR = I, SIGIS = CLK
-PORT aux0_clk_n  = aux0_clk_n,  DIR = I, SIGIS = CLK
-PORT aux0_clk_p  = aux0_clk_p,  DIR = I, SIGIS = CLK
-PORT aux1_clk_n  = aux1_clk_n,  DIR = I, SIGIS = CLK
-PORT aux1_clk_p  = aux1_clk_p,  DIR = I, SIGIS = CLK
+PORT sys_clk_n   = sys_clk_n,   DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+PORT sys_clk_p   = sys_clk_p,   DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+PORT dly_clk_n   = dly_clk_n,   DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
+PORT dly_clk_p   = dly_clk_p,   DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
+PORT aux0_clk_n  = aux0_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000 #IF# 1 # ['PORT aux0_clk_n  = aux0_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
+PORT aux0_clk_p  = aux0_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000 #IF# 1 # ['PORT aux0_clk_p  = aux0_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
+PORT aux1_clk_n  = aux1_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000 #IF# 1 # ['PORT aux1_clk_n  = aux1_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
+PORT aux1_clk_p  = aux1_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = 100000000 #IF# 1 # ['PORT aux1_clk_p  = aux1_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
 
 # EPB Ports
 PORT epb_clk_in  = epb_clk_in,  DIR = I
@@ -89,6 +89,7 @@ PORT ppc_irq_n   = ppc_irq_n,   DIR = O
 BEGIN roach_infrastructure
   PARAMETER INSTANCE = infrastructure_inst
   PARAMETER HW_VER   = 1.00.a
+  PARAMETER CLK_FREQ = 100 #IF# 1 # ['  PARAMETER CLK_FREQ = ', num2str(app_clk_rate), '\n']
   PORT sys_clk_n     = sys_clk_n
   PORT sys_clk_p     = sys_clk_p
   PORT dly_clk_n     = dly_clk_n
