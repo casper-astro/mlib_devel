@@ -198,7 +198,7 @@ generate
               .CLK2X  (aux0_clk2x_int),
               .LOCKED (aux0_clk_dcm_locked),
               .CLKFB  (aux0_clk),
-              .RST    (~sysclk_dcm_locked)
+              .RST    (~sys_clk_dcm_locked)
             );
 
             DCM_BASE #(
@@ -210,7 +210,7 @@ generate
               .CLK90  (aux1_clk90_dcm),
               .LOCKED (aux1_clk_dcm_locked),
               .CLKFB  (aux1_clk),
-              .RST    (~sysclk_dcm_locked)
+              .RST    (~sys_clk_dcm_locked)
             );
 
             DCM_BASE #(
@@ -236,7 +236,7 @@ generate
               .CLK2X  (aux0_clk2x_int),
               .LOCKED (aux0_clk_dcm_locked),
               .CLKFB  (aux0_clk),
-              .RST    (~sysclk_dcm_locked)
+              .RST    (~sys_clk_dcm_locked)
             );
 
             DCM_BASE #(
@@ -248,7 +248,7 @@ generate
               .CLK90  (aux1_clk90_dcm),
               .LOCKED (aux1_clk_dcm_locked),
               .CLKFB  (aux1_clk),
-              .RST    (~sysclk_dcm_locked)
+              .RST    (~sys_clk_dcm_locked)
             );
 
             DCM_BASE #(
