@@ -98,10 +98,13 @@ module opb_attach(
   localparam ARP_CACHE_OFFSET = 32'h3000;
   localparam ARP_CACHE_HIGH   = 32'h37FF;
 
-  wire reg_sel    = OPB_select && local_addr >= REGISTERS_OFFSET && local_addr <= REGISTERS_HIGH;
-  wire rxbuf_sel  = OPB_select && local_addr >= RX_BUFFER_OFFSET && local_addr <= RX_BUFFER_HIGH;
-  wire txbuf_sel  = OPB_select && local_addr >= TX_BUFFER_OFFSET && local_addr <= TX_BUFFER_HIGH;
-  wire arp_sel    = OPB_select && local_addr >= ARP_CACHE_OFFSET && local_addr <= ARP_CACHE_HIGH;
+  reg opb_ack;
+  wire opb_trans = opb_sel && OPB_select && !opb_ack;
+
+  wire reg_sel    = opb_trans && local_addr >= REGISTERS_OFFSET && local_addr <= REGISTERS_HIGH;
+  wire rxbuf_sel  = opb_trans && local_addr >= RX_BUFFER_OFFSET && local_addr <= RX_BUFFER_HIGH;
+  wire txbuf_sel  = opb_trans && local_addr >= TX_BUFFER_OFFSET && local_addr <= TX_BUFFER_HIGH;
+  wire arp_sel    = opb_trans && local_addr >= ARP_CACHE_OFFSET && local_addr <= ARP_CACHE_HIGH;
 
   wire [31:0] reg_addr   = local_addr - REGISTERS_OFFSET;
   wire [31:0] rxbuf_addr = local_addr - RX_BUFFER_OFFSET;
@@ -139,9 +142,9 @@ module opb_attach(
 
   reg tx_cpu_free_buffer_R, rx_cpu_new_buffer_R;
 
-  reg opb_ack;
+  reg opb_wait;
+
   reg [3:0] opb_data_src;
-  wire opb_trans = opb_sel && OPB_select && !opb_ack;
 
   always @(posedge OPB_Clk) begin
     //strobes
@@ -151,6 +154,7 @@ module opb_attach(
     use_rx_data  <= 1'b0;
 
     if (OPB_Rst) begin
+      opb_ack <= 1'b0;
       opb_data_src <= 4'b0;
 
       tx_size <= 8'b0;
@@ -170,6 +174,9 @@ module opb_attach(
       mgt_rxeqpole      <= DEFAULT_RXEQPOLE;
       mgt_txpreemphasis <= DEFAULT_TXPREEMPHASIS;
       mgt_txdiffctrl    <= DEFAULT_TXDIFFCTRL;
+    end else if (opb_wait) begin
+      opb_wait <= 1'b0;
+      opb_ack  <= 1'b1;
     end else begin
       tx_cpu_free_buffer_R <= tx_cpu_free_buffer;
       rx_cpu_new_buffer_R  <= rx_cpu_new_buffer;
@@ -212,6 +219,8 @@ module opb_attach(
       // ARP Cache
       if (arp_sel) begin 
         if (!OPB_RNW) begin
+          opb_ack <= 1'b0;
+          opb_wait <= 1'b1;
         end else begin
           use_arp_data <= 1'b1;
         end
@@ -219,7 +228,9 @@ module opb_attach(
 
       // RX Buffer 
       if (rxbuf_sel) begin
-        if (!OPB_RNW) begin
+        if (!OPB_RNW && opb_trans) begin
+          opb_ack <= 1'b0;
+          opb_wait <= 1'b1;
         end else begin
           use_rx_data <= 1'b1;
         end
@@ -227,7 +238,9 @@ module opb_attach(
 
       // TX Buffer 
       if (txbuf_sel) begin
-        if (!OPB_RNW) begin
+        if (!OPB_RNW && opb_trans) begin
+          opb_ack <= 1'b0;
+          opb_wait <= 1'b1;
         end else begin
           use_tx_data <= 1'b1;
         end
@@ -313,9 +326,9 @@ module opb_attach(
     tx_buffer_we <= 1'b0;
     if (OPB_Rst) begin
     end else begin
-      //populate write_data according to wishbone transaction info & contents
+      //populate write_data according to opb transaction info & contents
       //of memory
-      if (arp_sel && !OPB_RNW) begin
+      if (arp_sel && opb_wait) begin
         arp_cache_we <= 1'b1;
 
         write_data[ 7: 0] <= arp_addr[2] == 1'b1 & OPB_BE[0] ? OPB_DBus[ 7: 0] : arp_cache_data_out[ 7: 0]; 
@@ -325,7 +338,7 @@ module opb_attach(
         write_data[39:32] <= arp_addr[2] == 1'b0 & OPB_BE[0] ? OPB_DBus[ 7: 0] : arp_cache_data_out[39:32]; 
         write_data[47:40] <= arp_addr[2] == 1'b0 & OPB_BE[1] ? OPB_DBus[15: 8] : arp_cache_data_out[47:40]; 
       end
-      if (rxbuf_sel && !OPB_RNW) begin
+      if (rxbuf_sel && opb_wait) begin
         rx_buffer_we <= 1'b1;
         write_data[ 7: 0] <= rxbuf_addr[2] == 1'b1 & OPB_BE[0] ? OPB_DBus[ 7: 0] : rx_buffer_data_out[ 7: 0]; 
         write_data[15: 8] <= rxbuf_addr[2] == 1'b1 & OPB_BE[1] ? OPB_DBus[15: 8] : rx_buffer_data_out[15: 8]; 
@@ -336,7 +349,7 @@ module opb_attach(
         write_data[55:48] <= rxbuf_addr[2] == 1'b0 & OPB_BE[2] ? OPB_DBus[23:16] : rx_buffer_data_out[55:48]; 
         write_data[63:56] <= rxbuf_addr[2] == 1'b0 & OPB_BE[3] ? OPB_DBus[31:24] : rx_buffer_data_out[63:56]; 
       end
-      if (txbuf_sel && !OPB_RNW) begin
+      if (txbuf_sel && opb_wait) begin
         tx_buffer_we <= 1'b1;
 
         write_data[7:0]   <= txbuf_addr[2] == 1'b1 & OPB_BE[0] ? OPB_DBus[ 7: 0] : tx_buffer_data_out[ 7: 0];
