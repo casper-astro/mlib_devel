@@ -21,7 +21,7 @@ check_mask_type(blk, 'finedelay_fstop_prog');
 munge_block(blk, varargin{:});
  
 % sets the variable needed
-n_input = get_var ('n_input','defaults', defaults, varargin{:});
+n_input = get_var ('n_input','defaults', defaults, varargin{:})
 fft_len = get_var('fft_len', 'defaults', defaults, varargin{:});
 fft_bits = get_var('fft_bits', 'defaults', defaults, varargin{:});
 theta_bits= get_var('theta_bits', 'defaults', defaults, varargin{:});
