@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 module tge_tx #(
-    parameter CPU_ENABLE = 1'b1
+    parameter CPU_ENABLE = 1'b1,
+    parameter LARGE_PACKETS = 0
   ) (
     // Local Parameters
     input         local_enable,
@@ -42,7 +43,6 @@ module tge_tx #(
     output        mac_tx_start,
     input         mac_tx_ack
   );
-  localparam LARGE_PACKETS = 1;
 
   /****************** Common Signals *******************/
   /* these signals are used by the primary tx state machine and various

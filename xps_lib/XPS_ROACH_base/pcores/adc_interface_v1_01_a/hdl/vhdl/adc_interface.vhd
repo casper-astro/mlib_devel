@@ -212,7 +212,7 @@ architecture IMP of adc_interface is
     -- clock DCM
     ----------------------------------------
 
-    component DCM
+    component DCM_ADV
         generic (
             CLK_FEEDBACK          :     string     := "1X";
             CLKDV_DIVIDE          :     real       := 2.000000;
@@ -237,7 +237,6 @@ architecture IMP of adc_interface is
             PSEN                    : in  std_logic;
             PSINCDEC                : in  std_logic;
             PSCLK                   : in  std_logic;
-            DSSEN                   : in  std_logic;
             CLK0                    : out std_logic;
             CLK90                   : out std_logic;
             CLK180                  : out std_logic;
@@ -247,9 +246,15 @@ architecture IMP of adc_interface is
             CLK2X180                : out std_logic;
             CLKFX                   : out std_logic;
             CLKFX180                : out std_logic;
-            STATUS                  : out std_logic_vector (7 downto 0);
             LOCKED                  : out std_logic;
-            PSDONE                  : out std_logic
+            PSDONE                  : out std_logic;
+            DCLK                    : in  std_logic;
+            DADDR                   : in  std_logic_vector (6 downto 0);
+            DI                      : in  std_logic_vector (15 downto 0);
+            DWE                     : in  std_logic;
+            DEN                     : in  std_logic;
+            DO                      : out std_logic_vector (15 downto 0);
+            DRDY                    : out std_logic
         );
     end component;
 
@@ -530,7 +535,7 @@ ctrl_clk270_out <= adc_clk270;
 -- Clock DCM for phase shifting
 ----------------------------------------
 
-CLKSHIFT_DCM : DCM
+CLKSHIFT_DCM : DCM_ADV
     generic map(
         CLK_FEEDBACK          => "1X",
         CLKDV_DIVIDE          => 2.000000,
@@ -538,7 +543,7 @@ CLKSHIFT_DCM : DCM
         CLKFX_MULTIPLY        => 4,
         CLKIN_DIVIDE_BY_2     => FALSE,
         CLKIN_PERIOD          => 3.906250,
-        CLKOUT_PHASE_SHIFT    => "VARIABLE_POSITIVE",
+        CLKOUT_PHASE_SHIFT    => "VARIABLE_CENTER",
         DESKEW_ADJUST         => "SYSTEM_SYNCHRONOUS",
         DFS_FREQUENCY_MODE    => "HIGH",
         DLL_FREQUENCY_MODE    => "HIGH",
@@ -549,7 +554,6 @@ CLKSHIFT_DCM : DCM
     port map (
         CLKFB                 => adc_clk,
         CLKIN                 => adc_clk_buf,
-        DSSEN                 => '0',
         PSCLK                 => dcm_psclk,
         PSEN                  => dcm_psen,
         PSINCDEC              => dcm_psincdec,
@@ -565,6 +569,13 @@ CLKSHIFT_DCM : DCM
         CLK270                => adc_clk270_dcm,
         LOCKED                => ctrl_dcm_locked,
         PSDONE                => dcm_psdone,
-        STATUS                => open);
+        DCLK                  => '0',
+        DADDR                 => "0000000",
+        DI                    => x"0000",
+        DWE                   => '0',
+        DEN                   => '0',
+        DO                    => open,
+        DRDY                  => open
+    );
 
 end IMP;

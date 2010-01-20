@@ -21,12 +21,11 @@ str = [str, ' PARAMETER INSTANCE = ', hw_qdr,'_controller',    '\n'];
 str = [str, ' PARAMETER CLK_FREQ = ', sprintf('%d', clk_rate), '\n'];
 str = [str, ' PARAMETER HW_VER   = 1.00.a',                    '\n'];
 
-str = [str, ' PORT clk0    = ', clk_src,         '\n'];
-str = [str, ' PORT clk180  = ', clk_src, '180',  '\n'];
-str = [str, ' PORT clk270  = ', clk_src, '270',  '\n'];
-str = [str, ' PORT div_clk = epb_clk',           '\n'];
-str = [str, ' PORT reset   = 0b0',               '\n'];
-
+str = [str, ' PORT clk0    = ', clk_src,              '\n'];
+str = [str, ' PORT clk180  = ', clk_src, '180',       '\n'];
+str = [str, ' PORT clk270  = ', clk_src, '270',       '\n'];
+str = [str, ' PORT div_clk = epb_clk',                '\n'];
+str = [str, ' PORT reset   = ', inst_name, '_reset',  '\n'];
 
 str = [str, ' PORT qdr_k_n       = ', hw_qdr, '_k_n',       '\n'];
 str = [str, ' PORT qdr_k         = ', hw_qdr, '_k',         '\n'];
@@ -75,25 +74,34 @@ str = [str, ' PARAMETER INSTANCE   = ', hw_qdr,'_sniffer', '\n'];
 str = [str, ' PARAMETER HW_VER     = 1.00.a',              '\n'];
 str = [str, ' PARAMETER ENABLE     = ', use_sniffer,       '\n'];
 if strcmp(hw_qdr, 'qdr0')
+  str = [str, ' PARAMETER C_CONFIG_BASEADDR = 0x00030000', '\n'];
+  str = [str, ' PARAMETER C_CONFIG_HIGHADDR = 0x000300FF', '\n'];
   str = [str, ' PARAMETER C_BASEADDR = 0x02000000', '\n'];
   str = [str, ' PARAMETER C_HIGHADDR = 0x02ffffff', '\n'];
 else
+  str = [str, ' PARAMETER C_CONFIG_BASEADDR = 0x00030100', '\n'];
+  str = [str, ' PARAMETER C_CONFIG_HIGHADDR = 0x000301FF', '\n'];
   str = [str, ' PARAMETER C_BASEADDR = 0x03000000', '\n'];
   str = [str, ' PARAMETER C_HIGHADDR = 0x03ffffff', '\n'];
 end
 
 str = [str, ' BUS_INTERFACE SQDR = ', inst_name, '\n'];
 str = [str, ' BUS_INTERFACE SOPB = opb0',        '\n'];
+str = [str, ' BUS_INTERFACE COPB = opb0',        '\n'];
 
 str = [str, ' PORT qdr_clk       = ', clk_src,         '\n'];
 
-str = [str, ' PORT slave_addr    = ', inst_name, '_address',  '\n'];
-str = [str, ' PORT slave_wr_strb = ', inst_name, '_wr_en',    '\n'];
-str = [str, ' PORT slave_wr_data = ', inst_name, '_data_in',  '\n'];
-str = [str, ' PORT slave_wr_be   = ', inst_name, '_be',       '\n'];
-str = [str, ' PORT slave_rd_strb = ', inst_name, '_rd_en',    '\n'];
-str = [str, ' PORT slave_rd_data = ', inst_name, '_data_out', '\n'];
-str = [str, ' PORT slave_ack     = ', inst_name, '_ack',     '\n'];
+str = [str, ' PORT slave_addr    = ', inst_name, '_address',   '\n'];
+str = [str, ' PORT slave_wr_strb = ', inst_name, '_wr_en',     '\n'];
+str = [str, ' PORT slave_wr_data = ', inst_name, '_data_in',   '\n'];
+str = [str, ' PORT slave_wr_be   = ', inst_name, '_be',        '\n'];
+str = [str, ' PORT slave_rd_strb = ', inst_name, '_rd_en',     '\n'];
+str = [str, ' PORT slave_rd_data = ', inst_name, '_data_out',  '\n'];
+str = [str, ' PORT slave_ack     = ', inst_name, '_ack',       '\n'];
+
+str = [str, ' PORT phy_rdy       = ', inst_name, '_phy_ready', '\n'];
+str = [str, ' PORT cal_fail      = ', inst_name, '_cal_fail',  '\n'];
+str = [str, ' PORT qdr_reset     = ', inst_name, '_reset',     '\n'];
 
 str = [str, 'END\n'];
 str = [str, '\n'];

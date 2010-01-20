@@ -13,7 +13,8 @@ module kat_ten_gb_eth #(
     parameter PREEMPHASYS    = 1,
     parameter CPU_TX_ENABLE  = 1,
     parameter CPU_RX_ENABLE  = 1,
-    parameter RX_DIST_RAM    = 0
+    parameter RX_DIST_RAM    = 0,
+    parameter LARGE_PACKETS  = 0
   ) (
     input         clk,
     input         rst,
@@ -226,7 +227,8 @@ module kat_ten_gb_eth #(
   end
 
   tge_tx #(
-    .CPU_ENABLE          (CPU_TX_ENABLE)
+    .CPU_ENABLE          (CPU_TX_ENABLE),
+    .LARGE_PACKETS       (LARGE_PACKETS)
   ) tge_tx_inst (
     // Local parameters
     .local_enable        (local_enable),

@@ -45,6 +45,7 @@ s.fab_ip         = ['0x', dec2hex(eval(get_param(blk_name, 'fab_ip')))   ];
 s.fab_udp        = ['0x', dec2hex(eval(get_param(blk_name, 'fab_udp')))  ];
 s.fab_gate       = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
 s.fab_en         = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));
+s.large_packets  = num2str(strcmp(get_param(blk_name, 'large_frames'),'on'));
 
 b = class(s,'xps_tengbe_v2',blk_obj);
 
@@ -76,6 +77,7 @@ parameters.FABRIC_IP      = s.fab_ip;
 parameters.FABRIC_PORT    = s.fab_udp;
 parameters.FABRIC_GATEWAY = s.fab_gate;
 parameters.FABRIC_ENABLE  = s.fab_en;
+parameters.LARGE_PACKETS  = s.large_packets;
 parameters.RX_DIST_RAM    = s.rx_dist_ram;
 parameters.CPU_RX_ENABLE  = s.cpu_rx_enable;
 parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;

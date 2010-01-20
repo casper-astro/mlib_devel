@@ -35,10 +35,10 @@ module qdrc_phy_bit_train(
   /* DLY_DELTA is the delay increment when the IDELAY_CONF is configured
    * with a 200 MHz clock in ps*/
   localparam DLY_DELTA  = 78;
+  /* ILogic hold time in ps */
+  localparam HOLD_TIME  = 500;
   /* The width of a bit in ps */
-  localparam BITWIDTH   =   500000/CLK_FREQ;
-  /* The number of delay steps in half a data bit */
-  localparam BIT_STEPS  = (BITWIDTH/DLY_DELTA)/2;
+  localparam BIT_STEPS  = 500/78 + 1;
 
   function valid;
     input [1:0] i;
@@ -140,17 +140,20 @@ module qdrc_phy_bit_train(
               end
             end
             STATE_SEARCH:  begin
+              /* Search for a edge transition
+                 _______BBBBBBB--X
+              */
               hist0 <= curr;
               hist1 <= hist0;
               hist2 <= hist1;
 
               if (curr != prev && valid(curr) && valid(prev) && history_stable) begin
-                if (progress - 2 - (baddies >> 1) >= BIT_STEPS) begin
+                if (progress > BIT_STEPS + baddies + 2) begin
                   state    <= STATE_BACK;
-                  progress <= BIT_STEPS + (baddies >> 1) + 2;
+                  progress <= BIT_STEPS + baddies + 2;
                 end else begin
                   state    <= STATE_FORWARD;
-                  progress <= BIT_STEPS - (baddies >> 1) - 2;
+                  progress <= BIT_STEPS - 2;
                 end
               end else begin
                 if (progress == 6'd63) begin

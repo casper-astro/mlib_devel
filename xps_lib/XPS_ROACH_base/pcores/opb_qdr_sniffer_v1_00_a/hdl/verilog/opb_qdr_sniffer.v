@@ -1,4 +1,10 @@
 module opb_qdr_sniffer #(
+    /* config IF */
+    parameter C_CONFIG_BASEADDR     = 0,
+    parameter C_CONFIG_HIGHADDR     = 0,
+    parameter C_CONFIG_OPB_AWIDTH   = 0,
+    parameter C_CONFIG_OPB_DWIDTH   = 0,
+
     parameter C_BASEADDR     = 0,
     parameter C_HIGHADDR     = 0,
     parameter C_OPB_AWIDTH   = 0,
@@ -54,7 +60,12 @@ module opb_qdr_sniffer #(
     input  slave_rd_strb,
     output [35:0] slave_rd_data,
     output slave_rd_dvld,
-    output slave_ack
+    output slave_ack,
+
+    /* Misc signals */
+    input  phy_rdy,
+    input  cal_fail,
+    output qdr_reset
   );
 
   localparam QDR_LATENCY   = 10;
@@ -208,5 +219,31 @@ end else begin : qdr_disabled
   assign slave_rd_dvld  = master_rd_dvld;
   assign slave_ack      = 1'b1;
 end endgenerate
+
+  qdr_config #(
+    /* config IF */
+    .C_BASEADDR   (C_CONFIG_BASEADDR),
+    .C_HIGHADDR   (C_CONFIG_HIGHADDR),
+    .C_OPB_AWIDTH (C_CONFIG_OPB_AWIDTH),
+    .C_OPB_DWIDTH (C_CONFIG_OPB_DWIDTH)
+  ) qdr_config_inst (
+    .OPB_Clk     (OPB_Clk_config),
+    .OPB_Rst     (OPB_Rst_config),
+    .Sl_DBus     (Sl_DBus_config),
+    .Sl_errAck   (Sl_errAck_config),
+    .Sl_retry    (Sl_retry_config),
+    .Sl_toutSup  (Sl_toutSup_config),
+    .Sl_xferAck  (Sl_xferAck_config),
+    .OPB_ABus    (OPB_ABus_config),
+    .OPB_BE      (OPB_BE_config),
+    .OPB_DBus    (OPB_DBus_config),
+    .OPB_RNW     (OPB_RNW_config),
+    .OPB_select  (OPB_select_config),
+    .OPB_seqAddr (OPB_seqAddr_config),
+    .qdr_reset   (qdr_reset),
+    .cal_fail    (cal_fail),
+    .phy_rdy     (phy_rdy),
+    .qdr_clk     (qdr_clk)
+  );
 
 endmodule

@@ -9,7 +9,8 @@ BEGIN opb_qdr_sniffer
   OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
 
 ## Bus Interfaces
-  BUS_INTERFACE BUS = SOPB,  BUS_TYPE = SLAVE, BUS_STD = OPB
+  BUS_INTERFACE BUS = SOPB, BUS_TYPE = SLAVE,  BUS_STD = OPB
+  BUS_INTERFACE BUS = COPB, BUS_TYPE = SLAVE,  BUS_STD = OPB
   BUS_INTERFACE BUS = SQDR, BUS_TYPE = TARGET, BUS_STD = QDR
 
 ## Peripheral parameter
@@ -22,6 +23,27 @@ BEGIN opb_qdr_sniffer
   PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector,                   BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
   PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
   PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
+## Generics for VHDL or Parameters for Verilog
+  PARAMETER C_CONFIG_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = COPB, ADDRESS = BASE, PAIR = C_CONFIG_HIGHADDR
+  PARAMETER C_CONFIG_HIGHADDR = 0x00000000, DT = std_logic_vector,                   BUS = COPB, ADDRESS = HIGH, PAIR = C_CONFIG_BASEADDR
+  PARAMETER C_CONFIG_OPB_AWIDTH = 32, DT = INTEGER, BUS = COPB
+  PARAMETER C_CONFIG_OPB_DWIDTH = 32, DT = INTEGER, BUS = COPB
+
+## Config OPB Interface
+  PORT OPB_Clk_config     = "",          DIR = I, BUS = COPB, SIGIS = Clk
+  PORT OPB_Rst_config     = OPB_Rst,     DIR = I, BUS = COPB, SIGIS = Rst
+  PORT Sl_DBus_config     = Sl_DBus,     DIR = O, BUS = COPB, VEC = [0:31]
+  PORT Sl_errAck_config   = Sl_errAck,   DIR = O, BUS = COPB
+  PORT Sl_retry_config    = Sl_retry,    DIR = O, BUS = COPB
+  PORT Sl_toutSup_config  = Sl_toutSup,  DIR = O, BUS = COPB
+  PORT Sl_xferAck_config  = Sl_xferAck,  DIR = O, BUS = COPB
+  PORT OPB_ABus_config    = OPB_ABus,    DIR = I, BUS = COPB, VEC = [0:31],     
+  PORT OPB_BE_config      = OPB_BE,      DIR = I, BUS = COPB, VEC = [0:3], 
+  PORT OPB_DBus_config    = OPB_DBus,    DIR = I, BUS = COPB, VEC = [0:31],     
+  PORT OPB_RNW_config     = OPB_RNW,     DIR = I, BUS = COPB
+  PORT OPB_select_config  = OPB_select,  DIR = I, BUS = COPB
+  PORT OPB_seqAddr_config = OPB_seqAddr, DIR = I, BUS = COPB
+
 
 ## OPB Interface
   PORT OPB_Clk     = "",          DIR = I, BUS = SOPB, SIGIS = Clk
@@ -59,5 +81,9 @@ BEGIN opb_qdr_sniffer
   PORT slave_rd_data = slave_rd_data, DIR = O, VEC = [35:0]
   PORT slave_rd_dvld = slave_rd_dvld, DIR = O
   PORT slave_ack     = slave_ack,     DIR = O
+
+  PORT phy_rdy       = "",     DIR = I
+  PORT cal_fail      = "",     DIR = I
+  PORT qdr_reset     = "",     DIR = O
 
 END
