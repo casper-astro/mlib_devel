@@ -134,7 +134,7 @@ end % switch s.hw_sys
 % borf parameters
 switch s.hw_sys
     case 'ROACH'
-        borph_info.size = 16;
+        borph_info.size = 32;
         borph_info.mode = 3;
         b = set(b,'borph_info',borph_info);
 end
