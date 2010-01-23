@@ -16,7 +16,8 @@ module opb_attach(
     rxeqmix,
     rxeqpole,
     txpreemphasis,
-    txdiffctrl
+    txdiffctrl,
+    xaui_status
   );
   parameter C_BASEADDR = 0;
   parameter C_HIGHADDR = 0;
@@ -38,6 +39,7 @@ module opb_attach(
   output [3:0] rxeqpole;
   output [2:0] txpreemphasis;
   output [2:0] txdiffctrl;
+  input  [7:0] xaui_status;
 
   assign Sl_toutSup = 1'b0;
   assign Sl_retry   = 1'b0;
@@ -50,6 +52,7 @@ module opb_attach(
   localparam REG_RXEQPOLE   = 1;
   localparam REG_TXPREEMPH  = 2;
   localparam REG_TXDIFFCTRL = 3;
+  localparam REG_STATUS     = 4;
 
   reg Sl_xferAck;
 
@@ -70,7 +73,7 @@ module opb_attach(
       if (a_match && OPB_select && !Sl_xferAck) begin
         Sl_xferAck <= 1'b1;
         if (!OPB_RNW) begin
-          case (a_trans[3:2])
+          case (a_trans[4:2])
             REG_RXEQMIX: begin
               if (OPB_BE[3])
                 rxeqmix <= OPB_DBus[30:31];
@@ -93,10 +96,12 @@ module opb_attach(
     end
   end
 
-  wire [31:0] Sl_DBus_int = a_trans[3:2] == 0 ? {30'b0, rxeqmix} :
-                            a_trans[3:2] == 1 ? {28'b0, rxeqpole} :
-                            a_trans[3:2] == 2 ? {29'b0, txpreemphasis} :
-                                                {29'b0, txdiffctrl};
+  wire [31:0] Sl_DBus_int = a_trans[4:2] == REG_RXEQMIX    ? {30'b0, rxeqmix} :
+                            a_trans[4:2] == REG_RXEQPOLE   ? {28'b0, rxeqpole} :
+                            a_trans[4:2] == REG_TXPREEMPH  ? {29'b0, txpreemphasis} :
+                            a_trans[4:2] == REG_TXDIFFCTRL ? {29'b0, txdiffctrl}:
+                            a_trans[4:2] == REG_STATUS     ? {24'b0, xaui_status}:
+                                            32'b0;
 
   assign Sl_DBus = Sl_xferAck ? Sl_DBus_int : 32'b0;
 

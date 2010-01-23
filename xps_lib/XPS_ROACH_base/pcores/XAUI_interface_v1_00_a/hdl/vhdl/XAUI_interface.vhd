@@ -22,8 +22,8 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
-library unisim;
-use unisim.all;
+--library unisim;
+--use unisim.all;
 
 entity XAUI_interface is
 	generic(
@@ -169,7 +169,8 @@ architecture XAUI_interface_arch of XAUI_interface is
       rxeqmix               : out std_logic_vector( 1 downto 0);
       rxeqpole              : out std_logic_vector( 3 downto 0);
       txpreemphasis         : out std_logic_vector( 2 downto 0);
-      txdiffctrl            : out std_logic_vector( 2 downto 0)
+      txdiffctrl            : out std_logic_vector( 2 downto 0);
+      xaui_status           : in  std_logic_vector( 7 downto 0)
 		);
 	end component;
 
@@ -717,7 +718,8 @@ opb_attach_inst : opb_attach
       rxeqmix       => mgt_rxeqmix,
       rxeqpole      => mgt_rxeqpole,
       txpreemphasis => mgt_txpreemphasis,
-      txdiffctrl    => mgt_txdiffctrl
+      txdiffctrl    => mgt_txdiffctrl,
+      xaui_status   => xaui_status
 		);
 
 xgmii_txd         <= xgmii_txd_int;
