@@ -34,18 +34,10 @@ delete_lines(blk);
  
 % Drawing the fixed blocks in the design.Includes the sync delays at the top
  
- 
     reuse_block(blk,'sync_delay','casper_library/Delays/sync_delay',...
-                'DelayLen', '3', ...
-                'Position',[135 51 255 79]);
-     
-    reuse_block(blk,'sync_delay1','casper_library/Delays/sync_delay',...
-                'DelayLen', '4', ...
+                'DelayLen', '3+4+2', ...
                 'Position',[600 49 645 81]);
     
-    reuse_block(blk,'sync_delay2','casper_library/Delays/sync_delay',...
-                'DelayLen', '2', ...
-                'Position',[825 50 870 80]);
 %  %%%%%%%%%% Drawing the blocks which are replicated depending upon the
 % %  %%%%%%%%%% number of inputs.
  y1 = 181;
@@ -276,8 +268,8 @@ delete_lines(blk);
                
  
  
-    name = ['cmult_4bit_em', num2str(i)];
-    reuse_block(blk,name,'casper_library/Multipliers/cmult_4bit_em',...
+    name = ['cmult', num2str(i)];
+    reuse_block(blk,name,'casper_library/Multipliers/cmult_4bit_hdl',...
                 'Position',[1105 y1-1+((i-1)*405) 1150 y2+31+((i-1)*405)],...
                 'mult_latency', '2',...
                 'add_latency', '0') ; 
@@ -359,9 +351,7 @@ y2 = 214;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % % Add lines
  add_line(blk, 'sync/1', 'sync_delay/1', 'autorouting', 'on');
- add_line(blk, 'sync_delay/1', 'sync_delay1/1', 'autorouting', 'on');
- add_line(blk, 'sync_delay1/1', 'sync_delay2/1', 'autorouting', 'on');
- add_line(blk, 'sync_delay2/1', 'sync_out/1', 'autorouting', 'on');
+ add_line(blk, 'sync_delay/1', 'sync_out/1', 'autorouting', 'on');
  
 for i= 1: n_input
     
@@ -428,14 +418,14 @@ for i= 1: n_input
      add_line(blk,['pol',num2str(i-1),'_in/1'],['Input_Del',num2str(i),'/1'], 'autorouting', 'on');
      add_line(blk,['Input_Del',num2str(i),'/1'], ['c_to_ri',num2str(i),'/1'],'autorouting', 'on');
  
-     add_line(blk,['c_to_ri',num2str(i),'/1'],['cmult_4bit_em',num2str(i),'/1'],'autorouting', 'on');
-     add_line(blk,['c_to_ri',num2str(i),'/2'],['cmult_4bit_em',num2str(i),'/2'],'autorouting', 'on');
-     add_line(blk,['SineCosine',num2str(i),'/2'],['cmult_4bit_em',num2str(i),'/3'],'autorouting', 'on');
-     add_line(blk,['SineCosine',num2str(i),'/1'],['cmult_4bit_em',num2str(i),'/4'],'autorouting', 'on');
+     add_line(blk,['c_to_ri',num2str(i),'/1'],['cmult',num2str(i),'/1'],'autorouting', 'on');
+     add_line(blk,['c_to_ri',num2str(i),'/2'],['cmult',num2str(i),'/2'],'autorouting', 'on');
+     add_line(blk,['SineCosine',num2str(i),'/2'],['cmult',num2str(i),'/3'],'autorouting', 'on');
+     add_line(blk,['SineCosine',num2str(i),'/1'],['cmult',num2str(i),'/4'],'autorouting', 'on');
  
     
-     add_line(blk,['cmult_4bit_em',num2str(i),'/1'],['Convert',num2str((i*3)-1),'/1'],'autorouting', 'on');
-     add_line(blk,['cmult_4bit_em',num2str(i),'/2'],['Convert',num2str(i*3),'/1'],'autorouting', 'on');
+     add_line(blk,['cmult',num2str(i),'/1'],['Convert',num2str((i*3)-1),'/1'],'autorouting', 'on');
+     add_line(blk,['cmult',num2str(i),'/2'],['Convert',num2str(i*3),'/1'],'autorouting', 'on');
      
      add_line(blk,['Convert',num2str(i*3-1),'/1'],['ri_to_c',num2str(i),'/1'],'autorouting', 'on');
      add_line(blk,['Convert',num2str(i*3),'/1'],['ri_to_c',num2str(i),'/2'],'autorouting', 'on');
