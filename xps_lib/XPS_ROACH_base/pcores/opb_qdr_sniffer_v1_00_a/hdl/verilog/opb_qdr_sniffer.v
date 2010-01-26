@@ -220,6 +220,14 @@ end else begin : qdr_disabled
   assign slave_ack      = 1'b1;
 end endgenerate
 
+  reg phy_rdyR;
+  reg cal_failR;
+
+  always @(posedge OPB_Clk_config) begin
+    phy_rdyR <= phy_rdy;
+    cal_failR <= cal_fail;
+  end
+
   qdr_config #(
     /* config IF */
     .C_BASEADDR   (C_CONFIG_BASEADDR),
@@ -241,9 +249,10 @@ end endgenerate
     .OPB_select  (OPB_select_config),
     .OPB_seqAddr (OPB_seqAddr_config),
     .qdr_reset   (qdr_reset),
-    .cal_fail    (cal_fail),
-    .phy_rdy     (phy_rdy),
+    .cal_fail    (cal_failR),
+    .phy_rdy     (phy_rdyR),
     .qdr_clk     (qdr_clk)
   );
+
 
 endmodule
