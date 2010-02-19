@@ -47,7 +47,11 @@ function katcp_obj = katcp(rhost, varargin)
         error('Unable to open connection to remote host ', rhost, ' on port 7147.');
     end % try
 
+    pause(0.25);
+
     fprintf(tcpip_obj, '\n');
+
+    pause(0.25);
 
     out = '';
 

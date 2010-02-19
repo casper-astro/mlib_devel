@@ -1,9 +1,8 @@
-%WORDREAD Read a single word from a device via KATCP.
+%PROGDEV Execute BOF on KATCP server.
 %
-%    [WORD, STATUS] = WORDREAD(OBJ, IOREG) peforms a single-word read from
-%    IOREG on a KATCP connection.
+%    PROGDEV(OBJ, BOFFILE)
 %
-%    See also KATCP/HELP, KATCP/WORDWRITE, KATCP/READ, KATCP/WRITE
+%    See also KATCP/HELP, KATCP/LISTCMD, KATCP/LISTDEV
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -32,42 +31,14 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [word, status] = wordread(obj, varargin)
+function progdev(obj, boffile)
 
-%    num_optargs = size(varargin, 2);
+    fprintf(obj.tcpip_obj, ['?progdev ', boffile]);
+    pause(1);
 
-    try
-        reg_name = varargin{1};
-    catch
-        error('Read must have <device name>.');
-    end
-
-    try
-        read_offset = num2str(varargin{2});
-    catch
-        read_offset = '0';
-    end
-
-    cmd_string = ['?wordread ', reg_name, ' ', read_offset];
-%    disp(cmd_string);
-
-    fprintf(obj.tcpip_obj, cmd_string);
-    pause(0.1);
-
-    rb = '';
     status = '';
-    word = 0;
-
     while (get(obj.tcpip_obj, 'BytesAvailable') > 0)
-        rb = [rb, fscanf(obj.tcpip_obj)];
+        status = [status, fscanf(obj.tcpip_obj)];
     end
 
-    status = rb(1:13);
-%    disp(status);
-
-    if ~strcmp('!wordread ok ', status)
-        status = rb;
-        return;
-    end
-
-    word = dec2hex(hex2dec(rb(16:end-1)),8);
+    disp(status);

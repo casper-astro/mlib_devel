@@ -1,4 +1,4 @@
-%READ Read data from KATCP server.
+%READ Read data stream from a device via KATCP.
 %
 %    DATA = READ(OBJ, IOREG) reads data from IOREG on a KATCP connection.
 %
@@ -142,7 +142,28 @@ function data = read(obj, varargin)
         switch char(readback(n))
 
             case '\'    % escape character
+
+                switch char(readback(n+1))
+
+                    case '_' % d31; 0x1F
+                        readback(n+1) = uint8(32);
+
+                    case 'e' % d101; 0x65
+                        readback(n+1) = uint8(27);
+
+                    case 'n' % d110; 0x6E
+                        readback(n+1) = uint8(10);
+
+                    case 'r' % d114; 0x72
+                        readback(n+1) = uint8(13);
+
+                    case 't' % d116; 0x74
+                        readback(n+1) = uint8(9);
+
+                end % switch char(readback(n+1))
+
                 continue;
+
             % end case '\'
 
             case '0'

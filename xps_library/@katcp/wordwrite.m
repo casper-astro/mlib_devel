@@ -1,4 +1,4 @@
-%WORDWRITE Write a single word to KATCP server.
+%WORDWRITE Write a single word to a device via KATCP.
 %
 %    STATUS = WORDWRITE(OBJ, IOREG, WORD) writes a single word WORD to
 %    IOREG on a KATCP connection.
