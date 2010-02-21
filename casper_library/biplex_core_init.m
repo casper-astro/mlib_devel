@@ -79,7 +79,7 @@ if FFTSize < 2,
 end
 
 if( strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize)),
-    errordlg('biplex_core_init.m: Multiplier use specification for stages does not match FFT size');
+    %errordlg('biplex_core_init.m: Multiplier use specification for stages does not match FFT size');
     error('biplex_core_init.m: Multiplier use specification for stages does not match FFT size');
     return
 end
