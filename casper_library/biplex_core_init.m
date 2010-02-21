@@ -68,6 +68,7 @@ elseif strcmp(arch, 'Virtex5'),
 %    MaxCoeffNum = 12;      % This is the maximum that will fit in a BRAM for V5
      MaxCoeffNum = 20;      
 else,
+    errordlg(['biplex_core_init.m: Unrecognized architecture ',arch]);
     error(['biplex_core_init.m: Unrecognized architecture ',arch,'\n']);
 end
 
@@ -75,6 +76,12 @@ if FFTSize < 2,
     errordlg('biplex_core_init.m: Biplex FFT must have length of at least 2^2, forcing size to 2.');
     set_param(blk, 'FFTSize', '2');
     FFTSize = 2;
+end
+
+if( strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize)),
+    errordlg('biplex_core_init.m: Multiplier use specification for stages does not match FFT size');
+    error('biplex_core_init.m: Multiplier use specification for stages does not match FFT size');
+    return
 end
 
 current_stages = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', 'SearchDepth',1,...
