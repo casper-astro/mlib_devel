@@ -72,10 +72,28 @@ function varargout = write(obj, reg_name, varargin)
         return;
     end
 
-    if ( (length(write_data) > MAX_WRITESIZE/4) || (length(write_data) < 1) )
+    switch write_format
+        case 'ub'
+            INPUT_MOD = 4;
+        case 'uw'
+            INPUT_MOD = 1;
+        case 'hw'
+            INPUT_MOD = 1;
+        otherwise
+            INPUT_MOD = 4;
+    end % switch write_format
+
+    if mod(length(write_data), INPUT_MOD) ~= 0
+        disp(['Data vector must be a multiple of 4 bytes']);
+        status = -1;
+        message = 'Invalid data vector length';
+        return;
+    end
+
+    if ( (length(write_data)*4/INPUT_MOD > MAX_WRITESIZE) || (length(write_data) < 1) )
         disp(['Maximum data vector size is ', num2str(MAX_WRITESIZE), ' bytes.'])
         status = -1;
-        message = 'Invalid data vector length.'
+        message = 'Invalid data vector length.';
         return;
     end
 
@@ -141,13 +159,19 @@ function varargout = write(obj, reg_name, varargin)
         switch data(n)
 
             case 9  % corresponds to TAB (^I) -> escape as \t
-                write_vector = [write_vector, uint8('\'), uint8(9)];
+                write_vector = [write_vector, uint8(92), uint8(9)];
 
             case 10 % corresponds to LF (^J) -> escape as \n
-                write_vector = [write_vector, uint8('\'), uint8('n')];
+                write_vector = [write_vector, uint8(92), uint8(110)];
+
+            case 13 % corresponds to CR (^M) -> escape as \r
+                write_vector = [write_vector, uint8(92), uint8(114)];
 
             case 32 % corresonds to SPACE ( ) -> escape as \_
-                write_vector = [write_vector, uint8('\'), uint8('_')];
+                write_vector = [write_vector, uint8(92), uint8(95)];
+
+            case 92 % corresponds to \ -> escape as \\
+                write_vector = [write_vector, uint8(92), uint8(92)];
 
             otherwise
                 write_vector = [write_vector, data(n)];

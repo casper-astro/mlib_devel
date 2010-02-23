@@ -103,9 +103,9 @@ function data = read(obj, varargin)
     fprintf(obj.tcpip_obj, '');
 
     while 1
-        pause(0.001);
-
         bytes_available = get(obj.tcpip_obj, 'BytesAvailable');
+
+        pause(0.05);
 
         if ( bytes_available ~= get(obj.tcpip_obj, 'BytesAvailable') || bytes_available < 1 )
             continue;
@@ -139,40 +139,45 @@ function data = read(obj, varargin)
 
     for n=1:length(readback)
 
-        switch char(readback(n))
+        switch readback(n)
 
-            case '\'    % escape character
+            case -1 % should only be artificially inserted by de-escaper
+                continue;
 
-                switch char(readback(n+1))
+            case 92 % escape character '\'
 
-                    case '_' % d31; 0x1F
+                switch readback(n+1)
+
+                    case 48 % 0x30; '0'
+                        readback(n+1) = uint8(0);
+
+                    case 92 % 0x5C; '\'
+                        data = [data, uint8(92)];
+                        readback(n+1) = -1;
+
+                    case 95 % 0x5F; '_'
                         readback(n+1) = uint8(32);
 
-                    case 'e' % d101; 0x65
+                    case 101 % 0x65; 'e'
                         readback(n+1) = uint8(27);
 
-                    case 'n' % d110; 0x6E
+                    case 110 % 0x6E; 'n'
                         readback(n+1) = uint8(10);
 
-                    case 'r' % d114; 0x72
+                    case 114 % 0x72; 'r'
                         readback(n+1) = uint8(13);
 
-                    case 't' % d116; 0x74
+                    case 116 %0x74; 't'
                         readback(n+1) = uint8(9);
 
                 end % switch char(readback(n+1))
 
                 continue;
 
-            % end case '\'
-
-            case '0'
-                data = [data, uint8(0)];
-            % end '0'
+            % end case 92
 
             otherwise
                 data = [data, readback(n)];
-           % end otherwise
 
         end % switch char(readback(n))
 
@@ -186,7 +191,7 @@ function data = read(obj, varargin)
     switch read_format
 
         case 'ub'
-            data = uint8(readback);
+            data = readback;
         % end case 'ub'
 
         case 'uw'
