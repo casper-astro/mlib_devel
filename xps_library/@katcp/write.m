@@ -83,14 +83,16 @@ function varargout = write(obj, reg_name, varargin)
             INPUT_MOD = 4;
     end % switch write_format
 
-    if mod(length(write_data), INPUT_MOD) ~= 0
+    data_size = length(write_data);
+
+    if mod(data_size, INPUT_MOD) ~= 0
         disp(['Data vector must be a multiple of 4 bytes']);
         status = -1;
         message = 'Invalid data vector length';
         return;
     end
 
-    if ( (length(write_data)*4/INPUT_MOD > MAX_WRITESIZE) || (length(write_data) < 1) )
+    if ( (data_size*4/INPUT_MOD > MAX_WRITESIZE) || (data_size < 1) )
         disp(['Maximum data vector size is ', num2str(MAX_WRITESIZE), ' bytes.'])
         status = -1;
         message = 'Invalid data vector length.';
@@ -108,17 +110,19 @@ function varargout = write(obj, reg_name, varargin)
 
         case 'uw'
 
-            data = [];
+            data = zeros(1, data_size*4);
+            m = 1;
 
-            for n=1:length(write_data)
+            for n=1:data_size
 
                 word = write_data(n);
 
-                data = [data, ...
-                        uint8(mod(floor(word/2^24), 2^8)), ...
-                        uint8(mod(floor(word/2^16), 2^8)), ...
-                        uint8(mod(floor(word/2^8 ), 2^8)), ...
-                        uint8(mod(floor(word/2^0 ), 2^8))];
+                data(m:m+3) =  [uint8(mod(floor(word/2^24), 2^8)), ...
+                                uint8(mod(floor(word/2^16), 2^8)), ...
+                                uint8(mod(floor(word/2^8 ), 2^8)), ...
+                                uint8(mod(floor(word/2^0 ), 2^8))];
+
+                m = m + 4;
 
             end % for n=1:length(write_data);
 
@@ -126,17 +130,19 @@ function varargout = write(obj, reg_name, varargin)
 
         case 'hw'
 
-            data = [];
+            data = zeros(1, data_size*4);
+            m = 1;
 
-            for n=1:length(write_data)
+            for n=1:data_size
 
                 word = write_data{n};
 
-                data = [data, ...
-                        uint8(hex2dec(word(1:2))), ...
-                        uint8(hex2dec(word(3:4))), ...
-                        uint8(hex2dec(word(5:6))), ...
-                        uint8(hex2dec(word(7:8)))];
+                data(m:m+3) =  [uint8(hex2dec(word(1:2))), ...
+                                uint8(hex2dec(word(3:4))), ...
+                                uint8(hex2dec(word(5:6))), ...
+                                uint8(hex2dec(word(7:8)))];
+
+                m = m + 4;
 
             end % for n=1:length(write_data)
 
@@ -152,33 +158,68 @@ function varargout = write(obj, reg_name, varargin)
     %%% Escape data stream
     % CAN THIS BE MADE MORE EFFICIENT?
 
-    write_vector = [];
+    vector_size = 0;
 
-    for n=1:length(data)
+    for n=1:data_size
 
         switch data(n)
 
             case 9  % corresponds to TAB (^I) -> escape as \t
-                write_vector = [write_vector, uint8(92), uint8(9)];
+                vector_size = vector_size + 2;
 
             case 10 % corresponds to LF (^J) -> escape as \n
-                write_vector = [write_vector, uint8(92), uint8(110)];
+                vector_size = vector_size + 2;
 
             case 13 % corresponds to CR (^M) -> escape as \r
-                write_vector = [write_vector, uint8(92), uint8(114)];
+                vector_size = vector_size + 2;
 
             case 32 % corresonds to SPACE ( ) -> escape as \_
-                write_vector = [write_vector, uint8(92), uint8(95)];
+                vector_size = vector_size + 2;
 
             case 92 % corresponds to \ -> escape as \\
-                write_vector = [write_vector, uint8(92), uint8(92)];
+                vector_size = vector_size + 2;
 
             otherwise
-                write_vector = [write_vector, data(n)];
+                vector_size = vector_size + 1;
 
         end % switch data(n)
 
-    end % for n=1:length(data)
+    end % for n=1:data_size
+
+    write_vector = zeros(1, vector_size);
+    m = 1;
+
+    for n=1:data_size
+
+        switch data(n)
+
+            case 9  % corresponds to TAB (^I) -> escape as \t
+                write_vector(m:m+1) = [uint8(92), uint8(9)];
+                m = m + 2;
+
+            case 10 % corresponds to LF (^J) -> escape as \n
+                write_vector(m:m+1) = [uint8(92), uint8(110)];
+                m = m + 2;
+
+            case 13 % corresponds to CR (^M) -> escape as \r
+                write_vector(m:m+1) = [uint8(92), uint8(114)];
+                m = m + 2;
+
+            case 32 % corresonds to SPACE ( ) -> escape as \_
+                write_vector(m:m+1) = [uint8(92), uint8(95)];
+                m = m + 2;
+
+            case 92 % corresponds to \ -> escape as \\
+                write_vector(m:m+1) = [uint8(92), uint8(92)];
+                m = m + 2;
+
+            otherwise
+                write_vector(m) = data(n);
+                m = m + 1;
+
+        end % switch data(n)
+
+    end % for n=1:data_size
 
 
     %%% Send read command to KATCP

@@ -33,6 +33,8 @@
 
 function data = read(obj, varargin)
 
+%tic;
+
     num_optargs = size(varargin, 2);
 
     MAX_READSIZE = 256*1024;
@@ -93,6 +95,10 @@ function data = read(obj, varargin)
         return;
     end
 
+%toc
+%disp('process arguments');
+
+%tic;
 
     %%% Send read command to KATCP
 
@@ -101,6 +107,11 @@ function data = read(obj, varargin)
 
     fwrite(obj.tcpip_obj, uint8(cmd_string));
     fprintf(obj.tcpip_obj, '');
+
+%toc
+%disp('send command')
+
+%tic;
 
     while 1
         bytes_available = get(obj.tcpip_obj, 'BytesAvailable');
@@ -113,6 +124,11 @@ function data = read(obj, varargin)
             break;
         end
     end
+
+%toc
+%disp('wait for bytes')
+
+%tic;
 
     readback = '';
 
@@ -131,11 +147,17 @@ function data = read(obj, varargin)
 
     readback = readback(10:end-1);
 
+%toc
+%disp('read from buffer')
+
+%tic;
 
     %%% De-escape data stream.
     % CAN THIS BE MADE MORE EFFICIENT??
+    % Pre-allocating result vector gives major speedup. Others?
 
-    data = [];
+    data = zeros(1,read_size);
+    m = 1;
 
     for n=1:length(readback)
 
@@ -152,7 +174,9 @@ function data = read(obj, varargin)
                         readback(n+1) = uint8(0);
 
                     case 92 % 0x5C; '\'
-                        data = [data, uint8(92)];
+                        %data = [data, uint8(92)];
+                        data(m) = uint8(92);
+                        m = m+1;
                         readback(n+1) = -1;
 
                     case 95 % 0x5F; '_'
@@ -177,7 +201,9 @@ function data = read(obj, varargin)
             % end case 92
 
             otherwise
-                data = [data, readback(n)];
+                %data = [data, readback(n)];
+                data(m) = readback(n);
+                m = m+1;
 
         end % switch char(readback(n))
 
@@ -185,6 +211,11 @@ function data = read(obj, varargin)
 
     readback = data;
 
+%toc
+%disp('de-escape')
+
+
+%tic
 
     %%% Get into output radix/format
 
@@ -196,28 +227,33 @@ function data = read(obj, varargin)
 
         case 'uw'
 
-            data = [];
+            data = zeros(1,read_size/4);
+            m = 1;
 
             for n=1:4:length(readback)
-                data = [data, ...
-                        (uint32(readback(n))   * 2^24 + ...
-                         uint32(readback(n+1)) * 2^16 + ...
-                         uint32(readback(n+2)) * 2^8  + ...
-                         uint32(readback(n+3)) * 2^0 )];
+                data(m) =  (uint32(readback(n))   * 2^24 + ...
+                            uint32(readback(n+1)) * 2^16 + ...
+                            uint32(readback(n+2)) * 2^8  + ...
+                            uint32(readback(n+3)) * 2^0);
+
+                m = m+1;
             end
         % end case 'uw'
 
         case 'hw'
 
-            data = {};
+            data = cell(1,read_size/4);
+            m = 1;
 
             for n=1:4:length(readback)
-                data = [data, ...
-                        dec2hex( (uint32(readback(n))   * 2^24 + ...
-                                  uint32(readback(n+1)) * 2^16 + ...
-                                  uint32(readback(n+2)) * 2^8  + ...
-                                  uint32(readback(n+3)) * 2^0),  ...
-                                  8)];
+                data(m) = {dec2hex(( ...
+                            uint32(readback(n))   * 2^24 + ...
+                            uint32(readback(n+1)) * 2^16 + ...
+                            uint32(readback(n+2)) * 2^8  + ...
+                            uint32(readback(n+3)) * 2^0),  ...
+                            8)};
+
+                m = m+1;
             end
         % end case 'hw'
 
@@ -226,3 +262,6 @@ function data = read(obj, varargin)
             data = readback;
 
     end % switch read_format
+
+%toc
+%disp('output formatting')
