@@ -31,15 +31,16 @@ module qdrc_phy_sm(
   localparam STATE_BURST_ALIGN = 3'd3;
   localparam STATE_DONE        = 3'd4;
 
-  reg [13:0] wait_counter;
-  /* qdr_dll_off needs to be deactivated for 2048 cycle after reset is
+  reg [14:0] wait_counter;
+  /* qdr_dll_off needs to be held high for 2048 cycle after reset is
    * released
    */
 
   reg bit_align_start, burst_align_start;
   reg cal_fail;
 
-  assign qdr_dll_off_n = !(phy_state == STATE_DLLOFF);
+  reg qdr_dll_off_n_reg;
+  assign qdr_dll_off_n = qdr_dll_off_n_reg;
   assign phy_rdy       = phy_state == STATE_DONE;
 
   always @(posedge clk) begin
@@ -51,15 +52,18 @@ module qdrc_phy_sm(
       cal_fail     <= 1'b0;
       wait_counter <= 14'b0;
       phy_state    <= STATE_DLLOFF;
+      qdr_dll_off_n_reg <= 1'b0; //start with dlls disabled
     end else begin
       case (phy_state)
         STATE_DLLOFF:      begin
-          if (wait_counter[13] == 1'b1) begin
+          if (wait_counter[14] == 1'b1) begin
             phy_state    <= STATE_BIT_ALIGN;
             bit_align_start <= 1'b1;
           end else begin
             wait_counter <= wait_counter + 1;
           end
+          if (wait_counter[12])
+            qdr_dll_off_n_reg <= 1'b1; //enabled
         end
         STATE_BIT_ALIGN:   begin
           if (bit_align_done) begin
