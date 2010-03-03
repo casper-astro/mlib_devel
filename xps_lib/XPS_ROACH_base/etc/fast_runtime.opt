@@ -32,6 +32,7 @@ Program map
 -ol high;
 -xe n;
 -register_duplication;
+-global_opt on;
 -o <design>_map.ncd;        # Output Mapped ncd file
 -w;                         # Overwrite output files.
 -pr b;                      # Pack internal FF/latches into IOBs
