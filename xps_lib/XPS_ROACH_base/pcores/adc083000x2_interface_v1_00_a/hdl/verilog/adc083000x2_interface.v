@@ -79,6 +79,14 @@ module adc083000x2_interface #(
 	output [3:0] 	adc1_user_sync,
 	output [0:0] 	adc1_user_data_valid,
 
+	// 3-wire serial interface ports
+	output		adc0_notSCS,
+	output		adc0_sclk,
+	output 		adc0_sdata,
+	output		adc1_notSCS,
+	output		adc1_sclk,
+	output 		adc1_sdata,
+
 	// dcm/ctrl signals
 	input					ctrl_clk_in,
 	output				ctrl_clk_out,
