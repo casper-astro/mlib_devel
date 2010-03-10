@@ -11,7 +11,8 @@
 %                                                                             %
 %   This program is distributed in the hope that it will be useful,           %
 %   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
-%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   %
 %   GNU General Public License for more details.                              %
 %                                                                             %
 %   You should have received a copy of the GNU General Public License along   %
@@ -30,6 +31,7 @@ use_adc0 = strcmp( get_param(cur_block_name, 'use_adc0'), 'on');
 use_adc1 = strcmp( get_param(cur_block_name, 'use_adc1'), 'on');
 clock_sync = strcmp( get_param(cur_block_name, 'clock_sync'), 'on');
 verbose = strcmp( get_param(cur_block_name, 'verbose'), 'on');
+sample_bit_width = str2num( get_param(cur_block_name, 'bit_width') );
 
 if verbose,
     fprintf('Mask Script inputs:\n')
@@ -63,18 +65,18 @@ if clock_sync && demux_adc0
         'adc0_s12', 'adc1_s12', 'adc0_s13', 'adc1_s13', 'adc0_s14', 'adc1_s14', 'adc0_s15', 'adc1_s15', ...
         'adc0_sync', 'adc0_outofrange', 'adc0_data_valid', ...
         'adc1_sync', 'adc1_outofrange', 'adc1_data_valid' ];
-    portwidths = [8, 8, 8, 8, 8, 8, 8, 8, ...
-        8, 8, 8, 8, 8, 8, 8, 8, ...
-        8, 8, 8, 8, 8, 8, 8, 8, ...
-        8, 8, 8, 8, 8, 8, 8, 8, ...
+    portwidths = [sample_bit_width*ones(1,8), ...
+        sample_bit_width*ones(1,8), ...
+        sample_bit_width*ones(1,8), ...
+        sample_bit_width*ones(1,8), ...
         8, 8, 2, 8, 8, 2];
 elseif clock_sync
     portnames = [portnames, 'adc0_s0', 'adc1_s0', 'adc0_s1', 'adc1_s1', 'adc0_s2', 'adc1_s2', 'adc0_s3', 'adc1_s3', ...
         'adc0_s4', 'adc1_s4', 'adc0_s5', 'adc1_s5', 'adc0_s6', 'adc1_s6', 'adc0_s7', 'adc1_s7', ...
         'adc0_sync', 'adc0_outofrange', 'adc0_data_valid', ...
         'adc1_sync', 'adc1_outofrange', 'adc1_data_valid' ];
-    portwidths = [8, 8, 8, 8, 8, 8, 8, 8, ...
-        8, 8, 8, 8, 8, 8, 8, 8, ...
+    portwidths = [sample_bit_width*ones(1,8), ...
+        sample_bit_width*ones(1,8), ...
         4, 4, 1, 4, 4, 1];    
 end
 
@@ -82,13 +84,13 @@ if (use_adc0 && demux_adc0 && ~clock_sync)
     portnames = [portnames, 'adc0_s0','adc0_s1', 'adc0_s2', 'adc0_s3', 'adc0_s4', 'adc0_s5', 'adc0_s6', 'adc0_s7', ...
         'adc0_s8','adc0_s9', 'adc0_s10', 'adc0_s11', 'adc0_s12', 'adc0_s13', 'adc0_s14', 'adc0_s15', ...
         'adc0_sync', 'adc0_outofrange', 'adc0_data_valid'];
-    portwidths = [8, 8, 8, 8, 8, 8, 8, 8, ...
-        8, 8, 8, 8, 8, 8, 8, 8, ...
+    portwidths = [sample_bit_width*ones(1,8), ...
+        sample_bit_width*ones(1,8), ...
         8, 8, 2];
 elseif (use_adc0 && ~clock_sync)
     portnames = [portnames, 'adc0_s0', 'adc0_s1', 'adc0_s2', 'adc0_s3', 'adc0_s4', 'adc0_s5', 'adc0_s6', 'adc0_s7', ...      
         'adc0_sync', 'adc0_outofrange', 'adc0_data_valid'];
-    portwidths = [8, 8, 8, 8, 8, 8, 8, 8, ...
+    portwidths = [sample_bit_width*ones(1,8), ...
         4, 4, 1];
 end
 
@@ -96,31 +98,39 @@ if (use_adc1 && demux_adc0 && ~clock_sync)
     portnames = [portnames, 'adc1_s0', 'adc1_s1', 'adc1_s2', 'adc1_s3', 'adc1_s4', 'adc1_s5', 'adc1_s6', 'adc1_s7', ...
         'adc1_s8', 'adc1_s9', 'adc1_s10', 'adc1_s11', 'adc1_s12', 'adc1_s13', 'adc1_s14', 'adc1_s15', ...
         'adc1_sync', 'adc1_outofrange', 'adc1_data_valid'];
-    portwidths = [portwidths, 8, 8, 8, 8, 8, 8, 8, 8, ...
-        8, 8, 8, 8, 8, 8, 8, 8, ...
+    portwidths = [portwidths, sample_bit_width*ones(1,8), ...
+        sample_bit_width*ones(1,8), ...
         8, 8, 2];
 elseif (use_adc1 && ~clock_sync)
     portnames = [portnames, 'adc1_s0','adc1_s1', 'adc1_s2', 'adc1_s3', 'adc1_s5', 'adc1_s4', 'adc1_s6', 'adc1_s7', ...      
         'adc1_sync', 'adc1_outofrange', 'adc1_data_valid'];
-    portwidths = [portwidths, 8, 8, 8, 8, 8, 8, 8, 8, ...
+    portwidths = [portwidths, sample_bit_width*ones(1,8), ...
         4, 4, 1];
 end
 
 % Simulation Data drawing
+if clock_sync, 
+    num_demux_data_phases = 16 + 16*demux_adc0;
+else
+    num_demux_data_phases = 8 + 8*demux_adc0;
+end
+    
 if clock_sync,
     reuse_block(cur_block_name, 'sim_adc_data_in', 'simulink/Sources/In1', ...
         'Position', [310   208   340   222])
-    reuse_block(cur_block_name, 'adc_sim', 'casper_library/Misc/adc_sim', ...   % if the location of 'adc_sim' changes...
+    reuse_block(cur_block_name, 'adc_sim', 'adc_lib/adc_sim', ...   % if the location of 'adc_sim' changes...
         'Position', [425   100   520   330], ...
-        'nStreams', num2str(16 + 16*demux_adc0));
+        'nStreams', num2str(16 + 16*demux_adc0), ...
+        'bit_width', num2str(sample_bit_width));
     add_line(cur_block_name, 'sim_adc_data_in/1', 'adc_sim/1');
 else
     if use_adc0,
         reuse_block(cur_block_name, 'sim_adc0_data_in', 'simulink/Sources/In1', ...
             'Position', [310   208   340   222])
-        reuse_block(cur_block_name, 'adc0_sim', 'casper_library/Misc/adc_sim', ...   % if the location of 'adc_sim' changes...
+        reuse_block(cur_block_name, 'adc0_sim', 'adc_lib/adc_sim', ...   % if the location of 'adc_sim' changes...
             'Position', [425   100   520   330], ...
-            'nStreams', num2str(8 + 8*demux_adc0));
+            'nStreams', num2str(8 + 8*demux_adc0), ...
+            'bit_width', num2str(sample_bit_width));
         add_line(cur_block_name, 'sim_adc0_data_in/1', 'adc0_sim/1');
     end
     
@@ -128,9 +138,9 @@ else
     if use_adc1,
         reuse_block(cur_block_name, 'sim_adc1_data_in', 'simulink/Sources/In1', ...
             'Position', [305   683   335   697])
-        reuse_block(cur_block_name, 'adc1_sim', 'casper_library/Misc/adc_sim', ...   % if the location of 'adc_sim' changes...
+        reuse_block(cur_block_name, 'adc1_sim', 'adc_lib/adc_sim', ...   % if the location of 'adc_sim' changes...
             'Position', [420   575   515   805], ...
-            'nStreams', num2str(8 + 8*demux_adc0));
+            'nStreams', num2str(8 + 8*demux_adc0), 'bit_width', num2str(sample_bit_width));
         add_line(cur_block_name, 'sim_adc1_data_in/1', 'adc1_sim/1');
     end
 end
@@ -140,7 +150,7 @@ if clock_sync
     port_mod_factor = port_mod_factor * 2;
 end
 if demux_adc0
-    port_mod_factor = port_mod_factor * 2;
+    port_mod_factor = port_mod_fact or * 2;
 end 
 
 % draw the gateway in following blocks
@@ -148,6 +158,7 @@ ds_phase = 1;
 ds_factor = 16;
 sim_port = 0;
 for k=1:length(portnames),
+
     port = char(portnames(k));
     gateway_in_name = [clear_name([cur_block_name,'_']), '_', ];
     
@@ -156,7 +167,7 @@ for k=1:length(portnames),
     output_port_pos = [1220 53+50*k 1250 67+50*k];
     downsample_pos = [640 43+50*k 675 77+50*k];
     delay_pos = [725 47+50*k 755 73+50*k];
-
+    
     if regexp( port, '(adc\d+)_([iq]\d+)')
         toks = regexp( port, '(adc\d+)_([iq]\d+)$', 'tokens');
         gateway_in_name = [gateway_in_name, toks{1}{1}, '_user_data', toks{1}{2}];
@@ -184,19 +195,32 @@ for k=1:length(portnames),
         end
 
         % add signal convert block
-        reuse_block(cur_block_name, [gateway_in_name, '_conv'], 'casper_library/Misc/conv', ...
-            'Position', convert_pos);
+        reuse_block(cur_block_name, [gateway_in_name, '_conv'], 'adc_lib/conv', ...
+            'Position', convert_pos, 'bit_width', num2str(sample_bit_width));
 
         add_line( cur_block_name, [adc_sim_block, '/', num2str( mod(sim_port,port_mod_factor)+1 )], [gateway_in_name, '/1'] );
         sim_port = sim_port +1;
         add_line( cur_block_name, [gateway_in_name,'/1'], [gateway_in_name, '_conv/1']);
         add_line( cur_block_name, [gateway_in_name, '_conv/1'], [port, '/1']);
+    elseif regexp( port, '(adc\d+)_outofrange' ),
+        toks = regexp( port, '(adc\d+)_(\w+)$', 'tokens');
+        if clock_sync,
+            adc_sim_block = 'adc_sim';
+        else
+            adc_sim_block = [toks{1}{1}, '_sim'];
+            ds_factor = 8;
+        end
+        add_line(cur_block_name, [adc_sim_block, '/', num2str(num_demux_data_phases+1)], [gateway_in_name,'/1']);
+        reuse_block(cur_block_name, [port, '_sim'], 'simulink/Sources/In1', ...
+            'Position', [310, 53+50*k, 340, 67+50*k]);
+        add_line( cur_block_name, [gateway_in_name,'/1'], [port, '/1']);
     else
         reuse_block(cur_block_name, [port, '_sim'], 'simulink/Sources/In1', ...
             'Position', [310, 53+50*k, 340, 67+50*k]);
         add_line( cur_block_name, [port, '_sim/1'], [gateway_in_name,'/1']);
         add_line( cur_block_name, [gateway_in_name,'/1'], [port, '/1']);
     end
+    
 end
 
 
