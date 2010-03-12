@@ -150,7 +150,7 @@ if clock_sync
     port_mod_factor = port_mod_factor * 2;
 end
 if demux_adc0
-    port_mod_factor = port_mod_fact or * 2;
+    port_mod_factor = port_mod_factor * 2;
 end 
 
 % draw the gateway in following blocks
