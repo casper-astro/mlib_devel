@@ -47,11 +47,11 @@ xsg_blk = [strtok(gcs,'/') '/ System Generator'];
 fpga_arch = xlgetparam(xsg_blk,'xilinxfamily');
 
 switch fpga_arch
-  case 'Virtex5'
-    if addr_width < 2
-      errordlg('Shared BRAM address width cannot be less than 2 on Virtex-5 boards');
+  case 'virtex5'
+    if addr_width < 10
+      errordlg('Shared BRAM address width cannot be less than 10 on Virtex-5 boards');
     end
-  case 'Virtex2P'
+  case 'virtex2p'
     if addr_width < 11
       errordlg('Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards');
     end
