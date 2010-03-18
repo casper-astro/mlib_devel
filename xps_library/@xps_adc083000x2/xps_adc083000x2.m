@@ -117,8 +117,8 @@ ext_ports.adc0_dataoddq_p    = {8 'in'  ['adc0','dataoddq_p']    ['{',adc0port,'
 ext_ports.adc0_dataoddq_n    = {8 'in'  ['adc0','dataoddq_n']    ['{',adc0port,'_n{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 ext_ports.adc0_reset        = {1 'out' ['adc0','_reset']        ['{',adc0port,'_p{[19]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
 ext_ports.adc0_notSCS        = {1 'out' ['adc0','_notSCS']        ['{',adc0port,'_p{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-ext_ports.adc0_sdata        = {1 'out' ['adc0','_notSCS']        ['{',adc0port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-ext_ports.adc0_sclk        = {1 'out' ['adc0','_notSCS']        ['{',adc0port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc0_sdata        = {1 'out' ['adc0','_sdata']        ['{',adc0port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc0_sclk        = {1 'out' ['adc0','_sclk']        ['{',adc0port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ADC1
 ext_ports.adc1_clk_p         = {1 'in'  ['adc1','clk_p']         ['{',adc1port,'_p{[39]+1,:}}']                         'vector=false'  mhs_constraints ucf_constraints_clock };
@@ -137,8 +137,8 @@ ext_ports.adc1_dataoddq_p    = {8 'in'  ['adc1','dataoddq_p']    ['{',adc1port,'
 ext_ports.adc1_dataoddq_n    = {8 'in'  ['adc1','dataoddq_n']    ['{',adc1port,'_n{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 ext_ports.adc1_reset       = {1 'out' ['adc1','_reset']        ['{',adc1port,'_p{[19]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
 ext_ports.adc1_notSCS        = {1 'out' ['adc1','_notSCS']        ['{',adc1port,'_p{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-ext_ports.adc1_sdata        = {1 'out' ['adc1','_notSCS']        ['{',adc1port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-ext_ports.adc1_sclk        = {1 'out' ['adc1','_notSCS']        ['{',adc1port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc1_sdata        = {1 'out' ['adc1','_sdata']        ['{',adc1port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc1_sclk        = {1 'out' ['adc1','_sclk']        ['{',adc1port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
 
 
 b = set(b,'ext_ports',ext_ports);
