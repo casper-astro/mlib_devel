@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "sgowda"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Mar 19 04:12:43 2010"
+  LastModifiedDate	  "Fri Mar 19 15:45:44 2010"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:408>"
+  ModelVersionFormat	  "1.%<AutoIncrement:409>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -758,7 +758,7 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[521, 336, 1019, 636]
+	Location		[154, 249, 780, 615]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -771,6 +771,197 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "adc083000_ctrl"
+	  Tag			  "xps:adc083000_ctrl"
+	  Ports			  []
+	  Position		  [440, 55, 515, 75]
+	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
+	  MinAlgLoopOccurrences	  off
+	  PropExecContextOutsideSubsystem off
+	  RTWSystemCode		  "Auto"
+	  FunctionWithSeparateData off
+	  Opaque		  off
+	  RequestExecContextInheritance	off
+	  MaskHideContents	  off
+	  MaskType		  "adc083000_ctrl"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
+	  MaskIconUnits		  "autoscale"
+	  System {
+	    Name		    "adc083000_ctrl"
+	    Location		    [446, 212, 1019, 509]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+	    TiledPageScale	    1
+	    ShowPageBoundaries	    off
+	    ZoomFactor		    "100"
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice"
+	      Ports		      [1, 1]
+	      Position		      [280, 85, 340, 115]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "1"
+	      boolean_output	      on
+	      mode		      "Lower Bit Location + Width"
+	      bit1		      "0"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "LSB of Input"
+	      dbl_ovrd		      off
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "60,30,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.366667 0.283333 0.4 0.283333 0.366667 0.5 0.533333 0.566667 0.7 0.583333 0.483333 0.4 0.5 0.4 0.4"
+	      "83333 0.583333 0.7 0.566667 0.533333 0.5 0.366667 ],[0.1 0.266667 0.5 0.733333 0.9 0.9 0.833333 0.9 0.9 0.66666"
+	      "7 0.866667 0.7 0.5 0.3 0.133333 0.333333 0.1 0.1 0.166667 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
+	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');p"
+	      "ort_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "adc083000_ctrl_conf"
+	      Ports		      [1, 1]
+	      Position		      [390, 90, 450, 110]
+	      SourceBlock	      "xbsIndex_r4/Gateway Out"
+	      SourceType	      "Xilinx Gateway Out Block"
+	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
+	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
+	      "scarded, depending on how they are configured."
+	      hdl_port		      on
+	      timing_constraint	      "None"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0,0,0,0,0,0,0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "gatewayout"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "60,20,1,1,white,yellow,0,cc31b7ac,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
+	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
+	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('b"
+	      "lack');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text')"
+	      ";\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "adc083000_ctrl_sdata_bus"
+	      Ports		      [1, 1]
+	      Position		      [390, 165, 450, 185]
+	      SourceBlock	      "xbsIndex_r4/Gateway Out"
+	      SourceType	      "Xilinx Gateway Out Block"
+	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
+	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
+	      "scarded, depending on how they are configured."
+	      hdl_port		      on
+	      timing_constraint	      "None"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0,0,0,0,0,0,0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "gatewayout"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "60,20,1,1,white,yellow,0,cc31b7ac,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
+	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
+	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('b"
+	      "lack');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text')"
+	      ";\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "conf"
+	      Tag		      "xps:sw_reg"
+	      Ports		      [1, 1]
+	      Position		      [135, 84, 235, 116]
+	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
+	      SourceBlock	      "xps_library/software register"
+	      SourceType	      ""
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
+	      io_dir		      "From Processor"
+	      arith_type	      "Unsigned"
+	      bitwidth		      "32"
+	      bin_pt		      "0"
+	      sample_period	      "1"
+	      gw_name		      "untitled_adc083000_ctrl_conf_user_data_out"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "sdata_bus"
+	      Tag		      "xps:sw_reg"
+	      Ports		      [1, 1]
+	      Position		      [135, 159, 235, 191]
+	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
+	      SourceBlock	      "xps_library/software register"
+	      SourceType	      ""
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
+	      io_dir		      "From Processor"
+	      arith_type	      "Unsigned"
+	      bitwidth		      "32"
+	      bin_pt		      "0"
+	      sample_period	      "1"
+	      gw_name		      "untitled_adc083000_ctrl_conf_user_data_out"
+	    }
+	    Line {
+	      SrcBlock		      "conf"
+	      SrcPort		      1
+	      DstBlock		      "Slice"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "sdata_bus"
+	      SrcPort		      1
+	      DstBlock		      "adc083000_ctrl_sdata_bus"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Slice"
+	      SrcPort		      1
+	      DstBlock		      "adc083000_ctrl_conf"
+	      DstPort		      1
+	    }
+	  }
+	}
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "adc_mkid"
@@ -13126,7 +13317,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13144,7 +13335,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13162,7 +13353,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13180,7 +13371,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13637,11 +13828,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13672,11 +13863,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13707,11 +13898,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13733,10 +13924,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 95, 1130, 125]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -13759,11 +13950,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13785,10 +13976,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 145, 1130, 175]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -13811,11 +14002,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13837,10 +14028,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 195, 1130, 225]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -13863,11 +14054,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13889,10 +14080,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 245, 1130, 275]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -13915,11 +14106,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13941,10 +14132,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 295, 1130, 325]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -13967,11 +14158,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -13993,10 +14184,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 345, 1130, 375]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14019,11 +14210,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -14045,10 +14236,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 395, 1130, 425]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14071,11 +14262,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -14097,10 +14288,10 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1050, 445, 1130, 475]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14123,11 +14314,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
