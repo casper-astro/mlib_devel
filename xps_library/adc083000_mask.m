@@ -118,30 +118,30 @@ end
 if clock_sync,
     reuse_block(cur_block_name, 'sim_adc_data_in', 'simulink/Sources/In1', ...
         'Position', [310   208   340   222])
-    reuse_block(cur_block_name, 'adc_sim', 'adc_lib/adc_sim', ...   % if the location of 'adc_sim' changes...
+    reuse_block(cur_block_name, 'adc_sim', 'xps_library/ADCs/adc_sim', ...   % if the location of 'adc_sim' changes...
         'Position', [425   100   520   330], ...
         'nStreams', num2str(16 + 16*demux_adc0), ...
         'bit_width', num2str(sample_bit_width));
-    add_line(cur_block_name, 'sim_adc_data_in/1', 'adc_sim/1');
+    reuse_line(cur_block_name, 'sim_adc_data_in/1', 'adc_sim/1');
 else
     if use_adc0,
         reuse_block(cur_block_name, 'sim_adc0_data_in', 'simulink/Sources/In1', ...
             'Position', [310   208   340   222])
-        reuse_block(cur_block_name, 'adc0_sim', 'adc_lib/adc_sim', ...   % if the location of 'adc_sim' changes...
+        reuse_block(cur_block_name, 'adc0_sim', 'xps_library/ADCs/adc_sim', ...   % if the location of 'adc_sim' changes...
             'Position', [425   100   520   330], ...
             'nStreams', num2str(8 + 8*demux_adc0), ...
             'bit_width', num2str(sample_bit_width));
-        add_line(cur_block_name, 'sim_adc0_data_in/1', 'adc0_sim/1');
+        reuse_line(cur_block_name, 'sim_adc0_data_in/1', 'adc0_sim/1');
     end
     
     
     if use_adc1,
         reuse_block(cur_block_name, 'sim_adc1_data_in', 'simulink/Sources/In1', ...
             'Position', [305   683   335   697])
-        reuse_block(cur_block_name, 'adc1_sim', 'adc_lib/adc_sim', ...   % if the location of 'adc_sim' changes...
+        reuse_block(cur_block_name, 'adc1_sim', 'xps_library/ADCs/adc_sim', ...   % if the location of 'adc_sim' changes...
             'Position', [420   575   515   805], ...
             'nStreams', num2str(8 + 8*demux_adc0), 'bit_width', num2str(sample_bit_width));
-        add_line(cur_block_name, 'sim_adc1_data_in/1', 'adc1_sim/1');
+        reuse_line(cur_block_name, 'sim_adc1_data_in/1', 'adc1_sim/1');
     end
 end
     
@@ -195,13 +195,13 @@ for k=1:length(portnames),
         end
 
         % add signal convert block
-        reuse_block(cur_block_name, [gateway_in_name, '_conv'], 'adc_lib/conv', ...
+        reuse_block(cur_block_name, [gateway_in_name, '_conv'], 'xps_library/ADCs/conv', ...
             'Position', convert_pos, 'bit_width', num2str(sample_bit_width));
 
-        add_line( cur_block_name, [adc_sim_block, '/', num2str( mod(sim_port,port_mod_factor)+1 )], [gateway_in_name, '/1'] );
+        reuse_line( cur_block_name, [adc_sim_block, '/', num2str( mod(sim_port,port_mod_factor)+1 )], [gateway_in_name, '/1'] );
         sim_port = sim_port +1;
-        add_line( cur_block_name, [gateway_in_name,'/1'], [gateway_in_name, '_conv/1']);
-        add_line( cur_block_name, [gateway_in_name, '_conv/1'], [port, '/1']);
+        reuse_line( cur_block_name, [gateway_in_name,'/1'], [gateway_in_name, '_conv/1']);
+        reuse_line( cur_block_name, [gateway_in_name, '_conv/1'], [port, '/1']);
     elseif regexp( port, '(adc\d+)_outofrange' ),
         toks = regexp( port, '(adc\d+)_(\w+)$', 'tokens');
         if clock_sync,
@@ -210,15 +210,15 @@ for k=1:length(portnames),
             adc_sim_block = [toks{1}{1}, '_sim'];
             ds_factor = 8;
         end
-        add_line(cur_block_name, [adc_sim_block, '/', num2str(num_demux_data_phases+1)], [gateway_in_name,'/1']);
+        reuse_line(cur_block_name, [adc_sim_block, '/', num2str(num_demux_data_phases+1)], [gateway_in_name,'/1']);
         reuse_block(cur_block_name, [port, '_sim'], 'simulink/Sources/In1', ...
             'Position', [310, 53+50*k, 340, 67+50*k]);
-        add_line( cur_block_name, [gateway_in_name,'/1'], [port, '/1']);
+        reuse_line( cur_block_name, [gateway_in_name,'/1'], [port, '/1']);
     else
         reuse_block(cur_block_name, [port, '_sim'], 'simulink/Sources/In1', ...
             'Position', [310, 53+50*k, 340, 67+50*k]);
-        add_line( cur_block_name, [port, '_sim/1'], [gateway_in_name,'/1']);
-        add_line( cur_block_name, [gateway_in_name,'/1'], [port, '/1']);
+        reuse_line( cur_block_name, [port, '_sim/1'], [gateway_in_name,'/1']);
+        reuse_line( cur_block_name, [gateway_in_name,'/1'], [port, '/1']);
     end
     
 end
