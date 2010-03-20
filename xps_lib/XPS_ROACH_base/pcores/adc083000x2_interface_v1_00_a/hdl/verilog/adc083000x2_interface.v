@@ -87,6 +87,11 @@ module adc083000x2_interface #(
 	output		adc1_sclk,
 	output 		adc1_sdata,
 
+	input		adc_ctrl_clk,
+	input		adc_ctrl_sdata,
+	input		adc_ctrl_notSCS,
+
+
 	// dcm/ctrl signals
 	input					ctrl_clk_in,
 	output				ctrl_clk_out,
@@ -317,6 +322,16 @@ end else if (USE_ADC1 && DEMUX_DATA_OUT) begin
 	);
 end
 endgenerate
+
+
+// Serial interface
+assign adc0_notSCS = adc_ctrl_notSCS;
+assign adc0_sclk = adc_ctrl_clk;
+assign adc0_sdata = adc_ctrl_sdata;
+assign adc1_notSCS = adc_ctrl_notSCS;
+assign adc1_sclk = adc_ctrl_clk;
+assign adc1_sdata = adc_ctrl_sdata;
+
 
 // Clock signal assignment
 generate if (USE_ADC0) begin
