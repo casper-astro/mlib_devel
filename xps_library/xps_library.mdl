@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "sgowda"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Mar 20 14:17:22 2010"
+  LastModifiedDate	  "Sat Mar 20 14:59:33 2010"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:411>"
+  ModelVersionFormat	  "1.%<AutoIncrement:412>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -699,7 +699,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [5, 77, 1380, 928]
+    Location		    [5, 77, 1377, 928]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -759,7 +759,7 @@ Library {
       System {
 	Name			"ADCs"
 	Location		[154, 249, 780, 615]
-	Open			off
+	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -775,8 +775,8 @@ Library {
 	  BlockType		  SubSystem
 	  Name			  "adc083000_ctrl"
 	  Tag			  "xps:adc083000_ctrl"
-	  Ports			  []
-	  Position		  [445, 50, 520, 70]
+	  Ports			  [2]
+	  Position		  [415, 28, 485, 57]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -807,6 +807,23 @@ Library {
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
 	    Block {
+	      BlockType		      Inport
+	      Name		      "conf"
+	      Position		      [130, 93, 160, 107]
+	      IconDisplay	      "Port number"
+	      OutDataType	      "fixdt(1, 16)"
+	      OutScaling	      "2^0"
+	    }
+	    Block {
+	      BlockType		      Inport
+	      Name		      "sdata_bus"
+	      Position		      [205, 168, 235, 182]
+	      Port		      "2"
+	      IconDisplay	      "Port number"
+	      OutDataType	      "fixdt(1, 16)"
+	      OutScaling	      "2^0"
+	    }
+	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert"
 	      Ports		      [1, 1]
@@ -821,9 +838,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "0"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -852,9 +869,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "0"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,532,429"
@@ -872,20 +889,20 @@ Library {
 	      BlockType		      Reference
 	      Name		      "Slice"
 	      Ports		      [1, 1]
-	      Position		      [280, 85, 340, 115]
+	      Position		      [205, 85, 265, 115]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "1"
-	      boolean_output	      "on"
+	      boolean_output	      on
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "slice"
@@ -908,11 +925,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -937,11 +954,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -958,68 +975,59 @@ Library {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "conf"
-	      Tag		      "xps:sw_reg"
+	      Name		      "posedge"
+	      Tag		      "Rising Edge Detector"
 	      Ports		      [1, 1]
-	      Position		      [135, 84, 235, 116]
-	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-	      SourceBlock	      "xps_library/software register"
-	      SourceType	      "Unknown"
+	      Position		      [285, 91, 320, 109]
+	      LinkData {
+		BlockName		"Delay"
+		DialogParameters {
+		  sg_icon_stat		  "45,46,1,1,white,blue,0,07b98262,right,"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
+		  "tch([0.222222 0.0666667 0.311111 0.0666667 0.222222 0.488889 0.555556 0.622222 0.911111 0.688889 0.466667 0.311111"
+		  " 0.555556 0.311111 0.466667 0.688889 0.911111 0.622222 0.555556 0.488889 0.222222 ],[0.108696 0.26087 0.5 0.73913 "
+		  "0.891304 0.891304 0.826087 0.891304 0.891304 0.673913 0.891304 0.73913 0.5 0.26087 0.108696 0.326087 0.108696 0.10"
+		  "8696 0.173913 0.108696 0.108696 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end i"
+		  "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('"
+		  "','COMMENT: end icon text');\n"
+		}
+		BlockName		"Inverter"
+		DialogParameters {
+		  sg_icon_stat		  "50,34,1,1,white,blue,0,267846e5,right,"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
+		  "tch([0.32 0.2 0.36 0.2 0.32 0.5 0.54 0.58 0.78 0.62 0.48 0.38 0.54 0.38 0.48 0.62 0.78 0.58 0.54 0.5 0.32 ],[0.117"
+		  "647 0.294118 0.529412 0.764706 0.941176 0.941176 0.882353 0.941176 0.941176 0.705882 0.911765 0.764706 0.529412 0."
+		  "294118 0.147059 0.352941 0.117647 0.117647 0.176471 0.117647 0.117647 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0"
+		  " 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');dis"
+		  "p('not');\nfprintf('','COMMENT: end icon text');\n"
+		}
+		BlockName		"Logical"
+		DialogParameters {
+		  sg_icon_stat		  "60,87,2,1,white,blue,0,0a851f85,right,"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
+		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.916667 0.7 0.483333 0.333333 0.583333 0.333"
+		  "333 0.483333 0.7 0.916667 0.633333 0.566667 0.5 0.233333 ],[0.229885 0.344828 0.505747 0.666667 0.781609 0.781609 "
+		  "0.735632 0.781609 0.781609 0.632184 0.781609 0.678161 0.505747 0.333333 0.229885 0.37931 0.229885 0.229885 0.27586"
+		  "2 0.229885 0.229885 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics"
+		  "');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('\\newlineand\\newlinez^{-0}','texmode','on');\n"
+		  "fprintf('','COMMENT: end icon text');\n"
+		}
+	      }
+	      SourceBlock	      "casper_library/Misc/posedge"
+	      SourceType	      "posedge"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
+	      FunctionWithSeparateData off
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
 	      RTWMemSecDataInternal   "Inherit from model"
 	      RTWMemSecDataParameters "Inherit from model"
-	      io_dir		      "From Processor"
-	      arith_type	      "Unsigned"
-	      bitwidth		      "32"
-	      bin_pt		      "0"
-	      sample_period	      "1"
-	      gw_name		      "adc_snap_adc083000_ctrl_conf_user_data_out"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sdata_bus"
-	      Tag		      "xps:sw_reg"
-	      Ports		      [1, 1]
-	      Position		      [135, 159, 235, 191]
-	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-	      SourceBlock	      "xps_library/software register"
-	      SourceType	      "Unknown"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      io_dir		      "From Processor"
-	      arith_type	      "Unsigned"
-	      bitwidth		      "32"
-	      bin_pt		      "0"
-	      sample_period	      "1"
-	      gw_name		      "adc_snap_adc083000_ctrl_sdata_bus_user_data_out"
-	    }
-	    Line {
-	      SrcBlock		      "conf"
-	      SrcPort		      1
-	      DstBlock		      "Slice"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "sdata_bus"
-	      SrcPort		      1
-	      DstBlock		      "Convert1"
-	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "Slice"
 	      SrcPort		      1
-	      DstBlock		      "Convert"
+	      DstBlock		      "posedge"
 	      DstPort		      1
 	    }
 	    Line {
@@ -1032,6 +1040,24 @@ Library {
 	      SrcBlock		      "Convert1"
 	      SrcPort		      1
 	      DstBlock		      "adc_snap_adc083000_ctrl_sdata_bus"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "sdata_bus"
+	      SrcPort		      1
+	      DstBlock		      "Convert1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "conf"
+	      SrcPort		      1
+	      DstBlock		      "Slice"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "posedge"
+	      SrcPort		      1
+	      DstBlock		      "Convert"
 	      DstPort		      1
 	    }
 	  }
