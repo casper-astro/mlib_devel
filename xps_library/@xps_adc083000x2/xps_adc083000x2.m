@@ -35,11 +35,14 @@ end
 blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 
-% Most of these parameters are hacks on top of the existing toolflow...
+% Retrieve block configuration parameters
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.use_adc0 = strcmp( get_param(blk_name, 'use_adc0'), 'on');
 s.use_adc1 = strcmp( get_param(blk_name, 'use_adc1'), 'on');
 s.demux_adc = strcmp( get_param(blk_name, 'demux_adc0'), 'on');
+s.using_ctrl = strcmp( get_param(blk_name, 'using_ctrl'), 'on' );
+
+
 if s.demux_adc
     s.sysclk_rate = eval_param(blk_name,'adc_clk_rate')/8;
 else
@@ -87,6 +90,13 @@ if strcmp(get(b,'ip_version'), '1.01.a')
     misc_ports.ctrl_clk270_out  = {1 'out' [s.adc_str,'_clk270']};
 end
 misc_ports.sys_clk       = {1 'in'  'sys_clk'};
+
+if s.using_ctrl,
+    misc_ports.adc_ctrl_notSCS = {1 'in' 'adc_ctrl_notSCS'};
+    misc_ports.adc_ctrl_clk = {1 'in' 'adc_ctrl_clk'};
+    misc_ports.adc_ctrl_sdata = {1 'in' 'adc_ctrl_sdata'};
+end
+
 % misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
 % misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
 % misc_ports.control_data = {1, 'in', 'adc_control_data'};

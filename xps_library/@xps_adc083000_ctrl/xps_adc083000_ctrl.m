@@ -36,7 +36,8 @@ blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 % 
 % % Most of these parameters are hacks on top of the existing toolflow...
-% s.hw_sys = get(xsg_obj,'hw_sys');
+s.hw_sys = get(xsg_obj,'hw_sys');
+s.adc_str = 'adc0';
 % s.use_adc0 = strcmp( get_param(blk_name, 'use_adc0'), 'on');
 % s.use_adc1 = strcmp( get_param(blk_name, 'use_adc1'), 'on');
 % s.demux_adc = strcmp( get_param(blk_name, 'demux_adc0'), 'on');
@@ -65,14 +66,14 @@ xsg_obj = get(blk_obj,'xsg_obj');
 %         error(['Unsupported hardware system: ',s.hw_sys]);
 % end % end switch s.hw_sys
 % 
-% b = class(s,'xps_adc083000x2',blk_obj);
+b = class(s,'xps_adc083000_ctrl',blk_obj);
 % 
 % % ip name and version
-% b = set(b, 'ip_name', 'adc083000x2_interface');
-% switch s.hw_sys
-%     case 'ROACH'
-%         b = set(b, 'ip_version', '1.00.a');
-% end % switch s.hw_sys
+b = set(b, 'ip_name', 'opb_adc083000ctrl');
+switch s.hw_sys
+    case 'ROACH'
+        b = set(b, 'ip_version', '1.00.a');
+end % switch s.hw_sys
 % 
 % % misc ports
 % % misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_ddrb']};
@@ -86,11 +87,14 @@ xsg_obj = get(blk_obj,'xsg_obj');
 %     misc_ports.ctrl_clk180_out  = {1 'out' [s.adc_str,'_clk180']};
 %     misc_ports.ctrl_clk270_out  = {1 'out' [s.adc_str,'_clk270']};
 % end
-% misc_ports.sys_clk       = {1 'in'  'sys_clk'};
+misc_ports.sys_clk       = {1 'in'  'sys_clk'};
+misc_ports.adc_ctrl_notSCS = {1 'out' 'adc_ctrl_notSCS'};
+misc_ports.adc_ctrl_clk = {1 'out' 'adc_ctrl_clk'};
+misc_ports.adc_ctrl_sdata = {1 'out' 'adc_ctrl_sdata'};
 % % misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
 % % misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
 % % misc_ports.control_data = {1, 'in', 'adc_control_data'};
-% b = set(b,'misc_ports',misc_ports);
+b = set(b,'misc_ports',misc_ports);
 % 
 % % external ports
 % mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ',num2str(s.adc_clk_rate*1e6));
@@ -141,12 +145,13 @@ xsg_obj = get(blk_obj,'xsg_obj');
 % ext_ports.adc1_sclk        = {1 'out' ['adc1','_sclk']        ['{',adc1port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
 % 
 % 
-% b = set(b,'ext_ports',ext_ports);
+ext_ports = {};
+ b = set(b,'ext_ports',ext_ports);
 % parameters.DEMUX_DATA_OUT  = num2str(s.demux_adc);
 % parameters.USE_ADC0 = num2str(s.use_adc0);
 % parameters.USE_ADC1 = num2str(s.use_adc1);
 % parameters.INTERLEAVE_BOARDS = num2str(s.adc_interleave);
-% 
+ 
 % b = set(b,'parameters',parameters);
-% % Software parameters
+ % Software parameters
 % b = set(b,'c_params',['adc = ',s.adc_str,' / interleave = ',num2str(s.adc_interleave)]);
