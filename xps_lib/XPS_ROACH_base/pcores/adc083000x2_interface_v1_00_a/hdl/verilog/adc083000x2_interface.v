@@ -80,16 +80,16 @@ module adc083000x2_interface #(
 	output [0:0] 	adc1_user_data_valid,
 
 	// 3-wire serial interface ports
-	output		adc0_notSCS,
-	output		adc0_sclk,
-	output 		adc0_sdata,
-	output		adc1_notSCS,
-	output		adc1_sclk,
-	output 		adc1_sdata,
+	//output		adc0_notSCS,
+	//output		adc0_sclk,
+	//output 		adc0_sdata,
+	//output		adc1_notSCS,
+	//output		adc1_sclk,
+	//output 		adc1_sdata,
 
-	input		adc_ctrl_clk,
-	input		adc_ctrl_sdata,
-	input		adc_ctrl_notSCS,
+	//input		adc_ctrl_clk,
+	//input		adc_ctrl_sdata,
+	//input		adc_ctrl_notSCS,
 
 
 	// dcm/ctrl signals
@@ -325,12 +325,12 @@ endgenerate
 
 
 // Serial interface
-assign adc0_notSCS = adc_ctrl_notSCS;
-assign adc0_sclk = adc_ctrl_clk;
-assign adc0_sdata = adc_ctrl_sdata;
-assign adc1_notSCS = adc_ctrl_notSCS;
-assign adc1_sclk = adc_ctrl_clk;
-assign adc1_sdata = adc_ctrl_sdata;
+//assign adc0_notSCS = adc_ctrl_notSCS;
+//assign adc0_sclk = adc_ctrl_clk;
+//assign adc0_sdata = adc_ctrl_sdata;
+//assign adc1_notSCS = adc_ctrl_notSCS;
+//assign adc1_sclk = adc_ctrl_clk;
+//assign adc1_sdata = adc_ctrl_sdata;
 
 
 // Clock signal assignment
