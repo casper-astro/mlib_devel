@@ -88,9 +88,9 @@ end % switch s.hw_sys
 %     misc_ports.ctrl_clk270_out  = {1 'out' [s.adc_str,'_clk270']};
 % end
 misc_ports.sys_clk       = {1 'in'  'sys_clk'};
-misc_ports.adc_ctrl_notSCS = {1 'out' 'adc_ctrl_notSCS'};
-misc_ports.adc_ctrl_clk = {1 'out' 'adc_ctrl_clk'};
-misc_ports.adc_ctrl_sdata = {1 'out' 'adc_ctrl_sdata'};
+% misc_ports.adc_ctrl_notSCS = {1 'out' 'adc_ctrl_notSCS'};
+% misc_ports.adc_ctrl_clk = {1 'out' 'adc_ctrl_clk'};
+% misc_ports.adc_ctrl_sdata = {1 'out' 'adc_ctrl_sdata'};
 % % misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
 % % misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
 % % misc_ports.control_data = {1, 'in', 'adc_control_data'};
@@ -120,9 +120,6 @@ b = set(b,'misc_ports',misc_ports);
 % ext_ports.adc0_dataoddq_p    = {8 'in'  ['adc0','dataoddq_p']    ['{',adc0port,'_p{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 % ext_ports.adc0_dataoddq_n    = {8 'in'  ['adc0','dataoddq_n']    ['{',adc0port,'_n{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 % ext_ports.adc0_reset        = {1 'out' ['adc0','_reset']        ['{',adc0port,'_p{[19]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-% ext_ports.adc0_notSCS        = {1 'out' ['adc0','_notSCS']        ['{',adc0port,'_p{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-% ext_ports.adc0_sdata        = {1 'out' ['adc0','_sdata']        ['{',adc0port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-% ext_ports.adc0_sclk        = {1 'out' ['adc0','_sclk']        ['{',adc0port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
 % 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ADC1
 % ext_ports.adc1_clk_p         = {1 'in'  ['adc1','clk_p']         ['{',adc1port,'_p{[39]+1,:}}']                         'vector=false'  mhs_constraints ucf_constraints_clock };
@@ -140,13 +137,20 @@ b = set(b,'misc_ports',misc_ports);
 % ext_ports.adc1_dataoddq_p    = {8 'in'  ['adc1','dataoddq_p']    ['{',adc1port,'_p{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 % ext_ports.adc1_dataoddq_n    = {8 'in'  ['adc1','dataoddq_n']    ['{',adc1port,'_n{[30 31 32 33 34 35 36 37]+1,:}}']    'vector=true'   struct()        ucf_constraints_term };
 % ext_ports.adc1_reset       = {1 'out' ['adc1','_reset']        ['{',adc1port,'_p{[19]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-% ext_ports.adc1_notSCS        = {1 'out' ['adc1','_notSCS']        ['{',adc1port,'_p{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-% ext_ports.adc1_sdata        = {1 'out' ['adc1','_sdata']        ['{',adc1port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-% ext_ports.adc1_sclk        = {1 'out' ['adc1','_sclk']        ['{',adc1port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
-% 
-% 
-ext_ports = {};
- b = set(b,'ext_ports',ext_ports);
+
+
+adc0port = [s.hw_sys, '.', 'zdok0'];%, s.adc_str(length(s.adc_str))];
+adc1port = [s.hw_sys, '.', 'zdok1'];%, s.adc_str(length(s.adc_str))];
+ucf_constraints_single = struct('IOSTANDARD', 'LVCMOS25');
+
+ext_ports.adc1_notSCS        = {1 'out' ['adc1','_notSCS']        ['{',adc1port,'_p{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc1_sdata        = {1 'out' ['adc1','_sdata']        ['{',adc1port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc1_sclk        = {1 'out' ['adc1','_sclk']        ['{',adc1port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc0_notSCS        = {1 'out' ['adc0','_notSCS']        ['{',adc0port,'_p{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc0_sdata        = {1 'out' ['adc0','_sdata']        ['{',adc0port,'_n{[9]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+ext_ports.adc0_sclk        = {1 'out' ['adc0','_sclk']        ['{',adc0port,'_n{[8]+1,:}}']                         'vector=false'  struct()        ucf_constraints_single };
+b = set(b,'ext_ports',ext_ports);
+
 % parameters.DEMUX_DATA_OUT  = num2str(s.demux_adc);
 % parameters.USE_ADC0 = num2str(s.use_adc0);
 % parameters.USE_ADC1 = num2str(s.use_adc1);
