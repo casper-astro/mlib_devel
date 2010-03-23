@@ -917,7 +917,7 @@ Library {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "adc_snap_adc083000_ctrl_conf"
+	      Name		      "xps_library_adc083000_ctrl_conf"
 	      Ports		      [1, 1]
 	      Position		      [490, 90, 550, 110]
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
@@ -946,7 +946,7 @@ Library {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "adc_snap_adc083000_ctrl_sdata_bus"
+	      Name		      "xps_library_adc083000_ctrl_sdata_bus"
 	      Ports		      [1, 1]
 	      Position		      [490, 165, 550, 185]
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
@@ -982,13 +982,13 @@ Library {
 	    Line {
 	      SrcBlock		      "Convert"
 	      SrcPort		      1
-	      DstBlock		      "adc_snap_adc083000_ctrl_conf"
+	      DstBlock		      "xps_library_adc083000_ctrl_conf"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "Convert1"
 	      SrcPort		      1
-	      DstBlock		      "adc_snap_adc083000_ctrl_sdata_bus"
+	      DstBlock		      "xps_library_adc083000_ctrl_sdata_bus"
 	      DstPort		      1
 	    }
 	    Line {
