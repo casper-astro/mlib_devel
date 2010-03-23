@@ -30,10 +30,13 @@ OPTION LAST_UPDATED = 9.1
 ##  PORTS  ##
 #############
 PORT sys_clk = "", DIR = I
-PORT conf = "", DIR = I
+PORT conf = "", VEC = [2:0], DIR = I
 PORT sdata_bus = "", VEC = [31:0], DIR = I
-PORT adc_ctrl_notSCS = "", DIR = O
-PORT adc_ctrl_clk = "", DIR = O
-PORT adc_ctrl_sdata = "", DIR = O
+PORT adc0_notSCS = "", DIR = O
+PORT adc0_sclk = "", DIR = O
+PORT adc0_sdata = "", DIR = O
+PORT adc1_notSCS = "", DIR = O
+PORT adc1_sclk = "", DIR = O
+PORT adc1_sdata = "", DIR = O
 
 END

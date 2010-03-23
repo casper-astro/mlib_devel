@@ -1,2 +1,3 @@
 lib opb_adc083000ctrl_v1_00_a opb_adc083000ctrl 
 lib basemodules_v1_00_a Counter
+lib basemodules_v1_00_a EdgeDetect
