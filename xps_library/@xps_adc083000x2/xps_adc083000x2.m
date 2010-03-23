@@ -39,7 +39,7 @@ xsg_obj = get(blk_obj,'xsg_obj');
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.use_adc0 = strcmp( get_param(blk_name, 'use_adc0'), 'on');
 s.use_adc1 = strcmp( get_param(blk_name, 'use_adc1'), 'on');
-s.demux_adc = strcmp( get_param(blk_name, 'demux_adc0'), 'on');
+s.demux_adc = strcmp( get_param(blk_name, 'demux_adc'), 'on');
 s.using_ctrl = strcmp( get_param(blk_name, 'using_ctrl'), 'on' );
 
 

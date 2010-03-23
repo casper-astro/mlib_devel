@@ -27,7 +27,7 @@ load_system('xbsBasic_r4');
 cursys = gcb;
 disp(cursys)
 
-demux_adc0 = strcmp( get_param(cursys, 'demux_adc0'), 'on');
+demux_adc = strcmp( get_param(cursys, 'demux_adc'), 'on');
 use_adc0 = strcmp( get_param(cursys, 'use_adc0'), 'on');
 use_adc1 = strcmp( get_param(cursys, 'use_adc1'), 'on');
 clock_sync = strcmp( get_param(cursys, 'clock_sync'), 'on');
@@ -38,7 +38,7 @@ if verbose,
     fprintf('Mask Script inputs:\n')
     fprintf('Using adc0..................%d\n', use_adc0)
     fprintf('Using adc1..................%d\n', use_adc1)
-    fprintf('Demuxing ADC outputs........%d\n', demux_adc0)
+    fprintf('Demuxing ADC outputs........%d\n', demux_adc)
     fprintf('Synchronizing ZDOK clocks...%d\n', clock_sync)
 end
 
@@ -57,7 +57,7 @@ portwidths = [];
 delete_lines(cursys);
 
 if clock_sync
-    if demux_adc0
+    if demux_adc
         portnames = [portnames, ...
             'adc0_s0', 'adc1_s0', 'adc0_s1', 'adc1_s1', ...
             'adc0_s2', 'adc1_s2', 'adc0_s3', 'adc1_s3', ...
@@ -97,7 +97,7 @@ if clock_sync
             4, 4, 1];
     end
 else
-    if use_adc0 && demux_adc0
+    if use_adc0 && demux_adc
         portnames = [portnames, ...
             'adc0_s0','adc0_s1', 'adc0_s2', 'adc0_s3', ...
             'adc0_s4', 'adc0_s5', 'adc0_s6', 'adc0_s7', ...
@@ -121,7 +121,7 @@ else
             4, 4, 1];
     end
     
-    if use_adc1 && demux_adc0
+    if use_adc1 && demux_adc
         portnames = [portnames, ...
             'adc1_s0', 'adc1_s1', 'adc1_s2', 'adc1_s3', ...
             'adc1_s4', 'adc1_s5', 'adc1_s6', 'adc1_s7', ...
@@ -148,9 +148,9 @@ end
 
 % Simulation Data drawing
 if clock_sync, 
-    num_demux_data_phases = 16 + 16*demux_adc0;
+    num_demux_data_phases = 16 + 16*demux_adc;
 else
-    num_demux_data_phases = 8 + 8*demux_adc0;
+    num_demux_data_phases = 8 + 8*demux_adc;
 end
     
 if clock_sync,
@@ -159,7 +159,7 @@ if clock_sync,
     % if the location of 'adc_sim' changes...
     reuse_block(cursys, 'adc_sim', 'xps_library/ADCs/adc_sim', ...
         'Position', [425   100   520   330], ...
-        'nStreams', num2str(16 + 16*demux_adc0), ...
+        'nStreams', num2str(16 + 16*demux_adc), ...
         'bit_width', num2str(sample_bit_width));
     reuse_line(cursys, 'sim_adc_data_in/1', 'adc_sim/1');
 else
@@ -169,7 +169,7 @@ else
         % if the location of 'adc_sim' changes...
         reuse_block(cursys, 'adc0_sim', 'xps_library/ADCs/adc_sim', ...
             'Position', [425   100   520   330], ...
-            'nStreams', num2str(8 + 8*demux_adc0), ...
+            'nStreams', num2str(8 + 8*demux_adc), ...
             'bit_width', num2str(sample_bit_width));
         reuse_line(cursys, 'sim_adc0_data_in/1', 'adc0_sim/1');
     end
@@ -181,7 +181,7 @@ else
         % if the location of 'adc_sim' changes...
         reuse_block(cursys, 'adc1_sim', 'xps_library/ADCs/adc_sim', ...
             'Position', [420   575   515   805], ...
-            'nStreams', num2str(8 + 8*demux_adc0), ...
+            'nStreams', num2str(8 + 8*demux_adc), ...
             'bit_width', num2str(sample_bit_width));
         reuse_line(cursys, 'sim_adc1_data_in/1', 'adc1_sim/1');
     end
@@ -191,7 +191,7 @@ port_mod_factor = 8;
 if clock_sync
     port_mod_factor = port_mod_factor * 2;
 end
-if demux_adc0
+if demux_adc
     port_mod_factor = port_mod_factor * 2;
 end 
 

@@ -12,11 +12,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "sgowda"
+  LastModifiedBy	  "wjm"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Mar 22 13:58:36 2010"
+  LastModifiedDate	  "Mon Mar 22 17:55:56 2010"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:414>"
+  ModelVersionFormat	  "1.%<AutoIncrement:415>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -699,8 +699,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [5, 77, 1377, 928]
-    Open		    off
+    Location		    [5, 78, 1377, 929]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -758,7 +758,7 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[154, 249, 780, 615]
+	Location		[154, 250, 780, 616]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -838,9 +838,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -869,9 +869,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,532,429"
@@ -896,13 +896,13 @@ Library {
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      off
+	      boolean_output	      "off"
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "slice"
@@ -925,11 +925,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -954,11 +954,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -13081,8 +13081,8 @@ Library {
       "are sampled and digitized to \n8 bit binary point numbers in the range of [-1, 1).  \n\nOnline block-specific do"
       "cumentation: http://casper.berkeley.edu/wiki/Adc083000"
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_adc\\sys_adc.html''])')"
-      MaskPromptString	      "Use ZD0K0?|Use ZDOK1?|Demux outputs of adc0?|Interleave 2 ADC boards?|Verbose Block Crea"
-      "tion?|Add ports for control registers?|ADC clock rate (MHz)|Sample Period|Output Bit Width"
+      MaskPromptString	      "Use ZD0K0?|Use ZDOK1?|Demux ADCs by 2?|Interleave 2 ADC boards?|Verbose Block Creation?|"
+      "Add ports for control registers?|ADC clock rate (MHz)|Sample Period|Output Bit Width"
       MaskStyleString	      "checkbox,checkbox,checkbox,checkbox,checkbox,checkbox,edit,edit,edit"
       MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
       MaskCallbackString      "||||||||"
@@ -13090,8 +13090,8 @@ Library {
       MaskVisibilityString    "on,on,on,on,on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
       MaskVarAliasString      ",,,,,,,,"
-      MaskVariables	      "use_adc0=@1;use_adc1=@2;demux_adc0=@3;clock_sync=@4;verbose=@5;using_ctrl=@6;adc_clk_rate=@"
-      "7;sample_period=@8;bit_width=@9;"
+      MaskVariables	      "use_adc0=@1;use_adc1=@2;demux_adc=@3;clock_sync=@4;verbose=@5;using_ctrl=@6;adc_clk_rate=@7"
+      ";sample_period=@8;bit_width=@9;"
       MaskInitialization      "adc083000_mask;"
       MaskDisplay	      "\n"
       MaskSelfModifiable      on
@@ -13242,7 +13242,7 @@ Library {
 	      BlockType		      SubSystem
 	      Name		      "overflow_detector"
 	      Ports		      [16, 1]
-	      Position		      [740, 993, 850, 1187]
+	      Position		      [740, 989, 850, 1181]
 	      AncestorBlock	      "casper_library/Misc/of_detect_bus"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
@@ -13450,7 +13450,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13468,7 +13468,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13486,7 +13486,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13504,7 +13504,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13522,7 +13522,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13540,7 +13540,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13558,7 +13558,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13576,7 +13576,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
+		  FunctionWithSeparateData off
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -13755,7 +13755,7 @@ Library {
 	      N			      "16"
 	      phase		      "1"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13768,7 +13768,7 @@ Library {
 	      N			      "16"
 	      phase		      "11"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13781,7 +13781,7 @@ Library {
 	      N			      "16"
 	      phase		      "12"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13794,7 +13794,7 @@ Library {
 	      N			      "16"
 	      phase		      "13"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13807,7 +13807,7 @@ Library {
 	      N			      "16"
 	      phase		      "14"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13820,7 +13820,7 @@ Library {
 	      N			      "16"
 	      phase		      "15"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13833,7 +13833,7 @@ Library {
 	      N			      "16"
 	      phase		      "0"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13846,7 +13846,7 @@ Library {
 	      N			      "16"
 	      phase		      "2"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13859,7 +13859,7 @@ Library {
 	      N			      "16"
 	      phase		      "3"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13872,7 +13872,7 @@ Library {
 	      N			      "16"
 	      phase		      "4"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13885,7 +13885,7 @@ Library {
 	      N			      "16"
 	      phase		      "5"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13898,7 +13898,7 @@ Library {
 	      N			      "16"
 	      phase		      "6"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13911,7 +13911,7 @@ Library {
 	      N			      "16"
 	      phase		      "7"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13924,7 +13924,7 @@ Library {
 	      N			      "16"
 	      phase		      "8"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13937,7 +13937,7 @@ Library {
 	      N			      "16"
 	      phase		      "9"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -13950,7 +13950,7 @@ Library {
 	      N			      "16"
 	      phase		      "10"
 	      ic		      "0"
-	      smode		      "Allow multirate"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
@@ -14404,7 +14404,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_data_valid"
+	  Name			  "xps_library_adc083000x2_adc0_user_data_valid"
 	  Ports			  [1, 1]
 	  Position		  [840, 998, 895, 1022]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14417,17 +14417,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14439,7 +14438,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_outofrange"
+	  Name			  "xps_library_adc083000x2_adc0_user_outofrange"
 	  Ports			  [1, 1]
 	  Position		  [840, 948, 895, 972]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14452,17 +14451,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14474,7 +14472,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s0"
+	  Name			  "xps_library_adc083000x2_adc0_user_s0"
 	  Ports			  [1, 1]
 	  Position		  [840, 98, 895, 122]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14487,17 +14485,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14509,14 +14506,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s0_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s0_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 95, 1130, 125]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14526,7 +14523,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s1"
+	  Name			  "xps_library_adc083000x2_adc0_user_s1"
 	  Ports			  [1, 1]
 	  Position		  [840, 198, 895, 222]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14539,17 +14536,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14561,14 +14557,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s1_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s1_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 195, 1130, 225]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14578,7 +14574,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s2"
+	  Name			  "xps_library_adc083000x2_adc0_user_s2"
 	  Ports			  [1, 1]
 	  Position		  [840, 298, 895, 322]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14591,17 +14587,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14613,14 +14608,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s2_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s2_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 295, 1130, 325]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14630,7 +14625,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s3"
+	  Name			  "xps_library_adc083000x2_adc0_user_s3"
 	  Ports			  [1, 1]
 	  Position		  [840, 398, 895, 422]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14643,17 +14638,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14665,14 +14659,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s3_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s3_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 395, 1130, 425]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14682,7 +14676,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s4"
+	  Name			  "xps_library_adc083000x2_adc0_user_s4"
 	  Ports			  [1, 1]
 	  Position		  [840, 498, 895, 522]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14695,17 +14689,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14717,14 +14710,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s4_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s4_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 495, 1130, 525]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14734,7 +14727,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s5"
+	  Name			  "xps_library_adc083000x2_adc0_user_s5"
 	  Ports			  [1, 1]
 	  Position		  [840, 598, 895, 622]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14747,17 +14740,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14769,14 +14761,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s5_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s5_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 595, 1130, 625]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14786,7 +14778,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s6"
+	  Name			  "xps_library_adc083000x2_adc0_user_s6"
 	  Ports			  [1, 1]
 	  Position		  [840, 698, 895, 722]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14799,17 +14791,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14821,14 +14812,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s6_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s6_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 695, 1130, 725]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14838,7 +14829,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s7"
+	  Name			  "xps_library_adc083000x2_adc0_user_s7"
 	  Ports			  [1, 1]
 	  Position		  [840, 798, 895, 822]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14851,17 +14842,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14873,14 +14863,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_s7_conv"
+	  Name			  "xps_library_adc083000x2_adc0_user_s7_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 795, 1130, 825]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -14890,7 +14880,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc0_user_sync"
+	  Name			  "xps_library_adc083000x2_adc0_user_sync"
 	  Ports			  [1, 1]
 	  Position		  [840, 898, 895, 922]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14903,17 +14893,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14925,7 +14914,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_data_valid"
+	  Name			  "xps_library_adc083000x2_adc1_user_data_valid"
 	  Ports			  [1, 1]
 	  Position		  [840, 1148, 895, 1172]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14938,17 +14927,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14960,7 +14948,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_outofrange"
+	  Name			  "xps_library_adc083000x2_adc1_user_outofrange"
 	  Ports			  [1, 1]
 	  Position		  [840, 1098, 895, 1122]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -14973,17 +14961,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -14995,7 +14982,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s0"
+	  Name			  "xps_library_adc083000x2_adc1_user_s0"
 	  Ports			  [1, 1]
 	  Position		  [840, 148, 895, 172]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15008,17 +14995,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15030,14 +15016,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s0_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s0_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 145, 1130, 175]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15047,7 +15033,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s1"
+	  Name			  "xps_library_adc083000x2_adc1_user_s1"
 	  Ports			  [1, 1]
 	  Position		  [840, 248, 895, 272]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15060,17 +15046,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15082,14 +15067,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s1_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s1_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 245, 1130, 275]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15099,7 +15084,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s2"
+	  Name			  "xps_library_adc083000x2_adc1_user_s2"
 	  Ports			  [1, 1]
 	  Position		  [840, 348, 895, 372]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15112,17 +15097,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15134,14 +15118,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s2_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s2_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 345, 1130, 375]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15151,7 +15135,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s3"
+	  Name			  "xps_library_adc083000x2_adc1_user_s3"
 	  Ports			  [1, 1]
 	  Position		  [840, 448, 895, 472]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15164,17 +15148,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15186,14 +15169,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s3_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s3_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 445, 1130, 475]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15203,7 +15186,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s4"
+	  Name			  "xps_library_adc083000x2_adc1_user_s4"
 	  Ports			  [1, 1]
 	  Position		  [840, 548, 895, 572]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15216,17 +15199,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15238,14 +15220,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s4_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s4_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 545, 1130, 575]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15255,7 +15237,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s5"
+	  Name			  "xps_library_adc083000x2_adc1_user_s5"
 	  Ports			  [1, 1]
 	  Position		  [840, 648, 895, 672]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15268,17 +15250,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15290,14 +15271,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s5_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s5_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 645, 1130, 675]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15307,7 +15288,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s6"
+	  Name			  "xps_library_adc083000x2_adc1_user_s6"
 	  Ports			  [1, 1]
 	  Position		  [840, 748, 895, 772]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15320,17 +15301,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15342,14 +15322,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s6_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s6_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 745, 1130, 775]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15359,7 +15339,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s7"
+	  Name			  "xps_library_adc083000x2_adc1_user_s7"
 	  Ports			  [1, 1]
 	  Position		  [840, 848, 895, 872]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15372,17 +15352,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15394,14 +15373,14 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_s7_conv"
+	  Name			  "xps_library_adc083000x2_adc1_user_s7_conv"
 	  Ports			  [1, 1]
 	  Position		  [1050, 845, 1130, 875]
 	  SourceBlock		  "xps_library/ADCs/conv"
-	  SourceType		  "Unknown"
+	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -15411,7 +15390,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adc_snap_adc083000x2_adc1_user_sync"
+	  Name			  "xps_library_adc083000x2_adc1_user_sync"
 	  Ports			  [1, 1]
 	  Position		  [840, 1048, 895, 1072]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -15424,17 +15403,16 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
-	  block_version		  "11.4"
+	  block_version		  "11.3"
 	  sg_icon_stat		  "55,24,1,1,white,yellow,0,00d3666e,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
 	  "ch([0.381818 0.309091 0.418182 0.309091 0.381818 0.490909 0.527273 0.563636 0.690909 0.6 0.509091 0.436364 0.545455"
@@ -15650,17 +15628,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s0"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s0"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s0"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s0_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s0_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s0_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s0_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s0"
 	  DstPort		  1
@@ -15668,17 +15646,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  2
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s0"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s0"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s0"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s0"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s0_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s0_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s0_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s0_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s0"
 	  DstPort		  1
@@ -15686,17 +15664,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  3
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s1"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s1"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s1"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s1_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s1_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s1_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s1_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s1"
 	  DstPort		  1
@@ -15704,17 +15682,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  4
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s1"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s1"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s1"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s1_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s1_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s1_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s1_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s1"
 	  DstPort		  1
@@ -15722,17 +15700,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  5
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s2"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s2"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s2"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s2_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s2_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s2_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s2_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s2"
 	  DstPort		  1
@@ -15740,17 +15718,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  6
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s2"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s2"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s2"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s2_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s2_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s2_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s2_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s2"
 	  DstPort		  1
@@ -15758,17 +15736,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  7
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s3"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s3"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s3"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s3_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s3_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s3_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s3_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s3"
 	  DstPort		  1
@@ -15776,17 +15754,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  8
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s3"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s3"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s3"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s3"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s3_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s3_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s3_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s3_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s3"
 	  DstPort		  1
@@ -15794,17 +15772,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  9
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s4"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s4"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s4"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s4"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s4_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s4_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s4_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s4_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s4"
 	  DstPort		  1
@@ -15812,17 +15790,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  10
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s4"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s4"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s4"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s4"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s4_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s4_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s4_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s4_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s4"
 	  DstPort		  1
@@ -15830,17 +15808,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  11
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s5"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s5"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s5"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s5"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s5_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s5_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s5_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s5_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s5"
 	  DstPort		  1
@@ -15848,17 +15826,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  12
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s5"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s5"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s5"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s5"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s5_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s5_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s5_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s5_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s5"
 	  DstPort		  1
@@ -15866,17 +15844,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  13
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s6"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s6"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s6"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s6"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s6_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s6_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s6_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s6_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s6"
 	  DstPort		  1
@@ -15884,17 +15862,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  14
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s6"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s6"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s6"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s6"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s6_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s6_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s6_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s6_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s6"
 	  DstPort		  1
@@ -15902,17 +15880,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  15
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s7"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s7"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s7"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s7"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_s7_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_s7_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_s7_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_s7_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc0_s7"
 	  DstPort		  1
@@ -15920,17 +15898,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc_sim"
 	  SrcPort		  16
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s7"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s7"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s7"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s7"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_s7_conv"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_s7_conv"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_s7_conv"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_s7_conv"
 	  SrcPort		  1
 	  DstBlock		  "adc1_s7"
 	  DstPort		  1
@@ -15938,11 +15916,11 @@ Library {
 	Line {
 	  SrcBlock		  "adc0_sync_sim"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_sync"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_sync"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_sync"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_sync"
 	  SrcPort		  1
 	  DstBlock		  "adc0_sync"
 	  DstPort		  1
@@ -15952,16 +15930,16 @@ Library {
 	  SrcPort		  17
 	  Points		  [0, 0]
 	  Branch {
-	    DstBlock		    "adc_snap_adc083000x2_adc0_user_outofrange"
+	    DstBlock		    "xps_library_adc083000x2_adc0_user_outofrange"
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "adc_snap_adc083000x2_adc1_user_outofrange"
+	    DstBlock		    "xps_library_adc083000x2_adc1_user_outofrange"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_outofrange"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_outofrange"
 	  SrcPort		  1
 	  DstBlock		  "adc0_outofrange"
 	  DstPort		  1
@@ -15969,11 +15947,11 @@ Library {
 	Line {
 	  SrcBlock		  "adc0_data_valid_sim"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc0_user_data_valid"
+	  DstBlock		  "xps_library_adc083000x2_adc0_user_data_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc0_user_data_valid"
+	  SrcBlock		  "xps_library_adc083000x2_adc0_user_data_valid"
 	  SrcPort		  1
 	  DstBlock		  "adc0_data_valid"
 	  DstPort		  1
@@ -15981,17 +15959,17 @@ Library {
 	Line {
 	  SrcBlock		  "adc1_sync_sim"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_sync"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_sync"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_sync"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_sync"
 	  SrcPort		  1
 	  DstBlock		  "adc1_sync"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_outofrange"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_outofrange"
 	  SrcPort		  1
 	  DstBlock		  "adc1_outofrange"
 	  DstPort		  1
@@ -15999,11 +15977,11 @@ Library {
 	Line {
 	  SrcBlock		  "adc1_data_valid_sim"
 	  SrcPort		  1
-	  DstBlock		  "adc_snap_adc083000x2_adc1_user_data_valid"
+	  DstBlock		  "xps_library_adc083000x2_adc1_user_data_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "adc_snap_adc083000x2_adc1_user_data_valid"
+	  SrcBlock		  "xps_library_adc083000x2_adc1_user_data_valid"
 	  SrcPort		  1
 	  DstBlock		  "adc1_data_valid"
 	  DstPort		  1

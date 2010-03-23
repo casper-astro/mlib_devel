@@ -40,7 +40,7 @@ s.hw_sys = get(xsg_obj,'hw_sys');
 s.adc_str = 'adc0';
 % s.use_adc0 = strcmp( get_param(blk_name, 'use_adc0'), 'on');
 % s.use_adc1 = strcmp( get_param(blk_name, 'use_adc1'), 'on');
-% s.demux_adc = strcmp( get_param(blk_name, 'demux_adc0'), 'on');
+% s.demux_adc = strcmp( get_param(blk_name, 'demux_adc'), 'on');
 % if s.demux_adc
 %     s.sysclk_rate = eval_param(blk_name,'adc_clk_rate')/8;
 % else
