@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "wjm"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Mar 22 22:17:03 2010"
+  LastModifiedDate	  "Mon Mar 22 23:47:11 2010"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:416>"
+  ModelVersionFormat	  "1.%<AutoIncrement:418>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -699,8 +699,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [5, 78, 1377, 929]
-    Open		    off
+    Location		    [4, 58, 1376, 909]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -759,7 +759,7 @@ Library {
       System {
 	Name			"ADCs"
 	Location		[154, 250, 780, 616]
-	Open			on
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -840,9 +840,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
@@ -873,22 +873,22 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
 	      block_type	      "convert"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "45,30,1,1,white,blue,0,5129c5aa,right,"
+	      sg_icon_stat	      "55,20,1,1,white,blue,0,5129c5aa,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.511111 0.555556 0.6 0.777778 0.622222 0.488889 0.377"
-	      "778 0.511111 0.377778 0.488889 0.622222 0.777778 0.6 0.555556 0.511111 0.333333 ],[0.1 0.266667 0.5 0.733333 0."
-	      "9 0.9 0.833333 0.9 0.9 0.666667 0.866667 0.7 0.5 0.3 0.133333 0.333333 0.1 0.1 0.166667 0.1 0.1 ],[0.98 0.96 0."
-	      "92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin "
-	      "icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-2}','texmode','o"
-	      "n');\nfprintf('','COMMENT: end icon text');\n"
+	      "]);\npatch([0.4 0.345455 0.436364 0.345455 0.4 0.490909 0.509091 0.527273 0.636364 0.563636 0.490909 0.436364 0"
+	      ".527273 0.436364 0.490909 0.563636 0.636364 0.527273 0.509091 0.490909 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0."
+	      "9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);"
+	      "\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label"
+	      "('output',1,'cast');\ncolor('black');disp('\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon tex"
+	      "t');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -902,24 +902,24 @@ Library {
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      off
+	      boolean_output	      "off"
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "60,30,1,1,white,blue,0,1fd851a7,right,"
+	      sg_icon_stat	      "60,20,1,1,white,blue,0,1fd851a7,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.283333 0.4 0.283333 0.366667 0.5 0.533333 0.566667 0.7 0.583333 0.483333 0.4 0.5 0.4 0.4"
-	      "83333 0.583333 0.7 0.566667 0.533333 0.5 0.366667 ],[0.1 0.266667 0.5 0.733333 0.9 0.9 0.833333 0.9 0.9 0.66666"
-	      "7 0.866667 0.7 0.5 0.3 0.133333 0.333333 0.1 0.1 0.166667 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');p"
-	      "ort_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
+	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
+	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
+	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpr"
+	      "intf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Terminator
@@ -935,7 +935,7 @@ Library {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "test_adc_ctrl_adc083000_ctrl_conf"
+	      Name		      "xps_library_ADCs_adc083000_ctrl_conf"
 	      Ports		      [1, 1]
 	      Position		      [360, 45, 420, 65]
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
@@ -943,11 +943,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -964,7 +964,7 @@ Library {
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "test_adc_ctrl_adc083000_ctrl_sdata_bus"
+	      Name		      "xps_library_ADCs_adc083000_ctrl_sdata_bus"
 	      Ports		      [1, 1]
 	      Position		      [360, 120, 420, 140]
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
@@ -972,11 +972,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -992,13 +992,13 @@ Library {
 	      ";\n"
 	    }
 	    Line {
-	      SrcBlock		      "test_adc_ctrl_adc083000_ctrl_sdata_bus"
+	      SrcBlock		      "xps_library_ADCs_adc083000_ctrl_sdata_bus"
 	      SrcPort		      1
 	      DstBlock		      "Terminator1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "test_adc_ctrl_adc083000_ctrl_conf"
+	      SrcBlock		      "xps_library_ADCs_adc083000_ctrl_conf"
 	      SrcPort		      1
 	      DstBlock		      "Terminator"
 	      DstPort		      1
@@ -1006,7 +1006,7 @@ Library {
 	    Line {
 	      SrcBlock		      "Convert1"
 	      SrcPort		      1
-	      DstBlock		      "test_adc_ctrl_adc083000_ctrl_sdata_bus"
+	      DstBlock		      "xps_library_ADCs_adc083000_ctrl_sdata_bus"
 	      DstPort		      1
 	    }
 	    Line {
@@ -1024,7 +1024,7 @@ Library {
 	    Line {
 	      SrcBlock		      "Convert"
 	      SrcPort		      1
-	      DstBlock		      "test_adc_ctrl_adc083000_ctrl_conf"
+	      DstBlock		      "xps_library_ADCs_adc083000_ctrl_conf"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7097,15 +7097,16 @@ Library {
       RequestExecContextInheritance off
       MaskHideContents	      off
       MaskPromptString	      "Output Data Type|Address width|Data Width|Data Binary Point|Initial values (simulation o"
-      "nly)|Sample rate"
-      MaskStyleString	      "popup(Unsigned|Signed  (2's comp)),edit,edit,edit,edit,edit"
-      MaskTunableValueString  "on,on,on,on,on,on"
-      MaskCallbackString      "|||||"
-      MaskEnableString	      "on,on,off,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,"
-      MaskVariables	      "arith_type=@1;addr_width=@2;data_width=@3;data_bin_pt=@4;init_vals=@5;sample_rate=@6;"
+      "nly)|Sample rate|Latency"
+      MaskStyleString	      "popup(Unsigned|Signed  (2's comp)),edit,edit,edit,edit,edit,edit"
+      MaskTunableValueString  "on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||"
+      MaskEnableString	      "on,on,off,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,"
+      MaskVariables	      "arith_type=@1;addr_width=@2;data_width=@3;data_bin_pt=@4;init_vals=@5;sample_rate=@6;latenc"
+      "y=@7;"
       MaskInitialization      "shared_bram_mask;"
       MaskSelfModifiable      on
       MaskIconFrame	      on
@@ -7113,11 +7114,11 @@ Library {
       MaskIconRotate	      "none"
       MaskPortRotate	      "default"
       MaskIconUnits	      "pixels"
-      MaskValueString	      "Signed  (2's comp)|11|32|0|[1:2^11]|1"
-      MaskTabNameString	      ",,,,,"
+      MaskValueString	      "Signed  (2's comp)|11|32|0|[1:2^11]|1|0"
+      MaskTabNameString	      ",,,,,,"
       System {
 	Name			"Shared BRAM"
-	Location		[214, 240, 1089, 701]
+	Location		[214, 241, 1089, 702]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -7169,21 +7170,22 @@ Library {
 	  bin_pt		  "0"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  latency		  "latency"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,374,375"
+	  sggui_pos		  "20,20,636,521"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "35,24,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 ],[0 0 24 24 ],[0.77 0.82 0.91]);\n"
-	  "patch([11 7 13 7 11 17 19 21 28 23 18 14 20 14 18 23 28 21 19 17 11 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3"
-	  " 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 35 35 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon "
-	  "text');\n"
+	  sg_icon_stat		  "35,24,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.314286 0.2 0.371429 0.2 0.314286 0.485714 0.542857 0.6 0.8 0.657143 0.514286 0.4 0.571429 0.4 0.514286 0.6571"
+	  "43 0.8 0.6 0.542857 0.485714 0.314286 ],[0.125 0.291667 0.541667 0.791667 0.958333 0.958333 0.875 0.958333 0.958333"
+	  " 0.75 0.958333 0.791667 0.541667 0.291667 0.125 0.333333 0.125 0.125 0.208333 0.125 0.125 ],[0.98 0.96 0.92]);\nplo"
+	  "t([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n"
+	  "color('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7198,21 +7200,22 @@ Library {
 	  bin_pt		  "data_bin_pt"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  latency		  "latency"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,20,636,521"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "35,24,1,1,white,blue,0,0eb6e735"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 ],[0 0 24 24 ],[0.77 0.82 0.91]);\n"
-	  "patch([11 7 13 7 11 17 19 21 28 23 18 14 20 14 18 23 28 21 19 17 11 ],[3 7 13 19 23 23 21 23 23 18 23 19 13 7 3 8 3"
-	  " 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 0 35 35 0 ],[0 24 24 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon "
-	  "text');\n"
+	  sg_icon_stat		  "35,24,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.314286 0.2 0.371429 0.2 0.314286 0.485714 0.542857 0.6 0.8 0.657143 0.514286 0.4 0.571429 0.4 0.514286 0.6571"
+	  "43 0.8 0.6 0.542857 0.485714 0.314286 ],[0.125 0.291667 0.541667 0.791667 0.958333 0.958333 0.875 0.958333 0.958333"
+	  " 0.75 0.958333 0.791667 0.541667 0.291667 0.125 0.333333 0.125 0.125 0.208333 0.125 0.125 ],[0.98 0.96 0.92]);\nplo"
+	  "t([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n"
+	  "color('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7227,21 +7230,22 @@ Library {
 	  bin_pt		  "0"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  latency		  "latency"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,20,636,521"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "35,24,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "35,24,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.314286 0.2 0.371429 0.2 0.314286 0.485714 0.542857 0.6 0.8 0.657143 0.514286 0.4 0.571429 0.4 0.514286 0.6571"
+	  "43 0.8 0.6 0.542857 0.485714 0.314286 ],[0.125 0.291667 0.541667 0.791667 0.958333 0.958333 0.875 0.958333 0.958333"
+	  " 0.75 0.958333 0.791667 0.541667 0.291667 0.125 0.333333 0.125 0.125 0.208333 0.125 0.125 ],[0.98 0.96 0.92]);\nplo"
+	  "t([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n"
+	  "color('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  SubSystem
@@ -7400,11 +7404,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "sample_rate"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
 	      "'=>{'non_memory_mapped_port'=>'sim_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}}}"
@@ -7412,12 +7416,14 @@ Library {
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
 	      block_version	      "9.1.01"
-	      sg_icon_stat	      "55,20,1,1,white,yellow,0,4bb76ffd"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 20 20 ],[0.95 0.93 "
-	      "0.65]);\npatch([22 19 24 19 22 27 28 29 35 31 27 24 29 24 27 31 35 29 28 27 22 ],[2 5 10 15 18 18 17 18 18 14 1"
-	      "8 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 20 20 0 0 ]);\nfprintf('','COMMENT: end ic"
-	      "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\"
-	      "bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "55,20,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.345455 0.436364 0.345455 0.4 0.490909 0.509091 0.527273 0.636364 0.563636 0.490909 0.436364 0"
+	      ".527273 0.436364 0.490909 0.563636 0.636364 0.527273 0.509091 0.490909 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0."
+	      "9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);"
+	      "\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label"
+	      "('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('',"
+	      "'COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -7557,11 +7563,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{'A5','B9','A9','C1','A3','G6','E9','A6','A7','A8','B8','B1','B3','D9','B5','B4','B6','C2'}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'}},'Xilinx'=>{'jtaghwc"
 	  "osim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRA"
@@ -7570,12 +7576,14 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "55,22,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 22 22 ],[0.95 0.93 0.65]);\n"
-	  "patch([22 18 23 18 22 28 30 32 38 33 28 25 31 25 28 33 38 32 30 28 22 ],[2 6 11 16 20 20 18 20 20 15 20 17 11 5 2 7"
-	  " 2 2 4 2 2 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('outpu"
-	  "t',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,22,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.563636 0.454545 "
+	  "0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0.909091 0.818182 "
+	  "0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.0909091 0.181818 0.0909091"
+	  " 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprin"
+	  "tf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1"
+	  ",'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7587,11 +7595,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'}},'Xilinx'=>{'jtag"
 	  "hwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shar"
@@ -7600,12 +7608,14 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "55,22,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 22 22 ],[0.95 0.93 0.65]);\n"
-	  "patch([22 18 23 18 22 28 30 32 38 33 28 25 31 25 28 33 38 32 30 28 22 ],[2 6 11 16 20 20 18 20 20 15 20 17 11 5 2 7"
-	  " 2 2 4 2 2 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('outpu"
-	  "t',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,22,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.563636 0.454545 "
+	  "0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0.909091 0.818182 "
+	  "0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.0909091 0.181818 0.0909091"
+	  " 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprin"
+	  "tf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1"
+	  ",'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7622,11 +7632,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "sample_rate"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'}},'Xilinx'=>{'jta"
 	  "ghwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Sh"
@@ -7635,12 +7645,13 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "55,20,1,1,white,yellow,0,4bb76ffd"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([22 19 24 19 22 27 28 29 35 31 27 24 29 24 27 31 35 29 28 27 22 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 0 55 55 0 ],[0 20 20 0 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,20,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.4 0.345455 0.436364 0.345455 0.4 0.490909 0.509091 0.527273 0.636364 0.563636 0.490909 0.436364 0.527273 0.43"
+	  "6364 0.490909 0.563636 0.636364 0.527273 0.509091 0.490909 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0."
+	  "75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMEN"
+	  "T: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{1"
+	  "1pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7652,11 +7663,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{'A14'}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'}},'Xilinx'=>{'jtaghwcos"
 	  "im'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we"
@@ -7665,12 +7676,14 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "55,22,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 22 22 ],[0.95 0.93 0.65]);\n"
-	  "patch([22 18 23 18 22 28 30 32 38 33 28 25 31 25 28 33 38 32 30 28 22 ],[2 6 11 16 20 20 18 20 20 15 20 17 11 5 2 7"
-	  " 2 2 4 2 2 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('outpu"
-	  "t',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "55,22,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.563636 0.454545 "
+	  "0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0.909091 0.818182 "
+	  "0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.0909091 0.181818 0.0909091"
+	  " 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprin"
+	  "tf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1"
+	  ",'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport
