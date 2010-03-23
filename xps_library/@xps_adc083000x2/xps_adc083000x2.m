@@ -32,7 +32,7 @@ if ~strcmp(get(blk_obj,'type'),'xps_adc083000x2')
     error(['Wrong XPS block type: ',get(blk_obj,'type')]);
 end
 
-blk_name = get(blk_obj,'simulink_name')
+blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 
 % Retrieve block configuration parameters
