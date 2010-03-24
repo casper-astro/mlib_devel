@@ -22,10 +22,16 @@
 
 function sram_sim (this_block)
 
-    if isempty(getenv('MLIB_ROOT'))
-        error('MLIB_ROOT environment variable must be set to point to mlib directory.');
-    else
+    xps_library_path = getenv('XPS_LIBRARY_PATH');
+    if isempty(xps_library_path)
+        % try to fall back on MLIB_ROOT.
         mlib_root = getenv('MLIB_ROOT');
+        if isempty(mlib_root)
+            error('XPS_LIBRARY_PATH environment variable must be set to point to xps_library directory.');
+        else
+            warning('MLIB_ROOT environment variable is deprecated.')
+            xps_library_path = [mlib_root, '\xps_library'];
+        end
     end
 
     this_block.setTopLevelLanguage('VHDL');
@@ -52,9 +58,9 @@ function sram_sim (this_block)
     this_block.port('data_valid').setRate(1);
     this_block.port('data_valid').setType('UFix_1_0');
 
-    this_block.addFile([mlib_root,'\xps_library\hdlsimfiles\sram_sim\package_utility.vhd']);
-    this_block.addFile([mlib_root,'\xps_library\hdlsimfiles\sram_sim\CY7C1370DV25.vhd']);
-    this_block.addFile([mlib_root,'\xps_library\hdlsimfiles\sram_sim\sram_interface.vhd']);
-    this_block.addFile([mlib_root,'\xps_library\hdlsimfiles\sram_sim\sram_sim.vhd']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\sram_sim\package_utility.vhd']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\sram_sim\CY7C1370DV25.vhd']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\sram_sim\sram_interface.vhd']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\sram_sim\sram_sim.vhd']);
 
 return;

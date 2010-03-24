@@ -22,12 +22,16 @@
 
 function dram_sim (this_block)
 
-    this_block.blockName;
-
-    if isempty(getenv('MLIB_ROOT'))
-        error('MLIB_ROOT environment variable must be set to point to mlib directory.');
-    else
+    xps_library_path = getenv('XPS_LIBRARY_PATH');
+    if isempty(xps_library_path)
+        % try to fall back on MLIB_ROOT.
         mlib_root = getenv('MLIB_ROOT');
+        if isempty(mlib_root)
+            error('XPS_LIBRARY_PATH environment variable must be set to point to xps_library directory.');
+        else
+            warning('MLIB_ROOT environment variable is deprecated.')
+            xps_library_path = [mlib_root, '\xps_library'];
+        end
     end
 
     simwrapper = get_param(this_block.blockName, 'parent');
@@ -109,12 +113,11 @@ function dram_sim (this_block)
     this_block.port('rd_valid').setRate(1);
 
 
-    this_block.addFile([mlib_root, '\xps_library\hdlsimfiles\dram_sim\xilinx_sim_src.vhd']);
-    this_block.addFile([mlib_root, '\xps_library\hdlsimfiles\dram_sim\ddr2_parameters.vh']);
-    this_block.addFile([mlib_root, '\xps_library\hdlsimfiles\dram_sim\ddr2_sim.v']);
-    this_block.addFile([mlib_root, '\xps_library\hdlsimfiles\dram_sim\ddr2_controller.vhd']);
-    this_block.addFile([mlib_root, '\xps_library\hdlsimfiles\dram_sim\async_ddr2.v']);
-
-    this_block.addFile([mlib_root, '\xps_library\hdlsimfiles\dram_sim\dram_sim.vhd']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\dram_sim\xilinx_sim_src.vhd']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\dram_sim\ddr2_parameters.vh']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\dram_sim\ddr2_sim.v']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\dram_sim\ddr2_controller.vhd']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\dram_sim\async_ddr2.v']);
+    this_block.addFile([xps_library_path, '\hdlsimfiles\dram_sim\dram_sim.vhd']);
 
 return;
