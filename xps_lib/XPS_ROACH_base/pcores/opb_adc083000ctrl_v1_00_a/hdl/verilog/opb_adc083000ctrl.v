@@ -19,7 +19,7 @@ assign adc1_sdata = sdata_bus[0]; //adc_ctrl_sdata;
 assign adc0_notSCS = conf[1];
 assign adc1_notSCS = conf[2];
 assign adc0_sclk = conf[0];
-assign adc1_sclk = conf[1];
+assign adc1_sclk = conf[0];
 
 // // Wires and Regs
 // //===============
