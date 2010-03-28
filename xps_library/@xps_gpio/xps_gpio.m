@@ -117,7 +117,7 @@ switch s.hw_sys
                 iostandard = 'LVCMOS33';
               case 'gpiob_oe_n'
                 iostandard = 'LVCMOS33';
-              case 'gpioa'
+              case 'gpiob'
                 iostandard = 'LVCMOS15';
               otherwise
                 iostandard = 'LVCMOS25';
