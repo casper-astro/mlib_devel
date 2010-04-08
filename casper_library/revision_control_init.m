@@ -16,7 +16,7 @@ lib_rcs = 0;
 % First try tortoiseSVN
 path = which(gcs);
 
-[usr_r,usr_rev] = system(sprintf('%s %s', 'SubWCRev.exe', path))
+[usr_r,usr_rev] = system(sprintf('%s %s', 'SubWCRev.exe', path));
 
 if (usr_r == 0) %success
     if (~isempty(regexp(usr_rev,'Local modifications'))) % we have local mods
@@ -95,43 +95,30 @@ if ( got_usr_rcs == 0  && strcmp(error_on_norcs, 'on') == 1)
     error('Failed to retrieve revision control information for user design');
 end
 
-%disp('lib dirty');
 if (lib_dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
     error('Files in revision control system out-of-date for libraries');
 end
-%disp('usr dirty');
 if (usr_dirty == 1 && strcmp(error_on_dirty, 'on') == 1)
     error('Files in revision control system out-of-date for user design');
 end
 
-disp('got library stuff');
 vec = {varargin{:}, 'usr_rev', usr_rcs, 'usr_dirty', usr_dirty, 'lib_rev', lib_rcs, 'lib_dirty', lib_dirty};
 
 if same_state(blk, 'defaults', defaults, vec{:}), return, end
-%disp('munging');
 munge_block(blk, vec{:});
-%disp('got_usr_rcs');
 if (got_usr_rcs == 0)
     disp('Warning: could not establish version for user design in revision control system');
 end
 
-%disp('usr_dirty');
 set_param([blk, '/const_uptodate'], 'const', num2str(usr_dirty));
-%disp('usr_rcs');
-usr_rcs
 set_param([blk, '/const_rcs'], 'const', num2str(usr_rcs));
 
-%disp('lib');
 if (got_lib_rcs == 0)
     disp('Warning: could not establish version for libraries in revision control system');
 end
-%disp('lib_dirty');    
 set_param([blk, '/const_lib_uptodate'], 'const', num2str(lib_dirty));
-%disp('lib_rcs');
-lib_rcs
 set_param([blk, '/const_lib_rcs'], 'const', num2str(lib_rcs));
 
-%disp('saving state');
 save_state(blk, 'defaults', defaults, vec{:});
 
 disp('exiting');
