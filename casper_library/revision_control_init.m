@@ -121,4 +121,3 @@ set_param([blk, '/const_lib_rcs'], 'const', num2str(lib_rcs));
 
 save_state(blk, 'defaults', defaults, vec{:});
 
-disp('exiting');
