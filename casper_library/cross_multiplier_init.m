@@ -43,16 +43,19 @@ bit_width_out = get_var('bit_width_out', 'defaults', defaults, varargin{:});
 binary_point_out = get_var('binary_point_out', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
+overflow = get_var('overflow', 'defaults', defaults, varargin{:});
+quantisation = get_var('quantisation', 'defaults', defaults, varargin{:});
+conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
 
 %delay infrastructure
 reuse_block(blk, 'sync_in', 'built-in/inport', ...
     'Port', '1', 'Position', [30 30 60 45]);
 reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
-    'latency', 'mult_latency+add_latency+1', ...
+    'latency', 'mult_latency+add_latency+1+conv_latency', ...
     'Position', [410 25 460 50]) 
 add_line(blk, 'sync_in/1', 'sync_delay/1');
 reuse_block(blk, 'sync_out', 'built-in/outport', ...
-    'Port', '1', 'Position', [850 30 880 45]);
+    'Port', '1', 'Position', [950 30 980 45]);
 add_line(blk, 'sync_delay/1', 'sync_out/1');
 
 offset = 0;
@@ -74,7 +77,8 @@ for input = 0:streams-1,
 
     %go through each aggregated stream
     for substream = 0:aggregation-1,
-        %separate real from imaginary parts
+
+        %combine real from imaginary parts
         sub_name = ['c_to_ri', num2str(input), '_', num2str(substream)];
         reuse_block(blk, sub_name, 'casper_library/Misc/c_to_ri', ...
             'n_bits', 'bit_width_in', 'bin_pt', 'binary_point_in', ...
@@ -100,7 +104,7 @@ for input = 0:streams-1,
         pack_name = ['pack', num2str(input), '_', num2str(mult)];
         reuse_block(blk, pack_name, 'gavrt_library/cram', ...
             'num_slice', 'aggregation', ...
-            'Position', [700 100+(offset+mults+(mult*aggregation))*tick 750 130+(offset+mults+(mult*aggregation))*tick]);
+            'Position', [800 100+(offset+mults+(mult*aggregation))*tick 850 130+(offset+mults+(mult*aggregation))*tick]);
         
         for substream = 0:aggregation-1,
 
@@ -110,7 +114,7 @@ for input = 0:streams-1,
                 'mult_latency', 'mult_latency', 'add_latency', 'add_latency', ...
                 'Position', [550 100+(offset+mults+(mult*aggregation)+substream)*tick 600 195+(offset+mults+(mult*aggregation)+substream)*tick]);
 
-            %set up delays
+            %set up delays to remove fanout from c_to_ri blocks
             delay_name = ['delay', num2str(input), '_', num2str(mult), '_', num2str(substream), '_0'];
             reuse_block(blk, delay_name, 'xbsIndex_r4/Delay', ...
                 'latency', '1', ...
@@ -141,17 +145,28 @@ for input = 0:streams-1,
 
             %TODO finish overflow detection
             %convert data to output precision
-%            cvrt_name = ['convert', num2str(input), '_', num2str(mult), '_', num2str(substream)];
-%            reuse_block(blk, [cvrt_name, '_real'], 'casper_library/Misc/convert_of', ...
-%                'Position', [525 100+(offset+mults+(mult*aggregation)+substream)*tick 600   
+            cvrt_name = ['cvrt', num2str(input), '_', num2str(mult), '_', num2str(substream)];
+            reuse_block(blk, [cvrt_name, '_real'], 'casper_library/Misc/convert_of', ...
+	    	'bit_width_i', tostring(bit_width_in*2+1), 'binary_point_i', tostring(binary_point_in*2), ...
+	    	'bit_width_o', tostring(bit_width_out), 'binary_point_o', tostring(binary_point_out), ...
+		'overflow', tostring(overflow), 'quantization', tostring(quantisation), 'latency', tostring(conv_latency), ...
+                'Position', [625 100+(offset+mults+(mult*aggregation)+substream)*tick 675 130+(offset+mults+(mult*aggregation)+substream)*tick]);
+            reuse_block(blk, [cvrt_name, '_imag'], 'casper_library/Misc/convert_of', ...
+	    	'bit_width_i', tostring(bit_width_in*2+1), 'binary_point_i', tostring(binary_point_in*2), ...
+	    	'bit_width_o', tostring(bit_width_out), 'binary_point_o', tostring(binary_point_out), ...
+		'overflow', tostring(overflow), 'quantization', tostring(quantisation), 'latency', tostring(conv_latency), ... 
+                'Position', [625 150+(offset+mults+(mult*aggregation)+substream)*tick 675 180+(offset+mults+(mult*aggregation)+substream)*tick]);
+            
+	    add_line(blk, [mult_name,'/1'], [cvrt_name,'_real/1']);
+            add_line(blk, [mult_name,'/2'], [cvrt_name,'_imag/1']);
 
             %join results into complex output
             ri2c_name = ['ri_to_c', num2str(input), '_', num2str(mult), '_', num2str(substream)];
             reuse_block(blk, ri2c_name, 'casper_library/Misc/ri_to_c', ...
-                'Position', [625 100+(offset+mults+(mult*aggregation)+substream)*tick 675 130+(offset+mults+(mult*aggregation)+substream)*tick]);
+                'Position', [725 100+(offset+mults+(mult*aggregation)+substream)*tick 775 130+(offset+mults+(mult*aggregation)+substream)*tick]);
 
-            add_line(blk, [mult_name,'/1'], [ri2c_name,'/1']);
-            add_line(blk, [mult_name,'/2'], [ri2c_name,'/2']);
+            add_line(blk, [cvrt_name,'_real/1'], [ri2c_name,'/1']);
+            add_line(blk, [cvrt_name,'_imag/1'], [ri2c_name,'/2']);
         
             add_line(blk, [ri2c_name,'/1'], [pack_name,'/',num2str(substream+1)]);
             
@@ -160,7 +175,7 @@ for input = 0:streams-1,
         %create output port
         out_name = ['din', num2str(x_in), '_x_din', num2str(y_in), '*']; 
         reuse_block(blk, out_name, 'built-in/outport', 'Port', num2str((offset/aggregation)+mult+2), ...
-            'Position', [850 100+(offset+mults+(mult*aggregation))*tick 880 115+(offset+mults+(mult*aggregation))*tick])
+            'Position', [950 100+(offset+mults+(mult*aggregation))*tick 980 115+(offset+mults+(mult*aggregation))*tick])
         add_line(blk, [pack_name,'/1'], [out_name,'/1']);
 
     end
