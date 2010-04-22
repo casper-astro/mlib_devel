@@ -23,15 +23,14 @@ module qdrc_phy_sm(
   output burst_align_start;
   input  burst_align_done, burst_align_fail;
 
-  reg [2:0] phy_state;
+  reg [1:0] phy_state;
 
-  localparam STATE_DLLOFF      = 3'd0;
-  localparam STATE_WAIT        = 3'd1;
-  localparam STATE_BIT_ALIGN   = 3'd2;
-  localparam STATE_BURST_ALIGN = 3'd3;
-  localparam STATE_DONE        = 3'd4;
+  localparam STATE_DLLOFF      = 2'd0;
+  localparam STATE_BIT_ALIGN   = 2'd1;
+  localparam STATE_BURST_ALIGN = 2'd2;
+  localparam STATE_DONE        = 2'd3;
 
-  reg [14:0] wait_counter;
+  reg [18:0] wait_counter;
   /* qdr_dll_off needs to be held high for 2048 cycle after reset is
    * released
    */
@@ -55,17 +54,17 @@ module qdrc_phy_sm(
       qdr_dll_off_n_reg <= 1'b0; //start with dlls disabled
     end else begin
       case (phy_state)
-        STATE_DLLOFF:      begin
-          if (wait_counter[14] == 1'b1) begin
+        STATE_DLLOFF: begin
+          if (wait_counter[18] == 1'b1) begin
             phy_state    <= STATE_BIT_ALIGN;
             bit_align_start <= 1'b1;
           end else begin
             wait_counter <= wait_counter + 1;
           end
-          if (wait_counter[12])
+          if (wait_counter[17])
             qdr_dll_off_n_reg <= 1'b1; //enabled
         end
-        STATE_BIT_ALIGN:   begin
+        STATE_BIT_ALIGN: begin
           if (bit_align_done) begin
             if (bit_align_fail) begin
               cal_fail  <= 1'b1;
@@ -79,12 +78,12 @@ module qdrc_phy_sm(
         STATE_BURST_ALIGN: begin
           if (burst_align_done) begin
             if (burst_align_fail) begin
-              cal_fail  <= 1'b1;
+              cal_fail <= 1'b1;
             end
             phy_state <= STATE_DONE;
           end
         end
-        STATE_DONE:        begin
+        STATE_DONE: begin
         end
       endcase
     end

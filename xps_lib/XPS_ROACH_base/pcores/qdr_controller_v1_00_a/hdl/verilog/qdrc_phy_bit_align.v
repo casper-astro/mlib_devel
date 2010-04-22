@@ -126,10 +126,7 @@ end else begin                  :include_bit_align
   end
 
 
-  qdrc_phy_bit_train #(
-    .CLK_FREQ (CLK_FREQ),
-    .BYPASS   (1'b0)
-  ) qdrc_phy_bit_train_inst (
+  qdrc_phy_bit_train qdrc_phy_bit_train_inst (
     .clk   (div_clk),
     .reset (reset_div_clk),
 
@@ -153,7 +150,7 @@ end else begin                  :include_bit_align
   reg bit_align_fail_reg;
   assign bit_align_fail = bit_align_fail_reg;
 
-  reg [3:0] read_wait; /* TODO: finalize this delay */
+  reg [3:0] read_wait;
 
   reg [2:0] finish_wait;
 
