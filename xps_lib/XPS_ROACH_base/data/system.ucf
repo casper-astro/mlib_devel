@@ -104,6 +104,19 @@ NET "epb_rdy"        IOSTANDARD = LVCMOS33 | LOC = K12;
 
 NET "epb_clk_in"    IOSTANDARD = LVCMOS33 | LOC = AH18;
 
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_clk" LOC = M31 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_dat" LOC = L34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_cs"  LOC = L30 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_clk" LOC = AN34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_dat" LOC = AN32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_cs"  LOC = AK26 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_sda" LOC = K34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_scl" LOC = M30 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_sda" LOC = AP32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_scl" LOC = AJ27 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#
+
 # ADC card 3 wire control
 #NET "adc0_adc3wire_clk"       IOSTANDARD = LVCMOS25 | LOC = F28;
 #NET "adc0_adc3wire_data"      IOSTANDARD = LVCMOS25 | LOC = D32;

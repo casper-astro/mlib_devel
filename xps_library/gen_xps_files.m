@@ -237,7 +237,7 @@ for n = 1:length(xps_blks)
 
             xps_objs = [xps_objs,{blk_obj}];
 
-            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_plb2opb' 'xps_probe' 'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
+            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc' 'xps_katadc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_plb2opb' 'xps_probe' 'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
             else
                 if isempty(find(strcmp(get(blk_obj, 'type'), core_types)))
