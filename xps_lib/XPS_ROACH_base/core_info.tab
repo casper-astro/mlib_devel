@@ -3,7 +3,9 @@ sys_rev             3        4        4
 sys_rev_rcs         3        8        4  
 sys_scratchpad      3        c        4
 sys_clkcounter      3       10        4
-#IF# strcmp(get(b,'type'),'xps_katadc')#kat_adc_controller     3    20000    10000
+#IF# strcmp(get(b,'type'),'xps_katadc')#kat_adc_controller     3    20000    1000
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#kat_iic_controller0     3    40000    100
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#kat_iic_controller1     3    48000    100
 #IF# strcmp(get(b,'type'),'xps_adc')#iadc_controller     3    20000    10000
 #IF# strcmp(get(b,'type'),'xps_dram')#dram_controller     3    50000    10000
 #IF# strcmp(get(b,'type'),'xps_dram')#dram_memory         3  4000000  4000000
