@@ -1,6 +1,8 @@
 %HELP Displays HELP from KATCP server.
 %
-%    HELP(OBJ)
+%    HELP(KATCP_OBJ) displays a list of KATCP commands available to the KATCP
+%    server that the KATCP object is connected to. Some of the commands listed
+%    may not be implemented or supported by KATCP member functions.
 %
 %    See also KATCP/LISTBOF, KATCP/LISTCMD, KATCP/LISTDEV, KATCP/STATUS
 %
@@ -36,10 +38,56 @@ function help(obj)
     fprintf(obj.tcpip_obj, '?help');
     pause(0.1);
 
-    txt = '';
+    msg = '';
 
-    while (get(obj.tcpip_obj, 'BytesAvailable') > 0)
-        txt = [txt, fscanf(obj.tcpip_obj)];
+    timeout = 2^10;
+
+    while timeout > 0
+
+        pause(0.01);
+
+        while (get(obj.tcpip_obj, 'BytesAvailable') > 0)
+            msg = [msg, fscanf(obj.tcpip_obj)];
+        end
+
+        % wait for BORPH server to return OK status message
+        if ~isempty(strfind(msg, '!help ok'))
+            break;
+        else
+            timeout = timeout-1;
+        end % if ~isempty(strfind(out, '!listbof ok')
+
+        if ~isempty(strfind(msg, '!help fail'))
+            errmsg = msg(strfind(msg, '!listdev fail'):end);
+            warning(['listdev failed to remote host ',  get(obj.tcpip_obj, 'RemoteHost'), ': ', errmsg]);
+            return;
+        end
+
+    end % while timeout > 0
+
+    msg = msg(1:strfind(msg, '!help ok')-1);
+
+    toks = regexp(msg, '#help (\S+) (\S+)\n', 'tokens');
+
+    helpmsg = '';
+
+    % finds length of longest command string
+    maxcmdlen = 0;
+    for n=1:length(toks)
+        maxcmdlen = max(maxcmdlen, length(toks{n}{1}));
     end
 
-    disp(txt);
+    for n=1:length(toks)
+
+        % adds spaces to match length of longest command string
+        padding = '  ';
+        for m=1:(maxcmdlen-length(toks{n}{1}))
+            padding = [padding, ' '];
+        end
+
+        cmd  = toks{n}{1};
+        desc = regexprep(toks{n}{2}, '\\\_', ' ');
+
+        disp([cmd, padding, desc]);
+
+    end % for n=1:length(toks)

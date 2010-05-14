@@ -1,3 +1,11 @@
+%SET Set KATCP object properties.
+%
+%    SET(OBJ, 'PropertyName', PropertyValue) sets the value V of the specified
+%    property for a KATCP object.
+%
+%    See also KATCP/GET
+%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -20,9 +28,10 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function b = set(b,field,value)
-try
-    eval(['b.',field,'=value;']);
-catch
-    b.xps_block = set(b.xps_block,field,value);
-end
+function obj = set(obj, field, value)
+
+    try
+        eval(['obj.',field,'=value;']);
+    catch
+        error(['Attempt to set field ', field, ' of object failed.']);
+    end

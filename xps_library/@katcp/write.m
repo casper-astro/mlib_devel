@@ -1,7 +1,29 @@
 %WRITE Write data stream to device via KATCP.
 %
-%    WRITE(OBJ, IOREG) reads data from IOREG on a KATCP connection.
+%    WRITE(KATCP_OBJ, IOREG, DATA) writes a vector DATA of unsigned bytes
+%    (uint8) to IOREG starting at the first byte in its memory space. DATA
+%    must have a length that is an integer multiple of 4.
 %
+%    WRITE(KATCP_OBJ, IOREG, OFFSET, DATA) writes a vector DATA of unsigned
+%    bytes (uint8) to IOREG with an integer byte offset of OFFSET. DATA must
+%    have a length that is an integer multiple of 4.
+%
+%    WRITE(KATCP_OBJ, IOREG, FORMAT, OFFSET, DATA) writes a vector DATA to
+%    IOREG with an integer byte offset of OFFSET. DATA must have a length that
+%    is an integer multiple of 4. The data type of DATA is specified by FORMAT:
+%
+%        FORMAT         DATA TYPE
+%       --------       -----------
+%        'ub'           Unsigned Bytes (uint8)
+%        'uw'           Unsigned Words (uint32)
+%        'hw'           Hex Words (string)
+%
+%    Example:
+%       roach=katcp('myroach.domain.edu');
+%       write(roach, my_bram, 'ub', 8, uint8([0:255]));
+%           would write a 256-element vector of uint8s to words 3-67 of
+%           "my_bram."
+
 %    See also KATCP/READ, KATCP/WORDREAD, KATCP/WORDWRITE
 %
 
@@ -37,9 +59,13 @@ function varargout = write(obj, reg_name, varargin)
 
     MAX_WRITESIZE = 256*1024;
 
+    status = 0;
+    message = '';
+
 
     %%% Process input arguments
 
+%tic;
     switch num_optargs
 
         case 1
@@ -98,10 +124,13 @@ function varargout = write(obj, reg_name, varargin)
         message = 'Invalid data vector length.';
         return;
     end
+%toc;
+%disp('process input arguments');
 
 
     %%% Get into input radix/format
 
+%tic;
     switch write_format
 
         case 'ub'
@@ -153,11 +182,13 @@ function varargout = write(obj, reg_name, varargin)
             return;
 
     end % switch read_format
-
+%toc;
+%disp('reformat input vector');
 
     %%% Escape data stream
     % CAN THIS BE MADE MORE EFFICIENT?
 
+%tic;
     vector_size = 0;
 
     for n=1:data_size
@@ -220,16 +251,21 @@ function varargout = write(obj, reg_name, varargin)
         end % switch data(n)
 
     end % for n=1:data_size
-
+%toc;
+%disp('escape characters in vector');
 
     %%% Send read command to KATCP
 
     cmd_string = ['?write ', reg_name, ' ', num2str(write_offset), ' ', write_vector];
 %    disp(cmd_string);
 
-    fwrite(obj.tcpip_obj, uint8(cmd_string));
-    fprintf(obj.tcpip_obj, '');
-
+%tic;
+%    fwrite(obj.tcpip_obj, uint8(cmd_string));
+%    fprintf(obj.tcpip_obj, '');
+%toc;
+%disp('send command/data');
+%
+%tic;
     while 1
         pause(0.001);
 
@@ -241,11 +277,13 @@ function varargout = write(obj, reg_name, varargin)
             break;
         end
     end
+%toc;
+%disp('wait for response');
 
     readback = '';
 
     readback = transpose(fread(obj.tcpip_obj, get(obj.tcpip_obj, 'BytesAvailable')));
-    disp(char(readback));
+%    disp(char(readback));
 
     if ~strcmp( char(readback(1:10)), '!write ok ')
 

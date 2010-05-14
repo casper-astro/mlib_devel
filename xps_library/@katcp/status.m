@@ -1,6 +1,10 @@
 %STATUS Displays the status of the KATCP server.
 %
-%    STATUS(OBJ)
+%    STATUS(KATCP_OBJ) prints the status of the KATCP server to the Matlab
+%    command window.
+%
+%    MESSAGE = STATUS(KATCP_OBJ) returns the status message as a character
+%    string.
 %
 %    See also KATCP/HELP, KATCP/LISTBOF, KATCP/LISTCMD, KATCP/LISTDEV
 %
@@ -31,15 +35,26 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function status(obj)
+function varargout = status(obj)
 
-    fprintf(obj.tcpip_obj, '?status');
+    fprintf(obj.tcpip_obj, ' ?status');
     pause(0.1);
 
-    txt = '';
+    msg = '';
 
     while (get(obj.tcpip_obj, 'BytesAvailable') > 0)
-        txt = [txt, fscanf(obj.tcpip_obj)];
+        msg = [msg, fscanf(obj.tcpip_obj)];
     end
 
-    disp(txt);
+    switch nargout
+
+        case 0
+            disp(msg);
+
+        case 1
+            varargout(1) = {msg};
+
+        otherwise
+            disp(msg);
+
+    end % switch nargout

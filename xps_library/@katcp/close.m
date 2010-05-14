@@ -1,9 +1,11 @@
 %CLOSE Closes connection to KATCP server.
 %
-%    STATUS = CLOSE(OBJ) closes the TCP/IP connection to the KATCP server
-%    associated with KATCP object OBJ.
+%    CLOSE(KATCP_OBJ) closes the TCP/IP connection to the KATCP server.
 %
-%    See also KATCP/HELP, KATCP/LISTBOF KATCP/LISTCMD, KATCP/LISTDEV,
+%    STATUS = CLOSE(KATCP_OBJ) returns 0 if the connection was
+%    successfully closed, and -1 if an error occurred.
+%
+%    See also KATCP/KATCP, KATCP/HELP, KATCP/LISTBOF, KATCP/LISTDEV,
 %    KATCP/STATUS
 %
 
@@ -34,7 +36,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-function status = close(obj)
+function varargout = close(obj)
 
     status = 0;
 
@@ -49,3 +51,9 @@ function status = close(obj)
     end
 
     disp(['Connection to ', obj.hostname, ' closed.']);
+
+    results = [{status}];
+
+    for n=1:nargout
+        varargout = results(n);
+    end

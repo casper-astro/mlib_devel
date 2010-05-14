@@ -4,8 +4,15 @@
 %    opens and represents the connection to a remote host RHOST running a
 %    KATCP server on port 7147.
 %
-%    See also KATCP/HELP, KATCP/LISTBOF KATCP/LISTCMD, KATCP/LISTDEV,
-%    KATCP/STATUS, KATCP/CLOSE
+%    Example:
+%       roach = katcp('myroach.domain.edu');
+%
+%    [KATCP_OBJ, MESSAGE] = KATCP('RHOST') returns the status message response
+%    to the connection attempt from the KATCP server.
+%
+%    See also KATCP/HELP, KATCP/LISTBOF, KATCP/LISTCMD, KATCP/LISTDEV,
+%    KATCP/STATUS, KATCP/CLOSE, KATCP/READ, KATCP/WRITE, KATCP/WORDREAD,
+%    KATCP/WORDWRITE
 %
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,7 +41,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function katcp_obj = katcp(rhost, varargin)
+function [katcp_obj, varargout] = katcp(rhost, varargin)
 
     tcpip_obj = tcpip(rhost, 7147);
 
@@ -44,22 +51,46 @@ function katcp_obj = katcp(rhost, varargin)
     try
         fopen(tcpip_obj);
     catch
-        error('Unable to open connection to remote host ', rhost, ' on port 7147.');
+        error(['Unable to open connection to remote host ', rhost, ' on port 7147.']);
     end % try
 
     pause(0.25);
 
-    fprintf(tcpip_obj, '\n');
+    fprintf(tcpip_obj, '\n\n');
 
     pause(0.25);
 
-    out = '';
+    msg = '';
 
-    while (get(tcpip_obj, 'BytesAvailable') > 0)
-        out = [out, fscanf(tcpip_obj)];
+    timeout = 2^15;
+
+    while timeout > 0
+
+        pause(0.01);
+
+        try
+            msg = [msg, transpose(fread(tcpip_obj, get(tcpip_obj, 'BytesAvailable')))];
+        catch
+        end
+
+        % wait for BORPH server to return OK status message
+        if ~isempty(strfind(msg, '#log')) && ~isempty(strfind(msg, 'new\_connection\_'))
+            break;
+        else
+            timeout = timeout-1;
+        end % if ~isempty(strfind(out, '#log')) && ~isempty(strfind(out, 'new\_connection\_'))
+
+    end % while timeout > 0
+
+    if (timeout == 0)
+        error(['KATCP connection to host ', rhost, ' timed out.'])
     end
 
-    disp(out);
+    if (nargout == 2)
+        varargout(1) = {msg};
+    end
+
+    disp(['Connection established to board ', rhost]);
 
     s.tcpip_obj = tcpip_obj;
     s.hostname  = rhost;

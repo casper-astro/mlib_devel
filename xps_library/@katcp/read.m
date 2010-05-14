@@ -1,6 +1,30 @@
 %READ Read data stream from a device via KATCP.
 %
-%    DATA = READ(OBJ, IOREG) reads data from IOREG on a KATCP connection.
+%    DATA = READ(KATCP_OBJ, IOREG) reads and returns the first word of data
+%    from IOREG on a KATCP connection returns it as a HEX string.
+%
+%    DATA = READ(KATCP_OBJ, IOREG, OFFSET) reads and returns a word of data
+%    with an integer byte offset OFFSET.
+%
+%    DATA = READ(KATCP_OBJ, IOREG, OFFSET, SIZE) reads and returns SIZE bytes
+%    of data with an integer byte offset OFFSET. SIZE must be an integer
+%    multiple of 4. The maximum supported read size is 262144 (2^18) bytes.
+%
+%    DATA = READ(KATCP_OBJ, IOREG, OFFSET, SIZE, FORMAT) reads and returns SIZE
+%    bytes of data with an integer byte offset OFFSET. SIZE must be an integer
+%    multiple of 4 using a return output format specified by FORMAT:
+%
+%        FORMAT         RETURN TYPE
+%       --------       -------------
+%        'ub'           Unsigned Bytes (uint8)
+%        'uw'           Unsigned Words (uint32)
+%        'hw'           Hex Words (string)
+%
+%    Example:
+%       roach=katcp('myroach.domain.edu');
+%       readback = read(roach, my_bram, 8, 256, 'ub');
+%           would return a 256-element vector "readback" of uint8s that are
+%           words 3-67 of "my_bram."
 %
 %    See also KATCP/WRITE, KATCP/WORDREAD, KATCP/WORDWRITE
 %
@@ -110,7 +134,7 @@ function data = read(obj, varargin)
 
 %toc
 %disp('send command')
-
+%
 %tic;
 
     while 1
@@ -127,7 +151,7 @@ function data = read(obj, varargin)
 
 %toc
 %disp('wait for bytes')
-
+%
 %tic;
 
     readback = '';
