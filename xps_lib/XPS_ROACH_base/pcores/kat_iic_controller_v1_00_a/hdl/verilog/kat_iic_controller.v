@@ -1,11 +1,4 @@
-module kat_iic_controller #(
-    parameter C_BASEADDR    = 32'h00000000,
-    parameter C_HIGHADDR    = 32'h0000FFFF,
-    parameter C_OPB_AWIDTH  = 32,
-    parameter C_OPB_DWIDTH  = 32,
-    parameter IIC_FREQ      = 100,   //kHz
-    parameter CORE_FREQ     = 100000 //kHz
-  ) (
+module kat_iic_controller(
     input         OPB_Clk,
     input         OPB_Rst,
     output [0:31] Sl_DBus,
@@ -29,6 +22,12 @@ module kat_iic_controller #(
 	  output        scl_o,
 	  output        scl_t
   );
+  parameter C_BASEADDR    = 32'h00000000;
+  parameter C_HIGHADDR    = 32'h0000FFFF;
+  parameter C_OPB_AWIDTH  = 32;
+  parameter C_OPB_DWIDTH  = 32;
+  parameter IIC_FREQ      = 100;  //kHz
+  parameter CORE_FREQ     = 100000; //kHz
 
   /************* OPB Attach ***************/
 
@@ -53,6 +52,7 @@ module kat_iic_controller #(
   localparam REG_OP_FIFO = 0;
   localparam REG_RX_FIFO = 1;
   localparam REG_STATUS  = 2;
+  localparam REG_CTRL    = 3;
 
   reg op_fifo_over_reg;
   reg rx_fifo_over_reg;
@@ -69,6 +69,8 @@ module kat_iic_controller #(
 
   reg fifo_rst_reg;
 
+  reg op_fifo_block;
+
   always @(posedge OPB_Clk) begin
     Sl_xferAck_reg <= 1'b0;
     fifo_rst_reg <= 1'b0;
@@ -84,6 +86,7 @@ module kat_iic_controller #(
     if (OPB_Rst) begin
       op_fifo_over_reg <= 1'b0;
       rx_fifo_over_reg <= 1'b0;
+      op_fifo_block <= 1'b0;
     end else begin
       if (addr_match && OPB_select && !Sl_xferAck_reg) begin
         Sl_xferAck_reg <= 1'b1;
@@ -106,6 +109,11 @@ module kat_iic_controller #(
               op_rd_error_reg <= 1'b0;
             end
           end
+          REG_CTRL: begin
+            if (!OPB_RNW && OPB_BE[3]) begin
+              op_fifo_block <= OPB_DBus[31];
+            end
+          end
         endcase
       end
     end
@@ -122,6 +130,9 @@ module kat_iic_controller #(
       end
       REG_STATUS: begin
         opb_dout <= {16'b0, 7'b0, op_rd_error_reg, 1'b0, op_fifo_over_reg, op_fifo_full, op_fifo_empty, 1'b0, rx_fifo_over_reg, rx_fifo_full, rx_fifo_empty};
+      end
+      REG_CTRL: begin
+        opb_dout <= {31'b0, op_fifo_block};
       end
       default: begin
         opb_dout <= 32'b0;
@@ -177,7 +188,7 @@ module kat_iic_controller #(
   assign rx_fifo_wr_en   = op_valid && op_rnw && op_ack;
   assign rx_fifo_wr_data = op_rd_data;
 
-  assign op_valid      = !op_fifo_empty;
+  assign op_valid      = !op_fifo_empty && !op_fifo_block;
   assign op_fifo_rd_en = op_ack;
   assign op_wr_data    = op_fifo_rd_data[7:0];
   assign op_rnw        = op_fifo_rd_data[8];
@@ -206,7 +217,6 @@ module kat_iic_controller #(
     .full     (op_fifo_full),
     .overflow (op_fifo_over)
   );
-  //synthesis attribute box_type op_fifo_inst "black_box" 
 
   rx_fifo rx_fifo_inst(
     .clk      (OPB_Clk),
@@ -219,6 +229,5 @@ module kat_iic_controller #(
     .full     (rx_fifo_full),
     .overflow (rx_fifo_over)
   );
-  //synthesis attribute box_type rx_fifo_inst "black_box" 
 
 endmodule
