@@ -46,9 +46,5 @@ use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
 set_param([blk,'/Mult'],'use_embedded',use_embedded);
 set_param([blk,'/Mult'],'use_behavioral_HDL',use_hdl);
 
-TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
-
-fmtstr = sprintf('taps=%d', TotalTaps);
-set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 

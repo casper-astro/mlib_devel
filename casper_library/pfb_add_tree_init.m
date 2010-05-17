@@ -103,7 +103,8 @@ add_line(blk, 'adder_tree1/2', 'scale1/1');
 add_line(blk, 'scale1/1', 'convert1/1');
 add_line(blk, 'adder_tree2/2', 'scale2/1');
 add_line(blk, 'scale2/1', 'convert2/1');
-set_param([blk,'/ri_to_c'], 'Position', [550 114+25*TotalTaps 580 144+25*TotalTaps]);
+reuse_block(blk, 'ri_to_c', 'casper_library/Misc/ri_to_c', ...
+    'Position', [550 114+25*TotalTaps 580 144+25*TotalTaps]);
 add_line(blk, 'convert1/1', 'ri_to_c/1');
 add_line(blk, 'convert2/1', 'ri_to_c/2');
 add_line(blk, 'ri_to_c/1', 'dout/1');

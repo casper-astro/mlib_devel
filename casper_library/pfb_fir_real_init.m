@@ -67,7 +67,7 @@ quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
-behavioral = get_var('behavioral', 'defaults', defaults, varargin{:});
+adder_folding = get_var('adder_folding', 'defaults', defaults, varargin{:});
 
 if MakeBiplex, pols = 2;
 else, pols = 1;
@@ -99,8 +99,8 @@ for p=1:pols,
     for i=1:2^n_inputs,
         portnum = portnum + 1;
         for t=1:TotalTaps,
-            use_hdl = 'off';
-            use_embedded = 'on';
+            use_hdl = 'on';
+            use_embedded = 'off';
             if( strcmp(specify_mult,'on') ) 
                 if( mult_spec(t) == 0 ), 
                     use_embedded = 'off';
@@ -147,7 +147,7 @@ for p=1:pols,
 	%add adder tree
 	reuse_block(blk, ['adder_', num2str(p), '_' ,num2str(i)], 'casper_library/Misc/adder_tree', ...
 		'n_inputs', num2str(TotalTaps), 'latency', num2str(add_latency), ...
-		'behavioral', behavioral, ...
+		'first_stage_hdl', adder_folding, 'behavioral', 'off', ...
 		'Position', [150*(TotalTaps+1) 50*portnum*TotalTaps 150*(TotalTaps+1)+100 50*(portnum+1)*TotalTaps-20]);
 
 	%add shift, convert blocks

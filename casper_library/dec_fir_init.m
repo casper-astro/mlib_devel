@@ -50,17 +50,20 @@ n_bits = get_var('n_bits','defaults', defaults, varargin{:});
 quantization = get_var('quantization','defaults', defaults, varargin{:});
 add_latency = get_var('add_latency','defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency','defaults', defaults, varargin{:});
+coeff_bit_width = get_var('coeff_bit_width','defaults', defaults, varargin{:});
+coeff_bin_pt = get_var('coeff_bin_pt','defaults', defaults, varargin{:}); 
+adder_tree_hdl = get_var('adder_tree_hdl','defaults', defaults, varargin{:}); 
 
 % round coefficients to make sure rounding error doesn't prevent us from
 % detecting symmetric coefficients
-coeff = round(coeff * 1e16) * 1e-16;
+coeff_round = round(coeff * 1e16) * 1e-16;
 
 if mod(length(coeff)/n_inputs,1) ~= 0,
     error('The number of coefficients must be integer multiples of the number of inputs');
 end
 
 num_fir_col = length(coeff)/n_inputs;
-if coeff(1:length(coeff)/2) == coeff(length(coeff):-1:length(coeff)/2+1),
+if coeff_round(1:length(coeff)/2) == coeff_round(length(coeff):-1:length(coeff)/2+1),
     num_fir_col = num_fir_col / 2;
     fir_col_type = 'fir_dbl_col';
     coeff_sym = 1;
@@ -94,18 +97,12 @@ for i=1:num_fir_col,
     reuse_block(blk, blk_name, ['casper_library/Downconverter/',fir_col_type], ...
         'Position', [200*i+200 50 200*i+300 250], 'n_inputs', num2str(n_inputs),...
         'coeff',tostring(coeff(i*n_inputs:-1:(i-1)*n_inputs+1)),...
-	'mult_latency', num2str(mult_latency),...
-	'add_latency', num2str(add_latency));
-%replaced by Andrew as parameters not fully specified
-%	'mult_latency', num2str(mult_latency));
-%    if coeff_sym
-%        set_param([blk,'/',blk_name], 'add_latency', num2str(add_latency));
-%    end
+	'mult_latency', num2str(mult_latency), 'add_latency', num2str(add_latency), ...
+	'coeff_bit_width', tostring(coeff_bit_width), 'coeff_bin_pt', tostring(coeff_bin_pt), ...
+	'adder_tree_hdl', adder_tree_hdl);
 
     if i == 1,
         for j=1:n_inputs,
-    %        disp(blk_name);
-    %        disp(j);
             add_line(blk, ['real',num2str(j),'/1'], [blk_name,'/',num2str(2*j-1)]);
             add_line(blk, ['imag',num2str(j),'/1'], [blk_name,'/',num2str(2*j)]);
         end

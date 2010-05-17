@@ -100,8 +100,8 @@ for p=1:pols,
         for t=1:TotalTaps,
             in_name = ['pol',num2str(p),'_in',num2str(i)];
             out_name = ['pol',num2str(p),'_out',num2str(i)];
-            use_hdl = 'off';
-            use_embedded = 'on';
+            use_hdl = 'on';
+            use_embedded = 'off';
             if( strcmp(specify_mult,'on') ) 
                 if( mult_spec(t) == 0 ), 
                     use_embedded = 'off';

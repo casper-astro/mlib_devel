@@ -40,7 +40,9 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 latency = get_var('latency', 'defaults', defaults, varargin{:});
+first_stage_hdl = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
 behavioral = get_var('behavioral', 'defaults', defaults, varargin{:});
+if strcmp(behavioral,'on'), first_stage_hdl = 'on'; end
 
 stages = ceil(log2(n_inputs));
 
@@ -87,6 +89,7 @@ else
                     'pipelined', 'on', 'use_rpm', 'on', ...
                     'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
                 if stage == 1,
+		    set_param([blk,'/',addr], 'use_behavioral_HDL', first_stage_hdl);
                     add_line(blk,['din',num2str((j*2-1)),'/1'],[addr,'/1']);
                     add_line(blk,['din',num2str((j*2)),'/1'],[addr,'/2']);
                 else,
