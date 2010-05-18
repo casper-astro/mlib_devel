@@ -147,14 +147,12 @@ reuse_block(blk, 'dout', 'built-in/outport', ...
 
 %delay of sync
 if coeff_sym,
+    % y(n) = sum(aix(n-i)) for i=0:N. sync is thus related to x(0)
+    sync_latency = add_latency + mult_latency + ceil(log2(n_inputs))*add_latency + add_latency;
 %    sync_latency = 2*num_fir_col + mult_latency + ceil(log2(num_fir_col))* add_latency + 2*add_latency;
-    sync_latency = (2*num_fir_col)-1 + mult_latency + ceil(log2(n_inputs))* add_latency + 2*add_latency;
 else
-    %replaced as does not make sense	
-%    sync_latency = num_fir_col + mult_latency + ceil(log2(num_fir_col))* add_latency + add_latency;
-    %registers in fir_cols + multiplier + adder tree in fir_col + convert block
-    sync_latency = (num_fir_col-1) + mult_latency + ceil(log2(n_inputs))* add_latency + add_latency;
-%
+    sync_latency = mult_latency + ceil(log2(n_inputs))*add_latency + add_latency;
+%    sync_latency = (num_fir_col-1) + mult_latency + ceil(log2(n_inputs))*add_latency + ceil(log2(num_fir_col) + add_latency;
 end
 reuse_block(blk, 'delay', 'xbsIndex_r4/Delay', ...
     'Position', [60 90*n_inputs+100 90 90*n_inputs+130], ...
