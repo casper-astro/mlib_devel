@@ -52,11 +52,11 @@ module dram_controller #(
                                        // registered addr/ctrl (=1 yes).
    parameter TREFI_NS                = 7800,       
                                        // auto refresh interval (ns).
-   parameter TRAS                    = 40000,       
+   parameter TRAS                    = 45000,       
                                        // active->precharge delay.
    parameter TRCD                    = 15000,       
                                        // active->read/write delay.
-   parameter TRFC                    = 75000,       
+   parameter TRFC                    = 127333,       
                                        // refresh->refresh, refresh->active delay.
    parameter TRP                     = 15000,       
                                        // precharge->command delay.
