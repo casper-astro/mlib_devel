@@ -87,7 +87,7 @@ Header: drivers/core_util.h
 DefaultInit: EXECUTABLE
 InitBram: 1
 Active: 1
-CompilerOptLevel: 2
+CompilerOptLevel: 2#IF#strcmp(get(b,'type'),'xps_lwip')#CompilerOptLevel: 4
 GlobPtrOpt: 0
 DebugSym: 0
 ProfileFlag: 0
