@@ -13,103 +13,76 @@ module opb_adc083000ctrl(
 	output adc1_sdata
 );
 
+// Wires and Regs
+//===============
+wire [3:0] 		sys_clk_cnt;
+wire sclk;
+wire sdata;
+wire chip_sel;
 
-assign adc0_sdata = sdata_bus[0]; //adc_ctrl_sdata;
-assign adc1_sdata = sdata_bus[0]; //adc_ctrl_sdata;
-assign adc0_notSCS = conf[1];
-assign adc1_notSCS = conf[2];
-assign adc0_sclk = conf[0];
-assign adc1_sclk = conf[0];
+wire [31:0] serial_iface_word;
+wire [15:0] config_data;
+wire [3:0]  config_addr;
+wire [7:0]  config_metadata;
 
-// // Wires and Regs
-// //===============
-// wire [3:0] sys_clk_cnt;
-// reg spi_reset;
-// wire spi_sdata;
-// wire spi_done;
-// reg adc_ctrl_notSCS, adc_ctrl_sdata;
-// assign adc0_sdata = adc_ctrl_sdata;
-// assign adc1_sdata = adc_ctrl_sdata;
-// assign adc0_notSCS = adc_ctrl_notSCS & conf[1];
-// assign adc1_notSCS = adc_ctrl_notSCS & conf[2];
-// 
-// // Module Declarations
-// //====================
-// // Generate a serial clock at 125/4 MHz
-// Counter sys_clk_counter(.Clock(sys_clk), .Reset(1'b0), .Set(0), .Load(0), .Enable(1'b1), .In(0), .Count(sys_clk_cnt));
-// defparam sys_clk_counter.width = 4;
-// 
-// assign adc0_sclk = sys_clk_cnt[3];
-// assign adc1_sclk = sys_clk_cnt[3];
-// 
-// spi32 spi( .spi_clk(adc_ctrl_clk), .reset(spi_reset), .pdata(sdata_bus), .sdata(spi_sdata), .done(spi_done));
-// 
-// /// TODO: add edge detector on LSB of conf
-// // mux the SCS lines
-// 
-// // State Update Mux
-// //=================
-// parameter state_idle = 4'd0;
-// parameter state_chip_sel = 4'd1;
-// parameter state_start_spi = 4'd2;
-// reg [3:0] state, next_state;
-// always @ (posedge adc0_sclk) begin
-// 	if (reset) begin
-// 		state <= state_idle;
-// 	end else begin
-// 		state <= next_state;
-// 	end
-// end
-// 
-// 
-// 
-// // Next-state Logic
-// //=================
-// always @ (*) begin
-// 	adc_ctrl_notSCS = 0;
-// 	adc_ctrl_sdata = 0;
-// 	spi_reset = 0;
-// 	case(state)
-// 		state_idle: begin
-// 			if (conf) begin
-// 				next_state = state_chip_sel;
-// 			end
-// 		end
-// 
-// 		state_chip_sel: begin
-// 			adc_ctrl_notSCS = 1;
-// 			next_state = state_start_spi;
-// 			spi_reset = 1;
-// 		end
-// 
-// 		state_start_spi: begin
-// 			adc_ctrl_sdata = spi_sdata;
-// 			if (spi_done) begin
-// 				next_state = state_idle;
-// 			end 
-// 		end
-// 
-// 		default: begin
-// 			next_state = state_idle;
-// 		end
-// 	endcase
-// end
-// 
-// endmodule
-// 
-// module spi32(
-// 	input spi_clk, 
-// 	input reset, 
-// 	input [31:0] pdata,
-// 	output sdata,
-// 	output done
-// );
-// 
-// wire [4:0] sdata_index;
-// Counter index_counter(.Clock(spi_clk), .Reset(1'b0), .Set(0), .Load(0), .Enable(1'b1), .In(0), .Count(sdata_index));
-// defparam index_counter.limited = 1;
-// defparam index_counter.width = 5;
-// assign sdata = pdata[sdata_index];
-// assign done = sdata_index == 31;
+wire config_trig;
+wire config_trig_dly;
+wire config_start;
+
+
+
+// Continuous assigns
+assign sclk = sys_clk_cnt[3];
+assign adc0_sclk = sclk;
+assign adc1_sclk = sclk;
+assign config_metadata = sdata_bus[31:24];
+assign config_data = sdata_bus[15:0];
+assign config_addr = sdata_bus[19:16];
+assign config_trig = config_metadata[0];
+assign config_start = config_trig & ~config_trig_dly;
+
+// Chip pin assigns
+assign adc0_notSCS = config_metadata[1] & chip_sel;
+assign adc1_notSCS = config_metadata[2] & chip_sel;
+assign adc0_sdata = sdata;
+assign adc1_sdata = sdata;
+
+// Module Declarations
+//====================
+// Generate a serial clock at 125/4 MHz
+Counter #(
+	.width(4)
+)
+sys_clk_counter(
+	.Clock(sys_clk), 
+	.Reset( reset ), 
+	.Set(0), 
+	.Load(0), 
+	.Enable(1'b1), 
+	.In(0), 
+	.Count(sys_clk_cnt)
+);
+
+// SPI for serial control 
+adc083000_spi spi(
+  .sclk( sclk ),
+  .reset( reset ),
+  .config_data( sdata_bus[15:0] ),
+  .config_addr( sdata_bus[19:16] ),
+  .config_start( config_start ),
+  .sdata( sdata ),
+  .chip_sel( chip_sel )
+);
+
+// Posedge detector for config_start
+Register config_trig_delay(
+  .Clock( sclk ),
+  .Reset( reset ),
+  .Set( 0 ),
+  .Enable( 1 ),
+  .In( config_trig ),
+  .Out( config_trig_dly )
+);
+
 
 endmodule
