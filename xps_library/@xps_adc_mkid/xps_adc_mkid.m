@@ -34,13 +34,25 @@ xsg_obj = get(blk_obj,'xsg_obj');
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.adc_brd = get_param(blk_name, 'adc_brd');
 s.adc_str = ['adc', s.adc_brd];
-s.adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
 
+s.adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
+s.clk_sys = get(xsg_obj,'clk_src');
+  
+  
 b = class(s,'xps_adc_mkid',blk_obj);
 
 % ip name & version
 b = set(b,'ip_name','adc_mkid_interface');
 b = set(b,'ip_version','1.00.a');
+
+parameters.OUTPUT_CLK = '0';
+if strfind(s.clk_sys,'adc')
+  parameters.OUTPUT_CLK = '1';
+end
+  
+b = set(b,'parameters',parameters);
+
+
 
 
 %%%%%%%%%%%%%%%%%
@@ -74,10 +86,14 @@ b = set(b,'ext_ports',ext_ports);
 % misc ports
 %%%%%%%%%%%%%
 misc_ports.fpga_clk       = {1 'in'  get(xsg_obj,'clk_src')};
-misc_ports.adc_clk_out    = {1 'out' [s.adc_str,'_clk']};
-misc_ports.adc_clk90_out    = {1 'out' [s.adc_str,'_clk90']};
-misc_ports.adc_clk180_out    = {1 'out' [s.adc_str,'_clk180']};
-misc_ports.adc_clk270_out    = {1 'out' [s.adc_str,'_clk270']};
+
+if  strfind(s.clk_sys,'adc')
+  misc_ports.adc_clk_out    = {1 'out' [s.adc_str,'_clk']};
+  misc_ports.adc_clk90_out    = {1 'out' [s.adc_str,'_clk90']};
+  misc_ports.adc_clk180_out    = {1 'out' [s.adc_str,'_clk180']};
+  misc_ports.adc_clk270_out    = {1 'out' [s.adc_str,'_clk270']};
+end
+
 misc_ports.adc_dcm_locked = {1 'out' [s.adc_str, '_dcm_locked']};
 
 b = set(b,'misc_ports',misc_ports);
