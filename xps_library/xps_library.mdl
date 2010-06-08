@@ -34,9 +34,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Administrator"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 08 12:35:01 2010"
-  RTWModifiedTimeStamp	  197901285
-  ModelVersionFormat	  "1.%<AutoIncrement:421>"
+  LastModifiedDate	  "Tue Jun 08 14:43:59 2010"
+  RTWModifiedTimeStamp	  197909006
+  ModelVersionFormat	  "1.%<AutoIncrement:422>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -263,7 +263,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [2, 82, 1374, 933]
+    Location		    [205, 89, 1577, 940]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -390,9 +390,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
@@ -416,9 +416,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
@@ -437,13 +437,13 @@ Library {
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The output type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      off
+	      boolean_output	      "off"
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
@@ -471,11 +471,11 @@ Library {
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -492,11 +492,11 @@ Library {
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1661,11 +1661,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -1688,11 +1688,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -1715,11 +1715,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -1742,11 +1742,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -1769,11 +1769,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -2192,7 +2192,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -2210,7 +2210,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -2228,7 +2228,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -2246,7 +2246,7 @@ Library {
 		  SourceType		  "of"
 		  ShowPortLabels	  "FromPortIcon"
 		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData off
+		  FunctionWithSeparateData "off"
 		  RTWMemSecFuncInitTerm	  "Inherit from model"
 		  RTWMemSecFuncExecute	  "Inherit from model"
 		  RTWMemSecDataConstants  "Inherit from model"
@@ -2595,7 +2595,7 @@ Library {
 	      SourceType	      "Xilinx Bus Concatenator Block"
 	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at zero."
 	      num_inputs	      "2"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "concat"
@@ -2611,10 +2611,10 @@ Library {
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -2631,9 +2631,9 @@ Library {
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal between signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in binary)."
-	      force_arith_type	      on
+	      force_arith_type	      "on"
 	      arith_type	      "Signed  (2's comp)"
-	      force_bin_pt	      on
+	      force_bin_pt	      "on"
 	      bin_pt		      "bit_width-1"
 	      has_advanced_control    "0"
 	      sggui_pos		      "15,25,372,364"
@@ -2651,13 +2651,13 @@ Library {
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The output type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "1"
-	      boolean_output	      off
+	      boolean_output	      "off"
 	      mode		      "Upper Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,442,407"
 	      block_type	      "slice"
@@ -2674,13 +2674,13 @@ Library {
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The output type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "bit_width-1"
-	      boolean_output	      off
+	      boolean_output	      "off"
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,537,482"
 	      block_type	      "slice"
@@ -9046,7 +9046,7 @@ Library {
       MaskDescription	      "The XSG Core Config block is used to configure the System Generator design\nfor the bee_xps toolflow. Settings here are used to configure the\nXilinx System Generator block parameters automatically, and control toolflow\nscript  execution. It needs to be at the top level of all designs being compiled\nwith the bee_xps toolflow."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_xsg_core_config\\sys_xsg_core_config.html''])')"
       MaskPromptString	      "Hardware Platform|Include Linux add-on board support|User IP Clock source|User IP Clock source|User IP Clock Source|User IP Clock Source|User IP Clock Source|User IP Clock Source|GPIO Clock Pin I/O group|GPIO Clock Pin bit index|User IP Clock Rate (MHz)|Sample Period|Synthesis Tool:|Processor:"
-      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH:sx95t|ROACH:lx110t|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux0_clk2x|aux1_clk|aux1_clk2x|adc0_clk|adc1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
+      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH:sx95t|ROACH:lx110t|CORR),checkbox,edit,popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux0_clk2x|aux1_clk|aux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "xps_xsg_conf_callback;|||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;||||||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,off,on,on,on"
