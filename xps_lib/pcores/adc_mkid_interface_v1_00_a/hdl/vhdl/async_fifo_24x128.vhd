@@ -90,7 +90,7 @@ end component;
 			c_has_overflow => 0,
 			c_preload_latency => 1,
 			c_dout_width => 24,
-			c_msgon_val => 1,
+			c_msgon_val => 0,
 			c_rd_depth => 128,
 			c_default_value => "BlankString",
 			c_mif_file_name => "BlankString",
@@ -129,7 +129,7 @@ end component;
 			c_prim_fifo_type => "512x36",
 			c_count_type => 0,
 			c_prog_full_type => 0,
-			c_memory_type => 1);
+			c_memory_type => 2);
 -- synthesis translate_on
 BEGIN
 -- synthesis translate_off

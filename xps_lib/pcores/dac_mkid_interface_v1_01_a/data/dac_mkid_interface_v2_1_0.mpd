@@ -27,6 +27,7 @@ OPTION IP_GROUP = MICROBLAZE:PPC:USER
 #################################################
 
 PARAMETER CTRL_CLK_PHASE = 0, DT = INTEGER, RANGE = (0:1)
+PARAMETER OUTPUT_CLK = 0, DT = INTEGER, RANGE = (0:1)
 
 
 ###########
@@ -34,8 +35,8 @@ PARAMETER CTRL_CLK_PHASE = 0, DT = INTEGER, RANGE = (0:1)
 ###########
 
 	# In from DAC
-#PORT dac_clk_p		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
-#PORT dac_clk_n		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_clk_p		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_clk_n		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 #PORT dac_phase		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 
 	# Out to DAC
@@ -60,10 +61,6 @@ PORT dac_sclk		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT dac_sdi		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT dac_not_reset	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
 
-#####################
-	# Out to design
-#PORT dac_clk		= "", DIR = O
-#PORT phase			= "", DIR = O
 
 ######################
 	# In from design
@@ -83,8 +80,14 @@ PORT sclk			= "", DIR = I
 PORT sdi			= "", DIR = I
 PORT not_reset		= "", DIR = I
 
-#PORT dac_smpl_clk_i	= "", DIR = I
-#PORT dac_smpl_clk_q	= "", DIR = I
+####################
+# out to design
+
+PORT dac_clk_out    = "", DIR = O, SIGIS = CLK
+PORT dac_clk90_out    = "", DIR = O, SIGIS = CLK
+PORT dac_clk180_out    = "", DIR = O, SIGIS = CLK
+PORT dac_clk270_out    = "", DIR = O, SIGIS = CLK
+PORT dac_dcm_locked = "", DIR = O
 
 
 END

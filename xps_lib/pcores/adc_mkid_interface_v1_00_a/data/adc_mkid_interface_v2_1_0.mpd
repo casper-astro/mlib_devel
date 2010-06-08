@@ -1,7 +1,10 @@
 
 BEGIN adc_mkid_interface
 
-## Peripheral Options
+########################
+## Peripheral Options ##
+########################
+
 OPTION IPTYPE = IP
 OPTION IMP_NETLIST = TRUE
 OPTION HDL = VHDL
@@ -9,12 +12,23 @@ OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=DEVELOPMENT, VIRTEX5=DEVELOPMENT)
 OPTION IP_GROUP = MICROBLAZE:PPC:USER
 OPTION STYLE = MIX
 
+####################
+## Bus Interfaces ##
+####################
 
-## Bus Interfaces
 
-## Generics for VHDL or Parameters for Verilog
 
-## Ports
+#################################################
+## Generics for VHDL or Parameters for Verilog ##
+#################################################
+
+PARAMETER OUTPUT_CLK = 0, DT = INTEGER, RANGE = (0:1)
+
+
+###########
+## Ports ##
+###########
+
 PORT DRDY_I_p       = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
 PORT DRDY_I_n       = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
 PORT DRDY_Q_p       = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK

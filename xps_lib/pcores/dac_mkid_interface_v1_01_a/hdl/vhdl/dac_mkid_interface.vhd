@@ -2,14 +2,10 @@
 -- dac_mkid_interface : DAC board with two DAC5681 for I and Q signals
 ----------------------------------------------------------------------------------
 
--- Author: 
+-- Authors:             Sean McHugh, Bruno Serfass, Ran Duan
 -- Create Date: 	09/02/09
--- modification: 	09/10/09 minimalist version.
---			09/16/09 Added ODDR for data out and a global clock buffer.
---			10/05/09
---			10/15/09 Routing dac_smpl_clk to the serial clock for writing
---			         to config.
-
+-- modification: 
+--
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -24,12 +20,21 @@ use UNISIM.vcomponents.all;
 --------------------------------------------------------------------------------
 
 entity dac_mkid_interface is
-	Port (
-      
-	--------------------------------------
-	-- differential signals from/to DAC
-	--------------------------------------
-
+      Generic (
+        OUTPUT_CLK   : INTEGER := 0;
+        CTRL_CLK_PHASE   :  INTEGER := 0
+        );          
+      Port (
+    
+        --------------------------------------
+        -- differential signals from/to DAC
+        --------------------------------------
+        
+        
+        -- clock from DAC
+        dac_clk_p		: in STD_LOGIC;
+        dac_clk_n		: in STD_LOGIC;
+  
 	-- clock to DAC
 	dac_smpl_clk_i_p   	: out STD_LOGIC;
 	dac_smpl_clk_i_n   	: out STD_LOGIC;
@@ -51,7 +56,7 @@ entity dac_mkid_interface is
 	-- configuration ports of DAC      
 	dac_not_sdenb_i		: out	STD_LOGIC;
 	dac_not_sdenb_q		: out	STD_LOGIC;
-	dac_sclk			: out	STD_LOGIC;
+	dac_sclk	       	: out	STD_LOGIC;
 	dac_sdi			: out	STD_LOGIC;
 	dac_not_reset		: out	STD_LOGIC;
 	-- dac_phase			: in	STD_LOGIC;
@@ -60,7 +65,7 @@ entity dac_mkid_interface is
       -- signals from/to design
       --------------------------------------
 
-	-- defined in xps_dac_mkid.m
+	-- defined in xps_dac_mkid.m  
 	dac_smpl_clk    		: in	STD_LOGIC;
 
 	-- defined in dac_mkid yellow block and dac_mkid_mask.m
@@ -70,12 +75,26 @@ entity dac_mkid_interface is
 	dac_data_q1			: in 	STD_LOGIC_VECTOR (15 downto 0);
 	dac_sync_i			: in	STD_LOGIC;
 	dac_sync_q			: in	STD_LOGIC;
+
+        -- serial ports
 	not_sdenb_i			: in	STD_LOGIC;
 	not_sdenb_q			: in	STD_LOGIC;
 	sclk				: in	STD_LOGIC;
 	sdi				: in	STD_LOGIC;
-	not_reset			: in	STD_LOGIC
+	not_reset			: in	STD_LOGIC;
 	-- phase				: out	STD_LOGIC
+
+        -- clock to FPGA
+        dac_clk_out       	: out	STD_LOGIC;
+        dac_clk90_out       	: out	STD_LOGIC;
+        dac_clk180_out       	: out	STD_LOGIC;
+        dac_clk270_out       	: out	STD_LOGIC;
+
+        -- dcm lock
+        dac_dcm_locked    	: out   STD_LOGIC
+
+
+        
 	);
 
 end dac_mkid_interface;
@@ -86,12 +105,30 @@ end dac_mkid_interface;
 --------------------------------------------------------------------------------
 architecture Structural of dac_mkid_interface is
 
-	signal smpl_clk	:	STD_LOGIC;
-	signal data_i	:	STD_LOGIC_VECTOR (15 downto 0);
-	signal data_q	:	STD_LOGIC_VECTOR (15 downto 0);
+        signal data_i	:	STD_LOGIC_VECTOR (15 downto 0);
+        signal data_q	:	STD_LOGIC_VECTOR (15 downto 0);
+
+        signal smpl_clk	        :	STD_LOGIC;
+        signal dac_clk_in	:	STD_LOGIC;
+        signal dac_clk	        :	STD_LOGIC;      
+        signal dcm_clk      	:	STD_LOGIC;
+        signal dcm_clk90     	:	STD_LOGIC;
+        signal dcm_clk180       :	STD_LOGIC;
+        signal dcm_clk270       :	STD_LOGIC;
+        signal clk              :	STD_LOGIC;
+        signal clk90            :	STD_LOGIC;
+        signal clk180           :	STD_LOGIC;
+        signal clk270           :	STD_LOGIC;
+
+        
 
 begin
 
+
+        -----------------------------------------------------------------------
+        -- Serial input (DAC configuration)
+        -----------------------------------------------------------------------
+  
 	OBUF_inst_not_sdenb_i : OBUF
 	generic map (
 		IOSTANDARD => "DEFAULT")
@@ -132,14 +169,15 @@ begin
 		I => not_reset
 	);
 
-
-	-------------------------------------------------------------------
+      
+        -------------------------------------------------------------------
 	-- Sample clock in to DAC.  "dac_smpl_clk_i_p/n" is a DDR clock. --
 	-------------------------------------------------------------------
+
     
 	BUFR_inst : BUFR
-	generic map (
-		SIM_DEVICE => "VIRTEX5")
+        generic map (
+            SIM_DEVICE => "VIRTEX5")
 	port map (
 		O => smpl_clk,
 		CE => '1',
@@ -165,6 +203,7 @@ begin
 		I =>  smpl_clk
 	);
 
+  
 
 	----------------------------------
 	-- Enable analog output for DAC --
@@ -189,11 +228,11 @@ begin
 	);
 
 
-	------------------------------------------------------
-	-- DAC data outputs --
-	-- 	Requires an ODDR to double the data rate, and an 
+	-----------------------------------------------------------------------
+        --  DAC data outputs
+        --      Requires an ODDR to double the data rate, and an 
 	--	OBUFDS to convert to differential signal.
-	------------------------------------------------------
+        -----------------------------------------------------------------------
 
 	-- DAC output I --
 
@@ -257,6 +296,87 @@ begin
 		);
 	end generate;
 
+        -----------------------------------------------------------------------
+        -- Clock Management
+        -----------------------------------------------------------------------
+        
+        GEN_DCM : if OUTPUT_CLK = 1 generate
+        
+          IBUFDS_inst_dac_clk : IBUFGDS
+            generic map (
+                IOSTANDARD => "LVDS_25") 
+            port map (
+              O => dac_clk_in,           
+              I => dac_clk_p,
+              IB => dac_clk_n
+              );       
 
-
+          
+          
+          BUFG_clk_dac : BUFG
+            port map (I => dac_clk_in, O => dac_clk);
+          
+          BUFG_clk : BUFG
+            port map (I => dcm_clk, O => clk);
+          
+            BUFG_clk90 : BUFG
+              port map (I => dcm_clk90, O => clk90);
+          
+          BUFG_clk180 : BUFG
+            port map (I => dcm_clk180, O => clk180);
+          
+          BUFG_clk270 : BUFG
+            port map (I => dcm_clk270, O => clk270);
+          
+          --  out clock to fpga
+          
+          dac_clk_out <= clk;
+          dac_clk90_out <= clk90;
+          dac_clk180_out <= clk180;
+          dac_clk270_out <= clk270;       
+          
+          
+          -- DCM
+          
+          CLK_DCM : DCM
+            generic map(
+              CLK_FEEDBACK          => "1X",
+              CLKDV_DIVIDE          => 2.000000,
+              CLKFX_DIVIDE          => 1,
+              CLKFX_MULTIPLY        => 4,
+              CLKIN_DIVIDE_BY_2     => FALSE,
+              CLKIN_PERIOD          => 0.000000,
+              CLKOUT_PHASE_SHIFT    => "NONE",
+              DESKEW_ADJUST         => "SYSTEM_SYNCHRONOUS",
+              DFS_FREQUENCY_MODE    => "HIGH",
+              DLL_FREQUENCY_MODE    => "HIGH",
+              DUTY_CYCLE_CORRECTION => TRUE,
+              FACTORY_JF            => x"F0F0",
+              PHASE_SHIFT           => 0,
+              STARTUP_WAIT          => FALSE)
+            port map (
+              CLKFB                 => clk,
+              CLKIN                 => dac_clk,
+              DSSEN                 => '0',
+              PSCLK                 => '0',
+              PSEN                  => '0',
+              PSINCDEC              => '0',
+              RST                   => '0',
+              CLKDV                 => open,
+              CLKFX                 => open,
+              CLKFX180              => open,
+              CLK0                  => dcm_clk,
+              CLK2X                 => open,
+              CLK2X180              => open,
+              CLK90                 => dcm_clk90,
+              CLK180                => dcm_clk180,
+              CLK270                => dcm_clk270,
+              LOCKED                => dac_dcm_locked,
+              PSDONE                => open,
+              STATUS                => open
+              );
+        
+        end generate;   
+        
+ 
 end Structural;
