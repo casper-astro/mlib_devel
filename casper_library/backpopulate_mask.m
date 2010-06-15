@@ -50,7 +50,7 @@ function backpopulate_mask(blk,varargin)
       end
 
      %if parameter too large
-      if( length(mat2str(value)) > 100 ),
+      if( length(tostring(value)) > 100 ),
       	mv{i} = ['getfield( getfield( get_param( gcb,''UserData'' ), ''parameters''),''',varname,''')'];
       else
       	mv{i} = tostring(value);

@@ -123,9 +123,9 @@ propagate_vars([blk,'/bi_real_unscr_2x'],'defaults', defaults, varargin{:});
 % Propagate dynamic variables
 %generate vectors of multiplier use from vectors passed in
 if strcmp(specify_mult,'on'),
-    set_param([blk,'/biplex_core'], 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(mult_spec));
+    set_param([blk,'/biplex_core'], 'specify_mult', tostring(specify_mult), 'mult_spec', tostring(mult_spec));
 else
-    set_param([blk,'/biplex_core'], 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str( 2.*ones(1, FFTSize)));
+    set_param([blk,'/biplex_core'], 'specify_mult', tostring(specify_mult), 'mult_spec', tostring( 2.*ones(1, FFTSize)));
 end
 
 clean_blocks(blk);

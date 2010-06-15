@@ -213,18 +213,18 @@ end
 if n_inputs < 1,
     name = [blk,'/fft_biplex0'];
     set_param(name, 'dsp48_adders', tostring(dsp48_adders), ...
-        'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
+        'specify_mult', tostring(specify_mult), 'mult_spec', tostring(vec_biplex));
 else,
     if n_inputs ~= FFTSize,
         for i=0:2^(n_inputs-1)-1,
             name = [blk,'/fft_biplex',num2str(i)];
             set_param(name, 'dsp48_adders', tostring(dsp48_adders), ...
-                'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
+                'specify_mult', tostring(specify_mult), 'mult_spec', tostring(vec_biplex));
         end
     end
     name = [blk,'/fft_direct'];
     set_param(name, 'dsp48_adders', tostring(dsp48_adders), ...
-        'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_direct));
+        'specify_mult', tostring(specify_mult), 'mult_spec', tostring(vec_direct));
 end
 
 clean_blocks(blk);

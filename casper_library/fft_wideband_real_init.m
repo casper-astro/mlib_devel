@@ -176,11 +176,11 @@ end
 
 for i=0:2^(n_inputs-2)-1,
     name = [blk,'/fft_biplex_real_4x',num2str(i)];
-    set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_biplex));
+    set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', tostring(vec_biplex));
 end
 
 name = [blk,'/fft_direct'];
-set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', mat2str(vec_direct));
+set_param(name, 'specify_mult', tostring(specify_mult), 'mult_spec', tostring(vec_direct));
 
 clean_blocks(blk);
 

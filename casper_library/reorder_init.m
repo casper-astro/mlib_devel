@@ -34,7 +34,7 @@ end
 
 map_length = length(map);
 %fprintf([tostring(map),'\n']);
-%fprintf([num2str(map_length),'\n']);
+%fprintf([tostring(map_length),'\n']);
 map_bits = ceil(log2(map_length));
 order = compute_order(map);
 order_bits = ceil(log2(order));
@@ -74,15 +74,15 @@ if double_buffer == 1,
     order = 2;
 end
 reuse_block(blk, 'pre_sync_delay', 'xbsIndex_r4/Delay', ...
-    'Position', [ 55   159    75   201], 'latency', num2str((order-1)*map_latency));
+    'Position', [ 55   159    75   201], 'latency', tostring((order-1)*map_latency));
 reuse_block(blk, 'sync_delay_en', 'casper_library/Delays/sync_delay_en', ...
-    'Position', [ 85   159   125   201], 'DelayLen', num2str(map_length));
+    'Position', [ 85   159   125   201], 'DelayLen', tostring(map_length));
 reuse_block(blk, 'post_sync_delay', 'xbsIndex_r4/Delay', ...
-    'Position', [135   159   155   201], 'latency', num2str(bram_latency+1+double_buffer));
+    'Position', [135   159   155   201], 'latency', tostring(bram_latency+1+double_buffer));
 reuse_block(blk, 'delay_valid', 'xbsIndex_r4/Delay', ...
-    'Position', [495    13    525    27], 'latency', num2str(bram_latency+1+double_buffer));
+    'Position', [495    13    525    27], 'latency', tostring(bram_latency+1+double_buffer));
 reuse_block(blk, 'delay_we', 'xbsIndex_r4/Delay', ...
-    'Position', [305   115    345   135], 'latency', num2str((order-1)*map_latency));
+    'Position', [305   115    345   135], 'latency', tostring((order-1)*map_latency));
 
 % Special case for reorder of order 1 (just delay)
 if order == 1,
@@ -97,68 +97,68 @@ if order == 1,
 
     for i=1:n_inputs,
         % Ports
-        reuse_block(blk, ['din',num2str(i-1)], 'built-in/inport', ...
-            'Position', [495    80*i+3   525    80*i+17], 'Port', num2str(2+i));
-        reuse_block(blk, ['dout', num2str(i-1)], 'built-in/outport', ...
-            'Position', [705    80*i+3   735    80*i+17], 'Port', num2str(2+i));
+        reuse_block(blk, ['din',tostring(i-1)], 'built-in/inport', ...
+            'Position', [495    80*i+3   525    80*i+17], 'Port', tostring(2+i));
+        reuse_block(blk, ['dout', tostring(i-1)], 'built-in/outport', ...
+            'Position', [705    80*i+3   735    80*i+17], 'Port', tostring(2+i));
 
         % Delays
-        reuse_block(blk, ['delay_din',num2str(i-1)], 'xbsIndex_r4/Delay', ...
-            'Position', [550    80*i    590    80*i+20], 'latency', num2str((order-1)*map_latency+1));
-        reuse_block(blk, ['delay_din_bram',num2str(i-1)], 'casper_library/Delays/delay_bram_en_plus', ...
+        reuse_block(blk, ['delay_din',tostring(i-1)], 'xbsIndex_r4/Delay', ...
+            'Position', [550    80*i    590    80*i+20], 'latency', tostring((order-1)*map_latency+1));
+        reuse_block(blk, ['delay_din_bram',tostring(i-1)], 'casper_library/Delays/delay_bram_en_plus', ...
             'Position', [620    80*i    660    80*i+20], 'DelayLen', 'length(map)', 'bram_latency', 'bram_latency');
 
         % Wires
-        add_line(blk, ['din',num2str(i-1),'/1'], ['delay_din',num2str(i-1),'/1']);
-        add_line(blk, ['delay_din',num2str(i-1),'/1'], ['delay_din_bram',num2str(i-1),'/1']);
-        add_line(blk, ['delay_din_bram',num2str(i-1),'/1'], ['dout',num2str(i-1),'/1']);
-        add_line(blk, 'delay_we/1', ['delay_din_bram',num2str(i-1),'/2']);
+        add_line(blk, ['din',tostring(i-1),'/1'], ['delay_din',tostring(i-1),'/1']);
+        add_line(blk, ['delay_din',tostring(i-1),'/1'], ['delay_din_bram',tostring(i-1),'/1']);
+        add_line(blk, ['delay_din_bram',tostring(i-1),'/1'], ['dout',tostring(i-1),'/1']);
+        add_line(blk, 'delay_we/1', ['delay_din_bram',tostring(i-1),'/2']);
     end
 % Case for order != 1, single-buffered
 elseif double_buffer == 0,
     reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
-        'Position', [95    56   145   109],'n_bits', num2str(map_bits + order_bits), 'cnt_type', 'Count Limited', ...
-        'arith_type', 'Unsigned', 'cnt_to', num2str(2^map_bits * order - 1), ...
+        'Position', [95    56   145   109],'n_bits', tostring(map_bits + order_bits), 'cnt_type', 'Count Limited', ...
+        'arith_type', 'Unsigned', 'cnt_to', tostring(2^map_bits * order - 1), ...
         'en', 'on', 'rst', 'on');
     reuse_block(blk, 'Slice1', 'xbsIndex_r4/Slice', ...
         'Position', [170    37   200    53], 'mode', 'Upper Bit Location + Width', ...
-        'nbits', num2str(order_bits));
+        'nbits', tostring(order_bits));
     reuse_block(blk, 'Slice2', 'xbsIndex_r4/Slice', ...
         'Position', [170    77   200    93], 'mode', 'Lower Bit Location + Width', ...
-        'nbits', num2str(map_bits));
+        'nbits', tostring(map_bits));
     reuse_block(blk, 'Mux', 'xbsIndex_r4/Mux', ...
-        'Position', [415    34   440    62+20*order], 'inputs', num2str(order), 'latency', '1');
+        'Position', [415    34   440    62+20*order], 'inputs', tostring(order), 'latency', '1');
     reuse_block(blk, 'delay_sel', 'xbsIndex_r4/Delay', ...
-        'Position', [305    37    345    53], 'latency', num2str((order-1)*map_latency));
+        'Position', [305    37    345    53], 'latency', tostring((order-1)*map_latency));
     reuse_block(blk, 'delay_d0', 'xbsIndex_r4/Delay', ...
-        'Position', [305    77    345    93], 'latency', num2str((order-1)*map_latency));
+        'Position', [305    77    345    93], 'latency', tostring((order-1)*map_latency));
 
 
     % Add Dynamic Ports and Blocks
     for i=1:n_inputs,
         % Ports
-        reuse_block(blk, ['din',num2str(i-1)], 'built-in/inport', ...
-            'Position', [495    80*i+3   525    80*i+17], 'Port', num2str(2+i));
-        reuse_block(blk, ['dout', num2str(i-1)], 'built-in/outport', ...
-            'Position', [705    80*i+3   735    80*i+17], 'Port', num2str(2+i));
+        reuse_block(blk, ['din',tostring(i-1)], 'built-in/inport', ...
+            'Position', [495    80*i+3   525    80*i+17], 'Port', tostring(2+i));
+        reuse_block(blk, ['dout', tostring(i-1)], 'built-in/outport', ...
+            'Position', [705    80*i+3   735    80*i+17], 'Port', tostring(2+i));
 
         % BRAMS
-        reuse_block(blk, ['delay_din',num2str(i-1)], 'xbsIndex_r4/Delay', ...
-            'Position', [550    80*i    590    80*i+20], 'latency', num2str((order-1)*map_latency+1));
-        reuse_block(blk, ['bram',num2str(i-1)], 'xbsIndex_r4/Single Port RAM', ...
-            'Position', [615    80*i-17   680   80*i+37], 'depth', num2str(2^map_bits), ...
-            'write_mode', 'Read Before Write', 'latency', num2str(bram_latency));
+        reuse_block(blk, ['delay_din',tostring(i-1)], 'xbsIndex_r4/Delay', ...
+            'Position', [550    80*i    590    80*i+20], 'latency', tostring((order-1)*map_latency+1));
+        reuse_block(blk, ['bram',tostring(i-1)], 'xbsIndex_r4/Single Port RAM', ...
+            'Position', [615    80*i-17   680   80*i+37], 'depth', tostring(2^map_bits), ...
+            'write_mode', 'Read Before Write', 'latency', tostring(bram_latency));
     end
 
     % Add Maps
     for i=1:order-1,
-        mapname = ['map', num2str(i)];
+        mapname = ['map', tostring(i)];
         reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
-            'depth', num2str(map_length), 'initVector', 'map', 'latency', num2str(map_latency), ...
-            'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', ...
+            'depth', tostring(map_length), 'initVector', 'map', 'latency', tostring(map_latency), ...
+            'arith_type', 'Unsigned', 'n_bits', tostring(map_bits), 'bin_pt', '0', ...
             'distributed_mem', map_memory_type, 'Position', [230  125+50*i   270    145+50*i]);
         reuse_block(blk, ['delay_',mapname], 'xbsIndex_r4/Delay', ...
-            'Position', [305   125+50*i    345   145+50*i], 'latency', [num2str(order-(i+1)),'*map_latency']);
+            'Position', [305   125+50*i    345   145+50*i], 'latency', [tostring(order-(i+1)),'*map_latency']);
     end
 
     % Add static wires
@@ -181,63 +181,63 @@ elseif double_buffer == 0,
 
     % Add dynamic wires
     for i=1:n_inputs
-        add_line(blk, 'delay_we/1', ['bram',num2str(i-1),'/3']);
-        add_line(blk, 'Mux/1', ['bram',num2str(i-1),'/1']);
-        add_line(blk, ['din',num2str(i-1),'/1'], ['delay_din',num2str(i-1),'/1']);
-        add_line(blk, ['delay_din',num2str(i-1),'/1'], ['bram',num2str(i-1),'/2']);
-        add_line(blk, ['bram',num2str(i-1),'/1'], ['dout',num2str(i-1),'/1']);
+        add_line(blk, 'delay_we/1', ['bram',tostring(i-1),'/3']);
+        add_line(blk, 'Mux/1', ['bram',tostring(i-1),'/1']);
+        add_line(blk, ['din',tostring(i-1),'/1'], ['delay_din',tostring(i-1),'/1']);
+        add_line(blk, ['delay_din',tostring(i-1),'/1'], ['bram',tostring(i-1),'/2']);
+        add_line(blk, ['bram',tostring(i-1),'/1'], ['dout',tostring(i-1),'/1']);
     end
 
     for i=1:order-1,
-        mapname = ['map',num2str(i)];
-        prevmapname = ['map',num2str(i-1)];
+        mapname = ['map',tostring(i)];
+        prevmapname = ['map',tostring(i-1)];
         if i == 1,
             add_line(blk, 'Slice2/1', 'map1/1');
         else,
             add_line(blk, [prevmapname,'/1'], [mapname,'/1'], 'autorouting', 'on');
         end
         add_line(blk, [mapname,'/1'], ['delay_',mapname,'/1']);
-        add_line(blk, ['delay_',mapname,'/1'], ['Mux/',num2str(i+2)]);
+        add_line(blk, ['delay_',mapname,'/1'], ['Mux/',tostring(i+2)]);
     end
 % case for order > 1, double-buffered
 else,
     reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
-        'Position', [95    56   145   109],'n_bits', num2str(map_bits + 1), 'cnt_type', 'Count Limited', ...
-        'arith_type', 'Unsigned', 'cnt_to', num2str(2^map_bits * 2 - 1), ...
+        'Position', [95    56   145   109],'n_bits', tostring(map_bits + 1), 'cnt_type', 'Count Limited', ...
+        'arith_type', 'Unsigned', 'cnt_to', tostring(2^map_bits * 2 - 1), ...
         'en', 'on', 'rst', 'on');
     reuse_block(blk, 'Slice1', 'xbsIndex_r4/Slice', ...
         'Position', [170    37   200    53], 'mode', 'Upper Bit Location + Width', ...
         'nbits', '1');
     reuse_block(blk, 'Slice2', 'xbsIndex_r4/Slice', ...
         'Position', [170    77   200    93], 'mode', 'Lower Bit Location + Width', ...
-        'nbits', num2str(map_bits));
+        'nbits', tostring(map_bits));
     reuse_block(blk, 'delay_sel', 'xbsIndex_r4/Delay', ...
-        'Position', [305    37    345    53], 'latency', num2str(map_latency));
+        'Position', [305    37    345    53], 'latency', tostring(map_latency));
     reuse_block(blk, 'delay_d0', 'xbsIndex_r4/Delay', ...
-        'Position', [305    77    345    93], 'latency', num2str(map_latency));
+        'Position', [305    77    345    93], 'latency', tostring(map_latency));
 
 
     % Add Dynamic Ports and Blocks
     for i=1:n_inputs,
         % Ports
-        reuse_block(blk, ['din',num2str(i-1)], 'built-in/inport', ...
-            'Position', [495    80*i+3   525    80*i+17], 'Port', num2str(2+i));
-        reuse_block(blk, ['dout', num2str(i-1)], 'built-in/outport', ...
-            'Position', [705    80*i+3   735    80*i+17], 'Port', num2str(2+i));
+        reuse_block(blk, ['din',tostring(i-1)], 'built-in/inport', ...
+            'Position', [495    80*i+3   525    80*i+17], 'Port', tostring(2+i));
+        reuse_block(blk, ['dout', tostring(i-1)], 'built-in/outport', ...
+            'Position', [705    80*i+3   735    80*i+17], 'Port', tostring(2+i));
 
         % BRAMS
-        reuse_block(blk, ['delay_din',num2str(i-1)], 'xbsIndex_r4/Delay', ...
-            'Position', [550    80*i    590    80*i+20], 'latency', num2str(map_latency));
-        reuse_block(blk, ['dbl_buffer',num2str(i-1)], 'casper_library/Reorder/dbl_buffer', ...
-            'Position', [615    80*i-17   680   80*i+37], 'depth', num2str(2^map_bits), ...
-            'latency', num2str(bram_latency));
+        reuse_block(blk, ['delay_din',tostring(i-1)], 'xbsIndex_r4/Delay', ...
+            'Position', [550    80*i    590    80*i+20], 'latency', tostring(map_latency));
+        reuse_block(blk, ['dbl_buffer',tostring(i-1)], 'casper_library/Reorder/dbl_buffer', ...
+            'Position', [615    80*i-17   680   80*i+37], 'depth', tostring(2^map_bits), ...
+            'latency', tostring(bram_latency));
     end
 
     % Add Maps
     mapname = 'map1';
     reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
-        'depth', num2str(map_length), 'initVector', mat2str(map), 'latency', num2str(map_latency), ...
-        'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', ...
+        'depth', tostring(map_length), 'initVector', tostring(map), 'latency', tostring(map_latency), ...
+        'arith_type', 'Unsigned', 'n_bits', tostring(map_bits), 'bin_pt', '0', ...
         'distributed_mem', map_memory_type, 'Position', [230  125+50   270    145+50]);
 
     % Add static wires
@@ -259,14 +259,14 @@ else,
 
     % Add dynamic wires
     for i=1:n_inputs
-        bram_name = ['dbl_buffer',num2str(i-1)];
+        bram_name = ['dbl_buffer',tostring(i-1)];
         add_line(blk, 'delay_d0/1', [bram_name,'/2']);
         add_line(blk, 'map1/1', [bram_name,'/3']);
         add_line(blk, 'delay_we/1', [bram_name,'/5']);
         add_line(blk, 'delay_sel/1', [bram_name,'/1']);
-        add_line(blk, ['din',num2str(i-1),'/1'], ['delay_din',num2str(i-1),'/1']);
-        add_line(blk, ['delay_din',num2str(i-1),'/1'], [bram_name,'/4']);
-        add_line(blk, [bram_name,'/1'], ['dout',num2str(i-1),'/1']);
+        add_line(blk, ['din',tostring(i-1),'/1'], ['delay_din',tostring(i-1),'/1']);
+        add_line(blk, ['delay_din',tostring(i-1),'/1'], [bram_name,'/4']);
+        add_line(blk, [bram_name,'/1'], ['dout',tostring(i-1),'/1']);
     end
 end
 
