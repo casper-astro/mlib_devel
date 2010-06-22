@@ -213,7 +213,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             if strcmp(hw_sys, 'ROACH')
               str = gen_borf_info(n, blk_obj, this_opb_addr_start);
             else
-              str = gen_borf_info(n, blk_obj, {});
+              str = gen_borf_info(n-1, blk_obj, {});
             end
             fprintf(bof_fid,str);
         catch
