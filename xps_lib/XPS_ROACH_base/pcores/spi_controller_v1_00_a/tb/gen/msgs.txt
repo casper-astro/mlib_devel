@@ -1,0 +1,2 @@
+PASSED
+Attribute Syntax Error : The attribute CLKOUT_PHASE_SHIFT on DCM instance x64_adc.x64_adc_infrastructure_inst.dcm_inst is set to VARIABLE_CENTER.  Legal values for this attribute are NONE, FIXED or VARIABLE.

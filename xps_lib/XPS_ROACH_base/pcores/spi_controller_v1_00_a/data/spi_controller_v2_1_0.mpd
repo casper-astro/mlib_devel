@@ -1,0 +1,24 @@
+BEGIN spi_controller
+
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = MIXED
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+OPTION STYLE = HDL
+OPTION DESC = "SPI Controller"
+
+#############
+##  PORTS  ##
+#############
+
+PORT clk   = "", DIR = I
+
+PORT cs_n  = "", DIR = O
+PORT sdata = "", DIR = O
+PORT sclk  = "", DIR = O
+
+PORT wr_strobe  = "", DIR = I
+PORT data       = "", DIR = I, VEC = [7:0] 
+
+END
