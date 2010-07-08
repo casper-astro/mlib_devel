@@ -19,7 +19,7 @@
 %   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+    
 function butterfly_direct_init(blk, varargin)
 % Initialize and configure the direct butterfly
 %
@@ -37,14 +37,19 @@ function butterfly_direct_init(blk, varargin)
 % add_latency = The latency of adders in the system.
 % mult_latency = The latency of multipliers in the system.
 % bram_latency = The latency of BRAM in the system.
-% use_bram = Use bram or slr delays
 % dist_mem =
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
 
+clog('entering butterfly_direct_init','trace');
 % Declare any default values for arguments you might like.
-defaults = {};
+defaults = {'biplex', 'on', 'FFTSize', 5, 'Coeffs', 0, 'StepPeriod', 0, ...
+    'input_bit_width', 18, 'coeff_bit_width', 18, 'add_latency', 1, 'mult_latency', 2, ...
+    'bram_latency', 2, 'conv_latency', 1, 'quantization', 'Round  (unbiased: +/- Inf)', ...
+    'overflow', 'Wrap', 'arch', 'Virtex5', 'opt_target', 'logic', ...
+    'coeffs_bram', 'off', 'use_hdl', 'on', 'use_embedded', 'off', 'dsp48_adders', 'off'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('butterfly_direct_init post same_state','trace');
 check_mask_type(blk, 'butterfly_direct');
 munge_block(blk, varargin{:});
 
@@ -57,7 +62,7 @@ coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
-use_bram = get_var('use_bram', 'defaults', defaults, varargin{:});
+conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 arch = get_var('arch', 'defaults', defaults, varargin{:});
@@ -67,17 +72,16 @@ use_hdl = get_var('use_hdl', 'defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+clog(flatstrcell(varargin),'butterfly_direct_init_debug');
+
 twiddle = [blk, '/twiddle'];
 
 % Compute the complex, bit-reversed values of the twiddle factors
 br_indices = bit_rev(Coeffs, FFTSize-1);
 br_indices = -2*pi*1j*br_indices/2^FFTSize;
 ActualCoeffs = exp(br_indices);
-ActualCoeffsStr = 'exp(-2*pi*1j*(bit_rev(Coeffs, FFTSize-1))/2^FFTSize)';
-%fprintf(['coeffs: ', tostring(ActualCoeffs),'\n']);
-%fprintf([ActualCoeffsStr,'\n']);
-%fprintf(['size: ', num2str(length(ActualCoeffs)), ' optimizing twiddle\n']);
-% Optimize twiddler for coeff = 0, 1, or alternating 0-1
+
+% Optimize twiddle for coeff = 0, 1, or alternating 0-1
 if length(Coeffs) == 1,
     if Coeffs(1) == 0,
         %if used in biplex core and first stage
@@ -99,47 +103,59 @@ if length(Coeffs) == 1,
 elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-2,
     block_type = 'twiddle_stage_2';
 else,
-    if strcmp( opt_target, 'Logic' ), 
+    if strcmp( opt_target, 'logic' ), 
         block_type = 'twiddle_general_4mult';
     else
-       block_type = 'twiddle_general_3mult';
-   end
-    
+        block_type = 'twiddle_general_3mult';
+    end
 end
-replace_block(blk, 'Name', 'twiddle', ['casper_library/FFTs/Twiddle/',block_type],'noprompt');
-set_param(twiddle,'LinkStatus','inactive')
+clog([block_type,' for twiddle'],'butterfly_direct_init_debug');
 
-propagate_vars(twiddle,'defaults', defaults, varargin{:});
+replace_block(blk, 'Name', 'twiddle', ['casper_library/FFTs/Twiddle/',block_type], 'noprompt');
+
+clog(['Coeffs = ',tostring(Coeffs),' ActualCoeffs = ',tostring(ActualCoeffs)],'butterfly_direct_init_debug');
+
 if(strcmp(block_type,'twiddle_general_3mult') || strcmp(block_type, 'twiddle_general_4mult')),
-%    set_param(twiddle, 'Coeffs', ['[',ActualCoeffsStr,']']);
-    set_param(twiddle, 'Coeffs', tostring(ActualCoeffs));
+    set_param(twiddle, 'Coeffs', tostring(ActualCoeffs), 'arch', tostring(arch), ...
+        'StepPeriod', tostring(StepPeriod), 'coeffs_bram', tostring(coeffs_bram), ...
+        'input_bit_width', num2str(input_bit_width), 'coeff_bit_width', num2str(coeff_bit_width), ...
+        'add_latency', num2str(add_latency), 'mult_latency', num2str(mult_latency), ...
+        'bram_latency', num2str(bram_latency), 'conv_latency', num2str(conv_latency), ...
+        'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded), ...
+        'quantization', tostring(quantization), 'overflow', tostring(overflow));
+else
+    set_param(twiddle, 'FFTSize', num2str(FFTSize), ...
+        'input_bit_width', num2str(input_bit_width), 'opt_target', tostring(opt_target), ...
+        'add_latency', num2str(add_latency), 'mult_latency', num2str(mult_latency), ...
+        'bram_latency', num2str(bram_latency), 'conv_latency', num2str(conv_latency));
 end
 
 %set up overflow indication blocks
-bw = input_bit_width+6; 
-bd = input_bit_width+1;
+bw = input_bit_width+7; 
+bd = input_bit_width+2;
 if strcmp(block_type, 'twiddle_general_3mult'),
-	bw = input_bit_width+6; 
-	bd = input_bit_width+1;
+    bw = input_bit_width+7; 
+    bd = input_bit_width+2;
 elseif strcmp(block_type, 'twiddle_general_4mult'),
-    bw = input_bit_width+5;
-    bd = input_bit_width+1; 
+    bw = input_bit_width+6;
+    bd = input_bit_width+2; 
 elseif strcmp(block_type, 'twiddle_stage_2') || strcmp(block_type, 'twiddle_coeff_0') || strcmp(block_type, 'twiddle_coeff_1') || strcmp(block_type, 'twiddle_pass_through'),
-	bw = input_bit_width+2;
-	bd = input_bit_width;
+    bw = input_bit_width+2;
+    bd = input_bit_width;
 else
-	fprintf('butterfly_direct_init: Unknown twiddle %s\n',block_type);
+    fprintf('butterfly_direct_init: Unknown twiddle %s\n',block_type);
+    clog(['butterfly_direct_init: Unknown twiddle ',block_type','\n'], 'error');
 end
 
 for i = 1:4 ,
-	set_param([blk,'/convert_of',num2str(i)], ...
-	'quantization', quantization, 'overflow', overflow, ...
-	'bit_width_i', tostring(bw), 'binary_point_i', tostring(bd), ...
-	'bit_width_o', tostring(input_bit_width), ...
-    'binary_point_o', tostring(input_bit_width-1));
+    set_param([blk,'/convert_of',num2str(i)], ...
+        'quantization', tostring(quantization), 'overflow', tostring(overflow), ...
+        'bit_width_i', num2str(bw), 'binary_point_i', num2str(bd), ...
+        'latency', num2str(conv_latency), 'bit_width_o', num2str(input_bit_width), ...
+        'binary_point_o', num2str(input_bit_width-1));
 end
 
-%set up adders
+%set up adders to use DSP48s if needed
 if strcmp( dsp48_adders, 'on' ),
     set_param( [blk,'/AddSub'], 'use_behavioral_HDL', 'off', 'pipelined', 'on', 'use_rpm', 'on', 'hw_selection', 'DSP48');
     set_param( [blk,'/AddSub1'], 'use_behavioral_HDL', 'off', 'pipelined', 'on', 'use_rpm', 'on', 'hw_selection', 'DSP48');
@@ -153,8 +169,12 @@ else,
 end
 
 clean_blocks(blk);
+coeffs = 'slices';
+if strcmp(coeffs_bram,'on'),
+    coeffs = 'BRAM';
+end
 
-fmtstr = sprintf('FFTSize=%d, coeff_bit_width=%d', ...
-                  FFTSize, coeff_bit_width);
+fmtstr = sprintf('%s\ncoeffs in %s',block_type, coeffs);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
+clog('exiting butterfly_direct_init','trace');

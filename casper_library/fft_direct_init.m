@@ -43,9 +43,19 @@
 
 function fft_direct_init(blk, varargin)
 
+clog('entering fft_direct_init','trace');
 % Declare any default values for arguments you might like.
-defaults = {};
+defaults = {'FFTSize', 1,  ...
+    'input_bit_width', 18, 'coeff_bit_width', 18, ...
+    'quantization', 'Round  (unbiased: +/- Inf)', 'overflow', 'Saturate', ...
+    'map_tail', 'on', 'LargerFFTSize', 5, 'StartStage', 4, ...
+    'add_latency', 1, 'mult_latency', 2, 'bram_latency', 2, ...
+    'conv_latency', 1, 'coeffs_bit_limit', 8,  ...
+    'arch', 'Virtex5', 'opt_target', 'logic', ...
+    'specify_mult', 'off', 'mult_spec', [2 2], 'dsp48_adders', 'off'};
+
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('fft_direct_init post same_state','trace');
 check_mask_type(blk, 'fft_direct');
 munge_block(blk, varargin{:});
 
@@ -55,6 +65,7 @@ coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 map_tail = get_var('map_tail', 'defaults', defaults, varargin{:});
@@ -67,9 +78,18 @@ specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+clog(flatstrcell(varargin),'fft_direct_init_debug');
+
 if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
     error('fft_direct_init.m: Multiplier use specification for stages does not match FFT size');
-    return
+    clog('fft_direct_init.m: Multiplier use specification for stages does not match FFT size','error');
+    return;
+end
+
+vec = 2.*ones(1, FFTSize);
+if strcmp(specify_mult, 'on'),
+    %generate vectors of multiplier use from vectors passed in
+    vec(1:FFTSize) = mult_spec(1:FFTSize);
 end
 
 current_stages = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on',...
@@ -85,7 +105,8 @@ for i=0:2^FFTSize-1,
     reuse_block(blk, ['in',num2str(i)], 'built-in/inport', 'Position', [30 100*i+100 60 100*i+115]);
     reuse_block(blk, ['out',num2str(i)], 'built-in/outport', 'Position', [300*FFTSize+150 100*i+100 300*FFTSize+180 100*i+115]);
 end
-reuse_block(blk, 'of', 'built-in/outport', 'Position', [300*FFTSize+210 100*(2^FFTSize)+100 300*FFTSize+240 100*(2^FFTSize)+115], 'Port', tostring((2^FFTSize)+2));
+reuse_block(blk, 'of', 'built-in/outport', 'Port', tostring((2^FFTSize)+2), ...
+    'Position', [300*FFTSize+210 100*(2^FFTSize)+100 300*FFTSize+240 100*(2^FFTSize)+115]);
 
 %FFTSize == 1 implies 1 input or block which generates an error
 if( FFTSize ~= 1 ),
@@ -120,19 +141,68 @@ end
 
 % Add butterflies
 for stage=1:FFTSize,
+    use_hdl = 'on';
+    use_embedded = 'off';
+    if(strcmp(specify_mult,'on')),
+        if( mult_spec(stage) == 2)
+            use_hdl = 'on'; 
+            use_embedded = 'off';
+        elseif( mult_spec(stage) == 1), 
+            use_hdl = 'off';
+            use_embedded = 'on'; 
+        else
+            use_hdl = 'off';
+            use_embedded = 'off';
+        end
+    end
+    
     %add overflow logic
     if( FFTSize ~= 1 ),
         reuse_block(blk, ['of_', num2str(stage)], 'xbsIndex_r4/Logical', ...
-            'logical_function', 'OR', 'inputs', tostring(2^(FFTSize-1)), 'latency', '1', ...
+            'logical_function', 'OR', 'inputs', num2str(2^(FFTSize-1)), 'latency', '1', ...
             'Position', [300*stage+90 100*(2^FFTSize)+100+(stage*15) 300*stage+120 120+100*(2^FFTSize)+(FFTSize*5)+(stage*15)]);
         add_line(blk, ['of_',num2str(stage),'/1'], ['of_or/',num2str(stage)]);
     end
+   
     for i=0:2^(FFTSize-1)-1,
+        % Implement a normal FFT or the tail end of a larger FFT
+        if strcmp(map_tail,'off'),
+            coeffs = ['[',num2str(floor(i/2^(FFTSize-stage))),']'];
+            actual_fft_size = FFTSize;
+            num_coeffs = 1;
+        else,
+            redundancy = 2^(LargerFFTSize - FFTSize);
+            coeffs = '[';
+            for r=0:redundancy-1,
+                n = bit_reverse(r, LargerFFTSize - FFTSize);
+                coeffs = [coeffs,' ',num2str(floor((i+n*2^(FFTSize-1))/2^(LargerFFTSize-(StartStage+stage-1))))];
+            end
+            coeffs = [coeffs, ']'];
+            actual_fft_size = LargerFFTSize;
+            num_coeffs = redundancy;
+        end
+        
+        if (num_coeffs * coeff_bit_width * 2) > 2^coeffs_bit_limit, 
+            coeffs_bram = 'on';
+        else, 
+            coeffs_bram = 'off';
+        end
+      
         name = ['butterfly',num2str(stage),'_',num2str(i)];
+        biplex = get_var('biplex', 'defaults', defaults, varargin{:});
+        
         reuse_block(blk, name, 'casper_library/FFTs/butterfly_direct', ...
-            'biplex', 'off', 'StepPeriod', '0', ... 
+            'FFTSize', num2str(actual_fft_size), ...
+            'biplex', 'off', 'Coeffs', coeffs, 'StepPeriod', '0', ...
+	        'input_bit_width', num2str(input_bit_width), ...
+            'coeff_bit_width', num2str(coeff_bit_width), 'add_latency', num2str(add_latency), ...
+            'mult_latency', num2str(mult_latency), 'bram_latency', num2str(bram_latency), ...
+            'coeffs_bram', coeffs_bram, 'conv_latency', num2str(conv_latency), ...
+            'quantization', tostring(quantization), 'overflow', tostring(overflow), ...
+            'arch', tostring(arch), 'opt_target', tostring(opt_target), 'use_hdl', use_hdl, ...
+            'use_embedded', use_embedded, 'dsp48_adders', tostring(dsp48_adders), ...
             'Position', [300*(stage-1)+220 200*i+100 300*(stage-1)+300 200*i+175]);
-        propagate_vars([blk,'/',name], 'defaults', defaults, varargin{:});
+        
         node_one_num = 2^(FFTSize-stage+1)*floor(i/2^(FFTSize-stage)) + mod(i, 2^(FFTSize-stage));
         node_two_num = node_one_num+2^(FFTSize-stage);
         input_one = ['node',num2str(stage-1),'_',num2str(node_one_num),'/1'];
@@ -159,60 +229,10 @@ for stage=1:FFTSize,
     end
 end
 
-% Check dynamic settings
-
-vec = 2.*ones(1, FFTSize);
-if strcmp(specify_mult, 'on'),
-    %generate vectors of multiplier use from vectors passed in
-    vec(1:FFTSize) = mult_spec(1:FFTSize);
-end
-
-for stage=1:FFTSize,
-
-    use_hdl = 'on';
-    use_embedded = 'off';
-    if(strcmp(specify_mult,'on')),
-        if( mult_spec(stage) == 2)
-            use_hdl = 'on'; 
-            use_embedded = 'off';
-        elseif( mult_spec(stage) == 1), 
-            use_hdl = 'off';
-            use_embedded = 'on'; 
-        else
-            use_hdl = 'off';
-            use_embedded = 'off';
-        end
-    end
-
-    for i=0:2^(FFTSize-1)-1,
-        butterfly = [blk,'/butterfly',num2str(stage),'_',num2str(i)];
-        % Implement a normal FFT or the tail end of a larger FFT
-        if strcmp(map_tail,'off'),
-            coeffs = ['[',num2str(floor(i/2^(FFTSize-stage))),']'];
-            actual_fft_size = FFTSize;
-            num_coeffs = 1;
-        else,
-            redundancy = 2^(LargerFFTSize - FFTSize);
-            coeffs = '[';
-            for r=0:redundancy-1,
-                n = bit_reverse(r, LargerFFTSize - FFTSize);
-                coeffs = [coeffs,' ',num2str(floor((i+n*2^(FFTSize-1))/2^(LargerFFTSize-(StartStage+stage-1))))];
-            end
-            coeffs = [coeffs, ']'];
-            actual_fft_size = LargerFFTSize;
-            num_coeffs = redundancy;
-        end
-        if (num_coeffs * coeff_bit_width) > (2^coeffs_bit_limit), coeffs_bram = 'on';
-        else, coeffs_bram = 'off';
-        end
-        set_param(butterfly, 'FFTSize', num2str(actual_fft_size), ...
-        'coeffs_bram', tostring(coeffs_bram), 'Coeffs', coeffs, 'use_hdl', tostring(use_hdl), ...
-        'use_embedded', tostring(use_embedded));
-    end
-end
-
 clean_blocks(blk);
 
-fmtstr = sprintf('FFTSize=%d', FFTSize);
+fmtstr = sprintf('%s\nstages [%s] of %d\n[%d,%d]\n%s\n%s', arch, num2str([StartStage:1:StartStage+FFTSize-1]), ...
+    actual_fft_size,  input_bit_width, coeff_bit_width, quantization, overflow);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
+clog('exiting fft_direct_init','trace');
