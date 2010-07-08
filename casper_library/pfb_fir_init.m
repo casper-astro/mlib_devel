@@ -45,9 +45,19 @@ function pfb_fir_init(blk, varargin)
 % (unbiased: Even Values)'
 % fwidth = Scaling of the width of each PFB channel
 
+clog('entering pfb_fir_init','trace');
+
 % Declare any default values for arguments you might like.
-defaults = {};
+defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
+    'WindowType', 'hamming', 'n_inputs', 1, 'MakeBiplex', 0, ...
+    'BitWidthIn', 8, 'BitWidthOut', 18, 'CoeffBitWidth', 18, ...
+    'CoeffDistMem', 0, 'add_latency', 1, 'mult_latency', 2, ...
+    'bram_latency', 2, 'conv_latency', 1, ...
+    'quantization', 'Round  (unbiased: +/- Inf)', ...
+    'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2]};
+
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('pfb_fir_real_init post same_state','trace');
 check_mask_type(blk, 'pfb_fir');
 munge_block(blk, varargin{:});
 
@@ -68,12 +78,19 @@ fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
+if strcmp(specify_mult, 'on') && len(mult_spec) ~= TotalTaps
+    clog('Multiplier specification vector not the same as the number of taps','error');
+    error('Multiplier specification vector not the same as the number of taps');
+    return
+end
+
 if MakeBiplex, pols = 2;
 else, pols = 1;
 end
 
 delete_lines(blk);
 
+clog('adding inports and outports','pfb_fir_init_debug');
 % Add ports
 portnum = 1;
 reuse_block(blk, 'sync', 'built-in/inport', ...
@@ -97,6 +114,8 @@ portnum = 0;
 for p=1:pols,
     for i=1:2^n_inputs,
         portnum = portnum + 1;
+
+        clog(['adding taps for pol ',num2str(p),' input ',num2str(i)],'pfb_fir_init_debug');
         for t=1:TotalTaps,
             in_name = ['pol',num2str(p),'_in',num2str(i)];
             out_name = ['pol',num2str(p),'_out',num2str(i)];
@@ -125,11 +144,11 @@ for p=1:pols,
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
                     'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
-		        %if t==2,
-                %    prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap'];
-                %else,
+		        if t==2,
+                    prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap'];
+                else,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_tap',num2str(t-1)];
-                %end
+                end
                 for n=1:4, add_line(blk, [prev_blk_name,'/',num2str(n)], [blk_name,'/',num2str(n)]);
                 end
                 add_line(blk, [blk_name,'/1'], [out_name,'/1']);
@@ -138,17 +157,12 @@ for p=1:pols,
             else,
                 blk_name = ['pol',num2str(p),'_in',num2str(i),'_tap',num2str(t)];
                 
-		%changed by Andrew to include parameters
-
-%		reuse_block(blk, blk_name, 'casper_library/PFBs/tap', ...
-%                   'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
 		        reuse_block(blk, blk_name, 'casper_library/PFBs/tap', ...
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
 		            'mult_latency',tostring(mult_latency), 'coeff_width', tostring(CoeffBitWidth), ...
 		            'coeff_frac_width',tostring(CoeffBitWidth-1), 'delay', tostring(2^(PFBSize-n_inputs)), ...
 		            'data_width',tostring(BitWidthIn), 'bram_latency', tostring(bram_latency), ...
                     'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
-%		    
 		        if t==2,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap'];
                 else,
@@ -166,3 +180,4 @@ clean_blocks(blk);
 fmtstr = sprintf('taps=%d, add_latency=%d', TotalTaps, add_latency);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
+clog('exiting pfb_fir_init','trace');
