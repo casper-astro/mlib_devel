@@ -21,6 +21,8 @@ mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 demux_factor = eval(get_var('demux_factor', 'defaults', defaults, varargin{:}));
 
+
+fix_pnt_pos = (n_bits-1)*2;
 xeng_delay = add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1;
 bit_growth = ceil(log2(acc_len));
 ant_bits = ceil(log2(n_ants));
@@ -28,10 +30,8 @@ n_bits_xeng_out = (2*n_bits + 1 + bit_growth);
 n_bits_scaled_out = 2^(ceil(log2(n_bits_xeng_out)));
 
 if n_ants < 5,
-    errordlg('X engine ERR: X Engine must have more than 4 antennas.');
-    error('X Engine must have more than 4 antennas.');
-    set_param(blk, 'n_ants', '8');
-    n_ants = 8;
+    warndlg('X engine is not tested for designs with less than 8 antennas.');
+    warning('X Engine is not tested for designs with less than 8 antennas.');
 end
 
 if floor(n_ants/2 + 1) >= acc_len,
@@ -46,11 +46,11 @@ if length(use_ded_mult) ~= floor(n_ants/2)+1 && length(use_ded_mult) ~= 1,
     error(sprintf('X engine ERR: Number of multiplier types must be 1 or floor(n_ants/2)+1 = %i',floor(n_ants/2 + 1)));
     set_param(blk,'use_ded_mult','1');
     use_ded_mult=1;
-    
 end    
 
 if (mod(n_ants,2) ~= 0)
     warndlg(sprintf('X engine is not tested for non-2^N antennas.'));
+    warning('X engine is not tested for non-2^N antennas.');
 end
 
 %fprintf('variables all done\n');
@@ -62,25 +62,43 @@ delete_lines(blk);
 
 % Add taps
 x = 275;
-if length(use_ded_mult)==1
-    reuse_block(blk, 'auto_tap', 'casper_library/Correlator/auto_tap',...
-                'Position',[135, 51, 230, 169],...
-            	'use_ded_mult', num2str(use_ded_mult), 'use_bram_delay', num2str(use_bram_delay));
-    for i=1:floor(n_ants/2),
+
+reuse_block(blk, 'auto_tap', 'casper_library/Correlator/auto_tap',...
+                'Position',[135, 51, 230, 169], ...
+                'n_ants',num2str(n_ants), ...                            
+                'n_bits',num2str(n_bits), ...
+                'acc_len',num2str(acc_len), ...
+                'add_latency',num2str(add_latency), ...
+                'mult_latency',num2str(mult_latency), ...
+                'bram_latency',num2str(bram_latency), ...
+            	'use_bram_delay', num2str(use_bram_delay));
+            
+for i=1:floor(n_ants/2),
         name = ['baseline_tap', num2str(i)];
         reuse_block(blk, name, 'casper_library/Correlator/baseline_tap', ...
+            'n_ants',num2str(n_ants), ...            
+            'n_bits',num2str(n_bits), ...
+            'acc_len',num2str(acc_len), ...
+            'add_latency',num2str(add_latency), ...
+            'mult_latency',num2str(mult_latency), ...
+            'bram_latency',num2str(bram_latency), ...
             'ant_sep', num2str(i), 'Position', [x, 52, x+95, 168], ...
-            'use_ded_mult', num2str(use_ded_mult), 'use_bram_delay', num2str(use_bram_delay));
+            'use_bram_delay', num2str(use_bram_delay));
         x = x + 135;
+end
+    
+    
+if length(use_ded_mult)==1
+    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult));
+    for i=1:floor(n_ants/2),
+        name = ['/baseline_tap', num2str(i)];
+        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult));    
     end
 elseif length(use_ded_mult)==floor(n_ants/2)+1
     set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult(1)));
     for i=1:floor(n_ants/2),
         name = ['baseline_tap', num2str(i)];
-        reuse_block(blk, name, 'casper_library/Correlator/baseline_tap', ...
-            'ant_sep', num2str(i), 'Position', [x, 52, x+95, 168], ...
-            'use_ded_mult', num2str(use_ded_mult(i+1)), 'use_bram_delay', num2str(use_bram_delay));
-        x = x + 135;
+        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult(i+1)));
     end
 end
 
@@ -207,7 +225,7 @@ set_param([blk, '/xeng_descramble'], 'num_ants', sprintf('%d',n_ants));
 set_param([blk, '/xeng_descramble'], 'n_bits_in', sprintf('%d',n_bits_scaled_out*8));
 set_param([blk, '/xeng_descramble'], 'demux_factor', sprintf('%d',demux_factor));
 set_param([blk, '/xeng_descramble'], 'acc_len', sprintf('%d',acc_len));
-set_param([blk, '/xeng_conj_fix'], 'n_bits_in', sprintf('%d',(n_bits_scaled_out)/demux_factor));
+set_param([blk, '/xeng_conj_fix'], 'n_bits_in', sprintf('%d',(n_bits_scaled_out)));
 set_param([blk, '/xeng_conj_fix'], 'n_ants', sprintf('%d',n_ants));
 set_param([blk, '/xeng_conj_fix'], 'demux_factor', sprintf('%d',demux_factor));
 
