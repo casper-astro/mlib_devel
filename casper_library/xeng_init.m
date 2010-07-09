@@ -29,10 +29,14 @@ ant_bits = ceil(log2(n_ants));
 n_bits_xeng_out = (2*n_bits + 1 + bit_growth);
 n_bits_scaled_out = 2^(ceil(log2(n_bits_xeng_out)));
 
-if n_ants < 5,
-    warndlg('X engine is not tested for designs with less than 8 antennas.');
-    warning('X Engine is not tested for designs with less than 8 antennas.');
+
+if n_ants < 4,
+    warndlg('X engine is not designed to work with less than 4 antennas. Defaulting to 4.');
+    warning('X Engine is not designed to work with less than 4 antennas. Defaulting to 4.');
+    set_param(blk, 'n_ants', '4');
+    n_ants=4;
 end
+
 
 if floor(n_ants/2 + 1) >= acc_len,
     errordlg(sprintf('X engine ERR: X Engine Accumulation length must be > floor(n_ants/2 + 1)=%i',floor(n_ants/2 + 1)));
@@ -49,8 +53,8 @@ if length(use_ded_mult) ~= floor(n_ants/2)+1 && length(use_ded_mult) ~= 1,
 end    
 
 if (mod(n_ants,2) ~= 0)
-    warndlg(sprintf('X engine is not tested for non-2^N antennas.'));
-    warning('X engine is not tested for non-2^N antennas.');
+    warndlg(sprintf('X engine is not tested for non-2^N antennas. YMMV.'));
+    warning('X engine is not tested for non-2^N antennas. YMMV.');
 end
 
 %fprintf('variables all done\n');
@@ -86,28 +90,8 @@ for i=1:floor(n_ants/2),
             'use_bram_delay', num2str(use_bram_delay));
         x = x + 135;
 end
-    
-    
-if length(use_ded_mult)==1
-    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult));
-    for i=1:floor(n_ants/2),
-        name = ['/baseline_tap', num2str(i)];
-        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult));    
-    end
-elseif length(use_ded_mult)==floor(n_ants/2)+1
-    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult(1)));
-    for i=1:floor(n_ants/2),
-        name = ['baseline_tap', num2str(i)];
-        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult(i+1)));
-    end
-end
 
 % Add Misc static blocks
-
-reuse_block(blk, 'x_cast', 'casper_library/Correlator/x_cast', 'Position', [x + 100, 100, x + 150, 125]);
-reuse_block(blk, 'xeng_descramble', 'casper_library/Correlator/xeng_descramble', 'Position', [x + 200, 105, x + 300, 163]);
-reuse_block(blk, 'xeng_conj_fix', 'casper_library/Correlator/xeng_conj_fix', 'Position', [x + 350, 105, x + 450, 163]);
-
 reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', 'Position', [15,89,85,121],...
             'const','0',...
             'arith_type','Unsigned',...
@@ -121,6 +105,19 @@ reuse_block(blk, 'sample_and_hold2', 'casper_library/Misc/sample_and_hold', 'Pos
 
 reuse_block(blk, 'sample_and_hold3', 'casper_library/Misc/sample_and_hold', 'Position', [x + 350,190,x+390,250],...
             'period',sprintf('%d',n_ants * acc_len));
+
+reuse_block(blk, 'x_cast', 'casper_library/Correlator/x_cast', ...
+    'Position', [x + 100, 100, x + 150, 125], ...
+    'n_bits_in', sprintf('%d',n_bits_xeng_out), ...
+    'demux_factor', sprintf('%d',demux_factor), ...
+    'n_bits_out', sprintf('%d',n_bits_scaled_out), ...
+    'fix_pnt_pos', sprintf('%d',(n_bits-1)*2));
+
+reuse_block(blk, 'xeng_conj_fix', 'casper_library/Correlator/xeng_conj_fix', ...
+    'Position', [x + 350, 105, x + 450, 163], ...
+    'n_bits_in', sprintf('%d',(n_bits_scaled_out)), ...
+    'n_ants', sprintf('%d',n_ants), ...
+    'demux_factor', sprintf('%d',demux_factor));
 
 reuse_block(blk, 'delay', 'xbsIndex_r4/Delay','Position', [x + 430, 220, x + 470, 230],...
             'reg_retiming','on',...
@@ -158,6 +155,44 @@ reuse_block(blk, 'window_valid', 'built-in/inport','Position', [55,223,85,237]);
 reuse_block(blk, 'mcnt_in', 'built-in/inport','Position', [55,293,85,307]);
 
 
+last_baseline_tap = ['baseline_tap', num2str(floor(n_ants/2))];
+
+if (n_ants == 4)
+    reuse_block(blk, 'xeng_descramble_4ant', 'casper_library/Correlator/xeng_descramble_4ant', ...
+        'Position', [x + 200, 105, x + 300, 163], ...
+        'n_bits_in', sprintf('%d',n_bits_scaled_out*8), ...
+        'demux_factor', sprintf('%d',demux_factor),...
+        'acc_len', sprintf('%d',acc_len));
+    add_line(blk, 'xeng_descramble_4ant/1', 'xeng_conj_fix/1', 'autorouting', 'on');
+    add_line(blk, 'xeng_descramble_4ant/2', 'xeng_conj_fix/2', 'autorouting', 'on');
+    add_line(blk, 'xeng_descramble_4ant/3', 'xeng_conj_fix/3', 'autorouting', 'on');
+    add_line(blk, 'xeng_descramble_4ant/3', 'sample_and_hold3/1', 'autorouting', 'on');
+    add_line(blk, 'x_cast/1', 'xeng_descramble_4ant/1', 'autorouting', 'on');
+    add_line(blk, [last_baseline_tap, '/5'], 'xeng_descramble_4ant/2', 'autorouting', 'on');
+    add_line(blk, [last_baseline_tap, '/7'], 'xeng_descramble_4ant/3', 'autorouting', 'on');
+    add_line(blk, 'window_delay/1', 'xeng_descramble_4ant/4', 'autorouting', 'on');
+elseif (n_ants >=6)
+    reuse_block(blk, 'xeng_descramble', 'casper_library/Correlator/xeng_descramble', ...
+        'Position', [x + 200, 105, x + 300, 163], ...
+        'num_ants', sprintf('%d',n_ants), ...
+        'n_bits_in', sprintf('%d',n_bits_scaled_out*8), ...
+        'demux_factor', sprintf('%d',demux_factor),...
+        'acc_len', sprintf('%d',acc_len));
+    add_line(blk, 'xeng_descramble/1', 'xeng_conj_fix/1', 'autorouting', 'on');
+    add_line(blk, 'xeng_descramble/2', 'xeng_conj_fix/2', 'autorouting', 'on');
+    add_line(blk, 'xeng_descramble/3', 'xeng_conj_fix/3', 'autorouting', 'on');
+    add_line(blk, 'xeng_descramble/3', 'sample_and_hold3/1', 'autorouting', 'on');
+    add_line(blk, 'x_cast/1', 'xeng_descramble/1', 'autorouting', 'on');
+    add_line(blk, [last_baseline_tap, '/5'], 'xeng_descramble/2', 'autorouting', 'on');
+    add_line(blk, [last_baseline_tap, '/7'], 'xeng_descramble/3', 'autorouting', 'on');
+    add_line(blk, 'window_delay/1', 'xeng_descramble/4', 'autorouting', 'on');
+
+else 
+    errordlg('Internal X engine fault. 5 antennas a special case; not supported.');
+    error('Internal X engine fault. 5 antennas a special case; not supported.');
+end
+
+
 % Add lines
 %==========
 add_line(blk, 'ant/1', 'auto_tap/1', 'autorouting', 'on');
@@ -166,12 +201,6 @@ add_line(blk, 'Constant/1', 'auto_tap/4', 'autorouting', 'on');
 add_line(blk, 'Constant1/1', 'auto_tap/5', 'autorouting', 'on');
 add_line(blk, 'sync_in/1', 'auto_tap/6', 'autorouting', 'on');
 add_line(blk, 'window_valid/1', 'window_delay/1', 'autorouting', 'on');
-add_line(blk, 'window_delay/1', 'xeng_descramble/4', 'autorouting', 'on');
-add_line(blk, 'x_cast/1', 'xeng_descramble/1', 'autorouting', 'on');
-
-add_line(blk, 'xeng_descramble/1', 'xeng_conj_fix/1', 'autorouting', 'on');
-add_line(blk, 'xeng_descramble/2', 'xeng_conj_fix/2', 'autorouting', 'on');
-add_line(blk, 'xeng_descramble/3', 'xeng_conj_fix/3', 'autorouting', 'on');
 
 add_line(blk, 'xeng_conj_fix/3', 'sync_out/1', 'autorouting', 'on');
 add_line(blk, 'xeng_conj_fix/1', 'acc/1', 'autorouting', 'on');
@@ -180,7 +209,6 @@ add_line(blk, 'xeng_conj_fix/2', 'valid/1', 'autorouting', 'on');
 add_line(blk, 'sync_in/1', 'sample_and_hold1/1', 'autorouting', 'on');
 add_line(blk, 'mcnt_in/1', 'sample_and_hold1/2', 'autorouting', 'on');
 add_line(blk, 'sample_and_hold1/1', 'sample_and_hold2/2', 'autorouting', 'on');
-add_line(blk, 'xeng_descramble/3', 'sample_and_hold3/1', 'autorouting', 'on');
 add_line(blk, 'sample_and_hold2/1', 'sample_and_hold3/2', 'autorouting', 'on');
 add_line(blk, 'sample_and_hold3/1', 'delay/1', 'autorouting', 'on');
 add_line(blk, 'delay/1', 'mcnt_out/1', 'autorouting', 'on');
@@ -201,35 +229,28 @@ for i=1:floor(n_ants / 2)
     add_line(blk, [prevblk, '/7'], [thisblk, '/7'], 'autorouting', 'on');
 end
 
+add_line(blk, [last_baseline_tap, '/1'], 'auto_tap/3', 'autorouting', 'on');
+add_line(blk, [last_baseline_tap, '/2'], 'Term1/1', 'autorouting', 'on');
+add_line(blk, [last_baseline_tap, '/3'], 'Term2/1', 'autorouting', 'on');
+add_line(blk, [last_baseline_tap, '/4'], 'x_cast/1', 'autorouting', 'on');
+add_line(blk, [last_baseline_tap, '/6'], 'Term3/1', 'autorouting', 'on');
+add_line(blk, [last_baseline_tap, '/7'], 'sample_and_hold2/1', 'autorouting', 'on');
 
+% SETUP multipliers
+if length(use_ded_mult)==1
+    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult));
+    for i=1:floor(n_ants/2),
+        name = ['/baseline_tap', num2str(i)];
+        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult));    
+    end
+elseif length(use_ded_mult)==floor(n_ants/2)+1
+    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult(1)));
+    for i=1:floor(n_ants/2),
+        name = ['baseline_tap', num2str(i)];
+        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult(i+1)));
+    end
+end
 
-i = floor(n_ants / 2);
-thisblk = ['baseline_tap', num2str(i)];
-add_line(blk, [thisblk, '/1'], 'auto_tap/3', 'autorouting', 'on');
-add_line(blk, [thisblk, '/2'], 'Term1/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/3'], 'Term2/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/4'], 'x_cast/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/5'], 'xeng_descramble/2', 'autorouting', 'on');
-add_line(blk, [thisblk, '/6'], 'Term3/1', 'autorouting', 'on');
-add_line(blk, [thisblk, '/7'], 'xeng_descramble/3', 'autorouting', 'on');
-add_line(blk, [thisblk, '/7'], 'sample_and_hold2/1', 'autorouting', 'on');
-
-%fprintf('setting block parameters...\n');
-
-% Set Params
-set_param([blk, '/x_cast'], 'n_bits_in', sprintf('%d',n_bits_xeng_out));
-set_param([blk, '/x_cast'], 'demux_factor', sprintf('%d',demux_factor));
-set_param([blk, '/x_cast'], 'n_bits_out', sprintf('%d',n_bits_scaled_out));
-set_param([blk, '/x_cast'], 'fix_pnt_pos', sprintf('%d',(n_bits-1)*2));
-set_param([blk, '/xeng_descramble'], 'num_ants', sprintf('%d',n_ants));
-set_param([blk, '/xeng_descramble'], 'n_bits_in', sprintf('%d',n_bits_scaled_out*8));
-set_param([blk, '/xeng_descramble'], 'demux_factor', sprintf('%d',demux_factor));
-set_param([blk, '/xeng_descramble'], 'acc_len', sprintf('%d',acc_len));
-set_param([blk, '/xeng_conj_fix'], 'n_bits_in', sprintf('%d',(n_bits_scaled_out)));
-set_param([blk, '/xeng_conj_fix'], 'n_ants', sprintf('%d',n_ants));
-set_param([blk, '/xeng_conj_fix'], 'demux_factor', sprintf('%d',demux_factor));
-
-%fprintf('all variables set. \n cleanup starting...\n');
 
 clean_blocks(blk);
 
