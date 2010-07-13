@@ -35,7 +35,11 @@ xsg_obj = get(blk_obj,'xsg_obj');
 
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.hw_adc = get_param(blk_name,'adc_brd');
+s.clk_src  = get(xsg_obj,'clk_src');
 s.adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
+s.adc_interleave = get_param(blk_name,'adc_interleave');
+s.bypass_auto = get_param(blk_name,'bypass_auto');
+s.en_gain = get_param(blk_name,'en_gain');
 
 switch s.hw_sys
     case 'ROACH'
@@ -106,4 +110,7 @@ ext_ports.adc_rst         = {1 'out' [s.adc_str,'rst']         ['{',adcport,'_p{
 ext_ports.adc_powerdown   = {1 'out' [s.adc_str,'powerdown']   ['{',adcport,'_p{[10]+1,:}}']                      'vector=false'  struct()        };
 
 b = set(b,'ext_ports',ext_ports);
+
+% Software parameters
+b = set(b,'c_params',['adc = ',s.adc_str,' / interleave = ',s.adc_interleave]);
 

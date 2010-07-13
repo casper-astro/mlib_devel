@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-`define SIMLENGTH 40000
+`define SIMLENGTH 400000
 `define SYS_CLK_PERIOD 4
 
 module TB_opb_katadccontroller();
@@ -84,12 +84,15 @@ module TB_opb_katadccontroller();
   /****** System Signal generations ******/
   reg [31:0] sys_clk_counter;
 
+  reg arm;
+
   reg reset;
   assign sys_rst = reset;
 
   initial begin
     $dumpvars;
     sys_clk_counter <= 32'b0;
+    arm <= 1'b0;
 
     reset <= 1'b1;
     #20
@@ -127,26 +130,32 @@ module TB_opb_katadccontroller();
       case (progress)
         0: begin
           opb_data <= 32'b11;
-          opb_rnw  <= 0;
-          opb_addr <= 0;
+          opb_rnw  <= 1;
+          opb_addr <= 4;
           opb_be   <= 4'b0001;
           opb_select <= 1'b1;
           progress <= 1;
         end
         1: begin
           if (Sl_xferAck) begin
-            opb_data <= {16'hdead, 4'b0, 4'h9, 8'b1};
-            opb_addr <= 4;
-            opb_be   <= 4'b1111;
-            opb_rnw  <= 0;
-            opb_select <= 1'b1;
-            progress <= 2;
+            if (Sl_DBus[27]) begin
+              progress <= 0;
+              opb_select <= 1'b0;
+            end else begin
+              opb_data <= 32'b11;
+              opb_rnw  <= 0;
+              opb_addr <= 0;
+              opb_be   <= 4'b0001;
+              opb_select <= 1'b1;
+              progress <= 2;
+              arm <= 1'b1;
+            end
           end
         end
         2: begin
           if (Sl_xferAck) begin
-            opb_data <= {16'hbeef, 4'b0, 4'h8, 8'b1};
-            opb_addr <= 8;
+            opb_data <= {16'hdead, 4'b0, 4'h9, 8'b1};
+            opb_addr <= 4;
             opb_be   <= 4'b1111;
             opb_rnw  <= 0;
             opb_select <= 1'b1;
@@ -154,6 +163,16 @@ module TB_opb_katadccontroller();
           end
         end
         3: begin
+          if (Sl_xferAck) begin
+            opb_data <= {16'hbeef, 4'b0, 4'h8, 8'b1};
+            opb_addr <= 8;
+            opb_be   <= 4'b1111;
+            opb_rnw  <= 0;
+            opb_select <= 1'b1;
+            progress <= 4;
+          end
+        end
+        4: begin
           if (Sl_xferAck) begin
             opb_select <= 1'b0;
           end
@@ -176,9 +195,9 @@ module TB_opb_katadccontroller();
   reg[31:0] config0_data;
 
   always @(posedge adc0_adc3wire_clk) begin
-    if (sys_rst) begin
+    if (sys_rst || !arm) begin
     end else begin
-      if (adc0_adc3wire_strobe === 1) begin
+      if (adc0_adc3wire_strobe === 0) begin
         config0_data[31-config0_cntr] <= adc0_adc3wire_data;
         config0_cntr <= config0_cntr + 1;
         if (config0_cntr == 31) begin
@@ -197,14 +216,15 @@ module TB_opb_katadccontroller();
   reg [4:0] config1_cntr;
   initial begin
     config1_cntr <= 0;
+    config1_data <= 0;
   end
 
   reg[31:0] config1_data;
 
   always @(posedge adc1_adc3wire_clk) begin
-    if (sys_rst) begin
+    if (sys_rst || !arm) begin
     end else begin
-      if (adc1_adc3wire_strobe === 1) begin
+      if (adc1_adc3wire_strobe === 0) begin
         config1_data[31 - config1_cntr] <= adc1_adc3wire_data;
         config1_cntr <= config1_cntr + 1;
         if (config1_cntr == 31) begin

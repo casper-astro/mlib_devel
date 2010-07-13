@@ -1,4 +1,4 @@
-MODULE=opb_katadccontroller
+MODULE=kat_adc_iic_controller
 
 VCC=iverilog
 FLAGS=-Wall
@@ -11,7 +11,7 @@ TB_DIR=./hdl
 GEN_DIR=./gen
 INCLUDE=-I$(SRC_DIR)
 
-SRC=$(SRC_DIR)/$(MODULE).v $(SRC_DIR)/autoconfig.v $(SRC_DIR)/opb_attach.v $(SRC_DIR)/serial_config.v
+SRC=$(SRC_DIR)/$(MODULE).v $(SRC_DIR)/miic_ops.v $(SRC_DIR)/opb_attach.v $(SRC_DIR)/gain_set.v $(SRC_DIR)/cpu_op_fifo.v $(SRC_DIR)/fab_op_fifo.v $(SRC_DIR)/rx_fifo.v ./simhdl/FIFO_GENERATOR_V5_3.v
 TB_SRC=$(TB_DIR)/TB_$(MODULE).v
 OBJ=$(GEN_DIR)/$(MODULE).o
 TB_OBJ=$(GEN_DIR)/TB_$(MODULE).o
