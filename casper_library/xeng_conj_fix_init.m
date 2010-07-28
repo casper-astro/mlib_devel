@@ -87,9 +87,9 @@ reuse_block(blk, 'sync_out', 'built-in/outport','Position', [630,150,660,164]);
 %=================
 add_line(blk, 'acc/1', 'delay1/1', 'autorouting', 'on');
 add_line(blk, 'valid/1', 'delay2/1', 'autorouting', 'on');
-add_line(blk, 'valid/1', 'pos_cnt/1', 'autorouting', 'on');
+add_line(blk, 'valid/1', 'pos_cnt/2', 'autorouting', 'on');
 add_line(blk, 'sync/1', 'delay3/1', 'autorouting', 'on');
-add_line(blk, 'sync/1', 'pos_cnt/2', 'autorouting', 'on');
+add_line(blk, 'sync/1', 'pos_cnt/1', 'autorouting', 'on');
 add_line(blk, 'delay2/1', 'delay4/1', 'autorouting', 'on');
 add_line(blk, 'delay3/1', 'delay5/1', 'autorouting', 'on');
 add_line(blk, 'delay4/1', 'valid_out/1', 'autorouting', 'on');
@@ -196,12 +196,17 @@ case 8,
 	'base0','LSB of Input',...
 	'bit0','0',...
 	'nbits','1');
+
+    reuse_block(blk, 'delay6', 'xbsIndex_r4/Delay', 'Position', [250,283,280,297],...
+		'reg_retiming','on',...
+		'Latency','1');
 	
 	reuse_block(blk, 'imag_sel', 'xbsIndex_r4/Mux', 'Position', [510,292,535,358],...
 		'inputs','2',...
-		'Latency','1');
+		'Latency','0');
 
-	add_line(blk, 'pos_cnt/1', 'slice/1', 'autorouting', 'on');
+	add_line(blk, 'pos_cnt/1', 'delay6/1', 'autorouting', 'on');
+    add_line(blk, 'delay6/1', 'slice/1', 'autorouting', 'on');
 	add_line(blk, 'delay1/1', 'reint_in/1', 'autorouting', 'on');
 	add_line(blk, 'reint_in/1', 'negate/1','autorouting', 'on');
 	add_line(blk, 'slice/1', 'imag_sel/1', 'autorouting', 'on');
