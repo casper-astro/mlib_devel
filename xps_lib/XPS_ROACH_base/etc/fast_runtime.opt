@@ -29,6 +29,7 @@ End Program ngdbuild
 #
 Program map
 -timing;
+-detail;
 -ol high;
 -xe n;
 -register_duplication;
