@@ -133,7 +133,12 @@ add_line(blk, 'bi_real_unscr_2x/2','pol13_out/1');
 add_line(blk, 'bi_real_unscr_2x/3','sync_out/1');
 
 % Unscrambler is not in library!
-propagate_vars([blk,'/bi_real_unscr_2x'],'defaults', defaults, varargin{:});
+if FFTSize > coeffs_bit_limit
+  bram_map = 'on';
+else
+  bram_map = 'off';
+end
+propagate_vars([blk,'/bi_real_unscr_2x'],'defaults', defaults, varargin{:}, 'bram_map', bram_map);
 
 fmtstr = sprintf('%s\n%d stages\n[%d,%d]\n%s\n%s', arch, FFTSize, input_bit_width, coeff_bit_width, quantization, overflow);
 set_param(blk, 'AttributesFormatString', fmtstr);
