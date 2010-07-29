@@ -17,7 +17,8 @@ Program ngdbuild
 -nt timestamp;        # NGO File generation. Regenerate only when
                       # source netlist is newer than existing
                       # NGO file (default)
--bm <design>.bmm     # Block RAM memory map file
+-sd ../pcores;        # Where to find NGC netlists for black box blocks
+-bm <design>.bmm      # Block RAM memory map file
 <userdesign>;         # User design - pick from xflow command line
 -uc <design>.ucf;     # ucf constraints
 <design>.ngd;         # Name of NGD file. Filebase same as design filebase
