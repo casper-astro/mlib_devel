@@ -549,7 +549,7 @@ CLKSHIFT_DCM : DCM_ADV
         DLL_FREQUENCY_MODE    => "HIGH",
         DUTY_CYCLE_CORRECTION => TRUE,
         FACTORY_JF            => x"C080",
-        PHASE_SHIFT           => 64, -- 64 is a 90 degree offset
+        PHASE_SHIFT           => 0, -- 0 is a 0 degree offset (64 is 90)
         STARTUP_WAIT          => FALSE)
     port map (
         CLKFB                 => adc_clk,
