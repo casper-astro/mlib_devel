@@ -1,6 +1,5 @@
 module x64_adc_mux_adc_streams (
   input            clk,        
-  input            rst,      
   input    [95:0]  din,        
   input            dinvld,     
   output   [23:0]  dout,       

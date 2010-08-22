@@ -92,6 +92,14 @@ str = [str, 'END',                                                          '\n'
 
 %%% ADC Reset line
 
+str = [str, '# reset inverter',                                         '\n'];
+str = [str, 'BEGIN signal_invert',                                      '\n'];
+str = [str, ' PARAMETER INSTANCE  = ', inst_name, '_rst_invert',        '\n'];
+str = [str, ' PARAMETER HW_VER    = 1.00.a',                            '\n'];
+str = [str, ' PORT sig_in         = ', inst_name, '_user_rst',          '\n'];
+str = [str, ' PORT sig_out        = ', inst_name, '_user_rst_inv',      '\n'];
+str = [str, 'END',                                                      '\n'];
+
 str = [str, '# x64 ADC reset',                                          '\n'];
 str = [str, 'BEGIN gpio_simulink2ext',                                  '\n'];
 str = [str, ' PARAMETER INSTANCE  = ', inst_name, '_rst_gpio',          '\n'];
@@ -100,10 +108,10 @@ str = [str, ' PARAMETER DDR       = 0',                                 '\n'];
 str = [str, ' PARAMETER WIDTH     = 1',                                 '\n'];
 str = [str, ' PARAMETER CLK_PHASE = 0',                                 '\n'];
 str = [str, ' PARAMETER REG_IOB   = true',                              '\n'];
-str = [str, ' PORT gateway        = ', inst_name, '_user_rst',          '\n'];
+str = [str, ' PORT gateway        = ', inst_name, '_user_rst_inv',      '\n'];
 str = [str, ' PORT io_pad         = ', inst_name, '_rst_gpio_ext',      '\n'];
 str = [str, ' PORT clk            = adc0_clk',                          '\n'];
-str = [str, ' PORT clk90          = adc0_clk90',                         '\n'];
+str = [str, ' PORT clk90          = adc0_clk90',                        '\n'];
 str = [str, 'END',                                                      '\n'];
 str = [str, 'PORT ', inst_name, '_rst_gpio_ext = ', inst_name, '_rst_gpio_ext, DIR = O, VEC = [0:0]', '\n'];
 str = [str, '',                                                         '\n'];
@@ -197,7 +205,7 @@ str = [str, ' PORT adc_dout_sync             = ', inst_name, '_user_chan_sync', 
 str = [str, ' PORT adc_dout_vld              = adc_dout_vld',                   '\n'];
 str = [str, ' PORT adc_fifo_of               = adc_fifo_of',                    '\n'];
 str = [str, ' PORT adc_fifo_uf               = adc_fifo_uf',                    '\n'];
-str = [str, ' PORT reset                     = sys_reset',                      '\n'];
+str = [str, ' PORT reset                     = ', inst_name, '_user_rst',       '\n'];
 str = [str, '',                                                                 '\n'];
 str = [str, ' PORT dly_clk                   = epb_clk',                        '\n'];
 str = [str, ' PORT fc_sampled                = fc_sampled',                     '\n'];
