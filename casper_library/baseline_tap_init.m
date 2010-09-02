@@ -26,13 +26,13 @@ multipliers = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on','Name
 for i=1:length(multipliers),
    if mult_type==2,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
-            'casper_library/Multipliers/cmult_4bit_br*','noprompt');
+            'casper_library_multipliers/cmult_4bit_br*','noprompt');
     elseif mult_type==1,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
-            'casper_library/Multipliers/cmult_4bit_em*','noprompt');
+            'casper_library_multipliers/cmult_4bit_em*','noprompt');
     else,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
-            'casper_library/Multipliers/cmult_4bit_sl*','noprompt');
+            'casper_library_multipliers/cmult_4bit_sl*','noprompt');
     end
     set_param(multipliers{i},'LinkStatus','inactive');
     set_param(multipliers{i},'mult_latency','mult_latency');
@@ -41,12 +41,12 @@ end
 
 % Configure the delay to use bram or slrs
 if use_bram_delay,
-    replace_block(blk,'Name','delay','casper_library/Delays/delay_bram','noprompt');
+    replace_block(blk,'Name','delay','casper_library_delays/delay_bram','noprompt');
     set_param([blk,'/delay'],'LinkStatus','inactive');    
     set_param([blk,'/delay'],'DelayLen','acc_len');
     set_param([blk,'/delay'],'bram_latency','bram_latency');
 else,
-    replace_block(blk,'Name','delay','casper_library/Delays/delay_slr','noprompt');
+    replace_block(blk,'Name','delay','casper_library_delays/delay_slr','noprompt');
     set_param([blk,'/delay'],'LinkStatus','inactive');    
     set_param([blk,'/delay'],'DelayLen','acc_len');    
 end

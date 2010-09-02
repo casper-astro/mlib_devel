@@ -29,7 +29,7 @@ add_line(blk, 'shift/1', 'Logical/2');
 for k = 1:num_shifter_units,
     % add the block
     new_blk_name = ['shifter_unit',num2str(k)];
-    reuse_block(blk, new_blk_name, 'casper_library/Flow_Control/shifter_unit', ...
+    reuse_block(blk, new_blk_name, 'casper_library_flow_control/shifter_unit', ...
         'data_width', num2str(sout_width), 'pin_offset', num2str((k-1)*sout_width), 'Position', [220 + (k-1)*200, 26, 280 + (k-1)*200, 74] );
     add_line(blk, 'ld/1', [new_blk_name, '/1']); % add the select line
     

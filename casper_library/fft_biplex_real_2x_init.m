@@ -92,8 +92,8 @@ reuse_block(blk, 'pol02_out', 'built-in/outport', 'Position', [470   113   500  
 reuse_block(blk, 'pol13_out', 'built-in/outport', 'Position', [470   143   500   157], 'Port', '3');
 reuse_block(blk, 'of', 'built-in/outport', 'Position', [285   153   315   167], 'Port', '4');
 
-reuse_block(blk, 'ri_to_c0', 'casper_library/Misc/ri_to_c','Position',[65    34   105    76]);
-reuse_block(blk, 'ri_to_c1', 'casper_library/Misc/ri_to_c','Position',[65    94   105   136]);
+reuse_block(blk, 'ri_to_c0', 'casper_library_misc/ri_to_c','Position',[65    34   105    76]);
+reuse_block(blk, 'ri_to_c1', 'casper_library_misc/ri_to_c','Position',[65    94   105   136]);
 
 %generate vectors of multiplier use from vectors passed in
 if strcmp(specify_mult,'on'),
@@ -102,7 +102,7 @@ else
     mult_spec_str = mat2str(2.*ones(1, FFTSize));
 end
 
-reuse_block(blk, 'biplex_core', 'casper_library/FFTs/biplex_core', ...
+reuse_block(blk, 'biplex_core', 'casper_library_ffts/biplex_core', ...
     'FFTSize', num2str(FFTSize), 'input_bit_width', num2str(input_bit_width), ...
     'coeff_bit_width', num2str(coeff_bit_width), ... 
     'quantization', tostring(quantization), 'add_latency', num2str(add_latency), ...

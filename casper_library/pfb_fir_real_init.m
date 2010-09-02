@@ -134,21 +134,21 @@ for p=1:pols,
             end
             
             if t==1,
-                src_blk = 'casper_library/PFBs/first_tap_real';
+                src_blk = 'casper_library_pfbs/first_tap_real';
                 name = ['pol',tostring(p),'_in',tostring(i),'_first_tap'];
                 reuse_block(blk, name, src_blk, ...
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded), ...
                     'Position', [150*t 50*portnum*TotalTaps 150*t+100 50*portnum*TotalTaps+30]);
                 propagate_vars([blk,'/',name],'defaults', defaults, varargin{:});
             elseif t==TotalTaps,
-                src_blk = 'casper_library/PFBs/last_tap_real';
+                src_blk = 'casper_library_pfbs/last_tap_real';
                 name = ['pol',tostring(p),'_in',tostring(i),'_last_tap'];
                 reuse_block(blk, name, src_blk, ...
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded), ...
                     'Position', [150*t 50*portnum*TotalTaps 150*t+100 50*portnum*TotalTaps+30]);
                 propagate_vars([blk,'/',name],'defaults', defaults, varargin{:});
             else,
-                src_blk = 'casper_library/PFBs/tap_real';
+                src_blk = 'casper_library_pfbs/tap_real';
                 name = ['pol',tostring(p),'_in',tostring(i),'_tap',tostring(t)];
                 reuse_block(blk, name, src_blk, ...
                    'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded), ...
@@ -170,7 +170,7 @@ for p=1:pols,
         
     clog(['adder tree, scale and convert blocks for pol ',num2str(p),' input ',num2str(i)],'pfb_fir_real_init_debug');
     %add adder tree
-    reuse_block(blk, ['adder_', tostring(p), '_' ,tostring(i)], 'casper_library/Misc/adder_tree', ...
+    reuse_block(blk, ['adder_', tostring(p), '_' ,tostring(i)], 'casper_library_misc/adder_tree', ...
         'n_inputs', tostring(TotalTaps), 'latency', tostring(add_latency), ...
         'first_stage_hdl', adder_folding, 'behavioral', 'off', ...
         'Position', [150*(TotalTaps+1) 50*portnum*TotalTaps 150*(TotalTaps+1)+100 50*(portnum+1)*TotalTaps-20]);

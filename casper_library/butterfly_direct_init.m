@@ -111,7 +111,7 @@ else,
 end
 clog([block_type,' for twiddle'],'butterfly_direct_init_debug');
 
-replace_block(blk, 'Name', 'twiddle', ['casper_library/FFTs/Twiddle/',block_type], 'noprompt');
+replace_block(blk, 'Name', 'twiddle', ['casper_library_ffts_twiddle/',block_type], 'noprompt');
 
 clog(['Coeffs = ',tostring(Coeffs),' ActualCoeffs = ',tostring(ActualCoeffs)],'butterfly_direct_init_debug');
 
