@@ -11,7 +11,7 @@ TB_DIR=./hdl
 GEN_DIR=./gen
 INCLUDE=-I$(SRC_DIR)
 
-SRC=$(SRC_DIR)/$(MODULE).v
+SRC=$(SRC_DIR)/$(MODULE).v $(SRC_DIR)/autoconfig.v $(SRC_DIR)/opb_attach.v $(SRC_DIR)/serial_config.v
 TB_SRC=$(TB_DIR)/TB_$(MODULE).v
 OBJ=$(GEN_DIR)/$(MODULE).o
 TB_OBJ=$(GEN_DIR)/TB_$(MODULE).o
@@ -29,4 +29,4 @@ $(TB_OBJ): $(TB_SRC) $(SRC)
 	$(VCC) $(INCLUDE) $(FLAGS) $(DEFINES) -o $@ $^
 
 clean:
-	rm -rf $(TB_OBJ) $(OBJ) $(MSG_FILE)
+	rm -rf $(TB_OBJ) $(OBJ) $(MSG_FILE) *.vcd

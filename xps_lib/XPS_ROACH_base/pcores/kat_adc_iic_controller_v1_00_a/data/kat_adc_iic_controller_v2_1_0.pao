@@ -1,0 +1,7 @@
+lib kat_adc_iic_controller_v1_00_a kat_adc_iic_controller verilog
+lib kat_adc_iic_controller_v1_00_a miic_ops verilog
+lib kat_adc_iic_controller_v1_00_a gain_set verilog
+lib kat_adc_iic_controller_v1_00_a opb_attach verilog
+lib kat_adc_iic_controller_v1_00_a cpu_op_fifo verilog
+lib kat_adc_iic_controller_v1_00_a fab_op_fifo verilog
+lib kat_adc_iic_controller_v1_00_a rx_fifo verilog

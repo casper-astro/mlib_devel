@@ -1,0 +1,61 @@
+BEGIN kat_adc_iic_controller
+
+##########################
+##  PERIPHERAL OPTIONS  ##
+##########################
+
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = MIXED
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT)
+OPTION STYLE = MIX
+OPTION DESC = "KAT IIC Master interface"
+
+## Bus Interfaces
+BUS_INTERFACE BUS = SOPB, BUS_STD = OPB, BUS_TYPE = SLAVE
+
+## Generadc for VHDL or Parameters for Verilog
+PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
+PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
+PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
+PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
+
+PARAMETER EN_GAIN = 0, DT = INTEGER
+
+PARAMETER CORE_FREQ = 100000, DT = INTEGER
+PARAMETER IIC_FREQ = 100, DT = INTEGER
+
+#############
+##  PORTS  ##
+#############
+
+######################################
+## OPB Bus signals
+######################################
+PORT OPB_Clk = "", DIR = I, SIGIS = Clk, BUS = SOPB
+PORT OPB_Rst = OPB_Rst, DIR = I, SIGIS = Rst, BUS = SOPB
+PORT Sl_DBus = Sl_DBus, DIR = O, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
+PORT Sl_errAck = Sl_errAck, DIR = O, BUS = SOPB
+PORT Sl_retry = Sl_retry, DIR = O, BUS = SOPB
+PORT Sl_toutSup = Sl_toutSup, DIR = O, BUS = SOPB
+PORT Sl_xferAck = Sl_xferAck, DIR = O, BUS = SOPB
+PORT OPB_ABus = OPB_ABus, DIR = I, VEC = [0:(C_OPB_AWIDTH-1)], BUS = SOPB
+PORT OPB_BE = OPB_BE, DIR = I, VEC = [0:((C_OPB_DWIDTH/8)-1)], BUS = SOPB
+PORT OPB_DBus = OPB_DBus, DIR = I, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
+PORT OPB_RNW = OPB_RNW, DIR = I, BUS = SOPB
+PORT OPB_select = OPB_select, DIR = I, BUS = SOPB
+PORT OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB
+
+PORT sda_i = "", DIR = I
+PORT sda_o = "", DIR = O
+PORT sda_t = "", DIR = O
+PORT scl_i = "", DIR = I
+PORT scl_o = "", DIR = O
+PORT scl_t = "", DIR = O
+
+PORT gain_load  = "", DIR = I
+PORT gain_value = "", DIR = I, VEC = [13:0]
+PORT app_clk    = "", DIR = I
+
+END

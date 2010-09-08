@@ -24,6 +24,29 @@ function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb
 
 hw_adc = get(blk_obj, 'hw_adc');
 
+% HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK HACK 
+% Remove gain control ports from adc_interface intstantiation
+gain_load_port = '';
+gain_value_port = '';
+clk_src  = get(blk_obj,'clk_src'); 
+en_gain  = get(blk_obj,'en_gain'); 
+
+foo = get(blk_obj,'ports');
+portname = fieldnames(foo);
+for n = 1:length(portname)
+  if (~isempty(regexp(portname{n},'gain_value')))
+    gain_value_port = portname{n};
+    foo = rmfield(foo, portname{n});
+  end
+  if (~isempty(regexp(portname{n},'gain_load')))
+    gain_load_port = portname{n};
+    foo = rmfield(foo, portname{n});
+  end
+  %port_names{n}
+end
+
+blk_obj = set(blk_obj,'ports',foo);
+
 % Add the MHS entry for the ADC Interface
 [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj.xps_block, opb_addr_start, plb_addr_start, plb_name, opb_name);
 str = [str, '\n'];
@@ -37,11 +60,16 @@ else
 end
 
 % Add IIC controller
-str = [str, 'BEGIN kat_iic_controller',                                   '\n'];
+str = [str, 'BEGIN kat_adc_iic_controller',                               '\n'];
 str = [str, ' PARAMETER HW_VER = 1.00.a',                                 '\n'];
 str = [str, ' PARAMETER INSTANCE = iic_', hw_adc,                         '\n'];
 str = [str, ' PARAMETER C_BASEADDR = ', base_addr,                        '\n'];
 str = [str, ' PARAMETER C_HIGHADDR = ', high_addr,                        '\n'];
+
+if (strcmp(en_gain,'on'))
+  str = [str, ' PARAMETER EN_GAIN = 1',                                   '\n'];
+end
+
 str = [str, ' PARAMETER CORE_FREQ = 83333',                               '\n'];
 str = [str, ' PARAMETER IIC_FREQ = 100',                                  '\n'];
 str = [str, ' BUS_INTERFACE SOPB = opb0',                                 '\n'];
@@ -53,6 +81,9 @@ str = [str, ' PORT sda_t = iic_', hw_adc, '_sda_t',                       '\n'];
 str = [str, ' PORT scl_i = iic_', hw_adc, '_scl_i',                       '\n'];
 str = [str, ' PORT scl_o = iic_', hw_adc, '_scl_o',                       '\n'];
 str = [str, ' PORT scl_t = iic_', hw_adc, '_scl_t',                       '\n'];
+str = [str, ' PORT gain_value = ', gain_value_port,                       '\n'];
+str = [str, ' PORT gain_load  = ', gain_load_port,                        '\n'];
+str = [str, ' PORT app_clk    = ', clk_src,                               '\n'];
 str = [str, 'END',                                                        '\n'];
 str = [str, '',                                                           '\n'];
 str = [str, 'PORT ', hw_adc, '_iic_sda = ', hw_adc, '_iic_sda, DIR = IO', '\n'];

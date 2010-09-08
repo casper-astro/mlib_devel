@@ -31,6 +31,8 @@ end
 blk_name = get(blk_obj,'simulink_name');
 s.hw_sys = 'any';
 s.addr_width = eval_param(blk_name,'addr_width');
+s.data_width = eval_param(blk_name,'data_width');
+
 b = class(s,'xps_bram',blk_obj);
 
 % ip name

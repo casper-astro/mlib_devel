@@ -1,0 +1,24 @@
+VCD info: dumpfile dump.vcd opened for output.
+sys: reset cleared
+iic_slave: got_start
+iic_slave: data 53
+iic_slave: ack 1
+iic_slave: data 78
+iic_slave: ack 1
+iic_slave: data 0f
+iic_slave: ack 1
+iic_slave: got_stop
+iic_slave: got_start
+iic_slave: data 18
+iic_slave: ack 1
+iic_slave: data 19
+iic_slave: ack 1
+iic_slave: got_start
+iic_slave: data 20
+iic_slave: ack 1
+iic_slave: data ff
+iic_slave: ack 1
+iic_slave: got_stop
+opbs: got iic 0 data 00000000
+opbs: got iic 1 data 000000xX
+opbs: got iic 2 data 000000xX

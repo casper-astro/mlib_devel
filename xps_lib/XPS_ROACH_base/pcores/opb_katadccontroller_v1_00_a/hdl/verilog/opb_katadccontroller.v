@@ -1,3 +1,5 @@
+`timescale 1ns/10ps
+
 module opb_katadccontroller(
     input         OPB_Clk,
     input         OPB_Rst,
@@ -41,153 +43,158 @@ module opb_katadccontroller(
   parameter C_OPB_DWIDTH  = 32;
   parameter C_FAMILY      = "";
 
-  /* TODO: implement AUTO configuration */
   parameter INTERLEAVED_0 = 0;
   parameter INTERLEAVED_1 = 0;
-  parameter AUTOCONFIG_0  = 0;
-  parameter AUTOCONFIG_1  = 0;
+  parameter AUTOCONFIG_0  = 1;
+  parameter AUTOCONFIG_1  = 1;
 
   /********* Global Signals *************/
-
   wire [15:0] adc0_config_data;
   wire  [3:0] adc0_config_addr;
   wire        adc0_config_start;
+  wire        adc0_config_idle;
   wire        adc0_config_done;
 
   wire [15:0] adc1_config_data;
   wire  [3:0] adc1_config_addr;
   wire        adc1_config_start;
+  wire        adc1_config_idle;
   wire        adc1_config_done;
 
   wire        adc0_reset;
   wire        adc1_reset;
 
-  /************ OPB Logic ***************/
+  /**** CPU Attachment ********/
+  wire [15:0] adc0_config_data_cpu;
+  wire  [3:0] adc0_config_addr_cpu;
+  wire        adc0_config_start_cpu;
 
-  wire addr_match = OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR;
-  wire [31:0] opb_addr = OPB_ABus - C_BASEADDR;
+  wire [15:0] adc1_config_data_cpu;
+  wire  [3:0] adc1_config_addr_cpu;
+  wire        adc1_config_start_cpu;
 
-  reg opb_ack;
+  wire auto_busy_0;
+  wire auto_busy_1;
 
-  /*** Registers ****/
+  opb_attach #(
+    .C_BASEADDR   (C_BASEADDR),
+    .C_HIGHADDR   (C_HIGHADDR),
+    .C_OPB_AWIDTH (C_OPB_AWIDTH),
+    .C_OPB_DWIDTH (C_OPB_DWIDTH)
+  ) opb_attach_inst (
+    .OPB_Clk           (OPB_Clk),
+    .OPB_Rst           (OPB_Rst),
+    .Sl_DBus           (Sl_DBus),
+    .Sl_errAck         (Sl_errAck),
+    .Sl_retry          (Sl_retry),
+    .Sl_toutSup        (Sl_toutSup),
+    .Sl_xferAck        (Sl_xferAck),
+    .OPB_ABus          (OPB_ABus),
+    .OPB_BE            (OPB_BE),
+    .OPB_DBus          (OPB_DBus),
+    .OPB_RNW           (OPB_RNW),
+    .OPB_select        (OPB_select),
+    .OPB_seqAddr       (OPB_seqAddr),
+    .adc0_reset        (adc0_reset),
+    .adc1_reset        (adc1_reset),
+    .adc0_psen         (adc0_psen),
+    .adc0_psincdec     (adc0_psincdec),
+    .adc0_psclk        (adc0_psclk),
+    .adc0_psdone       (adc0_psdone),
+    .adc1_psen         (adc1_psen),
+    .adc1_psincdec     (adc1_psincdec),
+    .adc1_psclk        (adc1_psclk),
+    .adc1_psdone       (adc1_psdone),
+    .adc0_config_data  (adc0_config_data_cpu),
+    .adc0_config_addr  (adc0_config_addr_cpu),
+    .adc0_config_start (adc0_config_start_cpu),
+    .adc0_config_idle  (adc0_config_idle),
+    .adc1_config_data  (adc1_config_data_cpu),
+    .adc1_config_addr  (adc1_config_addr_cpu),
+    .adc1_config_start (adc1_config_start_cpu),
+    .adc1_config_idle  (adc1_config_idle),
+    .auto_busy_0       (auto_busy_0),
+    .auto_busy_1       (auto_busy_1)
 
-  reg adc0_reset_reg;
-  reg adc1_reset_reg;
-  assign adc0_reset = adc0_reset_reg;
-  assign adc1_reset = adc1_reset_reg;
+  );
 
-  reg adc0_dcm_psen_reg;
-  reg adc0_dcm_psincdec_reg;
-  assign adc0_psen     = adc0_dcm_psen_reg;
-  assign adc0_psincdec = adc0_dcm_psincdec_reg;
-  assign adc0_psclk    = OPB_Clk;
+  /********* ADC0 configuration state machine *********/
 
-  reg adc1_dcm_psen_reg;
-  reg adc1_dcm_psincdec_reg;
-  assign adc1_psen     = adc1_dcm_psen_reg;
-  assign adc1_psincdec = adc1_dcm_psincdec_reg;
-  assign adc1_psclk    = OPB_Clk;
-
-  reg [15:0] adc0_config_data_reg;
-  reg  [3:0] adc0_config_addr_reg;
-  reg        adc0_config_start_reg;
-  assign adc0_config_data  = adc0_config_data_reg;
-  assign adc0_config_addr  = adc0_config_addr_reg;
-  assign adc0_config_start = adc0_config_start_reg;
-
-  reg [15:0] adc1_config_data_reg;
-  reg  [3:0] adc1_config_addr_reg;
-  reg        adc1_config_start_reg;
-  assign adc1_config_data  = adc1_config_data_reg;
-  assign adc1_config_addr  = adc1_config_addr_reg;
-  assign adc1_config_start = adc1_config_start_reg;
-
-
-  always @(posedge OPB_Clk) begin
-    opb_ack <= 1'b0;
+  serial_config serial_config_adc0 (
+    .clk             (OPB_Clk),
+    .rst             (OPB_Rst),
+    .config_data     (adc0_config_data),
+    .config_addr     (adc0_config_addr),
+    .config_start    (adc0_config_start),
+    .config_idle     (adc0_config_idle),
+    .config_done     (adc0_config_done),
+    .adc3wire_clk    (adc0_adc3wire_clk),
+    .adc3wire_data   (adc0_adc3wire_data),
+    .adc3wire_strobe (adc0_adc3wire_strobe)
     
-    adc0_reset_reg <= 1'b0;
-    adc1_reset_reg <= 1'b0;
+  );
 
-    adc0_dcm_psen_reg <= 1'b0;
-    adc1_dcm_psen_reg <= 1'b0;
+  /********* ADC1 configuration state machine *********/
 
-    adc0_config_start_reg <= 1'b0;
-    adc1_config_start_reg <= 1'b0;
+  serial_config serial_config_adc1 (
+    .clk             (OPB_Clk),
+    .rst             (OPB_Rst),
+    .config_data     (adc1_config_data),
+    .config_addr     (adc1_config_addr),
+    .config_start    (adc1_config_start),
+    .config_idle     (adc1_config_idle),
+    .config_done     (adc1_config_done),
+    .adc3wire_clk    (adc1_adc3wire_clk),
+    .adc3wire_data   (adc1_adc3wire_data),
+    .adc3wire_strobe (adc1_adc3wire_strobe)
+    
+  );
 
-    if (OPB_Rst) begin
-    end else begin
-      if (addr_match && OPB_select && !opb_ack) begin
-        opb_ack <= 1'b1;
-        if (!OPB_RNW) begin
-          case (opb_addr[3:2])
-            0:  begin
-              if (OPB_BE[3]) begin
-                adc0_reset_reg <= OPB_DBus[31];
-                adc1_reset_reg <= OPB_DBus[30];
-              end
-              if (OPB_BE[1]) begin
-                adc0_dcm_psen_reg <= OPB_DBus[15];
-                adc1_dcm_psen_reg <= OPB_DBus[11];
-                adc0_dcm_psincdec_reg <= OPB_DBus[14];
-                adc1_dcm_psincdec_reg <= OPB_DBus[10];
-              end
-            end
-            1:  begin
-              if (OPB_BE[3]) begin
-                adc0_config_start_reg <= OPB_DBus[31];
-              end
-              if (OPB_BE[2]) begin
-                adc0_config_addr_reg <= OPB_DBus[20:23];
-              end
-              if (OPB_BE[1]) begin
-                adc0_config_data_reg[7:0] <= OPB_DBus[8:15];
-              end
-              if (OPB_BE[0]) begin
-                adc0_config_data_reg[15:8] <= OPB_DBus[0:7];
-              end
-            end
-            2:  begin
-              if (OPB_BE[3]) begin
-                adc1_config_start_reg <= OPB_DBus[31];
-              end
-              if (OPB_BE[2]) begin
-                adc1_config_addr_reg <= OPB_DBus[20:23];
-              end
-              if (OPB_BE[1]) begin
-                adc1_config_data_reg[7:0] <= OPB_DBus[8:15];
-              end
-              if (OPB_BE[0]) begin
-                adc1_config_data_reg[15:8] <= OPB_DBus[0:7];
-              end
-            end
-            3:  begin
-            end
-          endcase
-        end
-      end
-    end
-  end
+  /*************** AUTOMAGIC CONFIGURATION *****************/
 
-  reg [31:0] opb_data_out;
+  wire [15:0] adc0_config_data_auto;
+  wire  [3:0] adc0_config_addr_auto;
+  wire        adc0_config_start_auto;
 
-  always @(*) begin
-    case (opb_addr[3:2])
-      0: opb_data_out <= {2'b0, adc1_psdone, adc0_psdone, 4'b0, 2'b0, adc1_dcm_psincdec_reg, adc1_dcm_psen_reg, 2'b0, adc0_dcm_psincdec_reg, adc0_dcm_psen_reg, 16'b0};
-      1: opb_data_out <= {adc0_config_data_reg[15:8], adc0_config_data_reg[7:0], 4'b0, adc0_config_addr_reg, 7'b0, adc0_config_done};
-      2: opb_data_out <= {adc1_config_data_reg[15:8], adc1_config_data_reg[7:0], 4'b0, adc1_config_addr_reg, 7'b0, adc1_config_done};
-      3: opb_data_out <= {32'b0};
-    endcase
-  end
+  assign adc0_config_data  = auto_busy_0 ? adc0_config_data_auto  : adc0_config_data_cpu;
+  assign adc0_config_addr  = auto_busy_0 ? adc0_config_addr_auto  : adc0_config_addr_cpu;
+  assign adc0_config_start = auto_busy_0 ? adc0_config_start_auto : adc0_config_start_cpu;
 
-  assign Sl_DBus     = Sl_xferAck ? opb_data_out : 32'b0;
-  assign Sl_errAck   = 1'b0;
-  assign Sl_retry    = 1'b0;
-  assign Sl_toutSup  = 1'b0;
-  assign Sl_xferAck  = opb_ack;
+  autoconfig #(
+    .INTERLEAVED (INTERLEAVED_0),
+    .ENABLE      (AUTOCONFIG_0)
+  ) autoconfig_adc0 (
+    .clk          (OPB_Clk),
+    .rst          (OPB_Rst),
+    .busy         (auto_busy_0),
+    .config_data  (adc0_config_data_auto),
+    .config_addr  (adc0_config_addr_auto),
+    .config_start (adc0_config_start_auto),
+    .config_done  (adc0_config_done)
+  );
+
+  wire [15:0] adc1_config_data_auto;
+  wire  [3:0] adc1_config_addr_auto;
+  wire        adc1_config_start_auto;
+  assign adc1_config_data  = auto_busy_1 ? adc1_config_data_auto  : adc1_config_data_cpu;
+  assign adc1_config_addr  = auto_busy_1 ? adc1_config_addr_auto  : adc1_config_addr_cpu;
+  assign adc1_config_start = auto_busy_1 ? adc1_config_start_auto : adc1_config_start_cpu;
+
+  autoconfig #(
+    .INTERLEAVED (INTERLEAVED_1),
+    .ENABLE      (AUTOCONFIG_1)
+  ) autoconfig_adc1 (
+    .clk          (OPB_Clk),
+    .rst          (OPB_Rst),
+    .busy         (auto_busy_1),
+    .config_data  (adc1_config_data_auto),
+    .config_addr  (adc1_config_addr_auto),
+    .config_start (adc1_config_start_auto),
+    .config_done  (adc1_config_done)
+  );
+
 
   /********* DCM Reset Gen *********/
-
 
   reg [7:0] adc0_reset_counter;
   reg [7:0] adc1_reset_counter;
@@ -213,10 +220,10 @@ module opb_katadccontroller(
       if (adc1_reset_counter) begin
         adc1_reset_counter <= adc1_reset_counter - 1;
       end
-      if (adc0_reset) begin
+      if (adc0_reset || auto_busy_0) begin
         adc0_reset_counter <= {8{1'b1}};
       end
-      if (adc1_reset) begin
+      if (adc1_reset || auto_busy_1) begin
         adc1_reset_counter <= {8{1'b1}};
       end
     end
@@ -226,146 +233,5 @@ module opb_katadccontroller(
   assign adc1_dcm_reset = adc1_reset_counter != 0;
   assign adc0_adc_reset = adc0_reset_iob;
   assign adc1_adc_reset = adc1_reset_iob;
-
-  /********* ADC0 configuration state machine *********/
-
-  wire clk0_done;
-  wire clk0_en;
-
-  localparam CONFIG_IDLE      = 0;
-  localparam CONFIG_CLKWAIT   = 1;
-  localparam CONFIG_DATA      = 2;
-  localparam CONFIG_FINISH    = 3;
-
-  reg [1:0] adc0_state;
-
-  reg [31:0] adc0_config_data_shift;
-
-  reg [4:0] adc0_config_progress;
-
-  always @(posedge OPB_Clk) begin
-    if (OPB_Rst) begin
-      adc0_state <= CONFIG_IDLE;
-    end else begin
-      case (adc0_state)
-        CONFIG_IDLE: begin
-          if (adc0_config_start) begin
-            adc0_state <= CONFIG_CLKWAIT;
-            adc0_config_data_shift <= {12'b1, adc0_config_addr, adc0_config_data};
-          end
-        end
-        CONFIG_CLKWAIT: begin
-          if (clk0_done) begin
-            adc0_state <= CONFIG_DATA;
-            adc0_config_progress <= 0;
-          end
-        end 
-        CONFIG_DATA: begin
-          if (clk0_done) begin
-            adc0_config_data_shift <= adc0_config_data_shift << 1;
-            adc0_config_progress <= adc0_config_progress + 1;
-            if (adc0_config_progress == 31) begin
-              adc0_state <= CONFIG_FINISH;
-            end
-          end
-        end
-        CONFIG_FINISH: begin
-          if (clk0_done) begin
-            adc0_state <= CONFIG_IDLE;
-          end
-        end
-        default: begin
-          adc0_state <= CONFIG_IDLE;
-        end
-      endcase
-    end
-  end
-
-  assign adc0_config_done = adc0_state == CONFIG_IDLE;
-  
-  /* Clock Control */
-
-  reg [3:0] clk0_counter;
-  always @(posedge OPB_Clk) begin
-    if (clk0_en) begin
-      clk0_counter <= clk0_counter + 1;
-    end else begin
-      clk0_counter <= 4'b0;
-    end
-  end
-  assign clk0_done = clk0_counter == 4'b1111;
-  assign clk0_en   = adc0_state != CONFIG_IDLE;
-
-  assign adc0_adc3wire_strobe = !(adc0_state == CONFIG_DATA);
-  assign adc0_adc3wire_data   = adc0_config_data_shift[31];
-  assign adc0_adc3wire_clk    = clk0_counter[3];
-
-  /********* ADC1 configuration state machine *********/
-
-  wire clk1_done;
-  wire clk1_en;
-
-  reg [1:0] adc1_state;
-
-  reg [31:0] adc1_config_data_shift;
-
-  reg [4:0] adc1_config_progress;
-
-  always @(posedge OPB_Clk) begin
-    if (OPB_Rst) begin
-      adc1_state <= CONFIG_IDLE;
-    end else begin
-      case (adc1_state)
-        CONFIG_IDLE: begin
-          if (adc1_config_start) begin
-            adc1_state <= CONFIG_CLKWAIT;
-            adc1_config_data_shift <= {12'b1, adc1_config_addr, adc1_config_data};
-          end
-        end
-        CONFIG_CLKWAIT: begin
-          if (clk1_done) begin
-            adc1_state <= CONFIG_DATA;
-            adc1_config_progress <= 0;
-          end
-        end 
-        CONFIG_DATA: begin
-          if (clk1_done) begin
-            adc1_config_data_shift <= adc1_config_data_shift << 1;
-            adc1_config_progress <= adc1_config_progress + 1;
-            if (adc1_config_progress == 31) begin
-              adc1_state <= CONFIG_FINISH;
-            end
-          end
-        end
-        CONFIG_FINISH: begin
-          if (clk1_done) begin
-            adc1_state <= CONFIG_IDLE;
-          end
-        end
-        default: begin
-          adc1_state <= CONFIG_IDLE;
-        end
-      endcase
-    end
-  end
-
-  assign adc1_config_done = adc1_state == CONFIG_IDLE;
-
-  /* Clock Control */
-
-  reg [3:0] clk1_counter;
-  always @(posedge OPB_Clk) begin
-    if (clk1_en) begin
-      clk1_counter <= clk1_counter + 1;
-    end else begin
-      clk1_counter <= 4'b0;
-    end
-  end
-  assign clk1_done = clk1_counter == 4'b1111;
-  assign clk1_en   = adc1_state != CONFIG_IDLE;
-
-  assign adc1_adc3wire_strobe = adc1_state == CONFIG_DATA;
-  assign adc1_adc3wire_data   = adc1_config_data_shift[31];
-  assign adc1_adc3wire_clk    = clk0_counter[3];
 
 endmodule

@@ -5,9 +5,9 @@ lib kat_ten_gb_eth_v1_00_a opb_attach          verilog
 lib kat_ten_gb_eth_v1_00_a rx_packet_ctrl_fifo verilog
 lib kat_ten_gb_eth_v1_00_a rx_packet_fifo_bram verilog
 lib kat_ten_gb_eth_v1_00_a rx_packet_fifo_dist verilog
-lib kat_ten_gb_eth_v1_00_a ten_gig_eth_mac_ucb verilog
 lib kat_ten_gb_eth_v1_00_a tge_rx              verilog
 lib kat_ten_gb_eth_v1_00_a tge_tx              verilog
 lib kat_ten_gb_eth_v1_00_a tx_packet_ctrl_fifo verilog
 lib kat_ten_gb_eth_v1_00_a tx_packet_fifo      verilog
 lib kat_ten_gb_eth_v1_00_a tx_fifo_ext         verilog
+lib kat_ten_gb_eth_v1_00_a ten_gig_eth_mac_UCB vhdl

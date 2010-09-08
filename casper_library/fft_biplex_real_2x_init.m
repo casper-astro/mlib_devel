@@ -38,9 +38,17 @@ function fft_biplex_real_2x_init(blk, varargin)
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
 
+clog('entering fft_biplex_real_2x_init','trace');
 % Declare any default values for arguments you might like.
-defaults = {};
+defaults = {'FFTSize', 2, 'input_bit_width', 18, 'coeff_bit_width', 18, ...
+    'quantization', 'Round  (unbiased: +/- Inf)', 'overflow', 'Saturate', ...
+    'add_latency', 1, 'mult_latency', 2, 'bram_latency', 2, ...
+    'arch', 'Virtex5', 'opt_target', 'logic', ...
+    'conv_latency', 1, 'coeffs_bit_limit', 8, 'delays_bit_limit', 8, ...
+    'specify_mult', 'off', 'mult_spec', [2 2], 'dsp48_adders', 'off'};
+
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('fft_biplex_real_2x_init post same_state','trace');
 check_mask_type(blk, 'fft_biplex_real_2x');
 munge_block(blk, varargin{:});
 
@@ -51,6 +59,7 @@ quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
+conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 arch = get_var('arch', 'defaults', defaults, varargin{:});
 opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
@@ -60,10 +69,12 @@ specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+clog(flatstrcell(varargin), 'fft_biplex_real_2x_init_debug');
+
 if( strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize)),
     errordlg('fft_biplex_real_2x_init.m: Multiplier use specification for stages does not match FFT size');
     error('fft_biplex_real_2x_init.m: Multiplier use specification for stages does not match FFT size');
-    return
+    return;
 end
 
 delete_lines(blk);
@@ -81,21 +92,26 @@ reuse_block(blk, 'pol02_out', 'built-in/outport', 'Position', [470   113   500  
 reuse_block(blk, 'pol13_out', 'built-in/outport', 'Position', [470   143   500   157], 'Port', '3');
 reuse_block(blk, 'of', 'built-in/outport', 'Position', [285   153   315   167], 'Port', '4');
 
-reuse_block(blk, 'ri_to_c0', 'casper_library/Misc/ri_to_c','Position',[65    34   105    76]);
-reuse_block(blk, 'ri_to_c1', 'casper_library/Misc/ri_to_c','Position',[65    94   105   136]);
+reuse_block(blk, 'ri_to_c0', 'casper_library_misc/ri_to_c','Position',[65    34   105    76]);
+reuse_block(blk, 'ri_to_c1', 'casper_library_misc/ri_to_c','Position',[65    94   105   136]);
 
-reuse_block(blk, 'biplex_core', 'casper_library/FFTs/biplex_core', ...
- 'FFTSize', tostring(FFTSize), 'input_bit_width', tostring(input_bit_width), ...
- 'coeff_bit_width',tostring(coeff_bit_width), ...
- 'overflow', overflow, ...
- 'quantization', quantization,... 
- 'add_latency', tostring(add_latency), 'mult_latency', tostring(mult_latency), ...
- 'bram_latency',tostring(bram_latency), 'dsp48_adders', tostring(dsp48_adders), ...
- 'arch', tostring(arch), 'opt_target', tostring(opt_target), ...
- 'coeffs_bit_limit', tostring(coeffs_bit_limit), ...
- 'delays_bit_limit', tostring(delays_bit_limit), ...
- 'Position', [145 105 265 200]);
+%generate vectors of multiplier use from vectors passed in
+if strcmp(specify_mult,'on'),
+    mult_spec_str = mat2str(mult_spec);
+else
+    mult_spec_str = mat2str(2.*ones(1, FFTSize));
+end
 
+reuse_block(blk, 'biplex_core', 'casper_library_ffts/biplex_core', ...
+    'FFTSize', num2str(FFTSize), 'input_bit_width', num2str(input_bit_width), ...
+    'coeff_bit_width', num2str(coeff_bit_width), ... 
+    'quantization', tostring(quantization), 'add_latency', num2str(add_latency), ...
+    'mult_latency', num2str(mult_latency), 'bram_latency',num2str(bram_latency), ...
+    'dsp48_adders', tostring(dsp48_adders), 'arch', tostring(arch), ...
+    'opt_target', tostring(opt_target), 'coeffs_bit_limit', num2str(coeffs_bit_limit), ...
+    'delays_bit_limit', num2str(delays_bit_limit), 'overflow', tostring(overflow), ...
+    'conv_latency', num2str(conv_latency), 'specify_mult', tostring(specify_mult), ...
+    'mult_spec', mult_spec_str, 'Position', [145 105 265 200]);
 
 add_line(blk, ['pol0','/1'], ['ri_to_c0','/1']);
 add_line(blk, ['pol1','/1'], ['ri_to_c0','/2']);
@@ -116,21 +132,15 @@ add_line(blk, 'bi_real_unscr_2x/1','pol02_out/1');
 add_line(blk, 'bi_real_unscr_2x/2','pol13_out/1');
 add_line(blk, 'bi_real_unscr_2x/3','sync_out/1');
 
-
 % Unscrambler is not in library!
-propagate_vars([blk,'/bi_real_unscr_2x'],'defaults', defaults, varargin{:});
-
-% Propagate dynamic variables
-%generate vectors of multiplier use from vectors passed in
-if strcmp(specify_mult,'on'),
-    set_param([blk,'/biplex_core'], 'specify_mult', tostring(specify_mult), 'mult_spec', tostring(mult_spec));
+if FFTSize > coeffs_bit_limit
+  bram_map = 'on';
 else
-    set_param([blk,'/biplex_core'], 'specify_mult', tostring(specify_mult), 'mult_spec', tostring( 2.*ones(1, FFTSize)));
+  bram_map = 'off';
 end
+propagate_vars([blk,'/bi_real_unscr_2x'],'defaults', defaults, varargin{:}, 'bram_map', bram_map);
 
-clean_blocks(blk);
-
-fmtstr = sprintf('FFTSize=%d', FFTSize);
+fmtstr = sprintf('%s\n%d stages\n[%d,%d]\n%s\n%s', arch, FFTSize, input_bit_width, coeff_bit_width, quantization, overflow);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
-
+clog('exiting fft_biplex_real_2x_init','trace');
