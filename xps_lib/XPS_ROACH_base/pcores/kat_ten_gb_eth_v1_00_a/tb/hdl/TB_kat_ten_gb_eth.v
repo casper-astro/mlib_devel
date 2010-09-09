@@ -94,7 +94,8 @@ module TB_kat_ten_gb_eth();
     .FABRIC_ENABLE  (FABRIC_ENABLE ),
     .C_BASEADDR     (32'h0),
     .C_HIGHADDR     (32'hffff),
-    .RX_DIST_RAM    (1)
+    .RX_DIST_RAM    (1),
+    .LARGE_PACKETS  (1)
   ) kat_ten_gb_eth_inst (
     .clk(app_clk),
     .rst(app_rst),

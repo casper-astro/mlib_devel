@@ -46,28 +46,19 @@ function pfb_fir_real_init(blk, varargin)
 % (unbiased: Even Values)'
 % fwidth = Scaling of the width of each PFB channel
 
+clog('entering pfb_fir_real_init','trace');
 % Declare any default values for arguments you might like.
-defaults = {
-    'PFBSize', 8,...
-    'TotalTaps', 4,...
-    'WindowType', 'hamming',...
-    'n_inputs', 0,...
-    'MakeBiplex', 0,...
-    'BitWidthIn', 8,...
-    'BitWidthOut', 18,...
-    'CoeffBitWidth', 18,...
-    'CoeffDistMem', 0,...
-    'add_latency', 1,...
-    'mult_latency', 2,...
-    'bram_latency', 3,...
-    'conv_latency', 1,...
-    'quantization', 'Truncate',...
-    'fwidth', 1,...
-    'specify_mult', 'off',...
-    'mult_spec', '[1 1 1]',...
+defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
+    'WindowType', 'hamming', 'n_inputs', 1, 'MakeBiplex', 0, ...
+    'BitWidthIn', 8, 'BitWidthOut', 18, 'CoeffBitWidth', 18, ...
+    'CoeffDistMem', 0, 'add_latency', 1, 'mult_latency', 2, ...
+    'bram_latency', 2, 'conv_latency', 1, ...
+    'quantization', 'Round  (unbiased: +/- Inf)', ...
+    'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
     'adder_folding', 'on'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('pfb_fir_real_init post same_state','trace');
 check_mask_type(blk, 'pfb_fir_real');
 munge_block(blk, varargin{:});
 
@@ -90,18 +81,26 @@ specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 adder_folding = get_var('adder_folding', 'defaults', defaults, varargin{:});
 
+if strcmp(specify_mult, 'on') && len(mult_spec) ~= TotalTaps
+    clog('Multiplier specification vector not the same as the number of taps','error');
+    error('Multiplier specification vector not the same as the number of taps');
+    return
+end
+
 if MakeBiplex, pols = 2;
 else, pols = 1;
 end
 
 delete_lines(blk);
 
+clog('adding inports and outports','pfb_fir_real_init_debug');
+
 % Add ports
 portnum = 1;
 reuse_block(blk, 'sync', 'built-in/inport', ...
-    'Position', [0 50 30 50+15], 'Port', tostring(portnum));
+    'Position', [0 50 30 50+15], 'Port', num2str(portnum));
 reuse_block(blk, 'sync_out', 'built-in/outport', ...
-    'Position', [150*(TotalTaps+4) 50*portnum*TotalTaps 150*(TotalTaps+4)+30 50*portnum*TotalTaps+15], 'Port', tostring(portnum));
+    'Position', [150*(TotalTaps+4) 50*portnum*TotalTaps 150*(TotalTaps+4)+30 50*portnum*TotalTaps+15], 'Port', num2str(portnum));
 for p=1:pols,
     for i=1:2^n_inputs,
         portnum = portnum + 1; % Skip one to allow sync & sync_out to be 1
@@ -119,6 +118,9 @@ portnum = 0;
 for p=1:pols,
     for i=1:2^n_inputs,
         portnum = portnum + 1;
+
+        clog(['adding taps for pol ',num2str(p),' input ',num2str(i)],'pfb_fir_real_init_debug');
+
         for t=1:TotalTaps,
             use_hdl = 'on';
             use_embedded = 'off';
@@ -165,6 +167,8 @@ for p=1:pols,
                 set_param([blk,'/',name], 'nput', tostring(i-1));
             end
         end
+        
+    clog(['adder tree, scale and convert blocks for pol ',num2str(p),' input ',num2str(i)],'pfb_fir_real_init_debug');
     %add adder tree
     reuse_block(blk, ['adder_', tostring(p), '_' ,tostring(i)], 'casper_library/Misc/adder_tree', ...
         'n_inputs', tostring(TotalTaps), 'latency', tostring(add_latency), ...
@@ -185,6 +189,8 @@ for p=1:pols,
     
     end
 end
+
+clog('joining inports to blocks','pfb_fir_real_init_debug');
 
 for p=1:pols,
     for i=1:2^n_inputs,
@@ -212,6 +218,8 @@ for p=1:pols,
 
     end
 end
+
+clog('joining blocks to outports','pfb_fir_real_init_debug');
 
 % Add Lines
 for p=1:pols,
@@ -245,3 +253,4 @@ clean_blocks(blk);
 fmtstr = sprintf('taps=%d, add_latency=%d', TotalTaps, add_latency);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
+clog('exiting pfb_fir_real_init','trace');

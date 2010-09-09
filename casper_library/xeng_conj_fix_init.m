@@ -1,6 +1,9 @@
 function xeng_conj_fix_init(blk, varargin)
 % Initialize and configure the windowed CASPER X Engine with configurable output demux.
 %
+%n_bits_in is size of a component of a complex number.
+
+
 
 % Declare any default values for arguments you might like.
 defaults = {'n_ants', 8, 'n_bits_in', 4, ...
@@ -84,9 +87,9 @@ reuse_block(blk, 'sync_out', 'built-in/outport','Position', [630,150,660,164]);
 %=================
 add_line(blk, 'acc/1', 'delay1/1', 'autorouting', 'on');
 add_line(blk, 'valid/1', 'delay2/1', 'autorouting', 'on');
-add_line(blk, 'valid/1', 'pos_cnt/1', 'autorouting', 'on');
+add_line(blk, 'valid/1', 'pos_cnt/2', 'autorouting', 'on');
 add_line(blk, 'sync/1', 'delay3/1', 'autorouting', 'on');
-add_line(blk, 'sync/1', 'pos_cnt/2', 'autorouting', 'on');
+add_line(blk, 'sync/1', 'pos_cnt/1', 'autorouting', 'on');
 add_line(blk, 'delay2/1', 'delay4/1', 'autorouting', 'on');
 add_line(blk, 'delay3/1', 'delay5/1', 'autorouting', 'on');
 add_line(blk, 'delay4/1', 'valid_out/1', 'autorouting', 'on');
@@ -110,9 +113,9 @@ case {1,2},
 	
 	add_line(blk, 'remux/1', 'sel_conj/3', 'autorouting', 'on');
 
-        for n_unpack=1:n_unpacks,
-	%fprintf('n_unpack=%d\n',n_unpack);
-	reuse_block(blk, sprintf('slice%d',n_unpack), 'xbsIndex_r4/Slice', ...
+    for n_unpack=1:n_unpacks,
+        %fprintf('n_unpack=%d\n',n_unpack);
+        reuse_block(blk, sprintf('slice%d',n_unpack), 'xbsIndex_r4/Slice', ...
 	'Position', [310,n_unpack*70+234,330,n_unpack*70+246],...
 	'mode','Lower Bit Location + Width',...
 	'base0','LSB of Input',...
@@ -171,7 +174,7 @@ case 8,
 	reuse_block(blk, 'negate', 'xbsIndex_r4/Negate', 'Position', [390,348,415,373],...
 	'precision','User Defined',...
 	'arith_type','Signed  (2''s comp)',...
-	'n_bits',sprintf('%d',n_bits_in*2),...		
+	'n_bits',sprintf('%d',n_bits_in),...		
 	'bin_pt','0',...
 	'Latency','0');
 
@@ -193,12 +196,17 @@ case 8,
 	'base0','LSB of Input',...
 	'bit0','0',...
 	'nbits','1');
+
+    reuse_block(blk, 'delay6', 'xbsIndex_r4/Delay', 'Position', [250,283,280,297],...
+		'reg_retiming','on',...
+		'Latency','1');
 	
 	reuse_block(blk, 'imag_sel', 'xbsIndex_r4/Mux', 'Position', [510,292,535,358],...
 		'inputs','2',...
-		'Latency','1');
+		'Latency','0');
 
-	add_line(blk, 'pos_cnt/1', 'slice/1', 'autorouting', 'on');
+	add_line(blk, 'pos_cnt/1', 'delay6/1', 'autorouting', 'on');
+    add_line(blk, 'delay6/1', 'slice/1', 'autorouting', 'on');
 	add_line(blk, 'delay1/1', 'reint_in/1', 'autorouting', 'on');
 	add_line(blk, 'reint_in/1', 'negate/1','autorouting', 'on');
 	add_line(blk, 'slice/1', 'imag_sel/1', 'autorouting', 'on');

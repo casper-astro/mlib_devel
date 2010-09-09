@@ -23,6 +23,20 @@
 myname = gcb;
 %set_param(myname, 'LinkStatus', 'inactive');
 
+gateway_outs = find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Xilinx Gateway Out Block');
+for i =1:length(gateway_outs)
+    gw = gateway_outs{i};
+    if regexp(get_param(gw,'Name'),'(gain_load)$')
+        toks = regexp(get_param(gw,'Name'),'(gain_load)$','tokens');
+        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
+    elseif regexp(get_param(gw,'Name'),'(gain_value)$')
+        toks = regexp(get_param(gw,'Name'),'(gain_value)$','tokens');
+        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
+    else
+        error(['Unknown gateway name: ',gw]);
+    end
+end
+
 gateway_ins = find_system(gcb,'searchdepth',1,'FollowLinks', 'on', 'lookundermasks','all','masktype','Xilinx Gateway In Block');
 for n = 1:length(gateway_ins)
     gw = gateway_ins{n};

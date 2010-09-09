@@ -1,8 +1,10 @@
-% twiddle_general_3mult_init(blk, varargin)
+% coeff_gen_init(blk, varargin)
 %
 % blk = The block to configure
 % varargin = {'varname', 'value, ...} pairs
-
+%
+%
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Karoo Array Telesope                                                      %
@@ -27,8 +29,10 @@
 
 function coeff_gen_init(blk, varargin)
 
-defaults = {};
+clog('entering coeff_gen_init.m','trace');
+defaults = {'Coeffs', [1 0.5+j], 'StepPeriod', 1, 'coeff_bit_width', 18, 'bram_latency', 2, 'coeffs_bram', 'off'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('coeff_gen_init post same_state','trace');
 check_mask_type(blk, 'coeff_gen');
 munge_block(blk, varargin{:});
 
@@ -37,6 +41,14 @@ StepPeriod = get_var('StepPeriod', 'defaults', defaults, varargin{:});
 coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 coeffs_bram = get_var('coeffs_bram', 'defaults', defaults, varargin{:});
+
+clog(flatstrcell(varargin), 'coeff_gen_init_debug');
+
+if( ~isempty(find(real(Coeffs) > 1)) || ~isempty(find(imag(Coeffs) > 1)) ),
+    clog(['coeff_gen_init: [',num2str(Coeffs,4),'] not all in range [-1->1]'],'error');
+    error('coeff_gen_init: Coefficients specified are out of range');
+    return;
+end
 
 delete_lines(blk);
 
@@ -56,48 +68,45 @@ if length(Coeffs) == 1,
     add_line(blk, 'rst/1', 'Terminator/1');
 
     %constant blocks
-    real_coeff = round(real(Coeffs(1)) * 2^(coeff_bit_width-1)) / 2^(coeff_bit_width-1);
-    imag_coeff = round(imag(Coeffs(1)) * 2^(coeff_bit_width-1)) / 2^(coeff_bit_width-1);
+    real_coeff = round(real(Coeffs(1)) * 2^(coeff_bit_width-2)) / 2^(coeff_bit_width-2);
+    imag_coeff = round(imag(Coeffs(1)) * 2^(coeff_bit_width-2)) / 2^(coeff_bit_width-2);
     reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', ...
         'arith_type', tostring('Signed (2''s comp)'), ...
         'const', tostring(real_coeff), 'n_bits', tostring(coeff_bit_width), ...
         'explicit_period', 'on', 'period', '1', ...
-        'bin_pt', tostring(coeff_bit_width-1), 'Position', [185 34 255 66]);         
+        'bin_pt', tostring(coeff_bit_width-2), 'Position', [185 34 255 66]);         
     add_line(blk, 'Constant/1', 'ri_to_c/1');
     reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', ...
         'arith_type', tostring('Signed (2''s comp)'), ...
         'const', tostring(imag_coeff), 'n_bits', tostring(coeff_bit_width), ...
         'explicit_period', 'on', 'period', '1', ...
-        'bin_pt', tostring(coeff_bit_width-1), 'Position', [185 84 255 116]);         
+        'bin_pt', tostring(coeff_bit_width-2), 'Position', [185 84 255 116]);         
     add_line(blk, 'Constant1/1', 'ri_to_c/2');
 else,
     vlen = length(Coeffs);
-    %counter
     reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
         'cnt_type', 'Free Running', 'start_count', '0', 'cnt_by_val', '1', ...
         'arith_type', 'Unsigned', 'n_bits', tostring( log2(vlen)+StepPeriod ), ...
         'bin_pt', '0', 'rst', 'on', 'Position', [75 29 125 81]);
     add_line(blk, 'rst/1', 'Counter/1');
-    %slice
     reuse_block(blk, 'Slice', 'xbsIndex_r4/Slice', ...
         'nbits', tostring(log2(vlen)), ...
         'mode', 'Upper Bit Location + Width', ...
         'bit1', '0', 'base1', 'MSB of Input', ...
         'Position', [145 41 190 69]);
     add_line(blk, 'Counter/1', 'Slice/1');
-    %ROMs
     if( strcmp(coeffs_bram, 'on')),
         mem = 'Block RAM';
     else
         mem = 'Distributed memory';
     end
-    real_coeffs = round( real(Coeffs) * 2^(coeff_bit_width-1) ) / 2^(coeff_bit_width-1);
-    imag_coeffs = round( imag(Coeffs) * 2^(coeff_bit_width-1)  ) / 2^(coeff_bit_width-1);
+    real_coeffs = round( real(Coeffs) * 2^(coeff_bit_width-2) ) / 2^(coeff_bit_width-2);
+    imag_coeffs = round( imag(Coeffs) * 2^(coeff_bit_width-2)  ) / 2^(coeff_bit_width-2);
     reuse_block(blk, 'ROM', 'xbsIndex_r4/ROM', ...
         'depth', tostring(length(Coeffs)), 'initVector', tostring(real_coeffs), ...
         'distributed_mem', tostring(mem), 'latency', tostring(bram_latency), ...
         'arith_type', 'Signed  (2''s comp)', 'n_bits', tostring(coeff_bit_width), ...
-        'bin_pt', tostring(coeff_bit_width-1), 'Position', [210 30 260 82]);
+        'bin_pt', tostring(coeff_bit_width-2), 'Position', [210 30 260 82]);
     add_line(blk, 'Slice/1', 'ROM/1');
     add_line(blk, 'ROM/1','ri_to_c/1');
 
@@ -105,7 +114,7 @@ else,
         'depth', tostring(length(Coeffs)), 'initVector', tostring(imag_coeffs), ...
         'distributed_mem', tostring(mem), 'latency', tostring(bram_latency), ...
         'arith_type', 'Signed  (2''s comp)', 'n_bits', tostring(coeff_bit_width), ...
-        'bin_pt', tostring(coeff_bit_width-1), 'Position', [210 95 260 147]);
+        'bin_pt', tostring(coeff_bit_width-2), 'Position', [210 95 260 147]);
     add_line(blk, 'Slice/1', 'ROM1/1');
     add_line(blk, 'ROM1/1','ri_to_c/2');
 
@@ -113,6 +122,7 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('coeff_bit_width=%d', coeff_bit_width);
+fmtstr = sprintf('%d @ (%d,%d)', length(Coeffs), coeff_bit_width, coeff_bit_width-2);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
+clog('exiting coeff_gen_init','trace');

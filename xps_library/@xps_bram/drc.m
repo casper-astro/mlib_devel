@@ -34,6 +34,7 @@ end
 hw_sys=get(xps_objs{1},'hw_sys');
 
 addr_width = blk_obj.addr_width;
+data_width = blk_obj.data_width;
 
 switch hw_sys
   case 'ROACH'
@@ -64,6 +65,11 @@ switch hw_sys
 end
 if addr_width > 16
     msg = 'Shared BRAM address width cannot be greater than 16';
+	result = 1;
+end
+
+if isempty(find([8 16 32 64 128] == data_width))
+    msg = 'Shared BRAM data width can only be 8,16,32,64 or 128';
 	result = 1;
 end
 

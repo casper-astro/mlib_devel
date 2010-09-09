@@ -413,7 +413,10 @@ module ten_gig_eth_mac_ucb(
           rx_crc_start_reg <= 1'b1;
         end
         RX_RECEIVE: begin
-          if (xgmii_rxc_align != 8'b00000000) begin
+          if (rx_aligned && |xgmii_rxc_align) begin
+            rx_state <= RX_IDLE;
+          end
+          if (!rx_aligned && |xgmii_rxc) begin
             rx_state <= RX_IDLE;
           end
         end
