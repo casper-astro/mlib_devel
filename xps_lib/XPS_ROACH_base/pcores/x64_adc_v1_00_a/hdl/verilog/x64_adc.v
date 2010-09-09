@@ -214,6 +214,15 @@ module x64_adc (
   );
   
   wire [16*12-1:0] adc_data_retimed;
+  wire [7:0]       async_fifo_empty;
+  wire async_fifo_rd_en = ((~async_fifo_empty[0])&&
+                           (~async_fifo_empty[1])&&
+                           (~async_fifo_empty[2])&&
+                           (~async_fifo_empty[3])&&
+                           (~async_fifo_empty[4])&&
+                           (~async_fifo_empty[5])&&
+                           (~async_fifo_empty[6])&&
+                           (~async_fifo_empty[7]));
 
   x64_adc_retime x64_adc_retime_inst [7:0] (
     .wr_clk      (adc_clk0),
@@ -222,9 +231,11 @@ module x64_adc (
     .dvld        ({adc_dvld7, adc_dvld6, adc_dvld5, adc_dvld4, adc_dvld3, adc_dvld2, adc_dvld1, adc_dvld0}),
     .dout        (adc_data_retimed),
     .rst         (reset),
+    .rd_en       (async_fifo_rd_en),
     .dout_sync   (adc_dout_sync),
     .fifo_of     (adc_fifo_of),
     .fifo_uf     (adc_fifo_uf),
+    .fifo_empty  (async_fifo_empty),
     .dout_vld    (adc_dout_vld)
   );
 
