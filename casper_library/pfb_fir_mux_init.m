@@ -146,11 +146,11 @@ for p=1:pols,
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
                     'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
-		        %if t==2,
-                %    prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap_mux'];
-                %else,
+		        if t==2,
+                    prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_first_tap_mux'];
+                else,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(i),'_tap',num2str(t-1)];
-                %end
+                end
                 for n=1:4, add_line(blk, [prev_blk_name,'/',num2str(n)], [blk_name,'/',num2str(n)]);
                 end
                 add_line(blk, [blk_name,'/1'], [out_name,'/1']);
