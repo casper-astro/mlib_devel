@@ -116,6 +116,23 @@ str = [str, 'END',                                                      '\n'];
 str = [str, 'PORT ', inst_name, '_rst_gpio_ext = ', inst_name, '_rst_gpio_ext, DIR = O, VEC = [0:0]', '\n'];
 str = [str, '',                                                         '\n'];
 
+%%% Control pin GPIO output enable (active low)
+str = [str, '# SPI/Reset pin output enable (active low)',               '\n'];
+str = [str, 'BEGIN gpio_simulink2ext',                                  '\n'];
+str = [str, ' PARAMETER INSTANCE  = ', inst_name, '_ctrl_out_en_inst',  '\n'];
+str = [str, ' PARAMETER HW_VER    = 1.00.a',                            '\n'];
+str = [str, ' PARAMETER DDR       = 0',                                 '\n'];
+str = [str, ' PARAMETER WIDTH     = 1',                                 '\n'];
+str = [str, ' PARAMETER CLK_PHASE = 0',                                 '\n'];
+str = [str, ' PARAMETER REG_IOB   = true',                              '\n'];
+str = [str, ' PORT gateway        = 0b0',                               '\n'];
+str = [str, ' PORT io_pad         = ', inst_name, '_ctrl_out_en',       '\n'];
+str = [str, ' PORT clk            = adc0_clk',                          '\n'];
+str = [str, ' PORT clk90          = adc0_clk90',                        '\n'];
+str = [str, 'END',                                                      '\n'];
+str = [str, 'PORT ', inst_name, '_ctrl_out_en = ', inst_name, '_ctrl_out_en, DIR = O, VEC = [0:0]', '\n'];
+str = [str, '',                                                         '\n'];
+
 str = [str, 'BEGIN dcm_module',                                                        '\n'];
 str = [str, ' PARAMETER INSTANCE                = ', inst_name, '_fab_phase_gen',      '\n'];
 str = [str, ' PARAMETER HW_VER                  = 1.00.d',                             '\n'];

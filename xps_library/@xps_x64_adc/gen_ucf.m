@@ -187,6 +187,8 @@ str = [str, '', '\n'];
 str = [str, 'INST "*async_data_fifo_inst/BU2/U0/grf.rf/mem/gdm.dm/Mram*" TNM= RAMSOURCE;',                        '\n'];
 str = [str, 'INST "*async_data_fifo_inst/BU2/U0/grf.rf/mem/gdm.dm/dout*" TNM= FFDEST;',                           '\n'];
 str = [str, 'TIMESPEC TS_RAM_FF= FROM "RAMSOURCE" TO "FFDEST" ', num2str(clk_period*(6/4)), ' ns DATAPATHONLY;',  '\n'];
+str = [str, 'NET "*BU2/U0/grf.rf/gcx.clkx/wr_pntr_gc*" TIG;', '\n'];
+str = [str, 'NET "*BU2/U0/grf.rf/gcx.clkx/rd_pntr_gc*" TIG;', '\n'];
 %str = [str, '', '\n'];
 %str = [str, '', '\n'];
 
