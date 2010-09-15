@@ -69,13 +69,18 @@ module x64_adc_retime (
     .underflow  (fifo_uf_int)
   );
 
+  reg [23:0] dout_reg;
+  reg dout_sync_reg;
+
   always @(posedge rd_clk) begin
     fifo_empty_reg <= fifo_empty_int;
     rd_en_reg <= rd_en;
+    dout_reg <= dout_int[23:0];
+    dout_sync_reg <= dout_int[24];
   end
 
-  assign dout       =  dout_int[23:0];
-  assign dout_sync  =  dout_int[24];
+  assign dout       =  dout_reg;
+  assign dout_sync  =  dout_sync_reg;
   assign fifo_empty =  fifo_empty_reg;
 
   //reg fifo_full_reg;

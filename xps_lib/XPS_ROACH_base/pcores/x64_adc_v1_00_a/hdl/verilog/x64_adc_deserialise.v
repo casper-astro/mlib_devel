@@ -59,6 +59,20 @@ module x64_adc_deserialise(
   /*
   TODO: this is profoundly lame, fix
   */
+  // This will probably blow the resources, but there
+  // are serious iming problems at the moment
+  // synthesis attribute shreg_extract of ser_r0 is NO
+  // synthesis attribute shreg_extract of ser_f0 is NO
+  // synthesis attribute shreg_extract of ser_r1 is NO
+  // synthesis attribute shreg_extract of ser_f1 is NO
+  // synthesis attribute shreg_extract of ser_r2 is NO
+  // synthesis attribute shreg_extract of ser_f2 is NO
+  // synthesis attribute shreg_extract of ser_r3 is NO
+  // synthesis attribute shreg_extract of ser_f3 is NO
+  // synthesis attribute shreg_extract of ser_r4 is NO
+  // synthesis attribute shreg_extract of ser_f4 is NO
+  // synthesis attribute shreg_extract of ser_r5 is NO
+  // synthesis attribute shreg_extract of ser_f5 is NO
 
   reg [7:0] ser_r0;
   reg [7:0] ser_f0;
