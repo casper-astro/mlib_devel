@@ -30,6 +30,9 @@ module x64_adc_retime (
   // FIFO, as we desperately try to get this bloody thing
   // to compile.
   
+  reg [23:0] dout_pipeline_reg;
+  reg doutvld_pipeline_reg;
+  reg dout_sync_pipeline_reg;
   // synthesis attribute shreg_extract of dout_pipeline_reg is NO
   // synthesis attribute shreg_extract of doutvld_pipeline_reg is NO
   // synthesis attribute shreg_extract of dout_sync_pipeline_reg is NO
