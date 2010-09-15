@@ -12,8 +12,12 @@ module x64_adc_mux_adc_streams (
   reg [24:0] word2;
   reg [24:0] word3;
   reg sync_reg;
-
+ 
   /* Parallel load, serial out shift register */
+  // The dinvld signal has a huge fanout here -- can cause
+  // timing issues
+  
+  // synthesis attribute MAX_FANOUT of dinvld is 24
   always @(posedge clk) begin
     if (dinvld) begin
       word0    <= {1'b1, din[24*1 -1:24*0]};

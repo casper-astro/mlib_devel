@@ -30,11 +30,13 @@ module x64_adc_retime (
   wire fifo_full;
   wire fifo_uf_int;
   wire fifo_of_int;
+  reg  rd_en_reg;
+  reg  fifo_empty_reg;
 
   fifo_generator_v5_3 async_data_fifo_inst (
     .din        ({mux_dout_sync, mux_dout}),
     .rd_clk     (rd_clk),
-    .rd_en      (rd_en),
+    .rd_en      (rd_en_reg),
     .rst        (rst),
     .wr_clk     (wr_clk),
     .wr_en      (mux_dout_valid),
@@ -45,9 +47,14 @@ module x64_adc_retime (
     .underflow  (fifo_uf_int)
   );
 
+  always @(posedge rd_clk) begin
+    fifo_empty_reg <= fifo_empty_int;
+    rd_en_reg <= rd_en;
+  end
+
   assign dout       =  dout_int[23:0];
   assign dout_sync  =  dout_int[24];
-  assign fifo_empty =  fifo_empty_int;
+  assign fifo_empty =  fifo_empty_reg;
 
   //reg fifo_full_reg;
   //reg fifo_empty_reg;
