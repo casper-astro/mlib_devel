@@ -26,6 +26,25 @@ module x64_adc_retime (
     .dout_sync  (mux_dout_sync)
   );
   
+  // Register everything between the multiplexer and the
+  // FIFO, as we desperately try to get this bloody thing
+  // to compile.
+  
+  // synthesis attribute shreg_extract of dout_pipeline_reg is NO
+  // synthesis attribute shreg_extract of doutvld_pipeline_reg is NO
+  // synthesis attribute shreg_extract of dout_sync_pipeline_reg is NO
+  // NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO NO 
+ 
+  always @(posedge wr_clk) begin
+    dout_pipeline_reg <= mux_dout;
+    doutvld_pipeline_reg <= mux_dout_valid;
+    dout_sync_pipeline_reg <= mux_dout_sync;
+  end
+
+  wire [23:0] dout_pl_int = dout_pipeline_reg;
+  wire doutvld_pl_int = doutvld_pipeline_reg;
+  wire dout_sync_pl_int = dout_sync_pipeline_reg;
+
   wire [24:0] dout_int;
   wire fifo_full;
   wire fifo_uf_int;
@@ -34,12 +53,12 @@ module x64_adc_retime (
   reg  fifo_empty_reg;
 
   fifo_generator_v5_3 async_data_fifo_inst (
-    .din        ({mux_dout_sync, mux_dout}),
+    .din        ({dout_sync_pl_int, dout_pl_int}),
     .rd_clk     (rd_clk),
     .rd_en      (rd_en_reg),
     .rst        (rst),
     .wr_clk     (wr_clk),
-    .wr_en      (mux_dout_valid),
+    .wr_en      (doutvld_pl_int),
     .dout       (dout_int),
     .empty      (fifo_empty_int),
     .full       (fifo_full),
