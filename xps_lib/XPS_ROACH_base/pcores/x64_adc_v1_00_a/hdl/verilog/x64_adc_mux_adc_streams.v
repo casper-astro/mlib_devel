@@ -17,7 +17,11 @@ module x64_adc_mux_adc_streams (
   // The dinvld signal has a huge fanout here -- can cause
   // timing issues
   
-  // synthesis attribute MAX_FANOUT of dinvld is 24
+  // synthesis attribute MAX_FANOUT of dinvld is 12
+  // synthesis attribute shreg_extract of word0 is NO
+  // synthesis attribute shreg_extract of word1 is NO
+  // synthesis attribute shreg_extract of word2 is NO
+  // synthesis attribute shreg_extract of word3 is NO
   always @(posedge clk) begin
     if (dinvld) begin
       word0    <= {1'b1, din[24*1 -1:24*0]};
