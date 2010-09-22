@@ -19,6 +19,7 @@ module x64_adc_retime (
 
   x64_adc_mux_adc_streams x64_adc_mux_adc_streams_inst (
     .clk        (wr_clk),
+    .rst        (rst),
     .din        (din),
     .dinvld     (dvld),
     .dout       (mux_dout),
