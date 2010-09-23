@@ -12,11 +12,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "dave"
+  LastModifiedBy	  "wjm"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jul 13 16:01:32 2010"
-  RTWModifiedTimeStamp	  200937687
-  ModelVersionFormat	  "1.%<AutoIncrement:423>"
+  LastModifiedDate	  "Wed Sep 22 17:17:17 2010"
+  RTWModifiedTimeStamp	  207076634
+  ModelVersionFormat	  "1.%<AutoIncrement:424>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -28428,10 +28428,11 @@ Library {
       "period|Use as single-ended|Use DDR|Pack register in the pad|Register clock phase|Termination method"
       MaskStyleString	      "popup(iBOB:led|iBOB:dipsw|iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:zdok0|iBOB:zdo"
       "k1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlin"
-      "k4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:l"
-      "ed|ROACH:gpioa|ROACH:gpioa_oe_n|ROACH:gpiob|ROACH:gpiob_oe_n|ROACH:qsh|ROACH:zdok0|ROACH:zdok1|CORR:four_buttons"
-      "|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed "
-      " (2's comp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
+      "k4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:a"
+      "ux0_clk|ROACH:aux1_clk|ROACH:led|ROACH:gpioa|ROACH:gpioa_oe_n|ROACH:gpiob|ROACH:gpiob_oe_n|ROACH:qsh|ROACH:zdok0"
+      "|ROACH:zdok1|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),"
+      "popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),po"
+      "pup(None|Pullup|Pulldown)"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'iBOB:zdok0' 'iBOB:zdok1' 'iBOB:md"
       "r' 'ROACH:qsh' 'ROACH:zdok0' 'ROACH:zdok1'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on'"
