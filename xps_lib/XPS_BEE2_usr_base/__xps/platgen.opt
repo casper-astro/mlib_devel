@@ -1,1 +1,0 @@
- -p virtex2p -lang vhdl -lp /home/alschult/BEE2_BSP/ -st xst
