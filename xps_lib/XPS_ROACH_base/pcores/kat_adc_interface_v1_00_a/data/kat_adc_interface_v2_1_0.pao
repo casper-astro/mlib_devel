@@ -1,0 +1,22 @@
+##############################################################################
+##
+## ***************************************************************************
+## **                                                                       **
+## ** Copyright (c) 1995-2004 Xilinx, Inc.  All rights reserved.            **
+## **                                                                       **
+## ** You may copy and modify these files for your own internal use solely  **
+## ** with Xilinx programmable logic devices and Xilinx EDK system or       **
+## ** create IP modules solely for Xilinx programmable logic devices and    **
+## ** Xilinx EDK system. No rights are granted to distribute any files      **
+## ** unless they are distributed in Xilinx programmable logic devices.     **
+## **                                                                       **
+## ***************************************************************************
+##
+##############################################################################
+## Filename:          C:\edk_user_repository\MyProcessorIPLib\pcores\opb_adcinterface_v1_00_a\data\opb_adcinterface_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Fri Dec 03 21:08:57 2004 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib kat_adc_interface_v1_00_a adc_async_fifo verilog
+lib kat_adc_interface_v1_00_a kat_adc_interface verilog

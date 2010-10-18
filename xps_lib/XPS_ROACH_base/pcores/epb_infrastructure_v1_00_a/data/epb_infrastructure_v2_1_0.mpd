@@ -1,0 +1,30 @@
+#epb infrastructure
+
+BEGIN epb_infrastructure
+
+OPTION IPTYPE      = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION IP_GROUP    = USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+
+PORT epb_data_buf = "",    DIR = IO, VEC = [15:0], THREE_STATE = FALSE, IOB_STATE = BUF
+PORT epb_data_oe_n_i = "", DIR = I, 
+PORT epb_data_out_i = "",  DIR = I,  VEC = [15:0] 
+PORT epb_data_in_o = "",   DIR = O,  VEC = [15:0] 
+PORT epb_oe_n_buf = "",    DIR = I
+PORT epb_oe_n = "",        DIR = O
+PORT epb_cs_n_buf = "",    DIR = I
+PORT epb_cs_n = "",        DIR = O 
+PORT epb_r_w_n_buf = "",   DIR = I 
+PORT epb_r_w_n = "",       DIR = O 
+PORT epb_be_n_buf = "",    DIR = I, VEC =  [1:0] 
+PORT epb_be_n = "",        DIR = O, VEC =  [1:0] 
+PORT epb_addr_buf = "",    DIR = I, VEC = [22:0] 
+PORT epb_addr = "",        DIR = O, VEC = [22:0] 
+PORT epb_addr_gp_buf = "", DIR = I, VEC =  [5:0] 
+PORT epb_addr_gp = "",     DIR = O, VEC =  [5:0] 
+PORT epb_rdy_buf = "",     DIR = O
+PORT epb_rdy = "",         DIR = I
+PORT epb_rdy_oe = "",      DIR = I
+
+END

@@ -1,0 +1,13 @@
+bfm_system.mhs
+-p
+xc2vp4fg456-6
+-lang
+vhdl
+-lp
+../../../../
+-mixed
+yes
+-s
+mti
+-m
+behavioral

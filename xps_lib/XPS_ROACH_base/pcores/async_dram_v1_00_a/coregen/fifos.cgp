@@ -1,0 +1,20 @@
+# Date: Thu Jan 15 12:38:02 2009
+SET addpads = False
+SET asysymbol = False
+SET busformat = BusFormatAngleBracketNotRipped
+SET createndf = False
+SET designentry = Verilog
+SET device = xc5vlx110t
+SET devicefamily = virtex5
+SET flowvendor = Other
+SET formalverification = False
+SET foundationsym = False
+SET implementationfiletype = Ngc
+SET package = ff1136
+SET removerpms = False
+SET simulationfiles = Behavioral
+SET speedgrade = -2
+SET verilogsim = True
+SET vhdlsim = False
+SET workingdirectory = C:\data\work\casper_libraries\mlib_devel_10_1\xps_lib\XPS_ROACH_base\pcores\async_dram_v1_00_a\coregen\tmp
+

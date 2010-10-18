@@ -1,0 +1,33 @@
+
+BEGIN dram_infrastructure 
+
+## Peripheral Options
+OPTION IPTYPE      = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL         = VERILOG
+OPTION IP_GROUP    = USER
+OPTION DESC        = DRAM_INFRASTRUCTURE
+
+## Bus Interfaces
+BUS_INTERFACE BUS = DRAM_SYS, BUS_STD = DRAM_SYS, BUS_TYPE = INITIATOR
+  
+## Parameters
+PARAMETER CLK_FREQ = 266, DT = INTEGER, RANGE = (150,200,266,300,333)
+
+## Ports
+
+## System interface
+PORT reset         = "", DIR = I
+PORT clk_in        = "", DIR = I
+PORT clk_in_locked = "", DIR = I
+PORT clk_out       = "", DIR = O
+
+## DRAM interface
+PORT dram_clk_0    = "dram_clk_0",   BUS = DRAM_SYS, DIR = O
+PORT dram_clk_90   = "dram_clk_90",  BUS = DRAM_SYS, DIR = O
+PORT dram_clk_div  = "dram_clk_div", BUS = DRAM_SYS, DIR = O
+PORT dram_rst_0    = "dram_rst_0",   BUS = DRAM_SYS, DIR = O
+PORT dram_rst_90   = "dram_rst_90",  BUS = DRAM_SYS, DIR = O
+PORT dram_rst_div  = "dram_rst_div", BUS = DRAM_SYS, DIR = O
+
+END
