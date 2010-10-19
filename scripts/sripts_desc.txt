@@ -1,1 +1,0 @@
-In this directory you will find scripts to start simulink, with various libraries automatically imported
