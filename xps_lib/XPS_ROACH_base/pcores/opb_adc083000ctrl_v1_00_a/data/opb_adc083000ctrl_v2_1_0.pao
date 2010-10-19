@@ -1,0 +1,6 @@
+lib opb_adc083000ctrl_v1_00_a opb_adc083000ctrl 
+lib opb_adc083000ctrl_v1_00_a adc083000_spi 
+lib basemodules_v1_00_a Counter
+lib basemodules_v1_00_a EdgeDetect
+lib basemodules_v1_00_a ShiftRegister
+lib basemodules_v1_00_a Register

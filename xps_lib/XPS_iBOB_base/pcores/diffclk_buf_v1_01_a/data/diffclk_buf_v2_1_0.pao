@@ -1,0 +1,11 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## proc_sys_reset.pao
+##
+## Peripheral Analyze Order
+##
+################################################################################
+
+lib diffclk_buf_v1_01_a diffclk_buf

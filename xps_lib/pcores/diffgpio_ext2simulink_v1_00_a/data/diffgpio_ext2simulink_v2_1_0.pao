@@ -1,0 +1,9 @@
+################################################################################
+##
+## File		: diffgpio_ext2simulink_v2_1_0.pao
+## Desc		: Peripheral Analysis Order
+##
+##
+################################################################################
+
+lib diffgpio_ext2simulink_v1_00_a diffgpio_ext2simulink

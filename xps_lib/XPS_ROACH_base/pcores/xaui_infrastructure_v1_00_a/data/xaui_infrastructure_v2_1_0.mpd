@@ -1,0 +1,132 @@
+#
+
+BEGIN xaui_infrastructure
+
+OPTION IPTYPE           = IP
+OPTION IMP_NETLIST      = TRUE
+OPTION HDL              = MIXED
+OPTION IP_GROUP         = USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+
+PARAMETER DIFF_BOOST = "TRUE", DT = STRING
+PARAMETER DISABLE_0  = 1,      DT = INTEGER
+PARAMETER DISABLE_1  = 1,      DT = INTEGER
+PARAMETER DISABLE_2  = 1,      DT = INTEGER
+PARAMETER DISABLE_3  = 1,      DT = INTEGER
+
+BUS_INTERFACE BUS = XAUI_SYS_0,  BUS_STD = XAUI_SYS,  BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = XAUI_SYS_1,  BUS_STD = XAUI_SYS,  BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = XAUI_SYS_2,  BUS_STD = XAUI_SYS,  BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = XAUI_SYS_3,  BUS_STD = XAUI_SYS,  BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = XAUI_CONF_0, BUS_STD = XAUI_CONF, BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = XAUI_CONF_1, BUS_STD = XAUI_CONF, BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = XAUI_CONF_2, BUS_STD = XAUI_CONF, BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = XAUI_CONF_3, BUS_STD = XAUI_CONF, BUS_TYPE = INITIATOR
+
+PORT mgt_refclk_t_n = "", DIR = I 
+PORT mgt_refclk_t_p = "", DIR = I
+PORT mgt_refclk_b_n = "", DIR = I
+PORT mgt_refclk_b_p = "", DIR = I
+PORT mgt_rx_t1_n    = "", DIR = I, VEC = [3:0]
+PORT mgt_rx_t1_p    = "", DIR = I, VEC = [3:0]
+PORT mgt_tx_t1_n    = "", DIR = O, VEC = [3:0] 
+PORT mgt_tx_t1_p    = "", DIR = O, VEC = [3:0] 
+PORT mgt_rx_t0_n    = "", DIR = I, VEC = [3:0] 
+PORT mgt_rx_t0_p    = "", DIR = I, VEC = [3:0] 
+PORT mgt_tx_t0_n    = "", DIR = O, VEC = [3:0] 
+PORT mgt_tx_t0_p    = "", DIR = O, VEC = [3:0] 
+PORT mgt_rx_b1_n    = "", DIR = I, VEC = [3:0] 
+PORT mgt_rx_b1_p    = "", DIR = I, VEC = [3:0] 
+PORT mgt_tx_b1_n    = "", DIR = O, VEC = [3:0] 
+PORT mgt_tx_b1_p    = "", DIR = O, VEC = [3:0] 
+PORT mgt_rx_b0_n    = "", DIR = I, VEC = [3:0] 
+PORT mgt_rx_b0_p    = "", DIR = I, VEC = [3:0] 
+PORT mgt_tx_b0_n    = "", DIR = O, VEC = [3:0] 
+PORT mgt_tx_b0_p    = "", DIR = O, VEC = [3:0] 
+
+PORT reset               = reset,             DIR = I
+
+PORT mgt_clk_1           = mgt_clk_1,         DIR = O
+PORT mgt_clk_0           = mgt_clk_0,         DIR = O
+
+PORT mgt_tx_reset_3      = mgt_tx_reset,      DIR = I, BUS = XAUI_SYS_3, VEC =  [3:0]
+PORT mgt_rx_reset_3      = mgt_rx_reset,      DIR = I, BUS = XAUI_SYS_3, VEC =  [3:0]
+PORT mgt_rxdata_3        = mgt_rx_data,       DIR = O, BUS = XAUI_SYS_3, VEC = [63:0]
+PORT mgt_rxcharisk_3     = mgt_rx_charisk,    DIR = O, BUS = XAUI_SYS_3, VEC =  [7:0]
+PORT mgt_txdata_3        = mgt_tx_data,       DIR = I, BUS = XAUI_SYS_3, VEC = [63:0]
+PORT mgt_txcharisk_3     = mgt_tx_charisk,    DIR = I, BUS = XAUI_SYS_3, VEC =  [7:0]
+PORT mgt_code_comma_3    = mgt_code_comma,    DIR = O, BUS = XAUI_SYS_3, VEC =  [7:0]
+PORT mgt_enchansync_3    = mgt_en_chan_sync,  DIR = I, BUS = XAUI_SYS_3
+PORT mgt_enable_align_3  = mgt_enable_align,  DIR = I, BUS = XAUI_SYS_3, VEC =  [3:0]
+PORT mgt_loopback_3      = mgt_loopback,      DIR = I, BUS = XAUI_SYS_3
+PORT mgt_powerdown_3     = mgt_powerdown,     DIR = I, BUS = XAUI_SYS_3
+PORT mgt_rxlock_3        = mgt_rxlock,        DIR = O, BUS = XAUI_SYS_3, VEC =  [3:0]
+PORT mgt_syncok_3        = mgt_syncok,        DIR = O, BUS = XAUI_SYS_3, VEC =  [3:0]
+PORT mgt_codevalid_3     = mgt_code_valid,    DIR = O, BUS = XAUI_SYS_3, VEC =  [7:0]
+PORT mgt_rxbufferr_3     = mgt_rxbufferr,     DIR = O, BUS = XAUI_SYS_3, VEC =  [3:0]
+PORT mgt_rxeqmix_3       = mgt_rxeqmix,       DIR = I, BUS = XAUI_CONF_3, VEC =  [1:0]
+PORT mgt_rxeqpole_3      = mgt_rxeqpole,      DIR = I, BUS = XAUI_CONF_3, VEC =  [3:0]
+PORT mgt_txpreemphasis_3 = mgt_txpreemphasis, DIR = I, BUS = XAUI_CONF_3, VEC =  [2:0]
+PORT mgt_txdiffctrl_3    = mgt_txdiffctrl,    DIR = I, BUS = XAUI_CONF_3, VEC =  [2:0]
+
+PORT mgt_tx_reset_2      = mgt_tx_reset,      DIR = I, BUS = XAUI_SYS_2, VEC =  [3:0]
+PORT mgt_rx_reset_2      = mgt_rx_reset,      DIR = I, BUS = XAUI_SYS_2, VEC =  [3:0]
+PORT mgt_rxdata_2        = mgt_rx_data,       DIR = O, BUS = XAUI_SYS_2, VEC = [63:0]
+PORT mgt_rxcharisk_2     = mgt_rx_charisk,    DIR = O, BUS = XAUI_SYS_2, VEC =  [7:0]
+PORT mgt_txdata_2        = mgt_tx_data,       DIR = I, BUS = XAUI_SYS_2, VEC = [63:0]
+PORT mgt_txcharisk_2     = mgt_tx_charisk,    DIR = I, BUS = XAUI_SYS_2, VEC =  [7:0]
+PORT mgt_code_comma_2    = mgt_code_comma,    DIR = O, BUS = XAUI_SYS_2, VEC =  [7:0]
+PORT mgt_enchansync_2    = mgt_en_chan_sync,  DIR = I, BUS = XAUI_SYS_2
+PORT mgt_enable_align_2  = mgt_enable_align,  DIR = I, BUS = XAUI_SYS_2, VEC =  [3:0]
+PORT mgt_loopback_2      = mgt_loopback,      DIR = I, BUS = XAUI_SYS_2
+PORT mgt_powerdown_2     = mgt_powerdown,     DIR = I, BUS = XAUI_SYS_2
+PORT mgt_rxlock_2        = mgt_rxlock,        DIR = O, BUS = XAUI_SYS_2, VEC =  [3:0]
+PORT mgt_syncok_2        = mgt_syncok,        DIR = O, BUS = XAUI_SYS_2, VEC =  [3:0]
+PORT mgt_codevalid_2     = mgt_code_valid,    DIR = O, BUS = XAUI_SYS_2, VEC =  [7:0]
+PORT mgt_rxbufferr_2     = mgt_rxbufferr,     DIR = O, BUS = XAUI_SYS_2, VEC =  [3:0]
+PORT mgt_rxeqmix_2       = mgt_rxeqmix,       DIR = I, BUS = XAUI_CONF_2, VEC =  [1:0]
+PORT mgt_rxeqpole_2      = mgt_rxeqpole,      DIR = I, BUS = XAUI_CONF_2, VEC =  [3:0]
+PORT mgt_txpreemphasis_2 = mgt_txpreemphasis, DIR = I, BUS = XAUI_CONF_2, VEC =  [2:0]
+PORT mgt_txdiffctrl_2    = mgt_txdiffctrl,    DIR = I, BUS = XAUI_CONF_2, VEC =  [2:0]
+
+PORT mgt_tx_reset_1      = mgt_tx_reset,      DIR = I, BUS = XAUI_SYS_1, VEC =  [3:0]
+PORT mgt_rx_reset_1      = mgt_rx_reset,      DIR = I, BUS = XAUI_SYS_1, VEC =  [3:0]
+PORT mgt_rxdata_1        = mgt_rx_data,       DIR = O, BUS = XAUI_SYS_1, VEC = [63:0]
+PORT mgt_rxcharisk_1     = mgt_rx_charisk,    DIR = O, BUS = XAUI_SYS_1, VEC =  [7:0]
+PORT mgt_txdata_1        = mgt_tx_data,       DIR = I, BUS = XAUI_SYS_1, VEC = [63:0]
+PORT mgt_txcharisk_1     = mgt_tx_charisk,    DIR = I, BUS = XAUI_SYS_1, VEC =  [7:0]
+PORT mgt_code_comma_1    = mgt_code_comma,    DIR = O, BUS = XAUI_SYS_1, VEC =  [7:0]
+PORT mgt_enchansync_1    = mgt_en_chan_sync,  DIR = I, BUS = XAUI_SYS_1
+PORT mgt_enable_align_1  = mgt_enable_align,  DIR = I, BUS = XAUI_SYS_1, VEC =  [3:0]
+PORT mgt_loopback_1      = mgt_loopback,      DIR = I, BUS = XAUI_SYS_1
+PORT mgt_powerdown_1     = mgt_powerdown,     DIR = I, BUS = XAUI_SYS_1
+PORT mgt_rxlock_1        = mgt_rxlock,        DIR = O, BUS = XAUI_SYS_1, VEC =  [3:0]
+PORT mgt_syncok_1        = mgt_syncok,        DIR = O, BUS = XAUI_SYS_1, VEC =  [3:0]
+PORT mgt_codevalid_1     = mgt_code_valid,    DIR = O, BUS = XAUI_SYS_1, VEC =  [7:0]
+PORT mgt_rxbufferr_1     = mgt_rxbufferr,     DIR = O, BUS = XAUI_SYS_1, VEC =  [3:0]
+PORT mgt_rxeqmix_1       = mgt_rxeqmix,       DIR = I, BUS = XAUI_CONF_1, VEC =  [1:0]
+PORT mgt_rxeqpole_1      = mgt_rxeqpole,      DIR = I, BUS = XAUI_CONF_1, VEC =  [3:0]
+PORT mgt_txpreemphasis_1 = mgt_txpreemphasis, DIR = I, BUS = XAUI_CONF_1, VEC =  [2:0]
+PORT mgt_txdiffctrl_1    = mgt_txdiffctrl,    DIR = I, BUS = XAUI_CONF_1, VEC =  [2:0]
+
+PORT mgt_tx_reset_0      = mgt_tx_reset,      DIR = I, BUS = XAUI_SYS_0, VEC =  [3:0]
+PORT mgt_rx_reset_0      = mgt_rx_reset,      DIR = I, BUS = XAUI_SYS_0, VEC =  [3:0]
+PORT mgt_rxdata_0        = mgt_rx_data,       DIR = O, BUS = XAUI_SYS_0, VEC = [63:0]
+PORT mgt_rxcharisk_0     = mgt_rx_charisk,    DIR = O, BUS = XAUI_SYS_0, VEC =  [7:0]
+PORT mgt_txdata_0        = mgt_tx_data,       DIR = I, BUS = XAUI_SYS_0, VEC = [63:0]
+PORT mgt_txcharisk_0     = mgt_tx_charisk,    DIR = I, BUS = XAUI_SYS_0, VEC =  [7:0]
+PORT mgt_code_comma_0    = mgt_code_comma,    DIR = O, BUS = XAUI_SYS_0, VEC =  [7:0]
+PORT mgt_enchansync_0    = mgt_en_chan_sync,  DIR = I, BUS = XAUI_SYS_0
+PORT mgt_enable_align_0  = mgt_enable_align,  DIR = I, BUS = XAUI_SYS_0, VEC =  [3:0]
+PORT mgt_loopback_0      = mgt_loopback,      DIR = I, BUS = XAUI_SYS_0
+PORT mgt_powerdown_0     = mgt_powerdown,     DIR = I, BUS = XAUI_SYS_0
+PORT mgt_rxlock_0        = mgt_rxlock,        DIR = O, BUS = XAUI_SYS_0, VEC =  [3:0]
+PORT mgt_syncok_0        = mgt_syncok,        DIR = O, BUS = XAUI_SYS_0, VEC =  [3:0]
+PORT mgt_codevalid_0     = mgt_code_valid,    DIR = O, BUS = XAUI_SYS_0, VEC =  [7:0]
+PORT mgt_rxbufferr_0     = mgt_rxbufferr,     DIR = O, BUS = XAUI_SYS_0, VEC =  [3:0]
+PORT mgt_rxeqmix_0       = mgt_rxeqmix,       DIR = I, BUS = XAUI_CONF_0, VEC =  [1:0]
+PORT mgt_rxeqpole_0      = mgt_rxeqpole,      DIR = I, BUS = XAUI_CONF_0, VEC =  [3:0]
+PORT mgt_txpreemphasis_0 = mgt_txpreemphasis, DIR = I, BUS = XAUI_CONF_0, VEC =  [2:0]
+PORT mgt_txdiffctrl_0    = mgt_txdiffctrl,    DIR = I, BUS = XAUI_CONF_0, VEC =  [2:0]
+
+END

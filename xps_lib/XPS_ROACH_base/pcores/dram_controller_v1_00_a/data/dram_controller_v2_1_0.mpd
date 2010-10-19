@@ -1,0 +1,58 @@
+BEGIN dram_controller
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VERILOG
+OPTION IP_GROUP = USER
+OPTION DESC = DRAM_CONTROLLER
+
+## Bus Interface
+BUS_INTERFACE BUS = DRAM_SYS,  BUS_STD = DRAM_SYS,  BUS_TYPE = TARGET
+BUS_INTERFACE BUS = DRAM_USER, BUS_STD = DRAM_CTRL, BUS_TYPE = TARGET
+
+## Parameters
+PARAMETER CLK_FREQ = 266, DT = INTEGER, RANGE = (150,200,266,300,333)
+
+## Ports
+PORT phy_rdy  = "",    DIR = O
+PORT cal_fail = "",    DIR = O
+
+## SYSTEM BUS
+PORT clk0     = "dram_clk_0",    BUS = DRAM_SYS,    DIR = I
+PORT clk90    = "dram_clk_90",   BUS = DRAM_SYS,    DIR = I
+PORT clkdiv0  = "dram_clk_div",  BUS = DRAM_SYS,    DIR = I
+PORT rst0     = "dram_rst_0",    BUS = DRAM_SYS,    DIR = I
+PORT rst90    = "dram_rst_90",   BUS = DRAM_SYS,    DIR = I
+PORT rstdiv0  = "dram_rst_div",  BUS = DRAM_SYS,    DIR = I
+
+## USER BUS
+PORT app_cmd_addr   = "app_cmd_addr",   BUS = DRAM_USER,  DIR = I,  VEC = [31:0]
+PORT app_cmd_rnw    = "app_cmd_rnw",    BUS = DRAM_USER,  DIR = I
+PORT app_cmd_valid  = "app_cmd_valid",  BUS = DRAM_USER,  DIR = I 
+PORT app_wr_data    = "app_wr_data",    BUS = DRAM_USER,  DIR = I,  VEC = [143:0]
+PORT app_wr_be      = "app_wr_be",      BUS = DRAM_USER,  DIR = I,  VEC = [17:0]
+PORT app_rd_data    = "app_rd_data",    BUS = DRAM_USER,  DIR = O,  VEC = [143:0]
+PORT app_rd_valid   = "app_rd_valid",   BUS = DRAM_USER,  DIR = O
+PORT app_fifo_ready = "app_fifo_ready", BUS = DRAM_USER,  DIR = O
+
+#pins
+PORT dram_ck      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [2:0]
+PORT dram_ck_n    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [2:0]
+PORT dram_a       = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [15:0]
+PORT dram_ba      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [2:0]
+PORT dram_ras_n   = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT dram_cas_n   = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT dram_we_n    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT dram_cs_n    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [1:0]
+PORT dram_cke     = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [1:0]
+PORT dram_odt     = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [1:0]
+PORT dram_dm      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [8:0]
+PORT dram_dqs     = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = IO, VEC = [8:0]
+PORT dram_dqs_n   = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = IO, VEC = [8:0]
+PORT dram_dq      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = IO, VEC = [71:0]
+PORT dram_reset_n = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+
+END
+
+
