@@ -1,0 +1,55 @@
+###################################################################
+##
+## Name     : async_dram
+##
+###################################################################
+
+BEGIN async_dram
+
+## Peripheral Options
+OPTION IPTYPE      = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL         = VERILOG
+OPTION STYLE       = MIX
+OPTION ARCH_SUPPORT_MAP = (OTHERS=DEVELOPMENT)
+
+# Parameters
+PARAMETER C_WIDE_DATA   = 0,  DT = INTEGER, RANGE = (0:1)
+PARAMETER C_HALF_BURST  = 0,  DT = INTEGER, RANGE = (0:1)
+PARAMETER BRAM_FIFOS    = 0,  DT = INTEGER, RANGE = (0:1)
+PARAMETER TAG_BUFFER_EN = 0,  DT = INTEGER, RANGE = (0:1)
+
+## Bus Interfaces
+BUS_INTERFACE BUS = DRAM_USER, BUS_STD = DRAM_APP,  BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = MEM_CMD,   BUS_STD = MEM_CMD,   BUS_TYPE = TARGET
+
+## DRAM Controller Signals
+PORT dram_clk        = "",          DIR = I
+PORT dram_reset      = "",          DIR = O
+
+## DRAM Application Bus
+PORT dram_address     = "app_cmd_addr",  BUS = DRAM_USER,  DIR = O,  VEC = [31:0]
+PORT dram_rnw         = "app_cmd_rnw",   BUS = DRAM_USER,  DIR = O
+PORT dram_cmd_en      = "app_cmd_valid", BUS = DRAM_USER,  DIR = O 
+PORT dram_ready       = "app_cmd_ack",   BUS = DRAM_USER,  DIR = I
+PORT dram_data_o      = "app_wr_data",   BUS = DRAM_USER,  DIR = O,  VEC = [143:0]
+PORT dram_byte_enable = "app_wr_be",     BUS = DRAM_USER,  DIR = O,  VEC = [17:0]
+PORT dram_data_i      = "app_rd_data",   BUS = DRAM_USER,  DIR = I,  VEC = [143:0]
+PORT dram_data_valid  = "app_rd_valid",  BUS = DRAM_USER,  DIR = I
+
+## Memory command interface
+PORT Mem_Clk         = "",              DIR = I
+PORT Mem_Rst         = "",              DIR = I
+PORT Mem_Cmd_Address = Mem_Cmd_Address, DIR = I, BUS = MEM_CMD,   VEC = [31:0]
+PORT Mem_Cmd_RNW     = Mem_Cmd_RNW,     DIR = I, BUS = MEM_CMD    
+PORT Mem_Cmd_Valid   = Mem_Cmd_Valid,   DIR = I, BUS = MEM_CMD    
+PORT Mem_Cmd_Tag     = Mem_Cmd_Tag,     DIR = I, BUS = MEM_CMD,   VEC = [31:0]
+PORT Mem_Cmd_Ack     = Mem_Cmd_Ack,     DIR = O, BUS = MEM_CMD    
+PORT Mem_Rd_Dout     = Mem_Rd_Dout,     DIR = O, BUS = MEM_CMD,   VEC = [144-1:0]
+PORT Mem_Rd_Tag      = Mem_Rd_Tag,      DIR = O, BUS = MEM_CMD,   VEC = [31:0]
+PORT Mem_Rd_Ack      = Mem_Rd_Ack,      DIR = I, BUS = MEM_CMD    
+PORT Mem_Rd_Valid    = Mem_Rd_Valid,    DIR = O, BUS = MEM_CMD    
+PORT Mem_Wr_Din      = Mem_Wr_Din,      DIR = I, BUS = MEM_CMD,   VEC = [144-1:0]
+PORT Mem_Wr_BE       = Mem_Wr_BE,       DIR = I, BUS = MEM_CMD,   VEC = [ 18-1:0]
+
+END

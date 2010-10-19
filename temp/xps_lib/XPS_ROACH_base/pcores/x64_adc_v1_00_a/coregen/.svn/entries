@@ -1,0 +1,52 @@
+8
+
+dir
+3048
+http://casper.berkeley.edu/svn/trunk/mlib_devel_10_1/xps_lib/XPS_ROACH_base/pcores/adc083000x2_interface_v1_00_a/coregen
+http://casper.berkeley.edu/svn
+
+
+
+2009-08-18T22:55:51.340059Z
+2258
+sgowda
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+577e11ce-4b3a-42a0-b907-5d4e03b181e5
+
+async_fifo_64by16.xco
+file
+
+
+
+
+2010-02-12T13:44:13.000000Z
+77f029121929feec021beea590148329
+2009-08-18T22:55:51.340059Z
+2258
+sgowda
+
+coregen.cgp
+file
+
+
+
+
+2010-02-12T13:44:13.000000Z
+eff373767c587c4254384b07e9a2cfe0
+2009-08-18T22:55:51.340059Z
+2258
+sgowda
+

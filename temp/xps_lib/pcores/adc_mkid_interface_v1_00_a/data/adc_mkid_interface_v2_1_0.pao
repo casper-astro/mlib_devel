@@ -1,0 +1,3 @@
+
+lib adc_mkid_interface_v1_00_a adc_mkid_interface
+lib adc_mkid_interface_v1_00_a async_fifo_24x128

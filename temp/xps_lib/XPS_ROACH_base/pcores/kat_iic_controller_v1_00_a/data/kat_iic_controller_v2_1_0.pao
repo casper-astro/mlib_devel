@@ -1,0 +1,4 @@
+lib kat_iic_controller_v1_00_a kat_iic_controller verilog
+lib kat_iic_controller_v1_00_a miic_ops verilog
+lib kat_iic_controller_v1_00_a op_fifo verilog
+lib kat_iic_controller_v1_00_a rx_fifo verilog

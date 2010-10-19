@@ -1,0 +1,26 @@
+XmpVersion:              10.1.03
+VerMgmt:                 10.1.03
+IntStyle:                default
+MHS File:                system.mhs
+MSS File:                system.mss
+Architecture:            virtex5
+Device:                  xc5vlx110t
+Package:                 ff1136
+SpeedGrade:              -1
+UserCmd1: 
+UserCmd1Type:            0
+UserCmd2: 
+UserCmd2Type:            0
+TopInst:                 system_i
+GenSimTB:                0
+InsertNoPads:            0
+WarnForEAArch:           1
+HdlLang:                 VHDL
+Simulator:               mti
+SimModel:                BEHAVIORAL
+MixLangSim:              1
+UcfFile:                 data/system.ucf
+FpgaImpMode:             0
+EnableParTimingError:    1
+EnableResetOptimization: 0
+ShowLicenseDialog:       1
