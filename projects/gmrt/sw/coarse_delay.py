@@ -41,6 +41,18 @@ config = [
 {'x':-3102.11, 'y':-11245.60, 'z':  8916.26, 't1':-29671.71,'t2':-29668.49}
 ]
 #######################################
+# Re normalize the delay times, relative to the fastest signal
+fastest_t1 = 0
+fastest_t2 = 0
+for ant in config:
+    if ant['t1'] > fastest_t1:
+        fastest_t1 = ant['t1']
+    if ant['t2'] > fastest_t2:
+        fastest_t2 = ant['t2']
+
+for ant in range(len(config)):
+    config[ant]['t1'] -= fastest_t1
+    config[ant]['t2'] -= fastest_t2
 
 # calculate maximum pairwise delays
 # This is the delay where the source lies
@@ -58,7 +70,7 @@ print max_delay[0]*10**9
 max_delay_actual = n.zeros((len(config),len(config)))
 for i in range(len(config)):
     for j in range(len(config)):
-        max_delay_actual[i,j] = max_delay[i,j]+(10**-9*(config[i]['t1'] - config[j]['t1']))
+        max_delay_actual[i,j] = max_delay[i,j]+n.abs(10**-9*(config[i]['t1']-config[j]['t1']))
 
 print 'Maximum delay between ant 0 and other based on ant pos and cable delays.'
 print max_delay_actual[0]*10**9
@@ -69,5 +81,5 @@ for i in range(len(config)):
 
 #print 'buffer required in ns'
 #print buffer_req*10**9
-
-print (buffer_req-n.min(buffer_req))*ts
+print 'Delay in clock cycles'
+print (buffer_req)*ts
