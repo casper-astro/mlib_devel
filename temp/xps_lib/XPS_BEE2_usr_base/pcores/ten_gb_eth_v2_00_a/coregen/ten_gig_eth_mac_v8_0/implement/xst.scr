@@ -1,6 +1,0 @@
-run
--ifn xst.prj
--ifmt mixed
--ofn ten_gig_eth_mac_v8_0_example_design
--top ten_gig_eth_mac_v8_0_example_design
--p virtex2p

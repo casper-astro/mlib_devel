@@ -1,3 +1,0 @@
-lib multiport_ddr2_v2_00_a arbiter verilog
-lib multiport_ddr2_v2_00_a fifo_sync verilog
-lib multiport_ddr2_v2_00_a multiport_ddr2 verilog

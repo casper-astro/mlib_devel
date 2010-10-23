@@ -1,6 +1,0 @@
-# Output products list for <packet_buffer>
-packet_buffer_flist.txt
-packet_buffer.vhd
-packet_buffer.xco
-packet_buffer.ngc
-packet_buffer.vho
