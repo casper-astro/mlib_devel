@@ -1,7 +1,0 @@
-lib x64_adc_v1_00_a async_fifo_64by16.v verilog
-lib x64_adc_v1_00_a x64_adc_mux_adc_streams.v verilog
-lib x64_adc_v1_00_a x64_adc_retime.v verilog
-lib x64_adc_v1_00_a x64_adc.v verilog
-lib x64_adc_v1_00_a x64_adc_serialise.v verilog
-lib x64_adc_v1_00_a x64_adc_infrastructure.v verilog
-lib x64_adc_v1_00_a x64_adc_fcsample.v verilog
