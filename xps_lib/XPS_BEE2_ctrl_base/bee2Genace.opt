@@ -1,8 +1,0 @@
--jprog
--board user
--target ppc_hw
--hw implementation/download.bit
--elf zImage.embedded
--configdevice devicenr 1 idcode 0x112ba093 irlength 14 partname xc2vp70
--debugdevice devicenr 1 cpunr 1
--ace implementation/cflash.ace
