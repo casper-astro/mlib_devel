@@ -39,9 +39,19 @@ module x64_adc_mux_adc_streams (
     end
   end
   
+  // rst CDC synchronizer. For testing only.
+  // Move out of this module if required in final
+  // design.
+  reg rst_buf0;
+  reg rst_buf1;
+  always @(posedge clk) begin
+    rst_buf0 <= rst;
+    rst_buf1 <= rst_buf0;
+  end
+
   reg mstr_en;
-  always @(posedge clk or posedge rst) begin
-    if (rst) begin
+  always @(posedge clk) begin
+    if (rst_buf1) begin
         mstr_en <= 0'b0;
     end else begin
         if (sync_reg) begin
