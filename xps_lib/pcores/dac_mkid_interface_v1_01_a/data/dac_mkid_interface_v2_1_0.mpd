@@ -1,0 +1,93 @@
+###################################################################
+##
+## Name     : dac_mkid_interface
+## Desc     :  mkid DAC board interface
+##
+###################################################################
+
+BEGIN dac_mkid_interface
+
+########################
+## Peripheral Options ##
+########################
+
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+
+
+####################
+## Bus Interfaces ##
+####################
+
+
+#################################################
+## Generics for VHDL or Parameters for Verilog ##
+#################################################
+
+PARAMETER CTRL_CLK_PHASE = 0, DT = INTEGER, RANGE = (0:1)
+PARAMETER OUTPUT_CLK = 0, DT = INTEGER, RANGE = (0:1)
+
+
+###########
+## Ports ##
+###########
+
+	# In from DAC
+PORT dac_clk_p		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_clk_n		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+#PORT dac_phase		= "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+
+	# Out to DAC
+PORT dac_smpl_clk_i_p	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT dac_smpl_clk_i_n	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT dac_smpl_clk_q_p	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT dac_smpl_clk_q_n	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+
+PORT dac_sync_i_p		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_sync_i_n		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_sync_q_p		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_sync_q_n		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+
+PORT dac_data_i_p		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [15:0]
+PORT dac_data_i_n		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [15:0]
+PORT dac_data_q_p		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [15:0]
+PORT dac_data_q_n		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [15:0]
+
+PORT dac_not_sdenb_i	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_not_sdenb_q	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_sclk		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_sdi		= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT dac_not_reset	= "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE
+
+
+######################
+	# In from design
+PORT dac_data_i0		= "", DIR = I, VEC = [15:0]
+PORT dac_data_i1		= "", DIR = I, VEC = [15:0]
+PORT dac_data_q0		= "", DIR = I, VEC = [15:0]
+PORT dac_data_q1		= "", DIR = I, VEC = [15:0]
+
+PORT dac_sync_i		= "", DIR = I
+PORT dac_sync_q		= "", DIR = I
+
+PORT dac_smpl_clk		= "", DIR = I
+
+PORT not_sdenb_i		= "", DIR = I
+PORT not_sdenb_q		= "", DIR = I
+PORT sclk			= "", DIR = I
+PORT sdi			= "", DIR = I
+PORT not_reset		= "", DIR = I
+
+####################
+# out to design
+
+PORT dac_clk_out    = "", DIR = O, SIGIS = CLK
+PORT dac_clk90_out    = "", DIR = O, SIGIS = CLK
+PORT dac_clk180_out    = "", DIR = O, SIGIS = CLK
+PORT dac_clk270_out    = "", DIR = O, SIGIS = CLK
+PORT dac_dcm_locked = "", DIR = O
+
+
+END

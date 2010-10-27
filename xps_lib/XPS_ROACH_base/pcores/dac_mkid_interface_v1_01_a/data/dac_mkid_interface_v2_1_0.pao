@@ -1,0 +1,11 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## dac_mkid_interface.pao
+##
+## Peripheral Analyze Order
+##
+################################################################################
+
+lib dac_mkid_interface_v1_01_a dac_mkid_interface

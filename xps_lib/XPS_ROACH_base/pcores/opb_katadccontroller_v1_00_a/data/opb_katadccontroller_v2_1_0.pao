@@ -1,0 +1,4 @@
+lib opb_katadccontroller_v1_00_a opb_katadccontroller verilog
+lib opb_katadccontroller_v1_00_a opb_attach verilog
+lib opb_katadccontroller_v1_00_a serial_config verilog
+lib opb_katadccontroller_v1_00_a autoconfig verilog

@@ -1,0 +1,98 @@
+BEGIN x64_adc
+
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = MIXED
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+OPTION STYLE = MIX
+OPTION DESC = "ADC interface"
+
+################
+## PARAMETERS ##
+################
+
+PARAMETER ADC_BIT_CLK_PERIOD = 3.3 ns, DT = FLOAT
+
+
+#############
+##  PORTS  ##
+#############
+
+PORT adc_clk_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT adc_clk_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+
+PORT in_0_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_0_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_0_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT fc_0_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT in_1_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_1_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_1_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT fc_1_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT in_2_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_2_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_2_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT fc_2_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT in_3_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_3_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_3_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT fc_3_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT in_4_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_4_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_4_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT fc_4_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT in_5_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_5_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_5_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT fc_5_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT in_6_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_6_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_6_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT fc_6_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT in_7_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT in_7_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [7:0]  
+PORT fc_7_n = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE       
+PORT fc_7_p = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE       
+
+PORT adc_clk0    = "", DIR = O
+PORT adc_clk90   = "", DIR = O
+PORT adc_clk180  = "", DIR = O
+PORT adc_clk270  = "", DIR = O
+PORT fab_clk     = "", DIR = O
+
+PORT adc_data0  = "", DIR = O, VEC = [11:0]  
+PORT adc_data1  = "", DIR = O, VEC = [11:0]  
+PORT adc_data2  = "", DIR = O, VEC = [11:0]  
+PORT adc_data3  = "", DIR = O, VEC = [11:0]  
+PORT adc_data4  = "", DIR = O, VEC = [11:0]  
+PORT adc_data5  = "", DIR = O, VEC = [11:0]  
+PORT adc_data6  = "", DIR = O, VEC = [11:0]  
+PORT adc_data7  = "", DIR = O, VEC = [11:0]  
+PORT adc_data8  = "", DIR = O, VEC = [11:0]  
+PORT adc_data9  = "", DIR = O, VEC = [11:0]  
+PORT adc_data10 = "", DIR = O, VEC = [11:0]  
+PORT adc_data11 = "", DIR = O, VEC = [11:0]  
+PORT adc_data12 = "", DIR = O, VEC = [11:0]  
+PORT adc_data13 = "", DIR = O, VEC = [11:0]  
+PORT adc_data14 = "", DIR = O, VEC = [11:0]  
+PORT adc_data15 = "", DIR = O, VEC = [11:0]  
+
+PORT adc_dout_sync = "", DIR = O, VEC = [7:0]
+PORT adc_dout_vld  = "", DIR = O, VEC = [7:0]
+PORT adc_fifo_of   = "", DIR = O, VEC = [7:0]
+PORT adc_fifo_uf   = "", DIR = O, VEC = [7:0]
+PORT reset         = "", DIR = I
+
+###############################
+
+
+PORT fc_sampled    = "", DIR = O, VEC = [12*8-1:0]
+PORT dly_clk       = "", DIR = I
+PORT dly_rst       = "", DIR = I, VEC = [7:0] 
+PORT dly_en        = "", DIR = I, VEC = [7:0] 
+PORT dly_inc_dec_n = "", DIR = I, VEC = [7:0] 
+PORT dcm_reset     = "", DIR = I
+PORT dcm_locked    = "", DIR = O
+
+END

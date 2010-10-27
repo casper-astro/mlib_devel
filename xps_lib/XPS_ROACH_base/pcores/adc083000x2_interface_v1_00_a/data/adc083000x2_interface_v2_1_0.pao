@@ -1,0 +1,37 @@
+##############################################################################
+##
+## ***************************************************************************
+## **                                                                       **
+## ** Copyright (c) 1995-2004 Xilinx, Inc.  All rights reserved.            **
+## **                                                                       **
+## ** You may copy and modify these files for your own internal use solely  **
+## ** with Xilinx programmable logic devices and Xilinx EDK system or       **
+## ** create IP modules solely for Xilinx programmable logic devices and    **
+## ** Xilinx EDK system. No rights are granted to distribute any files      **
+## ** unless they are distributed in Xilinx programmable logic devices.     **
+## **                                                                       **
+## ***************************************************************************
+##
+##############################################################################
+## Filename:          C:\edk_user_repository\MyProcessorIPLib\pcores\opb_adcinterface_v1_00_a\data\opb_adcinterface_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Fri Dec 03 21:08:57 2004 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib adc083000x2_interface_v1_00_a adc083000x2_interface
+lib adc083000x2_interface_v1_00_a clock_sample
+lib adc083000x2_interface_v1_00_a adc_reset
+lib adc083000x2_interface_v1_00_a clock_sync_fsm
+lib basemodules_v1_00_a Counter
+lib basemodules_v1_00_a ShiftRegister
+lib basemodules_v1_00_a IOShiftRegister
+lib basemodules_v1_00_a Register
+lib basemodules_v1_00_a IORegister
+lib adc083000x2_interface_v1_00_a adc083000_board_phy
+lib adc083000x2_interface_v1_00_a adc083000_board_phy_demux
+lib adc083000x2_interface_v1_00_a async_fifo_64by16
+lib adc_generic_subblocks_v1_00_a diff_to_se
+lib adc_generic_subblocks_v1_00_a diff_ddr_reg
+lib adc_generic_subblocks_v1_00_a recapture
+lib adc_generic_subblocks_v1_00_a diff_qdr_reg
+lib adc_generic_subblocks_v1_00_a qdr_capture
