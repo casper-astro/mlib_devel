@@ -1,6 +1,6 @@
 Library {
   Name			  "ox_lib"
-  Version		  7.4
+  Version		  7.5
   MdlSubVersion		  0
   SavedCharacterEncoding  "windows-1252"
   PostLoadFcn		  "% Stub definitions for mask variables\ndelay_depth=16;\nn_bits=8;\nbin_pt=7;"
@@ -16,9 +16,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jack"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jul 22 08:45:24 2010"
-  RTWModifiedTimeStamp	  201689090
-  ModelVersionFormat	  "1.%<AutoIncrement:1263>"
+  LastModifiedDate	  "Tue Oct 26 20:57:56 2010"
+  RTWModifiedTimeStamp	  210027470
+  ModelVersionFormat	  "1.%<AutoIncrement:1264>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -46,6 +46,7 @@ Library {
   LinearizationMsg	  "none"
   Profile		  off
   ParamWorkspaceSource	  "MATLABWorkspace"
+  RecordCoverage	  off
   CovSaveName		  "covdata"
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
@@ -85,13 +86,13 @@ Library {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      1
-      Version		      "1.6.0"
+      Version		      "1.10.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
 	  $ObjectID		  2
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -111,6 +112,7 @@ Library {
 	  SolverMode		  "SingleTasking"
 	  Solver		  "ode45"
 	  SolverName		  "ode45"
+	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
 	  ZeroCrossAlgorithm	  "Nonadaptive"
@@ -123,7 +125,7 @@ Library {
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  3
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -138,6 +140,7 @@ Library {
 	  SaveOutput		  on
 	  SaveState		  off
 	  SignalLogging		  on
+	  DSMLogging		  on
 	  InspectSignalLogs	  off
 	  SaveTime		  on
 	  ReturnWorkspaceOutputs  off
@@ -145,6 +148,7 @@ Library {
 	  TimeSaveName		  "tout"
 	  OutputSaveName	  "yout"
 	  SignalLoggingName	  "logsout"
+	  DSMLoggingName	  "dsmout"
 	  OutputOption		  "RefineOutputTimes"
 	  OutputTimes		  "[]"
 	  ReturnWorkspaceOutputsName "out"
@@ -152,7 +156,7 @@ Library {
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  4
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    7
@@ -178,6 +182,7 @@ Library {
 	  EnforceIntegerDowncast  on
 	  ExpressionFolding	  on
 	  BooleansAsBitfields	  off
+	  BitfieldContainerType	  "uint_T"
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
 	  PassReuseOutputArgsAs	  "Structure reference"
@@ -197,13 +202,14 @@ Library {
 	  EfficientMapNaN2IntZero on
 	  OptimizeModelRefInitCode off
 	  LifeSpan		  "inf"
+	  MaxStackSize		  "Inherit from target"
 	  BufferReusableBoundary  on
 	  SimCompilerOptimization "Off"
 	  AccelVerboseBuild	  off
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  5
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -272,12 +278,14 @@ Library {
 	  StateNameClashWarn	  "warning"
 	  SimStateInterfaceChecksumMismatchMsg "warning"
 	  StrictBusMsg		  "Warning"
+	  BusNameAdapt		  "WarnAndRepair"
+	  NonBusSignalsTreatedAsBus "none"
 	  LoggingUnavailableSignals "error"
 	  BlockIODiagnostic	  "none"
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  6
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -304,16 +312,21 @@ Library {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  7
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
+	  EnableParallelModelReferenceBuilds off
+	  ParallelModelReferenceMATLABWorkerInit "None"
 	  ModelReferenceNumInstancesAllowed "Multi"
+	  PropagateVarSize	  "Infer from blocks in model"
 	  ModelReferencePassRootInputsByReference on
 	  ModelReferenceMinAlgLoopOccurrences off
+	  PropagateSignalLabelsOutOfModel off
+	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  8
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -327,7 +340,7 @@ Library {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  9
-	  Version		  "1.6.0"
+	  Version		  "1.10.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -370,12 +383,13 @@ Library {
 	  GenerateCodeInfo	  off
 	  RTWCompilerOptimization "Off"
 	  CheckMdlBeforeBuild	  "Off"
+	  CustomRebuildMode	  "OnUpdate"
 	  Array {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      10
-	      Version		      "1.6.0"
+	      Version		      "1.10.0"
 	      Array {
 		Type			"Cell"
 		Dimension		19
@@ -435,7 +449,7 @@ Library {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      11
-	      Version		      "1.6.0"
+	      Version		      "1.10.0"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -464,6 +478,7 @@ Library {
 	      TargetFunctionLibrary   "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
+	      ERTCodeCoverageTool     "None"
 	      ERTMultiwordLength      256
 	      MultiwordLength	      2048
 	      GenerateFullHeader      on
@@ -567,6 +582,7 @@ Library {
       LockScale		      off
       SampleTime	      "inf"
       FramePeriod	      "inf"
+      PreserveConstantTs      off
     }
     Block {
       BlockType		      From
@@ -596,7 +612,7 @@ Library {
       SignalType	      "auto"
       SamplingMode	      "auto"
       LatchByDelayingOutsideSignal off
-      LatchByCopyingInsideSignal off
+      LatchInputForFeedbackSignals off
       Interpolate	      on
     }
     Block {
@@ -660,7 +676,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    3920
+    SIDHighWatermark	    3976
     Block {
       BlockType		      SubSystem
       Name		      "8pt_fft"
@@ -27612,10 +27628,10 @@ Library {
 	  SID			  3142
 	  Ports			  [1, 1]
 	  Position		  [145, 100, 195, 130]
-	  LibraryVersion	  "1.1288"
+	  LibraryVersion	  "1.2"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag127"
-	  SourceBlock		  "casper_library/Delays/pipeline"
+	  SourceBlock		  "casper_library_delays/pipeline"
 	  SourceType		  "pipeline"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
@@ -35084,9 +35100,9 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
-	  use_carryin		  off
-	  use_carryout		  off
-	  en			  off
+	  use_carryin		  "off"
+	  use_carryout		  "off"
+	  en			  "off"
 	  latency		  "2"
 	  precision		  "User Defined"
 	  arith_type		  "Signed  (2's comp)"
@@ -35094,11 +35110,11 @@ Library {
 	  bin_pt		  "bin_pt"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  on
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "on"
 	  hw_selection		  "Fabric"
-	  pipelined		  off
-	  xl_use_area		  off
+	  pipelined		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -35129,7 +35145,7 @@ Library {
 	  const			  "0"
 	  n_bits		  "n_bits"
 	  bin_pt		  "bin_pt"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -35138,7 +35154,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -35166,7 +35182,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
 	  inputs		  "2"
-	  en			  off
+	  en			  "off"
 	  latency		  "0"
 	  precision		  "Full"
 	  arith_type		  "Signed  (2's comp)"
@@ -35174,8 +35190,8 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -35262,7 +35278,7 @@ Library {
 	      const		      "1"
 	      n_bits		      "1"
 	      bin_pt		      "0"
-	      explicit_period	      on
+	      explicit_period	      "on"
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -35271,7 +35287,7 @@ Library {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
@@ -35303,15 +35319,15 @@ Library {
 	      arith_type	      "Unsigned"
 	      n_bits		      "BitWidth"
 	      bin_pt		      "0"
-	      load_pin		      off
-	      rst		      off
-	      en		      off
+	      load_pin		      "off"
+	      rst		      "off"
+	      en		      "off"
 	      explicit_period	      "off"
 	      period		      "1"
-	      dbl_ovrd		      off
-	      use_behavioral_HDL      off
+	      dbl_ovrd		      "off"
+	      use_behavioral_HDL      "off"
 	      implementation	      "Fabric"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      use_rpm		      "off"
 	      has_advanced_control    "0"
@@ -35338,14 +35354,14 @@ Library {
 	      initVector	      "0"
 	      distributed_mem	      "Block RAM"
 	      write_mode	      "Read Before Write"
-	      rst		      off
+	      rst		      "off"
 	      init_reg		      "0"
-	      en		      off
+	      en		      "off"
 	      latency		      "bram_latency"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      optimize		      "Area"
-	      use_rpm		      off
-	      xl_use_area	      off
+	      use_rpm		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -35464,7 +35480,7 @@ Library {
 	      const		      "pulse_len"
 	      n_bits		      "bits"
 	      bin_pt		      "0"
-	      explicit_period	      off
+	      explicit_period	      "off"
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -35473,7 +35489,7 @@ Library {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
@@ -35505,15 +35521,15 @@ Library {
 	      arith_type	      "Unsigned"
 	      n_bits		      "bits"
 	      bin_pt		      "0"
-	      load_pin		      off
-	      rst		      on
-	      en		      on
+	      load_pin		      "off"
+	      rst		      "on"
+	      en		      "on"
 	      explicit_period	      "on"
 	      period		      "1"
-	      dbl_ovrd		      off
-	      use_behavioral_HDL      off
+	      dbl_ovrd		      "off"
+	      use_behavioral_HDL      "off"
 	      implementation	      "Fabric"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      use_rpm		      "on"
 	      has_advanced_control    "0"
@@ -35539,10 +35555,10 @@ Library {
 	      SourceBlock	      "xbsIndex_r4/Relational"
 	      SourceType	      "Xilinx Arithmetic Relational Operator Block"
 	      mode		      "a!=b"
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -35606,11 +35622,11 @@ Library {
 		  SourceBlock		  "xbsIndex_r4/Delay"
 		  SourceType		  "Xilinx Delay Block"
 		  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-		  en			  off
+		  en			  "off"
 		  latency		  "1"
-		  dbl_ovrd		  off
-		  reg_retiming		  off
-		  xl_use_area		  off
+		  dbl_ovrd		  "off"
+		  reg_retiming		  "off"
+		  xl_use_area		  "off"
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -35635,10 +35651,10 @@ Library {
 		  SourceBlock		  "xbsIndex_r4/Inverter"
 		  SourceType		  "Xilinx Inverter Block"
 		  infoedit		  "Bitwise logical negation (one's complement) operator."
-		  en			  off
+		  en			  "off"
 		  latency		  "0"
-		  dbl_ovrd		  off
-		  xl_use_area		  off
+		  dbl_ovrd		  "off"
+		  xl_use_area		  "off"
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -35663,15 +35679,15 @@ Library {
 		  SourceType		  "Xilinx Logical Block Block"
 		  logical_function	  "AND"
 		  inputs		  "2"
-		  en			  off
+		  en			  "off"
 		  latency		  "0"
 		  precision		  "Full"
 		  arith_type		  "Unsigned"
 		  n_bits		  "8"
 		  bin_pt		  "2"
-		  align_bp		  on
-		  dbl_ovrd		  off
-		  xl_use_area		  off
+		  align_bp		  "on"
+		  dbl_ovrd		  "off"
+		  xl_use_area		  "off"
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -35851,7 +35867,7 @@ Library {
 	      const		      "pulse_len"
 	      n_bits		      "bits"
 	      bin_pt		      "0"
-	      explicit_period	      off
+	      explicit_period	      "off"
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -35860,7 +35876,7 @@ Library {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
@@ -35892,15 +35908,15 @@ Library {
 	      arith_type	      "Unsigned"
 	      n_bits		      "bits"
 	      bin_pt		      "0"
-	      load_pin		      off
-	      rst		      on
-	      en		      on
+	      load_pin		      "off"
+	      rst		      "on"
+	      en		      "on"
 	      explicit_period	      "on"
 	      period		      "1"
-	      dbl_ovrd		      off
-	      use_behavioral_HDL      off
+	      dbl_ovrd		      "off"
+	      use_behavioral_HDL      "off"
 	      implementation	      "Fabric"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      use_rpm		      "on"
 	      has_advanced_control    "0"
@@ -35926,10 +35942,10 @@ Library {
 	      SourceBlock	      "xbsIndex_r4/Relational"
 	      SourceType	      "Xilinx Arithmetic Relational Operator Block"
 	      mode		      "a!=b"
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -35993,11 +36009,11 @@ Library {
 		  SourceBlock		  "xbsIndex_r4/Delay"
 		  SourceType		  "Xilinx Delay Block"
 		  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-		  en			  off
+		  en			  "off"
 		  latency		  "1"
-		  dbl_ovrd		  off
-		  reg_retiming		  off
-		  xl_use_area		  off
+		  dbl_ovrd		  "off"
+		  reg_retiming		  "off"
+		  xl_use_area		  "off"
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -36022,10 +36038,10 @@ Library {
 		  SourceBlock		  "xbsIndex_r4/Inverter"
 		  SourceType		  "Xilinx Inverter Block"
 		  infoedit		  "Bitwise logical negation (one's complement) operator."
-		  en			  off
+		  en			  "off"
 		  latency		  "0"
-		  dbl_ovrd		  off
-		  xl_use_area		  off
+		  dbl_ovrd		  "off"
+		  xl_use_area		  "off"
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -36050,15 +36066,15 @@ Library {
 		  SourceType		  "Xilinx Logical Block Block"
 		  logical_function	  "AND"
 		  inputs		  "2"
-		  en			  off
+		  en			  "off"
 		  latency		  "0"
 		  precision		  "Full"
 		  arith_type		  "Unsigned"
 		  n_bits		  "8"
 		  bin_pt		  "2"
-		  align_bp		  on
-		  dbl_ovrd		  off
-		  xl_use_area		  off
+		  align_bp		  "on"
+		  dbl_ovrd		  "off"
+		  xl_use_area		  "off"
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -36285,7 +36301,7 @@ Library {
 	  SourceType		  "sync_delay"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -36710,10 +36726,10 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "x64_adc"
-      SID		      3838
+      SID		      3921
       Tag		      "xps:x64_adc"
       Ports		      [18, 17]
-      Position		      [915, 263, 1105, 647]
+      Position		      [1075, 303, 1265, 687]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -36726,14 +36742,14 @@ Library {
       MaskDescription	      "The ADC block converts analog inputs to digital outputs. Every clock cycle, the inputs ar"
       "e sampled and digitized to 8 bit binary point numbers in the range of [-1, 1) and are then output by the adc."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_adc\\sys_adc.html''])')"
-      MaskPromptString	      "ADC clock rate (MHz)|Include SPI interface?"
-      MaskStyleString	      "edit,checkbox"
-      MaskTunableValueString  "on,on"
-      MaskCallbackString      "|"
-      MaskEnableString	      "on,on"
-      MaskVisibilityString    "on,on"
-      MaskToolTipString	      "on,on"
-      MaskVariables	      "adc_clk_rate=@1;spi=@2;"
+      MaskPromptString	      "ADC clock rate (MHz)|Include SPI interface?|GPIO bank to use for control signals?"
+      MaskStyleString	      "edit,checkbox,popup(GPIO_A|GPIO_B)"
+      MaskTunableValueString  "on,on,on"
+      MaskCallbackString      "||"
+      MaskEnableString	      "on,on,on"
+      MaskVisibilityString    "on,on,on"
+      MaskToolTipString	      "on,on,on"
+      MaskVariables	      "adc_clk_rate=@1;spi=@2;ctrl_gpio=@3;"
       MaskInitialization      "x64_adc_mask(gcb);"
       MaskDisplay	      "\n"
       MaskSelfModifiable      on
@@ -36742,10 +36758,10 @@ Library {
       MaskIconRotate	      "none"
       MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "64|off"
+      MaskValueString	      "64|off|GPIO_A"
       System {
 	Name			"x64_adc"
-	Location		[250, 173, 1298, 770]
+	Location		[190, 117, 1238, 714]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -36758,19 +36774,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	56
-	SIDPrevWatermark	56
+	SIDHighWatermark	8
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim0"
-	  SID			  2
+	  SID			  3922
 	  Position		  [30, 35, 60, 55]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim1"
-	  SID			  3
+	  SID			  3923
 	  Position		  [30, 80, 60, 100]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -36778,7 +36793,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim2"
-	  SID			  4
+	  SID			  3924
 	  Position		  [30, 130, 60, 150]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -36786,7 +36801,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim3"
-	  SID			  5
+	  SID			  3925
 	  Position		  [30, 190, 60, 210]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -36794,7 +36809,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim4"
-	  SID			  6
+	  SID			  3926
 	  Position		  [30, 245, 60, 265]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -36802,7 +36817,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim5"
-	  SID			  7
+	  SID			  3927
 	  Position		  [30, 300, 60, 320]
 	  Port			  "6"
 	  IconDisplay		  "Port number"
@@ -36810,7 +36825,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim6"
-	  SID			  8
+	  SID			  3928
 	  Position		  [30, 355, 60, 375]
 	  Port			  "7"
 	  IconDisplay		  "Port number"
@@ -36818,7 +36833,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim7"
-	  SID			  9
+	  SID			  3929
 	  Position		  [30, 410, 60, 430]
 	  Port			  "8"
 	  IconDisplay		  "Port number"
@@ -36826,7 +36841,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim8"
-	  SID			  10
+	  SID			  3930
 	  Position		  [30, 465, 60, 485]
 	  Port			  "9"
 	  IconDisplay		  "Port number"
@@ -36834,7 +36849,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim9"
-	  SID			  11
+	  SID			  3931
 	  Position		  [30, 520, 60, 540]
 	  Port			  "10"
 	  IconDisplay		  "Port number"
@@ -36842,7 +36857,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim10"
-	  SID			  12
+	  SID			  3932
 	  Position		  [30, 580, 60, 600]
 	  Port			  "11"
 	  IconDisplay		  "Port number"
@@ -36850,7 +36865,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim11"
-	  SID			  13
+	  SID			  3933
 	  Position		  [30, 640, 60, 660]
 	  Port			  "12"
 	  IconDisplay		  "Port number"
@@ -36858,7 +36873,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim12"
-	  SID			  14
+	  SID			  3934
 	  Position		  [30, 695, 60, 715]
 	  Port			  "13"
 	  IconDisplay		  "Port number"
@@ -36866,7 +36881,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim13"
-	  SID			  15
+	  SID			  3935
 	  Position		  [30, 750, 60, 770]
 	  Port			  "14"
 	  IconDisplay		  "Port number"
@@ -36874,7 +36889,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim14"
-	  SID			  16
+	  SID			  3936
 	  Position		  [30, 805, 60, 825]
 	  Port			  "15"
 	  IconDisplay		  "Port number"
@@ -36882,7 +36897,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim15"
-	  SID			  17
+	  SID			  3937
 	  Position		  [30, 860, 60, 880]
 	  Port			  "16"
 	  IconDisplay		  "Port number"
@@ -36890,7 +36905,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim_sync"
-	  SID			  18
+	  SID			  3938
 	  Position		  [510, 40, 540, 60]
 	  Port			  "17"
 	  IconDisplay		  "Port number"
@@ -36898,7 +36913,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "adc_rst"
-	  SID			  19
+	  SID			  3939
 	  Position		  [510, 110, 540, 130]
 	  Port			  "18"
 	  IconDisplay		  "Port number"
@@ -36906,7 +36921,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert"
-	  SID			  20
+	  SID			  3940
 	  Ports			  [1, 1]
 	  Position		  [595, 105, 640, 135]
 	  LibraryVersion	  "1.2"
@@ -36919,9 +36934,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -36938,14 +36953,14 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator"
-	  SID			  21
+	  SID			  3941
 	  Position		  [845, 110, 865, 130]
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_chan_sync"
-	  SID			  22
+	  SID			  3942
 	  Ports			  [1, 1]
 	  Position		  [695, 40, 735, 60]
 	  LibraryVersion	  "1.2"
@@ -36959,15 +36974,15 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -36981,7 +36996,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data0"
-	  SID			  23
+	  SID			  3943
 	  Ports			  [1, 1]
 	  Position		  [215, 35, 255, 55]
 	  LibraryVersion	  "1.2"
@@ -36989,21 +37004,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37017,7 +37032,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data1"
-	  SID			  24
+	  SID			  3944
 	  Ports			  [1, 1]
 	  Position		  [215, 80, 255, 100]
 	  LibraryVersion	  "1.2"
@@ -37025,21 +37040,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37053,7 +37068,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data10"
-	  SID			  25
+	  SID			  3945
 	  Ports			  [1, 1]
 	  Position		  [215, 580, 255, 600]
 	  LibraryVersion	  "1.2"
@@ -37061,21 +37076,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37089,7 +37104,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data11"
-	  SID			  26
+	  SID			  3946
 	  Ports			  [1, 1]
 	  Position		  [215, 640, 255, 660]
 	  LibraryVersion	  "1.2"
@@ -37097,21 +37112,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37125,7 +37140,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data12"
-	  SID			  27
+	  SID			  3947
 	  Ports			  [1, 1]
 	  Position		  [215, 695, 255, 715]
 	  LibraryVersion	  "1.2"
@@ -37133,21 +37148,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37161,7 +37176,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data13"
-	  SID			  28
+	  SID			  3948
 	  Ports			  [1, 1]
 	  Position		  [215, 750, 255, 770]
 	  LibraryVersion	  "1.2"
@@ -37169,21 +37184,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37197,7 +37212,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data14"
-	  SID			  29
+	  SID			  3949
 	  Ports			  [1, 1]
 	  Position		  [215, 805, 255, 825]
 	  LibraryVersion	  "1.2"
@@ -37205,21 +37220,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37233,7 +37248,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data15"
-	  SID			  30
+	  SID			  3950
 	  Ports			  [1, 1]
 	  Position		  [215, 860, 255, 880]
 	  LibraryVersion	  "1.2"
@@ -37241,21 +37256,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37269,7 +37284,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data2"
-	  SID			  31
+	  SID			  3951
 	  Ports			  [1, 1]
 	  Position		  [215, 130, 255, 150]
 	  LibraryVersion	  "1.2"
@@ -37277,21 +37292,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37305,7 +37320,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data3"
-	  SID			  32
+	  SID			  3952
 	  Ports			  [1, 1]
 	  Position		  [215, 190, 255, 210]
 	  LibraryVersion	  "1.2"
@@ -37313,21 +37328,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37341,7 +37356,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data4"
-	  SID			  33
+	  SID			  3953
 	  Ports			  [1, 1]
 	  Position		  [215, 245, 255, 265]
 	  LibraryVersion	  "1.2"
@@ -37349,21 +37364,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37377,7 +37392,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data5"
-	  SID			  34
+	  SID			  3954
 	  Ports			  [1, 1]
 	  Position		  [215, 300, 255, 320]
 	  LibraryVersion	  "1.2"
@@ -37385,21 +37400,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37413,7 +37428,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data6"
-	  SID			  35
+	  SID			  3955
 	  Ports			  [1, 1]
 	  Position		  [215, 355, 255, 375]
 	  LibraryVersion	  "1.2"
@@ -37421,21 +37436,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37449,7 +37464,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data7"
-	  SID			  36
+	  SID			  3956
 	  Ports			  [1, 1]
 	  Position		  [215, 410, 255, 430]
 	  LibraryVersion	  "1.2"
@@ -37457,21 +37472,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37485,7 +37500,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data8"
-	  SID			  37
+	  SID			  3957
 	  Ports			  [1, 1]
 	  Position		  [215, 465, 255, 485]
 	  LibraryVersion	  "1.2"
@@ -37493,21 +37508,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37521,7 +37536,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_data9"
-	  SID			  38
+	  SID			  3958
 	  Ports			  [1, 1]
 	  Position		  [215, 520, 255, 540]
 	  LibraryVersion	  "1.2"
@@ -37529,21 +37544,21 @@ Library {
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	  arith_type		  "Unsigned"
+	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "12"
 	  bin_pt		  "11"
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,45,390,496"
 	  block_type		  "gatewayin"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,20,1,1,white,yellow,0,00d3666e,right,"
@@ -37557,7 +37572,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ox_lib_x64_adc_user_rst"
-	  SID			  39
+	  SID			  3959
 	  Ports			  [1, 1]
 	  Position		  [705, 110, 765, 130]
 	  LibraryVersion	  "1.2"
@@ -37566,14 +37581,14 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "0,0,403,473"
+	  sggui_pos		  "0,25,403,473"
 	  block_type		  "gatewayout"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "60,20,1,1,white,yellow,0,cc31b7ac,right,"
@@ -37585,16 +37600,88 @@ Library {
 	  "t',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
+	  BlockType		  Reference
+	  Name			  "ox_lib_x64_adc_user_sdata"
+	  SID			  3
+	  Ports			  [1, 1]
+	  Position		  [705, 190, 765, 210]
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Gateway Out"
+	  SourceType		  "Xilinx Gateway Out Block"
+	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
+	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
+	  "ending on how they are configured."
+	  hdl_port		  on
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayout"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "60,20,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 0.483333 0.5"
+	  "5 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0."
+	  "1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
+	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('outpu"
+	  "t',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "ox_lib_x64_adc_user_spi_strb"
+	  SID			  4
+	  Ports			  [1, 1]
+	  Position		  [705, 270, 765, 290]
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Gateway Out"
+	  SourceType		  "Xilinx Gateway Out Block"
+	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
+	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
+	  "ending on how they are configured."
+	  hdl_port		  on
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "gatewayout"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "60,20,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 0.483333 0.5"
+	  "5 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0."
+	  "1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
+	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('outpu"
+	  "t',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  "sdata_term"
+	  SID			  7
+	  Position		  [845, 190, 865, 210]
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  "spi_strb_term"
+	  SID			  8
+	  Position		  [845, 270, 865, 290]
+	}
+	Block {
 	  BlockType		  Outport
 	  Name			  "dout0"
-	  SID			  40
+	  SID			  3960
 	  Position		  [315, 35, 345, 55]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout1"
-	  SID			  41
+	  SID			  3961
 	  Position		  [315, 80, 345, 100]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -37602,7 +37689,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout2"
-	  SID			  42
+	  SID			  3962
 	  Position		  [315, 130, 345, 150]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -37610,7 +37697,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout3"
-	  SID			  43
+	  SID			  3963
 	  Position		  [315, 190, 345, 210]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -37618,7 +37705,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout4"
-	  SID			  44
+	  SID			  3964
 	  Position		  [315, 245, 345, 265]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -37626,7 +37713,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout5"
-	  SID			  45
+	  SID			  3965
 	  Position		  [315, 300, 345, 320]
 	  Port			  "6"
 	  IconDisplay		  "Port number"
@@ -37634,7 +37721,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout6"
-	  SID			  46
+	  SID			  3966
 	  Position		  [315, 355, 345, 375]
 	  Port			  "7"
 	  IconDisplay		  "Port number"
@@ -37642,7 +37729,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout7"
-	  SID			  47
+	  SID			  3967
 	  Position		  [315, 410, 345, 430]
 	  Port			  "8"
 	  IconDisplay		  "Port number"
@@ -37650,7 +37737,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout8"
-	  SID			  48
+	  SID			  3968
 	  Position		  [315, 465, 345, 485]
 	  Port			  "9"
 	  IconDisplay		  "Port number"
@@ -37658,7 +37745,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout9"
-	  SID			  49
+	  SID			  3969
 	  Position		  [315, 520, 345, 540]
 	  Port			  "10"
 	  IconDisplay		  "Port number"
@@ -37666,7 +37753,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout10"
-	  SID			  50
+	  SID			  3970
 	  Position		  [315, 580, 345, 600]
 	  Port			  "11"
 	  IconDisplay		  "Port number"
@@ -37674,7 +37761,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout11"
-	  SID			  51
+	  SID			  3971
 	  Position		  [315, 640, 345, 660]
 	  Port			  "12"
 	  IconDisplay		  "Port number"
@@ -37682,7 +37769,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout12"
-	  SID			  52
+	  SID			  3972
 	  Position		  [315, 695, 345, 715]
 	  Port			  "13"
 	  IconDisplay		  "Port number"
@@ -37690,7 +37777,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout13"
-	  SID			  53
+	  SID			  3973
 	  Position		  [315, 750, 345, 770]
 	  Port			  "14"
 	  IconDisplay		  "Port number"
@@ -37698,7 +37785,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout14"
-	  SID			  54
+	  SID			  3974
 	  Position		  [315, 805, 345, 825]
 	  Port			  "15"
 	  IconDisplay		  "Port number"
@@ -37706,7 +37793,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout15"
-	  SID			  55
+	  SID			  3975
 	  Position		  [315, 860, 345, 880]
 	  Port			  "16"
 	  IconDisplay		  "Port number"
@@ -37714,7 +37801,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "chan_sync"
-	  SID			  56
+	  SID			  3976
 	  Position		  [820, 40, 850, 60]
 	  Port			  "17"
 	  IconDisplay		  "Port number"
@@ -37939,6 +38026,28 @@ Library {
 	  SrcBlock		  "sim0"
 	  SrcPort		  1
 	  DstBlock		  "ox_lib_x64_adc_user_data0"
+	  DstPort		  1
+	}
+	Line {
+	  Points		  [645, 200]
+	  DstBlock		  "ox_lib_x64_adc_user_sdata"
+	  DstPort		  1
+	}
+	Line {
+	  Points		  [645, 280]
+	  DstBlock		  "ox_lib_x64_adc_user_spi_strb"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "ox_lib_x64_adc_user_sdata"
+	  SrcPort		  1
+	  DstBlock		  "sdata_term"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "ox_lib_x64_adc_user_spi_strb"
+	  SrcPort		  1
+	  DstBlock		  "spi_strb_term"
 	  DstPort		  1
 	}
       }
