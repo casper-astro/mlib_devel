@@ -1,5 +1,6 @@
 module x64_adc_mux_adc_streams (
   input            clk,        
+  input            rst,
   input    [95:0]  din,        
   input            dinvld,     
   output   [23:0]  dout,       
@@ -12,8 +13,16 @@ module x64_adc_mux_adc_streams (
   reg [24:0] word2;
   reg [24:0] word3;
   reg sync_reg;
-
+ 
   /* Parallel load, serial out shift register */
+  // The dinvld signal has a huge fanout here -- can cause
+  // timing issues
+  
+  // synthesis attribute MAX_FANOUT of dinvld is 12
+  // synthesis attribute shreg_extract of word0 is NO
+  // synthesis attribute shreg_extract of word1 is NO
+  // synthesis attribute shreg_extract of word2 is NO
+  // synthesis attribute shreg_extract of word3 is NO
   always @(posedge clk) begin
     if (dinvld) begin
       word0    <= {1'b1, din[24*1 -1:24*0]};
@@ -30,8 +39,19 @@ module x64_adc_mux_adc_streams (
     end
   end
   
+  reg mstr_en;
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        mstr_en <= 0'b0;
+    end else begin
+        if (sync_reg) begin
+            mstr_en <= 0'b1;
+        end
+    end
+  end
+
   assign dout      = word0[23:0];
-  assign doutvld   = word0[24];
+  assign doutvld   = word0[24]&mstr_en;
   assign dout_sync = sync_reg;
 
 /*

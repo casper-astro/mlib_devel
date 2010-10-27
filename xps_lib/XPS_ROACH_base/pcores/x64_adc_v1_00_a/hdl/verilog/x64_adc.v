@@ -239,22 +239,22 @@ module x64_adc (
     .dout_vld    (adc_dout_vld)
   );
 
-  assign adc_data0  = adc_data_retimed[12*1 -1  : 12*0];
-  assign adc_data1  = adc_data_retimed[12*2 -1  : 12*1];
-  assign adc_data2  = adc_data_retimed[12*3 -1  : 12*2];
-  assign adc_data3  = adc_data_retimed[12*4 -1  : 12*3];
-  assign adc_data4  = adc_data_retimed[12*5 -1  : 12*4];
-  assign adc_data5  = adc_data_retimed[12*6 -1  : 12*5];
-  assign adc_data6  = adc_data_retimed[12*7 -1  : 12*6];
-  assign adc_data7  = adc_data_retimed[12*8 -1  : 12*7];
-  assign adc_data8  = adc_data_retimed[12*9 -1  : 12*8];
-  assign adc_data9  = adc_data_retimed[12*10 -1 : 12*9];
-  assign adc_data10 = adc_data_retimed[12*11 -1 : 12*10];
-  assign adc_data11 = adc_data_retimed[12*12 -1 : 12*11];
-  assign adc_data12 = adc_data_retimed[12*13 -1 : 12*12];
-  assign adc_data13 = adc_data_retimed[12*14 -1 : 12*13];
-  assign adc_data14 = adc_data_retimed[12*15 -1 : 12*14];
-  assign adc_data15 = adc_data_retimed[12*16 -1 : 12*15];
+  assign adc_data0 ={~adc_data_retimed[12*1 -1],adc_data_retimed[12*1 -2:12*0]};
+  assign adc_data1 ={~adc_data_retimed[12*2 -1],adc_data_retimed[12*2 -2:12*1]};
+  assign adc_data2 ={~adc_data_retimed[12*3 -1],adc_data_retimed[12*3 -2:12*2]};
+  assign adc_data3 ={~adc_data_retimed[12*4 -1],adc_data_retimed[12*4 -2:12*3]};
+  assign adc_data4 ={~adc_data_retimed[12*5 -1],adc_data_retimed[12*5 -2:12*4]};
+  assign adc_data5 ={~adc_data_retimed[12*6 -1],adc_data_retimed[12*6 -2:12*5]};
+  assign adc_data6 ={~adc_data_retimed[12*7 -1],adc_data_retimed[12*7 -2:12*6]};
+  assign adc_data7 ={~adc_data_retimed[12*8 -1],adc_data_retimed[12*8 -2:12*7]};
+  assign adc_data8 ={~adc_data_retimed[12*9 -1],adc_data_retimed[12*9 -2:12*8]};
+  assign adc_data9 ={~adc_data_retimed[12*10-1],adc_data_retimed[12*10-2:12*9]};
+  assign adc_data10={~adc_data_retimed[12*11-1],adc_data_retimed[12*11-2:12*10]};
+  assign adc_data11={~adc_data_retimed[12*12-1],adc_data_retimed[12*12-2:12*11]};
+  assign adc_data12={~adc_data_retimed[12*13-1],adc_data_retimed[12*13-2:12*12]};
+  assign adc_data13={~adc_data_retimed[12*14-1],adc_data_retimed[12*14-2:12*13]};
+  assign adc_data14={~adc_data_retimed[12*15-1],adc_data_retimed[12*15-2:12*14]};
+  assign adc_data15={~adc_data_retimed[12*16-1],adc_data_retimed[12*16-2:12*15]};
 
   x64_adc_fcsample x64_adc_fcsample_inst [7:0] (
     .clk        (adc_clk0),
