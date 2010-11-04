@@ -26,8 +26,8 @@ use_bram = get_var('use_bram', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 
 if use_bram,
-    replace_block(blk,'Name','delay1','casper_library/Delays/delay_bram','noprompt');
-    replace_block(blk,'Name','delay2','casper_library/Delays/delay_bram','noprompt');
+    replace_block(blk,'Name','delay1','casper_library_delays/delay_bram','noprompt');
+    replace_block(blk,'Name','delay2','casper_library_delays/delay_bram','noprompt');
     set_param([blk,'/delay1'],'LinkStatus','inactive');
     set_param([blk,'/delay2'],'LinkStatus','inactive');
     set_param([blk,'/delay1'],'DelayLen','delay');
@@ -37,8 +37,8 @@ if use_bram,
     
     delay_type = 'delay_bram';
 else,
-    replace_block(blk,'Name','delay1','casper_library/Delays/delay_slr','noprompt');
-    replace_block(blk,'Name','delay2','casper_library/Delays/delay_slr','noprompt');
+    replace_block(blk,'Name','delay1','casper_library_delays/delay_slr','noprompt');
+    replace_block(blk,'Name','delay2','casper_library_delays/delay_slr','noprompt');
     set_param([blk,'/delay1'],'LinkStatus','inactive');
     set_param([blk,'/delay2'],'LinkStatus','inactive');
     set_param([blk,'/delay1'],'DelayLen','delay');

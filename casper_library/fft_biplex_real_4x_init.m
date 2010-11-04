@@ -101,10 +101,10 @@ delays = {'delay0', 'delay1'};
 for i=1:length(delays),
     full_path = [blk,'/bi_real_unscr_4x/',delays{i}];
     if strcmp(delay_bram, 'on'),
-        replace_block([blk,'/bi_real_unscr_4x'],'Name',delays{i},'casper_library/Delays/delay_bram','noprompt');
+        replace_block([blk,'/bi_real_unscr_4x'],'Name',delays{i},'casper_library_delays/delay_bram','noprompt');
         set_param(full_path,'LinkStatus','inactive', 'DelayLen', '2^(FFTSize-1)', 'bram_latency', 'bram_latency');
     else,
-        replace_block([blk,'/bi_real_unscr_4x'],'Name',delays{i},'casper_library/Delays/delay_slr','noprompt');
+        replace_block([blk,'/bi_real_unscr_4x'],'Name',delays{i},'casper_library_delays/delay_slr','noprompt');
         set_param(full_path,'LinkStatus','inactive', 'DelayLen', '2^(FFTSize-1)');
     end
 end

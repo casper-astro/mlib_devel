@@ -88,10 +88,10 @@ delays = {'delay_f', 'delay_b'};
 for i=1:length(delays),
     full_path = [blk,'/',delays{i}];
     if strcmp(delays_bram,'on'),
-        replace_block(blk,'Name',delays{i},'casper_library/Delays/delay_bram','noprompt');
+        replace_block(blk,'Name',delays{i},'casper_library_delays/delay_bram','noprompt');
         set_param(full_path,'LinkStatus','inactive', 'DelayLen', '2^(FFTSize-FFTStage)', 'bram_latency', 'bram_latency');
     else,
-        replace_block(blk,'Name',delays{i},'casper_library/Delays/delay_slr','noprompt');
+        replace_block(blk,'Name',delays{i},'casper_library_delays/delay_slr','noprompt');
         set_param(full_path,'LinkStatus','inactive', 'DelayLen', '2^(FFTSize-FFTStage)');
     end
 end
@@ -106,7 +106,7 @@ end
 StepPeriod = FFTSize-FFTStage;
 
 % Propagate parameters to the butterfly
-reuse_block( blk, 'butterfly_direct', 'casper_library/FFTs/butterfly_direct', ...
+reuse_block( blk, 'butterfly_direct', 'casper_library_ffts/butterfly_direct', ...
     'biplex', 'on', 'Coeffs', tostring(Coeffs), 'StepPeriod', tostring(StepPeriod), ...
     'FFTSize', num2str(FFTSize), 'input_bit_width', num2str(input_bit_width), ...
     'coeff_bit_width', num2str(coeff_bit_width), 'add_latency', num2str(add_latency), ...
