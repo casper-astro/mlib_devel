@@ -83,7 +83,7 @@ module kat_ten_gb_eth #(
   wire        mac_rx_good_frame;
   wire        mac_rx_bad_frame;
 
-  ten_gig_eth_mac_UCB ten_gig_eth_mac_ucb_inst (
+  ten_gig_eth_mac ten_gig_eth_mac_inst (
     .reset                (mac_rst  ),
     .tx_clk0              (mac_clk  ),
     .tx_dcm_lock          (1'b1     ),

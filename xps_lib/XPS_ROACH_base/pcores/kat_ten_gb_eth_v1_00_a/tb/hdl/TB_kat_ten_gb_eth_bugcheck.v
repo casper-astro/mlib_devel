@@ -5,7 +5,7 @@
 `define USR_PERIOD 5
 `define OPB_PERIOD 12
 
-module TB_kat_ten_gb_eth();
+module TB_kat_ten_gb_eth_bugcheck();
   /* Simulation constants */
 
   /* the size of the TX frame in 64-bit words */
@@ -164,7 +164,6 @@ module TB_kat_ten_gb_eth();
 `endif
     #`SIMLENGTH
     $display("FAILED: simulation timed out");
-    $finish;
   end
 
   assign mgt_clk = mgt_clk_counter < ((`MGT_PERIOD) / 2);
@@ -237,17 +236,14 @@ module TB_kat_ten_gb_eth();
               if (i == 0) begin
                 if (mode_mem[i] !== {FABRIC_MAC[47:16]}) begin
                   $display("ERROR: cpu header mismatch 0, got %x", mode_mem[i]);
-                  $finish;
                 end
               end else if (i == 1) begin
                 if (mode_mem[i] !== {FABRIC_MAC[15:0], 16'b0}) begin
                   $display("ERROR: cpu header mismatch 1, got %x", mode_mem[i]);
-                  $finish;
                 end
               end else begin
                 if (mode_mem[i] !== i) begin
                   $display("ERROR: cpu data mismatch - got = %x,  expected = %x", mode_mem[i], i);
-                  $finish;
                 end
               end
               mode_mem[i] <= 32'd0; //clear after reading
@@ -275,7 +271,6 @@ module TB_kat_ten_gb_eth();
             $display("mode: MODE_XGMII_BREAK completed");
 `endif
             $display("PASSED");
-            $finish;
           end
         end
         /************ ************/
@@ -410,8 +405,56 @@ module TB_kat_ten_gb_eth();
   end
 
   /* negate data when break packet = 1 */
-  assign xgmii_rxd = break_xgmii ? ~xgmii_rxd_if : xgmii_rxd_if;
-  assign xgmii_rxc = xgmii_rxc_if;
+  reg [31:0] index;
+
+  reg [63:0] rxd;
+  reg  [7:0] rxc;
+
+
+  always @(posedge xaui_clk) begin
+    if (mgt_rst) begin
+      index <= 0;
+      rxc <= 8'b1111_1111;
+      rxd <= {8{8'h07}};
+    end else begin
+      index <= index + 1;
+      case (index)
+        10: begin
+          rxc <= 8'b0000_0001;
+          rxd <= {{7{8'h55}}, 8'hfb};
+        end
+        11: begin
+          rxc <= 8'b0000_0000;
+        end
+        20: begin
+          rxc <= 8'b1111_1111;
+          rxd <= {{7{8'h07}}, 8'hfd};
+        end
+        21: begin
+          rxc <= 8'b0001_1111;
+          rxd <= {{3{8'h55}}, 8'hfb, {4{8'h07}}};
+        end
+        22: begin
+          rxc <= 8'b0000_0000;
+          rxd <= {8{8'h55}};
+        end
+        30: begin
+          rxc <= 8'b1111_1111;
+          rxd <= {{7{8'h07}}, 8'hfd};
+        end
+        31: begin
+          rxc <= 8'b1111_1111;
+          rxd <= {8{8'h07}};
+        end
+        50: begin
+          $finish;
+        end
+      endcase
+    end
+  end
+
+  assign xgmii_rxd = rxd;
+  assign xgmii_rxc = rxc;
 
   /************** Application CLK/RST assignments ***********/
 
@@ -460,7 +503,6 @@ module TB_kat_ten_gb_eth();
     end else begin
       if (app_tx_overflow) begin
         $display("ERROR: tx fabric buffer overflowed");
-        $finish;
       end
     end
   end
@@ -489,15 +531,12 @@ module TB_kat_ten_gb_eth();
   reg [7:0] block_counter;
   wire app_rx_block = block_counter < 10;
 
-  reg [3:0] num_good_frames;
-
   always @(posedge app_clk) begin
     if (app_rst) begin
       rx_app_state    <= RX_APP_WAIT;
       rx_app_progress <= 32'd0;
       mode_done[MODE_XGMII_BREAK] <= 1'b0;
       block_counter <= 0;
-      num_good_frames <= 0;
     end else begin
       case (rx_app_state)
         /* wait 256 cycles -- long enough for the rx buffer to overflow (only with distributed memory) */
@@ -528,27 +567,18 @@ module TB_kat_ten_gb_eth();
                 mode_done[MODE_XGMII_BREAK] <= 1'b1;
                 $display("app_rx: got bad frame, but expected it!");
               end
-              if (app_rx_end_of_frame)
-                num_good_frames <= num_good_frames + 1;
-              if (num_good_frames == 9) begin
-                $display("FAILED: didn't get a corrupted frame when expecting it (waited 9 frames)");
-                $finish;
-              end
             end else begin
               rx_app_progress <= rx_app_progress + 1;
               if (rx_app_progress != 32'd0) begin
                 if (app_rx_data != ((app_rx_data_reg + 1) | {app_rx_end_of_frame, 63'b0})) begin
                   $display("FAILED: application data mismatch - got = %x, expected = %x", app_rx_data, (app_rx_data_reg + 1 | {app_rx_end_of_frame, 63'b0}));
-                  $finish;
                 end
               end
               if (app_rx_end_of_frame && app_rx_bad_frame) begin
                 $display("FAILED: unexpected bad frame");
-                $finish;
               end
               if (app_rx_end_of_frame && app_rx_overrun) begin
                 $display("FAILED: unexpected overflow");
-                $finish;
               end
               if (app_rx_end_of_frame) begin
 `ifdef DEBUG
