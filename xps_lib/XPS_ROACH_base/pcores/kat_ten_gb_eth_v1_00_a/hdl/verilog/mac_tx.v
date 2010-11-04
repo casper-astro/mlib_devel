@@ -40,14 +40,19 @@ module mac_tx #(
   assign tx_ack = tx_ack_reg;
   
   reg [63:0] tx_data_z;
+  reg [63:0] tx_data_zz;
+  reg  [7:0] tx_data_valid_z;
   reg        tx_start_latched;
 
   always @(posedge tx_clk) begin
     /* strobes */
     tx_ack_reg       <= 1'b0;
 
-    /* We delay the data by one to align with state machine */
+    /* We delay the data by once to improve timing closure
+       We delay it again to align with CRC block, ditto with the dvalid */
     tx_data_z        <= tx_data;
+    tx_data_zz       <= tx_data_z;
+    tx_data_valid_z  <= tx_data_valid;
   
     if (reset) begin
       tx_state         <= TX_IDLE;
@@ -100,13 +105,21 @@ module mac_tx #(
     end
   end
   
+  reg  [2:0] tx_state_z;
+  reg  [2:0] tx_state_zz;
+  
+  always @(posedge tx_clk) begin
+    tx_state_z  <= tx_state;
+    tx_state_zz <= tx_state_z;
+  end
+  
   /********* TX Data/Ctrl Decode *********/
   /* pre-CRC insertion values */
   reg [63:0] xgmii_txd_val;
   reg  [7:0] xgmii_txc_val;
 
   always @(posedge tx_clk) begin
-    case (tx_state)
+    case (tx_state_z)
       TX_IDLE:
         xgmii_txd_val <= 64'h0707070707070707;
       TX_INTERFRAME:
@@ -114,12 +127,12 @@ module mac_tx #(
       TX_SEND_PREAMBLE:
         xgmii_txd_val <= 64'hD5555555555555FB;
       TX_SEND_DATA:
-        xgmii_txd_val <= tx_data_z;
+        xgmii_txd_val <= tx_data_zz;
       TX_SEND_END_ALIGNED:
         xgmii_txd_val <= {32'h070707FD, 32'h00000000};
         /* Send stop code + zeros to be filled in by CRC insertion */
       TX_SEND_END_NON_ALIGNED:
-        xgmii_txd_val <= {16'h07FD, 32'h0000_0000, tx_data_z[15:0]};
+        xgmii_txd_val <= {16'h07FD, 32'h0000_0000, tx_data_zz[15:0]};
         /* Move stop code left according to the only support data_valid value,
            leaving space for CRC insertion */
       TX_SEND_CORRUPTED_CRC:
@@ -131,7 +144,7 @@ module mac_tx #(
   end
 
   always @(posedge tx_clk) begin
-    case (tx_state)
+    case (tx_state_z)
       TX_IDLE:
         xgmii_txc_val <= 8'b1111_1111;
       TX_INTERFRAME:
@@ -166,22 +179,16 @@ module mac_tx #(
     .crc_out   (tx_crc_out)
   );
 
-  assign tx_crc_data_in    = tx_data;
-  assign tx_crc_data_valid = tx_data_valid;
-  assign tx_crc_reset      = tx_state == TX_SEND_PREAMBLE; 
+  assign tx_crc_data_in    = tx_data_z;
+  assign tx_crc_data_valid = tx_data_valid_z;
+  assign tx_crc_reset      = tx_state_z == TX_SEND_PREAMBLE; 
 
   /********** CRC Insertion ************/
-  
-  reg  [2:0] tx_state_z;
-  
-  always @(posedge tx_clk) begin
-    tx_state_z <= tx_state;
-  end
 
   reg [63:0] xgmii_txd_reg;
 
   always @(*) begin
-    case (tx_state_z)
+    case (tx_state_zz)
       TX_SEND_END_ALIGNED:
         xgmii_txd_reg <= {xgmii_txd_val[63:32], tx_crc_out};
       TX_SEND_END_NON_ALIGNED:
