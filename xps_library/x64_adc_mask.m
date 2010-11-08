@@ -19,16 +19,17 @@
 %   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function x64_adc_mask(blk)
+function x64_adc_mask(blk, varargin)
 
 check_mask_type(blk, 'x64_adc');
-myname = gcb;
-use_spi = get_param(myname, 'spi');
+myname = blk;
+use_spi = get_var('spi', varargin{:});
 
 munge_block(myname);
 
+
 % create SPI ports if interface enabled
-if strcmp(use_spi,'on')
+if use_spi == 1
     try
         add_block(['built-in/inport'],[myname,'/sdata'],'Position', [510 190 540 210],   'Port', '19');
         add_block(['built-in/inport'],[myname,'/spi_strb' ],'Position', [510 270 540 290],   'Port', '20');
@@ -37,9 +38,9 @@ if strcmp(use_spi,'on')
         add_block(['xbsIndex_r4/Gateway Out'],[myname,'/user_spi_strb'  ],'Position', [705 270 765 290]);
 
         add_block(['xbsIndex_r4/Convert'],[myname,'/sdata_conv' ],'Position', [595 185 640 215], ...
-            'arith_type', 'Unsigned', 'n_bits', '8', 'bin_pt', '0');
+        'arith_type', 'Unsigned', 'n_bits', '8', 'bin_pt', '0');
         add_block(['xbsIndex_r4/Convert'],[myname,'/spi_strb_conv'  ],'Position', [595 265 640 295], ...
-            'arith_type', 'Unsigned', 'n_bits', '1', 'bin_pt', '0');
+        'arith_type', 'Unsigned', 'n_bits', '1', 'bin_pt', '0');
 
         add_block(['built-in/terminator'],[myname,'/sdata_term'],'Position', [845 190 865 210]);
         add_block(['built-in/terminator'],[myname,'/spi_strb_term' ],'Position', [845 270 865 290]);
@@ -53,29 +54,31 @@ if strcmp(use_spi,'on')
         add_line(myname,'user_sdata/1','sdata_term/1');
         add_line(myname,'user_spi_strb/1' ,'spi_strb_term/1');
     end
-else %else delete the SPI ports
+%else %else delete the SPI ports
+else
     try
-        delete_line(myname,'sdata/1','sdata_conv/1');
-        delete_line(myname,'spi_strb/1' ,'spi_strb_conv/1');
-
-        delete_line(myname,'sdata_conv/1','user_sdata/1');
-        delete_line(myname,'spi_strb_conv/1' ,'user_spi_strb/1');
-
-        delete_line(myname,'user_sdata/1','sdata_term/1');
-        delete_line(myname,'user_spi_strb/1' ,'spi_strb_term/1');
-
-        delete_block([myname,'/sdata']);
-        delete_block([myname,'/spi_strb']);
-
-        delete_block([myname,'/user_sdata']);
-        delete_block([myname,'/user_spi_strb']);
-
-        delete_block([myname,'/sdata_conv']);
-        delete_block([myname,'/spi_strb_conv']);
-
-        delete_block([myname,'/sdata_term']);
-        delete_block([myname,'/spi_strb_term']);
+        delete_line(myname, 'sdata/1', 'sdata_conv/1');
+        delete_line(myname, 'spi_strb/1' , 'spi_strb_conv/1');
+        
+        delete_line(myname, 'sdata_conv/1', [strrep([myname, '_user_sdata'], '/', '_'), '/1']);
+        delete_line(myname, 'spi_strb_conv/1', [strrep([myname, '_user_spi_strb'], '/', '_'), '/1']);
+        
+        delete_line(myname, [strrep([myname, '_user_sdata'], '/', '_'), '/1'], 'sdata_term/1');
+        delete_line(myname, [strrep([myname, '_user_spi_strb'], '/', '_'), '/1'], 'spi_strb_term/1');
     end
+%    try
+%        delete_block([myname,'/sdata']);
+%        delete_block([myname,'/spi_strb']);
+%
+%        delete_block([myname,'/user_sdata']);
+%        delete_block([myname,'/user_spi_strb']);
+%
+%        delete_block([myname,'/sdata_conv']);
+%        delete_block([myname,'/spi_strb_conv']);
+%
+%        delete_block([myname,'/sdata_term']);
+%        delete_block([myname,'/spi_strb_term']);
+%    end
 end
 
 clean_blocks(myname);
