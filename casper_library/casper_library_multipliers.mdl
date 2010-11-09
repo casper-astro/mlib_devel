@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "wjm"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Nov  8 13:46:04 2010"
-  RTWModifiedTimeStamp	  211124749
-  ModelVersionFormat	  "1.%<AutoIncrement:2>"
+  LastModifiedDate	  "Mon Nov  8 18:40:04 2010"
+  RTWModifiedTimeStamp	  211142379
+  ModelVersionFormat	  "1.%<AutoIncrement:3>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -5544,7 +5544,7 @@ Library {
       SID		      134
       Ports		      [2, 2]
       Position		      [320, 114, 370, 161]
-      LibraryVersion	      "1.721"
+      LibraryVersion	      "*1.2"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -5554,18 +5554,20 @@ Library {
       MaskHideContents	      off
       MaskType		      "cmult_dsp48e"
       MaskDescription	      "Performs a complex multiplication using 4 DSP48Es.\nConjugation is optional.\n\nInput and"
-      " output widths can be up to 48 bits each.\nWidth-in is inferred.  Width-out is parameterized."
-      MaskPromptString	      "Input bit width:|Output bit width:|Conjugate"
-      MaskStyleString	      "edit,edit,checkbox"
-      MaskTunableValueString  "on,on,on"
-      MaskCallbackString      "||"
-      MaskEnableString	      "on,on,on"
-      MaskVisibilityString    "on,on,on"
-      MaskToolTipString	      "on,on,on"
-      MaskVariables	      "bits_in=@1;bits_out=@2;do_conj=&3;"
-      MaskInitialization      "if strcmp(do_conj, 'on'),\n    set_param([gcb, 'alumode1'], 'const', '3')\n    set_para"
-      "m([gcb, 'alumode3'], 'const', '0')\nelse,\n    set_param([gcb, 'alumode1'], 'const', '0')\n    set_param([gcb, '"
-      "alumode3'], 'const', '3')\nend"
+      " output widths can be up to 48 bits each.\n\nThe input bitwidth is parameterized, though values\nare assumed to "
+      "be signed and have only one bit to\nthe left of the binary point.\n\nThe outputs are full precision, so casting "
+      "is left\nto the user."
+      MaskPromptString	      "Bit width:|Conjugate"
+      MaskStyleString	      "edit,checkbox"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskVariables	      "bitwidth=@1;do_conj=&2;"
+      MaskInitialization      "if strcmp(do_conj, 'on'),\n    set_param([gcb, '/alumode1'], 'const', '3')\n    set_par"
+      "am([gcb, '/alumode3'], 'const', '0')\nelse,\n    set_param([gcb, '/alumode1'], 'const', '0')\n    set_param([gcb"
+      ", '/alumode3'], 'const', '3')\nend"
       MaskDisplay	      "port_label('input', 1, 'a+bi');\nport_label('input', 2, 'c+di');\nport_label('output', 1, 're"
       "al');\nport_label('output', 2, 'imag');\ndisp(['Z^-', num2str(4)]);"
       MaskSelfModifiable      on
@@ -5574,10 +5576,10 @@ Library {
       MaskIconRotate	      "none"
       MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "4|4|on"
+      MaskValueString	      "18|off"
       System {
 	Name			"cmult_dsp48e"
-	Location		[426, 184, 1173, 763]
+	Location		[421, 160, 1267, 739]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5590,6 +5592,8 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	182
+	SIDPrevWatermark	182
 	Block {
 	  BlockType		  Inport
 	  Name			  "a+bi"
@@ -5616,6 +5620,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 17, 395, 33]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5625,9 +5630,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5647,6 +5652,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 302, 395, 318]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5656,9 +5662,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5678,6 +5684,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 167, 395, 183]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5687,9 +5694,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5709,6 +5716,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 32, 395, 48]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5718,9 +5726,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5740,6 +5748,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 182, 395, 198]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5749,9 +5758,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5771,6 +5780,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 452, 395, 468]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5780,9 +5790,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5802,6 +5812,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 317, 395, 333]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5811,9 +5822,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5833,6 +5844,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 467, 395, 483]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -5842,9 +5854,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,27,633,525"
@@ -5863,67 +5875,68 @@ Library {
 	  SID			  145
 	  Ports			  [6, 2]
 	  Position		  [445, 449, 545, 546]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
 	  use_b			  "Direct from B Port"
-	  pattern_from_creg	  "off"
+	  pattern_from_creg	  off
 	  pattern		  "'000000000000'"
-	  mask_from_creg	  "off"
+	  mask_from_creg	  off
 	  pattern_mask		  "'3FFFFFFFFFFF'"
-	  reset_preg		  "off"
+	  reset_preg		  off
 	  sel_rounding_mask	  "Select mask"
-	  use_op		  "off"
-	  use_creg		  "off"
-	  rst_all		  "off"
-	  en_all		  "off"
-	  use_pcin		  "off"
-	  use_carrycascin	  "off"
-	  use_multsignin	  "off"
-	  use_carryout		  "off"
-	  use_patterndetect	  "off"
-	  use_patternbdetect	  "off"
-	  use_overflow		  "off"
-	  use_underflow		  "off"
-	  use_acout		  "off"
-	  use_bcout		  "off"
-	  use_pcout		  "on"
-	  use_multsignout	  "off"
-	  use_carrycascout	  "off"
+	  use_op		  off
+	  use_creg		  off
+	  rst_all		  off
+	  en_all		  off
+	  use_pcin		  off
+	  use_carrycascin	  off
+	  use_multsignin	  off
+	  use_carryout		  off
+	  use_patterndetect	  off
+	  use_patternbdetect	  off
+	  use_overflow		  off
+	  use_underflow		  off
+	  use_acout		  off
+	  use_bcout		  off
+	  use_pcout		  on
+	  use_multsignout	  off
+	  use_carrycascout	  off
 	  pipeline_a		  "1"
 	  pipeline_b		  "1"
 	  pipeline_acout	  "1"
 	  pipeline_bcout	  "1"
-	  pipeline_c		  "on"
-	  pipeline_p		  "on"
-	  pipeline_mult		  "on"
-	  pipeline_opmode	  "on"
-	  pipeline_alumode	  "on"
-	  pipeline_carryin	  "on"
-	  pipeline_carryinsel	  "on"
-	  rst_a			  "off"
-	  rst_b			  "off"
-	  rst_c			  "off"
-	  rst_mult		  "off"
-	  rst_p			  "off"
-	  rst_carry_in		  "off"
-	  rst_alumode		  "off"
-	  rst_ctrl		  "off"
-	  en_a1			  "off"
-	  en_a2			  "off"
-	  en_b1			  "off"
-	  en_b2			  "off"
-	  en_c			  "off"
-	  en_mult		  "off"
-	  en_p			  "off"
-	  en_carry_in		  "off"
-	  en_alumode		  "off"
-	  en_multcarryin	  "off"
-	  en_ctrl		  "off"
-	  use_synth_model	  "off"
+	  pipeline_c		  on
+	  pipeline_p		  on
+	  pipeline_mult		  on
+	  pipeline_opmode	  on
+	  pipeline_alumode	  on
+	  pipeline_carryin	  on
+	  pipeline_carryinsel	  on
+	  rst_a			  off
+	  rst_b			  off
+	  rst_c			  off
+	  rst_mult		  off
+	  rst_p			  off
+	  rst_carry_in		  off
+	  rst_alumode		  off
+	  rst_ctrl		  off
+	  en_a1			  off
+	  en_a2			  off
+	  en_b1			  off
+	  en_b2			  off
+	  en_c			  off
+	  en_mult		  off
+	  en_p			  off
+	  en_carry_in		  off
+	  en_alumode		  off
+	  en_multcarryin	  off
+	  en_ctrl		  off
+	  use_synth_model	  off
 	  addsub_mode		  "ONE48"
-	  xl_useadderonly	  "off"
-	  xl_use_area		  "off"
+	  xl_useadderonly	  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "0,0,658,967"
@@ -5946,67 +5959,68 @@ Library {
 	  SID			  146
 	  Ports			  [7, 1]
 	  Position		  [445, 299, 545, 411]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
 	  use_b			  "Direct from B Port"
-	  pattern_from_creg	  "off"
+	  pattern_from_creg	  off
 	  pattern		  "'000000000000'"
-	  mask_from_creg	  "off"
+	  mask_from_creg	  off
 	  pattern_mask		  "'3FFFFFFFFFFF'"
-	  reset_preg		  "off"
+	  reset_preg		  off
 	  sel_rounding_mask	  "Select mask"
-	  use_op		  "off"
-	  use_creg		  "off"
-	  rst_all		  "off"
-	  en_all		  "off"
-	  use_pcin		  "on"
-	  use_carrycascin	  "off"
-	  use_multsignin	  "off"
-	  use_carryout		  "off"
-	  use_patterndetect	  "off"
-	  use_patternbdetect	  "off"
-	  use_overflow		  "off"
-	  use_underflow		  "off"
-	  use_acout		  "off"
-	  use_bcout		  "off"
-	  use_pcout		  "off"
-	  use_multsignout	  "off"
-	  use_carrycascout	  "off"
+	  use_op		  off
+	  use_creg		  off
+	  rst_all		  off
+	  en_all		  off
+	  use_pcin		  on
+	  use_carrycascin	  off
+	  use_multsignin	  off
+	  use_carryout		  off
+	  use_patterndetect	  off
+	  use_patternbdetect	  off
+	  use_overflow		  off
+	  use_underflow		  off
+	  use_acout		  off
+	  use_bcout		  off
+	  use_pcout		  off
+	  use_multsignout	  off
+	  use_carrycascout	  off
 	  pipeline_a		  "2"
 	  pipeline_b		  "2"
 	  pipeline_acout	  "1"
 	  pipeline_bcout	  "1"
-	  pipeline_c		  "on"
-	  pipeline_p		  "on"
-	  pipeline_mult		  "on"
-	  pipeline_opmode	  "on"
-	  pipeline_alumode	  "on"
-	  pipeline_carryin	  "on"
-	  pipeline_carryinsel	  "on"
-	  rst_a			  "off"
-	  rst_b			  "off"
-	  rst_c			  "off"
-	  rst_mult		  "off"
-	  rst_p			  "off"
-	  rst_carry_in		  "off"
-	  rst_alumode		  "off"
-	  rst_ctrl		  "off"
-	  en_a1			  "off"
-	  en_a2			  "off"
-	  en_b1			  "off"
-	  en_b2			  "off"
-	  en_c			  "off"
-	  en_mult		  "off"
-	  en_p			  "off"
-	  en_carry_in		  "off"
-	  en_alumode		  "off"
-	  en_multcarryin	  "off"
-	  en_ctrl		  "off"
-	  use_synth_model	  "off"
+	  pipeline_c		  on
+	  pipeline_p		  on
+	  pipeline_mult		  on
+	  pipeline_opmode	  on
+	  pipeline_alumode	  on
+	  pipeline_carryin	  on
+	  pipeline_carryinsel	  on
+	  rst_a			  off
+	  rst_b			  off
+	  rst_c			  off
+	  rst_mult		  off
+	  rst_p			  off
+	  rst_carry_in		  off
+	  rst_alumode		  off
+	  rst_ctrl		  off
+	  en_a1			  off
+	  en_a2			  off
+	  en_b1			  off
+	  en_b2			  off
+	  en_c			  off
+	  en_mult		  off
+	  en_p			  off
+	  en_carry_in		  off
+	  en_alumode		  off
+	  en_multcarryin	  off
+	  en_ctrl		  off
+	  use_synth_model	  off
 	  addsub_mode		  "ONE48"
-	  xl_useadderonly	  "off"
-	  xl_use_area		  "off"
+	  xl_useadderonly	  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "224,37,658,967"
@@ -6029,67 +6043,68 @@ Library {
 	  SID			  147
 	  Ports			  [6, 2]
 	  Position		  [445, 164, 545, 261]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
 	  use_b			  "Direct from B Port"
-	  pattern_from_creg	  "off"
+	  pattern_from_creg	  off
 	  pattern		  "'000000000000'"
-	  mask_from_creg	  "off"
+	  mask_from_creg	  off
 	  pattern_mask		  "'3FFFFFFFFFFF'"
-	  reset_preg		  "off"
+	  reset_preg		  off
 	  sel_rounding_mask	  "Select mask"
-	  use_op		  "off"
-	  use_creg		  "off"
-	  rst_all		  "off"
-	  en_all		  "off"
-	  use_pcin		  "off"
-	  use_carrycascin	  "off"
-	  use_multsignin	  "off"
-	  use_carryout		  "off"
-	  use_patterndetect	  "off"
-	  use_patternbdetect	  "off"
-	  use_overflow		  "off"
-	  use_underflow		  "off"
-	  use_acout		  "off"
-	  use_bcout		  "off"
-	  use_pcout		  "on"
-	  use_multsignout	  "off"
-	  use_carrycascout	  "off"
+	  use_op		  off
+	  use_creg		  off
+	  rst_all		  off
+	  en_all		  off
+	  use_pcin		  off
+	  use_carrycascin	  off
+	  use_multsignin	  off
+	  use_carryout		  off
+	  use_patterndetect	  off
+	  use_patternbdetect	  off
+	  use_overflow		  off
+	  use_underflow		  off
+	  use_acout		  off
+	  use_bcout		  off
+	  use_pcout		  on
+	  use_multsignout	  off
+	  use_carrycascout	  off
 	  pipeline_a		  "1"
 	  pipeline_b		  "1"
 	  pipeline_acout	  "1"
 	  pipeline_bcout	  "1"
-	  pipeline_c		  "on"
-	  pipeline_p		  "on"
-	  pipeline_mult		  "on"
-	  pipeline_opmode	  "on"
-	  pipeline_alumode	  "on"
-	  pipeline_carryin	  "on"
-	  pipeline_carryinsel	  "on"
-	  rst_a			  "off"
-	  rst_b			  "off"
-	  rst_c			  "off"
-	  rst_mult		  "off"
-	  rst_p			  "off"
-	  rst_carry_in		  "off"
-	  rst_alumode		  "off"
-	  rst_ctrl		  "off"
-	  en_a1			  "off"
-	  en_a2			  "off"
-	  en_b1			  "off"
-	  en_b2			  "off"
-	  en_c			  "off"
-	  en_mult		  "off"
-	  en_p			  "off"
-	  en_carry_in		  "off"
-	  en_alumode		  "off"
-	  en_multcarryin	  "off"
-	  en_ctrl		  "off"
-	  use_synth_model	  "off"
+	  pipeline_c		  on
+	  pipeline_p		  on
+	  pipeline_mult		  on
+	  pipeline_opmode	  on
+	  pipeline_alumode	  on
+	  pipeline_carryin	  on
+	  pipeline_carryinsel	  on
+	  rst_a			  off
+	  rst_b			  off
+	  rst_c			  off
+	  rst_mult		  off
+	  rst_p			  off
+	  rst_carry_in		  off
+	  rst_alumode		  off
+	  rst_ctrl		  off
+	  en_a1			  off
+	  en_a2			  off
+	  en_b1			  off
+	  en_b2			  off
+	  en_c			  off
+	  en_mult		  off
+	  en_p			  off
+	  en_carry_in		  off
+	  en_alumode		  off
+	  en_multcarryin	  off
+	  en_ctrl		  off
+	  use_synth_model	  off
 	  addsub_mode		  "ONE48"
-	  xl_useadderonly	  "off"
-	  xl_use_area		  "off"
+	  xl_useadderonly	  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "0,0,658,967"
@@ -6112,67 +6127,68 @@ Library {
 	  SID			  148
 	  Ports			  [7, 1]
 	  Position		  [445, 14, 545, 126]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
 	  use_b			  "Direct from B Port"
-	  pattern_from_creg	  "off"
+	  pattern_from_creg	  off
 	  pattern		  "'000000000000'"
-	  mask_from_creg	  "off"
+	  mask_from_creg	  off
 	  pattern_mask		  "'3FFFFFFFFFFF'"
-	  reset_preg		  "off"
+	  reset_preg		  off
 	  sel_rounding_mask	  "Select mask"
-	  use_op		  "off"
-	  use_creg		  "off"
-	  rst_all		  "off"
-	  en_all		  "off"
-	  use_pcin		  "on"
-	  use_carrycascin	  "off"
-	  use_multsignin	  "off"
-	  use_carryout		  "off"
-	  use_patterndetect	  "off"
-	  use_patternbdetect	  "off"
-	  use_overflow		  "off"
-	  use_underflow		  "off"
-	  use_acout		  "off"
-	  use_bcout		  "off"
-	  use_pcout		  "off"
-	  use_multsignout	  "off"
-	  use_carrycascout	  "off"
+	  use_op		  off
+	  use_creg		  off
+	  rst_all		  off
+	  en_all		  off
+	  use_pcin		  on
+	  use_carrycascin	  off
+	  use_multsignin	  off
+	  use_carryout		  off
+	  use_patterndetect	  off
+	  use_patternbdetect	  off
+	  use_overflow		  off
+	  use_underflow		  off
+	  use_acout		  off
+	  use_bcout		  off
+	  use_pcout		  off
+	  use_multsignout	  off
+	  use_carrycascout	  off
 	  pipeline_a		  "2"
 	  pipeline_b		  "2"
 	  pipeline_acout	  "1"
 	  pipeline_bcout	  "1"
-	  pipeline_c		  "on"
-	  pipeline_p		  "on"
-	  pipeline_mult		  "on"
-	  pipeline_opmode	  "on"
-	  pipeline_alumode	  "on"
-	  pipeline_carryin	  "on"
-	  pipeline_carryinsel	  "on"
-	  rst_a			  "off"
-	  rst_b			  "off"
-	  rst_c			  "off"
-	  rst_mult		  "off"
-	  rst_p			  "off"
-	  rst_carry_in		  "off"
-	  rst_alumode		  "off"
-	  rst_ctrl		  "off"
-	  en_a1			  "off"
-	  en_a2			  "off"
-	  en_b1			  "off"
-	  en_b2			  "off"
-	  en_c			  "off"
-	  en_mult		  "off"
-	  en_p			  "off"
-	  en_carry_in		  "off"
-	  en_alumode		  "off"
-	  en_multcarryin	  "off"
-	  en_ctrl		  "off"
-	  use_synth_model	  "off"
+	  pipeline_c		  on
+	  pipeline_p		  on
+	  pipeline_mult		  on
+	  pipeline_opmode	  on
+	  pipeline_alumode	  on
+	  pipeline_carryin	  on
+	  pipeline_carryinsel	  on
+	  rst_a			  off
+	  rst_b			  off
+	  rst_c			  off
+	  rst_mult		  off
+	  rst_p			  off
+	  rst_carry_in		  off
+	  rst_alumode		  off
+	  rst_ctrl		  off
+	  en_a1			  off
+	  en_a2			  off
+	  en_b1			  off
+	  en_b2			  off
+	  en_c			  off
+	  en_mult		  off
+	  en_p			  off
+	  en_carry_in		  off
+	  en_alumode		  off
+	  en_multcarryin	  off
+	  en_ctrl		  off
+	  use_synth_model	  off
 	  addsub_mode		  "ONE48"
-	  xl_useadderonly	  "off"
-	  xl_use_area		  "off"
+	  xl_useadderonly	  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "224,37,658,967"
@@ -6210,13 +6226,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 497, 395, 513]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "4"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6225,7 +6242,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6244,13 +6261,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 362, 395, 378]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
-	  const			  "3"
+	  const			  "0"
 	  n_bits		  "4"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6259,17 +6277,17 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "50,16,0,1,white,blue,0,279a71c8,right,"
+	  sg_icon_stat		  "50,16,0,1,white,blue,0,bf4ddd8b,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
 	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
 	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
-	  ": begin icon text');\ncolor('black');port_label('output',1,'3');\nfprintf('','COMMENT: end icon text');\n"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'0');\nfprintf('','COMMENT: end icon text');\n"
 	  sg_list_contents	  "{'table'=>{'carry'=>'popup(0|1|CIN|~SIGN(P or PCIN)|~SIGN(A*B or A:B)|~SIGND(A*B or A:B))','inp"
 	  "1'=>'popup(0|P|A:B|A*B|C|P+C|A:B+C)','inp2'=>'popup(0|PCIN|P|C|PCIN>>17|P>>17)','opselect'=>'popup(C + A*B|PCIN + A"
 	  "*B|P + A*B|A * B|C + A:B|C - A:B|C|Custom)','userSelections'=>{'carry'=>'CIN','inp1'=>'P','inp2'=>'PCIN>>17','opsel"
@@ -6282,13 +6300,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 212, 395, 228]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "4"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6297,7 +6316,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6316,13 +6335,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 77, 395, 93]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
-	  const			  "0"
+	  const			  "3"
 	  n_bits		  "4"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6331,17 +6351,17 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "50,16,0,1,white,blue,0,bf4ddd8b,right,"
+	  sg_icon_stat		  "50,16,0,1,white,blue,0,279a71c8,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
 	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
 	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
-	  ": begin icon text');\ncolor('black');port_label('output',1,'0');\nfprintf('','COMMENT: end icon text');\n"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'3');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -6350,13 +6370,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 512, 395, 528]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6365,7 +6386,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6384,13 +6405,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 377, 395, 393]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6399,7 +6421,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6418,13 +6440,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 227, 395, 243]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6433,7 +6456,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6452,13 +6475,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 92, 395, 108]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6467,7 +6491,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6486,13 +6510,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 527, 395, 543]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "3"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6501,7 +6526,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6520,13 +6545,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 392, 395, 408]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "3"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6535,7 +6561,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6554,13 +6580,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 242, 395, 258]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "3"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6569,7 +6596,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6588,13 +6615,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 107, 395, 123]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "3"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6603,7 +6631,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,400,346"
 	  block_type		  "constant"
@@ -6617,80 +6645,19 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "cast_imag"
-	  SID			  163
-	  Ports			  [1, 1]
-	  Position		  [595, 347, 645, 363]
-	  ShowName		  off
-	  SourceBlock		  "xbsIndex_r4/Convert"
-	  SourceType		  "Xilinx Type Converter Block"
-	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
-	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "bits_out"
-	  bin_pt		  "0"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
-	  xl_area		  "[0,0,0,0,0,0,0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,27,633,525"
-	  block_type		  "convert"
-	  block_version		  "10.1.3"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
-	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
-	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
-	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
-	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "cast_real"
-	  SID			  164
-	  Ports			  [1, 1]
-	  Position		  [595, 62, 645, 78]
-	  ShowName		  off
-	  SourceBlock		  "xbsIndex_r4/Convert"
-	  SourceType		  "Xilinx Type Converter Block"
-	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
-	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "bits_out"
-	  bin_pt		  "0"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
-	  xl_area		  "[0,0,0,0,0,0,0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,27,633,525"
-	  block_type		  "convert"
-	  block_version		  "10.1.3"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
-	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
-	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
-	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
-	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
 	  Name			  "opmode0"
 	  SID			  165
 	  Ports			  [0, 1]
 	  Position		  [345, 482, 395, 498]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "5"
 	  n_bits		  "7"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6699,7 +6666,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "0,0,550,547"
 	  block_type		  "constant"
@@ -6722,13 +6689,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 347, 395, 363]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "21"
 	  n_bits		  "7"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6737,7 +6705,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "0,0,550,547"
 	  block_type		  "constant"
@@ -6760,13 +6728,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 197, 395, 213]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "5"
 	  n_bits		  "7"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6775,7 +6744,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "0,0,550,547"
 	  block_type		  "constant"
@@ -6798,13 +6767,14 @@ Library {
 	  Ports			  [0, 1]
 	  Position		  [345, 62, 395, 78]
 	  ShowName		  off
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  arith_type		  "Unsigned"
 	  const			  "21"
 	  n_bits		  "7"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -6813,7 +6783,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "0,0,550,547"
 	  block_type		  "constant"
@@ -6835,6 +6805,7 @@ Library {
 	  SID			  169
 	  Ports			  [1, 1]
 	  Position		  [170, 17, 220, 33]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -6842,9 +6813,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "off"
+	  force_bin_pt		  off
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "15,25,372,364"
@@ -6863,6 +6834,7 @@ Library {
 	  SID			  170
 	  Ports			  [1, 1]
 	  Position		  [170, 57, 220, 73]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -6870,9 +6842,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "off"
+	  force_bin_pt		  off
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "15,25,372,364"
@@ -6891,6 +6863,7 @@ Library {
 	  SID			  171
 	  Ports			  [1, 1]
 	  Position		  [170, 97, 220, 113]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -6898,9 +6871,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "off"
+	  force_bin_pt		  off
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "15,25,372,364"
@@ -6919,6 +6892,7 @@ Library {
 	  SID			  172
 	  Ports			  [1, 1]
 	  Position		  [170, 137, 220, 153]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -6926,10 +6900,68 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "off"
+	  force_bin_pt		  off
 	  bin_pt		  "0"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "15,25,372,364"
+	  block_type		  "reinterpret"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,6b04d0b0,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "reinterp_imag"
+	  SID			  181
+	  Ports			  [1, 1]
+	  Position		  [670, 347, 720, 363]
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Reinterpret"
+	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
+	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
+	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
+	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
+	  " in binary)."
+	  force_arith_type	  on
+	  arith_type		  "Signed  (2's comp)"
+	  force_bin_pt		  on
+	  bin_pt		  "2 * (bitwidth - 1)"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "15,25,372,364"
+	  block_type		  "reinterpret"
+	  block_version		  "10.1.3"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,6b04d0b0,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "reinterp_real"
+	  SID			  179
+	  Ports			  [1, 1]
+	  Position		  [670, 62, 720, 78]
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Reinterpret"
+	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
+	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
+	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
+	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
+	  " in binary)."
+	  force_arith_type	  on
+	  arith_type		  "Signed  (2's comp)"
+	  force_bin_pt		  on
+	  bin_pt		  "2 * (bitwidth - 1)"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "15,25,372,364"
 	  block_type		  "reinterpret"
@@ -6947,19 +6979,20 @@ Library {
 	  SID			  173
 	  Ports			  [1, 1]
 	  Position		  [95, 17, 145, 33]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
-	  nbits			  "bits_in"
-	  boolean_output	  "off"
+	  nbits			  "bitwidth"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -6977,19 +7010,20 @@ Library {
 	  SID			  174
 	  Ports			  [1, 1]
 	  Position		  [95, 57, 145, 73]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
-	  nbits			  "bits_in"
-	  boolean_output	  "off"
+	  nbits			  "bitwidth"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -7007,19 +7041,20 @@ Library {
 	  SID			  175
 	  Ports			  [1, 1]
 	  Position		  [95, 97, 145, 113]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
-	  nbits			  "bits_in"
-	  boolean_output	  "off"
+	  nbits			  "bitwidth"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -7037,21 +7072,84 @@ Library {
 	  SID			  176
 	  Ports			  [1, 1]
 	  Position		  [95, 137, 145, 153]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
-	  nbits			  "bits_in"
-	  boolean_output	  "off"
+	  nbits			  "bitwidth"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "slice"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,1fd851a7,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "slice_imag"
+	  SID			  182
+	  Ports			  [1, 1]
+	  Position		  [595, 347, 645, 363]
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Slice"
+	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
+	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
+	  "e notes: In hardware this block costs nothing."
+	  nbits			  "(2 * bitwidth) + 1"
+	  boolean_output	  off
+	  mode			  "Lower Bit Location + Width"
+	  bit1			  "0"
+	  base1			  "MSB of Input"
+	  bit0			  "0"
+	  base0			  "LSB of Input"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "0,0,537,482"
+	  block_type		  "slice"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,1fd851a7,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "slice_real"
+	  SID			  180
+	  Ports			  [1, 1]
+	  Position		  [595, 62, 645, 78]
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Slice"
+	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
+	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
+	  "e notes: In hardware this block costs nothing."
+	  nbits			  "(2 * bitwidth) + 1"
+	  boolean_output	  off
+	  mode			  "Lower Bit Location + Width"
+	  bit1			  "0"
+	  base1			  "MSB of Input"
+	  bit0			  "0"
+	  base0			  "LSB of Input"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "0,0,537,482"
 	  block_type		  "slice"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "50,16,1,1,white,blue,0,1fd851a7,right,"
@@ -7065,7 +7163,7 @@ Library {
 	  BlockType		  Outport
 	  Name			  "real"
 	  SID			  177
-	  Position		  [695, 63, 725, 77]
+	  Position		  [770, 63, 800, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
@@ -7074,11 +7172,29 @@ Library {
 	  BlockType		  Outport
 	  Name			  "imag"
 	  SID			  178
-	  Position		  [695, 348, 725, 362]
+	  Position		  [770, 348, 800, 362]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
+	}
+	Line {
+	  SrcBlock		  "reinterp_imag"
+	  SrcPort		  1
+	  DstBlock		  "imag"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "slice_imag"
+	  SrcPort		  1
+	  DstBlock		  "reinterp_imag"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "slice_real"
+	  SrcPort		  1
+	  DstBlock		  "reinterp_real"
+	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "reinterp_d"
@@ -7141,13 +7257,7 @@ Library {
 	Line {
 	  SrcBlock		  "DSP48E_1"
 	  SrcPort		  1
-	  DstBlock		  "cast_imag"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "cast_imag"
-	  SrcPort		  1
-	  DstBlock		  "imag"
+	  DstBlock		  "slice_imag"
 	  DstPort		  1
 	}
 	Line {
@@ -7264,11 +7374,11 @@ Library {
 	Line {
 	  SrcBlock		  "DSP48E_3"
 	  SrcPort		  1
-	  DstBlock		  "cast_real"
+	  DstBlock		  "slice_real"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "cast_real"
+	  SrcBlock		  "reinterp_real"
 	  SrcPort		  1
 	  DstBlock		  "real"
 	  DstPort		  1
