@@ -116,6 +116,8 @@ else
     xlsetparam(xsg_blk, 'synthesis_tool', syn_tool)
 end
 
+xlsetparam(xsg_blk,'clock_loc','d7hack')
+
 switch clk_src
     case {'sys_clk' 'sys_clk2x'}
     case {'usr_clk' 'usr_clk2x'}
