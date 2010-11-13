@@ -46,19 +46,19 @@ function cmult_init(blk, varargin)
   n_bits_ab = get_var('n_bits_ab','defaults',defaults,varargin{:});
   bin_pt_a = get_var('bin_pt_a','defaults',defaults,varargin{:});
   bin_pt_b = get_var('bin_pt_b','defaults',defaults,varargin{:});
-  bin_pt_ab = get_var('bin_pt_ab','defaults',defaults,varargin{:});  
-  quantization = get_var('quantization','defaults',defaults,varargin{:});  
-  overflow = get_var('overflow','defaults',defaults,varargin{:});  
-  mult_latency = get_var('mult_latency','defaults',defaults,varargin{:});  
-  add_latency = get_var('add_latency','defaults',defaults,varargin{:});  
-  conjugated = get_var('conjugated','defaults',defaults,varargin{:});  
+  bin_pt_ab = get_var('bin_pt_ab','defaults',defaults,varargin{:});
+  quantization = get_var('quantization','defaults',defaults,varargin{:});
+  overflow = get_var('overflow','defaults',defaults,varargin{:});
+  mult_latency = get_var('mult_latency','defaults',defaults,varargin{:});
+  add_latency = get_var('add_latency','defaults',defaults,varargin{:});
+  conjugated = get_var('conjugated','defaults',defaults,varargin{:});
   conv_latency = 0;
 
   if (n_bits_a < bin_pt_a),
       errordlg('Number of bits for a input must be greater than binary point position.'); return; end
-  if (n_bits_b < bin_pt_b), 
+  if (n_bits_b < bin_pt_b),
       errordlg('Number of bits for b input must be greater than binary point position.'); return; end
-  if (n_bits_ab < bin_pt_ab), 
+  if (n_bits_ab < bin_pt_ab),
       errordlg('Number of bits for ab input must be greater than binary point position.'); return; end
 
   switch quantization
@@ -147,8 +147,8 @@ function cmult_init(blk, varargin)
   % Set attribute format string (block annotation)
   annotation=sprintf('%d_%d * %d_%d ==> %d_%d\n%s, %s\nLatency=%d', ...
     n_bits_a,bin_pt_a,n_bits_b,bin_pt_b,n_bits_ab,bin_pt_ab,qstr,ostr,latency);
-
   set_param(blk,'AttributesFormatString',annotation);
 
-  save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
+  % Save and back-populate mask parameter values
+  save_state(blk, 'defaults', defaults, varargin{:});
 
