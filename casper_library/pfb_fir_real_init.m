@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function pfb_fir_real_init(blk, varargin)
+function pfb_fir_real_init_new(blk, varargin)
 % Initialize and configure the Real Polyphase Filter Bank.
 %
 % pfb_fir_real_init(blk, varargin)
@@ -55,7 +55,7 @@ defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
     'bram_latency', 2, 'conv_latency', 1, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
-    'adder_folding', 'on'};
+    'adder_folding', 'on', 'adder_imp', 'Fabric'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('pfb_fir_real_init post same_state','trace');
@@ -80,6 +80,7 @@ fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 adder_folding = get_var('adder_folding', 'defaults', defaults, varargin{:});
+adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 
 if strcmp(specify_mult, 'on') && len(mult_spec) ~= TotalTaps
     clog('Multiplier specification vector not the same as the number of taps','error');
@@ -172,7 +173,7 @@ for p=1:pols,
     %add adder tree
     reuse_block(blk, ['adder_', tostring(p), '_' ,tostring(i)], 'casper_library_misc/adder_tree', ...
         'n_inputs', tostring(TotalTaps), 'latency', tostring(add_latency), ...
-        'first_stage_hdl', adder_folding, 'behavioral', 'off', ...
+        'first_stage_hdl', adder_folding, 'adder_imp', adder_imp, ...
         'Position', [150*(TotalTaps+1) 50*portnum*TotalTaps 150*(TotalTaps+1)+100 50*(portnum+1)*TotalTaps-20]);
 
     %add shift, convert blocks
@@ -184,7 +185,7 @@ for p=1:pols,
         'arith_type', 'Signed  (2''s comp)', 'n_bits', tostring(BitWidthOut), ...
         'bin_pt', tostring(BitWidthOut-1), 'quantization', quantization, ...
         'overflow', 'Saturate', 'latency', tostring(add_latency), ...
-        'latency',tostring(conv_latency),...
+        'latency',tostring(conv_latency), 'pipeline', 'on', ...
         'Position', [150*(TotalTaps+2)+60 50*(portnum+1)*TotalTaps-50 150*(TotalTaps+2)+90 50*(portnum+1)*TotalTaps-25]);
     
     end

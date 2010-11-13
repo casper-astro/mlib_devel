@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Oct 25 14:27:54 2010"
-  RTWModifiedTimeStamp	  209917671
-  ModelVersionFormat	  "1.%<AutoIncrement:429>"
+  LastModifiedDate	  "Thu Nov 11 09:19:27 2010"
+  RTWModifiedTimeStamp	  211367964
+  ModelVersionFormat	  "1.%<AutoIncrement:431>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -827,20 +827,22 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
 	      block_type	      "convert"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "55,20,1,1,white,blue,0,b1f514c1,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "6 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor("
-	      "'black');disp('\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "55,20,1,1,white,blue,0,5129c5aa,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.345455 0.436364 0.345455 0.4 0.490909 0.509091 0.527273 0.636364 0.563636 0.490909 0.436364 0"
+	      ".527273 0.436364 0.490909 0.563636 0.636364 0.527273 0.509091 0.490909 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0."
+	      "9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);"
+	      "\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label"
+	      "('output',1,'cast');\ncolor('black');disp('\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon tex"
+	      "t');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -858,20 +860,22 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
 	      block_type	      "convert"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "55,20,1,1,white,blue,0,b1f514c1,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "6 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor("
-	      "'black');disp('\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "55,20,1,1,white,blue,0,5129c5aa,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.345455 0.436364 0.345455 0.4 0.490909 0.509091 0.527273 0.636364 0.563636 0.490909 0.436364 0"
+	      ".527273 0.436364 0.490909 0.563636 0.636364 0.527273 0.509091 0.490909 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0."
+	      "9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);"
+	      "\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label"
+	      "('output',1,'cast');\ncolor('black');disp('\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon tex"
+	      "t');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -885,23 +889,24 @@ Library {
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      "off"
+	      boolean_output	      off
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "60,20,1,1,white,blue,0,b1026674,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 "
-	      "0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "6 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprin"
-	      "tf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "60,20,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
+	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
+	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpr"
+	      "intf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Terminator
@@ -925,22 +930,24 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayout"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "60,20,1,1,white,yellow,0,38220381,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 20 20 ],[0.95 0.93 "
-	      "0.65]);\npatch([24 21 26 21 24 29 30 31 37 33 29 26 31 26 29 33 37 31 30 29 24 ],[2 5 10 15 18 18 17 18 18 14 1"
-	      "8 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end ic"
-	      "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('blac"
-	      "k');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "60,20,1,1,white,yellow,0,cc31b7ac,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
+	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
+	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('b"
+	      "lack');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text')"
+	      ";\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -952,22 +959,24 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayout"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "60,20,1,1,white,yellow,0,38220381,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 20 20 ],[0.95 0.93 "
-	      "0.65]);\npatch([24 21 26 21 24 29 30 31 37 33 29 26 31 26 29 33 37 31 30 29 24 ],[2 5 10 15 18 18 17 18 18 14 1"
-	      "8 15 10 5 2 6 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end ic"
-	      "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('blac"
-	      "k');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "60,20,1,1,white,yellow,0,cc31b7ac,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
+	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
+	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('b"
+	      "lack');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text')"
+	      ";\n"
 	    }
 	    Line {
 	      SrcBlock		      "xps_library_ADCs_adc083000_ctrl_sdata_bus"
@@ -32858,14 +32867,14 @@ Library {
       MaskToolTipString	      "on,on,on,on,on,on"
       MaskVarAliasString      ",,,,,"
       MaskVariables	      "adc_brd=&1;adc_interleave=&2;bypass_auto=&3;en_gain=&4;adc_clk_rate=@5;sample_period=@6;"
-      MaskInitialization      "name = get_param(gcb, 'Name');\nkatadc_init(gcb, ...\n    'name', name, ...\n    'adc_b"
-      "rd', adc_brd, ...\n    'adc_interleave', adc_interleave, ...\n    'bypass_auto', bypass_auto, ...\n    'en_gain'"
-      ", en_gain, ...\n    'adc_clk_rate', adc_clk_rate, ...\n    'sample_period', sample_period);"
+      MaskInitialization      "name = gcb;\nkatadc_init(gcb, ...\n    'name', name, ...\n    'adc_brd', adc_brd, ...\n"
+      "    'adc_interleave', adc_interleave, ...\n    'bypass_auto', bypass_auto, ...\n    'en_gain', en_gain, ...\n   "
+      " 'adc_clk_rate', adc_clk_rate, ...\n    'sample_period', sample_period);"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "adc0|off|off|on|1000|1"
+      MaskValueString	      "adc0|off|off|on|800|1"
       MaskTabNameString	      ",,,,,"
       System {
 	Name			"katadc"
@@ -32963,9 +32972,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -32992,9 +33001,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33015,10 +33024,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
 	  mode			  "a!=b"
-	  en			  "off"
+	  en			  off
 	  latency		  "1"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33042,7 +33051,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "5"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33066,7 +33075,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33090,7 +33099,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33114,7 +33123,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33138,7 +33147,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33162,7 +33171,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33186,7 +33195,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33210,7 +33219,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33234,7 +33243,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -33461,7 +33470,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33470,7 +33479,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33481,7 +33490,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33490,7 +33499,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33501,7 +33510,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33510,7 +33519,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33521,7 +33530,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33530,7 +33539,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33541,7 +33550,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33550,7 +33559,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33561,7 +33570,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33570,7 +33579,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33581,7 +33590,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33590,7 +33599,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33601,7 +33610,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -33610,7 +33619,7 @@ Library {
 	  relop			  ">"
 	  const			  "255"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -33620,10 +33629,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33645,10 +33654,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33670,10 +33679,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33695,10 +33704,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33720,10 +33729,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33745,10 +33754,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33770,10 +33779,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33795,10 +33804,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33820,10 +33829,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33845,10 +33854,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33864,7 +33873,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_gain_load"
+	  Name			  "katadc_interface_katadc_gain_load"
 	  Ports			  [1, 1]
 	  Position		  [1060, 2630, 1100, 2650]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -33872,11 +33881,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33892,7 +33901,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_gain_value"
+	  Name			  "katadc_interface_katadc_gain_value"
 	  Ports			  [1, 1]
 	  Position		  [1060, 2510, 1100, 2530]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -33900,11 +33909,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -33920,7 +33929,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_data_valid"
+	  Name			  "katadc_interface_katadc_user_data_valid"
 	  Ports			  [1, 1]
 	  Position		  [940, 50, 980, 70]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -33933,11 +33942,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -33954,7 +33963,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_datai0"
+	  Name			  "katadc_interface_katadc_user_datai0"
 	  Ports			  [1, 1]
 	  Position		  [940, 410, 980, 430]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -33967,11 +33976,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -33988,7 +33997,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_datai1"
+	  Name			  "katadc_interface_katadc_user_datai1"
 	  Ports			  [1, 1]
 	  Position		  [940, 650, 980, 670]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34001,11 +34010,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34022,7 +34031,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_datai2"
+	  Name			  "katadc_interface_katadc_user_datai2"
 	  Ports			  [1, 1]
 	  Position		  [940, 890, 980, 910]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34035,11 +34044,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34056,7 +34065,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_datai3"
+	  Name			  "katadc_interface_katadc_user_datai3"
 	  Ports			  [1, 1]
 	  Position		  [940, 1130, 980, 1150]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34069,11 +34078,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34090,7 +34099,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_dataq0"
+	  Name			  "katadc_interface_katadc_user_dataq0"
 	  Ports			  [1, 1]
 	  Position		  [940, 1370, 980, 1390]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34103,11 +34112,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34124,7 +34133,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_dataq1"
+	  Name			  "katadc_interface_katadc_user_dataq1"
 	  Ports			  [1, 1]
 	  Position		  [940, 1610, 980, 1630]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34137,11 +34146,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34158,7 +34167,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_dataq2"
+	  Name			  "katadc_interface_katadc_user_dataq2"
 	  Ports			  [1, 1]
 	  Position		  [940, 1850, 980, 1870]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34171,11 +34180,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34192,7 +34201,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_dataq3"
+	  Name			  "katadc_interface_katadc_user_dataq3"
 	  Ports			  [1, 1]
 	  Position		  [940, 2090, 980, 2110]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34205,11 +34214,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34226,7 +34235,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_outofrange0"
+	  Name			  "katadc_interface_katadc_user_outofrange0"
 	  Ports			  [1, 1]
 	  Position		  [940, 1250, 980, 1270]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34239,11 +34248,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34260,7 +34269,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_outofrange1"
+	  Name			  "katadc_interface_katadc_user_outofrange1"
 	  Ports			  [1, 1]
 	  Position		  [940, 2210, 980, 2230]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34273,11 +34282,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34294,7 +34303,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_sync0"
+	  Name			  "katadc_interface_katadc_user_sync0"
 	  Ports			  [1, 1]
 	  Position		  [940, 110, 980, 130]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34307,11 +34316,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34328,7 +34337,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_sync1"
+	  Name			  "katadc_interface_katadc_user_sync1"
 	  Ports			  [1, 1]
 	  Position		  [940, 170, 980, 190]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34341,11 +34350,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34362,7 +34371,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_sync2"
+	  Name			  "katadc_interface_katadc_user_sync2"
 	  Ports			  [1, 1]
 	  Position		  [940, 230, 980, 250]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34375,11 +34384,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34396,7 +34405,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "katadc_test1_katadc0_user_sync3"
+	  Name			  "katadc_interface_katadc_user_sync3"
 	  Ports			  [1, 1]
 	  Position		  [940, 290, 980, 310]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -34409,11 +34418,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -34459,7 +34468,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34468,7 +34477,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34479,7 +34488,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34488,7 +34497,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34499,7 +34508,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34508,7 +34517,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34519,7 +34528,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34528,7 +34537,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34539,7 +34548,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34548,7 +34557,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34559,7 +34568,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34568,7 +34577,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34579,7 +34588,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34588,7 +34597,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34599,7 +34608,7 @@ Library {
 	  SourceType		  "Compare To Constant"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -34608,7 +34617,7 @@ Library {
 	  relop			  "<"
 	  const			  "0"
 	  LogicOutDataTypeMode	  "boolean"
-	  ZeroCross		  "off"
+	  ZeroCross		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -34618,10 +34627,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
 	  init			  "0"
-	  rst			  "off"
-	  en			  "off"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  rst			  off
+	  en			  off
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34647,9 +34656,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34675,9 +34684,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34703,9 +34712,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34731,9 +34740,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34759,9 +34768,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34787,9 +34796,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34815,9 +34824,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34843,9 +34852,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "7"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34870,13 +34879,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -34900,13 +34909,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -34930,13 +34939,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -34960,13 +34969,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -34990,13 +34999,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35020,13 +35029,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35050,13 +35059,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35080,13 +35089,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "MSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35110,13 +35119,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35140,13 +35149,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "6"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35170,13 +35179,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "1"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35200,13 +35209,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "6"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35230,13 +35239,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "14"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35356,7 +35365,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "off"
+	  explicit_period	  off
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -35365,7 +35374,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -35389,13 +35398,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35419,13 +35428,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35449,13 +35458,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35479,13 +35488,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35509,13 +35518,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35539,13 +35548,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35569,13 +35578,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35599,13 +35608,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "7"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "LSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -35725,7 +35734,7 @@ Library {
 	Line {
 	  SrcBlock		  "cast1"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_gain_load"
+	  DstBlock		  "katadc_interface_katadc_gain_load"
 	  DstPort		  1
 	}
 	Line {
@@ -35737,7 +35746,7 @@ Library {
 	Line {
 	  SrcBlock		  "cast0"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_gain_value"
+	  DstBlock		  "katadc_interface_katadc_gain_value"
 	  DstPort		  1
 	}
 	Line {
@@ -35778,25 +35787,25 @@ Library {
 	  SrcBlock		  "inv1"
 	  SrcPort		  1
 	  DstBlock		  "con"
-	  DstPort		  5
+	  DstPort		  3
 	}
 	Line {
 	  SrcBlock		  "slc2"
 	  SrcPort		  1
 	  DstBlock		  "con"
-	  DstPort		  4
+	  DstPort		  2
 	}
 	Line {
 	  SrcBlock		  "inv0"
 	  SrcPort		  1
 	  DstBlock		  "con"
-	  DstPort		  3
+	  DstPort		  5
 	}
 	Line {
 	  SrcBlock		  "slc0"
 	  SrcPort		  1
 	  DstBlock		  "con"
-	  DstPort		  2
+	  DstPort		  4
 	}
 	Line {
 	  SrcBlock		  "trigger"
@@ -35841,7 +35850,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_data_valid"
+	  SrcBlock		  "katadc_interface_katadc_user_data_valid"
 	  SrcPort		  1
 	  DstBlock		  "data_valid"
 	  DstPort		  1
@@ -35849,11 +35858,11 @@ Library {
 	Line {
 	  SrcBlock		  "sim_data_valid"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_user_data_valid"
+	  DstBlock		  "katadc_interface_katadc_user_data_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_sync3"
+	  SrcBlock		  "katadc_interface_katadc_user_sync3"
 	  SrcPort		  1
 	  DstBlock		  "sync3"
 	  DstPort		  1
@@ -35861,7 +35870,7 @@ Library {
 	Line {
 	  SrcBlock		  "sync_del3"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_user_sync3"
+	  DstBlock		  "katadc_interface_katadc_user_sync3"
 	  DstPort		  1
 	}
 	Line {
@@ -35871,7 +35880,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_sync2"
+	  SrcBlock		  "katadc_interface_katadc_user_sync2"
 	  SrcPort		  1
 	  DstBlock		  "sync2"
 	  DstPort		  1
@@ -35879,7 +35888,7 @@ Library {
 	Line {
 	  SrcBlock		  "sync_del2"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_user_sync2"
+	  DstBlock		  "katadc_interface_katadc_user_sync2"
 	  DstPort		  1
 	}
 	Line {
@@ -35889,7 +35898,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_sync1"
+	  SrcBlock		  "katadc_interface_katadc_user_sync1"
 	  SrcPort		  1
 	  DstBlock		  "sync1"
 	  DstPort		  1
@@ -35897,7 +35906,7 @@ Library {
 	Line {
 	  SrcBlock		  "sync_del1"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_user_sync1"
+	  DstBlock		  "katadc_interface_katadc_user_sync1"
 	  DstPort		  1
 	}
 	Line {
@@ -35907,7 +35916,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_sync0"
+	  SrcBlock		  "katadc_interface_katadc_user_sync0"
 	  SrcPort		  1
 	  DstBlock		  "sync0"
 	  DstPort		  1
@@ -35915,7 +35924,7 @@ Library {
 	Line {
 	  SrcBlock		  "sync_del0"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_user_sync0"
+	  DstBlock		  "katadc_interface_katadc_user_sync0"
 	  DstPort		  1
 	}
 	Line {
@@ -35946,7 +35955,7 @@ Library {
 	  }
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_outofrange1"
+	  SrcBlock		  "katadc_interface_katadc_user_outofrange1"
 	  SrcPort		  1
 	  DstBlock		  "or1"
 	  DstPort		  1
@@ -35954,7 +35963,7 @@ Library {
 	Line {
 	  SrcBlock		  "logical1"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_user_outofrange1"
+	  DstBlock		  "katadc_interface_katadc_user_outofrange1"
 	  DstPort		  1
 	}
 	Line {
@@ -36036,7 +36045,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_dataq3"
+	  SrcBlock		  "katadc_interface_katadc_user_dataq3"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36061,7 +36070,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_dataq3"
+	    DstBlock		    "katadc_interface_katadc_user_dataq3"
 	    DstPort		    1
 	  }
 	}
@@ -36102,7 +36111,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_dataq2"
+	  SrcBlock		  "katadc_interface_katadc_user_dataq2"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36127,7 +36136,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_dataq2"
+	    DstBlock		    "katadc_interface_katadc_user_dataq2"
 	    DstPort		    1
 	  }
 	}
@@ -36168,7 +36177,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_dataq1"
+	  SrcBlock		  "katadc_interface_katadc_user_dataq1"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36193,7 +36202,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_dataq1"
+	    DstBlock		    "katadc_interface_katadc_user_dataq1"
 	    DstPort		    1
 	  }
 	}
@@ -36234,7 +36243,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_dataq0"
+	  SrcBlock		  "katadc_interface_katadc_user_dataq0"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36259,7 +36268,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_dataq0"
+	    DstBlock		    "katadc_interface_katadc_user_dataq0"
 	    DstPort		    1
 	  }
 	}
@@ -36303,7 +36312,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_outofrange0"
+	  SrcBlock		  "katadc_interface_katadc_user_outofrange0"
 	  SrcPort		  1
 	  DstBlock		  "or0"
 	  DstPort		  1
@@ -36311,7 +36320,7 @@ Library {
 	Line {
 	  SrcBlock		  "logical0"
 	  SrcPort		  1
-	  DstBlock		  "katadc_test1_katadc0_user_outofrange0"
+	  DstBlock		  "katadc_interface_katadc_user_outofrange0"
 	  DstPort		  1
 	}
 	Line {
@@ -36393,7 +36402,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_datai3"
+	  SrcBlock		  "katadc_interface_katadc_user_datai3"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36418,7 +36427,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_datai3"
+	    DstBlock		    "katadc_interface_katadc_user_datai3"
 	    DstPort		    1
 	  }
 	}
@@ -36459,7 +36468,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_datai2"
+	  SrcBlock		  "katadc_interface_katadc_user_datai2"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36484,7 +36493,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_datai2"
+	    DstBlock		    "katadc_interface_katadc_user_datai2"
 	    DstPort		    1
 	  }
 	}
@@ -36525,7 +36534,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_datai1"
+	  SrcBlock		  "katadc_interface_katadc_user_datai1"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36550,7 +36559,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_datai1"
+	    DstBlock		    "katadc_interface_katadc_user_datai1"
 	    DstPort		    1
 	  }
 	}
@@ -36591,7 +36600,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "katadc_test1_katadc0_user_datai0"
+	  SrcBlock		  "katadc_interface_katadc_user_datai0"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
@@ -36616,7 +36625,7 @@ Library {
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "katadc_test1_katadc0_user_datai0"
+	    DstBlock		    "katadc_interface_katadc_user_datai0"
 	    DstPort		    1
 	  }
 	}
@@ -45481,25 +45490,25 @@ MatData {
   NumRecords		  5
   DataRecord {
     Tag			    DataTag4
-    Data		    "  %)30     .    $ 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &[!M ,.    @ 4   "
-    "8    (     @         %    \"     $    !     0         %  0 #P    $   !X    9&5F875L=',         ;F%M90             "
-    " 861C7V)R9           861C7VEN=&5R;&5A=F4 8GEP87-S7V%U=&\\     96Y?9V%I;@          861C7V-L:U]R871E    <V%M<&QE7W!E"
-    "<FEO9   #@   \"@#   &    \"     $         !0    @    !    #     $         #@   #@    &    \"     0         !0    @"
-    "    !    !P    $         $     <   !A9&-?8G)D  X    P    !@    @    $          4    (     0    0    !         !  !"
-    " !A9&,P#@   $     &    \"     0         !0    @    !    #@    $         $     X   !A9&-?:6YT97)L96%V90  #@   #    "
-    " &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $   "
-    " +     0         0    \"P   &)Y<&%S<U]A=71O       .    ,     8    (    !          %    \"     $    #     0        "
-    " 0  , ;V9F  X    X    !@    @    $          4    (     0    <    !         !     '    96Y?9V%I;@ .    ,     8    ("
-    "    !          %    \"     $    \"     0         0  ( ;VX   X   !     !@    @    $          4    (     0    P    !"
-    "         !     ,    861C7V-L:U]R871E      X    X    !@    @    &          4    (     0    $    !          D    (  "
-    "          B4 .    0     8    (    !          %    \"     $    -     0         0    #0   '-A;7!L95]P97)I;V0    .   "
-    " .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     0       "
-    "  !0    @    !    !P    $         $     <   !K871A9&,P  X    P    !@    @    $          4    (     0    0    !    "
-    "     !  ! !A9&,P#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    (    !"
-    "          %    \"     $    #     0         0  , ;V9F  X    P    !@    @    $          4    (     0    (    !      "
-    "   !   @!O;@  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @          $\"/0 X    X    !"
-    "@    @    &          4    (     0    $    !          D    (            \\#\\"
+    Data		    "  %)30     .    ( 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \": R 4.    D 4  "
+    " 8    (     @         %    \"     $    !     0         %  0 #P    $   !X    9&5F875L=',         ;F%M90            "
+    "  861C7V)R9           861C7VEN=&5R;&5A=F4 8GEP87-S7V%U=&\\     96Y?9V%I;@          861C7V-L:U]R871E    <V%M<&QE7W!"
+    "E<FEO9   #@   \"@#   &    \"     $         !0    @    !    #     $         #@   #@    &    \"     0         !0    "
+    "@    !    !P    $         $     <   !A9&-?8G)D  X    P    !@    @    $          4    (     0    0    !         !  "
+    "! !A9&,P#@   $     &    \"     0         !0    @    !    #@    $         $     X   !A9&-?:6YT97)L96%V90  #@   #   "
+    "  &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $  "
+    "  +     0         0    \"P   &)Y<&%S<U]A=71O       .    ,     8    (    !          %    \"     $    #     0       "
+    "  0  , ;V9F  X    X    !@    @    $          4    (     0    <    !         !     '    96Y?9V%I;@ .    ,     8    "
+    "(    !          %    \"     $    \"     0         0  ( ;VX   X   !     !@    @    $          4    (     0    P    "
+    "!         !     ,    861C7V-L:U]R871E      X    X    !@    @    &          4    (     0    $    !          D    ( "
+    "           B4 .    0     8    (    !          %    \"     $    -     0         0    #0   '-A;7!L95]P97)I;V0    .  "
+    "  .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $@    &    \"     0      "
+    "   !0    @    !    %P    $         $    !<   !K871A9&-?:6YT97)F86-E+VMA=&%D8P .    ,     8    (    !          %   "
+    " \"     $    $     0         0  0 861C, X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
+    "#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \""
+    "     $    \"     0         0  ( ;VX   X    X    !@    @    &          4    (     0    $    !          D    (      "
+    "      B4 .    .     8    (    !@         %    \"     $    !     0         )    \"            / _"
   }
   DataRecord {
     Tag			    DataTag3
