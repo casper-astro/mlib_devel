@@ -33,7 +33,7 @@ function cmult_dsp48e_init (blk, varargin)
 % * bin_pt_a
 % * n_bits_b
 % * bin_pt_b
-% * do_conj
+% * conjugated
 
 % Set default vararg values.
 defaults = { ...
@@ -41,7 +41,7 @@ defaults = { ...
   'bin_pt_a', 17, ...
   'n_bits_b', 18, ...
   'bin_pt_b', 17, ...
-  'do_conj', 'off', ...
+  'conjugated', 'off', ...
 };
 
 % Skip init script if mask state has not changed.
@@ -60,7 +60,7 @@ n_bits_a = get_var('n_bits_a', 'defaults', defaults, varargin{:});
 bin_pt_a = get_var('bin_pt_a', 'defaults', defaults, varargin{:});
 n_bits_b = get_var('n_bits_b', 'defaults', defaults, varargin{:});
 bin_pt_b = get_var('bin_pt_b', 'defaults', defaults, varargin{:});
-do_conj = get_var('do_conj', 'defaults', defaults, varargin{:});
+conjugated = get_var('conjugated', 'defaults', defaults, varargin{:});
 
 % Validate input fields.
 
@@ -166,7 +166,7 @@ set_param([blk, '/cast_imag'], ...
     'bin_pt', num2str(bin_pt_out));
 
 % Set conjugation mode.
-if strcmp(do_conj, 'on'),
+if strcmp(conjugated, 'on'),
     set_param([blk, '/alumode1'], 'const', '3');
     set_param([blk, '/alumode3'], 'const', '0');
 else,
