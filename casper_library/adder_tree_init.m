@@ -46,15 +46,17 @@ latency = get_var('latency', 'defaults', defaults, varargin{:});
 first_stage_hdl = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
 adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 
+hw_selection = adder_imp;
+
 if strcmp(adder_imp,'on'), 
   first_stage_hdl = 'on'; 
 end
 if strcmp(adder_imp, 'Behavioral'),
   behavioral = 'on';
+  hw_selection = 'Fabric';
 else, 
   behavioral = 'off';
 end
-hw_selection = adder_imp;
 
 stages = ceil(log2(n_inputs));
 
