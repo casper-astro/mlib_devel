@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.24"
+    ComputedModelVersion    "1.28"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -24,9 +24,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Nov 18 09:29:11 2010"
+  LastModifiedDate	  "Mon Nov 22 17:28:08 2010"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:24>"
+  ModelVersionFormat	  "1.%<AutoIncrement:28>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -659,7 +659,7 @@ Model {
   }
   System {
     Name		    "butterfly_direct_general_3mult_test"
-    Location		    [499, 132, 1742, 877]
+    Location		    [297, 154, 1761, 1054]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1210,7 +1210,7 @@ Model {
     Block {
       BlockType		      ToFile
       Name		      "To File"
-      Position		      [840, 284, 1105, 316]
+      Position		      [845, 284, 1110, 316]
       Filename		      "butterfly_direct_general_3mult_test_output.mat"
       MatrixName	      "output"
     }
