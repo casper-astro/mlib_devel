@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function pfb_fir_real_init_new(blk, varargin)
+function pfb_fir_real_init(blk, varargin)
 % Initialize and configure the Real Polyphase Filter Bank.
 %
 % pfb_fir_real_init(blk, varargin)
