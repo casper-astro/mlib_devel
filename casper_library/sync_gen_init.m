@@ -1,5 +1,5 @@
 function sync_gen_init(blk, varargin)
-disp('Running mask script for block: sync_gen')
+%disp('Running mask script for block: sync_gen')
 defaults = {};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), 
