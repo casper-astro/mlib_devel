@@ -24,7 +24,8 @@ function fft_callback_arch(cursys)
 % Dialog callback for arch parameter in all fft blocks.
 
   % if arch is Virtex5, allow dsp48 adders.
-  % otherwise: disable them, disallow them.
+  % otherwise: disable them, disallow them,
+  % and ensure that add_latency is enabled.
 
   arch = get_param(gcb, 'arch');
   if strcmp(arch, 'Virtex5'),
@@ -32,6 +33,7 @@ function fft_callback_arch(cursys)
   else
       set_param(gcb, 'dsp48_adders', 'off');
       set_param_state(gcb, 'dsp48_adders', 'off');
+      set_param_state(gcb, 'add_latency', 'on');
   end
 
 end
