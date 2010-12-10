@@ -4,7 +4,7 @@ function xeng_init(blk, varargin)
 
 % Declare any default values for arguments you might like.
 defaults = {'n_ants',8,'n_bits',4,'use_ded_mult', 1, 'use_bram_delay', 1, 'demux_factor', '1', 'n_bits', 4, ...
-    'add_latency', 1, 'mult_latency', 1, 'bram_latency', 2, 'acc_len',128, 'use_dsp_acc', 0};
+    'add_latency', 1, 'mult_latency', 1, 'bram_latency', 2, 'acc_len',128};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'xeng');
 munge_block(blk, varargin{:});
@@ -20,7 +20,6 @@ add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 demux_factor = eval(get_var('demux_factor', 'defaults', defaults, varargin{:}));
-use_dsp_acc = get_var('use_dsp_acc', 'defaults', defaults, varargin{:});
 
 
 fix_pnt_pos = (n_bits-1)*2;
@@ -76,8 +75,7 @@ reuse_block(blk, 'auto_tap', 'casper_library_correlator/auto_tap', ...
                 'add_latency',num2str(add_latency), ...
                 'mult_latency',num2str(mult_latency), ...
                 'bram_latency',num2str(bram_latency), ...
-            	'use_bram_delay', num2str(use_bram_delay), ...
-                'use_dsp_acc', num2str(use_dsp_acc));
+            	'use_bram_delay', num2str(use_bram_delay));
             
 for i=1:floor(n_ants/2),
         name = ['baseline_tap', num2str(i)];
@@ -89,8 +87,7 @@ for i=1:floor(n_ants/2),
             'mult_latency',num2str(mult_latency), ...
             'bram_latency',num2str(bram_latency), ...
             'ant_sep', num2str(i), 'Position', [x, 52, x+95, 168], ...
-            'use_bram_delay', num2str(use_bram_delay), ...
-            'use_dsp_acc', num2str(use_dsp_acc));
+            'use_bram_delay', num2str(use_bram_delay));
         x = x + 135;
 end
 
