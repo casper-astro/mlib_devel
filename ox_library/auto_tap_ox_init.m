@@ -24,7 +24,7 @@ if use_dsp_acc == 1
     for i=1:length(dual_pol_cmacs),
         replace_block(get_param(dual_pol_cmacs{i},'Parent'), ...
           'Name', get_param(dual_pol_cmacs{i}, 'Name'), ...
-          'casper_library_correlator/dual_pol_cmac_dsp_acc', 'noprompt');
+          'ox_lib/xeng/dual_pol_cmac_dsp_acc', 'noprompt');
         set_param(dual_pol_cmacs{i},'LinkStatus','inactive');
     end
 else
@@ -48,13 +48,13 @@ for i=1:length(multipliers),
             'casper_library_multipliers/cmult_4bit_em*','noprompt');
     elseif use_ded_mult==3,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
-            'casper_library_multipliers/combi_cmult*','noprompt');
+            'ox_lib/xeng/combi_cmult*','noprompt');
     elseif use_ded_mult==4,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
-            'casper_library_multipliers/dsp_cmult*','noprompt');
+            'ox_lib/xeng/dsp_cmult*','noprompt');
     elseif use_ded_mult==5,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
-            'casper_library_multipliers/dualdsp_cmult*','noprompt');
+            'ox_lib/xeng/dualdsp_cmult*','noprompt');
     else,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
             'casper_library_multipliers/cmult_4bit_sl*','noprompt');
