@@ -27,7 +27,7 @@ function pfb_fir_real_init(blk, varargin)
 %
 % blk = The block to configure.
 % varargin = {'varname', 'value', ...} pairs
-% 
+%
 % Valid varnames for this block are:
 % PFBSize = The size of the PFB
 % TotalTaps = Total number of taps in the PFB
@@ -55,7 +55,7 @@ defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
     'bram_latency', 2, 'conv_latency', 1, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
-    'adder_folding', 'on'};
+    'adder_folding', 'on', 'adder_imp', 'Fabric'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('pfb_fir_real_init post same_state','trace');
@@ -80,6 +80,7 @@ fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 adder_folding = get_var('adder_folding', 'defaults', defaults, varargin{:});
+adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 
 if strcmp(specify_mult, 'on') && len(mult_spec) ~= TotalTaps
     clog('Multiplier specification vector not the same as the number of taps','error');
@@ -124,15 +125,15 @@ for p=1:pols,
         for t=1:TotalTaps,
             use_hdl = 'on';
             use_embedded = 'off';
-            if( strcmp(specify_mult,'on') ) 
-                if( mult_spec(t) == 0 ), 
+            if( strcmp(specify_mult,'on') )
+                if( mult_spec(t) == 0 ),
                     use_embedded = 'off';
                 elseif( mult_spec(t) == 2);
                     use_hdl = 'on';
                     use_embedded = 'off';
                 end
             end
-            
+
             if t==1,
                 src_blk = 'casper_library_pfbs/first_tap_real';
                 name = ['pol',tostring(p),'_in',tostring(n),'_first_tap'];
@@ -167,12 +168,12 @@ for p=1:pols,
                 set_param([blk,'/',name], 'nput', tostring(n-1));
             end
         end
-        
+
         clog(['adder tree, scale and convert blocks for pol ',num2str(p),' input ',num2str(n)],'pfb_fir_real_init_debug');
         %add adder tree
         reuse_block(blk, ['adder_', tostring(p), '_' ,tostring(n)], 'casper_library_misc/adder_tree', ...
             'n_inputs', tostring(TotalTaps), 'latency', tostring(add_latency), ...
-            'first_stage_hdl', adder_folding, 'behavioral', 'off', ...
+            'first_stage_hdl', adder_folding, 'adder_imp', adder_imp, ...
             'Position', [150*(TotalTaps+1) 50*portnum*TotalTaps 150*(TotalTaps+1)+100 50*(portnum+1)*TotalTaps-20]);
 
         % Compute the maximum gain through all of the 2^PFBSize sub-filters.  This
@@ -236,7 +237,7 @@ for p=1:pols,
         scale_factor = -bit_growth;
         reuse_block(blk, ['scale_',tostring(p),'_',tostring(n)], 'xbsIndex_r4/Scale', ...
             'scale_factor', tostring(scale_factor), ...
-            'Position', [150*(TotalTaps+2) 50*(portnum+1)*TotalTaps-50 150*(TotalTaps+2)+30 50*(portnum+1)*TotalTaps-25]);    
+            'Position', [150*(TotalTaps+2) 50*(portnum+1)*TotalTaps-50 150*(TotalTaps+2)+30 50*(portnum+1)*TotalTaps-25]);
         % Because we have handled bit growth for maximum gain, there can be no
         % overflow so it can be set to "Wrap" to avoid unnecessary logic.  If
         % BitWidthOut is greater than adder_bin_pt_out, set quantization to
@@ -248,9 +249,9 @@ for p=1:pols,
             'arith_type', 'Signed  (2''s comp)', 'n_bits', tostring(BitWidthOut), ...
             'bin_pt', tostring(BitWidthOut-1), 'quantization', quantization, ...
             'overflow', 'Wrap', 'latency', tostring(add_latency), ...
-            'latency',tostring(conv_latency),...
+            'latency',tostring(conv_latency), 'pipeline', 'on', ...
             'Position', [150*(TotalTaps+2)+60 50*(portnum+1)*TotalTaps-50 150*(TotalTaps+2)+90 50*(portnum+1)*TotalTaps-25]);
-    
+
     end
 end
 
@@ -264,11 +265,11 @@ for p=1:pols,
         adder_name = ['adder_',tostring(p),'_',tostring(n)];
         convert_name = ['convert_',tostring(p), '_',tostring(n)];
         scale_name = ['scale_',tostring(p), '_',tostring(n)];
-    
+
         add_line(blk, [in_name,'/1'], [blk_name,'/1']);
         add_line(blk, 'sync/1', [blk_name,'/2']);
-    
-        if n==1 && p==1, 
+
+        if n==1 && p==1,
             reuse_block(blk, 'delay1', 'xbsIndex_r4/Delay', ...
                 'latency', tostring(conv_latency), ...
                 'Position', [150*(TotalTaps+2)+60 50 150*(TotalTaps+2)+90 80]);
@@ -276,7 +277,7 @@ for p=1:pols,
             add_line(blk, 'delay1/1', 'sync_out/1');
         end
 
-        add_line(blk, [adder_name,'/2'], [scale_name,'/1']);    
+        add_line(blk, [adder_name,'/2'], [scale_name,'/1']);
         add_line(blk, [scale_name,'/1'], [convert_name,'/1']);
         add_line(blk, [convert_name,'/1'], [out_name,'/1']);
 
@@ -291,12 +292,12 @@ for p=1:pols,
         adder_name = ['adder_',tostring(p),'_',tostring(n)];
         for t=2:TotalTaps,
             blk_name = ['pol',tostring(p),'_in',tostring(n),'_tap',tostring(t)];
-                
+
             if t == TotalTaps,
                 blk_name = ['pol',tostring(p),'_in',tostring(n),'_last_tap'];
-                add_line(blk, [blk_name,'/2'], [adder_name,'/1']);  
-                add_line(blk, [blk_name,'/1'], [adder_name,'/',tostring(t+1)]);    
-            end 
+                add_line(blk, [blk_name,'/2'], [adder_name,'/1']);
+                add_line(blk, [blk_name,'/1'], [adder_name,'/',tostring(t+1)]);
+            end
 
             if t==2,
                 prev_blk_name = ['pol',tostring(p),'_in',tostring(n),'_first_tap'];

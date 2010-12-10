@@ -9,7 +9,7 @@ module TB_kat_ten_gb_eth();
   /* Simulation constants */
 
   /* the size of the TX frame in 64-bit words */
-  localparam TX_FRAME_SIZE  = 32'd1024;
+  localparam TX_FRAME_SIZE  = 32'd12;
 
   localparam FABRIC_MAC     = 48'h0202_0a00_0080;
   localparam FABRIC_IP      = {8'd10, 8'd0, 8'd0, 8'd128};
@@ -17,7 +17,7 @@ module TB_kat_ten_gb_eth();
   localparam FABRIC_GATEWAY = 8'd1;
   localparam FABRIC_ENABLE  = 1;
 
-  localparam CPU_PACKET_SIZE = 8'd16;
+  localparam CPU_PACKET_SIZE = 8'd8;
   localparam CPU_SRC_MAC     = 48'h1111_2222_3333;
   localparam CPU_DEST_MAC    = FABRIC_MAC;
 
@@ -258,7 +258,7 @@ module TB_kat_ten_gb_eth();
           end
         end
         MODE_PROCESS: begin
-          if (mode_progress < 2) begin
+          if (mode_progress < 3) begin
             mode_progress <= mode_progress + 1;
             mode          <= MODE_CPU_WRITE;
           end else begin
@@ -309,7 +309,7 @@ module TB_kat_ten_gb_eth();
       xgmii_add_delay <= 1'b0;
     end else begin
       /* after mode progress is non-zero add a half cycle delay when */
-      if (mode_progress >= 1) begin
+      if (mode_progress >= 2) begin
         if (xgmii_txc == 8'b1111_1111 && xgmii_txd == {8{8'h07}}) begin
           xgmii_add_delay <= 1'b1;
         end
@@ -319,6 +319,58 @@ module TB_kat_ten_gb_eth();
 
   wire [63:0] xgmii_rxd_int = xgmii_add_delay ? {xgmii_txd[31:0], xgmii_txd_z[63:32]}: xgmii_txd;
   wire  [7:0] xgmii_rxc_int = xgmii_add_delay ? {xgmii_txc[ 3:0], xgmii_txc_z[ 7:4 ]}: xgmii_txc;
+
+  /********** Make sure we test for minimum if-gap ***********/
+
+  reg [63:0] xgmii_rxd_int_z;
+  reg  [7:0] xgmii_rxc_int_z;
+  reg [63:0] xgmii_rxd_int_zz;
+  reg  [7:0] xgmii_rxc_int_zz;
+
+  reg buffered_idle;
+  reg got_start;
+
+  wire perform_idle_drop = xgmii_rxd_int_zz == 64'h07070707_070707FD && xgmii_rxc_int_zz == 8'hff &&
+                           xgmii_rxd_int_z  == 64'h07070707_07070707 && xgmii_rxc_int_z  == 8'hff &&
+                           xgmii_rxd_int    == 64'h555555FB_07070707 && xgmii_rxc_int    == 8'h1f;
+  always @(posedge xaui_clk) begin
+    xgmii_rxd_int_z  <= xgmii_rxd_int;
+    xgmii_rxc_int_z  <= xgmii_rxc_int;
+    xgmii_rxd_int_zz <= xgmii_rxd_int_z;
+    xgmii_rxc_int_zz <= xgmii_rxc_int_z;
+
+    if (mgt_rst) begin
+      buffered_idle <= 0;
+      got_start <= 0;
+    end else begin
+      if (!buffered_idle) begin
+        /* if there is an idle we are free to add another one in */
+        if (xgmii_rxc_int == 8'b1111_1111 && xgmii_rxd_int == {8{8'h07}}) begin
+          buffered_idle <= 1'b1;
+`ifdef DEBUG
+          $display("app_rx: adding an extra idle");
+`endif
+        end
+      end else begin
+        if (xgmii_rxc_int[0] &&  xgmii_rxd_int[7:0]   == 8'hFB ||
+            xgmii_rxc_int[4] &&  xgmii_rxd_int[39:32] == 8'hFB) begin
+          got_start <= 1'b1;
+        end
+        if (got_start) begin
+          if (perform_idle_drop) begin
+             got_start     <= 0;
+             buffered_idle <= 0;
+`ifdef DEBUG
+             $display("app_rx: dropping an idle to make interframe gap minumum");
+`endif
+          end
+        end
+      end
+    end
+  end
+
+  wire [63:0] xgmii_rxd_if = !buffered_idle || got_start && perform_idle_drop ? xgmii_rxd_int : xgmii_rxd_int_z;
+  wire  [7:0] xgmii_rxc_if = !buffered_idle || got_start && perform_idle_drop ? xgmii_rxc_int : xgmii_rxc_int_z;
 
   /********** Break XGMII ***********/
 
@@ -341,12 +393,12 @@ module TB_kat_ten_gb_eth();
     end else begin
       case (break_state)
         BREAK_WAIT_IDLE: begin
-          if (mode == MODE_XGMII_BREAK && xgmii_rxc_int == {8{1'b1}}) begin
+          if (mode == MODE_XGMII_BREAK && xgmii_rxc_if == {8{1'b1}}) begin
             break_state <= BREAK_WAIT_FIRST_DATA;
           end
         end
         BREAK_WAIT_FIRST_DATA: begin
-          if (xgmii_rxc_int == {8{1'b0}}) begin
+          if (xgmii_rxc_if == {8{1'b0}}) begin
             break_state <= BREAK_DONE;
             break_xgmii_shifter <= {break_xgmii_shifter[4:0], 1'b1};
           end
@@ -358,8 +410,8 @@ module TB_kat_ten_gb_eth();
   end
 
   /* negate data when break packet = 1 */
-  assign xgmii_rxd = break_xgmii ? ~xgmii_rxd_int : xgmii_rxd_int;
-  assign xgmii_rxc = xgmii_rxc_int;
+  assign xgmii_rxd = break_xgmii ? ~xgmii_rxd_if : xgmii_rxd_if;
+  assign xgmii_rxc = xgmii_rxc_if;
 
   /************** Application CLK/RST assignments ***********/
 
@@ -437,12 +489,15 @@ module TB_kat_ten_gb_eth();
   reg [7:0] block_counter;
   wire app_rx_block = block_counter < 10;
 
+  reg [3:0] num_good_frames;
+
   always @(posedge app_clk) begin
     if (app_rst) begin
       rx_app_state    <= RX_APP_WAIT;
       rx_app_progress <= 32'd0;
       mode_done[MODE_XGMII_BREAK] <= 1'b0;
       block_counter <= 0;
+      num_good_frames <= 0;
     end else begin
       case (rx_app_state)
         /* wait 256 cycles -- long enough for the rx buffer to overflow (only with distributed memory) */
@@ -472,6 +527,12 @@ module TB_kat_ten_gb_eth();
               if (app_rx_end_of_frame && app_rx_bad_frame) begin
                 mode_done[MODE_XGMII_BREAK] <= 1'b1;
                 $display("app_rx: got bad frame, but expected it!");
+              end
+              if (app_rx_end_of_frame)
+                num_good_frames <= num_good_frames + 1;
+              if (num_good_frames == 9) begin
+                $display("FAILED: didn't get a corrupted frame when expecting it (waited 9 frames)");
+                $finish;
               end
             end else begin
               rx_app_progress <= rx_app_progress + 1;

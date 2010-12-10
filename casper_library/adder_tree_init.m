@@ -33,16 +33,30 @@
 
 function adder_tree_init(blk,varargin)
 
+clog('entering adder_tree_init', 'trace');
 check_mask_type(blk, 'adder_tree');
 
-defaults = {'latency', 2};
+defaults = {'n_inputs', 3, 'latency', 1, 'first_stage_hdl', 'off', 'adder_imp', 'Fabric'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('adder_tree_init: post same_state', 'trace');
 munge_block(blk, varargin{:});
+
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 latency = get_var('latency', 'defaults', defaults, varargin{:});
 first_stage_hdl = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
-behavioral = get_var('behavioral', 'defaults', defaults, varargin{:});
-if strcmp(behavioral,'on'), first_stage_hdl = 'on'; end
+adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
+
+hw_selection = adder_imp;
+
+if strcmp(adder_imp,'on'), 
+  first_stage_hdl = 'on'; 
+end
+if strcmp(adder_imp, 'Behavioral'),
+  behavioral = 'on';
+  hw_selection = 'Fabric';
+else, 
+  behavioral = 'off';
+end
 
 stages = ceil(log2(n_inputs));
 
@@ -50,7 +64,8 @@ delete_lines(blk);
 
 % Take care of sync
 reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 10 60 25], 'Port', '1');
-reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', 'latency', num2str(stages*latency), ...
+reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
+    'latency', num2str(stages*latency), 'reg_retiming', 'on', ...
     'Position', [30+50 10 60+50 40]);
 reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [30+(stages+1)*100 10 60+(stages+1)*100 25], ...
     'Port', '1');
@@ -85,7 +100,8 @@ else
                 addr = ['addr',num2str(blk_cnt)];
                 blks{j} = addr;
                 reuse_block(blk, addr, 'xbsIndex_r4/AddSub', ...
-                    'latency', num2str(latency), 'use_behavioral_HDL', behavioral,...
+                    'latency', num2str(latency), ...
+                    'use_behavioral_HDL', behavioral, 'hw_selection', hw_selection, ...
                     'pipelined', 'on', 'use_rpm', 'on', ...
                     'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
                 if stage == 1,
@@ -101,6 +117,7 @@ else
                 blks{j} = dly;
                 reuse_block(blk, dly, 'xbsIndex_r4/Delay', ...
                     'latency', num2str(latency), ...
+                    'reg_retiming', 'on', ...
                     'Position', [30+stage*100 j*80-40 70+stage*100 j*80+20]);
                 if stage == 1,
                     add_line(blk,['din',num2str((j*2-1)),'/1'],[dly,'/1']);
@@ -122,3 +139,4 @@ set_param(blk,'AttributesFormatString',annotation);
 
 save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 
+clog('exiting adder_tree_init', 'trace');
