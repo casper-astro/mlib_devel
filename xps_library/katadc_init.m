@@ -123,14 +123,8 @@ function katadc_init(blk, varargin)
     reuse_block(blk, atten1_name, 'built-in/inport', 'Port', num2str(4-il+4), ...
       'Position', [xtick*1-15 ytick*(yoff+4)-7.5 xtick*1+15 ytick*(yoff+4)+7.5]);
   else
-    en1_name = 'en1_const';
-    atten1_name = 'atten1_const';
-    reuse_block(blk, en1_name, 'xbsIndex_r4/Constant', ...
-      'arith_type', 'Unsigned', 'const', '0', 'n_bits', '1', 'bin_pt', '0', ...
-      'Position', [xtick*1-15 ytick*(yoff+3)-7.5 xtick*1+15 ytick*(yoff+3)+7.5]);
-    reuse_block(blk, atten1_name, 'xbsIndex_r4/Constant', ...
-      'arith_type', 'Unsigned', 'const', '0', 'n_bits', '6', 'bin_pt', '0', ...
-      'Position', [xtick*1-15 ytick*(yoff+4)-7.5 xtick*1+15 ytick*(yoff+4)+7.5]);
+    en1_name = 'en0';
+    atten1_name = 'atten0';
   end
  
   reuse_block(blk, 'slc2', 'xbsIndex_r4/Slice', ...
@@ -149,10 +143,10 @@ function katadc_init(blk, varargin)
   reuse_block(blk, 'con', 'xbsIndex_r4/Concat', ...
     'num_inputs', '5', 'Position', [xtick*5-15 ytick*yoff-25 xtick*5+15 ytick*(yoff+4)+25]);
   add_line(gcb, 'trigger/1', 'con/1');
-  add_line(gcb, 'slc0/1', 'con/2');
-  add_line(gcb, 'inv0/1', 'con/3');
-  add_line(gcb, 'slc2/1', 'con/4');
-  add_line(gcb, 'inv1/1', 'con/5');
+  add_line(gcb, 'slc0/1', 'con/4');
+  add_line(gcb, 'inv0/1', 'con/5');
+  add_line(gcb, 'slc2/1', 'con/2');
+  add_line(gcb, 'inv1/1', 'con/3');
   
   %trigger constant, combined with 0 initial value here forces load after reset
   reuse_block(blk, 'reg', 'xbsIndex_r4/Register', ...

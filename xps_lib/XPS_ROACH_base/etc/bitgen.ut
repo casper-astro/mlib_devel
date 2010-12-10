@@ -2,7 +2,7 @@
 -g DriveDone:No
 -g StartUpClk:CCLK
 -g DONE_cycle:4
--g GTS_cycle:5
+-g GTS_cycle:2
 -g TckPin:PULLUP
 -g TdiPin:PULLUP
 -g TmsPin:PULLUP
