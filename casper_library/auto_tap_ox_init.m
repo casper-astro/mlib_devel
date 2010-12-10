@@ -15,6 +15,26 @@ check_mask_type(blk, 'auto_tap');
 munge_block(blk, varargin{:});
 use_ded_mult = get_var('use_ded_mult', varargin{:});
 use_bram_delay = get_var('use_bram_delay', varargin{:});
+use_dsp_acc = get_var('use_dsp_acc', varargin{:});
+
+% Replace cmult-accumulator cores with DSP version if option set
+dual_pol_cmacs = find_system(blk, 'lookUnderMasks', 'all', ...
+   'FollowLinks', 'on', 'Name', 'dual_pol_cmac');
+if use_dsp_acc == 1
+    for i=1:length(dual_pol_cmacs),
+        replace_block(get_param(dual_pol_cmacs{i},'Parent'), ...
+          'Name', get_param(dual_pol_cmacs{i}, 'Name'), ...
+          'casper_library_correlator/dual_pol_cmac_dsp_acc', 'noprompt');
+        set_param(dual_pol_cmacs{i},'LinkStatus','inactive');
+    end
+else
+    for i=1:length(dual_pol_cmacs),
+        replace_block(get_param(dual_pol_cmacs{i},'Parent'), ...
+          'Name', get_param(dual_pol_cmacs{i}, 'Name'), ...
+          'casper_library_correlator/dual_pol_cmac', 'noprompt');
+        set_param(dual_pol_cmacs{i},'LinkStatus','inactive');
+    end
+end
 
 % Configure all multipliers in this block to use dedicated multipliers 
 %(or not)
@@ -26,6 +46,15 @@ for i=1:length(multipliers),
     elseif use_ded_mult==1,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
             'casper_library_multipliers/cmult_4bit_em*','noprompt');
+    elseif use_ded_mult==3,
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library_multipliers/combi_cmult*','noprompt');
+    elseif use_ded_mult==4,
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library_multipliers/dsp_cmult*','noprompt');
+    elseif use_ded_mult==5,
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'casper_library_multipliers/dualdsp_cmult*','noprompt');
     else,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
             'casper_library_multipliers/cmult_4bit_sl*','noprompt');
