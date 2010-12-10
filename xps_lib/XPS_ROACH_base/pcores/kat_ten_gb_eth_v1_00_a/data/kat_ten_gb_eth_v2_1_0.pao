@@ -10,4 +10,7 @@ lib kat_ten_gb_eth_v1_00_a tge_tx              verilog
 lib kat_ten_gb_eth_v1_00_a tx_packet_ctrl_fifo verilog
 lib kat_ten_gb_eth_v1_00_a tx_packet_fifo      verilog
 lib kat_ten_gb_eth_v1_00_a tx_fifo_ext         verilog
-lib kat_ten_gb_eth_v1_00_a ten_gig_eth_mac_UCB vhdl
+lib kat_ten_gb_eth_v1_00_a ten_gig_eth_mac     verilog
+lib kat_ten_gb_eth_v1_00_a mac_rx              verilog
+lib kat_ten_gb_eth_v1_00_a mac_tx              verilog
+lib kat_ten_gb_eth_v1_00_a mac_hard_crc        verilog

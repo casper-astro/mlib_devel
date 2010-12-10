@@ -43,12 +43,12 @@ line=fgetl(fid);
 linenum=linenum+1;
 
 %load the appropriate library
-if(exist(['../',library],'file') ~= 4),
-	fprintf(['Error loading library ../',library,'. Aborting...\n']);
+if(exist(library,'file') ~= 4),
+	fprintf(['Error loading library ',library,'. Aborting...\n']);
 	return;
 else,
     warning('off','Simulink:SL_LoadMdlParameterizedLink')
-    load_system(['../',library]);
+    load_system(library);
 	fprintf([library,' loaded\n\n']);
 end
 
@@ -87,27 +87,30 @@ while( ischar(line) )
     load_system(model);
 	 
 	%try to find block in model
-	fprintf(['Trying to find ',model,'/',blk,'...\n']);
+	fprintf(['Trying to find ',model,'/',blk,'...']);
 	thisblk = find_system( [model],'name',blk);
 	if( isempty(thisblk) ),
-		fprintf(['block: "',blk,'" does not exist in ',model,'.\n']);
+		fprintf([' failure\n']);
 	else
 	   	%everything is good
+                fprintf(' success\n');
 		err = 0;
 	end
 	   
 	%try to find library block specified
-	fprintf(['Trying to find library block ',libloc,'...\n']);
+        lib = [];
+	fprintf(['Trying to find library block ',libloc,'...']);
 	try,
 		lib = find_system( libloc );
 	catch, 
-		fprintf(['Error loading library block ',libloc,'.\n']); 
+		fprintf([' failure\n']); 
 		err = 1;
 	end
 
     	if( isempty(lib) ),
-		fprintf(['Error loading library block ',libloc,'.\n']); 
 		err = 1;
+        else
+          fprintf(['success\n']);
 	end
     end
 
