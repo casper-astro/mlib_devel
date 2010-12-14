@@ -1,7 +1,20 @@
+function fft_unscrambler_init(blk, varargin)
+% Initialize and configure an fft_unscrambler block.
+%
+% fft_unscrambler_init(blk, varargin)
+%
+% blk = the block to configure
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames:
+% FFTSize = Size of the FFT (2^FFTSize points).
+% n_inputs = Number of parallel input streams
+% bram_latency = The latency of BRAM in the system.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
-%   http://seti.ssl.berkeley.edu/casper/                                      %
+%   http://casper.berkeley.edu                                                %
 %   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
@@ -20,39 +33,34 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function fft_unscrambler_init(blk, varargin)
-% Initialize and configure the FFT unscrambler.
-%
-% fft_unscrambler_init(blk, varargin)
-%
-% blk = The block to configure.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames for this block are:
-% FFTSize = Size of the FFT (2^FFTSize points).
-% n_inputs = Number of parallel input streams
-% bram_latency = The latency of BRAM in the system.
+% Set default vararg values.
+defaults = { ...
+    'FFTSize', 5, ...
+    'n_inputs', 2, ...
+    'bram_latency', 2, ...
+};
 
-% Declare any default values for arguments you might like.
-defaults = {};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'fft_unscrambler');
 munge_block(blk, varargin{:});
 
+% Retrieve values from mask fields.
 FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 
-if n_inputs >= FFTSize - 2,
+% Validate input fields.
+
+if (n_inputs >= FFTSize - 2),
     errordlg('FFT Unscrambler: 2^n_inputs must be < 2^(FFT size-2).');
 end
+
 part_mat = [0:2^(FFTSize-2*n_inputs)-1]*2^(n_inputs);
 map_mat = [];
 for i=0:2^n_inputs-1,
     map_mat = [map_mat, part_mat+i];
 end
 map_str = tostring(map_mat);
-
 
 delete_lines(blk);
 
@@ -66,14 +74,19 @@ end
 
 % Add static blocks
 reuse_block(blk, 'square_transposer', 'casper_library_reorder/square_transposer', ...
-    'n_inputs', num2str(n_inputs), 'Position', [85 30 170 2^n_inputs*20+80]);
+    'Position', [85 30 170 2^n_inputs*20+80], ...
+    'n_inputs', num2str(n_inputs));
 reuse_block(blk, 'reorder', 'casper_library_reorder/reorder', ...
-    'map', map_str, 'bram_latency', num2str(bram_latency), ...
-    'n_inputs', num2str(2^n_inputs), 'map_latency', num2str(1),...
-    'double_buffer', '0',...
-    'Position', [265 37 360 93]);
+    'Position', [265 37 360 93], ...
+    'map', map_str, ...
+    'n_inputs', num2str(2^n_inputs), ...
+    'bram_latency', num2str(bram_latency), ...
+    'map_latency', num2str(1), ...
+    'double_buffer', '0');
 reuse_block(blk, 'const', 'xbsIndex_r4/Constant', ...
-    'arith_type', 'Boolean', 'explicit_period', 'on', 'Position', [225 57 250 73]);
+    'Position', [225 57 250 73], ...
+    'arith_type', 'Boolean', ...
+    'explicit_period', 'on');
 
 % Add static lines
 add_line(blk, 'sync/1', 'square_transposer/1');
@@ -89,7 +102,6 @@ for i=1:2^n_inputs,
     add_line(blk, ['square_transposer/',num2str(i+1)], ['reorder/',num2str(i+2)]);
     add_line(blk, ['reorder/',num2str(i+2)], [out_name,'/1']);
 end
-
 
 clean_blocks(blk);
 

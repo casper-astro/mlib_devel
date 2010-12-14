@@ -1,3 +1,24 @@
+function cmult_dsp48e_init (blk, varargin)
+% Initialize and configure a cmult_dsp48e block.
+%
+% cmult_dsp48e_init(blk, varargin)
+%
+% blk = The block to configure.
+% varargin = {'varname', 'value', ...} pairs.
+%
+% Valid varnames:
+% * n_bits_a
+% * bin_pt_a
+% * n_bits_b
+% * bin_pt_b
+% * conjugated
+% * full_precision
+% * n_bits_c
+% * bin_pt_c
+% * quantization
+% * overflow
+% * cast_latency
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -20,21 +41,6 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function cmult_dsp48e_init (blk, varargin)
-% Initialize and configure a cmult_dsp48e block.
-%
-% cmult_dsp48e_init(blk, varargin)
-%
-% blk = The block to configure.
-% varargin = {'varname', 'value', ...} pairs.
-%
-% Valid varnames:
-% * n_bits_a
-% * bin_pt_a
-% * n_bits_b
-% * bin_pt_b
-% * conjugated
-
 % Set default vararg values.
 defaults = { ...
   'n_bits_a', 18, ...
@@ -42,6 +48,12 @@ defaults = { ...
   'n_bits_b', 18, ...
   'bin_pt_b', 17, ...
   'conjugated', 'off', ...
+  'full_precision', 'on', ...
+  'n_bits_c', 37, ...
+  'bin_pt_c', 34, ...
+  'quantization', 'Truncate', ...
+  'overflow', 'Wrap', ...
+  'cast_latency', 0, ...
 };
 
 % Skip init script if mask state has not changed.
@@ -61,6 +73,12 @@ bin_pt_a = get_var('bin_pt_a', 'defaults', defaults, varargin{:});
 n_bits_b = get_var('n_bits_b', 'defaults', defaults, varargin{:});
 bin_pt_b = get_var('bin_pt_b', 'defaults', defaults, varargin{:});
 conjugated = get_var('conjugated', 'defaults', defaults, varargin{:});
+full_precision = get_var('full_precision', 'defaults', defaults, varargin{:});
+n_bits_c = get_var('n_bits_c', 'defaults', defaults, varargin{:});
+bin_pt_c = get_var('bin_pt_c', 'defaults', defaults, varargin{:});
+quantization = get_var('quantization', 'defaults', defaults, varargin{:});
+overflow = get_var('overflow', 'defaults', defaults, varargin{:});
+cast_latency = get_var('cast_latency', 'defaults', defaults, varargin{:});
 
 % Validate input fields.
 
@@ -71,6 +89,11 @@ end
 
 if (n_bits_b < 1),
 	errordlg([blk, ': Input ''b'' bit width must be greater than 0.']);
+	return
+end
+
+if (n_bits_c < 1),
+	errordlg([blk, ': Output ''c'' bit width must be greater than 0.']);
 	return
 end
 
@@ -94,6 +117,11 @@ if (bin_pt_b < 0),
 	return
 end
 
+if (bin_pt_c < 0),
+	errordlg([blk, ': Output ''c'' binary point must be greater than 0.']);
+	return
+end
+
 if (bin_pt_a > n_bits_a),
   errordlg([blk, ': Input ''a'' binary point cannot exceed bit width.']);
   return
@@ -104,68 +132,50 @@ if (bin_pt_b > n_bits_b),
   return
 end
 
+if (bin_pt_c > n_bits_c),
+  errordlg([blk, ': Output ''c'' binary point cannot exceed bit width.']);
+  return
+end
+
 % Calculate bit widths and binary points.
-max_bin_pt = max(bin_pt_a, bin_pt_b);
-n_bits_a_adj = n_bits_a + (max_bin_pt - bin_pt_a);
-n_bits_b_adj = n_bits_b + (max_bin_pt - bin_pt_b);
-n_bits_out = n_bits_a + n_bits_b + 1;
-bin_pt_out = bin_pt_a + bin_pt_b;
+
+if strcmp(full_precision, 'on'),
+  n_bits_out = n_bits_a + n_bits_b + 1;
+  bin_pt_out = bin_pt_a + bin_pt_b;
+else,
+  n_bits_out = n_bits_c;
+  bin_pt_out = bin_pt_c;
+end
 
 % Update sub-block parameters.
 
-set_param([blk, '/assert_a'], ...
-    'arith_type', 'Unsigned', ...
-    'n_bits', num2str(2 * n_bits_a), ...
-    'bin_pt', '0');
-set_param([blk, '/assert_b'], ...
-    'arith_type', 'Unsigned', ...
-    'n_bits', num2str(2 * n_bits_b), ...
-    'bin_pt', '0');
-
-set_param([blk, '/slice_a'], ...
-    'nbits', num2str(n_bits_a));
-set_param([blk, '/slice_b'], ...
-    'nbits', num2str(n_bits_a));
-set_param([blk, '/slice_c'], ...
-    'nbits', num2str(n_bits_b));
-set_param([blk, '/slice_d'], ...
-    'nbits', num2str(n_bits_b));
-
-set_param([blk, '/reinterp_a'], ...
+set_param([blk, '/realign_a_re'], ...
+    'n_bits', num2str(n_bits_a), ...
     'bin_pt', num2str(bin_pt_a));
-set_param([blk, '/reinterp_b'], ...
+set_param([blk, '/realign_a_im'], ...
+    'n_bits', num2str(n_bits_a), ...
     'bin_pt', num2str(bin_pt_a));
-set_param([blk, '/reinterp_c'], ...
+set_param([blk, '/realign_b_re'], ...
+    'n_bits', num2str(n_bits_b), ...
     'bin_pt', num2str(bin_pt_b));
-set_param([blk, '/reinterp_d'], ...
+set_param([blk, '/realign_b_im'], ...
+    'n_bits', num2str(n_bits_b), ...
     'bin_pt', num2str(bin_pt_b));
 
-set_param([blk, '/realign_a'], ...
-    'n_bits', num2str(n_bits_a_adj), ...
-    'bin_pt', num2str(max_bin_pt));
-set_param([blk, '/realign_b'], ...
-    'n_bits', num2str(n_bits_a_adj), ...
-    'bin_pt', num2str(max_bin_pt));
-set_param([blk, '/realign_c'], ...
-    'n_bits', num2str(n_bits_b_adj), ...
-    'bin_pt', num2str(max_bin_pt));
-set_param([blk, '/realign_d'], ...
-    'n_bits', num2str(n_bits_b_adj), ...
-    'bin_pt', num2str(max_bin_pt));
+set_param([blk, '/reinterp_c_re'], ...
+    'bin_pt', num2str(bin_pt_out));
+set_param([blk, '/reinterp_c_im'], ...
+    'bin_pt', num2str(bin_pt_out));
 
-set_param([blk, '/unzero_binpt_real'], ...
-    'bin_pt', num2str(2*max_bin_pt));
-set_param([blk, '/unzero_binpt_imag'], ...
-    'bin_pt', num2str(2*max_bin_pt));
-
-set_param([blk, '/cast_real'], ...
+set_param([blk, '/cast_c_re'], ...
     'n_bits', num2str(n_bits_out), ...
     'bin_pt', num2str(bin_pt_out));
-set_param([blk, '/cast_imag'], ...
+set_param([blk, '/cast_c_im'], ...
     'n_bits', num2str(n_bits_out), ...
     'bin_pt', num2str(bin_pt_out));
 
 % Set conjugation mode.
+
 if strcmp(conjugated, 'on'),
     set_param([blk, '/alumode1'], 'const', '3');
     set_param([blk, '/alumode3'], 'const', '0');
@@ -175,11 +185,12 @@ else,
 end
 
 % Set attribute format string (block annotation).
-annotation_fmt = '%d_%d * %d_%d ==> %d_%d';
+annotation_fmt = '%d_%d * %d_%d ==> %d_%d\nLatency=%d';
 annotation = sprintf(annotation_fmt, ...
   n_bits_a, bin_pt_a, ...
   n_bits_b, bin_pt_b, ...
-  n_bits_out, bin_pt_out);
+  n_bits_out, bin_pt_out, ...
+  4+cast_latency);
 set_param(blk, 'AttributesFormatString', annotation);
 
 % Save block state to stop repeated init script runs.

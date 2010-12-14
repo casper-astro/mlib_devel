@@ -1,3 +1,33 @@
+function butterfly_direct_init(blk, varargin)
+% Initialize and configure a butterfly_direct block.
+%
+% butterfly_direct_init(blk, varargin)
+%
+% blk = the block to configure
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames:
+% * biplex = Make biplex.
+% * FFTSize = Size of the FFT (2^FFTSize points).
+% * Coeffs = Coefficients for twiddle blocks.
+% * StepPeriod = Coefficient step period.
+% * coeffs_bram = Store coefficients in BRAM.
+% * coeff_bit_width = Bitwdith of coefficients.
+% * input_bit_width = Bitwidth of input and output data.
+% * downshift = Explicitly downshift output data.
+% * bram_latency = Latency of BRAM blocks.
+% * add_latency = Latency of adders blocks.
+% * mult_latency = Latency of multiplier blocks.
+% * conv_latency = Latency of cast blocks.
+% * quantization = Quantization behavior.
+% * overflow = Overflow behavior.
+% * arch = Target architecture.
+% * opt_target = Optimization target.
+% * use_hdl = Use behavioral HDL for multipliers.
+% * use_embedded = Use embedded multipliers.
+% * hardcode_shifts = Enable downshift setting.
+% * dsp48_adders = Use DSP48-based adders.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -20,34 +50,6 @@
 %   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-function butterfly_direct_init (blk, varargin)
-% Initialize and configure a butterfly_direct block.
-%
-% butterfly_direct_init(blk, varargin)
-%
-% blk = The block to configure.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames:
-% * biplex = Make biplex.
-% * FFTSize = Size of the FFT (2^FFTSize points).
-% * Coeffs = Coefficients for twiddle blocks.
-% * StepPeriod = Coefficient step period.
-% * coeffs_bram = Store coefficients in BRAM.
-% * coeff_bit_width = Bitwdith of coefficients.
-% * input_bit_width = Bitwidth of input and output data.
-% * bram_latency = Latency of BRAM blocks.
-% * add_latency = Latency of adders blocks.
-% * mult_latency = Latency of multiplier blocks.
-% * conv_latency = Latency of cast blocks.
-% * quantization = Quantization behavior.
-% * overflow = Overflow behavior.
-% * arch = Target architecture.
-% * opt_target = Optimization target.
-% * use_hdl = Use behavioral HDL for multipliers.
-% * use_embedded = Use embedded multipliers.
-% * dsp48_adders = Use DSP48-based adders.
 
 clog('entering butterfly_direct_init', 'trace');
 
@@ -59,9 +61,10 @@ defaults = { ...
     'StepPeriod', 0, ...
     'coeff_bit_width', 18, ...
     'input_bit_width', 18, ...
-    'bram_latency', 2, ...
+    'downshift', 'off', ...
     'add_latency', 1, ...
     'mult_latency', 2, ...
+    'bram_latency', 2, ...
     'conv_latency', 1, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'overflow', 'Wrap', ...
@@ -70,6 +73,7 @@ defaults = { ...
     'coeffs_bram', 'off', ...
     'use_hdl', 'on', ...
     'use_embedded', 'off', ...
+    'hardcode_shifts', 'off', ...
     'dsp48_adders', 'off', ...
 };
 
@@ -93,6 +97,7 @@ Coeffs = get_var('Coeffs', 'defaults', defaults, varargin{:});
 StepPeriod = get_var('StepPeriod', 'defaults', defaults, varargin{:});
 coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+downshift = get_var('downshift', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
@@ -104,6 +109,7 @@ opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 coeffs_bram = get_var('coeffs_bram', 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl', 'defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
+hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
 clog(flatstrcell(varargin), 'butterfly_direct_init_debug');
@@ -115,19 +121,21 @@ if ~strcmp(arch, 'Virtex5') && strcmp(dsp48_adders, 'on'),
     clog(['butterfly_direct_init: Cannot use dsp48e adders on a non-Virtex5 chip.\n'], 'error');
 end
 
+if strcmp(coeffs_bram, 'on'),
+    coeff_type = 'BRAM';
+else
+    coeff_type = 'slices';
+end
+
+if strcmp(hardcode_shifts, 'on'),
+    mux_latency = 0;
+else
+    mux_latency = 1;
+end
+
 if strcmp(dsp48_adders, 'on'),
     set_param(blk, 'add_latency', '2');
     add_latency = 2;
-end
-
-%
-% Compute useful subblock parameters.
-%
-
-if strcmp(coeffs_bram, 'on'),
-    coeff_type = 'BRAM';
-else,
-    coeff_type = 'slices';
 end
 
 % Compute the complex, bit-reversed values of the twiddle factors
@@ -146,8 +154,8 @@ if length(Coeffs) == 1,
         end
     elseif Coeffs(1) == 1,
         twiddle_type = 'twiddle_coeff_1';
-    else,
-        if strcmp(opt_target, 'Logic'), 
+    else
+        if strcmp(opt_target, 'Logic'),
             twiddle_type = 'twiddle_general_4mult';
         else
            twiddle_type = 'twiddle_general_3mult';
@@ -155,8 +163,8 @@ if length(Coeffs) == 1,
     end
 elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-2,
     twiddle_type = 'twiddle_stage_2';
-else,
-    if strcmp(opt_target, 'logic'), 
+else
+    if strcmp(opt_target, 'logic'),
         twiddle_type = 'twiddle_general_4mult';
     else
         twiddle_type = 'twiddle_general_3mult';
@@ -185,8 +193,22 @@ else
     fprintf('butterfly_direct_init: Unknown twiddle %s\n', twiddle_type);
     clog(['butterfly_direct_init: Unknown twiddle ', twiddle_type', '\n'], 'error');
 end
+
 addsub_b_bitwidth = bw - 2;
 addsub_b_binpoint = bd - 1;
+
+if strcmp(hardcode_shifts, 'on'),
+    if strcmp(downshift, 'on'),
+        convert_in_bitwidth = bw - 1;
+        convert_in_binpoint = bd;
+    else
+        convert_in_bitwidth = bw - 1;
+        convert_in_binpoint = bd - 1;
+    end
+else
+    convert_in_bitwidth = bw;
+    convert_in_binpoint = bd;
+end
 
 %%%%%%%%%%%%%%%%%%
 % Start drawing! %
@@ -280,7 +302,7 @@ if strcmp(dsp48_adders, 'on'),
         'n_bits_b', num2str(addsub_b_bitwidth), ...
         'bin_pt_b', num2str(addsub_b_binpoint), ...
         'full_precision', 'on');
-else,
+else
     for i = 0:3,
         yoffset = i*85;
         reuse_block(blk, ['AddSub', num2str(i)], 'xbsIndex_r4/AddSub', ...
@@ -296,41 +318,52 @@ else,
 end
 
 %
-% Add shift delay.
-%
-
-reuse_block(blk, 'shift_delay', 'xbsIndex_r4/Delay', ...
-    'Position', [400 13 450 47], ...
-    'latency', num2str(add_latency), ...
-    'reg_retiming', 'off');
-
-%
 % Add sync delay.
 %
 
 reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
     'Position', [300 403 350 437], ...
-    'latency', num2str(add_latency + conv_latency + 1), ...
+    'latency', num2str(add_latency + mux_latency + conv_latency), ...
     'reg_retiming', 'on');
 
 %
-% Add scale and mux blocks.
+% Add shifts.
 %
 
-for i = 0:3,
-    yoffset = i*85;
-    reuse_block(blk, ['Scale', num2str(i)], 'xbsIndex_r4/Scale', ...
-        'Position', [400 99+yoffset 450 121+yoffset], ...
-        'scale_factor', '-1');
-end
+if strcmp(hardcode_shifts, 'off'),
+    reuse_block(blk, 'shift_delay', 'xbsIndex_r4/Delay', ...
+        'Position', [400 13 450 47], ...
+        'latency', num2str(add_latency), ...
+        'reg_retiming', 'off');
 
-for i = 0:3,
-    yoffset = i*85;
-    reuse_block(blk, ['Mux', num2str(i)], 'xbsIndex_r4/Mux', ...
-        'Position', [560 57+yoffset 585 123+yoffset], ...
-        'inputs', '2', ...
-        'latency', '1', ...
-        'precision', 'Full');
+    for i = 0:3,
+        yoffset = i*85;
+        reuse_block(blk, ['Scale', num2str(i)], 'xbsIndex_r4/Scale', ...
+            'Position', [400 99+yoffset 450 121+yoffset], ...
+            'scale_factor', '-1');
+    end
+
+    for i = 0:3,
+        yoffset = i*85;
+        reuse_block(blk, ['Mux', num2str(i)], 'xbsIndex_r4/Mux', ...
+            'Position', [560 57+yoffset 585 123+yoffset], ...
+            'inputs', '2', ...
+            'latency', '1', ...
+            'precision', 'Full');
+    end
+else
+    reuse_block(blk, 'Terminator', 'built-in/terminator', ...
+        'Position', [400 20 420 40], ...
+        'ShowName', 'off');
+
+    if strcmp(downshift, 'on'),
+        for i = 0:3,
+            yoffset = i*85;
+            reuse_block(blk, ['Scale', num2str(i)], 'xbsIndex_r4/Scale', ...
+                'Position', [400 79+yoffset 450 101+yoffset], ...
+                'scale_factor', '-1');
+        end
+    end
 end
 
 %
@@ -341,13 +374,13 @@ for i = 0:3,
     yoffset = i*85;
     reuse_block(blk, ['convert_of', num2str(i)], 'casper_library_misc/convert_of', ...
         'Position', [630 70+yoffset 680 105+yoffset], ...
-        'quantization', tostring(quantization), ...
-        'overflow', tostring(overflow), ...
-        'bit_width_i', num2str(bw), ...
-        'binary_point_i', num2str(bd), ...
-        'latency', num2str(conv_latency), ...
+        'bit_width_i', num2str(convert_in_bitwidth), ...
+        'binary_point_i', num2str(convert_in_binpoint), ...
         'bit_width_o', num2str(input_bit_width), ...
-        'binary_point_o', num2str(input_bit_width-1));
+        'binary_point_o', num2str(input_bit_width-1), ...
+        'latency', num2str(conv_latency), ...
+        'quantization', tostring(quantization), ...
+        'overflow', tostring(overflow));
 end
 
 %
@@ -373,7 +406,6 @@ reuse_block(blk, 'Logical', 'xbsIndex_r4/Logical', ...
 add_line(blk, 'a/1', [twiddle_type, '/1']);
 add_line(blk, 'b/1', [twiddle_type, '/2']);
 add_line(blk, 'sync/1', [twiddle_type, '/3']);
-add_line(blk, 'shift/1', 'shift_delay/1');
 
 if strcmp(dsp48_adders, 'on'),
     add_line(blk, [twiddle_type, '/1'], 'cadd/1');
@@ -384,7 +416,7 @@ if strcmp(dsp48_adders, 'on'),
     add_line(blk, [twiddle_type, '/2'], 'csub/2');
     add_line(blk, [twiddle_type, '/3'], 'csub/3');
     add_line(blk, [twiddle_type, '/4'], 'csub/4');
-else,
+else
     add_line(blk, [twiddle_type, '/1'], 'AddSub0/1');
     add_line(blk, [twiddle_type, '/2'], 'AddSub1/1');
     add_line(blk, [twiddle_type, '/3'], 'AddSub0/2');
@@ -397,40 +429,82 @@ end
 
 add_line(blk, [twiddle_type, '/5'], 'sync_delay/1');
 
-add_line(blk, 'shift_delay/1', 'Mux0/1');
-add_line(blk, 'shift_delay/1', 'Mux1/1');
-add_line(blk, 'shift_delay/1', 'Mux2/1');
-add_line(blk, 'shift_delay/1', 'Mux3/1');
+if strcmp(hardcode_shifts, 'off'),
+    add_line(blk, 'shift/1', 'shift_delay/1');
 
-if strcmp(dsp48_adders, 'on'),
-    add_line(blk, 'cadd/1', 'Mux0/2');
-    add_line(blk, 'cadd/2', 'Mux1/2');
-    add_line(blk, 'csub/1', 'Mux2/2');
-    add_line(blk, 'csub/2', 'Mux3/2');
-    add_line(blk, 'cadd/1', 'Scale0/1');
-    add_line(blk, 'cadd/2', 'Scale1/1');
-    add_line(blk, 'csub/1', 'Scale2/1');
-    add_line(blk, 'csub/2', 'Scale3/1');
-else,
-    add_line(blk, 'AddSub0/1', 'Mux0/2');
-    add_line(blk, 'AddSub1/1', 'Mux1/2');
-    add_line(blk, 'AddSub2/1', 'Mux2/2');
-    add_line(blk, 'AddSub3/1', 'Mux3/2');
-    add_line(blk, 'AddSub0/1', 'Scale0/1');
-    add_line(blk, 'AddSub1/1', 'Scale1/1');
-    add_line(blk, 'AddSub2/1', 'Scale2/1');
-    add_line(blk, 'AddSub3/1', 'Scale3/1');
+    add_line(blk, 'shift_delay/1', 'Mux0/1');
+    add_line(blk, 'shift_delay/1', 'Mux1/1');
+    add_line(blk, 'shift_delay/1', 'Mux2/1');
+    add_line(blk, 'shift_delay/1', 'Mux3/1');
+
+    if strcmp(dsp48_adders, 'on'),
+        add_line(blk, 'cadd/1', 'Mux0/2');
+        add_line(blk, 'cadd/2', 'Mux1/2');
+        add_line(blk, 'csub/1', 'Mux2/2');
+        add_line(blk, 'csub/2', 'Mux3/2');
+        add_line(blk, 'cadd/1', 'Scale0/1');
+        add_line(blk, 'cadd/2', 'Scale1/1');
+        add_line(blk, 'csub/1', 'Scale2/1');
+        add_line(blk, 'csub/2', 'Scale3/1');
+    else
+        add_line(blk, 'AddSub0/1', 'Mux0/2');
+        add_line(blk, 'AddSub1/1', 'Mux1/2');
+        add_line(blk, 'AddSub2/1', 'Mux2/2');
+        add_line(blk, 'AddSub3/1', 'Mux3/2');
+        add_line(blk, 'AddSub0/1', 'Scale0/1');
+        add_line(blk, 'AddSub1/1', 'Scale1/1');
+        add_line(blk, 'AddSub2/1', 'Scale2/1');
+        add_line(blk, 'AddSub3/1', 'Scale3/1');
+    end
+
+    add_line(blk, 'Scale0/1', 'Mux0/3');
+    add_line(blk, 'Scale1/1', 'Mux1/3');
+    add_line(blk, 'Scale2/1', 'Mux2/3');
+    add_line(blk, 'Scale3/1', 'Mux3/3');
+
+    add_line(blk, 'Mux0/1', 'convert_of0/1');
+    add_line(blk, 'Mux1/1', 'convert_of1/1');
+    add_line(blk, 'Mux2/1', 'convert_of2/1');
+    add_line(blk, 'Mux3/1', 'convert_of3/1');
+else
+    add_line(blk, 'shift/1', 'Terminator/1');
+
+    if strcmp(downshift, 'on'),
+        if strcmp(dsp48_adders, 'on'),
+            add_line(blk, 'cadd/1', 'Scale0/1');
+            add_line(blk, 'cadd/2', 'Scale1/1');
+            add_line(blk, 'csub/1', 'Scale2/1');
+            add_line(blk, 'csub/2', 'Scale3/1');
+
+            add_line(blk, 'Scale0/1', 'convert_of0/1');
+            add_line(blk, 'Scale1/1', 'convert_of1/1');
+            add_line(blk, 'Scale2/1', 'convert_of2/1');
+            add_line(blk, 'Scale3/1', 'convert_of3/1');
+        else
+            add_line(blk, 'AddSub0/1', 'Scale0/1');
+            add_line(blk, 'AddSub1/1', 'Scale1/1');
+            add_line(blk, 'AddSub2/1', 'Scale2/1');
+            add_line(blk, 'AddSub3/1', 'Scale3/1');
+
+            add_line(blk, 'Scale0/1', 'convert_of0/1');
+            add_line(blk, 'Scale1/1', 'convert_of1/1');
+            add_line(blk, 'Scale2/1', 'convert_of2/1');
+            add_line(blk, 'Scale3/1', 'convert_of3/1');
+        end
+    else
+        if strcmp(dsp48_adders, 'on'),
+            add_line(blk, 'cadd/1', 'convert_of0/1');
+            add_line(blk, 'cadd/2', 'convert_of1/1');
+            add_line(blk, 'csub/1', 'convert_of2/1');
+            add_line(blk, 'csub/2', 'convert_of3/1');
+        else
+            add_line(blk, 'AddSub0/1', 'convert_of0/1');
+            add_line(blk, 'AddSub1/1', 'convert_of1/1');
+            add_line(blk, 'AddSub2/1', 'convert_of2/1');
+            add_line(blk, 'AddSub3/1', 'convert_of3/1');
+        end
+    end
 end
-
-add_line(blk, 'Scale0/1', 'Mux0/3');
-add_line(blk, 'Scale1/1', 'Mux1/3');
-add_line(blk, 'Scale2/1', 'Mux2/3');
-add_line(blk, 'Scale3/1', 'Mux3/3');
-
-add_line(blk, 'Mux0/1', 'convert_of0/1');
-add_line(blk, 'Mux1/1', 'convert_of1/1');
-add_line(blk, 'Mux2/1', 'convert_of2/1');
-add_line(blk, 'Mux3/1', 'convert_of3/1');
 
 add_line(blk, 'convert_of0/1', 'ri_to_c01/1');
 add_line(blk, 'convert_of1/1', 'ri_to_c01/2');
