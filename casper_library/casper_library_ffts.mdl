@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "wjm"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Dec 16 18:47:41 2010"
-  RTWModifiedTimeStamp	  214425970
-  ModelVersionFormat	  "1.%<AutoIncrement:8>"
+  LastModifiedDate	  "Fri Dec 17 17:38:36 2010"
+  RTWModifiedTimeStamp	  214508297
+  ModelVersionFormat	  "1.%<AutoIncrement:9>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -631,13 +631,44 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    12
+    SIDHighWatermark	    13
+    Block {
+      BlockType		      SubSystem
+      Name		      "Internal"
+      SID		      13
+      Ports		      []
+      Position		      [525, 90, 575, 140]
+      OpenFcn		      "casper_library_ffts_internal"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      System {
+	Name			"Internal"
+	Location		[480, 85, 1016, 386]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+      }
+    }
     Block {
       BlockType		      SubSystem
       Name		      "Twiddle"
       SID		      1
       Ports		      []
-      Position		      [615, 90, 665, 140]
+      Position		      [635, 90, 685, 140]
       OpenFcn		      "casper_library_ffts_twiddle"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -2470,7 +2501,7 @@ Library {
       "plementation,Implementation"
       System {
 	Name			"fft"
-	Location		[180, 280, 1157, 930]
+	Location		[175, 256, 1152, 906]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
