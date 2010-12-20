@@ -142,7 +142,7 @@ else
 end
 
 % Add biplex FFTs
-if (n_inputs < 1),
+if (n_inputs == 0),
     pos = [100 100 220 255];
     name = 'fft_biplex0';
     reuse_block(blk, name, 'casper_library_ffts/fft_biplex', ...
@@ -166,10 +166,10 @@ if (n_inputs < 1),
         'hardcode_shifts', tostring(hardcode_shifts), ...
         'shift_schedule', tostring(shifts_biplex), ...
         'dsp48_adders', tostring(dsp48_adders));
-    add_line(blk, 'pol0/1', [name,'/1']);
-    add_line(blk, 'pol1/1', [name,'/2']);
-    add_line(blk, 'shift/1', [name,'/4']);
-    add_line(blk, 'sync/1', [name,'/3']);
+    add_line(blk, 'sync/1', [name,'/1']);
+    add_line(blk, 'shift/1', [name,'/2']);
+    add_line(blk, 'pol0/1', [name,'/3']);
+    add_line(blk, 'pol1/1', [name,'/4']);
 elseif (n_inputs ~= FFTSize),
     reuse_block(blk, 'of_or', 'xbsIndex_r4/Logical', ...
         'Position', [575 210 625 200+(2^n_inputs)*20], ...
@@ -200,20 +200,20 @@ elseif (n_inputs ~= FFTSize),
             'hardcode_shifts', tostring(hardcode_shifts), ...
             'shift_schedule', tostring(shifts_biplex), ...
             'dsp48_adders', tostring(dsp48_adders));
-        add_line(blk, ['in',num2str(2*i),'/1'], [name,'/1']);
-        add_line(blk, ['in',num2str(2*i+1),'/1'], [name,'/2']);
-        add_line(blk, 'shift/1', [name,'/4']);
-        add_line(blk, 'sync/1', [name,'/3']);
-        add_line(blk, [name,'/3'], ['of_or/',num2str(i+2)]);
+        add_line(blk, 'sync/1', [name,'/1']);
+        add_line(blk, 'shift/1', [name,'/2']);
+        add_line(blk, ['in',num2str(2*i),'/1'], [name,'/3']);
+        add_line(blk, ['in',num2str(2*i+1),'/1'], [name,'/4']);
+        add_line(blk, [name,'/4'], ['of_or/',num2str(i+2)]);
     end
 end
 
 % Add direct FFTs
-if (n_inputs < 1),
-    add_line(blk, 'fft_biplex0/1', 'out0/1');
-    add_line(blk, 'fft_biplex0/2', 'out1/1');
-    add_line(blk, 'fft_biplex0/4', 'sync_out/1');
-    add_line(blk, 'fft_biplex0/3', 'of/1')
+if (n_inputs == 0),
+    add_line(blk, 'fft_biplex0/1', 'sync_out/1');
+    add_line(blk, 'fft_biplex0/2', 'out0/1');
+    add_line(blk, 'fft_biplex0/3', 'out1/1');
+    add_line(blk, 'fft_biplex0/4', 'of/1')
 elseif (n_inputs == FFTSize),
     pos = [400 20 520 175];
     reuse_block(blk, 'fft_direct', 'casper_library_ffts/fft_direct', ...
@@ -277,12 +277,12 @@ else
         'Position', [100 82 130 100]);
     add_line(blk, 'shift/1', 'slice/1');
     add_line(blk, 'slice/1', 'fft_direct/2');
-    add_line(blk, 'fft_biplex0/4', 'fft_direct/1');
+    add_line(blk, 'fft_biplex0/1', 'fft_direct/1');
 
     for i=0:2^(n_inputs-1)-1,
         bi_name = ['fft_biplex',num2str(i)];
-        add_line(blk, [bi_name,'/1'], ['fft_direct/',num2str(3+2*i)]);
-        add_line(blk, [bi_name,'/2'], ['fft_direct/',num2str(3+2*i+1)]);
+        add_line(blk, [bi_name,'/2'], ['fft_direct/',num2str(3+2*i)]);
+        add_line(blk, [bi_name,'/3'], ['fft_direct/',num2str(3+2*i+1)]);
     end
 
     %add overflow

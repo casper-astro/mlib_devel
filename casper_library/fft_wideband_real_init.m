@@ -177,14 +177,14 @@ for i=0:2^(n_inputs-2)-1,
         'shift_schedule', tostring(shifts_biplex), ...
         'dsp48_adders', tostring(dsp48_adders));
 
-    add_line(blk, ['in',num2str(4*i),'/1'], [name,'/1']);
-    add_line(blk, ['in',num2str(4*i+1),'/1'], [name,'/2']);
-    add_line(blk, ['in',num2str(4*i+2),'/1'], [name,'/3']);
-    add_line(blk, ['in',num2str(4*i+3),'/1'], [name,'/4']);
-    add_line(blk, 'shift/1', [name,'/6']);
-    add_line(blk, 'sync/1', [name,'/5']);
+    add_line(blk, 'sync/1', [name,'/1']);
+    add_line(blk, 'shift/1', [name,'/2']);
+    add_line(blk, ['in',num2str(4*i),'/1'], [name,'/3']);
+    add_line(blk, ['in',num2str(4*i+1),'/1'], [name,'/4']);
+    add_line(blk, ['in',num2str(4*i+2),'/1'], [name,'/5']);
+    add_line(blk, ['in',num2str(4*i+3),'/1'], [name,'/6']);
 
-    add_line(blk, [name,'/5'], ['of_or/',num2str(i+2)]);
+    add_line(blk, [name,'/6'], ['of_or/',num2str(i+2)]);
 end
 
 % Add direct FFT
@@ -220,13 +220,13 @@ reuse_block(blk, 'slice', 'xbsIndex_r4/Slice', ...
     'nbits', num2str(n_inputs));
 add_line(blk, 'shift/1', 'slice/1');
 add_line(blk, 'slice/1', 'fft_direct/2');
-add_line(blk, 'fft_biplex_real_4x0/6', 'fft_direct/1');
+add_line(blk, 'fft_biplex_real_4x0/1', 'fft_direct/1');
 for i=0:2^(n_inputs-2)-1,
     bi_name = ['fft_biplex_real_4x',num2str(i)];
-    add_line(blk, [bi_name,'/1'], ['fft_direct/',num2str(3+4*i)]);
-    add_line(blk, [bi_name,'/2'], ['fft_direct/',num2str(3+4*i+1)]);
-    add_line(blk, [bi_name,'/3'], ['fft_direct/',num2str(3+4*i+2)]);
-    add_line(blk, [bi_name,'/4'], ['fft_direct/',num2str(3+4*i+3)]);
+    add_line(blk, [bi_name,'/2'], ['fft_direct/',num2str(3+4*i)]);
+    add_line(blk, [bi_name,'/3'], ['fft_direct/',num2str(3+4*i+1)]);
+    add_line(blk, [bi_name,'/4'], ['fft_direct/',num2str(3+4*i+2)]);
+    add_line(blk, [bi_name,'/5'], ['fft_direct/',num2str(3+4*i+3)]);
 end
 
 %add overflow

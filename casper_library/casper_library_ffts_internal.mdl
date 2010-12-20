@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "wjm"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Dec 17 17:42:44 2010"
-  RTWModifiedTimeStamp	  214508536
-  ModelVersionFormat	  "1.%<AutoIncrement:1>"
+  LastModifiedDate	  "Mon Dec 20 01:06:22 2010"
+  RTWModifiedTimeStamp	  214707969
+  ModelVersionFormat	  "1.%<AutoIncrement:2>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -617,7 +617,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_internal"
-    Location		    [1308, 77, 1888, 337]
+    Location		    [1303, 53, 1883, 313]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -672,7 +672,7 @@ Library {
       MaskTabNameString	      "Basic,Basic,Latency,Latency,Latency,Implementation,Implementation"
       System {
 	Name			"bi_real_unscr_2x"
-	Location		[75, 53, 709, 378]
+	Location		[70, 29, 704, 354]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -728,7 +728,7 @@ Library {
 	  const			  "0"
 	  n_bits		  "FFTSize-1"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -737,7 +737,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -770,15 +770,15 @@ Library {
 	  arith_type		  "Unsigned"
 	  n_bits		  "FFTSize-1"
 	  bin_pt		  "0"
-	  load_pin		  "off"
-	  rst			  "on"
-	  en			  "off"
+	  load_pin		  off
+	  rst			  on
+	  en			  off
 	  explicit_period	  "on"
 	  period		  "1"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  off
 	  implementation	  "Fabric"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -803,11 +803,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -832,7 +832,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
 	  inputs		  "2"
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
 	  precision		  "Full"
 	  arith_type		  "Signed  (2's comp)"
@@ -840,8 +840,8 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "334,474,419,344"
@@ -867,10 +867,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
 	  mode			  "a=b"
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -899,7 +899,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -908,7 +908,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "264,216,473,439"
 	  block_type		  "constant"
@@ -935,7 +935,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -944,7 +944,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "264,216,473,439"
 	  block_type		  "constant"
@@ -3022,11 +3022,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "add_latency + conv_latency"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "0,0,419,315"
@@ -3228,7 +3228,7 @@ Library {
       MaskTabNameString	      "Basic,Basic,Latency,Latency,Latency,Implementation,Implementation,Implementation"
       System {
 	Name			"bi_real_unscr_4x"
-	Location		[60, 416, 1213, 953]
+	Location		[55, 392, 1208, 929]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -3278,7 +3278,7 @@ Library {
 	  const			  "2^(FFTSize-1)"
 	  n_bits		  "FFTSize"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -3287,7 +3287,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -3314,7 +3314,7 @@ Library {
 	  const			  "0"
 	  n_bits		  "FFTSize"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -3323,7 +3323,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -3356,15 +3356,15 @@ Library {
 	  arith_type		  "Unsigned"
 	  n_bits		  "FFTSize"
 	  bin_pt		  "0"
-	  load_pin		  "off"
-	  rst			  "on"
-	  en			  "off"
+	  load_pin		  off
+	  rst			  on
+	  en			  off
 	  explicit_period	  "on"
 	  period		  "1"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  off
 	  implementation	  "Fabric"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -3388,11 +3388,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -3417,29 +3417,29 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
 	  inputs		  "2"
-	  en			  "off"
-	  latency		  "0"
+	  en			  off
+	  latency		  "1"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
 	  n_bits		  "16"
 	  bin_pt		  "14"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mux"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "25,66,3,1,white,blue,3,eb98d690,right,"
+	  sg_icon_stat		  "25,66,3,1,white,blue,3,a150fb03,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],[0.77 0.8"
 	  "2 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0.68 0.6 0.52"
 	  " 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636364 0.575758 0.5"
 	  " 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0"
 	  " 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
 	  "or('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('in"
-	  "put',3,'d1');\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  "put',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -3452,29 +3452,29 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
 	  inputs		  "2"
-	  en			  "off"
-	  latency		  "0"
+	  en			  off
+	  latency		  "1"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
 	  n_bits		  "16"
 	  bin_pt		  "14"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mux"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "25,66,3,1,white,blue,3,eb98d690,right,"
+	  sg_icon_stat		  "25,66,3,1,white,blue,3,a150fb03,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],[0.77 0.8"
 	  "2 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0.68 0.6 0.52"
 	  " 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636364 0.575758 0.5"
 	  " 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0"
 	  " 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
 	  "or('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('in"
-	  "put',3,'d1');\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  "put',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -3487,29 +3487,29 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
 	  inputs		  "2"
-	  en			  "off"
-	  latency		  "0"
+	  en			  off
+	  latency		  "1"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
 	  n_bits		  "16"
 	  bin_pt		  "14"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mux"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "25,66,3,1,white,blue,3,eb98d690,right,"
+	  sg_icon_stat		  "25,66,3,1,white,blue,3,a150fb03,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],[0.77 0.8"
 	  "2 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0.68 0.6 0.52"
 	  " 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636364 0.575758 0.5"
 	  " 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0"
 	  " 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
 	  "or('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('in"
-	  "put',3,'d1');\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  "put',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -3522,29 +3522,29 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
 	  inputs		  "2"
-	  en			  "off"
-	  latency		  "0"
+	  en			  off
+	  latency		  "1"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
 	  n_bits		  "16"
 	  bin_pt		  "14"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "mux"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "25,66,3,1,white,blue,3,eb98d690,right,"
+	  sg_icon_stat		  "25,66,3,1,white,blue,3,a150fb03,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],[0.77 0.8"
 	  "2 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0.68 0.6 0.52"
 	  " 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636364 0.575758 0.5"
 	  " 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0"
 	  " 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
 	  "or('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('in"
-	  "put',3,'d1');\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  "put',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -3557,10 +3557,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
 	  mode			  "a=b"
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -3586,10 +3586,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
 	  mode			  "a=b"
-	  en			  "off"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -3835,7 +3835,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -3844,7 +3844,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -3871,7 +3871,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -3880,7 +3880,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -3907,7 +3907,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  "on"
+	  explicit_period	  on
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -3916,7 +3916,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -3960,7 +3960,7 @@ Library {
 	  MaskIconRotate	  "none"
 	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "n_bits|add_latency|conv_latency"
+	  MaskValueString	  "n_bits|add_latency|add_latency"
 	  System {
 	    Name		    "hilbert0"
 	    Location		    [0, 53, 584, 410]
@@ -4735,7 +4735,7 @@ Library {
 	  MaskIconRotate	  "none"
 	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "n_bits|add_latency|conv_latency"
+	  MaskValueString	  "n_bits|add_latency|add_latency"
 	  System {
 	    Name		    "hilbert1"
 	    Location		    [0, 53, 584, 410]
@@ -10683,7 +10683,7 @@ Library {
 	  MaskIconRotate	  "none"
 	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "2^(FFTSize-1) + add_latency + conv_latency + 1"
+	  MaskValueString	  "2^(FFTSize-1) + add_latency + add_latency + 1"
 	  System {
 	    Name		    "sync_delay"
 	    Location		    [383, 134, 876, 622]
@@ -11554,9 +11554,9 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
-	  use_carryin		  off
-	  use_carryout		  off
-	  en			  off
+	  use_carryin		  "off"
+	  use_carryout		  "off"
+	  en			  "off"
 	  latency		  "add_latency"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
@@ -11564,11 +11564,11 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  on
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "on"
 	  hw_selection		  "Fabric"
-	  pipelined		  off
-	  xl_use_area		  off
+	  pipelined		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -11595,9 +11595,9 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
-	  use_carryin		  off
-	  use_carryout		  off
-	  en			  off
+	  use_carryin		  "off"
+	  use_carryout		  "off"
+	  en			  "off"
 	  latency		  "add_latency"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
@@ -11605,11 +11605,11 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  on
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "on"
 	  hw_selection		  "Fabric"
-	  pipelined		  off
-	  xl_use_area		  off
+	  pipelined		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -11636,9 +11636,9 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
-	  use_carryin		  off
-	  use_carryout		  off
-	  en			  off
+	  use_carryin		  "off"
+	  use_carryout		  "off"
+	  en			  "off"
 	  latency		  "add_latency"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
@@ -11646,11 +11646,11 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  on
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "on"
 	  hw_selection		  "Fabric"
-	  pipelined		  off
-	  xl_use_area		  off
+	  pipelined		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -11677,9 +11677,9 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
-	  use_carryin		  off
-	  use_carryout		  off
-	  en			  off
+	  use_carryin		  "off"
+	  use_carryout		  "off"
+	  en			  "off"
 	  latency		  "add_latency"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
@@ -11687,11 +11687,11 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  on
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "on"
 	  hw_selection		  "Fabric"
-	  pipelined		  off
-	  xl_use_area		  off
+	  pipelined		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -11724,9 +11724,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "conv_latency"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,538,377"
@@ -11757,9 +11757,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "conv_latency"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -11790,9 +11790,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "conv_latency"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -11823,9 +11823,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "conv_latency"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -11852,7 +11852,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,348,233"
 	  block_type		  "scale"
@@ -11877,7 +11877,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,348,233"
 	  block_type		  "scale"
@@ -11902,7 +11902,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,348,233"
 	  block_type		  "scale"
@@ -11927,7 +11927,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,348,233"
 	  block_type		  "scale"
@@ -12497,7 +12497,7 @@ Library {
 	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
 	      "nt at zero."
 	      num_inputs	      "2"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,336,165"
 	      block_type	      "concat"
@@ -12525,9 +12525,9 @@ Library {
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
 	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
 	      "ut of 56 (111000 in binary)."
-	      force_arith_type	      on
+	      force_arith_type	      "on"
 	      arith_type	      "Unsigned"
-	      force_bin_pt	      on
+	      force_bin_pt	      "on"
 	      bin_pt		      "0"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -12555,9 +12555,9 @@ Library {
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
 	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
 	      "ut of 56 (111000 in binary)."
-	      force_arith_type	      on
+	      force_arith_type	      "on"
 	      arith_type	      "Unsigned"
-	      force_bin_pt	      on
+	      force_bin_pt	      "on"
 	      bin_pt		      "0"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -12689,7 +12689,7 @@ Library {
 	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
 	      "nt at zero."
 	      num_inputs	      "2"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,336,165"
 	      block_type	      "concat"
@@ -12717,9 +12717,9 @@ Library {
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
 	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
 	      "ut of 56 (111000 in binary)."
-	      force_arith_type	      on
+	      force_arith_type	      "on"
 	      arith_type	      "Unsigned"
-	      force_bin_pt	      on
+	      force_bin_pt	      "on"
 	      bin_pt		      "0"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -12747,9 +12747,9 @@ Library {
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
 	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
 	      "ut of 56 (111000 in binary)."
-	      force_arith_type	      on
+	      force_arith_type	      "on"
 	      arith_type	      "Unsigned"
-	      force_bin_pt	      on
+	      force_bin_pt	      "on"
 	      bin_pt		      "0"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"

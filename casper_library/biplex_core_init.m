@@ -107,11 +107,13 @@ current_stages = find_system(blk, ...
     'masktype', 'fft_stage');
 prev_stages = length(current_stages);
 
-reuse_block(blk, 'pol1', 'built-in/inport', 'Port', '1', 'Position', [15 33 45 47]);
-reuse_block(blk, 'pol2', 'built-in/inport', 'Port', '2', 'Position', [15 58 45 72]);
-reuse_block(blk, 'sync', 'built-in/inport', 'Port', '3', 'Position', [15 108 45 122]);
+reuse_block(blk, 'sync', 'built-in/inport', 'Port', '1', 'Position', [15 108 45 122]);
+reuse_block(blk, 'shift', 'built-in/inport', 'Port', '2', 'Position', [15 193 45 207]);
+reuse_block(blk, 'pol1', 'built-in/inport', 'Port', '3', 'Position', [15 33 45 47]);
+reuse_block(blk, 'pol2', 'built-in/inport', 'Port', '4', 'Position', [15 58 45 72]);
+
 reuse_block(blk, 'Constant', 'xbsindex_r4/Constant', 'arith_type', 'Boolean', 'const', '0', 'Position', [55 82 85 98]);
-reuse_block(blk, 'shift', 'built-in/inport', 'Port', '4', 'Position', [15 193 45 207]);
+
 
 if FFTSize ~= prev_stages,
     delete_lines(blk);
@@ -197,15 +199,24 @@ if FFTSize ~= prev_stages,
     % Reposition output ports
     last_stage = ['fft_stage_',num2str(FFTSize)];
 
-    outports = {'out1', 'out2', 'of', 'sync_out'};
-    for a=1:length(outports),
-        x = 120*(FFTSize+1);
-        y = 33 + 30*(a-1);
-        reuse_block(blk, outports{a}, 'built-in/outport', ...
-            'Position', [x, y, x+30, y+14], ...
-            'Port', num2str(a));
-        add_line(blk, [last_stage,'/',num2str(a)], [outports{a},'/1']);
-    end
+    x = 120*(FFTSize+1);
+    reuse_block(blk, 'out1', 'built-in/outport', ...
+        'Position', [x 33 x+30 47], ...
+        'Port', '2');
+    reuse_block(blk, 'out2', 'built-in/outport', ...
+        'Position', [x 63 x+30 77], ...
+        'Port', '3');
+    reuse_block(blk, 'of', 'built-in/outport', ...
+        'Position', [x 93 x+30 107], ...
+        'Port', '4');
+    reuse_block(blk, 'sync_out', 'built-in/outport', ...
+        'Position', [x 123 x+30 137], ...
+        'Port', '1');
+
+    add_line(blk, [last_stage,'/1'], 'out1/1');
+    add_line(blk, [last_stage,'/2'], 'out2/1');
+    add_line(blk, [last_stage,'/3'], 'of/1');
+    add_line(blk, [last_stage,'/4'], 'sync_out/1');
 end
 
 clean_blocks(blk);
