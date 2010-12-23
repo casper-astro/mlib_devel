@@ -76,6 +76,13 @@ map_even = bit_reverse(0:2^(FFTSize-1)-1, FFTSize-1);
 map_odd = bit_reverse(2^(FFTSize-1)-1:-1:0, FFTSize-1);
 map_out = 2^(FFTSize-1)-1:-1:0;
 
+% Set mirror_spectrum conjugation latency.
+if strcmp(dsp48_adders, 'on'),
+    negate_latency = 1;
+else
+    negate_latency = 0;
+end
+
 %%%%%%%%%%%%%%%%%%
 % Start drawing! %
 %%%%%%%%%%%%%%%%%%
@@ -372,7 +379,11 @@ reuse_block(blk, 'en_out', 'xbsIndex_r4/Constant', ...
 
 reuse_block(blk, 'mirror_spectrum', 'casper_library_ffts_internal/mirror_spectrum', ...
     'Position', [950 18 1050 241], ...
-    'LinkStatus', 'inactive');
+    'LinkStatus', 'inactive', ...
+    'FFTSize', num2str(FFTSize), ...
+    'input_bitwidth', num2str(n_bits), ...
+    'bram_latency', num2str(bram_latency), ...
+    'negate_latency', num2str(negate_latency));
 
 %
 % Draw wires.
