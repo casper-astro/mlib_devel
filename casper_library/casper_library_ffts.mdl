@@ -15631,7 +15631,7 @@ Library {
 	      MaskIconRotate	      "none"
 	      MaskPortRotate	      "default"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "n_bits|add_latency|add_latency"
+	      MaskValueString	      "n_bits|add_latency|conv_latency"
 	      System {
 		Name			"hilbert0"
 		Location		[0, 53, 584, 410]
@@ -17116,7 +17116,7 @@ Library {
 	      MaskIconRotate	      "none"
 	      MaskPortRotate	      "default"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "n_bits|add_latency|add_latency"
+	      MaskValueString	      "n_bits|add_latency|conv_latency"
 	      System {
 		Name			"hilbert1"
 		Location		[0, 53, 584, 410]
@@ -22294,7 +22294,7 @@ Library {
 	      MaskIconRotate	      "none"
 	      MaskPortRotate	      "default"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2^(FFTSize-1) + add_latency + add_latency + 1"
+	      MaskValueString	      "2^(FFTSize-1) + add_latency + conv_latency + 1"
 	      System {
 		Name			"sync_delay_srl"
 		Location		[296, 444, 571, 542]
