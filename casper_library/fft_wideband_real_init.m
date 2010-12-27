@@ -43,25 +43,27 @@ clog('entering fft_wideband_real_init', 'trace');
 
 % Set default vararg values.
 defaults = { ...
-    'FFTSize', 5, ...
-    'n_inputs', 2, ...
+    'FFTSize', 11, ...
+    'n_inputs', 4, ...
     'input_bit_width', 18, ...
     'coeff_bit_width', 18,  ...
     'add_latency', 1, ...
-    'mult_latency', 2, ...
+    'mult_latency', 3, ...
     'bram_latency', 2, ...
     'conv_latency', 1, ...
+		'biplex_direct_latency', 2, ...
+		'input_latency', 2, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'overflow', 'Saturate', ...
     'arch', 'Virtex5', ...
     'opt_target', 'logic', ...
     'coeffs_bit_limit', 8, ...
     'delays_bit_limit', 8, ...
-    'specify_mult', 'off', ...
-    'mult_spec', [2 2 2 2 2], ...
+    'specify_mult', 'on', ...
+    'mult_spec', ones(1,11), ...
     'hardcode_shifts', 'off', ...
     'shift_schedule', [1 1 1 1 1], ...
-    'dsp48_adders', 'off', ...
+    'dsp48_adders', 'on', ...
     'unscramble', 'on', ...
 };
 
@@ -79,6 +81,8 @@ add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
+biplex_direct_latency = get_var('biplex_direct_latency', 'defaults', defaults, varargin{:});
+input_latency = get_var('input_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 arch = get_var('arch', 'defaults', defaults, varargin{:});
@@ -111,7 +115,7 @@ delete_lines(blk);
 % Add Ports
 reuse_block(blk, 'sync', 'built-in/inport', 'Position', [30 32 60 48], 'Port', '1');
 reuse_block(blk, 'shift', 'built-in/inport', 'Position', [30 82 60 98], 'Port', '2');
-reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [725 35 755 50], 'Port', '1');
+reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [935 32 965 48], 'Port', '1');
 
 for i=0:2^n_inputs-1,
     reuse_block(blk, ['in',num2str(i)], 'built-in/inport', ...
@@ -121,15 +125,15 @@ end
 
 for i=0:2^(n_inputs-1)-1,
     reuse_block(blk, ['out',num2str(i)], 'built-in/outport', ...
-        'Position', [725 45*i+80 755 45*i+100], ...
+        'Position', [935 45*i+80 965 45*i+100], ...
         'Port', num2str(i+2));
 end
 reuse_block(blk, 'of', 'built-in/outport', ...
-    'Position', [725 45*2^(n_inputs-1)+120 755 45*(2^(n_inputs-1))+135], ...
+    'Position', [935 45*2^(n_inputs-1)+120 965 45*(2^(n_inputs-1))+135], ...
     'Port', num2str(2^(n_inputs-1)+2));
 
 reuse_block(blk, 'of_or', 'xbsIndex_r4/Logical', ...
-    'Position', [575 210 625 200+2^(n_inputs-1)*20], ...
+    'Position', [790 210 840 200+2^(n_inputs-1)*20], ...
     'logical_function', 'OR', ...
     'inputs', tostring(2^(n_inputs-2)+1), ...
     'latency', '1');
@@ -152,7 +156,7 @@ end
 
 % Add biplex_real_4x FFTs
 for i=0:2^(n_inputs-2)-1,
-    pos = [100 200*i+100 220 200*i+255];
+    pos = [200 200*i+100 320 200*i+255];
     name = ['fft_biplex_real_4x',num2str(i)];
 
     reuse_block(blk, name, 'casper_library_ffts/fft_biplex_real_4x', ...
@@ -177,18 +181,46 @@ for i=0:2^(n_inputs-2)-1,
         'shift_schedule', tostring(shifts_biplex), ...
         'dsp48_adders', tostring(dsp48_adders));
 
-    add_line(blk, 'sync/1', [name,'/1']);
-    add_line(blk, 'shift/1', [name,'/2']);
-    add_line(blk, ['in',num2str(4*i),'/1'], [name,'/3']);
-    add_line(blk, ['in',num2str(4*i+1),'/1'], [name,'/4']);
-    add_line(blk, ['in',num2str(4*i+2),'/1'], [name,'/5']);
-    add_line(blk, ['in',num2str(4*i+3),'/1'], [name,'/6']);
+		% input sync through input latency
+    reuse_block(blk, strcat('in_del_sync_4x', num2str(i) ), 'casper_library_delays/pipeline', 'latency', tostring(input_latency), 'Position', [125  108+i*200  185  122+i*200]);
+    reuse_line(blk, 'sync/1', strcat('in_del_sync_4x', num2str(i), '/1' ) );
+    reuse_line(blk, strcat('in_del_sync_4x', num2str(i), '/1' ), [name,'/1']);
 
-    add_line(blk, [name,'/6'], ['of_or/',num2str(i+2)]);
+		% connect shift
+    reuse_line(blk, 'shift/1', [name,'/2']);
+
+		% connect data inputs through input latency
+    reuse_block(blk, strcat('in_del_4x', num2str(i), '_pol1'), 'casper_library_delays/pipeline', 'latency', tostring(input_latency), 'Position', [125  158+i*200  185  172+i*200]);
+    reuse_block(blk, strcat('in_del_4x', num2str(i), '_pol2'), 'casper_library_delays/pipeline', 'latency', tostring(input_latency), 'Position', [125  183+i*200  185  197+i*200]);
+    reuse_block(blk, strcat('in_del_4x', num2str(i), '_pol3'), 'casper_library_delays/pipeline', 'latency', tostring(input_latency), 'Position', [125  208+i*200  185  222+i*200]);
+    reuse_block(blk, strcat('in_del_4x', num2str(i), '_pol4'), 'casper_library_delays/pipeline', 'latency', tostring(input_latency), 'Position', [125  233+i*200  185  247+i*200]);
+
+    reuse_line(blk, ['in',num2str(4*i+0),'/1'], strcat('in_del_4x', num2str(i), '_pol1/1') );
+    reuse_line(blk, ['in',num2str(4*i+1),'/1'], strcat('in_del_4x', num2str(i), '_pol2/1') );
+    reuse_line(blk, ['in',num2str(4*i+2),'/1'], strcat('in_del_4x', num2str(i), '_pol3/1') );
+    reuse_line(blk, ['in',num2str(4*i+3),'/1'], strcat('in_del_4x', num2str(i), '_pol4/1') );
+    reuse_line(blk, strcat('in_del_4x', num2str(i), '_pol1/1'), [name,'/3']);
+    reuse_line(blk, strcat('in_del_4x', num2str(i), '_pol2/1'), [name,'/4']);
+    reuse_line(blk, strcat('in_del_4x', num2str(i), '_pol3/1'), [name,'/5']);
+    reuse_line(blk, strcat('in_del_4x', num2str(i), '_pol4/1'), [name,'/6']);
+
+		% connect overflow output
+    reuse_line(blk, [name,'/6'], ['of_or/',num2str(i+2)]);
+    
+		% connect data outputs to output latency
+    reuse_block(blk, strcat('del_4x', num2str(i), '_pol1'), 'casper_library_delays/pipeline', 'latency', tostring(biplex_direct_latency), 'Position', [335  133+i*200  395  147+i*200]);
+    reuse_block(blk, strcat('del_4x', num2str(i), '_pol2'), 'casper_library_delays/pipeline', 'latency', tostring(biplex_direct_latency), 'Position', [335  158+i*200  395  172+i*200]);
+    reuse_block(blk, strcat('del_4x', num2str(i), '_pol3'), 'casper_library_delays/pipeline', 'latency', tostring(biplex_direct_latency), 'Position', [335  183+i*200  395  197+i*200]);
+    reuse_block(blk, strcat('del_4x', num2str(i), '_pol4'), 'casper_library_delays/pipeline', 'latency', tostring(biplex_direct_latency), 'Position', [335  208+i*200  395  222+i*200]);
+
+		reuse_line(blk, strcat(name, '/2'), strcat('del_4x', num2str(i), '_pol1/1') );
+		reuse_line(blk, strcat(name, '/3'), strcat('del_4x', num2str(i), '_pol2/1') );
+		reuse_line(blk, strcat(name, '/4'), strcat('del_4x', num2str(i), '_pol3/1') );
+		reuse_line(blk, strcat(name, '/5'), strcat('del_4x', num2str(i), '_pol4/1') );
 end
 
 % Add direct FFT
-pos = [400 20 520 175];
+pos = [530 35 650 180];
 reuse_block(blk, 'fft_direct', 'casper_library_ffts/fft_direct', ...
     'Position', pos, ...
     'LinkStatus', 'inactive', ...
@@ -218,38 +250,39 @@ reuse_block(blk, 'slice', 'xbsIndex_r4/Slice', ...
     'mode', 'Lower Bit Location + Width', ...
     'bit0', num2str(FFTSize-n_inputs), ...
     'nbits', num2str(n_inputs));
-add_line(blk, 'shift/1', 'slice/1');
-add_line(blk, 'slice/1', 'fft_direct/2');
-add_line(blk, 'fft_biplex_real_4x0/1', 'fft_direct/1');
+reuse_line(blk, 'shift/1', 'slice/1');
+reuse_line(blk, 'slice/1', 'fft_direct/2');
 for i=0:2^(n_inputs-2)-1,
-    bi_name = ['fft_biplex_real_4x',num2str(i)];
-    add_line(blk, [bi_name,'/2'], ['fft_direct/',num2str(3+4*i)]);
-    add_line(blk, [bi_name,'/3'], ['fft_direct/',num2str(3+4*i+1)]);
-    add_line(blk, [bi_name,'/4'], ['fft_direct/',num2str(3+4*i+2)]);
-    add_line(blk, [bi_name,'/5'], ['fft_direct/',num2str(3+4*i+3)]);
+    reuse_line(blk, strcat('del_4x', num2str(i), '_pol1/1'), ['fft_direct/',num2str(3+4*i)]);
+    reuse_line(blk, strcat('del_4x', num2str(i), '_pol2/1'), ['fft_direct/',num2str(3+4*i+1)]);
+    reuse_line(blk, strcat('del_4x', num2str(i), '_pol3/1'), ['fft_direct/',num2str(3+4*i+2)]);
+    reuse_line(blk, strcat('del_4x', num2str(i), '_pol4/1'), ['fft_direct/',num2str(3+4*i+3)]);
 end
+reuse_block(blk, 'del_sync', 'casper_library_delays/pipeline', 'latency', tostring(biplex_direct_latency), 'Position', [335  108  395  122]);
+reuse_line(blk, 'fft_biplex_real_4x0/1', 'del_sync/1'); 
+reuse_line(blk, 'del_sync/1', 'fft_direct/1');
 
 %add overflow
-add_line(blk, ['fft_direct/',num2str(2^n_inputs+3-1)], 'of_or/1');
-add_line(blk, 'of_or/1', 'of/1');
+reuse_line(blk, ['fft_direct/',num2str(2^n_inputs+3-1)], 'of_or/1');
+reuse_line(blk, 'of_or/1', 'of/1');
 
 % Add Unscrambler
 if strcmp(unscramble, 'on'),
     reuse_block(blk, 'fft_unscrambler', 'casper_library_ffts/fft_unscrambler', ...
-        'Position', [550 20 670 160], ...
+        'Position', [755 28 875 172], ...
         'FFTSize', num2str(FFTSize-1), ...
         'n_inputs', num2str(n_inputs-1), ...
         'bram_latency', num2str(bram_latency));
-    add_line(blk, 'fft_direct/1', 'fft_unscrambler/1');
-    add_line(blk, 'fft_unscrambler/1', 'sync_out/1');
+    reuse_line(blk, 'fft_direct/1', 'fft_unscrambler/1');
+    reuse_line(blk, 'fft_unscrambler/1', 'sync_out/1');
     for i=1:2^(n_inputs-1),
-        add_line(blk, ['fft_direct/',num2str(i+1)], ['fft_unscrambler/',num2str(i+1)]);
-        add_line(blk, ['fft_unscrambler/',num2str(i+1)], ['out',num2str(i-1),'/1']);
+        reuse_line(blk, ['fft_direct/',num2str(i+1)], ['fft_unscrambler/',num2str(i+1)]);
+        reuse_line(blk, ['fft_unscrambler/',num2str(i+1)], ['out',num2str(i-1),'/1']);
     end
 else
-    add_line(blk, 'fft_direct/1', 'sync_out/1');
+    reuse_line(blk, 'fft_direct/1', 'sync_out/1');
     for i=1:2^(n_inputs-1),
-        add_line(blk, ['fft_direct/',num2str(i+1)], ['out',num2str(i-1),'/1']);
+        reuse_line(blk, ['fft_direct/',num2str(i+1)], ['out',num2str(i-1),'/1']);
     end
 end
 
