@@ -110,7 +110,7 @@ end
 
 max_non_frac = max(n_bits_a - bin_pt_a, n_bits_b - bin_pt_b);
 max_bin_pt = max(bin_pt_a, bin_pt_b);
-bin_pt_tmp = 24 - (max_non_frac + 1);
+bin_pt_tmp = 24 - (max_non_frac + 2);
 
 if strcmp(full_precision, 'on'),
   n_bits_out = max_non_frac + max_bin_pt + 1;
