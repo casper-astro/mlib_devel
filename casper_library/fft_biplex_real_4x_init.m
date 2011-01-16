@@ -118,11 +118,11 @@ end
 
 % Derive useful values.
 
-if FFTSize > coeffs_bit_limit
-  bram_map = 'on';
-else
-  bram_map = 'off';
-end
+% if FFTSize > coeffs_bit_limit
+%   bram_map = 'on';
+% else
+%   bram_map = 'off';
+% end
 
 if (2^(FFTSize-1) * 2*input_bit_width >= 2^delays_bit_limit) && (2^(FFTSize-1) >= bram_latency),
     bram_delays = 'on';
