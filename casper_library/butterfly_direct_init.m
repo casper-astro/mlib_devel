@@ -131,20 +131,33 @@ else
 end
 
 %set up overflow indication blocks
-bw = input_bit_width+7; 
-bd = input_bit_width+2;
-if strcmp(block_type, 'twiddle_general_3mult'),
+if( strcmp(arch,'Virtex2Pro') ),
+    % Bit growth on Virtex2Pro is different from ROACH (for now) for both
+    % twiddle_general_3mult and twiddle_general_4mult.  Bit growth through the
+    % butterfly is 1 non-fractional bit for the twiddle, 1 non-fractional bit
+    % for the post-twiddle add, and 1 fractional bit for the shift mux.
+    bw = input_bit_width+3; 
+    bd = input_bit_width;
+    if strcmp(block_type, 'twiddle_stage_2') || strcmp(block_type, 'twiddle_coeff_0') || strcmp(block_type, 'twiddle_coeff_1') || strcmp(block_type, 'twiddle_pass_through'),
+        bw = input_bit_width+2;
+        bd = input_bit_width;
+    end
+else
     bw = input_bit_width+7; 
     bd = input_bit_width+2;
-elseif strcmp(block_type, 'twiddle_general_4mult'),
-    bw = input_bit_width+6;
-    bd = input_bit_width+2; 
-elseif strcmp(block_type, 'twiddle_stage_2') || strcmp(block_type, 'twiddle_coeff_0') || strcmp(block_type, 'twiddle_coeff_1') || strcmp(block_type, 'twiddle_pass_through'),
-    bw = input_bit_width+2;
-    bd = input_bit_width;
-else
-    fprintf('butterfly_direct_init: Unknown twiddle %s\n',block_type);
-    clog(['butterfly_direct_init: Unknown twiddle ',block_type','\n'], 'error');
+    if strcmp(block_type, 'twiddle_general_3mult'),
+        bw = input_bit_width+7; 
+        bd = input_bit_width+2;
+    elseif strcmp(block_type, 'twiddle_general_4mult'),
+        bw = input_bit_width+6;
+        bd = input_bit_width+2; 
+    elseif strcmp(block_type, 'twiddle_stage_2') || strcmp(block_type, 'twiddle_coeff_0') || strcmp(block_type, 'twiddle_coeff_1') || strcmp(block_type, 'twiddle_pass_through'),
+        bw = input_bit_width+2;
+        bd = input_bit_width;
+    else
+        fprintf('butterfly_direct_init: Unknown twiddle %s\n',block_type);
+        clog(['butterfly_direct_init: Unknown twiddle ',block_type','\n'], 'error');
+    end
 end
 
 for i = 1:4 ,
