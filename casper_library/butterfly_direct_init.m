@@ -45,6 +45,7 @@ clog('entering butterfly_direct_init','trace');
 % Declare any default values for arguments you might like.
 defaults = {'biplex', 'on', 'FFTSize', 5, 'Coeffs', 0, 'StepPeriod', 0, ...
     'input_bit_width', 18, 'coeff_bit_width', 18, 'add_latency', 1, 'mult_latency', 2, ...
+    'mux_latency', 2, ...
     'bram_latency', 2, 'conv_latency', 1, 'quantization', 'Round  (unbiased: +/- Inf)', ...
     'overflow', 'Wrap', 'arch', 'Virtex5', 'opt_target', 'logic', ...
     'coeffs_bram', 'off', 'use_hdl', 'on', 'use_embedded', 'off', 'dsp48_adders', 'off'};
@@ -61,6 +62,7 @@ input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
 coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
+mux_latency = get_var('mux_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
@@ -129,6 +131,14 @@ else
         'add_latency', num2str(add_latency), 'mult_latency', num2str(mult_latency), ...
         'bram_latency', num2str(bram_latency), 'conv_latency', num2str(conv_latency));
 end
+
+% Set mux latencies.  If desired, the butterfly_direct block's mask can be given
+% a 'mux_latency' parameter and this can all be moved into the library itself.
+muxes = {'/Mux', '/Mux1', '/Mux2', '/Mux3'};
+for k=1:length(muxes)
+  set_param([blk, muxes{k}], 'latency', num2str(mux_latency));
+end
+set_param([blk, '/Delay'], 'latency', ['add_latency + conv_latency + ', num2str(mux_latency)]);
 
 %set up overflow indication blocks
 if( strcmp(arch,'Virtex2Pro') ),
