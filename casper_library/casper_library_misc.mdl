@@ -15,8 +15,8 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "wjm"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Nov 18 13:29:59 2010"
-  RTWModifiedTimeStamp	  211987760
+  LastModifiedDate	  "Mon Nov 29 22:21:28 2010"
+  RTWModifiedTimeStamp	  212970052
   ModelVersionFormat	  "1.%<AutoIncrement:5>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
@@ -2242,7 +2242,7 @@ Library {
 	  en_ctrl		  off
 	  use_synth_model	  off
 	  addsub_mode		  "TWO24"
-	  xl_useadderonly	  on
+	  xl_useadderonly	  off
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
