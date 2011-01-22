@@ -135,7 +135,7 @@ end
 if strcmp(hardcode_shifts, 'on'),
     mux_latency = 0;
 else
-    mux_latency = 1;
+    mux_latency = 2;
 end
 
 if use_dsp48_adders,
@@ -377,7 +377,7 @@ if strcmp(hardcode_shifts, 'off'),
         reuse_block(blk, ['Mux', num2str(i)], 'xbsIndex_r4/Mux', ...
             'Position', [560 57+yoffset 585 123+yoffset], ...
             'inputs', '2', ...
-            'latency', '1', ...
+            'latency', num2str(mux_latency), ...
             'precision', 'Full');
     end
 else
