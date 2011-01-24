@@ -186,7 +186,7 @@ clog(['Coeffs = ', tostring(Coeffs), ' ActualCoeffs = ', tostring(ActualCoeffs)]
 % Compute bit widths into addsub and convert blocks.
 bw = input_bit_width + 7;
 bd = input_bit_width + 2;
-if strcmp(arch,'Virtex2Pro') && regexp(twiddle_type, 'twiddle_general_[34]mult')
+if strcmp(arch,'Virtex2Pro') && length(regexp(twiddle_type, 'twiddle_general_[34]mult'))
     % Bit growth on Virtex2Pro is different from ROACH (for now) for both
     % twiddle_general_3mult and twiddle_general_4mult.  Bit growth through the
     % butterfly is 1 non-fractional bit for the twiddle, 1 non-fractional bit
