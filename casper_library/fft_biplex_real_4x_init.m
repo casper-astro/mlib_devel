@@ -118,12 +118,6 @@ end
 
 % Derive useful values.
 
-if FFTSize > coeffs_bit_limit
-  bram_map = 'on';
-else
-  bram_map = 'off';
-end
-
 if (2^(FFTSize-1) * 2*input_bit_width >= 2^delays_bit_limit) && (2^(FFTSize-1) >= bram_latency),
     bram_delays = 'on';
 else
@@ -204,7 +198,7 @@ reuse_block(blk, 'bi_real_unscr_4x', 'casper_library_ffts_internal/bi_real_unscr
     'add_latency', num2str(add_latency), ...
     'conv_latency', num2str(conv_latency), ...
     'bram_latency', num2str(bram_latency), ...
-    'bram_map', bram_map, ...
+    'bram_map', 'off', ...
     'bram_delays', bram_delays, ...
     'dsp48_adders', dsp48_adders);
 
