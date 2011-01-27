@@ -31,7 +31,7 @@ else
     for i=1:length(dual_pol_cmacs),
         replace_block(get_param(dual_pol_cmacs{i},'Parent'), ...
           'Name', get_param(dual_pol_cmacs{i}, 'Name'), ...
-          'casper_library_correlator/dual_pol_cmac', 'noprompt');
+          'ox_lib/xeng/dual_pol_cmac', 'noprompt');
         set_param(dual_pol_cmacs{i},'LinkStatus','inactive');
     end
 end
