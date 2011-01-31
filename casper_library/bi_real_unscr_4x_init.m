@@ -76,11 +76,13 @@ map_even = bit_reverse(0:2^(FFTSize-1)-1, FFTSize-1);
 map_odd = bit_reverse(2^(FFTSize-1)-1:-1:0, FFTSize-1);
 map_out = 2^(FFTSize-1)-1:-1:0;
 
-% Set mirror_spectrum conjugation latency.
+% Set mirror_spectrum latencies.
 if strcmp(dsp48_adders, 'on'),
-    negate_latency = 1;
+    ms_input_latency = 1;
+    ms_negate_latency = 1;
 else
-    negate_latency = 0;
+    ms_input_latency = 0;
+    ms_negate_latency = 0;
 end
 
 %%%%%%%%%%%%%%%%%%
@@ -105,19 +107,19 @@ reuse_block(blk, 'odd', 'built-in/inport', ...
     'Port', '3');
 
 reuse_block(blk, 'sync_out', 'built-in/outport', ...
-    'Position', [1100 33 1130 47], ...
+    'Position', [1200 33 1230 47], ...
     'Port', '1');
 reuse_block(blk, 'pol1_out', 'built-in/outport', ...
-    'Position', [1100 78 1130 92], ...
+    'Position', [1200 78 1230 92], ...
     'Port', '2');
 reuse_block(blk, 'pol2_out', 'built-in/outport', ...
-    'Position', [1100 123 1130 137], ...
+    'Position', [1200 123 1230 137], ...
     'Port', '3');
 reuse_block(blk, 'pol3_out', 'built-in/outport', ...
-    'Position', [1100 168 1130 182], ...
+    'Position', [1200 168 1230 182], ...
     'Port', '4');
 reuse_block(blk, 'pol4_out', 'built-in/outport', ...
-    'Position', [1100 213 1130 227], ...
+    'Position', [1200 213 1230 227], ...
     'Port', '5');
 
 %
@@ -223,7 +225,7 @@ reuse_block(blk, 'Relational1', 'xbsIndex_r4/Relational', ...
 
 reuse_block(blk, 'Delay', 'xbsIndex_r4/Delay', ...
     'Position', [225 360 255 380], ...
-    'ShowName', 'on', ...
+    'ShowName', 'off', ...
     'latency', '1', ...
     'reg_retiming', 'off');
 
@@ -371,12 +373,21 @@ reuse_block(blk, 'en_out', 'xbsIndex_r4/Constant', ...
     'period', '1');
 
 reuse_block(blk, 'mirror_spectrum', 'casper_library_ffts_internal/mirror_spectrum', ...
-    'Position', [950 18 1050 241], ...
+    'Position', [1050 18 1150 241], ...
     'LinkStatus', 'inactive', ...
     'FFTSize', num2str(FFTSize), ...
     'input_bitwidth', num2str(n_bits), ...
     'bram_latency', num2str(bram_latency), ...
-    'negate_latency', num2str(negate_latency));
+    'negate_latency', num2str(ms_negate_latency));
+
+for i = 0:8,
+    name = ['delay_ms', num2str(i+1)];
+    reuse_block(blk, name, 'xbsIndex_r4/Delay', ...
+        'Position', [950 23+i*25 1000 37+i*25], ...
+        'ShowName', 'off', ...
+        'latency', num2str(ms_input_latency), ...
+        'reg_retiming', 'off');
+end
 
 %
 % Draw wires.
@@ -428,21 +439,30 @@ add_line(blk, [delay_name, '1/1'], 'reorder_out/4');
 add_line(blk, [hilbert_name, '1/1'], 'reorder_out/5');
 add_line(blk, [hilbert_name, '1/2'], 'reorder_out/6');
 
-add_line(blk, [delay_name, '0/1'], 'mirror_spectrum/2');
-add_line(blk, [delay_name, '1/1'], 'mirror_spectrum/4');
-add_line(blk, [hilbert_name, '1/1'], 'mirror_spectrum/6');
-add_line(blk, [hilbert_name, '1/2'], 'mirror_spectrum/8');
-
-add_line(blk, 'reorder_out/3', 'mirror_spectrum/3');
-add_line(blk, 'reorder_out/4', 'mirror_spectrum/5');
-add_line(blk, 'reorder_out/5', 'mirror_spectrum/7');
-add_line(blk, 'reorder_out/6', 'mirror_spectrum/9');
-
-add_line(blk, [sync_delay_name, '/1'], 'mirror_spectrum/1');
-add_line(blk, 'mirror_spectrum/1', 'sync_out/1');
-
 add_line(blk, 'reorder_even/1', [sync_delay_name, '/1']);
+add_line(blk, [sync_delay_name, '/1'], 'delay_ms1/1');
 
+add_line(blk, [delay_name, '0/1'], 'delay_ms2/1');
+add_line(blk, [delay_name, '1/1'], 'delay_ms4/1');
+add_line(blk, [hilbert_name, '1/1'], 'delay_ms6/1');
+add_line(blk, [hilbert_name, '1/2'], 'delay_ms8/1');
+
+add_line(blk, 'reorder_out/3', 'delay_ms3/1');
+add_line(blk, 'reorder_out/4', 'delay_ms5/1');
+add_line(blk, 'reorder_out/5', 'delay_ms7/1');
+add_line(blk, 'reorder_out/6', 'delay_ms9/1');
+
+add_line(blk, 'delay_ms1/1', 'mirror_spectrum/1');
+add_line(blk, 'delay_ms2/1', 'mirror_spectrum/2');
+add_line(blk, 'delay_ms3/1', 'mirror_spectrum/3');
+add_line(blk, 'delay_ms4/1', 'mirror_spectrum/4');
+add_line(blk, 'delay_ms5/1', 'mirror_spectrum/5');
+add_line(blk, 'delay_ms6/1', 'mirror_spectrum/6');
+add_line(blk, 'delay_ms7/1', 'mirror_spectrum/7');
+add_line(blk, 'delay_ms8/1', 'mirror_spectrum/8');
+add_line(blk, 'delay_ms9/1', 'mirror_spectrum/9');
+
+add_line(blk, 'mirror_spectrum/1', 'sync_out/1');
 add_line(blk, 'mirror_spectrum/2', 'pol1_out/1');
 add_line(blk, 'mirror_spectrum/3', 'pol2_out/1');
 add_line(blk, 'mirror_spectrum/4', 'pol3_out/1');
