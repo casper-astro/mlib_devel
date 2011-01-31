@@ -112,6 +112,11 @@ use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
 hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+use_dsp48_mults = strcmp(use_embedded, 'on');
+use_dsp48_adders = strcmp(dsp48_adders, 'on');
+opt_logic = strcmp(opt_target, 'logic');
+opt_mults = strcmp(opt_target, 'multipliers');
+
 clog(flatstrcell(varargin), 'butterfly_direct_init_debug');
 
 % Validate input fields.
@@ -133,7 +138,7 @@ else
     mux_latency = 1;
 end
 
-if strcmp(dsp48_adders, 'on'),
+if use_dsp48_adders,
     set_param(blk, 'add_latency', '2');
     add_latency = 2;
 end
@@ -155,7 +160,9 @@ if length(Coeffs) == 1,
     elseif Coeffs(1) == 1,
         twiddle_type = 'twiddle_coeff_1';
     else
-        if strcmp(opt_target, 'Logic'),
+        if opt_logic && use_dsp48_mults,
+            twiddle_type = 'twiddle_general_dsp48e';
+        elseif opt_logic,
             twiddle_type = 'twiddle_general_4mult';
         else
            twiddle_type = 'twiddle_general_3mult';
@@ -164,7 +171,9 @@ if length(Coeffs) == 1,
 elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-2,
     twiddle_type = 'twiddle_stage_2';
 else
-    if strcmp(opt_target, 'logic'),
+    if opt_logic && use_dsp48_mults,
+        twiddle_type = 'twiddle_general_dsp48e';
+    elseif opt_logic,
         twiddle_type = 'twiddle_general_4mult';
     else
         twiddle_type = 'twiddle_general_3mult';
@@ -180,7 +189,7 @@ bd = input_bit_width + 2;
 if strcmp(twiddle_type, 'twiddle_general_3mult'),
     bw = input_bit_width + 7;
     bd = input_bit_width + 2;
-elseif strcmp(twiddle_type, 'twiddle_general_4mult'),
+elseif strcmp(twiddle_type, 'twiddle_general_4mult') || strcmp(twiddle_type, 'twiddle_general_dsp48e'),
     bw = input_bit_width + 6;
     bd = input_bit_width + 2;
 elseif strcmp(twiddle_type, 'twiddle_stage_2') ...
@@ -251,6 +260,7 @@ reuse_block(blk, 'sync_out', 'built-in/outport', ...
 % Add twiddle block.
 %
 
+
 if strcmp(twiddle_type, 'twiddle_general_4mult') ...
     || strcmp(twiddle_type, 'twiddle_general_3mult'),
     reuse_block(blk, twiddle_type, ['casper_library_ffts_twiddle/', twiddle_type], ...
@@ -269,6 +279,18 @@ if strcmp(twiddle_type, 'twiddle_general_4mult') ...
         'use_embedded', tostring(use_embedded), ...
         'quantization', tostring(quantization), ...
         'overflow', tostring(overflow));
+elseif strcmp(twiddle_type, 'twiddle_general_dsp48e')
+    reuse_block(blk, twiddle_type, ['casper_library_ffts_twiddle/', twiddle_type], ...
+        'Position', [110 141 200 229], ...
+        'Coeffs', tostring(ActualCoeffs), ...
+        'StepPeriod', tostring(StepPeriod), ...
+        'coeffs_bram', tostring(coeffs_bram), ...
+        'input_bit_width', num2str(input_bit_width), ...
+        'coeff_bit_width', num2str(coeff_bit_width), ...
+        'bram_latency', num2str(bram_latency), ...
+        'conv_latency', num2str(conv_latency), ...
+        'quantization', tostring(quantization), ...
+        'overflow', tostring(overflow));    
 else
     reuse_block(blk, twiddle_type, ['casper_library_ffts_twiddle/', twiddle_type], ...
         'Position', [110 141 200 229], ...
@@ -285,7 +307,7 @@ end
 % Add complex add/sub blocks.
 %
 
-if strcmp(dsp48_adders, 'on'),
+if use_dsp48_adders,
     reuse_block(blk, 'cadd', 'casper_library_misc/caddsub_dsp48e', ...
         'Position', [300 71 350 134], ...
         'mode', 'Addition', ...

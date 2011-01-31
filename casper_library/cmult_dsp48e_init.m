@@ -138,7 +138,7 @@ if (bin_pt_c > n_bits_c),
 end
 
 % Calculate bit widths and binary points.
-
+bin_pt_reinterp = bin_pt_a + bin_pt_b;
 if strcmp(full_precision, 'on'),
   n_bits_out = n_bits_a + n_bits_b + 1;
   bin_pt_out = bin_pt_a + bin_pt_b;
@@ -163,16 +163,18 @@ set_param([blk, '/realign_b_im'], ...
     'bin_pt', num2str(bin_pt_b));
 
 set_param([blk, '/reinterp_c_re'], ...
-    'bin_pt', num2str(bin_pt_out));
+    'bin_pt', num2str(bin_pt_reinterp));
 set_param([blk, '/reinterp_c_im'], ...
-    'bin_pt', num2str(bin_pt_out));
+    'bin_pt', num2str(bin_pt_reinterp));
 
 set_param([blk, '/cast_c_re'], ...
     'n_bits', num2str(n_bits_out), ...
-    'bin_pt', num2str(bin_pt_out));
+    'bin_pt', num2str(bin_pt_out), ...
+    'latency', num2str(cast_latency));
 set_param([blk, '/cast_c_im'], ...
     'n_bits', num2str(n_bits_out), ...
-    'bin_pt', num2str(bin_pt_out));
+    'bin_pt', num2str(bin_pt_out), ...
+    'latency', num2str(cast_latency));
 
 % Set conjugation mode.
 

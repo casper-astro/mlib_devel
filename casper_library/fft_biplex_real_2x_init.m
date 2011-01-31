@@ -7,20 +7,31 @@ function fft_biplex_real_2x_init(blk, varargin)
 % varargin = {'varname', 'value', ...} pairs
 % 
 % Valid varnames:
-% FFTSize = Size of the FFT (2^FFTSize points).
-% input_bit_width = Bit width of input and output data.
-% coeff_bit_width = Bit width of coefficients
+% FFTSize = Size of the FFT (2^FFTSize points). 
+% input_bit_width = Bit width of input and output data. 
+% coeff_bit_width = Bit width of coefficients.
 % add_latency = The latency of adders in the system.
 % mult_latency = The latency of multipliers in the system.
-% bram_latency = The latency of BRAM in the system. 
+% bram_latency = The latency of BRAM in the system.
+% conv_latency = 
 % quantization = Quantization behavior.
 % overflow = Overflow behavior.
+% arch = 
+% opt_target = 
+% coeff_bit_limit = 
+% delays_bit_limit = 
+% specify_mult = 
+% mult_spec = 
+% hardcode_shifts = 
+% shift_schedule = 
+% dsp48_adders = 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
 %   http://casper.berkeley.edu                                                %
 %   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
+%   Copyright (C) 2010 William Mallard                                        %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
@@ -62,9 +73,17 @@ defaults = { ...
     'dsp48_adders', 'off', ...
 };
 
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+% Skip init script if mask state has not changed.
+if same_state(blk, 'defaults', defaults, varargin{:}),
+  return
+end
+
 clog('fft_biplex_real_2x_init post same_state','trace');
+
+% Verify that this is the right mask for the block.
 check_mask_type(blk, 'fft_biplex_real_2x');
+
+% Disable link if state changes from default.
 munge_block(blk, varargin{:});
 
 % Retrieve values from mask fields.
@@ -89,45 +108,69 @@ dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
 clog(flatstrcell(varargin), 'fft_biplex_real_2x_init_debug');
 
-if( strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize)),
-    errordlg('fft_biplex_real_2x_init.m: Multiplier use specification for stages does not match FFT size');
+% Validate input fields.
+
+if (strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize)),
     error('fft_biplex_real_2x_init.m: Multiplier use specification for stages does not match FFT size');
+    clog('fft_biplex_real_2x_init.m: Multiplier use specification for stages does not match FFT size','error');
     return;
 end
 
-delete_lines(blk);
+% Derive useful values.
 
-% Add Ports
-reuse_block(blk, 'sync', 'built-in/inport', 'Position', [15   158    45   172], 'Port', '1');
-reuse_block(blk, 'shift', 'built-in/inport', 'Position', [15   183    45   197], 'Port', '2');
-reuse_block(blk, 'pol0', 'built-in/inport', 'Position', [15    33    45    47], 'Port', '3');
-reuse_block(blk, 'pol1', 'built-in/inport', 'Position', [15    63    45    77], 'Port', '4');
-reuse_block(blk, 'pol2', 'built-in/inport', 'Position', [15    93    45   107], 'Port', '5');
-reuse_block(blk, 'pol3', 'built-in/inport', 'Position', [15   123    45   137], 'Port', '6');
-
-reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [470   173   500   187], 'Port', '1');
-reuse_block(blk, 'pol02_out', 'built-in/outport', 'Position', [470   113   500   127], 'Port', '2');
-reuse_block(blk, 'pol13_out', 'built-in/outport', 'Position', [470   143   500   157], 'Port', '3');
-reuse_block(blk, 'of', 'built-in/outport', 'Position', [285   153   315   167], 'Port', '4');
-
-reuse_block(blk, 'ri_to_c0', 'casper_library_misc/ri_to_c','Position',[65    34   105    76]);
-reuse_block(blk, 'ri_to_c1', 'casper_library_misc/ri_to_c','Position',[65    94   105   136]);
-
-%generate vectors of multiplier use from vectors passed in
-if strcmp(specify_mult,'on'),
-    mult_spec_str = mat2str(mult_spec);
+if FFTSize > coeffs_bit_limit
+  bram_map = 'on';
 else
-    mult_spec_str = mat2str(2.*ones(1, FFTSize));
+  bram_map = 'off';
 end
 
+%%%%%%%%%%%%%%%%%%
+% Start drawing! %
+%%%%%%%%%%%%%%%%%%
+
+% Delete all lines.
+delete_lines(blk);
+
+%
+% Add inputs and outputs.
+%
+
+reuse_block(blk, 'sync', 'built-in/inport', 'Position', [15 13 45 27], 'Port', '1');
+reuse_block(blk, 'shift', 'built-in/inport', 'Position', [15 43 45 57], 'Port', '2');
+reuse_block(blk, 'pol1', 'built-in/inport', 'Position', [15 73 45 87], 'Port', '3');
+reuse_block(blk, 'pol2', 'built-in/inport', 'Position', [15 103 45 117], 'Port', '4');
+reuse_block(blk, 'pol3', 'built-in/inport', 'Position', [15 133 45 147], 'Port', '5');
+reuse_block(blk, 'pol4', 'built-in/inport', 'Position', [15 163 45 177], 'Port', '6');
+
+reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [535  33 565  47], 'Port', '1');
+reuse_block(blk, 'pol12_out', 'built-in/outport', 'Position', [535  78 565  92], 'Port', '2');
+reuse_block(blk, 'pol34_out', 'built-in/outport', 'Position', [535 123 565 137], 'Port', '3');
+reuse_block(blk, 'of', 'built-in/outport', 'Position', [320 138 350 152], 'Port', '4');
+
+%
+% Add ri_to_c blocks.
+%
+
+reuse_block(blk, 'ri_to_c0', 'casper_library_misc/ri_to_c', ...
+    'Position', [95 74 135 116], ...
+    'LinkStatus', 'inactive');
+reuse_block(blk, 'ri_to_c1', 'casper_library_misc/ri_to_c', ...
+    'Position', [95 134 135 176], ...
+    'LinkStatus', 'inactive');
+
+%
+% Add biplex_core block.
+%
+
 reuse_block(blk, 'biplex_core', 'casper_library_ffts/biplex_core', ...
-    'Position', [145 105 265 200], ...
+    'Position', [185 30 285 125], ...
+    'LinkStatus', 'inactive', ...
     'FFTSize', num2str(FFTSize), ...
     'input_bit_width', num2str(input_bit_width), ...
-    'coeff_bit_width', num2str(coeff_bit_width), ... 
+    'coeff_bit_width', num2str(coeff_bit_width), ...
     'add_latency', num2str(add_latency), ...
     'mult_latency', num2str(mult_latency), ...
-    'bram_latency',num2str(bram_latency), ...
+    'bram_latency', num2str(bram_latency), ...
     'conv_latency', num2str(conv_latency), ...
     'quantization', tostring(quantization), ...
     'overflow', tostring(overflow), ...
@@ -136,39 +179,63 @@ reuse_block(blk, 'biplex_core', 'casper_library_ffts/biplex_core', ...
     'coeffs_bit_limit', num2str(coeffs_bit_limit), ...
     'delays_bit_limit', num2str(delays_bit_limit), ...
     'specify_mult', tostring(specify_mult), ...
-    'mult_spec', mult_spec_str, ...
+    'mult_spec', tostring(mult_spec), ...
     'hardcode_shifts', tostring(hardcode_shifts), ...
     'shift_schedule', tostring(shift_schedule), ...
     'dsp48_adders', tostring(dsp48_adders));
 
-add_line(blk, ['pol0','/1'], ['ri_to_c0','/1']);
-add_line(blk, ['pol1','/1'], ['ri_to_c0','/2']);
-add_line(blk, ['pol2','/1'], ['ri_to_c1','/1']);
-add_line(blk, ['pol3','/1'], ['ri_to_c1','/2']);
+%
+% Add bi_real_unscr_2x block.
+%
 
-add_line(blk, ['ri_to_c0','/1'],'biplex_core/1');
-add_line(blk, ['ri_to_c1','/1'],'biplex_core/2');
+reuse_block(blk, 'bi_real_unscr_2x', 'casper_library_ffts_internal/bi_real_unscr_2x', ...
+    'Position', [385 15 485 151], ...
+    'LinkStatus', 'inactive', ...
+    'FFTSize', num2str(FFTSize), ...
+    'n_bits', num2str(input_bit_width), ...
+    'add_latency', num2str(add_latency), ...
+    'conv_latency', num2str(conv_latency), ...
+    'bram_latency', num2str(bram_latency), ...
+    'bram_map', bram_map, ...
+    'dsp48_adders', dsp48_adders);
 
-add_line(blk, 'sync/1', ['biplex_core','/3']);
-add_line(blk, 'shift/1', ['biplex_core','/4']);
-add_line(blk, ['biplex_core','/1'],'bi_real_unscr_2x/1');
-add_line(blk, ['biplex_core','/2'],'bi_real_unscr_2x/2');
-add_line(blk, ['biplex_core','/3'],'of/1');
-add_line(blk, ['biplex_core','/4'],'bi_real_unscr_2x/3');
+%
+% Draw wires.
+%
 
-add_line(blk, 'bi_real_unscr_2x/1','pol02_out/1');
-add_line(blk, 'bi_real_unscr_2x/2','pol13_out/1');
-add_line(blk, 'bi_real_unscr_2x/3','sync_out/1');
+add_line(blk, 'pol1/1', 'ri_to_c0/1');
+add_line(blk, 'pol2/1', 'ri_to_c0/2');
+add_line(blk, 'pol3/1', 'ri_to_c1/1');
+add_line(blk, 'pol4/1', 'ri_to_c1/2');
 
-% Unscrambler is not in library!
-if FFTSize > coeffs_bit_limit
-  bram_map = 'on';
-else
-  bram_map = 'off';
-end
-propagate_vars([blk,'/bi_real_unscr_2x'],'defaults', defaults, varargin{:}, 'bram_map', bram_map);
+add_line(blk, 'sync/1', 'biplex_core/1');
+add_line(blk, 'shift/1', 'biplex_core/2');
+add_line(blk, 'ri_to_c0/1', 'biplex_core/3');
+add_line(blk, 'ri_to_c1/1', 'biplex_core/4');
 
-fmtstr = sprintf('%s\n%d stages\n[%d,%d]\n%s\n%s', arch, FFTSize, input_bit_width, coeff_bit_width, quantization, overflow);
+add_line(blk, 'biplex_core/1', 'bi_real_unscr_2x/1');
+add_line(blk, 'biplex_core/2', 'bi_real_unscr_2x/2');
+add_line(blk, 'biplex_core/3', 'bi_real_unscr_2x/3');
+add_line(blk, 'biplex_core/4', 'of/1');
+
+add_line(blk, 'bi_real_unscr_2x/1', 'sync_out/1');
+add_line(blk, 'bi_real_unscr_2x/2', 'pol12_out/1');
+add_line(blk, 'bi_real_unscr_2x/3', 'pol34_out/1');
+
+% Delete all unconnected blocks.
+clean_blocks(blk);
+
+%%%%%%%%%%%%%%%%%%%
+% Finish drawing! %
+%%%%%%%%%%%%%%%%%%%
+
+% Set attribute format string (block annotation).
+fmtstr = sprintf('%s\n%d stages\n[%d,%d]\n%s\n%s', ...
+    arch, FFTSize, input_bit_width, coeff_bit_width, quantization, overflow);
 set_param(blk, 'AttributesFormatString', fmtstr);
+
+% Save block state to stop repeated init script runs.
 save_state(blk, 'defaults', defaults, varargin{:});
+
 clog('exiting fft_biplex_real_2x_init','trace');
+
