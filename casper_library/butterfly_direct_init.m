@@ -33,7 +33,7 @@ function butterfly_direct_init(blk, varargin)
 %   Center for Astronomy Signal Processing and Electronics Research           %
 %   http://casper.berkeley.edu                                                %
 %   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
-%   Copyright (C) 2010 William Mallard                                        %
+%   Copyright (C) 2010 William Mallard, David MacMahon                        %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
@@ -135,7 +135,7 @@ end
 if strcmp(hardcode_shifts, 'on'),
     mux_latency = 0;
 else
-    mux_latency = 1;
+    mux_latency = 2;
 end
 
 if use_dsp48_adders,
@@ -186,7 +186,14 @@ clog(['Coeffs = ', tostring(Coeffs), ' ActualCoeffs = ', tostring(ActualCoeffs)]
 % Compute bit widths into addsub and convert blocks.
 bw = input_bit_width + 7;
 bd = input_bit_width + 2;
-if strcmp(twiddle_type, 'twiddle_general_3mult'),
+if strcmp(arch,'Virtex2Pro') && length(regexp(twiddle_type, 'twiddle_general_[34]mult'))
+    % Bit growth on Virtex2Pro is different from ROACH (for now) for both
+    % twiddle_general_3mult and twiddle_general_4mult.  Bit growth through the
+    % butterfly is 1 non-fractional bit for the twiddle, 1 non-fractional bit
+    % for the post-twiddle add, and 1 fractional bit for the shift mux.
+    bw = input_bit_width+3; 
+    bd = input_bit_width;
+elseif strcmp(twiddle_type, 'twiddle_general_3mult'),
     bw = input_bit_width + 7;
     bd = input_bit_width + 2;
 elseif strcmp(twiddle_type, 'twiddle_general_4mult') || strcmp(twiddle_type, 'twiddle_general_dsp48e'),
@@ -370,7 +377,7 @@ if strcmp(hardcode_shifts, 'off'),
         reuse_block(blk, ['Mux', num2str(i)], 'xbsIndex_r4/Mux', ...
             'Position', [560 57+yoffset 585 123+yoffset], ...
             'inputs', '2', ...
-            'latency', '1', ...
+            'latency', num2str(mux_latency), ...
             'precision', 'Full');
     end
 else

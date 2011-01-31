@@ -32,13 +32,17 @@ function coeff_vector = pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs
 % n_inputs = Number of parallel input streams
 % nput = Which input this is (of the n_inputs parallel).
 % fwidth = The scaling of the bin width (1 is normal).
-% a = Index of this rom
+% a = Index of this rom (passing less than 0 will return all coefficients).
 
 % Set coefficient vector
 alltaps = TotalTaps*2^PFBSize;
 windowval = transpose(window(WindowType, alltaps));
 total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
-for i=1:alltaps/2^n_inputs,
-    buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
+if a < 0
+    coeff_vector = total_coeffs;
+else
+    for i=1:alltaps/2^n_inputs,
+        buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
+    end
+    coeff_vector = buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs));
 end
-coeff_vector = buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs));
