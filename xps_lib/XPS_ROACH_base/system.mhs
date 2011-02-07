@@ -250,6 +250,23 @@ BEGIN sys_block
   PORT fab_clk    = sys_clk #IF# 1 # ['  PORT fab_clk    = ', app_clk, '\n']
 END
 
+BEGIN dcm_module
+  PARAMETER INSTANCE                = dspmult_2x_dcm
+  PARAMETER HW_VER                  = 1.00.d                      
+  PARAMETER C_EXT_RESET_HIGH        = 0                           
+  PARAMETER C_CLK0_BUF              = TRUE
+  PARAMETER C_CLK2X_BUF             = TRUE
+  PARAMETER C_CLKIN_PERIOD          = 100 #IF# 1 # ['  PARAMETER C_CLKIN_PERIOD = ', num2str(1000/app_clk_rate, '%.3f'), '\n']
+  PARAMETER C_DFS_FREQUENCY_MODE    = HIGH,                        
+
+  PORT RST    = sys_clk_lock
+  PORT CLKIN  = sys_clk #IF# 1 # ['  PORT CLKIN  = ', app_clk, '\n']
+  PORT CLKFB  = dspmult_2x_clk_fb                           
+  PORT CLK0   = dspmult_2x_clk_fb                           
+  PORT CLK2X  = dspmult_2x_clk
+  PORT LOCKED = dspmult_2x_clk_lock                         
+END
+
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#BEGIN xaui_infrastructure
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PARAMETER INSTANCE = xaui_infrastructure_inst
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PARAMETER HW_VER = 1.00.a
