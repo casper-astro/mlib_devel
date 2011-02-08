@@ -83,6 +83,7 @@ module dspcmult_2x (
     .AREG(2),           // A input pipeline
     .BREG(2)            // B input pipeline
   ) dsp_inst_ac (
+    .CLK(dsp_clk),      // 2x main user clock
     .A({ {12{mux_out_a_r[17]}}, mux_out_a_r }),    // real part of input a -- sign extend to 30 bits
     .B(mux_out_b_r),    // real part of input b
     .OPMODE(7'd5),      // Operation mode input
@@ -102,6 +103,7 @@ module dspcmult_2x (
     .AREG(2),           // A input pipeline
     .BREG(2)            // B input pipeline
   ) dsp_inst_bd (
+    .CLK(dsp_clk),      // 2x main user clock
     .A({{12{mux_out_a_i[17]}}, mux_out_a_i}),    // imag part of input a -- sign extend to 30 bits
     .B(mux_out_b_i),    // imag part of input b
     .PCIN(pcout_ac),    // 48-bit cascade input
@@ -122,6 +124,7 @@ module dspcmult_2x (
     .AREG(2),           // A input pipeline
     .BREG(2)            // B input pipeline
   ) dsp_inst_ad (
+    .CLK(dsp_clk),      // 2x main user clock
     .A({{12{mux_out_a_r[17]}}, mux_out_a_r}),    // real part of input a -- sign extend to 30 bits
     .B(mux_out_b_i),    // imag part of input b
     .OPMODE(7'd5),      // Operation mode input
@@ -141,6 +144,7 @@ module dspcmult_2x (
     .AREG(2),           // A input pipeline
     .BREG(2)            // B input pipeline
   ) dsp_inst_bc (
+    .CLK(dsp_clk),      // 2x main user clock
     .A({{12{mux_out_a_i[17]}}, mux_out_a_i}),    // imag part of input a -- sign extend to 30 bits
     .B(mux_out_b_r),    // real part of input b
     .PCIN(pcout_ad),    // 48-bit cascade input
