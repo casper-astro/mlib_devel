@@ -9,7 +9,7 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'xeng');
 munge_block(blk, varargin{:});
 
-%fprintf('starting variables processing\n');
+fprintf('starting variables processing\n');
 
 n_ants = get_var('n_ants', 'defaults', defaults, varargin{:});
 acc_len = get_var('acc_len', 'defaults', defaults, varargin{:});
@@ -58,7 +58,7 @@ if (mod(n_ants,2) ~= 0)
     warning('X engine is not tested for non-2^N antennas. YMMV.');
 end
 
-%fprintf('variables all done\n');
+fprintf('variables all done\n');
 
 % Begin redrawing
 %================
