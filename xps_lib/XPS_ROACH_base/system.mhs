@@ -250,6 +250,23 @@ BEGIN sys_block
   PORT fab_clk    = sys_clk #IF# 1 # ['  PORT fab_clk    = ', app_clk, '\n']
 END
 
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#BEGIN dcm_module
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER INSTANCE                = dspmult_2x_dcm
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER HW_VER                  = 1.00.d                      
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_EXT_RESET_HIGH        = 0                           
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_CLK0_BUF              = TRUE
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_CLK2X_BUF             = TRUE
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  ['  PARAMETER C_CLKIN_PERIOD = ', num2str(1000/app_clk_rate, '%.6f'), '\n']
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_DFS_FREQUENCY_MODE    = HIGH,                        
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PORT RST    = sys_clk_lock
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  ['  PORT CLKIN  = ', app_clk, '\n']
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PORT CLKFB  = dspmult_2x_clk_fb                           
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PORT CLK0   = dspmult_2x_clk_fb                           
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PORT CLK2X  = dspmult_2x_clk
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PORT LOCKED = dspmult_2x_clk_lock                         
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#END
+
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#BEGIN xaui_infrastructure
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PARAMETER INSTANCE = xaui_infrastructure_inst
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PARAMETER HW_VER = 1.00.a
