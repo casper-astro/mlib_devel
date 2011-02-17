@@ -83,7 +83,7 @@ end entity XAUI_infrastructure;
 
 architecture XAUI_infrastructure_arch of XAUI_infrastructure is
 
-	component IBUFDS_LVDS_25
+	component IBUFGDS
 		port(
 			I   : in  std_logic;
 			IB  : in  std_logic;
@@ -115,13 +115,13 @@ begin
 
 	-- Input buffers
 
-	brefclk_top_ibuf : IBUFDS_LVDS_25 port map (
+	brefclk_top_ibuf : IBUFGDS port map (
 		I   => brefclk_top_p,
 		IB  => brefclk_top_m,
 		O   => mgt_clkin_top_10G
 	); 
 
-	brefclk_bottom_ibuf : IBUFDS_LVDS_25 port map (
+	brefclk_bottom_ibuf : IBUFGDS port map (
 		I   => brefclk_bottom_p,
 		IB  => brefclk_bottom_m,
 		O   => mgt_clkin_bottom_10G
