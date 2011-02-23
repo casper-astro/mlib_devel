@@ -1,4 +1,4 @@
-function adder_tree_v5_init(n_inputs, add_latency, quantization, overflow, mode)
+function adder_tree_init_xblock(n_inputs, add_latency, quantization, overflow, mode)
 
 	% dummy 0 input
 	dummy_input = xSignal;
@@ -21,7 +21,7 @@ function adder_tree_v5_init(n_inputs, add_latency, quantization, overflow, mode)
 	dout = xOutport('dout');
 	
 	n_stages = ceil(log2(n_inputs));
-	if strcmp(mode, 'dsp48e')
+	if strcmp(mode, 'dsp48e') || strcmp(mode, 'DSP48e')
 		add_latency = 2;
 	end
 	
