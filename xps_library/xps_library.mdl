@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "sgowda"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Feb 21 19:18:51 2011"
-  RTWModifiedTimeStamp	  220216729
-  ModelVersionFormat	  "1.%<AutoIncrement:432>"
+  LastModifiedDate	  "Tue Feb 22 17:26:22 2011"
+  RTWModifiedTimeStamp	  220296380
+  ModelVersionFormat	  "1.%<AutoIncrement:433>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -713,7 +713,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [5, 52, 1336, 1075]
+    Location		    [5, 52, 994, 738]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -727,7 +727,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    237
+    SIDHighWatermark	    238
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -41606,7 +41606,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "software register"
-      SID		      237
+      SID		      238
       Tag		      "xps:sw_reg"
       Ports		      [1, 1]
       Position		      [20, 507, 120, 543]
@@ -41618,23 +41618,24 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskPromptString	      "I/O direction|Data Type|Data bitwidth|Data binary point|Sample period"
-      MaskStyleString	      "popup(From Processor|To Processor),popup(Unsigned|Signed  (2's comp)),edit,edit,edit"
-      MaskTunableValueString  "on,on,on,on,on"
-      MaskCallbackString      "||||"
-      MaskEnableString	      "on,on,off,on,on"
-      MaskVisibilityString    "on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on"
-      MaskVariables	      "io_dir=&1;arith_type=&2;bitwidth=@3;bin_pt=@4;sample_period=@5;"
-      MaskInitialization      "gw_name = clear_name(gcb);\nconfig.source = str2func('software_register_init')\nconfig."
-      "toplevel = gcb;\nxBlock( config, {io_dir, arith_type, bitwidth, bin_pt, ... \n    sample_period, gw_name});"
+      MaskPromptString	      "I/O direction|Data Type|Data bitwidth|Data binary point|Sample period|Latency"
+      MaskStyleString	      "popup(From Processor|To Processor),popup(Unsigned|Signed  (2's comp)),edit,edit,edit,edit"
+      MaskTunableValueString  "on,on,on,on,on,on"
+      MaskCallbackString      "|||||"
+      MaskEnableString	      "on,on,off,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on"
+      MaskVariables	      "io_dir=&1;arith_type=&2;bitwidth=@3;bin_pt=@4;sample_period=@5;latency=@6;"
+      MaskInitialization      "gw_name = clear_name(gcb);\nconfig.source = str2func('software_register_init');\nconfig"
+      ".toplevel = gcb;\nxBlock( config, {io_dir, arith_type, bitwidth, bin_pt, ... \n    sample_period, gw_name, laten"
+      "cy});"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "From Processor|Signed  (2's comp)|32|0|1"
+      MaskValueString	      "From Processor|Signed  (2's comp)|32|0|1|0"
       System {
 	Name			"software register"
 	Location		[445, 146, 994, 327]
@@ -41650,21 +41651,71 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	176
-	SIDPrevWatermark	176
+	SIDHighWatermark	27
+	SIDPrevWatermark	27
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim_reg_in"
-	  SID			  174
-	  Position		  [15, 30, 35, 50]
+	  SID			  3
+	  Position		  [15, 40, 35, 60]
 	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "delay_pipe"
+	  SID			  25
+	  Ports			  [1, 1]
+	  Position		  [155, 30, 205, 70]
+	  MinAlgLoopOccurrences	  off
+	  PropExecContextOutsideSubsystem off
+	  RTWSystemCode		  "Auto"
+	  FunctionWithSeparateData off
+	  Opaque		  off
+	  RequestExecContextInheritance	off
+	  MaskHideContents	  off
+	  System {
+	    Name		    "delay_pipe"
+	    Location		    [70, 200, 650, 460]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+	    TiledPageScale	    1
+	    ShowPageBoundaries	    off
+	    ZoomFactor		    "100"
+	    Block {
+	      BlockType		      Inport
+	      Name		      "d"
+	      SID		      26
+	      Position		      [15, 15, 35, 35]
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "q"
+	      SID		      27
+	      Position		      [15, 15, 35, 35]
+	      IconDisplay	      "Port number"
+	    }
+	    Line {
+	      SrcBlock		      "d"
+	      SrcPort		      1
+	      DstBlock		      "q"
+	      DstPort		      1
+	    }
+	  }
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "untitled_software_register_user_data_out"
-	  SID			  176
+	  SID			  24
 	  Ports			  [1, 1]
-	  Position		  [65, 30, 130, 50]
+	  Position		  [60, 40, 125, 60]
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
@@ -41699,14 +41750,20 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "reg_in"
-	  SID			  175
-	  Position		  [155, 30, 175, 50]
+	  SID			  5
+	  Position		  [235, 40, 255, 60]
 	  IconDisplay		  "Port number"
+	}
+	Line {
+	  SrcBlock		  "delay_pipe"
+	  SrcPort		  1
+	  DstBlock		  "reg_in"
+	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "untitled_software_register_user_data_out"
 	  SrcPort		  1
-	  DstBlock		  "reg_in"
+	  DstBlock		  "delay_pipe"
 	  DstPort		  1
 	}
 	Line {

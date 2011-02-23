@@ -1,4 +1,4 @@
-function software_register_init(io_dir, arith_type, bitwidth, bin_pt, sample_period, gw_name)
+function software_register_init(io_dir, arith_type, bitwidth, bin_pt, sample_period, gw_name, latency)
 
 if strcmp(io_dir, 'To Processor')
     to_sim = xOutport('sim_reg_out');
@@ -19,9 +19,14 @@ if strcmp(io_dir, 'To Processor')
 elseif strcmp(io_dir, 'From Processor')
     sim_reg_in = xInport('sim_reg_in');
     reg_in = xOutport('reg_in');
+    data_in = xSignal;
     user_data_out = xBlock(struct('source', 'Gateway In', 'name', [gw_name, '_user_data_out']), ...
                             struct('period', sample_period, 'n_bits', 32, 'bin_pt', bin_pt, 'arith_type', arith_type), ...
-                            {sim_reg_in}, {reg_in});
+                            {sim_reg_in}, {data_in});
+                        
+    delay_pipeline_config.source = str2func('pipeline_init');
+    delay_pipeline_config.name = 'delay_pipe';
+    delay_pipeline = xBlock( delay_pipeline_config, {latency}, {data_in}, {reg_in} );
 end
 
 end
