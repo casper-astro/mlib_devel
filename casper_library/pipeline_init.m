@@ -1,48 +1,73 @@
-function pipeline_init(latency)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%   Center for Astronomy Signal Processing and Electronics Research           %
+%   http://seti.ssl.berkeley.edu/casper/                                      %
+%   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
+%                                                                             %
+%   This program is free software; you can redistribute it and/or modify      %
+%   it under the terms of the GNU General Public License as published by      %
+%   the Free Software Foundation; either version 2 of the License, or         %
+%   (at your option) any later version.                                       %
+%                                                                             %
+%   This program is distributed in the hope that it will be useful,           %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             %
+%   GNU General Public License for more details.                              %
+%                                                                             %
+%   You should have received a copy of the GNU General Public License along   %
+%   with this program; if not, write to the Free Software Foundation, Inc.,   %
+%   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function pipeline_init(blk, varargin)
+% Initialize and configure the pipeline block.
+%
+% pipeline_init(blk, varargin)
+%
+% blk = The block to configure.
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames for this block are:
+% latency = number of cycles N to delay (z^-N)
 
+% Declare any default values for arguments you might like.
+defaults = {};
+%if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+check_mask_type(blk, 'pipeline');
+munge_block(blk, varargin{:});
 
+latency = get_var('latency', 'defaults', defaults, varargin{:});
 
-%% inports
-xlsub2_d = xInport('d');
+delete_lines(blk);
 
-%% outports
-xlsub2_q = xOutport('q');
+if (latency < 0)
+    error('pipeline_init.m: Latency setting must be greater than or equal to 0');
+    return;
+end
 
-%% diagram
+% Add ports
+reuse_block(blk, 'd', 'built-in/inport',  'Position', [15 48 45 62], 'Port', '1');
+reuse_block(blk, 'q', 'built-in/outport', 'Position', [latency*100+115 48 latency*100+145 62], 'Port', '1');
 
-if (latency==0)
-    xlsub2_q.bind(xlsub2_d);
+% Add register blocks
+for z = 0:latency-1
+    reuse_block(blk, ['Register',num2str(z)], 'xbsIndex_r4/Register', ...
+        'en', 'off', ...
+        'Position', [100*z+115 27 100*z+175 83]);
+end
+
+% Connect blocks
+if (latency == 0)
+    add_line(blk, 'd/1', 'q/1');
 else
-    prev=xlsub2_d;
-    next=xSignal;
-    for i=1:latency,
-        xlsub2_Register.(['R',num2str(i-1)]) = xBlock(struct('source', 'Register', 'name', ['Register',num2str(i-1)]), ...
-                                             [], ...
-                                             {prev}, ...
-                                             {next});
-        prev=xSignal;
-        prev.bind(next);
-        next=xSignal;
+    for z = 1:latency-1
+        add_line(blk, ['Register', num2str(z-1), '/1'], ['Register', num2str(z), '/1']);
     end
-    xlsub2_q.bind(prev);
-end
-    
-        
-    
-% % block: delay_7/pipeline/Register0
-% xlsub2_Register0_out1 = xSignal;
-% xlsub2_Register0 = xBlock(struct('source', 'Register', 'name', 'Register0'), ...
-%                           [], ...
-%                           {xlsub2_d}, ...
-%                           {xlsub2_Register0_out1});
-% 
-% % block: delay_7/pipeline/Register1
-% xlsub2_Register1 = xBlock(struct('source', 'Register', 'name', 'Register1'), ...
-%                           [], ...
-%                           {xlsub2_Register0_out1}, ...
-%                           {xlsub2_q});
-% 
 
-
+    add_line(blk, 'd/1', 'Register0/1');
+    add_line(blk, ['Register', num2str(latency-1), '/1'], 'q/1');
 end
 
+clean_blocks(blk);
+
+save_state(blk, 'defaults', defaults, varargin{:});

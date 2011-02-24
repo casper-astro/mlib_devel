@@ -24,7 +24,7 @@ elseif strcmp(io_dir, 'From Processor')
                             struct('period', sample_period, 'n_bits', 32, 'bin_pt', bin_pt, 'arith_type', arith_type), ...
                             {sim_reg_in}, {data_in});
                         
-    delay_pipeline_config.source = str2func('pipeline_init');
+    delay_pipeline_config.source = str2func('pipeline_init_xblock');
     delay_pipeline_config.name = 'delay_pipe';
     delay_pipeline = xBlock( delay_pipeline_config, {latency}, {data_in}, {reg_in} );
 end
