@@ -21,6 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 cursys = gcb;
+fprintf('Deprecation Warning! register_mask.m is now deprecated in BWRC fork\n');
 
 pos = get_param(cursys,'Position');
 x= pos(1);
