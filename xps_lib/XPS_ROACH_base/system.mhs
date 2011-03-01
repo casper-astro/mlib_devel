@@ -257,8 +257,8 @@ END
 #IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_CLK0_BUF              = TRUE
 #IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_CLK2X_BUF             = TRUE
 #IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  ['  PARAMETER C_CLKIN_PERIOD = ', num2str(1000/app_clk_rate, '%.6f'), '\n']
-#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_DFS_FREQUENCY_MODE    = HIGH,                        
-#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_DFS_FREQUENCY_MODE    = "HIGH"                        
+#IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PARAMETER C_DLL_FREQUENCY_MODE    = "HIGH"
 #IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PORT RST    = sys_clk_lock
 #IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  ['  PORT CLKIN  = ', app_clk, '\n']
 #IF# (strcmp(get(b,'type'),'xps_dspmult_2x') || strcmp(get(b,'type'), 'xps_dspcmult_2x'))#  PORT CLKFB  = dspmult_2x_clk_fb                           

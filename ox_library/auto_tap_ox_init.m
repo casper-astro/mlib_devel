@@ -20,7 +20,16 @@ use_dsp_acc = get_var('use_dsp_acc', varargin{:});
 % Replace cmult-accumulator cores with DSP version if option set
 dual_pol_cmacs = find_system(blk, 'lookUnderMasks', 'all', ...
    'FollowLinks', 'on', 'Name', 'dual_pol_cmac');
-if use_dsp_acc == 1
+
+if use_ded_mult==6
+    for i=1:length(dual_pol_cmacs),
+        disp('Replacing cmults with dual_pol_cmac_dsp2x')
+        replace_block(get_param(dual_pol_cmacs{i},'Parent'), ...
+        'Name', get_param(dual_pol_cmacs{i}, 'Name'), ...
+        'ox_lib/xeng/dual_pol_cmac_dsp2x', 'noprompt');
+        set_param(dual_pol_cmacs{i},'LinkStatus','inactive');
+    end
+elseif use_dsp_acc == 1
     for i=1:length(dual_pol_cmacs),
         replace_block(get_param(dual_pol_cmacs{i},'Parent'), ...
           'Name', get_param(dual_pol_cmacs{i}, 'Name'), ...
