@@ -15,8 +15,8 @@ blkStruct.MaskDisplay = ['disp(''GAVRT Blockset'')'];
 %
 Browser(1).Library = 'gavrt_library';
 Browser(1).Name    = 'GAVRT Blockset';
-Browser(2).Library = 'testbench_lib';
-Browser(2).Name    = 'Testbench Blockset';
+%Browser(2).Library = 'testbench_lib';
+%Browser(2).Name    = 'Testbench Blockset';
 Browser(3).Library = 'gtkWave';
 Browser(3).Name = 'GtkWaveCapture';
 

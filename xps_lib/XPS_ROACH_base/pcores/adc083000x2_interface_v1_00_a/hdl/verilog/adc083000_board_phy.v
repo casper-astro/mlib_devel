@@ -1,87 +1,53 @@
 module adc083000_board_phy(
-	adc_clk_p,
-	adc_clk_n,
-	adc_sync_p,
-	adc_sync_n,
-	adc_outofrange_p,
-	adc_outofrange_n,
-	adc_dataeveni_p,
-	adc_dataeveni_n,
-	adc_dataoddi_p,
-	adc_dataoddi_n,
-	adc_dataevenq_p,
-	adc_dataevenq_n,
-	adc_dataoddq_p,
-	adc_dataoddq_n,
-
-
-	adc_clk,
-	adc_clk90,
-	adc_clk180,
-	adc_clk270,
-	adc_user_datai0,
-	adc_user_datai1, 
-	adc_user_datai2,
-	adc_user_datai3,
-	adc_user_dataq0,
-	adc_user_dataq1,
-	adc_user_dataq2,
-	adc_user_dataq3,
-	adc_sync0,
-	adc_sync1,
-	adc_sync2,
-	adc_sync3,
-	adc_outofrange0,
-	adc_outofrange1,
-	adc_outofrange2,
-	adc_outofrange3,
+	input adc_clk_p,
+	input adc_clk_n,
+	input adc_sync_p,
+	input adc_sync_n,
+	input adc_outofrange_p,
+	input adc_outofrange_n,
+	input [7:0] adc_dataeveni_p,
+	input [7:0] adc_dataeveni_n,
+	input [7:0] adc_dataoddi_p,
+	input [7:0] adc_dataoddi_n,
+	input [7:0] adc_dataevenq_p,
+	input [7:0] adc_dataevenq_n,
+	input [7:0] adc_dataoddq_p,
+	input [7:0] adc_dataoddq_n,
 	
-	ctrl_reset,
-	adc_dcm_locked,
-	ctrl_clk_out
+	output adc_clk,
+	output adc_clk90,
+	output adc_clk180,
+	output adc_clk270,
+	output [7:0] adc_user_datai0,
+	output [7:0] adc_user_dataq0,
+	output [7:0] adc_user_datai1,
+	output [7:0] adc_user_dataq1,
+	output [7:0] adc_user_datai2,
+	output [7:0] adc_user_dataq2,
+	output [7:0] adc_user_datai3,
+	output [7:0] adc_user_dataq3,
+	output adc_sync0,
+	output adc_sync1,
+	output adc_sync2,
+	output adc_sync3,
+	output adc_outofrange0,
+	output adc_outofrange1,
+	output adc_outofrange2,
+	output adc_outofrange3,
+	
+	// control lines
+	input ctrl_reset,
+	input ctrl_clk_out,
+	
+	// DCM ports
+	input dcm_psen,
+	input dcm_psclk, 
+	input dcm_psincdec,
+	input dcm_rst,
+	output [7:0] dcm_status,
+	output dcm_psdone,
+	output adc_dcm_locked
 );
-// Inputs and Outputs
-//===================
-input adc_clk_p;
-input adc_clk_n;
-input adc_sync_p;
-input adc_sync_n;
-input adc_outofrange_p;
-input adc_outofrange_n;
-input [7:0] adc_dataeveni_p;
-input [7:0] adc_dataeveni_n;
-input [7:0] adc_dataoddi_p;
-input [7:0] adc_dataoddi_n;
-input [7:0] adc_dataevenq_p;
-input [7:0] adc_dataevenq_n;
-input [7:0] adc_dataoddq_p;
-input [7:0] adc_dataoddq_n;
-
-output adc_clk;
-output adc_clk90;
-output adc_clk180;
-output adc_clk270;
-output [7:0] adc_user_datai0;
-output [7:0] adc_user_dataq0;
-output [7:0] adc_user_datai1;
-output [7:0] adc_user_dataq1;
-output [7:0] adc_user_datai2;
-output [7:0] adc_user_dataq2;
-output [7:0] adc_user_datai3;
-output [7:0] adc_user_dataq3;
-output adc_sync0;
-output adc_sync1;
-output adc_sync2;
-output adc_sync3;
-output adc_outofrange0;
-output adc_outofrange1;
-output adc_outofrange2;
-output adc_outofrange3;
-
-// control lines
-input ctrl_reset;
-output adc_dcm_locked;
-input ctrl_clk_out;
 
 // Wires and Regs
 //===============
@@ -111,8 +77,6 @@ wire adc_data_fifo_full;
 wire adc_data_fifo_empty;
 wire [63:0] adc_fifo_din;
 wire [63:0] adc_fifo_dout;
-wire adc_dcm_locked;
-wire [7:0] dcm0_status;
 wire data_buf_clk;
 
 // Digitize LVDS pairs
@@ -246,18 +210,18 @@ assign adc_fifo_din = {
 	adc_dataq3_recapture
 };
 
-//async_fifo_64by16 adc_data_fifo (
-//	.din(adc_fifo_din),
-//	.rd_clk(data_buf_clk),
-//	.rd_en(~adc_data_fifo_empty),
-//	.rst(ctrl_reset),
-//	.wr_clk(adc_clk),
-//	.wr_en(~adc_data_fifo_full),
-//	.dout(adc_fifo_dout),
-//	.empty(adc_data_fifo_empty),
-//	.full(adc_data_fifo_full),
-//	.valid(adc_user_data_valid)
-//);
+async_fifo_64by16 adc_data_fifo (
+	.din(adc_fifo_din),
+	.rd_clk(ctrl_clk_out),
+	.rd_en(~adc_data_fifo_empty),
+	.rst(ctrl_reset),
+	.wr_clk(adc_clk),
+	.wr_en(~adc_data_fifo_full),
+	.dout(adc_fifo_dout),
+	.empty(adc_data_fifo_empty),
+	.full(adc_data_fifo_full),
+	.valid(adc_user_data_valid)
+);
 
 	
 // DCM(s) and CLock Management 
@@ -292,10 +256,10 @@ DCM #(
 	.CLKFB(adc_clk),       		// DCM clock feedback
 	.CLKIN(adc_clk_buf),      // Clock input (from IBUFG, BUFG or DCM)		 
 	.DSSEN(0),
-	.PSCLK(), // dcm_psclk
-	.PSEN( 1'b0 ),
-	.PSINCDEC( 1'b0 ),
-	.RST( ctrl_reset ),           // DCM asynchronous reset input
+	.PSCLK( dcm_psclk ), 
+	.PSEN( dcm_psen ),
+	.PSINCDEC( dcm_psincdec ),
+	.RST( dcm_rst | ctrl_reset ),           // DCM asynchronous reset input
 	.CLKDV( ),       						// Divided DCM CLK out (CLKDV_DIVIDE)
 	.CLKFX( ),       						// DCM CLK synthesis out (M/D)
 	.CLKFX180( ), 							// 180 degree CLK synthesis out			
@@ -307,7 +271,7 @@ DCM #(
 	.CLK270( adc_clk270_dcm ),  // 270 degree DCM CLK output
 	.LOCKED( adc_dcm_locked ),  // DCM LOCK status output
 	.PSDONE( dcm_psdone ),
-	.STATUS( dcm0_status)
+	.STATUS( dcm_status)
 );
 
 // Buffer outputs of DCM

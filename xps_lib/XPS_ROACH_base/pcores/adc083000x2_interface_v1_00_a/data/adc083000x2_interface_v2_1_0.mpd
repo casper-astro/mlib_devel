@@ -145,18 +145,18 @@ PORT ctrl_clk180_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc0_clk_p, CLK_FA
 PORT ctrl_clk270_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc0_clk_p, CLK_FACTOR = 1
 PORT ctrl_dcm_locked = "", DIR = O
 PORT sys_clk       = "", DIR = I
-#PORT dcm_psen        = "", DIR = I
-#PORT dcm_psincdec    = "", DIR = I
-#PORT dcm_psdone      = "", DIR = O
-#PORT adc_ctrl_clk = "", DIR = I
-#PORT adc_ctrl_notSCS = "", DIR = I
-#PORT adc_ctrl_sdata = "", DIR = I
-#PORT adc0_notSCS = "", DIR = O
-#PORT adc0_sdata = "", DIR = O
-#PORT adc0_sclk = "", DIR = O
-#
-#PORT adc1_notSCS = "", DIR = O
-#PORT adc1_sdata = "", DIR = O
-#PORT adc1_sclk = "", DIR = O
-
+PORT adc1_dcm_psen = "", DIR = I
+PORT adc1_dcm_psclk = "", DIR = I
+PORT adc1_dcm_psincdec = "", DIR = I
+PORT adc1_dcm_rst = "", DIR = I
+PORT adc0_dcm_psen = "", DIR = I
+PORT adc0_dcm_psclk = "", DIR = I
+PORT adc0_dcm_psincdec = "", DIR = I
+PORT adc0_dcm_rst = "", DIR = I
+PORT adc0_dcm_psdone= "", DIR = O
+PORT adc1_dcm_psdone= "", DIR = O
+PORT adc1_dcm_status= "", DIR = O, VEC = [7:0]
+PORT adc0_dcm_status= "", DIR = O, VEC = [7:0]
+PORT adc0_reset_issue= "", DIR = I
+PORT adc1_reset_issue="", DIR = O
 END
