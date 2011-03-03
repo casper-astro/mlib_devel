@@ -132,10 +132,10 @@ NET phy_reset_n             LOC = K27  | IOSTANDARD = LVCMOS25 ;
 #IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_m"     TNM_NET = "brefclk_bottom_m";
 #IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#TIMESPEC "TS_brefclk_bottom_m" = PERIOD "brefclk_bottom_m" 156.25 Mhz;
 #IF# strcmp(get(b,'type'),'xps_tengbe')#
-#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_m"  LOC = "J18"  | IOSTANDARD = "LVDS_25"   ;
-#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_p"  LOC = "H18"  | IOSTANDARD = "LVDS_25"   ;
-#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_m"  LOC = "AL18" | IOSTANDARD = "LVDS_25"   ;
-#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_p"  LOC = "AK18" | IOSTANDARD = "LVDS_25"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_m"  LOC = "J18"  | IOSTANDARD = "LVDS_25_DT"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET "brefclk_top_p"  LOC = "H18"  | IOSTANDARD = "LVDS_25_DT"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_m"  LOC = "AL18" | IOSTANDARD = "LVDS_25_DT"   ;
+#IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'1')#NET "brefclk_bottom_p"  LOC = "AK18" | IOSTANDARD = "LVDS_25_DT"   ;
 #IF# strcmp(get(b,'type'),'xps_tengbe')#
 #IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l3_p        LOC = A7;
 #IF# strcmp(get(b,'type'),'xps_tengbe') && strcmp(get(b,'port'),'0')#NET XAUI0_rx_l3_n        LOC = A6;
@@ -180,10 +180,10 @@ NET phy_reset_n             LOC = K27  | IOSTANDARD = LVCMOS25 ;
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#NET "bref_clk_bottom" TNM_NET="bref_clk_bottom";
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#TIMESPEC "TS_bref_clk_bottom" = PERIOD "bref_clk_bottom" 156.25 MHz;
 #IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#NET "bref_clk_top_n"  LOC = "J18"  | IOSTANDARD = "LVDS_25"   ;
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#NET "bref_clk_top_p"  LOC = "H18"  | IOSTANDARD = "LVDS_25"   ;
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#NET "bref_clk_bottom_n"  LOC = "AL18" | IOSTANDARD = "LVDS_25"   ;
-#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#NET "bref_clk_bottom_p"  LOC = "AK18" | IOSTANDARD = "LVDS_25"   ;
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#NET "bref_clk_top_n"  LOC = "J18"  | IOSTANDARD = "LVDS_25_DT"   ;
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'0')#NET "bref_clk_top_p"  LOC = "H18"  | IOSTANDARD = "LVDS_25_DT"   ;
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#NET "bref_clk_bottom_n"  LOC = "AL18" | IOSTANDARD = "LVDS_25_DT"   ;
+#IF# strcmp(get(b,'type'),'xps_xaui') && strcmp(get(b,'port'),'1')#NET "bref_clk_bottom_p"  LOC = "AK18" | IOSTANDARD = "LVDS_25_DT"   ;
 #IF# strcmp(get(b,'type'),'xps_xaui')#
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = J2  ;
 #IF# strcmp(get(b,'type'),'xps_adc') && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = L8  ;
