@@ -79,19 +79,6 @@ module adc083000x2_interface #(
 	output [3:0] 	adc1_user_sync,
 	output [0:0] 	adc1_user_data_valid,
 
-	// 3-wire serial interface ports
-	//output		adc0_notSCS,
-	//output		adc0_sclk,
-	//output 		adc0_sdata,
-	//output		adc1_notSCS,
-	//output		adc1_sclk,
-	//output 		adc1_sdata,
-
-	//input		adc_ctrl_clk,
-	//input		adc_ctrl_sdata,
-	//input		adc_ctrl_notSCS,
-
-
 	// dcm/ctrl signals
 	input					ctrl_clk_in,
 	output				ctrl_clk_out,
@@ -99,7 +86,22 @@ module adc083000x2_interface #(
 	output				ctrl_clk180_out,
 	output				ctrl_clk270_out,
 	output				ctrl_dcm_locked,
-	input					sys_clk
+	input					sys_clk,
+	input			adc1_dcm_psen, 
+	input			adc1_dcm_psclk, 
+	input			adc1_dcm_psincdec, 
+	input			adc1_dcm_rst,
+	output	adc1_dcm_psdone,
+	output[7:0] adc1_dcm_status, 
+	input			adc0_dcm_psen, 
+	input			adc0_dcm_psclk, 
+	input			adc0_dcm_psincdec, 
+	input			adc0_dcm_rst,
+	output adc0_dcm_psdone,
+	output[7:0] adc0_dcm_status,
+
+	input adc0_reset_issue,
+	input adc1_reset_issue
 );
 
 // Wires and Regs
@@ -117,10 +119,16 @@ wire adc1_clk180;
 wire adc1_clk270;
 wire adc1_dcm_locked;
 
+
+wire adc1_synchronizer_reset;
+
 wire sync_done;
 
 // Module Declarations
 //====================
+assign adc1_reset = adc1_reset_issue | adc1_synchronizer_reset;
+assign adc0_reset = adc0_reset_issue;
+
 generate if (INTERLEAVE_BOARDS) begin
 clock_sync_fsm clock_sync_fsm(
 	.adc0_clk(adc0_clk),
@@ -132,7 +140,7 @@ clock_sync_fsm clock_sync_fsm(
 	.dcm_psclk(dcm_psclk),
 	.adc0_dcm_locked(adc0_dcm_locked),
 	.adc1_dcm_locked(adc1_dcm_locked),
-	.adc1_reset(adc1_reset),
+	.adc1_reset(adc1_synchronizer_reset),
 	.sync_done(sync_done)	
 );
 end
@@ -177,8 +185,14 @@ generate if (USE_ADC0 && ~DEMUX_DATA_OUT) begin
 		.adc_outofrange2(adc0_user_outofrange[2]),
 		.adc_outofrange3(adc0_user_outofrange[3]),
 		.ctrl_reset(ctrl_reset),
+		.ctrl_clk_out(ctrl_clk_out),
+		.dcm_psen( adc0_dcm_psen ),
+		.dcm_psclk( dcm_psclk ),
+		.dcm_psincdec( adc0_dcm_psincdec ),
+		.dcm_rst( adc0_dcm_rst ),
+		.dcm_status( adc0_dcm_status ),
 		.adc_dcm_locked(adc0_dcm_locked),
-		.ctrl_clk_out(ctrl_clk_out)
+		.dcm_psdone(adc0_dcm_psdone)
 	);
 end else if (USE_ADC0 && DEMUX_DATA_OUT) begin
 	adc083000_board_phy_demux ADC0 (
@@ -270,8 +284,14 @@ generate if (USE_ADC1) begin
 		.adc_outofrange2(adc1_user_outofrange[2]),
 		.adc_outofrange3(adc1_user_outofrange[3]),
 		.ctrl_reset(ctrl_reset),
-		.adc_dcm_locked(adc1_dcm_locked),
-		.ctrl_clk_out(ctrl_clk_out)
+		.ctrl_clk_out(ctrl_clk_out),
+		.dcm_psen( adc1_dcm_psen ),
+		.dcm_psclk( dcm_psclk ),
+		.dcm_psincdec( adc1_dcm_psincdec ),
+		.dcm_rst( adc1_dcm_rst ),
+		.dcm_status( adc1_dcm_status ),
+		.dcm_psdone(adc1_dcm_psdone),
+		.adc_dcm_locked(adc1_dcm_locked)
 	);
 end else if (USE_ADC1 && DEMUX_DATA_OUT) begin
 	adc083000_board_phy_demux ADC1 (
@@ -322,16 +342,6 @@ end else if (USE_ADC1 && DEMUX_DATA_OUT) begin
 	);
 end
 endgenerate
-
-
-// Serial interface
-//assign adc0_notSCS = adc_ctrl_notSCS;
-//assign adc0_sclk = adc_ctrl_clk;
-//assign adc0_sdata = adc_ctrl_sdata;
-//assign adc1_notSCS = adc_ctrl_notSCS;
-//assign adc1_sclk = adc_ctrl_clk;
-//assign adc1_sdata = adc_ctrl_sdata;
-
 
 // Clock signal assignment
 generate if (USE_ADC0) begin
