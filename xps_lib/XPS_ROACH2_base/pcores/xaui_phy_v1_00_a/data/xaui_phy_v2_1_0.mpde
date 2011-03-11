@@ -1,0 +1,51 @@
+###################################################################
+
+BEGIN xaui_phy
+
+## Peripheral Options
+  OPTION IPTYPE = IP
+  OPTION IMP_NETLIST = TRUE
+  OPTION HDL = VERILOG
+  OPTION IP_GROUP = USER
+  OPTION STYLE = MIX
+  OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+
+## Bus Interface
+	BUS_INTERFACE BUS = XAUI_SYS, BUS_STD = XAUI_SYS, BUS_TYPE = TARGET
+	BUS_INTERFACE BUS = XGMII,    BUS_STD = XGMII,    BUS_TYPE = INITIATOR
+
+## Parameters
+
+    PARAMETER USE_KAT_XAUI = 1, DT = INTEGER, RANGE = (0:1)
+
+## Ports
+
+# XAUI Ports
+  PORT reset             = reset,             DIR = I
+  PORT mgt_clk           = mgt_clk,           DIR = I
+  PORT mgt_txdata        = mgt_tx_data,       DIR = O, VEC = [63:0], BUS = XAUI_SYS
+  PORT mgt_txcharisk     = mgt_tx_charisk,    DIR = O, VEC =  [7:0], BUS = XAUI_SYS
+  PORT mgt_rxdata        = mgt_rx_data,       DIR = I, VEC = [63:0], BUS = XAUI_SYS
+  PORT mgt_rxcharisk     = mgt_rx_charisk,    DIR = I, VEC =  [7:0], BUS = XAUI_SYS
+  PORT mgt_enable_align  = mgt_enable_align,  DIR = O, VEC =  [3:0], BUS = XAUI_SYS
+  PORT mgt_code_valid    = mgt_code_valid,    DIR = I, VEC =  [7:0], BUS = XAUI_SYS
+  PORT mgt_code_comma    = mgt_code_comma,    DIR = I, VEC =  [7:0], BUS = XAUI_SYS
+  PORT mgt_rxlock        = mgt_rxlock,        DIR = I, VEC =  [3:0], BUS = XAUI_SYS
+  PORT mgt_rxbufferr     = mgt_rxbufferr,     DIR = I, VEC =  [3:0], BUS = XAUI_SYS
+  PORT mgt_loopback      = mgt_loopback,      DIR = O,               BUS = XAUI_SYS
+  PORT mgt_syncok        = mgt_syncok,        DIR = I, VEC =  [3:0], BUS = XAUI_SYS
+  PORT mgt_en_chan_sync  = mgt_en_chan_sync,  DIR = O,               BUS = XAUI_SYS
+  PORT mgt_powerdown     = mgt_powerdown,     DIR = O,               BUS = XAUI_SYS
+  PORT mgt_rx_reset      = mgt_rx_reset,      DIR = O, VEC =  [3:0], BUS = XAUI_SYS
+  PORT mgt_tx_reset      = mgt_tx_reset,      DIR = O, VEC =  [3:0], BUS = XAUI_SYS
+
+# XGMII Ports
+
+  PORT xgmii_txd         = xgmii_txd,         DIR = I, VEC = [63:0], BUS = XGMII
+  PORT xgmii_txc         = xgmii_txc,         DIR = I, VEC =  [7:0], BUS = XGMII
+  PORT xgmii_rxd         = xgmii_rxd,         DIR = O, VEC = [63:0], BUS = XGMII
+  PORT xgmii_rxc         = xgmii_rxc,         DIR = O, VEC =  [7:0], BUS = XGMII
+  PORT xaui_reset        = xaui_reset,        DIR = I,               BUS = XGMII
+  PORT xaui_status       = xaui_status,       DIR = O, VEC =  [7:0], BUS = XGMII
+
+END

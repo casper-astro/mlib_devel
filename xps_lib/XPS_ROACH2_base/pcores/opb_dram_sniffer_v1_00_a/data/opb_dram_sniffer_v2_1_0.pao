@@ -1,0 +1,5 @@
+lib opb_dram_sniffer_v1_00_a opb_dram_sniffer  verilog
+lib opb_dram_sniffer_v1_00_a ctrl_opb_attach   verilog
+lib opb_dram_sniffer_v1_00_a mem_opb_attach    verilog
+lib opb_dram_sniffer_v1_00_a read_history_fifo verilog
+lib opb_dram_sniffer_v1_00_a dram_arbiter      verilog

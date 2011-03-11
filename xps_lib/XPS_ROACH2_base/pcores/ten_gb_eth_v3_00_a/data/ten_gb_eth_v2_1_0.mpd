@@ -1,0 +1,94 @@
+###################################################################
+
+BEGIN ten_gb_eth
+
+## Peripheral Options
+  OPTION IPTYPE = PERIPHERAL
+  OPTION IMP_NETLIST = TRUE
+  OPTION HDL = VHDL
+  OPTION STYLE = MIX
+  OPTION IP_GROUP = MICROBLAZE:PPC:USER
+  OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+
+## Bus Interface
+  BUS_INTERFACE BUS = XGMII,     BUS_STD = XGMII,     BUS_TYPE = TARGET
+  BUS_INTERFACE BUS = XAUI_CONF, BUS_STD = XAUI_CONF, BUS_TYPE = TARGET
+  BUS_INTERFACE BUS = SOPB,      BUS_STD = OPB,       BUS_TYPE = SLAVE 
+
+## Parameters
+  PARAMETER SWING                  = 1,              DT = string
+  PARAMETER PREEMPHASYS            = 1,              DT = string
+  PARAMETER DEFAULT_FABRIC_MAC     = 0xffffffffffff, DT = std_logic_vector
+  PARAMETER DEFAULT_FABRIC_IP      = 0xffffffff,     DT = std_logic_vector
+  PARAMETER DEFAULT_FABRIC_GATEWAY = 0xff,           DT = std_logic_vector
+  PARAMETER DEFAULT_FABRIC_PORT    = 0xffff,         DT = std_logic_vector
+  PARAMETER FABRIC_RUN_ON_STARTUP  = 0,              DT = integer
+
+  PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x4000, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
+  PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
+  PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
+  PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
+
+## Ports
+
+  ## application clock
+  PORT clk                  = "", DIR = IN
+  ## reset
+  PORT rst                  = "", DIR = IN
+
+  ## tx ports
+  PORT tx_valid             = "", DIR = IN
+  PORT tx_ack               = "", DIR = OUT
+  PORT tx_end_of_frame      = "", DIR = IN
+  PORT tx_discard           = "", DIR = IN
+  PORT tx_data              = "", DIR = IN , VEC = [63:0]
+  PORT tx_dest_ip           = "", DIR = IN , VEC = [31:0]
+  PORT tx_dest_port         = "", DIR = IN , VEC = [15:0]
+  
+  ## rx port
+  PORT rx_valid             = "", DIR = OUT
+  PORT rx_ack               = "", DIR = IN
+  PORT rx_data              = "", DIR = OUT, VEC = [63:0]
+  PORT rx_end_of_frame      = "", DIR = OUT
+  PORT rx_size              = "", DIR = OUT, VEC = [15:0]
+  PORT rx_source_ip         = "", DIR = OUT, VEC = [31:0]
+  PORT rx_source_port       = "", DIR = OUT, VEC = [15:0]
+        
+  ## status LEDs
+  PORT led_up               = "", DIR = OUT
+  PORT led_rx               = "", DIR = OUT
+  PORT led_tx               = "", DIR = OUT
+
+  ## XGMII interface
+
+  PORT xaui_clk    = xaui_clk,    DIR = I
+  PORT xgmii_txd   = xgmii_txd,   DIR = O, VEC = [63:0], BUS = XGMII
+  PORT xgmii_txc   = xgmii_txc,   DIR = O, VEC =  [7:0], BUS = XGMII
+  PORT xgmii_rxd   = xgmii_rxd,   DIR = I, VEC = [63:0], BUS = XGMII
+  PORT xgmii_rxc   = xgmii_rxc,   DIR = I, VEC =  [7:0], BUS = XGMII
+  PORT xaui_reset  = xaui_reset,  DIR = O,               BUS = XGMII
+  PORT xaui_status = xaui_status, DIR = I, VEC =  [7:0], BUS = XGMII
+
+  ## MGT configuration bits
+  PORT mgt_rxeqmix       = mgt_rxeqmix,       DIR = O, VEC =  [1:0], BUS = XAUI_CONF 
+  PORT mgt_rxeqpole      = mgt_rxeqpole,      DIR = O, VEC =  [3:0], BUS = XAUI_CONF
+  PORT mgt_txpreemphasis = mgt_txpreemphasis, DIR = O, VEC =  [2:0], BUS = XAUI_CONF  
+  PORT mgt_txdiffctrl    = mgt_txdiffctrl,    DIR = O, VEC =  [2:0], BUS = XAUI_CONF 
+
+  ## OPB Ports
+  PORT OPB_Clk     = "",          DIR = I, SIGIS = Clk, BUS = SOPB
+  PORT OPB_Rst     = OPB_Rst,     DIR = I, SIGIS = Rst, BUS = SOPB
+  PORT Sl_DBus     = Sl_DBus,     DIR = O, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
+  PORT Sl_errAck   = Sl_errAck,   DIR = O, BUS = SOPB
+  PORT Sl_retry    = Sl_retry,    DIR = O, BUS = SOPB
+  PORT Sl_toutSup  = Sl_toutSup,  DIR = O, BUS = SOPB
+  PORT Sl_xferAck  = Sl_xferAck,  DIR = O, BUS = SOPB
+  PORT OPB_ABus    = OPB_ABus,    DIR = I, VEC = [0:(C_OPB_AWIDTH-1)], BUS = SOPB
+  PORT OPB_BE      = OPB_BE,      DIR = I, VEC = [0:((C_OPB_DWIDTH/8)-1)], BUS = SOPB
+  PORT OPB_DBus    = OPB_DBus,    DIR = I, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
+  PORT OPB_RNW     = OPB_RNW,     DIR = I, BUS = SOPB
+  PORT OPB_select  = OPB_select,  DIR = I, BUS = SOPB
+  PORT OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB
+
+END

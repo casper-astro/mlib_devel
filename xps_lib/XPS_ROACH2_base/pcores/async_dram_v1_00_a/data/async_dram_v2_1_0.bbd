@@ -1,0 +1,2 @@
+FILES
+rd_fifo_bram.ngc, rd_fifo_dist.ngc, data_fifo_dist.ngc, transaction_fifo_dist.ngc 

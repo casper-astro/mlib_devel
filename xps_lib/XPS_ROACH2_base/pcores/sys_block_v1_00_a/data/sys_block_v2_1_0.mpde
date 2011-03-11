@@ -1,0 +1,45 @@
+BEGIN sys_block
+
+## Peripheral Options
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION IP_GROUP = USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+
+## Bus Interfaces
+BUS_INTERFACE BUS = SOPB, BUS_TYPE = SLAVE, BUS_STD = OPB
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
+PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
+PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
+PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
+
+PARAMETER BOARD_ID     = 0x0, DT = INTEGER
+PARAMETER REV_MAJOR    = 0x0, DT = INTEGER
+PARAMETER REV_MINOR    = 0x0, DT = INTEGER
+PARAMETER REV_RCS      = 0x0, DT = INTEGER
+PARAMETER RCS_UPTODATE = 0x0, DT = INTEGER
+
+## Ports
+PORT OPB_Clk     = "",          DIR = I, BUS = SOPB, SIGIS = Clk
+PORT OPB_Rst     = OPB_Rst,     DIR = I, BUS = SOPB, SIGIS = Rst
+PORT Sl_DBus     = Sl_DBus,     DIR = O, BUS = SOPB, VEC = [0:(C_OPB_DWIDTH-1)]
+PORT Sl_errAck   = Sl_errAck,   DIR = O, BUS = SOPB
+PORT Sl_retry    = Sl_retry,    DIR = O, BUS = SOPB
+PORT Sl_toutSup  = Sl_toutSup,  DIR = O, BUS = SOPB
+PORT Sl_xferAck  = Sl_xferAck,  DIR = O, BUS = SOPB
+PORT OPB_ABus    = OPB_ABus,    DIR = I, BUS = SOPB, VEC = [0:(C_OPB_AWIDTH-1)],     
+PORT OPB_BE      = OPB_BE,      DIR = I, BUS = SOPB, VEC = [0:((C_OPB_DWIDTH/8)-1)], 
+PORT OPB_DBus    = OPB_DBus,    DIR = I, BUS = SOPB, VEC = [0:(C_OPB_DWIDTH-1)],     
+PORT OPB_RNW     = OPB_RNW,     DIR = I, BUS = SOPB
+PORT OPB_select  = OPB_select,  DIR = I, BUS = SOPB
+PORT OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB
+
+PORT soft_reset  = soft_reset,  DIR = O
+PORT irq_n       = irq_n,       DIR = O
+PORT app_irq     = app_irq,     DIR = I, VEC = [15:0]
+
+PORT fab_clk     = "",          DIR = I
+
+END

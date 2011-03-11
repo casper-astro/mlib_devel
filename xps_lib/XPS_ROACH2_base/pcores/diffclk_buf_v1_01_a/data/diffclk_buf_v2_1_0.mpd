@@ -1,0 +1,30 @@
+###################################################################
+##
+## Name     : diffclk_buf
+## Desc     : Differential clock input buffer
+##
+###################################################################
+
+BEGIN diffclk_buf
+
+## Peripheral Options
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+OPTION DESC = "Differential clock input buffer"
+OPTION LAST_UPDATED = 9.1
+
+IO_INTERFACE IO_IF = diffclk_0
+
+## Bus Interfaces
+
+## Generics for VHDL or Parameters for Verilog
+
+## Ports
+PORT Clkin_p = "", DIR = IN, IOB_STATE=BUF, THREE_STATE=FALSE, SIGIS=CLK
+PORT Clkin_m = "", DIR = IN, IOB_STATE=BUF, THREE_STATE=FALSE, SIGIS=CLK
+PORT Clkout = "", DIR = OUT, SIGIS=CLK, CLK_INPORT=Clkin_p, CLK_FACTOR=1
+
+END
