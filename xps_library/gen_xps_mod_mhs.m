@@ -39,6 +39,14 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             plb_addr        = hex2dec('04000000');
             opb_bridge_size = hex2dec('00080000');
         % end case 'ROACH'
+        case 'ROACH2'
+            plb_slaves = 0;
+            opb_slaves = 2; % The system block and the adc controller
+
+            opb_addr        = hex2dec('01000000');
+            plb_addr        = hex2dec('04000000');
+            opb_bridge_size = hex2dec('00080000');
+        % end case 'ROACH2'
         otherwise
             plb_slaves = 2; % the memory and the opb bridge
             opb_slaves = 3; % the UART, the selectmap fifo and the serial switch reader
@@ -210,7 +218,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
         fprintf(nfo_fid,'\n');
 
         try
-            if strcmp(hw_sys, 'ROACH')
+            if strcmp(hw_sys, 'ROACH') ||  strcmp(hw_sys, 'ROACH22')
               str = gen_borf_info(n, blk_obj, this_opb_addr_start);
             else
               str = gen_borf_info(n-1, blk_obj, {});
