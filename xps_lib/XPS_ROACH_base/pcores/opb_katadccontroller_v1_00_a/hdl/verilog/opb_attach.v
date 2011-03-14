@@ -86,12 +86,14 @@ module opb_attach #(
   assign adc1_config_addr  = adc1_config_addr_reg;
   assign adc1_config_start = adc1_config_start_reg;
 
+  reg adc0_reset_hold;
+  reg adc1_reset_hold;
 
   always @(posedge OPB_Clk) begin
     opb_ack <= 1'b0;
     
-    adc0_reset_reg <= 1'b0;
-    adc1_reset_reg <= 1'b0;
+    adc0_reset_reg <= adc0_reset_hold;
+    adc1_reset_reg <= adc1_reset_hold;
 
     adc0_dcm_psen_reg <= 1'b0;
     adc1_dcm_psen_reg <= 1'b0;
@@ -100,6 +102,8 @@ module opb_attach #(
     adc1_config_start_reg <= 1'b0;
 
     if (OPB_Rst) begin
+      adc0_reset_hold <= 1'b0;
+      adc1_reset_hold <= 1'b0;
     end else begin
       if (addr_match && OPB_select && !opb_ack) begin
         opb_ack <= 1'b1;
@@ -109,6 +113,9 @@ module opb_attach #(
               if (OPB_BE[3]) begin
                 adc0_reset_reg <= OPB_DBus[31];
                 adc1_reset_reg <= OPB_DBus[30];
+
+                adc0_reset_hold <= OPB_DBus[27];
+                adc1_reset_hold <= OPB_DBus[26];
               end
               if (OPB_BE[1]) begin
                 adc0_dcm_psen_reg <= OPB_DBus[15];
