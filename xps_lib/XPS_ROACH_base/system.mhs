@@ -100,6 +100,11 @@ PORT ppc_irq_n   = ppc_irq_n,   DIR = O
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # PARAMETER HW_VER       = 1.00.a
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # PARAMETER C_BASEADDR   = 0x00020000
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # PARAMETER C_HIGHADDR   = 0x0002ffff
+#IF# (strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0') && strcmp(get(b,'adc_interleave'),'on'))# PARAMETER INTERLEAVED_0 = 1
+#IF# (strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1') && strcmp(get(b,'adc_interleave'),'on'))# PARAMETER INTERLEAVED_1 = 1
+#IF# (strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0') && strcmp(get(b,'bypass_auto'),'on'))# PARAMETER AUTOCONFIG_0 = O
+#IF# (strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1') && strcmp(get(b,'bypass_auto'),'on'))# PARAMETER AUTOCONFIG_1 = O
+
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # BUS_INTERFACE SOPB = opb0
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # PORT OPB_Clk = epb_clk
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
@@ -123,6 +128,7 @@ PORT ppc_irq_n   = ppc_irq_n,   DIR = O
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psdone = adc1_psdone
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  #END
+
 
 BEGIN roach_infrastructure
   PARAMETER INSTANCE = infrastructure_inst
