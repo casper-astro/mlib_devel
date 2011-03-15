@@ -1,17 +1,17 @@
-casper_library
+casper_library 
 % # Misc
-bit_reverse casper_library/Misc/bit_reverse bit_reverse_test n_bits 5
-adder_tree casper_library/Misc/adder_tree adder_tree_test n_inputs 5 latency 3
-c_to_ri casper_library/Misc/c_to_ri c_to_ri_test n_bits 8 bin_pt 4
-complex_addsub casper_library/Misc/complex_addsub complex_addsub_test BitWidth 12 add_latency 3
-edge casper_library/Misc/edge edge_test
-freeze_cntr casper_library/Misc/freeze_cntr freeze_cntr_test CounterBits 6
-negedge casper_library/Misc/negedge negedge_test
-posedge casper_library/Misc/posedge posedge_test
-power casper_library/Misc/power power_test BitWidth 8
-pulse_ext casper_library/Misc/pulse_ext pulse_ext_test pulse_len 7
-ri_to_c casper_library/Misc/ri_to_c ri_to_c_test
-convert_of casper_library/Misc/convert_of convert_of_test bit_width_i 8 binary_point_i 4 bit_width_o 6 binary_point_o 3 latency 0 overflow 'Wrap' quantization 'Truncate'
+%bit_reverse casper_library_misc/bit_reverse bit_reverse_test n_bits 5
+adder_tree casper_library_misc/adder_tree adder_tree_test n_inputs 5 latency 3 adder_imp 'Fabric' first_stage_hdl 'on'
+c_to_ri casper_library_misc/c_to_ri c_to_ri_test n_bits 8 bin_pt 4
+complex_addsub casper_library_misc/complex_addsub complex_addsub_test BitWidth 12 add_latency 3
+edge casper_library_misc/edge edge_test
+freeze_cntr casper_library_misc/freeze_cntr freeze_cntr_test CounterBits 6
+negedge casper_library_misc/negedge negedge_test
+posedge casper_library_misc/posedge posedge_test
+power casper_library_misc/power power_test BitWidth 8 add_latency 2 mult_latency 3
+pulse_ext casper_librar_misc/pulse_ext pulse_ext_test pulse_len 7
+ri_to_c casper_library_misc/ri_to_c ri_to_c_test
+convert_of casper_library_misc/convert_of convert_of_test bit_width_i 8 binary_point_i 4 bit_width_o 6 binary_point_o 3 latency 0 overflow 'Wrap' quantization 'Truncate'
 % # Downconverter
 lo_const casper_library/Downconverter/lo_const lo_const_test n_bits 13 phase (8*pi+1)/16
 rcmult casper_library/Downconverter/rcmult rcmult_test latency 2
