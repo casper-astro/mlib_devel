@@ -10,7 +10,7 @@
 
 function test_library(varargin)
 
-defaults = {'tests_file', 'tester_input.txt', 'test_type', 'section', ...
+defaults = {'tests_file', 'tester_input.txt', 'test_type', 'unit', ...
  'subsection', 'Misc', 'block', 'adder_tree', 'stop_first_fail', 'on' };
 
 tests_file = get_var('tests_file', 'defaults', defaults, varargin{:});
@@ -87,7 +87,7 @@ if ~strcmp(test_type, 'all'),
 
     blk = ' ';
     section = ' ';
-    if strcmp(test_type, 'unit'),
+    if strcmp(test_type, 'unit') || strcmp(test_type, 'section from block'),
       %search for tests for block specified until end of section or block found
       while ~((strcmp(blk, '%') && strcmp(section, '#')) || strcmp(blk, block)),
           line = fgetl(fid);
@@ -133,14 +133,16 @@ while ischar(line),
     [libloc, remainder] = strtok(remainder);
     [model, remainder] = strtok(remainder);
 
-    %found end of section to be tested and only testing sections
+    %found end of section to be tested and not testing everything
     if (~strcmp(test_type, 'all') && strcmp(blk, '%') && strcmp('#', libloc)),
         fprintf(['End of test subsection ', subsection, ' found at line ', num2str(linenum), '.']);
         break;
     end
 
-    %testing individual blocks and come to end of tests
-    if (strcmp(test_type, 'unit') && ~strcmp(blk, block)),
+    %stop if unit testing and (encountered new library subsection or end of unit tests) 
+    if (strcmp(test_type, 'unit') && (... 
+      (~strcmp(blk, block) && ~strcmp(blk, '%')) || ...
+      (strcmp(blk, '%') && strcmp(libloc, '#')))),
         fprintf(['End of tests for ', block, ' found at line ', num2str(linenum), '.']);
         break;
     end

@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Mar 15 17:33:10 2011"
-  RTWModifiedTimeStamp	  222111188
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  LastModifiedDate	  "Wed Mar 16 12:37:38 2011"
+  RTWModifiedTimeStamp	  222179855
+  ModelVersionFormat	  "1.%<AutoIncrement:10>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -15314,7 +15314,7 @@ Library {
       MaskDescription	      "Interface to test infrastruture"
       MaskPromptString	      "Location of unit tests|Name of test file|Test type:|Library subsection:|Library block|St"
       "op testing on first failure"
-      MaskStyleString	      "edit,edit,popup(all|section|unit),edit,edit,checkbox"
+      MaskStyleString	      "edit,edit,popup(all|section|section from block|unit),edit,edit,checkbox"
       MaskTunableValueString  "on,on,on,on,on,on"
       MaskCallbackString      "|%ideally, generate sections and blocks \n%from tests_location and test_file\n||||"
       MaskEnableString	      "on,on,on,on,on,on"
@@ -15329,8 +15329,8 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "/opt/casper_git_devel/casper_library/Tests|tester_input.txt|unit|FFTs|twiddle_general_3mu"
-      "lt|on"
+      MaskValueString	      "/opt/casper_git_devel/casper_library/Tests|tester_input.txt|section from block|Downconver"
+      "ter|lo_osc|on"
       MaskTabNameString	      ",,,,,"
       System {
 	Name			"test"
