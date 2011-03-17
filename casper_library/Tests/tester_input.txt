@@ -25,12 +25,12 @@ dds casper_library_downconverter/dds dds_osc_test freq_div 4 freq 1 num_lo 2 n_b
 % Test using parameters to generate constants
 dds casper_library_downconverter/dds dds_const_test freq_div 4 freq 2 num_lo 4 n_bits 10 latency 1
 mixer casper_library_downconverter/mixer mixer_test freq_div 8 freq 1 nstreams 4 n_bits 10 bram_latency 3 mult_latency 3
-fir_tap casper_library_downconverter/fir_tap fir_tap_test latency 2 factor 0.12345
-fir_dbl_tap casper_library_downconverter/fir_dbl_tap fir_dbl_tap_test factor 0.1234 add_latency 3 mult_latency 4  
-fir_col casper_library_downconverter/fir_col fir_col_test n_inputs 4 coeff [0.1,0.2,0.3,0.4] add_latency 4 mult_latency 3
-fir_dbl_col casper_library_downconverter/fir_dbl_col fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4]' add_latency 2 mult_latency 2
-dec_fir casper_library_downconverter/dec_fir dec_fir_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8]' n_bits 16 quantization 'Round  (unbiased: +/- Inf)' add_latency 3 mult_latency 4
-dec_fir casper_library_downconverter/dec_fir dec_fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1]' n_bits 10 quantization 'Round  (unbiased: Even Values)' add_latency 2 mult_latency 3
+fir_tap casper_library_downconverter/fir_tap fir_tap_test latency 2 factor 0.12345 coeff_bit_width 18 coeff_bin_pt 17
+fir_dbl_tap casper_library_downconverter/fir_dbl_tap fir_dbl_tap_test factor 0.1234 add_latency 3 mult_latency 4 coeff_bit_width 18 coeff_bin_pt 17 
+fir_col casper_library_downconverter/fir_col fir_col_test n_inputs 4 coeff [0.1,0.2,0.3,0.4] add_latency 4 mult_latency 3 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'off'
+fir_dbl_col casper_library_downconverter/fir_dbl_col fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4]' add_latency 2 mult_latency 2 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'on'
+dec_fir casper_library_downconverter/dec_fir dec_fir_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8]' n_bits 16 quantization 'Round  (unbiased: +/- Inf)' add_latency 3 mult_latency 4 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'off'
+dec_fir casper_library_downconverter/dec_fir dec_fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1]' n_bits 10 quantization 'Round  (unbiased: Even Values)' add_latency 2 mult_latency 3 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'on'
 % # Delays
 sync_delay casper_library/Delays/sync_delay sync_delay_test DelayLen 7
 sync_delay_en casper_library/Delays/sync_delay_en sync_delay_en_test DelayLen 7
