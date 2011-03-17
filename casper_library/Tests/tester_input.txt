@@ -29,19 +29,19 @@ fir_tap casper_library_downconverter/fir_tap fir_tap_test latency 2 factor 0.123
 fir_dbl_tap casper_library_downconverter/fir_dbl_tap fir_dbl_tap_test factor 0.1234 add_latency 3 mult_latency 4 coeff_bit_width 18 coeff_bin_pt 17 
 fir_col casper_library_downconverter/fir_col fir_col_test n_inputs 4 coeff [0.1,0.2,0.3,0.4] add_latency 4 mult_latency 3 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'off'
 fir_dbl_col casper_library_downconverter/fir_dbl_col fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4]' add_latency 2 mult_latency 2 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'on'
-dec_fir casper_library_downconverter/dec_fir dec_fir_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8]' n_bits 16 quantization 'Round  (unbiased: +/- Inf)' add_latency 3 mult_latency 4 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'off'
-dec_fir casper_library_downconverter/dec_fir dec_fir_dbl_col_test n_inputs 4 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1]' n_bits 10 quantization 'Round  (unbiased: Even Values)' add_latency 2 mult_latency 3 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'on'
+dec_fir casper_library_downconverter/dec_fir dec_fir_col_test n_inputs 2 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8]' n_bits 16 quantization 'Round  (unbiased: +/- Inf)' add_latency 3 mult_latency 4 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'on'
+dec_fir casper_library_downconverter/dec_fir dec_fir_dbl_col_test n_inputs 2 coeff '[0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1]' n_bits 10 quantization 'Round  (unbiased: Even Values)' add_latency 2 mult_latency 3 coeff_bit_width 18 coeff_bin_pt 17 adder_tree_hdl 'on'
 % # Delays
-sync_delay casper_library/Delays/sync_delay sync_delay_test DelayLen 7
-sync_delay_en casper_library/Delays/sync_delay_en sync_delay_en_test DelayLen 7
-sync_delay_prog casper_library/Delays/sync_delay_prog sync_delay_prog_test MaxDelay 5
-delay_bram_en_plus casper_library/Delays/delay_bram_en_plus delay_bram_en_plus_test DelayLen 9 bram_latency 3
-delay_bram_prog casper_library/Delays/delay_bram_prog delay_bram_prog_test MaxDelay 5 bram_latency 3
-delay_bram casper_library/Delays/delay_bram delay_bram_test DelayLen 6 bram_latency 3
-delay_slr casper_library/Delays/delay_slr delay_slr_test DelayLen 5
-partial_delay_prog casper_library/Delays/partial_delay_prog partial_delay_prog_test n_inputs 4 mux_latency 2
-delay_complex casper_library/Delays/delay_complex delay_complex_bram_test delay 7 n_bits 11 bin_pt 10 use_bram 1 bram_latency 3
-delay_complex casper_library/Delays/delay_complex delay_complex_slr_test delay 7 n_bits 13 bin_pt 12 use_bram 0 bram_latency 4
+sync_delay casper_library_delays/sync_delay sync_delay_test DelayLen 7
+sync_delay_en casper_library_delays/sync_delay_en sync_delay_en_test DelayLen 7
+sync_delay_prog casper_library_delays/sync_delay_prog sync_delay_prog_test MaxDelay 5
+delay_bram_en_plus casper_library_delays/delay_bram_en_plus delay_bram_en_plus_test DelayLen 9 bram_latency 3
+delay_bram_prog casper_library_delays/delay_bram_prog delay_bram_prog_test MaxDelay 5 bram_latency 3
+delay_bram casper_library_delays/delay_bram delay_bram_test DelayLen 6 bram_latency 3
+delay_slr casper_library_delays/delay_slr delay_slr_test DelayLen 5
+partial_delay_prog casper_library_delays/partial_delay_prog partial_delay_prog_test n_inputs 4 mux_latency 2
+delay_complex casper_library_delays/delay_complex delay_complex_bram_test delay 7 n_bits 11 bin_pt 10 use_bram 1 bram_latency 3
+delay_complex casper_library_delays/delay_complex delay_complex_slr_test delay 7 n_bits 13 bin_pt 12 use_bram 0 bram_latency 4
 % # Reorder
 dbl_buffer casper_library_reorder/dbl_buffer dbl_buffer_test depth 64 latency 3
 barrel_switcher casper_library_reorder/barrel_switcher barrel_switcher_test n_inputs 2
@@ -53,12 +53,12 @@ reorder casper_library_reorder/reorder reorder_bram_test map '[0 2 1 3 4 6 5 7]'
 reorder casper_library_reorder/reorder reorder_double_buffer_test map '[2 3 4 5 6 7 0 1]' n_inputs 2 bram_latency 1 map_latency 2 double_buffer 1 bram_map 'off'
 square_transposer casper_library_reorder/square_transposer square_transposer_test n_inputs 2
 % # Multipliers
-cmult_4bit_sl casper_library/Multipliers/cmult_4bit_sl cmult_4bit_sl_test mult_latency 2 add_latency 2
-cmult_4bit_sl* casper_library/Multipliers/cmult_4bit_sl* cmult_4bit_sl_conj_test mult_latency 2 add_latency 2
-cmult_4bit_em* casper_library/Multipliers/cmult_4bit_em* cmult_4bit_em_conj_test mult_latency 2 add_latency 2
-cmult_4bit_em casper_library/Multipliers/cmult_4bit_em cmult_4bit_em_test mult_latency 2 add_latency 2
-cmult_4bit_br* casper_library/Multipliers/cmult_4bit_br* cmult_4bit_br_conj_test mult_latency 2 add_latency 2
-cmult_4bit_br casper_library/Multipliers/cmult_4bit_br cmult_4bit_br_test mult_latency 2 add_latency 2
+cmult_4bit_sl casper_library_multipliers/cmult_4bit_sl cmult_4bit_sl_test mult_latency 2 add_latency 2
+cmult_4bit_sl* casper_library_multipliers/cmult_4bit_sl* cmult_4bit_sl_conj_test mult_latency 2 add_latency 2
+cmult_4bit_em* casper_library_multipliers/cmult_4bit_em* cmult_4bit_em_conj_test mult_latency 2 add_latency 2
+cmult_4bit_em casper_library_multipliers/cmult_4bit_em cmult_4bit_em_test mult_latency 2 add_latency 2
+cmult_4bit_br* casper_library_multipliers/cmult_4bit_br* cmult_4bit_br_conj_test mult_latency 2 add_latency 2
+cmult_4bit_br casper_library_multipliers/cmult_4bit_br cmult_4bit_br_test mult_latency 2 add_latency 2
 % # FFTs
 coeff_gen casper_library_ffts_twiddle_coeff_gen/coeff_gen coeff_gen_static_test Coeffs '[0.1-0.2i]' coeff_bit_width 12 StepPeriod 1 bram_latency 2 coeffs_bram 'off'
 coeff_gen casper_library_ffts_twiddle_coeff_gen/coeff_gen coeff_gen_br_test Coeffs '[0-0.1i 0.1-0.2i 0.2-0.3i 0.3-0.4i 0.4-0.5i 0.5-0.6i 0.6-0.7i 0.7-0.8i]' StepPeriod 1 coeff_bit_width 16 bram_latency 2 coeffs_bram 'on'
@@ -102,18 +102,18 @@ fft casper_library_ffts/fft fft_one_input_test FFTSize 2 input_bit_width 8 coeff
 fft casper_library_ffts/fft fft_inputs_equal_size_test FFTSize 2 input_bit_width 8 coeff_bit_width 8 n_inputs 2 unscramble 'on' quantization 'Truncate' overflow 'Wrap' add_latency 2 mult_latency 3 bram_latency 1 conv_latency 2 arch 'Virtex2Pro' opt_target 'multipliers' coeffs_bit_limit 8 delays_bit_limit 8 specify_mult 'on' mult_spec '[1 2]' hardcode_shifts 'off' shift_schedule '[1 1]' dsp48_adders 'off'
 fft casper_library_ffts/fft fft_test FFTSize 6 input_bit_width 8 coeff_bit_width 8 n_inputs 2 unscramble 'on' quantization 'Round  (unbiased: +/- Inf)' overflow 'Saturate' add_latency 2 mult_latency 3 bram_latency 1 conv_latency 2 arch 'Virtex5' opt_target 'multipliers' coeffs_bit_limit 8 delays_bit_limit 9 specify_mult 'on' mult_spec '[0 1 2 0 1 2]' hardcode_shifts 'off' shift_schedule '[1 1 1 1 1 1]' dsp48_adders 'on'
 % # PFBs
-tap casper_library/PFBs/tap tap_test mult_latency 2 coeff_width 16 coeff_frac_width 5 delay 8 data_width 8 bram_latency 2 use_hdl 'on' use_embedded 'off'
-tap_real casper_library/PFBs/tap_real tap_real_test mult_latency 3 coeff_width 18 coeff_frac_width 16 delay 8 data_width 8 bram_latency 1 use_hdl 'off' use_embedded 'on'
+tap casper_library_pfbs/tap tap_test mult_latency 2 coeff_width 16 coeff_frac_width 5 delay 8 data_width 8 bram_latency 2 use_hdl 'on' use_embedded 'off'
+tap_real casper_library_pfbs/tap_real tap_real_test mult_latency 3 coeff_width 18 coeff_frac_width 16 delay 8 data_width 8 bram_latency 1 use_hdl 'off' use_embedded 'on'
 % Tests the use of distributed memory for storing coefficients
-pfb_coeff_gen casper_library/PFBs/pfb_coeff_gen pfb_coeff_gen_dist_mem_test PFBSize 4 CoeffBitWidth 6 TotalTaps 4 CoeffDistMem 1 WindowType 'blackman' bram_latency 1 n_inputs 0 nput 0 fwidth 1
+pfb_coeff_gen casper_library_pfbs/pfb_coeff_gen pfb_coeff_gen_dist_mem_test PFBSize 4 CoeffBitWidth 6 TotalTaps 4 CoeffDistMem 1 WindowType 'blackman' bram_latency 1 n_inputs 0 nput 0 fwidth 1
 % Tests the use of BRAMs for storing coefficients
-pfb_coeff_gen casper_library/PFBs/pfb_coeff_gen pfb_coeff_gen_bram_test PFBSize 4 CoeffBitWidth 6 TotalTaps 7 CoeffDistMem 0 WindowType 'blackman' bram_latency 2 n_inputs 1 nput 1 fwidth 0.5
+pfb_coeff_gen casper_library_pfbs/pfb_coeff_gen pfb_coeff_gen_bram_test PFBSize 4 CoeffBitWidth 6 TotalTaps 7 CoeffDistMem 0 WindowType 'blackman' bram_latency 2 n_inputs 1 nput 1 fwidth 0.5
 first_tap casper_library/PFBs/first_tap first_tap_test nput 0 PFBSize 5 CoeffBitWidth 6 TotalTaps 5 BitWidthIn 8 CoeffDistMem 1 WindowType 'bartlett' mult_latency 3 bram_latency 2 n_inputs 1 fwidth 1 use_hdl 'off' use_embedded 'off'
-first_tap_real casper_library/PFBs/first_tap_real first_tap_real_test nput 0 PFBSize 4 CoeffBitWidth 10 TotalTaps 6 BitWidthIn 16 CoeffDistMem 1 WindowType 'chebwin' mult_latency 3 bram_latency 1 n_inputs 2 fwidth 0.5 use_hdl 'on' use_embedded 'off' 
-last_tap casper_library/PFBs/last_tap last_tap_test TotalTaps 5 BitWidthIn 10 BitWidthOut 18 CoeffBitWidth 10 add_latency 1 mult_latency 2 quantization 'Round  (unbiased: Even Values)' use_hdl 'off' use_embedded 'on'
-last_tap_real casper_library/PFBs/last_tap_real last_tap_real_test TotalTaps 5 BitWidthIn 10 BitWidthOut 18 CoeffBitWidth 10 add_latency 1 mult_latency 2 quantization 'Round  (unbiased: +/- Inf)' use_hdl 'off' use_embedded 'on'
-pfb_fir casper_library/PFBs/pfb_fir pfb_fir_test PFBSize 6 TotalTaps 6 WindowType 'nuttallwin' n_inputs 0 MakeBiplex 1 BitWidthIn 12 BitWidthOut 20 CoeffBitWidth 8 CoeffDistMem 1 add_latency 1 mult_latency 2 bram_latency 1 quantization 'Round  (unbiased: +/- Inf)' fwidth 0.75 specify_mult 'off' mult_spec '[0 1 2 0 1 2]'
-pfb_fir_real casper_library/PFBs/pfb_fir_real pfb_fir_real_test PFBSize 5 TotalTaps 5 WindowType 'chebwin' n_inputs 0 MakeBiplex 1 BitWidthIn 10 BitWidthOut 22 CoeffBitWidth 10 CoeffDistMem 0 add_latency 2 mult_latency 3 bram_latency 1 quantization 'Truncate' fwidth 0.8 specify_mult 'on' mult_spec '[0 1 2 0 1]'
+first_tap_real casper_library_pfbs/first_tap_real first_tap_real_test nput 0 PFBSize 4 CoeffBitWidth 10 TotalTaps 6 BitWidthIn 16 CoeffDistMem 1 WindowType 'chebwin' mult_latency 3 bram_latency 1 n_inputs 2 fwidth 0.5 use_hdl 'on' use_embedded 'off' 
+last_tap casper_library_pfbs/last_tap last_tap_test TotalTaps 5 BitWidthIn 10 BitWidthOut 18 CoeffBitWidth 10 add_latency 1 mult_latency 2 quantization 'Round  (unbiased: Even Values)' use_hdl 'off' use_embedded 'on'
+last_tap_real casper_library_pfbs/last_tap_real last_tap_real_test TotalTaps 5 BitWidthIn 10 BitWidthOut 18 CoeffBitWidth 10 add_latency 1 mult_latency 2 quantization 'Round  (unbiased: +/- Inf)' use_hdl 'off' use_embedded 'on'
+pfb_fir casper_library_pfbs/pfb_fir pfb_fir_test PFBSize 6 TotalTaps 6 WindowType 'nuttallwin' n_inputs 0 MakeBiplex 1 BitWidthIn 12 BitWidthOut 20 CoeffBitWidth 8 CoeffDistMem 1 add_latency 1 mult_latency 2 bram_latency 1 quantization 'Round  (unbiased: +/- Inf)' fwidth 0.75 specify_mult 'off' mult_spec '[0 1 2 0 1 2]'
+pfb_fir_real casper_library_pfbs/pfb_fir_real pfb_fir_real_test PFBSize 5 TotalTaps 5 WindowType 'chebwin' n_inputs 0 MakeBiplex 1 BitWidthIn 10 BitWidthOut 22 CoeffBitWidth 10 CoeffDistMem 0 add_latency 2 mult_latency 3 bram_latency 1 quantization 'Truncate' fwidth 0.8 specify_mult 'on' mult_spec '[0 1 2 0 1]'
 % # Correlator
 % xeng_tvg casper_library/Correlator/xeng_tvg xeng_tvg_test ant_bits 4 bits_in 8 x_int_bits 4 sync_period 9
-xeng casper_library/Correlator/xeng xeng_test n_ants 8 n_bits 4 acc_len 64 demux_factor 8 add_latency 1 mult_latency 1 bram_latency 1 use_ded_mult 1 use_bram_delay 1
+xeng casper_library_correlator/xeng xeng_test n_ants 8 n_bits 4 acc_len 64 demux_factor 8 add_latency 1 mult_latency 1 bram_latency 1 use_ded_mult 1 use_bram_delay 1

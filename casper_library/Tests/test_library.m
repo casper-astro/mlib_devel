@@ -177,20 +177,6 @@ while ischar(line),
         fprintf(['Model file ''', model, '.mdl'' does not exist.\n']);
     % load model and try to find block specified
     else
-        % try to find block in model
-        fprintf(['Trying to find ', blk, ' in model file ', model, ' ...']);
-        
-        warning('off', 'Simulink:SL_LoadMdlParameterizedLink')
-        load_system(model);
-        % finds block with name followed by zero or more digits [0-9]
-        thisblk = find_system(model, 'Regexp', 'on', 'name', ['\<',blk,'[\d]*\>']);
-        if isempty(thisblk),
-            fprintf(' failure\n');
-        else
-            fprintf(' success\n');
-            pos = get_param(thisblk, 'Position');
-            err = 0;
-        end
 
         % try to find library block specified
         lib = [];
@@ -206,6 +192,23 @@ while ischar(line),
         else
             fprintf(' success\n');
         end
+
+        % try to find block in model
+        fprintf(['Trying to find ', blk, ' in model file ', model, ' ...']);
+        
+        warning('off', 'Simulink:SL_LoadMdlParameterizedLink')
+        load_system(model);
+        % finds block with name followed by zero or more digits [0-9]
+        thisblk = find_system(model, 'Regexp', 'on', 'name', ['\<',blk,'[\d]*\>']);
+        if isempty(thisblk),
+            fprintf(' failure\n');
+        else
+            fprintf(' success\n');
+            pos = get_param(thisblk, 'Position');
+
+            err = 0;
+        end
+
     end
 
     %error in unit test setup, ignore line
@@ -264,6 +267,7 @@ while ischar(line),
         %lock on to old inputs
         if ~err,
           delete_block(thisblk{:});
+
           set_param([model, '/', blk, '1'], 'Position', pos{:});
 
           %if no error so far simulate
