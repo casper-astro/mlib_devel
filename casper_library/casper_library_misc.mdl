@@ -1,6 +1,6 @@
 Library {
   Name			  "casper_library_misc"
-  Version		  7.4
+  Version		  7.2
   MdlSubVersion		  0
   SavedCharacterEncoding  "windows-1252"
   LibraryType		  "BlockLibrary"
@@ -8,16 +8,15 @@ Library {
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
   DisableAllScopes	  off
-  MaxMDLFileLineLength	  120
   Created		  "Thu Sep 02 12:37:18 2010"
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "mwagner"
+  LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Mar  2 18:26:45 2011"
-  RTWModifiedTimeStamp	  220991203
-  ModelVersionFormat	  "1.%<AutoIncrement:8>"
+  LastModifiedDate	  "Wed Mar 16 12:37:38 2011"
+  RTWModifiedTimeStamp	  222179855
+  ModelVersionFormat	  "1.%<AutoIncrement:10>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -49,13 +48,11 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
-  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
-  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -84,13 +81,13 @@ Library {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      1
-      Version		      "1.6.0"
+      Version		      "1.5.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
 	  $ObjectID		  2
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -119,10 +116,11 @@ Library {
 	  AutoInsertRateTranBlk	  off
 	  SampleTimeConstraint	  "Unconstrained"
 	  InsertRTBMode		  "Whenever possible"
+	  SignalSizeVariationType "Allow only fixed size"
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  3
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -132,26 +130,23 @@ Library {
 	  LoadExternalInput	  off
 	  LoadInitialState	  off
 	  SaveFinalState	  off
-	  SaveCompleteFinalSimState off
 	  SaveFormat		  "Array"
 	  SaveOutput		  on
 	  SaveState		  off
 	  SignalLogging		  on
 	  InspectSignalLogs	  off
 	  SaveTime		  on
-	  ReturnWorkspaceOutputs  off
 	  StateSaveName		  "xout"
 	  TimeSaveName		  "tout"
 	  OutputSaveName	  "yout"
 	  SignalLoggingName	  "logsout"
 	  OutputOption		  "RefineOutputTimes"
 	  OutputTimes		  "[]"
-	  ReturnWorkspaceOutputsName "out"
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  4
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    7
@@ -168,18 +163,14 @@ Library {
 	  BooleanDataType	  off
 	  ConditionallyExecuteInputs on
 	  InlineParams		  off
-	  UseIntDivNetSlope	  off
 	  InlineInvariantSignals  off
 	  OptimizeBlockIOStorage  on
 	  BufferReuse		  on
 	  EnhancedBackFolding	  off
-	  StrengthReduction	  off
 	  EnforceIntegerDowncast  on
 	  ExpressionFolding	  on
-	  BooleansAsBitfields	  off
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
-	  PassReuseOutputArgsAs	  "Structure reference"
 	  ExpressionDepthLimit	  2147483647
 	  FoldNonRolledExpr	  on
 	  LocalBlockOutputs	  on
@@ -202,7 +193,7 @@ Library {
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  5
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -242,9 +233,6 @@ Library {
 	  ParameterUnderflowMsg	  "none"
 	  ParameterPrecisionLossMsg "warning"
 	  ParameterTunabilityLossMsg "warning"
-	  FixptConstUnderflowMsg  "none"
-	  FixptConstOverflowMsg	  "none"
-	  FixptConstPrecisionLossMsg "none"
 	  UnderSpecifiedDataTypeMsg "none"
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
@@ -269,14 +257,13 @@ Library {
 	  ModelReferenceSymbolNameMessage "warning"
 	  ModelReferenceExtraNoncontSigs "error"
 	  StateNameClashWarn	  "warning"
-	  SimStateInterfaceChecksumMismatchMsg "warning"
 	  StrictBusMsg		  "Warning"
 	  LoggingUnavailableSignals "error"
 	  BlockIODiagnostic	  "none"
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  6
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -303,7 +290,7 @@ Library {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  7
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  ModelReferenceNumInstancesAllowed "Multi"
@@ -312,21 +299,17 @@ Library {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  8
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
-	  SimBlas		  on
-	  SimCtrlC		  on
-	  SimExtrinsic		  on
-	  SimIntegrity		  on
 	  SimUseLocalCustomCode	  off
 	  SimBuildMode		  "sf_incremental_build"
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  9
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -368,13 +351,12 @@ Library {
 	  GenerateTraceReportEml  off
 	  GenerateCodeInfo	  off
 	  RTWCompilerOptimization "Off"
-	  CheckMdlBeforeBuild	  "Off"
 	  Array {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      10
-	      Version		      "1.6.0"
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		19
@@ -417,7 +399,6 @@ Library {
 	      CustomSymbolStrType     "$N$R$M"
 	      CustomSymbolStrField    "$N$M"
 	      CustomSymbolStrFcn      "$R$N$M$F"
-	      CustomSymbolStrFcnArg   "rt$I$N$M"
 	      CustomSymbolStrBlkIO    "rtb_$N$M"
 	      CustomSymbolStrTmpVar   "$N$M"
 	      CustomSymbolStrMacro    "$R$N$M"
@@ -434,7 +415,7 @@ Library {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      11
-	      Version		      "1.6.0"
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -470,10 +451,8 @@ Library {
 	      GenerateTestInterfaces  off
 	      IsPILTarget	      off
 	      ModelReferenceCompliant on
-	      ParMdlRefBuildCompliant on
 	      CompOptLevelCompliant   on
 	      IncludeMdlTerminateFcn  on
-	      GeneratePreprocessorConditionals "Disable all"
 	      CombineOutputUpdateFcns off
 	      SuppressErrorStatus     off
 	      ERTFirstTimeCompliant   off
@@ -488,7 +467,6 @@ Library {
 	      PurelyIntegerCode	      off
 	      SupportContinuousTime   on
 	      SupportNonInlinedSFcns  on
-	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
 	      PortableWordSizes	      off
@@ -520,6 +498,7 @@ Library {
     PropName		    "ConfigurationSets"
   }
   BlockDefaults {
+    Orientation		    "right"
     ForegroundColor	    "black"
     BackgroundColor	    "white"
     DropShadow		    off
@@ -529,8 +508,6 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
     ShowName		    on
-    BlockRotation	    0
-    BlockMirror		    off
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -601,7 +578,6 @@ Library {
       BusObject		      "BusObject"
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       OutMin		      "[]"
       OutMax		      "[]"
@@ -634,7 +610,6 @@ Library {
       BusObject		      "BusObject"
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       OutMin		      "[]"
       OutMax		      "[]"
@@ -688,11 +663,9 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    315
     Block {
       BlockType		      SubSystem
       Name		      "adc_sim"
-      SID		      1
       Ports		      [1, 8]
       Position		      [445, 200, 540, 430]
       MinAlgLoopOccurrences   off
@@ -716,7 +689,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "8"
       System {
@@ -737,7 +709,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sim_adc_data_in"
-	  SID			  2
 	  Position		  [310, 103, 340, 117]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -746,14 +717,12 @@ Library {
 	Block {
 	  BlockType		  Bias
 	  Name			  "adc_bias"
-	  SID			  3
 	  Position		  [445, 100, 475, 120]
 	  Bias			  "127.5"
 	}
 	Block {
 	  BlockType		  Gain
 	  Name			  "adc_gain"
-	  SID			  4
 	  Position		  [390, 100, 420, 120]
 	  Gain			  "127.5"
 	  ParameterDataTypeMode	  "Inherit via internal rule"
@@ -769,11 +738,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample0_ds"
-	  SID			  2206
 	  Ports			  [1, 1]
 	  Position		  [640, 93, 675, 127]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2206"
 	  N			  "8"
 	  phase			  "1"
 	  ic			  "0"
@@ -783,11 +752,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample1_ds"
-	  SID			  2207
 	  Ports			  [1, 1]
 	  Position		  [640, 143, 675, 177]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2207"
 	  N			  "8"
 	  phase			  "2"
 	  ic			  "0"
@@ -797,11 +766,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample2_ds"
-	  SID			  2208
 	  Ports			  [1, 1]
 	  Position		  [640, 193, 675, 227]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2208"
 	  N			  "8"
 	  phase			  "3"
 	  ic			  "0"
@@ -811,11 +780,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample3_ds"
-	  SID			  2209
 	  Ports			  [1, 1]
 	  Position		  [640, 243, 675, 277]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2209"
 	  N			  "8"
 	  phase			  "4"
 	  ic			  "0"
@@ -825,11 +794,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample4_ds"
-	  SID			  2210
 	  Ports			  [1, 1]
 	  Position		  [640, 293, 675, 327]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2210"
 	  N			  "8"
 	  phase			  "5"
 	  ic			  "0"
@@ -839,11 +808,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample5_ds"
-	  SID			  2211
 	  Ports			  [1, 1]
 	  Position		  [640, 343, 675, 377]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2211"
 	  N			  "8"
 	  phase			  "6"
 	  ic			  "0"
@@ -853,11 +822,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample6_ds"
-	  SID			  2212
 	  Ports			  [1, 1]
 	  Position		  [640, 393, 675, 427]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2212"
 	  N			  "8"
 	  phase			  "7"
 	  ic			  "0"
@@ -867,11 +836,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sample7_ds"
-	  SID			  2213
 	  Ports			  [1, 1]
 	  Position		  [640, 443, 675, 477]
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
+	  SID			  "2213"
 	  N			  "8"
 	  phase			  "0"
 	  ic			  "0"
@@ -881,7 +850,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s0"
-	  SID			  13
 	  Position		  [700, 103, 730, 117]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -890,7 +858,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s1"
-	  SID			  14
 	  Position		  [700, 153, 730, 167]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -900,7 +867,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s2"
-	  SID			  15
 	  Position		  [700, 203, 730, 217]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -910,7 +876,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s3"
-	  SID			  16
 	  Position		  [700, 253, 730, 267]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -920,7 +885,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s4"
-	  SID			  17
 	  Position		  [700, 303, 730, 317]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -930,7 +894,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s5"
-	  SID			  18
 	  Position		  [700, 353, 730, 367]
 	  Port			  "6"
 	  IconDisplay		  "Port number"
@@ -940,7 +903,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s6"
-	  SID			  19
 	  Position		  [700, 403, 730, 417]
 	  Port			  "7"
 	  IconDisplay		  "Port number"
@@ -950,7 +912,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "s7"
-	  SID			  20
 	  Position		  [700, 453, 730, 467]
 	  Port			  "8"
 	  IconDisplay		  "Port number"
@@ -1059,7 +1020,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "adder_tree"
-      SID		      308
       Ports		      [3, 2]
       Position		      [125, 22, 190, 138]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
@@ -1088,6 +1048,7 @@ Library {
       MaskEnableString	      "on,on,on,on"
       MaskVisibilityString    "on,on,on,on"
       MaskToolTipString	      "on,on,on,on"
+      MaskVarAliasString      ",,,"
       MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
       MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n "
       "   'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
@@ -1095,9 +1056,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "2|1|Fabric|on"
+      MaskTabNameString	      ",,,"
       System {
 	Name			"adder_tree"
 	Location		[745, 413, 1654, 1083]
@@ -1116,14 +1077,12 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
-	  SID			  309
 	  Position		  [30, 17, 60, 33]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "din1"
-	  SID			  310
 	  Position		  [30, 62, 60, 78]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1131,7 +1090,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "din2"
-	  SID			  311
 	  Position		  [30, 102, 60, 118]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -1139,16 +1097,16 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "addr1"
-	  SID			  312
 	  Ports			  [2, 1]
 	  Position		  [130, 40, 170, 100]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
+	  SID			  "312"
+	  LibraryVersion	  "1.2"
 	  mode			  "Addition"
-	  use_carryin		  off
-	  use_carryout		  off
-	  en			  off
+	  use_carryin		  "off"
+	  use_carryout		  "off"
+	  en			  "off"
 	  latency		  "1"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
@@ -1156,11 +1114,11 @@ Library {
 	  bin_pt		  "14"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  on
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "on"
 	  hw_selection		  "Fabric"
-	  pipelined		  on
-	  xl_use_area		  off
+	  pipelined		  "on"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -1179,18 +1137,18 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
-	  SID			  313
 	  Ports			  [1, 1]
 	  Position		  [80, 15, 110, 45]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "313"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "1"
-	  dbl_ovrd		  off
-	  reg_retiming		  on
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "on"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,419,315"
@@ -1207,14 +1165,12 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
-	  SID			  314
 	  Position		  [230, 17, 260, 33]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
-	  SID			  315
 	  Position		  [230, 42, 260, 58]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1254,7 +1210,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "armed_trigger"
-      SID		      22
       Ports		      [2, 1]
       Position		      [460, 126, 510, 164]
       MinAlgLoopOccurrences   off
@@ -1280,7 +1235,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "0"
       System {
@@ -1298,11 +1252,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	7
 	Block {
 	  BlockType		  Inport
 	  Name			  "arm"
-	  SID			  1
 	  Position		  [25, 58, 55, 72]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -1311,7 +1263,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "trig_in"
-	  SID			  2
 	  Position		  [30, 163, 60, 177]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1321,12 +1272,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant2"
-	  SID			  3
 	  Ports			  [0, 1]
 	  Position		  [170, 28, 185, 42]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "3"
 	  arith_type		  "Boolean"
 	  const			  "0"
 	  n_bits		  "1"
@@ -1355,12 +1306,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
-	  SID			  4
 	  Ports			  [2, 1]
 	  Position		  [310, 132, 355, 183]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "4"
 	  logical_function	  "AND"
 	  inputs		  "2"
 	  en			  "off"
@@ -1387,12 +1338,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "armed"
-	  SID			  5
 	  Ports			  [3, 1]
 	  Position		  [225, 40, 270, 90]
 	  AttributesFormatString  "init=%<init>"
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
+	  SID			  "5"
 	  init			  "1"
 	  rst			  "on"
 	  en			  "on"
@@ -1414,7 +1365,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "edge_detect"
-	  SID			  6
 	  Ports			  [1, 1]
 	  Position		  [100, 55, 145, 75]
 	  AttributesFormatString  "rising edges\nactive high"
@@ -1440,6 +1390,7 @@ Library {
 	  MaskEnableString	  "off,off,off,off,off,off"
 	  MaskVisibilityString	  "on,on,off,off,off,off"
 	  MaskToolTipString	  "on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,"
 	  MaskVariables		  "edge=@1;polarity=@2;xin=@3;yin=@4;xout=@5;yout=@6;"
 	  MaskInitialization	  "%edge_detect_init(gcb,edge,polarity);"
 	  MaskDisplay		  "plot(xin,0.5+yin{edge}*0.2)\nplot(xout,0.5+yout{edge}*0.2*(3-2*polarity))\n"
@@ -1447,11 +1398,11 @@ Library {
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
-	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "normalized"
 	  MaskValueString	  "Rising|Active High|floor([0.5:0.5:5])*0.08|{[-1,-1,1,1,1,1,1,1,1,1],[1,1,-1,-1,-1,-1,-1,-1,-1,-1"
 	  "],[-1,-1,1,1,1,1,-1,-1,-1,-1]}|1-floor([5:-0.5:0.5])*0.08|{[-1,-1,1,1,-1,-1,-1,-1,-1,-1],[-1,-1,1,1,-1,-1,-1,-1,-1,"
 	  "-1],[-1,-1,1,1,-1,-1,1,1,-1,-1]}"
+	  MaskTabNameString	  ",,,,,"
 	  System {
 	    Name		    "edge_detect"
 	    Location		    [433, 403, 1041, 568]
@@ -1467,11 +1418,9 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    5
 	    Block {
 	      BlockType		      Inport
 	      Name		      "in"
-	      SID		      1
 	      Position		      [50, 53, 80, 67]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -1480,12 +1429,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay"
-	      SID		      2
 	      Ports		      [1, 1]
 	      Position		      [180, 72, 225, 88]
 	      ShowName		      off
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
+	      SID		      "2"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
 	      en		      "off"
@@ -1508,12 +1457,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter"
-	      SID		      3
 	      Ports		      [1, 1]
 	      Position		      [180, 52, 225, 68]
 	      ShowName		      off
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
+	      SID		      "3"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
 	      en		      "off"
 	      latency		      "0"
@@ -1534,11 +1483,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "edge_op"
-	      SID		      4
 	      Ports		      [2, 1]
 	      Position		      [275, 48, 320, 92]
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
+	      SID		      "4"
 	      logical_function	      "NOR"
 	      inputs		      "2"
 	      en		      "off"
@@ -1565,7 +1514,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "out"
-	      SID		      5
 	      Position		      [380, 63, 410, 77]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -1609,7 +1557,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "trig_out"
-	  SID			  7
 	  Position		  [420, 153, 450, 167]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -1666,7 +1613,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "bit_reverse"
-      SID		      23
       Ports		      [1, 1]
       Position		      [130, 159, 185, 181]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
@@ -1696,7 +1642,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1"
       System {
@@ -1714,11 +1659,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	2
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  1
 	  Position		  [20, 53, 50, 67]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -1727,7 +1670,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  2
 	  Position		  [565, 53, 595, 67]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -1744,7 +1686,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "c_to_ri"
-      SID		      24
       Ports		      [1, 2]
       Position		      [665, 49, 705, 91]
       AttributesFormatString  "8_7 r/i"
@@ -1768,6 +1709,7 @@ Library {
       MaskEnableString	      "on,on"
       MaskVisibilityString    "on,on"
       MaskToolTipString	      "on,on"
+      MaskVarAliasString      ","
       MaskVariables	      "n_bits=@1;bin_pt=@2;"
       MaskInitialization      "annotation=sprintf('%d_%d r/i',n_bits,bin_pt);\nset_param(gcb,'AttributesFormatString',"
       "annotation);"
@@ -1775,9 +1717,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "8|7"
+      MaskTabNameString	      ","
       System {
 	Name			"c_to_ri"
 	Location		[698, 94, 968, 282]
@@ -1793,11 +1735,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	7
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  1
 	  Position		  [20, 63, 50, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -1806,11 +1746,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_im"
-	  SID			  2
 	  Ports			  [1, 1]
 	  Position		  [150, 79, 190, 111]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -1834,11 +1774,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_re"
-	  SID			  3
 	  Ports			  [1, 1]
 	  Position		  [150, 29, 190, 61]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "3"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -1862,11 +1802,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice_im"
-	  SID			  4
 	  Ports			  [1, 1]
 	  Position		  [80, 81, 125, 109]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "4"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -1892,11 +1832,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice_re"
-	  SID			  5
 	  Ports			  [1, 1]
 	  Position		  [80, 31, 125, 59]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "5"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -1922,7 +1862,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "re"
-	  SID			  6
 	  Position		  [215, 38, 245, 52]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -1931,7 +1870,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "im"
-	  SID			  7
 	  Position		  [215, 88, 245, 102]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1982,12 +1920,10 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "caddsub_dsp48e"
-      SID		      25
       Ports		      [4, 2]
       Position		      [130, 321, 180, 384]
       BackgroundColor	      "[0.500000, 1.000000, 0.500000]"
       AttributesFormatString  "18_17 + 8_7 ==> 19_17\nMode=Addition\nLatency=2"
-      LibraryVersion	      "*1.4"
       UserDataPersistent      on
       UserData		      "DataTag4"
       MinAlgLoopOccurrences   off
@@ -2014,6 +1950,7 @@ Library {
       MaskEnableString	      "on,on,on,on,on,on,off,off,off,off,off"
       MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,"
       MaskVariables	      "mode=&1;n_bits_a=@2;bin_pt_a=@3;n_bits_b=@4;bin_pt_b=@5;full_precision=&6;n_bits_c=@7;bin_p"
       "t_c=@8;quantization=&9;overflow=&10;cast_latency=@11;"
       MaskInitialization      "caddsub_dsp48e_init(gcb, ...\n    'mode', mode, ...\n    'n_bits_a', n_bits_a, ...\n   "
@@ -2024,7 +1961,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "Addition|18|17|8|7|on|19|17|Truncate|Wrap|0"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Output Type,Output Type,Output Type,Output Type,Output Ty"
@@ -2044,12 +1980,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	57
-	SIDPrevWatermark	57
 	Block {
 	  BlockType		  Inport
 	  Name			  "a_re"
-	  SID			  1
 	  Position		  [15, 13, 45, 27]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -2058,7 +1991,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a_im"
-	  SID			  2
 	  Position		  [15, 53, 45, 67]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -2068,7 +2000,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "b_re"
-	  SID			  3
 	  Position		  [15, 93, 45, 107]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -2078,7 +2009,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "b_im"
-	  SID			  4
 	  Position		  [15, 133, 45, 147]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -2088,12 +2018,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "DSP48E"
-	  SID			  13
 	  Ports			  [7, 1]
 	  Position		  [570, 14, 670, 126]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
+	  SID			  "13"
+	  LibraryVersion	  "1.2"
 	  use_a			  "Direct from A Port"
 	  use_b			  "Direct from B Port"
 	  pattern_from_creg	  "off"
@@ -2172,13 +2102,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret_A"
-	  SID			  22
 	  Ports			  [1, 1]
 	  Position		  [470, 17, 520, 33]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "22"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2202,13 +2132,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret_B"
-	  SID			  23
 	  Ports			  [1, 1]
 	  Position		  [470, 32, 520, 48]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "23"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2232,13 +2162,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret_C"
-	  SID			  33
 	  Ports			  [1, 1]
 	  Position		  [470, 47, 520, 63]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "33"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2262,13 +2192,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice_A"
-	  SID			  19
 	  Ports			  [1, 1]
 	  Position		  [370, 17, 420, 33]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "19"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
@@ -2294,13 +2224,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice_B"
-	  SID			  20
 	  Ports			  [1, 1]
 	  Position		  [370, 32, 420, 48]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "20"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
@@ -2326,13 +2256,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "alumode"
-	  SID			  18
 	  Ports			  [0, 1]
 	  Position		  [470, 77, 520, 93]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "18"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "4"
@@ -2361,13 +2291,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryin"
-	  SID			  24
 	  Ports			  [0, 1]
 	  Position		  [470, 92, 520, 108]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "24"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
@@ -2396,13 +2326,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryinsel"
-	  SID			  28
 	  Ports			  [0, 1]
 	  Position		  [470, 107, 520, 123]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "28"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "3"
@@ -2431,12 +2361,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_c_im"
-	  SID			  57
 	  Ports			  [1, 1]
 	  Position		  [870, 102, 920, 118]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "57"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "19"
@@ -2462,12 +2392,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_c_re"
-	  SID			  56
 	  Ports			  [1, 1]
 	  Position		  [870, 62, 920, 78]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "56"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "19"
@@ -2493,12 +2423,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "concat_a"
-	  SID			  15
 	  Ports			  [2, 1]
 	  Position		  [270, 37, 320, 68]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "15"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -2518,12 +2448,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "concat_b"
-	  SID			  16
 	  Ports			  [2, 1]
 	  Position		  [270, 92, 320, 123]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "16"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -2543,13 +2473,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "opmode"
-	  SID			  34
 	  Ports			  [0, 1]
 	  Position		  [470, 62, 520, 78]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "34"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "51"
 	  n_bits		  "7"
@@ -2582,12 +2512,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_a_im"
-	  SID			  39
 	  Ports			  [1, 1]
 	  Position		  [95, 52, 145, 68]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "39"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "24"
@@ -2613,12 +2543,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_a_re"
-	  SID			  38
 	  Ports			  [1, 1]
 	  Position		  [95, 12, 145, 28]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "38"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "24"
@@ -2644,12 +2574,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_b_im"
-	  SID			  41
 	  Ports			  [1, 1]
 	  Position		  [95, 132, 145, 148]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "41"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "24"
@@ -2675,12 +2605,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_b_re"
-	  SID			  40
 	  Ports			  [1, 1]
 	  Position		  [95, 92, 145, 108]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "40"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "24"
@@ -2706,12 +2636,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_a_im"
-	  SID			  53
 	  Ports			  [1, 1]
 	  Position		  [170, 52, 220, 68]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "53"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2735,12 +2665,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_a_re"
-	  SID			  52
 	  Ports			  [1, 1]
 	  Position		  [170, 12, 220, 28]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "52"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2764,12 +2694,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_b_im"
-	  SID			  55
 	  Ports			  [1, 1]
 	  Position		  [170, 132, 220, 148]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "55"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2793,12 +2723,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_b_re"
-	  SID			  54
 	  Ports			  [1, 1]
 	  Position		  [170, 92, 220, 108]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "54"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2822,12 +2752,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_c_im"
-	  SID			  50
 	  Ports			  [1, 1]
 	  Position		  [795, 102, 845, 118]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "50"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2851,12 +2781,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_c_re"
-	  SID			  51
 	  Ports			  [1, 1]
 	  Position		  [795, 62, 845, 78]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "51"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -2880,12 +2810,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice_c_im"
-	  SID			  26
 	  Ports			  [1, 1]
 	  Position		  [720, 102, 770, 118]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "26"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
@@ -2911,12 +2841,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice_c_re"
-	  SID			  25
 	  Ports			  [1, 1]
 	  Position		  [720, 62, 770, 78]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "25"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
@@ -2942,7 +2872,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "c_re"
-	  SID			  29
 	  Position		  [970, 63, 1000, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -2951,7 +2880,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "c_im"
-	  SID			  30
 	  Position		  [970, 103, 1000, 117]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -3161,7 +3089,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "complex_addsub"
-      SID		      26
       Ports		      [2, 2]
       Position		      [235, 124, 295, 171]
       MinAlgLoopOccurrences   off
@@ -3181,13 +3108,14 @@ Library {
       MaskEnableString	      "on,on"
       MaskVisibilityString    "on,on"
       MaskToolTipString	      "on,on"
+      MaskVarAliasString      ","
       MaskVariables	      "BitWidth=@1;add_latency=@2;"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "18|2"
+      MaskTabNameString	      ","
       System {
 	Name			"complex_addsub"
 	Location		[915, 262, 1499, 619]
@@ -3206,7 +3134,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  27
 	  Position		  [25, 43, 55, 57]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -3215,7 +3142,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  28
 	  Position		  [25, 138, 55, 152]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -3225,11 +3151,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "AddSub"
-	  SID			  28
 	  Ports			  [2, 1]
 	  Position		  [175, 25, 225, 80]
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
+	  SID			  "28"
 	  mode			  "Addition"
 	  use_carryin		  "off"
 	  use_carryout		  "off"
@@ -3265,11 +3191,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "AddSub1"
-	  SID			  29
 	  Ports			  [2, 1]
 	  Position		  [175, 95, 225, 150]
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
+	  SID			  "29"
 	  mode			  "Subtraction"
 	  use_carryin		  "off"
 	  use_carryout		  "off"
@@ -3305,11 +3231,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "AddSub2"
-	  SID			  30
 	  Ports			  [2, 1]
 	  Position		  [175, 170, 225, 225]
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
+	  SID			  "30"
 	  mode			  "Subtraction"
 	  use_carryin		  "off"
 	  use_carryout		  "off"
@@ -3345,11 +3271,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "AddSub3"
-	  SID			  31
 	  Ports			  [2, 1]
 	  Position		  [175, 240, 225, 295]
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
+	  SID			  "31"
 	  mode			  "Addition"
 	  use_carryin		  "off"
 	  use_carryout		  "off"
@@ -3385,11 +3311,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert"
-	  SID			  32
 	  Ports			  [1, 1]
 	  Position		  [305, 40, 350, 70]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "32"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "BitWidth"
@@ -3417,11 +3343,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert1"
-	  SID			  33
 	  Ports			  [1, 1]
 	  Position		  [305, 110, 350, 140]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "33"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "BitWidth"
@@ -3449,11 +3375,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert2"
-	  SID			  34
 	  Ports			  [1, 1]
 	  Position		  [305, 185, 350, 215]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "34"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "BitWidth"
@@ -3481,11 +3407,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert3"
-	  SID			  35
 	  Ports			  [1, 1]
 	  Position		  [305, 255, 350, 285]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "35"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "BitWidth"
@@ -3513,11 +3439,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Scale"
-	  SID			  36
 	  Ports			  [1, 1]
 	  Position		  [245, 41, 285, 69]
 	  SourceBlock		  "xbsIndex_r4/Scale"
 	  SourceType		  "Xilinx Input Scaler Block"
+	  SID			  "36"
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
@@ -3537,11 +3463,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Scale1"
-	  SID			  37
 	  Ports			  [1, 1]
 	  Position		  [245, 111, 285, 139]
 	  SourceBlock		  "xbsIndex_r4/Scale"
 	  SourceType		  "Xilinx Input Scaler Block"
+	  SID			  "37"
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
@@ -3561,11 +3487,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Scale2"
-	  SID			  38
 	  Ports			  [1, 1]
 	  Position		  [240, 186, 280, 214]
 	  SourceBlock		  "xbsIndex_r4/Scale"
 	  SourceType		  "Xilinx Input Scaler Block"
+	  SID			  "38"
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
@@ -3585,11 +3511,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Scale3"
-	  SID			  39
 	  Ports			  [1, 1]
 	  Position		  [240, 256, 280, 284]
 	  SourceBlock		  "xbsIndex_r4/Scale"
 	  SourceType		  "Xilinx Input Scaler Block"
+	  SID			  "39"
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
@@ -3609,7 +3535,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "c_to_ri"
-	  SID			  40
 	  Ports			  [1, 2]
 	  Position		  [80, 29, 120, 71]
 	  AttributesFormatString  "18_17 r/i"
@@ -3617,6 +3542,7 @@ Library {
 	  UserData		  "DataTag5"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
 	  SourceType		  "c_to_ri"
+	  SID			  "40"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -3631,7 +3557,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "c_to_ri1"
-	  SID			  41
 	  Ports			  [1, 2]
 	  Position		  [80, 124, 120, 166]
 	  AttributesFormatString  "18_17 r/i"
@@ -3639,6 +3564,7 @@ Library {
 	  UserData		  "DataTag6"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
 	  SourceType		  "c_to_ri"
+	  SID			  "41"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -3653,7 +3579,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ri_to_c"
-	  SID			  42
 	  Ports			  [2, 1]
 	  Position		  [395, 44, 435, 86]
 	  LinkData {
@@ -3693,6 +3618,7 @@ Library {
 	  UserData		  "DataTag7"
 	  SourceBlock		  "casper_library_misc/ri_to_c"
 	  SourceType		  "ri_to_c"
+	  SID			  "42"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -3705,7 +3631,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ri_to_c1"
-	  SID			  43
 	  Ports			  [2, 1]
 	  Position		  [395, 109, 435, 151]
 	  LinkData {
@@ -3745,6 +3670,7 @@ Library {
 	  UserData		  "DataTag8"
 	  SourceBlock		  "casper_library_misc/ri_to_c"
 	  SourceType		  "ri_to_c"
+	  SID			  "43"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -3757,7 +3683,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "a+b"
-	  SID			  45
 	  Position		  [460, 58, 490, 72]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -3766,7 +3691,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "a-b"
-	  SID			  46
 	  Position		  [460, 123, 490, 137]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -3934,7 +3858,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "complex_convert"
-      SID		      47
       Ports		      [1, 1]
       Position		      [770, 60, 815, 80]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
@@ -3968,6 +3891,7 @@ Library {
       MaskEnableString	      "on,on,on,on,on,on,on"
       MaskVisibilityString    "on,on,on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,"
       MaskVariables	      "n_bits_in=@1;bin_pt_in=@2;n_bits_out=@3;bin_pt_out=@4;quantization=&5;overflow=&6;latency=@"
       "7;"
       MaskInitialization      "complex_convert_init(gcb, ...\n    'n_bits_in',n_bits_in,...\n    'bin_pt_in',bin_pt_in"
@@ -3977,9 +3901,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "8|7|8|7|Truncate|Wrap|3"
+      MaskTabNameString	      ",,,,,,"
       System {
 	Name			"complex_convert"
 	Location		[293, 170, 845, 378]
@@ -3995,11 +3919,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	6
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  1
 	  Position		  [20, 63, 50, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -4008,7 +3930,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "c_to_ri"
-	  SID			  2
 	  Ports			  [1, 2]
 	  Position		  [95, 49, 135, 91]
 	  AttributesFormatString  "8_7 r/i"
@@ -4034,15 +3955,16 @@ Library {
 	  MaskEnableString	  "on,on"
 	  MaskVisibilityString	  "on,on"
 	  MaskToolTipString	  "on,on"
+	  MaskVarAliasString	  ","
 	  MaskVariables		  "n_bits=@1;bin_pt=@2;"
 	  MaskInitialization	  "c_to_ri_init(gcb,n_bits,bin_pt);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
-	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
 	  MaskValueString	  "8|7"
+	  MaskTabNameString	  ","
 	  System {
 	    Name		    "c_to_ri"
 	    Location		    [567, 157, 837, 310]
@@ -4058,11 +3980,9 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    7
 	    Block {
 	      BlockType		      Inport
 	      Name		      "c"
-	      SID		      1
 	      Position		      [20, 63, 50, 77]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -4071,11 +3991,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_im"
-	      SID		      2
 	      Ports		      [1, 1]
 	      Position		      [150, 79, 190, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "2"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
@@ -4099,11 +4019,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_re"
-	      SID		      3
 	      Ports		      [1, 1]
 	      Position		      [150, 29, 190, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "3"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
@@ -4127,11 +4047,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_im"
-	      SID		      4
 	      Ports		      [1, 1]
 	      Position		      [80, 81, 125, 109]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "4"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P>"
 	      "<P>Hardware notes: In hardware this block costs nothing."
@@ -4157,11 +4077,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_re"
-	      SID		      5
 	      Ports		      [1, 1]
 	      Position		      [80, 31, 125, 59]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "5"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P>"
 	      "<P>Hardware notes: In hardware this block costs nothing."
@@ -4187,7 +4107,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "re"
-	      SID		      6
 	      Position		      [215, 38, 245, 52]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -4196,7 +4115,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "im"
-	      SID		      7
 	      Position		      [215, 88, 245, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -4247,11 +4165,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_im"
-	  SID			  3
 	  Ports			  [1, 1]
 	  Position		  [190, 72, 235, 88]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "3"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
@@ -4277,12 +4195,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_re"
-	  SID			  4
 	  Ports			  [1, 1]
 	  Position		  [190, 52, 235, 68]
 	  NamePlacement		  "alternate"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "4"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
@@ -4308,7 +4226,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
-	  SID			  5
 	  Ports			  [2, 1]
 	  Position		  [285, 49, 325, 91]
 	  UserDataPersistent	  on
@@ -4329,7 +4246,6 @@ Library {
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
-	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
 	  System {
 	    Name		    "ri_to_c"
@@ -4346,11 +4262,9 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    6
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
-	      SID		      1
 	      Position		      [25, 38, 55, 52]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -4359,7 +4273,6 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
-	      SID		      2
 	      Position		      [25, 88, 55, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -4369,11 +4282,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "concat"
-	      SID		      3
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      SourceBlock	      "xbsIndex_r4/Concat"
 	      SourceType	      "Xilinx Bus Concatenator Block"
+	      SID		      "3"
 	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
 	      "nt at zero."
 	      num_inputs	      "2"
@@ -4392,11 +4305,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_im"
-	      SID		      4
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "4"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
@@ -4420,11 +4333,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_re"
-	      SID		      5
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "5"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
 	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
@@ -4448,7 +4361,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
-	      SID		      6
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -4491,7 +4403,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  6
 	  Position		  [375, 63, 405, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -4538,7 +4449,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "conv"
-      SID		      48
       Ports		      [1, 1]
       Position		      [335, 200, 415, 230]
       MinAlgLoopOccurrences   off
@@ -4553,7 +4463,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       System {
 	Name			"conv"
@@ -4573,7 +4482,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "In1"
-	  SID			  49
 	  Position		  [25, 38, 55, 52]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -4582,11 +4490,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
-	  SID			  2250
 	  Ports			  [2, 1]
 	  Position		  [265, 32, 315, 83]
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "2250"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -4605,11 +4513,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Inverter"
-	  SID			  2251
 	  Ports			  [1, 1]
 	  Position		  [175, 28, 225, 62]
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "2251"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -4629,11 +4537,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
-	  SID			  2252
 	  Ports			  [1, 1]
 	  Position		  [355, 44, 395, 76]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "2252"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -4657,11 +4565,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
-	  SID			  2253
 	  Ports			  [1, 1]
 	  Position		  [100, 31, 145, 59]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "2253"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -4687,11 +4595,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
-	  SID			  2254
 	  Ports			  [1, 1]
 	  Position		  [100, 86, 145, 114]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "2254"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -4717,7 +4625,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "Out1"
-	  SID			  55
 	  Position		  [420, 53, 450, 67]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -4773,7 +4680,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "convert"
-      SID		      56
       Ports		      [1, 1]
       Position		      [770, 140, 815, 160]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
@@ -4805,6 +4711,7 @@ Library {
       MaskEnableString	      "on,on,on,on,on,on"
       MaskVisibilityString    "on,on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,"
       MaskVariables	      "bin_pt_in=@1;n_bits_out=@2;bin_pt_out=@3;quantization=&4;overflow=&5;latency=@6;"
       MaskInitialization      "convert_init(gcb, ...\n    'bin_pt_in',bin_pt_in, ...\n    'n_bits_out',n_bits_out,...\n"
       "    'bin_pt_out',bin_pt_out, ...\n    'quantization',quantization,...\n    'overflow',overflow,...\n    'latency"
@@ -4812,9 +4719,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "7|4|3|Truncate|Wrap|4"
+      MaskTabNameString	      ",,,,,"
       System {
 	Name			"convert"
 	Location		[846, 167, 1912, 598]
@@ -4833,7 +4740,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  57
 	  Position		  [15, 33, 45, 47]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -4842,12 +4748,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
-	  SID			  2258
 	  Ports			  [2, 1]
 	  Position		  [330, 20, 380, 95]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "2258"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -4866,12 +4772,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant"
-	  SID			  2259
 	  Ports			  [0, 1]
 	  Position		  [170, 78, 185, 92]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "2259"
 	  arith_type		  "Unsigned"
 	  const			  "1"
 	  n_bits		  "1"
@@ -4899,12 +4805,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
-	  SID			  2260
 	  Ports			  [1, 1]
 	  Position		  [120, 31, 160, 49]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "2260"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -4927,11 +4833,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "adder"
-	  SID			  2261
 	  Ports			  [2, 1]
 	  Position		  [585, 31, 630, 144]
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtractor Block"
+	  SID			  "2261"
 	  mode			  "Addition"
 	  use_carryin		  "off"
 	  use_carryout		  "off"
@@ -4965,11 +4871,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "almost_half"
-	  SID			  2262
 	  Ports			  [0, 1]
 	  Position		  [300, 108, 380, 122]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "2262"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "8"
@@ -4998,11 +4904,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bit"
-	  SID			  2263
 	  Ports			  [1, 1]
 	  Position		  [120, 56, 160, 74]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "2263"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -5028,11 +4934,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force1"
-	  SID			  2264
 	  Ports			  [1, 1]
 	  Position		  [460, 51, 500, 69]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "2264"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -5055,11 +4961,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force2"
-	  SID			  2265
 	  Ports			  [1, 1]
 	  Position		  [460, 106, 500, 124]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "2265"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -5082,11 +4988,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "tweak_op"
-	  SID			  2266
 	  Ports			  [2, 1]
 	  Position		  [225, 53, 270, 97]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2266"
 	  logical_function	  "NOR"
 	  inputs		  "2"
 	  en			  "off"
@@ -5113,7 +5019,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  67
 	  Position		  [695, 83, 725, 97]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -5199,7 +5104,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "convert_of"
-      SID		      68
       Ports		      [1, 2]
       Position		      [130, 210, 180, 245]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
@@ -5225,6 +5129,7 @@ Library {
       MaskEnableString	      "on,on,on,on,on,on,on"
       MaskVisibilityString    "on,on,on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,"
       MaskVariables	      "bit_width_i=@1;binary_point_i=@2;bit_width_o=@3;binary_point_o=@4;latency=@5;overflow=&6;qu"
       "antization=&7;"
       MaskInitialization      "convert_of_init(gcb, ...\n    'bit_width_i', bit_width_i, ...\n    'binary_point_i', bi"
@@ -5233,9 +5138,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "8|4|6|3|0|Wrap|Truncate"
+      MaskTabNameString	      ",,,,,,"
       System {
 	Name			"convert_of"
 	Location		[589, 253, 1104, 647]
@@ -5254,7 +5159,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
-	  SID			  69
 	  Position		  [50, 108, 80, 122]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -5263,11 +5167,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "all_0s"
-	  SID			  69
 	  Ports			  [2, 1]
 	  Position		  [275, 185, 320, 225]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "69"
 	  logical_function	  "NAND"
 	  inputs		  "2"
 	  en			  "off"
@@ -5294,11 +5198,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "all_1s"
-	  SID			  70
 	  Ports			  [2, 1]
 	  Position		  [275, 245, 320, 285]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "70"
 	  logical_function	  "NAND"
 	  inputs		  "2"
 	  en			  "off"
@@ -5325,11 +5229,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "and"
-	  SID			  71
 	  Ports			  [2, 1]
 	  Position		  [350, 185, 390, 220]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "71"
 	  logical_function	  "AND"
 	  inputs		  "2"
 	  en			  "off"
@@ -5356,11 +5260,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert"
-	  SID			  72
 	  Ports			  [1, 1]
 	  Position		  [275, 100, 320, 130]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "72"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "bit_width_o"
@@ -5386,11 +5290,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "invert1"
-	  SID			  73
 	  Ports			  [1, 1]
 	  Position		  [200, 184, 235, 206]
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "73"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -5410,11 +5314,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "invert2"
-	  SID			  74
 	  Ports			  [1, 1]
 	  Position		  [200, 234, 235, 256]
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "74"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -5434,11 +5338,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice1"
-	  SID			  75
 	  Ports			  [1, 1]
 	  Position		  [140, 184, 175, 206]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "75"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -5464,11 +5368,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice2"
-	  SID			  76
 	  Ports			  [1, 1]
 	  Position		  [140, 234, 175, 256]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "76"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -5494,14 +5398,12 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
-	  SID			  78
 	  Position		  [415, 108, 445, 122]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "of"
-	  SID			  79
 	  Position		  [415, 188, 445, 202]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -5590,7 +5492,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "edge"
-      SID		      80
       Ports		      [1, 1]
       Position		      [50, 111, 85, 129]
       MinAlgLoopOccurrences   off
@@ -5606,7 +5507,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       System {
 	Name			"edge"
@@ -5626,7 +5526,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  81
 	  Position		  [25, 28, 55, 42]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -5635,12 +5534,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay4"
-	  SID			  2282
 	  Ports			  [1, 1]
 	  Position		  [90, 25, 110, 45]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "2282"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  "off"
 	  latency		  "1"
@@ -5662,12 +5561,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical3"
-	  SID			  2283
 	  Ports			  [2, 1]
 	  Position		  [125, 28, 155, 57]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2283"
 	  logical_function	  "XOR"
 	  inputs		  "2"
 	  en			  "off"
@@ -5694,7 +5593,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  84
 	  Position		  [180, 38, 210, 52]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -5732,7 +5630,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "edge_detect"
-      SID		      85
       Ports		      [1, 1]
       Position		      [45, 150, 90, 170]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
@@ -5759,6 +5656,7 @@ Library {
       MaskEnableString	      "on,on,on,on,on,on"
       MaskVisibilityString    "on,on,off,off,off,off"
       MaskToolTipString	      "on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,"
       MaskVariables	      "edge=&1;polarity=&2;x_in=&3;y_in=&4;x_out=&5;y_out=&6;"
       MaskInitialization      "edge_detect_init(gcb,...\n    'edge',edge,...\n    'polarity',polarity,...\n    'x_in',"
       "x_in,...\n    'x_out',x_out,...\n    'y_in',y_in,...\n    'y_out',y_out);\n\nx_in_num=str2num(getfield(getfield("
@@ -5770,10 +5668,10 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "normalized"
       MaskValueString	      "Rising|Active High|[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]|[-1 -1  1  1  1  1  1 "
       " 1  1  1]|[0.6 0.68 0.68 0.76 0.76 0.84 0.84 0.92 0.92 1]|[-1 -1  1  1 -1 -1 -1 -1 -1 -1]"
+      MaskTabNameString	      ",,,,,"
       System {
 	Name			"edge_detect"
 	Location		[433, 403, 1041, 568]
@@ -5789,11 +5687,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	5
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  1
 	  Position		  [50, 53, 80, 67]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -5802,12 +5698,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
-	  SID			  2
 	  Ports			  [1, 1]
 	  Position		  [180, 72, 225, 88]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "2"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  "off"
 	  latency		  "1"
@@ -5829,12 +5725,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Inverter"
-	  SID			  3
 	  Ports			  [1, 1]
 	  Position		  [180, 52, 225, 68]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "3"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -5854,11 +5750,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "edge_op"
-	  SID			  4
 	  Ports			  [2, 1]
 	  Position		  [275, 48, 320, 92]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "4"
 	  logical_function	  "NOR"
 	  inputs		  "2"
 	  en			  "off"
@@ -5885,7 +5781,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  5
 	  Position		  [380, 63, 410, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -5929,7 +5824,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "freeze_cntr"
-      SID		      86
       Ports		      [2, 3]
       Position		      [560, 131, 610, 169]
       MinAlgLoopOccurrences   off
@@ -5953,7 +5847,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "5"
       System {
@@ -5974,7 +5867,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "en"
-	  SID			  87
 	  Position		  [100, 213, 130, 227]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -5983,7 +5875,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "rst"
-	  SID			  88
 	  Position		  [210, 208, 240, 222]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -5993,11 +5884,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter3"
-	  SID			  2289
 	  Ports			  [2, 1]
 	  Position		  [270, 200, 320, 255]
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
+	  SID			  "2289"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
 	  " implemented by combining a counter with a comparator."
 	  cnt_type		  "Free Running"
@@ -6032,11 +5923,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Inverter"
-	  SID			  2290
 	  Ports			  [1, 1]
 	  Position		  [240, 130, 265, 150]
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "2290"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -6056,11 +5947,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Inverter1"
-	  SID			  2291
 	  Ports			  [1, 1]
 	  Position		  [105, 245, 130, 265]
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "2291"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -6080,11 +5971,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical1"
-	  SID			  2292
 	  Ports			  [2, 1]
 	  Position		  [280, 125, 325, 180]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2292"
 	  logical_function	  "AND"
 	  inputs		  "2"
 	  en			  "off"
@@ -6111,11 +6002,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical5"
-	  SID			  2293
 	  Ports			  [2, 1]
 	  Position		  [145, 201, 200, 274]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2293"
 	  logical_function	  "AND"
 	  inputs		  "2"
 	  en			  "off"
@@ -6142,11 +6033,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "enable"
-	  SID			  2294
 	  Ports			  [1, 1]
 	  Position		  [390, 221, 430, 239]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "2294"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -6172,11 +6063,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "enable1"
-	  SID			  2295
 	  Ports			  [1, 1]
 	  Position		  [345, 271, 385, 289]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "2295"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -6202,7 +6093,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "addr"
-	  SID			  96
 	  Position		  [460, 223, 490, 237]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -6211,7 +6101,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "we"
-	  SID			  97
 	  Position		  [350, 148, 380, 162]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -6221,7 +6110,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "done"
-	  SID			  98
 	  Position		  [420, 273, 450, 287]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -6319,7 +6207,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "negedge"
-      SID		      99
       Tag		      "Rising Edge Detector"
       Ports		      [1, 1]
       Position		      [50, 66, 85, 84]
@@ -6336,7 +6223,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       System {
 	Name			"negedge"
@@ -6356,7 +6242,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "In"
-	  SID			  100
 	  Position		  [25, 43, 55, 57]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -6365,11 +6250,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
-	  SID			  2301
 	  Ports			  [1, 1]
 	  Position		  [75, 27, 120, 73]
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "2301"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  "off"
 	  latency		  "1"
@@ -6391,11 +6276,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Inverter"
-	  SID			  2302
 	  Ports			  [1, 1]
 	  Position		  [150, 78, 200, 112]
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "2302"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -6415,11 +6300,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
-	  SID			  2303
 	  Ports			  [2, 1]
 	  Position		  [225, 29, 285, 116]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2303"
 	  logical_function	  "AND"
 	  inputs		  "2"
 	  en			  "off"
@@ -6446,7 +6331,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "Out"
-	  SID			  104
 	  Position		  [305, 63, 335, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -6489,7 +6373,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "negedge_delay"
-      SID		      105
       Ports		      [1, 1]
       Position		      [250, 66, 285, 84]
       MinAlgLoopOccurrences   off
@@ -6514,7 +6397,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "5"
       System {
@@ -6535,7 +6417,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  106
 	  Position		  [20, 118, 50, 132]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -6544,11 +6425,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant5"
-	  SID			  2307
 	  Ports			  [0, 1]
 	  Position		  [145, 184, 215, 216]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "2307"
 	  arith_type		  "Unsigned"
 	  const			  "pulse_len-2"
 	  n_bits		  "bits"
@@ -6577,11 +6458,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter3"
-	  SID			  2308
 	  Ports			  [2, 1]
 	  Position		  [165, 110, 215, 165]
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
+	  SID			  "2308"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
 	  " implemented by combining a counter with a comparator."
 	  cnt_type		  "Free Running"
@@ -6617,12 +6498,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
-	  SID			  2309
 	  Ports			  [1, 1]
 	  Position		  [175, 60, 200, 80]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "2309"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  "off"
 	  latency		  "1"
@@ -6644,11 +6525,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
-	  SID			  2310
 	  Ports			  [3, 1]
 	  Position		  [370, 153, 400, 197]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2310"
 	  logical_function	  "OR"
 	  inputs		  "3"
 	  en			  "off"
@@ -6675,11 +6556,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Relational5"
-	  SID			  2311
 	  Ports			  [2, 1]
 	  Position		  [240, 168, 285, 212]
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
+	  SID			  "2311"
 	  mode			  "a<=b"
 	  en			  "off"
 	  latency		  "0"
@@ -6701,7 +6582,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "negedge"
-	  SID			  2312
 	  Tag			  "Rising Edge Detector"
 	  Ports			  [1, 1]
 	  Position		  [90, 116, 125, 134]
@@ -6736,6 +6616,7 @@ Library {
 	  }
 	  SourceBlock		  "casper_library_misc/negedge"
 	  SourceType		  "negedge"
+	  SID			  "2312"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -6748,7 +6629,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  113
 	  Position		  [435, 168, 465, 182]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -6826,7 +6706,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "of1"
-      SID		      114
       Ports		      [2, 1]
       Position		      [305, 290, 345, 345]
       MinAlgLoopOccurrences   off
@@ -6845,13 +6724,14 @@ Library {
       MaskEnableString	      "on,on"
       MaskVisibilityString    "on,on"
       MaskToolTipString	      "on,on"
+      MaskVarAliasString      ","
       MaskVariables	      "bit_num=@1;n_adc_bits=@2;"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "0|8"
+      MaskTabNameString	      ","
       System {
 	Name			"of1"
 	Location		[130, 286, 571, 640]
@@ -6870,14 +6750,12 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "s0"
-	  SID			  115
 	  Position		  [15, 33, 45, 47]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "s1"
-	  SID			  116
 	  Position		  [15, 73, 45, 87]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -6885,12 +6763,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Compare\nTo Constant1"
-	  SID			  2317
 	  Ports			  [1, 1]
 	  Position		  [110, 53, 140, 67]
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
+	  SID			  "2317"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -6907,12 +6785,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Compare\nTo Constant2"
-	  SID			  2318
 	  Ports			  [1, 1]
 	  Position		  [110, 93, 140, 107]
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
+	  SID			  "2318"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -6929,12 +6807,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Compare\nTo Constant6"
-	  SID			  2319
 	  Ports			  [1, 1]
 	  Position		  [110, 33, 140, 47]
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
+	  SID			  "2319"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -6951,12 +6829,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Compare\nTo Constant7"
-	  SID			  2320
 	  Ports			  [1, 1]
 	  Position		  [110, 73, 140, 87]
 	  ShowName		  off
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
+	  SID			  "2320"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -6973,7 +6851,6 @@ Library {
 	Block {
 	  BlockType		  Gain
 	  Name			  "Gain"
-	  SID			  121
 	  Position		  [210, 55, 240, 85]
 	  Gain			  "2^(bit_num)"
 	  ParameterDataTypeMode	  "Inherit via internal rule"
@@ -6989,7 +6866,6 @@ Library {
 	Block {
 	  BlockType		  Logic
 	  Name			  "Logical\nOperator1"
-	  SID			  122
 	  Ports			  [4, 1]
 	  Position		  [160, 29, 190, 111]
 	  ShowName		  off
@@ -7002,7 +6878,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "of"
-	  SID			  123
 	  Position		  [265, 63, 295, 77]
 	  IconDisplay		  "Port number"
 	}
@@ -7075,7 +6950,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "posedge"
-      SID		      124
       Tag		      "Rising Edge Detector"
       Ports		      [1, 1]
       Position		      [50, 21, 85, 39]
@@ -7092,7 +6966,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       System {
 	Name			"posedge"
@@ -7112,7 +6985,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "In"
-	  SID			  125
 	  Position		  [25, 43, 55, 57]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -7121,11 +6993,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
-	  SID			  2326
 	  Ports			  [1, 1]
 	  Position		  [75, 27, 120, 73]
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "2326"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  "off"
 	  latency		  "1"
@@ -7147,11 +7019,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Inverter"
-	  SID			  2327
 	  Ports			  [1, 1]
 	  Position		  [150, 33, 200, 67]
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
+	  SID			  "2327"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
 	  en			  "off"
 	  latency		  "0"
@@ -7171,11 +7043,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
-	  SID			  2328
 	  Ports			  [2, 1]
 	  Position		  [225, 29, 285, 116]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2328"
 	  logical_function	  "AND"
 	  inputs		  "2"
 	  en			  "off"
@@ -7202,7 +7074,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "Out"
-	  SID			  129
 	  Position		  [305, 63, 335, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -7247,7 +7118,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "power"
-      SID		      130
       Ports		      [1, 1]
       Position		      [330, 133, 415, 157]
       MinAlgLoopOccurrences   off
@@ -7267,6 +7137,7 @@ Library {
       MaskEnableString	      "on,on,on"
       MaskVisibilityString    "on,on,on"
       MaskToolTipString	      "on,on,on"
+      MaskVarAliasString      ",,"
       MaskVariables	      "BitWidth=@1;add_latency=@2;mult_latency=@3;"
       MaskDisplay	      "port_label('input', 1, 'c');\nport_label('output', 1, 'power');\ndisp(['Z^-', num2str(mult_la"
       "tency+add_latency)]);"
@@ -7274,9 +7145,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "18|2|3"
+      MaskTabNameString	      ",,"
       System {
 	Name			"power"
 	Location		[319, 126, 1121, 774]
@@ -7292,11 +7163,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	6
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  1
 	  Position		  [25, 93, 55, 107]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -7305,7 +7174,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "c_to_ri"
-	  SID			  2
 	  Ports			  [1, 2]
 	  Position		  [85, 79, 125, 121]
 	  AttributesFormatString  "18_17 r/i"
@@ -7351,6 +7219,7 @@ Library {
 	  UserData		  "DataTag15"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
 	  SourceType		  "c_to_ri"
+	  SID			  "2"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -7365,11 +7234,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_square"
-	  SID			  3
 	  Ports			  [2, 1]
 	  Position		  [170, 122, 220, 173]
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
+	  SID			  "3"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
 	  "ne for maximum performance'."
 	  precision		  "Full"
@@ -7405,11 +7274,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "power_adder"
-	  SID			  4
 	  Ports			  [2, 1]
 	  Position		  [255, 77, 305, 128]
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtractor Block"
+	  SID			  "4"
 	  mode			  "Addition"
 	  use_carryin		  "off"
 	  use_carryout		  "off"
@@ -7443,11 +7312,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_square"
-	  SID			  5
 	  Ports			  [2, 1]
 	  Position		  [170, 27, 220, 78]
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
+	  SID			  "5"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
 	  "ne for maximum performance'."
 	  precision		  "Full"
@@ -7483,7 +7352,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "power"
-	  SID			  6
 	  Position		  [335, 98, 365, 112]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -7548,7 +7416,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "power_dsp48e"
-      SID		      131
       Ports		      [1, 1]
       Position		      [130, 283, 180, 297]
       BackgroundColor	      "[0.500000, 1.000000, 0.500000]"
@@ -7573,7 +7440,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "18"
       System {
@@ -7591,11 +7457,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	23
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  1
 	  Position		  [15, 18, 45, 32]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -7604,13 +7468,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant1"
-	  SID			  187
 	  Ports			  [0, 1]
 	  Position		  [270, 212, 320, 228]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "187"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "4"
@@ -7639,13 +7503,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant2"
-	  SID			  188
 	  Ports			  [0, 1]
 	  Position		  [270, 77, 320, 93]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "188"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "4"
@@ -7674,13 +7538,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant3"
-	  SID			  189
 	  Ports			  [0, 1]
 	  Position		  [270, 62, 320, 78]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "189"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "21"
 	  n_bits		  "7"
@@ -7713,13 +7577,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant4"
-	  SID			  190
 	  Ports			  [0, 1]
 	  Position		  [270, 107, 320, 123]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "190"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "3"
@@ -7748,13 +7612,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant5"
-	  SID			  191
 	  Ports			  [0, 1]
 	  Position		  [270, 92, 320, 108]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "191"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
@@ -7783,13 +7647,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant6"
-	  SID			  192
 	  Ports			  [0, 1]
 	  Position		  [270, 197, 320, 213]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "192"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "5"
 	  n_bits		  "7"
@@ -7822,13 +7686,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant7"
-	  SID			  193
 	  Ports			  [0, 1]
 	  Position		  [270, 242, 320, 258]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "193"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "3"
@@ -7857,13 +7721,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant8"
-	  SID			  194
 	  Ports			  [0, 1]
 	  Position		  [270, 227, 320, 243]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "194"
+	  LibraryVersion	  "1.2"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
@@ -7892,13 +7756,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert"
-	  SID			  195
 	  Ports			  [1, 1]
 	  Position		  [270, 17, 320, 33]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "195"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "30"
@@ -7924,13 +7788,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert2"
-	  SID			  196
 	  Ports			  [1, 1]
 	  Position		  [270, 167, 320, 183]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "196"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "30"
@@ -7956,13 +7820,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert3"
-	  SID			  197
 	  Ports			  [1, 1]
 	  Position		  [270, 32, 320, 48]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "197"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "18"
@@ -7988,13 +7852,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert4"
-	  SID			  198
 	  Ports			  [1, 1]
 	  Position		  [270, 182, 320, 198]
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
+	  SID			  "198"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "18"
@@ -8020,12 +7884,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "DSP48E_0"
-	  SID			  199
 	  Ports			  [6, 2]
 	  Position		  [370, 164, 470, 261]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
+	  SID			  "199"
+	  LibraryVersion	  "1.2"
 	  use_a			  "Direct from A Port"
 	  use_b			  "Direct from B Port"
 	  pattern_from_creg	  "off"
@@ -8104,12 +7968,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "DSP48E_1"
-	  SID			  200
 	  Ports			  [7, 1]
 	  Position		  [370, 14, 470, 126]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
+	  SID			  "200"
+	  LibraryVersion	  "1.2"
 	  use_a			  "Direct from A Port"
 	  use_b			  "Direct from B Port"
 	  pattern_from_creg	  "off"
@@ -8188,19 +8052,18 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator"
-	  SID			  16
 	  Position		  [520, 180, 540, 200]
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_imag"
-	  SID			  202
 	  Ports			  [1, 1]
 	  Position		  [170, 167, 220, 183]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "202"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -8224,12 +8087,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_power"
-	  SID			  203
 	  Ports			  [1, 1]
 	  Position		  [595, 62, 645, 78]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "203"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -8253,12 +8116,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_real"
-	  SID			  204
 	  Ports			  [1, 1]
 	  Position		  [170, 17, 220, 33]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "204"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs nothing.<br>"
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
@@ -8282,12 +8145,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice_imag"
-	  SID			  205
 	  Ports			  [1, 1]
 	  Position		  [95, 167, 145, 183]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "205"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
@@ -8313,12 +8176,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice_power"
-	  SID			  206
 	  Ports			  [1, 1]
 	  Position		  [520, 62, 570, 78]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "206"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
@@ -8344,12 +8207,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice_real"
-	  SID			  207
 	  Ports			  [1, 1]
 	  Position		  [95, 17, 145, 33]
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "207"
+	  LibraryVersion	  "1.2"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
@@ -8375,7 +8238,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "p"
-	  SID			  23
 	  Position		  [695, 63, 725, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -8543,7 +8405,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pulse_ext"
-      SID		      132
       Ports		      [1, 1]
       Position		      [250, 26, 285, 44]
       MinAlgLoopOccurrences   off
@@ -8568,7 +8429,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "5"
       System {
@@ -8589,7 +8449,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  133
 	  Position		  [20, 43, 50, 57]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -8598,11 +8457,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant5"
-	  SID			  2333
 	  Ports			  [0, 1]
 	  Position		  [145, 109, 215, 141]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "2333"
 	  arith_type		  "Unsigned"
 	  const			  "pulse_len"
 	  n_bits		  "bits"
@@ -8631,11 +8490,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter3"
-	  SID			  2334
 	  Ports			  [2, 1]
 	  Position		  [165, 35, 215, 90]
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
+	  SID			  "2334"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
 	  " implemented by combining a counter with a comparator."
 	  cnt_type		  "Free Running"
@@ -8670,11 +8529,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Relational5"
-	  SID			  2335
 	  Ports			  [2, 1]
 	  Position		  [240, 93, 285, 137]
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
+	  SID			  "2335"
 	  mode			  "a!=b"
 	  en			  "off"
 	  latency		  "0"
@@ -8696,7 +8555,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "posedge"
-	  SID			  137
 	  Tag			  "Rising Edge Detector"
 	  Ports			  [1, 1]
 	  Position		  [85, 37, 130, 63]
@@ -8725,7 +8583,6 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "In"
-	      SID		      138
 	      Position		      [25, 43, 55, 57]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -8734,11 +8591,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay"
-	      SID		      2338
 	      Ports		      [1, 1]
 	      Position		      [75, 27, 120, 73]
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
+	      SID		      "2338"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
 	      en		      "off"
@@ -8761,11 +8618,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter"
-	      SID		      2339
 	      Ports		      [1, 1]
 	      Position		      [150, 33, 200, 67]
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
+	      SID		      "2339"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
 	      en		      "off"
 	      latency		      "0"
@@ -8786,11 +8643,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Logical"
-	      SID		      2340
 	      Ports		      [2, 1]
 	      Position		      [225, 29, 285, 116]
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
+	      SID		      "2340"
 	      logical_function	      "AND"
 	      inputs		      "2"
 	      en		      "off"
@@ -8817,7 +8674,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "Out"
-	      SID		      142
 	      Position		      [305, 63, 335, 77]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -8862,7 +8718,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  143
 	  Position		  [325, 108, 355, 122]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -8914,7 +8769,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "revision_control"
-      SID		      144
       Ports		      []
       Position		      [45, 258, 85, 303]
       UserDataPersistent      on
@@ -8935,6 +8789,7 @@ Library {
       MaskEnableString	      "on,on,on,on"
       MaskVisibilityString    "on,on,on,on"
       MaskToolTipString	      "on,on,on,on"
+      MaskVarAliasString      ",,,"
       MaskVariables	      "rev_major=@1;rev_minor=@2;error_on_dirty=&3;error_on_norcs=&4;"
       MaskInitialization      "revision_control_init( gcb, ...\n  'rev_major', rev_major, ...\n  'rev_minor', rev_mino"
       "r, ...\n  'error_on_dirty', error_on_dirty, ...\n  'error_on_norcs', error_on_norcs);"
@@ -8942,9 +8797,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "0|0|off|off"
+      MaskTabNameString	      ",,,"
       System {
 	Name			"revision_control"
 	Location		[726, 212, 1321, 474]
@@ -8960,16 +8815,15 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	15
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
-	  SID			  1
 	  Ports			  [2, 1]
 	  Position		  [225, 124, 240, 166]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "1"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -8988,12 +8842,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat1"
-	  SID			  2
 	  Ports			  [2, 1]
 	  Position		  [225, 194, 240, 236]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "2"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -9012,12 +8866,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat2"
-	  SID			  3
 	  Ports			  [2, 1]
 	  Position		  [225, 54, 240, 96]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "3"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -9036,32 +8890,29 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator16"
-	  SID			  4
 	  Position		  [365, 70, 375, 80]
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator2"
-	  SID			  5
 	  Position		  [365, 140, 375, 150]
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator3"
-	  SID			  6
 	  Position		  [365, 210, 375, 220]
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "const_lib_rcs"
-	  SID			  7
 	  Ports			  [0, 1]
 	  Position		  [155, 223, 200, 237]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "7"
 	  arith_type		  "Unsigned"
 	  const			  "2460"
 	  n_bits		  "31"
@@ -9090,11 +8941,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "const_lib_uptodate"
-	  SID			  8
 	  Ports			  [0, 1]
 	  Position		  [155, 193, 200, 207]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "8"
 	  arith_type		  "Unsigned"
 	  const			  "1"
 	  n_bits		  "1"
@@ -9123,11 +8974,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "const_major"
-	  SID			  9
 	  Ports			  [0, 1]
 	  Position		  [155, 43, 200, 57]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "9"
 	  arith_type		  "Unsigned"
 	  const			  "rev_major"
 	  n_bits		  "16"
@@ -9156,11 +9007,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "const_minor"
-	  SID			  10
 	  Ports			  [0, 1]
 	  Position		  [155, 88, 200, 102]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "10"
 	  arith_type		  "Unsigned"
 	  const			  "rev_minor"
 	  n_bits		  "16"
@@ -9189,11 +9040,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "const_rcs"
-	  SID			  11
 	  Ports			  [0, 1]
 	  Position		  [155, 153, 200, 167]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "11"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "31"
@@ -9222,11 +9073,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "const_uptodate"
-	  SID			  12
 	  Ports			  [0, 1]
 	  Position		  [155, 123, 200, 137]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "12"
 	  arith_type		  "Unsigned"
 	  const			  "0"
 	  n_bits		  "1"
@@ -9255,7 +9106,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "lib_rcs"
-	  SID			  13
 	  Tag			  "xps:sw_reg"
 	  Ports			  [1, 1]
 	  Position		  [255, 199, 345, 231]
@@ -9420,6 +9270,7 @@ Library {
 	  }
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  "Unknown"
+	  SID			  "13"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -9438,7 +9289,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "rcs"
-	  SID			  14
 	  Tag			  "xps:sw_reg"
 	  Ports			  [1, 1]
 	  Position		  [255, 129, 345, 161]
@@ -9603,6 +9453,7 @@ Library {
 	  }
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  "Unknown"
+	  SID			  "14"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -9621,7 +9472,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "user"
-	  SID			  15
 	  Tag			  "xps:sw_reg"
 	  Ports			  [1, 1]
 	  Position		  [255, 61, 345, 89]
@@ -9786,6 +9636,7 @@ Library {
 	  }
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  "Unknown"
+	  SID			  "15"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -9884,7 +9735,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "ri_to_c"
-      SID		      145
       Ports		      [2, 1]
       Position		      [665, 129, 705, 171]
       UserDataPersistent      on
@@ -9904,7 +9754,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       System {
 	Name			"ri_to_c"
@@ -9921,11 +9770,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	6
 	Block {
 	  BlockType		  Inport
 	  Name			  "re"
-	  SID			  1
 	  Position		  [25, 38, 55, 52]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -9934,7 +9781,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "im"
-	  SID			  2
 	  Position		  [25, 88, 55, 102]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -9944,11 +9790,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "concat"
-	  SID			  3
 	  Ports			  [2, 1]
 	  Position		  [145, 40, 195, 95]
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
+	  SID			  "3"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
@@ -9967,11 +9813,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_im"
-	  SID			  4
 	  Ports			  [1, 1]
 	  Position		  [80, 79, 120, 111]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "4"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -9995,11 +9841,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_re"
-	  SID			  5
 	  Ports			  [1, 1]
 	  Position		  [80, 29, 120, 61]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  SID			  "5"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
 	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
@@ -10023,7 +9869,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "c"
-	  SID			  6
 	  Position		  [220, 63, 250, 77]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -10066,7 +9911,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "sample_and_hold"
-      SID		      146
       Ports		      [2, 1]
       Position		      [460, 50, 510, 90]
       MinAlgLoopOccurrences   off
@@ -10089,7 +9933,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1024"
       System {
@@ -10110,14 +9953,12 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
-	  SID			  147
 	  Position		  [25, 108, 55, 122]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
-	  SID			  148
 	  Position		  [25, 208, 55, 222]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -10125,12 +9966,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant3"
-	  SID			  2348
 	  Ports			  [0, 1]
 	  Position		  [145, 136, 185, 154]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "2348"
 	  arith_type		  "Unsigned"
 	  const			  "period-1"
 	  n_bits		  "ceil(log2(period))"
@@ -10159,12 +10000,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter4"
-	  SID			  2349
 	  Ports			  [1, 1]
 	  Position		  [145, 89, 185, 131]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
+	  SID			  "2349"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
 	  " implemented by combining a counter with a comparator."
 	  cnt_type		  "Free Running"
@@ -10200,12 +10041,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay10"
-	  SID			  2350
 	  Ports			  [1, 1]
 	  Position		  [150, 223, 180, 247]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "2350"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  "off"
 	  latency		  "1"
@@ -10227,11 +10068,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
-	  SID			  2351
 	  Ports			  [2, 1]
 	  Position		  [85, 98, 110, 122]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2351"
 	  logical_function	  "OR"
 	  inputs		  "2"
 	  en			  "off"
@@ -10258,11 +10099,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Register"
-	  SID			  2352
 	  Ports			  [2, 1]
 	  Position		  [215, 207, 265, 243]
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
+	  SID			  "2352"
 	  init			  "0"
 	  rst			  "off"
 	  en			  "on"
@@ -10284,11 +10125,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Relational"
-	  SID			  2353
 	  Ports			  [2, 1]
 	  Position		  [220, 113, 265, 157]
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
+	  SID			  "2353"
 	  mode			  "a>=b"
 	  en			  "off"
 	  latency		  "0"
@@ -10310,7 +10151,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "out"
-	  SID			  155
 	  Position		  [290, 218, 320, 232]
 	  IconDisplay		  "Port number"
 	}
@@ -10377,7 +10217,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "spect_power"
-      SID		      187
       Ports		      [5, 5]
       Position		      [605, 253, 690, 417]
       UserDataPersistent      on
@@ -10396,15 +10235,16 @@ Library {
       MaskEnableString	      "on,on,on,on,on"
       MaskVisibilityString    "on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on"
+      MaskVarAliasString      ",,,,"
       MaskVariables	      "bitwidth=@1;add_latency=@2;mult_latency=@3;mode=&4;n_inputs=@5;"
       MaskInitialization      "config.source = str2func('spect_power');\nconfig.depend = {'spect_power.m'};\nconfig.to"
       "plevel = gcb;\nxBlock(config, {bitwidth, add_latency, mult_latency, mode, n_inputs});"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "18|2|3|dsp48e|4"
+      MaskTabNameString	      ",,,,"
       System {
 	Name			"spect_power"
 	Location		[290, 176, 877, 668]
@@ -10423,14 +10263,12 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync_in"
-	  SID			  188
 	  Position		  [15, 330, 35, 350]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "din_0"
-	  SID			  189
 	  Position		  [15, 250, 35, 270]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -10438,7 +10276,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "din_1"
-	  SID			  190
 	  Position		  [15, 180, 35, 200]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -10446,7 +10283,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "din_2"
-	  SID			  191
 	  Position		  [15, 110, 35, 130]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -10454,7 +10290,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "din_3"
-	  SID			  192
 	  Position		  [15, 40, 35, 60]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -10462,7 +10297,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "power1"
-	  SID			  193
 	  Ports			  [1, 1]
 	  Position		  [65, 240, 115, 280]
 	  MinAlgLoopOccurrences	  off
@@ -10490,18 +10324,17 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "c"
-	      SID		      194
 	      Position		      [15, 70, 35, 90]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant1"
-	      SID		      195
 	      Ports		      [0, 1]
 	      Position		      [235, 267, 290, 293]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "195"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -10532,11 +10365,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant2"
-	      SID		      196
 	      Ports		      [0, 1]
 	      Position		      [330, 387, 385, 413]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "196"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -10567,11 +10400,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant3"
-	      SID		      197
 	      Ports		      [0, 1]
 	      Position		      [330, 332, 385, 358]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "197"
 	      arith_type	      "Unsigned"
 	      const		      "21"
 	      n_bits		      "7"
@@ -10602,11 +10435,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant4"
-	      SID		      198
 	      Ports		      [0, 1]
 	      Position		      [330, 497, 385, 523]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "198"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -10637,11 +10470,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant5"
-	      SID		      199
 	      Ports		      [0, 1]
 	      Position		      [330, 442, 385, 468]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "199"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -10672,11 +10505,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant6"
-	      SID		      200
 	      Ports		      [0, 1]
 	      Position		      [235, 212, 290, 238]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "200"
 	      arith_type	      "Unsigned"
 	      const		      "5"
 	      n_bits		      "7"
@@ -10707,11 +10540,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant7"
-	      SID		      201
 	      Ports		      [0, 1]
 	      Position		      [235, 377, 290, 403]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "201"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -10742,11 +10575,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant8"
-	      SID		      202
 	      Ports		      [0, 1]
 	      Position		      [235, 322, 290, 348]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "202"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -10777,11 +10610,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert"
-	      SID		      203
 	      Ports		      [1, 1]
 	      Position		      [335, 39, 380, 71]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "203"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -10810,11 +10643,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert2"
-	      SID		      204
 	      Ports		      [1, 1]
 	      Position		      [240, 95, 285, 125]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "204"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -10842,11 +10675,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert3"
-	      SID		      205
 	      Ports		      [1, 1]
 	      Position		      [335, 104, 380, 136]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "205"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -10875,11 +10708,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert4"
-	      SID		      206
 	      Ports		      [1, 1]
 	      Position		      [240, 155, 285, 185]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "206"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -10907,11 +10740,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_0"
-	      SID		      207
 	      Ports		      [6, 2]
 	      Position		      [320, 167, 395, 303]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "207"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -10991,11 +10824,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_1"
-	      SID		      208
 	      Ports		      [7, 1]
 	      Position		      [425, 277, 500, 413]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "208"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -11075,11 +10908,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_imag"
-	      SID		      209
 	      Ports		      [1, 1]
 	      Position		      [150, 94, 200, 126]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "209"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -11104,11 +10937,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_power"
-	      SID		      210
 	      Ports		      [1, 1]
 	      Position		      [625, 329, 670, 361]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "210"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -11134,11 +10967,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_real"
-	      SID		      211
 	      Ports		      [1, 1]
 	      Position		      [235, 29, 285, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "211"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -11163,11 +10996,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_imag"
-	      SID		      212
 	      Ports		      [1, 1]
 	      Position		      [60, 95, 120, 125]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "212"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -11194,11 +11027,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_power"
-	      SID		      213
 	      Ports		      [1, 1]
 	      Position		      [530, 330, 590, 360]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "213"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -11225,11 +11058,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_real"
-	      SID		      214
 	      Ports		      [1, 1]
 	      Position		      [60, 35, 120, 65]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "214"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -11256,7 +11089,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "p"
-	      SID		      215
 	      Position		      [705, 335, 725, 355]
 	      IconDisplay	      "Port number"
 	    }
@@ -11429,7 +11261,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "power2"
-	  SID			  216
 	  Ports			  [1, 1]
 	  Position		  [65, 170, 115, 210]
 	  MinAlgLoopOccurrences	  off
@@ -11457,18 +11288,17 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "c"
-	      SID		      217
 	      Position		      [15, 70, 35, 90]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant1"
-	      SID		      218
 	      Ports		      [0, 1]
 	      Position		      [235, 267, 290, 293]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "218"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -11499,11 +11329,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant2"
-	      SID		      219
 	      Ports		      [0, 1]
 	      Position		      [330, 387, 385, 413]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "219"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -11534,11 +11364,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant3"
-	      SID		      220
 	      Ports		      [0, 1]
 	      Position		      [330, 332, 385, 358]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "220"
 	      arith_type	      "Unsigned"
 	      const		      "21"
 	      n_bits		      "7"
@@ -11569,11 +11399,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant4"
-	      SID		      221
 	      Ports		      [0, 1]
 	      Position		      [330, 497, 385, 523]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "221"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -11604,11 +11434,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant5"
-	      SID		      222
 	      Ports		      [0, 1]
 	      Position		      [330, 442, 385, 468]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "222"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -11639,11 +11469,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant6"
-	      SID		      223
 	      Ports		      [0, 1]
 	      Position		      [235, 212, 290, 238]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "223"
 	      arith_type	      "Unsigned"
 	      const		      "5"
 	      n_bits		      "7"
@@ -11674,11 +11504,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant7"
-	      SID		      224
 	      Ports		      [0, 1]
 	      Position		      [235, 377, 290, 403]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "224"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -11709,11 +11539,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant8"
-	      SID		      225
 	      Ports		      [0, 1]
 	      Position		      [235, 322, 290, 348]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "225"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -11744,11 +11574,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert"
-	      SID		      226
 	      Ports		      [1, 1]
 	      Position		      [335, 39, 380, 71]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "226"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -11777,11 +11607,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert2"
-	      SID		      227
 	      Ports		      [1, 1]
 	      Position		      [240, 95, 285, 125]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "227"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -11809,11 +11639,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert3"
-	      SID		      228
 	      Ports		      [1, 1]
 	      Position		      [335, 104, 380, 136]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "228"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -11842,11 +11672,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert4"
-	      SID		      229
 	      Ports		      [1, 1]
 	      Position		      [240, 155, 285, 185]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "229"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -11874,11 +11704,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_0"
-	      SID		      230
 	      Ports		      [6, 2]
 	      Position		      [320, 167, 395, 303]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "230"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -11958,11 +11788,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_1"
-	      SID		      231
 	      Ports		      [7, 1]
 	      Position		      [425, 277, 500, 413]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "231"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -12042,11 +11872,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_imag"
-	      SID		      232
 	      Ports		      [1, 1]
 	      Position		      [150, 94, 200, 126]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "232"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -12071,11 +11901,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_power"
-	      SID		      233
 	      Ports		      [1, 1]
 	      Position		      [625, 329, 670, 361]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "233"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -12101,11 +11931,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_real"
-	      SID		      234
 	      Ports		      [1, 1]
 	      Position		      [235, 29, 285, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "234"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -12130,11 +11960,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_imag"
-	      SID		      235
 	      Ports		      [1, 1]
 	      Position		      [60, 95, 120, 125]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "235"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -12161,11 +11991,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_power"
-	      SID		      236
 	      Ports		      [1, 1]
 	      Position		      [530, 330, 590, 360]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "236"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -12192,11 +12022,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_real"
-	      SID		      237
 	      Ports		      [1, 1]
 	      Position		      [60, 35, 120, 65]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "237"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -12223,7 +12053,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "p"
-	      SID		      238
 	      Position		      [705, 335, 725, 355]
 	      IconDisplay	      "Port number"
 	    }
@@ -12396,7 +12225,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "power3"
-	  SID			  239
 	  Ports			  [1, 1]
 	  Position		  [65, 100, 115, 140]
 	  MinAlgLoopOccurrences	  off
@@ -12424,18 +12252,17 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "c"
-	      SID		      240
 	      Position		      [15, 70, 35, 90]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant1"
-	      SID		      241
 	      Ports		      [0, 1]
 	      Position		      [235, 267, 290, 293]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "241"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -12466,11 +12293,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant2"
-	      SID		      242
 	      Ports		      [0, 1]
 	      Position		      [330, 387, 385, 413]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "242"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -12501,11 +12328,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant3"
-	      SID		      243
 	      Ports		      [0, 1]
 	      Position		      [330, 332, 385, 358]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "243"
 	      arith_type	      "Unsigned"
 	      const		      "21"
 	      n_bits		      "7"
@@ -12536,11 +12363,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant4"
-	      SID		      244
 	      Ports		      [0, 1]
 	      Position		      [330, 497, 385, 523]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "244"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -12571,11 +12398,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant5"
-	      SID		      245
 	      Ports		      [0, 1]
 	      Position		      [330, 442, 385, 468]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "245"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -12606,11 +12433,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant6"
-	      SID		      246
 	      Ports		      [0, 1]
 	      Position		      [235, 212, 290, 238]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "246"
 	      arith_type	      "Unsigned"
 	      const		      "5"
 	      n_bits		      "7"
@@ -12641,11 +12468,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant7"
-	      SID		      247
 	      Ports		      [0, 1]
 	      Position		      [235, 377, 290, 403]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "247"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -12676,11 +12503,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant8"
-	      SID		      248
 	      Ports		      [0, 1]
 	      Position		      [235, 322, 290, 348]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "248"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -12711,11 +12538,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert"
-	      SID		      249
 	      Ports		      [1, 1]
 	      Position		      [335, 39, 380, 71]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "249"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -12744,11 +12571,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert2"
-	      SID		      250
 	      Ports		      [1, 1]
 	      Position		      [240, 95, 285, 125]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "250"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -12776,11 +12603,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert3"
-	      SID		      251
 	      Ports		      [1, 1]
 	      Position		      [335, 104, 380, 136]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "251"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -12809,11 +12636,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert4"
-	      SID		      252
 	      Ports		      [1, 1]
 	      Position		      [240, 155, 285, 185]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "252"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -12841,11 +12668,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_0"
-	      SID		      253
 	      Ports		      [6, 2]
 	      Position		      [320, 167, 395, 303]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "253"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -12925,11 +12752,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_1"
-	      SID		      254
 	      Ports		      [7, 1]
 	      Position		      [425, 277, 500, 413]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "254"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -13009,11 +12836,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_imag"
-	      SID		      255
 	      Ports		      [1, 1]
 	      Position		      [150, 94, 200, 126]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "255"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -13038,11 +12865,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_power"
-	      SID		      256
 	      Ports		      [1, 1]
 	      Position		      [625, 329, 670, 361]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "256"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -13068,11 +12895,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_real"
-	      SID		      257
 	      Ports		      [1, 1]
 	      Position		      [235, 29, 285, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "257"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -13097,11 +12924,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_imag"
-	      SID		      258
 	      Ports		      [1, 1]
 	      Position		      [60, 95, 120, 125]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "258"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -13128,11 +12955,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_power"
-	      SID		      259
 	      Ports		      [1, 1]
 	      Position		      [530, 330, 590, 360]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "259"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -13159,11 +12986,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_real"
-	      SID		      260
 	      Ports		      [1, 1]
 	      Position		      [60, 35, 120, 65]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "260"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -13190,7 +13017,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "p"
-	      SID		      261
 	      Position		      [705, 335, 725, 355]
 	      IconDisplay	      "Port number"
 	    }
@@ -13363,7 +13189,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "power4"
-	  SID			  262
 	  Ports			  [1, 1]
 	  Position		  [65, 30, 115, 70]
 	  MinAlgLoopOccurrences	  off
@@ -13391,18 +13216,17 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "c"
-	      SID		      263
 	      Position		      [15, 70, 35, 90]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant1"
-	      SID		      264
 	      Ports		      [0, 1]
 	      Position		      [235, 267, 290, 293]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "264"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -13433,11 +13257,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant2"
-	      SID		      265
 	      Ports		      [0, 1]
 	      Position		      [330, 387, 385, 413]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "265"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "4"
@@ -13468,11 +13292,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant3"
-	      SID		      266
 	      Ports		      [0, 1]
 	      Position		      [330, 332, 385, 358]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "266"
 	      arith_type	      "Unsigned"
 	      const		      "21"
 	      n_bits		      "7"
@@ -13503,11 +13327,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant4"
-	      SID		      267
 	      Ports		      [0, 1]
 	      Position		      [330, 497, 385, 523]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "267"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -13538,11 +13362,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant5"
-	      SID		      268
 	      Ports		      [0, 1]
 	      Position		      [330, 442, 385, 468]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "268"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -13573,11 +13397,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant6"
-	      SID		      269
 	      Ports		      [0, 1]
 	      Position		      [235, 212, 290, 238]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "269"
 	      arith_type	      "Unsigned"
 	      const		      "5"
 	      n_bits		      "7"
@@ -13608,11 +13432,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant7"
-	      SID		      270
 	      Ports		      [0, 1]
 	      Position		      [235, 377, 290, 403]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "270"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "3"
@@ -13643,11 +13467,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant8"
-	      SID		      271
 	      Ports		      [0, 1]
 	      Position		      [235, 322, 290, 348]
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
+	      SID		      "271"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
@@ -13678,11 +13502,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert"
-	      SID		      272
 	      Ports		      [1, 1]
 	      Position		      [335, 39, 380, 71]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "272"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -13711,11 +13535,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert2"
-	      SID		      273
 	      Ports		      [1, 1]
 	      Position		      [240, 95, 285, 125]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "273"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -13743,11 +13567,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert3"
-	      SID		      274
 	      Ports		      [1, 1]
 	      Position		      [335, 104, 380, 136]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "274"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -13776,11 +13600,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Convert4"
-	      SID		      275
 	      Ports		      [1, 1]
 	      Position		      [240, 155, 285, 185]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
+	      SID		      "275"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
@@ -13808,11 +13632,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_0"
-	      SID		      276
 	      Ports		      [6, 2]
 	      Position		      [320, 167, 395, 303]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "276"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -13892,11 +13716,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "DSP48E_1"
-	      SID		      277
 	      Ports		      [7, 1]
 	      Position		      [425, 277, 500, 413]
 	      SourceBlock	      "xbsIndex_r4/DSP48E"
 	      SourceType	      "Xilinx DSP48E Block"
+	      SID		      "277"
 	      use_a		      "Direct from A Port"
 	      use_b		      "Direct from B Port"
 	      pattern_from_creg	      "off"
@@ -13976,11 +13800,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_imag"
-	      SID		      278
 	      Ports		      [1, 1]
 	      Position		      [150, 94, 200, 126]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "278"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -14005,11 +13829,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_power"
-	      SID		      279
 	      Ports		      [1, 1]
 	      Position		      [625, 329, 670, 361]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "279"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -14035,11 +13859,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterp_real"
-	      SID		      280
 	      Ports		      [1, 1]
 	      Position		      [235, 29, 285, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "280"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
 	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
 	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
@@ -14064,11 +13888,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_imag"
-	      SID		      281
 	      Ports		      [1, 1]
 	      Position		      [60, 95, 120, 125]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "281"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -14095,11 +13919,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_power"
-	      SID		      282
 	      Ports		      [1, 1]
 	      Position		      [530, 330, 590, 360]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "282"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -14126,11 +13950,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_real"
-	      SID		      283
 	      Ports		      [1, 1]
 	      Position		      [60, 35, 120, 65]
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      SID		      "283"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
@@ -14157,7 +13981,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "p"
-	      SID		      284
 	      Position		      [705, 335, 725, 355]
 	      IconDisplay	      "Port number"
 	    }
@@ -14330,11 +14153,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
-	  SID			  285
 	  Ports			  [1, 1]
 	  Position		  [60, 312, 120, 368]
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
+	  SID			  "285"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 	  en			  "off"
 	  latency		  "4"
@@ -14358,14 +14181,12 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
-	  SID			  286
 	  Position		  [150, 330, 170, 350]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout_0"
-	  SID			  287
 	  Position		  [150, 250, 170, 270]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -14373,7 +14194,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout_1"
-	  SID			  288
 	  Position		  [150, 180, 170, 200]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -14381,7 +14201,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout_2"
-	  SID			  289
 	  Position		  [150, 110, 170, 130]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -14389,7 +14208,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout_3"
-	  SID			  290
 	  Position		  [150, 40, 170, 60]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -14459,7 +14277,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "stopwatch"
-      SID		      156
       Ports		      [3, 1]
       Position		      [340, 45, 415, 105]
       MinAlgLoopOccurrences   off
@@ -14475,7 +14292,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       System {
 	Name			"stopwatch"
@@ -14495,7 +14311,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "start"
-	  SID			  157
 	  Position		  [140, 223, 170, 237]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -14504,7 +14319,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "stop"
-	  SID			  158
 	  Position		  [140, 118, 170, 132]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -14514,7 +14328,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "reset"
-	  SID			  159
 	  Position		  [140, 288, 170, 302]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -14524,12 +14337,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant1"
-	  SID			  2359
 	  Ports			  [0, 1]
 	  Position		  [320, 194, 335, 206]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "2359"
 	  arith_type		  "Boolean"
 	  const			  "1"
 	  n_bits		  "1"
@@ -14557,12 +14370,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant8"
-	  SID			  2360
 	  Ports			  [0, 1]
 	  Position		  [320, 104, 335, 116]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "2360"
 	  arith_type		  "Boolean"
 	  const			  "1"
 	  n_bits		  "1"
@@ -14590,12 +14403,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter1"
-	  SID			  2361
 	  Ports			  [2, 1]
 	  Position		  [535, 154, 570, 176]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
+	  SID			  "2361"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
 	  " implemented by combining a counter with a comparator."
 	  cnt_type		  "Free Running"
@@ -14631,12 +14444,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
-	  SID			  2362
 	  Ports			  [2, 1]
 	  Position		  [455, 152, 485, 183]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2362"
 	  logical_function	  "AND"
 	  inputs		  "2"
 	  en			  "off"
@@ -14663,12 +14476,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical1"
-	  SID			  2363
 	  Ports			  [2, 1]
 	  Position		  [295, 142, 325, 173]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "2363"
 	  logical_function	  "OR"
 	  inputs		  "2"
 	  en			  "off"
@@ -14695,12 +14508,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Register1"
-	  SID			  2364
 	  Ports			  [3, 1]
 	  Position		  [365, 195, 410, 235]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
+	  SID			  "2364"
 	  init			  "0"
 	  rst			  "on"
 	  en			  "on"
@@ -14722,12 +14535,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Register3"
-	  SID			  2365
 	  Ports			  [3, 1]
 	  Position		  [365, 105, 410, 145]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
+	  SID			  "2365"
 	  init			  "0"
 	  rst			  "on"
 	  en			  "on"
@@ -14749,7 +14562,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "count_out"
-	  SID			  167
 	  Position		  [595, 158, 625, 172]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -14848,7 +14660,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "sync_gen"
-      SID		      168
       Ports		      [0, 1]
       Position		      [245, 203, 295, 227]
       AttributesFormatString  "sim_sync_period=8960 "
@@ -14875,6 +14686,7 @@ Library {
       MaskEnableString	      "on,on,on,on,on,on"
       MaskVisibilityString    "on,on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,"
       MaskVariables	      "sim_acc_len=@1;fft_size=@2;fft_simult_inputs=@3;pfb_fir_taps=@4;reorder_vec=@5;scale=@6;"
       MaskInitialization      "sync_gen_init(gcb, ...\n    'sim_acc_len', sim_acc_len, ...\n    'fft_size', fft_size, "
       "...\n    'fft_simult_inputs', fft_simult_inputs,...\n    'pfb_fir_taps', pfb_fir_taps, ...\n    'reorder_vec', r"
@@ -14882,9 +14694,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "7|256|8|4|getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'reorder_vec')|1"
+      MaskTabNameString	      ",,,,,"
       System {
 	Name			"sync_gen"
 	Location		[130, 111, 1165, 564]
@@ -14903,7 +14715,6 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant"
-	  SID			  169
 	  Position		  [125, 310, 155, 340]
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
@@ -14911,7 +14722,6 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant1"
-	  SID			  170
 	  Position		  [220, 55, 250, 85]
 	  Value			  "0"
 	  OutDataType		  "sfix(16)"
@@ -14920,7 +14730,6 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant2"
-	  SID			  171
 	  Position		  [350, 130, 380, 160]
 	  Value			  "0"
 	  OutDataType		  "sfix(16)"
@@ -14929,11 +14738,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter3"
-	  SID			  170
 	  Ports			  [1, 1]
 	  Position		  [555, 200, 605, 250]
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
+	  SID			  "170"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
 	  " implemented by combining a counter with a comparator."
 	  cnt_type		  "Free Running"
@@ -14970,11 +14779,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
-	  SID			  171
 	  Ports			  [2, 1]
 	  Position		  [740, 253, 785, 297]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "171"
 	  logical_function	  "OR"
 	  inputs		  "2"
 	  en			  "off"
@@ -15003,11 +14812,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical1"
-	  SID			  172
 	  Ports			  [2, 1]
 	  Position		  [470, 246, 500, 279]
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
+	  SID			  "172"
 	  logical_function	  "OR"
 	  inputs		  "2"
 	  en			  "off"
@@ -15036,11 +14845,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mux"
-	  SID			  173
 	  Ports			  [3, 1]
 	  Position		  [545, 69, 570, 141]
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
+	  SID			  "173"
 	  inputs		  "2"
 	  en			  "off"
 	  latency		  "0"
@@ -15069,11 +14878,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Relational"
-	  SID			  174
 	  Ports			  [2, 1]
 	  Position		  [650, 193, 695, 237]
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
+	  SID			  "174"
 	  mode			  "a=b"
 	  en			  "off"
 	  latency		  "1"
@@ -15097,11 +14906,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
-	  SID			  175
 	  Ports			  [1, 1]
 	  Position		  [475, 56, 520, 84]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "175"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -15129,11 +14938,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice2"
-	  SID			  176
 	  Ports			  [1, 1]
 	  Position		  [380, 311, 425, 339]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "176"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -15161,7 +14970,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "posedge1"
-	  SID			  177
 	  Tag			  "Rising Edge Detector"
 	  Ports			  [1, 1]
 	  Position		  [810, 266, 845, 284]
@@ -15196,6 +15004,7 @@ Library {
 	  }
 	  SourceBlock		  "casper_library_misc/posedge"
 	  SourceType		  "posedge"
+	  SID			  "177"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -15208,7 +15017,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "posedge3"
-	  SID			  178
 	  Tag			  "Rising Edge Detector"
 	  Ports			  [1, 1]
 	  Position		  [320, 316, 355, 334]
@@ -15243,6 +15051,7 @@ Library {
 	  }
 	  SourceBlock		  "casper_library_misc/posedge"
 	  SourceType		  "posedge"
+	  SID			  "178"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -15255,13 +15064,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync"
-	  SID			  179
 	  Tag			  "xps:sw_reg"
 	  Ports			  [1, 1]
 	  Position		  [185, 309, 285, 341]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  "Unknown"
+	  SID			  "179"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -15280,11 +15089,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_period_const"
-	  SID			  180
 	  Ports			  [0, 1]
 	  Position		  [445, 98, 495, 112]
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
+	  SID			  "180"
 	  arith_type		  "Signed (2's comp)"
 	  const			  "8960"
 	  n_bits		  "32"
@@ -15314,13 +15123,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_period_sel"
-	  SID			  181
 	  Tag			  "xps:sw_reg"
 	  Ports			  [1, 1]
 	  Position		  [280, 54, 380, 86]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  "Unknown"
+	  SID			  "181"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -15339,13 +15148,13 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_period_var"
-	  SID			  182
 	  Tag			  "xps:sw_reg"
 	  Ports			  [1, 1]
 	  Position		  [415, 129, 515, 161]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  "Unknown"
+	  SID			  "182"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
 	  FunctionWithSeparateData "off"
@@ -15364,7 +15173,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
-	  SID			  185
 	  Position		  [905, 247, 935, 263]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -15492,8 +15300,58 @@ Library {
     }
     Block {
       BlockType		      SubSystem
+      Name		      "test"
+      Ports		      []
+      Position		      [45, 336, 87, 382]
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      MaskType		      "test"
+      MaskDescription	      "Interface to test infrastruture"
+      MaskPromptString	      "Location of unit tests|Name of test file|Test type:|Library subsection:|Library block|St"
+      "op testing on first failure"
+      MaskStyleString	      "edit,edit,popup(all|section|section from block|unit),edit,edit,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on"
+      MaskCallbackString      "|%ideally, generate sections and blocks \n%from tests_location and test_file\n||||"
+      MaskEnableString	      "on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,"
+      MaskVariables	      "tests_location=&1;tests_file=&2;test_type=&3;subsection=&4;block=&5;stop_first_fail=&6;"
+      MaskInitialization      "test_init( gcb, ...\n    'tests_location', tests_location, ...\n    'tests_file', tests"
+      "_file, ...\n    'test_type', test_type, ...\n    'subsection', subsection, ...\n    'block', block, ...\n    'st"
+      "op_first_fail', stop_first_fail);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "/opt/casper_git_devel/casper_library/Tests|tester_input.txt|section from block|Downconver"
+      "ter|lo_osc|on"
+      MaskTabNameString	      ",,,,,"
+      System {
+	Name			"test"
+	Location		[433, 403, 931, 703]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+      }
+    }
+    Block {
+      BlockType		      SubSystem
       Name		      "triggered_counter"
-      SID		      186
       Ports		      [1, 2]
       Position		      [560, 50, 610, 90]
       MinAlgLoopOccurrences   off
@@ -15514,7 +15372,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "8"
       System {
@@ -15532,11 +15389,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	7
 	Block {
 	  BlockType		  Inport
 	  Name			  "trig"
-	  SID			  1
 	  Position		  [25, 53, 55, 67]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -15545,12 +15400,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter"
-	  SID			  2
 	  Ports			  [2, 1]
 	  Position		  [250, 47, 300, 103]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
+	  SID			  "2"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
 	  " implemented by combining a counter with a comparator."
 	  cnt_type		  "Free Running"
@@ -15586,12 +15441,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "all_but_msb"
-	  SID			  3
 	  Ports			  [1, 1]
 	  Position		  [355, 27, 395, 43]
 	  NamePlacement		  "alternate"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "3"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -15617,7 +15472,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "edge_detect"
-	  SID			  4
 	  Ports			  [1, 1]
 	  Position		  [120, 50, 165, 70]
 	  AttributesFormatString  "rising edge\nactive high"
@@ -15643,6 +15497,7 @@ Library {
 	  MaskEnableString	  "on,on,off,off,off,off"
 	  MaskVisibilityString	  "on,on,off,off,off,off"
 	  MaskToolTipString	  "on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,"
 	  MaskVariables		  "edge=@1;polarity=@2;xin=@3;yin=@4;xout=@5;yout=@6;"
 	  MaskInitialization	  "edge_detect_init(gcb,edge,polarity);"
 	  MaskDisplay		  "plot(xin,0.5+yin{edge}*0.2)\nplot(xout,0.5+yout{edge}*0.2*(3-2*polarity))\n"
@@ -15650,11 +15505,11 @@ Library {
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
-	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "normalized"
 	  MaskValueString	  "Rising|Active High|floor([0.5:0.5:5])*0.08|{[-1,-1,1,1,1,1,1,1,1,1],[1,1,-1,-1,-1,-1,-1,-1,-1,-1"
 	  "],[-1,-1,1,1,1,1,-1,-1,-1,-1]}|1-floor([5:-0.5:0.5])*0.08|{[-1,-1,1,1,-1,-1,-1,-1,-1,-1],[-1,-1,1,1,-1,-1,-1,-1,-1,"
 	  "-1],[-1,-1,1,1,-1,-1,1,1,-1,-1]}"
+	  MaskTabNameString	  ",,,,,"
 	  System {
 	    Name		    "edge_detect"
 	    Location		    [433, 403, 1041, 568]
@@ -15670,11 +15525,9 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    5
 	    Block {
 	      BlockType		      Inport
 	      Name		      "in"
-	      SID		      1
 	      Position		      [50, 53, 80, 67]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -15683,12 +15536,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay"
-	      SID		      2
 	      Ports		      [1, 1]
 	      Position		      [180, 72, 225, 88]
 	      ShowName		      off
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
+	      SID		      "2"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
 	      en		      "off"
@@ -15711,12 +15564,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter"
-	      SID		      3
 	      Ports		      [1, 1]
 	      Position		      [180, 52, 225, 68]
 	      ShowName		      off
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
+	      SID		      "3"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
 	      en		      "off"
 	      latency		      "0"
@@ -15737,11 +15590,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "edge_op"
-	      SID		      4
 	      Ports		      [2, 1]
 	      Position		      [275, 48, 320, 92]
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
+	      SID		      "4"
 	      logical_function	      "NOR"
 	      inputs		      "2"
 	      en		      "off"
@@ -15768,7 +15621,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "out"
-	      SID		      5
 	      Position		      [380, 63, 410, 77]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -15812,11 +15664,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "msb"
-	  SID			  5
 	  Ports			  [1, 1]
 	  Position		  [355, 67, 395, 83]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  SID			  "5"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
@@ -15842,7 +15694,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "count"
-	  SID			  6
 	  Position		  [465, 28, 495, 42]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -15851,7 +15702,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "valid"
-	  SID			  7
 	  Position		  [465, 68, 495, 82]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
