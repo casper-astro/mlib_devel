@@ -57,7 +57,6 @@ module roach_infrastructure(
     .DLL_FREQUENCY_MODE    ("LOW"),
     .FACTORY_JF            (16'hC080),
     .PHASE_SHIFT           (127), // 127 is a 180 degree offset
-    .STARTUP_WAIT          (1'b0)
   ) dcm_epb_inst (
     .CLKFB                 (epb_clk),
     .CLKIN                 (epb_clk_int),
