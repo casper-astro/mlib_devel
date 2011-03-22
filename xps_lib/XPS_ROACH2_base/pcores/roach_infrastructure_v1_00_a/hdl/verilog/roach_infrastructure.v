@@ -3,16 +3,17 @@ module roach_infrastructure(
     sys_clk, sys_clk90, sys_clk180, sys_clk270,
     sys_clk_lock,
     sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270,
-    dly_clk_n,  dly_clk_p,
-    dly_clk,
+    ///dly_clk_n,  dly_clk_p,
+    //dly_clk,
     epb_clk_in,
     epb_clk,
     idelay_rst, idelay_rdy,
-    aux0_clk_n, aux0_clk_p,
-    aux0_clk, aux0_clk90, aux0_clk180, aux0_clk270,
-    aux1_clk_n, aux1_clk_p,
-    aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270,
-    aux0_clk2x, aux0_clk2x90, aux0_clk2x180, aux0_clk2x270
+    aux_clk_n, aux_clk_p,
+    aux_clk, aux_clk90, aux_clk180, aux_clk270,
+    aux_clk2x, aux_clk2x90, aux_clk2x180, aux_clk2x270
+    
+    //aux1_clk_n, aux1_clk_p,
+    //aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270,
   );
 
   parameter CLK_FREQ = 100;
@@ -21,15 +22,15 @@ module roach_infrastructure(
   output sys_clk, sys_clk90, sys_clk180, sys_clk270;
   output sys_clk_lock;
   output sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270;
-  input  dly_clk_n, dly_clk_p;
-  output dly_clk;
+  //input  dly_clk_n, dly_clk_p;
+  //output dly_clk;
   input  epb_clk_in;
   output epb_clk;
-  input  aux0_clk_n, aux0_clk_p;
-  output aux0_clk, aux0_clk90, aux0_clk180, aux0_clk270;
-  input  aux1_clk_n, aux1_clk_p;
-  output aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270;
-  output aux0_clk2x, aux0_clk2x90, aux0_clk2x180, aux0_clk2x270;
+  input  aux_clk_n, aux_clk_p;
+  output aux_clk, aux_clk90, aux_clk180, aux_clk270;
+  output aux_clk2x, aux_clk2x90, aux_clk2x180, aux_clk2x270;
+  //input  aux1_clk_n, aux1_clk_p;
+  //output aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270;
 
   input  idelay_rst;
   output idelay_rdy;
@@ -156,29 +157,29 @@ module roach_infrastructure(
   assign sys_clk2x270 = ~sys_clk2x90;
 
   /* Aux clocks */
-  wire  aux0_clk_int;
-  wire  aux1_clk_int;
+  wire  aux_clk_int;
+  //wire  aux1_clk_int;
   IBUFGDS #(
     .IOSTANDARD ("LVDS_25"),
     .DIFF_TERM  ("TRUE")
-  ) ibufgd_aux_arr[1:0] (
-    .I  ({aux0_clk_p,   aux1_clk_p}),
-    .IB ({aux0_clk_n,   aux1_clk_n}),
-    .O  ({aux0_clk_int, aux1_clk_int})
+  ) ibufgd_aux_arr (
+    .I  ({aux_clk_p}),
+    .IB ({aux_clk_n}),
+    .O  ({aux_clk_int})
   );
 
-  wire  aux0_clk_dcm;
-  wire  aux0_clk90_dcm;
-  wire  aux1_clk_dcm;
-  wire  aux1_clk90_dcm;
+  wire  aux_clk_dcm;
+  wire  aux_clk90_dcm;
+  //wire  aux1_clk_dcm;
+  //wire  aux1_clk90_dcm;
 
-  wire  aux0_clk_dcm_locked;
-  wire  aux1_clk_dcm_locked;
+  wire  aux_clk_dcm_locked;
+  //wire  aux1_clk_dcm_locked;
 
-  wire  aux0_clk2x_int;
-  wire  aux0_clk2x_buf;
-  wire  aux0_clk2x_dcm;
-  wire  aux0_clk2x90_dcm;
+  wire  aux_clk2x_int;
+  wire  aux_clk2x_buf;
+  wire  aux_clk2x_dcm;
+  wire  aux_clk2x90_dcm;
 
 // =====================================================================
 // Generated DCM instantiation based on target clock frequency; use
@@ -191,16 +192,16 @@ generate
               .CLKIN_PERIOD       (1000/CLK_FREQ),
               .DLL_FREQUENCY_MODE ("LOW")
             ) AUX0_CLK_DCM (
-              .CLKIN  (aux0_clk_int),
-              .CLK0   (aux0_clk_dcm),
-              .CLK90  (aux0_clk90_dcm),
-              .CLK2X  (aux0_clk2x_int),
-              .LOCKED (aux0_clk_dcm_locked),
-              .CLKFB  (aux0_clk),
+              .CLKIN  (aux_clk_int),
+              .CLK0   (aux_clk_dcm),
+              .CLK90  (aux_clk90_dcm),
+              .CLK2X  (aux_clk2x_int),
+              .LOCKED (aux_clk_dcm_locked),
+              .CLKFB  (aux_clk),
               .RST    (~sys_clk_dcm_locked)
             );
 
-            DCM_BASE #(
+            /*DCM_BASE #(
               .CLKIN_PERIOD       (1000/CLK_FREQ),
               .DLL_FREQUENCY_MODE ("LOW")
             ) AUX1_CLK_DCM (
@@ -210,18 +211,18 @@ generate
               .LOCKED (aux1_clk_dcm_locked),
               .CLKFB  (aux1_clk),
               .RST    (~sys_clk_dcm_locked)
-            );
+            );*/
 
             DCM_BASE #(
               .CLKIN_PERIOD       (1000/CLK_FREQ),
               .DLL_FREQUENCY_MODE ("LOW")
             ) AUX0_CLK2X_DCM (
-              .CLKIN  (aux0_clk2x_buf),
-              .CLK0   (aux0_clk2x_dcm),
-              .CLK90  (aux0_clk2x90_dcm),
+              .CLKIN  (aux_clk2x_buf),
+              .CLK0   (aux_clk2x_dcm),
+              .CLK90  (aux_clk2x90_dcm),
               .LOCKED (),
-              .CLKFB  (aux0_clk2x),
-              .RST    (~aux0_clk_dcm_locked)
+              .CLKFB  (aux_clk2x),
+              .RST    (~aux_clk_dcm_locked)
             );
         end // if (CLK_FREQ < 120)
         else begin
@@ -229,16 +230,16 @@ generate
               .CLKIN_PERIOD       (1000/CLK_FREQ),
               .DLL_FREQUENCY_MODE ("HIGH")
             ) AUX0_CLK_DCM (
-              .CLKIN  (aux0_clk_int),
-              .CLK0   (aux0_clk_dcm),
-              .CLK90  (aux0_clk90_dcm),
-              .CLK2X  (aux0_clk2x_int),
-              .LOCKED (aux0_clk_dcm_locked),
-              .CLKFB  (aux0_clk),
+              .CLKIN  (aux_clk_int),
+              .CLK0   (aux_clk_dcm),
+              .CLK90  (aux_clk90_dcm),
+              .CLK2X  (aux_clk2x_int),
+              .LOCKED (aux_clk_dcm_locked),
+              .CLKFB  (aux_clk),
               .RST    (~sys_clk_dcm_locked)
             );
 
-            DCM_BASE #(
+            /*DCM_BASE #(
               .CLKIN_PERIOD       (1000/CLK_FREQ),
               .DLL_FREQUENCY_MODE ("HIGH")
             ) AUX1_CLK_DCM (
@@ -248,62 +249,62 @@ generate
               .LOCKED (aux1_clk_dcm_locked),
               .CLKFB  (aux1_clk),
               .RST    (~sys_clk_dcm_locked)
-            );
+            );*/
 
             DCM_BASE #(
               .CLKIN_PERIOD       (1000/CLK_FREQ),
               .DLL_FREQUENCY_MODE ("HIGH")
             ) AUX0_CLK2X_DCM (
-              .CLKIN  (aux0_clk2x_buf),
-              .CLK0   (aux0_clk2x_dcm),
-              .CLK90  (aux0_clk2x90_dcm),
+              .CLKIN  (aux_clk2x_buf),
+              .CLK0   (aux_clk2x_dcm),
+              .CLK90  (aux_clk2x90_dcm),
               .LOCKED (),
-              .CLKFB  (aux0_clk2x),
-              .RST    (~aux0_clk_dcm_locked)
+              .CLKFB  (aux_clk2x),
+              .RST    (~aux_clk_dcm_locked)
             );
         end // else
    end // GEN_DCM
 endgenerate
 
 
-  BUFG bufg_aux_clk[3:0](
-    .I({aux0_clk_dcm, aux0_clk90_dcm, aux1_clk_dcm, aux1_clk90_dcm}),
-    .O({aux0_clk,     aux0_clk90,     aux1_clk,     aux1_clk90})
+  BUFG bufg_aux_clk[1:0](
+    .I({aux_clk_dcm, aux_clk90_dcm}),
+    .O({aux_clk,     aux_clk90})
   );
 
   BUFG bufg_aux2_clk[2:0](
-    .I({aux0_clk2x_int, aux0_clk2x_dcm, aux0_clk2x90_dcm}),
-    .O({aux0_clk2x_buf, aux0_clk2x,     aux0_clk2x90})
+    .I({aux_clk2x_int, aux_clk2x_dcm, aux_clk2x90_dcm}),
+    .O({aux_clk2x_buf, aux_clk2x,     aux_clk2x90})
   );
 
   // rely on inference of Xilinx internal clock inversion structures down the line
-  assign aux0_clk180 = ~aux0_clk;
-  assign aux0_clk270 = ~aux0_clk90;
-  assign aux1_clk180 = ~aux1_clk;
-  assign aux1_clk270 = ~aux1_clk90;
+  assign aux_clk180 = ~aux_clk;
+  assign aux_clk270 = ~aux_clk90;
+  //assign aux1_clk180 = ~aux1_clk;
+  //assign aux1_clk270 = ~aux1_clk90;
 
-  assign aux0_clk2x180 = ~aux0_clk2x;
-  assign aux0_clk2x270 = ~aux0_clk2x90;
+  assign aux_clk2x180 = ~aux_clk2x;
+  assign aux_clk2x270 = ~aux_clk2x90;
 
 
   /* Delay Clock */
-  wire dly_clk_int;
+  /*wire dly_clk_int;
   IBUFDS ibufds_dly_clk(
     .I (dly_clk_p),
     .IB(dly_clk_n),
     .O (dly_clk_int)
-  );
+  );*/
 
-  BUFG bufg_inst(
+  /*BUFG bufg_inst(
     .I(dly_clk_int),
     .O(dly_clk)
-  );
+  );*/
 
-  IDELAYCTRL idelayctrl_inst(
+  /*IDELAYCTRL idelayctrl_inst(
     .REFCLK (dly_clk),
     .RST    (idelay_rst),
     .RDY    (idelay_rdy)
-  );
+  );*/
 
 
 endmodule

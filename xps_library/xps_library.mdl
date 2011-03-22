@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "dave"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Feb 21 13:09:52 2011"
-  RTWModifiedTimeStamp	  220194548
-  ModelVersionFormat	  "1.%<AutoIncrement:432>"
+  LastModifiedDate	  "Tue Mar 22 12:10:32 2011"
+  RTWModifiedTimeStamp	  222696426
+  ModelVersionFormat	  "1.%<AutoIncrement:434>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -687,7 +687,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [2124, 102, 3455, 1125]
+    Location		    [2268, 57, 3599, 1049]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -14832,10 +14832,10 @@ Library {
       MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH:sx95t|ROACH:lx110t|ROACH2:sx475t|CORR),checkbox,edit,"
       "popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|u"
       "sr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux0_clk2x|aux1_cl"
-      "k|aux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux0_clk2x|aux1_clk|a"
-      "ux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:"
-      "gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synp"
-      "lify|Synplify Pro|XST),edit"
+      "k|aux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|arb_clk|aux_clk|aux_clk2x|adc0_clk|adc"
+      "1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:"
+      "gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST)"
+      ",edit"
       MaskTunableValueString  "off,off,off,off,off,off,off,on,off,off,off,off,off,off,off"
       MaskCallbackString      "xps_xsg_conf_callback;|||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_cal"
       "lback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;||||||"
@@ -14858,7 +14858,7 @@ Library {
       MaskTabNameString	      ",,,,,,,,,,,,,,"
       System {
 	Name			"XSG core config"
-	Location		[382, 144, 880, 444]
+	Location		[461, 144, 959, 444]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -32505,9 +32505,10 @@ Library {
       "k1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlin"
       "k4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:a"
       "ux0_clk|ROACH:aux1_clk|ROACH:led|ROACH:gpioa|ROACH:gpioa_oe_n|ROACH:gpiob|ROACH:gpiob_oe_n|ROACH:qsh|ROACH:zdok0"
-      "|ROACH:zdok1|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),"
-      "popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),po"
-      "pup(None|Pullup|Pulldown)"
+      "|ROACH:zdok1|ROACH2:aux0_clk|ROACH2:aux1_clk|ROACH2:led|ROACH2:gpioa|ROACH2:gpioa_oe_n|ROACH2:gpiob|ROACH2:gpiob"
+      "_oe_n|ROACH2:qsh|ROACH2:zdok0|ROACH2:zdok1|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:j"
+      "umper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,c"
+      "heckbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'iBOB:zdok0' 'iBOB:zdok1' 'iBOB:md"
       "r' 'ROACH:qsh' 'ROACH:zdok0' 'ROACH:zdok1'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on'"
@@ -32532,7 +32533,7 @@ Library {
       MaskTabNameString	      ",,,,,,,,,,,"
       System {
 	Name			"gpio"
-	Location		[460, 146, 919, 417]
+	Location		[539, 146, 998, 417]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -32560,7 +32561,6 @@ Library {
 	  Position		  [80, 50, 110, 70]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Boolean"
 	  n_bits		  "1"
@@ -32575,13 +32575,14 @@ Library {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
-	  block_version		  "10.1.3"
-	  sg_icon_stat		  "30,20,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 ],[0 0 20 20 ],[0.77 0.82 0.91]);\n"
-	  "patch([9 6 11 6 9 14 15 16 22 18 14 11 16 11 14 18 22 16 15 14 9 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6 2 2 "
-	  "3 2 2 ],[0.98 0.96 0.92]);\nplot([0 30 30 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprint"
-	  "f('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon tex"
-	  "t');\n"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,20,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.3 0.2 0.366667 0.2 0.3 0.466667 0.5 0.533333 0.733333 0.6 0.466667 0.366667 0.533333 0.366667 0.466667 0.6 0."
+	  "733333 0.533333 0.5 0.466667 0.3 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0."
+	  "15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprin"
+	  "tf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon te"
+	  "xt');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -32590,10 +32591,9 @@ Library {
 	  Position		  [150, 50, 190, 70]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "3"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
-	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
-	  "ding on how they are configured."
+	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
+	  "ending on how they are configured."
 	  hdl_port		  "on"
 	  timing_constraint	  "None"
 	  locs_specified	  "off"
@@ -32603,13 +32603,14 @@ Library {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
-	  block_version		  "10.1.3"
-	  sg_icon_stat		  "40,20,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([14 11 16 11 14 19 20 21 27 23 19 16 21 16 19 23 27 21 20 19 14 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 40 40 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('outpu"
-	  "t',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "40,20,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.35 0.275 0.4 0.275 0.35 0.475 0.5 0.525 0.675 0.575 0.475 0.4 0.525 0.4 0.475 0.575 0.675 0.525 0.5 0.475 0.3"
+	  "5 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);"
+	  "\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
+	  "');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','t"
+	  "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport

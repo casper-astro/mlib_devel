@@ -13,14 +13,17 @@ CONFIG DCI_CASCADE = "36 35 37 38";
 NET "sys_clk_n"          LOC = AP12;
 NET "sys_clk_p"          LOC = AP11;
 
+# aux clock (?? MHz)
 #NET "aux_clk_n"          LOC = AW16;
 #NET "aux_clk_p"          LOC = AV16;
-#
+
+# aux sync in/out
 #NET "aux_synci_n"        LOC = BB17;
 #NET "aux_synci_p"        LOC = BB16;
 #NET "aux_synco_n"        LOC = BA17;
 #NET "aux_synco_p"        LOC = BA16;
 
+# GPIOs
 #NET "v6_gpio<0>"         LOC = G31    | IOSTANDARD = "LVCMOS15";
 #NET "v6_gpio<1>"         LOC = H31    | IOSTANDARD = "LVCMOS15";
 #NET "v6_gpio<2>"         LOC = AF32   | IOSTANDARD = "LVCMOS15";
