@@ -43,80 +43,83 @@ NET "sys_clk_p"          LOC = AP11;
 #
 ## perclk 83.333 MHz
 ## This is correct
-#NET "ppc_perclk"         LOC = AY13 | CLOCK_DEDICATED_ROUTE = FALSE;
-#
-#NET "ppc_pcsn<0>"        LOC = N35;
-#NET "ppc_pcsn<1>"        LOC = L39;
-#NET "ppc_poen"           LOC = AA31;
-#NET "ppc_pwrn"           LOC = V31;
-#NET "ppc_pben<0>"        LOC = Y30;
-#NET "ppc_pben<1>"        LOC = W31;
-#NET "ppc_pben<2>"        LOC = R32;
-#NET "ppc_pben<3>"        LOC = T32;
-#NET "ppc_pblastn"        LOC = N34;
-#NET "ppc_prdy"           LOC = L40;
+
+# was "ppc_perclk"
+NET "epb_clk_in"         LOC = AY13 | CLOCK_DEDICATED_ROUTE = FALSE;
+
+NET "epb_cs_n"        LOC = N35;
+NET "epb_oe_n"           LOC = AA31;
+NET "epb_r_w_n"          LOC = V31;
+NET "epb_be_n<0>"        LOC = Y30;
+NET "epb_be_n<1>"        LOC = W31;
+NET "epb_be_n<2>"        LOC = R32;
+NET "epb_be_n<3>"        LOC = T32;
+#NET "ppc_blast_n"        LOC = N34;
+NET "epb_rdy"            LOC = L40;
+
 #
 ## external ouput enable for the data bus
-#NET "ppc_doen"           LOC = AF35  | IOSTANDARD = "LVCMOS15";
 #
-#NET "ppc_paddr<5>"       LOC = AT14;
-#NET "ppc_paddr<6>"       LOC = AR14;
-#NET "ppc_paddr<7>"       LOC = AR15;
-#NET "ppc_paddr<8>"       LOC = AP15;
-#NET "ppc_paddr<9>"       LOC = AN13;
-#NET "ppc_paddr<10>"      LOC = AN14;
-#NET "ppc_paddr<11>"      LOC = AM12;
-#NET "ppc_paddr<12>"      LOC = AM13;
-#NET "ppc_paddr<13>"      LOC = AV14;
-#NET "ppc_paddr<14>"      LOC = AJ32;
-#NET "ppc_paddr<15>"      LOC = AJ31;
-#NET "ppc_paddr<16>"      LOC = AK30;
-#NET "ppc_paddr<17>"      LOC = AJ30;
-#NET "ppc_paddr<18>"      LOC = AK33;
-#NET "ppc_paddr<19>"      LOC = AH30;
-#NET "ppc_paddr<20>"      LOC = AH29;
-#NET "ppc_paddr<21>"      LOC = AG29;
-#NET "ppc_paddr<22>"      LOC = AD30;
-#NET "ppc_paddr<23>"      LOC = AC30;
-#NET "ppc_paddr<24>"      LOC = AY14;
-#NET "ppc_paddr<25>"      LOC = AV13;
-#NET "ppc_paddr<26>"      LOC = AD31;
-#NET "ppc_paddr<27>"      LOC = AB31;
-#NET "ppc_paddr<28>"      LOC = AC31;
-#NET "ppc_paddr<29>"      LOC = AA30;
-#
-#NET "ppc_pdata<0>"       LOC = AR13;
-#NET "ppc_pdata<1>"       LOC = AP13;
-#NET "ppc_pdata<2>"       LOC = AU14;
-#NET "ppc_pdata<3>"       LOC = AV15;
-#NET "ppc_pdata<4>"       LOC = AT12;
-#NET "ppc_pdata<5>"       LOC = AR12;
-#NET "ppc_pdata<6>"       LOC = BA14;
-#NET "ppc_pdata<7>"       LOC = BA15;
-#NET "ppc_pdata<8>"       LOC = AW13;
-#NET "ppc_pdata<9>"       LOC = AW12;
-#NET "ppc_pdata<10>"      LOC = BB14;
-#NET "ppc_pdata<11>"      LOC = BB13;
-#NET "ppc_pdata<12>"      LOC = AU13;
-#NET "ppc_pdata<13>"      LOC = AU12;
-#NET "ppc_pdata<14>"      LOC = AW15;
-#NET "ppc_pdata<15>"      LOC = AY15;
-#NET "ppc_pdata<16>"      LOC = P33;
-#NET "ppc_pdata<17>"      LOC = N33;
-#NET "ppc_pdata<18>"      LOC = AG31;
-#NET "ppc_pdata<19>"      LOC = AH31;
-#NET "ppc_pdata<20>"      LOC = R30;
-#NET "ppc_pdata<21>"      LOC = T30;
-#NET "ppc_pdata<22>"      LOC = AF31;
-#NET "ppc_pdata<23>"      LOC = AG32;
-#NET "ppc_pdata<24>"      LOC = U31;
-#NET "ppc_pdata<25>"      LOC = T31;
-#NET "ppc_pdata<26>"      LOC = AL32;
-#NET "ppc_pdata<27>"      LOC = AK32;
-#NET "ppc_pdata<28>"      LOC = R33;
-#NET "ppc_pdata<29>"      LOC = P32;
-#NET "ppc_pdata<30>"      LOC = AH33;
-#NET "ppc_pdata<31>"      LOC = AJ33;
+NET "epb_doe_n"          LOC = AF35  | IOSTANDARD = "LVCMOS15";
+
+NET "epb_addr<5>"       LOC = AT14;
+NET "epb_addr<6>"       LOC = AR14;
+NET "epb_addr<7>"       LOC = AR15;
+NET "epb_addr<8>"       LOC = AP15;
+NET "epb_addr<9>"       LOC = AN13;
+NET "epb_addr<10>"      LOC = AN14;
+NET "epb_addr<11>"      LOC = AM12;
+NET "epb_addr<12>"      LOC = AM13;
+NET "epb_addr<13>"      LOC = AV14;
+NET "epb_addr<14>"      LOC = AJ32;
+NET "epb_addr<15>"      LOC = AJ31;
+NET "epb_addr<16>"      LOC = AK30;
+NET "epb_addr<17>"      LOC = AJ30;
+NET "epb_addr<18>"      LOC = AK33;
+NET "epb_addr<19>"      LOC = AH30;
+NET "epb_addr<20>"      LOC = AH29;
+NET "epb_addr<21>"      LOC = AG29;
+NET "epb_addr<22>"      LOC = AD30;
+NET "epb_addr<23>"      LOC = AC30;
+NET "epb_addr<24>"      LOC = AY14;
+NET "epb_addr<25>"      LOC = AV13;
+NET "epb_addr<26>"      LOC = AD31;
+NET "epb_addr<27>"      LOC = AB31;
+NET "epb_addr<28>"      LOC = AC31;
+NET "epb_addr<29>"      LOC = AA30;
+
+NET "epb_data<0>"       LOC = AR13;
+NET "epb_data<1>"       LOC = AP13;
+NET "epb_data<2>"       LOC = AU14;
+NET "epb_data<3>"       LOC = AV15;
+NET "epb_data<4>"       LOC = AT12;
+NET "epb_data<5>"       LOC = AR12;
+NET "epb_data<6>"       LOC = BA14;
+NET "epb_data<7>"       LOC = BA15;
+NET "epb_data<8>"       LOC = AW13;
+NET "epb_data<9>"       LOC = AW12;
+NET "epb_data<10>"      LOC = BB14;
+NET "epb_data<11>"      LOC = BB13;
+NET "epb_data<12>"      LOC = AU13;
+NET "epb_data<13>"      LOC = AU12;
+NET "epb_data<14>"      LOC = AW15;
+NET "epb_data<15>"      LOC = AY15;
+NET "epb_data<16>"      LOC = P33;
+NET "epb_data<17>"      LOC = N33;
+NET "epb_data<18>"      LOC = AG31;
+NET "epb_data<19>"      LOC = AH31;
+NET "epb_data<20>"      LOC = R30;
+NET "epb_data<21>"      LOC = T30;
+NET "epb_data<22>"      LOC = AF31;
+NET "epb_data<23>"      LOC = AG32;
+NET "epb_data<24>"      LOC = U31;
+NET "epb_data<25>"      LOC = T31;
+NET "epb_data<26>"      LOC = AL32;
+NET "epb_data<27>"      LOC = AK32;
+NET "epb_data<28>"      LOC = R33;
+NET "epb_data<29>"      LOC = P32;
+NET "epb_data<30>"      LOC = AH33;
+NET "epb_data<31>"      LOC = AJ33;
 #
 ### DDR3 SDRAM RDIMM Signals
 #
