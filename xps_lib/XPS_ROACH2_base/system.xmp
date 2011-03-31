@@ -22,3 +22,6 @@ SimModel: BEHAVIORAL
 UcfFile: data/system.ucf
 EnableParTimingError: 1
 ShowLicenseDialog: 1
+Processor: epb_opb_bridge_inst
+BootLoop: 0
+XmdStub: 0
