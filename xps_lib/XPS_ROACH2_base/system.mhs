@@ -14,10 +14,10 @@
 # Clock Ports
  PORT sys_clk_n = sys_clk_n, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
  PORT sys_clk_p = sys_clk_p, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
- PORT aux_clk_n = aux_clk_n, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
- PORT aux_clk_p = aux_clk_p, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
 # IF# 1 # ['PORT aux_clk_n  = aux_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
+ PORT aux_clk_n = aux_clk_n, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
 # IF# 1 # ['PORT aux_clk_p  = aux_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
+ PORT aux_clk_p = aux_clk_p, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
 # PORT aux_synci_n = aux_synci_n,   DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
 # PORT aux_synci_p = aux_synci_p,   DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
 # PORT aux_synco_n = aux_synco_n,   DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
@@ -123,7 +123,7 @@
 BEGIN roach_infrastructure
  PARAMETER INSTANCE = infrastructure_inst
  PARAMETER HW_VER = 1.00.a
-# IF# 1 # ['  PARAMETER CLK_FREQ = ', num2str(app_clk_rate)]
+# IF# 1 # ['  PARAMETER CLK_FREQ = ', num2str(app_clk_rate), '\n']
  PARAMETER CLK_FREQ = 100
  PORT sys_clk_n = sys_clk_n
  PORT sys_clk_p = sys_clk_p
@@ -217,7 +217,7 @@ BEGIN sys_block
  PORT soft_reset = soft_reset
  PORT irq_n = ppc_irq_n
  PORT app_irq = 0x0000
-# IF# 1 # ['  PORT fab_clk    = ', app_clk]
+# IF# 1 # ['  PORT fab_clk    = ', app_clk, '\n']
  PORT fab_clk = sys_clk
 END
 
