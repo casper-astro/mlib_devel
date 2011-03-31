@@ -1,3 +1,4 @@
+#Please do not modify this file by hand
 XmpVersion: 11.5
 VerMgmt: 10.1.03
 IntStyle: default
@@ -7,14 +8,20 @@ Architecture: virtex6
 Device: xc6vsx475t
 Package: ff1759
 SpeedGrade: -1
-UserCmd1:
+UserCmd1: 
 UserCmd1Type: 0
-UserCmd2:
+UserCmd2: 
 UserCmd2Type: 0
 GenSimTB: 0
+SdkExportBmmBit: 1
+SdkExportDir: SDK/SDK_Export
+InsertNoPads: 0
 WarnForEAArch: 1
 HdlLang: VHDL
 SimModel: BEHAVIORAL
 UcfFile: data/system.ucf
 EnableParTimingError: 1
 ShowLicenseDialog: 1
+Processor: epb_opb_bridge_inst
+BootLoop: 0
+XmdStub: 0

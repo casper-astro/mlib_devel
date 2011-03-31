@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
 %   http://seti.ssl.berkeley.edu/casper/                                      %
@@ -66,11 +66,7 @@ switch s.hw_sys
 	    s.sw_os = 'none';
     % end case 'ROACH'
 
-	case 'ROACH2'
-	    s.sw_os = 'none';
-    % end case 'ROACH2'
-
-  otherwise
+    otherwise
   		error(['Unsupported Platform: ',s.hw_sys]);
 end % switch s.hw_sys
 
