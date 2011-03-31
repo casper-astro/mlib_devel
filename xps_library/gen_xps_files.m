@@ -321,7 +321,9 @@ if run_xsg
         rmdir(xsg_path,'s');
     end
     disp('Running system generator ...');
+    xsg_blk
     xsg_result = xlGenerateButton(xsg_blk);
+    xsg_result
     if xsg_result == 0
         disp('XSG generation complete.');
     else
@@ -637,6 +639,14 @@ if run_software
       fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
     end % strcmp(hw_sys, 'ROACH')
 
+    if strcmp(hw_sys, 'ROACH2')
+      fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
+      fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
+      fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
+      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
+    end % strcmp(hw_sys, 'ROACH2')
+    
     fclose(win_fid);
     fclose(unix_fid);
 
