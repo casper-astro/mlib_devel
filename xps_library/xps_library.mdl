@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Apr 25 21:02:02 2011"
-  RTWModifiedTimeStamp	  225666095
-  ModelVersionFormat	  "1.%<AutoIncrement:437>"
+  LastModifiedDate	  "Fri Apr 29 12:44:22 2011"
+  RTWModifiedTimeStamp	  225981834
+  ModelVersionFormat	  "1.%<AutoIncrement:438>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -819,7 +819,6 @@ Library {
 	      ShowName		      off
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
-	      SID		      "6"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Unsigned"
@@ -828,9 +827,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
@@ -853,7 +852,6 @@ Library {
 	      ShowName		      off
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
-	      SID		      "7"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Unsigned"
@@ -862,9 +860,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
@@ -887,18 +885,17 @@ Library {
 	      ShowName		      off
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
-	      SID		      "8"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      "off"
+	      boolean_output	      off
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
@@ -930,15 +927,14 @@ Library {
 	      Position		      [360, 45, 420, 65]
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
-	      SID		      "11"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -960,15 +956,14 @@ Library {
 	      Position		      [360, 120, 420, 140]
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
-	      SID		      "12"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -12986,9 +12981,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,51,636,521"
@@ -13016,9 +13011,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "25,159,636,521"
@@ -13046,9 +13041,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,51,636,521"
@@ -13224,11 +13219,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "sample_rate"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
@@ -13383,11 +13378,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{'A5','B9','A9','C1','A3','G6','E9','A6','A7','A8','B8','B1','B3','D9','B5','B4','B6','C2'}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'}},'Xilinx'=>{'jtaghwc"
 	  "osim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRA"
@@ -13415,11 +13410,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'}},'Xilinx'=>{'jtag"
 	  "hwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shar"
@@ -13452,11 +13447,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "sample_rate"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'}},'Xilinx'=>{'jta"
@@ -13484,11 +13479,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{'A14'}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'}},'Xilinx'=>{'jtaghwcos"
 	  "im'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we"
@@ -42389,22 +42384,22 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskPromptString	      "I/O direction|Data Type|Data bitwidth|Data binary point|Sample period|Latency"
+      MaskPromptString	      "I/O direction|Data Type|Data bitwidth|Data binary point|Sample period|arb"
       MaskStyleString	      "popup(From Processor|To Processor),popup(Unsigned|Signed  (2's comp)),edit,edit,edit,edit"
       MaskTunableValueString  "on,on,on,on,on,on"
       MaskCallbackString      "|||||"
       MaskEnableString	      "on,on,off,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,off"
       MaskToolTipString	      "on,on,on,on,on,on"
       MaskVarAliasString      ",,,,,"
-      MaskVariables	      "io_dir=&1;arith_type=&2;bitwidth=@3;bin_pt=@4;sample_period=@5;latency=@6;"
+      MaskVariables	      "io_dir=&1;arith_type=&2;bitwidth=@3;bin_pt=@4;sample_period=@5;gw_name=&6;"
       MaskInitialization      "register_mask;"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "From Processor|Signed  (2's comp)|32|0|1|0"
+      MaskValueString	      "From Processor|Signed  (2's comp)|32|0|1|xps_library_software_register_user_data_out"
       MaskTabNameString	      ",,,,,"
       System {
 	Name			"software register"
@@ -42442,11 +42437,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
