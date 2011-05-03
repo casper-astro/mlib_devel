@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Apr 29 12:44:22 2011"
-  RTWModifiedTimeStamp	  225981834
-  ModelVersionFormat	  "1.%<AutoIncrement:438>"
+  LastModifiedDate	  "Tue May  3 13:59:53 2011"
+  RTWModifiedTimeStamp	  226331956
+  ModelVersionFormat	  "1.%<AutoIncrement:439>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -827,9 +827,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
@@ -860,9 +860,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
@@ -889,13 +889,13 @@ Library {
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      off
+	      boolean_output	      "off"
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
@@ -930,11 +930,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -959,11 +959,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -12908,8 +12908,8 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskPromptString	      "Output Data Type|Address width|Data Width|Data Binary Point|Initial 32-bit values (simul"
-      "ation only)|Sample rate"
+      MaskPromptString	      "Output Data Type|Address width|Data Width|Data Binary Point|Initial values (simulation o"
+      "nly)|Sample rate"
       MaskStyleString	      "popup(Unsigned|Signed  (2's comp)),edit,popup(8|16|32|64|128),edit,edit,edit"
       MaskTunableValueString  "on,on,on,on,on,on"
       MaskCallbackString      "|||||"
@@ -12981,9 +12981,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,51,636,521"
@@ -13011,9 +13011,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "25,159,636,521"
@@ -13041,9 +13041,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,51,636,521"
@@ -13219,11 +13219,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "sample_rate"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
@@ -13370,7 +13370,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "shared_bram_upgrade_Shared_BRAM_addr"
+	  Name			  "xps_library_Shared_BRAM_addr"
 	  Ports			  [1, 1]
 	  Position		  [230, 89, 285, 111]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -13378,11 +13378,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{'A5','B9','A9','C1','A3','G6','E9','A6','A7','A8','B8','B1','B3','D9','B5','B4','B6','C2'}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'}},'Xilinx'=>{'jtaghwc"
 	  "osim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRA"
@@ -13402,7 +13402,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "shared_bram_upgrade_Shared_BRAM_data_in"
+	  Name			  "xps_library_Shared_BRAM_data_in"
 	  Ports			  [1, 1]
 	  Position		  [230, 134, 285, 156]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -13410,11 +13410,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'}},'Xilinx'=>{'jtag"
 	  "hwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shar"
@@ -13434,7 +13434,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "shared_bram_upgrade_Shared_BRAM_data_out"
+	  Name			  "xps_library_Shared_BRAM_data_out"
 	  Ports			  [1, 1]
 	  Position		  [600, 135, 655, 155]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -13447,11 +13447,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "sample_rate"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'}},'Xilinx'=>{'jta"
@@ -13471,7 +13471,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "shared_bram_upgrade_Shared_BRAM_we"
+	  Name			  "xps_library_Shared_BRAM_we"
 	  Ports			  [1, 1]
 	  Position		  [230, 179, 285, 201]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -13479,11 +13479,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{'A14'}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'}},'Xilinx'=>{'jtaghwcos"
 	  "im'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we"
@@ -13510,19 +13510,19 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "shared_bram_upgrade_Shared_BRAM_we"
+	  SrcBlock		  "xps_library_Shared_BRAM_we"
 	  SrcPort		  1
 	  DstBlock		  "mem"
 	  DstPort		  3
 	}
 	Line {
-	  SrcBlock		  "shared_bram_upgrade_Shared_BRAM_data_in"
+	  SrcBlock		  "xps_library_Shared_BRAM_data_in"
 	  SrcPort		  1
 	  DstBlock		  "mem"
 	  DstPort		  2
 	}
 	Line {
-	  SrcBlock		  "shared_bram_upgrade_Shared_BRAM_addr"
+	  SrcBlock		  "xps_library_Shared_BRAM_addr"
 	  SrcPort		  1
 	  DstBlock		  "mem"
 	  DstPort		  1
@@ -13530,19 +13530,19 @@ Library {
 	Line {
 	  SrcBlock		  "convert_din"
 	  SrcPort		  1
-	  DstBlock		  "shared_bram_upgrade_Shared_BRAM_data_in"
+	  DstBlock		  "xps_library_Shared_BRAM_data_in"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "convert_we"
 	  SrcPort		  1
-	  DstBlock		  "shared_bram_upgrade_Shared_BRAM_we"
+	  DstBlock		  "xps_library_Shared_BRAM_we"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "convert_addr"
 	  SrcPort		  1
-	  DstBlock		  "shared_bram_upgrade_Shared_BRAM_addr"
+	  DstBlock		  "xps_library_Shared_BRAM_addr"
 	  DstPort		  1
 	}
 	Line {
@@ -13558,7 +13558,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "shared_bram_upgrade_Shared_BRAM_data_out"
+	  SrcBlock		  "xps_library_Shared_BRAM_data_out"
 	  SrcPort		  1
 	  DstBlock		  "data_out"
 	  DstPort		  1
@@ -13572,7 +13572,7 @@ Library {
 	Line {
 	  SrcBlock		  "mem"
 	  SrcPort		  1
-	  DstBlock		  "shared_bram_upgrade_Shared_BRAM_data_out"
+	  DstBlock		  "xps_library_Shared_BRAM_data_out"
 	  DstPort		  1
 	}
       }
@@ -42437,11 +42437,11 @@ Library {
 	  quantization		  "Round  (unbiased: +/- Inf)"
 	  overflow		  "Saturate"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
