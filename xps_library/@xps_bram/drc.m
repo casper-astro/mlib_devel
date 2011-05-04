@@ -39,22 +39,17 @@ data_width = blk_obj.data_width;
 switch hw_sys
   case 'ROACH'
     if addr_width < 2
-      msg = 'Shared BRAM address width cannot be less than 2 on on ROACH boards';
+      msg = 'Shared BRAM address width cannot be less than 2 on ROACH boards';
 	    result = 1;
     end
-  case 'BEE2_ctrl'
-    if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
+    if addr_width < 3 && data_width <= 8
+      msg = 'Shared BRAM address width cannot be less than 3 when using a data width of 8 on ROACH boards';
 	    result = 1;
     end
-  case 'BEE2_usr'
+
+  case {'BEE2_ctrl', 'BEE2_usr', 'iBOB'}
     if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
-	    result = 1;
-    end
-  case 'iBOB'
-    if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
+      msg = 'Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards';
 	    result = 1;
     end
   otherwise
