@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri May  6 14:16:59 2011"
+  LastModifiedDate	  "Fri May  6 15:11:40 2011"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:5>"
+  ModelVersionFormat	  "1.%<AutoIncrement:6>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1017,6 +1017,7 @@ Library {
       Name		      "munge"
       Ports		      [1, 1]
       Position		      [270, 157, 310, 193]
+      BackgroundColor	      "[0.494000, 1.000000, 0.494000]"
       AttributesFormatString  "[0]\n0 bits"
       UserDataPersistent      on
       UserData		      "DataTag2"
