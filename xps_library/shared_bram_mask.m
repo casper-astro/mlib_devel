@@ -50,7 +50,6 @@ set_param([c_sys, '/mem/sim_data_in'], 'arith_type', gcb_arith_type);
 
 xsg_blk = [strtok(gcs, '/') '/ System Generator'];
 fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
-addr_width = eval(get_param(c_sys, 'addr_width'));
 data_width = eval(get_param(c_sys, 'data_width'));
 
 switch fpga_arch
