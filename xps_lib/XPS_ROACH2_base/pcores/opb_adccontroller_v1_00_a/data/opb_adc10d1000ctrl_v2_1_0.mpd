@@ -65,7 +65,7 @@ PARAMETER AUTOCONFIG_1  = 0, DT = INTEGER
 	PORT adc_syns_le_o        = "", DIR = O
 	PORT adc_syns_rst_o       = "", DIR = O
 	PORT adc_syns_errflag_i   = "", DIR = I
-	PORT adc0_dcm_reset       = "", DIR = O
+	PORT adc0_mmcm_reset       = "", DIR = O
         PORT adc0_psclk           = "", DIR = O
         PORT adc0_psen            = "", DIR = O
         PORT adc0_psincdec        = "", DIR = O

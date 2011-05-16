@@ -45,6 +45,7 @@ set_param([c_sys,'/mem/sim_data_in'],'arith_type',gcb_arith_type);
 
 xsg_blk = [strtok(gcs,'/') '/ System Generator'];
 fpga_arch = xlgetparam(xsg_blk,'xilinxfamily');
+fpga_arch
 
 switch fpga_arch
   case {'virtex6', 'Virtex6', 'virtex5', 'Virtex5'}

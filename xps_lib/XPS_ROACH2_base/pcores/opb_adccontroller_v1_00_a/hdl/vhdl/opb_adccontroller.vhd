@@ -72,7 +72,7 @@ entity opb_adccontroller is
       adc0_adc3wire_strobe : out std_logic := '0';
       adc0_modepin         : out std_logic := '0';
       adc0_ddrb            : out std_logic := '0';
-      adc0_dcm_reset       : out std_logic := '0';
+      adc0_mmcm_reset       : out std_logic := '0';
       adc0_psclk           : out std_logic := '0';
       adc0_psen            : out std_logic := '0';
       adc0_psincdec        : out std_logic := '0';
@@ -87,7 +87,7 @@ entity opb_adccontroller is
       adc1_adc3wire_strobe : out std_logic := '0';
       adc1_modepin         : out std_logic := '0';
       adc1_ddrb            : out std_logic := '0';
-      adc1_dcm_reset       : out std_logic := '0';
+      adc1_mmcm_reset       : out std_logic := '0';
       adc1_psclk           : out std_logic := '0';
       adc1_psen            : out std_logic := '0';
       adc1_psincdec        : out std_logic := '0';
@@ -250,7 +250,7 @@ architecture IMP of opb_adccontroller is
       config_data_i   : in  std_logic_vector(15 downto 0);
       config_addr_i   : in  std_logic_vector( 2 downto 0);
       ddrb_o          : out std_logic;
-      dcm_reset_o     : out std_logic;
+      mmcm_reset_o     : out std_logic;
       mode_o          : out std_logic;
       ctrl_clk_o      : out std_logic;
       ctrl_strb_o     : out std_logic;
@@ -470,7 +470,7 @@ begin
       config_addr_i    => adc0_3wire_addr ,
 
       ddrb_o           => adc0_ddrb,
-      dcm_reset_o      => adc0_dcm_reset,
+      mmcm_reset_o     => adc0_mmcm_reset,
       mode_o           => adc0_modepin,
       ctrl_clk_o       => adc0_adc3wire_clk,
       ctrl_strb_o      => adc0_adc3wire_strobe,
@@ -496,7 +496,7 @@ begin
       config_addr_i    => adc1_3wire_addr ,
 
       ddrb_o           => adc1_ddrb,
-      dcm_reset_o      => adc1_dcm_reset,
+      mmcm_reset_o     => adc1_mmcm_reset,
       mode_o           => adc1_modepin,
       ctrl_clk_o       => adc1_adc3wire_clk,
       ctrl_strb_o      => adc1_adc3wire_strobe,

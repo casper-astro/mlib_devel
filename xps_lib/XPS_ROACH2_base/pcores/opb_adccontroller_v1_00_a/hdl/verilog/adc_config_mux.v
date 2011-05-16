@@ -13,7 +13,7 @@ module adc_config_mux #(
     input   [2:0] config_addr_i,
 
     output ddrb_o,
-    output dcm_reset_o,
+    output mmcm_reset_o,
     output mode_o,
     output ctrl_clk_o,
     output ctrl_strb_o,
@@ -172,25 +172,25 @@ module adc_config_mux #(
 
   /* dcm reset extend */
 
-  reg [4:0] dcm_reset_extend;
+  reg [4:0] mmcm_reset_extend;
 
   reg ddrb_reg;
   //synthesis attribute IOB of dcm_reg is true
 
   always @(posedge clk) begin
     if (rst) begin
-      dcm_reset_extend <= 4'b0;
+      mmcm_reset_extend <= 4'b0;
       ddrb_reg <= 1'b0;
     end else begin
       ddrb_reg <= ddrb_pre;
       if (ddrb_pre) begin
-        dcm_reset_extend <= 5'b11111;
+        mmcm_reset_extend <= 5'b11111;
       end else begin
-        dcm_reset_extend <= dcm_reset_extend << 1;
+        mmcm_reset_extend <= mmcm_reset_extend << 1;
       end
     end
   end
   
   assign ddrb_o      = ddrb_reg;
-  assign dcm_reset_o = conf_state != CONF_DONE ? 1'b1 : dcm_reset_extend[4];
+  assign mmcm_reset_o = conf_state != CONF_DONE ? 1'b1 :mmcm_reset_extend[4];
 endmodule

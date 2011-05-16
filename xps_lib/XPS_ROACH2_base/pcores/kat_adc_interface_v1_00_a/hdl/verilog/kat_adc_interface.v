@@ -45,7 +45,7 @@ module kat_adc_interface #(
     output       user_data_valid,
     /* Internal control signals */
     // ADC CLK DCM Reset
-    input        dcm_reset,
+    input        mmcm_reset,
     // Reset for ADC
     input        ctrl_reset,
     // Clock to use for output data domain crossing 
@@ -60,7 +60,7 @@ module kat_adc_interface #(
     input        dcm_psclk,
     input        dcm_psen,
     input        dcm_psincdec,
-    output       dcm_psdone
+    output       mmcm_psdone
   );
 
   wire adc_clk, adc_clk90, adc_clk180, adc_clk270;
@@ -148,50 +148,75 @@ module kat_adc_interface #(
     .O  (adc_clk_buf)
   );
 
-  wire adc_clk_dcm, adc_clk90_dcm, adc_clk180_dcm, adc_clk270_dcm;
-  BUFG bufg_adc_clk[3:0](
-    .I  ({adc_clk_dcm, adc_clk90_dcm, adc_clk180_dcm, adc_clk270_dcm}),
-    .O  ({adc_clk, adc_clk90, adc_clk180, adc_clk270})
-  );
+  //wire adc_clk_dcm, adc_clk90_dcm, adc_clk180_dcm, adc_clk270_dcm;
+  //BUFG bufg_adc_clk[3:0](
+  //  .I  ({adc_clk_dcm, adc_clk90_dcm, adc_clk180_dcm, adc_clk270_dcm}),
+  //  .O  ({adc_clk, adc_clk90, adc_clk180, adc_clk270})
+  //);
 
+  wire clk_fb, clk_fb_mmcm, adc_clk_mmcm, adc_clk90_mmcm, adc_clk180_mmcm, adc_clk270_mmcm;
+  BUFG bufg_adc_clk [4:0](
+    .I ({clk_fb_mmcm, adc_clk_mmcm, adc_clk90_mmcm, adc_clk180_mmcm, adc_clk270_mmcm}),
+    .O ({clk_fb, adc_clk, adc_clk90, adc_clk180, adc_clk270})
+  );
   assign ctrl_clk_out    = adc_clk;
   assign ctrl_clk90_out  = adc_clk90;
   assign ctrl_clk180_out = adc_clk180;
   assign ctrl_clk270_out = adc_clk270;
 
-  DCM #(
-    .CLK_FEEDBACK          ("1X"),
-    .CLKDV_DIVIDE          (2.000000),
-    .CLKFX_DIVIDE          (1),
-    .CLKFX_MULTIPLY        (4),
-    .CLKIN_PERIOD          (3.906250),
-    .CLKOUT_PHASE_SHIFT    ("VARIABLE_CENTER"),
-    .DESKEW_ADJUST         ("SYSTEM_SYNCHRONOUS"),
-    .DFS_FREQUENCY_MODE    ("HIGH"),
-    .DLL_FREQUENCY_MODE    ("HIGH"),
-    .FACTORY_JF            (16'hC080),
-    .PHASE_SHIFT           (64), // 64 is a 90 degree offset
-    .STARTUP_WAIT          (1'b0)
-  ) dcm_inst (
-    .CLKFB                 (adc_clk),
-    .CLKIN                 (adc_clk_buf),
-    .DSSEN                 (0),
-    .PSCLK                 (dcm_psclk),
-    .PSEN                  (dcm_psen),
-    .PSINCDEC              (dcm_psincdec),
-    .RST                   (dcm_reset),
-    .CLKDV                 (),
-    .CLKFX                 (),
-    .CLKFX180              (),
-    .CLK0                  (adc_clk_dcm),
-    .CLK2X                 (),
-    .CLK2X180              (),
-    .CLK90                 (adc_clk90_dcm),
-    .CLK180                (adc_clk180_dcm),
-    .CLK270                (adc_clk270_dcm),
-    .LOCKED                (ctrl_dcm_locked),
-    .PSDONE                (dcm_psdone),
-    .STATUS                ()
+  MMCM_BASE #(
+    .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
+    .CLKFBOUT_MULT_F    (5), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+    .CLKFBOUT_PHASE     (0.0),
+    .CLKIN1_PERIOD      (4.4),
+    .CLKOUT0_DIVIDE_F   (5), // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKOUT0_DUTY_CYCLE (0.5),
+    .CLKOUT1_DUTY_CYCLE (0.5),
+    .CLKOUT2_DUTY_CYCLE (0.5),
+    .CLKOUT3_DUTY_CYCLE (0.5),
+    .CLKOUT4_DUTY_CYCLE (0.5),
+    .CLKOUT5_DUTY_CYCLE (0.5),
+    .CLKOUT6_DUTY_CYCLE (0.5),
+    .CLKOUT0_PHASE      (0.0),
+    .CLKOUT1_PHASE      (90),
+    .CLKOUT2_PHASE      (180),
+    .CLKOUT3_PHASE      (270),
+    .CLKOUT4_PHASE      (0.0),
+    .CLKOUT5_PHASE      (0.0),
+    .CLKOUT6_PHASE      (0.0),
+    .CLKOUT1_DIVIDE     (5), //THIS IS THE DIVISOR
+    .CLKOUT2_DIVIDE     (5),
+    .CLKOUT3_DIVIDE     (5),
+    .CLKOUT4_DIVIDE     (1),
+    .CLKOUT5_DIVIDE     (1),
+    .CLKOUT6_DIVIDE     (1),
+    .CLKOUT4_CASCADE    ("FALSE"),
+    .CLOCK_HOLD         ("FALSE"),
+    .DIVCLK_DIVIDE      (1), // Master division value (1-80)
+    .REF_JITTER1        (0.0),
+    .STARTUP_WAIT       ("FALSE")
+  ) MMCM_BASE_inst (
+    .CLKIN1   (adc_clk_buf),
+    .CLKFBIN  (clk_fb),
+    
+    .CLKFBOUT  (clk_fb_mmcm),
+    .CLKFBOUTB (),
+    
+    .CLKOUT0  (adc_clk_mmcm),
+    .CLKOUT0B (),
+    .CLKOUT1  (adc_clk90_mmcm),
+    .CLKOUT1B (),
+    .CLKOUT2  (adc_clk180_mmcm),
+    .CLKOUT2B (),
+    .CLKOUT3  (adc_clk270_mmcm),
+    .CLKOUT3B (),
+    .CLKOUT4  (),
+    .CLKOUT5  (),
+    .CLKOUT6  (),
+    .LOCKED   (mmcm_psdone),
+    
+    .PWRDWN   (1'b0),
+    .RST      (mmcm_reset)
   );
 
   /************* Data DDR Capture ************/
@@ -261,7 +286,7 @@ end else begin
 end endgenerate
   
   adc_async_fifo adc_async_fifo_inst(
-    .rst    (dcm_reset),
+    .rst    (mmcm_reset),
     .din    (fifo_data_in),
     .wr_clk (adc_clk),
     .wr_en  (1'b1),
@@ -273,7 +298,7 @@ end endgenerate
   );
 
   always @(posedge adc_clk) begin
-    if (dcm_reset) begin
+    if (mmcm_reset) begin
       fifo_rd_en <= 1'b0;
     end else begin
       fifo_rd_en <= !fifo_empty;

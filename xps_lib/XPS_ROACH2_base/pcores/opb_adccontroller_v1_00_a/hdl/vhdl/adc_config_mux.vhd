@@ -20,7 +20,7 @@ entity adc_config_mux is
     syns_done_o			: out std_logic;
 
     ddrb_o			: out std_logic;
-    dcm_reset_o			: out std_logic;
+    mmcm_reset_o			: out std_logic;
     ctrl_clk_o			: out std_logic;
     ctrl_strb_o			: out std_logic;
     ctrl_data_o			: out std_logic
@@ -54,7 +54,7 @@ architecture IMP of adc_config_mux is
   signal clear_wait		: std_logic_vector(9 downto 0);
   signal config_busy		: std_logic;
   
-  signal dcm_reset_extend	: std_logic_vector(4 downto 0);
+  signal mmcm_reset_extend	: std_logic_vector(4 downto 0);
   signal ddrb_reg		: std_logic;
   signal syns_done		: std_logic;
 
@@ -239,22 +239,22 @@ end process;
 cmd_reset_p : process(clk, rst)
 begin
   if rst = '1' then
-    dcm_reset_extend <= (others => '0');
+    mmcm_reset_extend <= (others => '0');
     ddrb_reg <= '0';
   elsif clk'event and clk = '1' then
     ddrb_reg <= ddrb_pre;
     if ddrb_pre = '1' then
-      dcm_reset_extend <= (others => '1');
+      mmcm_reset_extend <= (others => '1');
     else
-      dcm_reset_extend(4 downto 1) <= dcm_reset_extend(3 downto 0);
-      dcm_reset_extend(0) <= '0';
+      mmcm_reset_extend(4 downto 1) <= mmcm_reset_extend(3 downto 0);
+      mmcm_reset_extend(0) <= '0';
     end if;
   end if;
 end process;
       
 ddrb_o      <= ddrb_reg;
-dcm_reset_o <= '1' when (conf_state /= CONF_DONE) else
-               dcm_reset_extend(4);
+mmcm_reset_o <= '1' when (conf_state /= CONF_DONE) else
+               mmcm_reset_extend(4);
 
 syns_done_o <= syns_done;
 

@@ -39,7 +39,15 @@ switch hw_sys
         %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 1ns;\n'];
             % end case 'adc1'
         end % switch adc_str
-
+    case 'ROACH2'
+        switch adc_str
+            case 'adc0'
+        %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 1ns;\n'];
+            % end case 'adc0'
+            case 'adc1'
+        %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_sync"       MAXDELAY           = 1ns;\n'];
+            % end case 'adc1'
+        end % switch adc_str
     case 'iBOB'
         switch adc_str
             case 'adc0'
