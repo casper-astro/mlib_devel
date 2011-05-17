@@ -82,7 +82,7 @@ mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 adder_folding = get_var('adder_folding', 'defaults', defaults, varargin{:});
 adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 
-if strcmp(specify_mult, 'on') && len(mult_spec) ~= TotalTaps
+if strcmp(specify_mult, 'on') && length(mult_spec) ~= TotalTaps
     clog('Multiplier specification vector not the same as the number of taps','error');
     error('Multiplier specification vector not the same as the number of taps');
     return
