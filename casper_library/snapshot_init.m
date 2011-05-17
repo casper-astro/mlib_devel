@@ -41,7 +41,7 @@ clog('entering snapshot_init', 'trace');
 check_mask_type(blk, 'snapshot');
 munge_block(blk, varargin{:});
 
-defaults = {'nsamples', 9, 'data_width', 32, 'use_dsp48', 'on' ...
+defaults = {'nsamples', 10, 'data_width', 32, 'use_dsp48', 'on' ...
   'circap', 'on', 'offset', 'on', 'value', 'off'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('snapshot_init: post same_state', 'trace');

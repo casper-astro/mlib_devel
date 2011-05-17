@@ -71,10 +71,18 @@ function katadc_init(blk, varargin)
 
   %%%% Rename generic ports to specific KATADC names %%%%%
   for input = 0:1,
-    if input == 0, 
-      label = 'i';
-    else, 
-      label = 'q';
+    if strcmp(adc_interleave, 'off'), 
+        if input == 0, 
+            label = 'i';
+        else, 
+            label = 'q';
+        end
+    else,
+        if input == 0, 
+            label = 'q';
+        else, 
+            label = 'i';
+        end
     end
     for offset = 0:3,
       name = clear_name([blk, '_user_data', num2str(input*4+offset)]);

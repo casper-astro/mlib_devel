@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.28"
+    ComputedModelVersion    "1.31"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -24,9 +24,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Mar 17 11:36:35 2011"
+  LastModifiedDate	  "Tue May 17 17:27:27 2011"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:28>"
+  ModelVersionFormat	  "1.%<AutoIncrement:31>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -659,7 +659,7 @@ Model {
   }
   System {
     Name		    "dec_fir_dbl_col_test"
-    Location		    [283, 79, 1266, 830]
+    Location		    [162, 181, 1145, 932]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1126,7 +1126,7 @@ Model {
       Ports		      [9]
       Position		      [810, 385, 875, 575]
       Floating		      off
-      Location		      [185, 170, 1865, 1161]
+      Location		      [284, 152, 1964, 1143]
       Open		      off
       NumInputPorts	      "9"
       ZoomMode		      "xonly"
@@ -1223,7 +1223,7 @@ Model {
       BlockType		      SubSystem
       Name		      "dec_fir"
       Ports		      [5, 2]
-      Position		      [470, 196, 560, 314]
+      Position		      [470, 187, 540, 323]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       AttributesFormatString  "16 taps\n10_9 r/i"
       AncestorBlock	      "casper_library_downconverter/dec_fir"
@@ -1241,33 +1241,33 @@ Model {
       "e sample.  If coefficients are symmetric, will automatically fold before multiplying."
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Dec_fir'')')"
       MaskPromptString	      "Number of Parallel Streams|Coefficients|Bit Width Out|Quantization Behavior|Add Latency|"
-      "Mult Latency|Coefficient bit width|Coefficient binary point|Implement first stage of adder trees after multiplic"
-      "ation as behavioural HDL"
+      "Mult Latency|Convert latency|Coefficient bit width|Coefficient binary point|Absorb adders into DSP slices|Adder "
+      "implementation"
       MaskStyleString	      "edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),"
-      "edit,edit,edit,edit,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "||||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,"
-      MaskVariables	      "n_inputs=@1;coeff=@2;n_bits=@3;quantization=&4;add_latency=@5;mult_latency=@6;coeff_bit_wid"
-      "th=@7;coeff_bin_pt=@8;adder_tree_hdl=&9;"
+      "edit,edit,edit,edit,edit,checkbox,popup(Behavioral|Fabric|DSP48)"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,"
+      MaskVariables	      "n_inputs=@1;coeff=@2;n_bits=@3;quantization=&4;add_latency=@5;mult_latency=@6;conv_latency="
+      "@7;coeff_bit_width=@8;coeff_bin_pt=@9;absorb_adders=&10;adder_imp=&11;"
       MaskInitialization      "dec_fir_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'coeff', coeff, ...\n    'n_b"
       "its', n_bits, ...\n    'quantization', quantization, ...\n    'add_latency', add_latency, ...\n    'mult_latency"
-      "', mult_latency, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    'coeff_bin_pt', coeff_bin_pt, ...\n    'a"
-      "dder_tree_hdl', adder_tree_hdl);"
+      "', mult_latency, ...\n    'conv_latency', conv_latency, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    'c"
+      "oeff_bin_pt', coeff_bin_pt, ...\n    'absorb_adders', absorb_adders, ...\n    'adder_imp', adder_imp);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "2|getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'coeff')|10|Round  (unbi"
-      "ased: Even Values)|2|3|18|17|on"
-      MaskTabNameString	      ",,,,,,,,"
+      "ased: Even Values)|2|3|2|18|17|off|DSP48"
+      MaskTabNameString	      ",,,,,,,,,,"
       System {
 	Name			"dec_fir"
-	Location		[89, 107, 1073, 761]
+	Location		[236, 283, 1743, 952]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1335,7 +1335,7 @@ Model {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
-	  block_version		  "10.1.3"
+	  block_version		  "11.4"
 	  sg_icon_stat		  "30,16,1,1,white,blue,0,5129c5aa,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.366667 0.266667 0.4 0.266667 0.366667 0.5 0.533333 0.566667 0.733333 0.6 0.5 0.433333 0.566667 0.433333 0.5 0"
@@ -1365,7 +1365,7 @@ Model {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
-	  block_version		  "10.1.3"
+	  block_version		  "11.4"
 	  sg_icon_stat		  "30,16,1,1,white,blue,0,5129c5aa,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.366667 0.266667 0.4 0.266667 0.366667 0.5 0.533333 0.566667 0.733333 0.6 0.5 0.433333 0.566667 0.433333 0.5 0"
@@ -1391,7 +1391,7 @@ Model {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "delay"
-	  block_version		  "10.1.3"
+	  block_version		  "11.4"
 	  sg_icon_stat		  "30,30,1,1,white,blue,0,c2fef566,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0.66"
@@ -1419,26 +1419,26 @@ Model {
 	  MaskType		  "fir_dbl_col"
 	  MaskHelp		  "eval('xlWeb(''http://casper.berkeley.edu/wiki/Fir_dbl_col'')')"
 	  MaskPromptString	  "Inputs|Coefficients|Add latency|Mult Latency|Coefficient bit width|Coefficient binary point|Imp"
-	  "lement first stage of adder trees on output as behavioural HDL"
-	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox"
-	  MaskTunableValueString  "on,on,on,on,on,on,on"
-	  MaskCallbackString	  "||||||"
-	  MaskEnableString	  "on,on,on,on,on,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on,on,on"
-	  MaskVarAliasString	  ",,,,,,"
-	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;adder_tree"
-	  "_hdl=&7;"
+	  "lement first stage of adder trees on output as behavioural HDL|Adder implementation"
+	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox,popup(Behavioral|Fabric|DSP48)"
+	  MaskTunableValueString  "on,on,on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||||"
+	  MaskEnableString	  "on,on,on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,,,"
+	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;first_stag"
+	  "e_hdl=&7;adder_imp=&8;"
 	  MaskInitialization	  "fir_dbl_col_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'coeff', coeff, ...\n    'mult_"
 	  "latency', mult_latency, ...\n    'add_latency', add_latency, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    "
-	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'adder_tree_hdl', adder_tree_hdl);"
+	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'first_stage_hdl', first_stage_hdl, ...\n    'adder_imp', adder_imp);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "2|[0.20000000000000001110223024625157     0.10000000000000000555111512312578]|2|3|18|17|on"
-	  MaskTabNameString	  ",,,,,,"
+	  MaskValueString	  "2|[0.2         0.1]|2|3|18|17|off|DSP48"
+	  MaskTabNameString	  ",,,,,,,"
 	  System {
 	    Name		    "fir_dbl_col1"
 	    Location		    [883, 252, 1643, 914]
@@ -1529,32 +1529,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree1"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -1606,16 +1606,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -1641,9 +1641,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -1717,32 +1717,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree2"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -1794,16 +1794,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -1829,9 +1829,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -1909,7 +1909,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -1942,7 +1942,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -2455,26 +2455,26 @@ Model {
 	  MaskType		  "fir_dbl_col"
 	  MaskHelp		  "eval('xlWeb(''http://casper.berkeley.edu/wiki/Fir_dbl_col'')')"
 	  MaskPromptString	  "Inputs|Coefficients|Add latency|Mult Latency|Coefficient bit width|Coefficient binary point|Imp"
-	  "lement first stage of adder trees on output as behavioural HDL"
-	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox"
-	  MaskTunableValueString  "on,on,on,on,on,on,on"
-	  MaskCallbackString	  "||||||"
-	  MaskEnableString	  "on,on,on,on,on,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on,on,on"
-	  MaskVarAliasString	  ",,,,,,"
-	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;adder_tree"
-	  "_hdl=&7;"
+	  "lement first stage of adder trees on output as behavioural HDL|Adder implementation"
+	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox,popup(Behavioral|Fabric|DSP48)"
+	  MaskTunableValueString  "on,on,on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||||"
+	  MaskEnableString	  "on,on,on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,,,"
+	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;first_stag"
+	  "e_hdl=&7;adder_imp=&8;"
 	  MaskInitialization	  "fir_dbl_col_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'coeff', coeff, ...\n    'mult_"
 	  "latency', mult_latency, ...\n    'add_latency', add_latency, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    "
-	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'adder_tree_hdl', adder_tree_hdl);"
+	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'first_stage_hdl', first_stage_hdl, ...\n    'adder_imp', adder_imp);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "2|[0.40000000000000002220446049250313     0.29999999999999998889776975374843]|2|3|18|17|on"
-	  MaskTabNameString	  ",,,,,,"
+	  MaskValueString	  "2|[0.4         0.3]|2|3|18|17|off|DSP48"
+	  MaskTabNameString	  ",,,,,,,"
 	  System {
 	    Name		    "fir_dbl_col2"
 	    Location		    [883, 252, 1643, 914]
@@ -2565,32 +2565,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree1"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -2642,16 +2642,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -2677,9 +2677,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -2753,32 +2753,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree2"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -2830,16 +2830,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -2865,9 +2865,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -2945,7 +2945,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -2978,7 +2978,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -3491,26 +3491,26 @@ Model {
 	  MaskType		  "fir_dbl_col"
 	  MaskHelp		  "eval('xlWeb(''http://casper.berkeley.edu/wiki/Fir_dbl_col'')')"
 	  MaskPromptString	  "Inputs|Coefficients|Add latency|Mult Latency|Coefficient bit width|Coefficient binary point|Imp"
-	  "lement first stage of adder trees on output as behavioural HDL"
-	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox"
-	  MaskTunableValueString  "on,on,on,on,on,on,on"
-	  MaskCallbackString	  "||||||"
-	  MaskEnableString	  "on,on,on,on,on,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on,on,on"
-	  MaskVarAliasString	  ",,,,,,"
-	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;adder_tree"
-	  "_hdl=&7;"
+	  "lement first stage of adder trees on output as behavioural HDL|Adder implementation"
+	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox,popup(Behavioral|Fabric|DSP48)"
+	  MaskTunableValueString  "on,on,on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||||"
+	  MaskEnableString	  "on,on,on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,,,"
+	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;first_stag"
+	  "e_hdl=&7;adder_imp=&8;"
 	  MaskInitialization	  "fir_dbl_col_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'coeff', coeff, ...\n    'mult_"
 	  "latency', mult_latency, ...\n    'add_latency', add_latency, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    "
-	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'adder_tree_hdl', adder_tree_hdl);"
+	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'first_stage_hdl', first_stage_hdl, ...\n    'adder_imp', adder_imp);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "2|[0.59999999999999997779553950749687                                    0.5]|2|3|18|17|on"
-	  MaskTabNameString	  ",,,,,,"
+	  MaskValueString	  "2|[0.6         0.5]|2|3|18|17|off|DSP48"
+	  MaskTabNameString	  ",,,,,,,"
 	  System {
 	    Name		    "fir_dbl_col3"
 	    Location		    [883, 252, 1643, 914]
@@ -3601,32 +3601,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree1"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3678,16 +3678,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -3713,9 +3713,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -3789,32 +3789,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree2"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3866,16 +3866,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -3901,9 +3901,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -3981,7 +3981,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -4014,7 +4014,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -4527,26 +4527,26 @@ Model {
 	  MaskType		  "fir_dbl_col"
 	  MaskHelp		  "eval('xlWeb(''http://casper.berkeley.edu/wiki/Fir_dbl_col'')')"
 	  MaskPromptString	  "Inputs|Coefficients|Add latency|Mult Latency|Coefficient bit width|Coefficient binary point|Imp"
-	  "lement first stage of adder trees on output as behavioural HDL"
-	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox"
-	  MaskTunableValueString  "on,on,on,on,on,on,on"
-	  MaskCallbackString	  "||||||"
-	  MaskEnableString	  "on,on,on,on,on,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on,on,on"
-	  MaskVarAliasString	  ",,,,,,"
-	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;adder_tree"
-	  "_hdl=&7;"
+	  "lement first stage of adder trees on output as behavioural HDL|Adder implementation"
+	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,checkbox,popup(Behavioral|Fabric|DSP48)"
+	  MaskTunableValueString  "on,on,on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||||"
+	  MaskEnableString	  "on,on,on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,,,"
+	  MaskVariables		  "n_inputs=@1;coeff=@2;add_latency=@3;mult_latency=@4;coeff_bit_width=@5;coeff_bin_pt=@6;first_stag"
+	  "e_hdl=&7;adder_imp=&8;"
 	  MaskInitialization	  "fir_dbl_col_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'coeff', coeff, ...\n    'mult_"
 	  "latency', mult_latency, ...\n    'add_latency', add_latency, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    "
-	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'adder_tree_hdl', adder_tree_hdl);"
+	  "'coeff_bin_pt', coeff_bin_pt,  ...\n    'first_stage_hdl', first_stage_hdl, ...\n    'adder_imp', adder_imp);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "2|[0.80000000000000004440892098500626     0.69999999999999995559107901499374]|2|3|18|17|on"
-	  MaskTabNameString	  ",,,,,,"
+	  MaskValueString	  "2|[0.8         0.7]|2|3|18|17|off|DSP48"
+	  MaskTabNameString	  ",,,,,,,"
 	  System {
 	    Name		    "fir_dbl_col4"
 	    Location		    [883, 252, 1643, 914]
@@ -4637,32 +4637,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree1"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4714,16 +4714,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -4749,9 +4749,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -4825,32 +4825,32 @@ Model {
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
 	      "ts to the block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)."
-	      "\nUse behavioural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP block"
-	      "s if multipliers precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages "
-	      "to be implemented in behavioural HDL (may improve timing).  "
+	      ".\nAdder implementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stag"
+	      "e of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virte"
+	      "x 5). Overrides Adder implementation\n"
 	      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	      MaskPromptString	      "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavior"
-	      "al HDL for all adders"
-	      MaskStyleString	      "edit,edit,checkbox,checkbox"
+	      MaskPromptString	      "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage o"
+	      "f adders"
+	      MaskStyleString	      "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	      MaskTunableValueString  "on,on,on,on"
 	      MaskCallbackString      "|||"
 	      MaskEnableString	      "on,on,on,on"
 	      MaskVisibilityString    "on,on,on,on"
 	      MaskToolTipString	      "on,on,on,on"
 	      MaskVarAliasString      ",,,"
-	      MaskVariables	      "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
+	      MaskVariables	      "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
 	      MaskInitialization      "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n"
-	      "    'first_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	      "    'adder_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	      MaskSelfModifiable      on
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "2|2|on|off"
+	      MaskValueString	      "2|2|DSP48|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree2"
-		Location		[321, 293, 1230, 963]
+		Location		[745, 413, 1654, 1083]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4902,16 +4902,16 @@ Model {
 		  quantization		  "Truncate"
 		  overflow		  "Wrap"
 		  dbl_ovrd		  off
-		  use_behavioral_HDL	  on
-		  hw_selection		  "Fabric"
+		  use_behavioral_HDL	  off
+		  hw_selection		  "DSP48"
 		  pipelined		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  use_rpm		  "on"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "20,20,348,344"
+		  sggui_pos		  "22,98,419,344"
 		  block_type		  "addsub"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "40,60,2,1,white,blue,0,4922a24f,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
@@ -4937,9 +4937,9 @@ Model {
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
+		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
-		  block_version		  "10.1.3"
+		  block_version		  "11.4"
 		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
@@ -5017,7 +5017,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -5050,7 +5050,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "constant"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,10,0,1,white,blue,0,1c72b5be,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.433333 0.366667 0.433333 0.366667 0.433333 0.533333 0.566667 0.6 0.7 0.633333 0.566667 0.5 0.5666"
@@ -5548,7 +5548,7 @@ Model {
 	  BlockType		  SubSystem
 	  Name			  "imag_sum"
 	  Ports			  [5, 2]
-	  Position		  [1200, 450, 1260, 550]
+	  Position		  [1200, 440, 1260, 480]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
 	  AttributesFormatString  "latency 4"
 	  AncestorBlock		  "casper_library_misc/adder_tree"
@@ -5563,33 +5563,32 @@ Model {
 	  MaskHideContents	  off
 	  MaskType		  "adder_tree"
 	  MaskDescription	  "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inputs to th"
-	  "e block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing).\nUse behavi"
-	  "oural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers"
-	  " precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages to be implemented in"
-	  " behavioural HDL (may improve timing).  "
+	  "e block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)..\nAdder imp"
+	  "lementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stage of adders: Cau"
+	  "ses the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virtex 5). Overrides Adde"
+	  "r implementation\n"
 	  MaskHelp		  "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	  MaskPromptString	  "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavioral HDL f"
-	  "or all adders"
-	  MaskStyleString	  "edit,edit,checkbox,checkbox"
+	  MaskPromptString	  "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage of adders"
+	  MaskStyleString	  "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	  MaskTunableValueString  "on,on,on,on"
 	  MaskCallbackString	  "|||"
 	  MaskEnableString	  "on,on,on,on"
 	  MaskVisibilityString	  "on,on,on,on"
 	  MaskToolTipString	  "on,on,on,on"
 	  MaskVarAliasString	  ",,,"
-	  MaskVariables		  "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
-	  MaskInitialization	  "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n    'fi"
-	  "rst_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	  MaskVariables		  "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
+	  MaskInitialization	  "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n    'ad"
+	  "der_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "4|2|off|off"
+	  MaskValueString	  "4|2|DSP48|off"
 	  MaskTabNameString	  ",,,"
 	  System {
 	    Name		    "imag_sum"
-	    Location		    [321, 293, 1230, 963]
+	    Location		    [745, 413, 1654, 1083]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -5656,7 +5655,7 @@ Model {
 	      overflow		      "Wrap"
 	      dbl_ovrd		      off
 	      use_behavioral_HDL      off
-	      hw_selection	      "Fabric"
+	      hw_selection	      "DSP48"
 	      pipelined		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
@@ -5664,7 +5663,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "addsub"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,4922a24f,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
@@ -5695,7 +5694,7 @@ Model {
 	      overflow		      "Wrap"
 	      dbl_ovrd		      off
 	      use_behavioral_HDL      off
-	      hw_selection	      "Fabric"
+	      hw_selection	      "DSP48"
 	      pipelined		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
@@ -5703,7 +5702,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "addsub"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,4922a24f,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
@@ -5734,7 +5733,7 @@ Model {
 	      overflow		      "Wrap"
 	      dbl_ovrd		      off
 	      use_behavioral_HDL      off
-	      hw_selection	      "Fabric"
+	      hw_selection	      "DSP48"
 	      pipelined		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
@@ -5742,7 +5741,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "addsub"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,4922a24f,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
@@ -5769,9 +5768,9 @@ Model {
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
+	      sggui_pos		      "21,71,419,315"
 	      block_type	      "delay"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,30,1,1,white,blue,0,d390c2d8,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0"
@@ -5853,7 +5852,7 @@ Model {
 	  BlockType		  SubSystem
 	  Name			  "real_sum"
 	  Ports			  [5, 2]
-	  Position		  [1200, 250, 1260, 350]
+	  Position		  [1200, 300, 1260, 340]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
 	  AttributesFormatString  "latency 4"
 	  AncestorBlock		  "casper_library_misc/adder_tree"
@@ -5868,33 +5867,32 @@ Model {
 	  MaskHideContents	  off
 	  MaskType		  "adder_tree"
 	  MaskDescription	  "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inputs to th"
-	  "e block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing).\nUse behavi"
-	  "oural HDL for first stage of adders: Causes the first stage of adders to be absorbed into DSP blocks if multipliers"
-	  " precede them (Virtex 5).\nUse behavioural HDL for all adders: Causes all adders in all stages to be implemented in"
-	  " behavioural HDL (may improve timing).  "
+	  "e block to be summed\nAdd latency: The number of clock cycles to perform one addition (affects timing)..\nAdder imp"
+	  "lementation: choice of fabric or DSP48E core, or behavioral HDL\nUse behavioural HDL for first stage of adders: Cau"
+	  "ses the first stage of adders to be absorbed into DSP blocks if multipliers precede them (Virtex 5). Overrides Adde"
+	  "r implementation\n"
 	  MaskHelp		  "eval('xlWeb(''http://casper.berkeley.edu/wiki/Adder_tree'')')"
-	  MaskPromptString	  "Number of Inputs|Add Latency|Use behavioural HDL for first stage of adders|Use behavioral HDL f"
-	  "or all adders"
-	  MaskStyleString	  "edit,edit,checkbox,checkbox"
+	  MaskPromptString	  "Number of Inputs|Add Latency|Adder implementation|Use behavioural HDL for first stage of adders"
+	  MaskStyleString	  "edit,edit,popup(Behavioral|Fabric|DSP48),checkbox"
 	  MaskTunableValueString  "on,on,on,on"
 	  MaskCallbackString	  "|||"
 	  MaskEnableString	  "on,on,on,on"
 	  MaskVisibilityString	  "on,on,on,on"
 	  MaskToolTipString	  "on,on,on,on"
 	  MaskVarAliasString	  ",,,"
-	  MaskVariables		  "n_inputs=@1;latency=@2;first_stage_hdl=&3;behavioral=&4;"
-	  MaskInitialization	  "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n    'fi"
-	  "rst_stage_hdl', first_stage_hdl, ...\n    'behavioral', behavioral);"
+	  MaskVariables		  "n_inputs=@1;latency=@2;adder_imp=&3;first_stage_hdl=&4;"
+	  MaskInitialization	  "adder_tree_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'latency', latency, ...\n    'ad"
+	  "der_imp', adder_imp, ...\n    'first_stage_hdl', first_stage_hdl);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "4|2|off|off"
+	  MaskValueString	  "4|2|DSP48|off"
 	  MaskTabNameString	  ",,,"
 	  System {
 	    Name		    "real_sum"
-	    Location		    [321, 296, 1220, 963]
+	    Location		    [745, 413, 1654, 1083]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -5961,7 +5959,7 @@ Model {
 	      overflow		      "Wrap"
 	      dbl_ovrd		      off
 	      use_behavioral_HDL      off
-	      hw_selection	      "Fabric"
+	      hw_selection	      "DSP48"
 	      pipelined		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
@@ -5969,7 +5967,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "addsub"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,4922a24f,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
@@ -6000,7 +5998,7 @@ Model {
 	      overflow		      "Wrap"
 	      dbl_ovrd		      off
 	      use_behavioral_HDL      off
-	      hw_selection	      "Fabric"
+	      hw_selection	      "DSP48"
 	      pipelined		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
@@ -6008,7 +6006,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "addsub"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,4922a24f,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
@@ -6039,7 +6037,7 @@ Model {
 	      overflow		      "Wrap"
 	      dbl_ovrd		      off
 	      use_behavioral_HDL      off
-	      hw_selection	      "Fabric"
+	      hw_selection	      "DSP48"
 	      pipelined		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
@@ -6047,7 +6045,7 @@ Model {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "addsub"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,4922a24f,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
@@ -6074,9 +6072,9 @@ Model {
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
+	      sggui_pos		      "21,71,419,315"
 	      block_type	      "delay"
-	      block_version	      "10.1.3"
+	      block_version	      "11.4"
 	      sg_icon_stat	      "30,30,1,1,white,blue,0,d390c2d8,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0"
@@ -6229,7 +6227,7 @@ Model {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "shift"
-	  block_version		  "10.1.3"
+	  block_version		  "11.4"
 	  sg_icon_stat		  "30,16,1,1,white,blue,0,2518b6df,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.366667 0.266667 0.4 0.266667 0.366667 0.5 0.533333 0.566667 0.733333 0.6 0.5 0.433333 0.566667 0.433333 0.5 0"
@@ -6262,7 +6260,7 @@ Model {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "shift"
-	  block_version		  "10.1.3"
+	  block_version		  "11.4"
 	  sg_icon_stat		  "30,16,1,1,white,blue,0,2518b6df,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.366667 0.266667 0.4 0.266667 0.366667 0.5 0.533333 0.566667 0.733333 0.6 0.5 0.433333 0.566667 0.433333 0.5 0"
@@ -6637,13 +6635,13 @@ Model {
       Branch {
 	Points			[55, 0]
 	Branch {
-	  DstBlock		  "dec_fir"
-	  DstPort		  2
-	}
-	Branch {
 	  Points		  [0, 190]
 	  DstBlock		  "Gateway Out3"
 	  DstPort		  1
+	}
+	Branch {
+	  DstBlock		  "dec_fir"
+	  DstPort		  2
 	}
       }
     }
@@ -6702,7 +6700,7 @@ Model {
     Line {
       SrcBlock		      "dec_fir"
       SrcPort		      2
-      Points		      [0, -35]
+      Points		      [0, -40]
       DstBlock		      "c_to_ri"
       DstPort		      1
     }
@@ -6748,7 +6746,7 @@ Model {
     Line {
       SrcBlock		      "dec_fir"
       SrcPort		      1
-      Points		      [0, -15]
+      Points		      [0, -10]
       DstBlock		      "Gateway Out"
       DstPort		      1
     }
@@ -6789,13 +6787,13 @@ Model {
       SrcPort		      1
       Points		      [10, 0]
       Branch {
-	DstBlock		"dec_fir"
-	DstPort			4
-      }
-      Branch {
 	Points			[0, 25]
 	DstBlock		"dec_fir"
 	DstPort			5
+      }
+      Branch {
+	DstBlock		"dec_fir"
+	DstPort			4
       }
     }
   }
@@ -6809,10 +6807,10 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag16
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ![V- ,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !Y%.0 .    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6820,16 +6818,16 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "           00 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@    @    $          4    (     0    ,    "
-    "!         !   P!O9F8 "
+    "           00 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag15
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ![V- ,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !Y%.0 .    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6837,16 +6835,16 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "           00 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@    @    $          4    (     0    ,    "
-    "!         !   P!O9F8 "
+    "           00 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag14
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6854,16 +6852,16 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag13
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6871,33 +6869,43 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag12
-    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $&I6 4.    N ,   "
-    "8    (     @         %    \"     $    !     0         %  0 $     $   \"     9&5F875L=',          &Y?:6YP=71S      "
-    "    !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &%D"
-    "9&5R7W1R965?:&1L   .    . $   8    (     0         %    \"     $    $     0         .    0     8    (    !        "
-    "  %    \"     $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P "
-    "  !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X "
-    "   X    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !@        "
-    " %    \"     $    \"     0         )    $    )J9F9F9F>D_9F9F9F9FYC\\.    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "             0 X    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"            #% #@   #     &    \"     0         !0    @ "
-    "   !     @    $         $  \" &]N   "
+    Data		    "  %)30     .    L <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"HYJ ,.    ( <  "
+    " 8    (     @         %    \"     $    !     0         %  0 $     $   \"0    9&5F875L=',          &Y?:6YP=71S     "
+    "     !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &9"
+    "I<G-T7W-T86=E7VAD; !A9&1E<E]I;7          #@   % $   &    \"     $         !0    @    !    $     $         #@   #@ "
+    "   &    \"     0         !0    @    !    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            \\#\\.    .     8    (    !          %    \"     $    %     0     "
+    "    0    !0   &-O969F    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @   \":F9F9F9FY/P"
+    "X   !     !@    @    $          4    (     0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @ "
+    "   &          4    (     0    $    !          D    (             $ .    0     8    (    !          %    \"     $  "
+    "  ,     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0        "
+    " )    \"             A #@   $     &    \"     0         !0    @    !    #P    $         $     \\   !C;V5F9E]B:71?="
+    "VED=&@ #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            Y0 X   !     !@    @  "
+    "  $          4    (     0    P    !         !     ,    8V]E9F9?8FEN7W!T      X    X    !@    @    &          4    "
+    "(     0    $    !          D    (            .$ .    0     8    (    !          %    \"     $    /     0         0"
+    "    #P   &9I<G-T7W-T86=E7VAD;  .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !  "
+    "   !@    @    $          4    (     0    D    !         !     )    861D97)?:6UP          X    X    !@    @    $   "
+    "       4    (     0    8    !         !     &    1F%B<FEC   .    .     8    (    !@         %    \"     $    !    "
+    " 0         )    \"             ! #@   $     &    \"     8         !0    @    !     @    $         \"0   !    \":F9"
+    "F9F9GI/V9F9F9F9N8_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X  "
+    "  !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    "
+    "\"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $        "
+    " \"0    @            Q0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    "
+    "\"     0         !0    @    !    !0    $         $     4   !$4U T.     "
   }
   DataRecord {
     Tag			    DataTag11
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6905,16 +6913,16 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag10
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6922,33 +6930,43 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag9
-    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +98O (.    N ,   "
-    "8    (     @         %    \"     $    !     0         %  0 $     $   \"     9&5F875L=',          &Y?:6YP=71S      "
-    "    !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &%D"
-    "9&5R7W1R965?:&1L   .    . $   8    (     0         %    \"     $    $     0         .    0     8    (    !        "
-    "  %    \"     $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P "
-    "  !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X "
-    "   X    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !@        "
-    " %    \"     $    \"     0         )    $    #,S,S,S,^,_        X#\\.    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "             0 X    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"            #% #@   #     &    \"     0         !0    @ "
-    "   !     @    $         $  \" &]N   "
+    Data		    "  %)30     .    L <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ )]>< <.    ( <   "
+    "8    (     @         %    \"     $    !     0         %  0 $     $   \"0    9&5F875L=',          &Y?:6YP=71S      "
+    "    !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &9I"
+    "<G-T7W-T86=E7VAD; !A9&1E<E]I;7          #@   % $   &    \"     $         !0    @    !    $     $         #@   #@  "
+    "  &    \"     0         !0    @    !    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4  "
+    "  (     0    $    !          D    (            \\#\\.    .     8    (    !          %    \"     $    %     0      "
+    "   0    !0   &-O969F    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @   \":F9F9F9FY/PX"
+    "   !     !@    @    $          4    (     0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @  "
+    "  &          4    (     0    $    !          D    (             $ .    0     8    (    !          %    \"     $   "
+    " ,     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         "
+    ")    \"             A #@   $     &    \"     0         !0    @    !    #P    $         $     \\   !C;V5F9E]B:71?=V"
+    "ED=&@ #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            Y0 X   !     !@    @   "
+    " $          4    (     0    P    !         !     ,    8V]E9F9?8FEN7W!T      X    X    !@    @    &          4    ("
+    "     0    $    !          D    (            .$ .    0     8    (    !          %    \"     $    /     0         0 "
+    "   #P   &9I<G-T7W-T86=E7VAD;  .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !   "
+    "  !@    @    $          4    (     0    D    !         !     )    861D97)?:6UP          X    X    !@    @    $    "
+    "      4    (     0    8    !         !     &    1F%B<FEC   .    .     8    (    !@         %    \"     $    !     "
+    "0         )    \"             ! #@   $     &    \"     8         !0    @    !     @    $         \"0   !     S,S,S"
+    ",S/C/P       . _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    "
+    "!@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \""
+    "     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $         \""
+    "0    @            Q0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    \" "
+    "    0         !0    @    !    !0    $         $     4   !$4U T.     "
   }
   DataRecord {
     Tag			    DataTag8
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6956,16 +6974,16 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag7
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -6973,33 +6991,43 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag6
-    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .#*808.    N ,   "
-    "8    (     @         %    \"     $    !     0         %  0 $     $   \"     9&5F875L=',          &Y?:6YP=71S      "
-    "    !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &%D"
-    "9&5R7W1R965?:&1L   .    . $   8    (     0         %    \"     $    $     0         .    0     8    (    !        "
-    "  %    \"     $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P "
-    "  !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X "
-    "   X    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !@        "
-    " %    \"     $    \"     0         )    $    )J9F9F9F=D_,S,S,S,STS\\.    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "             0 X    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"            #% #@   #     &    \"     0         !0    @ "
-    "   !     @    $         $  \" &]N   "
+    Data		    "  %)30     .    L <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,D\\T $.    ( <  "
+    " 8    (     @         %    \"     $    !     0         %  0 $     $   \"0    9&5F875L=',          &Y?:6YP=71S     "
+    "     !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &9"
+    "I<G-T7W-T86=E7VAD; !A9&1E<E]I;7          #@   % $   &    \"     $         !0    @    !    $     $         #@   #@ "
+    "   &    \"     0         !0    @    !    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            \\#\\.    .     8    (    !          %    \"     $    %     0     "
+    "    0    !0   &-O969F    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @   \":F9F9F9FY/P"
+    "X   !     !@    @    $          4    (     0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @ "
+    "   &          4    (     0    $    !          D    (             $ .    0     8    (    !          %    \"     $  "
+    "  ,     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0        "
+    " )    \"             A #@   $     &    \"     0         !0    @    !    #P    $         $     \\   !C;V5F9E]B:71?="
+    "VED=&@ #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            Y0 X   !     !@    @  "
+    "  $          4    (     0    P    !         !     ,    8V]E9F9?8FEN7W!T      X    X    !@    @    &          4    "
+    "(     0    $    !          D    (            .$ .    0     8    (    !          %    \"     $    /     0         0"
+    "    #P   &9I<G-T7W-T86=E7VAD;  .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !  "
+    "   !@    @    $          4    (     0    D    !         !     )    861D97)?:6UP          X    X    !@    @    $   "
+    "       4    (     0    8    !         !     &    1F%B<FEC   .    .     8    (    !@         %    \"     $    !    "
+    " 0         )    \"             ! #@   $     &    \"     8         !0    @    !     @    $         \"0   !    \":F9"
+    "F9F9G9/S,S,S,S,],_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X  "
+    "  !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    "
+    "\"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $        "
+    " \"0    @            Q0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    "
+    "\"     0         !0    @    !    !0    $         $     4   !$4U T.     "
   }
   DataRecord {
     Tag			    DataTag5
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -7007,16 +7035,16 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag4
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !;D80,.    L ,   "
+    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !SO^ 8.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
-    "   !L871E;F-Y            9FER<W1?<W1A9V5?:&1L &)E:&%V:6]R86P        .    , (   8    (     0         %    \"     $ "
+    "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
     "   &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X    !@    @    $          4 "
     "   (     0    <    !         !     '    ;&%T96YC>0 .    .     8    (    !@         %    \"     $    !     0       "
@@ -7024,53 +7052,73 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    ,     8   "
-    " (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,   "
-    " !         !   P!O9F8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8   "
+    " (    !          %    \"     $    %     0         0    !0   $134#0X    #@   #     &    \"     0         !0    @   "
+    " !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag3
-    Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ )I'LP .    N ,   "
-    "8    (     @         %    \"     $    !     0         %  0 $     $   \"     9&5F875L=',          &Y?:6YP=71S      "
-    "    !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &%D"
-    "9&5R7W1R965?:&1L   .    . $   8    (     0         %    \"     $    $     0         .    0     8    (    !        "
-    "  %    \"     $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P "
-    "  !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X "
-    "   X    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !@        "
-    " %    \"     $    \"     0         )    $    )J9F9F9F<D_FIF9F9F9N3\\.    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "             0 X    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"            #% #@   #     &    \"     0         !0    @ "
-    "   !     @    $         $  \" &]N   "
+    Data		    "  %)30     .    L <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (,%%04.    ( <   "
+    "8    (     @         %    \"     $    !     0         %  0 $     $   \"0    9&5F875L=',          &Y?:6YP=71S      "
+    "    !C;V5F9@              ;75L=%]L871E;F-Y     &%D9%]L871E;F-Y      !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &9I"
+    "<G-T7W-T86=E7VAD; !A9&1E<E]I;7          #@   % $   &    \"     $         !0    @    !    $     $         #@   #@  "
+    "  &    \"     0         !0    @    !    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4  "
+    "  (     0    $    !          D    (            \\#\\.    .     8    (    !          %    \"     $    %     0      "
+    "   0    !0   &-O969F    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @   \":F9F9F9FY/PX"
+    "   !     !@    @    $          4    (     0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @  "
+    "  &          4    (     0    $    !          D    (             $ .    0     8    (    !          %    \"     $   "
+    " ,     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         "
+    ")    \"             A #@   $     &    \"     0         !0    @    !    #P    $         $     \\   !C;V5F9E]B:71?=V"
+    "ED=&@ #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            Y0 X   !     !@    @   "
+    " $          4    (     0    P    !         !     ,    8V]E9F9?8FEN7W!T      X    X    !@    @    &          4    ("
+    "     0    $    !          D    (            .$ .    0     8    (    !          %    \"     $    /     0         0 "
+    "   #P   &9I<G-T7W-T86=E7VAD;  .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !   "
+    "  !@    @    $          4    (     0    D    !         !     )    861D97)?:6UP          X    X    !@    @    $    "
+    "      4    (     0    8    !         !     &    1F%B<FEC   .    .     8    (    !@         %    \"     $    !     "
+    "0         )    \"             ! #@   $     &    \"     8         !0    @    !     @    $         \"0   !    \":F9F"
+    "9F9G)/YJ9F9F9F;D_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X   "
+    " !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \""
+    "     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $         \""
+    "0    @            Q0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    \" "
+    "    0         !0    @    !    !0    $         $     4   !$4U T.     "
   }
   DataRecord {
     Tag			    DataTag2
-    Data		    "  %)30     .    J <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,?L[0,.    & <   "
-    "8    (     @         %    \"     $    !     0         %  0 $     $   \"@    9&5F875L=',          &Y?:6YP=71S      "
+    Data		    "  %)30     .    T H   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"^%!00.    0 H  "
+    " 8    (     @         %    \"     $    !     0         %  0 $     $   #     9&5F875L=',          &Y?:6YP=71S      "
     "    !C;V5F9@              ;E]B:71S             '%U86YT:7IA=&EO;@    !A9&1?;&%T96YC>0      ;75L=%]L871E;F-Y     &-O"
-    "969F7V)I=%]W:61T: !C;V5F9E]B:6Y?<'0     861D97)?=')E95]H9&P   X   !P P  !@    @    !          4    (     0    P   "
-    " !          X    X    !@    @    $          4    (     0    @    !         !     (    ;E]I;G!U=',.    .     8    ("
-    "    !@         %    \"     $    !     0         )    \"            !! #@   #@    &    \"     0         !0    @    "
-    "!    !0    $         $     4   !C;V5F9@    X   !0    !@    @    &          4    (     0    0    !          D    @ "
-    "           \\#\\         0         A         $$ .    .     8    (    !          %    \"     $    &     0         0"
-    "    !@   &Y?8FET<P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X   ! "
-    "    !@    @    $          4    (     0    P    !         !     ,    <75A;G1I>F%T:6]N      X   !0    !@    @    $  "
-    "        4    (     0   !H    !         !     :    4F]U;F0@(\"AU;F)I87-E9#H@*R\\M($EN9BD        .    0     8    (  "
-    "  !          %    \"     $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %  "
-    "  \"     $    !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    #     $      "
-    "   $     P   !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @      "
-    "      (0 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    L     8    (   "
-    " !@         %    \"     $    0     0         )    @    )J9F9F9F;D_FIF9F9F9R3\\S,S,S,S/3/YJ9F9F9F=D_        X#\\S,S"
-    ",S,S/C/V9F9F9F9N8_FIF9F9F9Z3^:F9F9F9GI/V9F9F9F9N8_,S,S,S,SXS\\       #@/YJ9F9F9F=D_,S,S,S,STS^:F9F9F9G)/YJ9F9F9F;D"
-    "_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            D0 X   !0    !@    @    $   "
-    "       4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87-E9#H@179E;B!686QU97,I   .    .     8    (    "
-    "!@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !   "
-    "  0    $         \"0    @            (0 X    X    !@    @    &          4    (     0    $    !          D    (    "
-    "        ,D .    .     8    (    !@         %    \"     $    !     0         )    \"            #% #@   #     &    "
-    "\"     0         !0    @    !     @    $         $  \" &]N   "
+    ";G9?;&%T96YC>0    !C;V5F9E]B:71?=VED=&@ 8V]E9F9?8FEN7W!T     &%B<V]R8E]A9&1E<G,   !A9&1E<E]I;7          #@   /@%  "
+    " &    \"     $         !0    @    !    %@    $         #@   #@    &    \"     0         !0    @    !    \"     $  "
+    "       $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    (            \\#"
+    "\\.    .     8    (    !          %    \"     $    &     0         0    !@   &Y?8FET<P  #@   #@    &    \"     8  "
+    "       !0    @    !     0    $         \"0    @            @0 X    X    !@    @    $          4    (     0    4   "
+    " !         !     %    8V]E9F8    .    .     8    (    !@         %    \"     $    !     0         )    \"    )J9F9"
+    "F9F;D_#@   $     &    \"     0         !0    @    !    #     $         $     P   !Q=6%N=&EZ871I;VX     #@   %     "
+    "&    \"     0         !0    @    !    &@    $         $    !H   !2;W5N9\" @*'5N8FEA<V5D.B K+RT@26YF*0        X   !"
+    "     !@    @    $          4    (     0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @    & "
+    "         4    (     0    $    !          D    (            \\#\\.    0     8    (    !          %    \"     $    ,"
+    "     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         ) "
+    "   \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P   !C;VYV7VQA=&5N8WD  "
+    "   #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $ "
+    "         4    (     0    \\    !         !     /    8V]E9F9?8FET7W=I9'1H  X    X    !@    @    &          4    (  "
+    "   0    $    !          D    (            .4 .    0     8    (    !          %    \"     $    ,     0         0   "
+    " #    &-O969F7V)I;E]P=      .    .     8    (    !@         %    \"     $    !     0         )    \"            #A"
+    " #@   $     &    \"     0         !0    @    !    #0    $         $     T   !A8G-O<F)?861D97)S    #@   #     &    "
+    "\"     0         !0    @    !     @    $         $  \" &]N   .    0     8    (    !          %    \"     $    )   "
+    "  0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $    %     0         0   "
+    " !0   $134#0X    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X   \"P  "
+    "  !@    @    &          4    (     0   !     !          D   \"     FIF9F9F9N3^:F9F9F9G)/S,S,S,S,],_FIF9F9F9V3\\   "
+    "    #@/S,S,S,S,^,_9F9F9F9FYC^:F9F9F9GI/YJ9F9F9F>D_9F9F9F9FYC\\S,S,S,S/C/P       . _FIF9F9F9V3\\S,S,S,S/3/YJ9F9F9F<"
+    "D_FIF9F9F9N3\\.    .     8    (    !@         %    \"     $    !     0         )    \"            \"1 #@   %     &"
+    "    \"     0         !0    @    !    '@    $         $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N(%9A;'5E<RD   X    X"
+    "    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %  "
+    "  \"     $    !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $      "
+    "   \"0    @             0 X    X    !@    @    &          4    (     0    $    !          D    (            ,D .  "
+    "  .     8    (    !@         %    \"     $    !     0         )    \"            #% #@   #     &    \"     0      "
+    "   !0    @    !     P    $         $  # &]F9@ .    .     8    (    !          %    \"     $    %     0         0  "
+    "  !0   $134#0X    "
   }
   DataRecord {
     Tag			    DataTag1
