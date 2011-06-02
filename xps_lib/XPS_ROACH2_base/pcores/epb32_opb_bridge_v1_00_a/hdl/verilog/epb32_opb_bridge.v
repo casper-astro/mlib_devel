@@ -109,25 +109,25 @@ module epb32_opb_bridge(
   /**** WishBone Generation ****/
   reg [31:0] OPB_DBus_reg;
   assign epb_data_o = OPB_DBus_reg;
-  assign M_DBus   = M_RNW ? 32'b0 : epb_data_i;
 
-  wire [24:0] epb_addr_fixed = epb_addr;
-  assign M_ABus   = {epb_addr_fixed, 2'b0};
-  assign M_BE       = ~epb_be_n;
-  assign M_RNW      = epb_r_w_n;
+  /* Register everything */
+  reg  [3:0] epb_be_n_reg;
+  reg [24:0] epb_addr_reg;
+  reg [31:0] epb_data_i_reg;
+  reg        epb_r_w_n_reg;
 
-  /* Register Data */
-  /*
   always @(posedge OPB_Clk) begin
-    if (OPB_Rst) begin
-      OPB_DBus_reg <= 32'b0;
-    end else begin
-      if (OPB_xferAck || OPB_errAck) begin
-        OPB_DBus_reg <= OPB_DBus;
-      end
-    end
+    epb_be_n_reg   <= epb_be_n;
+    epb_addr_reg   <= epb_addr;
+    epb_data_i_reg <= epb_data_i;
+    epb_r_w_n_reg  <= epb_r_w_n;
   end
-  */
+
+  assign M_DBus   = M_RNW ? 32'b0 : epb_data_i_reg;
+  wire [24:0] epb_addr_fixed = epb_addr_reg;
+  assign M_ABus   = {epb_addr_fixed, 2'b0};
+  assign M_BE       = ~epb_be_n_reg;
+  assign M_RNW      = epb_r_w_n_reg;
 
   /* Command collection */
 
@@ -136,6 +136,8 @@ module epb32_opb_bridge(
   
   reg cmnd_ack_reg;
   assign cmnd_ack_unstable = cmnd_ack_reg | cmnd_got;
+
+  wire opb_reply;
 
   always @(posedge OPB_Clk) begin
     //strobes
@@ -149,27 +151,54 @@ module epb32_opb_bridge(
       end else begin
         cmnd_ack_reg <= 1'b0;
       end
-      if (OPB_xferAck || OPB_errAck)
+      if (opb_reply)
         M_select_reg <= 1'b0;
     end
   end
 
   /* Response generation */
+  wire internal_timeout;
+
   reg resp_got_reg;
   assign resp_got_unstable = OPB_xferAck | resp_got_reg;
+
+  assign opb_reply = OPB_xferAck || OPB_errAck || OPB_timeout || OPB_retry || internal_timeout;
 
   always @(posedge OPB_Clk) begin
     if (OPB_Rst) begin
       resp_got_reg <= 1'b0;
       OPB_DBus_reg <= 32'b0;
     end else begin
-      if (OPB_xferAck || OPB_errAck) begin
+      if (opb_reply) begin
         resp_got_reg <= 1'b1;
         OPB_DBus_reg <= OPB_DBus;
       end
       if (resp_ack) begin
         resp_got_reg <= 1'b0;
       end
+    end
+  end
+
+  localparam BUS_TIMEOUT = 1000;
+  reg [9:0] timeout_counter;
+
+  reg internal_timeout_reg;
+  assign internal_timeout = internal_timeout_reg;
+
+  always @(posedge OPB_Clk) begin
+    internal_timeout_reg <= 1'b0;
+
+    timeout_counter <= timeout_counter + 10'b1;
+
+    if (OPB_Rst) begin
+      timeout_counter <= 10'b0;
+    end else begin
+      if (!M_select_reg)
+        timeout_counter <= 10'b0;
+
+      if (timeout_counter >= BUS_TIMEOUT  && M_select_reg)
+        internal_timeout_reg <= 1'b1;
+        
     end
   end
 

@@ -1,0 +1,12 @@
+################################################################################
+##
+## Copyright (c) 1995-2002 Xilinx, Inc.  All rights reserved.
+##
+## bram_block.pao
+##
+## Peripheral Analyze Order
+##
+################################################################################
+
+lib bram_block_custom_v1_00_a bram_block_custom verilog
+lib bram_block_custom_v1_00_a bram verilog

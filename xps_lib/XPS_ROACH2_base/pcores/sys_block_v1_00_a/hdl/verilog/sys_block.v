@@ -66,6 +66,9 @@ module sys_block(
   reg latch_start;
   wire latch_done;
 
+  wire [0:3]  cpu_be  = OPB_BE;
+  wire [0:31] cpu_din = OPB_DBus;
+
   always @(posedge OPB_Clk) begin
     //single cycle signals
     Sl_xferAck  <= 1'b0;
@@ -84,29 +87,31 @@ module sys_block(
       Sl_xferAck <= 1'b1;
       if (!OPB_RNW) begin
         case (a_trans[5:2])
-          2: begin
-            if (OPB_BE[3])
-              soft_reset <= OPB_DBus[31];
+          4'd2: begin
+            if (cpu_be[3])
+              soft_reset <= cpu_din[31];
           end
-          3: begin
-            if (OPB_BE[0])
-              scratch_pad[0:7]   <= OPB_DBus[ 0:7 ];
-            if (OPB_BE[1])
-              scratch_pad[8:15]  <= OPB_DBus[ 8:15];
-            if (OPB_BE[2])
-              scratch_pad[16:23] <= OPB_DBus[16:23];
-            if (OPB_BE[3])
-              scratch_pad[24:31] <= OPB_DBus[24:31];
+          4'd3: begin
+            if (cpu_be[0])
+              scratch_pad[0:7]   <= cpu_din[ 0:7 ];
+            if (cpu_be[1])
+              scratch_pad[8:15]  <= cpu_din[ 8:15];
+            if (cpu_be[2])
+              scratch_pad[16:23] <= cpu_din[16:23];
+            if (cpu_be[3])
+              scratch_pad[24:31] <= cpu_din[24:31];
+          end
+          default: begin
           end
         endcase
       end else begin /* Read Case */
         case (a_trans[5:2])
           4: begin
-            if (OPB_BE[0]) begin
-              bus_wait    <= 1'b1;
-              Sl_xferAck  <= 1'b0; //don't ack - lazy override
-              latch_start <= 1'b1;
-            end
+            bus_wait    <= 1'b1;
+            Sl_xferAck  <= 1'b0; //don't ack - lazy override
+            latch_start <= 1'b1;
+          end
+          default: begin
           end
         endcase
       end
@@ -114,6 +119,7 @@ module sys_block(
   end
 
   reg [0:31] Sl_DBus;
+  wire uptodate = RCS_UPTODATE;
 
   always @(*) begin
     if (!Sl_xferAck) begin
@@ -129,7 +135,7 @@ module sys_block(
           Sl_DBus[16:31] <= REV_RCS;
         end
         2: begin
-          Sl_DBus[ 0:15] <= {15'b0, RCS_UPTODATE};
+          Sl_DBus[ 0:15] <= {15'b0, uptodate};
           Sl_DBus[16:31] <= {15'b0, soft_reset};
         end
         3: begin
@@ -137,6 +143,9 @@ module sys_block(
         end
         4: begin
           Sl_DBus <= fab_clk_counter_latched;
+        end
+        5: begin
+          Sl_DBus <= fab_clk_counter;
         end
         default: begin
           Sl_DBus <= 32'd0;
@@ -185,18 +194,30 @@ module sys_block(
             latch_state <= LATCH_IDLE;
           end
         end
+        default: begin
+          latch_state <= LATCH_IDLE;
+        end
       endcase
     end
   end
   assign latch_done = latch_state == LATCH_WAIT && !val_gotRR;
 
   assign val_req = latch_state == LATCH_REQ;
+
+  reg rst_fabR;
+  reg rst_fabRR;
+
+  always @(posedge fab_clk) begin
+    rst_fabR  <= OPB_Rst;
+    rst_fabRR <= rst_fabR;
+  end
+
   always @(posedge fab_clk) begin
     val_reqR  <= val_req;
     val_reqRR <= val_reqR;
-    fab_clk_counter <= fab_clk_counter + 1;
+    fab_clk_counter <= fab_clk_counter + 32'b1;
 
-    if (OPB_Rst) begin
+    if (rst_fabRR) begin
       val_got <= 1'b0;
     end else begin
       if (val_reqRR && !val_got) begin

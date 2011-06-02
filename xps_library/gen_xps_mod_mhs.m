@@ -218,7 +218,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
         fprintf(nfo_fid,'\n');
 
         try
-            if strcmp(hw_sys, 'ROACH') ||  strcmp(hw_sys, 'ROACH22')
+            if strcmp(hw_sys, 'ROACH') ||  strcmp(hw_sys, 'ROACH2')
               str = gen_borf_info(n, blk_obj, this_opb_addr_start);
             else
               str = gen_borf_info(n-1, blk_obj, {});

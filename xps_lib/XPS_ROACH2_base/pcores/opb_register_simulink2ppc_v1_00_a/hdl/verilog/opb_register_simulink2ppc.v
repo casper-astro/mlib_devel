@@ -45,10 +45,6 @@ module opb_register_simulink2ppc #(
   reg register_readyR;
   reg register_readyRR;
 
-  /* Lock the buffer when the top half is read,
-     unlock the buffer when the bottom half is read */
-  reg buf_lock;
-
   always @(posedge OPB_Clk) begin
     //single cycle signals
     Sl_xferAck_reg  <= 1'b0;
@@ -58,22 +54,15 @@ module opb_register_simulink2ppc #(
 
     if (OPB_Rst) begin
       register_request <= 1'b0;
-      buf_lock <= 1'b0;
     end else if (a_match && OPB_select && !Sl_xferAck_reg) begin
       Sl_xferAck_reg <= 1'b1;
-      if (OPB_BE[0])
-        buf_lock <= 1'b1;
-
-      if (OPB_BE[3])
-        buf_lock <= 1'b0;
-        
     end
 
     if (register_readyRR) begin
       register_request <= 1'b0;
     end
 
-    if (register_readyRR && register_request && !buf_lock) begin
+    if (register_readyRR && register_request) begin
       /* only latch the data when the buffer is not locked */
       register_buffer <= user_data_in_reg;
     end

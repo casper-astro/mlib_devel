@@ -55,19 +55,12 @@ module opb_register_ppc2simulink #(
     end else if (a_match && OPB_select && !Sl_xferAck_reg) begin
       Sl_xferAck_reg <= 1'b1;
       if (!OPB_RNW) begin
-        if (OPB_BE[0])
-          reg_buffer[31:24] <= OPB_DBus[0:7]; 
-        if (OPB_BE[1])
-          reg_buffer[23:16] <= OPB_DBus[8:15]; 
-        if (OPB_BE[2])
-          reg_buffer[15:8] <= OPB_DBus[16:23]; 
-        if (OPB_BE[3])
-          reg_buffer[7:0] <= OPB_DBus[24:31]; 
+        reg_buffer[31:24] <= OPB_DBus[0:7]; 
+        reg_buffer[23:16] <= OPB_DBus[8:15]; 
+        reg_buffer[15:8] <= OPB_DBus[16:23]; 
+        reg_buffer[7:0] <= OPB_DBus[24:31]; 
 
-        /* ROACH bus transaction occurs in two stages;
-           to make sure that writes are atomic only latch on receiving the second half*/
-        if (OPB_BE[3])
-          register_ready <= 1'b1;
+        register_ready <= 1'b1;
       end
     end
     if (register_doneRR) begin

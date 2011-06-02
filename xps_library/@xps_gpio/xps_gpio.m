@@ -124,6 +124,24 @@ switch s.hw_sys
             end               
         end % if use_diffio
     % end case 'ROACH'
+    case 'ROACH2'
+        if use_diffio
+            iostandard = 'LVDS_25';
+        else
+            switch s.io_group
+              case 'led'
+                iostandard = 'LVCMOS15';
+              case 'gpioa_oe_n'
+                iostandard = 'LVCMOS15';
+              case 'gpiob_oe_n'
+                iostandard = 'LVCMOS15';
+              case 'gpiob'
+                iostandard = 'LVCMOS15';
+              otherwise
+                iostandard = 'LVCMOS15';
+            end               
+        end % if use_diffio
+    % end case 'ROACH2'
     otherwise
         iostandard = 'LVCMOS25';
 end % switch 'hw_sys'
