@@ -14,8 +14,8 @@
 # Clock Ports
  PORT sys_clk_n = sys_clk_n, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
  PORT sys_clk_p = sys_clk_p, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
- PORT aux_clk_n = aux_clk_n, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
- PORT aux_clk_p = aux_clk_p, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+ #PORT aux_clk_n = aux_clk_n, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
+ #PORT aux_clk_p = aux_clk_p, DIR = I, SIGIS = CLK, CLK_FREQ = 100000000
  #IF# 1 # ['PORT aux_clk_n  = aux_clk_n,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
  #IF# 1 # ['PORT aux_clk_p  = aux_clk_p,  DIR = I, SIGIS = CLK, CLK_FREQ = ' sprintf('%9.0f',app_clk_rate*1E6), '\n']
 # PORT aux_synci_n = aux_synci_n,   DIR = I, SIGIS = CLK, CLK_FREQ = 200000000
