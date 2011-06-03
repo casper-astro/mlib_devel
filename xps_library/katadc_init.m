@@ -6,8 +6,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
-%   Collaboration for Astronomy Signal Processing and Electronics Research    %
-%   http://seti.ssl.berkeley.edu/casper/                                      %
+%   Karoo Array Telescope Project                                             %
+%   www.ska.ac.za                                                             %
 %   Copyright (C) 2010 Andrew Martens SKA/SA                                  %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
@@ -43,33 +43,46 @@ function katadc_init(blk, varargin)
 
   %generic ADC parameters
   if strcmp(adc_interleave, 'on'), 
-    of_per_input = 2;
+    or_per_input = 2;
     in = 1;
     out = 8;
     il = 1;
   else, 
-    of_per_input = 1;
+    or_per_input = 1;
     in = 2;
     out = 4;
     il = 0;
   end
   bits = 8;
-  of_support = 'on'; of = 1;
+  or_support = 'on'; or = 1;
   sync_support = 'on'; sync = 1;
   dv_support = 'on'; dv = 1;
+  xtick = 120; 
+  ytick = 40+5*(or*out); 
  
   clog('katadc_init: drawing common adc','trace');
 
-  yoff = adc_common(blk, 'in', in, 'out', out, 'bits', bits, 'of_per_input', of_per_input, ...
-    'adc_interleave', adc_interleave, 'of_support', ...
-    of_support, 'sync_support', sync_support, 'dv_support', dv_support);
+  yoff = adc_common(blk, 'in', in, 'out', out, 'bits', bits, 'or_per_input', or_per_input, ...
+    'xoff', 0, 'xtick', xtick, 'yoff', 0, 'ytick', ytick, ...
+    'adc_interleave', adc_interleave, 'or_support', ...
+    or_support, 'sync_support', sync_support, 'dv_support', dv_support);
+  
+  clog('katadc_init: done drawing common adc','trace');
 
   %%%% Rename generic ports to specific KATADC names %%%%%
   for input = 0:1,
-    if input == 0, 
-      label = 'i';
-    else, 
-      label = 'q';
+    if strcmp(adc_interleave, 'off'), 
+        if input == 0, 
+            label = 'i';
+        else, 
+            label = 'q';
+        end
+    else,
+        if input == 0, 
+            label = 'q';
+        else, 
+            label = 'i';
+        end
     end
     for offset = 0:3,
       name = clear_name([blk, '_user_data', num2str(input*4+offset)]);
@@ -89,9 +102,6 @@ function katadc_init(blk, varargin)
   end
  
   %%%% KATADC specific ports %%%%
-
-  xtick = 120; 
-  ytick = 40+5*(of*out); 
   
   reuse_block(blk, 'trigger', 'xbsIndex_r4/Constant', ...
     'arith_type', 'Unsigned', 'const', '1', 'n_bits', '1', 'bin_pt', '0', ...
@@ -188,3 +198,5 @@ function katadc_init(blk, varargin)
   save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 
   clog('katadc_init: exiting','trace');
+
+end

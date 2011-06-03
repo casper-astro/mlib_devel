@@ -43,23 +43,13 @@ switch hw_sys
 	    result = 1;
     end
   case 'ROACH'
-    if addr_width < 2
-      msg = 'Shared BRAM address width cannot be less than 2 on on ROACH boards';
+    if (addr_width + ceil(log2(data_width))) < 15,   
+      msg = ['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards'];
 	    result = 1;
     end
-  case 'BEE2_ctrl'
+  case {'BEE2_ctrl', 'BEE2_usr', 'iBOB'}
     if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
-	    result = 1;
-    end
-  case 'BEE2_usr'
-    if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
-	    result = 1;
-    end
-  case 'iBOB'
-    if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on on Virtex-II Pro boards';
+      msg = 'Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards';
 	    result = 1;
     end
   otherwise
