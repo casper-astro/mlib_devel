@@ -38,65 +38,59 @@ BEGIN gbe_udp
 
 ## Ports
 
-  ## application clock
-  PORT clk              = "", DIR = IN
-  ## reset
-  PORT rst              = "", DIR = IN
-
-  ## tx ports
-  PORT tx_valid         = "", DIR = IN
-  PORT tx_afull         = "", DIR = OUT
-  PORT tx_overflow      = "", DIR = OUT
-  PORT tx_end_of_frame  = "", DIR = IN
-  PORT tx_data          = "", DIR = IN , VEC = [63:0]
-  PORT tx_dest_ip       = "", DIR = IN , VEC = [31:0]
-  PORT tx_dest_port     = "", DIR = IN , VEC = [15:0]
+  ## Application Interface
+  PORT app_clk         = "", DIR = IN
   
-  ## rx port
-  PORT rx_valid         = "", DIR = OUT
-  PORT rx_end_of_frame  = "", DIR = OUT
-  PORT rx_data          = "", DIR = OUT, VEC = [63:0]
-  PORT rx_source_ip     = "", DIR = OUT, VEC = [31:0]
-  PORT rx_source_port   = "", DIR = OUT, VEC = [15:0]
-  PORT rx_bad_frame     = "", DIR = OUT
-  PORT rx_overrun       = "", DIR = OUT
-  PORT rx_overrun_ack   = "", DIR = IN
-  PORT rx_ack           = "", DIR = IN
-        
-  ## status LEDs
-  PORT led_up               = "", DIR = OUT
-  PORT led_rx               = "", DIR = OUT
-  PORT led_tx               = "", DIR = OUT
+  PORT app_tx_data     = "", DIR = IN,  VEC =  [7:0] 
+  PORT app_tx_dvld     = "", DIR = IN
+  PORT app_tx_eof      = "", DIR = IN
+  PORT app_tx_destip   = "", DIR = IN,  VEC = [31:0]
+  PORT app_tx_destport = "", DIR = IN,  VEC = [15:0]
+  PORT app_tx_afull    = "", DIR = OUT
+  PORT app_tx_overflow = "", DIR = OUT
+  PORT app_tx_rst      = "", DIR = IN
 
-  ## XGMII interface
+  PORT app_rx_data     = "", DIR = OUT, VEC =  [7:0]
+  PORT app_rx_dvld     = "", DIR = OUT
+  PORT app_rx_eof      = "", DIR = OUT
+  PORT app_rx_srcip    = "", DIR = OUT, VEC = [31:0]
+  PORT app_rx_srcport  = "", DIR = OUT, VEC = [15:0]
+  PORT app_rx_badframe = "", DIR = OUT
+  PORT app_rx_overrun  = "", DIR = IN
+  PORT app_rx_ack      = "", DIR = IN 
+  PORT app_rx_rst      = "", DIR = OUT
 
-  PORT xaui_clk    = xaui_clk,    DIR = I
-  PORT xgmii_txd   = xgmii_txd,   DIR = O, VEC = [63:0], BUS = XGMII
-  PORT xgmii_txc   = xgmii_txc,   DIR = O, VEC =  [7:0], BUS = XGMII
-  PORT xgmii_rxd   = xgmii_rxd,   DIR = I, VEC = [63:0], BUS = XGMII
-  PORT xgmii_rxc   = xgmii_rxc,   DIR = I, VEC =  [7:0], BUS = XGMII
-  PORT xaui_reset  = xaui_reset,  DIR = I
-  PORT xaui_status = xaui_status, DIR = I, VEC =  [7:0], BUS = XGMII
+  ## MAC Interface 
 
-  ## MGT configuration bits
-  PORT mgt_rxeqmix       = mgt_rxeqmix,       DIR = O, VEC =  [1:0], BUS = XAUI_CONF 
-  PORT mgt_rxeqpole      = mgt_rxeqpole,      DIR = O, VEC =  [3:0], BUS = XAUI_CONF
-  PORT mgt_txpreemphasis = mgt_txpreemphasis, DIR = O, VEC =  [2:0], BUS = XAUI_CONF  
-  PORT mgt_txdiffctrl    = mgt_txdiffctrl,    DIR = O, VEC =  [2:0], BUS = XAUI_CONF 
+  PORT mac_tx_clk       = "", DIR = IN,
+  PORT mac_tx_rst       = "", DIR = IN,
+  PORT mac_tx_data      = "", DIR = OUT, VEC = [7:0]
+  PORT mac_tx_dvld      = "", DIR = OUT,
+  PORT mac_tx_ack       = "", DIR = IN,
 
-  ## OPB Ports
-  PORT OPB_Clk     = "",          DIR = I, SIGIS = Clk, BUS = SOPB
-  PORT OPB_Rst     = OPB_Rst,     DIR = I, SIGIS = Rst, BUS = SOPB
-  PORT Sl_DBus     = Sl_DBus,     DIR = O, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
-  PORT Sl_errAck   = Sl_errAck,   DIR = O, BUS = SOPB
-  PORT Sl_retry    = Sl_retry,    DIR = O, BUS = SOPB
-  PORT Sl_toutSup  = Sl_toutSup,  DIR = O, BUS = SOPB
-  PORT Sl_xferAck  = Sl_xferAck,  DIR = O, BUS = SOPB
-  PORT OPB_ABus    = OPB_ABus,    DIR = I, VEC = [0:(C_OPB_AWIDTH-1)], BUS = SOPB
-  PORT OPB_BE      = OPB_BE,      DIR = I, VEC = [0:((C_OPB_DWIDTH/8)-1)], BUS = SOPB
-  PORT OPB_DBus    = OPB_DBus,    DIR = I, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
-  PORT OPB_RNW     = OPB_RNW,     DIR = I, BUS = SOPB
-  PORT OPB_select  = OPB_select,  DIR = I, BUS = SOPB
-  PORT OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB
+  PORT mac_rx_clk       = "", DIR = IN,
+  PORT mac_rx_rst       = "", DIR = IN,
+  PORT mac_rx_data      = "", DIR = IN,  VEC = [7:0]
+  PORT mac_rx_dvld      = "", DIR = IN,
+  PORT mac_rx_goodframe = "", DIR = IN,
+  PORT mac_rx_badframe  = "", DIR = IN,
+
+  ## PHY Status/Control
+  PORT phy_status  = "", DIR = IN,  VEC = [0:31]
+  PORT phy_control = "", DIR = OUT, VEC = [0:31] 
+
+  ## CPU Bus Attachment
+  PORT OPB_Clk    = "",         DIR = IN,  BUS = SOPB, SIGIS = Clk
+  PORT OPB_Rst    = OPB_Rst,    DIR = IN,  BUS = SOPB, SIGIS = Rst
+  PORT OPB_RNW    = OPB_RNW,    DIR = IN,  BUS = SOPB
+  PORT OPB_select = OPB_select, DIR = IN,  BUS = SOPB
+  PORT OPB_ABus   = OPB_ABus,   DIR = IN,  BUS = SOPB, VEC = [0:(C_OPB_AWIDTH-1)]
+  PORT OPB_BE     = OPB_BE,     DIR = IN,  BUS = SOPB, VEC = [0:((C_OPB_DWIDTH/8)-1)]
+  PORT OPB_DBus   = OPB_DBus,   DIR = IN,  BUS = SOPB, VEC = [0:(C_OPB_DWIDTH-1)]
+  PORT Sl_DBus    = Sl_DBus,    DIR = OUT, BUS = SOPB, VEC = [0:(C_OPB_AWIDTH-1)]
+  PORT Sl_errAck  = Sl_errAck,  DIR = OUT, BUS = SOPB
+  PORT Sl_retry   = Sl_retry,   DIR = OUT, BUS = SOPB
+  PORT Sl_toutSup = Sl_toutSup, DIR = OUT, BUS = SOPB
+  PORT Sl_xferAck = Sl_xferAck, DIR = OUT, BUS = SOPB
 
 END
