@@ -37,6 +37,11 @@ addr_width = blk_obj.addr_width;
 data_width = blk_obj.data_width;
 
 switch hw_sys
+  case 'ROACH2'
+    if addr_width < 2
+      msg = 'Shared BRAM address width cannot be less than 2 on on ROACH boards';
+	    result = 1;
+    end
   case 'ROACH'
     if (addr_width + ceil(log2(data_width))) < 15,   
       msg = ['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards'];

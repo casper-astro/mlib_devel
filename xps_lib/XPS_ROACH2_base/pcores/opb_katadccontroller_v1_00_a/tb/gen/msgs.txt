@@ -1,0 +1,5 @@
+VCD info: dumpfile dump.vcd opened for output.
+sys: reset cleared
+adc0_conf: 0019dead
+adc1_conf: 0018beef
+PASSED

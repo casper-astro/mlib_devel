@@ -42,6 +42,17 @@ s.bypass_auto = get_param(blk_name,'bypass_auto');
 s.en_gain = get_param(blk_name,'en_gain');
 
 switch s.hw_sys
+    case 'ROACH2'
+        if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
+            s.adc_str = s.hw_adc;
+        else
+            error(['Unsupported adc board: ',s.hw_adc]);
+        end % if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
+
+        ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/s.adc_clk_rate*4),' ns']);
+        ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
+        ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
+    % end case 'ROACH'
     case 'ROACH'
         if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
             s.adc_str = s.hw_adc;
@@ -81,7 +92,7 @@ misc_ports.ctrl_clk180_out = {1 'out' [s.adc_str,'_clk180']};
 misc_ports.ctrl_clk270_out = {1 'out' [s.adc_str,'_clk270']};
 misc_ports.ctrl_dcm_locked = {1 'out' [s.adc_str,'_dcm_locked']};
 misc_ports.dcm_reset       = {1 'in'  [s.adc_str,'_dcm_reset']};
-misc_ports.dcm_psdone      = {1 'out' [s.adc_str,'_psdone']};
+misc_ports.mmcm_psdone      = {1 'out' [s.adc_str,'_psdone']};
 misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};
 misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
 misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};

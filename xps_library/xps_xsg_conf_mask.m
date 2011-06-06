@@ -97,7 +97,20 @@ switch hw_sys
         end % switch hw_subsys
 
         set_param(gcb,'mpc_type','powerpc440_ext');
-    % end case 'ROACH'
+    % end case 'ROACH
+    case 'ROACH2'
+        switch hw_subsys
+            case 'sx475t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Virtex6',...
+                    'part', 'xc6vsx475t',...
+                    'speed', '-1',...
+                    'testbench', 'off',...
+                    'package', 'ff1759');
+            % end case 'lx110t'
+        end % switch hw_subsys
+        set_param(gcb,'mpc_type','powerpc440_ext');
+    % end case 'ROACH2'
+    
     otherwise
         errordlg(['Unsupported hardware system: ',hw_sys]);
     % end 'otherwise'
@@ -121,16 +134,16 @@ xlsetparam(xsg_blk,'clock_loc','d7hack')
 switch clk_src
     case {'sys_clk' 'sys_clk2x'}
     case {'usr_clk' 'usr_clk2x'}
-        if (strcmp(hw_sys,{'CORR', 'ROACH'}))
-            errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
+        if (strcmp(hw_sys,{'CORR', 'ROACH', 'ROACH2'}))
+            errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'aux0_clk' 'aux1_clk' 'aux0_clk2x' 'aux1_clk2x' 'arb_clk'}
-        if isempty(find(strcmp(hw_sys,{'ROACH'})))
-            errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
+        if isempty(find(strcmp(hw_sys,{'ROACH', 'ROACH2'})))
+            errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'adc0_clk' 'adc1_clk' 'dac0_clk' 'dac1_clk'}
-        if isempty(find(strcmp(hw_sys,{'iBOB', 'ROACH'})))
-            errordlg(['Invalid clock source (',clk_src,'for hardware platform: ',hw_sys]);
+        if isempty(find(strcmp(hw_sys,{'iBOB', 'ROACH', 'ROACH2'})))
+            errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     otherwise
         errordlg(['Unsupported clock source: ',clk_src]);

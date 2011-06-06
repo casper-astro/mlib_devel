@@ -53,7 +53,7 @@ fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
 data_width = eval(get_param(c_sys, 'data_width'));
 
 switch fpga_arch
-  case {'virtex5', 'Virtex5'}
+  case {'virtex6', 'Virtex6', 'virtex5', 'Virtex5'}
     %if addressing less than 32k bytes
     if (addr_width + ceil(log2(data_width))) < 15,   
       errordlg(['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards']);

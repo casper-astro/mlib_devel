@@ -1,0 +1,4 @@
+lib ten_gb_eth_v3_00_a ten_gig_eth_mac_UCB.vhd vhdl
+lib ten_gb_eth_v3_00_a opb_attach              verilog
+lib ten_gb_eth_v3_00_a retimer.vhd             vhdl
+lib ten_gb_eth_v3_00_a ten_gb_eth.vhd          vhdl

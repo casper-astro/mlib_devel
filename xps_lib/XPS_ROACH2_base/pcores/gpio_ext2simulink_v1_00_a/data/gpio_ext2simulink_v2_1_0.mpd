@@ -1,0 +1,32 @@
+###################################################################
+##
+## File     : gpio_ext2simulink_v2_1_0.mpd
+## Desc     : Microprocessor Peripheral Description
+##
+##
+###################################################################
+
+BEGIN gpio_ext2simulink
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+## Bus Interfaces
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER WIDTH = 4, DT = INTEGER
+PARAMETER DDR = 0, DT = INTEGER
+PARAMETER CLK_PHASE = 0, DT = INTEGER
+PARAMETER REG_IOB = true, DT = STRING
+
+## Ports
+PORT gateway = "", DIR = O, VEC = [(WIDTH-1):0]
+PORT io_pad = "", DIR = I, VEC = [(WIDTH/(DDR+1))-1:0]
+
+PORT clk = "", DIR = I
+port clk90 = "", DIR = I
+
+END

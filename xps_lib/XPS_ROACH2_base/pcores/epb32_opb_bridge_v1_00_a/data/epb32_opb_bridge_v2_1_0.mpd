@@ -1,0 +1,43 @@
+#epb to opb bridge
+
+BEGIN epb32_opb_bridge
+
+OPTION IPTYPE      = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION IP_GROUP    = USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+BUS_INTERFACE BUS = MOPB, BUS_STD = OPB, BUS_TYPE = MASTER
+
+PORT epb_clk       = "", DIR = I
+PORT epb_doe_n     = "", DIR = O
+
+PORT epb_data_oe_n = "", DIR = O
+PORT epb_cs_n      = "", DIR = I
+PORT epb_oe_n      = "", DIR = I
+PORT epb_r_w_n     = "", DIR = I
+PORT epb_be_n      = "", DIR = I, VEC =[3:0] 
+PORT epb_addr      = "", DIR = I, VEC =[5:29] 
+PORT epb_data_i    = "", DIR = I, VEC =[0:31] 
+PORT epb_data_o    = "", DIR = O, VEC =[0:31] 
+PORT epb_rdy       = "", DIR = O
+
+PORT OPB_Clk       = "",          DIR = I,               BUS = MOPB
+PORT OPB_Rst       = OPB_Rst,     DIR = I,               BUS = MOPB
+PORT M_request     = M_request,   DIR = O,               BUS = MOPB
+PORT M_busLock     = M_busLock,   DIR = O,               BUS = MOPB
+PORT M_select      = M_select,    DIR = O,               BUS = MOPB
+PORT M_RNW         = M_RNW,       DIR = O,               BUS = MOPB
+PORT M_BE          = M_BE,        DIR = O, VEC = [0:3],  BUS = MOPB
+PORT M_seqAddr     = M_seqAddr,   DIR = O,               BUS = MOPB
+PORT M_DBus        = M_DBus,      DIR = O, VEC = [0:31], BUS = MOPB
+PORT M_ABus        = M_ABus,      DIR = O, VEC = [0:31], BUS = MOPB
+PORT OPB_MGrant    = OPB_MGrant,  DIR = I,               BUS = MOPB
+PORT OPB_xferAck   = OPB_xferAck, DIR = I,               BUS = MOPB
+PORT OPB_errAck    = OPB_errAck,  DIR = I,               BUS = MOPB
+PORT OPB_retry     = OPB_retry,   DIR = I,               BUS = MOPB
+PORT OPB_timeout   = OPB_timeout, DIR = I,               BUS = MOPB
+PORT OPB_DBus      = OPB_DBus,    DIR = I, VEC = [0:31], BUS = MOPB
+
+
+END
