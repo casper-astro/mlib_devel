@@ -175,7 +175,8 @@ end
 clog('add_gen block', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'add_gen', 'casper_library_scopes/snapshot/add_gen', ...
   'nsamples', 'nsamples', 'counter_size', as, ...
-  'use_dsp48', use_dsp48, 'Position', [800 210 860 420]);
+  'increment', num2str(data_width), 'use_dsp48', use_dsp48, ...
+  'Position', [800 210 860 420]);
 
 % join add_gen to: delay block
 if off == 1, 
