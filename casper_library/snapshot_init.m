@@ -169,7 +169,7 @@ end
 if circ == 1,
   as = '32';
 else
-  as = ['nsamples+',num2str(log2(data_width)),'+1'];
+  as = ['nsamples+',num2str(log2(data_width/8)),'+1'];
 end
 
 clog('add_gen block', 'snapshot_init_detailed_trace');
