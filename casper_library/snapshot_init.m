@@ -163,19 +163,20 @@ else,
 end
 
 %add_gen block
-
+eval(data_width)/8
 % address counter must be full 32 for circular capture
 % as used to track offset into vector
 if circ == 1,
   as = '32';
 else
-  as = 'nsamples+1';
+  as = ['nsamples+',num2str(log2(eval(data_width)/8)),'+1'];
 end
 
 clog('add_gen block', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'add_gen', 'casper_library_scopes/snapshot/add_gen', ...
   'nsamples', 'nsamples', 'counter_size', as, ...
-  'use_dsp48', use_dsp48, 'Position', [800 210 860 420]);
+  'increment', num2str(data_width), 'use_dsp48', use_dsp48, ...
+  'Position', [800 210 860 420]);
 
 % join add_gen to: delay block
 if off == 1, 
