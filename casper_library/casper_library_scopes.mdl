@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Jun  6 15:21:13 2011"
+  LastModifiedDate	  "Tue Jun  7 08:37:23 2011"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:27>"
+  ModelVersionFormat	  "1.%<AutoIncrement:28>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -17186,7 +17186,7 @@ Library {
       MaskTabNameString	      ",,,,,"
       System {
 	Name			"snapshot"
-	Location		[11, 148, 1733, 1028]
+	Location		[23, 522, 1745, 1402]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -17278,11 +17278,11 @@ Library {
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "32|32|nsamples|on"
+	  MaskValueString	  "32|4|nsamples|on"
 	  MaskTabNameString	  ",,,"
 	  System {
 	    Name		    "add_gen"
-	    Location		    [662, 191, 1645, 903]
+	    Location		    [667, 264, 1650, 976]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -17371,7 +17371,7 @@ Library {
 	      SourceType	      "Xilinx Constant Block Block"
 	      arith_type	      "Unsigned"
 	      const		      "0"
-	      n_bits		      "32-nsamples-log2(increment/8)-1"
+	      n_bits		      "32-nsamples-log2(increment)-1"
 	      bin_pt		      "0"
 	      explicit_period	      on
 	      period		      "1"
@@ -17384,7 +17384,7 @@ Library {
 	      carry		      "CIN"
 	      dbl_ovrd		      off
 	      has_advanced_control    "0"
-	      sggui_pos		      "22,78,474,439"
+	      sggui_pos		      "23,105,474,439"
 	      block_type	      "constant"
 	      block_version	      "10.1.3"
 	      sg_icon_stat	      "20,14,0,1,white,blue,0,bf4ddd8b,right,"
@@ -17792,7 +17792,7 @@ Library {
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      use_rpm		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "121,352,419,748"
+	      sggui_pos		      "122,379,419,748"
 	      block_type	      "counter"
 	      block_version	      "10.1.3"
 	      sg_icon_stat	      "50,60,2,1,white,blue,0,d605779c,right,"
@@ -17883,11 +17883,11 @@ Library {
 		  SourceBlock		  "xbsIndex_r4/Delay"
 		  SourceType		  "Xilinx Delay Block"
 		  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-		  en			  "off"
+		  en			  off
 		  latency		  "1"
-		  dbl_ovrd		  "off"
-		  reg_retiming		  "off"
-		  xl_use_area		  "off"
+		  dbl_ovrd		  off
+		  reg_retiming		  off
+		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -17910,10 +17910,10 @@ Library {
 		  SourceBlock		  "xbsIndex_r4/Inverter"
 		  SourceType		  "Xilinx Inverter Block"
 		  infoedit		  "Bitwise logical negation (one's complement) operator."
-		  en			  "off"
+		  en			  off
 		  latency		  "0"
-		  dbl_ovrd		  "off"
-		  xl_use_area		  "off"
+		  dbl_ovrd		  off
+		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -17936,15 +17936,15 @@ Library {
 		  SourceType		  "Xilinx Logical Block Block"
 		  logical_function	  "XNOR"
 		  inputs		  "2"
-		  en			  "off"
+		  en			  off
 		  latency		  "0"
 		  precision		  "Full"
 		  arith_type		  "Unsigned"
 		  n_bits		  "8"
 		  bin_pt		  "2"
-		  align_bp		  "on"
-		  dbl_ovrd		  "off"
-		  xl_use_area		  "off"
+		  align_bp		  on
+		  dbl_ovrd		  off
+		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -18013,7 +18013,7 @@ Library {
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "nsamples+log2(increment/8)"
+	      nbits		      "nsamples+log2(increment)"
 	      boolean_output	      off
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
@@ -18022,7 +18022,7 @@ Library {
 	      base0		      "LSB of Input"
 	      dbl_ovrd		      off
 	      has_advanced_control    "0"
-	      sggui_pos		      "27,233,540,482"
+	      sggui_pos		      "29,287,540,482"
 	      block_type	      "slice"
 	      block_version	      "10.1.3"
 	      sg_icon_stat	      "25,22,1,1,white,blue,0,1fd851a7,right,"
@@ -18049,11 +18049,11 @@ Library {
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
-	      bit0		      "nsamples + log2(increment/8)"
+	      bit0		      "nsamples + log2(increment)"
 	      base0		      "LSB of Input"
 	      dbl_ovrd		      off
 	      has_advanced_control    "0"
-	      sggui_pos		      "219,278,540,482"
+	      sggui_pos		      "220,305,540,482"
 	      block_type	      "slice"
 	      block_version	      "10.1.3"
 	      sg_icon_stat	      "25,20,1,1,white,blue,0,1fd851a7,right,"
