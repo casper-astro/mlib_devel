@@ -72,8 +72,8 @@ reuse_block(blk, 'cast', 'xbsIndex_r4/Convert', ...
   'bin_pt', '0', 'quantization', 'Truncate', 'overflow', 'Wrap', ...
   'Position', [290 247 320 263]); 
 add_line(blk, 'ri/1', 'cast/1');
-reuse_block(blk, 'trig', 'built-in/inport', 'Position', [200 327 230 343], 'Port', '2');
-reuse_block(blk, 'we', 'built-in/inport', 'Position', [200 287 230 303], 'Port', '3');
+reuse_block(blk, 'trig', 'built-in/inport', 'Position', [200 327 230 343], 'Port', '3');
+reuse_block(blk, 'we', 'built-in/inport', 'Position', [200 287 230 303], 'Port', '2');
 
 %basic_ctrl
 clog('basic_ctrl block', 'snapshot_init_detailed_trace');
