@@ -207,13 +207,13 @@ else
 end
 
 % status registers
-reuse_block(blk, 'addr', 'xps_library/software register', ...
+reuse_block(blk, 'status', 'xps_library/software register', ...
   'io_dir', 'To Processor', 'arith_type', 'Unsigned', ...
   'Position', [895 355 995 385]);
-add_line(blk, 'add_gen/5', 'addr/1');
+add_line(blk, 'add_gen/5', 'status/1');
 reuse_block(blk, 'gaddr', 'built-in/Terminator', ...
   'Position', [1010 360 1025 375]);
-add_line(blk, 'addr/1', 'gaddr/1');
+add_line(blk, 'status/1', 'gaddr/1');
 
 %value in 
 if val == 1,
