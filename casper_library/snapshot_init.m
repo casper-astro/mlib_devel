@@ -41,7 +41,7 @@ clog('entering snapshot_init', 'trace');
 check_mask_type(blk, 'snapshot');
 munge_block(blk, varargin{:});
 
-defaults = {'nsamples', 10, 'data_width', 32, 'use_dsp48', 'on' ...
+defaults = {'nsamples', 10, 'data_width', '32', 'use_dsp48', 'on' ...
   'circap', 'on', 'offset', 'on', 'value', 'off'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('snapshot_init: post same_state', 'trace');
@@ -62,16 +62,16 @@ delete_lines(blk);
 
 %basic input ports
 reuse_block(blk, 'din', 'built-in/inport', 'Position', [130 247 160 263], 'Port', '1');
-reuse_block(blk, 'slice', 'xbsIndex_r4/Slice', ...
-  'nbits', num2str(data_width), 'mode', 'Lower Bit Location + Width', ...
-  'bit0', '0', 'base0', 'LSB of Input', ...
-  'Position', [190 247 220 263]); 
-add_line(blk, 'din/1', 'slice/1');
 reuse_block(blk, 'ri', 'xbsIndex_r4/Reinterpret', ...
   'force_arith_type', 'on', 'arith_type', 'Unsigned', ...
   'force_bin_pt', 'on', 'bin_pt', '0', ...
-  'Position', [250 247 320 263]); 
-add_line(blk, 'slice/1', 'ri/1');
+  'Position', [190 247 250 263]); 
+add_line(blk, 'din/1', 'ri/1');
+reuse_block(blk, 'cast', 'xbsIndex_r4/Convert', ...
+  'arith_type', 'Unsigned', 'n_bits', num2str(eval(data_width)), ...
+  'bin_pt', '0', 'quantization', 'Truncate', 'overflow', 'Wrap', ...
+  'Position', [290 247 320 263]); 
+add_line(blk, 'ri/1', 'cast/1');
 reuse_block(blk, 'trig', 'built-in/inport', 'Position', [200 327 230 343], 'Port', '2');
 reuse_block(blk, 'we', 'built-in/inport', 'Position', [200 287 230 303], 'Port', '3');
 
@@ -79,7 +79,7 @@ reuse_block(blk, 'we', 'built-in/inport', 'Position', [200 287 230 303], 'Port',
 clog('basic_ctrl block', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'basic_ctrl', 'casper_library_scopes/snapshot/basic_ctrl', ...
   'Position', [345 195 400 395]);
-add_line(blk, 'ri/1', 'basic_ctrl/2');
+add_line(blk, 'cast/1', 'basic_ctrl/2');
 add_line(blk, 'we/1', 'basic_ctrl/3');
 add_line(blk, 'trig/1', 'basic_ctrl/4');
 
@@ -169,13 +169,14 @@ end
 if circ == 1,
   as = '32';
 else
-  as = 'nsamples+1';
+  as = ['nsamples+',num2str(log2(eval(data_width)/8)),'+1'];
 end
 
 clog('add_gen block', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'add_gen', 'casper_library_scopes/snapshot/add_gen', ...
   'nsamples', 'nsamples', 'counter_size', as, ...
-  'use_dsp48', use_dsp48, 'Position', [800 210 860 420]);
+  'increment', num2str(eval(data_width)/8), 'use_dsp48', use_dsp48, ...
+  'Position', [800 210 860 420]);
 
 % join add_gen to: delay block
 if off == 1, 
