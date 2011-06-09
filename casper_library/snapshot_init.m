@@ -40,14 +40,17 @@ function snapshot_init(blk,varargin)
 clog('entering snapshot_init', 'trace');
 check_mask_type(blk, 'snapshot');
 munge_block(blk, varargin{:});
-
-defaults = {'nsamples', 10, 'data_width', '32', 'use_dsp48', 'on' ...
-  'circap', 'on', 'offset', 'on', 'value', 'off'};
+defaults = {'storage', 'bram', 'dram_dimm', '1', 'dram_clock', '200', ...
+  'nsamples', 10, 'data_width', '32',  'offset', 'on', ...
+  'circap', 'on', 'value', 'off','use_dsp48', 'on'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('snapshot_init: post same_state', 'trace');
 
+storage = get_var('storage', 'defaults', defaults, varargin{:});
+dram_dimm = eval(get_var('dram_dimm', 'defaults', defaults, varargin{:}));
+dram_clock = eval(get_var('dram_clock', 'defaults', defaults, varargin{:}));
 nsamples = get_var('nsamples', 'defaults', defaults, varargin{:});
-data_width = get_var('data_width', 'defaults', defaults, varargin{:});
+data_width = eval(get_var('data_width', 'defaults', defaults, varargin{:})); %value in drop down list
 use_dsp48 = get_var('use_dsp48', 'defaults', defaults, varargin{:});
 circap = get_var('circap', 'defaults', defaults, varargin{:});
 offset = get_var('offset', 'defaults', defaults, varargin{:});
@@ -68,7 +71,7 @@ reuse_block(blk, 'ri', 'xbsIndex_r4/Reinterpret', ...
   'Position', [190 247 250 263]); 
 add_line(blk, 'din/1', 'ri/1');
 reuse_block(blk, 'cast', 'xbsIndex_r4/Convert', ...
-  'arith_type', 'Unsigned', 'n_bits', num2str(eval(data_width)), ...
+  'arith_type', 'Unsigned', 'n_bits', num2str(data_width), ...
   'bin_pt', '0', 'quantization', 'Truncate', 'overflow', 'Wrap', ...
   'Position', [290 247 320 263]); 
 add_line(blk, 'ri/1', 'cast/1');
@@ -77,7 +80,10 @@ reuse_block(blk, 'we', 'built-in/inport', 'Position', [200 287 230 303], 'Port',
 
 %basic_ctrl
 clog('basic_ctrl block', 'snapshot_init_detailed_trace');
+temp = 'off';
+if strcmp(storage,'dram'), temp = 'on'; end
 reuse_block(blk, 'basic_ctrl', 'casper_library_scopes/snapshot/basic_ctrl', ...
+  'dram', temp, 'data_width', num2str(data_width), ...
   'Position', [345 195 400 395]);
 add_line(blk, 'cast/1', 'basic_ctrl/2');
 add_line(blk, 'we/1', 'basic_ctrl/3');
@@ -94,7 +100,7 @@ add_line(blk, 'ctrl/1', 'basic_ctrl/5');
 % stop_gen block
 
 reuse_block(blk, 'g_tr_en_cnt', 'built-in/Terminator', ...
-  'Position', [1190 397 1205 413]);
+  'Position', [1015 455 1030 470]);
 
 if circ == 1,
   clog('stop_gen block', 'snapshot_init_detailed_trace');
@@ -114,7 +120,7 @@ if circ == 1,
   %tr_en_cnt register 
   reuse_block(blk, 'tr_en_cnt', 'xps_library/software register', ...
     'io_dir', 'To Processor', 'arith_type', 'Unsigned', ...
-    'Position', [1070 390 1170 420]);
+    'Position', [895 450 995 480]);
 
   add_line(blk, 'tr_en_cnt/1', 'g_tr_en_cnt/1');
 
@@ -127,7 +133,6 @@ else
 end
 
 %delay_block
-%TODO could support offset in stop time too
 if off == 1,
   clog('delay block', 'snapshot_init_detailed_trace');
   
@@ -140,7 +145,7 @@ if off == 1,
 
   % block doing delay
   reuse_block(blk, 'delay', 'casper_library_scopes/snapshot/delay', ...
-    'use_dsp48', use_dsp48, 'Position', [650 215 715 420]);
+    'word_size', num2str(data_width/8), 'use_dsp48', use_dsp48, 'Position', [650 215 715 420]);
   add_line(blk, 'trig_offset/1', 'delay/7');
 
   add_line(blk, 'basic_ctrl/5', 'delay/5'); %init
@@ -156,7 +161,6 @@ if off == 1,
     add_line(blk, 'basic_ctrl/2', 'delay/2'); %din
     add_line(blk, 'basic_ctrl/3', 'delay/3'); %we
     add_line(blk, 'never/1', 'delay/6'); %continue
-    
   end
 else,
 % don't really have anything to do if no offset  
@@ -169,13 +173,13 @@ end
 if circ == 1,
   as = '32';
 else
-  as = ['nsamples+',num2str(log2(eval(data_width)/8)),'+1'];
+  as = ['nsamples+',num2str(log2(data_width/8)),'+1'];
 end
 
 clog('add_gen block', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'add_gen', 'casper_library_scopes/snapshot/add_gen', ...
   'nsamples', 'nsamples', 'counter_size', as, ...
-  'increment', num2str(eval(data_width)/8), 'use_dsp48', use_dsp48, ...
+  'increment', num2str(data_width/8), 'use_dsp48', use_dsp48, ...
   'Position', [800 210 860 420]);
 
 % join add_gen to: delay block
@@ -211,9 +215,9 @@ reuse_block(blk, 'status', 'xps_library/software register', ...
   'io_dir', 'To Processor', 'arith_type', 'Unsigned', ...
   'Position', [895 355 995 385]);
 add_line(blk, 'add_gen/5', 'status/1');
-reuse_block(blk, 'gaddr', 'built-in/Terminator', ...
-  'Position', [1010 360 1025 375]);
-add_line(blk, 'status/1', 'gaddr/1');
+reuse_block(blk, 'gstatus', 'built-in/Terminator', ...
+  'Position', [1015 360 1030 375]);
+add_line(blk, 'status/1', 'gstatus/1');
 
 %value in 
 if val == 1,
@@ -227,7 +231,7 @@ if val == 1,
     'Position', [895 215 995 245]);
   add_line(blk, 'add_gen/1', 'val/1');
   reuse_block(blk, 'gval', 'built-in/Terminator', ...
-    'Position', [1010 223 1025 238]);
+    'Position', [1015 223 1030 238]);
   add_line(blk,'val/1', 'gval/1'); 
 
 else %connect constant and terminate output
@@ -237,7 +241,7 @@ else %connect constant and terminate output
     'Position', [200 207 230 223]);
   add_line(blk, 'vin_const/1', 'basic_ctrl/1');
   reuse_block(blk, 'gval', 'built-in/Terminator', ...
-    'Position', [1138 223 1153 238]);
+    'Position', [1015 223 1030 238]);
   add_line(blk,'add_gen/1', 'gval/1'); 
   
 end
