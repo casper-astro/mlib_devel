@@ -56,6 +56,10 @@ circap = get_var('circap', 'defaults', defaults, varargin{:});
 offset = get_var('offset', 'defaults', defaults, varargin{:});
 value = get_var('value', 'defaults', defaults, varargin{:});
 
+if strcmp(storage,'dram') && ((log2(data_width/8) + nsamples + 1) > 31),
+  errordlg('snapshot does not support capture of more than 1Gbytes using DRAM');
+end
+
 %useful constants
 if strcmp(circap,'on'), circ = 1; else, circ = 0; end
 if strcmp(offset,'on'), off = 1; else, off = 0; end
@@ -80,10 +84,17 @@ reuse_block(blk, 'we', 'built-in/inport', 'Position', [200 287 230 303], 'Port',
 
 %basic_ctrl
 clog('basic_ctrl block', 'snapshot_init_detailed_trace');
-temp = 'off';
-if strcmp(storage,'dram'), temp = 'on'; end
+
+if strcmp(storage,'dram'), 
+  dram = 'on'; 
+  word_size = 144;
+else
+  dram = 'off';
+  word_size = data_width;
+end
+
 reuse_block(blk, 'basic_ctrl', 'casper_library_scopes/snapshot/basic_ctrl', ...
-  'dram', temp, 'data_width', num2str(data_width), ...
+  'dram', dram, 'data_width', num2str(word_size), ...
   'Position', [345 195 400 395]);
 add_line(blk, 'cast/1', 'basic_ctrl/2');
 add_line(blk, 'we/1', 'basic_ctrl/3');
@@ -123,13 +134,11 @@ if circ == 1,
     'Position', [895 450 995 480]);
 
   add_line(blk, 'tr_en_cnt/1', 'g_tr_en_cnt/1');
-
 else
 % constant so that always stop
   reuse_block(blk, 'never', 'xbsIndex_r4/Constant', ...
     'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
     'Position', [600 340 620 360]);
-  
 end
 
 %delay_block
@@ -145,7 +154,7 @@ if off == 1,
 
   % block doing delay
   reuse_block(blk, 'delay', 'casper_library_scopes/snapshot/delay', ...
-    'word_size', num2str(data_width/8), 'use_dsp48', use_dsp48, 'Position', [650 215 715 420]);
+    'word_size', num2str(data_width/8), 'use_dsp48', use_dsp48, 'Position', [650 212 715 418]);
   add_line(blk, 'trig_offset/1', 'delay/7');
 
   add_line(blk, 'basic_ctrl/5', 'delay/5'); %init
@@ -176,9 +185,15 @@ else
   as = ['nsamples+',num2str(log2(data_width/8)),'+1'];
 end
 
+%if using DRAM, write twice per address
+if strcmp(storage,'dram'),
+  burst_size = 1;
+else
+  burst_size = 0;
+end
 clog('add_gen block', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'add_gen', 'casper_library_scopes/snapshot/add_gen', ...
-  'nsamples', 'nsamples', 'counter_size', as, ...
+  'nsamples', 'nsamples', 'counter_size', as, 'burst_size', num2str(burst_size), ...
   'increment', num2str(data_width/8), 'use_dsp48', use_dsp48, ...
   'Position', [800 210 860 420]);
 
@@ -255,26 +270,89 @@ end
 %storage
 clog('storage', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'add_del', 'xbsIndex_r4/Delay', ...
-  'latency', '1', 'Position', [1025 255 1050 275]);
+  'latency', '1', 'Position', [1015 255 1040 275]);
 add_line(blk, 'add_gen/2', 'add_del/1'); %add
 reuse_block(blk, 'dat_del', 'xbsIndex_r4/Delay', ...
-  'latency', '1', 'Position', [1025 290 1050 310]);
+  'latency', '1', 'Position', [1015 290 1040 310]);
 add_line(blk, 'add_gen/3', 'dat_del/1'); %data
 reuse_block(blk, 'we_del', 'xbsIndex_r4/Delay', ...
-  'latency', '1', 'Position', [1025 325 1050 345]);
+  'latency', '1', 'Position', [1015 325 1040 345]);
 add_line(blk, 'add_gen/4', 'we_del/1'); %we
 
-%shared BRAM
-reuse_block(blk, 'bram', 'xps_library/Shared BRAM', ...
-  'data_width', num2str(data_width), 'addr_width', num2str(nsamples), ...
-  'Position', [1070 250 1170 350]);
-add_line(blk, 'add_del/1', 'bram/1');
-add_line(blk, 'dat_del/1', 'bram/2');
-add_line(blk, 'we_del/1', 'bram/3');
+if strcmp(storage, 'dram'),
+  %DRAM block
+  reuse_block(blk, 'dram', 'xps_library/dram', ...
+    'dimm', num2str(dram_dimm), 'ip_clock', num2str(dram_clock), ...
+    'disable_tag', 'on', 'use_sniffer', 'on', ...
+    'Position', [1090 220 1170 488]);
+  
+  %inputs
+  reuse_block(blk, 'rst', 'xbsIndex_r4/Constant', ...
+    'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
+    'Position', [1055 222 1070 238]);
+  add_line(blk, 'rst/1', 'dram/1');
+  add_line(blk, 'add_del/1', 'dram/2');
+  add_line(blk, 'dat_del/1', 'dram/3');
+  %wr_be
+  reuse_block(blk, 'w_all', 'xbsIndex_r4/Constant', ...
+    'arith_type', 'Unsigned', 'const', '2^18-1', ... 
+    'n_bits', '18', 'bin_pt', '0', ...
+    'explicit_period', 'on', 'period', '1', ...
+    'Position', [1055 327 1070 343]);
+  add_line(blk, 'w_all/1', 'dram/4');
+  %RWn
+  reuse_block(blk, 'write', 'xbsIndex_r4/Constant', ...
+    'arith_type', 'Unsigned', 'const', '0', ... 
+    'n_bits', '1', 'bin_pt', '0', ...
+    'explicit_period', 'on', 'period', '1', ...
+    'Position', [1055 362 1070 378]);
+  add_line(blk, 'write/1', 'dram/5');
+  %cmd_tag
+  reuse_block(blk, 'tag', 'xbsIndex_r4/Constant', ...
+    'arith_type', 'Unsigned', 'const', '0', ... 
+    'n_bits', '32', 'bin_pt', '0', ...
+    'explicit_period', 'on', 'period', '1', ...
+    'Position', [1055 397 1070 413]);
+  add_line(blk, 'tag/1', 'dram/6');
+  %cmd_valid
+  add_line(blk, 'we_del/1', 'dram/7');
+  %rd_ack
+  reuse_block(blk, 'always', 'xbsIndex_r4/Constant', ...
+    'arith_type', 'Boolean', 'const', '1', ... 
+    'explicit_period', 'on', 'period', '1', ...
+    'Position', [1055 467 1070 483]);
+  add_line(blk, 'always/1', 'dram/8');
 
-reuse_block(blk, 'gbram', 'built-in/Terminator', ...
-  'Position', [1190 290 1205 305]);
-add_line(blk, 'bram/1', 'gbram/1');
+  %terminate outputs
+  reuse_block(blk, 'gcmd_ack', 'built-in/Terminator', ...
+    'Position', [1195 238 1210 253]);
+  add_line(blk, 'dram/1', 'gcmd_ack/1');
+  reuse_block(blk, 'gdout', 'built-in/Terminator', ...
+    'Position', [1195 290 1210 305]);
+  add_line(blk, 'dram/2', 'gdout/1');
+  reuse_block(blk, 'grd_tag', 'built-in/Terminator', ...
+    'Position', [1195 348 1210 363]);
+  add_line(blk, 'dram/3', 'grd_tag/1');
+  reuse_block(blk, 'grd_valid', 'built-in/Terminator', ...
+    'Position', [1195 402 1210 418]);
+  add_line(blk, 'dram/4', 'grd_valid/1');
+  reuse_block(blk, 'gphy_ready', 'built-in/Terminator', ...
+    'Position', [1195 457 1210 473]);
+  add_line(blk, 'dram/5', 'gphy_ready/1');
+
+else,
+  %shared BRAM
+  reuse_block(blk, 'bram', 'xps_library/Shared BRAM', ...
+    'data_width', num2str(data_width), 'addr_width', num2str(nsamples), ...
+    'Position', [1070 250 1170 350]);
+  add_line(blk, 'add_del/1', 'bram/1');
+  add_line(blk, 'dat_del/1', 'bram/2');
+  add_line(blk, 'we_del/1', 'bram/3');
+
+  reuse_block(blk, 'gbram', 'built-in/Terminator', ...
+    'Position', [1190 290 1205 305]);
+  add_line(blk, 'bram/1', 'gbram/1');
+end
 
 % When finished drawing blocks and lines, remove all unused blocks.
 clean_blocks(blk);

@@ -38,14 +38,12 @@ if strcmp(storage, 'bram'),
   mask_visibilities{ismember(mask_names, 'dram_dimm')} = 'off';
   mask_visibilities{ismember(mask_names, 'dram_clock')} = 'off';
   mask_enables{ismember(mask_names, 'data_width')} = 'on';
-  mask_enables{ismember(mask_names, 'value')} = 'on';
 elseif strcmp(storage, 'dram'),
   mask_visibilities{ismember(mask_names, 'dram_dimm')} = 'on';
   mask_visibilities{ismember(mask_names, 'dram_clock')} = 'on';
   set_param(blk, 'data_width', '64');
   mask_enables{ismember(mask_names, 'data_width')} = 'off';
   set_param(blk, 'value', 'off');
-  mask_enables{ismember(mask_names, 'value')} = 'off';
 else,
 end
 
