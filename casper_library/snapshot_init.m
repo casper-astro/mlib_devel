@@ -56,6 +56,12 @@ circap = get_var('circap', 'defaults', defaults, varargin{:});
 offset = get_var('offset', 'defaults', defaults, varargin{:});
 value = get_var('value', 'defaults', defaults, varargin{:});
 
+%we double path width and decimate rate for DRAM
+if strcmp(storage,'dram'),
+  nsamples = nsamples - 1;
+  data_width = 128;
+end
+
 if strcmp(storage,'dram') && ((log2(data_width/8) + nsamples + 1) > 31),
   errordlg('snapshot does not support capture of more than 1Gbytes using DRAM');
 end
@@ -182,7 +188,7 @@ end
 if circ == 1,
   as = '32';
 else
-  as = ['nsamples+',num2str(log2(data_width/8)),'+1'];
+  as = [num2str(nsamples),'+',num2str(log2(data_width/8)),'+1'];
 end
 
 %if using DRAM, write twice per address
@@ -193,7 +199,7 @@ else
 end
 clog('add_gen block', 'snapshot_init_detailed_trace');
 reuse_block(blk, 'add_gen', 'casper_library_scopes/snapshot/add_gen', ...
-  'nsamples', 'nsamples', 'counter_size', as, 'burst_size', num2str(burst_size), ...
+  'nsamples', num2str(nsamples), 'counter_size', as, 'burst_size', num2str(burst_size), ...
   'increment', num2str(data_width/8), 'use_dsp48', use_dsp48, ...
   'Position', [800 210 860 420]);
 
