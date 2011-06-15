@@ -1,0 +1,68 @@
+##############################################################################
+##
+## ***************************************************************************
+## **                                                                       **
+## ** Copyright (c) 1995-2004 Xilinx, Inc.  All rights reserved.            **
+## **                                                                       **
+## ** You may copy and modify these files for your own internal use solely  **
+## ** with Xilinx programmable logic devices and Xilinx EDK system or       **
+## ** create IP modules solely for Xilinx programmable logic devices and    **
+## ** Xilinx EDK system. No rights are granted to distribute any files      **
+## ** unless they are distributed in Xilinx programmable logic devices.     **
+## **                                                                       **
+## ***************************************************************************
+##
+##############################################################################
+## Filename:          C:\edk_user_repository\MyProcessorIPLib\pcores\opb_adccontroller_v1_00_a\data\opb_adccontroller_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Fri Dec 03 21:08:57 2004 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib opb_adc10d1000ctrl_v1_00_a adc10d1000_ctrl vhdl
+lib opb_adc10d1000ctrl_v1_00_a adc10d1000_temp vhdl
+lib opb_adc10d1000ctrl_v1_00_a adc10d1000_attn vhdl
+lib opb_adc10d1000ctrl_v1_00_a adc_config_mux vhdl
+lib opb_adc10d1000ctrl_v1_00_a user_logic vhdl
+lib opb_adc10d1000ctrl_v1_00_a opb_adc10d1000ctrl vhdl
+lib proc_common_v2_00_a proc_common_pkg vhdl
+lib proc_common_v2_00_a family vhdl
+lib proc_common_v2_00_a or_muxcy vhdl
+lib proc_common_v2_00_a or_gate vhdl
+lib proc_common_v2_00_a counter_bit vhdl
+lib proc_common_v2_00_a counter vhdl
+lib proc_common_v2_00_a inferred_lut4 vhdl
+lib proc_common_v2_00_a srl_fifo2 vhdl
+lib proc_common_v2_00_a pf_counter_bit vhdl
+lib proc_common_v2_00_a pf_counter vhdl
+lib proc_common_v2_00_a pf_counter_top vhdl
+lib proc_common_v2_00_a pf_occ_counter vhdl
+lib proc_common_v2_00_a pf_occ_counter_top vhdl
+lib proc_common_v2_00_a pf_adder_bit vhdl
+lib proc_common_v2_00_a pf_adder vhdl
+lib proc_common_v2_00_a pf_dpram_select vhdl
+lib proc_common_v2_00_a srl16_fifo vhdl
+lib proc_common_v2_00_a pselect vhdl
+lib proc_common_v2_00_a valid_be vhdl
+lib proc_common_v2_00_a ld_arith_reg vhdl
+lib proc_common_v2_00_a mux_onehot vhdl
+lib proc_common_v2_00_a down_counter vhdl
+lib proc_common_v2_00_a ipif_pkg vhdl
+lib proc_common_v2_00_a ipif_steer vhdl
+lib proc_common_v2_00_a direct_path_cntr_ai vhdl
+lib interrupt_control_v1_00_a interrupt_control vhdl
+lib wrpfifo_v1_01_b pf_dly1_mux vhdl
+lib wrpfifo_v1_01_b ipif_control_wr vhdl
+lib wrpfifo_v1_01_b wrpfifo_dp_cntl vhdl
+lib wrpfifo_v1_01_b wrpfifo_top vhdl
+lib rdpfifo_v1_01_b ipif_control_rd vhdl
+lib rdpfifo_v1_01_b rdpfifo_dp_cntl vhdl
+lib rdpfifo_v1_01_b rdpfifo_top vhdl
+lib opb_ipif_v3_01_a reset_mir vhdl
+lib opb_ipif_v3_01_a brst_addr_cntr vhdl
+lib opb_ipif_v3_01_a opb_flex_addr_cntr vhdl
+lib opb_ipif_v3_01_a brst_addr_cntr_reg vhdl
+lib opb_ipif_v3_01_a opb_be_gen vhdl
+lib opb_ipif_v3_01_a srl_fifo3 vhdl
+lib opb_ipif_v3_01_a write_buffer vhdl
+lib opb_ipif_v3_01_a opb_bam vhdl
+lib opb_ipif_v3_01_a opb_ipif vhdl

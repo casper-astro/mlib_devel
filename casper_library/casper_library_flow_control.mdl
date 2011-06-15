@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Apr 21 12:46:07 2011"
+  LastModifiedDate	  "Wed May 11 16:04:53 2011"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:2>"
+  ModelVersionFormat	  "1.%<AutoIncrement:7>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -586,7 +586,7 @@ Library {
   }
   System {
     Name		    "casper_library_flow_control"
-    Location		    [392, 343, 924, 790]
+    Location		    [274, 361, 806, 808]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -671,7 +671,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -696,9 +696,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  on
+	  force_arith_type	  "on"
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  on
+	  force_bin_pt		  "on"
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -723,9 +723,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  on
+	  force_arith_type	  "on"
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  on
+	  force_bin_pt		  "on"
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "281,224,671,460"
@@ -785,9 +785,9 @@ Library {
       BlockType		      SubSystem
       Name		      "bus_expand"
       Ports		      [1, 2]
-      Position		      [370, 26, 420, 104]
+      Position		      [350, 26, 400, 104]
       BackgroundColor	      "[0.502000, 1.000000, 0.502000]"
-      AttributesFormatString  "2 outputs, f8.7"
+      AttributesFormatString  "2 outputs"
       UserDataPersistent      on
       UserData		      "DataTag1"
       MinAlgLoopOccurrences   off
@@ -799,36 +799,33 @@ Library {
       MaskHideContents	      off
       MaskType		      "bus_expand"
       MaskDescription	      "Expands a 'bus' made using a bus_create or Xilinx\nconcat block.\nThe input will be divid"
-      "ed into the specified number\nof outputs with the specified arithmetic types."
-      MaskPromptString	      "Number of outputs:|Output width:|Output binary point position:|Output arithmetic type:|O"
-      "utput to workspace?|Variable name prefix:|Output to model as well?"
-      MaskStyleString	      "edit,edit,edit,popup(Unsigned|Signed  (2's comp)),checkbox,edit,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on"
-      MaskCallbackString      "||||maskEnables{ismember(get_param(gcb, 'MaskNames'), 'variablePrefix')} = get_param(gc"
-      "b, 'outputToWorkspace');\nmaskEnables{ismember(get_param(gcb, 'MaskNames'), 'outputToModelAsWell')} = get_param("
-      "gcb, 'outputToWorkspace');\nset_param(gcb, 'MaskEnables', get_param(gcb, 'MaskEnables'));|%maskEnables{ismember("
-      "get_param(gcb, 'MaskNames'), 'variablePrefix')} = get_param(gcb, 'outputToWorkspace');\n%maskEnables{ismember(ge"
-      "t_param(gcb, 'MaskNames'), 'outputToModelAsWell')} = get_param(gcb, 'outputToWorkspace');\n%set_param(gcb, 'Mask"
-      "Enables', get_param(gcb, 'MaskEnables'));|"
-      MaskEnableString	      "on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,"
-      MaskVariables	      "outputNum=@1;outputWidth=@2;outputBinaryPt=@3;outputArithmeticType=&4;outputToWorkspace=&5;"
-      "variablePrefix=&6;outputToModelAsWell=&7;"
-      MaskInitialization      "bus_expand_init(gcb,...\n    'outputNum', outputNum, ...\n    'outputWidth', outputWidt"
-      "h, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArithmeticType, ...\n    'o"
-      "utputToWorkspace', outputToWorkspace, ...\n    'variablePrefix', variablePrefix, ...\n    'outputToModelAsWell',"
-      " outputToModelAsWell);"
+      "ed into the specified number\nof outputs with the specified arithmetic types.\nDivisions are made from most sign"
+      "ificant bit."
+      MaskPromptString	      "Mode:|Number of outputs:|Output width:|Output binary point position:|Output arithmetic t"
+      "ype: (Unsigned=0, Signed=1, Boolean=2)|Output to workspace?|Variable name prefix:|Output to model as well?"
+      MaskStyleString	      "popup(divisions of equal size|divisions of arbitrary size),edit,edit,edit,edit,checkbox,e"
+      "dit,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on"
+      MaskCallbackString      "bus_expand_callback();||bus_expand_callback();|||bus_expand_callback();||"
+      MaskEnableString	      "on,on,on,on,on,on,off,off"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,"
+      MaskVariables	      "mode=&1;outputNum=@2;outputWidth=@3;outputBinaryPt=@4;outputArithmeticType=@5;outputToWorks"
+      "pace=&6;variablePrefix=&7;outputToModelAsWell=&8;"
+      MaskInitialization      "bus_expand_init(gcb,...\n    'mode', mode, ...\n    'outputNum', outputNum, ...\n    'o"
+      "utputWidth', outputWidth, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArit"
+      "hmeticType, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'variablePrefix', variablePrefix, ...\n   "
+      " 'outputToModelAsWell', outputToModelAsWell);"
       MaskIconFrame	      on
       MaskIconOpaque	      off
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "2|8|7|Signed  (2's comp)|off|out|off"
-      MaskTabNameString	      ",,,,,,"
+      MaskValueString	      "divisions of equal size|2|8|7|1|off|out|on"
+      MaskTabNameString	      ",,,,,,,"
       System {
 	Name			"bus_expand"
-	Location		[1, 79, 1919, 1171]
+	Location		[647, 130, 1518, 588]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -920,7 +917,7 @@ Library {
 	  base0			  "LSB of Input"
 	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "22,98,540,482"
 	  block_type		  "slice"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "50,20,1,1,white,blue,0,1fd851a7,right,"
@@ -949,7 +946,7 @@ Library {
 	  base0			  "LSB of Input"
 	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "22,98,540,482"
 	  block_type		  "slice"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "50,20,1,1,white,blue,0,1fd851a7,right,"
@@ -1001,7 +998,6 @@ Library {
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
-	    Points		    [65, 0; 0, 40]
 	    DstBlock		    "slice1"
 	    DstPort		    1
 	  }
@@ -1014,12 +1010,83 @@ Library {
     }
     Block {
       BlockType		      SubSystem
+      Name		      "munge"
+      Ports		      [1, 1]
+      Position		      [270, 157, 310, 193]
+      BackgroundColor	      "[0.494000, 1.000000, 0.494000]"
+      AttributesFormatString  "[0]\n0 bits"
+      UserDataPersistent      on
+      UserData		      "DataTag2"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      MaskType		      "munge"
+      MaskDescription	      "Splits an input bus into the specified number of divisions and then recombines them in th"
+      "e order specified (most significant division = 0,least = number divisions-1)"
+      MaskPromptString	      "Number of divisions|Division size (bits)|Division packing order"
+      MaskStyleString	      "edit,edit,edit"
+      MaskTunableValueString  "on,on,on"
+      MaskCallbackString      "||"
+      MaskEnableString	      "on,on,on"
+      MaskVisibilityString    "on,on,on"
+      MaskToolTipString	      "on,on,on"
+      MaskVarAliasString      ",,"
+      MaskVariables	      "divisions=@1;div_size=@2;order=@3;"
+      MaskInitialization      "munge_init(gcb, ...\n    'divisions', divisions, ...\n    'div_size', div_size, ...\n  "
+      "  'order', order);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0|0"
+      MaskTabNameString	      ",,"
+      System {
+	Name			"munge"
+	Location		[418, 599, 1518, 964]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "din"
+	  Position		  [40, 30, 70, 50]
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "dout"
+	  Position		  [670, 30, 700, 50]
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  SrcBlock		  "din"
+	  SrcPort		  1
+	  DstBlock		  "dout"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
       Name		      "packetizer"
       Ports		      [3, 4]
       Position		      [25, 115, 180, 205]
       AttributesFormatString  "Parallel Input Width: 512\nSerial Output Width: 64"
       UserDataPersistent      on
-      UserData		      "DataTag2"
+      UserData		      "DataTag3"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -1350,7 +1417,7 @@ Library {
 	  Position		  [730, 403, 780, 437]
 	  AncestorBlock		  "casper_library_flow_control/parallel_to_serial_converter"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag3"
+	  UserData		  "DataTag4"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -2323,7 +2390,7 @@ Library {
       Ports		      [3, 1]
       Position		      [145, 28, 195, 62]
       UserDataPersistent      on
-      UserData		      "DataTag4"
+      UserData		      "DataTag5"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -3020,9 +3087,9 @@ Library {
   }
 }
 MatData {
-  NumRecords		  5
+  NumRecords		  6
   DataRecord {
-    Tag			    DataTag4
+    Tag			    DataTag5
     Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
     "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
@@ -3031,7 +3098,7 @@ MatData {
     "  )    \"            #! "
   }
   DataRecord {
-    Tag			    DataTag3
+    Tag			    DataTag4
     Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -YWH  .    $ $   "
     "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
@@ -3040,7 +3107,7 @@ MatData {
     "  )    \"            %! "
   }
   DataRecord {
-    Tag			    DataTag2
+    Tag			    DataTag3
     Data		    "  %)30     .    , (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %QQC  .    H $   "
     "8    (     @         %    \"     $    !     0         %  0 #     $    \\    9&5F875L=',     <&EN7W=I9'1H    <V]U=%"
@@ -3050,29 +3117,46 @@ MatData {
     "       \"0    @           !00 X    P    !@    @    $          4    (     0    (    !         !   @ V-   "
   }
   DataRecord {
+    Tag			    DataTag2
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"1_6@0.    V (  "
+    " 8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ9"
+    "0  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          "
+    "4    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $ "
+    "   !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &"
+    "1I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    "
+    "@    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $"
+    "    !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    "
+    "@           #P/PX    X    !@    @    &          4    (     0    $    !          D    (               .    .     8 "
+    "   (    !@         %    \"     $    !     0         )    \"               "
+  }
+  DataRecord {
     Tag			    DataTag1
-    Data		    "  %)30     .    ( <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ #AP:P$.    D 8   "
-    "8    (     @         %    \"     $    !     0         %  0 %0    $   \"H    9&5F875L=',                 ;W5T<'5T3G"
-    "5M                ;W5T<'5T5VED=&@             ;W5T<'5T0FEN87)Y4'0         ;W5T<'5T07)I=&AM971I8U1Y<&4 ;W5T<'5T5&]7"
-    ";W)K<W!A8V4     =F%R:6%B;&50<F5F:7@         ;W5T<'5T5&]-;V1E;$%S5V5L;   #@   / #   &    \"     $         !0    @  "
-    "  !    #@    $         #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !O=71P=71.=6T  "
-    "       #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X   !     !@    @  "
-    "  $          4    (     0    L    !         !     +    ;W5T<'5T5VED=&@       X    X    !@    @    &          4    "
-    "(     0    $    !          D    (            ($ .    0     8    (    !          %    \"     $    .     0         0"
-    "    #@   &]U='!U=$)I;F%R>5!T   .    .     8    (    !@         %    \"     $    !     0         )    \"           "
-    " !Q #@   $@    &    \"     0         !0    @    !    %     $         $    !0   !O=71P=71!<FET:&UE=&EC5'EP90     . "
-    "   2     8    (    !          %    \"     $    2     0         0    $@   %-I9VYE9\" @*#(G<R!C;VUP*0        X   !( "
-    "   !@    @    $          4    (     0   !$    !         !     1    ;W5T<'5T5&]7;W)K<W!A8V4         #@   #     &   "
-    " \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    .   "
-    "  0         0    #@   '9A<FEA8FQE4')E9FEX   .    ,     8    (    !          %    \"     $    #     0         0  , "
-    ";W5T  X   !(    !@    @    $          4    (     0   !,    !         !     3    ;W5T<'5T5&]-;V1E;$%S5V5L;       #@"
-    "   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@         %    \" "
-    "    $    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \""
-    "0    @            @0 X    X    !@    @    &          4    (     0    $    !          D    (            '$ .    2  "
-    "   8    (    !          %    \"     $    2     0         0    $@   %-I9VYE9\" @*#(G<R!C;VUP*0        X    P    !@ "
-    "   @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !     P  "
-    "  $         $  # &]U=  .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
+    Data		    "  %)30     .    \\ <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ )J2Z04.    8 <  "
+    " 8    (     @         %    \"     $    !     0         %  0 %0    $   \"]    9&5F875L=',                 ;6]D90   "
+    "                   ;W5T<'5T3G5M                ;W5T<'5T5VED=&@             ;W5T<'5T0FEN87)Y4'0         ;W5T<'5T07)"
+    "I=&AM971I8U1Y<&4 ;W5T<'5T5&]7;W)K<W!A8V4     =F%R:6%B;&50<F5F:7@         ;W5T<'5T5&]-;V1E;$%S5V5L;       #@   &@$ "
+    "  &    \"     $         !0    @    !    $     $         #@   #     &    \"     0         !0    @    !    !     $  "
+    "       $  $ &UO9&4.    2     8    (    !          %    \"     $    7     0         0    %P   &1I=FES:6]N<R!O9B!E<7"
+    "5A;\"!S:7IE  X   !     !@    @    $          4    (     0    D    !         !     )    ;W5T<'5T3G5M          X    "
+    "X    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !          % "
+    "   \"     $    +     0         0    \"P   &]U='!U=%=I9'1H       .    .     8    (    !@         %    \"     $    !"
+    "     0         )    \"            \"! #@   $     &    \"     0         !0    @    !    #@    $         $     X   !"
+    "O=71P=71\":6YA<GE0=   #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            <0 X   "
+    "!(    !@    @    $          4    (     0   !0    !         !     4    ;W5T<'5T07)I=&AM971I8U1Y<&4     #@   #@    &"
+    "    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !(    !@    @    $          4    ("
+    "     0   !$    !         !     1    ;W5T<'5T5&]7;W)K<W!A8V4         #@   #     &    \"     0         !0    @    ! "
+    "    P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    .     0         0    #@   '9A<FEA8F"
+    "QE4')E9FEX   .    ,     8    (    !          %    \"     $    #     0         0  , ;W5T  X   !(    !@    @    $   "
+    "       4    (     0   !,    !         !     3    ;W5T<'5T5&]-;V1E;$%S5V5L;       #@   #     &    \"     0         "
+    "!0    @    !     P    $         $  # &]F9@ .    2     8    (    !          %    \"     $    7     0         0    %"
+    "P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X    X    !@    @    &          4    (     0    $    !          D    (      "
+    "       $ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \""
+    "     8         !0    @    !     0    $         \"0    @            <0 X    X    !@    @    &          4    (     0"
+    "    $    !          D    (            \\#\\.    ,     8    (    !          %    \"     $    #     0         0  , ;"
+    "V9F  X    P    !@    @    $          4    (     0    ,    !         !   P!O=70 #@   #     &    \"     0         !0"
+    "    @    !     @    $         $  \" &]N   "
   }
   DataRecord {
     Tag			    DataTag0

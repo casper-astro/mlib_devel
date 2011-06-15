@@ -1,0 +1,12 @@
+lib qdr_controller_v1_00_a qdr_controller.v       verilog
+lib qdr_controller_v1_00_a qdrc_top.v             verilog
+lib qdr_controller_v1_00_a qdrc_infrastructure.v  verilog
+lib qdr_controller_v1_00_a qdrc_phy.v             verilog
+lib qdr_controller_v1_00_a qdrc_phy_bit_align.v   verilog
+lib qdr_controller_v1_00_a qdrc_phy_bit_correct.v verilog
+lib qdr_controller_v1_00_a qdrc_phy_bit_train.v   verilog
+lib qdr_controller_v1_00_a qdrc_phy_burst_align.v verilog
+lib qdr_controller_v1_00_a qdrc_phy_sm.v          verilog
+lib qdr_controller_v1_00_a qdrc_rd.v              verilog
+lib qdr_controller_v1_00_a qdrc_wr.v              verilog
+

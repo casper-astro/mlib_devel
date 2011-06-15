@@ -42,6 +42,17 @@ s.bypass_auto = get_param(blk_name,'bypass_auto');
 s.en_gain = get_param(blk_name,'en_gain');
 
 switch s.hw_sys
+    case 'ROACH2'
+        if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
+            s.adc_str = s.hw_adc;
+        else
+            error(['Unsupported adc board: ',s.hw_adc]);
+        end % if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
+
+        ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/s.adc_clk_rate*4),' ns']);
+        ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
+        ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
+    % end case 'ROACH'
     case 'ROACH'
         if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
             s.adc_str = s.hw_adc;

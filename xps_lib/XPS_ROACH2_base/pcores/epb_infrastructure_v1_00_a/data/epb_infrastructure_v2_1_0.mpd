@@ -1,0 +1,15 @@
+#epb infrastructure
+
+BEGIN epb_infrastructure
+
+OPTION IPTYPE      = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION IP_GROUP    = USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+PORT epb_data_buf = "",    DIR = IO, VEC = [31:0], THREE_STATE = FALSE, IOB_STATE = BUF
+PORT epb_data_oe_n_i = "", DIR = I, 
+PORT epb_data_out_i = "",  DIR = I,  VEC = [31:0] 
+PORT epb_data_in_o = "",   DIR = O,  VEC = [31:0] 
+
+END

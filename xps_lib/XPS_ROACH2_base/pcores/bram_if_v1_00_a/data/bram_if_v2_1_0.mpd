@@ -1,0 +1,44 @@
+###################################################################
+##
+## File     : bram_if_v2_1_0.mpd
+## Desc     : Microprocessor Peripheral Description
+##
+##
+###################################################################
+
+BEGIN bram_if
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION DWIDTH = 32
+OPTION AWIDTH = 32
+OPTION NUM_WRITE_ENABLES = 4
+OPTION ADDR_SLICE = 29
+OPTION SPECIAL = BRAM_CNTLR
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+## Bus Interfaces
+BUS_INTERFACE BUS = PORTA, BUS_STD = TRANSPARENT, BUS_TYPE = UNDEF
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER ADDR_SIZE = 11, DT = INTEGER
+
+## Ports
+PORT bram_rst = BRAM_Rst, DIR = O, BUS = PORTA
+PORT bram_clk = BRAM_Clk, DIR = O, BUS = PORTA
+PORT bram_en = BRAM_EN, DIR = O, BUS = PORTA
+PORT bram_wen = BRAM_WEN, DIR = O, VEC = [0:3], BUS = PORTA
+PORT bram_addr = BRAM_Addr, DIR = O, VEC = [0:31], BUS = PORTA
+PORT bram_din = BRAM_Din, DIR = I, VEC = [0:31], BUS = PORTA
+PORT bram_dout = BRAM_Dout, DIR = O, VEC = [0:31], BUS = PORTA
+
+PORT clk_in = "", DIR = I
+
+PORT addr     = "", DIR = I, VEC = [(ADDR_SIZE-1):0]
+PORT data_in  = "", DIR = I, VEC = [31:0]
+PORT data_out = "", DIR = O, VEC = [31:0]
+PORT we       = "", DIR = I
+
+END
