@@ -445,8 +445,9 @@ module gbe_rx #(
     if (mac_rst) begin
       rx_overrun <= 1'b0;
     end else begin
-      if (packet_fifo_overflow || ctrl_fifo_overflow)
+      if (packet_fifo_overflow || ctrl_fifo_overflow) begin
         rx_overrun <= 1'b1;
+      end
 
       if (app_rst_gotRR) begin
         app_rst_ack <= 1'b1;
