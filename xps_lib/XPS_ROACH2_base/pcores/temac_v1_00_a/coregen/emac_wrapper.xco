@@ -1,0 +1,85 @@
+##############################################################
+#
+# Xilinx Core Generator version 12.4
+# Date: Thu Feb 17 07:48:09 2011
+#
+##############################################################
+#
+#  This file contains the customisation parameters for a
+#  Xilinx CORE Generator IP GUI. It is strongly recommended
+#  that you do not manually alter this file as it may cause
+#  unexpected and unsupported behavior.
+#
+##############################################################
+#
+# BEGIN Project Options
+SET addpads = false
+SET asysymbol = true
+SET busformat = BusFormatAngleBracketNotRipped
+SET createndf = false
+SET designentry = Verilog
+SET device = xc6vsx475t
+SET devicefamily = virtex6
+SET flowvendor = Other
+SET formalverification = false
+SET foundationsym = false
+SET implementationfiletype = Ngc
+SET package = ff1759
+SET removerpms = false
+SET simulationfiles = Behavioral
+SET speedgrade = -1
+SET verilogsim = true
+SET vhdlsim = false
+# END Project Options
+# BEGIN Select
+SELECT Virtex-6_Embedded_Tri-Mode_Ethernet_MAC_Wrapper family Xilinx,_Inc. 1.4
+# END Select
+# BEGIN Parameters
+CSET address_filter_enable=false
+CSET byte_phy=false
+CSET client_side_data_width=8_bit
+CSET clock_enable=false
+CSET component_name=emac_wrapper
+CSET dcr_base_address=00
+CSET host_type=None
+CSET mdio=false
+CSET overclocking=None
+CSET phy_an_enable=false
+CSET phy_ignore_adzero=false
+CSET phy_isolate=false
+CSET phy_link_timer_value=032
+CSET phy_loopback_in_gtp=false
+CSET phy_loopback_msb=false
+CSET phy_powerdown=false
+CSET phy_reset=false
+CSET phy_unidirection_enable=false
+CSET physical_interface=SGMII
+CSET rx_ctrl_lencheck_disable=false
+CSET rx_disable_length=false
+CSET rx_enable=true
+CSET rx_flow_control_enable=true
+CSET rx_half_duplex_enable=false
+CSET rx_in_band_fcs_enable=false
+CSET rx_jumbo_frame_enable=true
+CSET rx_reset=false
+CSET rx_vlan_enable=false
+CSET serial_mode_switch_enable=false
+CSET sgmii_mode=Clock
+CSET speed=Tri_speed
+CSET tx_enable=true
+CSET tx_flow_control_enable=true
+CSET tx_half_duplex_enable=false
+CSET tx_ifg_adjust_enable=false
+CSET tx_in_band_fcs_enable=false
+CSET tx_jumbo_frame_enable=true
+CSET tx_reset=false
+CSET tx_vlan_enable=false
+CSET unicast_pause_mac_address_1=AA
+CSET unicast_pause_mac_address_2=BB
+CSET unicast_pause_mac_address_3=CC
+CSET unicast_pause_mac_address_4=DD
+CSET unicast_pause_mac_address_5=EE
+CSET unicast_pause_mac_address_6=FF
+# END Parameters
+GENERATE
+# CRC: 4333eaca

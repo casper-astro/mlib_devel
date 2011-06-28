@@ -32,7 +32,7 @@ SET verilogsim = true
 SET vhdlsim = false
 # END Project Options
 # BEGIN Select
-SELECT Block_Memory_Generator family Xilinx,_Inc. 4.3
+SELECT Block_Memory_Generator family Xilinx,_Inc. 3.1 
 # END Select
 # BEGIN Parameters
 CSET additional_inputs_for_power_estimation=false
