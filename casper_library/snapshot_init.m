@@ -107,10 +107,10 @@ add_line(blk, 'we/1', 'basic_ctrl/3');
 add_line(blk, 'trig/1', 'basic_ctrl/4');
 
 %ctrl reg
-reuse_block(blk, 'const0', 'built-in/Constant', 'Value', '0', 'Position', [130 365 150 385]);
+reuse_block(blk, 'const0', 'built-in/Constant', 'Value', '0', 'Position', [130 405 150 425]);
 reuse_block(blk, 'ctrl', 'xps_library/software register', ...
   'io_dir', 'From Processor', 'arith_type', 'Unsigned', ...
-  'Position', [165 360 265 390]);
+  'Position', [165 400 265 430]);
 add_line(blk, 'const0/1', 'ctrl/1');
 add_line(blk, 'ctrl/1', 'basic_ctrl/5');
 
@@ -122,17 +122,17 @@ reuse_block(blk, 'g_tr_en_cnt', 'built-in/Terminator', ...
 if circ == 1,
   clog('stop_gen block', 'snapshot_init_detailed_trace');
 
-  reuse_block(blk, 'stop', 'built-in/inport', 'Position', [200 407 230 423], 'Port', '4');
+  reuse_block(blk, 'stop', 'built-in/inport', 'Position', [200 447 230 463], 'Port', '4');
   reuse_block(blk, 'stop_gen', 'casper_library_scopes/snapshot/stop_gen', ...
-    'Position', [485 200 540 430]);
-  add_line(blk, 'stop/1', 'stop_gen/6');
+    'Position', [485 199 545 471]);
+  add_line(blk, 'stop/1', 'stop_gen/7');
   
   %join basic ctrl
   add_line(blk, 'basic_ctrl/1', 'stop_gen/1'); %vin
   add_line(blk, 'basic_ctrl/2', 'stop_gen/2'); %din
   add_line(blk, 'basic_ctrl/3', 'stop_gen/3'); %we
-  add_line(blk, 'basic_ctrl/5', 'stop_gen/4'); %init
-  add_line(blk, 'ctrl/1', 'stop_gen/5'); %ctrl
+  add_line(blk, 'basic_ctrl/5', 'stop_gen/5'); %init
+  add_line(blk, 'ctrl/1', 'stop_gen/6'); %ctrl
 
   %tr_en_cnt register 
   reuse_block(blk, 'tr_en_cnt', 'xps_library/software register', ...
@@ -140,6 +140,10 @@ if circ == 1,
     'Position', [895 450 995 480]);
 
   add_line(blk, 'tr_en_cnt/1', 'g_tr_en_cnt/1');
+  
+  %connect go signal to basic_ctrl if no offset
+  if off == 0, add_line(blk, 'basic_ctrl/4', 'stop_gen/4'); end
+
 else
 % constant so that always stop
   reuse_block(blk, 'never', 'xbsIndex_r4/Constant', ...
@@ -177,8 +181,12 @@ if off == 1,
     add_line(blk, 'basic_ctrl/3', 'delay/3'); %we
     add_line(blk, 'never/1', 'delay/6'); %continue
   end
+
+  %connect feeback go signal to stop block
+  if circ == 1, add_line(blk, 'delay/4', 'stop_gen/4'); end
+
 else,
-% don't really have anything to do if no offset  
+% don't really have anything to do if no offset 
 end
 
 %add_gen block
