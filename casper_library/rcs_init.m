@@ -245,7 +245,7 @@ function [result, revision, dirty] = get_revision_info(system_os, rev_sys, dir, 
           target = '"nothing to commit (working directory clean)"';
         end
         dirty = 1;
-        [s, r] = system(['cd ',dir,'; git status | grep ',target]);
+        [s, r] = system(['cd ',dir,'; git status | grep ',target,' | grep modified']);
         % failed to find file in status but no error message
         if ~isempty(file) && s == 1 && isempty(r), 
           dirty = 0;
