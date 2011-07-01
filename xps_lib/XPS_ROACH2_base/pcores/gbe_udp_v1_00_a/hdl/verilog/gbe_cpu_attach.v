@@ -373,7 +373,7 @@ module gbe_cpu_attach #(
                     use_rx_data  ? rx_data_int  :
                                    cpu_data_int;
 
-  assign cpu_err   = 1'b0;
+  //assign cpu_err   = 1'b0;
   assign cpu_ack   = cpu_ack_reg;
   
   assign Sl_errAck  = 1'b0; 

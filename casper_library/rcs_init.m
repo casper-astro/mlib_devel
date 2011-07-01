@@ -240,16 +240,17 @@ function [result, revision, dirty] = get_revision_info(system_os, rev_sys, dir, 
         end
 
         % determine if dirty. If file, must not appear, if whole repository, must be clean
-        target = file;
-        if isempty(file),
-          target = '"nothing to commit (working directory clean)"';
+        if isempty(file), search = 'grep "nothing to commit (working directory clean)"';
+        else, search = ['grep ',file,' | grep modified'];
         end
         dirty = 1;
-        [s, r] = system(['cd ',dir,'; git status | grep ',target]);
-        % failed to find file in status but no error message
+        [s, r] = system(['cd ',dir,'; git status |', search]);
+        clog(['cd ',dir,'; git status | ', search], 'rcs_init_debug');
+        clog([num2str(s),' : ',r], 'rcs_init_debug');
+        % failed to find modified string
         if ~isempty(file) && s == 1 && isempty(r), 
           dirty = 0;
-        % git succeeded and found string
+        % git succeeded and found nothing to commit
         elseif isempty(file) && s == 0,
           dirty = 0;
         end        

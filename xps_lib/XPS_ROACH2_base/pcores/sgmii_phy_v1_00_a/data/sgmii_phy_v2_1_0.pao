@@ -1,0 +1,2 @@
+lib sgmii_phy_v1_00_a sgmii_gtx      verilog
+lib sgmii_phy_v1_00_a sgmii_phy      verilog

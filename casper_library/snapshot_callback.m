@@ -43,7 +43,6 @@ elseif strcmp(storage, 'dram'),
   mask_visibilities{ismember(mask_names, 'dram_clock')} = 'on';
   set_param(blk, 'data_width', '64');
   mask_enables{ismember(mask_names, 'data_width')} = 'off';
-  set_param(blk, 'value', 'off');
 else,
 end
 

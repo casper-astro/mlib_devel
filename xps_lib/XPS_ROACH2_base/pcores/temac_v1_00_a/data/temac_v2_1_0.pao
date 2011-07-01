@@ -1,0 +1,2 @@
+lib temac_v1_00_a temac             verilog
+lib temac_v1_00_a emac_wrapper      verilog

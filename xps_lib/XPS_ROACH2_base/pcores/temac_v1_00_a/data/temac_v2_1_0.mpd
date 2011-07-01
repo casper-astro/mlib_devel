@@ -1,0 +1,68 @@
+###################################################################
+
+BEGIN temac
+
+## Peripheral Options
+  OPTION IPTYPE = PERIPHERAL
+  OPTION IMP_NETLIST = TRUE
+  OPTION HDL = VERILOG
+  OPTION STYLE = MIX
+  OPTION IP_GROUP = MICROBLAZE:PPC:USER
+  OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+
+## Bus Interface
+  BUS_INTERFACE BUS = SGMII,     BUS_STD = SGMII,     BUS_TYPE = INITIATOR
+  BUS_INTERFACE BUS = MAC,       BUS_STD = MAC,       BUS_TYPE = TARGET
+
+## Parameters
+  PARAMETER REG_SGMII = 1, DT = INTEGER
+  PARAMETER PHY_ADR   = 0, DT = INTEGER
+
+## Ports
+
+  PORT clk_125 = clk_125, DIR = IN
+  PORT reset   = reset,   DIR = IN
+  
+  ## SGMII Interface
+  PORT sgmii_txd          = sgmii_txd,          DIR = OUT, BUS = SGMII, VEC = [7:0]
+  PORT sgmii_txisk        = sgmii_txisk,        DIR = OUT, BUS = SGMII
+  PORT sgmii_txdispmode   = sgmii_txdispmode,   DIR = OUT, BUS = SGMII
+  PORT sgmii_txdispval    = sgmii_txdispval,    DIR = OUT, BUS = SGMII
+  PORT sgmii_txbuferr     = sgmii_txbuferr,     DIR = OUT, BUS = SGMII
+  PORT sgmii_txreset      = sgmii_txreset,      DIR = OUT, BUS = SGMII
+  #PORT sgmii_txbufstatus  = sgmii_txbufstatus   DIR = OUT, BUS = SGMII, VEC = [1:0]
+
+  PORT sgmii_rxd          = sgmii_rxd,          DIR = IN,  BUS = SGMII, VEC = [7:0]
+  PORT sgmii_rxiscomma    = sgmii_rxiscomma,    DIR = IN,  BUS = SGMII
+  PORT sgmii_rxisk        = sgmii_rxisk,        DIR = IN,  BUS = SGMII
+  PORT sgmii_rxdisperr    = sgmii_rxdisperr,    DIR = IN,  BUS = SGMII
+  PORT sgmii_rxnotintable = sgmii_rxnotintable, DIR = IN,  BUS = SGMII
+  PORT sgmii_rxrundisp    = sgmii_rxrundisp,    DIR = IN,  BUS = SGMII
+  PORT sgmii_rxclkcorcnt  = sgmii_rxclkcorcnt,  DIR = IN,  BUS = SGMII, VEC = [2:0]
+  PORT sgmii_rxbufstatus  = sgmii_rxbufstatus,  DIR = IN,  BUS = SGMII
+  PORT sgmii_rxreset      = sgmii_rxreset,      DIR = OUT, BUS = SGMII
+
+  PORT sgmii_encommaalign = sgmii_encommaalign, DIR = OUT, BUS = SGMII
+  PORT sgmii_pll_locked   = sgmii_pll_locked,   DIR = IN,  BUS = SGMII
+  PORT sgmii_elecidle     = sgmii_elecidle,     DIR = IN,  BUS = SGMII
+
+  PORT sgmii_resetdone    = sgmii_resetdone,    DIR = IN,  BUS = SGMII
+
+  PORT sgmii_loopback     = sgmii_loopback,     DIR = OUT, BUS = SGMII
+  PORT sgmii_powerdown    = sgmii_powerdown,    DIR = OUT, BUS = SGMII
+
+  ## MAC interface
+  PORT mac_rx_clk        = mac_rx_clk,       DIR = OUT, BUS = MAC 
+  PORT mac_rx_data       = mac_rx_data,      DIR = OUT, BUS = MAC, VEC = [7:0]
+  PORT mac_rx_dvld       = mac_rx_dvld,      DIR = OUT, BUS = MAC
+  PORT mac_rx_goodframe  = mac_rx_goodframe, DIR = OUT, BUS = MAC
+  PORT mac_rx_badframe   = mac_rx_badframe,  DIR = OUT, BUS = MAC
+
+  PORT mac_tx_clk       = mac_tx_clk,        DIR = OUT, BUS = MAC
+  PORT mac_tx_data      = mac_tx_data,       DIR = IN,  BUS = MAC, VEC = [7:0]
+  PORT mac_tx_dvld      = mac_tx_dvld,       DIR = IN,  BUS = MAC
+  PORT mac_tx_ack       = mac_tx_ack,        DIR = OUT, BUS = MAC
+
+  PORT mac_syncacquired = mac_syncacquired,  DIR = OUT, BUS = MAC
+

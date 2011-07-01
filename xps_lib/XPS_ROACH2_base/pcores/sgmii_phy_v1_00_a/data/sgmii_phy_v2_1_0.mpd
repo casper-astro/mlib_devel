@@ -1,0 +1,60 @@
+###################################################################
+
+BEGIN sgmii_phy 
+
+## Peripheral Options
+  OPTION IPTYPE = PERIPHERAL
+  OPTION IMP_NETLIST = TRUE
+  OPTION HDL = VERILOG
+  #OPTION STYLE = MIX
+  OPTION IP_GROUP = MICROBLAZE:PPC:USER
+  OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+## Ports
+
+  ## Bus Interface
+  BUS_INTERFACE BUS = SGMII,     BUS_STD = SGMII,     BUS_TYPE = TARGET
+
+  ## SGMII Interface
+  PORT sgmii_txd          = sgmii_txd,          DIR = IN,  BUS = SGMII, VEC = [7:0]
+  PORT sgmii_txisk        = sgmii_txisk,        DIR = IN,  BUS = SGMII
+  PORT sgmii_txdispmode   = sgmii_txdispmode,   DIR = IN,  BUS = SGMII
+  PORT sgmii_txdispval    = sgmii_txdispval,    DIR = IN,  BUS = SGMII
+  #PORT sgmii_txbufstatus  = sgmii_txbufstatus,  DIR = OUT, BUS = SGMII, VEC = [1:0] 
+  PORT sgmii_txbuferr     = sgmii_txbuferr,     DIR = IN,  BUS = SGMII
+  PORT sgmii_txreset      = sgmii_txreset,      DIR = IN,  BUS = SGMII
+
+  PORT sgmii_rxd          = sgmii_rxd,          DIR = OUT, BUS = SGMII, VEC = [7:0]
+  PORT sgmii_rxiscomma    = sgmii_rxiscomma,    DIR = OUT, BUS = SGMII
+  PORT sgmii_rxisk        = sgmii_rxisk,        DIR = OUT, BUS = SGMII
+  PORT sgmii_rxdisperr    = sgmii_rxdisperr,    DIR = OUT, BUS = SGMII
+  PORT sgmii_rxnotintable = sgmii_rxnotintable, DIR = OUT, BUS = SGMII
+  PORT sgmii_rxrundisp    = sgmii_rxrundisp,    DIR = OUT, BUS = SGMII
+  PORT sgmii_rxclkcorcnt  = sgmii_rxclkcorcnt,  DIR = OUT, BUS = SGMII, VEC = [2:0]
+  PORT sgmii_rxbufstatus  = sgmii_rxbufstatus,  DIR = OUT, BUS = SGMII
+  PORT sgmii_rxreset      = sgmii_rxreset,      DIR = IN,  BUS = SGMII
+
+  PORT sgmii_encommaalign = sgmii_encommaalign, DIR = IN,  BUS = SGMII
+  PORT sgmii_pll_locked   = sgmii_pll_locked,   DIR = OUT, BUS = SGMII
+  PORT sgmii_elecidle     = sgmii_elecidle,     DIR = OUT, BUS = SGMII
+
+  PORT sgmii_resetdone    = sgmii_resetdone,    DIR = OUT, BUS = SGMII
+
+  PORT sgmii_loopback     = sgmii_loopback,     DIR = IN,  BUS = SGMII
+  PORT sgmii_powerdown    = sgmii_powerdown,    DIR = IN,  BUS = SGMII
+
+  ## MGT Interface
+  PORT mgt_rx_n    = mgt_rx_n,   DIR = IN
+  PORT mgt_rx_p    = mgt_rx_p,   DIR = IN
+  PORT mgt_tx_n    = mgt_tx_n,   DIR = OUT
+  PORT mgt_tx_p    = mgt_tx_p,   DIR = OUT
+
+  PORT mgt_clk_n   = mgt_clk_n,  DIR = IN
+  PORT mgt_clk_p   = mgt_clk_p,  DIR = IN
+
+  PORT mgt_reset   = mgt_reset,  DIR = IN
+
+  PORT clk_125     = "", DIR = OUT
+  PORT recclk_125  = "", DIR = OUT
+
+END
