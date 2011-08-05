@@ -1,7 +1,8 @@
  // Modify for e2V 5 Gsps by Howard Liu, ASIAA 2009/10/07
 // change ctrl_strb_o to ctrl_spi_rst_o
 module adc_config_mux #(
-    parameter INTERLEAVED = 0
+   parameter INTERLEAVED = 0,
+   parameter MODE = 0 //defaults to 2-channel, DMUX 1:1
   ) (
     input  clk,
     input  rst,
@@ -189,10 +190,14 @@ module adc_config_mux #(
   assign config_start_int = conf_state == CONF_LOAD;
   //assign config_data_int  = INTERLEAVED ? 16'h7c2c : 16'h7cbc; //original description in ADC_1G
  
- //assign config_data_int  = 16'h0348; //new data value for ADC_5G temporarily
- assign config_data_int  = 16'h0344; // two-channel mode, A & C --rurik
- //assign config_data_int  = 16'h1344; // ramp-test mode  --rurik
- 
+   localparam MODE_2CHAN_DMUX1 = 0;
+   localparam MODE_2CHAN_DMUX2 = 1;
+   localparam MODE_TEST_RAMP = 2;
+
+   assign config_data_int = MODE == MODE_2CHAN_DMUX1 ? 16'h0344 : config_data_int; // two-channel mode, DMUX 1:1
+   assign config_data_int = MODE == MODE_2CHAN_DMUX2 ? 16'h0304 : config_data_int; // two-channel mode, DMUX 1:2
+   assign config_data_int = MODE == MODE_TEST_RAMP ? 16'h1344 : config_data_int; // ramp test mode
+   
   //assign config_addr_int  = 3'b0;
   assign config_addr_int  = 8'h81; //new address value for ADC_5G temporarily
 

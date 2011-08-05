@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "rprimian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Aug  4 19:10:57 2011"
-  RTWModifiedTimeStamp	  234385853
-  ModelVersionFormat	  "1.%<AutoIncrement:437>"
+  LastModifiedDate	  "Fri Aug  5 14:35:51 2011"
+  RTWModifiedTimeStamp	  234455748
+  ModelVersionFormat	  "1.%<AutoIncrement:438>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -5360,23 +5360,25 @@ Library {
 	  MaskDescription	  "Interface for the ASIAA 5 GSps ADC. This board comes in to types:\n\nDMUX 1:2 -- 4-bit samples, "
 	  "4 parallel streams\nDMUX 1:1 -- 8-bit samples, 2 parallel streams\n\nIn either configuration this block will output"
 	  " 8 parallel streams \nbut the underlying interface will be different."
-	  MaskPromptString	  "ADC Board|Internal demux|ADC Resolution (bits):|ADC Clock Rate (MHz):|use control"
-	  MaskStyleString	  "popup(ZDOK 0|ZDOK 1),popup(1:1|1:2),edit,edit,checkbox"
-	  MaskTunableValueString  "on,off,on,off,on"
+	  MaskPromptString	  "ADC Board|Internal demux|ADC Resolution (bits):|ADC Clock Rate (MHz):|use control|start in test"
+	  " ramp mode"
+	  MaskStyleString	  "popup(ZDOK 0|ZDOK 1),popup(1:1|1:2),edit,edit,checkbox,checkbox"
+	  MaskTunableValueString  "on,off,on,off,on,on"
 	  MaskCallbackString	  "|demux = get_param(gcb,'demux');\nif(strcmp(demux,'1:1')),\n    set_param(gcb, 'adc_bit_width"
-	  "', '8')\nelseif(strcmp(demux, '1:2')),\n    set_param(gcb, 'adc_bit_width', '4');\nelse\nend|||"
-	  MaskEnableString	  "on,on,off,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on"
-	  MaskVariables		  "adc_brd=&1;demux=&2;adc_bit_width=@3;adc_clk_rate=@4;using_ctrl=&5;"
+	  "', '8')\nelseif(strcmp(demux, '1:2')),\n    set_param(gcb, 'adc_bit_width', '4');\nelse\nend||||"
+	  MaskEnableString	  "on,on,off,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on"
+	  MaskVariables		  "adc_brd=&1;demux=&2;adc_bit_width=@3;adc_clk_rate=@4;using_ctrl=&5;test_ramp=&6;"
 	  MaskInitialization	  "adc5g_init(gcb,...\n    'demux', demux,...\n    'adc_clk_rate', adc_clk_rate,...\n    'adc_bi"
-	  "t_width', adc_bit_width,...\n    'adc_brd', adc_brd,...\n    'using_ctrl', using_ctrl);"
+	  "t_width', adc_bit_width,...\n    'adc_brd', adc_brd,...\n    'using_ctrl', using_ctrl,...\n    'test_ramp', test_ra"
+	  "mp);"
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "ZDOK 0|1:1|8|450|on"
+	  MaskValueString	  "ZDOK 0|1:1|8|450|on|off"
 	  System {
 	    Name		    "asiaa_adc5g"
 	    Location		    [2262, 210, 3649, 975]
@@ -5702,576 +5704,6 @@ Library {
 	      ic		      "0"
 	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_i1"
-	      SID		      259
-	      Ports		      [1, 1]
-	      Position		      [605, 79, 660, 101]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_i2"
-	      SID		      260
-	      Ports		      [1, 1]
-	      Position		      [605, 149, 660, 171]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_i3"
-	      SID		      261
-	      Ports		      [1, 1]
-	      Position		      [605, 204, 660, 226]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_i4"
-	      SID		      262
-	      Ports		      [1, 1]
-	      Position		      [605, 269, 660, 291]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_i5"
-	      SID		      263
-	      Ports		      [1, 1]
-	      Position		      [605, 329, 660, 351]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_i6"
-	      SID		      264
-	      Ports		      [1, 1]
-	      Position		      [605, 394, 660, 416]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_i7"
-	      SID		      265
-	      Ports		      [1, 1]
-	      Position		      [605, 449, 660, 471]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q0"
-	      SID		      266
-	      Ports		      [1, 1]
-	      Position		      [605, 519, 660, 541]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q1"
-	      SID		      267
-	      Ports		      [1, 1]
-	      Position		      [605, 574, 660, 596]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q2"
-	      SID		      268
-	      Ports		      [1, 1]
-	      Position		      [605, 619, 660, 641]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q3"
-	      SID		      269
-	      Ports		      [1, 1]
-	      Position		      [605, 669, 660, 691]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q4"
-	      SID		      270
-	      Ports		      [1, 1]
-	      Position		      [605, 734, 660, 756]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q5"
-	      SID		      271
-	      Ports		      [1, 1]
-	      Position		      [605, 784, 660, 806]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q6"
-	      SID		      272
-	      Ports		      [1, 1]
-	      Position		      [605, 834, 660, 856]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "adc5g_dmux_adc5g_user_data_q7"
-	      SID		      273
-	      Ports		      [1, 1]
-	      Position		      [605, 884, 660, 906]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,20,348,406"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
 	    }
 	    Block {
 	      BlockType		      Bias
@@ -6632,6 +6064,576 @@ Library {
 	      "\n"
 	    }
 	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i1"
+	      SID		      259
+	      Ports		      [1, 1]
+	      Position		      [605, 79, 660, 101]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
+	      SID		      260
+	      Ports		      [1, 1]
+	      Position		      [605, 149, 660, 171]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
+	      SID		      261
+	      Ports		      [1, 1]
+	      Position		      [605, 204, 660, 226]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
+	      SID		      262
+	      Ports		      [1, 1]
+	      Position		      [605, 269, 660, 291]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
+	      SID		      263
+	      Ports		      [1, 1]
+	      Position		      [605, 329, 660, 351]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
+	      SID		      264
+	      Ports		      [1, 1]
+	      Position		      [605, 394, 660, 416]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i7"
+	      SID		      265
+	      Ports		      [1, 1]
+	      Position		      [605, 449, 660, 471]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
+	      SID		      266
+	      Ports		      [1, 1]
+	      Position		      [605, 519, 660, 541]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
+	      SID		      267
+	      Ports		      [1, 1]
+	      Position		      [605, 574, 660, 596]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
+	      SID		      268
+	      Ports		      [1, 1]
+	      Position		      [605, 619, 660, 641]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
+	      SID		      269
+	      Ports		      [1, 1]
+	      Position		      [605, 669, 660, 691]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
+	      SID		      270
+	      Ports		      [1, 1]
+	      Position		      [605, 734, 660, 756]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
+	      SID		      271
+	      Ports		      [1, 1]
+	      Position		      [605, 784, 660, 806]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
+	      SID		      272
+	      Ports		      [1, 1]
+	      Position		      [605, 834, 660, 856]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,46,419,481"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
+	      SID		      273
+	      Ports		      [1, 1]
+	      Position		      [605, 884, 660, 906]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "0"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "Data Rate"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,20,348,406"
+	      block_type	      "gatewayin"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
+	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
+	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
+	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
+	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
+	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
+	      "\n"
+	    }
+	    Block {
 	      BlockType		      Outport
 	      Name		      "data_i0"
 	      SID		      294
@@ -6769,49 +6771,49 @@ Library {
 	    Line {
 	      SrcBlock		      "delay_i15"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q7"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i14"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q6"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i13"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q5"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i12"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q4"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i11"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q3"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i10"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q2"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i9"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q1"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i8"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_q0"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
 	      DstPort		      1
 	    }
 	    Line {
@@ -6956,91 +6958,91 @@ Library {
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q6"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
 	      SrcPort		      1
 	      DstBlock		      "data_q6"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q5"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
 	      SrcPort		      1
 	      DstBlock		      "data_q5"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q4"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
 	      SrcPort		      1
 	      DstBlock		      "data_q4"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q3"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
 	      SrcPort		      1
 	      DstBlock		      "data_q3"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q2"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
 	      SrcPort		      1
 	      DstBlock		      "data_q2"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q1"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
 	      SrcPort		      1
 	      DstBlock		      "data_q1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_i6"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
 	      SrcPort		      1
 	      DstBlock		      "data_i6"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_i5"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
 	      SrcPort		      1
 	      DstBlock		      "data_i5"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_i4"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
 	      SrcPort		      1
 	      DstBlock		      "data_i4"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_i3"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
 	      SrcPort		      1
 	      DstBlock		      "data_i3"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_i2"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
 	      SrcPort		      1
 	      DstBlock		      "data_i2"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_i1"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i1"
 	      SrcPort		      1
 	      DstBlock		      "data_i1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q7"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
 	      SrcPort		      1
 	      DstBlock		      "data_q7"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_q0"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
 	      SrcPort		      1
 	      DstBlock		      "data_q0"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "adc5g_dmux_adc5g_user_data_i7"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i7"
 	      SrcPort		      1
 	      DstBlock		      "data_i7"
 	      DstPort		      1
@@ -7166,43 +7168,43 @@ Library {
 	    Line {
 	      SrcBlock		      "delay_i1"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_i1"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i1"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i2"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_i2"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i3"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_i3"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i4"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_i4"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i5"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_i5"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i6"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_i6"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "delay_i7"
 	      SrcPort		      1
-	      DstBlock		      "adc5g_dmux_adc5g_user_data_i7"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i7"
 	      DstPort		      1
 	    }
 	  }
@@ -49969,21 +49971,22 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag0
-    Data		    "  %)30     .    \" 4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &EE5 <.    > 0  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   !4    9&5F875L=',       !D96UU>            &"
-    "%D8U]C;&M?<F%T90  861C7V)I=%]W:61T: !A9&-?8G)D         '5S:6YG7V-T<FP           X   \"P @  !@    @    !          4"
-    "    (     0    H    !          X    X    !@    @    $          4    (     0    4    !         !     %    9&5M=7@  "
-    "  .    ,     8    (    !          %    \"     $    #     0         0  , ,3HR  X   !     !@    @    $          4   "
-    " (     0    P    !         !     ,    861C7V-L:U]R871E      X    X    !@    @    &          4    (     0    $    !"
-    "          D    (          ! ?T .    0     8    (    !          %    \"     $    -     0         0    #0   &%D8U]B:"
-    "71?=VED=&@    .    .     8    (    !@         %    \"     $    !     0         )    \"            !! #@   #@    & "
-    "   \"     0         !0    @    !    !P    $         $     <   !A9&-?8G)D  X    X    !@    @    $          4    (  "
-    "   0    8    !         !     &    6D1/2R P   .    0     8    (    !          %    \"     $    *     0         0   "
-    " \"@   '5S:6YG7V-T<FP        .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P  "
-    "  !@    @    $          4    (     0    ,    !         !   P Q.C$ #@   #@    &    \"     8         !0    @    !   "
-    "  0    $         \"0    @          \"!\\0 X    X    !@    @    &          4    (     0    $    !          D    (  "
-    "          ($ .    .     8    (    !          %    \"     $    &     0         0    !@   %I$3TL@,   #@   #     &   "
-    " \"     0         !0    @    !     @    $         $  \" &]N   "
+    Data		    "  %)30     .    4 4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ #JU^0,.    P 0   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   !B    9&5F875L=',       !D96UU>            &%"
+    "D8U]C;&M?<F%T90  861C7V)I=%]W:61T: !A9&-?8G)D         '5S:6YG7V-T<FP     =&5S=%]R86UP               .    L (   8  "
+    "  (     0         %    \"     $    *     0         .    .     8    (    !          %    \"     $    %     0       "
+    "  0    !0   &1E;75X    #@   #     &    \"     0         !0    @    !     P    $         $  # #$Z,0 .    0     8   "
+    " (    !          %    \"     $    ,     0         0    #    &%D8U]C;&M?<F%T90     .    .     8    (    !@         "
+    "%    \"     $    !     0         )    \"           ('Q #@   $     &    \"     0         !0    @    !    #0    $   "
+    "      $     T   !A9&-?8FET7W=I9'1H    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @   "
+    "         @0 X    X    !@    @    $          4    (     0    <    !         !     '    861C7V)R9  .    .     8    ("
+    "    !          %    \"     $    &     0         0    !@   %I$3TL@,   #@   $     &    \"     0         !0    @    !"
+    "    \"@    $         $     H   !U<VEN9U]C=')L        #@   #     &    \"     0         !0    @    !     @    $     "
+    "    $  \" &]N   .    ,     8    (    !          %    \"     $    #     0         0  , ,3HQ  X    X    !@    @    &"
+    "          4    (     0    $    !          D    (           @?$ .    .     8    (    !@         %    \"     $    ! "
+    "    0         )    \"            \"! #@   #@    &    \"     0         !0    @    !    !@    $         $     8   !:"
+    "1$]+(#    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0      "
+    "   !0    @    !     P    $         $  # &]F9@ "
   }
 }

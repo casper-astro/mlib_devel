@@ -403,6 +403,9 @@ END
 #IF# (strcmp(get(b,'type'),'xps_adc5g') )    # PARAMETER HW_VER       = 1.00.a
 #IF# (strcmp(get(b,'type'),'xps_adc5g') )    # PARAMETER C_BASEADDR   = 0x00020000
 #IF# (strcmp(get(b,'type'),'xps_adc5g') )    # PARAMETER C_HIGHADDR   = 0x0002ffff
+#IF# (strcmp(get(b,'type'),'xps_adc5g') )  && strcmp(get(b,'demux'),'1:1')  && strcmp(get(b,'test_ramp'),'off')# PARAMETER INITIAL_CONFIG_MODE   = 0
+#IF# (strcmp(get(b,'type'),'xps_adc5g') )  && strcmp(get(b,'demux'),'1:2')  && strcmp(get(b,'test_ramp'),'off')# PARAMETER INITIAL_CONFIG_MODE   = 1
+#IF# (strcmp(get(b,'type'),'xps_adc5g') )  && strcmp(get(b,'test_ramp'),'on')# PARAMETER INITIAL_CONFIG_MODE   = 2
 #IF# (strcmp(get(b,'type'),'xps_adc5g') )    #  BUS_INTERFACE SOPB = opb0
 #IF# (strcmp(get(b,'type'),'xps_adc5g') )  # PORT OPB_Clk = epb_clk
 #IF# (strcmp(get(b,'type'),'xps_adc5g') )  # PORT adc0_adc3wire_clk     = adc0_adc3wire_clk

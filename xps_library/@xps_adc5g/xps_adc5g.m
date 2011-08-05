@@ -18,8 +18,11 @@ xsg_obj = get(blk_obj,'xsg_obj');
 % Get the mask parameters we need to know
 demux = get_param(blk_name, 'demux');
 adc_brd = get_param(blk_name, 'adc_brd');
+test_ramp = get_param(blk_name, 'test_ramp');
 
 % Retrieve block configuration parameters and set derivatives
+s.demux = demux;
+s.test_ramp = test_ramp;
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.using_ctrl = strcmp( get_param(blk_name, 'using_ctrl'), 'on' );
 s.sysclk_rate  = eval_param(blk_name,'adc_clk_rate')/2;

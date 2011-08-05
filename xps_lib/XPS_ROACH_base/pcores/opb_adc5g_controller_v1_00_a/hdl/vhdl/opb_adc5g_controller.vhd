@@ -65,7 +65,8 @@ entity opb_adc5g_controller is
       AUTOCONFIG_0  : integer          := 0;
       INTERLEAVED_0 : integer          := 0;
       AUTOCONFIG_1  : integer          := 0;
-      INTERLEAVED_1 : integer          := 0
+      INTERLEAVED_1 : integer          := 0;
+      INITIAL_CONFIG_MODE : integer    := 0
       );
   port
     (
@@ -238,7 +239,8 @@ constant PIPELINE_MODEL : integer := 5;
 
 	component adc_config_mux
 		generic(
-	    INTERLEAVED     : integer	:= 0
+	    INTERLEAVED     : integer	:= 0;
+            MODE            : integer   := INITIAL_CONFIG_MODE
 		);
 		port (
       clk             : in  std_logic;
@@ -456,8 +458,9 @@ begin
   adc_config_mux_0 : adc_config_mux
     generic map
     (
-      INTERLEAVED => INTERLEAVED_0
-    )
+      INTERLEAVED => INTERLEAVED_0,
+      MODE => INITIAL_CONFIG_MODE
+      )
     port map
     (
       clk              => iBus2IP_Clk,
@@ -482,7 +485,8 @@ begin
   adc_config_mux_1 : adc_config_mux
     generic map
     (
-      INTERLEAVED => INTERLEAVED_0
+      INTERLEAVED => INTERLEAVED_0,
+      MODE => INITIAL_CONFIG_MODE
     )
     port map
     (
