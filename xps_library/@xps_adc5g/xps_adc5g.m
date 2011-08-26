@@ -27,6 +27,13 @@ s.hw_sys = get(xsg_obj,'hw_sys');
 s.using_ctrl = strcmp( get_param(blk_name, 'using_ctrl'), 'on' );
 s.sysclk_rate  = eval_param(blk_name,'adc_clk_rate')/2;
 s.adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
+if strcmp(demux, '1:1')
+    actual_adc_clk_rate = s.adc_clk_rate;
+elseif strcmp(demux, '1:2')
+    actual_adc_clk_rate = s.adc_clk_rate/2;
+else
+    error(['Demux of ', demux, ' not supported!']);
+end
 if strcmp(adc_brd, 'ZDOK 0')
     s.use_adc0 = 1;
     s.use_adc1 = 0;
@@ -47,7 +54,7 @@ end;
 switch s.hw_sys
     case 'ROACH'
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25',...
-            'PERIOD', [num2str(1000/s.adc_clk_rate),' ns'],...
+            'PERIOD', [num2str(1000/actual_adc_clk_rate),' ns'],...
             'DIFF_TERM', 'TRUE');
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25',...
             'DIFF_TERM', 'TRUE');
