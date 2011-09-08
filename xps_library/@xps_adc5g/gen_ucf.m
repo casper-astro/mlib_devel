@@ -32,6 +32,8 @@ switch hw_sys
 
     case 'ROACH'
 	    disp('read gen_ucf.m for iserdes KSG');
+    case 'ROACH2'
+	    disp('read gen_ucf.m for iserdes KSG');
        % 		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_clk_buf"    PERIOD             = ',num2str(1000/blk_obj.adc_clk_rate),'ns;\n'];
         %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_clk_buf"    MAXDELAY           = 452ps;\n'];
         %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_clk_dcm"    MAXDELAY           = 853ps;\n'];
