@@ -26,7 +26,8 @@ library unisim;
 
 entity adc5g_dmux2_interface is
    generic (  
-	  adc_bit_width : integer :=8
+	  adc_bit_width : integer :=8;
+          mode          : integer :=0  -- 1-channel mode
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -172,25 +173,45 @@ architecture behavioral of adc5g_dmux2_interface is
 
 begin
 
-  user_data_i0 <= data0a(adc_bit_width/2-1 downto 0); 
-  user_data_i1 <= data2a(adc_bit_width/2-1 downto 0); 
-  user_data_i2 <= data0a(adc_bit_width-1 downto adc_bit_width/2);
-  user_data_i3 <= data2a(adc_bit_width-1 downto adc_bit_width/2); 
+  chan1_mode: if (mode=0) generate
+    user_data_i0 <= data0a(adc_bit_width/2-1 downto 0); 
+    user_data_i1 <= data1a(adc_bit_width/2-1 downto 0); 
+    user_data_i2 <= data2a(adc_bit_width/2-1 downto 0); 
+    user_data_i3 <= data3a(adc_bit_width/2-1 downto 0); 
+    user_data_i4 <= data0a(adc_bit_width-1 downto adc_bit_width/2);
+    user_data_i5 <= data1a(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_i6 <= data2a(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_i7 <= data3a(adc_bit_width-1 downto adc_bit_width/2); 
 
-  user_data_i4 <= data0b(adc_bit_width/2-1 downto 0); 
-  user_data_i5 <= data2b(adc_bit_width/2-1 downto 0); 
-  user_data_i6 <= data0b(adc_bit_width-1 downto adc_bit_width/2); 
-  user_data_i7 <= data2b(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_q0 <= data0b(adc_bit_width/2-1 downto 0); 
+    user_data_q1 <= data1b(adc_bit_width/2-1 downto 0); 
+    user_data_q4 <= data2b(adc_bit_width/2-1 downto 0); 
+    user_data_q5 <= data3b(adc_bit_width/2-1 downto 0); 
+    user_data_q2 <= data0b(adc_bit_width-1 downto adc_bit_width/2);
+    user_data_q3 <= data1b(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_q6 <= data2b(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_q7 <= data3b(adc_bit_width-1 downto adc_bit_width/2); 
+  end generate chan1_mode;
 
-  user_data_q0 <= data1a(adc_bit_width/2-1 downto 0); 
-  user_data_q1 <= data3a(adc_bit_width/2-1 downto 0); 
-  user_data_q2 <= data1a(adc_bit_width-1 downto adc_bit_width/2);
-  user_data_q3 <= data3a(adc_bit_width-1 downto adc_bit_width/2); 
+  chan2_mode: if (mode=1) generate
+    user_data_i0 <= data0a(adc_bit_width/2-1 downto 0); 
+    user_data_i1 <= data2a(adc_bit_width/2-1 downto 0); 
+    user_data_i2 <= data0a(adc_bit_width-1 downto adc_bit_width/2);
+    user_data_i3 <= data2a(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_i4 <= data0b(adc_bit_width/2-1 downto 0); 
+    user_data_i5 <= data2b(adc_bit_width/2-1 downto 0); 
+    user_data_i6 <= data0b(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_i7 <= data2b(adc_bit_width-1 downto adc_bit_width/2); 
 
-  user_data_q4 <= data1b(adc_bit_width/2-1 downto 0); 
-  user_data_q5 <= data3b(adc_bit_width/2-1 downto 0); 
-  user_data_q6 <= data1b(adc_bit_width-1 downto adc_bit_width/2); 
-  user_data_q7 <= data3b(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_q0 <= data1a(adc_bit_width/2-1 downto 0); 
+    user_data_q1 <= data3a(adc_bit_width/2-1 downto 0); 
+    user_data_q2 <= data1a(adc_bit_width-1 downto adc_bit_width/2);
+    user_data_q3 <= data3a(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_q4 <= data1b(adc_bit_width/2-1 downto 0); 
+    user_data_q5 <= data3b(adc_bit_width/2-1 downto 0); 
+    user_data_q6 <= data1b(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_q7 <= data3b(adc_bit_width-1 downto adc_bit_width/2); 
+  end generate chan2_mode;
 
  sync <= adc_sync;
   

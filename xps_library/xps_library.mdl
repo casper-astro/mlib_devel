@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "rprimian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Aug  5 14:35:51 2011"
-  RTWModifiedTimeStamp	  234455748
-  ModelVersionFormat	  "1.%<AutoIncrement:438>"
+  LastModifiedDate	  "Thu Sep  8 15:44:47 2011"
+  RTWModifiedTimeStamp	  237397483
+  ModelVersionFormat	  "1.%<AutoIncrement:444>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -727,7 +727,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    310
+    SIDHighWatermark	    1156
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -775,7 +775,7 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[867, 142, 1839, 599]
+	Location		[18, 380, 990, 837]
 	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5344,7 +5344,7 @@ Library {
 	  SID			  237
 	  Tag			  "xps:adc5g"
 	  Ports			  [3, 17]
-	  Position		  [730, 21, 895, 369]
+	  Position		  [725, 23, 890, 367]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag0"
@@ -5357,31 +5357,33 @@ Library {
 	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  MaskType		  "adc5g"
-	  MaskDescription	  "Interface for the ASIAA 5 GSps ADC. This board comes in to types:\n\nDMUX 1:2 -- 4-bit samples, "
-	  "4 parallel streams\nDMUX 1:1 -- 8-bit samples, 2 parallel streams\n\nIn either configuration this block will output"
-	  " 8 parallel streams \nbut the underlying interface will be different."
-	  MaskPromptString	  "ADC Board|Internal demux|ADC Resolution (bits):|ADC Clock Rate (MHz):|use control|start in test"
-	  " ramp mode"
-	  MaskStyleString	  "popup(ZDOK 0|ZDOK 1),popup(1:1|1:2),edit,edit,checkbox,checkbox"
-	  MaskTunableValueString  "on,off,on,off,on,on"
-	  MaskCallbackString	  "|demux = get_param(gcb,'demux');\nif(strcmp(demux,'1:1')),\n    set_param(gcb, 'adc_bit_width"
-	  "', '8')\nelseif(strcmp(demux, '1:2')),\n    set_param(gcb, 'adc_bit_width', '4');\nelse\nend||||"
-	  MaskEnableString	  "on,on,off,on,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on,on"
-	  MaskVariables		  "adc_brd=&1;demux=&2;adc_bit_width=@3;adc_clk_rate=@4;using_ctrl=&5;test_ramp=&6;"
-	  MaskInitialization	  "adc5g_init(gcb,...\n    'demux', demux,...\n    'adc_clk_rate', adc_clk_rate,...\n    'adc_bi"
-	  "t_width', adc_bit_width,...\n    'adc_brd', adc_brd,...\n    'using_ctrl', using_ctrl,...\n    'test_ramp', test_ra"
-	  "mp);"
+	  MaskDescription	  "Interface for the ASIAA 5 GSps ADC. Supports interleaving all four\ncores using either input A o"
+	  "r C, or interleaving two-cores each for \nA and C. The hardware itself comes in two versions:\n\nDMUX 1:2 -- 4-bit "
+	  "samples, 4 parallel streams\nDMUX 1:1 -- 8-bit samples, 2 parallel streams\n\nIn either configuration this block wi"
+	  "ll output 8 parallel streams \nbut the underlying interface, and the bitwidth of the samples,\nwill be different."
+	  MaskPromptString	  "Input mode:|ADC Board|Internal demux|ADC Resolution (bits):|ADC Clock Rate (MHz):|use control|s"
+	  "tart in test ramp mode"
+	  MaskStyleString	  "popup(One-channel -- A|One-channel -- C|Two-channel -- A&C),popup(ZDOK 0|ZDOK 1),popup(1:1|1:2),"
+	  "edit,edit,checkbox,checkbox"
+	  MaskTunableValueString  "on,on,off,on,off,on,on"
+	  MaskCallbackString	  "||demux = get_param(gcb,'demux');\nif(strcmp(demux,'1:1')),\n    set_param(gcb, 'adc_bit_widt"
+	  "h', '8')\nelseif(strcmp(demux, '1:2')),\n    set_param(gcb, 'adc_bit_width', '4');\nelse\nend||||"
+	  MaskEnableString	  "on,on,on,off,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on,on"
+	  MaskVariables		  "input_mode=&1;adc_brd=&2;demux=&3;adc_bit_width=@4;adc_clk_rate=@5;using_ctrl=&6;test_ramp=&7;"
+	  MaskInitialization	  "adc5g_init(gcb,...\n    'input_mode', input_mode,...\n    'demux', demux,...\n    'adc_clk_ra"
+	  "te', adc_clk_rate,...\n    'adc_bit_width', adc_bit_width,...\n    'adc_brd', adc_brd,...\n    'using_ctrl', using_"
+	  "ctrl,...\n    'test_ramp', test_ramp);"
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "ZDOK 0|1:1|8|450|on|off"
+	  MaskValueString	  "Two-channel -- A&C|ZDOK 0|1:1|8|450|on|off"
 	  System {
 	    Name		    "asiaa_adc5g"
-	    Location		    [2262, 210, 3649, 975]
+	    Location		    [2307, 115, 3693, 1108]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -5396,610 +5398,553 @@ Library {
 	    ZoomFactor		    "100"
 	    Block {
 	      BlockType		      Inport
-	      Name		      "sim_data_i"
-	      SID		      238
-	      Position		      [25, 108, 55, 122]
+	      Name		      "sim_a"
+	      SID		      1079
+	      Position		      [30, 102, 60, 118]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
-	      Name		      "sim_data_q"
-	      SID		      239
-	      Position		      [25, 578, 55, 592]
+	      Name		      "sim_c"
+	      SID		      1130
+	      Position		      [30, 582, 60, 598]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "sim_sync"
-	      SID		      240
-	      Position		      [45, 973, 75, 987]
+	      SID		      973
+	      Position		      [30, 1062, 60, 1078]
 	      Port		      "3"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei0"
-	      SID		      241
-	      Ports		      [1, 1]
-	      Position		      [275, 18, 310, 52]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag1"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "0"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei1"
-	      SID		      242
-	      Ports		      [1, 1]
-	      Position		      [275, 73, 310, 107]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag2"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "1"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei10"
-	      SID		      243
-	      Ports		      [1, 1]
-	      Position		      [275, 613, 310, 647]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag3"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "2"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei11"
-	      SID		      244
-	      Ports		      [1, 1]
-	      Position		      [275, 663, 310, 697]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag4"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "3"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei12"
-	      SID		      245
-	      Ports		      [1, 1]
-	      Position		      [275, 728, 310, 762]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag5"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "4"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei13"
-	      SID		      246
-	      Ports		      [1, 1]
-	      Position		      [275, 778, 310, 812]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag6"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "5"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei14"
-	      SID		      247
-	      Ports		      [1, 1]
-	      Position		      [275, 828, 310, 862]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag7"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "6"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei15"
-	      SID		      248
-	      Ports		      [1, 1]
-	      Position		      [275, 878, 310, 912]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag8"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "7"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei2"
-	      SID		      249
-	      Ports		      [1, 1]
-	      Position		      [275, 143, 310, 177]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag9"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "2"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei3"
-	      SID		      250
-	      Ports		      [1, 1]
-	      Position		      [275, 198, 310, 232]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag10"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "3"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei4"
-	      SID		      251
-	      Ports		      [1, 1]
-	      Position		      [275, 263, 310, 297]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag11"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "4"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei5"
-	      SID		      252
-	      Ports		      [1, 1]
-	      Position		      [275, 323, 310, 357]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag12"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "5"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei6"
-	      SID		      253
-	      Ports		      [1, 1]
-	      Position		      [275, 388, 310, 422]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag13"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "6"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei7"
-	      SID		      254
-	      Ports		      [1, 1]
-	      Position		      [275, 443, 310, 477]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag14"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "7"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei8"
-	      SID		      255
-	      Ports		      [1, 1]
-	      Position		      [275, 513, 310, 547]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag15"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "0"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Downsamplei9"
-	      SID		      256
-	      Ports		      [1, 1]
-	      Position		      [275, 568, 310, 602]
-	      ShowName		      off
-	      LibraryVersion	      "1.672"
-	      UserDataPersistent      on
-	      UserData		      "DataTag16"
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      N			      "8"
-	      phase		      "1"
-	      ic		      "0"
-	      smode		      "Force single rate"
-	      fmode		      "Maintain input frame size"
+	      BlockType		      Bias
+	      Name		      "bias_a"
+	      SID		      1081
+	      Position		      [150, 102, 180, 118]
+	      Bias		      "1"
 	    }
 	    Block {
 	      BlockType		      Bias
-	      Name		      "bias_i"
-	      SID		      274
-	      Position		      [175, 105, 205, 125]
-	    }
-	    Block {
-	      BlockType		      Bias
-	      Name		      "bias_q"
-	      SID		      275
-	      Position		      [175, 575, 205, 595]
+	      Name		      "bias_c"
+	      SID		      1132
+	      Position		      [150, 582, 180, 598]
+	      Bias		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i0"
-	      SID		      276
+	      Name		      "delay_a0"
+	      SID		      1083
 	      Ports		      [1, 1]
-	      Position		      [410, 18, 445, 52]
-	      ShowName		      off
+	      Position		      [350, 102, 380, 118]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag17"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "2"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i1"
-	      SID		      277
+	      Name		      "delay_a1"
+	      SID		      1086
 	      Ports		      [1, 1]
-	      Position		      [410, 73, 445, 107]
-	      ShowName		      off
+	      Position		      [350, 162, 380, 178]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag18"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i10"
-	      SID		      278
+	      Name		      "delay_a2"
+	      SID		      1089
 	      Ports		      [1, 1]
-	      Position		      [410, 613, 445, 647]
-	      ShowName		      off
+	      Position		      [350, 222, 380, 238]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag19"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i11"
-	      SID		      279
+	      Name		      "delay_a3"
+	      SID		      1092
 	      Ports		      [1, 1]
-	      Position		      [410, 663, 445, 697]
-	      ShowName		      off
+	      Position		      [350, 282, 380, 298]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag20"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i12"
-	      SID		      280
+	      Name		      "delay_a4"
+	      SID		      1095
 	      Ports		      [1, 1]
-	      Position		      [405, 728, 440, 762]
-	      ShowName		      off
+	      Position		      [350, 342, 380, 358]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag21"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i13"
-	      SID		      281
+	      Name		      "delay_a5"
+	      SID		      1098
 	      Ports		      [1, 1]
-	      Position		      [405, 778, 440, 812]
-	      ShowName		      off
+	      Position		      [350, 402, 380, 418]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag22"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i14"
-	      SID		      282
+	      Name		      "delay_a6"
+	      SID		      1101
 	      Ports		      [1, 1]
-	      Position		      [405, 828, 440, 862]
-	      ShowName		      off
+	      Position		      [350, 462, 380, 478]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag23"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i15"
-	      SID		      283
+	      Name		      "delay_a7"
+	      SID		      1104
 	      Ports		      [1, 1]
-	      Position		      [405, 878, 440, 912]
-	      ShowName		      off
+	      Position		      [350, 522, 380, 538]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag24"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i2"
-	      SID		      284
+	      Name		      "delay_c0"
+	      SID		      1134
 	      Ports		      [1, 1]
-	      Position		      [410, 143, 445, 177]
-	      ShowName		      off
+	      Position		      [350, 582, 380, 598]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag25"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
-	      samptime		      "-1"
-	      NumDelays		      "1"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "delay_i3"
-	      SID		      285
-	      Ports		      [1, 1]
-	      Position		      [410, 198, 445, 232]
-	      ShowName		      off
-	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag26"
-	      SourceBlock	      "simulink/Discrete/Integer Delay"
-	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
-	      samptime		      "-1"
-	      NumDelays		      "1"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "delay_i4"
-	      SID		      286
-	      Ports		      [1, 1]
-	      Position		      [405, 263, 440, 297]
-	      ShowName		      off
-	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag27"
-	      SourceBlock	      "simulink/Discrete/Integer Delay"
-	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
-	      samptime		      "-1"
-	      NumDelays		      "1"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "delay_i5"
-	      SID		      287
-	      Ports		      [1, 1]
-	      Position		      [405, 323, 440, 357]
-	      ShowName		      off
-	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag28"
-	      SourceBlock	      "simulink/Discrete/Integer Delay"
-	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
-	      samptime		      "-1"
-	      NumDelays		      "1"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "delay_i6"
-	      SID		      288
-	      Ports		      [1, 1]
-	      Position		      [405, 388, 440, 422]
-	      ShowName		      off
-	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag29"
-	      SourceBlock	      "simulink/Discrete/Integer Delay"
-	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
-	      samptime		      "-1"
-	      NumDelays		      "1"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "delay_i7"
-	      SID		      289
-	      Ports		      [1, 1]
-	      Position		      [405, 443, 440, 477]
-	      ShowName		      off
-	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag30"
-	      SourceBlock	      "simulink/Discrete/Integer Delay"
-	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
-	      samptime		      "-1"
-	      NumDelays		      "1"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "delay_i8"
-	      SID		      290
-	      Ports		      [1, 1]
-	      Position		      [410, 513, 445, 547]
-	      ShowName		      off
-	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag31"
-	      SourceBlock	      "simulink/Discrete/Integer Delay"
-	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "2"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "delay_i9"
-	      SID		      291
+	      Name		      "delay_c1"
+	      SID		      1137
 	      Ports		      [1, 1]
-	      Position		      [410, 568, 445, 602]
-	      ShowName		      off
+	      Position		      [350, 642, 380, 658]
 	      LibraryVersion	      "1.762"
-	      UserDataPersistent      on
-	      UserData		      "DataTag32"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
-	      vinit		      "0.0"
+	      vinit		      "0"
 	      samptime		      "-1"
 	      NumDelays		      "1"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "delay_c2"
+	      SID		      1140
+	      Ports		      [1, 1]
+	      Position		      [350, 702, 380, 718]
+	      LibraryVersion	      "1.762"
+	      SourceBlock	      "simulink/Discrete/Integer Delay"
+	      SourceType	      "Integer Delay"
+	      vinit		      "0"
+	      samptime		      "-1"
+	      NumDelays		      "1"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "delay_c3"
+	      SID		      1143
+	      Ports		      [1, 1]
+	      Position		      [350, 762, 380, 778]
+	      LibraryVersion	      "1.762"
+	      SourceBlock	      "simulink/Discrete/Integer Delay"
+	      SourceType	      "Integer Delay"
+	      vinit		      "0"
+	      samptime		      "-1"
+	      NumDelays		      "1"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "delay_c4"
+	      SID		      1146
+	      Ports		      [1, 1]
+	      Position		      [350, 822, 380, 838]
+	      LibraryVersion	      "1.762"
+	      SourceBlock	      "simulink/Discrete/Integer Delay"
+	      SourceType	      "Integer Delay"
+	      vinit		      "0"
+	      samptime		      "-1"
+	      NumDelays		      "1"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "delay_c5"
+	      SID		      1149
+	      Ports		      [1, 1]
+	      Position		      [350, 882, 380, 898]
+	      LibraryVersion	      "1.762"
+	      SourceBlock	      "simulink/Discrete/Integer Delay"
+	      SourceType	      "Integer Delay"
+	      vinit		      "0"
+	      samptime		      "-1"
+	      NumDelays		      "1"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "delay_c6"
+	      SID		      1152
+	      Ports		      [1, 1]
+	      Position		      [350, 942, 380, 958]
+	      LibraryVersion	      "1.762"
+	      SourceBlock	      "simulink/Discrete/Integer Delay"
+	      SourceType	      "Integer Delay"
+	      vinit		      "0"
+	      samptime		      "-1"
+	      NumDelays		      "1"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "delay_c7"
+	      SID		      1155
+	      Ports		      [1, 1]
+	      Position		      [350, 1002, 380, 1018]
+	      LibraryVersion	      "1.762"
+	      SourceBlock	      "simulink/Discrete/Integer Delay"
+	      SourceType	      "Integer Delay"
+	      vinit		      "0"
+	      samptime		      "-1"
+	      NumDelays		      "1"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a0"
+	      SID		      1082
+	      Ports		      [1, 1]
+	      Position		      [270, 102, 300, 118]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "0"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a1"
+	      SID		      1085
+	      Ports		      [1, 1]
+	      Position		      [270, 162, 300, 178]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "1"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a2"
+	      SID		      1088
+	      Ports		      [1, 1]
+	      Position		      [270, 222, 300, 238]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "2"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a3"
+	      SID		      1091
+	      Ports		      [1, 1]
+	      Position		      [270, 282, 300, 298]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "3"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a4"
+	      SID		      1094
+	      Ports		      [1, 1]
+	      Position		      [270, 342, 300, 358]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "4"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a5"
+	      SID		      1097
+	      Ports		      [1, 1]
+	      Position		      [270, 402, 300, 418]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "5"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a6"
+	      SID		      1100
+	      Ports		      [1, 1]
+	      Position		      [270, 462, 300, 478]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "6"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_a7"
+	      SID		      1103
+	      Ports		      [1, 1]
+	      Position		      [270, 522, 300, 538]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "7"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c0"
+	      SID		      1133
+	      Ports		      [1, 1]
+	      Position		      [270, 582, 300, 598]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "0"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c1"
+	      SID		      1136
+	      Ports		      [1, 1]
+	      Position		      [270, 642, 300, 658]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "1"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c2"
+	      SID		      1139
+	      Ports		      [1, 1]
+	      Position		      [270, 702, 300, 718]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "2"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c3"
+	      SID		      1142
+	      Ports		      [1, 1]
+	      Position		      [270, 762, 300, 778]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "3"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c4"
+	      SID		      1145
+	      Ports		      [1, 1]
+	      Position		      [270, 822, 300, 838]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "4"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c5"
+	      SID		      1148
+	      Ports		      [1, 1]
+	      Position		      [270, 882, 300, 898]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "5"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c6"
+	      SID		      1151
+	      Ports		      [1, 1]
+	      Position		      [270, 942, 300, 958]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "6"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "downsample_c7"
+	      SID		      1154
+	      Ports		      [1, 1]
+	      Position		      [270, 1002, 300, 1018]
+	      LibraryVersion	      "1.672"
+	      SourceBlock	      "dspsigops/Downsample"
+	      SourceType	      "Downsample"
+	      N			      "8"
+	      phase		      "7"
+	      ic		      "0"
+	      smode		      "Allow multirate"
+	      fmode		      "Maintain input frame size"
 	    }
 	    Block {
 	      BlockType		      Gain
-	      Name		      "gain_i"
-	      SID		      292
-	      Position		      [105, 105, 135, 125]
+	      Name		      "gain_a"
+	      SID		      1080
+	      Position		      [90, 102, 120, 118]
 	      Gain		      "256"
 	    }
 	    Block {
 	      BlockType		      Gain
-	      Name		      "gain_q"
-	      SID		      293
-	      Position		      [105, 575, 135, 595]
+	      Name		      "gain_c"
+	      SID		      1131
+	      Position		      [90, 582, 120, 598]
 	      Gain		      "256"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_sync"
-	      SID		      257
+	      SID		      1078
 	      Ports		      [1, 1]
-	      Position		      [605, 969, 660, 991]
+	      Position		      [90, 1062, 170, 1078]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
 	      arith_type	      "Boolean"
-	      n_bits		      "1"
+	      n_bits		      "16"
+	      bin_pt		      "14"
+	      quantization	      "Round  (unbiased: +/- Inf)"
+	      overflow		      "Saturate"
+	      period		      "1"
+	      dbl_ovrd		      off
+	      timing_constraint	      "None"
+	      locs_specified	      off
+	      LOCs		      "{}"
+	      xl_use_area	      off
+	      xl_area		      "[0,0,0,0,0,0,0]"
+	      hdl_port		      "on"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "gatewayin"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i0"
+	      SID		      1062
+	      Ports		      [1, 1]
+	      Position		      [430, 102, 510, 118]
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway In"
+	      SourceType	      "Xilinx Gateway In Block"
+	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
+	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
 	      bin_pt		      "0"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
@@ -6009,66 +5954,27 @@ Library {
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i0"
-	      SID		      258
-	      Ports		      [1, 1]
-	      Position		      [605, 24, 660, 46]
-	      LibraryVersion	      "1.2"
-	      SourceBlock	      "xbsIndex_r4/Gateway In"
-	      SourceType	      "Xilinx Gateway In Block"
-	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
-	      " fixed point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-	      arith_type	      "Unsigned"
-	      n_bits		      "8"
-	      bin_pt		      "0"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      period		      "1"
-	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
-	      locs_specified	      off
-	      LOCs		      "{}"
-	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      hdl_port		      "on"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
-	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i1"
-	      SID		      259
+	      SID		      1063
 	      Ports		      [1, 1]
-	      Position		      [605, 79, 660, 101]
+	      Position		      [430, 162, 510, 178]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6081,32 +5987,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
-	      SID		      260
+	      SID		      1064
 	      Ports		      [1, 1]
-	      Position		      [605, 149, 660, 171]
+	      Position		      [430, 222, 510, 238]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6119,32 +6024,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
-	      SID		      261
+	      SID		      1065
 	      Ports		      [1, 1]
-	      Position		      [605, 204, 660, 226]
+	      Position		      [430, 282, 510, 298]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6157,32 +6061,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
-	      SID		      262
+	      SID		      1066
 	      Ports		      [1, 1]
-	      Position		      [605, 269, 660, 291]
+	      Position		      [430, 342, 510, 358]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6195,32 +6098,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
-	      SID		      263
+	      SID		      1067
 	      Ports		      [1, 1]
-	      Position		      [605, 329, 660, 351]
+	      Position		      [430, 402, 510, 418]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6233,32 +6135,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
-	      SID		      264
+	      SID		      1068
 	      Ports		      [1, 1]
-	      Position		      [605, 394, 660, 416]
+	      Position		      [430, 462, 510, 478]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6271,32 +6172,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_i7"
-	      SID		      265
+	      SID		      1069
 	      Ports		      [1, 1]
-	      Position		      [605, 449, 660, 471]
+	      Position		      [430, 522, 510, 538]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6309,32 +6209,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
-	      SID		      266
+	      SID		      1070
 	      Ports		      [1, 1]
-	      Position		      [605, 519, 660, 541]
+	      Position		      [430, 582, 510, 598]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6347,32 +6246,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
-	      SID		      267
+	      SID		      1071
 	      Ports		      [1, 1]
-	      Position		      [605, 574, 660, 596]
+	      Position		      [430, 642, 510, 658]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6385,32 +6283,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
-	      SID		      268
+	      SID		      1072
 	      Ports		      [1, 1]
-	      Position		      [605, 619, 660, 641]
+	      Position		      [430, 702, 510, 718]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6423,32 +6320,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
-	      SID		      269
+	      SID		      1073
 	      Ports		      [1, 1]
-	      Position		      [605, 669, 660, 691]
+	      Position		      [430, 762, 510, 778]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6461,32 +6357,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
-	      SID		      270
+	      SID		      1074
 	      Ports		      [1, 1]
-	      Position		      [605, 734, 660, 756]
+	      Position		      [430, 822, 510, 838]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6499,32 +6394,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
-	      SID		      271
+	      SID		      1075
 	      Ports		      [1, 1]
-	      Position		      [605, 784, 660, 806]
+	      Position		      [430, 882, 510, 898]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6537,32 +6431,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
-	      SID		      272
+	      SID		      1076
 	      Ports		      [1, 1]
-	      Position		      [605, 834, 660, 856]
+	      Position		      [430, 942, 510, 958]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6575,32 +6468,31 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,46,419,481"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
-	      SID		      273
+	      SID		      1077
 	      Ports		      [1, 1]
-	      Position		      [605, 884, 660, 906]
+	      Position		      [430, 1002, 510, 1018]
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
@@ -6613,468 +6505,544 @@ Library {
 	      overflow		      "Wrap"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      timing_constraint	      "Data Rate"
+	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      xl_use_area	      off
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
-	      sggui_pos		      "20,20,348,406"
+	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayin"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "55,22,1,1,white,yellow,0,00d3666e,right,"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "80,16,1,1,white,yellow,0,00d3666e,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.327273 0.418182 0.327273 0.4 0.509091 0.545455 0.581818 0.690909 0.6 0.509091 0.454545 0.5636"
-	      "36 0.454545 0.509091 0.6 0.690909 0.581818 0.545455 0.509091 0.4 ],[0.0909091 0.272727 0.5 0.727273 0.909091 0."
-	      "909091 0.818182 0.909091 0.909091 0.681818 0.909091 0.772727 0.5 0.227273 0.0909091 0.318182 0.0909091 0.090909"
-	      "1 0.181818 0.0909091 0.0909091 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11p"
-	      "t}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');"
-	      "\n"
+	      "]);\npatch([0.45 0.4125 0.4625 0.4125 0.45 0.5 0.5125 0.525 0.5875 0.5375 0.5 0.475 0.525 0.475 0.5 0.5375 0.58"
+	      "75 0.525 0.5125 0.5 0.45 ],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0"
+	      ".375 0.125 0.125 0.1875 0.125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
+	      ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsiz"
+	      "e{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon te"
+	      "xt');\n"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i0"
-	      SID		      294
-	      Position		      [905, 28, 935, 42]
+	      Name		      "a0"
+	      SID		      1084
+	      Position		      [590, 102, 620, 118]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i1"
-	      SID		      295
-	      Position		      [925, 83, 955, 97]
+	      Name		      "a1"
+	      SID		      1087
+	      Position		      [590, 162, 620, 178]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i2"
-	      SID		      296
-	      Position		      [950, 153, 980, 167]
+	      Name		      "a2"
+	      SID		      1090
+	      Position		      [590, 222, 620, 238]
 	      Port		      "3"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i3"
-	      SID		      297
-	      Position		      [980, 208, 1010, 222]
+	      Name		      "a3"
+	      SID		      1093
+	      Position		      [590, 282, 620, 298]
 	      Port		      "4"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i4"
-	      SID		      298
-	      Position		      [1005, 273, 1035, 287]
+	      Name		      "a4"
+	      SID		      1096
+	      Position		      [590, 342, 620, 358]
 	      Port		      "5"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i5"
-	      SID		      299
-	      Position		      [1025, 333, 1055, 347]
+	      Name		      "a5"
+	      SID		      1099
+	      Position		      [590, 402, 620, 418]
 	      Port		      "6"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i6"
-	      SID		      300
-	      Position		      [1050, 398, 1080, 412]
+	      Name		      "a6"
+	      SID		      1102
+	      Position		      [590, 462, 620, 478]
 	      Port		      "7"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_i7"
-	      SID		      301
-	      Position		      [1075, 453, 1105, 467]
+	      Name		      "a7"
+	      SID		      1105
+	      Position		      [590, 522, 620, 538]
 	      Port		      "8"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q0"
-	      SID		      302
-	      Position		      [880, 523, 910, 537]
+	      Name		      "c0"
+	      SID		      1135
+	      Position		      [590, 582, 620, 598]
 	      Port		      "9"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q1"
-	      SID		      303
-	      Position		      [905, 578, 935, 592]
+	      Name		      "c1"
+	      SID		      1138
+	      Position		      [590, 642, 620, 658]
 	      Port		      "10"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q2"
-	      SID		      304
-	      Position		      [940, 623, 970, 637]
+	      Name		      "c2"
+	      SID		      1141
+	      Position		      [590, 702, 620, 718]
 	      Port		      "11"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q3"
-	      SID		      305
-	      Position		      [985, 673, 1015, 687]
+	      Name		      "c3"
+	      SID		      1144
+	      Position		      [590, 762, 620, 778]
 	      Port		      "12"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q4"
-	      SID		      306
-	      Position		      [1030, 738, 1060, 752]
+	      Name		      "c4"
+	      SID		      1147
+	      Position		      [590, 822, 620, 838]
 	      Port		      "13"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q5"
-	      SID		      307
-	      Position		      [1065, 788, 1095, 802]
+	      Name		      "c5"
+	      SID		      1150
+	      Position		      [590, 882, 620, 898]
 	      Port		      "14"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q6"
-	      SID		      308
-	      Position		      [1095, 838, 1125, 852]
+	      Name		      "c6"
+	      SID		      1153
+	      Position		      [590, 942, 620, 958]
 	      Port		      "15"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "data_q7"
-	      SID		      309
-	      Position		      [1130, 888, 1160, 902]
+	      Name		      "c7"
+	      SID		      1156
+	      Position		      [590, 1002, 620, 1018]
 	      Port		      "16"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
-	      Name		      "sync"
-	      SID		      310
-	      Position		      [860, 973, 890, 987]
+	      Name		      "sync_out"
+	      SID		      1027
+	      Position		      [250, 1062, 280, 1078]
 	      Port		      "17"
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      SrcBlock		      "delay_i15"
+	      SrcBlock		      "sim_a"
 	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
+	      DstBlock		      "gain_a"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "delay_i14"
+	      SrcBlock		      "gain_a"
 	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
+	      DstBlock		      "bias_a"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "delay_i13"
+	      SrcBlock		      "bias_a"
 	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i12"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i11"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i10"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i9"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i8"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei15"
-	      SrcPort		      1
-	      DstBlock		      "delay_i15"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei14"
-	      SrcPort		      1
-	      DstBlock		      "delay_i14"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei13"
-	      SrcPort		      1
-	      DstBlock		      "delay_i13"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei12"
-	      SrcPort		      1
-	      DstBlock		      "delay_i12"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei11"
-	      SrcPort		      1
-	      DstBlock		      "delay_i11"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei10"
-	      SrcPort		      1
-	      DstBlock		      "delay_i10"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei9"
-	      SrcPort		      1
-	      DstBlock		      "delay_i9"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Downsamplei8"
-	      SrcPort		      1
-	      DstBlock		      "delay_i8"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "sim_data_q"
-	      SrcPort		      1
-	      DstBlock		      "gain_q"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "gain_q"
-	      SrcPort		      1
-	      DstBlock		      "bias_q"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "bias_q"
-	      SrcPort		      1
-	      Points		      [15, 0; 0, -25]
+	      Points		      [0, 0]
 	      Branch {
-		Points			[0, 70]
-		Branch {
-		  DstBlock		  "Downsamplei10"
-		  DstPort		  1
-		}
-		Branch {
-		  Points		  [0, 50]
-		  Branch {
-		    DstBlock		    "Downsamplei11"
-		    DstPort		    1
-		  }
-		  Branch {
-		    Points		    [0, 65]
-		    Branch {
-		    DstBlock		    "Downsamplei12"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsamplei13"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    Branch {
-		    DstBlock		    "Downsamplei14"
-		    DstPort		    1
-		    }
-		    Branch {
-		    Points		    [0, 50]
-		    DstBlock		    "Downsamplei15"
-		    DstPort		    1
-		    }
-		    }
-		    }
-		  }
-		}
+		DstBlock		"downsample_a0"
+		DstPort			1
 	      }
 	      Branch {
-		Points			[0, 25]
-		Branch {
-		  Points		  [0, -55]
-		  DstBlock		  "Downsamplei8"
-		  DstPort		  1
-		}
-		Branch {
-		  DstBlock		  "Downsamplei9"
-		  DstPort		  1
-		}
+		DstBlock		"downsample_a1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_a2"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_a3"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_a4"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_a5"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_a6"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_a7"
+		DstPort			1
 	      }
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei7"
+	      SrcBlock		      "downsample_a0"
 	      SrcPort		      1
-	      DstBlock		      "delay_i7"
+	      DstBlock		      "delay_a0"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei6"
+	      SrcBlock		      "delay_a0"
 	      SrcPort		      1
-	      DstBlock		      "delay_i6"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i0"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei5"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i0"
 	      SrcPort		      1
-	      DstBlock		      "delay_i5"
+	      DstBlock		      "a0"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei4"
+	      SrcBlock		      "downsample_a1"
 	      SrcPort		      1
-	      DstBlock		      "delay_i4"
+	      DstBlock		      "delay_a1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
+	      SrcBlock		      "delay_a1"
 	      SrcPort		      1
-	      DstBlock		      "data_q6"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
-	      SrcPort		      1
-	      DstBlock		      "data_q5"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
-	      SrcPort		      1
-	      DstBlock		      "data_q4"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
-	      SrcPort		      1
-	      DstBlock		      "data_q3"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
-	      SrcPort		      1
-	      DstBlock		      "data_q2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
-	      SrcPort		      1
-	      DstBlock		      "data_q1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
-	      SrcPort		      1
-	      DstBlock		      "data_i6"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
-	      SrcPort		      1
-	      DstBlock		      "data_i5"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
-	      SrcPort		      1
-	      DstBlock		      "data_i4"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
-	      SrcPort		      1
-	      DstBlock		      "data_i3"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
-	      SrcPort		      1
-	      DstBlock		      "data_i2"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i1"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i1"
 	      SrcPort		      1
-	      DstBlock		      "data_i1"
+	      DstBlock		      "a1"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
+	      SrcBlock		      "downsample_a2"
 	      SrcPort		      1
-	      DstBlock		      "data_q7"
+	      DstBlock		      "delay_a2"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
+	      SrcBlock		      "delay_a2"
 	      SrcPort		      1
-	      DstBlock		      "data_q0"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
+	      SrcPort		      1
+	      DstBlock		      "a2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_a3"
+	      SrcPort		      1
+	      DstBlock		      "delay_a3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_a3"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
+	      SrcPort		      1
+	      DstBlock		      "a3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_a4"
+	      SrcPort		      1
+	      DstBlock		      "delay_a4"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_a4"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
+	      SrcPort		      1
+	      DstBlock		      "a4"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_a5"
+	      SrcPort		      1
+	      DstBlock		      "delay_a5"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_a5"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
+	      SrcPort		      1
+	      DstBlock		      "a5"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_a6"
+	      SrcPort		      1
+	      DstBlock		      "delay_a6"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_a6"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
+	      SrcPort		      1
+	      DstBlock		      "a6"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_a7"
+	      SrcPort		      1
+	      DstBlock		      "delay_a7"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_a7"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i7"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i7"
 	      SrcPort		      1
-	      DstBlock		      "data_i7"
+	      DstBlock		      "a7"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei3"
+	      SrcBlock		      "sim_c"
 	      SrcPort		      1
-	      DstBlock		      "delay_i3"
+	      DstBlock		      "gain_c"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei2"
+	      SrcBlock		      "gain_c"
 	      SrcPort		      1
-	      DstBlock		      "delay_i2"
+	      DstBlock		      "bias_c"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei1"
+	      SrcBlock		      "bias_c"
 	      SrcPort		      1
-	      DstBlock		      "delay_i1"
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"downsample_c0"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_c1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_c2"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_c3"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_c4"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_c5"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_c6"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"downsample_c7"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c0"
+	      SrcPort		      1
+	      DstBlock		      "delay_c0"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Downsamplei0"
+	      SrcBlock		      "delay_c0"
 	      SrcPort		      1
-	      DstBlock		      "delay_i0"
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_sync"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q0"
 	      SrcPort		      1
-	      DstBlock		      "sync"
+	      DstBlock		      "c0"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c1"
+	      SrcPort		      1
+	      DstBlock		      "delay_c1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_c1"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q1"
+	      SrcPort		      1
+	      DstBlock		      "c1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c2"
+	      SrcPort		      1
+	      DstBlock		      "delay_c2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_c2"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q2"
+	      SrcPort		      1
+	      DstBlock		      "c2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c3"
+	      SrcPort		      1
+	      DstBlock		      "delay_c3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_c3"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q3"
+	      SrcPort		      1
+	      DstBlock		      "c3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c4"
+	      SrcPort		      1
+	      DstBlock		      "delay_c4"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_c4"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q4"
+	      SrcPort		      1
+	      DstBlock		      "c4"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c5"
+	      SrcPort		      1
+	      DstBlock		      "delay_c5"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_c5"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q5"
+	      SrcPort		      1
+	      DstBlock		      "c5"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c6"
+	      SrcPort		      1
+	      DstBlock		      "delay_c6"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_c6"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q6"
+	      SrcPort		      1
+	      DstBlock		      "c6"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "downsample_c7"
+	      SrcPort		      1
+	      DstBlock		      "delay_c7"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay_c7"
+	      SrcPort		      1
+	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_q7"
+	      SrcPort		      1
+	      DstBlock		      "c7"
 	      DstPort		      1
 	    }
 	    Line {
@@ -7084,127 +7052,9 @@ Library {
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i0"
+	      SrcBlock		      "xps_library_ADCs_asiaa_adc5g_sync"
 	      SrcPort		      1
-	      DstBlock		      "data_i0"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "sim_data_i"
-	      SrcPort		      1
-	      DstBlock		      "gain_i"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "gain_i"
-	      SrcPort		      1
-	      DstBlock		      "bias_i"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "bias_i"
-	      SrcPort		      1
-	      Points		      [15, 0; 0, -25]
-	      Branch {
-		Points			[0, 25]
-		Branch {
-		  Points		  [0, -25]
-		  DstBlock		  "Downsamplei1"
-		  DstPort		  1
-		}
-		Branch {
-		  Points		  [0, -80]
-		  DstBlock		  "Downsamplei0"
-		  DstPort		  1
-		}
-	      }
-	      Branch {
-		Points			[0, 70]
-		Branch {
-		  Points		  [0, 55]
-		  Branch {
-		    Points		    [0, 65]
-		    Branch {
-		    Points		    [0, 60]
-		    Branch {
-		    Points		    [0, 65]
-		    Branch {
-		    Points		    [0, 55]
-		    DstBlock		    "Downsamplei7"
-		    DstPort		    1
-		    }
-		    Branch {
-		    DstBlock		    "Downsamplei6"
-		    DstPort		    1
-		    }
-		    }
-		    Branch {
-		    DstBlock		    "Downsamplei5"
-		    DstPort		    1
-		    }
-		    }
-		    Branch {
-		    DstBlock		    "Downsamplei4"
-		    DstPort		    1
-		    }
-		  }
-		  Branch {
-		    DstBlock		    "Downsamplei3"
-		    DstPort		    1
-		  }
-		}
-		Branch {
-		  DstBlock		  "Downsamplei2"
-		  DstPort		  1
-		}
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "delay_i0"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i0"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i1"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i2"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i3"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i3"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i4"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i4"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i5"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i5"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i6"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i6"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay_i7"
-	      SrcPort		      1
-	      DstBlock		      "xps_library_ADCs_asiaa_adc5g_user_data_i7"
+	      DstBlock		      "sync_out"
 	      DstPort		      1
 	    }
 	  }
@@ -8667,7 +8517,7 @@ Library {
 		  Ports			  [3, 1]
 		  Position		  [455, 132, 510, 198]
 		  UserDataPersistent	  on
-		  UserData		  "DataTag33"
+		  UserData		  "DataTag1"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -9158,7 +9008,7 @@ Library {
 		  Ports			  [3, 1]
 		  Position		  [455, 287, 510, 353]
 		  UserDataPersistent	  on
-		  UserData		  "DataTag34"
+		  UserData		  "DataTag2"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -11801,7 +11651,7 @@ Library {
 		  Ports			  [3, 1]
 		  Position		  [460, 136, 505, 194]
 		  UserDataPersistent	  on
-		  UserData		  "DataTag35"
+		  UserData		  "DataTag3"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -12633,7 +12483,7 @@ Library {
 		  Ports			  [3, 1]
 		  Position		  [455, 283, 505, 347]
 		  UserDataPersistent	  on
-		  UserData		  "DataTag36"
+		  UserData		  "DataTag4"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -16203,7 +16053,7 @@ Library {
 	      AttributesFormatString  "[0]\n32 bits"
 	      AncestorBlock	      "casper_library_flow_control/munge"
 	      UserDataPersistent      on
-	      UserData		      "DataTag37"
+	      UserData		      "DataTag5"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
 	      RTWSystemCode	      "Auto"
@@ -16278,7 +16128,7 @@ Library {
 	      AttributesFormatString  "[0]\n32 bits"
 	      AncestorBlock	      "casper_library_flow_control/munge"
 	      UserDataPersistent      on
-	      UserData		      "DataTag38"
+	      UserData		      "DataTag6"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
 	      RTWSystemCode	      "Auto"
@@ -16476,7 +16326,7 @@ Library {
 	  AttributesFormatString  "[0]\n32 bits"
 	  AncestorBlock		  "casper_library_flow_control/munge"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag39"
+	  UserData		  "DataTag7"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -16551,7 +16401,7 @@ Library {
 	  AttributesFormatString  "[0]\n32 bits"
 	  AncestorBlock		  "casper_library_flow_control/munge"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag40"
+	  UserData		  "DataTag8"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -36745,7 +36595,7 @@ Library {
       Position		      [1105, 1012, 1235, 1318]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       UserDataPersistent      on
-      UserData		      "DataTag41"
+      UserData		      "DataTag9"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -49694,9 +49544,9 @@ Library {
   }
 }
 MatData {
-  NumRecords		  42
+  NumRecords		  10
   DataRecord {
-    Tag			    DataTag41
+    Tag			    DataTag9
     Data		    "  %)30     .    ( 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \": R 4.    D 4  "
     " 8    (     @         %    \"     $    !     0         %  0 #P    $   !X    9&5F875L=',         ;F%M90            "
@@ -49718,275 +49568,119 @@ MatData {
     "      B4 .    .     8    (    !@         %    \"     $    !     0         )    \"            / _"
   }
   DataRecord {
-    Tag			    DataTag40
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
-  }
-  DataRecord {
-    Tag			    DataTag39
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
-  }
-  DataRecord {
-    Tag			    DataTag38
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
-  }
-  DataRecord {
-    Tag			    DataTag37
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
-  }
-  DataRecord {
-    Tag			    DataTag36
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            / _"
-  }
-  DataRecord {
-    Tag			    DataTag35
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            / _"
-  }
-  DataRecord {
-    Tag			    DataTag34
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            #! "
-  }
-  DataRecord {
-    Tag			    DataTag33
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            #! "
-  }
-  DataRecord {
-    Tag			    DataTag32
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag31
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag30
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag29
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag28
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag27
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag26
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag25
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag24
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag23
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag22
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag21
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag20
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag19
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag18
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag17
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag16
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag15
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag14
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag13
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag12
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag11
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag10
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
-    Tag			    DataTag9
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
-  }
-  DataRecord {
     Tag			    DataTag8
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag7
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag6
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag5
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag4
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            / _"
   }
   DataRecord {
     Tag			    DataTag3
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            / _"
   }
   DataRecord {
     Tag			    DataTag2
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            #! "
   }
   DataRecord {
     Tag			    DataTag1
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            #! "
   }
   DataRecord {
     Tag			    DataTag0
-    Data		    "  %)30     .    4 4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ #JU^0,.    P 0   "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $   !B    9&5F875L=',       !D96UU>            &%"
-    "D8U]C;&M?<F%T90  861C7V)I=%]W:61T: !A9&-?8G)D         '5S:6YG7V-T<FP     =&5S=%]R86UP               .    L (   8  "
-    "  (     0         %    \"     $    *     0         .    .     8    (    !          %    \"     $    %     0       "
-    "  0    !0   &1E;75X    #@   #     &    \"     0         !0    @    !     P    $         $  # #$Z,0 .    0     8   "
-    " (    !          %    \"     $    ,     0         0    #    &%D8U]C;&M?<F%T90     .    .     8    (    !@         "
-    "%    \"     $    !     0         )    \"           ('Q #@   $     &    \"     0         !0    @    !    #0    $   "
-    "      $     T   !A9&-?8FET7W=I9'1H    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @   "
-    "         @0 X    X    !@    @    $          4    (     0    <    !         !     '    861C7V)R9  .    .     8    ("
-    "    !          %    \"     $    &     0         0    !@   %I$3TL@,   #@   $     &    \"     0         !0    @    !"
-    "    \"@    $         $     H   !U<VEN9U]C=')L        #@   #     &    \"     0         !0    @    !     @    $     "
-    "    $  \" &]N   .    ,     8    (    !          %    \"     $    #     0         0  , ,3HQ  X    X    !@    @    &"
-    "          4    (     0    $    !          D    (           @?$ .    .     8    (    !@         %    \"     $    ! "
-    "    0         )    \"            \"! #@   #@    &    \"     0         !0    @    !    !@    $         $     8   !:"
-    "1$]+(#    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0      "
-    "   !0    @    !     P    $         $  # &]F9@ "
+    Data		    "  %)30     .    P 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %(RB@4.    , 8   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   !P    9&5F875L=',       !I;G!U=%]M;V1E     &1"
+    "E;75X            861C7V-L:U]R871E  !A9&-?8FET7W=I9'1H &%D8U]B<F0         =7-I;F=?8W1R;     !T97-T7W)A;7        X  "
+    " #( P  !@    @    !          4    (     0    X    !          X   !     !@    @    $          4    (     0    H    "
+    "!         !     *    :6YP=71?;6]D90        X   !(    !@    @    $          4    (     0   !(    !         !     2 "
+    "   5'=O+6-H86YN96P@+2T@029#        #@   #@    &    \"     0         !0    @    !    !0    $         $     4   !D96"
+    "UU>     X    P    !@    @    $          4    (     0    ,    !         !   P Q.C$ #@   $     &    \"     0        "
+    " !0    @    !    #     $         $     P   !A9&-?8VQK7W)A=&4     #@   #@    &    \"     8         !0    @    !    "
+    " 0    $         \"0    @          \"!\\0 X   !     !@    @    $          4    (     0    T    !         !     -   "
+    " 861C7V)I=%]W:61T:     X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    ."
+    "     8    (    !          %    \"     $    '     0         0    !P   &%D8U]B<F0 #@   #@    &    \"     0         !"
+    "0    @    !    !@    $         $     8   !:1$]+(#    X   !     !@    @    $          4    (     0    H    !       "
+    "  !     *    =7-I;F=?8W1R;         X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   "
+    "$     &    \"     0         !0    @    !    \"0    $         $     D   !T97-T7W)A;7          #@   #     &    \"   "
+    "  0         !0    @    !     P    $         $  # &]F9@ .    2     8    (    !          %    \"     $    2     0   "
+    "      0    $@   %1W;RUC:&%N;F5L(\"TM($$F0P        X    P    !@    @    $          4    (     0    ,    !         !"
+    "   P Q.C$ #@   #@    &    \"     8         !0    @    !     0    $         \"0    @          \"!\\0 X    X    !@  "
+    "  @    &          4    (     0    $    !          D    (            ($ .    .     8    (    !          %    \"    "
+    " $    &     0         0    !@   %I$3TL@,   #@   #     &    \"     0         !0    @    !     @    $         $  \" "
+    "&]N   .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
   }
 }

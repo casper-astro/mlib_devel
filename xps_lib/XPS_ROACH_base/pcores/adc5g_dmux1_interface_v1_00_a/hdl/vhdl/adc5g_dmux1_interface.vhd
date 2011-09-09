@@ -27,6 +27,7 @@ library unisim;
 entity adc5g_dmux1_interface is
    generic (  
 	  adc_bit_width : integer :=8
+          mode          : integer :=0  -- 1-channel mode
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -167,26 +168,46 @@ architecture behavioral of adc5g_dmux1_interface is
    signal adc_sync     : std_logic;
 
 begin
+
+  chan1_mode: if (mode=0) generate
+    user_data_i0 <= data0a; 
+    user_data_i1 <= data1a; 
+    user_data_i2 <= data2a; 
+    user_data_i3 <= data3a; 
+    user_data_i4 <= data0b; 
+    user_data_i5 <= data1b; 
+    user_data_i6 <= data2b; 
+    user_data_i7 <= data3b; 
+
+    user_data_q0 <= data0c; 
+    user_data_q1 <= data1c; 
+    user_data_q2 <= data2c; 
+    user_data_q3 <= data3c;
+    user_data_q4 <= data0d; 
+    user_data_q5 <= data1d; 
+    user_data_q6 <= data2d; 
+    user_data_q7 <= data3d; 
+  end generate chan1_mode;
   
-  user_data_i0 <= data0a; 
-  user_data_i1 <= data2a; 
-  user_data_i2 <= data0b; 
-  user_data_i3 <= data2b; 
+  chan2_mode: if (mode=1) generate
+    user_data_i0 <= data0a; 
+    user_data_i1 <= data2a; 
+    user_data_i2 <= data0b; 
+    user_data_i3 <= data2b; 
+    user_data_i4 <= data0c; 
+    user_data_i5 <= data2c; 
+    user_data_i6 <= data0d; 
+    user_data_i7 <= data2d; 
 
-  user_data_i4 <= data0c; 
-  user_data_i5 <= data2c; 
-  user_data_i6 <= data0d; 
-  user_data_i7 <= data2d; 
-
-  user_data_q0 <= data1a; 
-  user_data_q1 <= data3a; 
-  user_data_q2 <= data1b; 
-  user_data_q3 <= data3b; 
-
-  user_data_q4 <= data1c; 
-  user_data_q5 <= data3c; 
-  user_data_q6 <= data1d; 
-  user_data_q7 <= data3d; 
+    user_data_q0 <= data1a; 
+    user_data_q1 <= data3a; 
+    user_data_q2 <= data1b; 
+    user_data_q3 <= data3b;
+    user_data_q4 <= data1c; 
+    user_data_q5 <= data3c; 
+    user_data_q6 <= data1d; 
+    user_data_q7 <= data3d; 
+  end generate chan2_mode;
 
  sync <= adc_sync;
   

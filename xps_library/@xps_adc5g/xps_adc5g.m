@@ -19,10 +19,34 @@ xsg_obj = get(blk_obj,'xsg_obj');
 demux = get_param(blk_name, 'demux');
 adc_brd = get_param(blk_name, 'adc_brd');
 test_ramp = get_param(blk_name, 'test_ramp');
+input_mode = get_param(blk_name, 'input_mode');
 
 % Retrieve block configuration parameters and set derivatives
 s.demux = demux;
+s.input_mode = input_mode;
+if strcmp(input_mode, 'One-channel -- A') && strcmp(demux, '1:1')
+    mode = 0;
+    s.mode = 'MODE_ACHAN_DMUX1';
+elseif strcmp(input_mode, 'One-channel -- A') && strcmp(demux, '1:2')
+    mode = 0;
+    s.mode = 'MODE_ACHAN_DMUX2';
+elseif strcmp(input_mode, 'One-channel -- C') && strcmp(demux, '1:1')
+    mode = 0;
+    s.mode = 'MODE_CCHAN_DMUX1';
+elseif strcmp(input_mode, 'One-channel -- C') && strcmp(demux, '1:2')
+    mode = 0;
+    s.mode = 'MODE_CCHAN_DMUX2';
+elseif strcmp(input_mode, 'Two-channel -- A&C') && strcmp(demux, '1:1')
+    mode = 1;
+    s.mode = 'MODE_2CHAN_DMUX1';
+elseif strcmp(input_mode, 'Two-channel -- A&C') && strcmp(demux, '1:2')
+    mode = 1;
+    s.mode = 'MODE_2CHAN_DMUX2';
+end
 s.test_ramp = test_ramp;
+if strcmp(test_ramp, 'on')
+    s.mode = 'MODE_TEST_RAMP';
+end
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.using_ctrl = strcmp( get_param(blk_name, 'using_ctrl'), 'on' );
 s.sysclk_rate  = eval_param(blk_name,'adc_clk_rate')/2;
@@ -122,10 +146,9 @@ b = set(b,'misc_ports',misc_ports);
 mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ', num2str(s.adc_clk_rate*1e6));
 
 adcport = [s.hw_sys, '.', 'zdok', s.adc_str(length(s.adc_str))];
-% Set external ports for ADC0 (need to do the same for ADC1)
+% Set external ports
 ext_ports.adc_clk_p_i = {1 'in'  [s.adc_str,'clk_p']       ['{',adcport,'_p{[39]+1,:}}']              'vector=false'  mhs_constraints ucf_constraints_clock };
 ext_ports.adc_clk_n_i = {1 'in'  [s.adc_str,'clk_n']       ['{',adcport,'_n{[39]+1,:}}']              'vector=false'  mhs_constraints ucf_constraints_clock };
-%ext_ports.adc_reset_i = {1 'out' [s.adc_str,'_reset']       ['{',adcport,'_p{[19]+1,:}}']             'vector=false'  struct() ucf_constraints_single };
 ext_ports.adc_sync_p      = {1 'in'  [s.adc_str,'sync_p']      ['{',adcport,'_p{[38]+1,:}}']                 'vector=false'  struct() ucf_constraints_term };
 ext_ports.adc_sync_n      = {1 'in'  [s.adc_str,'sync_n']      ['{',adcport,'_n{[38]+1,:}}']                 'vector=false'  struct() ucf_constraints_term };
 ext_ports.adc_overrange_p = {1 'in'  [s.adc_str,'overrange_p'] ['{',adcport,'_p{[28]+1,:}}']                 'vector=false'  struct() ucf_constraints_term };
@@ -143,4 +166,5 @@ b = set(b,'ext_ports',ext_ports);
 % Finally set parameters and gtfo
 parameters.USE_ADC0 = num2str(s.use_adc0);
 parameters.USE_ADC1 = num2str(s.use_adc1);
+parameters.MODE = num2str(mode);
 b = set(b,'parameters',parameters);

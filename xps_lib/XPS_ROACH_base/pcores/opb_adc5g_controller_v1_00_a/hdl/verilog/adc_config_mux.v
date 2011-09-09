@@ -2,7 +2,7 @@
 // change ctrl_strb_o to ctrl_spi_rst_o
 module adc_config_mux #(
    parameter INTERLEAVED = 0,
-   parameter MODE = 0 //defaults to 2-channel, DMUX 1:1
+   parameter MODE = 0 //defaults to A-channel, DMUX 1:1
   ) (
     input  clk,
     input  rst,
@@ -189,13 +189,33 @@ module adc_config_mux #(
   assign mode_int         = clear_wait < 10'b01_1111_1111;
   assign config_start_int = conf_state == CONF_LOAD;
   //assign config_data_int  = INTERLEAVED ? 16'h7c2c : 16'h7cbc; //original description in ADC_1G
- 
-   localparam MODE_2CHAN_DMUX1 = 0;
-   localparam MODE_2CHAN_DMUX2 = 1;
-   localparam MODE_TEST_RAMP = 2;
 
+   // one-channel modes
+   localparam MODE_ACHAN_DMUX1 = 0;
+   localparam MODE_ACHAN_DMUX2 = 1;
+   localparam MODE_CCHAN_DMUX1 = 2;
+   localparam MODE_CCHAN_DMUX2 = 3;
+
+   // two-channel modes
+   localparam MODE_2CHAN_DMUX1 = 4;
+   localparam MODE_2CHAN_DMUX2 = 5;
+
+   // test modes
+   localparam MODE_TEST_RAMP   = 6;
+
+   // set the config register for A channel mode
+   assign config_data_int = MODE == MODE_ACHAN_DMUX1 ? 16'h0348 : config_data_int; // one-channel A mode, DMUX 1:1
+   assign config_data_int = MODE == MODE_ACHAN_DMUX2 ? 16'h0308 : config_data_int; // one-channel A mode, DMUX 1:2
+   
+   // set the config register for C channel mode
+   assign config_data_int = MODE == MODE_CCHAN_DMUX1 ? 16'h034a : config_data_int; // one-channel C mode, DMUX 1:1
+   assign config_data_int = MODE == MODE_CCHAN_DMUX2 ? 16'h030a : config_data_int; // one-channel C mode, DMUX 1:2
+   
+   // set the config register for two channel mode
    assign config_data_int = MODE == MODE_2CHAN_DMUX1 ? 16'h0344 : config_data_int; // two-channel mode, DMUX 1:1
    assign config_data_int = MODE == MODE_2CHAN_DMUX2 ? 16'h0304 : config_data_int; // two-channel mode, DMUX 1:2
+   
+   // set the config register for test mode
    assign config_data_int = MODE == MODE_TEST_RAMP ? 16'h1344 : config_data_int; // ramp test mode
    
   //assign config_addr_int  = 3'b0;
