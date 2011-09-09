@@ -399,13 +399,20 @@ END
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER C_BASEADDR   = 0x00020000
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PARAMETER C_HIGHADDR   = 0x0002ffff
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # BUS_INTERFACE SOPB = opb0
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE   = 0
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE   = 1
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && strcmp(get(b,'mode'), 'MODE_CCHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE   = 2
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && strcmp(get(b,'mode'), 'MODE_CCHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE   = 3
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && strcmp(get(b,'mode'), 'MODE_2CHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE   = 4
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && strcmp(get(b,'mode'), 'MODE_2CHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE   = 5
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && strcmp(get(b,'mode'), 'MODE_TEST_RAMP')# PARAMETER INITIAL_CONFIG_MODE   = 6
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE_0 = 0
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE_0 = 1
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_CCHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE_0 = 2
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_CCHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE_0 = 3
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_2CHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE_0 = 4
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_2CHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE_0 = 5
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc0') && strcmp(get(b,'mode'), 'MODE_TEST_RAMP')  # PARAMETER INITIAL_CONFIG_MODE_0 = 6
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc1') && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE_1 = 0
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc1') && strcmp(get(b,'mode'), 'MODE_ACHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE_1 = 1
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc1') && strcmp(get(b,'mode'), 'MODE_CCHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE_1 = 2
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc1') && strcmp(get(b,'mode'), 'MODE_CCHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE_1 = 3
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc1') && strcmp(get(b,'mode'), 'MODE_2CHAN_DMUX1')# PARAMETER INITIAL_CONFIG_MODE_1 = 4
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc1') && strcmp(get(b,'mode'), 'MODE_2CHAN_DMUX2')# PARAMETER INITIAL_CONFIG_MODE_1 = 5
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b, 'use_adc1') && strcmp(get(b,'mode'), 'MODE_TEST_RAMP')  # PARAMETER INITIAL_CONFIG_MODE_1 = 6
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # # 
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # # misc ports
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # PORT OPB_Clk = epb_clk

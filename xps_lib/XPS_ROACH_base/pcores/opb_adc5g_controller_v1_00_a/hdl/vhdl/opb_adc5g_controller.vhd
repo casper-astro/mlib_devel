@@ -64,9 +64,10 @@ entity opb_adc5g_controller is
       C_FAMILY      : string           := "virtex2p";
       AUTOCONFIG_0  : integer          := 0;
       INTERLEAVED_0 : integer          := 0;
+      INITIAL_CONFIG_MODE_0 : integer  := 0;
       AUTOCONFIG_1  : integer          := 0;
       INTERLEAVED_1 : integer          := 0;
-      INITIAL_CONFIG_MODE : integer    := 0
+      INITIAL_CONFIG_MODE_1 : integer  := 0
       );
   port
     (
@@ -240,7 +241,7 @@ constant PIPELINE_MODEL : integer := 5;
 	component adc_config_mux
 		generic(
 	    INTERLEAVED     : integer	:= 0;
-            MODE            : integer   := INITIAL_CONFIG_MODE
+            MODE            : integer   := 0
 		);
 		port (
       clk             : in  std_logic;
@@ -459,7 +460,7 @@ begin
     generic map
     (
       INTERLEAVED => INTERLEAVED_0,
-      MODE => INITIAL_CONFIG_MODE
+      MODE => INITIAL_CONFIG_MODE_0
       )
     port map
     (
@@ -485,8 +486,8 @@ begin
   adc_config_mux_1 : adc_config_mux
     generic map
     (
-      INTERLEAVED => INTERLEAVED_0,
-      MODE => INITIAL_CONFIG_MODE
+      INTERLEAVED => INTERLEAVED_1,
+      MODE => INITIAL_CONFIG_MODE_1
     )
     port map
     (

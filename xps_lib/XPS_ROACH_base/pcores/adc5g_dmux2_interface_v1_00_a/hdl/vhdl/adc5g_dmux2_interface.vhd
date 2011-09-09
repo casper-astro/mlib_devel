@@ -185,10 +185,10 @@ begin
 
     user_data_q0 <= data0b(adc_bit_width/2-1 downto 0); 
     user_data_q1 <= data1b(adc_bit_width/2-1 downto 0); 
-    user_data_q4 <= data2b(adc_bit_width/2-1 downto 0); 
-    user_data_q5 <= data3b(adc_bit_width/2-1 downto 0); 
-    user_data_q2 <= data0b(adc_bit_width-1 downto adc_bit_width/2);
-    user_data_q3 <= data1b(adc_bit_width-1 downto adc_bit_width/2); 
+    user_data_q2 <= data2b(adc_bit_width/2-1 downto 0); 
+    user_data_q3 <= data3b(adc_bit_width/2-1 downto 0); 
+    user_data_q4 <= data0b(adc_bit_width-1 downto adc_bit_width/2);
+    user_data_q5 <= data1b(adc_bit_width-1 downto adc_bit_width/2); 
     user_data_q6 <= data2b(adc_bit_width-1 downto adc_bit_width/2); 
     user_data_q7 <= data3b(adc_bit_width-1 downto adc_bit_width/2); 
   end generate chan1_mode;
