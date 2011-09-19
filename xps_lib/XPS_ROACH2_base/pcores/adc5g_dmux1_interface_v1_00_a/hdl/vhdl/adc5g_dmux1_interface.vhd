@@ -107,8 +107,6 @@ architecture behavioral of adc5g_dmux1_interface is
    signal clk2n       : std_logic;
    signal clk2_buf    : std_logic;
    signal clk2fb      : std_logic;
-   signal clk2dv      : std_logic;
-   signal clk2dvraw   : std_logic;
 
 
    signal reset         : std_logic;
@@ -132,10 +130,16 @@ architecture behavioral of adc5g_dmux1_interface is
    signal dcm2_clk270  : std_logic;
 
    -- PLL signals
-   signal pll_clkfb : std_logic;
-   signal pll_clkout0 : std_logic;
-   signal pll_clkout1 : std_logic;
-
+   signal pll_clkfbin  : std_logic;
+   signal pll_clkfbout : std_logic;
+   signal pll_clkout0  : std_logic;
+   signal pll_clkout1  : std_logic;
+   signal pll_clkout2  : std_logic;
+   signal pll_clkout3  : std_logic;
+   signal pll_clkout4  : std_logic;
+   signal pll_locked   : std_logic;
+   signal pll_rst      : std_logic;
+   
    -- ISERDES signals
    signal isd_clk : std_logic;
    signal isd_clkn : std_logic;
@@ -209,12 +213,9 @@ begin
     user_data_q7 <= data3d; 
   end generate chan2_mode;
 
- sync <= adc_sync;
-  
+  sync <= adc_sync;
   adc_reset_o<=ctrl_reset;
 
-  ctrl_dcm_locked<=dcm1_locked;
-  
 process(clk1_buf)  
     begin 
        if (clk1_buf'event and clk1_buf='1') then 
@@ -263,30 +264,53 @@ CBUF1:   IBUFGDS
           );
 
 
-PLL: PLL_BASE
+PLL: MMCM_ADV
   generic map (
-    CLKIN_PERIOD       => 1.6,
-    CLKOUT0_DIVIDE     => 1,
-    CLKOUT0_PHASE      => 0.0,
-    CLKOUT0_DUTY_CYCLE => 0.50,
-    CLKOUT1_DIVIDE     => 2,
-    CLKOUT1_PHASE      => 0.0,
-    CLKOUT1_DUTY_CYCLE => 0.50,
+    CLKFBOUT_MULT_F    => 5.0,
+    DIVCLK_DIVIDE      => 5,
+    CLKFBOUT_PHASE     => 0.0,
+    CLKIN1_PERIOD      => 1.6,
+    CLKOUT1_DIVIDE     => 1,
     CLKOUT2_DIVIDE     => 2,
-    CLKOUT2_PHASE      => 0.0,
+    CLKOUT3_DIVIDE     => 2,
+    CLKOUT4_DIVIDE     => 2,
+    CLKOUT5_DIVIDE     => 2,
+    CLKOUT1_DUTY_CYCLE => 0.50,
     CLKOUT2_DUTY_CYCLE => 0.50,
-    CLKFBOUT_MULT      => 1,
-    CLKFBOUT_PHASE     => 0.0
+    CLKOUT3_DUTY_CYCLE => 0.50,
+    CLKOUT4_DUTY_CYCLE => 0.50,
+    CLKOUT5_DUTY_CYCLE => 0.50,
+    CLKOUT1_PHASE      => 0.0,
+    CLKOUT2_PHASE      => 0.0,
+    CLKOUT3_PHASE      => 90.0,
+    CLKOUT4_PHASE      => 180.0,
+    CLKOUT5_PHASE      => 270.0
     )
   port map (
-    CLKIN     => adc_clk,
-    CLKFBIN   => pll_clkfb,
-    RST       => ctrl_reset,
-    CLKOUT0   => pll_clkout0,
-    CLKOUT1   => pll_clkout1,
-    CLKOUT2   => clk1,
-    CLKFBOUT  => pll_clkfb,
-    LOCKED    => dcm1_locked
+    CLKFBIN   => pll_clkfbin,
+    CLKFBOUT  => pll_clkfbout,
+    CLKINSEL  => '1',
+    CLKIN1    => adc_clk,
+    CLKIN2    => '0',
+    CLKOUT1   => pll_clkout0,
+    CLKOUT2   => pll_clkout1,
+    CLKOUT3   => pll_clkout2,
+    CLKOUT4   => pll_clkout3,
+    CLKOUT5   => pll_clkout4,
+    DADDR     => "0000000",
+    DCLK      => '0',
+    DEN       => '0',
+    DI        => X"0000",
+    DO        => open,
+    DRDY      => open,
+    DWE       => '1',
+    LOCKED    => pll_locked,
+    PSCLK     => dcm_psclk,
+    PSDONE    => dcm_psdone,
+    PSEN      => dcm_psen,
+    PSINCDEC  => dcm_psincdec,
+    PWRDWN    => '0',
+    RST       => pll_rst
     );
 
 isd_clkn <= not isd_clk;
@@ -299,56 +323,14 @@ PDIVBUF : BUFG port map (
   o => isd_clkdiv
 );
 
+CBUF1a:  BUFG     port map (i=> pll_clkfbout, o=> pll_clkfbin);
+CBUF1c:  BUFG     port map (i=> pll_clkout1,  o=> ctrl_clk_out);
+CBUF1d:  BUFG     port map (i=> pll_clkout2,  o=> ctrl_clk90_out);
+CBUF1e:  BUFG     port map (i=> pll_clkout3,  o=> ctrl_clk180_out);
+CBUF1f:  BUFG     port map (i=> pll_clkout4,  o=> ctrl_clk270_out);
 
-
-CBUF1a:  BUFG     port map (i=> clk1, o=> clk1_buf);
-CBUF1b:  BUFG     port map (i=> clk1dvraw, o=> clk1dv);
-
---adc_clk_out  <=  clk1_buf ;
---CBUF1c:  BUFG     port map (i=> dcm1_clk90, o=> ctrl_clk90_out);
---CBUF1d:  BUFG     port map (i=> dcm1_clk180, o=> ctrl_clk180_out);
---CBUF1e:  BUFG     port map (i=> dcm1_clk270, o=> ctrl_clk270_out);
-
-
-DCM2:    DCM_ADV 
-           generic map (
-              CLKIN_PERIOD       => 3.2,
-              DLL_FREQUENCY_MODE => "HIGH",
-              DFS_FREQUENCY_MODE => "HIGH",
-              DUTY_CYCLE_CORRECTION => TRUE,
-              PHASE_SHIFT => 0,
-              CLKOUT_PHASE_SHIFT => "FIXED",
-              CLK_FEEDBACK  => "1X"
-            )
-           port map (
-                     CLKIN   => clk1_buf,
-                     CLKFB   => clk2_buf,
-                     PSINCDEC=> '0',
-                     PSEN    => '0',
-                     PSCLK   => '0',
-                     PSDONE  => open,
-                     RST     => dcm2_reset,
-                     CLK0    => clk2,
-                     CLK90   => dcm2_clk90,
-                     CLK180  => dcm2_clk180,
-                     CLK270  => dcm2_clk270,
-                     CLKFX   => clk2dvraw,
-                     LOCKED  => dcm2_locked,
-                     DO      => open,
-                     DWE     => '0',
-                     DEN     => '1',
-                     dclk    => '0',
-                     di      => X"0000",
-                     daddr   => "0000000",
-                     drdy    => open
-                );
-
-CBUF2a:  BUFG     port map (i=> clk2, o=> clk2_buf);
-              ctrl_clk_out  <=  clk2_buf;
-CBUF2b:  BUFG     port map (i=> clk2dvraw, o=> clk2dv);
-CBUF2c:  BUFG     port map (i=> dcm2_clk90, o=>  ctrl_clk90_out);
-CBUF2d:  BUFG     port map (i=> dcm2_clk180, o=> ctrl_clk180_out);
-CBUF2e:  BUFG     port map (i=> dcm2_clk270, o=> ctrl_clk270_out);
+pll_rst <= ctrl_reset;
+ctrl_dcm_locked <= pll_locked;
 
 IBUFDS0 : for i in adc_bit_width-1 downto 0 generate
    IBUFI0  :  IBUFDS_LVDS_25
