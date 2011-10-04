@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Apr  8 11:29:08 2011"
-  RTWModifiedTimeStamp	  224162941
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  LastModifiedDate	  "Mon Sep 12 15:32:49 2011"
+  RTWModifiedTimeStamp	  237742367
+  ModelVersionFormat	  "1.%<AutoIncrement:14>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -6949,6 +6949,98 @@ Library {
     }
     Block {
       BlockType		      SubSystem
+      Name		      "polynomial"
+      Ports		      [2, 2]
+      Position		      [125, 447, 190, 498]
+      UserDataPersistent      on
+      UserData		      "DataTag15"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      MaskType		      "polynomial"
+      MaskPromptString	      "Number of polynomials|Degree of polynomial|Multiplier latency|Output number of bits|Outp"
+      "ut binary point|Convert latency|Quantization behaviour|Overflow behaviour|Bits in|Binary point in"
+      MaskStyleString	      "edit,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased:"
+      " even values)),popup(Wrap|Saturate|Error),edit,edit"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,"
+      MaskVariables	      "n_polys=@1;degree=@2;mult_latency=@3;bits_out=@4;bin_pt_out=@5;conv_latency=@6;quantization"
+      "=&7;overflow=&8;bits_in=@9;bin_pt_in=@10;"
+      MaskInitialization      "polynomial_init(gcb, ...\n    'n_polys', n_polys, ...\n    'degree', degree, ...\n    '"
+      "mult_latency', mult_latency, ...\n    'bits_out', bits_out, ...\n    'bin_pt_out', bin_pt_out, ...\n    'conv_la"
+      "tency', conv_latency, ...\n    'quantization', quantization, ...\n    'overflow', overflow, ...\n    'bits_in', "
+      "bits_in, ...\n    'bin_pt_in', bin_pt_in);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "0|0|2|18|17|2|Truncate|Wrap|8|0"
+      MaskTabNameString	      ",,,,,,,,,"
+      System {
+	Name			"polynomial"
+	Location		[469, 257, 1070, 1097]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "misc"
+	  Position		  [40, 92, 60, 108]
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "x"
+	  Position		  [15, 192, 35, 208]
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "misc_out"
+	  Position		  [190, 92, 210, 108]
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "x_out"
+	  Position		  [190, 192, 210, 208]
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  SrcBlock		  "x"
+	  SrcPort		  1
+	  DstBlock		  "x_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "misc"
+	  SrcPort		  1
+	  DstBlock		  "misc_out"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
       Name		      "posedge"
       Tag		      "Rising Edge Detector"
       Ports		      [1, 1]
@@ -7216,7 +7308,7 @@ Library {
 	    }
 	  }
 	  UserDataPersistent	  on
-	  UserData		  "DataTag15"
+	  UserData		  "DataTag16"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
 	  SourceType		  "c_to_ri"
 	  SID			  "2"
@@ -9095,7 +9187,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9104,7 +9196,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,474,439"
 	  block_type		  "constant"
@@ -9177,7 +9269,7 @@ Library {
 	  const			  "0"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9186,7 +9278,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "22,98,474,439"
 	  block_type		  "constant"
@@ -9250,7 +9342,7 @@ Library {
 	  const			  "0"
 	  n_bits		  "28"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9259,7 +9351,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "23,125,474,439"
 	  block_type		  "constant"
@@ -9287,7 +9379,7 @@ Library {
 	  const			  "1302253667"
 	  n_bits		  "31"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9296,7 +9388,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "24,152,474,439"
 	  block_type		  "constant"
@@ -9324,7 +9416,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9333,7 +9425,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,474,439"
 	  block_type		  "constant"
@@ -9500,7 +9592,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9509,7 +9601,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,474,439"
 	  block_type		  "constant"
@@ -9536,7 +9628,7 @@ Library {
 	  const			  "0"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9545,7 +9637,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,474,439"
 	  block_type		  "constant"
@@ -9609,7 +9701,7 @@ Library {
 	  const			  "0"
 	  n_bits		  "28"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9618,7 +9710,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "25,177,474,439"
 	  block_type		  "constant"
@@ -9646,7 +9738,7 @@ Library {
 	  const			  "1302262142"
 	  n_bits		  "31"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9655,7 +9747,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "24,152,474,439"
 	  block_type		  "constant"
@@ -9683,7 +9775,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -9692,7 +9784,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "21,71,474,439"
 	  block_type		  "constant"
@@ -10082,7 +10174,7 @@ Library {
       Ports		      [2, 1]
       Position		      [665, 129, 705, 171]
       UserDataPersistent      on
-      UserData		      "DataTag16"
+      UserData		      "DataTag17"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -10564,7 +10656,7 @@ Library {
       Ports		      [5, 5]
       Position		      [605, 253, 690, 417]
       UserDataPersistent      on
-      UserData		      "DataTag17"
+      UserData		      "DataTag18"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -15008,7 +15100,7 @@ Library {
       Position		      [245, 203, 295, 227]
       AttributesFormatString  "sim_sync_period=8960 "
       UserDataPersistent      on
-      UserData		      "DataTag18"
+      UserData		      "DataTag19"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -15820,7 +15912,7 @@ Library {
 	  Position		  [120, 50, 165, 70]
 	  AttributesFormatString  "rising edge\nactive high"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag19"
+	  UserData		  "DataTag20"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -16104,16 +16196,16 @@ Library {
   }
 }
 MatData {
-  NumRecords		  20
+  NumRecords		  21
   DataRecord {
-    Tag			    DataTag19
+    Tag			    DataTag20
     Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
     "      %    \"     $    0     0         0    $    &5D9V5?9&5T96-T7VEN:70.    .     8    (    !@         %    \"    "
     " $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0  "
     "  @           #P/P"
   }
   DataRecord {
-    Tag			    DataTag18
+    Tag			    DataTag19
     Data		    "  %)30     .    $ ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ '<ACP .    @ (   "
     "8    (     @         %    \"     $    !     0         %  0 $@    $   !^    9&5F875L=',             <VEM7V%C8U]L96X"
@@ -16126,22 +16218,53 @@ MatData {
     "  &          4    (     0    $    !          D    (            \\#\\"
   }
   DataRecord {
-    Tag			    DataTag17
+    Tag			    DataTag18
     Data		    "  %)30     .    H     8    (     @         %    \"     $    !     0         %  0 \"@    $    *    :&%S:"
     "%]C;V1E          X   !0    !@    @    $          4    (     0   \"     !         !     @    .6,Y-#DY,3ED8C4T9#@W8F"
     "8S-60P,30W960S-3 R,F$"
   }
   DataRecord {
-    Tag			    DataTag16
+    Tag			    DataTag17
     Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
     "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
   }
   DataRecord {
-    Tag			    DataTag15
+    Tag			    DataTag16
     Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
     "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
     " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
     "   @            <0 "
+  }
+  DataRecord {
+    Tag			    DataTag15
+    Data		    "  %)30     .    ( D   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,)Y!  .    D @   "
+    "8    (     @         %    \"     $    !     0         %  0 #0    $   \"/    9&5F875L=',      &Y?<&]L>7,       !D96"
+    "=R964         ;75L=%]L871E;F-Y &)I='-?;W5T      !B:6Y?<'1?;W5T    8V]N=E]L871E;F-Y '%U86YT:7IA=&EO;@!O=F5R9FQO=P  "
+    "    8FET<U]I;@       &)I;E]P=%]I;@      #@   $@%   &    \"     $         !0    @    !    %     $         #@   #@  "
+    "  &    \"     0         !0    @    !    !P    $         $     <   !N7W!O;'ES  X    X    !@    @    &          4   "
+    " (     0    $    !          D    (            \\#\\.    .     8    (    !          %    \"     $    &     0       "
+    "  0    !@   &1E9W)E90  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X  "
+    " !     !@    @    $          4    (     0    P    !         !     ,    ;75L=%]L871E;F-Y      X    X    !@    @    "
+    "&          4    (     0    $    !          D    (             $ .    .     8    (    !          %    \"     $    ("
+    "     0         0    \"    &)I='-?;W5T#@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
+    "        R0 X   !     !@    @    $          4    (     0    H    !         !     *    8FEN7W!T7V]U=         X    X "
+    "   !@    @    &          4    (     0    $    !          D    (            ,4 .    0     8    (    !          %   "
+    " \"     $    ,     0         0    #    &-O;G9?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !   "
+    "  0         )    \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P   !Q=6%"
+    "N=&EZ871I;VX     #@   #@    &    \"     0         !0    @    !    \"     $         $     @   !4<G5N8V%T90X    X   "
+    " !@    @    $          4    (     0    @    !         !     (    ;W9E<F9L;W<.    ,     8    (    !          %    \""
+    "     $    $     0         0  0 5W)A< X    X    !@    @    $          4    (     0    <    !         !     '    8FE"
+    "T<U]I;@ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   $     &    \""
+    "     0         !0    @    !    \"0    $         $     D   !B:6Y?<'1?:6X         #@   #@    &    \"     8         !"
+    "0    @    !     0    $         \"0    @               X    X    !@    @    &          4    (     0    $    !      "
+    "    D    (               .    .     8    (    !@         %    \"     $    !     0         )    \"               #@"
+    "   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &      "
+    "    4    (     0    $    !          D    (            ,D .    .     8    (    !@         %    \"     $    !     0 "
+    "        )    \"            #% #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           "
+    "  0 X    X    !@    @    $          4    (     0    @    !         !     (    5')U;F-A=&4.    ,     8    (    !   "
+    "       %    \"     $    $     0         0  0 5W)A< X    X    !@    @    &          4    (     0    $    !         "
+    " D    (            ($ .    .     8    (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag14
