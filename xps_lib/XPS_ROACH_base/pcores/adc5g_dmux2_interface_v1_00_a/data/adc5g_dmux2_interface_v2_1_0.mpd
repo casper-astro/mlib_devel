@@ -46,8 +46,6 @@ PORT adc_reset_o = "", DIR = O
 ##--PORT sys_clk = "", DIR = I
 PORT adc_sync_p = "", DIR = I
 PORT adc_sync_n = "", DIR = i
-PORT adc_overrange_p = "", DIR = I
-PORT adc_overrange_n = "", DIR = I
 PORT sync  = "", DIR = O
 ##PORT adc_clk_o = "", DIR = O
 #

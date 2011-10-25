@@ -151,8 +151,6 @@ ext_ports.adc_clk_p_i = {1 'in'  [s.adc_str,'clk_p']       ['{',adcport,'_p{[39]
 ext_ports.adc_clk_n_i = {1 'in'  [s.adc_str,'clk_n']       ['{',adcport,'_n{[39]+1,:}}']              'vector=false'  mhs_constraints ucf_constraints_clock };
 ext_ports.adc_sync_p      = {1 'in'  [s.adc_str,'sync_p']      ['{',adcport,'_p{[38]+1,:}}']                 'vector=false'  struct() ucf_constraints_term };
 ext_ports.adc_sync_n      = {1 'in'  [s.adc_str,'sync_n']      ['{',adcport,'_n{[38]+1,:}}']                 'vector=false'  struct() ucf_constraints_term };
-ext_ports.adc_overrange_p = {1 'in'  [s.adc_str,'overrange_p'] ['{',adcport,'_p{[28]+1,:}}']                 'vector=false'  struct() ucf_constraints_term };
-ext_ports.adc_overrange_n = {1 'in'  [s.adc_str,'overrange_n'] ['{',adcport,'_n{[28]+1,:}}']                 'vector=false'  struct() ucf_constraints_term };
 ext_ports.adc_data0_p_i = {8 'in'  [s.adc_str,'data0_p_i']  ['{',adcport,'_p{[0 1 2 3 4 5 6 7]+1,:}}']         'vector=true'   struct() ucf_constraints_term };
 ext_ports.adc_data0_n_i = {8 'in'  [s.adc_str,'data0_n_i']  ['{',adcport,'_n{[0 1 2 3 4 5 6 7]+1,:}}']         'vector=true'   struct() ucf_constraints_term };
 ext_ports.adc_data1_p_i = {8 'in'  [s.adc_str,'data1_p_i']  ['{',adcport,'_p{[10 11 12 13 14 15 16 17]+1,:}}'] 'vector=true'   struct() ucf_constraints_term };

@@ -63,8 +63,6 @@ entity adc5g_dmux2_interface is
 
          adc_sync_p     :  in  std_logic;
          adc_sync_n     :  in  std_logic;
-         adc_overrange_p     :  in  std_logic;
-         adc_overrange_n     :  in  std_logic;
          sync       :  out std_logic;
     
          ctrl_reset      : in  std_logic;
