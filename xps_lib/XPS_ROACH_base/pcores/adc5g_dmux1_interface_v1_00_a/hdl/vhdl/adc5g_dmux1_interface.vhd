@@ -26,7 +26,7 @@ library unisim;
 
 entity adc5g_dmux1_interface is
    generic (  
-	  adc_bit_width : integer :=8
+	  adc_bit_width : integer :=8;
           mode          : integer :=0  -- 1-channel mode
 	     )  ;
    port (
