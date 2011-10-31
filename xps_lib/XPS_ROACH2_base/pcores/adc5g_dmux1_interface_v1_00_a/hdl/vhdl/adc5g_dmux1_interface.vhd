@@ -301,7 +301,7 @@ PLL: MMCM_ADV
     DI        => X"0000",
     DO        => open,
     DRDY      => open,
-    DWE       => '1',
+    DWE       => '0',
     LOCKED    => pll_locked,
     PSCLK     => dcm_psclk,
     PSDONE    => dcm_psdone,
