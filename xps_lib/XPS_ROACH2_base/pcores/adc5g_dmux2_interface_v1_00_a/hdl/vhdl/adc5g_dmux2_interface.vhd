@@ -27,7 +27,8 @@ library unisim;
 entity adc5g_dmux2_interface is
    generic (  
 	  adc_bit_width : integer :=8;
-          mode          : integer :=0  -- 1-channel mode
+          mode          : integer :=0;  -- 1-channel mode
+          clkin_period  : real    :=2.0  -- clock in period (ns)
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -262,31 +263,51 @@ CBUF1:   IBUFGDS
 	    o=> adc_clk
           );
 
-PLL0: PLL_BASE
+
+PLL: MMCM_ADV
   generic map (
-    COMPENSATION   => "SOURCE_SYNCHRONOUS",
-    CLKIN_PERIOD   => 4.0,
-    CLKFBOUT_MULT  => 2,
-    CLKOUT0_DIVIDE => 2,
-    CLKOUT1_DIVIDE => 2,
-    CLKOUT2_DIVIDE => 2,
-    CLKOUT3_DIVIDE => 2,
-    CLKOUT0_PHASE  => 0.0,
-    CLKOUT1_PHASE  => 90.0,
-    CLKOUT2_PHASE  => 180.0,
-    CLKOUT3_PHASE  => 270.0
-  )
+    CLKFBOUT_MULT_F    => 12.0,
+    DIVCLK_DIVIDE      => 4,
+    CLKFBOUT_PHASE     => 0.0,
+    CLKIN1_PERIOD      => clkin_period,
+    CLKOUT1_DIVIDE     => 3,
+    CLKOUT2_DIVIDE     => 3,
+    CLKOUT3_DIVIDE     => 3,
+    CLKOUT4_DIVIDE     => 3,
+    CLKOUT1_DUTY_CYCLE => 0.50,
+    CLKOUT2_DUTY_CYCLE => 0.50,
+    CLKOUT3_DUTY_CYCLE => 0.50,
+    CLKOUT4_DUTY_CYCLE => 0.50,
+    CLKOUT1_PHASE      => 0.0,
+    CLKOUT2_PHASE      => 90.0,
+    CLKOUT3_PHASE      => 180.0,
+    CLKOUT4_PHASE      => 270.0
+    )
   port map (
-    CLKIN    => adc_clk,
-    CLKFBIN  => pll_clkfbin,
-    CLKFBOUT => pll_clkfbout,
-    CLKOUT0  => pll_clkout0,
-    CLKOUT1  => pll_clkout1,
-    CLKOUT2  => pll_clkout2,
-    CLKOUT3  => pll_clkout3,
-    LOCKED   => pll_locked,
-    RST      => pll_rst
-  );
+    CLKFBIN   => pll_clkfbin,
+    CLKFBOUT  => pll_clkfbout,
+    CLKINSEL  => '1',
+    CLKIN1    => adc_clk,
+    CLKIN2    => '0',
+    CLKOUT1   => pll_clkout0,
+    CLKOUT2   => pll_clkout1,
+    CLKOUT3   => pll_clkout2,
+    CLKOUT4   => pll_clkout3,
+    DADDR     => "0000000",
+    DCLK      => '0',
+    DEN       => '0',
+    DI        => X"0000",
+    DO        => open,
+    DRDY      => open,
+    DWE       => '0',
+    LOCKED    => pll_locked,
+    PSCLK     => dcm_psclk,
+    PSDONE    => dcm_psdone,
+    PSEN      => dcm_psen,
+    PSINCDEC  => dcm_psincdec,
+    PWRDWN    => '0',
+    RST       => pll_rst
+    );
 
 
 CBUF2a:  BUFG     port map (i=> pll_clkfbout, o=> pll_clkfbin);

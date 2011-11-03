@@ -81,7 +81,7 @@ end;
 switch s.hw_sys
     case 'ROACH'
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25',...
-            'PERIOD', [num2str(1000/s.adc_clk_rate),' ns'],...
+            'PERIOD', [num2str(1000/s.adc_clk_rate, '%.4f'),' ns'],...
             'DIFF_TERM', 'TRUE');
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25',...
             'DIFF_TERM', 'TRUE');
@@ -163,6 +163,7 @@ ext_ports.adc_data3_n_i = {8 'in'  [s.adc_str,'data3_n_i']  ['{',adcport,'_n{[30
 b = set(b,'ext_ports',ext_ports);
 
 % Finally set parameters and gtfo
+parameters.CLKIN_PERIOD = num2str(1000/s.adc_clk_rate, '%.4f');
 parameters.USE_ADC0 = num2str(s.use_adc0);
 parameters.USE_ADC1 = num2str(s.use_adc1);
 parameters.MODE = num2str(mode);

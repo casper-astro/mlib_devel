@@ -27,7 +27,8 @@ library unisim;
 entity adc5g_dmux1_interface is
    generic (  
 	  adc_bit_width : integer :=8;
-          mode          : integer :=0  -- 1-channel mode
+          mode          : integer :=0;  -- 1-channel mode
+          clkin_period  : real    :=2.0  -- clock in period (ns)
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -267,7 +268,7 @@ PLL: MMCM_ADV
     CLKFBOUT_MULT_F    => 5.0,
     DIVCLK_DIVIDE      => 5,
     CLKFBOUT_PHASE     => 0.0,
-    CLKIN1_PERIOD      => 1.6,
+    CLKIN1_PERIOD      => clkin_period,
     CLKOUT1_DIVIDE     => 1,
     CLKOUT2_DIVIDE     => 2,
     CLKOUT3_DIVIDE     => 2,

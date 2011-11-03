@@ -27,7 +27,8 @@ library unisim;
 entity adc5g_dmux2_interface is
    generic (  
 	  adc_bit_width : integer :=8;
-          mode          : integer :=0  -- 1-channel mode
+          mode          : integer :=0;  -- 1-channel mode
+          clkin_period  : real    :=2.0  -- clock in period (ns)
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -265,7 +266,7 @@ CBUF1:   IBUFGDS
 PLL0: PLL_BASE
   generic map (
     COMPENSATION   => "SOURCE_SYNCHRONOUS",
-    CLKIN_PERIOD   => 4.0,
+    CLKIN_PERIOD   => clkin_period,
     CLKFBOUT_MULT  => 2,
     CLKOUT0_DIVIDE => 2,
     CLKOUT1_DIVIDE => 2,

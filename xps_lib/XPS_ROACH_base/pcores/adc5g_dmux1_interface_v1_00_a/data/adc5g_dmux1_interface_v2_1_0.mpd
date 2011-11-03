@@ -20,6 +20,7 @@ OPTION DESC = "ADC 5G w/PLL-ISERDES interface"
 #################################################
 #
 PARAMETER adc_bit_width = 8, DT = INTEGER
+PARAMETER clkin_period = 2.0, DT = REAL
 PARAMETER mode = 0, DT = INTEGER
 PARAMETER use_adc0   = 1, DT = INTEGER
 PARAMETER use_adc1   = 0, DT = INTEGER
