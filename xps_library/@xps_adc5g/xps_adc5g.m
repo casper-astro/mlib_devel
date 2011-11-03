@@ -49,12 +49,13 @@ if strcmp(test_ramp, 'on')
 end
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.using_ctrl = strcmp( get_param(blk_name, 'using_ctrl'), 'on' );
-s.sysclk_rate  = eval_param(blk_name,'adc_clk_rate')/2;
-s.adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
+actual_adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
 if strcmp(demux, '1:1')
-    actual_adc_clk_rate = s.adc_clk_rate;
+    s.adc_clk_rate = actual_adc_clk_rate/4;
+    s.sysclk_rate = s.adc_clk_rate/2;
 elseif strcmp(demux, '1:2')
-    actual_adc_clk_rate = s.adc_clk_rate/2;
+    s.adc_clk_rate = actual_adc_clk_rate/8;
+    s.sysclk_rate = s.adc_clk_rate;
 else
     error(['Demux of ', demux, ' not supported!']);
 end
@@ -80,7 +81,7 @@ end;
 switch s.hw_sys
     case 'ROACH'
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25',...
-            'PERIOD', [num2str(1000/actual_adc_clk_rate),' ns'],...
+            'PERIOD', [num2str(1000/s.adc_clk_rate),' ns'],...
             'DIFF_TERM', 'TRUE');
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25',...
             'DIFF_TERM', 'TRUE');
@@ -89,7 +90,7 @@ switch s.hw_sys
     % end case 'ROACH'
     case 'ROACH2'
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25',...
-            'PERIOD', [num2str(1000/actual_adc_clk_rate),' ns'],...
+            'PERIOD', [num2str(1000/s.adc_clk_rate),' ns'],...
             'DIFF_TERM', 'TRUE');
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25',...
             'DIFF_TERM', 'TRUE');
