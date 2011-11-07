@@ -99,10 +99,6 @@ architecture behavioral of adc5g_dmux2_interface is
    signal clk1iobuf   : std_logic;
    signal adc_clk     : std_logic;
    signal adc_clk_buf : std_logic;
-   signal clk1_buf    : std_logic;
-   signal clk1fb      : std_logic;
-   signal clk1dv      : std_logic;
-   signal clk1dvraw   : std_logic;
    signal clk2        : std_logic;
    signal clk2n       : std_logic;
    signal clk2_buf    : std_logic;
@@ -150,22 +146,30 @@ architecture behavioral of adc5g_dmux2_interface is
    -- first core, "A"
    signal   data0      :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data0a     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data0a_pre :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data0b     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data0b_pre :   std_logic_vector(adc_bit_width-1 downto 0);
 
    -- second core, "C"
    signal   data1      :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data1a     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data1a_pre :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data1b     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data1b_pre :   std_logic_vector(adc_bit_width-1 downto 0);
 
    -- third core, "B"
    signal   data2      :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data2a     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data2a_pre :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data2b     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data2b_pre :   std_logic_vector(adc_bit_width-1 downto 0);
 
    -- fourth core, "D"
    signal   data3      :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data3a     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data3a_pre :   std_logic_vector(adc_bit_width-1 downto 0);
    signal   data3b     :   std_logic_vector(adc_bit_width-1 downto 0);
+   signal   data3b_pre :   std_logic_vector(adc_bit_width-1 downto 0);
 
    signal   startupword: std_logic_vector( 7 downto 0);
    signal adc_sync     : std_logic;
@@ -216,9 +220,9 @@ begin
   
   adc_reset_o<=ctrl_reset;
 
-process(clk1_buf)  
+process(clk2_buf)
     begin 
-       if (clk1_buf'event and clk1_buf='1') then 
+       if (clk2_buf'event and clk2_buf='1') then 
 	 if (startupword /= "01011010") or (dcm_reset='1') or (ctrl_reset='1') then 
            reset        <='1';
            reset_iserdes<='1';
@@ -306,7 +310,7 @@ PLL: MMCM_ADV
     PSEN      => dcm_psen,
     PSINCDEC  => dcm_psincdec,
     PWRDWN    => '0',
-    RST       => pll_rst
+    RST       => '0'
     );
 
 
@@ -359,62 +363,169 @@ end generate IBUFDS3;
 
     
 iddrx : for i in adc_bit_width-1 downto 0 generate
+
+  -----------------------------------------------------------------------------
+  -- Capture the data using IDDR
+  -----------------------------------------------------------------------------
   iddr0: IDDR
     generic map (
       DDR_CLK_EDGE => "SAME_EDGE_PIPELINED",
       SRTYPE       => "SYNC"
       )
     port map (
-      Q1 => data0a(i),
-      Q2 => data0b(i),
+      Q1 => data0a_pre(i),
+      Q2 => data0b_pre(i),
       C  => iddr_clk,
       CE => '1',
       D  => data0(i),
-      R  => reset_iserdes,
+      R  => '0',
       S  => '0'
     );
+
   iddr1: IDDR
     generic map (
       DDR_CLK_EDGE => "SAME_EDGE_PIPELINED",
       SRTYPE       => "SYNC"
     )
     port map (
-      Q1 => data1a(i),
-      Q2 => data1b(i),
+      Q1 => data1a_pre(i),
+      Q2 => data1b_pre(i),
       C  => iddr_clk,
       CE => '1',
       D  => data1(i),
-      R  => reset_iserdes,
+      R  => '0',
       S  => '0'
     );
+
   iddr2: IDDR
     generic map (
       DDR_CLK_EDGE => "SAME_EDGE_PIPELINED",
       SRTYPE       => "SYNC"
     )
     port map (
-      Q1 => data2a(i),
-      Q2 => data2b(i),
+      Q1 => data2a_pre(i),
+      Q2 => data2b_pre(i),
       C  => iddr_clk,
       CE => '1',
       D  => data2(i),
-      R  => reset_iserdes,
+      R  => '0',
       S  => '0'
     );
+
   iddr3: IDDR
     generic map (
       DDR_CLK_EDGE => "SAME_EDGE_PIPELINED",
       SRTYPE       => "SYNC"
     )
     port map (
-      Q1 => data3a(i),
-      Q2 => data3b(i),
+      Q1 => data3a_pre(i),
+      Q2 => data3b_pre(i),
       C  => iddr_clk,
       CE => '1',
       D  => data3(i),
-      R  => reset_iserdes,
+      R  => '0',
       S  => '0'
     ); 
+
+  -----------------------------------------------------------------------------
+  -- Buffer it up before sending it over
+  -----------------------------------------------------------------------------
+  idr0a_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data0a_pre(i),
+      C  => iddr_clk,
+      Q  => data0a(i)
+      );
+
+  iddr0b_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data0b_pre(i),
+      C  => iddr_clk,
+      Q  => data0b(i)
+      );
+
+  iddr1a_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data1a_pre(i),
+      C  => iddr_clk,
+      Q  => data1a(i)
+      );
+
+  iddr1b_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data1b_pre(i),
+      C  => iddr_clk,
+      Q  => data1b(i)
+      );
+
+  idr2a_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data2a_pre(i),
+      C  => iddr_clk,
+      Q  => data2a(i)
+      );
+
+  iddr2b_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data2b_pre(i),
+      C  => iddr_clk,
+      Q  => data2b(i)
+      );
+
+  iddr3a_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data3a_pre(i),
+      C  => iddr_clk,
+      Q  => data3a(i)
+      );
+
+  iddr3b_fd: FDRE
+    generic map (
+      INIT => '0'
+      )
+    port map (
+      R  => '0',
+      CE => '1',
+      D  => data3b_pre(i),
+      C  => iddr_clk,
+      Q  => data3b(i)
+      );
+
 end generate iddrx;
 
 

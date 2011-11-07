@@ -21,23 +21,31 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function str = gen_ucf(blk_obj)
-disp('adc_iserdes gen_ucf')
 
 hw_sys = blk_obj.hw_sys;
-disp('adc_iserdes trying generic ucf generation')
-str = gen_ucf(blk_obj.xps_block);
+blk_name = get(blk_obj,'simulink_name');
+
+% Get some parameters we're intereset in
 simulink_name = clear_name(get(blk_obj,'simulink_name'));
-disp('adc_iserdes trying specific ucf generation')
+str = gen_ucf(blk_obj.xps_block);
+demux = blk_obj.demux;
+
 switch hw_sys
 
     case 'ROACH'
-	    disp('read gen_ucf.m for iserdes KSG');
+        % pass
     case 'ROACH2'
-	    disp('read gen_ucf.m for iserdes KSG');
-       % 		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_clk_buf"    PERIOD             = ',num2str(1000/blk_obj.adc_clk_rate),'ns;\n'];
-        %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_clk_buf"    MAXDELAY           = 452ps;\n'];
-        %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_clk_dcm"    MAXDELAY           = 853ps;\n'];
-        %		str = [str, 'NET  "',simulink_name,'/',simulink_name,'/adc_clk90_dcm"  MAXDELAY           = 853ps;\n'];
+        if strcmp(demux, '1:2')
+            % Create an area group to place the FD close to the IOPAD
+            % which for some reason was traced to the other side of the 
+            % chip on ROACH2
+            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                '/iddrx[1].iddr1a_fd"     AREA_GROUP     = IDDR_1 ;\n'];
+            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                '/iddrx[1].iddr1b_fd"     AREA_GROUP     = IDDR_1 ;\n'];
+            str = [str, 'AREA_GROUP "IDDR_1"     RANGE    = ', ...
+                'SLICE_X0Y317:SLICE_X5Y321 ;\n'];
+        end
     otherwise 
-	      disp('error in gen_ucf.... not roach ');
-end % switch hw_sys
+        % pass
+end
