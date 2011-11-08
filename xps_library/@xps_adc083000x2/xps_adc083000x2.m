@@ -64,6 +64,11 @@ switch s.hw_sys
         ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
         ucf_constraints_single = struct('IOSTANDARD', 'LVCMOS25');
     % end case 'ROACH'
+    case 'ROACH2'
+        ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/s.adc_clk_rate*4),' ns']);
+        ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
+        ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
+        ucf_constraints_single = struct('IOSTANDARD', 'LVCMOS25');            
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end % end switch s.hw_sys
@@ -74,6 +79,8 @@ b = class(s,'xps_adc083000x2',blk_obj);
 b = set(b, 'ip_name', 'adc083000x2_interface');
 switch s.hw_sys
     case 'ROACH'
+        b = set(b, 'ip_version', '1.00.a');
+    case 'ROACH2'
         b = set(b, 'ip_version', '1.00.a');
 end % switch s.hw_sys
 
