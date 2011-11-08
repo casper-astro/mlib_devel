@@ -1,0 +1,15 @@
+################################################################################
+################################################################################
+##
+## Copyright (c) 2001 Xilinx, Inc.  All rights reserved.
+##
+## Xilinx, Inc.
+##
+## opb_bram_if_cntlr_v1_00_a.pao
+##
+## Peripheral Analyze Order file
+##
+################################################################################
+
+lib proc_common_v1_00_b proc_common_pkg
+lib bram_if_cntlr_v1_00_b bram_if
