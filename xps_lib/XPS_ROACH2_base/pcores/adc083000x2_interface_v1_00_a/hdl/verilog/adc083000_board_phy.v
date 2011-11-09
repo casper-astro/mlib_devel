@@ -278,7 +278,7 @@ DCM #(
 	.CLKFX_DIVIDE(1), 										// Can be any integer from 1 to 32
 	.CLKFX_MULTIPLY(4), 									// Can be any integer from 2 to 32
 	.CLKIN_DIVIDE_BY_2("FALSE"), 					// TRUE/FALSE to enable CLKIN divide by two feature
-	.CLKIN_PERIOD(4.0000), 									// Specify period of input clock in ns from 1.25 to 1000.00
+	.CLKIN_PERIOD(2.6667), 									// Specify period of input clock in ns from 1.25 to 1000.00
 	.CLKOUT_PHASE_SHIFT("NONE"), 					// Specify phase shift mode of NONE or FIXED
 	.DESKEW_ADJUST("SOURCE_SYNCHRONOUS"), // SOURCE_SYNCHRONOUS, SYSTEM_SYNCHRONOUS or an integer from 0 to 15
 	.DFS_FREQUENCY_MODE("HIGH"), 					// LOW or HIGH frequency mode for frequency synthesis
