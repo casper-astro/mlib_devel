@@ -90,23 +90,31 @@ misc_ports.ctrl_clk_out    = {1 'out' [s.adc_str,'_clk']};
 misc_ports.ctrl_clk90_out  = {1 'out' [s.adc_str,'_clk90']};
 misc_ports.ctrl_clk180_out = {1 'out' [s.adc_str,'_clk180']};
 misc_ports.ctrl_clk270_out = {1 'out' [s.adc_str,'_clk270']};
-misc_ports.ctrl_dcm_locked = {1 'out' [s.adc_str,'_dcm_locked']};
 
 switch s.hw_sys
     case 'iBOB'
-        misc_ports.dcm_reset        = {1 'in'  [s.adc_str,'_dcm_reset']};
-        misc_ports.dcm_psdone       = {1 'out' [s.adc_str,'_psdone']};
+        misc_ports.ctrl_dcm_locked   = {1 'out' [s.adc_str,'_dcm_locked']};
+        misc_ports.dcm_reset         = {1 'in'  [s.adc_str,'_dcm_reset']};
+        misc_ports.dcm_psdone        = {1 'out' [s.adc_str,'_psdone']};
+        misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};
+        misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
+        misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
     case 'ROACH'
-        misc_ports.dcm_reset        = {1 'in'  [s.adc_str,'_dcm_reset']};
-        misc_ports.dcm_psdone       = {1 'out' [s.adc_str,'_psdone']};
+        misc_ports.ctrl_dcm_locked   = {1 'out' [s.adc_str,'_dcm_locked']};
+        misc_ports.dcm_reset         = {1 'in'  [s.adc_str,'_dcm_reset']};
+        misc_ports.dcm_psdone        = {1 'out' [s.adc_str,'_psdone']};
+        misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};
+        misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
+        misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
     case 'ROACH2'
+        misc_ports.ctrl_mmcm_locked  = {1 'out' [s.adc_str,'_mmcm_locked']};
         misc_ports.mmcm_reset        = {1 'in'  [s.adc_str,'_mmcm_reset']};
         misc_ports.mmcm_psdone       = {1 'out' [s.adc_str,'_psdone']};
+        misc_ports.mmcm_psclk        = {1 'in'  [s.adc_str,'_psclk']};
+        misc_ports.mmcm_psen         = {1 'in'  [s.adc_str,'_psen']};
+        misc_ports.mmcm_psincdec     = {1 'in'  [s.adc_str,'_psincdec']};
 end
 
-misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};
-misc_ports.dcm_psen        = {1 'in'  [s.adc_str,'_psen']};
-misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
 b = set(b,'misc_ports',misc_ports);
 
 % external ports
