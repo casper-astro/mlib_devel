@@ -232,7 +232,7 @@ if length(use_ded_mult)==1
 elseif length(use_ded_mult)==floor(n_ants/2)+1
     set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult(1)));
     for i=1:floor(n_ants/2),
-        name = ['baseline_tap', num2str(i)];
+        name = ['/baseline_tap', num2str(i)];
         set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult(i+1)));
     end
 end
