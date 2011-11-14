@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Sep 12 15:39:22 2011"
-  RTWModifiedTimeStamp	  237742721
-  ModelVersionFormat	  "1.%<AutoIncrement:436>"
+  LastModifiedDate	  "Fri Nov 11 16:41:18 2011"
+  RTWModifiedTimeStamp	  242930416
+  ModelVersionFormat	  "1.%<AutoIncrement:437>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -687,7 +687,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [235, 136, 1915, 1136]
+    Location		    [0, 79, 1680, 1026]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -35113,10 +35113,9 @@ Library {
       "k1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlin"
       "k4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:a"
       "ux0_clk|ROACH:aux1_clk|ROACH:led|ROACH:gpioa|ROACH:gpioa_oe_n|ROACH:gpiob|ROACH:gpiob_oe_n|ROACH:qsh|ROACH:zdok0"
-      "|ROACH:zdok1|ROACH2:aux0_clk|ROACH2:aux1_clk|ROACH2:led|ROACH2:gpioa|ROACH2:gpioa_oe_n|ROACH2:gpiob|ROACH2:gpiob"
-      "_oe_n|ROACH2:qsh|ROACH2:zdok0|ROACH2:zdok1|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:j"
-      "umper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,c"
-      "heckbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
+      "|ROACH:zdok1|ROACH2:aux_clk|ROACH2:led|ROACH2:gpio|CORR:four_buttons|CORR:six_buttons|CORR:led|CORR:jumper_drive"
+      "r|CORR:jumper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,ch"
+      "eckbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'iBOB:zdok0' 'iBOB:zdok1' 'iBOB:md"
       "r' 'ROACH:qsh' 'ROACH:zdok0' 'ROACH:zdok1'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on'"
@@ -35137,7 +35136,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "iBOB:led|out|Boolean|1|0|1|1|off|off|on|0|None"
+      MaskValueString	      "iBOB:led|out|Boolean|1|0|0|1|off|off|on|0|None"
       MaskTabNameString	      ",,,,,,,,,,,"
       System {
 	Name			"gpio"
@@ -35148,9 +35147,9 @@ Library {
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
@@ -35176,9 +35175,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -35194,7 +35193,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_gpio_gateway"
+	  Name			  "r2_spec_1ghz_16k_iadc_r108_leds_roach_gpioa0_gateway"
 	  Ports			  [1, 1]
 	  Position		  [150, 50, 190, 70]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -35202,11 +35201,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -35229,21 +35228,21 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "gpio_out"
+	  SrcBlock		  "r2_spec_1ghz_16k_iadc_r108_leds_roach_gpioa0_gateway"
 	  SrcPort		  1
-	  DstBlock		  "convert"
+	  DstBlock		  "sim_out"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "convert"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_gpio_gateway"
+	  DstBlock		  "r2_spec_1ghz_16k_iadc_r108_leds_roach_gpioa0_gateway"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_gpio_gateway"
+	  SrcBlock		  "gpio_out"
 	  SrcPort		  1
-	  DstBlock		  "sim_out"
+	  DstBlock		  "convert"
 	  DstPort		  1
 	}
       }
