@@ -27,8 +27,12 @@ library unisim;
 entity adc5g_dmux1_interface is
    generic (  
 	  adc_bit_width : integer :=8;
-          mode          : integer :=0;  -- 1-channel mode
-          clkin_period  : real    :=2.0  -- clock in period (ns)
+          mode          : integer :=0;    -- 1-channel mode
+          clkin_period  : real    :=2.0;  -- clock in period (ns)
+          pll_m         : integer :=1;    -- clock in period (ns)
+          pll_d         : integer :=1;    -- clock in period (ns)
+          pll_o0        : integer :=1;    -- clock in period (ns)
+          pll_o1        : integer :=2     -- clock in period (ns)
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -93,81 +97,53 @@ end  adc5g_dmux1_interface ;
 
 architecture behavioral of adc5g_dmux1_interface is
 
-   signal clk1        : std_logic;
-   signal clk1n       : std_logic;
-   signal clk1no      : std_logic;
-   signal clk1iobuf   : std_logic;
-   signal adc_clk     : std_logic;
-   signal clk1_buf    : std_logic;
-   signal clk1fb      : std_logic;
-   signal clk1dv      : std_logic;
-   signal clk1dvraw   : std_logic;
-   signal clk2        : std_logic;
-   signal clk2n       : std_logic;
-   signal clk2_buf    : std_logic;
-   signal clk2fb      : std_logic;
-   signal clk2dv      : std_logic;
-   signal clk2dvraw   : std_logic;
+  -- Clock and sync signals
+  signal adc_clk      : std_logic;
+  signal adc_sync     : std_logic;
 
+  -- PLL signals
+  signal pll_clkfb    : std_logic;
+  signal pll_clkout0  : std_logic;
+  signal pll_clkout1  : std_logic;
+  signal pll_clkout2  : std_logic;
+  signal pll_clkout3  : std_logic;
+  signal pll_clkout4  : std_logic;
+  signal pll_locked   : std_logic;
+  signal pll_rst      : std_logic;
 
-   signal reset         : std_logic;
-   signal reset_iserdes : std_logic;
-   signal dcm1_locked   : std_logic;
-   signal dcm1_psincdec : std_logic;
-   signal dcm1_psen     : std_logic;
-   signal dcm1_psclk   : std_logic;
-   signal dcm1_psdone  : std_logic;
-   signal dcm1_status  : std_logic_vector(15 downto 0);
-   signal dcm1_clk0    : std_logic;
-   signal dcm1_clk90   : std_logic;
-   signal dcm1_clk180  : std_logic;
-   signal dcm1_clk270  : std_logic;
+  -- ISERDES signals
+  signal isd_clk      : std_logic;
+  signal isd_clkn     : std_logic;
+  signal isd_clkdiv   : std_logic;
+  signal isd_rst      : std_logic;
 
-   signal dcm2_reset   : std_logic;
-   signal dcm2_locked  : std_logic;
-   signal dcm2_clk0    : std_logic;
-   signal dcm2_clk90   : std_logic;
-   signal dcm2_clk180  : std_logic;
-   signal dcm2_clk270  : std_logic;
+  -- first core, "A"
+  signal   data0      :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data0a     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data0b     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data0c     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data0d     :   std_logic_vector(adc_bit_width-1 downto 0);
 
-   -- PLL signals
-   signal pll_clkfb : std_logic;
-   signal pll_clkout0 : std_logic;
-   signal pll_clkout1 : std_logic;
-   signal pll_clkout2 : std_logic;
-   signal pll_clkout3 : std_logic;
-   signal pll_clkout4 : std_logic;
+  -- first core, "C"
+  signal   data1      :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data1a     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data1b     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data1c     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data1d     :   std_logic_vector(adc_bit_width-1 downto 0);
 
-   -- ISERDES signals
-   signal isd_clk : std_logic;
-   signal isd_clkn : std_logic;
-   signal isd_clkdiv : std_logic;
+  -- first core, "B"
+  signal   data2      :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data2a     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data2b     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data2c     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data2d     :   std_logic_vector(adc_bit_width-1 downto 0);
 
-   signal   dcm1_control     : std_logic_vector(15 downto 0);
-   signal   dcm1_phase_word  : std_logic_vector(15 downto 0);
-   signal   data0      :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data0a     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data0b     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data0c     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data0d     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data1      :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data1a     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data1b     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data1c     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data1d     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data2      :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data2a     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data2b     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data2c     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data2d     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data3      :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data3a     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data3b     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data3c     :   std_logic_vector(adc_bit_width-1 downto 0);
-   signal   data3d     :   std_logic_vector(adc_bit_width-1 downto 0);
-
-   signal   startupword: std_logic_vector( 7 downto 0);
-   signal adc_sync     : std_logic;
+  -- first core, "D"
+  signal   data3      :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data3a     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data3b     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data3c     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal   data3d     :   std_logic_vector(adc_bit_width-1 downto 0);
 
 begin
 
@@ -211,262 +187,254 @@ begin
     user_data_q7 <= data3d; 
   end generate chan2_mode;
 
- sync <= adc_sync;
-  
-  adc_reset_o<=ctrl_reset;
-
-  ctrl_dcm_locked<=dcm1_locked;
-  
-process(clk1_buf)  
-    begin 
-       if (clk1_buf'event and clk1_buf='1') then 
-	 if (startupword /= "01011010") or (dcm_reset='1') or (ctrl_reset='1') then 
-           reset        <='1';
-           reset_iserdes<='1';
-	   dcm2_reset <='1';
-	   startupword<="01011010";
-         else
-           reset     <='0';
-         end if;
-	 if (dcm1_locked='1') then 
-           reset_iserdes<='0';
-	   dcm2_reset <='0';
-         end if;
-
-       end if;
-end process;
-
 -------------------------------------------------------
 -- Component Instantiation
 -------------------------------------------------------
 
 -- Clocks
 
-CBUF0:   IBUFGDS
-         generic map(
-           DIFF_TERM => TRUE,
-	   IOSTANDARD => "LVDS_25"
-            )
-         port map (
-	    i=> adc_sync_p,
-	    ib=> adc_sync_n,
-	    o=> adc_sync
-          );
+  CBUF0:   IBUFGDS
+    generic map(
+      DIFF_TERM => TRUE,
+      IOSTANDARD => "LVDS_25"
+      )
+    port map (
+      i=> adc_sync_p,
+      ib=> adc_sync_n,
+      o=> adc_sync
+      );
 
-CBUF1:   IBUFGDS
-         generic map(
-           DIFF_TERM => TRUE,
-	   IOSTANDARD => "LVDS_25"
-            )
-         port map (
-	    i=> adc_clk_p_i,
-	    ib=> adc_clk_n_i,
-	    o=> adc_clk
-          );
-
-
-PLL: PLL_BASE
-  generic map (
-    CLKIN_PERIOD       => clkin_period,
-    CLKOUT0_DIVIDE     => 1,
-    CLKOUT0_PHASE      => 0.0,
-    CLKOUT0_DUTY_CYCLE => 0.50,
-    CLKOUT1_DIVIDE     => 2,
-    CLKOUT1_PHASE      => 0.0,
-    CLKOUT1_DUTY_CYCLE => 0.50,
-    CLKOUT2_DIVIDE     => 2,
-    CLKOUT2_PHASE      => 90.0,
-    CLKOUT2_DUTY_CYCLE => 0.50,
-    CLKOUT3_DIVIDE     => 2,
-    CLKOUT3_PHASE      => 180.0,
-    CLKOUT3_DUTY_CYCLE => 0.50,
-    CLKOUT4_DIVIDE     => 2,
-    CLKOUT4_PHASE      => 270.0,
-    CLKOUT4_DUTY_CYCLE => 0.50,
-    CLKFBOUT_MULT      => 1,
-    CLKFBOUT_PHASE     => 0.0
-    )
-  port map (
-    CLKIN     => adc_clk,
-    CLKFBIN   => pll_clkfb,
-    RST       => ctrl_reset,
-    CLKOUT0   => pll_clkout0,
-    CLKOUT1   => pll_clkout1,
-    CLKOUT2   => pll_clkout2,
-    CLKOUT3   => pll_clkout3,
-    CLKOUT4   => pll_clkout4,
-    CLKFBOUT  => pll_clkfb,
-    LOCKED    => dcm1_locked
-    );
+  CBUF1:   IBUFGDS
+    generic map(
+      DIFF_TERM => TRUE,
+      IOSTANDARD => "LVDS_25"
+      )
+    port map (
+      i=> adc_clk_p_i,
+      ib=> adc_clk_n_i,
+      o=> adc_clk
+      );
 
 
-CBUF2a:  BUFG     port map (i=> pll_clkout0, o=> isd_clk);
-CBUF2b:  BUFG     port map (i=> pll_clkout1, o=> isd_clkdiv);
-CBUF2c:  BUFG     port map (i=> pll_clkout2, o=> ctrl_clk90_out);
-CBUF2d:  BUFG     port map (i=> pll_clkout3, o=> ctrl_clk180_out);
-CBUF2e:  BUFG     port map (i=> pll_clkout4, o=> ctrl_clk270_out);
-ctrl_clk_out <= isd_clkdiv;
-isd_clkn <= not isd_clk;
+  PLL: PLL_BASE
+    generic map (
+      BANDWIDTH          => "OPTIMIZED",
+      CLKFBOUT_MULT      => pll_m,
+      CLKFBOUT_PHASE     => 0.0,
+      CLKIN_PERIOD       => clkin_period,
+      CLKOUT0_DIVIDE     => pll_o0,
+      CLKOUT0_PHASE      => 0.0,
+      CLKOUT0_DUTY_CYCLE => 0.50,
+      CLKOUT1_DIVIDE     => pll_o1,
+      CLKOUT1_PHASE      => 0.0,
+      CLKOUT1_DUTY_CYCLE => 0.50,
+      CLKOUT2_DIVIDE     => pll_o1,
+      CLKOUT2_PHASE      => 90.0,
+      CLKOUT2_DUTY_CYCLE => 0.50,
+      CLKOUT3_DIVIDE     => pll_o1,
+      CLKOUT3_PHASE      => 180.0,
+      CLKOUT3_DUTY_CYCLE => 0.50,
+      CLKOUT4_DIVIDE     => pll_o1,
+      CLKOUT4_PHASE      => 270.0,
+      CLKOUT4_DUTY_CYCLE => 0.50,
+      COMPENSATION       => "SYSTEM_SYNCHRONOUS",
+      DIVCLK_DIVIDE      => pll_d,
+      REF_JITTER         => 0.1
+      )
+    port map (
+      CLKIN     => adc_clk,
+      CLKFBIN   => pll_clkfb,
+      CLKOUT0   => pll_clkout0,
+      CLKOUT1   => pll_clkout1,
+      CLKOUT2   => pll_clkout2,
+      CLKOUT3   => pll_clkout3,
+      CLKOUT4   => pll_clkout4,
+      CLKFBOUT  => pll_clkfb,
+      LOCKED    => pll_locked,
+      RST       => pll_rst
+      );
 
 
-IBUFDS0 : for i in adc_bit_width-1 downto 0 generate
-   IBUFI0  :  IBUFDS_LVDS_25
+  CBUF2a:  BUFG     port map (i=> pll_clkout0, o=> isd_clk);
+  CBUF2b:  BUFG     port map (i=> pll_clkout1, o=> isd_clkdiv);
+  CBUF2c:  BUFG     port map (i=> pll_clkout2, o=> ctrl_clk90_out);
+  CBUF2d:  BUFG     port map (i=> pll_clkout3, o=> ctrl_clk180_out);
+  CBUF2e:  BUFG     port map (i=> pll_clkout4, o=> ctrl_clk270_out);
+
+
+  pll_rst <= ctrl_reset;
+  isd_rst <= ctrl_reset;
+  adc_reset_o <= ctrl_reset;
+  
+  ctrl_dcm_locked <= pll_locked;
+  sync <= adc_sync;
+
+  ctrl_clk_out <= isd_clkdiv;
+  isd_clkn <= not isd_clk;
+
+
+  IBUFDS0 : for i in adc_bit_width-1 downto 0 generate
+    IBUFI0  :  IBUFDS_LVDS_25
       port map (  i  => adc_data0_p_i(i),
                   ib => adc_data0_n_i(i),
                   o  => data0(i)
-               );
-end generate IBUFDS0;
+                  );
+  end generate IBUFDS0;
 
 
-IBUFDS1 : for i in adc_bit_width-1 downto 0 generate
-   IBUFI1  :  IBUFDS_LVDS_25
+  IBUFDS1 : for i in adc_bit_width-1 downto 0 generate
+    IBUFI1  :  IBUFDS_LVDS_25
       port map (  i  => adc_data1_p_i(i),
                   ib => adc_data1_n_i(i),
                   o  => data1(i)
-               );
-end generate IBUFDS1;
+                  );
+  end generate IBUFDS1;
 
 
-IBUFDS2 : for i in adc_bit_width-1 downto 0 generate
-   IBUFI2  :  IBUFDS_LVDS_25
+  IBUFDS2 : for i in adc_bit_width-1 downto 0 generate
+    IBUFI2  :  IBUFDS_LVDS_25
       port map (  i  => adc_data2_p_i(i),
                   ib => adc_data2_n_i(i),
                   o  => data2(i)
-               );
-end generate IBUFDS2;
+                  );
+  end generate IBUFDS2;
 
 
-IBUFDS3 : for i in adc_bit_width-1 downto 0 generate
-   IBUF3  :  IBUFDS_LVDS_25
+  IBUFDS3 : for i in adc_bit_width-1 downto 0 generate
+    IBUF3  :  IBUFDS_LVDS_25
       port map (  i  => adc_data3_p_i(i),
                   ib => adc_data3_n_i(i),
                   o  => data3(i)
-               );
-end generate IBUFDS3;
+                  );
+  end generate IBUFDS3;
 
-    
-iserdesx : for i in adc_bit_width-1 downto 0 generate
-   iserdes0 : ISERDES_NODELAY
+  
+  iserdesx : for i in adc_bit_width-1 downto 0 generate
+
+    iserdes0 : ISERDES_NODELAY
       generic map (
-              BITSLIP_ENABLE =>  TRUE,
-              DATA_RATE     => "DDR",
-              DATA_WIDTH    =>  4,
-              INTERFACE_TYPE=> "NETWORKING",
-              SERDES_MODE   => "MASTER",
-              NUM_CE        =>  2
-           )
-    port map  (
-      Q1 => data0d(i),
-      Q2 => data0c(i),
-      Q3 => data0b(i),
-      Q4 => data0a(i),
-      Q5 => open,
-      Q6 => open,
-      SHIFTOUT1 => open,
-      SHIFTOUT2 => open,
-      BITSLIP   => '0',
-      CE1       => '1',
-      CE2       => '1',
-      CLK       => isd_clk,
-      CLKB      => isd_clkn,
-      CLKDIV    => isd_clkdiv,
-      D         => data0(i),
-      OCLK      => '0',
-      RST       => reset_iserdes,
-      SHIFTIN1  => '0',
-      SHIFTIN2  => '0'
-    );
-   iserdes1 : ISERDES_NODELAY
+        BITSLIP_ENABLE =>  TRUE,
+        DATA_RATE     => "DDR",
+        DATA_WIDTH    =>  4,
+        INTERFACE_TYPE=> "NETWORKING",
+        SERDES_MODE   => "MASTER",
+        NUM_CE        =>  2
+        )
+      port map  (
+        Q1 => data0d(i),
+        Q2 => data0c(i),
+        Q3 => data0b(i),
+        Q4 => data0a(i),
+        Q5 => open,
+        Q6 => open,
+        SHIFTOUT1 => open,
+        SHIFTOUT2 => open,
+        BITSLIP   => '0',
+        CE1       => '1',
+        CE2       => '1',
+        CLK       => isd_clk,
+        CLKB      => isd_clkn,
+        CLKDIV    => isd_clkdiv,
+        D         => data0(i),
+        OCLK      => '0',
+        RST       => isd_rst,
+        SHIFTIN1  => '0',
+        SHIFTIN2  => '0'
+        );
+
+    iserdes1 : ISERDES_NODELAY
       generic map (
-              BITSLIP_ENABLE =>  TRUE,
-              DATA_RATE     => "DDR",
-              DATA_WIDTH    =>  4,
-              INTERFACE_TYPE=> "NETWORKING",
-              SERDES_MODE   => "MASTER",
-              NUM_CE        =>  2
-           )
-    port map  (
-      Q1 => data1d(i),
-      Q2 => data1c(i),
-      Q3 => data1b(i),
-      Q4 => data1a(i),
-      Q5 => open,
-      Q6 => open,
-      SHIFTOUT1 => open,
-      SHIFTOUT2 => open,
-      BITSLIP   => '0',
-      CE1       => '1',
-      CE2       => '1',
-      CLK       => isd_clk,
-      CLKB      => isd_clkn,
-      CLKDIV    => isd_clkdiv,
-      D         => data1(i),
-      OCLK      => '0',
-      RST       => reset_iserdes,
-      SHIFTIN1  => '0',
-      SHIFTIN2  => '0'
-    );
-   iserdes2 : ISERDES_NODELAY
+        BITSLIP_ENABLE =>  TRUE,
+        DATA_RATE     => "DDR",
+        DATA_WIDTH    =>  4,
+        INTERFACE_TYPE=> "NETWORKING",
+        SERDES_MODE   => "MASTER",
+        NUM_CE        =>  2
+        )
+      port map  (
+        Q1 => data1d(i),
+        Q2 => data1c(i),
+        Q3 => data1b(i),
+        Q4 => data1a(i),
+        Q5 => open,
+        Q6 => open,
+        SHIFTOUT1 => open,
+        SHIFTOUT2 => open,
+        BITSLIP   => '0',
+        CE1       => '1',
+        CE2       => '1',
+        CLK       => isd_clk,
+        CLKB      => isd_clkn,
+        CLKDIV    => isd_clkdiv,
+        D         => data1(i),
+        OCLK      => '0',
+        RST       => isd_rst,
+        SHIFTIN1  => '0',
+        SHIFTIN2  => '0'
+        );
+
+    iserdes2 : ISERDES_NODELAY
       generic map (
-              BITSLIP_ENABLE =>  TRUE,
-              DATA_RATE     => "DDR",
-              DATA_WIDTH    =>  4,
-              INTERFACE_TYPE=> "NETWORKING",
-              SERDES_MODE   => "MASTER",
-              NUM_CE        =>  2
-           )
-    port map  (
-      Q1 => data2d(i),
-      Q2 => data2c(i),
-      Q3 => data2b(i),
-      Q4 => data2a(i),
-      Q5 => open,
-      Q6 => open,
-      SHIFTOUT1 => open,
-      SHIFTOUT2 => open,
-      BITSLIP   => '0',
-      CE1       => '1',
-      CE2       => '1',
-      CLK       => isd_clk,
-      CLKB      => isd_clkn,
-      CLKDIV    => isd_clkdiv,
-      D         => data2(i),
-      OCLK      => '0',
-      RST       => reset_iserdes,
-      SHIFTIN1  => '0',
-      SHIFTIN2  => '0'
-    );
-   iserdes3 : ISERDES_NODELAY
+        BITSLIP_ENABLE =>  TRUE,
+        DATA_RATE     => "DDR",
+        DATA_WIDTH    =>  4,
+        INTERFACE_TYPE=> "NETWORKING",
+        SERDES_MODE   => "MASTER",
+        NUM_CE        =>  2
+        )
+      port map  (
+        Q1 => data2d(i),
+        Q2 => data2c(i),
+        Q3 => data2b(i),
+        Q4 => data2a(i),
+        Q5 => open,
+        Q6 => open,
+        SHIFTOUT1 => open,
+        SHIFTOUT2 => open,
+        BITSLIP   => '0',
+        CE1       => '1',
+        CE2       => '1',
+        CLK       => isd_clk,
+        CLKB      => isd_clkn,
+        CLKDIV    => isd_clkdiv,
+        D         => data2(i),
+        OCLK      => '0',
+        RST       => isd_rst,
+        SHIFTIN1  => '0',
+        SHIFTIN2  => '0'
+        );
+
+    iserdes3 : ISERDES_NODELAY
       generic map (
-              BITSLIP_ENABLE =>  TRUE,
-              DATA_RATE     => "DDR",
-              DATA_WIDTH    =>  4,
-              INTERFACE_TYPE=> "NETWORKING",
-              SERDES_MODE   => "MASTER",
-              NUM_CE        =>  2
-           )
-    port map  (
-      Q1 => data3d(i),
-      Q2 => data3c(i),
-      Q3 => data3b(i),
-      Q4 => data3a(i),
-      Q5 => open,
-      Q6 => open,
-      SHIFTOUT1 => open,
-      SHIFTOUT2 => open,
-      BITSLIP   => '0',
-      CE1       => '1',
-      CE2       => '1',
-      CLK       => isd_clk,
-      CLKB      => isd_clkn,
-      CLKDIV    => isd_clkdiv,
-      D         => data3(i),
-      OCLK      => '0',
-      RST       => reset_iserdes,
-      SHIFTIN1  => '0',
-      SHIFTIN2  => '0'
-    );
-end generate iserdesx;
+        BITSLIP_ENABLE =>  TRUE,
+        DATA_RATE     => "DDR",
+        DATA_WIDTH    =>  4,
+        INTERFACE_TYPE=> "NETWORKING",
+        SERDES_MODE   => "MASTER",
+        NUM_CE        =>  2
+        )
+      port map  (
+        Q1 => data3d(i),
+        Q2 => data3c(i),
+        Q3 => data3b(i),
+        Q4 => data3a(i),
+        Q5 => open,
+        Q6 => open,
+        SHIFTOUT1 => open,
+        SHIFTOUT2 => open,
+        BITSLIP   => '0',
+        CE1       => '1',
+        CE2       => '1',
+        CLK       => isd_clk,
+        CLKB      => isd_clkn,
+        CLKDIV    => isd_clkdiv,
+        D         => data3(i),
+        OCLK      => '0',
+        RST       => isd_rst,
+        SHIFTIN1  => '0',
+        SHIFTIN2  => '0'
+        );
+  end generate iserdesx;
 
 
 end behavioral;    

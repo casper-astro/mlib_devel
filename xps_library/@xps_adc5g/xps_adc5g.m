@@ -77,6 +77,37 @@ if s.use_adc1
     s.adc_str = 'adc1';
 end;
 
+% Set the PLL parameters optimally
+switch s.hw_sys
+    case 'ROACH'
+        % These values are described in the Virtex-5
+        % FPGA User Guide, in the section discussing how
+        % to determine the M and D values for the PLL
+        % All swictching values are for V5 -1 speed grade
+        d_min = ceil(s.adc_clk_rate/450.0); % fPFDMAX = 450 MHz
+	d_max = floor(s.adc_clk_rate/19.0); % fPFDMIN = 19 MHz
+	m_min = d_min*ceil(400.0/s.adc_clk_rate); % fVCOMIN = 400 MHz
+	m_max = floor((d_max*1000.0)/s.adc_clk_rate); % fVCOMAX = 1000 MHz
+	
+	% Now determine the optimal PLL parameters
+	pll_m = floor((d_min*1000.0)/s.adc_clk_rate);
+	pll_d = d_min;
+	pll_vco_freq = s.adc_clk_rate*(pll_m/pll_d);
+	pll_pfd_freq = s.adc_clk_rate*pll_d;
+    pll_o0 = pll_vco_freq/s.adc_clk_rate;
+	pll_o1 = pll_vco_freq/s.sysclk_rate;
+	disp(['ADC5G: ', s.adc_str, ': PLL-VCO Freq. = ', num2str(pll_vco_freq, '%.4f')]);
+	disp(['ADC5G: ', s.adc_str, ': PLL-PFD Freq. = ', num2str(pll_pfd_freq, '%.4f')]);
+	disp(['ADC5G: ', s.adc_str, ': PLL MULT = ', num2str(pll_m, '%d')]);
+	disp(['ADC5G: ', s.adc_str, ': PLL DIV = ', num2str(pll_d, '%d')]);
+	disp(['ADC5G: ', s.adc_str, ': PLL DIV0 = ', num2str(pll_o0, '%d')]);
+	disp(['ADC5G: ', s.adc_str, ': PLL DIV1 = ', num2str(pll_o1, '%d')]);
+    case 'ROACH2'
+        % pass
+    otherwise
+        error(['Unsupported hardware system: ',s.hw_sys]);
+end
+
 % Set UCF constraints depending on which CASPER board we're on
 switch s.hw_sys
     case 'ROACH'
@@ -164,6 +195,17 @@ b = set(b,'ext_ports',ext_ports);
 
 % Finally set parameters and gtfo
 parameters.CLKIN_PERIOD = num2str(1000/s.adc_clk_rate, '%.4f');
+switch s.hw_sys
+    case 'ROACH'
+        parameters.PLL_M = num2str(pll_m, '%d');
+	parameters.PLL_D = num2str(pll_d, '%d');
+	parameters.PLL_O0 = num2str(pll_o0, '%d');
+	parameters.PLL_O1 = num2str(pll_o1, '%d');
+    case 'ROACH2'
+        % pass
+    otherwise
+        error(['Unsupported hardware system: ',s.hw_sys]);
+end
 parameters.USE_ADC0 = num2str(s.use_adc0);
 parameters.USE_ADC1 = num2str(s.use_adc1);
 parameters.MODE = num2str(mode);
