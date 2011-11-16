@@ -27,12 +27,12 @@ library unisim;
 entity adc5g_dmux2_interface is
    generic (  
 	  adc_bit_width : integer :=8;
-          mode          : integer :=0;  -- 1-channel mode
+          mode          : integer :=0;    -- 1-channel mode
           clkin_period  : real    :=2.0;  -- clock in period (ns)
-          pll_m         : integer :=2;  -- PLL multiplier value
-          pll_d         : integer :=1;  -- PLL divide value
-          pll_o0        : integer :=2;  -- PLL first clock divide
-          pll_o1        : integer :=2  -- PLL second clock divide
+          pll_m         : integer :=2;    -- PLL multiplier value
+          pll_d         : integer :=1;    -- PLL divide value
+          pll_o0        : integer :=2;    -- PLL first clock divide
+          pll_o1        : integer :=2     -- PLL second clock divide
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -97,9 +97,10 @@ end  adc5g_dmux2_interface ;
 
 architecture behavioral of adc5g_dmux2_interface is
 
-  -- Clock and sync signals
+  -- Clock, reset, sync signals
   signal adc_clk      : std_logic;
   signal adc_sync     : std_logic;
+  signal reset        : std_logic;
 
   -- PLL signals
   signal pll_clkfbin  : std_logic;
@@ -136,6 +137,26 @@ architecture behavioral of adc5g_dmux2_interface is
   signal   data3b     :   std_logic_vector(adc_bit_width-1 downto 0);
 
 begin
+
+  -- purpose: synchronously reset the PLL and IDDR's
+  -- type   : combinational
+  -- inputs : adc_clk
+  -- outputs: reset
+  RST: process (adc_clk)
+  begin  -- process RST
+    if (adc_clk'event and adc_clk='1') then
+      if (ctrl_reset='1') then
+        reset <= '1';
+      else
+        reset <= '0';
+      end if;
+    end if;
+  end process RST;
+
+  pll_rst <= reset;
+  iddr_rst <= reset;
+  adc_reset_o <= reset;
+  
 
   chan1_mode: if (mode=0) generate
     user_data_i0 <= data0a(adc_bit_width/2-1 downto 0); 
@@ -181,7 +202,7 @@ begin
 -- Component Instantiation
 -------------------------------------------------------
 
--- Clocks
+  -- Clocks
 
   CBUF0:   IBUFGDS
     generic map(
@@ -246,10 +267,6 @@ begin
   CBUF2d:  BUFG     port map (i=> pll_clkout2,  o=> ctrl_clk180_out);
   CBUF2e:  BUFG     port map (i=> pll_clkout3,  o=> ctrl_clk270_out);
 
-
-  pll_rst <= ctrl_reset;
-  iddr_rst <= ctrl_reset;
-  adc_reset_o <= ctrl_reset;
 
   ctrl_dcm_locked <= pll_locked;
   sync <= adc_sync;
