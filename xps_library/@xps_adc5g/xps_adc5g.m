@@ -79,34 +79,84 @@ end;
 
 % Set the PLL parameters optimally
 switch s.hw_sys
-    case 'ROACH'
-        % These values are described in the Virtex-5
-        % FPGA User Guide, in the section discussing how
-        % to determine the M and D values for the PLL
-        % All swictching values are for V5 -1 speed grade
-        d_min = ceil(s.adc_clk_rate/450.0); % fPFDMAX = 450 MHz
-	d_max = floor(s.adc_clk_rate/19.0); % fPFDMIN = 19 MHz
-	m_min = d_min*ceil(400.0/s.adc_clk_rate); % fVCOMIN = 400 MHz
-	m_max = floor((d_max*1000.0)/s.adc_clk_rate); % fVCOMAX = 1000 MHz
-	
-	% Now determine the optimal PLL parameters
-	pll_m = floor((d_min*1000.0)/s.adc_clk_rate);
-	pll_d = d_min;
-	pll_vco_freq = s.adc_clk_rate*(pll_m/pll_d);
-	pll_pfd_freq = s.adc_clk_rate*pll_d;
-    pll_o0 = pll_vco_freq/s.adc_clk_rate;
-	pll_o1 = pll_vco_freq/s.sysclk_rate;
-	disp(['ADC5G: ', s.adc_str, ': PLL-VCO Freq. = ', num2str(pll_vco_freq, '%.4f')]);
-	disp(['ADC5G: ', s.adc_str, ': PLL-PFD Freq. = ', num2str(pll_pfd_freq, '%.4f')]);
-	disp(['ADC5G: ', s.adc_str, ': PLL MULT = ', num2str(pll_m, '%d')]);
-	disp(['ADC5G: ', s.adc_str, ': PLL DIV = ', num2str(pll_d, '%d')]);
-	disp(['ADC5G: ', s.adc_str, ': PLL DIV0 = ', num2str(pll_o0, '%d')]);
-	disp(['ADC5G: ', s.adc_str, ': PLL DIV1 = ', num2str(pll_o1, '%d')]);
+    % These values are described in the Virtex-5
+    % FPGA User Guide, in the section discussing how
+    % to determine the M and D values for the PLL
+    % All swictching values are for V5 -1 speed grade
+    case 'ROACH'        
+        f_pfdmax = 450; % MHz
+        f_pfdmin = 19; % MHz
+        f_vcomax = 1000; % MHz
+        f_vcomin = 400; % MHz
+        m_allowed = 1:64;
+        d_allowed = 1:52;
+        o_allowed = 1:128;
     case 'ROACH2'
-        % pass
+        f_pfdmax = 450; % MHz, for bandwidth set to HIGH
+        f_pfdmin = 10; % MHz, for bandwidth set to LOW
+        f_vcomax = 1200; % MHz
+        f_vcomin = 600; % MHz
+        m_allowed = 5:64;
+        d_allowed = 1:80;
+        o_allowed = 1:128;
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end
+
+% Determine the possible ranges for M and D
+d_min = ceil(s.adc_clk_rate/f_pfdmax);
+d_max = floor(s.adc_clk_rate/f_pfdmin);
+m_min = max(m_allowed(1), d_min*ceil(f_vcomin/s.adc_clk_rate));
+m_max = floor((d_max*f_vcomax)/s.adc_clk_rate);
+
+% Determine optimal M and D values
+optimum_found = 0;
+for d=d_min:d_max
+    pfd_freq = s.adc_clk_rate/d;
+    for m=m_min:m_max
+        vco_freq = pfd_freq*m;
+        o0 = vco_freq/s.adc_clk_rate;
+        o1 = vco_freq/s.sysclk_rate;
+        if (mod(o0, 1)==0) && (mod(o1, 1)==0) % i.e. integers
+            if (m<m_allowed(1)) || (m>m_allowed(end))
+                continue
+            elseif (d<d_allowed(1)) || (d>d_allowed(end))
+                continue
+            elseif (pfd_freq<f_pfdmin) || (pfd_freq>f_pfdmax)
+                continue
+            elseif (vco_freq<f_vcomin) || (vco_freq>f_vcomax)
+                continue
+            else
+                % Finally, we've found it!
+                
+                pll_m = m;
+                pll_d = d;
+                pll_o0 = o0;
+                pll_o1 = o1;
+                optimum_found = 1;
+                break
+            end
+        end
+    end
+    if optimum_found
+        break
+    end
+end
+
+% Couldn't find ideal solution so GTFO
+if ~optimum_found
+    error(['An optimum PLL solution is not available!']);
+end
+
+% Print some useful debuging information
+disp(['ADC5G: requested sys_clk rate of ', num2str(s.sysclk_rate, '%.4f')]);
+disp(['ADC5G:   with an adc_clk rate of ', num2str(s.adc_clk_rate, '%.4f')]);
+disp(['ADC5G: ', s.adc_str, ': Chosen M = ', num2str(pll_m, '%d')]);
+disp(['ADC5G: ', s.adc_str, ': Chosen D = ', num2str(pll_d, '%d')]);
+disp(['ADC5G: ', s.adc_str, ': Chosen D0 = ', num2str(pll_o0, '%d')]);
+disp(['ADC5G: ', s.adc_str, ': Chosen D1 = ', num2str(pll_o1, '%d')]);
+disp(['ADC5G: ', s.adc_str, ': VCO Freq. = ', num2str(vco_freq, '%.4f')]);
+disp(['ADC5G: ', s.adc_str, ': PFD Freq. = ', num2str(pfd_freq, '%.4f')]);
 
 % Set UCF constraints depending on which CASPER board we're on
 switch s.hw_sys
@@ -198,11 +248,14 @@ parameters.CLKIN_PERIOD = num2str(1000/s.adc_clk_rate, '%.4f');
 switch s.hw_sys
     case 'ROACH'
         parameters.PLL_M = num2str(pll_m, '%d');
-	parameters.PLL_D = num2str(pll_d, '%d');
-	parameters.PLL_O0 = num2str(pll_o0, '%d');
-	parameters.PLL_O1 = num2str(pll_o1, '%d');
+        parameters.PLL_D = num2str(pll_d, '%d');
+        parameters.PLL_O0 = num2str(pll_o0, '%d');
+        parameters.PLL_O1 = num2str(pll_o1, '%d');
     case 'ROACH2'
-        % pass
+        parameters.MMCM_M = num2str(pll_m, '%.4f');
+        parameters.MMCM_D = num2str(pll_d, '%d');
+        parameters.MMCM_O0 = num2str(pll_o0, '%d');
+        parameters.MMCM_O1 = num2str(pll_o1, '%d');
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end

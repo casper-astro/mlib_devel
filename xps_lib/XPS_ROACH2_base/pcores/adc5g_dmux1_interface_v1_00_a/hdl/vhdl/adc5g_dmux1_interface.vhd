@@ -27,8 +27,12 @@ library unisim;
 entity adc5g_dmux1_interface is
    generic (  
 	  adc_bit_width : integer :=8;
-          mode          : integer :=0;  -- 1-channel mode
-          clkin_period  : real    :=2.0  -- clock in period (ns)
+          mode          : integer :=0;     -- 1-channel mode
+          clkin_period  : real    :=2.0;   -- clock in period (ns)
+          mmcm_m        : real    :=1.0;   -- MMCM multiplier value
+          mmcm_d        : integer :=1;     -- MMCM divide value
+          mmcm_o0       : integer :=1;     -- MMCM first clock divide
+          mmcm_o1       : integer :=2      -- MMCM second clock divide
 	     )  ;
    port (
 	 adc_clk_p_i    :  in std_logic;
@@ -265,15 +269,16 @@ CBUF1:   IBUFGDS
 
 PLL: MMCM_ADV
   generic map (
-    CLKFBOUT_MULT_F    => 5.0,
-    DIVCLK_DIVIDE      => 5,
+    BANDWIDTH          => "OPTIMIZED",
+    CLKFBOUT_MULT_F    => mmcm_m,
+    DIVCLK_DIVIDE      => mmcm_d,
     CLKFBOUT_PHASE     => 0.0,
     CLKIN1_PERIOD      => clkin_period,
-    CLKOUT1_DIVIDE     => 1,
-    CLKOUT2_DIVIDE     => 2,
-    CLKOUT3_DIVIDE     => 2,
-    CLKOUT4_DIVIDE     => 2,
-    CLKOUT5_DIVIDE     => 2,
+    CLKOUT1_DIVIDE     => mmcm_o0,
+    CLKOUT2_DIVIDE     => mmcm_o1,
+    CLKOUT3_DIVIDE     => mmcm_o1,
+    CLKOUT4_DIVIDE     => mmcm_o1,
+    CLKOUT5_DIVIDE     => mmcm_o1,
     CLKOUT1_DUTY_CYCLE => 0.50,
     CLKOUT2_DUTY_CYCLE => 0.50,
     CLKOUT3_DUTY_CYCLE => 0.50,
