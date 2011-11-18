@@ -720,7 +720,7 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_clk" LOC = AA34 | SLEW = SLOW;
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_dat" LOC = AA32 | SLEW = SLOW;
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_cs"  LOC = AA36 | SLEW = SLOW;
-#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_sda" LOC = N28 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_sda" LOC = P28 | SLEW = SLOW;
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_scl" LOC = L32 | SLEW = SLOW;
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_sda" LOC = Y32 | SLEW = SLOW;
