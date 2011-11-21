@@ -84,7 +84,7 @@ switch s.hw_sys
     % to determine the M and D values for the PLL
     % All swictching values are for V5 -1 speed grade
     case 'ROACH'        
-        f_pfdmax = 450; % MHz
+        f_pfdmax = 449; % MHz
         f_pfdmin = 19; % MHz
         f_vcomax = 1000; % MHz
         f_vcomin = 400; % MHz
@@ -141,6 +141,18 @@ for d=d_min:d_max
     if optimum_found
         break
     end
+end
+
+% Fix a special case for Virtex-6: if the MMCM input clock is >= 350 MHz
+% and the DIVCLK_DIVIDE value is 3 or 4, then we need to multipliy both 
+% DIVCLK_DIVIDE and CLKFBOUT_MULT by two. 
+% See: http://www.xilinx.com/support/answers/38133.htm
+switch s.hw_sys
+    case 'ROACH2'
+        if s.adc_clk_rate>350.0 && (pll_d==3 || pll_d==4)
+            pll_d = pll_d * 2;
+            pll_m = pll_m * 2;
+        end
 end
 
 % Couldn't find ideal solution so GTFO
