@@ -1,15 +1,15 @@
--- adc with iserdes block
--- adc 4gsps on 4 channels to zdoc 
---     1 Gbps on each wire DDR with 500Mhz clock
--- if used on a roach2 board with a Virtex6 can run to 5Gsps 1.25Gbps/wire
+-- ASIAA 5 GSps ADC DMUX 1:1 board interface
+-- This should run at up to 3.6 GSps on a ROACH 1
+-- with a -1 speed grade chip
+--
 -----------------------------------------------------------
--- Block Name: adc_pll
+-- Block Name: adc5g_dmux1
 --
 ----------------------------------------------------------
--- Designer: Kim Guzzino
+-- Designers: Rurik Primiani, Homin Jiang, Kim Guzzino
 -- 
--- Revisions: initial 3-31-2011
---            for sx95t-2  (Roach1 board)
+-- Revisions: initial 8-04-2011
+--            for sx95t-1  (Roach1 board)
 --
 --
 --
@@ -25,69 +25,60 @@ library unisim;
 --------------------------------------------
 
 entity adc5g_dmux1_interface is
-   generic (  
-	  adc_bit_width : integer :=8;
-          mode          : integer :=0;    -- 1-channel mode
-          clkin_period  : real    :=2.0;  -- clock in period (ns)
-          pll_m         : integer :=1;    -- PLL multiplier value
-          pll_d         : integer :=1;    -- PLL divide value
-          pll_o0        : integer :=1;    -- PLL first clock divide
-          pll_o1        : integer :=2     -- PLL second clock divide
-	     )  ;
-   port (
-	 adc_clk_p_i    :  in std_logic;
-         adc_clk_n_i    :  in std_logic;
-         adc_data0_p_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --i0
-         adc_data0_n_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --i0
-         adc_data1_p_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --q0
-         adc_data1_n_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --q0
-         adc_data2_p_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --i1
-         adc_data2_n_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --i1
-         adc_data3_p_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --q1
-         adc_data3_n_i    :  in std_logic_vector(adc_bit_width-1 downto 0); --q1
+  generic (  
+    adc_bit_width   : integer :=8;
+    clkin_period    : real    :=2.0;  -- clock in period (ns)
+    mode            : integer :=0;    -- 1-channel mode
+    pll_m           : integer :=2;    -- PLL multiplier value
+    pll_d           : integer :=1;    -- PLL divide value
+    pll_o0          : integer :=2;    -- PLL first clock divide
+    pll_o1          : integer :=2     -- PLL second clock divide
+    );
+  port (
+    adc_clk_p_i     : in std_logic;
+    adc_clk_n_i     : in std_logic;
+    adc_sync_p      : in std_logic;
+    adc_sync_n      : in std_logic;
+    dcm_reset       : in std_logic;
+    dcm_psclk       : in std_logic;
+    dcm_psen        : in std_logic;
+    dcm_psincdec    : in std_logic;
+    ctrl_reset      : in std_logic;
+    ctrl_clk_in     : in std_logic;
+    adc_data0_p_i   : in std_logic_vector(adc_bit_width-1 downto 0); --i0:i1
+    adc_data0_n_i   : in std_logic_vector(adc_bit_width-1 downto 0); --i0:i1
+    adc_data1_p_i   : in std_logic_vector(adc_bit_width-1 downto 0); --q0:q1
+    adc_data1_n_i   : in std_logic_vector(adc_bit_width-1 downto 0); --q0:q1
+    adc_data2_p_i   : in std_logic_vector(adc_bit_width-1 downto 0); --i2:i3
+    adc_data2_n_i   : in std_logic_vector(adc_bit_width-1 downto 0); --i2:i3
+    adc_data3_p_i   : in std_logic_vector(adc_bit_width-1 downto 0); --q2:q3
+    adc_data3_n_i   : in std_logic_vector(adc_bit_width-1 downto 0); --q2:q3
 
-         --adc_reset_i      :  in std_logic;
-         adc_reset_o      :  out std_logic;
-
-         user_data_i0    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_i1    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_i2    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_i3    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_i4    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_i5    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_i6    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_i7    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q0    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q1    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q2    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q3    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q4    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q5    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q6    :  out std_logic_vector(adc_bit_width-1 downto 0);
-         user_data_q7    :  out std_logic_vector(adc_bit_width-1 downto 0);
-
-         adc_sync_p     :  in  std_logic;
-         adc_sync_n     :  in  std_logic;
-         sync       :  out std_logic;
-    
-         ctrl_reset      : in  std_logic;
-         ctrl_clk_in     : in  std_logic;
-         ctrl_clk_out    : out std_logic;
-         ctrl_clk90_out  : out std_logic;
-         ctrl_clk180_out : out std_logic;
-         ctrl_clk270_out : out std_logic;
-         ctrl_dcm_locked : out std_logic;
-
-         --adc_clk_out     : out std_logic;
-
-         dcm_reset       : in  std_logic;
-         dcm_psclk       : in  std_logic;
-         dcm_psen        : in  std_logic;
-         dcm_psincdec    : in  std_logic;
-         dcm_psdone      : out std_logic
-
-        );
-
+    sync            : out std_logic;
+    dcm_psdone      : out std_logic;
+    ctrl_clk_out    : out std_logic;
+    ctrl_clk90_out  : out std_logic;
+    ctrl_clk180_out : out std_logic;
+    ctrl_clk270_out : out std_logic;
+    ctrl_dcm_locked : out std_logic;
+    user_data_i0    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_i1    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_i2    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_i3    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_i4    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_i5    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_i6    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_i7    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q0    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q1    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q2    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q3    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q4    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q5    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q6    : out std_logic_vector(adc_bit_width-1 downto 0);
+    user_data_q7    : out std_logic_vector(adc_bit_width-1 downto 0);
+    adc_reset_o     : out std_logic
+    );
 end  adc5g_dmux1_interface ;
 
 
@@ -150,11 +141,11 @@ begin
 
   -- purpose: synchronously reset the PLL and IDDR's
   -- type   : combinational
-  -- inputs : adc_clk
+  -- inputs : ctrl_clk_in
   -- outputs: reset
-  RST: process (adc_clk)
+  RST: process (ctrl_clk_in)
   begin  -- process RST
-    if (adc_clk'event and adc_clk='1') then
+    if (ctrl_clk_in'event and ctrl_clk_in='1') then
       if (ctrl_reset='1') then
         reset <= '1';
       else
