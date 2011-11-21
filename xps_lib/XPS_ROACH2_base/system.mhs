@@ -247,7 +247,20 @@
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  #END
 
-
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) #### added 2011-05-05 kim.guzzino (copy of Homin's with name change)
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) #### changed 2011-08-04 rurik to adc5g
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')##
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')## control wires for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_adc3wire_clk = adc0_adc3wire_clk, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_adc3wire_data = adc0_adc3wire_data, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_adc3wire_spi_rst= adc0_adc3wire_spi_rst, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_modepin = adc0_modepin, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')##
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')## control wires for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_adc3wire_clk = adc1_adc3wire_clk, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_adc3wire_data = adc1_adc3wire_data, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_adc3wire_spi_rst= adc1_adc3wire_spi_rst, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_modepin = adc1_modepin, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  #### added 2011-05-05 kim.guzzino same interface as adc_5g
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  #### changed 2011-08-04 rurik to adc5g
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  ##
