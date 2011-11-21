@@ -13,7 +13,7 @@ while 1
     if ~ischar(line)
         break;
     else
-        toks = regexp(line,'(.*)#IF#(.*)#(.*)','tokens');
+        toks = regexp(line,'(.*)#IF#(.*?)#(.*)','tokens');
         if isempty(toks)
             fprintf(out_fid,line);
         else

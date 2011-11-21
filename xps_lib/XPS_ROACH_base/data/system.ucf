@@ -220,6 +220,23 @@ NET "epb_clk_in"    IOSTANDARD = LVCMOS33 | LOC = AH18;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = AD32 ;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#
 
+
+
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))#### ADC5G Control Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))##
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_clk       LOC = F28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_data      LOC = C32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_spi_rst   LOC = C34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_modepin            LOC = E28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_clk       LOC = AE32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_data      LOC = AC34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_spi_rst   LOC = AB27 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = AD32 ;
+
+
+
 #IF# (strcmp(get(b,'type'),'xps_adc10d1000'))############## ADC10D1000 Control Signals #############
 #IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#
 #IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc0_adc3wire_clk       LOC = E31 ;

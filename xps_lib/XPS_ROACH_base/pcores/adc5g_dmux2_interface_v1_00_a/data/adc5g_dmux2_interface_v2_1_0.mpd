@@ -1,0 +1,88 @@
+BEGIN adc5g_dmux2_interface
+
+########################
+## Peripheral Options ##
+########################
+
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT, VIRTEX5SX=DEVELOPMENT)
+OPTION IP-GROUP = MICROBLAZE:PPC:USER
+OPTION DESC = "ADC 5G w/PLL-ISERDES interface"
+
+####################
+## Bus Interfaces ##
+####################
+
+#################################################
+## Generics for VHDL or Parameters for Verilog ##
+#################################################
+#
+PARAMETER adc_bit_width = 8, DT = INTEGER
+PARAMETER clkin_period = 2.0, DT = REAL
+PARAMETER pll_m = 0, DT = INTEGER
+PARAMETER pll_d = 0, DT = INTEGER
+PARAMETER pll_o0 = 0, DT = INTEGER
+PARAMETER pll_o1 = 0, DT = INTEGER
+PARAMETER mode = 0, DT = INTEGER
+PARAMETER use_adc0   = 1, DT = INTEGER
+PARAMETER use_adc1   = 0, DT = INTEGER
+PARAMETER using_cntl = 1, DT = INTEGER
+
+###########
+## Ports ##
+###########
+
+
+PORT adc_clk_p_i = "", DIR = I, SIGIS = CLK
+PORT adc_clk_n_i = "", DIR = I, SIGIS = CLK
+
+PORT adc_data0_p_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+PORT adc_data0_n_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+PORT adc_data1_p_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+PORT adc_data1_n_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+PORT adc_data2_p_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+PORT adc_data2_n_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+PORT adc_data3_p_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+PORT adc_data3_n_i = "", DIR = I, VEC = [(adc_bit_width-1):0]
+#PORT adc_reset_i = "", DIR = I
+PORT adc_reset_o = "", DIR = O
+##--PORT sys_clk = "", DIR = I
+PORT adc_sync_p = "", DIR = I
+PORT adc_sync_n = "", DIR = i
+PORT sync  = "", DIR = O
+##PORT adc_clk_o = "", DIR = O
+#
+PORT user_data_i0 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_i1 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_i2 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_i3 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_i4 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_i5 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_i6 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_i7 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q0 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q1 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q2 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q3 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q4 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q5 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q6 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+PORT user_data_q7 = "", DIR = O, VEC = [(adc_bit_width/2-1):0]
+
+## system ports
+PORT dcm_reset       = "", DIR = I
+PORT ctrl_reset      = "", DIR = I
+PORT ctrl_clk_in     = "", DIR = I, SIGIS = CLK
+PORT ctrl_clk_out    = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p_i, CLK_FACTOR = "1.0 / 2 "
+PORT ctrl_clk90_out  = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p_i, CLK_FACTOR = "1.0 / 2 "
+PORT ctrl_clk180_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p_i, CLK_FACTOR = "1.0 / 2 " 
+PORT ctrl_clk270_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p_i, CLK_FACTOR = "1.0 / 2 "
+PORT ctrl_dcm_locked = "", DIR = O
+PORT dcm_psclk       = "", DIR = I
+PORT dcm_psen        = "", DIR = I
+PORT dcm_psincdec    = "", DIR = I
+PORT dcm_psdone      = "", DIR = O
+
+END

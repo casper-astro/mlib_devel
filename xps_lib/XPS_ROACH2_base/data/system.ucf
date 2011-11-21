@@ -686,6 +686,23 @@ NET "epb_data<31>"      LOC = AJ33;
 
 ## ADCs
 
+
+
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))#### ADC5G Control Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))##
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_clk       LOC = A39 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_data      LOC = B41 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_spi_rst   LOC = A40 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_modepin            LOC = B38 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_clk       LOC = M42 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_data      LOC = L41 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_spi_rst   LOC = M38 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = M41 ;
+
+
+
 # ADC0
 
 
