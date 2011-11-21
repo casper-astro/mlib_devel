@@ -51,7 +51,7 @@ PARAMETER AUTOCONFIG_1  = 0, DT = INTEGER
 	PORT adc0_adc3wire_data   = "", DIR = O
 	PORT adc0_adc3wire_strobe = "", DIR = O
 	PORT adc0_adc_reset       = "", DIR = O
-	PORT adc0_dcm_reset       = "", DIR = O
+	PORT adc0_mmcm_reset      = "", DIR = O
   PORT adc0_psclk           = "", DIR = O
   PORT adc0_psen            = "", DIR = O
   PORT adc0_psincdec        = "", DIR = O
@@ -65,7 +65,7 @@ PARAMETER AUTOCONFIG_1  = 0, DT = INTEGER
 	PORT adc1_adc3wire_data   = "", DIR = O
 	PORT adc1_adc3wire_strobe = "", DIR = O
 	PORT adc1_adc_reset       = "", DIR = O
-	PORT adc1_dcm_reset       = "", DIR = O
+	PORT adc1_mmcm_reset      = "", DIR = O
   PORT adc1_psclk           = "", DIR = O
   PORT adc1_psen            = "", DIR = O
   PORT adc1_psincdec        = "", DIR = O

@@ -1,4 +1,4 @@
-
+## supports roach2 rev 1 (derived from roach2_rev1.ucf)
 # VRN/VRP sharing
 
 Net sys_clk TNM_NET = sys_clk;
@@ -41,6 +41,10 @@ NET "sys_clk_p"          LOC = AP11;
 #NET "v6_gpio<9>"         LOC = K30    | IOSTANDARD = "LVCMOS15";
 #NET "v6_gpio<10>"        LOC = N19    | IOSTANDARD = "LVCMOS15";
 #NET "v6_gpio<11>"        LOC = N20    | IOSTANDARD = "LVCMOS15";
+#NET "v6_gpio<12>"        LOC = H18    | IOSTANDARD = "LVCMOS15";
+#NET "v6_gpio<13>"        LOC = F16    | IOSTANDARD = "LVCMOS15";
+#NET "v6_gpio<14>"        LOC = E29    | IOSTANDARD = "LVCMOS15";
+#NET "v6_gpio<15>"        LOC = M27    | IOSTANDARD = "LVCMOS15";
 #
 #NET "v6_irqn"            LOC = AY17;
 
@@ -49,7 +53,7 @@ NET "sys_clk_p"          LOC = AP11;
 #
 
 ## perclk 83.333 MHz
-NET "epb_clk_in"         LOC = AY13 | CLOCK_DEDICATED_ROUTE = FALSE;
+NET "epb_clk_in"         LOC = AY14;
 
 NET "epb_cs_n"           LOC = N35;
 NET "epb_oe_n"           LOC = AA31;
@@ -83,7 +87,7 @@ NET "epb_addr<20>"      LOC = AH29;
 NET "epb_addr<21>"      LOC = AG29;
 NET "epb_addr<22>"      LOC = AD30;
 NET "epb_addr<23>"      LOC = AC30;
-NET "epb_addr<24>"      LOC = AY14;
+NET "epb_addr<24>"      LOC = AY13;
 NET "epb_addr<25>"      LOC = AV13;
 NET "epb_addr<26>"      LOC = AD31;
 NET "epb_addr<27>"      LOC = AB31;
@@ -123,159 +127,154 @@ NET "epb_data<29>"      LOC = P32;
 NET "epb_data<30>"      LOC = AH33;
 NET "epb_data<31>"      LOC = AJ33;
 
-#
-## DDR3 SDRAM RDIMM Signals
-#
+#IF# strcmp(get(b,'type'),'xps_dram')#
+#IF# strcmp(get(b,'type'),'xps_dram')################ DDR3 SDRAM RDIMM Contraints ##################
+#IF# strcmp(get(b,'type'),'xps_dram')#
 
-#NET  "ddr3_dq[*]"    IOSTANDARD = SSTL15_T_DCI;
-#NET  "ddr3_a[*]"     IOSTANDARD = SSTL15;
-#NET  "ddr3_ba[*]"    IOSTANDARD = SSTL15;
-#NET  "ddr3_rasn"     IOSTANDARD = SSTL15;
-#NET  "ddr3_casn"     IOSTANDARD = SSTL15;
-#NET  "ddr3_wen"      IOSTANDARD = SSTL15;
-#NET  "ddr3_resetn"   IOSTANDARD = SSTL15;
-#NET  "ddr3_cke[*]"   IOSTANDARD = SSTL15;
-#NET  "ddr3_odt[*]"   IOSTANDARD = SSTL15;
-#NET  "ddr3_sn[*]"    IOSTANDARD = SSTL15;
-#NET  "ddr3_dm[*]"    IOSTANDARD = SSTL15;
-#NET  "ddr3_dqs_p[*]" IOSTANDARD = DIFF_SSTL15_T_DCI;
-#NET  "ddr3_dqs_n[*]" IOSTANDARD = DIFF_SSTL15_T_DCI;
-#NET  "ddr3_ck_p"     IOSTANDARD = DIFF_SSTL15;
-#NET  "ddr3_ck_n"     IOSTANDARD = DIFF_SSTL15;
-#
-#NET "ddr3_ck_n"          LOC = AY33;
-#NET "ddr3_ck_p"          LOC = BA32;
-#NET "ddr3_casn"          LOC = AU34;
-#NET "ddr3_rasn"          LOC = AY38;
-#NET "ddr3_wen"           LOC = AV38;
-#NET "ddr3_odt<0>"        LOC = AU36;
-#NET "ddr3_odt<1>"        LOC = AH34;
-#NET "ddr3_cke<0>"        LOC = AV34;
-#NET "ddr3_cke<1>"        LOC = AV35;
-#NET "ddr3_sn<0>"         LOC = AW38;
-#NET "ddr3_sn<1>"         LOC = AR37;
-#NET "ddr3_sn<2>"         LOC = AP36;
-#NET "ddr3_sn<3>"         LOC = AN35;
-#NET "ddr3_resetn"        LOC = N13;
-#NET "ddr3_a<0>"          LOC = BB38;
-#NET "ddr3_a<1>"          LOC = BB37;
-#NET "ddr3_a<2>"          LOC = BA37;
-#NET "ddr3_a<3>"          LOC = BA36;
-#NET "ddr3_a<4>"          LOC = BB36;
-#NET "ddr3_a<5>"          LOC = BA35;
-#NET "ddr3_a<6>"          LOC = AW36;
-#NET "ddr3_a<7>"          LOC = AY35;
-#NET "ddr3_a<8>"          LOC = BA34;
-#NET "ddr3_a<9>"          LOC = AW35;
-#NET "ddr3_a<10>"         LOC = BB39;
-#NET "ddr3_a<11>"         LOC = BB34;
-#NET "ddr3_a<12>"         LOC = AY34;
-#NET "ddr3_a<13>"         LOC = AT34;
-#NET "ddr3_a<14>"         LOC = BB33;
-#NET "ddr3_a<15>"         LOC = BB31;
-#NET "ddr3_ba<0>"         LOC = AW37;
-#NET "ddr3_ba<1>"         LOC = AY37;
-#NET "ddr3_ba<2>"         LOC = AY32;
-#NET "ddr3_dm<0>"         LOC = AM33;
-#NET "ddr3_dm<1>"         LOC = AV28;
-#NET "ddr3_dm<2>"         LOC = BA29;
-#NET "ddr3_dm<3>"         LOC = AY29;
-#NET "ddr3_dm<4>"         LOC = AR33;
-#NET "ddr3_dm<5>"         LOC = BB41;
-#NET "ddr3_dm<6>"         LOC = AW42;
-#NET "ddr3_dm<7>"         LOC = AU42;
-#NET "ddr3_dm<8>"         LOC = AL30;
-#NET "ddr3_dq<0>"         LOC = AH24;
-#NET "ddr3_dq<1>"         LOC = AJ27;
-#NET "ddr3_dq<2>"         LOC = AM28;
-#NET "ddr3_dq<3>"         LOC = AN29;
-#NET "ddr3_dq<4>"         LOC = AH26;
-#NET "ddr3_dq<5>"         LOC = AH25;
-#NET "ddr3_dq<6>"         LOC = AL27;
-#NET "ddr3_dq<7>"         LOC = AK27;
-#NET "ddr3_dq<8>"         LOC = AP28;
-#NET "ddr3_dq<9>"         LOC = AU28;
-#NET "ddr3_dq<10>"        LOC = AR29;
-#NET "ddr3_dq<11>"        LOC = AR30;
-#NET "ddr3_dq<12>"        LOC = AM26;
-#NET "ddr3_dq<13>"        LOC = AN26;
-#NET "ddr3_dq<14>"        LOC = AW28;
-#NET "ddr3_dq<15>"        LOC = AV29;
-#NET "ddr3_dq<16>"        LOC = AY28;
-#NET "ddr3_dq<17>"        LOC = AU29;
-#NET "ddr3_dq<18>"        LOC = AW31;
-#NET "ddr3_dq<19>"        LOC = AU31;
-#NET "ddr3_dq<20>"        LOC = AL26;
-#NET "ddr3_dq<21>"        LOC = BB28;
-#NET "ddr3_dq<22>"        LOC = AV30;
-#NET "ddr3_dq<23>"        LOC = AT30;
-#NET "ddr3_dq<24>"        LOC = AT29;
-#NET "ddr3_dq<25>"        LOC = AW30;
-#NET "ddr3_dq<26>"        LOC = BA31;
-#NET "ddr3_dq<27>"        LOC = AV31;
-#NET "ddr3_dq<28>"        LOC = AP27;
-#NET "ddr3_dq<29>"        LOC = AR28;
-#NET "ddr3_dq<30>"        LOC = BB29;
-#NET "ddr3_dq<31>"        LOC = AT31;
-#NET "ddr3_dq<32>"        LOC = AU33;
-#NET "ddr3_dq<33>"        LOC = AV33;
-#NET "ddr3_dq<34>"        LOC = AN34;
-#NET "ddr3_dq<35>"        LOC = AM32;
-#NET "ddr3_dq<36>"        LOC = AT32;
-#NET "ddr3_dq<37>"        LOC = AW33;
-#NET "ddr3_dq<38>"        LOC = AP32;
-#NET "ddr3_dq<39>"        LOC = AN33;
-#NET "ddr3_dq<40>"        LOC = BA40;
-#NET "ddr3_dq<41>"        LOC = BA41;
-#NET "ddr3_dq<42>"        LOC = AK35;
-#NET "ddr3_dq<43>"        LOC = AP38;
-#NET "ddr3_dq<44>"        LOC = AM34;
-#NET "ddr3_dq<45>"        LOC = AL35;
-#NET "ddr3_dq<46>"        LOC = AM36;
-#NET "ddr3_dq<47>"        LOC = AY40;
-#NET "ddr3_dq<48>"        LOC = BA42;
-#NET "ddr3_dq<49>"        LOC = AW41;
-#NET "ddr3_dq<50>"        LOC = AR39;
-#NET "ddr3_dq<51>"        LOC = AL37;
-#NET "ddr3_dq<52>"        LOC = AW40;
-#NET "ddr3_dq<53>"        LOC = AV40;
-#NET "ddr3_dq<54>"        LOC = AR40;
-#NET "ddr3_dq<55>"        LOC = AN38;
-#NET "ddr3_dq<56>"        LOC = AY42;
-#NET "ddr3_dq<57>"        LOC = AP40;
-#NET "ddr3_dq<58>"        LOC = AR42;
-#NET "ddr3_dq<59>"        LOC = AN41;
-#NET "ddr3_dq<60>"        LOC = AN40;
-#NET "ddr3_dq<61>"        LOC = AN39;
-#NET "ddr3_dq<62>"        LOC = AT41;
-#NET "ddr3_dq<63>"        LOC = AT42;
-#NET "ddr3_dq<64>"        LOC = AL29;
-#NET "ddr3_dq<65>"        LOC = AN30;
-#NET "ddr3_dq<66>"        LOC = AL31;
-#NET "ddr3_dq<67>"        LOC = AG28;
-#NET "ddr3_dq<68>"        LOC = AJ26;
-#NET "ddr3_dq<69>"        LOC = AP31;
-#NET "ddr3_dq<70>"        LOC = AN31;
-#NET "ddr3_dq<71>"        LOC = AP30;
-#NET "ddr3_dqs_n<0>"      LOC = AK25;
-#NET "ddr3_dqs_n<1>"      LOC = AM27;
-#NET "ddr3_dqs_n<2>"      LOC = AT27;
-#NET "ddr3_dqs_n<3>"      LOC = AY30;
-#NET "ddr3_dqs_n<4>"      LOC = AP33;
-#NET "ddr3_dqs_n<5>"      LOC = AK34;
-#NET "ddr3_dqs_n<6>"      LOC = AU39;
-#NET "ddr3_dqs_n<7>"      LOC = AU41;
-#NET "ddr3_dqs_n<8>"      LOC = AK29;
-#NET "ddr3_dqs_p<0>"      LOC = AJ25;
-#NET "ddr3_dqs_p<1>"      LOC = AN28;
-#NET "ddr3_dqs_p<2>"      LOC = AR27;
-#NET "ddr3_dqs_p<3>"      LOC = BA30;
-#NET "ddr3_dqs_p<4>"      LOC = AR34;
-#NET "ddr3_dqs_p<5>"      LOC = AL34;
-#NET "ddr3_dqs_p<6>"      LOC = AT40;
-#NET "ddr3_dqs_p<7>"      LOC = AV41;
-#NET "ddr3_dqs_p<8>"      LOC = AK28;
+#IF# strcmp(get(b,'type'),'xps_dram')#CONFIG INTERNAL_VREF_BANK12=0.75;
+#IF# strcmp(get(b,'type'),'xps_dram')#CONFIG INTERNAL_VREF_BANK13=0.75;
+#IF# strcmp(get(b,'type'),'xps_dram')#CONFIG INTERNAL_VREF_BANK22=0.75;
+#IF# strcmp(get(b,'type'),'xps_dram')#CONFIG INTERNAL_VREF_BANK23=0.75;
 
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_dq[*]"    IOSTANDARD = SSTL15_T_DCI;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_a[*]"     IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_ba[*]"    IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_rasn"     IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_casn"     IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_wen"      IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_resetn"   IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_cke[*]"   IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_odt[*]"   IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_sn[*]"    IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_dm[*]"    IOSTANDARD = SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_dqs_p[*]" IOSTANDARD = DIFF_SSTL15_T_DCI;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_dqs_n[*]" IOSTANDARD = DIFF_SSTL15_T_DCI;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_ck_p"     IOSTANDARD = DIFF_SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET  "ddr3_ck_n"     IOSTANDARD = DIFF_SSTL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_ck_n"          LOC = AY33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_ck_p"          LOC = BA32;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_casn"          LOC = AU34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_rasn"          LOC = AY38;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_wen"           LOC = AV38;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_odt<0>"        LOC = AU36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_odt<1>"        LOC = AV36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_cke<0>"        LOC = AV34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_cke<1>"        LOC = AV35;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_sn<0>"         LOC = AW38;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_sn<1>"         LOC = AR37;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_sn<2>"         LOC = AP36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_sn<3>"         LOC = AH34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_resetn"        LOC = N13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<0>"          LOC = BB38;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<1>"          LOC = BB37;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<2>"          LOC = BA37;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<3>"          LOC = BA36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<4>"          LOC = BB36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<5>"          LOC = BA35;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<6>"          LOC = AW36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<7>"          LOC = AY35;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<8>"          LOC = BA34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<9>"          LOC = AW35;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<10>"         LOC = BB39;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<11>"         LOC = BB34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<12>"         LOC = AY34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<13>"         LOC = AT34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<14>"         LOC = BB33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_a<15>"         LOC = BB31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_ba<0>"         LOC = AW37;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_ba<1>"         LOC = AY37;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_ba<2>"         LOC = AY32;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<0>"         LOC = AH25;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<1>"         LOC = AM29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<2>"         LOC = AM28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<3>"         LOC = AN29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<4>"         LOC = AG27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<5>"         LOC = AH26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<6>"         LOC = AL27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<7>"         LOC = AK25;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<8>"         LOC = AP28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<9>"         LOC = AY30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<10>"        LOC = AR29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<11>"        LOC = AR30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<12>"        LOC = AM27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<13>"        LOC = AN26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<14>"        LOC = AW28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<15>"        LOC = AV29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<16>"        LOC = AY28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<17>"        LOC = AU29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<18>"        LOC = AW31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<19>"        LOC = AU31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<20>"        LOC = AL26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<21>"        LOC = BB28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<22>"        LOC = AV30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<23>"        LOC = AT30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<24>"        LOC = AT29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<25>"        LOC = AW30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<26>"        LOC = BA31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<27>"        LOC = AV31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<28>"        LOC = AP27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<29>"        LOC = AR28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<30>"        LOC = BB29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<31>"        LOC = AT31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<32>"        LOC = AU33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<33>"        LOC = AV33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<34>"        LOC = AP33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<35>"        LOC = AM32;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<36>"        LOC = AT32;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<37>"        LOC = AW33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<38>"        LOC = AR33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<39>"        LOC = AP32;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<40>"        LOC = BA40;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<41>"        LOC = BA41;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<42>"        LOC = AK34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<43>"        LOC = AP38;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<44>"        LOC = AM34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<45>"        LOC = AL35;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<46>"        LOC = AM36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<47>"        LOC = AY40;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<48>"        LOC = BA42;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<49>"        LOC = AW41;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<50>"        LOC = AU39;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<51>"        LOC = AL37;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<52>"        LOC = AW40;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<53>"        LOC = AV40;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<54>"        LOC = BB41;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<55>"        LOC = AN38;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<56>"        LOC = AY42;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<57>"        LOC = AP40;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<58>"        LOC = AR42;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<59>"        LOC = AN41;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<60>"        LOC = AN40;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<61>"        LOC = AN39;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<62>"        LOC = AT41;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<63>"        LOC = AT42;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<64>"        LOC = AL29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<65>"        LOC = AN30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<66>"        LOC = AL31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<67>"        LOC = AG28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<68>"        LOC = AJ26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<69>"        LOC = AK29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<70>"        LOC = AL30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dq<71>"        LOC = AP30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<0>"      LOC = AJ27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<1>"      LOC = AV28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<2>"      LOC = AT27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<3>"      LOC = BA29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<4>"      LOC = AN34;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<5>"      LOC = AL36;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<6>"      LOC = AT39;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<7>"      LOC = AU41;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_n<8>"      LOC = AN31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<0>"      LOC = AK27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<1>"      LOC = AU28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<2>"      LOC = AR27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<3>"      LOC = AY29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<4>"      LOC = AN33;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<5>"      LOC = AK35;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<6>"      LOC = AR39;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<7>"      LOC = AV41;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET "ddr3_dqs_p<8>"      LOC = AP31;
 
 #
 ## QDRs
@@ -538,7 +537,7 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<24>"         LOC = AP35;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<25>"         LOC = AR20;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<26>"         LOC = AF36;
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<27>"         LOC = AL36;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<27>"         LOC = AM38;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<28>"         LOC = AP41;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<29>"         LOC = AK40;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#NET "qdr2_d<30>"         LOC = AT20;
@@ -689,6 +688,20 @@ NET "epb_data<31>"      LOC = AJ33;
 
 # ADC0
 
+
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))#### ADC5G Control Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))##
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_clk       LOC = A39 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_data      LOC = B41 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_spi_rst   LOC = A40 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_modepin            LOC = B38 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_clk       LOC = M42 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_data      LOC = L41 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_spi_rst   LOC = M38 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = M41 ;
+
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = A39;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = B42;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_strobe    LOC = B41;
@@ -699,6 +712,21 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_strobe    LOC = L41;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = M41;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#
+
+#FIXME!!!!!!!
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_clk" LOC = P27 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_dat" LOC = N28 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_cs"  LOC = L31 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_clk" LOC = AA34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_dat" LOC = AA32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_cs"  LOC = AA36 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_sda" LOC = P28 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_scl" LOC = L32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_sda" LOC = Y32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_scl" LOC = AA37 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#
+
 
 
 #NET "adc0_clk_n<0>"     LOC = K42;
