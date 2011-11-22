@@ -686,7 +686,18 @@ NET "epb_data<31>"      LOC = AJ33;
 
 ## ADCs
 
-# ADC0
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))#### ADC5G Control Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))##
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_clk       LOC = A39 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_data      LOC = B41 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_spi_rst   LOC = A40 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_modepin            LOC = B38 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_clk       LOC = M42 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_data      LOC = L41 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_spi_rst   LOC = M38 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = M41 ;
 
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = A39;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = B42;
@@ -698,6 +709,20 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_strobe    LOC = L41;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = M41;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#
+
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_clk" LOC = P27 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_dat" LOC = N28 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_cs"  LOC = L31 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_clk" LOC = AA34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_dat" LOC = AA32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_cs"  LOC = AA36 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_sda" LOC = P28 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_scl" LOC = L32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_sda" LOC = Y32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_scl" LOC = AA37 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#
+
 
 
 #NET "adc0_clk_n<0>"     LOC = K42;

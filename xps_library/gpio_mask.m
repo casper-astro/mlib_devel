@@ -62,7 +62,7 @@ else
 	    errordlg('Gateway bitwidth is larger than the number of available pads');
 	end
     if length(bit_index) ~= real_bitwidth
-        errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth');
+        errordlg('Gateway bit index does not have the same number of elements as the I/O bitwidth. When using bitwidths greater than one, you should specify a vector of bit indices to use.');
     end
 end
 
