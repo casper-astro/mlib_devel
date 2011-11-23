@@ -15,10 +15,13 @@
 --
 ----------------------------------------------------------
 library ieee;
- use ieee.std_logic_1164.all;
+use ieee.std_logic_1164.all;
 
 library unisim;
-    use unisim.vcomponents.all;
+use unisim.vcomponents.all;
+
+--library adc5g_dmux1_v1_00_a;
+--use adc5g_dmux1_v1_00_a.all;
 
 --------------------------------------------
 --    ENTITY section
@@ -110,33 +113,44 @@ architecture behavioral of adc5g_dmux1_interface is
   signal isd_rst      : std_logic;
 
   -- first core, "A"
-  signal   data0      :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data0a     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data0b     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data0c     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data0d     :   std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0a       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0b       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0c       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0d       : std_logic_vector(adc_bit_width-1 downto 0);
 
-  -- first core, "C"
-  signal   data1      :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data1a     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data1b     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data1c     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data1d     :   std_logic_vector(adc_bit_width-1 downto 0);
+  -- second core, "C"
+  signal data1        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1a       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1b       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1c       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1d       : std_logic_vector(adc_bit_width-1 downto 0);
+                      
+  -- third core, "B"  
+  signal data2        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2a       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2b       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2c       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2d       : std_logic_vector(adc_bit_width-1 downto 0);
+                      
+  -- fourth core, "D"  
+  signal data3        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3a       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3b       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3c       : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3d       : std_logic_vector(adc_bit_width-1 downto 0);
 
-  -- first core, "B"
-  signal   data2      :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data2a     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data2b     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data2c     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data2d     :   std_logic_vector(adc_bit_width-1 downto 0);
-
-  -- first core, "D"
-  signal   data3      :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data3a     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data3b     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data3c     :   std_logic_vector(adc_bit_width-1 downto 0);
-  signal   data3d     :   std_logic_vector(adc_bit_width-1 downto 0);
-
+  -- Gray code to binary converter
+  component gc2bin
+    generic (
+      DATA_WIDTH   : integer := adc_bit_width
+      );
+    port (
+      gc  : in std_logic_vector(adc_bit_width-1 downto 0);
+      bin : out std_logic_vector(adc_bit_width-1 downto 0)
+      );
+  end component;
+  
 begin
 
   -- purpose: synchronously reset the PLL and IDDR's
@@ -160,44 +174,45 @@ begin
   
 
   chan1_mode: if (mode=0) generate
-    user_data_i0 <= data0a; 
-    user_data_i1 <= data1a; 
-    user_data_i2 <= data2a; 
-    user_data_i3 <= data3a; 
-    user_data_i4 <= data0b; 
-    user_data_i5 <= data1b; 
-    user_data_i6 <= data2b; 
-    user_data_i7 <= data3b; 
-
-    user_data_q0 <= data0c; 
-    user_data_q1 <= data1c; 
-    user_data_q2 <= data2c; 
-    user_data_q3 <= data3c;
-    user_data_q4 <= data0d; 
-    user_data_q5 <= data1d; 
-    user_data_q6 <= data2d; 
-    user_data_q7 <= data3d; 
-  end generate chan1_mode;
-  
-  chan2_mode: if (mode=1) generate
-    user_data_i0 <= data0a; 
-    user_data_i1 <= data2a; 
-    user_data_i2 <= data0b; 
-    user_data_i3 <= data2b; 
-    user_data_i4 <= data0c; 
-    user_data_i5 <= data2c; 
-    user_data_i6 <= data0d; 
-    user_data_i7 <= data2d; 
-
-    user_data_q0 <= data1a; 
-    user_data_q1 <= data3a; 
-    user_data_q2 <= data1b; 
-    user_data_q3 <= data3b;
-    user_data_q4 <= data1c; 
-    user_data_q5 <= data3c; 
-    user_data_q6 <= data1d; 
-    user_data_q7 <= data3d; 
+    GC2BI0 : gc2bin port map (gc  => data0a, bin => user_data_i0);
+    GC2BI1 : gc2bin port map (gc  => data1a, bin => user_data_i1);
+    GC2BI2 : gc2bin port map (gc  => data2a, bin => user_data_i2);
+    GC2BI3 : gc2bin port map (gc  => data3a, bin => user_data_i3);
+    GC2BI4 : gc2bin port map (gc  => data0b, bin => user_data_i4);
+    GC2BI5 : gc2bin port map (gc  => data1b, bin => user_data_i5);
+    GC2BI6 : gc2bin port map (gc  => data2b, bin => user_data_i6);
+    GC2BI7 : gc2bin port map (gc  => data3b, bin => user_data_i7);
+                                                    
+    GC2BQ0 : gc2bin port map (gc  => data0c, bin => user_data_q0);
+    GC2BQ1 : gc2bin port map (gc  => data1c, bin => user_data_q1);
+    GC2BQ2 : gc2bin port map (gc  => data2c, bin => user_data_q2);
+    GC2BQ3 : gc2bin port map (gc  => data3c, bin => user_data_q3);
+    GC2BQ4 : gc2bin port map (gc  => data0d, bin => user_data_q4);
+    GC2BQ5 : gc2bin port map (gc  => data1d, bin => user_data_q5);
+    GC2BQ6 : gc2bin port map (gc  => data2d, bin => user_data_q6);
+    GC2BQ7 : gc2bin port map (gc  => data3d, bin => user_data_q7);
+  end generate chan1_mode;                          
+                                                    
+  chan2_mode: if (mode=1) generate                  
+    GC2BI0 : gc2bin port map (gc  => data0a, bin => user_data_i0);
+    GC2BI1 : gc2bin port map (gc  => data2a, bin => user_data_i1);
+    GC2BI2 : gc2bin port map (gc  => data0b, bin => user_data_i2);
+    GC2BI3 : gc2bin port map (gc  => data2b, bin => user_data_i3);
+    GC2BI4 : gc2bin port map (gc  => data0c, bin => user_data_i4);
+    GC2BI5 : gc2bin port map (gc  => data2c, bin => user_data_i5);
+    GC2BI6 : gc2bin port map (gc  => data0d, bin => user_data_i6);
+    GC2BI7 : gc2bin port map (gc  => data2d, bin => user_data_i7);
+                                                    
+    GC2BQ0 : gc2bin port map (gc  => data1a, bin => user_data_q0);
+    GC2BQ1 : gc2bin port map (gc  => data3a, bin => user_data_q1);
+    GC2BQ2 : gc2bin port map (gc  => data1b, bin => user_data_q2);
+    GC2BQ3 : gc2bin port map (gc  => data3b, bin => user_data_q3);
+    GC2BQ4 : gc2bin port map (gc  => data1c, bin => user_data_q4);
+    GC2BQ5 : gc2bin port map (gc  => data3c, bin => user_data_q5);
+    GC2BQ6 : gc2bin port map (gc  => data1d, bin => user_data_q6);
+    GC2BQ7 : gc2bin port map (gc  => data3d, bin => user_data_q7);
   end generate chan2_mode;
+
 
 -------------------------------------------------------
 -- Component Instantiation
