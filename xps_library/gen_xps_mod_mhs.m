@@ -180,11 +180,12 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
                     disp(lasterr);
                     error('Error found during Peripheral generation in MHS (gen_mhs_ip).');
                 end
-                if (opb_cores + opb_slaves > 32) || (this_opb_addr_start_tmp > (hex2dec('01000000') + opb_bus_inst * opb_bridge_size))
+                if ((opb_cores + opb_slaves) > 32) || (opb_addr_tmp > (hex2dec('01000000') + (opb_bus_inst+1) * opb_bridge_size))
                     opb_bus_inst = opb_bus_inst + 1;
                     opb_slaves = 0;
                     opb_name = ['opb',num2str(opb_bus_inst)];
                     opb_addr = hex2dec('01000000') + opb_bus_inst * opb_bridge_size;
+                    %fprintf('adding bus %i at addr %08X',opb_bus_inst,opb_addr)
                     try
                         opb_bridge_obj = xps_opb2opb(opb_name,opb_addr,opb_bridge_size);
                     catch
