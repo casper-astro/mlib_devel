@@ -1,0 +1,90 @@
+###################################################################
+
+BEGIN opb_qdr_sniffer
+
+## Peripheral Options
+  OPTION IPTYPE      = IP
+  OPTION IMP_NETLIST = TRUE
+  OPTION HDL         = VERILOG
+  OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+## Bus Interfaces
+  BUS_INTERFACE BUS = SOPB, BUS_TYPE = SLAVE,  BUS_STD = OPB
+  BUS_INTERFACE BUS = COPB, BUS_TYPE = SLAVE,  BUS_STD = OPB
+  BUS_INTERFACE BUS = SQDR, BUS_TYPE = TARGET, BUS_STD = QDR
+
+## Peripheral parameter
+  PARAMETER QDR_DATA_WIDTH   = 18,  DT = INTEGER
+  PARAMETER QDR_BW_WIDTH     = 2,   DT = INTEGER
+  PARAMETER QDR_ADDR_WIDTH   = 22,  DT = INTEGER
+  PARAMETER QDR_LATENCY      = 10,  DT = INTEGER
+  PARAMETER ENABLE           = 0,   DT = INTEGER
+## Generics for VHDL or Parameters for Verilog
+  PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
+  PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector,                   BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
+  PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
+  PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
+## Generics for VHDL or Parameters for Verilog
+  PARAMETER C_CONFIG_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = COPB, ADDRESS = BASE, PAIR = C_CONFIG_HIGHADDR
+  PARAMETER C_CONFIG_HIGHADDR = 0x00000000, DT = std_logic_vector,                   BUS = COPB, ADDRESS = HIGH, PAIR = C_CONFIG_BASEADDR
+  PARAMETER C_CONFIG_OPB_AWIDTH = 32, DT = INTEGER, BUS = COPB
+  PARAMETER C_CONFIG_OPB_DWIDTH = 32, DT = INTEGER, BUS = COPB
+
+## Config OPB Interface
+  PORT OPB_Clk_config     = "",          DIR = I, BUS = COPB, SIGIS = Clk
+  PORT OPB_Rst_config     = OPB_Rst,     DIR = I, BUS = COPB, SIGIS = Rst
+  PORT Sl_DBus_config     = Sl_DBus,     DIR = O, BUS = COPB, VEC = [0:31]
+  PORT Sl_errAck_config   = Sl_errAck,   DIR = O, BUS = COPB
+  PORT Sl_retry_config    = Sl_retry,    DIR = O, BUS = COPB
+  PORT Sl_toutSup_config  = Sl_toutSup,  DIR = O, BUS = COPB
+  PORT Sl_xferAck_config  = Sl_xferAck,  DIR = O, BUS = COPB
+  PORT OPB_ABus_config    = OPB_ABus,    DIR = I, BUS = COPB, VEC = [0:31],     
+  PORT OPB_BE_config      = OPB_BE,      DIR = I, BUS = COPB, VEC = [0:3], 
+  PORT OPB_DBus_config    = OPB_DBus,    DIR = I, BUS = COPB, VEC = [0:31],     
+  PORT OPB_RNW_config     = OPB_RNW,     DIR = I, BUS = COPB
+  PORT OPB_select_config  = OPB_select,  DIR = I, BUS = COPB
+  PORT OPB_seqAddr_config = OPB_seqAddr, DIR = I, BUS = COPB
+
+
+## OPB Interface
+  PORT OPB_Clk     = "",          DIR = I, BUS = SOPB, SIGIS = Clk
+  PORT OPB_Rst     = OPB_Rst,     DIR = I, BUS = SOPB, SIGIS = Rst
+  PORT Sl_DBus     = Sl_DBus,     DIR = O, BUS = SOPB, VEC = [0:(C_OPB_DWIDTH-1)]
+  PORT Sl_errAck   = Sl_errAck,   DIR = O, BUS = SOPB
+  PORT Sl_retry    = Sl_retry,    DIR = O, BUS = SOPB
+  PORT Sl_toutSup  = Sl_toutSup,  DIR = O, BUS = SOPB
+  PORT Sl_xferAck  = Sl_xferAck,  DIR = O, BUS = SOPB
+  PORT OPB_ABus    = OPB_ABus,    DIR = I, BUS = SOPB, VEC = [0:(C_OPB_AWIDTH-1)],     
+  PORT OPB_BE      = OPB_BE,      DIR = I, BUS = SOPB, VEC = [0:((C_OPB_DWIDTH/8)-1)], 
+  PORT OPB_DBus    = OPB_DBus,    DIR = I, BUS = SOPB, VEC = [0:(C_OPB_DWIDTH-1)],     
+  PORT OPB_RNW     = OPB_RNW,     DIR = I, BUS = SOPB
+  PORT OPB_select  = OPB_select,  DIR = I, BUS = SOPB
+  PORT OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB
+
+## QDR Clock
+  PORT qdr_clk     = "",          DIR = I
+  
+## QDR master/controller interface
+  PORT master_addr    = qdr_addr,    BUS = SQDR, DIR = O, VEC = [  QDR_ADDR_WIDTH - 1:0]
+  PORT master_wr_strb = qdr_wr_strb, BUS = SQDR, DIR = O
+  PORT master_wr_data = qdr_wr_data, BUS = SQDR, DIR = O, VEC = [2*QDR_DATA_WIDTH - 1:0]
+  PORT master_wr_be   = qdr_wr_be,   BUS = SQDR, DIR = O, VEC = [  2*QDR_BW_WIDTH - 1:0]
+  PORT master_rd_strb = qdr_rd_strb, BUS = SQDR, DIR = O
+  PORT master_rd_data = qdr_rd_data, BUS = SQDR, DIR = I, VEC = [2*QDR_DATA_WIDTH - 1:0]
+  PORT master_rd_dvld = qdr_rd_dvld, BUS = SQDR, DIR = I
+
+## QDR slave/fabric interface
+  PORT slave_addr    = slave_addr,    DIR = I, VEC = [31:0]
+  PORT slave_wr_strb = slave_wr_strb, DIR = I
+  PORT slave_wr_data = slave_wr_data, DIR = I, VEC = [2*QDR_DATA_WIDTH-1:0]
+  PORT slave_wr_be   = slave_wr_be,   DIR = I, VEC = [2*QDR_BW_WIDTH-1:0]
+  PORT slave_rd_strb = slave_rd_strb, DIR = I
+  PORT slave_rd_data = slave_rd_data, DIR = O, VEC = [2*QDR_DATA_WIDTH-1:0]
+  PORT slave_rd_dvld = slave_rd_dvld, DIR = O
+  PORT slave_ack     = slave_ack,     DIR = O
+
+  PORT phy_rdy       = "",     DIR = I
+  PORT cal_fail      = "",     DIR = I
+  PORT qdr_reset     = "",     DIR = O
+
+END
