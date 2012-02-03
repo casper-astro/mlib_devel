@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jack"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jan 17 21:05:52 2012"
-  RTWModifiedTimeStamp	  248735148
-  ModelVersionFormat	  "1.%<AutoIncrement:438>"
+  LastModifiedDate	  "Fri Feb  3 16:10:20 2012"
+  RTWModifiedTimeStamp	  250186216
+  ModelVersionFormat	  "1.%<AutoIncrement:439>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -727,7 +727,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    295
+    SIDHighWatermark	    296
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -862,9 +862,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
@@ -897,9 +897,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
@@ -928,13 +928,13 @@ Library {
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      "off"
+	      boolean_output	      off
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
@@ -973,11 +973,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1004,11 +1004,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -40569,7 +40569,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "qdr"
-      SID		      295
+      SID		      296
       Tag		      "xps:qdr"
       Ports		      [5, 5]
       Position		      [400, 593, 515, 777]
@@ -40582,7 +40582,8 @@ Library {
       RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "qdr"
-      MaskDescription	      "Interface to the QDR II SRAM device on ROACH"
+      MaskDescription	      "Interface to the QDR II SRAM device on ROACH and ROACH2.\nFor ROACH, use only QDR chips q"
+      "dr0 or qdr1.\nFor ROACH2, use qdr chips qdr0, qdr1, qdr2 or qdr3.\n"
       MaskPromptString	      "QDR Chip|Simulation QDR address width|Include CPU Interface"
       MaskStyleString	      "popup(qdr0|qdr1|qdr2|qdr3),edit,checkbox"
       MaskTunableValueString  "on,on,on"
@@ -41751,13 +41752,12 @@ Library {
 	      Ports		      [2, 1]
 	      Position		      [360, 79, 390, 141]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/AddSub"
 	      SourceType	      "Xilinx Adder/Subtracter Block"
 	      mode		      "Addition"
-	      use_carryin	      off
-	      use_carryout	      off
-	      en		      off
+	      use_carryin	      "off"
+	      use_carryout	      "off"
+	      en		      "off"
 	      latency		      "0"
 	      precision		      "Full"
 	      arith_type	      "Unsigned"
@@ -41765,11 +41765,11 @@ Library {
 	      bin_pt		      "14"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      dbl_ovrd		      off
-	      use_behavioral_HDL      off
+	      dbl_ovrd		      "off"
+	      use_behavioral_HDL      "off"
 	      hw_selection	      "Fabric"
-	      pipelined		      off
-	      xl_use_area	      off
+	      pipelined		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      use_rpm		      "on"
 	      has_advanced_control    "0"
@@ -41793,13 +41793,12 @@ Library {
 	      Ports		      [2, 1]
 	      Position		      [210, 47, 230, 138]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Concat"
 	      SourceType	      "Xilinx Bus Concatenator Block"
 	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
 	      "nt at zero."
 	      num_inputs	      "2"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "concat"
@@ -41820,14 +41819,13 @@ Library {
 	      Ports		      [0, 1]
 	      Position		      [155, 103, 175, 127]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
 	      arith_type	      "Unsigned"
 	      const		      "0"
 	      n_bits		      "1"
 	      bin_pt		      "0"
-	      explicit_period	      on
+	      explicit_period	      "on"
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -41836,7 +41834,7 @@ Library {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,400,346"
 	      block_type	      "constant"
@@ -41856,14 +41854,13 @@ Library {
 	      Ports		      [0, 1]
 	      Position		      [295, 113, 315, 137]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
 	      arith_type	      "Unsigned"
 	      const		      "1"
 	      n_bits		      "33"
 	      bin_pt		      "0"
-	      explicit_period	      on
+	      explicit_period	      "on"
 	      period		      "1"
 	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	      equ		      "P=C"
@@ -41872,7 +41869,7 @@ Library {
 	      opr		      "+"
 	      inp1		      "P"
 	      carry		      "CIN"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,400,346"
 	      block_type	      "constant"
@@ -41892,16 +41889,15 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [960, 169, 995, 201]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
-	      en		      off
+	      en		      "off"
 	      latency		      "9"
-	      dbl_ovrd		      off
-	      reg_retiming	      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      reg_retiming	      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,255"
@@ -41923,16 +41919,15 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [545, 294, 580, 326]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
-	      en		      off
+	      en		      "off"
 	      latency		      "1"
-	      dbl_ovrd		      off
-	      reg_retiming	      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      reg_retiming	      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,255"
@@ -41954,16 +41949,15 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [280, 79, 315, 111]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
-	      en		      off
+	      en		      "off"
 	      latency		      "1"
-	      dbl_ovrd		      off
-	      reg_retiming	      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      reg_retiming	      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,255"
@@ -41985,16 +41979,15 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [830, 134, 865, 166]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
-	      en		      off
+	      en		      "off"
 	      latency		      "1"
-	      dbl_ovrd		      off
-	      reg_retiming	      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      reg_retiming	      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,255"
@@ -42018,7 +42011,6 @@ Library {
 	      Position		      [799, 15, 850, 65]
 	      ShowName		      off
 	      AttributesFormatString  "Disregard Subsystem\\nFor Generation"
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Disregard Subsystem"
 	      SourceType	      "Xilinx Disregard Subsystem For Generation Block"
 	      infoedit		      "Place this block into a subsystem to have System Generator ignore the subsystem during code ge"
@@ -42040,7 +42032,6 @@ Library {
 	      SID		      76
 	      Ports		      [6, 2]
 	      Position		      [600, 32, 715, 338]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Dual Port RAM"
 	      SourceType	      "Xilinx Dual Port Random Access Memory Block"
 	      depth		      "2^qdr_awidth"
@@ -42048,17 +42039,17 @@ Library {
 	      distributed_mem	      "Block RAM"
 	      init_a		      "0"
 	      init_b		      "0"
-	      rst_a		      off
-	      rst_b		      off
-	      en_a		      off
-	      en_b		      off
+	      rst_a		      "off"
+	      rst_b		      "off"
+	      en_a		      "off"
+	      en_b		      "off"
 	      latency		      "1"
 	      write_mode_A	      "Read After Write"
 	      write_mode_B	      "Read After Write"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      optimize		      "Area"
-	      use_rpm		      on
-	      xl_use_area	      off
+	      use_rpm		      "on"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,384,398"
@@ -42200,14 +42191,13 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [145, 323, 175, 347]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -42228,14 +42218,13 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [260, 433, 290, 457]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -42256,14 +42245,13 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [305, 313, 335, 337]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -42284,20 +42272,19 @@ Library {
 	      Ports		      [2, 1]
 	      Position		      [310, 399, 335, 461]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
 	      logical_function	      "AND"
 	      inputs		      "2"
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
 	      precision		      "Full"
 	      arith_type	      "Unsigned"
 	      n_bits		      "16"
 	      bin_pt		      "0"
-	      align_bp		      on
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      align_bp		      "on"
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,261"
@@ -42318,20 +42305,19 @@ Library {
 	      Ports		      [2, 1]
 	      Position		      [200, 264, 225, 326]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
 	      logical_function	      "AND"
 	      inputs		      "2"
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
 	      precision		      "Full"
 	      arith_type	      "Unsigned"
 	      n_bits		      "16"
 	      bin_pt		      "0"
-	      align_bp		      on
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      align_bp		      "on"
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,261"
@@ -42352,20 +42338,19 @@ Library {
 	      Ports		      [2, 1]
 	      Position		      [355, 279, 380, 341]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
 	      logical_function	      "AND"
 	      inputs		      "2"
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
 	      precision		      "Full"
 	      arith_type	      "Unsigned"
 	      n_bits		      "16"
 	      bin_pt		      "0"
-	      align_bp		      on
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      align_bp		      "on"
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,261"
@@ -42387,11 +42372,10 @@ Library {
 	      Position		      [890, 133, 935, 237]
 	      NamePlacement	      "alternate"
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Mux"
 	      SourceType	      "Xilinx Bus Multiplexer Block"
 	      inputs		      "2"
-	      en		      off
+	      en		      "off"
 	      latency		      "0"
 	      precision		      "Full"
 	      arith_type	      "Unsigned"
@@ -42399,8 +42383,8 @@ Library {
 	      bin_pt		      "14"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,303"
@@ -42432,7 +42416,6 @@ Library {
 	      Position		      [550, 50, 580, 70]
 	      NamePlacement	      "alternate"
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
@@ -42443,9 +42426,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,461,375"
@@ -42466,7 +42449,6 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [555, 200, 580, 220]
 	      ShowName		      off
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
@@ -42477,9 +42459,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "0"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,461,375"
@@ -42498,14 +42480,13 @@ Library {
 	      SID		      100
 	      Ports		      [1, 1]
 	      Position		      [195, 430, 235, 460]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Register"
 	      SourceType	      "Xilinx Register Block"
 	      init		      "0"
-	      rst		      off
-	      en		      off
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      rst		      "off"
+	      en		      "off"
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,193"
@@ -42526,14 +42507,13 @@ Library {
 	      SID		      101
 	      Ports		      [1, 1]
 	      Position		      [245, 310, 285, 340]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Register"
 	      SourceType	      "Xilinx Register Block"
 	      init		      "0"
-	      rst		      off
-	      en		      off
-	      dbl_ovrd		      off
-	      xl_use_area	      off
+	      rst		      "off"
+	      en		      "off"
+	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,193"
@@ -42554,7 +42534,6 @@ Library {
 	      SID		      102
 	      Ports		      [1, 1]
 	      Position		      [120, 60, 175, 80]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -42565,11 +42544,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}},'Xilinx'=>{'jtaghwcosim'=>"
@@ -42593,7 +42572,6 @@ Library {
 	      SID		      103
 	      Ports		      [1, 1]
 	      Position		      [120, 185, 175, 205]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -42604,11 +42582,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}},'Xilinx'=>{'jtaghwcosim'=>"
@@ -42632,17 +42610,16 @@ Library {
 	      SID		      104
 	      Ports		      [1, 1]
 	      Position		      [1015, 174, 1070, 196]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_out'}},'Xilinx'=>{'jtaghwcosi"
 	      "m'=>{'non_memory_mapped_port'=>'sim_data_out'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_out'}}}"
@@ -42666,7 +42643,6 @@ Library {
 	      SID		      105
 	      Ports		      [1, 1]
 	      Position		      [125, 405, 180, 425]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -42677,11 +42653,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
@@ -42705,7 +42681,6 @@ Library {
 	      SID		      106
 	      Ports		      [1, 1]
 	      Position		      [120, 270, 175, 290]
-	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -42716,11 +42691,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
@@ -42746,251 +42721,11 @@ Library {
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      SrcBlock		      "rd_en"
-	      SrcPort		      1
-	      DstBlock		      "sim_rd_en"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "wr_en"
-	      SrcPort		      1
-	      DstBlock		      "sim_wr_en"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "be"
-	      SrcPort		      1
-	      DstBlock		      "Terminator"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "addr"
-	      SrcPort		      1
-	      DstBlock		      "sim_addr"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "data_in"
-	      SrcPort		      1
-	      DstBlock		      "sim_data_in"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Delay"
-	      SrcPort		      1
-	      DstBlock		      "sim_data_out"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "sim_data_out"
-	      SrcPort		      1
-	      DstBlock		      "data_out"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "convert_address1"
-	      SrcPort		      1
-	      DstBlock		      "Dual Port RAM"
-	      DstPort		      4
-	    }
-	    Line {
-	      SrcBlock		      "convert_address"
-	      SrcPort		      1
-	      DstBlock		      "Dual Port RAM"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "From4"
-	      SrcPort		      1
-	      DstBlock		      "Dual Port RAM"
-	      DstPort		      5
-	    }
-	    Line {
-	      SrcBlock		      "Delay1"
-	      SrcPort		      1
-	      DstBlock		      "Dual Port RAM"
-	      DstPort		      6
-	    }
-	    Line {
-	      SrcBlock		      "sim_addr"
-	      SrcPort		      1
-	      DstBlock		      "Concat"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Constant1"
-	      SrcPort		      1
-	      DstBlock		      "Concat"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Concat"
-	      SrcPort		      1
-	      Points		      [15, 0]
-	      Branch {
-		DstBlock		"Delay2"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, -35]
-		DstBlock		"Goto1"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Delay2"
-	      SrcPort		      1
-	      DstBlock		      "AddSub"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Constant2"
-	      SrcPort		      1
-	      DstBlock		      "AddSub"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "AddSub"
-	      SrcPort		      1
-	      DstBlock		      "Goto"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "sim_rd_en"
-	      SrcPort		      1
-	      DstBlock		      "Logical"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "prev_rd"
-	      SrcPort		      1
-	      DstBlock		      "Inverter2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Inverter2"
-	      SrcPort		      1
-	      DstBlock		      "Logical"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Logical"
-	      SrcPort		      1
-	      Points		      [0, 10]
-	      Branch {
-		Points			[0, 40; -160, 0]
-		DstBlock		"prev_rd"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Goto2"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "sim_wr_en"
-	      SrcPort		      1
-	      DstBlock		      "Logical1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "From1"
-	      SrcPort		      1
-	      DstBlock		      "Inverter1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "sim_data_in"
-	      SrcPort		      1
-	      DstBlock		      "Goto4"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "From3"
-	      SrcPort		      1
-	      DstBlock		      "Dual Port RAM"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "From"
-	      SrcPort		      1
-	      DstBlock		      "convert_address1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "From5"
-	      SrcPort		      1
-	      DstBlock		      "convert_address"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "From2"
-	      SrcPort		      1
-	      DstBlock		      "Dual Port RAM"
-	      DstPort		      3
-	    }
-	    Line {
-	      SrcBlock		      "From6"
-	      SrcPort		      1
-	      DstBlock		      "Delay1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Logical1"
-	      SrcPort		      1
-	      DstBlock		      "Logical2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "prev_w"
-	      SrcPort		      1
-	      DstBlock		      "Inverter3"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Logical2"
-	      SrcPort		      1
-	      Points		      [10, 0]
-	      Branch {
-		DstBlock		"Goto3"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 60; -165, 0]
-		DstBlock		"prev_w"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Inverter3"
-	      SrcPort		      1
-	      DstBlock		      "Logical2"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Inverter1"
-	      SrcPort		      1
-	      Points		      [5, 0]
-	      DstBlock		      "Logical1"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Mux"
-	      SrcPort		      1
-	      DstBlock		      "Delay"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "From7"
-	      SrcPort		      1
-	      DstBlock		      "Delay3"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Delay3"
-	      SrcPort		      1
+	      SrcBlock		      "Dual Port RAM"
+	      SrcPort		      2
+	      Points		      [150, 0; 0, -80]
 	      DstBlock		      "Mux"
-	      DstPort		      1
+	      DstPort		      2
 	    }
 	    Line {
 	      SrcBlock		      "Dual Port RAM"
@@ -43000,11 +42735,251 @@ Library {
 	      DstPort		      3
 	    }
 	    Line {
-	      SrcBlock		      "Dual Port RAM"
-	      SrcPort		      2
-	      Points		      [150, 0; 0, -80]
+	      SrcBlock		      "Delay3"
+	      SrcPort		      1
 	      DstBlock		      "Mux"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "From7"
+	      SrcPort		      1
+	      DstBlock		      "Delay3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Mux"
+	      SrcPort		      1
+	      DstBlock		      "Delay"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Inverter1"
+	      SrcPort		      1
+	      Points		      [5, 0]
+	      DstBlock		      "Logical1"
 	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Inverter3"
+	      SrcPort		      1
+	      DstBlock		      "Logical2"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Logical2"
+	      SrcPort		      1
+	      Points		      [10, 0]
+	      Branch {
+		Points			[0, 60; -165, 0]
+		DstBlock		"prev_w"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Goto3"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "prev_w"
+	      SrcPort		      1
+	      DstBlock		      "Inverter3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Logical1"
+	      SrcPort		      1
+	      DstBlock		      "Logical2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "From6"
+	      SrcPort		      1
+	      DstBlock		      "Delay1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "From2"
+	      SrcPort		      1
+	      DstBlock		      "Dual Port RAM"
+	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "From5"
+	      SrcPort		      1
+	      DstBlock		      "convert_address"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "From"
+	      SrcPort		      1
+	      DstBlock		      "convert_address1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "From3"
+	      SrcPort		      1
+	      DstBlock		      "Dual Port RAM"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "sim_data_in"
+	      SrcPort		      1
+	      DstBlock		      "Goto4"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "From1"
+	      SrcPort		      1
+	      DstBlock		      "Inverter1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "sim_wr_en"
+	      SrcPort		      1
+	      DstBlock		      "Logical1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Logical"
+	      SrcPort		      1
+	      Points		      [0, 10]
+	      Branch {
+		DstBlock		"Goto2"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 40; -160, 0]
+		DstBlock		"prev_rd"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Inverter2"
+	      SrcPort		      1
+	      DstBlock		      "Logical"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "prev_rd"
+	      SrcPort		      1
+	      DstBlock		      "Inverter2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "sim_rd_en"
+	      SrcPort		      1
+	      DstBlock		      "Logical"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "AddSub"
+	      SrcPort		      1
+	      DstBlock		      "Goto"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant2"
+	      SrcPort		      1
+	      DstBlock		      "AddSub"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Delay2"
+	      SrcPort		      1
+	      DstBlock		      "AddSub"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Concat"
+	      SrcPort		      1
+	      Points		      [15, 0]
+	      Branch {
+		Points			[0, -35]
+		DstBlock		"Goto1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Delay2"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Constant1"
+	      SrcPort		      1
+	      DstBlock		      "Concat"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "sim_addr"
+	      SrcPort		      1
+	      DstBlock		      "Concat"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Delay1"
+	      SrcPort		      1
+	      DstBlock		      "Dual Port RAM"
+	      DstPort		      6
+	    }
+	    Line {
+	      SrcBlock		      "From4"
+	      SrcPort		      1
+	      DstBlock		      "Dual Port RAM"
+	      DstPort		      5
+	    }
+	    Line {
+	      SrcBlock		      "convert_address"
+	      SrcPort		      1
+	      DstBlock		      "Dual Port RAM"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "convert_address1"
+	      SrcPort		      1
+	      DstBlock		      "Dual Port RAM"
+	      DstPort		      4
+	    }
+	    Line {
+	      SrcBlock		      "sim_data_out"
+	      SrcPort		      1
+	      DstBlock		      "data_out"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Delay"
+	      SrcPort		      1
+	      DstBlock		      "sim_data_out"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "data_in"
+	      SrcPort		      1
+	      DstBlock		      "sim_data_in"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "addr"
+	      SrcPort		      1
+	      DstBlock		      "sim_addr"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "be"
+	      SrcPort		      1
+	      DstBlock		      "Terminator"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "wr_en"
+	      SrcPort		      1
+	      DstBlock		      "sim_wr_en"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "rd_en"
+	      SrcPort		      1
+	      DstBlock		      "sim_rd_en"
+	      DstPort		      1
 	    }
 	  }
 	}
@@ -43067,238 +43042,35 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "convert_data_in1"
+	  SrcBlock		  "Inverter2"
 	  SrcPort		  1
-	  DstBlock		  "insert_parity"
+	  DstBlock		  "Logical"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "prev_rd"
+	  SrcPort		  1
+	  DstBlock		  "Inverter2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_data_in"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_data_in"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "insert_parity"
-	  SrcPort		  1
-	  DstBlock		  "convert_data_in"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "data_in"
-	  SrcPort		  1
-	  DstBlock		  "convert_data_in1"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "extract_parity"
-	  SrcPort		  1
-	  DstBlock		  "data_out"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Delay1"
-	  SrcPort		  1
-	  DstBlock		  "Logical1"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "qdr_latency"
-	  SrcPort		  1
-	  Points		  [30, 0]
-	  Branch {
-	    Points		    [0, 15]
-	    DstBlock		    "Delay1"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "Logical1"
-	    DstPort		    1
-	  }
-	}
-	Line {
-	  SrcBlock		  "Logical1"
-	  SrcPort		  1
-	  DstBlock		  "data_valid"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "force_data_out"
-	  SrcPort		  1
-	  DstBlock		  "extract_parity"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "force_ack"
-	  SrcPort		  1
-	  DstBlock		  "convert_ack"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant3"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_ack"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_ack"
-	  SrcPort		  1
-	  DstBlock		  "force_ack"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_address"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_address"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "address"
-	  SrcPort		  1
-	  DstBlock		  "convert_address"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_wr_en"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_wr_en"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "wr_en"
-	  SrcPort		  1
-	  DstBlock		  "convert_wr_en"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_rd_en"
-	  SrcPort		  1
-	  Points		  [140, 0]
-	  Branch {
-	    DstBlock		    "qdr_bringup_r2_qdr_rd_en"
-	    DstPort		    1
-	  }
-	  Branch {
-	    Points		    [0, -110]
-	    DstBlock		    "Logical"
-	    DstPort		    2
-	  }
-	}
-	Line {
-	  SrcBlock		  "rd_en"
-	  SrcPort		  1
-	  DstBlock		  "convert_rd_en"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_data_out"
-	  SrcPort		  1
-	  DstBlock		  "force_data_out"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "force_phy_ready"
-	  SrcPort		  1
-	  DstBlock		  "convert_ready"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "ready_constant"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_phy_ready"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_phy_ready"
-	  SrcPort		  1
-	  DstBlock		  "force_phy_ready"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "force_cal_fail"
-	  SrcPort		  1
-	  DstBlock		  "convert_cal_fail"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant2"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_cal_fail"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_cal_fail"
-	  SrcPort		  1
-	  DstBlock		  "force_cal_fail"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_ack"
+	  SrcBlock		  "Logical"
 	  SrcPort		  1
 	  Points		  [5, 0]
 	  Branch {
-	    DstBlock		    "ack"
+	    Points		    [0, 55; -160, 0]
+	    DstBlock		    "prev_rd"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [0, -40]
-	    DstBlock		    "Goto"
+	    DstBlock		    "qdr_latency"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  SrcBlock		  "convert_ready"
+	  SrcBlock		  "From"
 	  SrcPort		  1
-	  DstBlock		  "phy_ready"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_cal_fail"
-	  SrcPort		  1
-	  DstBlock		  "cal_fail"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_sim_model"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_data_out"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_rd_en"
-	  SrcPort		  1
-	  DstBlock		  "qdr_sim_model"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_wr_en"
-	  SrcPort		  1
-	  DstBlock		  "qdr_sim_model"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_address"
-	  SrcPort		  1
-	  DstBlock		  "qdr_sim_model"
-	  DstPort		  4
-	}
-	Line {
-	  SrcBlock		  "qdr_bringup_r2_qdr_data_in"
-	  SrcPort		  1
-	  Points		  [25, 0; 0, -140]
-	  DstBlock		  "qdr_sim_model"
-	  DstPort		  5
-	}
-	Line {
-	  SrcBlock		  "convert_be"
-	  SrcPort		  1
-	  DstBlock		  "qdr_bringup_r2_qdr_be"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "be"
-	  SrcPort		  1
-	  DstBlock		  "convert_be"
+	  DstBlock		  "Logical"
 	  DstPort		  1
 	}
 	Line {
@@ -43308,46 +43080,249 @@ Library {
 	  DstPort		  3
 	}
 	Line {
-	  SrcBlock		  "From"
+	  SrcBlock		  "be"
 	  SrcPort		  1
-	  DstBlock		  "Logical"
+	  DstBlock		  "convert_be"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Logical"
+	  SrcBlock		  "convert_be"
+	  SrcPort		  1
+	  DstBlock		  "qdr_bringup_r2_qdr_be"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "qdr_bringup_r2_qdr_data_in"
+	  SrcPort		  1
+	  Points		  [25, 0; 0, -140]
+	  DstBlock		  "qdr_sim_model"
+	  DstPort		  5
+	}
+	Line {
+	  SrcBlock		  "qdr_bringup_r2_qdr_address"
+	  SrcPort		  1
+	  DstBlock		  "qdr_sim_model"
+	  DstPort		  4
+	}
+	Line {
+	  SrcBlock		  "qdr_bringup_r2_qdr_wr_en"
+	  SrcPort		  1
+	  DstBlock		  "qdr_sim_model"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "qdr_bringup_r2_qdr_rd_en"
+	  SrcPort		  1
+	  DstBlock		  "qdr_sim_model"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "qdr_sim_model"
+	  SrcPort		  1
+	  DstBlock		  "qdr_bringup_r2_qdr_data_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_cal_fail"
+	  SrcPort		  1
+	  DstBlock		  "cal_fail"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_ready"
+	  SrcPort		  1
+	  DstBlock		  "phy_ready"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_ack"
 	  SrcPort		  1
 	  Points		  [5, 0]
 	  Branch {
-	    DstBlock		    "qdr_latency"
+	    Points		    [0, -40]
+	    DstBlock		    "Goto"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [0, 55; -160, 0]
-	    DstBlock		    "prev_rd"
+	    DstBlock		    "ack"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  SrcBlock		  "prev_rd"
+	  SrcBlock		  "qdr_bringup_r2_qdr_cal_fail"
 	  SrcPort		  1
-	  DstBlock		  "Inverter2"
+	  DstBlock		  "force_cal_fail"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Inverter2"
+	  SrcBlock		  "Constant2"
 	  SrcPort		  1
-	  DstBlock		  "Logical"
-	  DstPort		  3
+	  DstBlock		  "qdr_bringup_r2_qdr_cal_fail"
+	  DstPort		  1
 	}
-	Annotation {
-	  Name			  "Put the MSBs back where they belong"
-	  Position		  [982, 409]
+	Line {
+	  SrcBlock		  "force_cal_fail"
+	  SrcPort		  1
+	  DstBlock		  "convert_cal_fail"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "qdr_bringup_r2_qdr_phy_ready"
+	  SrcPort		  1
+	  DstBlock		  "force_phy_ready"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "ready_constant"
+	  SrcPort		  1
+	  DstBlock		  "qdr_bringup_r2_qdr_phy_ready"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "force_phy_ready"
+	  SrcPort		  1
+	  DstBlock		  "convert_ready"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "qdr_bringup_r2_qdr_data_out"
+	  SrcPort		  1
+	  DstBlock		  "force_data_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "rd_en"
+	  SrcPort		  1
+	  DstBlock		  "convert_rd_en"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_rd_en"
+	  SrcPort		  1
+	  Points		  [140, 0]
+	  Branch {
+	    Points		    [0, -110]
+	    DstBlock		    "Logical"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "qdr_bringup_r2_qdr_rd_en"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "wr_en"
+	  SrcPort		  1
+	  DstBlock		  "convert_wr_en"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_wr_en"
+	  SrcPort		  1
+	  DstBlock		  "qdr_bringup_r2_qdr_wr_en"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "address"
+	  SrcPort		  1
+	  DstBlock		  "convert_address"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_address"
+	  SrcPort		  1
+	  DstBlock		  "qdr_bringup_r2_qdr_address"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "qdr_bringup_r2_qdr_ack"
+	  SrcPort		  1
+	  DstBlock		  "force_ack"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant3"
+	  SrcPort		  1
+	  DstBlock		  "qdr_bringup_r2_qdr_ack"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "force_ack"
+	  SrcPort		  1
+	  DstBlock		  "convert_ack"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "force_data_out"
+	  SrcPort		  1
+	  DstBlock		  "extract_parity"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Logical1"
+	  SrcPort		  1
+	  DstBlock		  "data_valid"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "qdr_latency"
+	  SrcPort		  1
+	  Points		  [30, 0]
+	  Branch {
+	    DstBlock		    "Logical1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, 15]
+	    DstBlock		    "Delay1"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Delay1"
+	  SrcPort		  1
+	  DstBlock		  "Logical1"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "extract_parity"
+	  SrcPort		  1
+	  DstBlock		  "data_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "data_in"
+	  SrcPort		  1
+	  DstBlock		  "convert_data_in1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "insert_parity"
+	  SrcPort		  1
+	  DstBlock		  "convert_data_in"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_data_in"
+	  SrcPort		  1
+	  DstBlock		  "qdr_bringup_r2_qdr_data_in"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_data_in1"
+	  SrcPort		  1
+	  DstBlock		  "insert_parity"
+	  DstPort		  1
 	}
 	Annotation {
 	  Name			  "Position of the parity bits is irrelevant when using the QDR memory space\nfrom the FPGA. However, the PP"
 	  "C will not see parity bits, so for convenience\nbits are remapped so that the MSBs are unread (rather than every 9t"
 	  "h bit)"
 	  Position		  [238, 660]
+	}
+	Annotation {
+	  Name			  "Put the MSBs back where they belong"
+	  Position		  [982, 409]
 	}
       }
     }
