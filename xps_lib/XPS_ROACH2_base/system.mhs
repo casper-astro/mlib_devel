@@ -288,7 +288,7 @@ BEGIN reset_block
  PARAMETER HW_VER = 1.00.a
  PARAMETER DELAY = 10
  PARAMETER WIDTH = 50
- PORT clk = sys_clk
+ PORT clk = epb_clk 
  PORT async_reset_i = 0b0
  PORT reset_i = 0b0
  PORT reset_o = sys_reset
@@ -300,7 +300,7 @@ BEGIN opb_v20
  PARAMETER C_EXT_RESET_HIGH = 1
  PARAMETER C_REG_GRANTS = 0
  PORT SYS_Rst = 0b0
- PORT OPB_Clk = sys_clk
+ PORT OPB_Clk = epb_clk
 END
 
 BEGIN epb32_opb_bridge
@@ -340,7 +340,7 @@ BEGIN sys_block
  PARAMETER C_BASEADDR = 0x00000000
  PARAMETER C_HIGHADDR = 0x0000FFFF
  BUS_INTERFACE SOPB = opb0
- PORT OPB_Clk = sys_clk
+ PORT OPB_Clk = epb_clk
  PORT soft_reset = soft_reset
  PORT irq_n = ppc_irq_n
  PORT app_irq = 0x0000

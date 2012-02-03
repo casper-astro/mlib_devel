@@ -79,9 +79,9 @@ module roach_infrastructure(
 
   MMCM_BASE #(
     .BANDWIDTH          ("OPTIMIZED"),
-    .CLKOUT0_DIVIDE_F   (8), // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKOUT0_DIVIDE_F   (4.0), // Divide amount for CLKOUT0 (1.000-128.000).
     .CLKFBOUT_PHASE     (0),
-    .CLKFBOUT_MULT_F    (8), //Multiplier for all CLKOUTs
+    .CLKFBOUT_MULT_F    (8.0), //Multiplier for all CLKOUTs
     .CLKIN1_PERIOD      (10.0),
     .CLKOUT0_PHASE      (0),
     .CLKOUT1_PHASE      (90),
@@ -95,7 +95,6 @@ module roach_infrastructure(
     .CLKOUT3_DUTY_CYCLE (0.5),
     .CLKOUT4_DUTY_CYCLE (0.5),
     .CLKOUT5_DUTY_CYCLE (0.5),
-    .CLKOUT0_DIVIDE     (4),
     .CLKOUT1_DIVIDE     (4),
     .CLKOUT2_DIVIDE     (4),
     .CLKOUT3_DIVIDE     (8),

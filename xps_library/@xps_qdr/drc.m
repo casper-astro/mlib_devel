@@ -34,3 +34,12 @@ for i=1:length(xps_objs)
 		end
 	end
 end
+
+if strcmp(get(blk_obj,'hw_sys'), 'ROACH')
+	if ~(strcmp(get(blk_obj,'hw_qdr'),'qdr0') || strcmp(get(blk_obj,'hw_qdr'),'qdr1'))
+		msg = ['QDR ',get(blk_obj,'simulink_name'), ' is located on port ',get(blk_obj,'hw_qdr'),'. This is not possible on ROACH 1, which only has 2 QDR ports (qdr0 & qdr1)'];
+        result = 1;
+    end
+end
+
+
