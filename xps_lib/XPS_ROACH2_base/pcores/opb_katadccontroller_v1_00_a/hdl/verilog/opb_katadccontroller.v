@@ -17,7 +17,7 @@ module opb_katadccontroller(
 	  output        adc0_adc3wire_data,
 	  output        adc0_adc3wire_strobe,
 	  output        adc0_adc_reset,
-	  output        adc0_dcm_reset,
+	  output        adc0_mmcm_reset,
     output        adc0_psclk,
     output        adc0_psen,
     output        adc0_psincdec,
@@ -28,7 +28,7 @@ module opb_katadccontroller(
 	  output        adc1_adc3wire_data,
 	  output        adc1_adc3wire_strobe,
 	  output        adc1_adc_reset,
-	  output        adc1_dcm_reset,
+	  output        adc1_mmcm_reset,
     output        adc1_psclk,
     output        adc1_psen,
     output        adc1_psincdec,
@@ -76,16 +76,16 @@ module opb_katadccontroller(
   assign adc0_reset = adc0_reset_reg;
   assign adc1_reset = adc1_reset_reg;
 
-  reg adc0_dcm_psen_reg;
-  reg adc0_dcm_psincdec_reg;
-  assign adc0_psen     = adc0_dcm_psen_reg;
-  assign adc0_psincdec = adc0_dcm_psincdec_reg;
+  reg adc0_mmcm_psen_reg;
+  reg adc0_mmcm_psincdec_reg;
+  assign adc0_psen     = adc0_mmcm_psen_reg;
+  assign adc0_psincdec = adc0_mmcm_psincdec_reg;
   assign adc0_psclk    = OPB_Clk;
 
-  reg adc1_dcm_psen_reg;
-  reg adc1_dcm_psincdec_reg;
-  assign adc1_psen     = adc1_dcm_psen_reg;
-  assign adc1_psincdec = adc1_dcm_psincdec_reg;
+  reg adc1_mmcm_psen_reg;
+  reg adc1_mmcm_psincdec_reg;
+  assign adc1_psen     = adc1_mmcm_psen_reg;
+  assign adc1_psincdec = adc1_mmcm_psincdec_reg;
   assign adc1_psclk    = OPB_Clk;
 
   reg [15:0] adc0_config_data_reg;
@@ -109,8 +109,8 @@ module opb_katadccontroller(
     adc0_reset_reg <= 1'b0;
     adc1_reset_reg <= 1'b0;
 
-    adc0_dcm_psen_reg <= 1'b0;
-    adc1_dcm_psen_reg <= 1'b0;
+    adc0_mmcm_psen_reg <= 1'b0;
+    adc1_mmcm_psen_reg <= 1'b0;
 
     adc0_config_start_reg <= 1'b0;
     adc1_config_start_reg <= 1'b0;
@@ -127,10 +127,10 @@ module opb_katadccontroller(
                 adc1_reset_reg <= OPB_DBus[30];
               end
               if (OPB_BE[1]) begin
-                adc0_dcm_psen_reg <= OPB_DBus[15];
-                adc1_dcm_psen_reg <= OPB_DBus[11];
-                adc0_dcm_psincdec_reg <= OPB_DBus[14];
-                adc1_dcm_psincdec_reg <= OPB_DBus[10];
+                adc0_mmcm_psen_reg <= OPB_DBus[15];
+                adc1_mmcm_psen_reg <= OPB_DBus[11];
+                adc0_mmcm_psincdec_reg <= OPB_DBus[14];
+                adc1_mmcm_psincdec_reg <= OPB_DBus[10];
               end
             end
             1:  begin
@@ -173,7 +173,7 @@ module opb_katadccontroller(
 
   always @(*) begin
     case (opb_addr[3:2])
-      0: opb_data_out <= {2'b0, adc1_psdone, adc0_psdone, 4'b0, 2'b0, adc1_dcm_psincdec_reg, adc1_dcm_psen_reg, 2'b0, adc0_dcm_psincdec_reg, adc0_dcm_psen_reg, 16'b0};
+      0: opb_data_out <= {2'b0, adc1_psdone, adc0_psdone, 4'b0, 2'b0, adc1_mmcm_psincdec_reg, adc1_mmcm_psen_reg, 2'b0, adc0_mmcm_psincdec_reg, adc0_mmcm_psen_reg, 16'b0};
       1: opb_data_out <= {adc0_config_data_reg[15:8], adc0_config_data_reg[7:0], 4'b0, adc0_config_addr_reg, 7'b0, adc0_config_done};
       2: opb_data_out <= {adc1_config_data_reg[15:8], adc1_config_data_reg[7:0], 4'b0, adc1_config_addr_reg, 7'b0, adc1_config_done};
       3: opb_data_out <= {32'b0};
@@ -222,8 +222,8 @@ module opb_katadccontroller(
     end
   end
 
-  assign adc0_dcm_reset = adc0_reset_counter != 0;
-  assign adc1_dcm_reset = adc1_reset_counter != 0;
+  assign adc0_mmcm_reset = adc0_reset_counter != 0;
+  assign adc1_mmcm_reset = adc1_reset_counter != 0;
   assign adc0_adc_reset = adc0_reset_iob;
   assign adc1_adc_reset = adc1_reset_iob;
 

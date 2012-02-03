@@ -44,7 +44,7 @@ module kat_adc_interface #(
     output       user_outofrange1,
     output       user_data_valid,
     /* Internal control signals */
-    // ADC CLK DCM Reset
+    // ADC CLK MMCM Reset
     input        mmcm_reset,
     // Reset for ADC
     input        ctrl_reset,
@@ -55,11 +55,11 @@ module kat_adc_interface #(
     output       ctrl_clk90_out,
     output       ctrl_clk180_out,
     output       ctrl_clk270_out,
-    output       ctrl_dcm_locked,
-    /* DCM Phase control signals */
-    input        dcm_psclk,
-    input        dcm_psen,
-    input        dcm_psincdec,
+    output       ctrl_mmcm_locked,
+    /* MMCM Phase control signals */
+    input        mmcm_psclk,
+    input        mmcm_psen,
+    input        mmcm_psincdec,
     output       mmcm_psdone
   );
 
@@ -138,7 +138,7 @@ module kat_adc_interface #(
     .S  (0)
   );
 
-  /************** DCM ****************/
+  /************** MMCM ****************/
 
   wire adc_clk_buf;
 
@@ -157,7 +157,7 @@ module kat_adc_interface #(
   wire clk_fb, clk_fb_mmcm, adc_clk_mmcm, adc_clk90_mmcm, adc_clk180_mmcm, adc_clk270_mmcm;
   BUFG bufg_adc_clk [4:0](
     .I ({clk_fb_mmcm, adc_clk_mmcm, adc_clk90_mmcm, adc_clk180_mmcm, adc_clk270_mmcm}),
-    .O ({clk_fb, adc_clk, adc_clk90, adc_clk180, adc_clk270})
+    .O ({clk_fb,      adc_clk,      adc_clk90,      adc_clk180,      adc_clk270})
   );
   assign ctrl_clk_out    = adc_clk;
   assign ctrl_clk90_out  = adc_clk90;

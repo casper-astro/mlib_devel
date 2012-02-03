@@ -1,5 +1,0 @@
-\chapter{Communication Blocks}
-\input{com_ten_GbE.tex}
-\newpage
-\input{com_xaui.tex}
-\newpage
