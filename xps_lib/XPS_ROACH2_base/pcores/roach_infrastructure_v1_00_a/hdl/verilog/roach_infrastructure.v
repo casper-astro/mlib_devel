@@ -71,35 +71,78 @@ module roach_infrastructure(
   );
 
 
-  DCM_BASE #(
-    .CLKIN_PERIOD   (10.0)
+  wire clk_fb_mmcm_int;
+  BUFG bufg_adc_clk(
+    .I (clk_fb_mmcm_int),
+    .O (clk_fb_mmcm_buf)
+  );
+
+  MMCM_BASE #(
+    .BANDWIDTH          ("OPTIMIZED"),
+    .CLKOUT0_DIVIDE_F   (8), // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKFBOUT_PHASE     (0),
+    .CLKFBOUT_MULT_F    (8), //Multiplier for all CLKOUTs
+    .CLKIN1_PERIOD      (10.0),
+    .CLKOUT0_PHASE      (0),
+    .CLKOUT1_PHASE      (90),
+    .CLKOUT2_PHASE      (0),
+    .CLKOUT3_PHASE      (90),
+    .CLKOUT4_PHASE      (0),
+    .CLKOUT5_PHASE      (135),
+    .CLKOUT0_DUTY_CYCLE (0.5),
+    .CLKOUT1_DUTY_CYCLE (0.5),
+    .CLKOUT2_DUTY_CYCLE (0.5),
+    .CLKOUT3_DUTY_CYCLE (0.5),
+    .CLKOUT4_DUTY_CYCLE (0.5),
+    .CLKOUT5_DUTY_CYCLE (0.5),
+    .CLKOUT0_DIVIDE     (4),
+    .CLKOUT1_DIVIDE     (4),
+    .CLKOUT2_DIVIDE     (4),
+    .CLKOUT3_DIVIDE     (8),
+    .CLKOUT4_DIVIDE     (8),
+    .CLKOUT5_DIVIDE     (8),
+    .DIVCLK_DIVIDE      (1),  //Master Division value
+    .CLKOUT4_CASCADE    ("FALSE"),
+    .REF_JITTER1        (0.01),
+    .STARTUP_WAIT       ("FALSE"),
+    .CLOCK_HOLD         ("FALSE")
   ) SYS_CLK_DCM (
-    .CLKIN      (sys_clk_int),
-    .CLK0       (sys_clk_dcm),
-    .CLK180     (),
-    .CLK270     (),
-    .CLK2X      (sys_clk2x_int),
-    .CLK2X180   (),
-    .CLK90      (sys_clk90_dcm),
-    .CLKDV      (),
-    .CLKFX      (),
-    .CLKFX180   (),
+    .CLKIN1     (sys_clk_int),
+    .CLKOUT0    (sys_clk2x_dcm),
+    .CLKOUT0B   (),
+    .CLKOUT1    (sys_clk2x90_dcm),
+    .CLKOUT1B   (),
+    .CLKOUT2    (),
+    .CLKOUT2B   (),
+    .CLKOUT3    (sys_clk90_dcm),
+    .CLKOUT3B   (),
+    .CLKOUT4    (sys_clk_dcm),
+    .CLKOUT5    (),
+    .CLKOUT6    (),
+    .CLKFBOUT   (clk_fb_mmcm_int),
     .LOCKED     (sys_clk_dcm_locked),
-    .CLKFB      (sys_clk),
+    .CLKFBIN    (clk_fb_mmcm_buf),
+    .PWRDWN     (1'b0),
     .RST        (1'b0)
   );
 
-  DCM_BASE #(
-    .CLKIN_PERIOD       (5.0),
-    .DLL_FREQUENCY_MODE ("HIGH")
-  ) SYS_CLK2X_DCM (
-    .CLKIN      (sys_clk2x_buf),
-    .CLK0       (sys_clk2x_dcm),
-    .CLK90      (sys_clk2x90_dcm),
-    .LOCKED     (sys_clk2x_dcm_locked),
-    .CLKFB      (sys_clk2x),
-    .RST        (~sys_clk_dcm_locked)
-  );
+
+  //assign sys_clk_dcm = dcm_clk_out[4];
+  //assign sys_clk2x_dcm = dcm_clk_out[0];
+  //assign sys_clk90_dcm = dcm_clk_out[3];
+  //assign sys_clk2x90_dcm = dcm_clk_out[1];
+
+
+  //MMCM_BASE #(
+  //  .CLKIN_PERIOD       (5.0)
+  //) SYS_CLK2X_DCM (
+  //  .CLKIN      (sys_clk2x_buf),
+  //  .CLK0       (sys_clk2x_dcm),
+  //  .CLK90      (sys_clk2x90_dcm),
+  //  .LOCKED     (sys_clk2x_dcm_locked),
+  //  .CLKFB      (sys_clk2x),
+  //  .RST        (~sys_clk_dcm_locked)
+  //);
 
   assign sys_clk_lock = sys_clk_dcm_locked;
 

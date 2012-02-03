@@ -21,7 +21,7 @@ use_dsp_acc = get_var('use_dsp_acc', varargin{:});
 dual_pol_cmacs = find_system(blk, 'lookUnderMasks', 'all', ...
    'FollowLinks', 'on', 'Name', 'dual_pol_cmac');
 
-if use_ded_mult==6
+if use_ded_mult==7
     for i=1:length(dual_pol_cmacs),
         disp('Replacing cmults with dual_pol_cmac_dsp2x')
         replace_block(get_param(dual_pol_cmacs{i},'Parent'), ...
@@ -64,6 +64,9 @@ for i=1:length(multipliers),
     elseif use_ded_mult==5,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
             'ox_lib/xeng/dualdsp_cmult*','noprompt');
+    elseif use_ded_mult==6,
+        replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
+            'ox_lib/xeng/bunton_cmult*','noprompt');
     else,
         replace_block(get_param(multipliers{i},'Parent'),'Name',get_param(multipliers{i},'Name'),...
             'casper_library_multipliers/cmult_4bit_sl*','noprompt');

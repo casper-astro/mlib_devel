@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+########################################################################
+##
+## Copyright (c) 2005 Xilinx, Inc.  All rights reserved.
+##
+########################################################################
+-->
+
+<!DOCTYPE doc SYSTEM "../../ipdialog.dtd" [
+	<!-- -->
+	<!ENTITY C_NUM_DECODES '
+	<widget id="C_NUM_DECODES">
+		<key>C_NUM_DECODES</key>
+		<label>Number of OPB Address Window</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC0_BASEADDR '
+	<widget id="C_DEC0_BASEADDR">
+		<key>C_DEC0_BASEADDR</key>
+		<label>Base Address for Range 0</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC0_HIGHADDR '
+	<widget id="C_DEC0_HIGHADDR">
+		<key>C_DEC0_HIGHADDR</key>
+		<label>High Address for Range 0</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC1_BASEADDR '
+	<widget id="C_DEC1_BASEADDR">
+		<key>C_DEC1_BASEADDR</key>
+		<label>Base Address for Range 1</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC1_HIGHADDR '
+	<widget id="C_DEC1_HIGHADDR">
+		<key>C_DEC1_HIGHADDR</key>
+		<label>High Address for Range 1</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC2_BASEADDR '
+	<widget id="C_DEC2_BASEADDR">
+		<key>C_DEC2_BASEADDR</key>
+		<label>Base Address for Range 2</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC2_HIGHADDR '
+	<widget id="C_DEC2_HIGHADDR">
+		<key>C_DEC2_HIGHADDR</key>
+		<label>High Address for Range 2</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC3_BASEADDR '
+	<widget id="C_DEC3_BASEADDR">
+		<key>C_DEC3_BASEADDR</key>
+		<label>Base Address for Range 3</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEC3_HIGHADDR '
+	<widget id="C_DEC3_HIGHADDR">
+		<key>C_DEC3_HIGHADDR</key>
+		<label>High Address for Range 3</label>
+		<tip></tip>
+	</widget>
+	'>
+]>
+
+<doc>
+	<view id="User">
+		<display>User</display>
+	</view>
+	<view id="System">
+		<display>System</display>
+		<group id="OPB">
+			<display>OPB</display>
+			<item>&C_OPB_DWIDTH;</item>
+			<item>&C_OPB_AWIDTH;</item>
+		</group>
+		<group id="Address">
+			<display>Address</display>
+			<item>&C_NUM_DECODES;</item>
+			<item>&C_DEC0_BASEADDR;</item>
+			<item>&C_DEC0_HIGHADDR;</item>
+			<item>&C_DEC1_BASEADDR;</item>
+			<item>&C_DEC1_HIGHADDR;</item>
+			<item>&C_DEC2_BASEADDR;</item>
+			<item>&C_DEC2_HIGHADDR;</item>
+			<item>&C_DEC3_BASEADDR;</item>
+			<item>&C_DEC3_HIGHADDR;</item>
+		</group>
+	</view>
+</doc>
