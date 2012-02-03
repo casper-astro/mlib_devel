@@ -1,0 +1,7 @@
+lib x64_adc_v1_00_a fifo_generator_v5_3.v verilog
+lib x64_adc_v1_00_a x64_adc_mux_adc_streams.v verilog
+lib x64_adc_v1_00_a x64_adc_retime.v verilog
+lib x64_adc_v1_00_a x64_adc.v verilog
+lib x64_adc_v1_00_a x64_adc_deserialise.v verilog
+lib x64_adc_v1_00_a x64_adc_infrastructure.v verilog
+lib x64_adc_v1_00_a x64_adc_fcsample.v verilog
