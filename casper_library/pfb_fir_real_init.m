@@ -70,7 +70,7 @@ MakeBiplex = get_var('MakeBiplex', 'defaults', defaults, varargin{:});
 BitWidthIn = get_var('BitWidthIn', 'defaults', defaults, varargin{:});
 BitWidthOut = get_var('BitWidthOut', 'defaults', defaults, varargin{:});
 CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
-CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
+%CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -83,13 +83,15 @@ adder_folding = get_var('adder_folding', 'defaults', defaults, varargin{:});
 adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 
 if strcmp(specify_mult, 'on') && length(mult_spec) ~= TotalTaps
-    clog('Multiplier specification vector not the same as the number of taps','error');
-    error('Multiplier specification vector not the same as the number of taps');
-    return
+    error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), TotalTaps);
+    clog(error_string,'error');
+    error(error_string);
 end
 
-if MakeBiplex, pols = 2;
-else pols = 1;
+if MakeBiplex,
+    pols = 2;
+else
+    pols = 1;
 end
 
 % Compute the maximum gain through all of the 2^PFBSize sub-filters.  This is
@@ -160,14 +162,19 @@ for p=1:pols,
         clog(['adding taps for pol ',num2str(p),' input ',num2str(n)],'pfb_fir_real_init_debug');
 
         for t=1:TotalTaps,
+
+            % the default is to use hdl
             use_hdl = 'on';
             use_embedded = 'off';
-            if( strcmp(specify_mult,'on') )
-                if( mult_spec(t) == 0 ),
+            % unless otherwise specified
+            if(strcmp(specify_mult, 'on'))
+                % 0 = core, 1 = embedded, 2 = hdl
+                if(mult_spec(t) == 0), 
+                    use_hdl = 'off';
                     use_embedded = 'off';
-                elseif( mult_spec(t) == 2);
-                    use_hdl = 'on';
-                    use_embedded = 'off';
+                elseif(mult_spec(t) == 1);
+                    use_hdl = 'off';
+                    use_embedded = 'on';
                 end
             end
 

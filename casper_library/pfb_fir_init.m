@@ -69,7 +69,7 @@ MakeBiplex = get_var('MakeBiplex', 'defaults', defaults, varargin{:});
 BitWidthIn = get_var('BitWidthIn', 'defaults', defaults, varargin{:});
 BitWidthOut = get_var('BitWidthOut', 'defaults', defaults, varargin{:});
 CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
-CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
+%CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -78,14 +78,16 @@ fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 
-if strcmp(specify_mult, 'on') && len(mult_spec) ~= TotalTaps
-    clog('Multiplier specification vector not the same as the number of taps','error');
-    error('Multiplier specification vector not the same as the number of taps');
-    return
+if strcmp(specify_mult, 'on') && length(mult_spec) ~= TotalTaps
+    error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), TotalTaps);
+    clog(error_string,'error');
+    error(error_string);
 end
 
-if MakeBiplex, pols = 2;
-else, pols = 1;
+if MakeBiplex
+    pols = 2;
+else
+    pols = 1;
 end
 
 % Compute the maximum gain through all of the 2^PFBSize sub-filters.  This is
@@ -116,7 +118,7 @@ bit_growth = max(0, nextpow2(max_gain));
 % maximum gain.  The products from the taps will have
 % (BitWidthIn+CoeffBitWidth-2) fractional bits.  We will preserve them through
 % the adder tree.
-adder_bin_pt_out = BitWidthIn+CoeffBitWidth-2;
+adder_bin_pt_out = BitWidthIn + CoeffBitWidth - 2;
 adder_n_bits_out = bit_growth + 1 + adder_bin_pt_out;
 
 % If BitWidthOut is 0, set it to accomodate bit growth in the
@@ -127,7 +129,7 @@ end
 
 delete_lines(blk);
 
-clog('adding inports and outports','pfb_fir_init_debug');
+clog('adding inports and outports', 'pfb_fir_init_debug');
 % Add ports
 portnum = 1;
 reuse_block(blk, 'sync', 'built-in/inport', ...
@@ -152,18 +154,22 @@ for p=1:pols,
     for n=1:2^n_inputs,
         portnum = portnum + 1;
 
-        clog(['adding taps for pol ',num2str(p),' input ',num2str(n)],'pfb_fir_init_debug');
+        clog(['adding taps for pol ', num2str(p), ' input ',num2str(n)], 'pfb_fir_init_debug');
         for t=1:TotalTaps,
             in_name = ['pol',num2str(p),'_in',num2str(n)];
             out_name = ['pol',num2str(p),'_out',num2str(n)];
+            % the default is to use hdl
             use_hdl = 'on';
             use_embedded = 'off';
-            if( strcmp(specify_mult,'on') ) 
-                if( mult_spec(t) == 0 ), 
+            % unless otherwise specified
+            if(strcmp(specify_mult, 'on'))
+                % 0 = core, 1 = embedded, 2 = hdl
+                if(mult_spec(t) == 0), 
+                    use_hdl = 'off';
                     use_embedded = 'off';
-                elseif( mult_spec(t) == 2);
-                    use_hdl = 'on';
-                    use_embedded = 'off';
+                elseif(mult_spec(t) == 1);
+                    use_hdl = 'off';
+                    use_embedded = 'on';
                 end
             end
 
@@ -226,7 +232,7 @@ for p=1:pols,
                 end
                 if t==2,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_first_tap'];
-                else,
+                else
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t-1)];
                 end
                 for nn=1:4, add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
@@ -234,7 +240,7 @@ for p=1:pols,
                 add_line(blk, [blk_name,'/1'], [out_name,'/1']);
                 if n==1 && p==1, add_line(blk, [blk_name,'/2'], 'sync_out/1');
                 end
-            else,
+            else
                 blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t)];
                 
                 reuse_block(blk, blk_name, 'casper_library_pfbs/tap', ...
@@ -245,7 +251,7 @@ for p=1:pols,
                     'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
                 if t==2,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_first_tap'];
-                else,
+                else
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t-1)];
                 end
                 for nn=1:4, add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
