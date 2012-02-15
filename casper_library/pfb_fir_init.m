@@ -44,6 +44,7 @@ function pfb_fir_init(blk, varargin)
 % quantization = 'Truncate', 'Round  (unbiased: +/- Inf)', or 'Round
 % (unbiased: Even Values)'
 % fwidth = Scaling of the width of each PFB channel
+% coeffs_share = Both polarizations will share coefficients.
 
 clog('entering pfb_fir_init','trace');
 
@@ -54,10 +55,11 @@ defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
     'CoeffDistMem', 0, 'add_latency', 1, 'mult_latency', 2, ...
     'bram_latency', 2, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
-    'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2]};
+    'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
+    'coeffs_share', 'off', 'coeffs_fold', 'off'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
-clog('pfb_fir_real_init post same_state','trace');
+clog('pfb_fir_init post same_state','trace');
 check_mask_type(blk, 'pfb_fir');
 munge_block(blk, varargin{:});
 
@@ -77,6 +79,8 @@ quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
+coeffs_share = get_var('coeffs_share', 'defaults', defaults, varargin{:});
+coeffs_fold = get_var('coeffs_fold', 'defaults', defaults, varargin{:});
 
 if strcmp(specify_mult, 'on') && length(mult_spec) ~= TotalTaps
     error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), TotalTaps);
@@ -84,10 +88,13 @@ if strcmp(specify_mult, 'on') && length(mult_spec) ~= TotalTaps
     error(error_string);
 end
 
+pols = 1;
+share_coefficients = false;
 if MakeBiplex
     pols = 2;
-else
-    pols = 1;
+    if strcmp(coeffs_share, 'on')
+        share_coefficients = true;
+    end
 end
 
 % Compute the maximum gain through all of the 2^PFBSize sub-filters.  This is
@@ -135,7 +142,7 @@ portnum = 1;
 reuse_block(blk, 'sync', 'built-in/inport', ...
     'Position', [0 50*portnum 30 50*portnum+15], 'Port', num2str(portnum));
 reuse_block(blk, 'sync_out', 'built-in/outport', ...
-    'Position', [150*(TotalTaps+1) 50*portnum 150*(TotalTaps+1)+30 50*portnum+15], 'Port', num2str(portnum));
+    'Position', [150*(TotalTaps+2) 50*portnum 150*(TotalTaps+2)+30 50*portnum+15], 'Port', num2str(portnum));
 for p=1:pols,
     for n=1:2^n_inputs,
         portnum = portnum + 1; % Skip one to allow sync & sync_out to be 1
@@ -144,7 +151,7 @@ for p=1:pols,
         reuse_block(blk, in_name, 'built-in/inport', ...
             'Position', [0 50*portnum 30 50*portnum+15], 'Port', num2str(portnum));
         reuse_block(blk, out_name, 'built-in/outport', ...
-            'Position', [150*(TotalTaps+1) 50*portnum 150*(TotalTaps+1)+30 50*portnum+15], 'Port', num2str(portnum));
+            'Position', [150*(TotalTaps+2) 50*portnum 150*(TotalTaps+2)+30 50*portnum+15], 'Port', num2str(portnum));
     end
 end
 
@@ -153,11 +160,27 @@ portnum = 0;
 for p=1:pols,
     for n=1:2^n_inputs,
         portnum = portnum + 1;
+        in_name = ['pol',num2str(p),'_in',num2str(n)];
+        out_name = ['pol',num2str(p),'_out',num2str(n)];
+        
+        % add the coefficient generators
+        if (p == 2) && (share_coefficients == true)
+            blk_name = [in_name,'_delay'];
+            reuse_block(blk, blk_name, 'xbsIndex_r4/Delay', ...
+                'latency', 'bram_latency+1', 'Position', [150 50*portnum 150+100 50*portnum+30]);
+            add_line(blk, [in_name,'/1'], [blk_name,'/1']);
+        else
+            blk_name = [in_name,'_coeffs'];
+            reuse_block(blk, blk_name, 'casper_library_pfbs/pfb_coeff_gen', ...
+                'nput', num2str(n-1), 'Position', [150 50*portnum 150+100 50*portnum+30]);
+            propagate_vars([blk,'/',blk_name], 'defaults', defaults, varargin{:});
+            add_line(blk, [in_name,'/1'], [blk_name,'/1']);
+            add_line(blk, 'sync/1', [blk_name,'/2']);    
+        end
 
         clog(['adding taps for pol ', num2str(p), ' input ',num2str(n)], 'pfb_fir_init_debug');
         for t=1:TotalTaps,
-            in_name = ['pol',num2str(p),'_in',num2str(n)];
-            out_name = ['pol',num2str(p),'_out',num2str(n)];
+            
             % the default is to use hdl
             use_hdl = 'on';
             use_embedded = 'off';
@@ -177,15 +200,24 @@ for p=1:pols,
                 blk_name = [in_name,'_first_tap'];
                 reuse_block(blk, blk_name, 'casper_library_pfbs/first_tap', ...
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
-                    'nput', num2str(n-1), 'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
+                    'Position', [150*(t+1) 50*portnum 150*(t+1)+100 50*portnum+30]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
-                add_line(blk, [in_name,'/1'], [blk_name,'/1']);
-                add_line(blk, 'sync/1', [blk_name,'/2']);
+                if (p == 2) && (share_coefficients == true)
+                    src_block = [strrep(in_name,'pol2','pol1'),'_coeffs'];
+                    data_source = [in_name,'_delay/1'];
+                else
+                    src_block = [in_name,'_coeffs'];
+                    data_source = [src_block,'/1'];
+                end
+                add_line(blk, data_source, [blk_name,'/1']);
+                add_line(blk, 'pol1_in1_coeffs/2', [blk_name,'/2']);
+                add_line(blk, [src_block,'/3'], [blk_name,'/3']);
+                
             elseif t==TotalTaps,
                 blk_name = [in_name,'_last_tap'];
                 reuse_block(blk, blk_name, 'casper_library_pfbs/last_tap', ...
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
-                    'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
+                    'Position', [150*(t+1) 50*portnum 150*(t+1)+100 50*portnum+30]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
                 % Update innards of the adder trees using our knowledge of
                 % maximum bit growth.  This uses knowledge of the
@@ -248,7 +280,7 @@ for p=1:pols,
                     'mult_latency',tostring(mult_latency), 'coeff_width', tostring(CoeffBitWidth), ...
                     'coeff_frac_width',tostring(CoeffBitWidth-1), 'delay', tostring(2^(PFBSize-n_inputs)), ...
                     'data_width',tostring(BitWidthIn), 'bram_latency', tostring(bram_latency), ...
-                    'Position', [150*t 50*portnum 150*t+100 50*portnum+30]);
+                    'Position', [150*(t+1) 50*portnum 150*(t+1)+100 50*portnum+30]);
                 if t==2,
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_first_tap'];
                 else

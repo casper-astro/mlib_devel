@@ -58,12 +58,11 @@ nput = get_var('nput', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 
 % Set coefficient vector
-try, 
+try
 	window('hamming',1024);
-catch,
+catch
 	disp('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
 	error('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
-	return;
 end
 alltaps = TotalTaps*2^PFBSize;
 windowval = transpose(window(WindowType, alltaps));
@@ -138,7 +137,7 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('PFBSize=%d, n_inputs=%d, taps=%d', PFBSize, n_inputs, TotalTaps);
+fmtstr = sprintf('PFBSize=%d, n_inputs=%d, taps=%d, input=%d', PFBSize, n_inputs, TotalTaps, nput);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 
