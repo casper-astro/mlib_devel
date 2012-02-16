@@ -128,9 +128,9 @@ end
 % Set coefficient ROMs to use distribute memory (or not).
 for a=1:TotalTaps,
     blkname = ['ROM', tostring(a)];
-    if CoeffDistMem,
+    if strcmp(CoeffDistMem, 'on'),
         set_param([blk,'/',blkname], 'distributed_mem', 'Distributed memory');
-    else,
+    else
         set_param([blk,'/',blkname], 'distributed_mem', 'Block RAM');
     end
 end

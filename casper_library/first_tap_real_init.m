@@ -29,12 +29,10 @@ function first_tap_real_init(blk, varargin)
 % varargin = {'varname', 'value', ...} pairs
 % 
 % Valid varnames for this block are:
-% nput = Which input this is
 % PFBSize = The size of the PFB
 % CoeffBitWidth = Bitwidth of Coefficients.
 % TotalTaps = Total number of taps in the PFB
 % BitWidthIn = Input Bitwidth
-% CoeffDistMem = Implement coefficients in distributed memory
 % WindowType = The type of windowing function to use.
 % mult_latency = Latency through each multiplier
 % bram_latency = Latency through each BRAM.
@@ -47,17 +45,13 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'first_tap_real');
 munge_block(blk, varargin{:});
 
-propagate_vars([blk,'/pfb_coeff_gen'], 'defaults', defaults, varargin{:});
-
-nput = get_var('nput', 'defaults', defaults, varargin{:});
 TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
 
-set_param([blk,'/Mult'],'use_embedded',use_embedded);
-set_param([blk,'/Mult'],'use_behavioral_HDL',use_hdl);
+set_param([blk,'/Mult'],'use_embedded', use_embedded);
+set_param([blk,'/Mult'],'use_behavioral_HDL', use_hdl);
 
-fmtstr = sprintf('input=%d, taps=%d', nput, TotalTaps);
+fmtstr = sprintf('taps=%d', TotalTaps);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
-

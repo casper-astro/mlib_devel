@@ -50,9 +50,9 @@ clog('entering pfb_fir_init','trace');
 
 % Declare any default values for arguments you might like.
 defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
-    'WindowType', 'hamming', 'n_inputs', 1, 'MakeBiplex', 0, ...
+    'WindowType', 'hamming', 'n_inputs', 1, 'MakeBiplex', 'off', ...
     'BitWidthIn', 8, 'BitWidthOut', 0, 'CoeffBitWidth', 18, ...
-    'CoeffDistMem', 0, 'add_latency', 1, 'mult_latency', 2, ...
+    'CoeffDistMem', 'off', 'add_latency', 1, 'mult_latency', 2, ...
     'bram_latency', 2, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
@@ -71,7 +71,7 @@ MakeBiplex = get_var('MakeBiplex', 'defaults', defaults, varargin{:});
 BitWidthIn = get_var('BitWidthIn', 'defaults', defaults, varargin{:});
 BitWidthOut = get_var('BitWidthOut', 'defaults', defaults, varargin{:});
 CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
-%CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
+CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -90,7 +90,7 @@ end
 
 pols = 1;
 share_coefficients = false;
-if MakeBiplex
+if strcmp(MakeBiplex, 'on'),
     pols = 2;
     if strcmp(coeffs_share, 'on')
         share_coefficients = true;
@@ -136,8 +136,8 @@ end
 
 delete_lines(blk);
 
-clog('adding inports and outports', 'pfb_fir_init_debug');
 % Add ports
+clog('adding inports and outports', 'pfb_fir_init_debug');
 portnum = 1;
 reuse_block(blk, 'sync', 'built-in/inport', ...
     'Position', [0 50*portnum 30 50*portnum+15], 'Port', num2str(portnum));
@@ -155,7 +155,7 @@ for p=1:pols,
     end
 end
 
-% Add Blocks and Lines
+% Add blocks and Lines
 portnum = 0;
 for p=1:pols,
     for n=1:2^n_inputs,
@@ -172,15 +172,14 @@ for p=1:pols,
         else
             blk_name = [in_name,'_coeffs'];
             reuse_block(blk, blk_name, 'casper_library_pfbs/pfb_coeff_gen', ...
-                'nput', num2str(n-1), 'Position', [150 50*portnum 150+100 50*portnum+30]);
+                'nput', num2str(n-1), 'CoeffDistMem', CoeffDistMem, 'Position', [150 50*portnum 150+100 50*portnum+30]);
             propagate_vars([blk,'/',blk_name], 'defaults', defaults, varargin{:});
             add_line(blk, [in_name,'/1'], [blk_name,'/1']);
-            add_line(blk, 'sync/1', [blk_name,'/2']);    
+            add_line(blk, 'sync/1', [blk_name,'/2']);  
         end
 
         clog(['adding taps for pol ', num2str(p), ' input ',num2str(n)], 'pfb_fir_init_debug');
         for t=1:TotalTaps,
-            
             % the default is to use hdl
             use_hdl = 'on';
             use_embedded = 'off';
@@ -195,7 +194,7 @@ for p=1:pols,
                     use_embedded = 'on';
                 end
             end
-
+            % first tap
             if t==1,
                 blk_name = [in_name,'_first_tap'];
                 reuse_block(blk, blk_name, 'casper_library_pfbs/first_tap', ...
@@ -212,7 +211,7 @@ for p=1:pols,
                 add_line(blk, data_source, [blk_name,'/1']);
                 add_line(blk, 'pol1_in1_coeffs/2', [blk_name,'/2']);
                 add_line(blk, [src_block,'/3'], [blk_name,'/3']);
-                
+            % last tap
             elseif t==TotalTaps,
                 blk_name = [in_name,'_last_tap'];
                 reuse_block(blk, blk_name, 'casper_library_pfbs/last_tap', ...
@@ -262,19 +261,21 @@ for p=1:pols,
                     set_param(sprintf('%s/convert%d', pfb_add_tree, k), ...
                         'overflow', 'Wrap', 'quantization', conv_quant);
                 end
-                if t==2,
+                if t==2
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_first_tap'];
                 else
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t-1)];
                 end
-                for nn=1:4, add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
+                for nn=1:4
+                    add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
                 end
                 add_line(blk, [blk_name,'/1'], [out_name,'/1']);
-                if n==1 && p==1, add_line(blk, [blk_name,'/2'], 'sync_out/1');
+                if n==1 && p==1
+                    add_line(blk, [blk_name,'/2'], 'sync_out/1');
                 end
+            % intermediary taps
             else
                 blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t)];
-                
                 reuse_block(blk, blk_name, 'casper_library_pfbs/tap', ...
                     'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
                     'mult_latency',tostring(mult_latency), 'coeff_width', tostring(CoeffBitWidth), ...
@@ -286,7 +287,8 @@ for p=1:pols,
                 else
                     prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t-1)];
                 end
-                for nn=1:4, add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
+                for nn=1:4
+                    add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
                 end
             end
         end

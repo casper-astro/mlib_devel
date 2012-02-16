@@ -33,7 +33,6 @@ function first_tap_init(blk, varargin)
 % CoeffBitWidth = Bitwidth of Coefficients.
 % TotalTaps = Total number of taps in the PFB
 % BitWidthIn = Input Bitwidth
-% CoeffDistMem = Implement coefficients in distributed memory
 % WindowType = The type of windowing function to use.
 % mult_latency = Latency through each multiplier
 % bram_latency = Latency through each BRAM.
@@ -50,10 +49,10 @@ TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
 
-set_param([blk,'/Mult'],'use_embedded',use_embedded);
-set_param([blk,'/Mult'],'use_behavioral_HDL',use_hdl);
-set_param([blk,'/Mult1'],'use_embedded',use_embedded);
-set_param([blk,'/Mult1'],'use_behavioral_HDL',use_hdl)
+set_param([blk,'/Mult'],'use_embedded', use_embedded);
+set_param([blk,'/Mult'],'use_behavioral_HDL', use_hdl);
+set_param([blk,'/Mult1'],'use_embedded', use_embedded);
+set_param([blk,'/Mult1'],'use_behavioral_HDL', use_hdl)
 
 fmtstr = sprintf('taps=%d', TotalTaps);
 set_param(blk, 'AttributesFormatString', fmtstr);
