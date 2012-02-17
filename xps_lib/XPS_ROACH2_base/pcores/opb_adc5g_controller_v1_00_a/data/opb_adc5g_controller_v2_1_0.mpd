@@ -57,6 +57,7 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	PORT adc0_adc3wire_data   = "", DIR = O
 	PORT adc0_adc3wire_spi_rst = "", DIR = O
 	PORT adc0_modepin = "", DIR = O
+	PORT adc0_reset = "", DIR = O
 
 ###	PORT adc0_adc_reset       = "", DIR = O
 ###	PORT adc0_ddrb            = "", DIR = O
@@ -75,6 +76,7 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	PORT adc1_adc3wire_data   = "", DIR = O
 	PORT adc1_adc3wire_spi_rst = "", DIR = O
 	PORT adc1_modepin = "", DIR = O
+	PORT adc1_reset = "", DIR = O
 
 
 ###	PORT adc1_adc_reset       = "", DIR = O

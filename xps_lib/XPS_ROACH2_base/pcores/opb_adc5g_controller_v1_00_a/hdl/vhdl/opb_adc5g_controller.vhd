@@ -74,32 +74,34 @@ entity opb_adc5g_controller is
       --------------------------------------
       -- configuration signals to ADC 0
       --------------------------------------
-     adc0_adc3wire_clk    : out std_logic := '0';
-     adc0_adc3wire_data   : out std_logic := '0';
-     adc0_adc3wire_spi_rst : out std_logic := '0';
-     adc0_modepin         : out std_logic := '0';
-     adc0_ddrb            : out std_logic := '0';
-      adc0_dcm_reset       : out std_logic := '0';
-      adc0_psclk           : out std_logic := '0';
-      adc0_psen            : out std_logic := '0';
-      adc0_psincdec        : out std_logic := '0';
-      adc0_psdone          : in  std_logic := '0';
-      adc0_clk             : in  std_logic := '0';
+      adc0_adc3wire_clk     : out std_logic := '0';
+      adc0_adc3wire_data    : out std_logic := '0';
+      adc0_adc3wire_spi_rst : out std_logic := '0';
+      adc0_modepin          : out std_logic := '0';
+      adc0_reset            : out std_logic := '0';
+      adc0_ddrb             : out std_logic := '0';
+      adc0_dcm_reset        : out std_logic := '0';
+      adc0_psclk            : out std_logic := '0';
+      adc0_psen             : out std_logic := '0';
+      adc0_psincdec         : out std_logic := '0';
+      adc0_psdone           : in  std_logic := '0';
+      adc0_clk              : in  std_logic := '0';
 
       --------------------------------------
       -- configuration signals to ADC 1
       --------------------------------------
-     adc1_adc3wire_clk    : out std_logic := '0';
-     adc1_adc3wire_data   : out std_logic := '0';
-     adc1_adc3wire_spi_rst : out std_logic := '0';
-     adc1_modepin         : out std_logic := '0';
-     adc1_ddrb            : out std_logic := '0';
-      adc1_dcm_reset       : out std_logic := '0';
-      adc1_psclk           : out std_logic := '0';
-      adc1_psen            : out std_logic := '0';
-      adc1_psincdec        : out std_logic := '0';
-      adc1_psdone          : in  std_logic := '0';
-      adc1_clk             : in  std_logic := '0';
+      adc1_adc3wire_clk     : out std_logic := '0';
+      adc1_adc3wire_data    : out std_logic := '0';
+      adc1_adc3wire_spi_rst : out std_logic := '0';
+      adc1_modepin          : out std_logic := '0';
+      adc1_reset            : out std_logic := '0';
+      adc1_ddrb             : out std_logic := '0';
+      adc1_dcm_reset        : out std_logic := '0';
+      adc1_psclk            : out std_logic := '0';
+      adc1_psen             : out std_logic := '0';
+      adc1_psincdec         : out std_logic := '0';
+      adc1_psdone           : in  std_logic := '0';
+      adc1_clk              : in  std_logic := '0';
 
       -- Bus protocol ports
       OPB_Clk     : in  std_logic;
@@ -298,6 +300,7 @@ constant PIPELINE_MODEL : integer := 5;
   signal adc0_3wire_busy         : std_logic;
   signal adc0_ddrb_int           : std_logic;
   signal adc0_modepin_int        : std_logic;
+  signal adc0_reset_int          : std_logic;
 
   signal adc1_3wire_request      : std_logic;
   signal adc1_3wire_start        : std_logic;
@@ -306,6 +309,7 @@ constant PIPELINE_MODEL : integer := 5;
   signal adc1_3wire_busy         : std_logic;
   signal adc1_ddrb_int           : std_logic;
   signal adc1_modepin_int        : std_logic;
+  signal adc1_reset_int          : std_logic;
 
 begin
 
@@ -480,12 +484,14 @@ begin
       config_addr_i    => adc0_3wire_addr ,
 
       ddrb_o           => adc0_ddrb,
-      dcm_reset_o      => adc0_dcm_reset,
+      dcm_reset_o      => adc0_reset_int,
       mode_o           => adc0_modepin,
       ctrl_clk_o       => adc0_adc3wire_clk,
       ctrl_spi_rst_o      => adc0_adc3wire_spi_rst,
       ctrl_data_o      => adc0_adc3wire_data
   );
+  adc0_dcm_reset <= adc0_reset_int;
+  adc0_reset <= adc0_reset_int;
 
   adc_config_mux_1 : adc_config_mux
     generic map
@@ -507,11 +513,13 @@ begin
       config_addr_i    => adc1_3wire_addr ,
 
       ddrb_o           => adc1_ddrb,
-      dcm_reset_o      => adc1_dcm_reset,
+      dcm_reset_o      => adc1_reset_int,
       mode_o           => adc1_modepin,
       ctrl_clk_o       => adc1_adc3wire_clk,
       ctrl_spi_rst_o      => adc1_adc3wire_spi_rst,
       ctrl_data_o      => adc1_adc3wire_data
   );
+  adc1_dcm_reset <= adc1_reset_int;
+  adc1_reset <= adc1_reset_int;
 
 end IMP;
