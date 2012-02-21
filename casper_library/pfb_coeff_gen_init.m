@@ -56,6 +56,7 @@ bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 nput = get_var('nput', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
+debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
 
 % Set coefficient vector
 try
@@ -64,12 +65,12 @@ catch
 	disp('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
 	error('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
 end
-alltaps = TotalTaps*2^PFBSize;
-windowval = transpose(window(WindowType, alltaps));
-total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
-for i=1:alltaps/2^n_inputs,
-    buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
-end
+%alltaps = TotalTaps*2^PFBSize;
+%windowval = transpose(window(WindowType, alltaps));
+%total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
+%for i=1:alltaps/2^n_inputs,
+%    buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
+%end
 
 delete_lines(blk);
 
@@ -105,15 +106,24 @@ add_line(blk, 'Register/1', 'coeff/1');
 for a=1:TotalTaps,
     blkname = ['ROM', tostring(a)];
     pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a);
-    vecstr = ['pfb_coeff_gen_calc(', tostring(PFBSize), ', ', ...
-        tostring(TotalTaps), ',''', tostring(WindowType), ''',', ...
-        tostring(n_inputs), ', ', tostring(nput), ',', ...
-        tostring(fwidth), ',', tostring(a), ')'];
+    if strcmp(debug_mode, 'on'),
+        s = ((TotalTaps - a) * 2^PFBSize) + 1;
+        vecstr = [tostring(s), ':', tostring(s - 1 + 2^PFBSize)];
+        atype = 'Unsigned';
+        binpt = '0';
+    else
+        vecstr = ['pfb_coeff_gen_calc(', tostring(PFBSize), ', ', ...
+            tostring(TotalTaps), ',''', tostring(WindowType), ''',', ...
+            tostring(n_inputs), ', ', tostring(nput), ',', ...
+            tostring(fwidth), ',', tostring(a), ')'];
+        atype = 'Signed  (2''s comp)';
+        binpt = tostring(CoeffBitWidth-1);
+    end
     %v = mat2str(buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs)));
     %v
     reuse_block(blk, blkname, 'xbsIndex_r4/ROM', ...
-        'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vecstr, 'arith_type', 'Signed  (2''s comp)', ...
-        'n_bits', tostring(CoeffBitWidth), 'bin_pt', tostring(CoeffBitWidth-1), ...
+        'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vecstr, 'arith_type', atype, ...
+        'n_bits', tostring(CoeffBitWidth), 'bin_pt', binpt, ...
         'latency', tostring(bram_latency), 'use_rpm','on', 'Position', [150 65*(a-1)+74 200 65*(a-1)+126]);
     add_line(blk, 'Counter/1', [blkname, '/1']);
     reintname = ['Reinterpret', tostring(a)];
@@ -137,7 +147,10 @@ end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('PFBSize=%d, n_inputs=%d, taps=%d, input=%d', PFBSize, n_inputs, TotalTaps, nput);
+fmtstr = sprintf('PFBSize=%d, n_inputs=%d,\ntaps=%d, input=%d', PFBSize, n_inputs, TotalTaps, nput);
+if strcmp(debug_mode, 'on'),
+    fmtstr = [fmtstr, '\nDEBUG MODE!'];
+end
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 

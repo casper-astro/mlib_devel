@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Feb 21 11:53:13 2012"
+  LastModifiedDate	  "Tue Feb 21 12:52:05 2012"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:71>"
+  ModelVersionFormat	  "1.%<AutoIncrement:73>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1238,7 +1238,7 @@ Library {
       BlockType		      SubSystem
       Name		      "first_tap_real"
       Ports		      [3, 4]
-      Position		      [55, 567, 160, 643]
+      Position		      [55, 607, 160, 683]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       AttributesFormatString  "taps=4"
       UserDataPersistent      on
@@ -5920,7 +5920,7 @@ Library {
       BlockType		      SubSystem
       Name		      "last_tap_real"
       Ports		      [3, 2]
-      Position		      [340, 571, 445, 649]
+      Position		      [340, 606, 445, 684]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag15"
@@ -6186,9 +6186,9 @@ Library {
       BlockType		      SubSystem
       Name		      "pfb_coeff_gen"
       Ports		      [2, 3]
-      Position		      [55, 452, 150, 528]
+      Position		      [55, 462, 150, 538]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
-      AttributesFormatString  "PFBSize=6, n_inputs=0, taps=4, input=0"
+      AttributesFormatString  "PFBSize=6, n_inputs=0,\ntaps=4, input=0"
       UserDataPersistent      on
       UserData		      "DataTag16"
       MinAlgLoopOccurrences   off
@@ -6201,27 +6201,27 @@ Library {
       MaskType		      "pfb_coeff_gen"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of Taps:|Implement Coeff "
       "Gen in Distributed Memory|Windowing Function: |BRAM Latency|Number of Simultaneous Inputs: (2^?)|This is input n"
-      "umber:|Bin Width (normal=1)"
-      MaskStyleString	      "edit,edit,edit,checkbox,edit,edit,edit,edit,edit"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "||||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,"
+      "umber:|Bin Width (normal=1)|Debug mode - coeffs are a [1:pfb_size*taps] ramp."
+      MaskStyleString	      "edit,edit,edit,checkbox,edit,edit,edit,edit,edit,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,"
       MaskVariables	      "PFBSize=@1;CoeffBitWidth=@2;TotalTaps=@3;CoeffDistMem=&4;WindowType=&5;bram_latency=@6;n_in"
-      "puts=@7;nput=@8;fwidth=@9;"
+      "puts=@7;nput=@8;fwidth=@9;debug_mode=&10;"
       MaskInitialization      "pfb_coeff_gen_init(gcb, ...\n    'PFBSize', PFBSize, ...\n    'CoeffBitWidth', CoeffBit"
       "Width, ...\n    'TotalTaps', TotalTaps, ...\n    'CoeffDistMem', CoeffDistMem, ...\n    'WindowType', WindowType"
       ", ...\n    'bram_latency', bram_latency, ...\n    'n_inputs', n_inputs, ...\n    'nput', nput, ...\n    'fwidth'"
-      ", fwidth);"
+      ", fwidth, ...\n    'debug_mode', debug_mode);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "6|8|4|off|hamming|2|0|0|1"
-      MaskTabNameString	      ",,,,,,,,"
+      MaskValueString	      "6|8|4|off|hamming|2|0|0|1|off"
+      MaskTabNameString	      ",,,,,,,,,"
       System {
 	Name			"pfb_coeff_gen"
 	Location		[20, 102, 533, 772]
@@ -6265,7 +6265,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "4"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -6296,15 +6296,15 @@ Library {
 	  arith_type		  "Unsigned"
 	  n_bits		  "6"
 	  bin_pt		  "0"
-	  load_pin		  "off"
-	  rst			  "on"
-	  en			  "off"
+	  load_pin		  off
+	  rst			  on
+	  en			  off
 	  explicit_period	  "on"
 	  period		  "1"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  off
 	  implementation	  "Fabric"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -6328,11 +6328,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "bram_latency+1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "50,74,419,315"
@@ -6356,11 +6356,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "bram_latency+1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,315"
@@ -6384,21 +6384,21 @@ Library {
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "64"
 	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,1)"
-	  distributed_mem	  "Distributed memory"
-	  rst			  "off"
+	  distributed_mem	  "Block RAM"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
+	  en			  off
 	  latency		  "2"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,44,419,340"
 	  block_type		  "sprom"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,52,1,1,white,blue,0,f671c08f,right,"
@@ -6418,21 +6418,21 @@ Library {
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "64"
 	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,2)"
-	  distributed_mem	  "Distributed memory"
-	  rst			  "off"
+	  distributed_mem	  "Block RAM"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
+	  en			  off
 	  latency		  "2"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,44,419,340"
 	  block_type		  "sprom"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,52,1,1,white,blue,0,f671c08f,right,"
@@ -6452,21 +6452,21 @@ Library {
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "64"
 	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,3)"
-	  distributed_mem	  "Distributed memory"
-	  rst			  "off"
+	  distributed_mem	  "Block RAM"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
+	  en			  off
 	  latency		  "2"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,44,419,340"
 	  block_type		  "sprom"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,52,1,1,white,blue,0,f671c08f,right,"
@@ -6486,21 +6486,21 @@ Library {
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "64"
 	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,4)"
-	  distributed_mem	  "Distributed memory"
-	  rst			  "off"
+	  distributed_mem	  "Block RAM"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
+	  en			  off
 	  latency		  "2"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,44,419,340"
 	  block_type		  "sprom"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,52,1,1,white,blue,0,f671c08f,right,"
@@ -6520,10 +6520,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
 	  init			  "0"
-	  rst			  "off"
-	  en			  "off"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  rst			  off
+	  en			  off
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6551,9 +6551,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6580,9 +6580,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6609,9 +6609,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6638,9 +6638,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -11991,11 +11991,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "bram_latency"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,315"
@@ -12018,11 +12018,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "bram_latency"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,315"
@@ -12051,14 +12051,14 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  en			  off
+	  en			  "off"
 	  latency		  "mult_latency"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  off
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
 	  opt			  "Speed"
-	  use_embedded		  on
-	  optimum_pipeline	  off
-	  xl_use_area		  off
+	  use_embedded		  "on"
+	  optimum_pipeline	  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
@@ -12091,14 +12091,14 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  en			  off
+	  en			  "off"
 	  latency		  "mult_latency"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  off
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
 	  opt			  "Speed"
-	  use_embedded		  on
-	  optimum_pipeline	  off
-	  xl_use_area		  off
+	  use_embedded		  "on"
+	  optimum_pipeline	  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
@@ -12129,9 +12129,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  on
+	  force_arith_type	  "on"
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  on
+	  force_bin_pt		  "on"
 	  bin_pt		  "coeff_bits - 1"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,374,364"
@@ -12156,14 +12156,14 @@ Library {
 	  initVector		  "0"
 	  distributed_mem	  "Block RAM"
 	  write_mode		  "Read Before Write"
-	  rst			  off
+	  rst			  "off"
 	  init_reg		  "0"
-	  en			  off
+	  en			  "off"
 	  latency		  "bram_latency"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  optimize		  "Area"
-	  use_rpm		  off
-	  xl_use_area		  off
+	  use_rpm		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,435,384"
@@ -12191,13 +12191,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "coeff_bits"
-	  boolean_output	  off
+	  boolean_output	  "off"
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,540,482"
 	  block_type		  "slice"
@@ -12223,13 +12223,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
 	  nbits			  "coeff_bits * (total_taps - 1)"
-	  boolean_output	  off
+	  boolean_output	  "off"
 	  mode			  "Two Bit Locations"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "coeff_bits"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,540,482"
 	  block_type		  "slice"
@@ -12260,15 +12260,15 @@ Library {
 	  arith_type		  "Unsigned"
 	  n_bits		  "pfb_bits - simul_bits"
 	  bin_pt		  "0"
-	  load_pin		  off
-	  rst			  off
-	  en			  off
+	  load_pin		  "off"
+	  rst			  "off"
+	  en			  "off"
 	  explicit_period	  "on"
 	  period		  "1"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  off
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
 	  implementation	  "Fabric"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "off"
 	  has_advanced_control	  "0"
@@ -12300,7 +12300,7 @@ Library {
 	  SourceType		  "c_to_ri"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -12497,7 +12497,7 @@ Library {
 	  SourceType		  "sync_delay"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -12515,7 +12515,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -12536,11 +12536,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "bram_latency * (total_taps - this_tap)"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "934,344,419,315"
@@ -12763,7 +12763,7 @@ Library {
       BlockType		      SubSystem
       Name		      "tap_real"
       Ports		      [3, 4]
-      Position		      [195, 567, 300, 643]
+      Position		      [195, 607, 300, 683]
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -13871,18 +13871,19 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag16
-    Data		    "  %)30     .    P ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %K(A@0.    , ,   "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $   \",    9&5F875L=',       !01D)3:7IE         $"
-    "-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &YP"
-    "=70             9G=I9'1H                #@   \"@    &    \"     $         !0    @               $         #@   #@ "
-    "   &    \"     8         !0    @    !     0    $         \"0    @            80 X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            ($ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            !! #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8  "
-    "  (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@    &    \"     8         !0    @  "
-    "  !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    !          D   "
-    " (               .    .     8    (    !@         %    \"     $    !     0         )    \"               #@   #@   "
-    " &    \"     8         !0    @    !     0    $         \"0    @           #P/P"
+    Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .9 4P$.    > ,  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
+    "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
+    "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
+    "  !          X    X    !@    @    &          4    (     0    $    !          D    (            &$ .    .     8    "
+    "(    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @  "
+    "  !     0    $         \"0    @            00 X    P    !@    @    $          4    (     0    ,    !         !   P"
+    "!O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    "
+    "&          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !"
+    "     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
+    "           X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    "
+    "(    !          %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag15
