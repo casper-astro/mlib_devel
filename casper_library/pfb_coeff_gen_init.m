@@ -52,7 +52,7 @@ CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
 TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
 CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
 WindowType = get_var('WindowType', 'defaults', defaults, varargin{:});
-bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+%bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 nput = get_var('nput', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
@@ -124,7 +124,7 @@ for a=1:TotalTaps,
     reuse_block(blk, blkname, 'xbsIndex_r4/ROM', ...
         'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vecstr, 'arith_type', atype, ...
         'n_bits', tostring(CoeffBitWidth), 'bin_pt', binpt, ...
-        'latency', tostring(bram_latency), 'use_rpm','on', 'Position', [150 65*(a-1)+74 200 65*(a-1)+126]);
+        'latency', 'bram_latency', 'use_rpm','on', 'Position', [150 65*(a-1)+74 200 65*(a-1)+126]);
     add_line(blk, 'Counter/1', [blkname, '/1']);
     reintname = ['Reinterpret', tostring(a)];
     reuse_block(blk, reintname, 'xbsIndex_r4/Reinterpret', 'force_arith_type', 'On', ...
