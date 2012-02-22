@@ -114,21 +114,21 @@ add_line(blk, 'sync/1', 'adder_tree2/1');
 add_line(blk, 'adder_tree1/1', 'delay1/1');
 add_line(blk, 'delay1/1', 'sync_out/1');
 
-for i=0:TotalTaps-1,
-    for j=1:2,
-        slice_name = ['Slice', num2str(i),'_',num2str(j)];
+for p=0:TotalTaps-1,
+    for q=1:2,
+        slice_name = ['Slice', num2str(p),'_',num2str(q)];
         reuse_block(blk, slice_name, 'xbsIndex_r4/Slice', ...
             'mode', 'Upper Bit Location + Width', 'nbits', num2str(CoeffBitWidth + BitWidthIn), ...
             'base0', 'MSB of Input', 'base1', 'MSB of Input', ...
-            'bit1', num2str(-(2*i+j-1)*(CoeffBitWidth + BitWidthIn)), 'Position', [70 50*i+25*j+116 115 50*i+25*j+128]);
+            'bit1', num2str(-(2*p+q-1)*(CoeffBitWidth + BitWidthIn)), 'Position', [70 50*p+25*q+116 115 50*p+25*q+128]);
         add_line(blk, 'din/1', [slice_name, '/1']);
-        reint_name = ['Reint',num2str(i),'_',num2str(j)];
+        reint_name = ['Reint',num2str(p),'_',num2str(q)];
         reuse_block(blk, reint_name, 'xbsIndex_r4/Reinterpret', ...
             'force_arith_type', 'on', 'arith_type', 'Signed  (2''s comp)', ...
             'force_bin_pt', 'on', 'bin_pt', num2str(CoeffBitWidth + BitWidthIn - 2), ...
-            'Position', [130 50*i+25*j+116 160 50*i+25*j+128]);
+            'Position', [130 50*p+25*q+116 160 50*p+25*q+128]);
         add_line(blk, [slice_name, '/1'], [reint_name, '/1']);
-        add_line(blk, [reint_name, '/1'], ['adder_tree',num2str(j),'/',num2str(i+2)]);
+        add_line(blk, [reint_name, '/1'], ['adder_tree',num2str(q),'/',num2str(p+2)]);
     end
 end
 
