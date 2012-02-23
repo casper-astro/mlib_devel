@@ -20,8 +20,8 @@ use ieee.std_logic_1164.all;
 library unisim;
 use unisim.vcomponents.all;
 
---library adc5g_dmux1_v1_00_a;
---use adc5g_dmux1_v1_00_a.all;
+library adc5g_dmux1_interface_v1_00_a;
+use adc5g_dmux1_interface_v1_00_a.all;
 
 --------------------------------------------
 --    ENTITY section
@@ -91,10 +91,9 @@ end  adc5g_dmux1_interface ;
 
 architecture behavioral of adc5g_dmux1_interface is
 
-  -- Clock, reset, and sync signals
+  -- Clock and sync signals
   signal adc_clk       : std_logic;
   signal adc_sync      : std_logic;
-  signal reset         : std_logic;
 
   -- MMCM signals
   signal mmcm_clkfbin  : std_logic;
@@ -112,6 +111,24 @@ architecture behavioral of adc5g_dmux1_interface is
   signal isd_clkn      : std_logic;
   signal isd_clkdiv    : std_logic;
   signal isd_rst       : std_logic;
+  signal isd0_rst      : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd1_rst      : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd2_rst      : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd3_rst      : std_logic_vector(adc_bit_width-1 downto 0);
+
+  -- FIFO signals
+  signal fifo_rst      : std_logic;
+  signal fifo_wr_clk   : std_logic;
+  signal fifo_rd_clk   : std_logic;
+  signal fifo_wr_en    : std_logic;
+  signal fifo_rd_en    : std_logic;
+  signal fifo_full     : std_logic;
+  signal fifo_afull    : std_logic;
+  signal fifo_empty    : std_logic;
+  signal fifo_din      : std_logic_vector(143 downto 0);
+  signal fifo_din_buf0 : std_logic_vector(143 downto 0);
+  signal fifo_din_buf1 : std_logic_vector(143 downto 0);
+  signal fifo_dout     : std_logic_vector(143 downto 0);
 
   -- first core, "A"
   signal data0         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -119,6 +136,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data0b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data0c        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data0d        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0a_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0b_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0c_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0d_pre    : std_logic_vector(adc_bit_width-1 downto 0);
                        
   -- second core, "B"  
   signal data1         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -126,6 +147,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data1b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data1c        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data1d        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1a_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1b_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1c_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1d_pre    : std_logic_vector(adc_bit_width-1 downto 0);
                        
   -- third core, "C"   
   signal data2         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -133,6 +158,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data2b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data2c        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data2d        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2a_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2b_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2c_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2d_pre    : std_logic_vector(adc_bit_width-1 downto 0);
                        
   -- fourth core, "D"  
   signal data3         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -140,6 +169,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data3b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data3c        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data3d        : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3a_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3b_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3c_pre    : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3d_pre    : std_logic_vector(adc_bit_width-1 downto 0);
 
   -- Gray code to binary converter
   component gc2bin
@@ -151,29 +184,31 @@ architecture behavioral of adc5g_dmux1_interface is
       bin : out std_logic_vector(adc_bit_width-1 downto 0)
       );
   end component;
+
+  -- async FIFO for clock-domain crossing
+  component fifo_generator_v5_3
+    port (
+      rst         : in  std_logic;
+      wr_clk      : in  std_logic;
+      rd_clk      : in  std_logic;
+      din         : in  std_logic_vector(143 downto 0);
+      wr_en       : in  std_logic;
+      rd_en       : in  std_logic;
+      dout        : out std_logic_vector(143 downto 0);
+      full        : out std_logic;
+      almost_full : out std_logic;
+      empty       : out std_logic);
+  end component;
   
 begin
 
-  -- purpose: synchronously reset the MMCM and ISerDes
-  -- type   : combinational
-  -- inputs : ctrl_clk_in
-  -- outputs: reset
-  RST: process (ctrl_clk_in)
-  begin  -- process RST
-    if (ctrl_clk_in'event and ctrl_clk_in='1') then
-      if (ctrl_reset='1') then
-        reset <= '1';
-      else
-        reset <= '0';
-      end if;
-    end if;
-  end process RST;
+  -- Synchronize resets for all components 
+  ISD_R  : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q =>     isd_rst);
+  MMCM_R : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q =>    mmcm_rst);
+  FIFO_R : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q =>    fifo_rst);
+  ADC_R  : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q => adc_reset_o);
 
-  mmcm_rst <= reset;
-  isd_rst <= reset;
-  adc_reset_o <= reset;
 
-  
   chan1_mode: if (mode=0) generate
     GC2BI0 : gc2bin port map (gc  => data0a, bin => user_data_i0);
     GC2BI1 : gc2bin port map (gc  => data1a, bin => user_data_i1);
@@ -347,6 +382,7 @@ begin
   
   iserdesx : for i in adc_bit_width-1 downto 0 generate
 
+    isd0_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd0_rst(i));
     iserdes0 : ISERDES_NODELAY
       generic map (
         BITSLIP_ENABLE =>  TRUE,
@@ -357,10 +393,10 @@ begin
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data0d(i),
-        Q2 => data0c(i),
-        Q3 => data0b(i),
-        Q4 => data0a(i),
+        Q1 => data0d_pre(i),
+        Q2 => data0c_pre(i),
+        Q3 => data0b_pre(i),
+        Q4 => data0a_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -373,11 +409,12 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data0(i),
         OCLK      => '0',
-        RST       => isd_rst,
+        RST       => isd0_rst(i),
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
+    isd1_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd1_rst(i));
     iserdes1 : ISERDES_NODELAY
       generic map (
         BITSLIP_ENABLE =>  TRUE,
@@ -388,10 +425,10 @@ begin
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data1d(i),
-        Q2 => data1c(i),
-        Q3 => data1b(i),
-        Q4 => data1a(i),
+        Q1 => data1d_pre(i),
+        Q2 => data1c_pre(i),
+        Q3 => data1b_pre(i),
+        Q4 => data1a_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -404,11 +441,12 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data1(i),
         OCLK      => '0',
-        RST       => isd_rst,
+        RST       => isd1_rst(i),
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
+    isd2_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd2_rst(i));
     iserdes2 : ISERDES_NODELAY
       generic map (
         BITSLIP_ENABLE =>  TRUE,
@@ -419,10 +457,10 @@ begin
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data2d(i),
-        Q2 => data2c(i),
-        Q3 => data2b(i),
-        Q4 => data2a(i),
+        Q1 => data2d_pre(i),
+        Q2 => data2c_pre(i),
+        Q3 => data2b_pre(i),
+        Q4 => data2a_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -435,11 +473,12 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data2(i),
         OCLK      => '0',
-        RST       => isd_rst,
+        RST       => isd2_rst(i),
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
+    isd3_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd3_rst(i));
     iserdes3 : ISERDES_NODELAY
       generic map (
         BITSLIP_ENABLE =>  TRUE,
@@ -450,10 +489,10 @@ begin
         NUM_CE        =>  2
         )
       port map  (
-        Q1 => data3d(i),
-        Q2 => data3c(i),
-        Q3 => data3b(i),
-        Q4 => data3a(i),
+        Q1 => data3d_pre(i),
+        Q2 => data3c_pre(i),
+        Q3 => data3b_pre(i),
+        Q4 => data3a_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -466,11 +505,74 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data3(i),
         OCLK      => '0',
-        RST       => isd_rst,
+        RST       => isd3_rst(i),
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
   end generate iserdesx;
 
 
+  -- Use FIFO to cross clock domains
+  FIFO : fifo_generator_v5_3
+    port map (
+      rst         => fifo_rst,
+      wr_clk      => fifo_wr_clk,
+      rd_clk      => fifo_rd_clk,
+      din         => fifo_din_buf1,
+      wr_en       => fifo_wr_en,
+      rd_en       => fifo_rd_en,
+      dout        => fifo_dout,
+      full        => fifo_full,
+      almost_full => fifo_afull,
+      empty       => fifo_empty
+      
+      );
+
+  -- purpose: control the FIFO read enable signal
+  -- type   : sequential
+  -- inputs : fifo_wr_clk, fifo_rst, fifo_afull
+  -- outputs: fifo_rd_en, fifo_din_buf(n)
+  FIFO_RD_CTRL: process (fifo_wr_clk, fifo_rst, fifo_afull)
+  begin  -- process FIFO_RD_CTRL
+    if fifo_wr_clk'event and fifo_wr_clk = '1' then  -- rising clock edge
+      if fifo_rst = '1' then              -- synchronous reset (active high)
+        fifo_rd_en <= '0';
+        fifo_din <= (others => '0');
+        fifo_din_buf0 <= (others => '0');
+        fifo_din_buf1 <= (others => '0');
+      else
+        fifo_rd_en <= fifo_afull;
+        fifo_din(143 downto adc_bit_width*16) <= (others => '0');
+        fifo_din(adc_bit_width*16-1 downto 0) <=
+          data0d_pre & data0c_pre & data0b_pre & data0a_pre &
+          data1d_pre & data1c_pre & data1b_pre & data1a_pre &
+          data2d_pre & data2c_pre & data2b_pre & data2a_pre &
+          data3d_pre & data3c_pre & data3b_pre & data3a_pre;
+        fifo_din_buf0 <= fifo_din;
+        fifo_din_buf1 <= fifo_din_buf0;
+      end if;
+    end if;
+  end process FIFO_RD_CTRL;
+
+  fifo_wr_en <= '1';
+  fifo_wr_clk <= isd_clkdiv;
+  fifo_rd_clk <= ctrl_clk_in;
+  data0d <= fifo_dout(adc_bit_width*16-1 downto adc_bit_width*15); 
+  data0c <= fifo_dout(adc_bit_width*15-1 downto adc_bit_width*14);
+  data0b <= fifo_dout(adc_bit_width*14-1 downto adc_bit_width*13);
+  data0a <= fifo_dout(adc_bit_width*13-1 downto adc_bit_width*12);
+  data1d <= fifo_dout(adc_bit_width*12-1 downto adc_bit_width*11);
+  data1c <= fifo_dout(adc_bit_width*11-1 downto adc_bit_width*10);
+  data1b <= fifo_dout(adc_bit_width*10-1 downto adc_bit_width*9);
+  data1a <= fifo_dout(adc_bit_width*9-1  downto adc_bit_width*8);
+  data2d <= fifo_dout(adc_bit_width*8-1  downto adc_bit_width*7);
+  data2c <= fifo_dout(adc_bit_width*7-1  downto adc_bit_width*6);
+  data2b <= fifo_dout(adc_bit_width*6-1  downto adc_bit_width*5);
+  data2a <= fifo_dout(adc_bit_width*5-1  downto adc_bit_width*4);
+  data3d <= fifo_dout(adc_bit_width*4-1  downto adc_bit_width*3);
+  data3c <= fifo_dout(adc_bit_width*3-1  downto adc_bit_width*2);
+  data3b <= fifo_dout(adc_bit_width*2-1  downto adc_bit_width);
+  data3a <= fifo_dout(adc_bit_width-1    downto 0);
+
+  
 end behavioral;    
