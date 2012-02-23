@@ -60,11 +60,11 @@ defaults = {'pfb_bits', 5, 'total_taps', 2, ...
     'bram_latency', 2, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
-    'coeffs_share', 'off', 'coeffs_fold', 'off', 'async', 'off'};
+    'coeffs_share', 'off', 'async', 'off'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
-clog('pfb_fir_init post same_state','trace');
-check_mask_type(blk, 'pfb_fir');
+clog('pfb_fir_async_init post same_state','trace');
+check_mask_type(blk, 'pfb_fir_async');
 munge_block(blk, varargin{:});
 
 pfb_bits = get_var('pfb_bits', 'defaults', defaults, varargin{:});
@@ -81,23 +81,45 @@ mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
-specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 coeffs_share = get_var('coeffs_share', 'defaults', defaults, varargin{:});
-coeffs_fold = get_var('coeffs_fold', 'defaults', defaults, varargin{:});
 async = get_var('async', 'defaults', defaults, varargin{:});
 
-if strcmp(specify_mult, 'on') && length(mult_spec) ~= total_taps
+% check the multiplier specifications first off
+if (length(mult_spec) == 1),
+    mult_spec = ones(1, total_taps) * mult_spec;
+end
+if (length(mult_spec) ~= total_taps),
     error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), total_taps);
     clog(error_string,'error');
     error(error_string);
 end
+for ctr = 1 : length(mult_spec),
+    if (mult_spec(ctr) > 2) || (mult_spec(ctr) < 0),
+        error_string = sprintf('Multiplier specification of %i for tap %i is not valid.', mult_spec(ctr), ctr);
+        clog(error_string,'error');
+        error(error_string);
+    end
+    if mult_spec(ctr) == 0,
+        temp.use_hdl = 'off';
+        temp.use_embedded = 'off';
+    elseif mult_spec(ctr) == 1,
+        temp.use_hdl = 'off';
+        temp.use_embedded = 'on';
+    else
+        temp.use_hdl = 'on';
+        temp.use_embedded = 'off';
+    end
+    tap_multipliers(ctr) = temp;
+end
 
+% async?
 make_async = false;
 if strcmp(async, 'on'),
     make_async = true;
 end
 
+% share coeffs in a 2-pol setup?
 pols = 1;
 share_coefficients = false;
 if strcmp(make_biplex, 'on'),
@@ -214,25 +236,11 @@ for p = 1:pols,
         out_name = ['pol',num2str(p),'_out',num2str(n)];
         clog(['adding taps for pol ', num2str(p), ' input ',num2str(n)], 'pfb_fir_init_debug');
         for t = 1:total_taps,
-            % the default is to use hdl
-            use_hdl = 'on';
-            use_embedded = 'off';
-            % unless otherwise specified
-            if(strcmp(specify_mult, 'on'))
-                % 0 = core, 1 = embedded, 2 = hdl
-                if(mult_spec(t) == 0), 
-                    use_hdl = 'off';
-                    use_embedded = 'off';
-                elseif(mult_spec(t) == 1);
-                    use_hdl = 'off';
-                    use_embedded = 'on';
-                end
-            end
             % not last tap
             if t ~= total_taps,
                 blk_name = [in_name, '_tap', tostring(t)];
                 reuse_block(blk, blk_name, 'casper_library_pfbs/tap_async', ...
-                    'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
+                    'use_hdl', tap_multipliers(t).use_hdl, 'use_embedded', tap_multipliers(t).use_embedded,...
                     'this_tap',tostring(t),...
                     'Position', [150*(t+1) 150*portnum 150*(t+1)+x_size 150*portnum+y_size]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
@@ -254,7 +262,7 @@ for p = 1:pols,
             else
                 blk_name = [in_name,'_last_tap'];
                 reuse_block(blk, blk_name, 'casper_library_pfbs/last_tap_async', ...
-                    'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
+                    'use_hdl', tap_multipliers(t).use_hdl, 'use_embedded', tap_multipliers(t).use_embedded,...
                     'Position', [150*(t+1) 150*portnum 150*(t+1)+x_size 150*portnum+y_size]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
                 % Update innards of the adder trees using our knowledge of
