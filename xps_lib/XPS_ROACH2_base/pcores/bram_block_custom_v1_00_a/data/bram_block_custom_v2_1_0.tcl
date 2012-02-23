@@ -8,6 +8,7 @@ proc min {a b} {
 }
 
 proc generate_bram {mhsinst} {
+
 	set filePath [xget_ncf_dir $mhsinst]
 	set dwidtha  [xget_value $mhsinst "parameter" "C_PORTA_DWIDTH"]
 	set dwidthb  [xget_value $mhsinst "parameter" "C_PORTB_DWIDTH"]
@@ -23,6 +24,7 @@ proc generate_bram {mhsinst} {
 	set outputFile [open $coregenfile "w"]
 
   puts $outputFile "# BEGIN Project Options"
+  puts $outputFile "NEWPROJECT ."
   puts $outputFile "SET addpads = False"
   puts $outputFile "SET asysymbol = True"
   puts $outputFile "SET busformat = BusFormatAngleBracketNotRipped"
