@@ -94,21 +94,20 @@ if (length(mult_spec) ~= total_taps),
     clog(error_string,'error');
     error(error_string);
 end
-for ctr = 1 : length(mult_spec),
+temp.use_hdl = 'on'; temp.use_embedded = 'off';
+tap_multipliers = repmat(temp, total_taps);
+clear temp;
+for ctr = 1 : total_taps,
     if (mult_spec(ctr) > 2) || (mult_spec(ctr) < 0),
         error_string = sprintf('Multiplier specification of %i for tap %i is not valid.', mult_spec(ctr), ctr);
         clog(error_string,'error');
         error(error_string);
     end
+    temp.use_hdl = 'on'; temp.use_embedded = 'off';
     if mult_spec(ctr) == 0,
-        temp.use_hdl = 'off';
-        temp.use_embedded = 'off';
+        temp.use_hdl = 'off'; temp.use_embedded = 'off';
     elseif mult_spec(ctr) == 1,
-        temp.use_hdl = 'off';
-        temp.use_embedded = 'on';
-    else
-        temp.use_hdl = 'on';
-        temp.use_embedded = 'off';
+        temp.use_hdl = 'off'; temp.use_embedded = 'on';
     end
     tap_multipliers(ctr) = temp;
 end
