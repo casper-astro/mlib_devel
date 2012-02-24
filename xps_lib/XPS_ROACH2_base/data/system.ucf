@@ -1,8 +1,16 @@
 ## supports roach2 rev 1 (derived from roach2_rev1.ucf)
 # VRN/VRP sharing
 
+################## Global Timing Constraints
+#
+
 Net sys_clk TNM_NET = sys_clk;
 TIMESPEC TS_sys_clk = PERIOD sys_clk 100 MHz;
+
+Net epb_clk TNM_NET = epb_clk;
+TIMESPEC TS_epb_clk = PERIOD epb_clk 88 MHz;
+
+
 
 CONFIG DCI_CASCADE = "14 13";
 CONFIG DCI_CASCADE = "23 22";
@@ -906,16 +914,20 @@ NET "epb_data<31>"      LOC = AJ33;
 #### MGT external clocks
 #
 ## XAUI reference clk (156.25 MHz)
-#NET "xaui_refclk_n<0>"   LOC = AU9;
-#NET "xaui_refclk_n<1>"   LOC = AF7;
-#NET "xaui_refclk_n<2>"   LOC = M7;
-#NET "xaui_refclk_p<0>"   LOC = AU10;
-#NET "xaui_refclk_p<1>"   LOC = AF8;
-#NET "xaui_refclk_p<2>"   LOC = M8;
+
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET xaui_clk TNM_NET = xaui_clk;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#TIMESPEC TS_xaui_clk = PERIOD xaui_clk 156.25 MHz;
+
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_n<0>"   LOC = AT7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_n<1>"   LOC = AD7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_n<2>"   LOC = K7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_p<0>"   LOC = AT8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_p<1>"   LOC = AD8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_p<2>"   LOC = K8;
 
 ## MGT Mezzanine Card Signals
 
-# MGT Mezzanine card GPIO
+# MGT Mezzanine card GPIO TODO
 
 #NET "mgt_gpio<0>"        LOC = J16 | IOSTANDARD = "LVCMOS15";
 #NET "mgt_gpio<1>"        LOC = H20 | IOSTANDARD = "LVCMOS15";
@@ -932,138 +944,139 @@ NET "epb_data<31>"      LOC = AJ33;
 #
 ## MGT Mezzanine card transceivers
 #
-#NET "mgt_rx_n<0>"        LOC = AW6;
-#NET "mgt_rx_n<1>"        LOC = AY8;
-#NET "mgt_rx_n<2>"        LOC = BA6;
-#NET "mgt_rx_n<3>"        LOC = BB8;
-#NET "mgt_rx_n<4>"        LOC = AP8;
-#NET "mgt_rx_n<5>"        LOC = AR6;
-#NET "mgt_rx_n<6>"        LOC = AU6;
-#NET "mgt_rx_n<7>"        LOC = AV8;
-#NET "mgt_rx_n<8>"        LOC = AJ6;
-#NET "mgt_rx_n<9>"        LOC = AL6;
-#NET "mgt_rx_n<10>"       LOC = AM8;
-#NET "mgt_rx_n<11>"       LOC = AN6;
-#NET "mgt_rx_n<12>"       LOC = AD4;
-#NET "mgt_rx_n<13>"       LOC = AE6;
-#NET "mgt_rx_n<14>"       LOC = AF4;
-#NET "mgt_rx_n<15>"       LOC = AG6;
-#NET "mgt_rx_n<16>"       LOC = Y4;
-#NET "mgt_rx_n<17>"       LOC = AA6;
-#NET "mgt_rx_n<18>"       LOC = AB4;
-#NET "mgt_rx_n<19>"       LOC = AC6;
-#NET "mgt_rx_n<20>"       LOC = R6;
-#NET "mgt_rx_n<21>"       LOC = U6;
-#NET "mgt_rx_n<22>"       LOC = V4;
-#NET "mgt_rx_n<23>"       LOC = W6;
-#NET "mgt_rx_n<24>"       LOC = J6;
-#NET "mgt_rx_n<25>"       LOC = L6;
-#NET "mgt_rx_n<26>"       LOC = N6;
-#NET "mgt_rx_n<27>"       LOC = P8;
-#NET "mgt_rx_n<28>"       LOC = E6;
-#NET "mgt_rx_n<29>"       LOC = F8;
-#NET "mgt_rx_n<30>"       LOC = G6;
-#NET "mgt_rx_n<31>"       LOC = H8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_n<0>"        LOC = AW6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_n<1>"        LOC = AY8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_n<2>"        LOC = BA6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_n<3>"        LOC = BB8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_n<4>"        LOC = AP8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_n<5>"        LOC = AR6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_n<6>"        LOC = AU6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_n<7>"        LOC = AV8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_n<8>"        LOC = AJ6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_n<9>"        LOC = AL6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_n<10>"       LOC = AM8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_n<11>"       LOC = AN6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_n<12>"       LOC = AD4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_n<13>"       LOC = AE6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_n<14>"       LOC = AF4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_n<15>"       LOC = AG6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_n<16>"       LOC = Y4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_n<17>"       LOC = AA6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_n<18>"       LOC = AB4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_n<19>"       LOC = AC6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_n<20>"       LOC = R6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_n<21>"       LOC = U6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_n<22>"       LOC = V4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_n<23>"       LOC = W6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_n<24>"       LOC = J6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_n<25>"       LOC = L6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_n<26>"       LOC = N6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_n<27>"       LOC = P8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_n<28>"       LOC = E6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_n<29>"       LOC = F8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_n<30>"       LOC = G6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_n<31>"       LOC = H8;
 #
-#NET "mgt_rx_p<0>"        LOC = AW5;
-#NET "mgt_rx_p<1>"        LOC = AY7;
-#NET "mgt_rx_p<2>"        LOC = BA5;
-#NET "mgt_rx_p<3>"        LOC = BB7;
-#NET "mgt_rx_p<4>"        LOC = AP7;
-#NET "mgt_rx_p<5>"        LOC = AR5;
-#NET "mgt_rx_p<6>"        LOC = AU5;
-#NET "mgt_rx_p<7>"        LOC = AV7;
-#NET "mgt_rx_p<8>"        LOC = AJ5;
-#NET "mgt_rx_p<9>"        LOC = AL5;
-#NET "mgt_rx_p<10>"       LOC = AM7;
-#NET "mgt_rx_p<11>"       LOC = AN5;
-#NET "mgt_rx_p<12>"       LOC = AD3;
-#NET "mgt_rx_p<13>"       LOC = AE5;
-#NET "mgt_rx_p<14>"       LOC = AF3;
-#NET "mgt_rx_p<15>"       LOC = AG5;
-#NET "mgt_rx_p<16>"       LOC = Y3;
-#NET "mgt_rx_p<17>"       LOC = AA5;
-#NET "mgt_rx_p<18>"       LOC = AB3;
-#NET "mgt_rx_p<19>"       LOC = AC5;
-#NET "mgt_rx_p<20>"       LOC = R5;
-#NET "mgt_rx_p<21>"       LOC = U5;
-#NET "mgt_rx_p<22>"       LOC = V3;
-#NET "mgt_rx_p<23>"       LOC = W5;
-#NET "mgt_rx_p<24>"       LOC = J5;
-#NET "mgt_rx_p<25>"       LOC = L5;
-#NET "mgt_rx_p<26>"       LOC = N5;
-#NET "mgt_rx_p<27>"       LOC = P7;
-#NET "mgt_rx_p<28>"       LOC = E5;
-#NET "mgt_rx_p<29>"       LOC = F7;
-#NET "mgt_rx_p<30>"       LOC = G5;
-#NET "mgt_rx_p<31>"       LOC = H7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_p<0>"        LOC = AW5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_p<1>"        LOC = AY7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_p<2>"        LOC = BA5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_rx_p<3>"        LOC = BB7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_p<4>"        LOC = AP7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_p<5>"        LOC = AR5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_p<6>"        LOC = AU5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_rx_p<7>"        LOC = AV7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_p<8>"        LOC = AJ5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_p<9>"        LOC = AL5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_p<10>"       LOC = AM7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_rx_p<11>"       LOC = AN5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_p<12>"       LOC = AD3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_p<13>"       LOC = AE5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_p<14>"       LOC = AF3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_rx_p<15>"       LOC = AG5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_p<16>"       LOC = Y3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_p<17>"       LOC = AA5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_p<18>"       LOC = AB3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_rx_p<19>"       LOC = AC5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_p<20>"       LOC = R5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_p<21>"       LOC = U5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_p<22>"       LOC = V3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_rx_p<23>"       LOC = W5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_p<24>"       LOC = J5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_p<25>"       LOC = L5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_p<26>"       LOC = N5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_rx_p<27>"       LOC = P7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_p<28>"       LOC = E5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_p<29>"       LOC = F7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_p<30>"       LOC = G5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_rx_p<31>"       LOC = H7;
 #
-#NET "mgt_tx_n<0>"        LOC = AW2;
-#NET "mgt_tx_n<1>"        LOC = AY4;
-#NET "mgt_tx_n<2>"        LOC = BA2;
-#NET "mgt_tx_n<3>"        LOC = BB4;
-#NET "mgt_tx_n<4>"        LOC = AR2;
-#NET "mgt_tx_n<5>"        LOC = AT4;
-#NET "mgt_tx_n<6>"        LOC = AU2;
-#NET "mgt_tx_n<7>"        LOC = AV4;
-#NET "mgt_tx_n<8>"        LOC = AL2;
-#NET "mgt_tx_n<9>"        LOC = AM4;
-#NET "mgt_tx_n<10>"       LOC = AN2;
-#NET "mgt_tx_n<11>"       LOC = AP4;
-#NET "mgt_tx_n<12>"       LOC = AG2;
-#NET "mgt_tx_n<13>"       LOC = AH4;
-#NET "mgt_tx_n<14>"       LOC = AJ2;
-#NET "mgt_tx_n<15>"       LOC = AK4;
-#NET "mgt_tx_n<16>"       LOC = W2;
-#NET "mgt_tx_n<17>"       LOC = AA2;
-#NET "mgt_tx_n<18>"       LOC = AC2;
-#NET "mgt_tx_n<19>"       LOC = AE2;
-#NET "mgt_tx_n<20>"       LOC = P4;
-#NET "mgt_tx_n<21>"       LOC = R2;
-#NET "mgt_tx_n<22>"       LOC = T4;
-#NET "mgt_tx_n<23>"       LOC = U2;
-#NET "mgt_tx_n<24>"       LOC = K4;
-#NET "mgt_tx_n<25>"       LOC = L2;
-#NET "mgt_tx_n<26>"       LOC = M4;
-#NET "mgt_tx_n<27>"       LOC = N2;
-#NET "mgt_tx_n<28>"       LOC = F4;
-#NET "mgt_tx_n<29>"       LOC = G2;
-#NET "mgt_tx_n<30>"       LOC = H4;
-#NET "mgt_tx_n<31>"       LOC = J2;
-#NET "mgt_tx_p<0>"        LOC = AW1;
-#NET "mgt_tx_p<1>"        LOC = AY3;
-#NET "mgt_tx_p<2>"        LOC = BA1;
-#NET "mgt_tx_p<3>"        LOC = BB3;
-#NET "mgt_tx_p<4>"        LOC = AR1;
-#NET "mgt_tx_p<5>"        LOC = AT3;
-#NET "mgt_tx_p<6>"        LOC = AU1;
-#NET "mgt_tx_p<7>"        LOC = AV3;
-#NET "mgt_tx_p<8>"        LOC = AL1;
-#NET "mgt_tx_p<9>"        LOC = AM3;
-#NET "mgt_tx_p<10>"       LOC = AN1;
-#NET "mgt_tx_p<11>"       LOC = AP3;
-#NET "mgt_tx_p<12>"       LOC = AG1;
-#NET "mgt_tx_p<13>"       LOC = AH3;
-#NET "mgt_tx_p<14>"       LOC = AJ1;
-#NET "mgt_tx_p<15>"       LOC = AK3;
-#NET "mgt_tx_p<16>"       LOC = W1;
-#NET "mgt_tx_p<17>"       LOC = AA1;
-#NET "mgt_tx_p<18>"       LOC = AC1;
-#NET "mgt_tx_p<19>"       LOC = AE1;
-#NET "mgt_tx_p<20>"       LOC = P3;
-#NET "mgt_tx_p<21>"       LOC = R1;
-#NET "mgt_tx_p<22>"       LOC = T3;
-#NET "mgt_tx_p<23>"       LOC = U1;
-#NET "mgt_tx_p<24>"       LOC = K3;
-#NET "mgt_tx_p<25>"       LOC = L1;
-#NET "mgt_tx_p<26>"       LOC = M3;
-#NET "mgt_tx_p<27>"       LOC = N1;
-#NET "mgt_tx_p<28>"       LOC = F3;
-#NET "mgt_tx_p<29>"       LOC = G1;
-#NET "mgt_tx_p<30>"       LOC = H3;
-#NET "mgt_tx_p<31>"       LOC = J1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_n<0>"        LOC = AW2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_n<1>"        LOC = AY4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_n<2>"        LOC = BA2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_n<3>"        LOC = BB4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_n<4>"        LOC = AR2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_n<5>"        LOC = AT4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_n<6>"        LOC = AU2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_n<7>"        LOC = AV4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_n<8>"        LOC = AL2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_n<9>"        LOC = AM4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_n<10>"       LOC = AN2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_n<11>"       LOC = AP4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_n<12>"       LOC = AG2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_n<13>"       LOC = AH4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_n<14>"       LOC = AJ2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_n<15>"       LOC = AK4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_n<16>"       LOC = W2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_n<17>"       LOC = AA2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_n<18>"       LOC = AC2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_n<19>"       LOC = AE2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_n<20>"       LOC = P4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_n<21>"       LOC = R2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_n<22>"       LOC = T4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_n<23>"       LOC = U2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_n<24>"       LOC = K4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_n<25>"       LOC = L2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_n<26>"       LOC = M4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_n<27>"       LOC = N2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_n<28>"       LOC = F4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_n<29>"       LOC = G2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_n<30>"       LOC = H4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_n<31>"       LOC = J2;
 
-## MGT mezzanine card clock inputs
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_p<0>"        LOC = AW1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_p<1>"        LOC = AY3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_p<2>"        LOC = BA1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0')#NET "mgt_tx_p<3>"        LOC = BB3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_p<4>"        LOC = AR1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_p<5>"        LOC = AT3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_p<6>"        LOC = AU1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1')#NET "mgt_tx_p<7>"        LOC = AV3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_p<8>"        LOC = AL1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_p<9>"        LOC = AM3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_p<10>"       LOC = AN1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2')#NET "mgt_tx_p<11>"       LOC = AP3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_p<12>"       LOC = AG1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_p<13>"       LOC = AH3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_p<14>"       LOC = AJ1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3')#NET "mgt_tx_p<15>"       LOC = AK3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_p<16>"       LOC = W1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_p<17>"       LOC = AA1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_p<18>"       LOC = AC1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4')#NET "mgt_tx_p<19>"       LOC = AE1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_p<20>"       LOC = P3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_p<21>"       LOC = R1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_p<22>"       LOC = T3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#NET "mgt_tx_p<23>"       LOC = U1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_p<24>"       LOC = K3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_p<25>"       LOC = L1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_p<26>"       LOC = M3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#NET "mgt_tx_p<27>"       LOC = N1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_p<28>"       LOC = F3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_p<29>"       LOC = G1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_p<30>"       LOC = H3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#NET "mgt_tx_p<31>"       LOC = J1;
+
+## MGT mezzanine card clock inputs TODO
 #
 #NET "ext_refclk_n<0>"    LOC = G9;
 #NET "ext_refclk_n<1>"    LOC = AB7;
@@ -1081,4 +1094,4 @@ NET "epb_data<31>"      LOC = AJ33;
 #NET "ext_refclk_p<4>"    LOC = E10;
 #NET "ext_refclk_p<5>"    LOC = Y8;
 #NET "ext_refclk_p<6>"    LOC = AH8;
-#NET "ext_redc_sync_pfclk_p<7>"    LOC = AW10;
+#NET "ext_refclk_p<7>"    LOC = AW10;
