@@ -138,7 +138,8 @@ module roach_infrastructure(
   assign sys_clk2x180 = ~sys_clk2x;
   assign sys_clk2x270 = ~sys_clk2x90;
 
-  /* Aux clocks */
+  /* Aux clocks */ //TODO 
+/*
   wire  aux_clk_int;
   IBUFGDS #(
     .IOSTANDARD ("LVDS_25"),
@@ -297,7 +298,7 @@ endgenerate
 
   assign aux_clk2x180 = ~aux_clk2x;
   assign aux_clk2x270 = ~aux_clk2x90;
-
+*/
 
   /* Delay Clock */
   /*wire dly_clk_int;
