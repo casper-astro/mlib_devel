@@ -9,8 +9,10 @@ module opb_attach #(
     parameter FABRIC_PORT    = 16'hffff,
     parameter FABRIC_GATEWAY = 8'd0,
     parameter FABRIC_ENABLE  = 0,
-    parameter SWING          = 1,
-    parameter PREEMPHASYS    = 1
+    parameter PREEMPHASIS    = 4'b0100,
+    parameter POSTEMPHASIS   = 5'b00000,
+    parameter DIFFCTRL       = 4'b1010,
+    parameter RXEQMIX        = 3'b111
   )(
     //OPB attachment
     input         OPB_Clk,
@@ -54,11 +56,14 @@ module opb_attach #(
     input         soft_reset_ack,
     //xaui status
     input   [7:0] xaui_status,
+    //xaui config
+
     //MGT/GTP PMA Config
-    output  [1:0] mgt_rxeqmix,
-    output  [3:0] mgt_rxeqpole,
-    output  [2:0] mgt_txpreemphasis,
-    output  [2:0] mgt_txdiffctrl
+    input  [15:0] mgt_status,
+    output  [2:0] mgt_rxeqmix,
+    output  [3:0] mgt_txpreemphasis,
+    output  [4:0] mgt_txpostemphasis,
+    output  [3:0] mgt_txdiffctrl
   );
 
   /************* OPB Address Decoding *************/
@@ -99,17 +104,21 @@ module opb_attach #(
   localparam REG_VALID_PORTS   = 4'd8;
   localparam REG_XAUI_STATUS   = 4'd9;
   localparam REG_PHY_CONFIG    = 4'd10;
+  localparam REG_XAUI_CONFIG   = 4'd11;
 
   reg [47:0] local_mac_reg;
   reg [31:0] local_ip_reg;
   reg  [7:0] local_gateway_reg;
   reg [15:0] local_port_reg;
   reg        local_enable_reg;
-  reg  [1:0] mgt_rxeqmix_reg;
-  reg  [3:0] mgt_rxeqpole_reg;
-  reg  [2:0] mgt_txpreemphasis_reg;
-  reg  [2:0] mgt_txdiffctrl_reg;
+  reg  [2:0] mgt_rxeqmix_reg;
+  reg  [3:0] mgt_txpreemphasis_reg;
+  reg  [4:0] mgt_txpostemphasis_reg;
+  reg  [3:0] mgt_txdiffctrl_reg;
   reg        soft_reset_reg;
+  reg        xaui_rst_local_fault_reg;
+  reg        xaui_rst_rx_link_status_reg;
+  reg  [1:0] xaui_test_select_reg;
 
   assign local_mac         = local_mac_reg;
   assign local_ip          = local_ip_reg;
@@ -117,8 +126,8 @@ module opb_attach #(
   assign local_port        = local_port_reg;
   assign local_enable      = local_enable_reg;
   assign mgt_rxeqmix       = mgt_rxeqmix_reg;
-  assign mgt_rxeqpole      = mgt_rxeqpole_reg;
   assign mgt_txpreemphasis = mgt_txpreemphasis_reg;
+  assign mgt_txpostemphasis = mgt_txpostemphasis_reg;
   assign mgt_txdiffctrl    = mgt_txdiffctrl_reg;
   assign soft_reset        = soft_reset_reg;
 
@@ -168,11 +177,12 @@ module opb_attach #(
 
       cpu_rx_ack_reg  <= 1'b0;
 
-      /* TODO: add decode PREEMPHASYS/SWING feature */
-      mgt_rxeqmix_reg       <= 2'b00;
-      mgt_rxeqpole_reg      <= 4'b0000;
-      mgt_txpreemphasis_reg <= 3'b000;
-      mgt_txdiffctrl_reg    <= 3'b100;
+      /* TODO: add decode PREEMPHASIS/SWING feature */
+      mgt_rxeqmix_reg       <= RXEQMIX;
+//      mgt_rxeqpole_reg      <= 4'b0000;
+      mgt_txpreemphasis_reg <= PREEMPHASIS;
+      mgt_txpostemphasis_reg <= POSTEMPHASIS;
+      mgt_txdiffctrl_reg    <= DIFFCTRL;
 
       opb_wait <= 1'b0;
 
@@ -276,13 +286,21 @@ module opb_attach #(
             end
             REG_PHY_CONFIG: begin
               if (OPB_BE[0])
-                mgt_rxeqmix_reg       <= OPB_DBus[1:0];
+                mgt_rxeqmix_reg       <= OPB_DBus[2:0];
               if (OPB_BE[1])
-                mgt_rxeqpole_reg      <= OPB_DBus[11:8];
+                mgt_txpostemphasis_reg <= OPB_DBus[12:8];
               if (OPB_BE[2])
-                mgt_txpreemphasis_reg <= OPB_DBus[18:16];
+                mgt_txpreemphasis_reg <= OPB_DBus[19:16];
               if (OPB_BE[3])
-                mgt_txdiffctrl_reg    <= OPB_DBus[26:24];
+                mgt_txdiffctrl_reg    <= OPB_DBus[27:24];
+            end
+            REG_XAUI_CONFIG: begin
+              if (OPB_BE[0])
+                xaui_test_select_reg        <= OPB_DBus[1:0];
+              if (OPB_BE[1])
+                xaui_rst_local_fault_reg    <= OPB_DBus[8];
+              if (OPB_BE[2])
+                xaui_rst_rx_link_status_reg <= OPB_DBus[16];
             end
             default: begin
             end
@@ -348,16 +366,18 @@ module opb_attach #(
   wire [31:0] tx_data_int  = txbuf_addr[2] == 1'b1 ? cpu_tx_buffer_rd_data[31:0] : cpu_tx_buffer_rd_data[63:32];
   wire [31:0] rx_data_int  = rxbuf_addr[2] == 1'b1 ? cpu_rx_buffer_rd_data[31:0] : cpu_rx_buffer_rd_data[63:32];
 
-  wire [31:0] opb_data_int = opb_data_src == REG_LOCAL_MAC_1   ? {16'b0, local_mac[47:32]} :
-                             opb_data_src == REG_LOCAL_MAC_0   ? local_mac[31:0] :
-                             opb_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway} :
-                             opb_data_src == REG_LOCAL_IPADDR  ? local_ip[31:0] :
-                             opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size, 8'b0, cpu_rx_ack ? 8'b0 : cpu_rx_size} :
-                             opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset, 7'b0, local_enable, local_port} :
+  wire [31:0] opb_data_int = opb_data_src == REG_LOCAL_MAC_1   ? {16'b0, local_mac_reg[47:32]} :
+                             opb_data_src == REG_LOCAL_MAC_0   ? local_mac_reg[31:0] :
+                             opb_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway_reg} :
+                             opb_data_src == REG_LOCAL_IPADDR  ? local_ip_reg[31:0] :
+                             opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
+                             opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset_reg, 7'b0, local_enable_reg, local_port_reg} :
                              opb_data_src == REG_XAUI_STATUS   ? {24'b0, xaui_status} :
-                             opb_data_src == REG_PHY_CONFIG    ? {5'b0, mgt_txdiffctrl, 5'b0, mgt_txpreemphasis,
-                                                                  4'b0, mgt_rxeqpole,   6'b0, mgt_rxeqmix} :
-                                                                 16'b0;
+                             opb_data_src == REG_PHY_CONFIG    ? {4'b0, mgt_txdiffctrl_reg, 
+                                                                  4'b0, mgt_txpreemphasis_reg,
+                                                                  3'b0, mgt_txpostemphasis_reg, 
+                                                                  4'b0, 1'b0, mgt_rxeqmix_reg} :
+                                                                  32'd0;
   wire [31:0] Sl_DBus_int;
   assign Sl_DBus_int = use_arp_data ? arp_data_int :
                        use_tx_data  ? tx_data_int  :
