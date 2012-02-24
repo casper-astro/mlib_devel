@@ -120,6 +120,7 @@ module roach_infrastructure(
   assign sys_clk2x270 = ~sys_clk2x90;
 
   /* Aux clocks */
+/*
   wire  aux_clk_int;
   //wire  aux1_clk_int;
   IBUFGDS #(
@@ -164,18 +165,6 @@ generate
               .RST    (~sys_clk_dcm_locked)
             );
 
-            /*DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("LOW")
-            ) AUX1_CLK_DCM (
-              .CLKIN  (aux1_clk_int),
-              .CLK0   (aux1_clk_dcm),
-              .CLK90  (aux1_clk90_dcm),
-              .LOCKED (aux1_clk_dcm_locked),
-              .CLKFB  (aux1_clk),
-              .RST    (~sys_clk_dcm_locked)
-            );*/
-
             DCM_BASE #(
               .CLKIN_PERIOD       (1000/CLK_FREQ),
               .DLL_FREQUENCY_MODE ("LOW")
@@ -201,18 +190,6 @@ generate
               .CLKFB  (aux_clk),
               .RST    (~sys_clk_dcm_locked)
             );
-
-            /*DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("HIGH")
-            ) AUX1_CLK_DCM (
-              .CLKIN  (aux1_clk_int),
-              .CLK0   (aux1_clk_dcm),
-              .CLK90  (aux1_clk90_dcm),
-              .LOCKED (aux1_clk_dcm_locked),
-              .CLKFB  (aux1_clk),
-              .RST    (~sys_clk_dcm_locked)
-            );*/
 
             DCM_BASE #(
               .CLKIN_PERIOD       (1000/CLK_FREQ),
@@ -248,7 +225,7 @@ endgenerate
 
   assign aux_clk2x180 = ~aux_clk2x;
   assign aux_clk2x270 = ~aux_clk2x90;
-
+*/
 
   /* Delay Clock */
   /*wire dly_clk_int;
