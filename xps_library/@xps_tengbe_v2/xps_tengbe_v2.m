@@ -36,7 +36,7 @@ toks = regexp(get_param(blk_name,'port'),'^(.*):(.*)$','tokens');
 s.hw_sys         = get(xsg_obj,'hw_sys');
 s.port           = get_param(blk_name, 'port');
 s.preemph        = get_param(blk_name, 'pre_emph');
-s.swing          = get_param(blk_name, 'swing');
+%s.swing          = get_param(blk_name, 'swing');
 s.rx_dist_ram    = num2str(strcmp(get_param(blk_name, 'rx_dist_ram'), 'on'));
 s.cpu_rx_enable  = num2str(strcmp(get_param(blk_name, 'cpu_rx_en'), 'on'));
 s.cpu_tx_enable  = num2str(strcmp(get_param(blk_name, 'cpu_tx_en'), 'on'));
@@ -53,7 +53,7 @@ b = class(s,'xps_tengbe_v2',blk_obj);
 b = set(b,'ip_name','kat_ten_gb_eth');
 
 switch s.hw_sys
-    case 'ROACH'
+    case {'ROACH','ROACH2'},
         b = set(b,'ip_version','1.00.a');
     otherwise
         error(['10GbE not supported for platform ', s.hw_sys]);
@@ -63,15 +63,13 @@ end
 
 % ROACH has an OPB Ten Gig Eth interface
 switch s.hw_sys
-    case 'ROACH'
+    case {'ROACH','ROACH2'},
         b = set(b,'opb_clk','epb_clk');
         b = set(b,'opb_address_offset',16384);
         b = set(b,'opb_address_align', hex2dec('4000'));
-    % end case 'ROACH'
+    % end case {'ROACH','ROACH2'}
 end % switch s.hw_sys
 
-parameters.SWING          = s.swing;
-parameters.PREEMPHASYS    = s.preemph;
 parameters.FABRIC_MAC     = s.fab_mac;
 parameters.FABRIC_IP      = s.fab_ip;
 parameters.FABRIC_PORT    = s.fab_udp;
@@ -82,15 +80,33 @@ parameters.RX_DIST_RAM    = s.rx_dist_ram;
 parameters.CPU_RX_ENABLE  = s.cpu_rx_enable;
 parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;
 
+%TODO make mask (values, parameters) sensible for different platforms
+switch s.hw_sys
+  case {'ROACH2'}, %taken from roach2_bsp
+    parameters.PREEMPHASIS    = s.preemph;  %4'b0100 
+    parameters.POSTEMPHASIS   = '0';  %5'b00000 %TODO make mask parameter
+    parameters.DIFFCTRL       = '10'; %4'b1010
+    parameters.RXEQMIX        = '7';  %3'b111
+  otherwise,
+    parameters.SWING          = s.swing;
+    parameters.PREEMPHASYS    = s.preemph;
+end
+
 b = set(b,'parameters',parameters);
 
 % bus interfaces
 switch s.hw_sys
-    case 'ROACH'
+    case {'ROACH'},
         interfaces.XAUI_CONF = ['xaui_conf',s.port];
         interfaces.XGMII     = ['xgmii',s.port];
         b = set(b,'interfaces',interfaces);
     % end case 'ROACH'
+    case {'ROACH2'},
+        interfaces.PHY_CONF = ['phy_conf',s.port];
+        interfaces.XAUI_CONF = ['xaui_conf',s.port];
+        interfaces.XGMII     = ['xgmii',s.port];
+        b = set(b,'interfaces',interfaces);
+    % end case 'ROACH2'
 end % switch s.hw_sys
 
 % miscellaneous and external ports
@@ -100,12 +116,16 @@ misc_ports.clk     = {1 'in' get(xsg_obj,'clk_src')};
 ext_ports = {};
 
 switch s.hw_sys
-    case 'ROACH'
+    case {'ROACH'}, 
         if strcmp(s.port, '0') || strcmp(s.port, '1')
             misc_ports.xaui_clk = {1 'in'  'mgt_clk_0'};
         else
             misc_ports.xaui_clk = {1 'in'  'mgt_clk_1'};
         end
+    case {'ROACH2'},
+        misc_ports.xaui_clk = {1 'in' 'xaui_clk'};
+        misc_ports.xaui_reset = {1 'in' 'sys_reset'};
+    
 end % switch s.hw_sys
 
 b = set(b,'misc_ports',misc_ports);
@@ -113,7 +133,7 @@ b = set(b,'ext_ports',ext_ports);
 
 % borf parameters
 switch s.hw_sys
-    case 'ROACH'
+    case {'ROACH','ROACH2'},
         borph_info.size = hex2dec('4000');
         borph_info.mode = 3;
         b = set(b,'borph_info',borph_info);
