@@ -172,11 +172,20 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             % end case 'microblaze'
 
             case 'powerpc440_ext'
-                if opb_cores + opb_slaves > 32
+                try
+                    [str_tmp, opb_addr_tmp, plb_addr_tmp,this_opb_addr_start_tmp] = gen_mhs_ip(blk_obj,opb_addr,plb_addr,plb_name,opb_name);
+                catch
+                    disp('Problem with block : ')
+                    display(blk_obj);
+                    disp(lasterr);
+                    error('Error found during Peripheral generation in MHS (gen_mhs_ip).');
+                end
+                if ((opb_cores + opb_slaves) > 32) || (opb_addr_tmp > (hex2dec('01000000') + (opb_bus_inst+1) * opb_bridge_size))
                     opb_bus_inst = opb_bus_inst + 1;
                     opb_slaves = 0;
                     opb_name = ['opb',num2str(opb_bus_inst)];
                     opb_addr = hex2dec('01000000') + opb_bus_inst * opb_bridge_size;
+                    %fprintf('adding bus %i at addr %08X',opb_bus_inst,opb_addr)
                     try
                         opb_bridge_obj = xps_opb2opb(opb_name,opb_addr,opb_bridge_size);
                     catch
