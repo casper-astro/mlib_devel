@@ -27,24 +27,50 @@ blk_name = get(blk_obj,'simulink_name');
 
 % Get some parameters we're intereset in
 simulink_name = clear_name(get(blk_obj,'simulink_name'));
+adc_per = 1e6/(blk_obj.adc_clk_rate);
 str = gen_ucf(blk_obj.xps_block);
+adc_str = blk_obj.adc_str;
 demux = blk_obj.demux;
 
-switch hw_sys
+% Set the ADC clock setup/hold constraints
+str = [str, 'NET "', adc_str, 'clk_p" TNM_NET = "', adc_str, '_clk";\n'];
+str = [str, 'TIMESPEC "TS_', adc_str, '_clk" = PERIOD "', ...
+    adc_str, '_clk" ', num2str(adc_per), ' ps HIGH 50%%;\n'];
+str = [str, 'OFFSET = IN 400 ps VALID ', num2str(adc_per/2), ...
+    ' ps BEFORE "', adc_str, '_clk" RISING;\n'];
+str = [str, 'OFFSET = IN 400 ps VALID ', num2str(adc_per/2), ...
+    ' ps BEFORE "', adc_str, '_clk" FALLING;\n'];
 
+switch hw_sys
     case 'ROACH'
         % pass
     case 'ROACH2'
-        if strcmp(demux, '1:2')
-            % Create an area group to place the FD close to the IOPAD
-            % which for some reason was traced to the other side of the 
-            % chip on ROACH2
-            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                '/iddrx[1].iddr1a_fd"     AREA_GROUP     = IDDR_1 ;\n'];
-            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                '/iddrx[1].iddr1b_fd"     AREA_GROUP     = IDDR_1 ;\n'];
-            str = [str, 'AREA_GROUP "IDDR_1"     RANGE    = ', ...
-                'SLICE_X0Y317:SLICE_X5Y321 ;\n'];
+        if blk_obj.use_adc0
+            switch demux
+                case '1:2'
+                    % Create an area group to place the FD close to the IOPAD
+                    % which for some reason was traced to the other side of the
+                    % chip on ROACH2
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/iddrx[1].iddr1a_fd"     AREA_GROUP     = IDDR_1 ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/iddrx[1].iddr1b_fd"     AREA_GROUP     = IDDR_1 ;\n'];
+                    str = [str, 'AREA_GROUP "IDDR_1"     RANGE    = ', ...
+                        'SLICE_X0Y317:SLICE_X5Y321 ;\n'];
+                case '1:1'
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/fifo_din_65"     AREA_GROUP     = ISD_1 ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/fifo_din_73"     AREA_GROUP     = ISD_1 ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/fifo_din_81"     AREA_GROUP     = ISD_1 ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/fifo_din_89"     AREA_GROUP     = ISD_1 ;\n'];
+                    str = [str, 'AREA_GROUP "ISD_1"     RANGE    = ', ...
+                        'SLICE_X0Y290:SLICE_X60Y320 ;\n'];
+                otherwise
+                    % pass
+            end
         end
     otherwise 
         % pass
