@@ -1,2 +1,2 @@
 Files
-arp_cache.ngc, cpu_buffer.ngc, ctrl_fifo.ngc, gbe_rx_ctrl_fifo.ngc, gbe_rx_packet_fifo.ngc, tx_packet_fifo.ngc      
+gbe_arp_cache.ngc, gbe_cpu_buffer.ngc, gbe_ctrl_fifo.ngc, gbe_rx_ctrl_fifo.ngc, gbe_rx_packet_fifo.ngc, gbe_tx_packet_fifo.ngc      
