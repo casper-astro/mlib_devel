@@ -20,41 +20,85 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function first_tap_init(blk, varargin)
-% Initialize and configure the first tap of the Polyphase Filter Bank.
+function pfb_async_tap_init(blk, varargin)
+% Initialize and configure the taps of the asynchronous Polyphase Filter Bank.
 %
-% first_tap_init(blk, varargin)
+% pfb_async_tap_init(blk, varargin)
 %
 % blk = The block to configure.
 % varargin = {'varname', 'value', ...} pairs
 % 
 % Valid varnames for this block are:
-% PFBSize = The size of the PFB
-% CoeffBitWidth = Bitwidth of Coefficients.
-% TotalTaps = Total number of taps in the PFB
-% BitWidthIn = Input Bitwidth
-% WindowType = The type of windowing function to use.
+% pfb_bits = The size of the PFB
+% coeff_bits = Bitwidth of coefficients.
+% total_taps = Total number of taps in the PFB
+% data_in_bits = Input bitwidth
 % mult_latency = Latency through each multiplier
 % bram_latency = Latency through each BRAM.
-% n_inputs = The number of parallel inputs
+% simul_bits = The number of parallel inputs
 % fwidth = Scaling of the width of each PFB channel
+% async = Enable the block to take a valid signal
 
 % Declare any default values for arguments you might like.
 defaults = {};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
-check_mask_type(blk, 'first_tap');
+check_mask_type(blk, 'tap_async');
 munge_block(blk, varargin{:});
 
-TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
+total_taps = get_var('total_taps', 'defaults', defaults, varargin{:});
+this_tap = get_var('this_tap', 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
+async = get_var('async','defaults', defaults, varargin{:});
+
+if (this_tap == 0) || (this_tap >= total_taps),
+    error('Tap number must be >0 and <= %d\n', total_taps)
+end
+
+if strcmp(async, 'on'),
+    nothing_to_do = 1;
+end
+
+eblk = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', 'SearchDepth', 1, 'Name', 'taps_in');
+if this_tap > 1,
+    if isempty(eblk),
+        % delete line from ri_to_c to port
+        delete_line(blk, 'tapout_delay/1', 'taps_out/1');
+        % the in port
+        reuse_block(blk, 'taps_in', 'built-in/inport', ...
+            'Position', [35 247 65 263], 'Port', '5');
+        % concat block
+        reuse_block(blk, 'tapcat', 'xbsIndex_r4/Concat', ...
+            'Position', [985  217 1005 268], 'num_inputs', '2');
+        % move the out port
+        reuse_block(blk, 'taps_out', 'built-in/outport', ...
+            'Position', [1075 238 1105 252], 'Port', '5');
+        % line from port to concat
+        add_line(blk, 'taps_in/1', 'tapcat/2');
+        % line from ri_to_c to concat
+        add_line(blk, 'tapout_delay/1', 'tapcat/1');
+        % line from concat to taps outport
+        add_line(blk, 'tapcat/1', 'taps_out/1');
+    end
+else
+    if ~isempty(eblk),
+        delete_line(blk, 'taps_in/1', 'tapcat/2');
+        delete_line(blk, 'tapout_delay/1', 'tapcat/1');
+        delete_line(blk, 'tapcat/1', 'taps_out/1');
+        reuse_block(blk, 'taps_out', 'built-in/outport', ...
+            'Position', [865 198 895 212], 'Port', '5');
+        add_line(blk, 'tapout_delay/1', 'taps_out/1');
+    end
+end
 
 set_param([blk,'/Mult'],'use_embedded', use_embedded);
 set_param([blk,'/Mult'],'use_behavioral_HDL', use_hdl);
 set_param([blk,'/Mult1'],'use_embedded', use_embedded);
 set_param([blk,'/Mult1'],'use_behavioral_HDL', use_hdl)
 
-fmtstr = sprintf('taps=%d', TotalTaps);
+clean_blocks(blk);
+
+fmtstr = sprintf('tap(%d/%d)', this_tap, total_taps);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 

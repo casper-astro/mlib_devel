@@ -7,7 +7,8 @@
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
 %   the Free Software Foundation; either version 2 of the License, or         %
-%   (at your option) any later version.                                       %
+%   (at your option) any later version.
+%   %
 %                                                                             %
 %   This program is distributed in the hope that it will be useful,           %
 %   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
@@ -20,7 +21,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function pfb_fir_init(blk, varargin)
+function pfb_fir_async_init(blk, varargin)
 % Initialize and configure the Polyphase Filter Bank.
 %
 % pfb_fir_init(blk, varargin)
@@ -29,15 +30,15 @@ function pfb_fir_init(blk, varargin)
 % varargin = {'varname', 'value', ...} pairs
 % 
 % Valid varnames for this block are:
-% PFBSize = The size of the PFB
-% TotalTaps = Total number of taps in the PFB
-% WindowType = The type of windowing function to use.
-% n_inputs = The number of parallel inputs
-% MakeBiplex = Double up the PFB to feed a biplex FFT
-% BitWidthIn = Input Bitwidth
-% BitWidthOut = Output Bitwidth (0 == as needed)
-% CoeffBitWidth = Bitwidth of Coefficients.
-% CoeffDistMem = Implement coefficients in distributed memory
+% pfb_bits = The size of the PFB
+% total_taps = Total number of taps in the PFB
+% window_type = The type of windowing function to use.
+% simul_bits = The number of parallel inputs
+% make_biplex = Double up the PFB to feed a biplex FFT
+% data_in_bits = Input Bitwidth
+% data_out_bits = Output Bitwidth (0 == as needed)
+% coeff_bits = Bitwidth of Coefficients.
+% coeffs_in_distmem = Implement coefficients in distributed memory
 % add_latency = Latency through each adder.
 % mult_latency = Latency through each multiplier
 % bram_latency = Latency through each BRAM.
@@ -45,33 +46,36 @@ function pfb_fir_init(blk, varargin)
 % (unbiased: Even Values)'
 % fwidth = Scaling of the width of each PFB channel
 % coeffs_share = Both polarizations will share coefficients.
+% async = Should the PFB take a data valid signal so it can function asynchronously?
 
-clog('entering pfb_fir_init','trace');
+clog('entering pfb_fir_async_init','trace');
+
+autoroute = 'off';
 
 % Declare any default values for arguments you might like.
-defaults = {'PFBSize', 5, 'TotalTaps', 2, ...
-    'WindowType', 'hamming', 'n_inputs', 1, 'MakeBiplex', 'off', ...
-    'BitWidthIn', 8, 'BitWidthOut', 0, 'CoeffBitWidth', 18, ...
-    'CoeffDistMem', 'off', 'add_latency', 1, 'mult_latency', 2, ...
+defaults = {'pfb_bits', 5, 'total_taps', 2, ...
+    'window_type', 'hamming', 'simul_bits', 1, 'make_biplex', 'off', ...
+    'data_in_bits', 8, 'data_out_bits', 0, 'coeff_bits', 18, ...
+    'coeffs_in_distmem', 'off', 'add_latency', 1, 'mult_latency', 2, ...
     'bram_latency', 2, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
-    'fwidth', 1, 'mult_spec', [2 2], ...
-    'coeffs_share', 'off', 'coeffs_fold', 'off'};
+    'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
+    'coeffs_share', 'off', 'async', 'off'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
-clog('pfb_fir_init post same_state','trace');
-check_mask_type(blk, 'pfb_fir');
+clog('pfb_fir_async_init post same_state','trace');
+check_mask_type(blk, 'pfb_fir_async');
 munge_block(blk, varargin{:});
 
-PFBSize = get_var('PFBSize', 'defaults', defaults, varargin{:});
-TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
-WindowType = get_var('WindowType', 'defaults', defaults, varargin{:});
-n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-MakeBiplex = get_var('MakeBiplex', 'defaults', defaults, varargin{:});
-BitWidthIn = get_var('BitWidthIn', 'defaults', defaults, varargin{:});
-BitWidthOut = get_var('BitWidthOut', 'defaults', defaults, varargin{:});
-CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
-CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
+pfb_bits = get_var('pfb_bits', 'defaults', defaults, varargin{:});
+total_taps = get_var('total_taps', 'defaults', defaults, varargin{:});
+window_type = get_var('window_type', 'defaults', defaults, varargin{:});
+simul_bits = get_var('simul_bits', 'defaults', defaults, varargin{:});
+make_biplex = get_var('make_biplex', 'defaults', defaults, varargin{:});
+data_in_bits = get_var('data_in_bits', 'defaults', defaults, varargin{:});
+data_out_bits = get_var('data_out_bits', 'defaults', defaults, varargin{:});
+coeff_bits = get_var('coeff_bits', 'defaults', defaults, varargin{:});
+coeffs_in_distmem = get_var('coeffs_in_distmem', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -79,20 +83,21 @@ quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 coeffs_share = get_var('coeffs_share', 'defaults', defaults, varargin{:});
+async = get_var('async', 'defaults', defaults, varargin{:});
 
 % check the multiplier specifications first off
 if (length(mult_spec) == 1),
-    mult_spec = ones(1, TotalTaps) * mult_spec;
+    mult_spec = ones(1, total_taps) * mult_spec;
 end
-if (length(mult_spec) ~= TotalTaps),
-    error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), TotalTaps);
+if (length(mult_spec) ~= total_taps),
+    error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), total_taps);
     clog(error_string,'error');
     error(error_string);
 end
 temp.use_hdl = 'on'; temp.use_embedded = 'off';
-tap_multipliers = repmat(temp, TotalTaps);
+tap_multipliers = repmat(temp, total_taps);
 clear temp;
-for ctr = 1 : TotalTaps,
+for ctr = 1 : total_taps,
     if (mult_spec(ctr) > 2) || (mult_spec(ctr) < 0),
         error_string = sprintf('Multiplier specification of %i for tap %i is not valid.', mult_spec(ctr), ctr);
         clog(error_string,'error');
@@ -107,17 +112,23 @@ for ctr = 1 : TotalTaps,
     tap_multipliers(ctr) = temp;
 end
 
+% async?
+make_async = false;
+if strcmp(async, 'on'),
+    make_async = true;
+end
+
 % share coeffs in a 2-pol setup?
 pols = 1;
 share_coefficients = false;
-if strcmp(MakeBiplex, 'on'),
+if strcmp(make_biplex, 'on'),
     pols = 2;
     if strcmp(coeffs_share, 'on')
         share_coefficients = true;
     end
 end
 
-% Compute the maximum gain through all of the 2^PFBSize sub-filters.  This is
+% Compute the maximum gain through all of the 2^pfb_bits sub-filters.  This is
 % used to determine how much bit growth is really needed.  The maximum gain of
 % each filter is the sum of the absolute values of its coefficients.  The
 % maximum of these gains sets the upper bound on bit growth through the
@@ -131,10 +142,10 @@ end
 % root-sum-squares or RSS).
 
 % Get all coefficients of the pfb_fir in one vector (by passing -1 for a)
-all_coeffs = pfb_coeff_gen_calc(PFBSize, TotalTaps, WindowType, n_inputs, 0, fwidth, -1);
-% Rearrange into matrix with 2^PFBSize rows and TotalTaps columns.
+all_coeffs = pfb_coeff_gen_calc(pfb_bits, total_taps, window_type, simul_bits, 0, fwidth, -1);
+% Rearrange into matrix with 2^pfb_bits rows and total_taps columns.
 % Each row contains coefficients for one sub-filter.
-all_filters = reshape(all_coeffs, 2^PFBSize, TotalTaps);
+all_filters = reshape(all_coeffs, 2^pfb_bits, total_taps);
 % Compute max gain
 % NB: sum rows, not columns!
 max_gain = max(sum(abs(all_filters), 2));
@@ -143,15 +154,15 @@ bit_growth = max(0, nextpow2(max_gain));
 % Compute adder output width and binary point.  We know that the adders in the
 % adder tree need to have (bit_growth+1) non-fractional bits to accommodate the
 % maximum gain.  The products from the taps will have
-% (BitWidthIn+CoeffBitWidth-2) fractional bits.  We will preserve them through
+% (data_in_bits+coeff_bits-2) fractional bits.  We will preserve them through
 % the adder tree.
-adder_bin_pt_out = BitWidthIn + CoeffBitWidth - 2;
+adder_bin_pt_out = data_in_bits + coeff_bits - 2;
 adder_n_bits_out = bit_growth + 1 + adder_bin_pt_out;
 
-% If BitWidthOut is 0, set it to accomodate bit growth in the
+% If data_out_bits is 0, set it to accomodate bit growth in the
 % non-fractional part and full-precision of the fractional part.
-if BitWidthOut == 0
-    BitWidthOut = adder_n_bits_out;
+if data_out_bits == 0
+    data_out_bits = adder_n_bits_out;
 end
 
 delete_lines(blk);
@@ -162,67 +173,96 @@ portnum = 1;
 reuse_block(blk, 'sync', 'built-in/inport', ...
     'Position', [0 50*portnum 30 50*portnum+15], 'Port', num2str(portnum));
 reuse_block(blk, 'sync_out', 'built-in/outport', ...
-    'Position', [150*(TotalTaps+2) 50*portnum 150*(TotalTaps+2)+30 50*portnum+15], 'Port', num2str(portnum));
-for p=1:pols,
-    for n=1:2^n_inputs,
-        portnum = portnum + 1; % Skip one to allow sync & sync_out to be 1
-        in_name = ['pol',num2str(p),'_in',num2str(n)];
-        out_name = ['pol',num2str(p),'_out',num2str(n)];
-        reuse_block(blk, in_name, 'built-in/inport', ...
-            'Position', [0 50*portnum 30 50*portnum+15], 'Port', num2str(portnum));
-        reuse_block(blk, out_name, 'built-in/outport', ...
-            'Position', [150*(TotalTaps+2) 50*portnum 150*(TotalTaps+2)+30 50*portnum+15], 'Port', num2str(portnum));
-    end
+    'Position', [150*(total_taps+3) 50*portnum 150*(total_taps+3)+30 50*portnum+15], 'Port', num2str(portnum));
+if make_async,
+    portnum = 2;
+    reuse_block(blk, 'dv', 'built-in/inport', ...
+        'Position', [0 50*portnum 30 50*portnum+15], 'Port', num2str(portnum));
+    reuse_block(blk, 'dv_out', 'built-in/outport', ...
+        'Position', [150*(total_taps+3) 50*portnum 150*(total_taps+3)+30 50*portnum+15], 'Port', num2str(portnum));
+    reuse_block(blk, 'dv_delay', 'xbsIndex_r4/Delay', ...
+                'latency', 'bram_latency+1', 'Position', [75 50*portnum 100 50*portnum+15]);
+    add_line(blk, 'dv/1', 'dv_delay/1', 'autorouting', autoroute);
 end
-
-% Add blocks and Lines
-portnum = 0;
 for p=1:pols,
-    for n=1:2^n_inputs,
+    for n=1:2^simul_bits,
         portnum = portnum + 1;
         in_name = ['pol',num2str(p),'_in',num2str(n)];
         out_name = ['pol',num2str(p),'_out',num2str(n)];
-        
-        % add the coefficient generators
+        reuse_block(blk, in_name, 'built-in/inport', ...
+            'Position', [0 150*portnum 30 150*portnum+15], 'Port', num2str(portnum));
+        reuse_block(blk, out_name, 'built-in/outport', ...
+            'Position', [150*(total_taps+3) 150*portnum 150*(total_taps+3)+30 150*portnum+15], 'Port', num2str(portnum));
+    end
+end
+
+% add the coefficient generators - one per port
+portnum = 0;
+x_size = 100;
+y_size = 100;
+for p = 1 : pols,
+    for n = 1 : 2^simul_bits,
+        portnum = portnum + 1;
+        in_name = ['pol',num2str(p),'_in',num2str(n)];
         if (p == 2) && (share_coefficients == true)
             blk_name = [in_name,'_delay'];
             reuse_block(blk, blk_name, 'xbsIndex_r4/Delay', ...
-                'latency', 'bram_latency+1', 'Position', [150 50*portnum 150+100 50*portnum+30]);
-            add_line(blk, [in_name,'/1'], [blk_name,'/1']);
+                'latency', 'bram_latency+1', 'Position', [150 150*portnum 150+x_size 150*portnum+y_size]);
+            add_line(blk, [in_name,'/1'], [blk_name,'/1'], 'autorouting', autoroute);
         else
             blk_name = [in_name,'_coeffs'];
             reuse_block(blk, blk_name, 'casper_library_pfbs/pfb_coeff_gen', ...
-                'nput', num2str(n-1), 'CoeffDistMem', CoeffDistMem, 'Position', [150 50*portnum 150+100 50*portnum+30]);
+                'PFBSize', tostring(pfb_bits), 'CoeffBitWidth', tostring(coeff_bits), ...
+                'TotalTaps', tostring(total_taps), ...
+                'CoeffDistMem', coeffs_in_distmem, ...
+                'WindowType', window_type, ...
+                'n_inputs', tostring(simul_bits), ...
+                'nput', num2str(n-1), ...
+                'Position', [150 150*portnum 150+x_size 150*portnum+y_size]);
             propagate_vars([blk,'/',blk_name], 'defaults', defaults, varargin{:});
-            add_line(blk, [in_name,'/1'], [blk_name,'/1']);
-            add_line(blk, 'sync/1', [blk_name,'/2']);  
+            add_line(blk, [in_name,'/1'], [blk_name,'/1'], 'autorouting', autoroute);
+            add_line(blk, 'sync/1', [blk_name,'/2'], 'autorouting', autoroute);
         end
-
+    end
+end
+        
+% Add taps and lines
+portnum = 0;
+for p = 1:pols,
+    for n = 1:2^simul_bits,
+        portnum = portnum + 1;
+        in_name = ['pol',num2str(p),'_in',num2str(n)];
+        out_name = ['pol',num2str(p),'_out',num2str(n)];
         clog(['adding taps for pol ', num2str(p), ' input ',num2str(n)], 'pfb_fir_init_debug');
-        for t = 1:TotalTaps,
-            % first tap
-            if t==1,
-                blk_name = [in_name,'_first_tap'];
-                reuse_block(blk, blk_name, 'casper_library_pfbs/first_tap', ...
+        for t = 1:total_taps,
+            % not last tap
+            if t ~= total_taps,
+                blk_name = [in_name, '_tap', tostring(t)];
+                reuse_block(blk, blk_name, 'casper_library_pfbs/tap_async', ...
                     'use_hdl', tap_multipliers(t).use_hdl, 'use_embedded', tap_multipliers(t).use_embedded,...
-                    'Position', [150*(t+1) 50*portnum 150*(t+1)+100 50*portnum+30]);
+                    'this_tap',tostring(t),...
+                    'Position', [150*(t+1) 150*portnum 150*(t+1)+x_size 150*portnum+y_size]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
-                if (p == 2) && (share_coefficients == true)
-                    src_block = [strrep(in_name,'pol2','pol1'),'_coeffs'];
-                    data_source = [in_name,'_delay/1'];
-                else
-                    src_block = [in_name,'_coeffs'];
-                    data_source = [src_block,'/1'];
+                if t == 1,
+                    if (p == 2) && (share_coefficients == true)
+                        src_block = [strrep(in_name,'pol2','pol1'),'_coeffs'];
+                        data_source = [in_name,'_delay/1'];
+                    else
+                        src_block = [in_name,'_coeffs'];
+                        data_source = [src_block,'/1'];
+                    end
+                    add_line(blk, data_source, [blk_name,'/1'], 'autorouting', autoroute);
+                    add_line(blk, 'pol1_in1_coeffs/2', [blk_name,'/2'], 'autorouting', autoroute);
+                    add_line(blk, [src_block,'/3'], [blk_name,'/3'], 'autorouting', autoroute);
+                    if make_async,
+                        add_line(blk, 'dv_delay/1', [blk_name,'/4'], 'autorouting', autoroute);
+                    end
                 end
-                add_line(blk, data_source, [blk_name,'/1']);
-                add_line(blk, 'pol1_in1_coeffs/2', [blk_name,'/2']);
-                add_line(blk, [src_block,'/3'], [blk_name,'/3']);
-            % last tap
-            elseif t==TotalTaps,
+            else
                 blk_name = [in_name,'_last_tap'];
-                reuse_block(blk, blk_name, 'casper_library_pfbs/last_tap', ...
+                reuse_block(blk, blk_name, 'casper_library_pfbs/last_tap_async', ...
                     'use_hdl', tap_multipliers(t).use_hdl, 'use_embedded', tap_multipliers(t).use_embedded,...
-                    'Position', [150*(t+1) 50*portnum 150*(t+1)+100 50*portnum+30]);
+                    'Position', [150*(t+1) 150*portnum 150*(t+1)+x_size 150*portnum+y_size]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
                 % Update innards of the adder trees using our knowledge of
                 % maximum bit growth.  This uses knowledge of the
@@ -232,7 +272,7 @@ for p=1:pols,
                 % that encapsulates or uses an adder_tree smarter.  Forcing
                 % such a global change for one or two specific cases seems a
                 % greater evil, IMHO.
-                pfb_add_tree = sprintf('%s/%s/pfb_add_tree', blk, blk_name);
+                pfb_add_tree = sprintf('%s/%s/pfb_add_tree_async', blk, blk_name);
                 for k=1:2
                     % Update adder blocks in the adder trees using our
                     % knowledge of maximum bit growth.
@@ -250,16 +290,16 @@ for p=1:pols,
                             'overflow', 'Wrap');
                     end
                     % Adder tree output has bit_growth more non-fractional bits
-                    % than BitWidthIn, but we want to keep the same number of
+                    % than data_in_bits, but we want to keep the same number of
                     % non-fractional bits, so we must scale by 2^(-bit_growth).
                     set_param(sprintf('%s/scale%d', pfb_add_tree, k), ...
                         'scale_factor', tostring(-bit_growth));
                     % Because we have handled bit growth for maximum gain,
                     % there can be no overflow so the convert blocks can be set
-                    % to "Wrap" to avoid unnecessary logic.  If BitWidthOut is
+                    % to "Wrap" to avoid unnecessary logic.  If data_out_bits is
                     % greater than adder_bin_pt_out, set their quantization to
                     % "Truncate" since there is no need to quantize.
-                    if BitWidthOut > adder_bin_pt_out
+                    if data_out_bits > adder_bin_pt_out
                         conv_quant = 'Truncate';
                     else
                         conv_quant = quantization;
@@ -267,44 +307,47 @@ for p=1:pols,
                     set_param(sprintf('%s/convert%d', pfb_add_tree, k), ...
                         'overflow', 'Wrap', 'quantization', conv_quant);
                 end
-                if t==2
-                    prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_first_tap'];
-                else
-                    prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t-1)];
-                end
-                for nn=1:4
-                    add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
-                end
-                add_line(blk, [blk_name,'/1'], [out_name,'/1']);
+                % join dataout, dv and sync
+                add_line(blk, [blk_name,'/1'], [out_name,'/1'], 'autorouting', autoroute);
                 if n==1 && p==1
-                    add_line(blk, [blk_name,'/2'], 'sync_out/1');
+                    add_line(blk, [blk_name,'/2'], 'sync_out/1', 'autorouting', autoroute);
+                    add_line(blk, [blk_name,'/3'], 'dv_out/1', 'autorouting', autoroute);
                 end
-            % intermediary taps
-            else
-                blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t)];
-                reuse_block(blk, blk_name, 'casper_library_pfbs/tap', ...
-                    'use_hdl', tap_multipliers(t).use_hdl, 'use_embedded', tap_multipliers(t).use_embedded,...
-                    'mult_latency',tostring(mult_latency), 'coeff_width', tostring(CoeffBitWidth), ...
-                    'coeff_frac_width',tostring(CoeffBitWidth-1), 'delay', tostring(2^(PFBSize-n_inputs)), ...
-                    'data_width',tostring(BitWidthIn), 'bram_latency', tostring(bram_latency), ...
-                    'Position', [150*(t+1) 50*portnum 150*(t+1)+100 50*portnum+30]);
-                if t==2,
-                    prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_first_tap'];
-                else
-                    prev_blk_name = ['pol',num2str(p),'_in',num2str(n),'_tap',num2str(t-1)];
-                end
-                for nn=1:4
-                    add_line(blk, [prev_blk_name,'/',num2str(nn)], [blk_name,'/',num2str(nn)]);
+            end
+            % join all the taps together
+            if t > 1
+                for ctr = 1 : 5,
+                    add_line(blk, [in_name, '_tap', tostring(t-1), '/', tostring(ctr)], [blk_name, '/', tostring(ctr)], 'autorouting', autoroute);
                 end
             end
         end
     end
 end
 
+% the sync generate block
+delete_line(blk, ['pol1_in1_tap', tostring(total_taps-1), '/2'], 'pol1_in1_last_tap/2');
+add_line(blk, 'sync_generate/1', 'pol1_in1_last_tap/2', 'autorouting', autoroute);
+add_line(blk, 'pol1_in1_coeffs/2', 'sync_generate/1', 'autorouting', autoroute);
+add_line(blk, 'dv_delay/1', 'sync_generate/2', 'autorouting', autoroute);
+
+% add the adder trees
+%portnum = 0;
+%for p = 1 : pols,
+%    for n = 1 : 2^simul_bits,
+%        tree_name = ['adder', tostring(n), tostring(p)];
+%        reuse_block(blk, tree_name, 'casper_library_pfbs/pfb_add_tree', ...
+%            'use_hdl', tostring(use_hdl), 'use_embedded', tostring(use_embedded),...
+%            'Position', [150*(total_taps+2) 150*portnum 150*(total_taps+2)+x_size 150*portnum+y_size]);
+%        %propagate_vars([blk,'/',blk_name],'defaults', defaults,
+%        %varargin{:});
+%        add_line(blk, [tree_name, '/1'], ['pol',tostring(p),'_out',tostring(n),'/1'], 'autorouting', autoroute);
+%    end
+%end
+
 clean_blocks(blk);
 
 fmtstr = sprintf('taps=%d, add_latency=%d\nmax scale %.3f', ...
-  TotalTaps, add_latency, max_gain*2^-bit_growth);
+  total_taps, add_latency, max_gain*2^-bit_growth);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 clog('exiting pfb_fir_init','trace');
