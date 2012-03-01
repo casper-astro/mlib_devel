@@ -12,7 +12,7 @@ defaults = {...
     'test_ramp', 'off'};
 
 % Check to see if mask parameters have changed
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+if same_state(blk, 'gcb', gcb, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'adc5g');
 munge_block(blk, varargin{:});
 
@@ -194,4 +194,4 @@ reuse_block(blk,...
 add_line(blk, [sync_name, '/1'], 'sync_out/1');
 
 clean_blocks(blk);
-save_state(blk, 'defaults', defaults, varargin{:});
+save_state(blk, 'gcb', gcb, 'defaults', defaults, varargin{:});
