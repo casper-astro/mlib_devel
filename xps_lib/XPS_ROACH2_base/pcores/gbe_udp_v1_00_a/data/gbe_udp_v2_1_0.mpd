@@ -16,67 +16,69 @@ BEGIN gbe_udp
   BUS_INTERFACE BUS = SOPB,      BUS_STD = OPB,       BUS_TYPE = SLAVE 
 
 ## Parameters
-  PARAMETER LOCAL_ENABLE     = 0,            DT = string
-  PARAMETER LOCAL_MAC        = 0x0,          DT = std_logic_vector
-  PARAMETER LOCAL_IP         = 0x0,          DT = std_logic_vector
-  PARAMETER LOCAL_PORT       = 0x0,          DT = std_logic_vector
-  PARAMETER LOCAL_GATEWAY    = 0x0,          DT = std_logic_vector
-  PARAMETER CPU_PROMISCUOUS  = 0,            DT = string
-  PARAMETER PHY_CONFIG       = 0,            DT = string
-  PARAMETER DIS_CPU_TX       = 0,            DT = string
-  PARAMETER DIS_CPU_RX       = 0,            DT = string
-  PARAMETER TX_LARGE_PACKETS = 0,            DT = string
-  PARAMETER RX_DIST_RAM      = 0,            DT = string
-  PARAMETER ARP_CACHE_INIT   = 0,            DT = string
-                                                                                     
-  PARAMETER C_BASEADDR = 0x00000000, DT = std_logic_vector, MIN_SIZE = 0x4000, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
-  PARAMETER C_HIGHADDR = 0x000000FF, DT = std_logic_vector, BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
+  PARAMETER LOCAL_ENABLE     = 1,               DT = std_logic
+  PARAMETER DIS_CPU_RX       = 0,               DT = std_logic
+  PARAMETER DIS_CPU_TX       = 0,               DT = std_logic
+  PARAMETER CPU_PROMISCUOUS  = 1,               DT = std_logic
+  PARAMETER LOCAL_MAC        = 0x001234567890,  DT = std_logic_vector
+  PARAMETER LOCAL_IP         = 0xc0a82805,      DT = std_logic_vector
+  PARAMETER LOCAL_PORT       = 0x029a,          DT = std_logic_vector
+  PARAMETER LOCAL_GATEWAY    = 0x01,            DT = std_logic_vector
+
+  PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x4000, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
+  PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
   PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
   PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
 
-
 ## Ports
-
   ## Application Interface
-  PORT app_clk         = app_clk,          DIR = IN
-                                       
-  PORT app_tx_data     = app_tx_dat,        DIR = IN,  VEC =  [7:0] 
-  PORT app_tx_dvld     = app_tx_dvld,       DIR = IN
-  PORT app_tx_eof      = app_tx_eof,        DIR = IN
-  PORT app_tx_destip   = app_tx_destip,     DIR = IN,  VEC = [31:0]
-  PORT app_tx_destport = app_tx_destport,   DIR = IN,  VEC = [15:0]
-  PORT app_tx_afull    = app_tx_afull,      DIR = OUT
-  PORT app_tx_overflow = app_tx_overflow,   DIR = OUT
-  PORT app_tx_rst      = app_tx_rst,        DIR = IN
+
+## XPS ROACH2 CLK Select
+  PORT app_clk          = "", DIR = IN
+
+## XPS RESET
+  PORT app_tx_rst       = "", DIR = IN
+  PORT app_rx_rst       = "", DIR = IN
+  PORT mac_tx_rst       = "", DIR = IN
+  PORT mac_rx_rst       = "", DIR = IN
+
+## User Application Ports                                        
+  PORT app_tx_data     = "",  DIR = IN,  VEC =  [7:0] 
+  PORT app_tx_dvld     = "",  DIR = IN
+  PORT app_tx_eof      = "",  DIR = IN
+  PORT app_tx_destip   = "",  DIR = IN,  VEC = [31:0]
+  PORT app_tx_destport = "",  DIR = IN,  VEC = [15:0]
+  PORT app_tx_afull    = "",  DIR = OUT
+  PORT app_tx_overflow = "",  DIR = OUT
+
                                         
-  PORT app_rx_data     = app_rx_data,       DIR = OUT, VEC =  [7:0]
-  PORT app_rx_dvld     = app_rx_dvld,       DIR = OUT
-  PORT app_rx_eof      = app_rx_eof,        DIR = OUT
-  PORT app_rx_srcip    = app_rx_srcip,      DIR = OUT, VEC = [31:0]
-  PORT app_rx_srcport  = app_rx_srcport,    DIR = OUT, VEC = [15:0]
-  PORT app_rx_badframe = app_rx_badframe,   DIR = OUT
-  PORT app_rx_overrun  = app_rx_overrun,    DIR = OUT
-  PORT app_rx_ack      = app_rx_ack,        DIR = IN 
-  PORT app_rx_rst      = app_rx_rst,        DIR = IN
+  PORT app_rx_data     = "",  DIR = OUT, VEC =  [7:0]
+  PORT app_rx_dvld     = "",  DIR = OUT
+  PORT app_rx_eof      = "",  DIR = OUT
+  PORT app_rx_srcip    = "",  DIR = OUT, VEC = [31:0]
+  PORT app_rx_srcport  = "",  DIR = OUT, VEC = [15:0]
+  PORT app_rx_badframe = "",  DIR = OUT
+  PORT app_rx_overrun  = "",  DIR = OUT
+  PORT app_rx_ack      = "",  DIR = IN 
 
-  ## MAC Interface 
+  PORT app_dbg_data     = "",  DIR = OUT, VEC = [31:0]
+  PORT app_dbg_dvld     = "",  DIR = OUT
 
-  PORT mac_tx_clk       = mac_tx_clk,       DIR = IN,   BUS = MAC  
-  #PORT mac_tx_rst       = mac_tx_rst,       DIR = IN,   BUS = MAC
-  PORT mac_tx_data      = mac_tx_data,      DIR = OUT,  BUS = MAC, VEC = [7:0]
-  PORT mac_tx_dvld      = mac_tx_dvld,      DIR = OUT,  BUS = MAC
-  PORT mac_tx_ack       = mac_tx_ack,       DIR = IN,   BUS = MAC
-                                          
-  PORT mac_rx_clk       = mac_rx_clk,       DIR = IN,   BUS = MAC
-  #PORT mac_rx_rst       = mac_rx_rst,       DIR = IN,   BUS = MAC
-  PORT mac_rx_data      = mac_rx_data,      DIR = IN,   BUS = MAC, VEC = [7:0]
-  PORT mac_rx_dvld      = mac_rx_dvld,      DIR = IN,   BUS = MAC
-  PORT mac_rx_goodframe = mac_rx_goodframe, DIR = IN,   BUS = MAC
-  PORT mac_rx_badframe  = mac_rx_badframe,  DIR = IN,   BUS = MAC
+## Internal MAC interface (gbe_udp <--> temac)
+  ## MAC interface
+  PORT mac_rx_clk        = mac_rx_clk,       DIR = IN, BUS = MAC 
+  PORT mac_rx_data       = mac_rx_data,      DIR = IN, BUS = MAC, VEC = [7:0]
+  PORT mac_rx_dvld       = mac_rx_dvld,      DIR = IN, BUS = MAC
+  PORT mac_rx_goodframe  = mac_rx_goodframe, DIR = IN, BUS = MAC
+  PORT mac_rx_badframe   = mac_rx_badframe,  DIR = IN, BUS = MAC
 
-  ## PHY Status/Control
-  PORT phy_status  = "", DIR = IN,  VEC = [0:31]
-  PORT phy_control = "", DIR = OUT, VEC = [0:31] 
+  PORT mac_tx_clk       = mac_tx_clk,        DIR = IN,   BUS = MAC
+  PORT mac_tx_data      = mac_tx_data,       DIR = OUT,  BUS = MAC, VEC = [7:0]
+  PORT mac_tx_dvld      = mac_tx_dvld,       DIR = OUT,  BUS = MAC
+  PORT mac_tx_ack       = mac_tx_ack,        DIR = IN,   BUS = MAC
+
+  PORT mac_syncacquired = mac_syncacquired,  DIR = IN,   BUS = MAC
+
 
   ## CPU Bus Attachment
   PORT OPB_Clk    = "",         DIR = IN,  BUS = SOPB, SIGIS = Clk

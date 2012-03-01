@@ -1,6 +1,5 @@
 `timescale 1ns/1ps
 module gbe_tx #(
-    parameter LARGE_PACKETS = 0,
     parameter REG_APP_IF    = 1
   ) (
     // Application Interface
@@ -57,7 +56,7 @@ module gbe_tx #(
   wire        packet_fifo_rd;
   wire        packet_fifo_empty;
 
-  tx_packet_fifo tx_packet_fifo_inst(
+  gbe_tx_packet_fifo tx_packet_fifo_inst(
     .wr_clk    (app_clk),
     .din       (packet_fifo_din),
     .wr_en     (packet_fifo_wr),
@@ -90,7 +89,7 @@ module gbe_tx #(
   wire        ctrl_fifo_empty;
 
 
-  ctrl_fifo tx_packet_ctrl_fifo_inst(
+  gbe_ctrl_fifo tx_packet_ctrl_fifo_inst(
     .wr_clk    (app_clk),
     .din       (ctrl_fifo_din),
     .wr_en     (ctrl_fifo_wr),
@@ -222,7 +221,7 @@ end endgenerate
   wire [7:0] cpu_data = cpu_tx_buffer_rd_data;
 
   reg cpu_ack;
-  wire cpu_pending = cpu_tx_ready;
+  wire cpu_pending = cpu_tx_ready_retimed;
   assign cpu_tx_done = cpu_ack;
 
   /* Local enable retimer */
@@ -242,6 +241,16 @@ end endgenerate
   always @(posedge mac_clk) begin
     app_overflowR  <= app_overflow;
     app_overflowRR <= app_overflowR;
+  end
+
+  /* cpu_tx_ready retimer */
+
+  reg cpu_tx_readyR;
+  reg cpu_tx_readyRR;
+  wire cpu_tx_ready_retimed = cpu_tx_readyRR;
+  always @(posedge mac_clk) begin
+    cpu_tx_readyR  <= cpu_tx_ready;
+    cpu_tx_readyRR <= cpu_tx_readyR;
   end
 
   localparam MAC_HDR_SIZE = 14;
@@ -298,13 +307,17 @@ end endgenerate
             /* we start at one due to special case with ack delay */
             tx_count <= ctrl_size;
           end
+
           if (!cpu_ack && cpu_pending) begin
             tx_state <= TX_CPU_WAIT;
-            tx_count <= cpu_tx_size;
+            //tx_count <= cpu_tx_size;
+            // CPU sends tx size in 8 byte (64 bit) words
+            tx_count <= {2'b0,cpu_tx_size,3'b0}; // size in bytes = cpu_tx_size * 8          
             cpu_addr_reg <= 11'h0;
             cpu_ack  <= 1'b1;
             cpu_buffer_sel_reg <= ~cpu_buffer_sel_reg;
           end
+
         end
         TX_APP_HDR0: begin
           if (mac_tx_ack)
@@ -342,7 +355,7 @@ end endgenerate
         end
         TX_CPU_WAIT: begin
           if (mac_tx_ack) begin
-            tx_state <= TX_CPU_DATA;
+            tx_state <= TX_CPU_DATA;            
           end
         end
         TX_CPU_DATA: begin

@@ -81,6 +81,40 @@
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
 
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#BEGIN temac
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER INSTANCE  = temac_inst
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER HW_VER    = 1.00.a
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER REG_SGMII = 1
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER PHY_ADR   = 0
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT clk_125        = clk_125
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT reset          = sys_reset
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  BUS_INTERFACE SGMII = sgmii
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  BUS_INTERFACE MAC   = mac
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#END
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#BEGIN sgmii_phy
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER INSTANCE  = sgmii_phy_inst
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER HW_VER    = 1.00.a
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT mgt_rx_n       = sgmii_rx_n_i
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT mgt_rx_p       = sgmii_rx_p_i
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT mgt_tx_n       = sgmii_tx_n_i
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT mgt_tx_p       = sgmii_tx_p_i
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT mgt_clk_n      = sgmii_clkref_n_i
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT mgt_clk_p      = sgmii_clkref_p_i
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT mgt_reset      = sys_reset
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PORT clk_125        = clk_125
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  BUS_INTERFACE SGMII = sgmii
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#END
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#  # MARVELL PHY SGMII Pins
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_rx_n      = sgmii_rx_n_i, DIR = I
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_rx_p      = sgmii_rx_p_i, DIR = I
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_tx_n      = sgmii_tx_n_i, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_tx_p      = sgmii_tx_p_i, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_clkref_n  = sgmii_clkref_n_i, DIR = I
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_clkref_p  = sgmii_clkref_p_i, DIR = I
 
 #IF# ( strcmp(get(b,'type'),'xps_adc'))#BEGIN opb_adccontroller
 #IF# ( strcmp(get(b,'type'),'xps_adc'))# PARAMETER INSTANCE     = opb_adccontroller_0
