@@ -34,7 +34,7 @@ Program map
 -ol high;
 -xe n;
 -register_duplication;
-#-global_opt on;            # Try uncommenting if timing is an issue
+-global_opt on;            # Try uncommenting if timing is an issue
 -o <design>_map.ncd;        # Output Mapped ncd file
 -w;                         # Overwrite output files.
 -pr b;                      # Pack internal FF/latches into IOBs
@@ -63,9 +63,9 @@ END Program post_map_trce
 # Type "par -h" for a detailed list of par command line options
 #
 Program par
--xe n;
+#-xe n;
 -w;                         # Overwrite existing placed and routed ncd
--ol high;                   # Overall effort level
+#-ol high;                   # Overall effort level
 <inputdir><design>_map.ncd; # Input mapped NCD file
 <design>.ncd;               # Output placed and routed NCD
 <inputdir><design>.pcf;     # Input physical constraints file

@@ -59,15 +59,15 @@ switch hw_sys
                         'SLICE_X0Y317:SLICE_X5Y321 ;\n'];
                 case '1:1'
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/fifo_din_65"     AREA_GROUP     = ISD_1 ;\n'];
+                        '/data_buf[1].D1A_0"     AREA_GROUP     = ISD_1 ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/fifo_din_73"     AREA_GROUP     = ISD_1 ;\n'];
+                        '/data_buf[1].D1B_0"     AREA_GROUP     = ISD_1 ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/fifo_din_81"     AREA_GROUP     = ISD_1 ;\n'];
+                        '/data_buf[1].D1C_0"     AREA_GROUP     = ISD_1 ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/fifo_din_89"     AREA_GROUP     = ISD_1 ;\n'];
+                        '/data_buf[1].D1D_0"     AREA_GROUP     = ISD_1 ;\n'];
                     str = [str, 'AREA_GROUP "ISD_1"     RANGE    = ', ...
-                        'SLICE_X0Y290:SLICE_X60Y320 ;\n'];
+                        'SLICE_X0Y300:SLICE_X27Y320 ;\n'];
                 otherwise
                     % pass
             end
