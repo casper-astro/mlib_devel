@@ -171,9 +171,43 @@ module TB_opb_adc5g_controller();
            end
            4: begin
               if (Sl_xferAck) begin
-		 opb_select <= 1'b0;
+		 opb_data <= {16'h03c8, 8'h81, 8'b1};
+		 opb_addr <= 8;
+		 opb_be   <= 4'b1111;
+		 opb_rnw  <= 0;
+		 opb_select <= 1'b1;
+		 progress <= 5;
               end
            end
+           5: begin
+              if (Sl_xferAck) begin
+		 opb_data <= {16'h03c8, 8'h01, 8'b1};
+		 opb_addr <= 8;
+		 opb_be   <= 4'b1111;
+		 opb_rnw  <= 0;
+		 opb_select <= 1'b1;
+		 progress <= 6;
+              end
+           end
+           6: begin
+              if (Sl_xferAck) begin
+		 opb_data <= 32'b0;
+		 opb_addr <= 8;
+		 opb_be   <= 4'b1111;
+		 opb_rnw  <= 1;
+		 opb_select <= 1'b1;
+		 progress <= 7;
+              end
+           end
+           7: begin
+              if (Sl_xferAck) begin
+		 opb_select <= 1'b0;
+		 progress <= 8;
+              end
+           end
+	   8: begin
+	      $finish;
+	   end
 	 endcase
       end
    end 
@@ -184,6 +218,9 @@ module TB_opb_adc5g_controller();
    assign OPB_RNW    = opb_rnw;
    assign OPB_select = opb_select;
 
+
+   /* ADC0 test setup */
+   
    reg [4:0] config0_cntr;
    initial begin
       config0_cntr <= 0;
@@ -209,13 +246,15 @@ module TB_opb_adc5g_controller();
 	    end
             if (config0_cntr == 23) begin
 	       config0_cntr <= 0;
-	       config0_reading <= 1'b0;
                #10
 			      $display("adc0_conf: %x", config0_data);
-               if (config0_data === {8'h81, 16'h03c8}) begin
-               end else begin
-		  $display("FAILED @(%x): adc0 mismatch - got = %x, expected = %x", progress, config0_data, {8'h81, 16'h03c8});
-               end
+	       if (!config0_reading) begin
+		  if (config0_data === {8'h81, 16'h03c8}) begin
+		     config0_reading <= 1'b0;
+		  end else begin
+		     $display("FAILED @(%x): adc0 mismatch - got = %x, expected = %x", progress, config0_data, {8'h81, 16'h03c8});
+		  end
+	       end
             end
 	 end // if (adc0_modepin === 0)
       end
@@ -233,32 +272,58 @@ module TB_opb_adc5g_controller();
       end
    end
 
-   // reg [4:0] config1_cntr;
-   // initial begin
-   //    config1_cntr <= 0;
-   // end
+   /* ADC1 test setup */
+   
+   reg [4:0] config1_cntr;
+   initial begin
+      config1_cntr <= 0;
+   end
 
-   // reg[23:0] config1_data;
+   reg [23:0] config1_data;
+   reg 	      config1_data_o;
+   reg 	      config1_reading;
+   reg [15:0] config1_data_o_shift;
 
-   // always @(posedge adc1_adc3wire_clk) begin
-   //    if (sys_rst) begin
-   //    end else begin
-   // 	 if (adc1_modepin === 0) begin
-   //          config1_data[23 - config1_cntr] <= adc1_adc3wire_data;
-   //          config1_cntr <= config1_cntr + 1;
-   //          if (config1_cntr == 23) begin
-   //             #20
-   // 			      $display("adc1_conf: %x", config1_data);
-   //             if (config1_data === {8'b1, 8'h81, 16'h03c8}) begin
-   // 		  $display("PASSED");
-   //             end else begin
-   // 		  $display("FAILED: adc1 mismatch - got = %x, expected = %x", config1_data, {8'b1, 8'h81, 16'h03c8});
-   //             end
-   //             #1000 $finish;
-   //          end
-   // 	 end
-   //    end
-   // end
+   assign adc1_adc3wire_data_o = config1_data_o;
+
+   always @(posedge adc1_adc3wire_clk) begin
+      if (sys_rst) begin
+      end else begin
+	 if (adc1_modepin === 0) begin
+            config1_data[23-config1_cntr] <= adc1_adc3wire_data;
+            config1_cntr <= config1_cntr + 1;
+	    if (config1_cntr == 7) begin
+	       if (config1_data[23] == 0) begin
+		  config1_reading <= 1'b1;
+	       end
+	    end
+            if (config1_cntr == 23) begin
+	       config1_cntr <= 0;
+               #10
+			      $display("adc1_conf: %x", config1_data);
+	       if (!config1_reading) begin
+		  if (config1_data === {8'h81, 16'h03c8}) begin
+		     config1_reading <= 1'b0;
+		  end else begin
+		     $display("FAILED @(%x): adc1 mismatch - got = %x, expected = %x", progress, config1_data, {8'h81, 16'h03c8});
+		  end
+	       end
+            end
+	 end // if (adc1_modepin === 0)
+      end
+   end // always @ (posedge adc1_adc3wire_clk)
+
+   always @(negedge adc1_adc3wire_clk) begin
+      if (sys_rst) begin
+	 config1_data_o <= 1'b0;
+	 config1_data_o_shift <= 16'h03c8;
+      end else begin
+	 if (config1_reading) begin
+	    config1_data_o <= config1_data_o_shift[15];
+	    config1_data_o_shift <= config1_data_o_shift << 1;
+	 end
+      end
+   end
 
    
 endmodule

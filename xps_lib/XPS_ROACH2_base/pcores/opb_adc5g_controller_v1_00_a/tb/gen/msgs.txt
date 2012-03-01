@@ -2,5 +2,5 @@ VCD info: dumpfile dump.vcd opened for output.
 sys: reset cleared
 adc0_conf: 8103c8
 adc0_conf: 010000
-FAILED @(00000004): adc0 mismatch - got = 010000, expected = 8103c8
-FAILED: system timeout
+adc1_conf: 8103c8
+adc1_conf: 010000
