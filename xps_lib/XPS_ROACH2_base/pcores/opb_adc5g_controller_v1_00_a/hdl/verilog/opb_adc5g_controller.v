@@ -268,13 +268,7 @@ module opb_adc5g_controller(
   assign adc0_reset = adc0_reset_counter != 0;//adc0_reset_iob;
   assign adc1_reset = adc1_reset_counter != 0;//adc1_reset_iob;
 
-  /********* ADC0 configuration state machine *********/
-
-  wire clk0_falling;
-  wire clk0_midhigh;
-  wire clk0_prerise;
-  wire clk0_en;
-
+  
   localparam CONFIG_IDLE        = 0;
   localparam CONFIG_CLKWAIT     = 1;
   localparam CONFIG_READWAIT    = 2;
@@ -283,6 +277,13 @@ module opb_adc5g_controller(
   localparam CONFIG_DATA_READ   = 5;
   localparam CONFIG_ALMOST_DONE = 6;
   localparam CONFIG_FINISH      = 7;
+
+  /********* ADC0 configuration state machine *********/
+
+  wire clk0_falling;
+  wire clk0_midhigh;
+  wire clk0_prerise;
+  wire clk0_en;
 
   reg [2:0] adc0_state;
 
@@ -393,15 +394,15 @@ module opb_adc5g_controller(
   assign adc0_adc3wire_data   = adc0_config_data_shift[23];
   assign adc0_adc3wire_clk    = clk0_counter[4] && !(adc0_state == CONFIG_READWAIT) && !(adc0_state == CONFIG_FINISH);
 
+
   /********* ADC1 configuration state machine *********/
 
-  localparam CONFIG_DATA       = 2;
-
-  wire clk1_prefall;
+  wire clk1_falling;
+  wire clk1_midhigh;
   wire clk1_prerise;
   wire clk1_en;
 
-  reg [1:0] adc1_state;
+  reg [2:0] adc1_state;
 
   reg [15:0] adc1_read_data_shift;
 
@@ -422,25 +423,62 @@ module opb_adc5g_controller(
           end
         end
         CONFIG_CLKWAIT: begin
-          if (clk1_prefall) begin
-            adc1_state <= CONFIG_DATA;
+          if (clk1_falling) begin
+            adc1_state <= CONFIG_DATA_ADDR;
             adc1_config_progress <= 0;
           end
         end 
-        CONFIG_DATA: begin
-          if (clk1_prefall) begin
+        CONFIG_READWAIT: begin
+          if (clk1_falling) begin
+            adc1_state <= CONFIG_DATA_READ;
+          end
+        end 
+        CONFIG_DATA_ADDR: begin
+          if (clk1_falling) begin
             adc1_config_data_shift <= adc1_config_data_shift << 1;
             adc1_config_progress <= adc1_config_progress + 1;
-            if (adc1_config_progress == 23) begin
-              adc1_state <= CONFIG_FINISH;
+            if (adc1_config_progress == 7) begin
+	      if (adc1_config_addr[7] == 1) begin
+		adc1_state <= CONFIG_DATA_WRITE;
+	      end else begin
+		adc1_state <= CONFIG_READWAIT;
+	      end
             end
           end
-	  if (clk1_prerise && adc1_config_progress > 7) begin
-	    adc1_read_data_shift <= {adc1_read_data_shift[14:0], adc1_adc3wire_data_o};
+        end
+        CONFIG_DATA_WRITE: begin
+          if (clk1_falling) begin
+	    adc1_config_data_shift <= adc1_config_data_shift << 1;
+            adc1_config_progress <= adc1_config_progress + 1;
 	  end
+	  if (clk1_midhigh) begin
+            if (adc1_config_progress == 23) begin
+	      adc1_state <= CONFIG_ALMOST_DONE;
+	    end
+          end
+        end
+        CONFIG_DATA_READ: begin
+          if (clk1_prerise) begin
+	    adc1_config_progress <= adc1_config_progress + 1;
+            if (adc1_config_progress == 16) begin
+	      adc1_state <= CONFIG_READWAIT;
+	    end else begin
+	      adc1_read_data_shift <= {adc1_read_data_shift[14:0], adc1_adc3wire_data_o};
+	    end
+	  end
+	  if (clk1_midhigh) begin
+	    if (adc1_config_progress == 25) begin
+	      adc1_state <= CONFIG_ALMOST_DONE;
+	    end
+          end
+        end
+        CONFIG_ALMOST_DONE: begin
+          if (clk1_prerise) begin
+            adc1_state <= CONFIG_FINISH;
+          end
         end
         CONFIG_FINISH: begin
-          if (clk1_prefall) begin
+          if (clk1_falling) begin
             adc1_state <= CONFIG_IDLE;
 	    adc1_read_data_reg <= adc1_read_data_shift;
           end
@@ -453,7 +491,7 @@ module opb_adc5g_controller(
   end
 
   assign adc1_config_done = adc1_state == CONFIG_IDLE;
-
+  
   /* Clock Control */
 
   reg [4:0] clk1_counter;
@@ -464,12 +502,14 @@ module opb_adc5g_controller(
       clk1_counter <= 5'b0;
     end
   end
-  assign clk1_prefall = clk1_counter == 5'b11111;
-  assign clk1_prerise = clk1_counter == 5'b00000;
+  assign clk1_falling = clk1_counter == 5'b00000;
+  assign clk1_midhigh = clk1_counter == 5'b11000;
+  assign clk1_prerise = clk1_counter == 5'b01111;
   assign clk1_en   = adc1_state != CONFIG_IDLE;
 
-  assign adc1_modepin         = adc1_state == CONFIG_DATA;
+  assign adc1_modepin         = !((adc1_state == CONFIG_DATA_ADDR) || (adc1_state == CONFIG_DATA_WRITE) || (adc1_state == CONFIG_DATA_READ) || (adc1_state == CONFIG_READWAIT));
   assign adc1_adc3wire_data   = adc1_config_data_shift[23];
-  assign adc1_adc3wire_clk    = clk0_counter[4];
+  assign adc1_adc3wire_clk    = clk1_counter[4] && !(adc1_state == CONFIG_READWAIT) && !(adc1_state == CONFIG_FINISH);
+
 
 endmodule
