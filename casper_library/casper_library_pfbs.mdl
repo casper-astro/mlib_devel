@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Feb 23 16:19:43 2012"
+  LastModifiedDate	  "Thu Mar  1 11:54:36 2012"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:90>"
+  ModelVersionFormat	  "1.%<AutoIncrement:103>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -3716,7 +3716,7 @@ Library {
       Ports		      [5, 3]
       Position		      [895, 332, 1000, 408]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
-      AttributesFormatString  "taps=4"
+      AttributesFormatString  "input(1), tap(2,2)"
       UserDataPersistent      on
       UserData		      "DataTag9"
       MinAlgLoopOccurrences   off
@@ -3727,37 +3727,38 @@ Library {
       RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "last_tap_async"
-      MaskPromptString	      "Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add Latency|Mult "
-      "Latency|Quantization Behavior|Use behavioral HDL for multlipliers|Use embedded multipliers|Make asynchronous?|De"
-      "bug mode - coeffs are a [1:pfb_size*taps] ramp."
-      MaskStyleString	      "edit,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased:"
-      " Even Values)),checkbox,checkbox,checkbox,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||use_hdl = get_param(gcb,'use_hdl');\nif( strcmp(use_hdl,'on')),\n    set_param(g"
-      "cb, 'use_embedded','off');\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on','off'"
-      ", 'on', 'on'});\nelse\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on','on', 'on'"
-      ", 'on'});\nend\n|||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,"
-      MaskVariables	      "total_taps=@1;data_in_bits=@2;data_out_bits=@3;coeff_bits=@4;add_latency=@5;mult_latency=@6"
-      ";quantization=&7;use_hdl=&8;use_embedded=&9;async=&10;debug_mode=&11;"
-      MaskInitialization      "last_tap_async_init(gcb,...\n    'total_taps', total_taps,...\n    'data_in_bits', data"
-      "_in_bits,...\n    'data_out_bits', data_out_bits,...\n    'coeff_bits', coeff_bits,...\n    'add_latency', add_l"
-      "atency,...\n    'mult_latency', mult_latency,...\n    'quantization', quantization,...\n    'use_hdl', use_hdl,."
-      "..\n    'use_embedded', use_embedded, ...\n    'async', async, ...\n    'debug_mode', debug_mode);"
+      MaskPromptString	      "Input number:|Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add"
+      " Latency|Mult Latency|Quantization Behavior|Use behavioral HDL for multlipliers|Use embedded multipliers|Make as"
+      "ynchronous?|Debug mode - coeffs are a [1:pfb_size*taps] ramp."
+      MaskStyleString	      "edit,edit,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbi"
+      "ased: Even Values)),checkbox,checkbox,checkbox,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||||use_hdl = get_param(gcb,'use_hdl');\nif( strcmp(use_hdl,'on')),\n    set_param("
+      "gcb, 'use_embedded','off');\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on','on'"
+      ",'off', 'on', 'on'});\nelse\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on','on'"
+      ",'on', 'on', 'on'});\nend\n|||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,off,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,"
+      MaskVariables	      "input_num=@1;total_taps=@2;data_in_bits=@3;data_out_bits=@4;coeff_bits=@5;add_latency=@6;mu"
+      "lt_latency=@7;quantization=&8;use_hdl=&9;use_embedded=&10;async=&11;debug_mode=&12;"
+      MaskInitialization      "last_tap_async_init(gcb,...\n    'input_num', input_num, ...\n    'total_taps', total_t"
+      "aps,...\n    'data_in_bits', data_in_bits,...\n    'data_out_bits', data_out_bits,...\n    'coeff_bits', coeff_b"
+      "its,...\n    'add_latency', add_latency,...\n    'mult_latency', mult_latency,...\n    'quantization', quantizat"
+      "ion,...\n    'use_hdl', use_hdl,...\n    'use_embedded', use_embedded, ...\n    'async', async, ...\n    'debug_"
+      "mode', debug_mode);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "4|8|18|8|1|2|Truncate|off|on|on|off"
-      MaskTabNameString	      ",,,,,,,,,,"
+      MaskValueString	      "1|2|8|18|8|1|2|Truncate|on|off|on|off"
+      MaskTabNameString	      ",,,,,,,,,,,"
       System {
 	Name			"last_tap_async"
-	Location		[1, 79, 1921, 1176]
-	Open			off
+	Location		[1, 79, 1919, 1171]
+	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -3789,7 +3790,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeff"
-	  Position		  [30, 228, 60, 242]
+	  Position		  [25, 228, 55, 242]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -3798,7 +3799,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "dvin"
-	  Position		  [30, 343, 60, 357]
+	  Position		  [25, 343, 55, 357]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -3823,7 +3824,7 @@ Library {
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -3844,11 +3845,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "mult_latency"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,315"
@@ -3871,11 +3872,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "mult_latency"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,315"
@@ -3905,14 +3906,14 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  en			  "off"
+	  en			  off
 	  latency		  "mult_latency"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  on
 	  opt			  "Speed"
-	  use_embedded		  "on"
-	  optimum_pipeline	  "off"
-	  xl_use_area		  "off"
+	  use_embedded		  off
+	  optimum_pipeline	  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
@@ -3945,14 +3946,14 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  en			  "off"
+	  en			  off
 	  latency		  "mult_latency"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  on
 	  opt			  "Speed"
-	  use_embedded		  "on"
-	  optimum_pipeline	  "off"
-	  xl_use_area		  "off"
+	  use_embedded		  off
+	  optimum_pipeline	  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
@@ -3982,9 +3983,9 @@ Library {
 	  "<br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigne"
 	  "d with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 	  " in binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "coeff_bits - 1"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,374,364"
@@ -4004,7 +4005,7 @@ Library {
 	  Ports			  [3, 3]
 	  Position		  [485, 174, 580, 216]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
-	  AttributesFormatString  "taps=4, add_latency=1"
+	  AttributesFormatString  "input(1), taps(2), add_lat(1)"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag10"
 	  MinAlgLoopOccurrences	  off
@@ -4015,30 +4016,31 @@ Library {
 	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  MaskType		  "pfb_add_tree_async"
-	  MaskPromptString	  "Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add Latency|Quantization"
-	  " Behavior"
-	  MaskStyleString	  "edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values"
-	  "))"
-	  MaskTunableValueString  "on,on,on,on,on,on"
-	  MaskCallbackString	  "|||||"
-	  MaskEnableString	  "on,on,on,on,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on,on"
-	  MaskVarAliasString	  ",,,,,"
-	  MaskVariables		  "total_taps=@1;data_in_bits=@2;data_out_bits=@3;coeff_bits=@4;add_latency=@5;quantization=&6;"
-	  MaskInitialization	  "pfb_add_tree_async_init(gcb, ...\n    'total_taps', total_taps, ...\n    'data_in_bits', data"
-	  "_in_bits, ...\n    'data_out_bits', data_out_bits, ...\n    'coeff_bits', coeff_bits, ...\n    'add_latency', add_l"
-	  "atency, ...\n    'quantization', quantization);"
+	  MaskPromptString	  "Input number:|Total number of taps:|Input bitwidth:|Output bitwidth:|Coeff bitwidth:|Add latenc"
+	  "y|Quantization behavior|Debug mode - coeffs are a [1:pfb_size*taps] ramp."
+	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even V"
+	  "alues)),checkbox"
+	  MaskTunableValueString  "on,on,on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||||"
+	  MaskEnableString	  "on,on,on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,,,"
+	  MaskVariables		  "input_num=@1;total_taps=@2;data_in_bits=@3;data_out_bits=@4;coeff_bits=@5;add_latency=@6;quantiza"
+	  "tion=&7;debug_mode=&8;"
+	  MaskInitialization	  "pfb_add_tree_async_init(gcb, ...\n    'input_num', input_num, ...\n    'total_taps', total_ta"
+	  "ps, ...\n    'data_in_bits', data_in_bits, ...\n    'data_out_bits', data_out_bits, ...\n    'coeff_bits', coeff_bi"
+	  "ts, ...\n    'add_latency', add_latency, ...\n    'quantization', quantization, ...\n    'debug_mode', debug_mode);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "4|8|18|8|1|Truncate"
-	  MaskTabNameString	  ",,,,,"
+	  MaskValueString	  "1|2|8|18|8|1|Truncate|off"
+	  MaskTabNameString	  ",,,,,,,"
 	  System {
 	    Name		    "pfb_add_tree_async"
-	    Location		    [2, 79, 1670, 1011]
+	    Location		    [1, 79, 1921, 1176]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4092,7 +4094,7 @@ Library {
 	      force_arith_type	      "on"
 	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "14"
+	      bin_pt		      "coeff_bits + data_in_bits - 2"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,44,374,364"
 	      block_type	      "reinterpret"
@@ -4120,7 +4122,7 @@ Library {
 	      force_arith_type	      "on"
 	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "14"
+	      bin_pt		      "coeff_bits + data_in_bits - 2"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
@@ -4148,7 +4150,7 @@ Library {
 	      force_arith_type	      "on"
 	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "14"
+	      bin_pt		      "coeff_bits + data_in_bits - 2"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
@@ -4176,119 +4178,7 @@ Library {
 	      force_arith_type	      "on"
 	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "14"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "reinterpret"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
-	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
-	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
-	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
-	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Reint2_1"
-	      Ports		      [1, 1]
-	      Position		      [130, 239, 160, 251]
-	      SourceBlock	      "xbsIndex_r4/Reinterpret"
-	      SourceType	      "Xilinx Type Reinterpreter Block"
-	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
-	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
-	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
-	      "output of 56 (111000 in binary)."
-	      force_arith_type	      "on"
-	      arith_type	      "Signed  (2's comp)"
-	      force_bin_pt	      "on"
-	      bin_pt		      "14"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "reinterpret"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
-	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
-	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
-	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
-	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Reint2_2"
-	      Ports		      [1, 1]
-	      Position		      [130, 264, 160, 276]
-	      SourceBlock	      "xbsIndex_r4/Reinterpret"
-	      SourceType	      "Xilinx Type Reinterpreter Block"
-	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
-	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
-	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
-	      "output of 56 (111000 in binary)."
-	      force_arith_type	      "on"
-	      arith_type	      "Signed  (2's comp)"
-	      force_bin_pt	      "on"
-	      bin_pt		      "14"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "reinterpret"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
-	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
-	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
-	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
-	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Reint3_1"
-	      Ports		      [1, 1]
-	      Position		      [130, 289, 160, 301]
-	      SourceBlock	      "xbsIndex_r4/Reinterpret"
-	      SourceType	      "Xilinx Type Reinterpreter Block"
-	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
-	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
-	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
-	      "output of 56 (111000 in binary)."
-	      force_arith_type	      "on"
-	      arith_type	      "Signed  (2's comp)"
-	      force_bin_pt	      "on"
-	      bin_pt		      "14"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "reinterpret"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
-	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
-	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
-	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
-	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Reint3_2"
-	      Ports		      [1, 1]
-	      Position		      [130, 314, 160, 326]
-	      SourceBlock	      "xbsIndex_r4/Reinterpret"
-	      SourceType	      "Xilinx Type Reinterpreter Block"
-	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
-	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
-	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
-	      "output of 56 (111000 in binary)."
-	      force_arith_type	      "on"
-	      arith_type	      "Signed  (2's comp)"
-	      force_bin_pt	      "on"
-	      bin_pt		      "14"
+	      bin_pt		      "coeff_bits + data_in_bits - 2"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
@@ -4311,7 +4201,7 @@ Library {
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
+	      nbits		      "coeff_bits + data_in_bits"
 	      boolean_output	      "off"
 	      mode		      "Upper Bit Location + Width"
 	      bit1		      "0"
@@ -4320,7 +4210,7 @@ Library {
 	      base0		      "MSB of Input"
 	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
+	      sggui_pos		      "20,44,540,482"
 	      block_type	      "slice"
 	      block_version	      "11.4"
 	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
@@ -4342,7 +4232,7 @@ Library {
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
+	      nbits		      "coeff_bits + data_in_bits"
 	      boolean_output	      "off"
 	      mode		      "Upper Bit Location + Width"
 	      bit1		      "-16"
@@ -4351,7 +4241,7 @@ Library {
 	      base0		      "MSB of Input"
 	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
+	      sggui_pos		      "20,44,540,482"
 	      block_type	      "slice"
 	      block_version	      "11.4"
 	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
@@ -4373,7 +4263,7 @@ Library {
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
+	      nbits		      "coeff_bits + data_in_bits"
 	      boolean_output	      "off"
 	      mode		      "Upper Bit Location + Width"
 	      bit1		      "-32"
@@ -4404,7 +4294,7 @@ Library {
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
+	      nbits		      "coeff_bits + data_in_bits"
 	      boolean_output	      "off"
 	      mode		      "Upper Bit Location + Width"
 	      bit1		      "-48"
@@ -4426,136 +4316,12 @@ Library {
 	      "ntf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
-	      BlockType		      Reference
-	      Name		      "Slice2_1"
-	      Ports		      [1, 1]
-	      Position		      [70, 239, 115, 251]
-	      SourceBlock	      "xbsIndex_r4/Slice"
-	      SourceType	      "Xilinx Bit Slice Extractor Block"
-	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
-	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
-	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
-	      boolean_output	      "off"
-	      mode		      "Upper Bit Location + Width"
-	      bit1		      "-64"
-	      base1		      "MSB of Input"
-	      bit0		      "0"
-	      base0		      "MSB of Input"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "slice"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
-	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
-	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
-	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
-	      "ntf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Slice2_2"
-	      Ports		      [1, 1]
-	      Position		      [70, 264, 115, 276]
-	      SourceBlock	      "xbsIndex_r4/Slice"
-	      SourceType	      "Xilinx Bit Slice Extractor Block"
-	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
-	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
-	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
-	      boolean_output	      "off"
-	      mode		      "Upper Bit Location + Width"
-	      bit1		      "-80"
-	      base1		      "MSB of Input"
-	      bit0		      "0"
-	      base0		      "MSB of Input"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "slice"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
-	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
-	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
-	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
-	      "ntf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Slice3_1"
-	      Ports		      [1, 1]
-	      Position		      [70, 289, 115, 301]
-	      SourceBlock	      "xbsIndex_r4/Slice"
-	      SourceType	      "Xilinx Bit Slice Extractor Block"
-	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
-	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
-	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
-	      boolean_output	      "off"
-	      mode		      "Upper Bit Location + Width"
-	      bit1		      "-96"
-	      base1		      "MSB of Input"
-	      bit0		      "0"
-	      base0		      "MSB of Input"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "slice"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
-	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
-	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
-	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
-	      "ntf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Slice3_2"
-	      Ports		      [1, 1]
-	      Position		      [70, 314, 115, 326]
-	      SourceBlock	      "xbsIndex_r4/Slice"
-	      SourceType	      "Xilinx Bit Slice Extractor Block"
-	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
-	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
-	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "16"
-	      boolean_output	      "off"
-	      mode		      "Upper Bit Location + Width"
-	      bit1		      "-112"
-	      base1		      "MSB of Input"
-	      bit0		      "0"
-	      base0		      "MSB of Input"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "slice"
-	      block_version	      "11.4"
-	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
-	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
-	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
-	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
-	      "ntf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
 	      BlockType		      SubSystem
 	      Name		      "adder_tree1"
-	      Ports		      [5, 2]
-	      Position		      [200, 114, 350, 316]
+	      Ports		      [3, 2]
+	      Position		      [200, 115, 350, 215]
 	      BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
-	      AttributesFormatString  "latency 2"
+	      AttributesFormatString  "latency 1"
 	      AncestorBlock	      "casper_library_misc/adder_tree"
 	      UserDataPersistent      on
 	      UserData		      "DataTag11"
@@ -4590,7 +4356,7 @@ Library {
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "4|1|Fabric|off"
+	      MaskValueString	      "2|add_latency|Fabric|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree1"
@@ -4628,20 +4394,6 @@ Library {
 		  IconDisplay		  "Port number"
 		}
 		Block {
-		  BlockType		  Inport
-		  Name			  "din3"
-		  Position		  [30, 142, 60, 158]
-		  Port			  "4"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "din4"
-		  Position		  [30, 182, 60, 198]
-		  Port			  "5"
-		  IconDisplay		  "Port number"
-		}
-		Block {
 		  BlockType		  Reference
 		  Name			  "addr1"
 		  Ports			  [2, 1]
@@ -4682,84 +4434,6 @@ Library {
 		}
 		Block {
 		  BlockType		  Reference
-		  Name			  "addr2"
-		  Ports			  [2, 1]
-		  Position		  [130, 120, 170, 180]
-		  SourceBlock		  "xbsIndex_r4/AddSub"
-		  SourceType		  "Xilinx Adder/Subtracter Block"
-		  mode			  "Addition"
-		  use_carryin		  "off"
-		  use_carryout		  "off"
-		  en			  "off"
-		  latency		  "1"
-		  precision		  "Full"
-		  arith_type		  "Unsigned"
-		  n_bits		  "16"
-		  bin_pt		  "14"
-		  quantization		  "Truncate"
-		  overflow		  "Wrap"
-		  dbl_ovrd		  "off"
-		  use_behavioral_HDL	  "off"
-		  hw_selection		  "Fabric"
-		  pipelined		  "on"
-		  xl_use_area		  "off"
-		  xl_area		  "[0,0,0,0,0,0,0]"
-		  use_rpm		  "on"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
-		  block_type		  "addsub"
-		  block_version		  "11.4"
-		  sg_icon_stat		  "40,60,2,1,white,blue,0,8ff03b5e,right,"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
-		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
-		  "[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0.333333 0.233"
-		  "333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\n"
-		  "fprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('inp"
-		  "ut',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bf{a + b}','texmod"
-		  "e','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon te"
-		  "xt');\n"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "addr3"
-		  Ports			  [2, 1]
-		  Position		  [230, 40, 270, 100]
-		  SourceBlock		  "xbsIndex_r4/AddSub"
-		  SourceType		  "Xilinx Adder/Subtracter Block"
-		  mode			  "Addition"
-		  use_carryin		  "off"
-		  use_carryout		  "off"
-		  en			  "off"
-		  latency		  "1"
-		  precision		  "Full"
-		  arith_type		  "Unsigned"
-		  n_bits		  "16"
-		  bin_pt		  "14"
-		  quantization		  "Truncate"
-		  overflow		  "Wrap"
-		  dbl_ovrd		  "off"
-		  use_behavioral_HDL	  "off"
-		  hw_selection		  "Fabric"
-		  pipelined		  "on"
-		  xl_use_area		  "off"
-		  xl_area		  "[0,0,0,0,0,0,0]"
-		  use_rpm		  "on"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
-		  block_type		  "addsub"
-		  block_version		  "11.4"
-		  sg_icon_stat		  "40,60,2,1,white,blue,0,8ff03b5e,right,"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
-		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
-		  "[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0.333333 0.233"
-		  "333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\n"
-		  "fprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('inp"
-		  "ut',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bf{a + b}','texmod"
-		  "e','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon te"
-		  "xt');\n"
-		}
-		Block {
-		  BlockType		  Reference
 		  Name			  "sync_delay"
 		  Ports			  [1, 1]
 		  Position		  [80, 15, 110, 45]
@@ -4767,7 +4441,7 @@ Library {
 		  SourceType		  "Xilinx Delay Block"
 		  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 		  en			  "off"
-		  latency		  "2"
+		  latency		  "1"
 		  dbl_ovrd		  "off"
 		  reg_retiming		  "on"
 		  xl_use_area		  "off"
@@ -4776,24 +4450,24 @@ Library {
 		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
 		  block_version		  "11.4"
-		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
+		  sg_icon_stat		  "30,30,1,1,white,blue,0,07b98262,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
 		  "666667 0.9 0.633333 0.566667 0.5 0.233333 ],[0.1 0.266667 0.5 0.733333 0.9 0.9 0.833333 0.9 0.9 0.666667 0.866667 "
 		  "0.7 0.5 0.3 0.133333 0.333333 0.1 0.1 0.166667 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-2}','tex"
+		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-1}','tex"
 		  "mode','on');\nfprintf('','COMMENT: end icon text');\n"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "sync_out"
-		  Position		  [330, 17, 360, 33]
+		  Position		  [230, 17, 260, 33]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
-		  Position		  [330, 42, 360, 58]
+		  Position		  [230, 42, 260, 58]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
 		}
@@ -4822,31 +4496,7 @@ Library {
 		  DstPort		  2
 		}
 		Line {
-		  SrcBlock		  "din3"
-		  SrcPort		  1
-		  DstBlock		  "addr2"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "din4"
-		  SrcPort		  1
-		  DstBlock		  "addr2"
-		  DstPort		  2
-		}
-		Line {
 		  SrcBlock		  "addr1"
-		  SrcPort		  1
-		  DstBlock		  "addr3"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "addr2"
-		  SrcPort		  1
-		  DstBlock		  "addr3"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "addr3"
 		  SrcPort		  1
 		  DstBlock		  "dout"
 		  DstPort		  1
@@ -4856,10 +4506,10 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "adder_tree2"
-	      Ports		      [5, 2]
-	      Position		      [200, 364, 350, 566]
+	      Ports		      [3, 2]
+	      Position		      [200, 265, 350, 365]
 	      BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
-	      AttributesFormatString  "latency 2"
+	      AttributesFormatString  "latency 1"
 	      AncestorBlock	      "casper_library_misc/adder_tree"
 	      UserDataPersistent      on
 	      UserData		      "DataTag12"
@@ -4894,7 +4544,7 @@ Library {
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
 	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "4|1|Fabric|off"
+	      MaskValueString	      "2|add_latency|Fabric|off"
 	      MaskTabNameString	      ",,,"
 	      System {
 		Name			"adder_tree2"
@@ -4932,20 +4582,6 @@ Library {
 		  IconDisplay		  "Port number"
 		}
 		Block {
-		  BlockType		  Inport
-		  Name			  "din3"
-		  Position		  [30, 142, 60, 158]
-		  Port			  "4"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "din4"
-		  Position		  [30, 182, 60, 198]
-		  Port			  "5"
-		  IconDisplay		  "Port number"
-		}
-		Block {
 		  BlockType		  Reference
 		  Name			  "addr1"
 		  Ports			  [2, 1]
@@ -4986,84 +4622,6 @@ Library {
 		}
 		Block {
 		  BlockType		  Reference
-		  Name			  "addr2"
-		  Ports			  [2, 1]
-		  Position		  [130, 120, 170, 180]
-		  SourceBlock		  "xbsIndex_r4/AddSub"
-		  SourceType		  "Xilinx Adder/Subtracter Block"
-		  mode			  "Addition"
-		  use_carryin		  "off"
-		  use_carryout		  "off"
-		  en			  "off"
-		  latency		  "1"
-		  precision		  "Full"
-		  arith_type		  "Unsigned"
-		  n_bits		  "16"
-		  bin_pt		  "14"
-		  quantization		  "Truncate"
-		  overflow		  "Wrap"
-		  dbl_ovrd		  "off"
-		  use_behavioral_HDL	  "off"
-		  hw_selection		  "Fabric"
-		  pipelined		  "on"
-		  xl_use_area		  "off"
-		  xl_area		  "[0,0,0,0,0,0,0]"
-		  use_rpm		  "on"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
-		  block_type		  "addsub"
-		  block_version		  "11.4"
-		  sg_icon_stat		  "40,60,2,1,white,blue,0,8ff03b5e,right,"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
-		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
-		  "[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0.333333 0.233"
-		  "333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\n"
-		  "fprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('inp"
-		  "ut',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bf{a + b}','texmod"
-		  "e','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon te"
-		  "xt');\n"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "addr3"
-		  Ports			  [2, 1]
-		  Position		  [230, 40, 270, 100]
-		  SourceBlock		  "xbsIndex_r4/AddSub"
-		  SourceType		  "Xilinx Adder/Subtracter Block"
-		  mode			  "Addition"
-		  use_carryin		  "off"
-		  use_carryout		  "off"
-		  en			  "off"
-		  latency		  "1"
-		  precision		  "Full"
-		  arith_type		  "Unsigned"
-		  n_bits		  "16"
-		  bin_pt		  "14"
-		  quantization		  "Truncate"
-		  overflow		  "Wrap"
-		  dbl_ovrd		  "off"
-		  use_behavioral_HDL	  "off"
-		  hw_selection		  "Fabric"
-		  pipelined		  "on"
-		  xl_use_area		  "off"
-		  xl_area		  "[0,0,0,0,0,0,0]"
-		  use_rpm		  "on"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
-		  block_type		  "addsub"
-		  block_version		  "11.4"
-		  sg_icon_stat		  "40,60,2,1,white,blue,0,8ff03b5e,right,"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
-		  "tch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.525 0.25 ],"
-		  "[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0.333333 0.233"
-		  "333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\n"
-		  "fprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('inp"
-		  "ut',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bf{a + b}','texmod"
-		  "e','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon te"
-		  "xt');\n"
-		}
-		Block {
-		  BlockType		  Reference
 		  Name			  "sync_delay"
 		  Ports			  [1, 1]
 		  Position		  [80, 15, 110, 45]
@@ -5071,7 +4629,7 @@ Library {
 		  SourceType		  "Xilinx Delay Block"
 		  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
 		  en			  "off"
-		  latency		  "2"
+		  latency		  "1"
 		  dbl_ovrd		  "off"
 		  reg_retiming		  "on"
 		  xl_use_area		  "off"
@@ -5080,24 +4638,24 @@ Library {
 		  sggui_pos		  "21,71,419,315"
 		  block_type		  "delay"
 		  block_version		  "11.4"
-		  sg_icon_stat		  "30,30,1,1,white,blue,0,85ce9542,right,"
+		  sg_icon_stat		  "30,30,1,1,white,blue,0,07b98262,right,"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npa"
 		  "tch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0."
 		  "666667 0.9 0.633333 0.566667 0.5 0.233333 ],[0.1 0.266667 0.5 0.733333 0.9 0.9 0.833333 0.9 0.9 0.666667 0.866667 "
 		  "0.7 0.5 0.3 0.133333 0.333333 0.1 0.1 0.166667 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-2}','tex"
+		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-1}','tex"
 		  "mode','on');\nfprintf('','COMMENT: end icon text');\n"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "sync_out"
-		  Position		  [330, 17, 360, 33]
+		  Position		  [230, 17, 260, 33]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
-		  Position		  [330, 42, 360, 58]
+		  Position		  [230, 42, 260, 58]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
 		}
@@ -5126,31 +4684,7 @@ Library {
 		  DstPort		  2
 		}
 		Line {
-		  SrcBlock		  "din3"
-		  SrcPort		  1
-		  DstBlock		  "addr2"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "din4"
-		  SrcPort		  1
-		  DstBlock		  "addr2"
-		  DstPort		  2
-		}
-		Line {
 		  SrcBlock		  "addr1"
-		  SrcPort		  1
-		  DstBlock		  "addr3"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "addr2"
-		  SrcPort		  1
-		  DstBlock		  "addr3"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "addr3"
 		  SrcPort		  1
 		  DstBlock		  "dout"
 		  DstPort		  1
@@ -5161,14 +4695,14 @@ Library {
 	      BlockType		      Reference
 	      Name		      "convert1"
 	      Ports		      [1, 1]
-	      Position		      [500, 213, 530, 227]
+	      Position		      [500, 163, 530, 177]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "18"
-	      bin_pt		      "17"
+	      n_bits		      "data_out_bits"
+	      bin_pt		      "data_out_bits-1"
 	      quantization	      "Truncate"
 	      overflow		      "Saturate"
 	      latency		      "add_latency"
@@ -5193,23 +4727,23 @@ Library {
 	      BlockType		      Reference
 	      Name		      "convert2"
 	      Ports		      [1, 1]
-	      Position		      [500, 258, 530, 272]
+	      Position		      [500, 203, 530, 217]
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "18"
-	      bin_pt		      "17"
+	      n_bits		      "data_out_bits"
+	      bin_pt		      "data_out_bits-1"
 	      quantization	      "Truncate"
 	      overflow		      "Saturate"
 	      latency		      "add_latency"
 	      dbl_ovrd		      "off"
-	      pipeline		      "off"
+	      pipeline		      "on"
 	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
+	      sggui_pos		      "20,44,538,429"
 	      block_type	      "convert"
 	      block_version	      "11.4"
 	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
@@ -5225,7 +4759,7 @@ Library {
 	      BlockType		      Reference
 	      Name		      "delay_convert"
 	      Ports		      [1, 1]
-	      Position		      [400, 150, 430, 180]
+	      Position		      [400, 100, 430, 130]
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
@@ -5258,7 +4792,7 @@ Library {
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
 	      "p."
 	      en		      "off"
-	      latency		      "3"
+	      latency		      "2"
 	      dbl_ovrd		      "off"
 	      reg_retiming	      "off"
 	      xl_use_area	      "off"
@@ -5267,13 +4801,13 @@ Library {
 	      sggui_pos		      "20,44,419,315"
 	      block_type	      "delay"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "30,30,1,1,white,blue,0,83e6bb61,right,"
+	      sg_icon_stat	      "30,30,1,1,white,blue,0,85ce9542,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0"
 	      ".466667 0.666667 0.9 0.633333 0.566667 0.5 0.233333 ],[0.1 0.266667 0.5 0.733333 0.9 0.9 0.833333 0.9 0.9 0.666"
 	      "667 0.866667 0.7 0.5 0.3 0.133333 0.333333 0.1 0.1 0.166667 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 "
 	      "0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black')"
-	      ";disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	      ";disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	      Port {
 		PortNumber		1
 		Name			"dvo"
@@ -5285,7 +4819,7 @@ Library {
 	      BlockType		      Reference
 	      Name		      "ri_to_c"
 	      Ports		      [2, 1]
-	      Position		      [550, 212, 580, 243]
+	      Position		      [550, 162, 580, 193]
 	      UserDataPersistent      on
 	      UserData		      "DataTag13"
 	      SourceBlock	      "casper_library_misc/ri_to_c"
@@ -5303,54 +4837,54 @@ Library {
 	      BlockType		      Reference
 	      Name		      "scale1"
 	      Ports		      [1, 1]
-	      Position		      [400, 213, 430, 227]
+	      Position		      [400, 163, 430, 177]
 	      SourceBlock	      "xbsIndex_r4/Scale"
 	      SourceType	      "Xilinx Input Scaler Block"
 	      infoedit		      "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: "
 	      "In hardware this block costs nothing."
-	      scale_factor	      "-3"
+	      scale_factor	      "-2"
 	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "scale"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,b236fd91,right,"
+	      sg_icon_stat	      "30,14,1,1,white,blue,0,0459bb18,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
 	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
 	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
 	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-3}}','texmode','on');\nfprintf('','COMMENT: end icon text"
+	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-2}}','texmode','on');\nfprintf('','COMMENT: end icon text"
 	      "');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "scale2"
 	      Ports		      [1, 1]
-	      Position		      [400, 258, 430, 272]
+	      Position		      [400, 208, 430, 222]
 	      SourceBlock	      "xbsIndex_r4/Scale"
 	      SourceType	      "Xilinx Input Scaler Block"
 	      infoedit		      "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: "
 	      "In hardware this block costs nothing."
-	      scale_factor	      "-3"
+	      scale_factor	      "-2"
 	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
+	      sggui_pos		      "20,44,348,233"
 	      block_type	      "scale"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,b236fd91,right,"
+	      sg_icon_stat	      "30,14,1,1,white,blue,0,0459bb18,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
 	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
 	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
 	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-3}}','texmode','on');\nfprintf('','COMMENT: end icon text"
+	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-2}}','texmode','on');\nfprintf('','COMMENT: end icon text"
 	      "');\n"
 	    }
 	    Block {
 	      BlockType		      Outport
 	      Name		      "dout"
-	      Position		      [600, 202, 630, 218]
+	      Position		      [600, 152, 630, 168]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
@@ -5470,22 +5004,6 @@ Library {
 		DstBlock		"Slice1_2"
 		DstPort			1
 	      }
-	      Branch {
-		DstBlock		"Slice2_1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice2_2"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice3_1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Slice3_2"
-		DstPort			1
-	      }
 	    }
 	    Line {
 	      SrcBlock		      "Slice0_1"
@@ -5534,54 +5052,6 @@ Library {
 	      SrcPort		      1
 	      DstBlock		      "adder_tree2"
 	      DstPort		      3
-	    }
-	    Line {
-	      SrcBlock		      "Slice2_1"
-	      SrcPort		      1
-	      DstBlock		      "Reint2_1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Reint2_1"
-	      SrcPort		      1
-	      DstBlock		      "adder_tree1"
-	      DstPort		      4
-	    }
-	    Line {
-	      SrcBlock		      "Slice2_2"
-	      SrcPort		      1
-	      DstBlock		      "Reint2_2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Reint2_2"
-	      SrcPort		      1
-	      DstBlock		      "adder_tree2"
-	      DstPort		      4
-	    }
-	    Line {
-	      SrcBlock		      "Slice3_1"
-	      SrcPort		      1
-	      DstBlock		      "Reint3_1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Reint3_1"
-	      SrcPort		      1
-	      DstBlock		      "adder_tree1"
-	      DstPort		      5
-	    }
-	    Line {
-	      SrcBlock		      "Slice3_2"
-	      SrcPort		      1
-	      DstBlock		      "Reint3_2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Reint3_2"
-	      SrcPort		      1
-	      DstBlock		      "adder_tree2"
-	      DstPort		      5
 	    }
 	  }
 	}
@@ -5764,7 +5234,7 @@ Library {
 	  SourceType		  "bus_expand"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -5775,9 +5245,9 @@ Library {
 	  outputWidth		  "data_in_bits"
 	  outputBinaryPt	  "data_in_bits - 1"
 	  outputArithmeticType	  "1"
-	  outputToWorkspace	  "off"
+	  outputToWorkspace	  off
 	  variablePrefix	  "out"
-	  outputToModelAsWell	  "on"
+	  outputToModelAsWell	  on
 	}
 	Block {
 	  BlockType		  Outport
@@ -6858,8 +6328,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|Round  (unbiased: Even Values)|1|[2                  "
-      "                    2]|on"
+      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|Round  (unbiased: Even Values)|1|2|on"
       MaskTabNameString	      ",,,,,,,,,,,,,,,"
       System {
 	Name			"pfb_fir"
@@ -7588,7 +7057,7 @@ Library {
       BlockType		      SubSystem
       Name		      "pfb_fir_async"
       Ports		      [4, 4]
-      Position		      [755, 54, 845, 166]
+      Position		      [755, 62, 845, 178]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       AttributesFormatString  "taps=2, add_latency=1\nmax scale 0.500"
       UserDataPersistent      on
@@ -7632,8 +7101,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "5|2|hamming|1|off|18|18|18|off|1|2|3|Round  (unbiased: Even Values)|1|[2                 "
-      "                     2]|off|on|off"
+      MaskValueString	      "5|2|hamming|1|off|8|18|8|off|1|2|3|Truncate|1|2|off|on|off"
       MaskTabNameString	      ",,,,,,,,,,,,,,,,,"
       System {
 	Name			"pfb_fir_async"
@@ -7685,14 +7153,14 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "bram_latency+1"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,44,419,315"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "25,16,1,1,white,blue,0,d390c2d8,right,"
@@ -7709,75 +7177,28 @@ Library {
 	  Position		  [150, 150, 250, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "PFBSize=5, n_inputs=1,\ntaps=2, input=0"
-	  LinkData {
-	    BlockName		    "Delay"
-	    DialogParameters {
-	      sggui_pos		      "50,74,419,315"
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,83e6bb61,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.222222 0.0666667 0.311111 0.0666667 0.222222 0.488889 0.555556 0.622222 0.911111 0.688889 0.46666"
-	      "7 0.311111 0.555556 0.311111 0.466667 0.688889 0.911111 0.622222 0.555556 0.488889 0.222222 ],[0.108696 0.26087"
-	      " 0.5 0.73913 0.891304 0.891304 0.826087 0.891304 0.891304 0.673913 0.891304 0.73913 0.5 0.26087 0.108696 0.3260"
-	      "87 0.108696 0.108696 0.173913 0.108696 0.108696 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf"
-	      "('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texm"
-	      "ode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "Delay1"
-	    DialogParameters {
-	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
-	      "p."
-	      en		      "off"
-	      latency		      "bram_latency+1"
-	      dbl_ovrd		      "off"
-	      reg_retiming	      "off"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,83e6bb61,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.222222 0.0666667 0.311111 0.0666667 0.222222 0.488889 0.555556 0.622222 0.911111 0.688889 0.46666"
-	      "7 0.311111 0.555556 0.311111 0.466667 0.688889 0.911111 0.622222 0.555556 0.488889 0.222222 ],[0.108696 0.26087"
-	      " 0.5 0.73913 0.891304 0.891304 0.826087 0.891304 0.891304 0.673913 0.891304 0.73913 0.5 0.26087 0.108696 0.3260"
-	      "87 0.108696 0.108696 0.173913 0.108696 0.108696 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf"
-	      "('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texm"
-	      "ode','on');\nfprintf('','COMMENT: end icon text');\n"
-	      sggui_pos		      "20,44,419,315"
-	    }
-	    BlockName		    "Register"
-	    DialogParameters {
-	      sggui_pos		      "20,44,419,209"
-	      sg_icon_stat	      "45,50,1,1,white,blue,0,ef2275f7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.222222 0.0666667 0.311111 0.0666667 0.222222 0.488889 0.555556 0.622222 0.911111 0.688889 0.46666"
-	      "7 0.311111 0.555556 0.311111 0.466667 0.688889 0.911111 0.622222 0.555556 0.488889 0.222222 ],[0.14 0.28 0.5 0."
-	      "72 0.86 0.86 0.8 0.86 0.86 0.66 0.86 0.72 0.5 0.28 0.14 0.34 0.14 0.14 0.2 0.14 0.14 ],[0.98 0.96 0.92]);\nplot"
-	      "([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text')"
-	      ";\ncolor('black');port_label('input',1,'d');\ncolor('black');port_label('output',1,'q');\ncolor('black');disp('"
-	      "\\bf{z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag25"
 	  SourceBlock		  "casper_library_pfbs/pfb_coeff_gen"
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
 	  RTWMemSecDataInternal	  "Inherit from model"
 	  RTWMemSecDataParameters "Inherit from model"
 	  PFBSize		  "5"
-	  CoeffBitWidth		  "18"
+	  CoeffBitWidth		  "8"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  off
+	  CoeffDistMem		  "off"
 	  WindowType		  "hamming"
 	  bram_latency		  "3"
 	  n_inputs		  "1"
 	  nput			  "0"
 	  fwidth		  "1"
-	  debug_mode		  off
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7785,188 +7206,30 @@ Library {
 	  Ports			  [5, 3]
 	  Position		  [450, 150, 550, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
-	  AttributesFormatString  "taps=2"
+	  AttributesFormatString  "input(1), tap(2,2)"
 	  LinkData {
-	    BlockName		    "pfb_add_tree/adder_tree1/addr1"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree1/addr2"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree1/addr3"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree2/addr1"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree2/addr2"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree2/addr3"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/convert1"
-	    DialogParameters {
-	      quantization	      "Round  (unbiased: +/- Inf)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/convert2"
-	    DialogParameters {
-	      quantization	      "Round  (unbiased: +/- Inf)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/scale1"
-	    DialogParameters {
-	      scale_factor	      "-1"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,315b7d78,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
-	      "');\n"
-	    }
-	    BlockName		    "pfb_add_tree/scale2"
-	    DialogParameters {
-	      scale_factor	      "-1"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,315b7d78,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
-	      "');\n"
-	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr1"
 	    DialogParameters {
 	      precision		      "User Defined"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
+	      n_bits		      "16"
+	      bin_pt		      "14"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
 	      latency		      "1"
 	      use_behavioral_HDL      "off"
 	      hw_selection	      "Fabric"
 	      pipelined		      "on"
 	      use_rpm		      "on"
+	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
+	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
+	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
+	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
+	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
+	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
+	      "('','COMMENT: end icon text');\n"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr2"
 	    DialogParameters {
@@ -7976,20 +7239,6 @@ Library {
 	      bin_pt		      "34"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr3"
 	    DialogParameters {
@@ -7999,27 +7248,13 @@ Library {
 	      bin_pt		      "34"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree2/addr1"
 	    DialogParameters {
 	      precision		      "User Defined"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
+	      n_bits		      "16"
+	      bin_pt		      "14"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
@@ -8054,11 +7289,6 @@ Library {
 	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
 	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
 	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree2/addr3"
 	    DialogParameters {
@@ -8077,46 +7307,26 @@ Library {
 	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
 	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
 	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/convert1"
 	    DialogParameters {
-	      quantization	      "Round  (unbiased: Even Values)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "18"
-	      bin_pt		      "17"
+	      n_bits		      "data_out_bits"
+	      bin_pt		      "data_out_bits-1"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
 	      latency		      "add_latency"
 	      pipeline		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/convert2"
 	    DialogParameters {
-	      quantization	      "Round  (unbiased: Even Values)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "18"
-	      bin_pt		      "17"
+	      n_bits		      "data_out_bits"
+	      bin_pt		      "data_out_bits-1"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
 	      latency		      "add_latency"
+	      pipeline		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/scale1"
 	    DialogParameters {
@@ -8149,23 +7359,24 @@ Library {
 	  SourceType		  "last_tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
 	  RTWMemSecDataInternal	  "Inherit from model"
 	  RTWMemSecDataParameters "Inherit from model"
+	  input_num		  "1"
 	  total_taps		  "2"
-	  data_in_bits		  "18"
+	  data_in_bits		  "8"
 	  data_out_bits		  "18"
-	  coeff_bits		  "18"
+	  coeff_bits		  "8"
 	  add_latency		  "1"
 	  mult_latency		  "2"
-	  quantization		  "Round  (unbiased: Even Values)"
-	  use_hdl		  on
-	  use_embedded		  off
-	  async			  on
-	  debug_mode		  off
+	  quantization		  "Truncate"
+	  use_hdl		  "on"
+	  use_embedded		  "off"
+	  async			  "on"
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -8174,134 +7385,13 @@ Library {
 	  Position		  [300, 150, 400, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "tap(1/2)"
-	  LinkData {
-	    BlockName		    "Delay1"
-	    DialogParameters {
-	      sg_icon_stat	      "40,28,1,1,white,blue,0,85ce9542,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.325 0.2 0.375 0.2 0.325 0.5 0.55 0.6 0.8 0.65 0.5 0.4 0.6 0.4 0.5 0.65 0.8 0.6 0.55 0.5 0.325 ],["
-	      "0.107143 0.285714 0.535714 0.785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.53571"
-	      "4 0.25 0.107143 0.321429 0.107143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],["
-	      "0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black"
-	      "');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "Delay2"
-	    DialogParameters {
-	      sg_icon_stat	      "40,28,1,1,white,blue,0,85ce9542,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.325 0.2 0.375 0.2 0.325 0.5 0.55 0.6 0.8 0.65 0.5 0.4 0.6 0.4 0.5 0.65 0.8 0.6 0.55 0.5 0.325 ],["
-	      "0.107143 0.285714 0.535714 0.785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.53571"
-	      "4 0.25 0.107143 0.321429 0.107143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],["
-	      "0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black"
-	      "');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "Mult"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,9a78ff34,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.22 0.06 0.3 0.06 0.22 0.48 0.56 0.64 0.92 0.7 0.48 0.32 0.56 0.32 0.48 0.7 0.92 0.64 0.56 0.48 0."
-	      "22 ],[0.117647 0.27451 0.509804 0.745098 0.901961 0.901961 0.823529 0.901961 0.901961 0.686275 0.901961 0.74509"
-	      "8 0.509804 0.27451 0.117647 0.333333 0.117647 0.117647 0.196078 0.117647 0.117647 ],[0.98 0.96 0.92]);\nplot([0"
-	      " 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n"
-	      "color('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label"
-	      "('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-2}','texmode','on');\nfprintf('','COMMEN"
-	      "T: end icon text');\n"
-	    }
-	    BlockName		    "Mult1"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,9a78ff34,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.22 0.06 0.3 0.06 0.22 0.48 0.56 0.64 0.92 0.7 0.48 0.32 0.56 0.32 0.48 0.7 0.92 0.64 0.56 0.48 0."
-	      "22 ],[0.117647 0.27451 0.509804 0.745098 0.901961 0.901961 0.823529 0.901961 0.901961 0.686275 0.901961 0.74509"
-	      "8 0.509804 0.27451 0.117647 0.333333 0.117647 0.117647 0.196078 0.117647 0.117647 ],[0.98 0.96 0.92]);\nplot([0"
-	      " 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n"
-	      "color('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label"
-	      "('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-2}','texmode','on');\nfprintf('','COMMEN"
-	      "T: end icon text');\n"
-	    }
-	    BlockName		    "Single Port RAM"
-	    DialogParameters {
-	      sg_icon_stat	      "65,54,3,1,white,blue,0,f2d5aa4c,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.276923 0.138462 0.338462 0.138462 0.276923 0.492308 0.553846 0.615385 0.846154 0.661538 0.476923 "
-	      "0.353846 0.569231 0.353846 0.476923 0.661538 0.846154 0.615385 0.553846 0.492308 0.276923 ],[0.111111 0.277778 "
-	      "0.518519 0.759259 0.925926 0.925926 0.851852 0.925926 0.925926 0.703704 0.925926 0.777778 0.518519 0.259259 0.1"
-	      "11111 0.333333 0.111111 0.111111 0.185185 0.111111 0.111111 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 "
-	      "]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_la"
-	      "bel('input',1,'addr');\ncolor('black');port_label('input',2,'data');\ncolor('black');port_label('input',3,'we')"
-	      ";\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "c_to_ri/force_im"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "c_to_ri/force_re"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "c_to_ri/slice_im"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "c_to_ri/slice_re"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "sync_delay/Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.244444 0.377778 0.244444 0.333333 0.488889 0.533333 0.577778 0.733333 0.6 0.466667 0.377"
-	      "778 0.511111 0.377778 0.466667 0.6 0.733333 0.577778 0.533333 0.488889 0.333333 ],[0.115385 0.269231 0.5 0.7307"
-	      "69 0.884615 0.884615 0.807692 0.884615 0.884615 0.653846 0.884615 0.730769 0.5 0.269231 0.115385 0.346154 0.115"
-	      "385 0.115385 0.192308 0.115385 0.115385 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COM"
-	      "MENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'16')"
-	      ";\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "tapout_delay"
-	    DialogParameters {
-	      sg_icon_stat	      "40,28,1,1,white,blue,0,aa5bc30d,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.325 0.2 0.375 0.2 0.325 0.5 0.55 0.6 0.8 0.65 0.5 0.4 0.6 0.4 0.5 0.65 0.8 0.6 0.55 0.5 0.325 ],["
-	      "0.107143 0.285714 0.535714 0.785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.53571"
-	      "4 0.25 0.107143 0.321429 0.107143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],["
-	      "0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black"
-	      "');disp('z^{-6}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag27"
 	  SourceBlock		  "casper_library_pfbs/tap_async"
 	  SourceType		  "tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8309,17 +7399,17 @@ Library {
 	  RTWMemSecDataParameters "Inherit from model"
 	  this_tap		  "1"
 	  pfb_bits		  "5"
-	  coeff_bits		  "18"
+	  coeff_bits		  "8"
 	  total_taps		  "2"
-	  data_in_bits		  "18"
+	  data_in_bits		  "8"
 	  mult_latency		  "2"
 	  bram_latency		  "3"
 	  simul_bits		  "1"
 	  fwidth		  "1"
-	  use_hdl		  on
-	  use_embedded		  off
-	  async			  on
-	  debug_mode		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
+	  async			  "on"
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -8334,22 +7424,22 @@ Library {
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
 	  RTWMemSecDataInternal	  "Inherit from model"
 	  RTWMemSecDataParameters "Inherit from model"
 	  PFBSize		  "5"
-	  CoeffBitWidth		  "18"
+	  CoeffBitWidth		  "8"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  off
+	  CoeffDistMem		  "off"
 	  WindowType		  "hamming"
 	  bram_latency		  "3"
 	  n_inputs		  "1"
 	  nput			  "1"
 	  fwidth		  "1"
-	  debug_mode		  off
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -8357,188 +7447,30 @@ Library {
 	  Ports			  [5, 3]
 	  Position		  [450, 300, 550, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
-	  AttributesFormatString  "taps=2"
+	  AttributesFormatString  "input(2), tap(2,2)"
 	  LinkData {
-	    BlockName		    "pfb_add_tree/adder_tree1/addr1"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree1/addr2"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree1/addr3"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree2/addr1"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree2/addr2"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/adder_tree2/addr3"
-	    DialogParameters {
-	      precision		      "User Defined"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
-	      quantization	      "Truncate"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/convert1"
-	    DialogParameters {
-	      quantization	      "Round  (unbiased: +/- Inf)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/convert2"
-	    DialogParameters {
-	      quantization	      "Round  (unbiased: +/- Inf)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "pfb_add_tree/scale1"
-	    DialogParameters {
-	      scale_factor	      "-1"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,315b7d78,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
-	      "');\n"
-	    }
-	    BlockName		    "pfb_add_tree/scale2"
-	    DialogParameters {
-	      scale_factor	      "-1"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,315b7d78,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
-	      "');\n"
-	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr1"
 	    DialogParameters {
 	      precision		      "User Defined"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
+	      n_bits		      "16"
+	      bin_pt		      "14"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
 	      latency		      "1"
 	      use_behavioral_HDL      "off"
 	      hw_selection	      "Fabric"
 	      pipelined		      "on"
 	      use_rpm		      "on"
+	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
+	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
+	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
+	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
+	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
+	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
+	      "('','COMMENT: end icon text');\n"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr2"
 	    DialogParameters {
@@ -8548,20 +7480,6 @@ Library {
 	      bin_pt		      "34"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr3"
 	    DialogParameters {
@@ -8571,27 +7489,13 @@ Library {
 	      bin_pt		      "34"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.25 0.075 0.3 0.075 0.25 0.525 0.6 0.675 0.95 0.725 0.5 0.35 0.6 0.35 0.5 0.725 0.95 0.675 0.6 0.5"
-	      "25 0.25 ],[0.233333 0.35 0.5 0.65 0.766667 0.766667 0.716667 0.766667 0.766667 0.616667 0.766667 0.666667 0.5 0"
-	      ".333333 0.233333 0.383333 0.233333 0.233333 0.283333 0.233333 0.233333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],"
-	      "[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
-	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
-	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree2/addr1"
 	    DialogParameters {
 	      precision		      "User Defined"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "36"
-	      bin_pt		      "34"
+	      n_bits		      "16"
+	      bin_pt		      "14"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      sg_icon_stat	      "40,60,2,1,white,blue,0,8ff03b5e,right,"
@@ -8626,11 +7530,6 @@ Library {
 	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
 	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
 	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree2/addr3"
 	    DialogParameters {
@@ -8649,46 +7548,26 @@ Library {
 	      "k');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1"
 	      ",'\\bf{a + b}','texmode','on');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf"
 	      "('','COMMENT: end icon text');\n"
-	      latency		      "1"
-	      use_behavioral_HDL      "off"
-	      hw_selection	      "Fabric"
-	      pipelined		      "on"
-	      use_rpm		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/convert1"
 	    DialogParameters {
-	      quantization	      "Round  (unbiased: Even Values)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "18"
-	      bin_pt		      "17"
+	      n_bits		      "data_out_bits"
+	      bin_pt		      "data_out_bits-1"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
 	      latency		      "add_latency"
 	      pipeline		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/convert2"
 	    DialogParameters {
-	      quantization	      "Round  (unbiased: Even Values)"
-	      overflow		      "Wrap"
-	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
-	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
-	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
-	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
-	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "18"
-	      bin_pt		      "17"
+	      n_bits		      "data_out_bits"
+	      bin_pt		      "data_out_bits-1"
+	      quantization	      "Truncate"
+	      overflow		      "Wrap"
 	      latency		      "add_latency"
+	      pipeline		      "on"
 	    }
 	    BlockName		    "pfb_add_tree_async/scale1"
 	    DialogParameters {
@@ -8721,23 +7600,24 @@ Library {
 	  SourceType		  "last_tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
 	  RTWMemSecDataInternal	  "Inherit from model"
 	  RTWMemSecDataParameters "Inherit from model"
+	  input_num		  "2"
 	  total_taps		  "2"
-	  data_in_bits		  "18"
+	  data_in_bits		  "8"
 	  data_out_bits		  "18"
-	  coeff_bits		  "18"
+	  coeff_bits		  "8"
 	  add_latency		  "1"
 	  mult_latency		  "2"
-	  quantization		  "Round  (unbiased: Even Values)"
-	  use_hdl		  on
-	  use_embedded		  off
-	  async			  on
-	  debug_mode		  off
+	  quantization		  "Truncate"
+	  use_hdl		  "on"
+	  use_embedded		  "off"
+	  async			  "on"
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -8752,7 +7632,7 @@ Library {
 	  SourceType		  "tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8760,23 +7640,23 @@ Library {
 	  RTWMemSecDataParameters "Inherit from model"
 	  this_tap		  "1"
 	  pfb_bits		  "5"
-	  coeff_bits		  "18"
+	  coeff_bits		  "8"
 	  total_taps		  "2"
-	  data_in_bits		  "18"
+	  data_in_bits		  "8"
 	  mult_latency		  "2"
 	  bram_latency		  "3"
 	  simul_bits		  "1"
 	  fwidth		  "1"
-	  use_hdl		  on
-	  use_embedded		  off
-	  async			  on
-	  debug_mode		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
+	  async			  "on"
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "sync_generate"
 	  Ports			  [2, 1]
-	  Position		  [450, 45, 510, 105]
+	  Position		  [480, 45, 540, 105]
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -8786,7 +7666,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "sync_generate"
-	    Location		    [0, 79, 1920, 1176]
+	    Location		    [1, 79, 1921, 1176]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -8877,13 +7757,13 @@ Library {
 	      sggui_pos		      "20,44,474,439"
 	      block_type	      "constant"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "55,26,0,1,white,blue,0,1552f8cf,right,"
+	      sg_icon_stat	      "55,26,0,1,white,blue,0,1802740d,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.363636 0.290909 0.4 0.290909 0.363636 0.490909 0.527273 0.563636 0.690909 0.581818 0.472727 0.4 0"
 	      ".509091 0.4 0.472727 0.581818 0.690909 0.563636 0.527273 0.490909 0.363636 ],[0.115385 0.269231 0.5 0.730769 0."
 	      "884615 0.884615 0.807692 0.884615 0.884615 0.653846 0.884615 0.730769 0.5 0.269231 0.115385 0.346154 0.115385 0"
 	      ".115385 0.192308 0.115385 0.115385 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT:"
-	      " end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'49');\nfp"
+	      " end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'17');\nfp"
 	      "rintf('','COMMENT: end icon text');\n"
 	      sg_list_contents	      "{'table'=>{'carry'=>'popup(0|1|CIN|~SIGN(P or PCIN)|~SIGN(A*B or A:B)|~SIGND(A*B or A:B"
 	      "))','inp1'=>'popup(0|P|A:B|A*B|C|P+C|A:B+C)','inp2'=>'popup(0|PCIN|P|C|PCIN>>17|P>>17)','opselect'=>'popup(C + "
@@ -9047,12 +7927,12 @@ Library {
 	      sggui_pos		      "20,44,419,315"
 	      block_type	      "delay"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "25,16,1,1,white,blue,0,83e6bb61,right,"
+	      sg_icon_stat	      "25,16,1,1,white,blue,0,aa5bc30d,right,"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
 	      "]);\npatch([0.36 0.24 0.4 0.24 0.36 0.52 0.56 0.6 0.8 0.64 0.52 0.44 0.6 0.44 0.52 0.64 0.8 0.6 0.56 0.52 0.36 "
 	      "],[0.125 0.3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0"
 	      ".125 0.125 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	      "printf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end"
+	      "printf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-6}','texmode','on');\nfprintf('','COMMENT: end"
 	      " icon text');\n"
 	    }
 	    Block {
@@ -9062,65 +7942,10 @@ Library {
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      SrcBlock		      "Constant"
+	      SrcBlock		      "sync_delay"
 	      SrcPort		      1
-	      DstBlock		      "Register"
+	      DstBlock		      "sync_out"
 	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Register"
-	      SrcPort		      1
-	      DstBlock		      "Logical"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Logical"
-	      SrcPort		      1
-	      DstBlock		      "Counter"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Counter"
-	      SrcPort		      1
-	      DstBlock		      "Relational"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Constant1"
-	      SrcPort		      1
-	      Points		      [30, 0; 0, -65]
-	      DstBlock		      "Relational"
-	      DstPort		      2
-	    }
-	    Line {
-	      Name		      "sync_out"
-	      Labels		      [0, 0; 0, 0; 0, 0]
-	      SrcBlock		      "Relational"
-	      SrcPort		      1
-	      Points		      [20, 0]
-	      Branch {
-		Points			[0, -75; -245, 0]
-		Branch {
-		  Points		  [-215, 0; 0, 90]
-		  DstBlock		  "Register"
-		  DstPort		  2
-		}
-		Branch {
-		  Points		  [0, 45]
-		  DstBlock		  "Counter"
-		  DstPort		  1
-		}
-	      }
-	      Branch {
-		DstBlock		"sync_delay"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "sync"
-	      SrcPort		      1
-	      DstBlock		      "Register"
-	      DstPort		      3
 	    }
 	    Line {
 	      SrcBlock		      "dv"
@@ -9130,9 +7955,64 @@ Library {
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "sync_delay"
+	      SrcBlock		      "sync"
 	      SrcPort		      1
-	      DstBlock		      "sync_out"
+	      DstBlock		      "Register"
+	      DstPort		      3
+	    }
+	    Line {
+	      Name		      "sync_out"
+	      Labels		      [0, 0; 0, 0; 0, 0]
+	      SrcBlock		      "Relational"
+	      SrcPort		      1
+	      Points		      [20, 0]
+	      Branch {
+		DstBlock		"sync_delay"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, -75; -245, 0]
+		Branch {
+		  Points		  [0, 45]
+		  DstBlock		  "Counter"
+		  DstPort		  1
+		}
+		Branch {
+		  Points		  [-215, 0; 0, 90]
+		  DstBlock		  "Register"
+		  DstPort		  2
+		}
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Constant1"
+	      SrcPort		      1
+	      Points		      [30, 0; 0, -65]
+	      DstBlock		      "Relational"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Counter"
+	      SrcPort		      1
+	      DstBlock		      "Relational"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Logical"
+	      SrcPort		      1
+	      DstBlock		      "Counter"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Register"
+	      SrcPort		      1
+	      DstBlock		      "Logical"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Constant"
+	      SrcPort		      1
+	      DstBlock		      "Register"
 	      DstPort		      1
 	    }
 	  }
@@ -9392,8 +8272,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|Round  (unbiased: Even Values)|1|[2                "
-      "                      2]|on|Fabric|off"
+      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|Round  (unbiased: Even Values)|1|2|on|Fabric|off"
       MaskTabNameString	      ",,,,,,,,,,,,,,,,,,"
       System {
 	Name			"pfb_fir_real"
@@ -9463,7 +8342,7 @@ Library {
 	  SourceType		  "adder_tree"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9472,7 +8351,7 @@ Library {
 	  n_inputs		  "2"
 	  latency		  "1"
 	  adder_imp		  "Fabric"
-	  first_stage_hdl	  on
+	  first_stage_hdl	  "on"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9507,7 +8386,7 @@ Library {
 	  SourceType		  "adder_tree"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9516,7 +8395,7 @@ Library {
 	  n_inputs		  "2"
 	  latency		  "1"
 	  adder_imp		  "Fabric"
-	  first_stage_hdl	  on
+	  first_stage_hdl	  "on"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9532,9 +8411,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "1"
-	  dbl_ovrd		  off
-	  pipeline		  on
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "on"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9563,9 +8442,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "1"
-	  dbl_ovrd		  off
-	  pipeline		  on
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "on"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9588,11 +8467,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "1"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -9619,7 +8498,7 @@ Library {
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9628,13 +8507,13 @@ Library {
 	  PFBSize		  "5"
 	  CoeffBitWidth		  "18"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  off
+	  CoeffDistMem		  "off"
 	  WindowType		  "hamming"
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  nput			  "0"
 	  fwidth		  "1"
-	  debug_mode		  off
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9649,7 +8528,7 @@ Library {
 	  SourceType		  "first_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9664,8 +8543,8 @@ Library {
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  fwidth		  "1"
-	  use_hdl		  on
-	  use_embedded		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9679,7 +8558,7 @@ Library {
 	  SourceType		  "last_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9688,8 +8567,8 @@ Library {
 	  BitWidthIn		  "8"
 	  CoeffBitWidth		  "18"
 	  mult_latency		  "2"
-	  use_hdl		  on
-	  use_embedded		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9704,7 +8583,7 @@ Library {
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9713,13 +8592,13 @@ Library {
 	  PFBSize		  "5"
 	  CoeffBitWidth		  "18"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  off
+	  CoeffDistMem		  "off"
 	  WindowType		  "hamming"
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  nput			  "1"
 	  fwidth		  "1"
-	  debug_mode		  off
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9734,7 +8613,7 @@ Library {
 	  SourceType		  "first_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9749,8 +8628,8 @@ Library {
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  fwidth		  "1"
-	  use_hdl		  on
-	  use_embedded		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9764,7 +8643,7 @@ Library {
 	  SourceType		  "last_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -9773,8 +8652,8 @@ Library {
 	  BitWidthIn		  "8"
 	  CoeffBitWidth		  "18"
 	  mult_latency		  "2"
-	  use_hdl		  on
-	  use_embedded		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -9786,7 +8665,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "scale"
@@ -9810,7 +8689,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "scale"
@@ -10724,10 +9603,10 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "tap_async"
-      Ports		      [5, 5]
+      Ports		      [4, 5]
       Position		      [755, 332, 860, 408]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
-      AttributesFormatString  "tap(2/4)"
+      AttributesFormatString  "tap(1/2)"
       UserDataPersistent      on
       UserData		      "DataTag41"
       MinAlgLoopOccurrences   off
@@ -10749,7 +9628,7 @@ Library {
       "','on','off','on', 'on'});\nelse,\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on"
       "','on','on','on','on', 'on'});    \nend\n|||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,off,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskVarAliasString      ",,,,,,,,,,,,"
       MaskVariables	      "this_tap=@1;pfb_bits=@2;coeff_bits=@3;total_taps=@4;data_in_bits=@5;mult_latency=@6;bram_la"
@@ -10764,11 +9643,11 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "2|7|8|4|8|1|1|2|1|off|on|on|off"
+      MaskValueString	      "1|5|8|2|8|2|3|1|1|on|off|on|off"
       MaskTabNameString	      ",,,,,,,,,,,,"
       System {
 	Name			"tap_async"
-	Location		[1, 79, 1921, 1176]
+	Location		[1, 79, 1919, 1171]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -10817,13 +9696,6 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Block {
-	  BlockType		  Inport
-	  Name			  "taps_in"
-	  Position		  [35, 247, 65, 263]
-	  Port			  "5"
-	  IconDisplay		  "Port number"
-	}
-	Block {
 	  BlockType		  Reference
 	  Name			  "Delay1"
 	  Ports			  [1, 1]
@@ -10842,12 +9714,12 @@ Library {
 	  sggui_pos		  "20,44,419,315"
 	  block_type		  "delay"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "40,28,1,1,white,blue,0,07b98262,right,"
+	  sg_icon_stat		  "40,28,1,1,white,blue,0,83e6bb61,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.325 0.2 0.375 0.2 0.325 0.5 0.55 0.6 0.8 0.65 0.5 0.4 0.6 0.4 0.5 0.65 0.8 0.6 0.55 0.5 0.325 ],[0.107143 0.2"
 	  "85714 0.535714 0.785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 "
 	  "0.321429 0.107143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprin"
-	  "tf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-1}','texmod"
+	  "tf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texmod"
 	  "e','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
@@ -10869,12 +9741,12 @@ Library {
 	  sggui_pos		  "20,44,419,315"
 	  block_type		  "delay"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "40,28,1,1,white,blue,0,07b98262,right,"
+	  sg_icon_stat		  "40,28,1,1,white,blue,0,83e6bb61,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.325 0.2 0.375 0.2 0.325 0.5 0.55 0.6 0.8 0.65 0.5 0.4 0.6 0.4 0.5 0.65 0.8 0.6 0.55 0.5 0.325 ],[0.107143 0.2"
 	  "85714 0.535714 0.785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 "
 	  "0.321429 0.107143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprin"
-	  "tf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-1}','texmod"
+	  "tf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texmod"
 	  "e','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
@@ -10895,9 +9767,9 @@ Library {
 	  en			  "off"
 	  latency		  "mult_latency"
 	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  use_behavioral_HDL	  "on"
 	  opt			  "Speed"
-	  use_embedded		  "on"
+	  use_embedded		  "off"
 	  optimum_pipeline	  "off"
 	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
@@ -10908,14 +9780,14 @@ Library {
 	  sggui_pos		  "20,24,419,609"
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,51,2,1,white,blue,0,beae5990,right,"
+	  sg_icon_stat		  "50,51,2,1,white,blue,0,9a78ff34,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.22 0.06 0.3 0.06 0.22 0.48 0.56 0.64 0.92 0.7 0.48 0.32 0.56 0.32 0.48 0.7 0.92 0.64 0.56 0.48 0.22 ],[0.1176"
 	  "47 0.27451 0.509804 0.745098 0.901961 0.901961 0.823529 0.901961 0.901961 0.686275 0.901961 0.745098 0.509804 0.274"
 	  "51 0.117647 0.333333 0.117647 0.117647 0.196078 0.117647 0.117647 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 "
 	  "0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_labe"
 	  "l('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor("
-	  "'black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  "'black');disp('\\newline\\bf{}\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -10935,9 +9807,9 @@ Library {
 	  en			  "off"
 	  latency		  "mult_latency"
 	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  use_behavioral_HDL	  "on"
 	  opt			  "Speed"
-	  use_embedded		  "on"
+	  use_embedded		  "off"
 	  optimum_pipeline	  "off"
 	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
@@ -10948,14 +9820,14 @@ Library {
 	  sggui_pos		  "20,24,419,609"
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,51,2,1,white,blue,0,beae5990,right,"
+	  sg_icon_stat		  "50,51,2,1,white,blue,0,9a78ff34,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.22 0.06 0.3 0.06 0.22 0.48 0.56 0.64 0.92 0.7 0.48 0.32 0.56 0.32 0.48 0.7 0.92 0.64 0.56 0.48 0.22 ],[0.1176"
 	  "47 0.27451 0.509804 0.745098 0.901961 0.901961 0.823529 0.901961 0.901961 0.686275 0.901961 0.745098 0.509804 0.274"
 	  "51 0.117647 0.333333 0.117647 0.117647 0.196078 0.117647 0.117647 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 "
 	  "0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_labe"
 	  "l('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor("
-	  "'black');disp('\\newline\\bf{}\\newlinez^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  "'black');disp('\\newline\\bf{}\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -10981,14 +9853,14 @@ Library {
 	  sggui_pos		  "20,44,435,384"
 	  block_type		  "spram"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "65,54,3,1,white,blue,0,4294c61d,right,"
+	  sg_icon_stat		  "65,54,3,1,white,blue,0,12751819,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.276923 0.138462 0.338462 0.138462 0.276923 0.492308 0.553846 0.615385 0.846154 0.661538 0.476923 0.353846 0.5"
 	  "69231 0.353846 0.476923 0.661538 0.846154 0.615385 0.553846 0.492308 0.276923 ],[0.111111 0.277778 0.518519 0.75925"
 	  "9 0.925926 0.925926 0.851852 0.925926 0.925926 0.703704 0.925926 0.777778 0.518519 0.259259 0.111111 0.333333 0.111"
 	  "111 0.111111 0.185185 0.111111 0.111111 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT"
 	  ": end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolo"
-	  "r('black');port_label('input',2,'data');\ncolor('black');port_label('input',3,'we');\ncolor('black');disp('z^{-1}',"
+	  "r('black');port_label('input',2,'data');\ncolor('black');port_label('input',3,'we');\ncolor('black');disp('z^{-3}',"
 	  "'texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
@@ -11354,29 +10226,6 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tapcat"
-	  Ports			  [2, 1]
-	  Position		  [985, 217, 1005, 268]
-	  SourceBlock		  "xbsIndex_r4/Concat"
-	  SourceType		  "Xilinx Bus Concatenator Block"
-	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
-	  "ro."
-	  num_inputs		  "2"
-	  dbl_ovrd		  "off"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "concat"
-	  block_version		  "11.4"
-	  sg_icon_stat		  "20,51,2,1,white,blue,0,97b7e8d2,right,"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
-	  "ch([0.2 0.05 0.3 0.05 0.2 0.45 0.5 0.55 0.85 0.65 0.45 0.3 0.55 0.3 0.45 0.65 0.85 0.55 0.5 0.45 0.2 ],[0.352941 0."
-	  "411765 0.509804 0.607843 0.666667 0.666667 0.647059 0.666667 0.666667 0.588235 0.666667 0.607843 0.509804 0.411765 "
-	  "0.352941 0.431373 0.352941 0.352941 0.372549 0.352941 0.352941 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]"
-	  ");\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('"
-	  "input',1,'hi');\ncolor('black');port_label('input',2,'lo');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
 	  Name			  "tapout_delay"
 	  Ports			  [1, 1]
 	  Position		  [765, 216, 805, 244]
@@ -11393,12 +10242,12 @@ Library {
 	  sggui_pos		  "934,344,419,315"
 	  block_type		  "delay"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "40,28,1,1,white,blue,0,85ce9542,right,"
+	  sg_icon_stat		  "40,28,1,1,white,blue,0,83e6bb61,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
 	  "ch([0.325 0.2 0.375 0.2 0.325 0.5 0.55 0.6 0.8 0.65 0.5 0.4 0.6 0.4 0.5 0.65 0.8 0.6 0.55 0.5 0.325 ],[0.107143 0.2"
 	  "85714 0.535714 0.785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 "
 	  "0.321429 0.107143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprin"
-	  "tf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-2}','texmod"
+	  "tf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texmod"
 	  "e','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
@@ -11439,7 +10288,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
-	  Position		  [1075, 238, 1105, 252]
+	  Position		  [865, 198, 895, 212]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -11574,24 +10423,6 @@ Library {
 	  }
 	}
 	Line {
-	  SrcBlock		  "taps_in"
-	  SrcPort		  1
-	  DstBlock		  "tapcat"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "tapout_delay"
-	  SrcPort		  1
-	  DstBlock		  "tapcat"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "tapcat"
-	  SrcPort		  1
-	  DstBlock		  "taps_out"
-	  DstPort		  1
-	}
-	Line {
 	  SrcBlock		  "Delay1"
 	  SrcPort		  1
 	  DstBlock		  "coeff_out"
@@ -11601,6 +10432,12 @@ Library {
 	  SrcBlock		  "Delay2"
 	  SrcPort		  1
 	  DstBlock		  "dv_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "tapout_delay"
+	  SrcPort		  1
+	  DstBlock		  "taps_out"
 	  DstPort		  1
 	}
       }
@@ -12023,19 +10860,19 @@ MatData {
   DataRecord {
     Tag			    DataTag41
     Data		    "  %)30     .    T 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &6RH@$.    0 0   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,A@W@(.    0 0   "
     "8    (     @         %    \"     $    !     0         %  0 #0    $   \"V    9&5F875L=',      '1H:7-?=&%P      !P9F"
     ")?8FET<P      8V]E9F9?8FET<P   '1O=&%L7W1A<',   !D871A7VEN7V)I=', ;75L=%]L871E;F-Y &)R86U?;&%T96YC>0!S:6UU;%]B:71S"
     "    9G=I9'1H         '5S95]H9&P       !U<V5?96UB961D960 87-Y;F,          &1E8G5G7VUO9&4       X    H    !@    @   "
     " !          4    (               !          X    X    !@    @    &          4    (     0    $    !          D    ("
-    "             $ .    .     8    (    !@         %    \"     $    !     0         )    \"            !Q #@   #@    &"
-    "    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4    ("
-    "     0    $    !          D    (            $$ .    .     8    (    !@         %    \"     $    !     0         ) "
-    "   \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    "
-    "X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8    (    !@         "
-    "%    \"     $    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $   "
-    "      \"0    @           #P/PX    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #     "
-    "&    \"     0         !0    @    !     @    $         $  \" &]N   .    ,     8    (    !          %    \"     $   "
+    "            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   #@   "
+    " &    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4   "
+    " (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         "
+    ")    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X  "
+    "  X    !@    @    &          4    (     0    $    !          D    (            \"$ .    .     8    (    !@        "
+    " %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $  "
+    "       \"0    @           #P/PX    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #    "
+    " &    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $   "
     " \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
   }
   DataRecord {
@@ -12169,8 +11006,8 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag31
-    Data		    "  %)30     .    4!$   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +B Q 8.    P!    "
+    Data		    "  %)30     .    2!$   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +S RP,.    N!    "
     "8    (     @         %    \"     $    !     0         %  0 #@    $    8 0  9&5F875L=',       !01D)3:7IE         %1"
     "O=&%L5&%P<P      5VEN9&]W5'EP90    !N7VEN<'5T<P       $UA:V5\":7!L97@     0FET5VED=&A);@    !\":717:61T:$]U=    $-"
     "O969F0FET5VED=&@ 0V]E9F9$:7-T365M  !A9&1?;&%T96YC>0   &UU;'1?;&%T96YC>0  8G)A;5]L871E;F-Y  !C;VYV7VQA=&5N8WD  '%U8"
@@ -12218,117 +11055,119 @@ MatData {
     "&          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !"
     "     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
     "       #P/PX   !0    !@    @    $          4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87-E9#H@179E"
-    ";B!686QU97,I   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &"
-    "    \"     8         !0    @    !     @    $         \"0   !              0         ! #@   #     &    \"     0    "
-    "     !0    @    !     @    $         $  \" &]N   .    .     8    (    !          %    \"     $    &     0         "
-    "0    !@   $9A8G)I8P  #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
+    ";B!686QU97,I   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &"
+    "    \"     8         !0    @    !     0    $         \"0    @             0 X    P    !@    @    $          4    ("
+    "     0    (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    !    !@    $         $     8   !&8"
+    "6)R:6,   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
   }
   DataRecord {
     Tag			    DataTag30
     Data		    "  %)30     .    T 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -SF[00.    0 0   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,A@W@(.    0 0   "
     "8    (     @         %    \"     $    !     0         %  0 #0    $   \"V    9&5F875L=',      '1H:7-?=&%P      !P9F"
     ")?8FET<P      8V]E9F9?8FET<P   '1O=&%L7W1A<',   !D871A7VEN7V)I=', ;75L=%]L871E;F-Y &)R86U?;&%T96YC>0!S:6UU;%]B:71S"
     "    9G=I9'1H         '5S95]H9&P       !U<V5?96UB961D960 87-Y;F,          &1E8G5G7VUO9&4       X    H    !@    @   "
     " !          4    (               !          X    X    !@    @    &          4    (     0    $    !          D    ("
     "            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   #@   "
-    " &    \"     8         !0    @    !     0    $         \"0    @            R0 X    X    !@    @    &          4   "
+    " &    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4   "
     " (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         "
-    ")    \"            #) #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X   "
-    " X    !@    @    &          4    (     0    $    !          D    (            \"$ .    .     8    (    !@         "
-    "%    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $   "
-    "      \"0    @           #P/PX    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #     "
-    "&    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $    "
-    "\"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
+    ")    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X  "
+    "  X    !@    @    &          4    (     0    $    !          D    (            \"$ .    .     8    (    !@        "
+    " %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $  "
+    "       \"0    @           #P/PX    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #    "
+    " &    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $   "
+    " \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
   }
   DataRecord {
     Tag			    DataTag29
-    Data		    "  %)30     .    6 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .\\9-P,.    R ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !T;W1A;%]T87!S     "
-    "&1A=&%?:6Y?8FET<P  9&%T85]O=71?8FET<P!C;V5F9E]B:71S     &%D9%]L871E;F-Y    ;75L=%]L871E;F-Y  !Q=6%N=&EZ871I;VX  '5"
-    "S95]H9&P         =7-E7V5M8F5D9&5D  !A<WEN8P           &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @"
-    "               $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X"
-    "    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@       "
-    "  %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $ "
-    "        \"0    @            R0 X    X    !@    @    &          4    (     0    $    !          D    (            \\"
-    "#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   %     &    \"     0"
-    "         !0    @    !    '@    $         $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N(%9A;'5E<RD   X    P    !@    @ "
-    "   $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P    $  "
-    "       $  # &]F9@ .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @  "
-    "  $          4    (     0    ,    !         !   P!O9F8 "
+    Data		    "  %)30     .    D 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %#8B04.      0   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   \"V    9&5F875L=',       !I;G!U=%]N=6T      '"
+    "1O=&%L7W1A<',     9&%T85]I;E]B:71S  !D871A7V]U=%]B:71S &-O969F7V)I=',     861D7VQA=&5N8WD   !M=6QT7VQA=&5N8WD  '%U"
+    "86YT:7IA=&EO;@  =7-E7VAD;         !U<V5?96UB961D960  &%S>6YC            9&5B=6=?;6]D90        X    H    !@    @   "
+    " !          4    (               !          X    X    !@    @    &          4    (     0    $    !          D    ("
+    "             $ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &"
+    "    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4    ("
+    "     0    $    !          D    (            ,D .    .     8    (    !@         %    \"     $    !     0         ) "
+    "   \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    "
+    "X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !          % "
+    "   \"     $    (     0         0    \"    %1R=6YC871E#@   #     &    \"     0         !0    @    !     @    $     "
+    "    $  \" &]N   .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@    @    $"
+    "          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P    $      "
+    "   $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag28
     Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (_FJ $.    > ,  "
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *H$4 $.    > ,  "
     " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
     "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
     "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
     "  !          X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!"
-    "O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &"
-    "          4    (     0    $    !          D    (            \"$ .    .     8    (    !@         %    \"     $    !"
-    "     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
-    "       #P/PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    "
-    "(    !          %    \"     $    #     0         0  , ;V9F  "
+    "(    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @  "
+    "  !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P"
+    "!O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    "
+    "&          4    (     0    $    !          D    (            \"$ .    .     8    (    !@         %    \"     $    "
+    "!     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @   "
+    "        #P/PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8   "
+    " (    !          %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag27
     Data		    "  %)30     .    T 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -SF[00.    0 0   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,A@W@(.    0 0   "
     "8    (     @         %    \"     $    !     0         %  0 #0    $   \"V    9&5F875L=',      '1H:7-?=&%P      !P9F"
     ")?8FET<P      8V]E9F9?8FET<P   '1O=&%L7W1A<',   !D871A7VEN7V)I=', ;75L=%]L871E;F-Y &)R86U?;&%T96YC>0!S:6UU;%]B:71S"
     "    9G=I9'1H         '5S95]H9&P       !U<V5?96UB961D960 87-Y;F,          &1E8G5G7VUO9&4       X    H    !@    @   "
     " !          4    (               !          X    X    !@    @    &          4    (     0    $    !          D    ("
     "            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   #@   "
-    " &    \"     8         !0    @    !     0    $         \"0    @            R0 X    X    !@    @    &          4   "
+    " &    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4   "
     " (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         "
-    ")    \"            #) #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X   "
-    " X    !@    @    &          4    (     0    $    !          D    (            \"$ .    .     8    (    !@         "
-    "%    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $   "
-    "      \"0    @           #P/PX    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #     "
-    "&    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $    "
-    "\"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
+    ")    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X  "
+    "  X    !@    @    &          4    (     0    $    !          D    (            \"$ .    .     8    (    !@        "
+    " %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $  "
+    "       \"0    @           #P/PX    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #    "
+    " &    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $   "
+    " \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
   }
   DataRecord {
     Tag			    DataTag26
-    Data		    "  %)30     .    6 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .\\9-P,.    R ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !T;W1A;%]T87!S     "
-    "&1A=&%?:6Y?8FET<P  9&%T85]O=71?8FET<P!C;V5F9E]B:71S     &%D9%]L871E;F-Y    ;75L=%]L871E;F-Y  !Q=6%N=&EZ871I;VX  '5"
-    "S95]H9&P         =7-E7V5M8F5D9&5D  !A<WEN8P           &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @"
-    "               $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X"
-    "    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@       "
-    "  %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $ "
-    "        \"0    @            R0 X    X    !@    @    &          4    (     0    $    !          D    (            \\"
-    "#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   %     &    \"     0"
-    "         !0    @    !    '@    $         $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N(%9A;'5E<RD   X    P    !@    @ "
-    "   $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P    $  "
-    "       $  # &]F9@ .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @  "
-    "  $          4    (     0    ,    !         !   P!O9F8 "
+    Data		    "  %)30     .    D 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /$B30$.      0   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   \"V    9&5F875L=',       !I;G!U=%]N=6T      '"
+    "1O=&%L7W1A<',     9&%T85]I;E]B:71S  !D871A7V]U=%]B:71S &-O969F7V)I=',     861D7VQA=&5N8WD   !M=6QT7VQA=&5N8WD  '%U"
+    "86YT:7IA=&EO;@  =7-E7VAD;         !U<V5?96UB961D960  &%S>6YC            9&5B=6=?;6]D90        X    H    !@    @   "
+    " !          4    (               !          X    X    !@    @    &          4    (     0    $    !          D    ("
+    "            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@   "
+    " &    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4   "
+    " (     0    $    !          D    (            ,D .    .     8    (    !@         %    \"     $    !     0         "
+    ")    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX  "
+    "  X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !          "
+    "%    \"     $    (     0         0    \"    %1R=6YC871E#@   #     &    \"     0         !0    @    !     @    $   "
+    "      $  \" &]N   .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@    @   "
+    " $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P    $    "
+    "     $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag25
     Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $  [Q#P4.    > ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
-    "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
-    "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
-    "  !          X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!"
-    "O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &"
-    "          4    (     0    $    !          D    (            \"$ .    .     8    (    !@         %    \"     $    !"
-    "     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
-    "           X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    "
-    "(    !          %    \"     $    #     0         0  , ;V9F  "
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"D/MP0.    > , "
+    "  8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE        "
+    " $-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &"
+    "YP=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (            "
+    "   !          X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8   "
+    " (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @ "
+    "   !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   "
+    "P!O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @   "
+    " &          4    (     0    $    !          D    (            \"$ .    .     8    (    !@         %    \"     $   "
+    " !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @  "
+    "             X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8  "
+    "  (    !          %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag24
-    Data		    "  %)30     .    0!    8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *S0[@,.    L \\  "
+    Data		    "  %)30     .    (!    8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !ICR0$.    D \\  "
     " 8    (     @         %    \"     $    !     0         %  0 $@    $   !6 0  9&5F875L=',             <&9B7V)I=',   "
     "          =&]T86Q?=&%P<P          =VEN9&]W7W1Y<&4         <VEM=6Q?8FET<P          ;6%K95]B:7!L97@         9&%T85]I"
     ";E]B:71S        9&%T85]O=71?8FET<P      8V]E9F9?8FET<P          8V]E9F9S7VEN7V1I<W1M96T 861D7VQA=&5N8WD         ;7"
@@ -12367,16 +11206,16 @@ MatData {
     "   !0    @    !     0    $         \"0    @             0 X    X    !@    @    $          4    (     0    <    !  "
     "       !     '    :&%M;6EN9P .    .     8    (    !@         %    \"     $    !     0         )    \"            /"
     " _#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@         %   "
-    " \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $       "
-    "  \"0    @            R0 X    X    !@    @    &          4    (     0    $    !          D    (            ,D .   "
-    " ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4    (    "
-    " 0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )   "
-    " \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X   !0  "
-    "  !@    @    $          4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87-E9#H@179E;B!686QU97,I   .   "
-    " .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     8       "
-    "  !0    @    !     @    $         \"0   !              0         ! #@   #     &    \"     0         !0    @    !  "
-    "   P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P  "
-    "  !@    @    $          4    (     0    ,    !         !   P!O9F8 "
+    " \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $      "
+    "   \"0    @            R0 X    X    !@    @    &          4    (     0    $    !          D    (            ($ .  "
+    "  ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4    (   "
+    "  0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )  "
+    "  \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X "
+    "   !@    @    $          4    (     0    @    !         !     (    5')U;F-A=&4.    .     8    (    !@         %   "
+    " \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $       "
+    "  \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &   "
+    " \"     0         !0    @    !     @    $         $  \" &]N   .    ,     8    (    !          %    \"     $    #  "
+    "   0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag23
@@ -12476,8 +11315,8 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag17
-    Data		    "  %)30     .    X X   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -K1X0,.    4 X   "
+    Data		    "  %)30     .    V X   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,Q'VP8.    2 X   "
     "8    (     @         %    \"     $    !     0         %  0 #@    $   #N    9&5F875L=',       !01D)3:7IE         %1"
     "O=&%L5&%P<P      5VEN9&]W5'EP90    !N7VEN<'5T<P       $UA:V5\":7!L97@     0FET5VED=&A);@    !\":717:61T:$]U=    $-"
     "O969F0FET5VED=&@ 0V]E9F9$:7-T365M  !A9&1?;&%T96YC>0   &UU;'1?;&%T96YC>0  8G)A;5]L871E;F-Y  !Q=6%N=&EZ871I;VX  &9W:"
@@ -12519,9 +11358,9 @@ MatData {
     "    &          4    (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     "
     "$    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0   "
     " @             0 X   !0    !@    @    $          4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87-E9#"
-    "H@179E;B!686QU97,I   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $"
-    "     &    \"     8         !0    @    !     @    $         \"0   !              0         ! #@   #     &    \"    "
-    " 0         !0    @    !     @    $         $  \" &]N   "
+    "H@179E;B!686QU97,I   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #"
+    "@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    P    !@    @    $          "
+    "4    (     0    (    !         !   @!O;@  "
   }
   DataRecord {
     Tag			    DataTag16
@@ -12586,7 +11425,7 @@ MatData {
   DataRecord {
     Tag			    DataTag12
     Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $L6> ,.    N ,   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $  VLK00.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
     "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
@@ -12596,14 +11435,14 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "           00 X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8 "
     "   (    !          %    \"     $    &     0         0    !@   $9A8G)I8P  #@   #     &    \"     0         !0    @ "
     "   !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag11
     Data		    "  %)30     .    2 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $L6> ,.    N ,   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $  VLK00.    N ,   "
     "8    (     @         %    \"     $    !     0         %  0 $     $   !0    9&5F875L=',          &Y?:6YP=71S       "
     "   !L871E;F-Y            861D97)?:6UP         &9I<G-T7W-T86=E7VAD;  .    , (   8    (     0         %    \"     $ "
     "   (     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@ "
@@ -12613,39 +11452,41 @@ MatData {
     "95]H9&P #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !        "
     "  %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     $ "
     "   &     0         0    !@   $9A8G)I8P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "           00 X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8 "
+    "            0 X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8 "
     "   (    !          %    \"     $    &     0         0    !@   $9A8G)I8P  #@   #     &    \"     0         !0    @ "
     "   !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag10
-    Data		    "  %)30     .    X (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ #D>U0$.    4 (   "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $   !B    9&5F875L=',       !T;W1A;%]T87!S     &1"
-    "A=&%?:6Y?8FET<P  9&%T85]O=71?8FET<P!C;V5F9E]B:71S     &%D9%]L871E;F-Y    <75A;G1I>F%T:6]N           .    *     8  "
-    "  (     0         %    \"                0         .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            !! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X "
-    "   X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@        "
-    " %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $ "
-    "        \"0    @           #P/PX    X    !@    @    $          4    (     0    @    !         !     (    5')U;F-A="
-    "&4"
+    Data		    "  %)30     .    < ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *6\"* <.    X (  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $   !^    9&5F875L=',       !I;G!U=%]N=6T      '"
+    "1O=&%L7W1A<',     9&%T85]I;E]B:71S  !D871A7V]U=%]B:71S &-O969F7V)I=',     861D7VQA=&5N8WD   !Q=6%N=&EZ871I;VX  &1E"
+    "8G5G7VUO9&4        .    *     8    (     0         %    \"                0         .    .     8    (    !@       "
+    "  %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $ "
+    "        \"0    @             0 X    X    !@    @    &          4    (     0    $    !          D    (            ("
+    "$ .    .     8    (    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8 "
+    "        !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    %1"
+    "R=6YC871E#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag9
-    Data		    "  %)30     .    0 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %6H: <.    L ,   "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !T;W1A;%]T87!S     &"
-    "1A=&%?:6Y?8FET<P  9&%T85]O=71?8FET<P!C;V5F9E]B:71S     &%D9%]L871E;F-Y    ;75L=%]L871E;F-Y  !Q=6%N=&EZ871I;VX  '5S"
-    "95]H9&P         =7-E7V5M8F5D9&5D  !A<WEN8P           &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @ "
-    "              $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            00 X "
-    "   X    !@    @    &          4    (     0    $    !          D    (            ($ .    .     8    (    !@        "
-    " %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0    $  "
-    "       \"0    @            @0 X    X    !@    @    &          4    (     0    $    !          D    (            \\"
-    "#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     0"
-    "         !0    @    !    \"     $         $     @   !4<G5N8V%T90X    P    !@    @    $          4    (     0    , "
-    "   !         !   P!O9F8 #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    ,     8 "
-    "   (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    , "
-    "   !         !   P!O9F8 "
+    Data		    "  %)30     .    D 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /$B30$.      0   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   \"V    9&5F875L=',       !I;G!U=%]N=6T      '"
+    "1O=&%L7W1A<',     9&%T85]I;E]B:71S  !D871A7V]U=%]B:71S &-O969F7V)I=',     861D7VQA=&5N8WD   !M=6QT7VQA=&5N8WD  '%U"
+    "86YT:7IA=&EO;@  =7-E7VAD;         !U<V5?96UB961D960  &%S>6YC            9&5B=6=?;6]D90        X    H    !@    @   "
+    " !          4    (               !          X    X    !@    @    &          4    (     0    $    !          D    ("
+    "            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@   "
+    " &    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @    &          4   "
+    " (     0    $    !          D    (            ,D .    .     8    (    !@         %    \"     $    !     0         "
+    ")    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX  "
+    "  X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    (    !          "
+    "%    \"     $    (     0         0    \"    %1R=6YC871E#@   #     &    \"     0         !0    @    !     @    $   "
+    "      $  \" &]N   .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@    @   "
+    " $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P    $    "
+    "     $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag8

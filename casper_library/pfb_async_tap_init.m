@@ -49,14 +49,11 @@ total_taps = get_var('total_taps', 'defaults', defaults, varargin{:});
 this_tap = get_var('this_tap', 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
-async = get_var('async','defaults', defaults, varargin{:});
+%async = get_var('async','defaults', defaults, varargin{:});
+debug_mode = get_var('debug_mode','defaults', defaults, varargin{:});
 
 if (this_tap == 0) || (this_tap >= total_taps),
     error('Tap number must be >0 and <= %d\n', total_taps)
-end
-
-if strcmp(async, 'on'),
-    nothing_to_do = 1;
 end
 
 eblk = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', 'SearchDepth', 1, 'Name', 'taps_in');
@@ -89,6 +86,14 @@ else
             'Position', [865 198 895 212], 'Port', '5');
         add_line(blk, 'tapout_delay/1', 'taps_out/1');
     end
+end
+
+if strcmp(debug_mode, 'on'),
+    set_param([blk,'/split_data'],  'outputWidth', 'data_in_bits', 'outputBinaryPt', '0', 'outputArithmeticType', '0');
+    set_param([blk,'/interpret_coeff'],  'arith_type', 'Unsigned', 'bin_pt', '0');
+else
+    set_param([blk,'/split_data'],  'outputWidth', 'data_in_bits', 'outputBinaryPt', 'data_in_bits - 1', 'outputArithmeticType', '1');
+    set_param([blk,'/interpret_coeff'],  'arith_type', 'Signed  (2''s comp)', 'bin_pt', 'coeff_bits - 1');
 end
 
 set_param([blk,'/Mult'],'use_embedded', use_embedded);

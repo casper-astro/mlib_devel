@@ -84,6 +84,7 @@ fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 coeffs_share = get_var('coeffs_share', 'defaults', defaults, varargin{:});
 async = get_var('async', 'defaults', defaults, varargin{:});
+debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
 
 % check the multiplier specifications first off
 if (length(mult_spec) == 1),
@@ -92,7 +93,8 @@ end
 if (length(mult_spec) ~= total_taps),
     error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), total_taps);
     clog(error_string,'error');
-    error(error_string);
+    errordlg(error_string);
+    return;
 end
 temp.use_hdl = 'on'; temp.use_embedded = 'off';
 tap_multipliers = repmat(temp, total_taps);
@@ -101,7 +103,8 @@ for ctr = 1 : total_taps,
     if (mult_spec(ctr) > 2) || (mult_spec(ctr) < 0),
         error_string = sprintf('Multiplier specification of %i for tap %i is not valid.', mult_spec(ctr), ctr);
         clog(error_string,'error');
-        error(error_string);
+        errordlg(error_string);
+        return;
     end
     temp.use_hdl = 'on'; temp.use_embedded = 'off';
     if mult_spec(ctr) == 0,
@@ -262,6 +265,7 @@ for p = 1:pols,
                 blk_name = [in_name,'_last_tap'];
                 reuse_block(blk, blk_name, 'casper_library_pfbs/last_tap_async', ...
                     'use_hdl', tap_multipliers(t).use_hdl, 'use_embedded', tap_multipliers(t).use_embedded,...
+                    'input_num', num2str(portnum), ...
                     'Position', [150*(t+1) 150*portnum 150*(t+1)+x_size 150*portnum+y_size]);
                 propagate_vars([blk,'/',blk_name],'defaults', defaults, varargin{:});
                 % Update innards of the adder trees using our knowledge of
@@ -346,8 +350,12 @@ add_line(blk, 'dv_delay/1', 'sync_generate/2', 'autorouting', autoroute);
 
 clean_blocks(blk);
 
-fmtstr = sprintf('taps=%d, add_latency=%d\nmax scale %.3f', ...
-  total_taps, add_latency, max_gain*2^-bit_growth);
+debug_string = '';
+if strcmp(debug_mode, 'on'),
+    debug_string = '\n-*-*-*-*-*-*-*-\nDEBUG MODE!!\n-*-*-*-*-*-*-*-';
+end
+fmtstr = [sprintf('taps=%d, add_latency=%d\nmax scale %.3f', ...
+  total_taps, add_latency, max_gain*2^-bit_growth), debug_string];
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 clog('exiting pfb_fir_init','trace');

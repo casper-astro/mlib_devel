@@ -87,7 +87,8 @@ end
 if (length(mult_spec) ~= TotalTaps),
     error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), TotalTaps);
     clog(error_string,'error');
-    error(error_string);
+    errordlg(error_string);
+    return;
 end
 temp.use_hdl = 'on'; temp.use_embedded = 'off';
 tap_multipliers = repmat(temp, TotalTaps);
@@ -96,7 +97,8 @@ for ctr = 1 : TotalTaps,
     if (mult_spec(ctr) > 2) || (mult_spec(ctr) < 0),
         error_string = sprintf('Multiplier specification of %i for tap %i is not valid.', mult_spec(ctr), ctr);
         clog(error_string,'error');
-        error(error_string);
+        errordlg(error_string);
+        return;
     end
     temp.use_hdl = 'on'; temp.use_embedded = 'off';
     if mult_spec(ctr) == 0,

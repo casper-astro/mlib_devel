@@ -49,12 +49,22 @@ propagate_vars([blk,'/pfb_add_tree_async'], 'defaults', defaults, varargin{:});
 use_hdl = get_var('use_hdl','defaults', defaults, varargin{:});
 use_embedded = get_var('use_embedded','defaults', defaults, varargin{:});
 total_taps = get_var('total_taps', 'defaults', defaults, varargin{:});
+debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
+input_num = get_var('input_num', 'defaults', defaults, varargin{:});
+
+if strcmp(debug_mode, 'on'),
+    set_param([blk,'/split_data'],  'outputWidth', 'data_in_bits', 'outputBinaryPt', '0', 'outputArithmeticType', '0');
+    set_param([blk,'/interpret_coeff'],  'arith_type', 'Unsigned', 'bin_pt', '0');
+else
+    set_param([blk,'/split_data'],  'outputWidth', 'data_in_bits', 'outputBinaryPt', 'data_in_bits - 1', 'outputArithmeticType', '1');
+    set_param([blk,'/interpret_coeff'],  'arith_type', 'Signed  (2''s comp)', 'bin_pt', 'coeff_bits - 1');
+end
 
 set_param([blk,'/Mult'],  'use_embedded', use_embedded);
 set_param([blk,'/Mult'],  'use_behavioral_HDL', use_hdl);
 set_param([blk,'/Mult1'], 'use_embedded', use_embedded);
 set_param([blk,'/Mult1'], 'use_behavioral_HDL', use_hdl);
 
-fmtstr = sprintf('taps=%d', total_taps);
+fmtstr = sprintf('input(%d), tap(%d,%d)', input_num, total_taps, total_taps);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
