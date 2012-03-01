@@ -253,6 +253,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')## control wires for adc0
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_adc3wire_clk = adc0_adc3wire_clk, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_adc3wire_data = adc0_adc3wire_data, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_adc3wire_data_o = adc0_adc3wire_data_o, DIR = I
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_adc3wire_spi_rst= adc0_adc3wire_spi_rst, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_modepin = adc0_modepin, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')#PORT adc0_reset = adc0_reset, DIR = O
@@ -260,6 +261,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')## control wires for adc1
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_adc3wire_clk = adc1_adc3wire_clk, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_adc3wire_data = adc1_adc3wire_data, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_adc3wire_data_o = adc1_adc3wire_data_o, DIR = I
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_adc3wire_spi_rst= adc1_adc3wire_spi_rst, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_modepin = adc1_modepin, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc1')#PORT adc1_reset = adc1_reset, DIR = O
@@ -294,6 +296,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # # control signals for adc0
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_adc3wire_clk     = adc0_adc3wire_clk
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_adc3wire_data    = adc0_adc3wire_data
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_adc3wire_data_o  = adc0_adc3wire_data_o
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_adc3wire_spi_rst = adc0_adc3wire_spi_rst
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_modepin          = adc0_modepin
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_reset            = adc0_reset
@@ -307,6 +310,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # # control signals for adc1
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_adc3wire_clk     = adc1_adc3wire_clk
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_adc3wire_data    = adc1_adc3wire_data
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_adc3wire_data_o  = adc1_adc3wire_data_o
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_adc3wire_spi_rst = adc1_adc3wire_spi_rst
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_modepin          = adc1_modepin
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_reset            = adc1_reset  
