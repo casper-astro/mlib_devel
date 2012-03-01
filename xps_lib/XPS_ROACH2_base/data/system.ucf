@@ -22,12 +22,6 @@ TIMESPEC TS_epb_clk_in = PERIOD epb_clk_in 67 MHz;
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#TIMESPEC TS_mac_rx_clk = PERIOD mac_rx_clk 125 MHz;
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#
 
-#IF# (strcmp(get(b,'type'),'xps_bram'))## Snap BRAM Timing Constraints
-#IF# (strcmp(get(b,'type'),'xps_bram'))#
-#IF# (strcmp(get(b,'type'),'xps_bram'))#Net *portb_BRAM_Clk TNM_NET = bram_clk;
-#IF# (strcmp(get(b,'type'),'xps_bram'))#TIMESPEC TS_bram_clk = PERIOD bram_clk 100 MHz;
-#IF# (strcmp(get(b,'type'),'xps_bram'))#
-
 CONFIG DCI_CASCADE = "14 13";
 CONFIG DCI_CASCADE = "23 22";
 CONFIG DCI_CASCADE = "28 27";
