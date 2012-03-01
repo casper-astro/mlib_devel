@@ -1,3 +1,4 @@
 lib xaui_infrastructure_v1_00_a xaui_infrastructure verilog
-lib xaui_infrastructure_v1_00_a transceiver_bank    verilog
-lib xaui_infrastructure_v1_00_a transceiver         verilog
+lib xaui_infrastructure_v1_00_a xaui_infrastructure_low verilog
+lib xaui_infrastructure_v1_00_a xaui_rx_steer       verilog
+lib xaui_infrastructure_v1_00_a gtx_quad            verilog

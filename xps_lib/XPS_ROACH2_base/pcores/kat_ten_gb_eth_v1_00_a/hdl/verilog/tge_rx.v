@@ -261,6 +261,7 @@ generate if (CPU_ENABLE) begin : rx_cpu_enabled
     .web       (cpu_buffer_we),
     .doutb     () //no reading on mac side
   );
+  //synthesis attribute box_type cpu_rx_buffer "user_black_box"
 
 end endgenerate
 
@@ -297,7 +298,7 @@ end endgenerate
             if (cpu_addr == {8{1'b1}}) begin
               frame_bypass <= 1'b1;
             end else begin
-              cpu_addr <= cpu_addr + 1;
+              cpu_addr <= cpu_addr + 8'd1;
             end
           end
           if (cpu_frame_invalid || cpu_frame_valid && frame_bypass) begin
@@ -387,6 +388,7 @@ generate if (USE_DISTRIBUTED_RAM == 0) begin : use_bram
     .rst       (app_rst),
     .prog_full (packet_fifo_almost_full)
   );
+  //synthesis attribute box_type rx_packet_fifo_bram_inst "user_black_box"
 
 end else begin : usr_dram
 
@@ -402,6 +404,7 @@ end else begin : usr_dram
     .rst       (app_rst),
     .prog_full (packet_fifo_almost_full)
   );
+  //synthesis attribute box_type rx_packet_fifo_dist_inst "user_black_box"
 
 end endgenerate
 
@@ -411,7 +414,6 @@ end endgenerate
   wire        ctrl_fifo_almost_full;
   wire [47:0] ctrl_fifo_rd_data;
   wire        ctrl_fifo_rd_en;
-  wire        ctrl_fifo_empty;
 
   rx_packet_ctrl_fifo rx_packet_ctrl_fifo_inst (
     .rd_clk    (app_clk),
@@ -420,11 +422,12 @@ end endgenerate
     .wr_clk    (mac_clk),
     .wr_en     (ctrl_fifo_wr_en),
     .din       (ctrl_fifo_wr_data),
-    .empty     (ctrl_fifo_empty),
+    .empty     (),
     .full      (),
     .rst       (app_rst),
     .prog_full (ctrl_fifo_almost_full)
   );
+  //synthesis attribute box_type rx_packet_ctrl_fifo_inst "user_black_box"
 
   assign app_rx_valid        = !packet_fifo_empty;
   assign app_rx_end_of_frame = packet_fifo_rd_data[64];
