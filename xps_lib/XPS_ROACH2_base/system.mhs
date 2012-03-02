@@ -361,19 +361,19 @@ BEGIN roach_infrastructure
 # PORT aux_clk2x180  = aux_clk2x180
 # PORT aux_clk2x270  = aux_clk2x270
  PORT epb_clk = epb_clk
- PORT idelay_rst = sys_reset
+ PORT idelay_rst = power_on_rst
  PORT idelay_rdy = idelay_rdy
+ PORT op_power_on_rst  = power_on_rst
 END
 
 BEGIN reset_block
  PARAMETER INSTANCE = reset_block_inst
  PARAMETER HW_VER = 1.00.a
- PARAMETER DELAY = 10 
- PARAMETER WIDTH = 50
+ PARAMETER WIDTH = 1000
  PORT clk = sys_clk
- PORT async_reset_i = 0b0
- PORT reset_i = 0b0
- PORT reset_o = sys_reset
+ PORT ip_async_reset_i = power_on_rst
+ PORT ip_reset_i = power_on_rst
+ PORT op_reset_o = sys_reset
 END
 
 BEGIN opb_v20
@@ -381,7 +381,7 @@ BEGIN opb_v20
  PARAMETER HW_VER = 1.10.c
  PARAMETER C_EXT_RESET_HIGH = 1
  PARAMETER C_REG_GRANTS = 0
- PORT SYS_Rst = 0b0
+ PORT SYS_Rst = power_on_rst
  PORT OPB_Clk = epb_clk
 END
 
