@@ -36,7 +36,6 @@ toks = regexp(get_param(blk_name,'port'),'^(.*):(.*)$','tokens');
 s.hw_sys         = get(xsg_obj,'hw_sys');
 s.port           = get_param(blk_name, 'port');
 s.preemph        = get_param(blk_name, 'pre_emph');
-%s.swing          = get_param(blk_name, 'swing');
 s.rx_dist_ram    = num2str(strcmp(get_param(blk_name, 'rx_dist_ram'), 'on'));
 s.cpu_rx_enable  = num2str(strcmp(get_param(blk_name, 'cpu_rx_en'), 'on'));
 s.cpu_tx_enable  = num2str(strcmp(get_param(blk_name, 'cpu_tx_en'), 'on'));
@@ -88,6 +87,7 @@ switch s.hw_sys
     parameters.DIFFCTRL       = '10'; %4'b1010
     parameters.RXEQMIX        = '7';  %3'b111
   otherwise,
+    s.swing          = get_param(blk_name, 'swing');
     parameters.SWING          = s.swing;
     parameters.PREEMPHASYS    = s.preemph;
 end
