@@ -70,8 +70,8 @@ end
 % ROACH2 has an OPB One Gig Eth interface
 switch s.hw_sys
     case 'ROACH2'
-        %b = set(b,'opb_clk','epb_clk');
-        b = set(b,'opb_clk',get(xsg_obj,'clk_src'));
+        b = set(b,'opb_clk','epb_clk');
+        %b = set(b,'opb_clk',get(xsg_obj,'clk_src'));
         b = set(b,'opb_address_offset',16384);
         b = set(b,'opb_address_align', hex2dec('4000'));
     % end case 'ROACH'
