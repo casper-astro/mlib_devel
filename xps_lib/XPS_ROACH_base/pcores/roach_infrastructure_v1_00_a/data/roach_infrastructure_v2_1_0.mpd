@@ -44,4 +44,6 @@ PORT epb_clk        = "", DIR = OUT
 PORT idelay_rst     = "", DIR = IN
 PORT idelay_rdy     = "", DIR = OUT
 
+PORT op_power_on_rst   = "", DIR = OUT
+
 END
