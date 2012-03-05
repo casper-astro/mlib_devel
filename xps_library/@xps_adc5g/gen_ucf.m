@@ -47,16 +47,16 @@ switch hw_sys
     case 'ROACH2'
         if blk_obj.use_adc0
             switch demux
+	        % Create an area group to place the FD close to the IOPAD
+		% which for some reason was traced to the other side of the
+	        % chip on ROACH2
                 case '1:2'
-                    % Create an area group to place the FD close to the IOPAD
-                    % which for some reason was traced to the other side of the
-                    % chip on ROACH2
+		    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                       '/fifo_din_33"     AREA_GROUP     = IDDR_1 ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/iddrx[1].iddr1a_fd"     AREA_GROUP     = IDDR_1 ;\n'];
-                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/iddrx[1].iddr1b_fd"     AREA_GROUP     = IDDR_1 ;\n'];
+                       '/fifo_din_41"     AREA_GROUP     = IDDR_1 ;\n'];
                     str = [str, 'AREA_GROUP "IDDR_1"     RANGE    = ', ...
-                        'SLICE_X0Y279:SLICE_X23Y321 ;\n'];
+                       'SLICE_X0Y279:SLICE_X23Y321 ;\n'];
                 case '1:1'
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
                         '/data_buf[1].D1A_0"     AREA_GROUP     = ISD_1 ;\n'];
