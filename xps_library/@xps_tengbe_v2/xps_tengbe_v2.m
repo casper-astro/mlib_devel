@@ -36,7 +36,11 @@ toks = regexp(get_param(blk_name,'port'),'^(.*):(.*)$','tokens');
 s.hw_sys         = get(xsg_obj,'hw_sys');
 s.port           = get_param(blk_name, 'port');
 s.preemph        = get_param(blk_name, 'pre_emph');
-%s.swing          = get_param(blk_name, 'swing');
+s.preemph_r2     = get_param(blk_name, 'pre_emph_r2');
+s.postemph_r2    = get_param(blk_name, 'post_emph_r2');
+s.rxeqmix_r2     = get_param(blk_name, 'rxeqmix_r2');
+s.swing          = get_param(blk_name, 'swing');
+s.swing_r2       = get_param(blk_name, 'swing_r2');
 s.rx_dist_ram    = num2str(strcmp(get_param(blk_name, 'rx_dist_ram'), 'on'));
 s.cpu_rx_enable  = num2str(strcmp(get_param(blk_name, 'cpu_rx_en'), 'on'));
 s.cpu_tx_enable  = num2str(strcmp(get_param(blk_name, 'cpu_tx_en'), 'on'));
@@ -47,16 +51,45 @@ s.fab_gate       = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
 s.fab_en         = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));
 s.large_packets  = num2str(strcmp(get_param(blk_name, 'large_frames'),'on'));
 
+%convert (more intuitive) mask values to defines to be passed on
+switch s.hw_sys
+  case 'ROACH2', %taken from ug366 transceiver user guide (should match with tengbe_v2_loadfcn)
+    postemph_lookup = [0.18;0.19;0.18;0.18;0.18;0.18;0.18;0.18;0.19;0.2;0.39;0.63;0.82;1.07;1.32;1.6;1.65;1.94;2.21;2.52;2.76;3.08;3.41;3.77;3.97;4.36;4.73;5.16;5.47;5.93;6.38;6.89];
+    index = find(postemph_lookup == str2num(s.postemph_r2));
+    if isempty(index), 
+      error(['xps_tengbe_v2:''',str2num(s.postemph_r2),''' not found in ''',postemph_lookup,'''']);
+      return; 
+    end
+    s.postemph_r2 = num2str(index(1)-1);
+
+    preemph_lookup = [0.15;0.3;0.45;0.61;0.74;0.91;1.07;1.25;1.36;1.55;1.74;1.94;2.11;2.32;2.54;2.77];
+    index = find(preemph_lookup == str2num(s.preemph_r2));
+    if index == [], 
+      error(['xps_tengbe_v2:''',str2num(s.preemph_r2),''' not found in ''',preemph_lookup,'''']);
+      return; 
+    end
+    s.preemph_r2 = num2str(index(1)-1);
+
+    swing_lookup = [110;210;310;400;480;570;660;740;810;880;940;990;1040;1080;1110;1130];
+    index = find(swing_lookup == str2num(s.swing_r2));
+    if index == [], 
+      error(['xps_tengbe_v2:''',str2num(s.swing_r2),''' not found in ''',swing_lookup,'''']);
+      return; 
+    end
+    s.swing_r2 = num2str(index(1)-1);
+  otherwise
+end
+
 b = class(s,'xps_tengbe_v2',blk_obj);
 
 % ip name & version
 b = set(b,'ip_name','kat_ten_gb_eth');
 
 switch s.hw_sys
-    case {'ROACH','ROACH2'},
-        b = set(b,'ip_version','1.00.a');
-    otherwise
-        error(['10GbE not supported for platform ', s.hw_sys]);
+  case {'ROACH','ROACH2'},
+    b = set(b,'ip_version','1.00.a');
+  otherwise
+    error(['10GbE not supported for platform ', s.hw_sys]);
 end
 
 % bus offset
@@ -80,13 +113,12 @@ parameters.RX_DIST_RAM    = s.rx_dist_ram;
 parameters.CPU_RX_ENABLE  = s.cpu_rx_enable;
 parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;
 
-%TODO make mask (values, parameters) sensible for different platforms
 switch s.hw_sys
-  case {'ROACH2'}, %taken from roach2_bsp
-    parameters.PREEMPHASIS    = s.preemph;  %4'b0100 
-    parameters.POSTEMPHASIS   = '0';  %5'b00000 %TODO make mask parameter
-    parameters.DIFFCTRL       = '10'; %4'b1010
-    parameters.RXEQMIX        = '7';  %3'b111
+  case {'ROACH2'}, 
+    parameters.PREEMPHASIS    = s.preemph_r2; 
+    parameters.POSTEMPHASIS   = s.postemph_r2;
+    parameters.DIFFCTRL       = s.swing_r2;
+    parameters.RXEQMIX        = s.rxeqmix_r2;
   otherwise,
     parameters.SWING          = s.swing;
     parameters.PREEMPHASYS    = s.preemph;
