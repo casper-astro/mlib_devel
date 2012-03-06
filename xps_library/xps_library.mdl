@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Mar  1 13:44:16 2012"
-  RTWModifiedTimeStamp	  252510253
-  ModelVersionFormat	  "1.%<AutoIncrement:439>"
+  LastModifiedDate	  "Tue Mar  6 16:47:31 2012"
+  RTWModifiedTimeStamp	  252953248
+  ModelVersionFormat	  "1.%<AutoIncrement:440>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -687,7 +687,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [0, 51, 1920, 1080]
+    Location		    [1, 87, 1921, 1116]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -827,9 +827,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
@@ -860,9 +860,9 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      latency		      "2"
-	      dbl_ovrd		      off
-	      pipeline		      off
-	      xl_use_area	      off
+	      dbl_ovrd		      "off"
+	      pipeline		      "off"
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
@@ -889,13 +889,13 @@ Library {
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      off
+	      boolean_output	      "off"
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
@@ -930,11 +930,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -959,11 +959,11 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      on
+	      hdl_port		      "on"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -41339,9 +41339,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,538,429"
@@ -41368,9 +41368,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,538,429"
@@ -41397,9 +41397,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,24,538,429"
@@ -41426,9 +41426,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,24,538,429"
@@ -41455,9 +41455,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,538,429"
@@ -41484,9 +41484,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,24,538,429"
@@ -41513,9 +41513,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,538,429"
@@ -41542,9 +41542,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,24,538,429"
@@ -41572,11 +41572,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41606,11 +41606,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41635,11 +41635,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,403,473"
@@ -41668,11 +41668,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41702,11 +41702,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41736,11 +41736,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41770,11 +41770,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41804,11 +41804,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41833,11 +41833,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,403,473"
@@ -41866,11 +41866,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41900,11 +41900,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41934,11 +41934,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -41963,11 +41963,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,403,473"
@@ -41991,11 +41991,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42019,11 +42019,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42047,11 +42047,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,403,473"
@@ -42075,11 +42075,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42108,11 +42108,11 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
@@ -42137,11 +42137,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,403,473"
@@ -48956,8 +48956,9 @@ Library {
       Name		      "ten_Gbe_v2"
       Tag		      "xps:tengbe_v2"
       Ports		      [8, 12]
-      Position		      [1075, 272, 1230, 538]
+      Position		      [1090, 272, 1245, 538]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
+      OpenFcn		      "tengbe_v2_openfcn"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -48971,41 +48972,43 @@ Library {
       "ets are unwrapped and the data presented as a 64 bit wide stream."
       MaskPromptString	      "Port|Shallow RX Fifo (Beware overruns!)|Enable Large TX Frames (8k+512)|----------------"
       "------ Show Implementation Parameters --------------------------------------------------------------------------"
-      "---------|Pre-emphasis|Differential swing|Enable fabric on startup|Fabric MAC Address|Fabric IP Address|Fabric U"
-      "DP Port|Fabric Gateway|Enable CPU RX|Enable CPU TX"
-      MaskStyleString	      "popup(0|1|2|3),checkbox,checkbox,checkbox,popup(0|1|2|3),popup(400|500|600|700|800),check"
-      "box,edit,edit,edit,edit,checkbox,checkbox"
-      MaskTunableValueString  "on,on,on,off,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||myname=gcb;\nif strcmp(get_param(myname, 'show_param'), 'on')\n    set_param(myname,"
-      " 'MaskVisibilities', {'on', 'on', 'on','on','on','on','on','on','on','on','on','on','on'});\nelse\n    set_param"
-      "(myname, 'MaskVisibilities', {'on', 'on', 'on','on','off','off','off','off','off','off','off','off','off'});\nen"
-      "d|||||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,,,"
-      MaskVariables	      "port=@1;rx_dist_ram=@2;large_frames=@3;show_param=&4;pre_emph=@5;swing=@6;fab_en=@7;fab_mac"
-      "=@8;fab_ip=@9;fab_udp=@10;fab_gate=@11;cpu_rx_en=@12;cpu_tx_en=@13;"
+      "---------|Pre-emphasis (dB)|Pre-emphasis|Post-emphasis (dB)|Receive equalisation|Driver Swing Control (mVppd)|Di"
+      "fferential swing|Enable fabric on startup|Fabric MAC Address|Fabric IP Address|Fabric UDP Port|Fabric Gateway|En"
+      "able CPU RX|Enable CPU TX"
+      MaskStyleString	      "popup(0|1|2|3|4|5|6|7),checkbox,checkbox,checkbox,popup(0.15|0.3|0.45|0.61|0.74|0.91|1.07"
+      "|1.25|1.36|1.55|1.74|1.94|2.11|2.32|2.54|2.77),popup(0|1|2|3),popup(0.18|0.19|0.2|0.39|0.63|0.82|1.07|1.32|1.6|1"
+      ".65|1.94|2.21|2.52|2.76|3.08|3.41|3.77|3.97|4.36|4.73|5.16|5.47|5.93|6.38|6.89),popup(0|1|2|3|4|5|6|7),popup(110"
+      "|210|310|400|480|570|660|740|810|880|940|990|1040|1080|1110|1130),popup(400|500|600|700|800),checkbox,edit,edit,"
+      "edit,edit,checkbox,checkbox"
+      MaskTunableValueString  "on,on,on,off,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||tengbe_v2_callback|||||||||||||"
+      MaskEnableString	      "on,on,on,on,on,off,on,on,on,off,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,off,on,on,on,off,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,,,,,,"
+      MaskVariables	      "port=@1;rx_dist_ram=@2;large_frames=@3;show_param=&4;pre_emph_r2=&5;pre_emph=&6;post_emph_r"
+      "2=&7;rxeqmix_r2=&8;swing_r2=&9;swing=&10;fab_en=&11;fab_mac=@12;fab_ip=@13;fab_udp=@14;fab_gate=@15;cpu_rx_en=&1"
+      "6;cpu_tx_en=&17;"
       MaskInitialization      "tengbe_v2_mask;"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|on|off|on|3|800|on|hex2dec('123456780000')|192*(2^24) + 168*(2^16) + 5*(2^8) + 20*(2^0)"
-      "|10000|1|on|on"
-      MaskTabNameString	      ",,,,,,,,,,,,"
+      MaskValueString	      "0|on|off|on|0.74|3|0.18|7|940|800|on|hex2dec('123456780000')|192*(2^24) + 168*(2^16) + 5*"
+      "(2^8) + 20*(2^0)|10000|1|on|on"
+      MaskTabNameString	      ",,,,,,,,,,,,,,,,"
       System {
 	Name			"ten_Gbe_v2"
-	Location		[86, 84, 1344, 927]
+	Location		[86, 87, 1344, 930]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"A4"
-	PaperUnits		"centimeters"
+	PaperType		"usletter"
+	PaperUnits		"inches"
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
@@ -49244,7 +49247,6 @@ Library {
 	  Position		  [235, 82, 285, 98]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "29"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Boolean"
 	  n_bits		  "64"
@@ -49252,20 +49254,20 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -49274,7 +49276,6 @@ Library {
 	  Position		  [235, 567, 285, 583]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "30"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Boolean"
 	  n_bits		  "64"
@@ -49282,20 +49283,20 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -49304,7 +49305,6 @@ Library {
 	  Position		  [235, 607, 285, 623]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "31"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Boolean"
 	  n_bits		  "64"
@@ -49312,20 +49312,20 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -49334,7 +49334,6 @@ Library {
 	  Position		  [235, 267, 285, 283]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "32"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Unsigned"
 	  n_bits		  "64"
@@ -49342,20 +49341,20 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -49364,7 +49363,6 @@ Library {
 	  Position		  [235, 307, 285, 323]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "33"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Unsigned"
 	  n_bits		  "32"
@@ -49372,20 +49370,20 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -49394,7 +49392,6 @@ Library {
 	  Position		  [235, 387, 285, 403]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "34"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Boolean"
 	  n_bits		  "1"
@@ -49402,20 +49399,20 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -49424,7 +49421,6 @@ Library {
 	  Position		  [235, 347, 285, 363]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "35"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Unsigned"
 	  n_bits		  "16"
@@ -49432,20 +49428,20 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -49454,7 +49450,6 @@ Library {
 	  Position		  [235, 227, 285, 243]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "36"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Boolean"
 	  n_bits		  "1"
@@ -49462,29 +49457,28 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,374,375"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,blue,0,74901e60,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_led_rx"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_led_rx"
 	  Ports			  [1, 1]
 	  Position		  [665, 692, 765, 708]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "37"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49493,31 +49487,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_led_tx"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_led_tx"
 	  Ports			  [1, 1]
 	  Position		  [665, 737, 765, 753]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "38"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49526,31 +49521,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_led_up"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_led_up"
 	  Ports			  [1, 1]
 	  Position		  [665, 647, 765, 663]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "39"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49559,87 +49555,88 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rst"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rst"
 	  Ports			  [1, 1]
 	  Position		  [405, 82, 455, 98]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "40"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_ack"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_ack"
 	  Ports			  [1, 1]
 	  Position		  [405, 567, 455, 583]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "41"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_bad_frame"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_bad_frame"
 	  Ports			  [1, 1]
 	  Position		  [665, 537, 765, 553]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "42"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49648,31 +49645,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_data"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_data"
 	  Ports			  [1, 1]
 	  Position		  [665, 322, 765, 338]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "43"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Unsigned"
@@ -49681,31 +49679,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_end_of_frame"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_end_of_frame"
 	  Ports			  [1, 1]
 	  Position		  [665, 502, 765, 518]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "44"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49714,31 +49713,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_overrun"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun"
 	  Ports			  [1, 1]
 	  Position		  [665, 572, 765, 588]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "45"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49747,59 +49747,60 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_overrun_ack"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun_ack"
 	  Ports			  [1, 1]
 	  Position		  [405, 607, 455, 623]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "46"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_source_ip"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_ip"
 	  Ports			  [1, 1]
 	  Position		  [665, 412, 765, 428]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "47"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Unsigned"
@@ -49808,31 +49809,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_source_port"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_port"
 	  Ports			  [1, 1]
 	  Position		  [665, 457, 765, 473]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "48"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Unsigned"
@@ -49841,31 +49843,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_rx_valid"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_valid"
 	  Ports			  [1, 1]
 	  Position		  [665, 367, 765, 383]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "49"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49874,31 +49877,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_tx_afull"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_afull"
 	  Ports			  [1, 1]
 	  Position		  [665, 227, 765, 243]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "50"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -49907,143 +49911,144 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_tx_data"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_data"
 	  Ports			  [1, 1]
 	  Position		  [405, 267, 455, 283]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "51"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_tx_dest_ip"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_ip"
 	  Ports			  [1, 1]
 	  Position		  [405, 307, 455, 323]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "52"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_tx_dest_port"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_port"
 	  Ports			  [1, 1]
 	  Position		  [405, 347, 455, 363]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "53"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_tx_end_of_frame"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_end_of_frame"
 	  Ports			  [1, 1]
 	  Position		  [405, 387, 455, 403]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "54"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_tx_overflow"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_overflow"
 	  Ports			  [1, 1]
 	  Position		  [665, 267, 765, 283]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
-	  SID			  "55"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
 	  "oint type.<P><P>Hardware notes:  In hardware these blocks become top level input ports."
 	  arith_type		  "Boolean"
@@ -50052,50 +50057,52 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  period		  "1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "100,16,1,1,white,yellow,0,bc55d28f,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 ],[0 0 20 20 ],[0.95 0.93 0.65]);\n"
-	  "patch([27 24 29 24 27 32 33 34 40 36 32 29 34 29 32 36 40 34 33 32 27 ],[2 5 10 15 18 18 17 18 18 14 18 15 10 5 2 6"
-	  " 2 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 65 65 0 0 ],[0 0 20 20 0 ]);\nfprintf('','COMMENT: end icon graphics');\nf"
-	  "printf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','o"
-	  "n');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.46 0.43 0.47 0.43 0.46 0.5 0.51 0.52 0.57 0.53 0.5 0.48 0.52 0.48 0.5 0.53 0.57 0.52 0.51 0.5 0.46 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black"
+	  "');port_label('output',1,' ');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_ten_Gbe_v2_tx_valid"
+	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_valid"
 	  Ports			  [1, 1]
 	  Position		  [405, 227, 455, 243]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "56"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,16,1,1,white,yellow,0,38220381,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 16 16 ],[0.95 0.93 0.65]);\n"
-	  "patch([21 18 22 18 21 25 26 27 32 28 25 23 27 23 25 28 32 27 26 25 21 ],[2 5 9 13 16 16 15 16 16 12 15 13 9 5 3 6 2"
-	  " 2 3 2 2 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 16 16 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfpr"
-	  "intf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output'"
-	  ",1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,16,1,1,white,yellow,0,cc31b7ac,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
+	  "ch([0.42 0.36 0.44 0.36 0.42 0.5 0.52 0.54 0.64 0.56 0.5 0.46 0.54 0.46 0.5 0.56 0.64 0.54 0.52 0.5 0.42 ],[0.125 0"
+	  ".3125 0.5625 0.8125 1 1 0.9375 1 1 0.75 0.9375 0.8125 0.5625 0.3125 0.1875 0.375 0.125 0.125 0.1875 0.125 0.125 ],["
+	  "0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	  ": begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{1"
+	  "1pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport
@@ -50205,7 +50212,7 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_overflow"
 	  SrcPort		  1
 	  DstBlock		  "tx_overflow"
 	  DstPort		  1
@@ -50213,7 +50220,7 @@ Library {
 	Line {
 	  SrcBlock		  "Constant12"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_overflow"
 	  DstPort		  1
 	}
 	Line {
@@ -50225,11 +50232,11 @@ Library {
 	Line {
 	  SrcBlock		  "convert_rx_overrun_ack"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun_ack"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun_ack"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_overrun_ack"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun_ack"
 	  SrcPort		  1
 	  DstBlock		  "Terminator6"
 	  DstPort		  1
@@ -50237,11 +50244,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant11"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun"
 	  SrcPort		  1
 	  DstBlock		  "rx_overrun"
 	  DstPort		  1
@@ -50249,11 +50256,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant5"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_bad_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_bad_frame"
 	  SrcPort		  1
 	  DstBlock		  "rx_bad_frame"
 	  DstPort		  1
@@ -50269,11 +50276,11 @@ Library {
 	  SrcBlock		  "convert_rx_ack"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_ack"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_ack"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_data"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_data"
 	  SrcPort		  1
 	  DstBlock		  "rx_data"
 	  DstPort		  1
@@ -50289,7 +50296,7 @@ Library {
 	  SrcBlock		  "convert_tx_data"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_data"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_data"
 	  DstPort		  1
 	}
 	Line {
@@ -50303,7 +50310,7 @@ Library {
 	  SrcBlock		  "convert_tx_dest_ip"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_ip"
 	  DstPort		  1
 	}
 	Line {
@@ -50317,30 +50324,30 @@ Library {
 	  SrcBlock		  "convert_tx_valid"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_valid"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_afull"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_afull"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  DstBlock		  "tx_afull"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_data"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_data"
 	  SrcPort		  1
 	  DstBlock		  "Terminator"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_ip"
 	  SrcPort		  1
 	  DstBlock		  "Terminator1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_valid"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_valid"
 	  SrcPort		  1
 	  DstBlock		  "Terminator2"
 	  DstPort		  1
@@ -50349,17 +50356,17 @@ Library {
 	  SrcBlock		  "Constant2"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_afull"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_afull"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Constant6"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_data"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_data"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_ack"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_ack"
 	  SrcPort		  1
 	  DstBlock		  "Terminator3"
 	  DstPort		  1
@@ -50367,11 +50374,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant7"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_valid"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_valid"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_valid"
 	  SrcPort		  1
 	  DstBlock		  "rx_valid"
 	  DstPort		  1
@@ -50385,11 +50392,11 @@ Library {
 	Line {
 	  SrcBlock		  "convert_rst"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rst"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rst"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rst"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rst"
 	  SrcPort		  1
 	  DstBlock		  "Terminator5"
 	  DstPort		  1
@@ -50405,11 +50412,11 @@ Library {
 	  SrcBlock		  "convert_tx_port"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_port"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_port"
 	  SrcPort		  1
 	  DstBlock		  "Terminator7"
 	  DstPort		  1
@@ -50425,17 +50432,17 @@ Library {
 	  SrcBlock		  "convert_tx_end_of_frame"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_end_of_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_end_of_frame"
 	  SrcPort		  1
 	  DstBlock		  "Terminator8"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_ip"
 	  SrcPort		  1
 	  DstBlock		  "rx_source_ip"
 	  DstPort		  1
@@ -50443,17 +50450,17 @@ Library {
 	Line {
 	  SrcBlock		  "Constant8"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_ip"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Constant9"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_port"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_port"
 	  SrcPort		  1
 	  DstBlock		  "rx_source_port"
 	  DstPort		  1
@@ -50461,11 +50468,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant10"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_end_of_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_end_of_frame"
 	  SrcPort		  1
 	  DstBlock		  "rx_end_of_frame"
 	  DstPort		  1
@@ -50473,11 +50480,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant1"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_led_up"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_up"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_led_up"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_up"
 	  SrcPort		  1
 	  DstBlock		  "led_up"
 	  DstPort		  1
@@ -50485,11 +50492,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant3"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_led_rx"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_rx"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_led_rx"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_rx"
 	  SrcPort		  1
 	  DstBlock		  "led_rx"
 	  DstPort		  1
@@ -50497,11 +50504,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant4"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_led_tx"
+	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_tx"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_led_tx"
+	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_tx"
 	  SrcPort		  1
 	  DstBlock		  "led_tx"
 	  DstPort		  1
