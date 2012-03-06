@@ -6,7 +6,6 @@ module gbe_cpu_attach #(
     parameter LOCAL_GATEWAY   = 8'd0,
     parameter LOCAL_ENABLE    = 0,
     parameter CPU_PROMISCUOUS = 0,
-    parameter PHY_CONFIG      = 32'd0,
     parameter C_BASEADDR      = 32'h0,
     parameter C_HIGHADDR      = 32'hffff,
     parameter C_OPB_AWIDTH    = 32'hffff,
@@ -51,11 +50,7 @@ module gbe_cpu_attach #(
     output        cpu_tx_buffer_wr_en,
     output [11:0] cpu_tx_size,
     output        cpu_tx_ready,
-    input         cpu_tx_done,
-    //phy status
-    input  [31:0] phy_status,
-    //phy control
-    output [31:0] phy_control
+    input         cpu_tx_done
   );
 
 
@@ -106,9 +101,9 @@ module gbe_cpu_attach #(
   localparam REG_LOCAL_GATEWAY = 4'd3;
   localparam REG_LOCAL_IPADDR  = 4'd4;
   localparam REG_BUFFER_SIZES  = 4'd6;
+  localparam REG_BUFFER_SIZES_LATCH  = 4'd7;
   localparam REG_VALID_PORTS   = 4'd8;
-  localparam REG_PHY_STATUS    = 4'd9;
-  localparam REG_PHY_CONTROL   = 4'd10;
+  localparam REG_HANDSHAKE_STAT  = 4'd11;
 
   reg [47:0] local_mac_reg;
   reg [31:0] local_ip_reg;
@@ -116,7 +111,6 @@ module gbe_cpu_attach #(
   reg [15:0] local_port_reg;
   reg        local_enable_reg;
   reg        cpu_promiscuous_reg;
-  reg [31:0] phy_control_reg;
 
   assign local_mac         = local_mac_reg;
   assign local_ip          = local_ip_reg;
@@ -124,7 +118,6 @@ module gbe_cpu_attach #(
   assign local_port        = local_port_reg;
   assign local_enable      = local_enable_reg;
   assign cpu_promiscuous   = cpu_promiscuous_reg;
-  assign phy_control       = phy_control_reg;
 
   reg use_arp_data, use_tx_data, use_rx_data;
 
@@ -132,8 +125,8 @@ module gbe_cpu_attach #(
 
   /* RX/TX Buffer Control regs */
 
-  reg [12:0] cpu_rx_size_reg;
-  reg [11:0] cpu_tx_size_reg;
+  reg [12:0] cpu_rx_size_reg,cpu_rx_size_reg_latch;
+  reg [11:0] cpu_tx_size_reg,cpu_tx_size_reg_latch;
   reg        cpu_tx_ready_reg;
   reg        cpu_rx_ack_reg;
   assign cpu_tx_size  = cpu_tx_size_reg;
@@ -147,6 +140,21 @@ module gbe_cpu_attach #(
   always @(posedge cpu_clk) begin
     OPB_select_z <= OPB_select;
   end
+
+
+  /* CPU Tx Done retimer 
+  Sync cpu_tx_done from mac_tx_clk domain
+  */
+
+  reg cpu_tx_doneR;
+  reg cpu_tx_doneRR;
+  wire cpu_tx_done_retimed = cpu_tx_doneRR;
+  always @(posedge cpu_clk) begin
+    cpu_tx_doneR  <= cpu_tx_done;
+    cpu_tx_doneRR <= cpu_tx_doneR;
+  end
+
+
   
   always @(posedge cpu_clk) begin
     //strobes
@@ -157,18 +165,21 @@ module gbe_cpu_attach #(
 
     /* When the udp wrapper has sent the packet we tell the user by clearing 
        the size register */
-    if (cpu_tx_done) begin
-      cpu_tx_size_reg  <= 12'd0;
+    if (cpu_tx_done_retimed) begin      
+      cpu_tx_size_reg  <= 12'd0;       
       cpu_tx_ready_reg <= 1'b0;
     end
 
     /* The size will be set to zero when the double buffer is swapped */
-    if (cpu_rx_size_reg == 13'h0) begin
+    if (cpu_rx_size_reg == 13'h0 && cpu_rx_ready) begin
       cpu_rx_ack_reg  <= 1'b1;
     end
 
     if (cpu_rx_ready && cpu_rx_ack_reg) begin
-      cpu_rx_size_reg <= cpu_rx_size + 1;
+      //cpu_rx_size_reg <= cpu_rx_size + 1;
+      // CPU sends rx size in 8 byte (64 bit) words 
+      cpu_rx_size_reg <= {3'b0,cpu_rx_size[11:3]} + 1; // size in words = round up (cpu_tx_size / 8)
+      cpu_rx_size_reg_latch <= {3'b0,cpu_rx_size[11:3]} + 1; // size in words = round up (cpu_tx_size / 8)
       cpu_rx_ack_reg  <= 1'b0;
     end
 
@@ -187,8 +198,6 @@ module gbe_cpu_attach #(
       cpu_tx_size_reg   <= 12'd0;
 
       cpu_rx_ack_reg    <= 1'b0;
-
-      phy_control_reg   <= PHY_CONFIG;
 
       cpu_wait          <= 1'b0;
 
@@ -266,15 +275,20 @@ module gbe_cpu_attach #(
                 local_ip_reg[31:24] <= cpu_din[31:24];
             end
             REG_BUFFER_SIZES: begin
-              if (cpu_sel[0] && cpu_din[12:0] == 8'b0) begin
+              if (cpu_sel[0] && cpu_din[7:0] == 8'b0) begin
                 cpu_rx_size_reg <= 13'h0;
               end
               if (cpu_sel[2]) begin
                 cpu_tx_size_reg[7:0]  <= cpu_din[23:16];
-                cpu_tx_ready_reg <= 1'b1;
+                cpu_tx_size_reg_latch[7:0]  <= cpu_din[23:16];                 
               end
               if (cpu_sel[3]) begin
                 cpu_tx_size_reg[11:8]  <= cpu_din[27:24];
+                cpu_tx_size_reg_latch[11:8]  <= cpu_din[27:24];
+                if ((cpu_tx_size_reg[7:0] == 12'h0) && (cpu_din[27:24] == 4'h0))
+                  cpu_tx_ready_reg <= 1'b0;
+                else
+                  cpu_tx_ready_reg <= 1'b1;
               end
             end
             REG_VALID_PORTS: begin
@@ -286,18 +300,6 @@ module gbe_cpu_attach #(
                 local_enable_reg     <= cpu_din[16];
               if (cpu_sel[3])
                 cpu_promiscuous_reg  <= cpu_din[24];
-            end
-            REG_PHY_STATUS: begin
-            end
-            REG_PHY_CONTROL: begin
-              if (cpu_sel[0])
-                phy_control_reg <= cpu_din[7:0];
-              if (cpu_sel[1])
-                phy_control_reg <= cpu_din[15:8];
-              if (cpu_sel[2])
-                phy_control_reg <= cpu_din[23:16];
-              if (cpu_sel[3])
-                phy_control_reg <= cpu_din[31:24];
             end
             default: begin
             end
@@ -364,10 +366,11 @@ module gbe_cpu_attach #(
                              cpu_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway} :
                              cpu_data_src == REG_LOCAL_IPADDR  ? local_ip[31:0] :
                              cpu_data_src == REG_BUFFER_SIZES  ? {4'b0, cpu_tx_size, {3'b0, cpu_rx_ack ? 13'b0 : cpu_rx_size_reg}} :
+                             cpu_data_src == REG_BUFFER_SIZES_LATCH  ? {4'b0, cpu_tx_size_reg_latch, {3'b0, cpu_rx_size_reg_latch}} :
                              cpu_data_src == REG_VALID_PORTS   ? {7'b0, cpu_promiscuous_reg, 7'b0, local_enable, local_port} :
-                             cpu_data_src == REG_PHY_STATUS    ? phy_status :
-                             cpu_data_src == REG_PHY_CONTROL   ? phy_control :
+                             cpu_data_src == REG_HANDSHAKE_STAT   ? {24'b0, 3'b0, cpu_tx_done_retimed, cpu_promiscuous_reg, tx_buffer_we, arp_cache_we, cpu_rx_ack} :
                                                                  32'b0;
+
   assign cpu_dout = use_arp_data ? arp_data_int :
                     use_tx_data  ? tx_data_int  :
                     use_rx_data  ? rx_data_int  :

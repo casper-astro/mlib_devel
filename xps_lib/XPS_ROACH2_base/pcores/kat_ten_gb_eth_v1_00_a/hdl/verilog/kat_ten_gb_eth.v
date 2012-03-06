@@ -9,8 +9,11 @@ module kat_ten_gb_eth #(
     parameter FABRIC_PORT    = 16'hffff,
     parameter FABRIC_GATEWAY = 8'd0,
     parameter FABRIC_ENABLE  = 0,
-    parameter SWING          = 1,
-    parameter PREEMPHASYS    = 1,
+//    parameter SWING          = 1,
+    parameter PREEMPHASIS    = 4'b0100,
+    parameter POSTEMPHASIS   = 5'b00000,
+    parameter DIFFCTRL       = 4'b1010,
+    parameter RXEQMIX        = 3'b111,
     parameter CPU_TX_ENABLE  = 1,
     parameter CPU_RX_ENABLE  = 1,
     parameter RX_DIST_RAM    = 0,
@@ -63,10 +66,14 @@ module kat_ten_gb_eth #(
     input  [63:0] xgmii_rxd,
     input   [7:0] xgmii_rxc,
 
-    output  [1:0] mgt_rxeqmix,
-    output  [3:0] mgt_rxeqpole,
-    output  [2:0] mgt_txpreemphasis,
-    output  [2:0] mgt_txdiffctrl
+    //xaui config
+    
+    //phy status
+    //phy config
+    output  [2:0] mgt_rxeqmix,
+    output  [3:0] mgt_txpreemphasis,
+    output  [4:0] mgt_txpostemphasis,
+    output  [3:0] mgt_txdiffctrl
   );
 
   /**************************************** MAC Controller ***************************************/
@@ -83,7 +90,7 @@ module kat_ten_gb_eth #(
   wire        mac_rx_good_frame;
   wire        mac_rx_bad_frame;
 
-  ten_gig_eth_mac_ucb ten_gig_eth_mac_ucb_inst (
+  ten_gig_eth_mac_UCB ten_gig_eth_mac_inst (
     .reset                (mac_rst  ),
     .tx_clk0              (mac_clk  ),
     .tx_dcm_lock          (1'b1     ),
@@ -166,8 +173,10 @@ module kat_ten_gb_eth #(
     .FABRIC_PORT    (FABRIC_PORT   ),
     .FABRIC_GATEWAY (FABRIC_GATEWAY),
     .FABRIC_ENABLE  (FABRIC_ENABLE ),
-    .SWING          (SWING         ),
-    .PREEMPHASYS    (PREEMPHASYS   )
+    .PREEMPHASIS    (PREEMPHASIS   ),
+    .POSTEMPHASIS   (POSTEMPHASIS   ),
+    .DIFFCTRL       (DIFFCTRL   ),
+    .RXEQMIX        (RXEQMIX   )
   ) opb_attach_inst (
     //OPB attachment
     .OPB_Clk     (OPB_Clk),
@@ -212,10 +221,12 @@ module kat_ten_gb_eth #(
     .soft_reset_ack (soft_reset_ack_cpu),
     //xaui status
     .xaui_status       (xaui_status),
+    //xaui config 
+    //phy status
     //MGT/GTP PMA Config
     .mgt_rxeqmix       (mgt_rxeqmix),
-    .mgt_rxeqpole      (mgt_rxeqpole),
     .mgt_txpreemphasis (mgt_txpreemphasis),
+    .mgt_txpostemphasis (mgt_txpostemphasis),
     .mgt_txdiffctrl    (mgt_txdiffctrl)
   );
 
@@ -400,15 +411,15 @@ module kat_ten_gb_eth #(
       tx_stretch   <= {LED_WIDTH{1'b0}};
     end else begin
       if (down_stretch[LED_WIDTH-1]) begin
-        down_stretch <= down_stretch - 1;
+        down_stretch <= down_stretch - {{LED_WIDTH-1{1'b0}}, 1'b1};
       end
 
       if (rx_stretch[LED_WIDTH-1]) begin
-        rx_stretch <= rx_stretch - 1;
+        rx_stretch <= rx_stretch - {{LED_WIDTH-1{1'b0}}, 1'b1};
       end
 
       if (tx_stretch[LED_WIDTH-1]) begin
-        tx_stretch <= tx_stretch - 1;
+        tx_stretch <= tx_stretch - {{LED_WIDTH-1{1'b0}}, 1'b1};
       end
 
       if (down_trig) begin

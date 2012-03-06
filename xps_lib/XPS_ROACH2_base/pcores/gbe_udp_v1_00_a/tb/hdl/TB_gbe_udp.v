@@ -64,18 +64,17 @@ module TB_gbe_dup();
   wire [31:0] phy_control;
 
 /**** CPU Bus Attachment ****/
-  wire        OPB_Clk;
-  wire        OPB_Rst;
-  wire        OPB_RNW;
-  wire  [3:0] OPB_BE;
-  wire [31:0] OPB_ABus;
-  wire [31:0] OPB_DBus;
-  wire        OPB_select;
-  wire [31:0] Sl_DBus;
-  wire        Sl_errAck;
-  wire        Sl_retry;
-  wire        Sl_toutSup;
-  wire        Sl_xferAck;
+  wire        wb_clk_i;
+  wire        wb_rst_i;
+  wire        wb_stb_i;
+  wire        wb_cyc_i;
+  wire        wb_we_i;
+  wire [31:0] wb_adr_i;
+  wire [31:0] wb_dat_i;
+  wire  [3:0] wb_sel_i;
+  wire [31:0] wb_dat_o;
+  wire        wb_err_o;
+  wire        wb_ack_o;
 
  gbe_udp #(
    .LOCAL_ENABLE      (1),
@@ -130,18 +129,17 @@ module TB_gbe_dup();
     .phy_status(phy_status),
     .phy_control(phy_control),
 
-    .OPB_Clk (OPB_Clk), 
-    .OPB_Rst (OPB_Rst), 
-    .OPB_RNW (OPB_RNW), 
-    .OPB_select (OPB_select), 
-    .OPB_BE (OPB_BE),
-    .OPB_ABus (OPB_ABus), 
-    .OPB_DBus (OPB_DBus), 
-    .Sl_DBus (Sl_DBus), 
-    .Sl_errAck (Sl_errAck), 
-    .Sl_retry (Sl_retry), 
-    .Sl_toutSup (Sl_toutSup),  
-    .Sl_xferAck (Sl_xferAck) 
+    .wb_clk_i(wb_clk_i),
+    .wb_rst_i(wb_rst_i),
+    .wb_stb_i(wb_stb_i),
+    .wb_cyc_i(wb_cyc_i),
+    .wb_we_i(wb_we_i),
+    .wb_adr_i(wb_adr_i),
+    .wb_dat_i(wb_dat_i),
+    .wb_sel_i(wb_sel_i),
+    .wb_dat_o(wb_dat_o),
+    .wb_err_o(wb_err_o),
+    .wb_ack_o(wb_ack_o)
   );
 
 
@@ -652,19 +650,18 @@ module TB_gbe_dup();
     end
   end
 
-  assign OPB_Clk    = cpu_clk;
-  assign OPB_Rst    = cpu_rst;
+  assign wb_clk_i   = cpu_clk;
+  assign wb_rst_i   = cpu_rst;
 
-  assign OPB_select  = cpu_stb;
-  //assign opb_stb_i  = cpu_stb;
-  //assign opb_cyc_i  = cpu_stb;
-  assign OPB_RNW    = cpu_rnw;
-  assign OPB_ABus   = cpu_adr;
-  assign OPB_DBus   = cpu_dat_wr;
-  assign OPB_BE     = cpu_sel;
+  assign wb_stb_i   = cpu_stb;
+  assign wb_cyc_i   = cpu_stb;
+  assign wb_we_i    = !cpu_rnw;
+  assign wb_adr_i   = cpu_adr;
+  assign wb_dat_i   = cpu_dat_wr;
+  assign wb_sel_i   = cpu_sel;
 
-  assign cpu_dat_rd = Sl_DBus;
-  assign cpu_ack    = Sl_xferAck;
+  assign cpu_dat_rd = wb_dat_o;
+  assign cpu_ack    = wb_ack_o;
 
 
 

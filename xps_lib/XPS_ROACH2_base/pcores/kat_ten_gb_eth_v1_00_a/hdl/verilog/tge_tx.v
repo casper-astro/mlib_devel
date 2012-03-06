@@ -45,8 +45,8 @@ module tge_tx #(
   );
 
   /****************** Common Signals *******************/
-  /* these signals are used by the primary tx state machine and various
-  /* periphery logic
+  // these signals are used by the primary tx state machine and various
+  // periphery logic
 
   /* Fabric data signals */
   wire [63:0] packet_data;
@@ -100,7 +100,7 @@ module tge_tx #(
         $display("tge_tx: got fabric frame, size = %d", data_count);
 `endif
       end else if (app_tx_validR) begin
-        data_count <= data_count + 1;
+        data_count <= data_count + 16'h1;
       end
     end
   end
@@ -121,10 +121,12 @@ module tge_tx #(
     .dout      (packet_fifo_data),
     .rd_en     (packet_fifo_rd),
     .prog_full (tx_packet_fifo_prog_full),
+    .full      (),
     .empty     (packet_fifo_empty),
     .overflow  (packet_data_overflow),
     .rst       (app_rst)
   );
+  //synthesis attribute box_type tx_packet_fifo_inst "user_black_box"
 
   /* ip, port & data_count fifo*/
   wire tx_packet_ctrl_fifo_prog_full;
@@ -140,10 +142,12 @@ module tge_tx #(
     .dout      (ctrl_fifo_data),
     .rd_en     (ctrl_fifo_rd),
     .prog_full (tx_packet_ctrl_fifo_prog_full),
+    .full      (),
     .overflow  (packet_ctrl_overflow),
     .empty     (ctrl_fifo_empty),
     .rst       (app_rst)
   );
+  //synthesis attribute box_type tx_packet_ctrl_fifo_inst "user_black_box"
   assign app_tx_afull = tx_packet_fifo_prog_full || tx_packet_ctrl_fifo_prog_full;
 
 generate if (LARGE_PACKETS) begin : large_packet_gen
@@ -163,6 +167,7 @@ generate if (LARGE_PACKETS) begin : large_packet_gen
     .full      (),
     .prog_full (data_fifo_ext_afull)
   );
+  //synthesis attribute box_type tx_data_fifo_ext "user_black_box"
 
   wire ctrl_fifo_ext_afull;
   assign ctrl_fifo_rd = !ctrl_fifo_ext_afull && !ctrl_fifo_empty;
@@ -178,6 +183,7 @@ generate if (LARGE_PACKETS) begin : large_packet_gen
     .full      (),
     .prog_full (ctrl_fifo_ext_afull)
   );
+  //synthesis attribute box_type tx_ctrl_fifo_ext "user_black_box"
 
 end else begin : small_packet_gen
 
@@ -222,6 +228,7 @@ end endgenerate
     .web       (1'b0),
     .doutb     (packet_arp_cache_data)
   );
+  //synthesis attribute box_type arp_cache_inst "user_black_box"
 
   /************ TX CPU Memory ************/
 
@@ -229,7 +236,7 @@ end endgenerate
 
   /* tx data fifo - 64x512 */
 
-generate if (CPU_ENABLE) begin : rx_cpu_enabled
+generate if (CPU_ENABLE) begin : tx_cpu_enabled
 
   cpu_buffer cpu_tx_buffer(   
     .clka      (cpu_clk),
@@ -244,6 +251,7 @@ generate if (CPU_ENABLE) begin : rx_cpu_enabled
     .web       (1'b0),
     .doutb     (mac_cpu_data)
   );
+  //synthesis attribute box_type cpu_tx_buffer "user_black_box"
 
 end endgenerate
 
@@ -380,7 +388,7 @@ end endgenerate
 
           if (!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) begin
             mac_data_valid <= {8{1'b1}};
-            tx_size        <= packet_ctrl_size - 1;
+            tx_size        <= packet_ctrl_size - 16'h1;
             tx_state       <= TX_SEND_HDR_1;
           end
 
@@ -419,7 +427,7 @@ end endgenerate
           packet_rd_reg <= 1'b1; /* tick */
         end
         TX_SEND_HDR_6:    begin
-          tx_size       <= tx_size - 1;
+          tx_size       <= tx_size - 16'h1;
           if (tx_size == 16'd0) begin
             mac_data_valid <= 8'b00000011;
             tx_state       <= TX_SEND_LAST;
@@ -429,7 +437,7 @@ end endgenerate
           end
         end
         TX_SEND_DATA: begin
-          tx_size        <= tx_size - 1;
+          tx_size        <= tx_size - 16'h1;
           if (tx_size == 16'd0) begin
             mac_data_valid <= 8'b00000011;
             tx_state          <= TX_SEND_LAST;
@@ -452,8 +460,8 @@ end endgenerate
                mac_cpu_ack_reg <= 1'b1;
              end else begin
                tx_state         <= TX_SEND_CPU;
-               tx_size          <= tx_size - 1;
-               mac_cpu_addr_reg <= mac_cpu_addr_reg + 1;
+               tx_size          <= tx_size - 16'h1;
+               mac_cpu_addr_reg <= mac_cpu_addr_reg + 8'd1;
              end
            end
         end
@@ -463,15 +471,15 @@ end endgenerate
              mac_data_valid <= 8'b00000000;
              mac_cpu_ack_reg <= 1'b1;
            end else begin
-             tx_size          <= tx_size - 1;
-             mac_cpu_addr_reg <= mac_cpu_addr_reg + 1;
+             tx_size          <= tx_size - 16'h1;
+             mac_cpu_addr_reg <= mac_cpu_addr_reg + 8'h1;
            end
         end
       endcase
       // compute the ip length
-      ip_length <= {packet_ctrl_size, 3'b0} + 28;
+      ip_length <= {packet_ctrl_size[12:0], 3'b0} + 16'd28;
       // compute the udp length
-      udp_length <= {packet_ctrl_size, 3'b0} + 8;
+      udp_length <= {packet_ctrl_size[12:0], 3'b0} + 16'd8;
       // compute the ip checksum (1's complement logic)
       ip_checksum_0 <= {2'b00, ip_checksum_fixed     }+
                        {2'b00, ip_length             }+

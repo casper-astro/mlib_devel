@@ -12,22 +12,14 @@ module gbe_udp #(
     parameter LOCAL_GATEWAY = 0,
   /* Default promiscuous mode (no MAC matching for CPU interface in promiscuous mode) */
     parameter CPU_PROMISCUOUS = 0,
-  /* Default PHY Config */
-    parameter PHY_CONFIG = 0,
   /* Disable CPU_TX */
     parameter DIS_CPU_TX = 0,
   /* Disable CPU_RX */
     parameter DIS_CPU_RX = 0,
-  /* Enable large packets on TX (doubles BRAM/FIFO utilization on TX FIFO) */
-    parameter TX_LARGE_PACKETS = 0,
-  /* Enable distributed RAM FIFOs on RX */
-    parameter RX_DIST_RAM = 0,
-  /* ARP Cache initialization string */
-    parameter ARP_CACHE_INIT = 0,
   /* */
-    parameter C_BASEADDR = 32'h0,
+    parameter C_BASEADDR = 32'hffff_ffff,
   /* */
-    parameter C_HIGHADDR = 32'hFFFF,
+    parameter C_HIGHADDR = 32'h00,
   /* */
     parameter C_OPB_AWIDTH = 32'hFFFF,
   /* */
@@ -57,6 +49,12 @@ module gbe_udp #(
     input         app_rx_ack,
     input         app_rx_rst,
 
+  /**** Debug Interface ****/
+    output [31:0] app_dbg_data,
+    output        app_dbg_dvld, 
+    //output [7:0]  led,
+
+
   /**** MAC Interface ****/
 
     input         mac_tx_clk,
@@ -71,11 +69,24 @@ module gbe_udp #(
     input         mac_rx_dvld,
     input         mac_rx_goodframe,
     input         mac_rx_badframe,
+    input         mac_syncacquired,
 
-  /**** PHY Status/Control ****/
-    input  [31:0] phy_status,
-    output [31:0] phy_control,
+// Wishbone Bus
+  /**** CPU Bus Attachment ****/
+/*
+    input         OPB_Clk,
+    input         wb_rst_i,
+    input         wb_stb_i,
+    input         wb_cyc_i,
+    input         wb_we_i,
+    input  [31:0] wb_adr_i,
+    input  [31:0] wb_dat_i,
+    input   [3:0] wb_sel_i,
+    output [31:0] wb_dat_o,
+    output        wb_err_o,
+    output        wb_ack_o */
 
+// OPB Bus
   /**** CPU Bus Attachment ****/
     input         OPB_Clk,
     input         OPB_Rst,
@@ -125,7 +136,27 @@ module gbe_udp #(
   wire        cpu_rx_packet_ack;
 
   wire        cpu_promiscuous;
+  
+  // Debug 
+  assign app_mac_tx_clk_cnt = 0;
+  assign app_mac_rx_clk_cnt = 0; 
+  assign app_app_clk_cnt = 0;
+  assign app_mac_tx_ack = 0;
 
+generate if (DIS_CPU_RX || DIS_CPU_TX) begin : disable_cpu
+
+  assign local_enable = LOCAL_ENABLE;
+  assign local_mac = LOCAL_MAC;
+  assign local_ip = LOCAL_IP;
+  assign local_port = LOCAL_PORT;
+  assign local_gateway = LOCAL_GATEWAY;
+  assign cpu_promiscuous = 1'b1;
+  assign arp_tx_cache_rd_data = LOCAL_MAC;  
+
+end else begin : enable_cpu
+
+// Wishbone Bus
+/*
   gbe_cpu_attach #(
     .LOCAL_ENABLE    (LOCAL_ENABLE),
     .LOCAL_MAC       (LOCAL_MAC),
@@ -133,7 +164,63 @@ module gbe_udp #(
     .LOCAL_PORT      (LOCAL_PORT),
     .LOCAL_GATEWAY   (LOCAL_GATEWAY),
     .CPU_PROMISCUOUS (CPU_PROMISCUOUS),
-    .PHY_CONFIG      (PHY_CONFIG),
+    .PHY_CONFIG      (PHY_CONFIG)
+  ) gbe_cpu_attach_inst (
+    .OPB_Clk (OPB_Clk),
+    .wb_rst_i (wb_rst_i),
+    .wb_stb_i (wb_stb_i),
+    .wb_cyc_i (wb_cyc_i),
+    .wb_we_i  (wb_we_i),
+    .wb_adr_i (wb_adr_i),
+    .wb_dat_i (wb_dat_i),
+    .wb_sel_i (wb_sel_i),
+    .wb_dat_o (wb_dat_o),
+    .wb_err_o (wb_err_o),
+    .wb_ack_o (wb_ack_o),
+  // Common CPU signals 
+    .local_enable  (local_enable),
+    .local_mac     (local_mac),
+    .local_ip      (local_ip),
+    .local_port    (local_port),
+    .local_gateway (local_gateway),
+
+    .cpu_promiscuous (cpu_promiscuous),
+
+  // ARP cache CPU signals 
+    .arp_cache_addr    (arp_cpu_cache_index),
+    .arp_cache_rd_data (arp_cpu_cache_rd_data),
+    .arp_cache_wr_data (arp_cpu_cache_wr_data),
+    .arp_cache_wr_en   (arp_cpu_cache_wr_en),
+
+  // CPU RX signals 
+    .cpu_rx_buffer_addr    (cpurx_cpu_addr),
+    .cpu_rx_buffer_rd_data (cpurx_cpu_rd_data),
+    .cpu_rx_size           (cpu_rx_size),
+    .cpu_rx_ready          (cpu_rx_packet_ready),
+    .cpu_rx_ack            (cpu_rx_packet_ack),
+
+  // CPU TX signals 
+    .cpu_tx_buffer_addr    (cputx_cpu_addr),
+    .cpu_tx_buffer_rd_data (cputx_cpu_rd_data),
+    .cpu_tx_buffer_wr_data (cputx_cpu_wr_data),
+    .cpu_tx_buffer_wr_en   (cputx_cpu_wr_en),
+    .cpu_tx_size           (cpu_tx_size),
+    .cpu_tx_ready          (cpu_tx_packet_ready),
+    .cpu_tx_done           (cpu_tx_packet_ack),
+  // PHY Status/Control 
+    .phy_status   (phy_status),
+    .phy_control  (phy_control)
+  ); */
+
+
+// OPB Bus
+  gbe_cpu_attach #(
+    .LOCAL_ENABLE    (LOCAL_ENABLE),
+    .LOCAL_MAC       (LOCAL_MAC),
+    .LOCAL_IP        (LOCAL_IP),
+    .LOCAL_PORT      (LOCAL_PORT),
+    .LOCAL_GATEWAY   (LOCAL_GATEWAY),
+    .CPU_PROMISCUOUS (CPU_PROMISCUOUS),
     .C_BASEADDR      (C_BASEADDR),
     .C_HIGHADDR      (C_HIGHADDR),
     .C_OPB_AWIDTH    (C_OPB_AWIDTH),
@@ -152,7 +239,7 @@ module gbe_udp #(
     .Sl_retry   (Sl_retry),
     .Sl_toutSup (Sl_toutSup), 
     .Sl_xferAck (Sl_xferAck),
-  /* Common CPU signals */
+  // Common CPU signals 
     .local_enable  (local_enable),
     .local_mac     (local_mac),
     .local_ip      (local_ip),
@@ -161,31 +248,30 @@ module gbe_udp #(
 
     .cpu_promiscuous (cpu_promiscuous),
 
-  /* ARP cache CPU signals */
+  // ARP cache CPU signals 
     .arp_cache_addr    (arp_cpu_cache_index),
     .arp_cache_rd_data (arp_cpu_cache_rd_data),
     .arp_cache_wr_data (arp_cpu_cache_wr_data),
     .arp_cache_wr_en   (arp_cpu_cache_wr_en),
 
-  /* CPU RX signals */
+  // CPU RX signals 
     .cpu_rx_buffer_addr    (cpurx_cpu_addr),
     .cpu_rx_buffer_rd_data (cpurx_cpu_rd_data),
     .cpu_rx_size           (cpu_rx_size),
     .cpu_rx_ready          (cpu_rx_packet_ready),
     .cpu_rx_ack            (cpu_rx_packet_ack),
 
-  /* CPU TX signals */
+  // CPU TX signals 
     .cpu_tx_buffer_addr    (cputx_cpu_addr),
     .cpu_tx_buffer_rd_data (cputx_cpu_rd_data),
     .cpu_tx_buffer_wr_data (cputx_cpu_wr_data),
     .cpu_tx_buffer_wr_en   (cputx_cpu_wr_en),
     .cpu_tx_size           (cpu_tx_size),
     .cpu_tx_ready          (cpu_tx_packet_ready),
-    .cpu_tx_done           (cpu_tx_packet_ack),
-  /* PHY Status/Control */
-    .phy_status   (phy_status),
-    .phy_control  (phy_control)
+    .cpu_tx_done           (cpu_tx_packet_ack)
   );
+
+end endgenerate
 
 /*** buffer size clock domain crossing ***/
 
@@ -252,10 +338,30 @@ module gbe_udp #(
   wire  [7:0] cputx_tx_rd_data;
   wire        cpu_tx_buffer_sel;
   wire        cpu_tx_buffer_sel_unstable;
+  
+/****** ARP Cache ******/
 
-  gbe_tx #(
-    .LARGE_PACKETS (TX_LARGE_PACKETS)
-  ) gbe_tx_inst (
+  /* TODO: Optimization - shave off 1 bram
+     A 48-bit memory will use two brams on virtex-6 (and others)
+     due to the native BRAM geometry of 32x1k.  However, 
+     we could quite comfortably use a 24 bit memory and time
+     multiplex to make up 48 bits. */
+
+  gbe_arp_cache arp_cache_inst (
+    .clka  (OPB_Clk),
+    .addra (arp_cpu_cache_index),
+    .douta (arp_cpu_cache_rd_data),
+    .dina  (arp_cpu_cache_wr_data),
+    .wea   (arp_cpu_cache_wr_en),
+
+    .clkb  (mac_tx_clk),
+    .addrb (arp_tx_cache_index),
+    .doutb (arp_tx_cache_rd_data),
+    .dinb  (48'b0),
+    .web   (1'b0)
+  );
+
+  gbe_tx gbe_tx_inst (
     .app_clk         (app_clk),
     .app_rst         (app_tx_rst),
     .app_data        (app_tx_data),
@@ -289,6 +395,8 @@ module gbe_udp #(
     .cpu_buffer_sel        (cpu_tx_buffer_sel_unstable)
   );
 
+// END Clock counter debugs
+
   reg cpu_tx_buffer_selR;
   reg cpu_tx_buffer_selRR;
   always @(posedge OPB_Clk) begin
@@ -299,6 +407,9 @@ module gbe_udp #(
 
 /****** RX Logic ******/
 
+  wire mac_rx_dvld_i;
+wire [7:0] mac_rx_data_i;
+
   /* CPU buffer RX logic signals */
   wire [10:0] cpurx_rx_addr;
   wire  [7:0] cpurx_rx_wr_data;
@@ -307,7 +418,7 @@ module gbe_udp #(
   wire        cpu_rx_buffer_sel_unstable;
 
   gbe_rx #(
-    .DIST_RAM (RX_DIST_RAM)
+    .DIS_CPU(DIS_CPU_RX)
   ) gbe_rx_inst (
     .app_clk      (app_clk),
     .app_rst      (app_rx_rst),
@@ -322,8 +433,10 @@ module gbe_udp #(
 
     .mac_clk          (mac_rx_clk),
     .mac_rst          (mac_rx_rst),
-    .mac_rx_data      (mac_rx_data),
-    .mac_rx_dvld      (mac_rx_dvld),
+    //.mac_rx_data      (mac_rx_data),
+    //.mac_rx_dvld      (mac_rx_dvld),
+    .mac_rx_data      (mac_rx_data_i),
+    .mac_rx_dvld      (mac_rx_dvld_i),
     .mac_rx_goodframe (mac_rx_goodframe),
     .mac_rx_badframe  (mac_rx_badframe),
 
@@ -343,6 +456,15 @@ module gbe_udp #(
     .cpu_buffer_sel (cpu_rx_buffer_sel_unstable)
   );
 
+// >>>>>>>>>>>>>>>> DEBUG
+// Route the incomming MAC data to the yellow block 
+
+  assign app_dbg_data = {14'h0,mac_rx_dvld, mac_tx_dvld, mac_rx_data, mac_tx_data};
+  assign app_dbg_dvld = mac_tx_dvld || mac_rx_dvld;
+
+  assign mac_rx_data_i = mac_rx_data;
+  assign mac_rx_dvld_i = mac_rx_dvld;
+
   reg cpu_rx_buffer_selR;
   reg cpu_rx_buffer_selRR;
   always @(posedge OPB_Clk) begin
@@ -351,27 +473,6 @@ module gbe_udp #(
   end
   assign cpu_rx_buffer_sel = cpu_rx_buffer_selRR;
 
-/****** ARP Cache ******/
-
-  /* TODO: Optimization - shave off 1 bram
-     A 48-bit memory will use two brams on virtex-6 (and others)
-     due to the native BRAM geometry of 32x1k.  However, 
-     we could quite comfortably use a 24 bit memory and time
-     multiplex to make up 48 bits. */
-
-  arp_cache arp_cache_inst (
-    .clka  (OPB_Clk),
-    .addra (arp_cpu_cache_index),
-    .douta (arp_cpu_cache_rd_data),
-    .dina  (arp_cpu_cache_wr_data),
-    .wea   (arp_cpu_cache_wr_en),
-
-    .clkb  (mac_tx_clk),
-    .addrb (arp_tx_cache_index),
-    .doutb (arp_tx_cache_rd_data),
-    .dinb  (48'b0),
-    .web   (1'b0)
-  );
 
 /****** TX Buffer ******/
 
@@ -382,7 +483,7 @@ generate if (DIS_CPU_TX) begin : disable_cpu_tx
 
 end else begin : enable_cpu_tx
 
-  cpu_buffer cpu_buffer_tx(
+  gbe_cpu_buffer cpu_buffer_tx(
     .clka  (OPB_Clk),
     .addra ({!cpu_tx_buffer_sel, cputx_cpu_addr}),
     .douta ({cputx_cpu_rd_data[ 7:0 ], cputx_cpu_rd_data[15:8],
@@ -407,7 +508,7 @@ generate if (DIS_CPU_RX) begin : disable_cpu_rx
 
 end else begin : enable_cpu_rx
 
-  cpu_buffer cpu_buffer_rx(
+  gbe_cpu_buffer cpu_buffer_rx(
     .clka  (OPB_Clk),
     .addra ({!cpu_rx_buffer_sel, cpurx_cpu_addr}),
     .douta ({cpurx_cpu_rd_data[ 7:0 ], cpurx_cpu_rd_data[15:8],

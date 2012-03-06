@@ -1,7 +1,7 @@
 module roach_infrastructure(
     sys_clk_n, sys_clk_p,
     sys_clk, sys_clk90, sys_clk180, sys_clk270,
-    sys_clk_lock,
+    sys_clk_lock, op_power_on_rst,
     sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270,
     ///dly_clk_n,  dly_clk_p,
     //dly_clk,
@@ -12,15 +12,13 @@ module roach_infrastructure(
     aux_clk, aux_clk90, aux_clk180, aux_clk270,
     aux_clk2x, aux_clk2x90, aux_clk2x180, aux_clk2x270
     
-    //aux1_clk_n, aux1_clk_p,
-    //aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270,
   );
 
   parameter CLK_FREQ = 100;
 
   input  sys_clk_n, sys_clk_p;
   output sys_clk, sys_clk90, sys_clk180, sys_clk270;
-  output sys_clk_lock;
+  output sys_clk_lock, op_power_on_rst;
   output sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270;
   //input  dly_clk_n, dly_clk_p;
   //output dly_clk;
@@ -29,8 +27,6 @@ module roach_infrastructure(
   input  aux_clk_n, aux_clk_p;
   output aux_clk, aux_clk90, aux_clk180, aux_clk270;
   output aux_clk2x, aux_clk2x90, aux_clk2x180, aux_clk2x270;
-  //input  aux1_clk_n, aux1_clk_p;
-  //output aux1_clk, aux1_clk90, aux1_clk180, aux1_clk270;
 
   input  idelay_rst;
   output idelay_rdy;
@@ -52,14 +48,16 @@ module roach_infrastructure(
 
   /* system clock */
   wire  sys_clk_int;
-  wire  sys_clk_dcm_locked;
-  wire  sys_clk_dcm, sys_clk90_dcm;
+  wire  sys_clk_mmcm_locked;
+  wire  sys_clk_mmcm, sys_clk90_mmcm;
+  wire  sys_clk_fb_out;
 
   wire  sys_clk2x_int;
   wire  sys_clk2x_buf;
-  wire  sys_clk2x_dcm;
-  wire  sys_clk2x90_dcm;
-  wire  sys_clk2x_dcm_locked;
+  wire  sys_clk2x_mmcm;
+  wire  sys_clk2x90_mmcm;
+  
+  wire  mmcm_reset;
 
   IBUFGDS #(
     .IOSTANDARD ("LVDS_25"),
@@ -71,57 +69,84 @@ module roach_infrastructure(
   );
 
 
-  DCM_BASE #(
-    .CLKIN_PERIOD   (10.0)
-  ) SYS_CLK_DCM (
-    .CLKIN      (sys_clk_int),
-    .CLK0       (sys_clk_dcm),
-    .CLK180     (),
-    .CLK270     (),
-    .CLK2X      (sys_clk2x_int),
-    .CLK2X180   (),
-    .CLK90      (sys_clk90_dcm),
-    .CLKDV      (),
-    .CLKFX      (),
-    .CLKFX180   (),
-    .LOCKED     (sys_clk_dcm_locked),
-    .CLKFB      (sys_clk),
-    .RST        (1'b0)
+  MMCM_BASE #(
+    .BANDWIDTH          ("OPTIMIZED"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
+    .CLKFBOUT_MULT_F    (6), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+    .CLKFBOUT_PHASE     (0.0),
+    .CLKIN1_PERIOD      (10),
+    .CLKOUT0_DIVIDE_F   (1), // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKOUT0_DUTY_CYCLE (0.5),
+    .CLKOUT1_DUTY_CYCLE (0.5),
+    .CLKOUT2_DUTY_CYCLE (0.5),
+    .CLKOUT3_DUTY_CYCLE (0.5),
+    .CLKOUT4_DUTY_CYCLE (0.5),
+    .CLKOUT5_DUTY_CYCLE (0.5),
+    .CLKOUT6_DUTY_CYCLE (0.5),
+    .CLKOUT0_PHASE      (0.0),
+    .CLKOUT1_PHASE      (0.0),
+    .CLKOUT2_PHASE      (0.0),
+    .CLKOUT3_PHASE      (90),
+    .CLKOUT4_PHASE      (90),
+    .CLKOUT5_PHASE      (0.0),
+    .CLKOUT6_PHASE      (0.0),
+    .CLKOUT1_DIVIDE     (6), //THIS IS THE DIVISOR
+    .CLKOUT2_DIVIDE     (3),
+    .CLKOUT3_DIVIDE     (6),
+    .CLKOUT4_DIVIDE     (3),
+    .CLKOUT5_DIVIDE     (1),
+    .CLKOUT6_DIVIDE     (1),
+    .CLKOUT4_CASCADE    ("FALSE"),
+    .CLOCK_HOLD         ("FALSE"),
+    .DIVCLK_DIVIDE      (1), // Master division value (1-80)
+    .REF_JITTER1        (0.0),
+    .STARTUP_WAIT       ("FALSE")
+  ) MMCM_BASE_inst (
+    .CLKIN1   (sys_clk_int),
+    .CLKFBIN  (sys_clk_fb),
+    
+    .CLKFBOUT  (sys_clk_fb_int),
+    .CLKFBOUTB (),
+    
+    .CLKOUT0  (),
+    .CLKOUT0B (),
+    .CLKOUT1  (sys_clk_mmcm),
+    .CLKOUT1B (),
+    .CLKOUT2  (sys_clk2x_mmcm),
+    .CLKOUT2B (),
+    .CLKOUT3  (sys_clk90_mmcm),
+    .CLKOUT3B (),
+    .CLKOUT4  (sys_clk2x90_mmcm),
+    .CLKOUT5  (),
+    .CLKOUT6  (),
+    .LOCKED   (sys_clk_mmcm_locked),
+    
+    .PWRDWN   (1'b0),
+    .RST      (mmcm_reset)
+  );
+  
+  assign op_power_on_rst = ~sys_clk_mmcm_locked;
+  assign mmcm_reset = 1'b0;
+  assign sys_clk_lock = sys_clk_mmcm_locked;
+
+  BUFG bufg_sys_clk[2:0](
+    .I({sys_clk_mmcm, sys_clk90_mmcm, sys_clk_fb_int}),
+    .O({sys_clk,      sys_clk90,      sys_clk_fb})
   );
 
-  DCM_BASE #(
-    .CLKIN_PERIOD       (5.0),
-    .DLL_FREQUENCY_MODE ("HIGH")
-  ) SYS_CLK2X_DCM (
-    .CLKIN      (sys_clk2x_buf),
-    .CLK0       (sys_clk2x_dcm),
-    .CLK90      (sys_clk2x90_dcm),
-    .LOCKED     (sys_clk2x_dcm_locked),
-    .CLKFB      (sys_clk2x),
-    .RST        (~sys_clk_dcm_locked)
+  BUFG bufg_sys_clk2x[1:0](
+    .I({sys_clk2x_mmcm, sys_clk2x90_mmcm}),
+    .O({sys_clk2x,      sys_clk2x90})
   );
-
-  assign sys_clk_lock = sys_clk_dcm_locked;
-
-  BUFG bufg_sys_clk[1:0](
-    .I({sys_clk_dcm, sys_clk90_dcm}),
-    .O({sys_clk,     sys_clk90})
-  );
-
-    BUFG bufg_sys_clk2x[2:0](
-        .I({sys_clk2x_int,  sys_clk2x_dcm,  sys_clk2x90_dcm}),
-        .O({sys_clk2x_buf,  sys_clk2x,      sys_clk2x90})
-    );
 
   // rely on inference of Xilinx internal clock inversion structures down the line
-  assign sys_clk180 = ~sys_clk;
-  assign sys_clk270 = ~sys_clk90;
+  assign sys_clk180   = ~sys_clk;
+  assign sys_clk270   = ~sys_clk90;
   assign sys_clk2x180 = ~sys_clk2x;
   assign sys_clk2x270 = ~sys_clk2x90;
 
-  /* Aux clocks */
+  /* Aux clocks */ //TODO 
+/*
   wire  aux_clk_int;
-  //wire  aux1_clk_int;
   IBUFGDS #(
     .IOSTANDARD ("LVDS_25"),
     .DIFF_TERM  ("TRUE")
@@ -131,18 +156,15 @@ module roach_infrastructure(
     .O  ({aux_clk_int})
   );
 
-  wire  aux_clk_dcm;
-  wire  aux_clk90_dcm;
-  //wire  aux1_clk_dcm;
-  //wire  aux1_clk90_dcm;
+  wire  aux_clk_mmcm;
+  wire  aux_clk90_mmcm;
 
-  wire  aux_clk_dcm_locked;
-  //wire  aux1_clk_dcm_locked;
+  wire  aux_clk_mmcm_locked;
 
   wire  aux_clk2x_int;
   wire  aux_clk2x_buf;
-  wire  aux_clk2x_dcm;
-  wire  aux_clk2x90_dcm;
+  wire  aux_clk2x_mmcm;
+  wire  aux_clk2x90_mmcm;
 
 // =====================================================================
 // Generated DCM instantiation based on target clock frequency; use
@@ -151,104 +173,138 @@ module roach_infrastructure(
 generate
     begin: GEN_DCM
         if (CLK_FREQ < 120) begin
-            DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("LOW")
-            ) AUX0_CLK_DCM (
-              .CLKIN  (aux_clk_int),
-              .CLK0   (aux_clk_dcm),
-              .CLK90  (aux_clk90_dcm),
-              .CLK2X  (aux_clk2x_int),
-              .LOCKED (aux_clk_dcm_locked),
-              .CLKFB  (aux_clk),
-              .RST    (~sys_clk_dcm_locked)
-            );
-
-            /*DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("LOW")
-            ) AUX1_CLK_DCM (
-              .CLKIN  (aux1_clk_int),
-              .CLK0   (aux1_clk_dcm),
-              .CLK90  (aux1_clk90_dcm),
-              .LOCKED (aux1_clk_dcm_locked),
-              .CLKFB  (aux1_clk),
-              .RST    (~sys_clk_dcm_locked)
-            );*/
-
-            DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("LOW")
-            ) AUX0_CLK2X_DCM (
-              .CLKIN  (aux_clk2x_buf),
-              .CLK0   (aux_clk2x_dcm),
-              .CLK90  (aux_clk2x90_dcm),
-              .LOCKED (),
-              .CLKFB  (aux_clk2x),
-              .RST    (~aux_clk_dcm_locked)
+            MMCM_BASE #(
+              .BANDWIDTH          ("LOW"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
+              .CLKFBOUT_MULT_F    (6), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+              .CLKFBOUT_PHASE     (0.0),
+              .CLKIN1_PERIOD      (1000/CLK_FREQ),
+              .CLKOUT0_DIVIDE_F   (1), // Divide amount for CLKOUT0 (1.000-128.000).
+              .CLKOUT0_DUTY_CYCLE (0.5),
+              .CLKOUT1_DUTY_CYCLE (0.5),
+              .CLKOUT2_DUTY_CYCLE (0.5),
+              .CLKOUT3_DUTY_CYCLE (0.5),
+              .CLKOUT4_DUTY_CYCLE (0.5),
+              .CLKOUT5_DUTY_CYCLE (0.5),
+              .CLKOUT6_DUTY_CYCLE (0.5),
+              .CLKOUT0_PHASE      (0.0),
+              .CLKOUT1_PHASE      (0.0),
+              .CLKOUT2_PHASE      (0.0),
+              .CLKOUT3_PHASE      (90),
+              .CLKOUT4_PHASE      (90),
+              .CLKOUT5_PHASE      (0.0),
+              .CLKOUT6_PHASE      (0.0),
+              .CLKOUT1_DIVIDE     (6), //THIS IS THE DIVISOR
+              .CLKOUT2_DIVIDE     (3),
+              .CLKOUT3_DIVIDE     (6),
+              .CLKOUT4_DIVIDE     (3),
+              .CLKOUT5_DIVIDE     (1),
+              .CLKOUT6_DIVIDE     (1),
+              .CLKOUT4_CASCADE    ("FALSE"),
+              .CLOCK_HOLD         ("FALSE"),
+              .DIVCLK_DIVIDE      (1), // Master division value (1-80)
+              .REF_JITTER1        (0.0),
+              .STARTUP_WAIT       ("FALSE")
+            ) MMCM_BASE_inst (
+              .CLKIN1   (aux_clk_int),
+              .CLKFBIN  (aux_clk_fb),
+              
+              .CLKFBOUT  (aux_clk_fb_int),
+              .CLKFBOUTB (),
+              
+              .CLKOUT0  (),
+              .CLKOUT0B (),
+              .CLKOUT1  (aux_clk_mmcm),
+              .CLKOUT1B (),
+              .CLKOUT2  (aux_clk2x_mmcm),
+              .CLKOUT2B (),
+              .CLKOUT3  (aux_clk90_mmcm),
+              .CLKOUT3B (),
+              .CLKOUT4  (aux_clk2x90_mmcm),
+              .CLKOUT5  (),
+              .CLKOUT6  (),
+              .LOCKED   (),
+              
+              .PWRDWN   (1'b0),
+              .RST      (mmcm_reset)
             );
         end // if (CLK_FREQ < 120)
         else begin
-            DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("HIGH")
-            ) AUX0_CLK_DCM (
-              .CLKIN  (aux_clk_int),
-              .CLK0   (aux_clk_dcm),
-              .CLK90  (aux_clk90_dcm),
-              .CLK2X  (aux_clk2x_int),
-              .LOCKED (aux_clk_dcm_locked),
-              .CLKFB  (aux_clk),
-              .RST    (~sys_clk_dcm_locked)
-            );
-
-            /*DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("HIGH")
-            ) AUX1_CLK_DCM (
-              .CLKIN  (aux1_clk_int),
-              .CLK0   (aux1_clk_dcm),
-              .CLK90  (aux1_clk90_dcm),
-              .LOCKED (aux1_clk_dcm_locked),
-              .CLKFB  (aux1_clk),
-              .RST    (~sys_clk_dcm_locked)
-            );*/
-
-            DCM_BASE #(
-              .CLKIN_PERIOD       (1000/CLK_FREQ),
-              .DLL_FREQUENCY_MODE ("HIGH")
-            ) AUX0_CLK2X_DCM (
-              .CLKIN  (aux_clk2x_buf),
-              .CLK0   (aux_clk2x_dcm),
-              .CLK90  (aux_clk2x90_dcm),
-              .LOCKED (),
-              .CLKFB  (aux_clk2x),
-              .RST    (~aux_clk_dcm_locked)
+            MMCM_BASE #(
+              .BANDWIDTH          ("HIGH"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
+              .CLKFBOUT_MULT_F    (6), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+              .CLKFBOUT_PHASE     (0.0),
+              .CLKIN1_PERIOD      (1000/CLK_FREQ),
+              .CLKOUT0_DIVIDE_F   (1), // Divide amount for CLKOUT0 (1.000-128.000).
+              .CLKOUT0_DUTY_CYCLE (0.5),
+              .CLKOUT1_DUTY_CYCLE (0.5),
+              .CLKOUT2_DUTY_CYCLE (0.5),
+              .CLKOUT3_DUTY_CYCLE (0.5),
+              .CLKOUT4_DUTY_CYCLE (0.5),
+              .CLKOUT5_DUTY_CYCLE (0.5),
+              .CLKOUT6_DUTY_CYCLE (0.5),
+              .CLKOUT0_PHASE      (0.0),
+              .CLKOUT1_PHASE      (0.0),
+              .CLKOUT2_PHASE      (0.0),
+              .CLKOUT3_PHASE      (90),
+              .CLKOUT4_PHASE      (90),
+              .CLKOUT5_PHASE      (0.0),
+              .CLKOUT6_PHASE      (0.0),
+              .CLKOUT1_DIVIDE     (6), //THIS IS THE DIVISOR
+              .CLKOUT2_DIVIDE     (3),
+              .CLKOUT3_DIVIDE     (6),
+              .CLKOUT4_DIVIDE     (3),
+              .CLKOUT5_DIVIDE     (1),
+              .CLKOUT6_DIVIDE     (1),
+              .CLKOUT4_CASCADE    ("FALSE"),
+              .CLOCK_HOLD         ("FALSE"),
+              .DIVCLK_DIVIDE      (1), // Master division value (1-80)
+              .REF_JITTER1        (0.0),
+              .STARTUP_WAIT       ("FALSE")
+            ) MMCM_BASE_inst (
+              .CLKIN1   (aux_clk_int),
+              .CLKFBIN  (aux_clk_fb),
+              
+              .CLKFBOUT  (aux_clk_fb_int),
+              .CLKFBOUTB (),
+              
+              .CLKOUT0  (),
+              .CLKOUT0B (),
+              .CLKOUT1  (aux_clk_mmcm),
+              .CLKOUT1B (),
+              .CLKOUT2  (aux_clk2x_mmcm),
+              .CLKOUT2B (),
+              .CLKOUT3  (aux_clk90_mmcm),
+              .CLKOUT3B (),
+              .CLKOUT4  (aux_clk2x90_mmcm),
+              .CLKOUT5  (),
+              .CLKOUT6  (),
+              .LOCKED   (),
+              
+              .PWRDWN   (1'b0),
+              .RST      (mmcm_reset)
             );
         end // else
    end // GEN_DCM
 endgenerate
 
 
-  BUFG bufg_aux_clk[1:0](
-    .I({aux_clk_dcm, aux_clk90_dcm}),
-    .O({aux_clk,     aux_clk90})
+  BUFG bufg_aux_clk[2:0](
+    .I({aux_clk_mmcm, aux_clk90_mmcm, aux_clk_fb_int}),
+    .O({aux_clk,      aux_clk90,      aux_clk_fb})
   );
 
-  BUFG bufg_aux2_clk[2:0](
-    .I({aux_clk2x_int, aux_clk2x_dcm, aux_clk2x90_dcm}),
-    .O({aux_clk2x_buf, aux_clk2x,     aux_clk2x90})
+  BUFG bufg_aux2_clk[1:0](
+    .I({aux_clk2x_mmcm, aux_clk2x90_mmcm}),
+    .O({aux_clk2x,      aux_clk2x90})
   );
 
   // rely on inference of Xilinx internal clock inversion structures down the line
   assign aux_clk180 = ~aux_clk;
   assign aux_clk270 = ~aux_clk90;
-  //assign aux1_clk180 = ~aux1_clk;
-  //assign aux1_clk270 = ~aux1_clk90;
 
   assign aux_clk2x180 = ~aux_clk2x;
   assign aux_clk2x270 = ~aux_clk2x90;
-
+*/
 
   /* Delay Clock */
   /*wire dly_clk_int;

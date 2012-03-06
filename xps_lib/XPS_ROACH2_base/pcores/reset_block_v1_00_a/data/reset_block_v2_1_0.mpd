@@ -6,12 +6,11 @@ OPTION HDL              = MIXED
 OPTION IP_GROUP         = USER
 OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
 
-PARAMETER DELAY = 10, DT = integer
-PARAMETER WIDTH = 50, DT = integer
+PARAMETER WIDTH = 1000, DT = integer
 
 PORT clk           = "", DIR = IN, SIGIS = CLK
-PORT async_reset_i = "", DIR = IN, SIGIS = RST
-PORT reset_i       = "", DIR = IN, SIGIS = RST
-PORT reset_o       = "", DIR = OUT
+PORT ip_async_reset_i = "", DIR = IN, SIGIS = RST
+PORT ip_reset_i       = "", DIR = IN, SIGIS = RST
+PORT op_reset_o       = "", DIR = OUT
 
 END
