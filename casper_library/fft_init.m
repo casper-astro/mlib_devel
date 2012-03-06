@@ -95,9 +95,8 @@ unscramble = get_var('unscramble', 'defaults', defaults, varargin{:});
 clog(flatstrcell(varargin), 'fft_init_debug');
 
 if( strcmp(specify_mult, 'on') && length(mult_spec) ~= FFTSize ),
-    error('fft_init.m: Multiplier use specification for stages does not match FFT size');
     clog('fft_init.m: Multiplier use specification for stages does not match FFT size','error');
-    return
+    error('fft_init.m: Multiplier use specification for stages does not match FFT size');
 end
 
 % split up multiplier specification
