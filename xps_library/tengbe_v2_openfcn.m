@@ -1,8 +1,8 @@
-% ten_gbe_v2_loadfcn
+% ten_gbe_v2_openfcn
 %
 % Sets up the mask according to the target architecture just
 % before displaying the Mask Parameter dialog. 
-% Use 'set_param(gcb, 'OpenFcn', 'tengbe_v2_loadfcn')
+% Use 'set_param(gcb, 'OpenFcn', 'tengbe_v2_openfcn')
 % to set up the block to run the function just before displaying the 
 % mask parameter dialog.
 
@@ -40,10 +40,10 @@ check_mask_type(blk, 'ten_GbE_v2');
 set_param(blk,'LinkStatus','inactive');
 
 %search for sysgen block and get target
-xps_xsg_blks    = find_system(gcs,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
+xps_xsg_blks    = find_system(gcs,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
 
 if length(xps_xsg_blks) ~= 1,
-  errordlg('ten_Gbe_v2 requires a MSSGE (XSG core config) block to be instantiated');
+  errordlg('ten_Gbe_v2 requires one MSSGE (XSG core config) block to be instantiated at the top level');
   return;
 end
 
