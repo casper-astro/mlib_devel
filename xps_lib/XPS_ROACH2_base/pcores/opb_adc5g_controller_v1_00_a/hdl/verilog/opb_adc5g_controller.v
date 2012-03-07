@@ -59,10 +59,8 @@ module opb_adc5g_controller(
   parameter C_FAMILY      = "";
 
   /* TODO: implement AUTO configuration */
-  parameter INTERLEAVED_0 = 0;
-  parameter INTERLEAVED_1 = 0;
-  parameter AUTOCONFIG_0  = 0;
-  parameter AUTOCONFIG_1  = 0;
+  parameter INITIAL_CONFIG_MODE_0   = 0;
+  parameter INITIAL_CONFIG_MODE_1   = 0;
 
   /********* Global Signals *************/
 
@@ -201,7 +199,9 @@ module opb_adc5g_controller(
 	  case (opb_addr[3:2])
 	    0: begin
 	       opb_ack <= 1'b1;
-	       opb_data_out <= {2'b0, adc1_psdone, adc0_psdone, 4'b0, 2'b0, adc1_mmcm_psincdec_reg, adc1_mmcm_psen_reg, 2'b0, adc0_mmcm_psincdec_reg, adc0_mmcm_psen_reg, 16'b0};
+	       opb_data_out <= {2'b0, adc1_psdone, adc0_psdone, 4'b0, 
+				2'b0, adc1_mmcm_psincdec_reg, adc1_mmcm_psen_reg, 
+				2'b0, adc0_mmcm_psincdec_reg, adc0_mmcm_psen_reg, 16'b0};
 	    end
 	    1: begin
 	       opb_ack <= adc0_config_done ? 1'b1 : 1'b0;
@@ -238,11 +238,13 @@ module opb_adc5g_controller(
   // synthesis attribute IOB of adc0_reset_iob is TRUE
   // synthesis attribute IOB of adc1_reset_iob is TRUE
 
+  localparam RST_LENGTH = 8'h10;
+
   always @(posedge OPB_Clk) begin
 
     if (OPB_Rst) begin
-      adc0_reset_counter <= {8{1'b1}};
-      adc1_reset_counter <= {8{1'b1}};
+      adc0_reset_counter <= RST_LENGTH;
+      adc1_reset_counter <= RST_LENGTH;
       adc0_reset_iob <= 1'b1;
       adc1_reset_iob <= 1'b1;
     end else begin
@@ -254,29 +256,39 @@ module opb_adc5g_controller(
       if (adc1_reset_counter) begin
         adc1_reset_counter <= adc1_reset_counter - 1;
       end
-      if (adc0_reset_wire) begin
-        adc0_reset_counter <= {8{1'b1}};
+      if ((adc0_reset_wire) || (adc0_startup_reset)) begin
+        adc0_reset_counter <= RST_LENGTH;
       end
-      if (adc1_reset_wire) begin
-        adc1_reset_counter <= {8{1'b1}};
+      if ((adc1_reset_wire) || (adc1_startup_reset)) begin
+        adc1_reset_counter <= RST_LENGTH;
       end
     end
   end
 
-  assign adc0_dcm_reset = adc0_reset_counter != 0;
-  assign adc1_dcm_reset = adc1_reset_counter != 0;
+  assign adc0_dcm_reset = ((adc0_reset_counter != 0) || (adc0_startup));
+  assign adc1_dcm_reset = ((adc1_reset_counter != 0) || (adc1_startup));
   assign adc0_reset = adc0_reset_counter != 0;//adc0_reset_iob;
   assign adc1_reset = adc1_reset_counter != 0;//adc1_reset_iob;
 
-  
+  /*** machine states ***/
   localparam CONFIG_IDLE        = 0;
-  localparam CONFIG_CLKWAIT     = 1;
-  localparam CONFIG_READWAIT    = 2;
-  localparam CONFIG_DATA_ADDR   = 3;
-  localparam CONFIG_DATA_WRITE  = 4;
-  localparam CONFIG_DATA_READ   = 5;
-  localparam CONFIG_ALMOST_DONE = 6;
-  localparam CONFIG_FINISH      = 7;
+  localparam CONFIG_STARTUP     = 1;
+  localparam CONFIG_CLKWAIT     = 2;
+  localparam CONFIG_READWAIT    = 3;
+  localparam CONFIG_DATA_ADDR   = 4;
+  localparam CONFIG_DATA_WRITE  = 5;
+  localparam CONFIG_DATA_READ   = 6;
+  localparam CONFIG_ALMOST_DONE = 7;
+  localparam CONFIG_FINISH      = 8;
+
+  /*** initial configuration modes ***/
+  localparam MODE_ACHAN_DMUX1   = 0;
+  localparam MODE_ACHAN_DMUX2   = 1;
+  localparam MODE_CCHAN_DMUX1   = 2;
+  localparam MODE_CCHAN_DMUX2   = 3;
+  localparam MODE_2CHAN_DMUX1   = 4;
+  localparam MODE_2CHAN_DMUX2   = 5;
+  localparam MODE_TEST_RAMP     = 6;
 
   /********* ADC0 configuration state machine *********/
 
@@ -285,23 +297,47 @@ module opb_adc5g_controller(
   wire clk0_prerise;
   wire clk0_en;
 
-  reg [2:0] adc0_state;
-
+  reg [3:0] adc0_state;
   reg [15:0] adc0_read_data_shift;
-
   reg [23:0] adc0_config_data_shift;
-
   reg [4:0] adc0_config_progress;
+  reg [23:0] adc0_startup_data;
+  reg adc0_config_writing;
+  reg adc0_startup_reset;
+  reg adc0_startup;
+
+  initial begin
+     case (INITIAL_CONFIG_MODE_0)
+       MODE_ACHAN_DMUX1: adc0_startup_data <= {8'h81, 16'h03c8};
+       MODE_ACHAN_DMUX2: adc0_startup_data <= {8'h81, 16'h0388};
+       MODE_CCHAN_DMUX1: adc0_startup_data <= {8'h81, 16'h03ca};
+       MODE_CCHAN_DMUX2: adc0_startup_data <= {8'h81, 16'h038a};
+       MODE_2CHAN_DMUX1: adc0_startup_data <= {8'h81, 16'h03c4};
+       MODE_2CHAN_DMUX2: adc0_startup_data <= {8'h81, 16'h0384};
+       MODE_TEST_RAMP  : adc0_startup_data <= {8'h81, 16'h13c4};
+       default         : adc0_startup_data <= {8'h81, 16'h03c8};
+     endcase // case (INITIAL_CONFIG_MODE_0)
+  end
 
   always @(posedge OPB_Clk) begin
     if (OPB_Rst) begin
-      adc0_state <= CONFIG_IDLE;
+      adc0_state <= CONFIG_STARTUP;
+      adc0_config_writing <= 1'b0;
     end else begin
       case (adc0_state)
+        CONFIG_STARTUP: begin
+	    adc0_startup <= 1'b1;
+            adc0_state <= CONFIG_CLKWAIT;
+	    adc0_read_data_shift <= 16'b0;
+	    adc0_config_writing <= 1'b1;
+            adc0_config_data_shift <= adc0_startup_data;
+        end
         CONFIG_IDLE: begin
+	  adc0_startup <= 1'b0;
           if (adc0_config_start) begin
             adc0_state <= CONFIG_CLKWAIT;
 	    adc0_read_data_shift <= 16'b0;
+	    adc0_config_writing <= adc0_config_addr[7];
             adc0_config_data_shift <= {adc0_config_addr, adc0_config_data};
           end
         end
@@ -321,7 +357,7 @@ module opb_adc5g_controller(
             adc0_config_data_shift <= adc0_config_data_shift << 1;
             adc0_config_progress <= adc0_config_progress + 1;
             if (adc0_config_progress == 7) begin
-	      if (adc0_config_addr[7] == 1) begin
+	      if (adc0_config_writing) begin
 		adc0_state <= CONFIG_DATA_WRITE;
 	      end else begin
 		adc0_state <= CONFIG_READWAIT;
@@ -359,8 +395,13 @@ module opb_adc5g_controller(
           if (clk0_prerise) begin
             adc0_state <= CONFIG_FINISH;
           end
+	  if (adc0_startup) begin
+	    adc0_startup_reset <= 1'b1;
+	  end
         end
         CONFIG_FINISH: begin
+	  adc0_startup_reset <= 1'b0;
+	  adc0_config_writing <= 1'b0;
           if (clk0_falling) begin
             adc0_state <= CONFIG_IDLE;
 	    adc0_read_data_reg <= adc0_read_data_shift;
@@ -390,7 +431,8 @@ module opb_adc5g_controller(
   assign clk0_prerise = clk0_counter == 5'b01111;
   assign clk0_en   = adc0_state != CONFIG_IDLE;
 
-  assign adc0_modepin         = !((adc0_state == CONFIG_DATA_ADDR) || (adc0_state == CONFIG_DATA_WRITE) || (adc0_state == CONFIG_DATA_READ) || (adc0_state == CONFIG_READWAIT));
+  assign adc0_modepin         = !((adc0_state == CONFIG_DATA_ADDR) || (adc0_state == CONFIG_DATA_WRITE) || 
+				  (adc0_state == CONFIG_DATA_READ) || (adc0_state == CONFIG_READWAIT));
   assign adc0_adc3wire_data   = adc0_config_data_shift[23];
   assign adc0_adc3wire_clk    = clk0_counter[4] && !(adc0_state == CONFIG_READWAIT) && !(adc0_state == CONFIG_FINISH);
 
@@ -402,23 +444,46 @@ module opb_adc5g_controller(
   wire clk1_prerise;
   wire clk1_en;
 
-  reg [2:0] adc1_state;
-
+  reg [3:0] adc1_state;
   reg [15:0] adc1_read_data_shift;
-
   reg [23:0] adc1_config_data_shift;
-
   reg [4:0] adc1_config_progress;
+  reg [23:0] adc1_startup_data;
+  reg adc1_config_writing;
+  reg adc1_startup_reset;
+  reg adc1_startup;
+
+  initial begin
+     case (INITIAL_CONFIG_MODE_1)
+       MODE_ACHAN_DMUX1: adc1_startup_data <= {8'h81, 16'h03c8};
+       MODE_ACHAN_DMUX2: adc1_startup_data <= {8'h81, 16'h0388};
+       MODE_CCHAN_DMUX1: adc1_startup_data <= {8'h81, 16'h03ca};
+       MODE_CCHAN_DMUX2: adc1_startup_data <= {8'h81, 16'h038a};
+       MODE_2CHAN_DMUX1: adc1_startup_data <= {8'h81, 16'h03c4};
+       MODE_2CHAN_DMUX2: adc1_startup_data <= {8'h81, 16'h0384};
+       MODE_TEST_RAMP  : adc1_startup_data <= {8'h81, 16'h13c4};
+     endcase // case (INITIAL_CONFIG_MODE_1)
+  end
 
   always @(posedge OPB_Clk) begin
     if (OPB_Rst) begin
-      adc1_state <= CONFIG_IDLE;
+      adc1_state <= CONFIG_STARTUP;
+      adc1_config_writing <= 1'b0;
     end else begin
       case (adc1_state)
+        CONFIG_STARTUP: begin
+	    adc1_startup <= 1'b1;
+            adc1_state <= CONFIG_CLKWAIT;
+	    adc1_read_data_shift <= 16'b0;
+	    adc1_config_writing <= 1'b1;
+            adc1_config_data_shift <= adc1_startup_data;
+        end
         CONFIG_IDLE: begin
+	  adc1_startup <= 1'b0;
           if (adc1_config_start) begin
             adc1_state <= CONFIG_CLKWAIT;
 	    adc1_read_data_shift <= 16'b0;
+	    adc1_config_writing <= adc1_config_addr[7];
             adc1_config_data_shift <= {adc1_config_addr, adc1_config_data};
           end
         end
@@ -438,7 +503,7 @@ module opb_adc5g_controller(
             adc1_config_data_shift <= adc1_config_data_shift << 1;
             adc1_config_progress <= adc1_config_progress + 1;
             if (adc1_config_progress == 7) begin
-	      if (adc1_config_addr[7] == 1) begin
+	      if (adc1_config_writing) begin
 		adc1_state <= CONFIG_DATA_WRITE;
 	      end else begin
 		adc1_state <= CONFIG_READWAIT;
@@ -476,8 +541,13 @@ module opb_adc5g_controller(
           if (clk1_prerise) begin
             adc1_state <= CONFIG_FINISH;
           end
+	  if (adc1_startup) begin
+	    adc1_startup_reset <= 1'b1;
+	  end
         end
         CONFIG_FINISH: begin
+	  adc1_startup_reset <= 1'b0;
+	  adc1_config_writing <= 1'b0;
           if (clk1_falling) begin
             adc1_state <= CONFIG_IDLE;
 	    adc1_read_data_reg <= adc1_read_data_shift;
@@ -507,7 +577,8 @@ module opb_adc5g_controller(
   assign clk1_prerise = clk1_counter == 5'b01111;
   assign clk1_en   = adc1_state != CONFIG_IDLE;
 
-  assign adc1_modepin         = !((adc1_state == CONFIG_DATA_ADDR) || (adc1_state == CONFIG_DATA_WRITE) || (adc1_state == CONFIG_DATA_READ) || (adc1_state == CONFIG_READWAIT));
+  assign adc1_modepin         = !((adc1_state == CONFIG_DATA_ADDR) || (adc1_state == CONFIG_DATA_WRITE) || 
+				  (adc1_state == CONFIG_DATA_READ) || (adc1_state == CONFIG_READWAIT));
   assign adc1_adc3wire_data   = adc1_config_data_shift[23];
   assign adc1_adc3wire_clk    = clk1_counter[4] && !(adc1_state == CONFIG_READWAIT) && !(adc1_state == CONFIG_FINISH);
 
