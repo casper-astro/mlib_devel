@@ -1,0 +1,45 @@
+module x64_adc_retime (
+  input             wr_clk,
+  input             rd_clk,
+  input     [95:0]  din,
+  input             dvld,
+  input             rst,
+  output    [23:0]  dout,
+  output            dout_sync,
+  output            fifo_of, 
+  output            fifo_uf,
+  output            dout_vld
+  );
+
+  x64_adc_mux_adc_streams x64_adc_mux_adc_streams_inst (
+    .clk        (wr_clk),
+    .rst        (rst),
+    .din        (din),
+    .dinvld     (dvld),
+    .dout       (mux_dout),
+    .doutvld    (mux_dout_valid),
+    .dout_sync  (mux_dout_sync)
+  );
+  
+  wire [24:0] dout_int;
+
+  async_fifo_64by16 async_fifo_64by16_inst (
+    .din        ({mux_dout_sync, mux_dout}),
+    .rd_clk     (rd_clk),
+    .rd_en      (~fifo_uf),
+    .rst        (rst),
+    .wr_clk     (wr_clk),
+    .wr_en      (mux_dout_valid),
+    .dout       (dout_int),
+    .empty      (fifo_uf),
+    .full       (fifo_of),
+    .valid      (dout_vld)
+  );
+
+  assign dout       =  dout_int[23:0];
+  assign dout_sync  =  dout_int[24];
+
+
+endmodule
+
+

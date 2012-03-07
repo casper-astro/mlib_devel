@@ -26,7 +26,7 @@ myname = blk;
 
 %get hardware platform from XSG block
 try
-    xsg_blk = find_system(gcs, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
+    xsg_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
     hw_sys = xps_get_hw_plat(get_param(xsg_blk{1},'hw_sys'));
 catch
     warndlg('Count not find hardware platform for QDR configuration - is there an XSG block in this model? Defaulting platform to ROACH.');

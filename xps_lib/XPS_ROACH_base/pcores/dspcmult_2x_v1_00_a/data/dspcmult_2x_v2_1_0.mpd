@@ -1,0 +1,37 @@
+BEGIN dspcmult_2x
+
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = MIXED
+OPTION IP_GROUP = USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+#OPTION STYLE = MIX
+OPTION DESC = "Wrapper for DSP48 complex multiplier with 2x multiplexing"
+
+################
+## PARAMETERS ##
+################
+
+
+#############
+##  PORTS  ##
+#############
+
+PORT app_clk = "", DIR = I
+PORT dsp_clk = "", DIR = I
+
+PORT in0a_r = "", DIR = I, VEC=[17:0]
+PORT in0a_i = "", DIR = I, VEC=[17:0]
+PORT in0b_r = "", DIR = I, VEC=[17:0]
+PORT in0b_i = "", DIR = I, VEC=[17:0]
+PORT in1a_r = "", DIR = I, VEC=[17:0]
+PORT in1a_i = "", DIR = I, VEC=[17:0]
+PORT in1b_r = "", DIR = I, VEC=[17:0]
+PORT in1b_i = "", DIR = I, VEC=[17:0]
+
+PORT out0_r = "", DIR = O, VEC=[36:0]
+PORT out0_i = "", DIR = O, VEC=[36:0]
+PORT out1_r = "", DIR = O, VEC=[36:0]
+PORT out1_i = "", DIR = O, VEC=[36:0]
+
+END
