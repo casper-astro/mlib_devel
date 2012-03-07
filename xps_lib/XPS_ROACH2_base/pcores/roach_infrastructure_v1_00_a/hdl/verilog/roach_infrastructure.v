@@ -1,7 +1,7 @@
 module roach_infrastructure(
     sys_clk_n, sys_clk_p,
     sys_clk, sys_clk90, sys_clk180, sys_clk270,
-    sys_clk_lock,
+    sys_clk_lock, op_power_on_rst,
     sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270,
     ///dly_clk_n,  dly_clk_p,
     //dly_clk,
@@ -18,7 +18,7 @@ module roach_infrastructure(
 
   input  sys_clk_n, sys_clk_p;
   output sys_clk, sys_clk90, sys_clk180, sys_clk270;
-  output sys_clk_lock;
+  output sys_clk_lock, op_power_on_rst;
   output sys_clk2x, sys_clk2x90, sys_clk2x180, sys_clk2x270;
   //input  dly_clk_n, dly_clk_p;
   //output dly_clk;
@@ -56,6 +56,8 @@ module roach_infrastructure(
   wire  sys_clk2x_buf;
   wire  sys_clk2x_mmcm;
   wire  sys_clk2x90_mmcm;
+  
+  wire  mmcm_reset;
 
   IBUFGDS #(
     .IOSTANDARD ("LVDS_25"),
@@ -116,11 +118,15 @@ module roach_infrastructure(
     .CLKOUT4  (sys_clk2x90_mmcm),
     .CLKOUT5  (),
     .CLKOUT6  (),
-    .LOCKED   (mmcm_psdone),
+    .LOCKED   (sys_clk_mmcm_locked),
     
     .PWRDWN   (1'b0),
     .RST      (mmcm_reset)
   );
+  
+  assign op_power_on_rst = ~sys_clk_mmcm_locked;
+  assign mmcm_reset = 1'b0;
+  assign sys_clk_lock = sys_clk_mmcm_locked;
 
   BUFG bufg_sys_clk[2:0](
     .I({sys_clk_mmcm, sys_clk90_mmcm, sys_clk_fb_int}),

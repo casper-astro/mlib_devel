@@ -1,16 +1,26 @@
 ## supports roach2 rev 1 (derived from roach2_rev1.ucf)
 # VRN/VRP sharing
 
-################## Global Timing Constraints
-#
+Net sys_clk_n TNM_NET = sys_clk_n;
+TIMESPEC TS_sys_clk_n = PERIOD sys_clk_n 100 MHz;
 
-Net sys_clk TNM_NET = sys_clk;
-TIMESPEC TS_sys_clk = PERIOD sys_clk 100 MHz;
+Net epb_clk_in TNM_NET = epb_clk_in;
+TIMESPEC TS_epb_clk_in = PERIOD epb_clk_in 67 MHz;
 
-Net epb_clk TNM_NET = epb_clk;
-TIMESPEC TS_epb_clk = PERIOD epb_clk 88 MHz;
-
-
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))## GbE Timing Constraints
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#Net clk_125 TNM_NET = clk_125;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#TIMESPEC TS_clk_125 = PERIOD clk_125 125 MHz;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#Net sgmii_phy_inst/sgmii_phy_inst/clk_ds_i TNM_NET = sgmii_clk_i;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#TIMESPEC TS_sgmii_clk_i = PERIOD sgmii_clk_i 125 MHz;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#Net sgmii_phy_inst/sgmii_phy_inst/clk_ds TNM_NET = sgmii_clk;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#TIMESPEC TS_sgmii_clk = PERIOD sgmii_clk 125 MHz;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#Net mac_mac_rx_clk TNM_NET = mac_rx_clk;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#TIMESPEC TS_mac_rx_clk = PERIOD mac_rx_clk 125 MHz;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
 
 CONFIG DCI_CASCADE = "14 13";
 CONFIG DCI_CASCADE = "23 22";
@@ -901,22 +911,28 @@ NET "epb_data<31>"      LOC = AJ33;
 #NET "adc1_dp_p<36>"     LOC = N36;
 #NET "adc1_dp_p<37>"     LOC = N38;
 
-#
-## SGMII (1Ge port)
-#
-#NET "sgmii_clkref_n"     LOC = C9;
-#NET "sgmii_clkref_p"     LOC = C10;
-#NET "sgmii_rx_n"         LOC = D8;
-#NET "sgmii_rx_p"    s     LOC = D7;
-#NET "sgmii_tx_n"         LOC = E2;
-#NET "sgmii_tx_p"         LOC = E1;
-#
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))## SGMII (1Ge port)
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#NET "sgmii_clkref_n"     LOC = C9;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#NET "sgmii_clkref_p"     LOC = C10;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#NET "sgmii_rx_n"         LOC = D8;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#NET "sgmii_rx_p"         LOC = D7;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#NET "sgmii_tx_n"         LOC = E2;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#NET "sgmii_tx_p"         LOC = E1;
+#IF# (strcmp(get(b,'type'),'xps_onegbe'))#
+
 #### MGT external clocks
 #
 ## XAUI reference clk (156.25 MHz)
 
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET xaui_clk TNM_NET = xaui_clk;
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#TIMESPEC TS_xaui_clk = PERIOD xaui_clk 156.25 MHz;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## XUAI Infrastructure Clocks
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET xaui_infrastructure_inst/xaui_infrastructure_inst/xaui_infrastructure_low_inst/gtx_refclk_bufr<*> TNM_NET = xaui_infra_clk;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#TIMESPEC TS_xaui_infra_clk = PERIOD xaui_infra_clk 156.25 MHz;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
 
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_n<0>"   LOC = AT7;
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "xaui_refclk_n<1>"   LOC = AD7;

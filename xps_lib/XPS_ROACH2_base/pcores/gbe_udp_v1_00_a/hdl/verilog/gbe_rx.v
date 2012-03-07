@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 module gbe_rx #(
-    parameter DIST_RAM = 0
+    parameter DIS_CPU = 0
   ) (
     input         app_clk,
 
@@ -112,37 +112,48 @@ module gbe_rx #(
   localparam RX_HDR2 = 3'd3;
   localparam RX_DATA = 3'd4;
 
-  reg [4:0] hdr_progress;
+  reg [5:0] hdr_progress;
 
   localparam MAC_HDR_SIZE = 14;
   localparam IP_HDR_SIZE  = 20;
   localparam UDP_HDR_SIZE = 8;
+  
+  reg icmp_unsearchable;
 
   always @(posedge mac_clk) begin
-    hdr_progress  <= hdr_progress + 5'd1;
+    hdr_progress  <= hdr_progress + 6'd1;
 
     if (mac_rst) begin
       rx_state     <= RX_IDLE;
-      hdr_progress <= 5'd0;
+      hdr_progress <= 6'd0;
     end else begin
       case (rx_state)
         RX_IDLE: begin
           if (mac_rx_dvld) begin
-            hdr_progress <= 5'd0;
+            hdr_progress <= 6'd0;
             rx_state     <= RX_HDR0;
           end
         end
         RX_HDR0: begin
           if (hdr_progress == MAC_HDR_SIZE - 1) begin
             rx_state     <= RX_HDR1;
-            hdr_progress <= 5'd0;
+            hdr_progress <= 6'd0;
           end
         end
         RX_HDR1: begin
           if (hdr_progress == IP_HDR_SIZE - 1) begin
             rx_state     <= RX_HDR2;
-            hdr_progress <= 5'd0;
+            hdr_progress <= 6'd0;
           end
+/*
+          if ((hdr_progress == IP_HDR_SIZE - 1) && (icmp_unsearchable == 0)) begin
+            rx_state     <= RX_HDR2;
+            hdr_progress <= 6'd0;
+          end
+          if ((hdr_progress == IP_HDR_SIZE + 20 - 1) && (icmp_unsearchable == 1)) begin
+            rx_state     <= RX_HDR2;
+            hdr_progress <= 6'd0;
+          end*/
         end
         RX_HDR2: begin
           if (hdr_progress == UDP_HDR_SIZE - 1) begin
@@ -262,20 +273,32 @@ module gbe_rx #(
             cpu_ok <= 1'b0;
         end
       endcase
+      if (DIS_CPU) begin
+        cpu_ok <= 1'b0; // Force CPU NOK
+      end
     end
+  end
+
+  /* Local enable retimer */
+  reg local_enableR;
+  reg local_enableRR;
+  wire local_enable_retimed = local_enableRR;
+  always @(posedge mac_clk) begin
+    local_enableR  <= local_enable;
+    local_enableRR <= local_enableR;
   end
 
   /********** MAC Header Checks **********/
 
-  always @(*) begin
+  always @(posedge mac_clk) begin
     hdr0_cpu_ok <= 1'b1;
 
-    if (local_enable) begin
+    if (local_enable_retimed) begin
       hdr0_app_ok <= 1'b1;
     end else begin
       hdr0_app_ok <= 1'b0;
     end
-
+   if (rx_state == RX_HDR0) begin
     case (hdr_progress)
       0: begin
         if (local_mac[47:40] != mac_data && mac_data != 8'hff) begin
@@ -330,19 +353,21 @@ module gbe_rx #(
         end
       end
     endcase
+   end // if (rx_state == RX_HDR0) begin
   end
 
   /********** IP Header Checks **********/
 
-  always @(*) begin
+  always @(posedge mac_clk) begin
     hdr1_cpu_ok <= 1'b1;
 
-    if (local_enable) begin
+    if (local_enable_retimed) begin
       hdr1_app_ok <= 1'b1;
     end else begin
       hdr1_app_ok <= 1'b0;
-    end
-
+    end    
+   
+   if (rx_state == RX_HDR1) begin
     case (hdr_progress)
       0: begin
         if (mac_data != 8'h45) begin
@@ -354,6 +379,17 @@ module gbe_rx #(
         if (mac_data != 8'h11) begin
           hdr1_app_ok <= 1'b0;
         end
+        // must be udp or icmp unsearchable (loopback test)
+/*
+        if ((mac_data != 8'h11) && (mac_data != 8'h1)) begin        
+          hdr1_app_ok <= 1'b0;
+        end*/
+        
+        // if ICMP unsearchable
+        if (mac_data != 8'h1) begin        
+          icmp_unsearchable <= 1'b1;
+        end        
+        
       end
       16: begin
         if (mac_data != local_ip[31:24]) begin
@@ -374,21 +410,26 @@ module gbe_rx #(
         if (mac_data != local_ip[7:0]) begin
           hdr1_app_ok <= 1'b0;
         end
-      end
+      end    
     endcase
+   end // if (rx_state == RX_HDR1) begin
+   if (rx_state == RX_HDR0) begin
+     icmp_unsearchable <= 1'b0;
+   end
   end
 
   /********** UDP Header Checks **********/
 
-  always @(*) begin
+  always @(posedge mac_clk) begin
     hdr2_cpu_ok <= 1'b1;
 
-    if (local_enable) begin
+    if (local_enable_retimed) begin
       hdr2_app_ok <= 1'b1;
     end else begin
       hdr2_app_ok <= 1'b0;
     end
 
+   if (rx_state == RX_HDR2) begin
     case (hdr_progress)
       2: begin
         if (mac_data != local_port[15:8]) begin
@@ -401,6 +442,7 @@ module gbe_rx #(
         end
       end
     endcase
+   end //    if (rx_state == RX_HDR1) begin
   end
 
   /*********** Application WR Interface ***********/
@@ -502,7 +544,7 @@ module gbe_rx #(
   assign packet_fifo_wr  = packet_dvld && app_state == APP_RUNNING && app_ok;
 
   assign ctrl_fifo_din = {src_port, src_addr};
-  assign ctrl_fifo_wr  = app_state == APP_RUNNING && app_ok && packet_first;
+  assign ctrl_fifo_wr  = app_state == APP_RUNNING && packet_first && app_ok;
 
   /*********** CPU Interface ***********/
 
@@ -573,6 +615,15 @@ module gbe_rx #(
           end
         end
       endcase
+
+      // Kill CPU interface when DIS_CPU == 1
+      if (DIS_CPU) begin
+        cpu_state          <= CPU_IDLE;
+        cpu_buffer_sel_reg <= 1'b0;
+        cpu_counter        <= 11'b0;
+        cpu_invalidate     <= 1'b1;
+        cpu_ready_reg      <= 1'b0;
+      end
     end
   end
 
@@ -582,4 +633,4 @@ module gbe_rx #(
 
   assign cpu_size    = cpu_counter;
 
-endmodule
+endmodule //

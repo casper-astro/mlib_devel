@@ -22,7 +22,6 @@
 
 function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
 
-xaui_port   = get(blk_obj, 'port');
 hw_sys      = get(blk_obj, 'hw_sys');
 
 [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj.xps_block, opb_addr_start, plb_addr_start, plb_name, opb_name);
@@ -31,7 +30,7 @@ str = [str, '\n'];
 switch hw_sys
     case 'ROACH2'
 
-        mgt_clk_num = num2str(floor(str2num(xaui_port)/2));
+        %mgt_clk_num = num2str(floor(str2num(xaui_port)/2));
 
         %str = [str, 'BEGIN xaui_phy',                                   '\n'];
         %str = [str, '  PARAMETER INSTANCE = xaui_phy_', xaui_port,      '\n'];
