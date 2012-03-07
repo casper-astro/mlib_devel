@@ -1,0 +1,8 @@
+lib qdr_controller_softcal_v1_00_a qdr_controller_softcal.v     verilog
+lib qdr_controller_softcal_v1_00_a qdrc_cpu_attach.v            verilog
+lib qdr_controller_softcal_v1_00_a qdrc_top.v                   verilog
+lib qdr_controller_softcal_v1_00_a qdrc_infrastructure.v        verilog
+lib qdr_controller_softcal_v1_00_a qdrc_phy.v                   verilog
+lib qdr_controller_softcal_v1_00_a qdrc_phy_align.v             verilog
+lib qdr_controller_softcal_v1_00_a qdrc_phy_train.v             verilog
+
