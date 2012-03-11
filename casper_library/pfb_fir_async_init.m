@@ -59,7 +59,7 @@ defaults = {'pfb_bits', 5, 'total_taps', 2, ...
     'coeffs_in_distmem', 'off', 'add_latency', 1, 'mult_latency', 2, ...
     'bram_latency', 2, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
-    'fwidth', 1, 'specify_mult', 'off', 'mult_spec', [2 2], ...
+    'fwidth', 1, 'mult_spec', [2 2], ...
     'coeffs_share', 'off', 'async', 'off'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
@@ -87,33 +87,7 @@ async = get_var('async', 'defaults', defaults, varargin{:});
 debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
 
 % check the multiplier specifications first off
-if (length(mult_spec) == 1),
-    mult_spec = ones(1, total_taps) * mult_spec;
-end
-if (length(mult_spec) ~= total_taps),
-    error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), total_taps);
-    clog(error_string,'error');
-    errordlg(error_string);
-    return;
-end
-temp.use_hdl = 'on'; temp.use_embedded = 'off';
-tap_multipliers = repmat(temp, total_taps);
-clear temp;
-for ctr = 1 : total_taps,
-    if (mult_spec(ctr) > 2) || (mult_spec(ctr) < 0),
-        error_string = sprintf('Multiplier specification of %i for tap %i is not valid.', mult_spec(ctr), ctr);
-        clog(error_string,'error');
-        errordlg(error_string);
-        return;
-    end
-    temp.use_hdl = 'on'; temp.use_embedded = 'off';
-    if mult_spec(ctr) == 0,
-        temp.use_hdl = 'off'; temp.use_embedded = 'off';
-    elseif mult_spec(ctr) == 1,
-        temp.use_hdl = 'off'; temp.use_embedded = 'on';
-    end
-    tap_multipliers(ctr) = temp;
-end
+tap_multipliers = multiplier_specification(mult_spec, total_taps, 'pfb_fir_async_init');
 
 % async?
 make_async = false;

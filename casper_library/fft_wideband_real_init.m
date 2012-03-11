@@ -23,7 +23,6 @@ function fft_wideband_real_init(blk, varargin)
 % opt_target = 
 % coeffs_bit_limit = 
 % delays_bit_limit = 
-% specify_mult = 
 % mult_spec = 
 % hardcode_shifts = 
 % shift_schedule = 
@@ -72,7 +71,6 @@ defaults = { ...
     'opt_target', 'logic', ...
     'coeffs_bit_limit', 8, ...
     'delays_bit_limit', 8, ...
-    'specify_mult', 'off', ...
     'mult_spec', [2 2 2 2 2], ...
     'hardcode_shifts', 'off', ...
     'shift_schedule', [1 1 1 1 1], ...
@@ -102,7 +100,6 @@ arch = get_var('arch', 'defaults', defaults, varargin{:});
 opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
 delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:});
-specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 shift_schedule = get_var('shift_schedule', 'defaults', defaults, varargin{:});
@@ -111,30 +108,23 @@ unscramble = get_var('unscramble', 'defaults', defaults, varargin{:});
 
 clog(flatstrcell(varargin), 'fft_wideband_real_init_debug');
 
-% Validate input fields.
-
-if strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize),
-    error('fft_wideband_real_init.m: Multiplier use specification for stages does not match FFT size');
-    clog('fft_wideband_real_init.m: Multiplier use specification for stages does not match FFT size','error');
-    return
-end
+% validate input fields
+[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, 'fft_wideband_real_init');
+clear temp;
 
 if n_inputs < 2,
-    error('fft_wideband_real_init.m: REAL FFT: Number of inputs must be at least 4!');
-    clog('fft_wideband_real_init.m: REAL FFT: Number of inputs must be at least 4!','error');
-    return
+    error_string = sprintf('fft_wideband_real_init.m: REAL FFT: Number of inputs must be at least 4!');
+    clog(error_string, 'error');
+    errordlg(error_string);
+    return;
 end
 
 % split up multiplier specification
-mults_biplex = 2.*ones(1, FFTSize-n_inputs);
-mults_direct = 2.*ones(1, n_inputs);
-if strcmp(specify_mult, 'on'),
-    mults_biplex(1:FFTSize-n_inputs) = mult_spec(1: FFTSize-n_inputs);
-    mults_direct = mult_spec(FFTSize-n_inputs+1:FFTSize);
-end
+mults_biplex(1 : FFTSize - n_inputs) = mult_spec(1 : FFTSize - n_inputs);
+mults_direct = mult_spec(FFTSize - n_inputs + 1 : FFTSize);
 
 % split up shift schedule
-shifts_biplex = ones(1, FFTSize-n_inputs);
+shifts_biplex = ones(1, FFTSize - n_inputs);
 shifts_direct = ones(1, n_inputs);
 if strcmp(hardcode_shifts, 'on'),
     shifts_biplex(1:FFTSize-n_inputs) = shift_schedule(1: FFTSize-n_inputs);
@@ -222,7 +212,6 @@ for i=0:2^(n_inputs-2)-1,
         'opt_target', tostring(opt_target), ...
         'coeffs_bit_limit', num2str(coeffs_bit_limit), ...
         'delays_bit_limit', num2str(delays_bit_limit), ...
-        'specify_mult', tostring(specify_mult), ...
         'mult_spec', mat2str(mults_biplex), ...
         'hardcode_shifts', tostring(hardcode_shifts), ...
         'shift_schedule', tostring(shifts_biplex), ...
@@ -275,7 +264,6 @@ reuse_block(blk, 'fft_direct', 'casper_library_ffts/fft_direct', ...
     'arch', tostring(arch), ...
     'opt_target', tostring(opt_target), ...
     'coeffs_bit_limit', num2str(coeffs_bit_limit), ...
-    'specify_mult', tostring(specify_mult), ...
     'mult_spec', mat2str(mults_direct), ...
     'hardcode_shifts', tostring(hardcode_shifts), ...
     'shift_schedule', tostring(shifts_direct), ...

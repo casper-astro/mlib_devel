@@ -55,7 +55,6 @@ defaults = { ...
     'opt_target', 'logic', ...
     'coeffs_bit_limit', 8, ...
     'delays_bit_limit', 8, ...
-    'specify_mult', 'off', ...
     'mult_spec', [2 2], ...
     'hardcode_shifts', 'off', ...
     'shift_schedule', [1 1], ...
@@ -81,7 +80,6 @@ arch = get_var('arch', 'defaults', defaults, varargin{:});
 opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
 delays_bit_limit = get_var('delays_bit_limit', 'defaults', defaults, varargin{:});
-specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 shift_schedule = get_var('shift_schedule', 'defaults', defaults, varargin{:});
@@ -94,11 +92,8 @@ if FFTSize < 2,
     FFTSize = 2;
 end
 
-if( strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize)),
-    error('biplex_core_init.m: Multiplier use specification for stages does not match FFT size');
-    clog('biplex_core_init.m: Multiplier use specification for stages does not match FFT size','error');
-    return
-end
+% check the per-stage multiplier specification
+stage_mult_spec = multiplier_specification(mult_spec, FFTSize, 'biplex_core_init');
 
 current_stages = find_system(blk, ...
     'lookUnderMasks', 'all', ...
@@ -118,49 +113,35 @@ reuse_block(blk, 'Constant', 'xbsindex_r4/Constant', 'arith_type', 'Boolean', 'c
 if FFTSize ~= prev_stages,
     delete_lines(blk);
 
-    % Create/Delete Stages
-    for a=1:FFTSize,
+    % create/delete stages
+    for stage = 1 : FFTSize,
 
-        %if delays occupy larger space than specified then implement in BRAM
-        if ((2^(FFTSize-a) * input_bit_width * 2) >= (2^delays_bit_limit)),
+        % if delays occupy larger space than specified then implement in BRAM
+        if ((2^(FFTSize - stage) * input_bit_width * 2) >= (2^delays_bit_limit)),
             delays_bram = 'on';
         else
             delays_bram = 'off';
         end
 
-        %if coefficients occupy larger space than specified then store in BRAM
-        if ((2^(a-1) * coeff_bit_width * 2) >= 2^coeffs_bit_limit),
+        % if coefficients occupy larger space than specified then store in BRAM
+        if ((2^(stage - 1) * coeff_bit_width * 2) >= 2^coeffs_bit_limit),
             coeffs_bram = 'on';
         else
             coeffs_bram = 'off';
         end
 
-        % default is to use HDL
-        use_hdl = 'on';
-        use_embedded = 'off';
-        if strcmp(specify_mult, 'on'),
-            % 0 is core, 1 is embedded, 2 is HDL
-            if (mult_spec(a) == 0),
-                use_hdl = 'off';
-                use_embedded = 'off';
-            elseif (mult_spec(a) == 1),
-                use_hdl = 'off';
-                use_embedded = 'on';
-            end
-        end
-
-        if (strcmp(hardcode_shifts, 'on') && (shift_schedule(a) == 1)),
+        if (strcmp(hardcode_shifts, 'on') && (shift_schedule(stage) == 1)),
             downshift = 'on';
         else
             downshift = 'off';
         end
 
-        stage_name = ['fft_stage_',num2str(a)];
+        stage_name = ['fft_stage_',num2str(stage)];
 
         reuse_block(blk, stage_name, 'casper_library_ffts/fft_stage_n', ...
-            'Position', [120*a, 32, 120*a+95, 148], ...
+            'Position', [120*stage, 32, 120*stage+95, 148], ...
             'FFTSize', num2str(FFTSize), ...
-            'FFTStage', num2str(a), ...
+            'FFTStage', num2str(stage), ...
             'input_bit_width', num2str(input_bit_width), ...
             'coeff_bit_width', num2str(coeff_bit_width), ...
             'downshift', downshift, ...
@@ -174,14 +155,14 @@ if FFTSize ~= prev_stages,
             'opt_target', tostring(opt_target), ...
             'delays_bram', delays_bram, ...
             'coeffs_bram', coeffs_bram, ...
-            'use_hdl', use_hdl, ...
-            'use_embedded', use_embedded, ...
+            'use_hdl', stage_mult_spec(stage).use_hdl, ...
+            'use_embedded', stage_mult_spec(stage).use_embedded, ...
             'hardcode_shifts', hardcode_shifts, ...
             'dsp48_adders', tostring(dsp48_adders));
 
-        prev_stage_name = ['fft_stage_',num2str(a-1)];
+        prev_stage_name = ['fft_stage_', num2str(stage-1)];
 
-        if( a > 1 ),
+        if(stage > 1),
             add_line(blk, [prev_stage_name,'/1'], [stage_name,'/1']);
             add_line(blk, [prev_stage_name,'/2'], [stage_name,'/2']);
             add_line(blk, [prev_stage_name,'/3'], [stage_name,'/3']);
