@@ -12,6 +12,7 @@ module opb_qdr_sniffer #(
     parameter QDR_ADDR_WIDTH = 32,
     parameter QDR_DATA_WIDTH = 18,
     parameter QDR_BW_WIDTH   = 2,
+    parameter QDR_LATENCY    = 10,
     parameter ENABLE         = 0
   )(
     input  OPB_Clk,
@@ -55,10 +56,10 @@ module opb_qdr_sniffer #(
     /* Slave interface to fabric */
     input  [31:0] slave_addr,
     input  slave_wr_strb,
-    input  [35:0] slave_wr_data,
-    input   [3:0] slave_wr_be,
+    input  [2*QDR_DATA_WIDTH - 1:0] slave_wr_data,
+    input   [2*QDR_BW_WIDTH - 1:0] slave_wr_be,
     input  slave_rd_strb,
-    output [35:0] slave_rd_data,
+    output [2*QDR_DATA_WIDTH-1:0] slave_rd_data,
     output slave_rd_dvld,
     output slave_ack,
 
@@ -68,11 +69,11 @@ module opb_qdr_sniffer #(
     output qdr_reset
   );
 
-  localparam QDR_LATENCY   = 10;
-  localparam SLAVE         = 4'h1;
-  localparam SLAVE_WAIT    = 4'h2;
-  localparam BACKDOOR      = 4'h4;
-  localparam BACKDOOR_WAIT = 4'h8;
+  localparam SLAVE          = 4'h1;
+  localparam SLAVE_WAIT     = 4'h2;
+  localparam BACKDOOR       = 4'h4;
+  localparam BACKDOOR_WAIT  = 4'h8;
+
 
 generate if (ENABLE == 1) begin: qdr_enabled
 
@@ -90,10 +91,10 @@ generate if (ENABLE == 1) begin: qdr_enabled
   wire backdoor_ack, backdoor_req;
   wire backdoor_r, backdoor_w;
   wire [31:0] backdoor_addr;
-  wire [35:0] backdoor_d;
-  wire  [3:0] backdoor_be;
-  wire [35:0] backdoor_q;
-  wire backdorr_qvld;
+  wire [2*QDR_DATA_WIDTH - 1:0] backdoor_d;
+  wire  [2*QDR_BW_WIDTH - 1 :0] backdoor_be;
+  wire [2*QDR_DATA_WIDTH - 1:0] backdoor_q;
+  wire backdoor_qvld;
 
   /* isolate start of opb xfer */
   reg opb_sel_state;
@@ -124,30 +125,59 @@ generate if (ENABLE == 1) begin: qdr_enabled
   wire [0:31] Sl_DBus_int;
   assign Sl_DBus = Sl_xferAck ? Sl_DBus_int : 32'b0;
 
-  async_qdr_interface #(
-    .QDR_LATENCY(QDR_LATENCY)
-  ) async_qdr_interface_inst (
-    .host_clk   (OPB_Clk),
-    .host_rst   (OPB_Rst),
-    .host_en    (host_en),
-    .host_rnw   (OPB_RNW),
-    .host_datai (OPB_DBus),
-    .host_be    (OPB_BE),
-    .host_addr  (local_addr),
-    .host_datao (Sl_DBus_int),
-    .host_ack   (Sl_xferAck),
+  /* Inner generate. Select appropriate QDR interface based on QDR data width */
+  if (QDR_DATA_WIDTH == 36) begin
+    async_qdr_interface36 #(
+      .QDR_LATENCY(QDR_LATENCY)
+    ) async_qdr_interface_inst (
+      .host_clk   (OPB_Clk),
+      .host_rst   (OPB_Rst),
+      .host_en    (host_en),
+      .host_rnw   (OPB_RNW),
+      .host_datai (OPB_DBus),
+      .host_be    (OPB_BE),
+      .host_addr  (local_addr),
+      .host_datao (Sl_DBus_int),
+      .host_ack   (Sl_xferAck),
 
-    .qdr_clk  (qdr_clk),
-    .qdr_rst  (qdr_rst),
-    .qdr_req  (backdoor_req),
-    .qdr_ack  (backdoor_ack),
-    .qdr_addr (backdoor_addr),
-    .qdr_r    (backdoor_r),
-    .qdr_w    (backdoor_w),
-    .qdr_d    (backdoor_d),
-    .qdr_be   (backdoor_be),
-    .qdr_q    (backdoor_q)
-  );
+      .qdr_clk  (qdr_clk),
+      .qdr_rst  (qdr_rst),
+      .qdr_req  (backdoor_req),
+      .qdr_ack  (backdoor_ack),
+      .qdr_addr (backdoor_addr),
+      .qdr_r    (backdoor_r),
+      .qdr_w    (backdoor_w),
+      .qdr_d    (backdoor_d),
+      .qdr_be   (backdoor_be),
+      .qdr_q    (backdoor_q)
+    );
+  end else begin
+    async_qdr_interface #(
+      .QDR_LATENCY(QDR_LATENCY)
+    ) async_qdr_interface_inst (
+      .host_clk   (OPB_Clk),
+      .host_rst   (OPB_Rst),
+      .host_en    (host_en),
+      .host_rnw   (OPB_RNW),
+      .host_datai (OPB_DBus),
+      .host_be    (OPB_BE),
+      .host_addr  (local_addr),
+      .host_datao (Sl_DBus_int),
+      .host_ack   (Sl_xferAck),
+
+      .qdr_clk  (qdr_clk),
+      .qdr_rst  (qdr_rst),
+      .qdr_req  (backdoor_req),
+      .qdr_ack  (backdoor_ack),
+      .qdr_addr (backdoor_addr),
+      .qdr_r    (backdoor_r),
+      .qdr_w    (backdoor_w),
+      .qdr_d    (backdoor_d),
+      .qdr_be   (backdoor_be),
+      .qdr_q    (backdoor_q)
+    );
+  end /* if (QDR_DATA_WIDTH == 36) generation
+
 
   /***************** QDR Arbitration ****************/
 
@@ -177,7 +207,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
           arb_sel <= BACKDOOR;
         end
         BACKDOOR: begin
-          // We only give the backdoor interface one slot
+          // We only give the backdoor interface one slot 
           arb_sel <= BACKDOOR_WAIT;
         end
         BACKDOOR_WAIT: begin
@@ -202,13 +232,14 @@ generate if (ENABLE == 1) begin: qdr_enabled
   assign slave_rd_data  = master_rd_data;
 
   assign slave_rd_dvld  = master_rd_dvld;
+  assign Sl_retry   = 1'b0;
 
 end else begin : qdr_disabled
   assign Sl_errAck  = 1'b0;
   assign Sl_retry   = 1'b0;
   assign Sl_toutSup = 1'b0;
   assign Sl_xferAck = 1'b0;
-  assign SL_DBus    = 32'b0;
+  assign Sl_DBus    = 32'b0;
 
   assign master_addr    = slave_addr;
   assign master_wr_strb = slave_wr_strb;
