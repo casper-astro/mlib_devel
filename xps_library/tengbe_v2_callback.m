@@ -42,20 +42,45 @@ end
 
 %get the target board for the design
 hw_sys = get_param(xps_xsg_blks(1),'hw_sys');
+flavour = get_param(blk,'flavour');
 show_param = get_param(blk, 'show_param');
 mask_names = get_param(blk, 'MaskNames');
 mask_visibilities = get_param(blk, 'MaskVisibilities');
 
 %turn everything off by default
+
 for p = 1:length(mask_visibilities), 
   mask_visibilities{p} = 'off';
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 %these are visible always
-mask_visibilities{ismember(mask_names, 'port')} = 'on';
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 mask_visibilities{ismember(mask_names, 'rx_dist_ram')} = 'on';
 mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%these are visible always depending on architecture
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if strcmp(hw_sys,'ROACH2:sx475t'),
+  mask_visibilities{ismember(mask_names, 'flavour')} = 'on';
+  mask_visibilities{ismember(mask_names, 'slot')} = 'on';
+
+  if strcmp(flavour,'cx4'), %CX4 mezzanine card for ROACH2 has only 3 (external) ports
+    mask_visibilities{ismember(mask_names, 'port_r2_cx4')} = 'on';
+  elseif strcmp(flavour, 'sfp+'), %SFP+ mezzanine card 4 external ports 
+    mask_visibilities{ismember(mask_names, 'port_r2_sfpp')} = 'on';
+  end
+else
+  mask_visibilities{ismember(mask_names, 'port_r1')} = 'on';
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%these are visible if low level parameters enabled
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if strcmp(show_param, 'on'),
   %these are visible regardless of target hardware
@@ -66,6 +91,7 @@ if strcmp(show_param, 'on'),
   mask_visibilities{ismember(mask_names, 'fab_gate')} = 'on';
   mask_visibilities{ismember(mask_names, 'cpu_rx_en')} = 'on';
   mask_visibilities{ismember(mask_names, 'cpu_tx_en')} = 'on';
+  
   if strcmp(hw_sys,'ROACH2:sx475t'),
     mask_visibilities{ismember(mask_names, 'pre_emph_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'swing_r2')} = 'on';
@@ -77,6 +103,7 @@ if strcmp(show_param, 'on'),
   end
 end
 
+%enable and make visible relevant parameters
 set_param(blk, 'MaskVisibilities', mask_visibilities);
 
 clog('exiting ten_gbe_v2_callback', 'trace');

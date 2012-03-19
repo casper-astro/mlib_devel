@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Mar  6 16:47:31 2012"
-  RTWModifiedTimeStamp	  252953248
-  ModelVersionFormat	  "1.%<AutoIncrement:440>"
+  LastModifiedDate	  "Fri Mar 16 08:48:19 2012"
+  RTWModifiedTimeStamp	  253788472
+  ModelVersionFormat	  "1.%<AutoIncrement:441>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -16746,7 +16746,7 @@ Library {
       Name		      "XAUI"
       Tag		      "xps:xaui"
       Ports		      [5, 7]
-      Position		      [895, 601, 1035, 769]
+      Position		      [965, 601, 1105, 769]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -41059,7 +41059,7 @@ Library {
       Name		      "one_GbE"
       Tag		      "xps:onegbe"
       Ports		      [8, 11]
-      Position		      [1335, 276, 1525, 794]
+      Position		      [1170, 285, 1295, 535]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -47515,7 +47515,7 @@ Library {
       Name		      "ten_GbE"
       Tag		      "xps:tengbe"
       Ports		      [8, 10]
-      Position		      [1090, 591, 1230, 854]
+      Position		      [1160, 591, 1300, 854]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -48956,9 +48956,8 @@ Library {
       Name		      "ten_Gbe_v2"
       Tag		      "xps:tengbe_v2"
       Ports		      [8, 12]
-      Position		      [1090, 272, 1245, 538]
+      Position		      [995, 283, 1125, 537]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-      OpenFcn		      "tengbe_v2_openfcn"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -48970,34 +48969,34 @@ Library {
       MaskDescription	      "This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream "
       "with user-determined frame breaks. The data stream is wrapped in a UDP frame for transmission. Incoming UDP pack"
       "ets are unwrapped and the data presented as a 64 bit wide stream."
-      MaskPromptString	      "Port|Shallow RX Fifo (Beware overruns!)|Enable Large TX Frames (8k+512)|----------------"
-      "------ Show Implementation Parameters --------------------------------------------------------------------------"
-      "---------|Pre-emphasis (dB)|Pre-emphasis|Post-emphasis (dB)|Receive equalisation|Driver Swing Control (mVppd)|Di"
-      "fferential swing|Enable fabric on startup|Fabric MAC Address|Fabric IP Address|Fabric UDP Port|Fabric Gateway|En"
-      "able CPU RX|Enable CPU TX"
-      MaskStyleString	      "popup(0|1|2|3|4|5|6|7),checkbox,checkbox,checkbox,popup(0.15|0.3|0.45|0.61|0.74|0.91|1.07"
-      "|1.25|1.36|1.55|1.74|1.94|2.11|2.32|2.54|2.77),popup(0|1|2|3),popup(0.18|0.19|0.2|0.39|0.63|0.82|1.07|1.32|1.6|1"
-      ".65|1.94|2.21|2.52|2.76|3.08|3.41|3.77|3.97|4.36|4.73|5.16|5.47|5.93|6.38|6.89),popup(0|1|2|3|4|5|6|7),popup(110"
-      "|210|310|400|480|570|660|740|810|880|940|990|1040|1080|1110|1130),popup(400|500|600|700|800),checkbox,edit,edit,"
-      "edit,edit,checkbox,checkbox"
-      MaskTunableValueString  "on,on,on,off,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||tengbe_v2_callback|||||||||||||"
-      MaskEnableString	      "on,on,on,on,on,off,on,on,on,off,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,off,on,on,on,off,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,,,,,,,"
-      MaskVariables	      "port=@1;rx_dist_ram=@2;large_frames=@3;show_param=&4;pre_emph_r2=&5;pre_emph=&6;post_emph_r"
-      "2=&7;rxeqmix_r2=&8;swing_r2=&9;swing=&10;fab_en=&11;fab_mac=@12;fab_ip=@13;fab_udp=@14;fab_gate=@15;cpu_rx_en=&1"
-      "6;cpu_tx_en=&17;"
+      MaskPromptString	      "Mezzanine card flavour|Card slot|Port|Port|Port|Shallow RX Fifo (Beware overruns!)|Enabl"
+      "e Large TX Frames (8k+512)|---------------------- Show Implementation Parameters -------------------------------"
+      "----------------------------------------------------|Pre-emphasis (dB)|Pre-emphasis|Post-emphasis (dB)|Receive e"
+      "qualisation|Driver Swing Control (mVppd)|Differential swing|Enable fabric on startup|Fabric MAC Address|Fabric I"
+      "P Address|Fabric UDP Port|Fabric Gateway|Enable CPU RX|Enable CPU TX"
+      MaskStyleString	      "popup(sfp+|cx4),popup(0|1),popup(0|1|2|3),popup(0|1|2),popup(0|1|2|3),checkbox,checkbox,c"
+      "heckbox,popup(0.15|0.3|0.45|0.61|0.74|0.91|1.07|1.25|1.36|1.55|1.74|1.94|2.11|2.32|2.54|2.77),popup(0|1|2|3),pop"
+      "up(0.18|0.19|0.2|0.39|0.63|0.82|1.07|1.32|1.6|1.65|1.94|2.21|2.52|2.76|3.08|3.41|3.77|3.97|4.36|4.73|5.16|5.47|5"
+      ".93|6.38|6.89),popup(0|1|2|3|4|5|6|7),popup(110|210|310|400|480|570|660|740|810|880|940|990|1040|1080|1110|1130)"
+      ",popup(400|500|600|700|800),checkbox,edit,edit,edit,edit,checkbox,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,off,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "tengbe_v2_callback|||||||tengbe_v2_callback|||||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "off,off,on,off,off,on,on,on,off,off,off,off,off,off,off,off,off,off,off,off,off"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,,,,,,,,,,"
+      MaskVariables	      "flavour=&1;slot=@2;port_r1=@3;port_r2_cx4=@4;port_r2_sfpp=@5;rx_dist_ram=@6;large_frames=@7"
+      ";show_param=&8;pre_emph_r2=&9;pre_emph=&10;post_emph_r2=&11;rxeqmix_r2=&12;swing_r2=&13;swing=&14;fab_en=&15;fab"
+      "_mac=@16;fab_ip=@17;fab_udp=@18;fab_gate=@19;cpu_rx_en=&20;cpu_tx_en=&21;"
       MaskInitialization      "tengbe_v2_mask;"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|on|off|on|0.74|3|0.18|7|940|800|on|hex2dec('123456780000')|192*(2^24) + 168*(2^16) + 5*"
-      "(2^8) + 20*(2^0)|10000|1|on|on"
-      MaskTabNameString	      ",,,,,,,,,,,,,,,,"
+      MaskValueString	      "cx4|1|0|0|0|on|off|off|0.74|3|0.18|7|940|800|on|hex2dec('123456780000')|192*(2^24) + 168*"
+      "(2^16) + 5*(2^8) + 20*(2^0)|10000|1|on|on"
+      MaskTabNameString	      ",,,,,,,,,,,,,,,,,,,,"
       System {
 	Name			"ten_Gbe_v2"
 	Location		[86, 87, 1344, 930]
@@ -49375,7 +49374,7 @@ Library {
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,374,375"
+	  sggui_pos		  "20,30,538,429"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
@@ -49433,7 +49432,7 @@ Library {
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,374,375"
+	  sggui_pos		  "20,30,538,429"
 	  block_type		  "convert"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,16,1,1,white,blue,0,edca21da,right,"
@@ -49474,7 +49473,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_led_rx"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_led_rx"
 	  Ports			  [1, 1]
 	  Position		  [665, 692, 765, 708]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49508,7 +49507,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_led_tx"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_led_tx"
 	  Ports			  [1, 1]
 	  Position		  [665, 737, 765, 753]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49542,7 +49541,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_led_up"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_led_up"
 	  Ports			  [1, 1]
 	  Position		  [665, 647, 765, 663]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49576,7 +49575,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rst"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rst"
 	  Ports			  [1, 1]
 	  Position		  [405, 82, 455, 98]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -49604,7 +49603,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_ack"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_ack"
 	  Ports			  [1, 1]
 	  Position		  [405, 567, 455, 583]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -49632,7 +49631,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_bad_frame"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_bad_frame"
 	  Ports			  [1, 1]
 	  Position		  [665, 537, 765, 553]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49666,7 +49665,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_data"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_data"
 	  Ports			  [1, 1]
 	  Position		  [665, 322, 765, 338]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49700,7 +49699,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_end_of_frame"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_end_of_frame"
 	  Ports			  [1, 1]
 	  Position		  [665, 502, 765, 518]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49734,7 +49733,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_overrun"
 	  Ports			  [1, 1]
 	  Position		  [665, 572, 765, 588]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49768,7 +49767,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun_ack"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_overrun_ack"
 	  Ports			  [1, 1]
 	  Position		  [405, 607, 455, 623]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -49796,7 +49795,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_ip"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_source_ip"
 	  Ports			  [1, 1]
 	  Position		  [665, 412, 765, 428]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49817,7 +49816,7 @@ Library {
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,50,419,481"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
@@ -49830,7 +49829,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_port"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_source_port"
 	  Ports			  [1, 1]
 	  Position		  [665, 457, 765, 473]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49851,7 +49850,7 @@ Library {
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,50,419,481"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "100,16,1,1,white,yellow,0,00d3666e,right,"
@@ -49864,7 +49863,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_rx_valid"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_valid"
 	  Ports			  [1, 1]
 	  Position		  [665, 367, 765, 383]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49898,7 +49897,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_afull"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_afull"
 	  Ports			  [1, 1]
 	  Position		  [665, 227, 765, 243]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -49932,7 +49931,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_data"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_data"
 	  Ports			  [1, 1]
 	  Position		  [405, 267, 455, 283]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -49960,7 +49959,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_ip"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_dest_ip"
 	  Ports			  [1, 1]
 	  Position		  [405, 307, 455, 323]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -49988,7 +49987,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_port"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_dest_port"
 	  Ports			  [1, 1]
 	  Position		  [405, 347, 455, 363]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -50016,7 +50015,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_end_of_frame"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_end_of_frame"
 	  Ports			  [1, 1]
 	  Position		  [405, 387, 455, 403]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -50044,7 +50043,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_overflow"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_overflow"
 	  Ports			  [1, 1]
 	  Position		  [665, 267, 765, 283]
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -50078,7 +50077,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "tengbe_mask_upgrade_ten_Gbe_v2_tx_valid"
+	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_valid"
 	  Ports			  [1, 1]
 	  Position		  [405, 227, 455, 243]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
@@ -50212,7 +50211,7 @@ Library {
 	  OutScaling		  "2^0"
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_overflow"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_overflow"
 	  SrcPort		  1
 	  DstBlock		  "tx_overflow"
 	  DstPort		  1
@@ -50220,7 +50219,7 @@ Library {
 	Line {
 	  SrcBlock		  "Constant12"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_overflow"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_overflow"
 	  DstPort		  1
 	}
 	Line {
@@ -50232,11 +50231,11 @@ Library {
 	Line {
 	  SrcBlock		  "convert_rx_overrun_ack"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun_ack"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun_ack"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun_ack"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun_ack"
 	  SrcPort		  1
 	  DstBlock		  "Terminator6"
 	  DstPort		  1
@@ -50244,11 +50243,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant11"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_overrun"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun"
 	  SrcPort		  1
 	  DstBlock		  "rx_overrun"
 	  DstPort		  1
@@ -50256,11 +50255,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant5"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_bad_frame"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_bad_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_bad_frame"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_bad_frame"
 	  SrcPort		  1
 	  DstBlock		  "rx_bad_frame"
 	  DstPort		  1
@@ -50276,11 +50275,11 @@ Library {
 	  SrcBlock		  "convert_rx_ack"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_ack"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_ack"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_data"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_data"
 	  SrcPort		  1
 	  DstBlock		  "rx_data"
 	  DstPort		  1
@@ -50296,7 +50295,7 @@ Library {
 	  SrcBlock		  "convert_tx_data"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_data"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_data"
 	  DstPort		  1
 	}
 	Line {
@@ -50310,7 +50309,7 @@ Library {
 	  SrcBlock		  "convert_tx_dest_ip"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_ip"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_ip"
 	  DstPort		  1
 	}
 	Line {
@@ -50324,30 +50323,30 @@ Library {
 	  SrcBlock		  "convert_tx_valid"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_valid"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_afull"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_afull"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  DstBlock		  "tx_afull"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_data"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_data"
 	  SrcPort		  1
 	  DstBlock		  "Terminator"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_ip"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_ip"
 	  SrcPort		  1
 	  DstBlock		  "Terminator1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_valid"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_valid"
 	  SrcPort		  1
 	  DstBlock		  "Terminator2"
 	  DstPort		  1
@@ -50356,17 +50355,17 @@ Library {
 	  SrcBlock		  "Constant2"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_afull"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_afull"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Constant6"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_data"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_data"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_ack"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_ack"
 	  SrcPort		  1
 	  DstBlock		  "Terminator3"
 	  DstPort		  1
@@ -50374,11 +50373,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant7"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_valid"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_valid"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_valid"
 	  SrcPort		  1
 	  DstBlock		  "rx_valid"
 	  DstPort		  1
@@ -50392,11 +50391,11 @@ Library {
 	Line {
 	  SrcBlock		  "convert_rst"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rst"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rst"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rst"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rst"
 	  SrcPort		  1
 	  DstBlock		  "Terminator5"
 	  DstPort		  1
@@ -50412,11 +50411,11 @@ Library {
 	  SrcBlock		  "convert_tx_port"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_port"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_port"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_dest_port"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_port"
 	  SrcPort		  1
 	  DstBlock		  "Terminator7"
 	  DstPort		  1
@@ -50432,17 +50431,17 @@ Library {
 	  SrcBlock		  "convert_tx_end_of_frame"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_end_of_frame"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_end_of_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_tx_end_of_frame"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_end_of_frame"
 	  SrcPort		  1
 	  DstBlock		  "Terminator8"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_ip"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_ip"
 	  SrcPort		  1
 	  DstBlock		  "rx_source_ip"
 	  DstPort		  1
@@ -50450,17 +50449,17 @@ Library {
 	Line {
 	  SrcBlock		  "Constant8"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_ip"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_ip"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Constant9"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_port"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_port"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_source_port"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_port"
 	  SrcPort		  1
 	  DstBlock		  "rx_source_port"
 	  DstPort		  1
@@ -50468,11 +50467,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant10"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_end_of_frame"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_end_of_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_rx_end_of_frame"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_end_of_frame"
 	  SrcPort		  1
 	  DstBlock		  "rx_end_of_frame"
 	  DstPort		  1
@@ -50480,11 +50479,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant1"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_up"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_led_up"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_up"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_led_up"
 	  SrcPort		  1
 	  DstBlock		  "led_up"
 	  DstPort		  1
@@ -50492,11 +50491,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant3"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_rx"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_led_rx"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_rx"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_led_rx"
 	  SrcPort		  1
 	  DstBlock		  "led_rx"
 	  DstPort		  1
@@ -50504,11 +50503,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant4"
 	  SrcPort		  1
-	  DstBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_tx"
+	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_led_tx"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "tengbe_mask_upgrade_ten_Gbe_v2_led_tx"
+	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_led_tx"
 	  SrcPort		  1
 	  DstBlock		  "led_tx"
 	  DstPort		  1

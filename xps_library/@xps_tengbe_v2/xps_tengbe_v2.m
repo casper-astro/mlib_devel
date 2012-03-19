@@ -31,10 +31,10 @@ end
 
 blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
-toks = regexp(get_param(blk_name,'port'),'^(.*):(.*)$','tokens');
 
 s.hw_sys         = get(xsg_obj,'hw_sys');
-s.port           = get_param(blk_name, 'port');
+s.flavour        = get_param(blk_name, 'flavour');
+s.slot           = get_param(blk_name, 'slot');
 s.preemph        = get_param(blk_name, 'pre_emph');
 s.preemph_r2     = get_param(blk_name, 'pre_emph_r2');
 s.postemph_r2    = get_param(blk_name, 'post_emph_r2');
@@ -51,9 +51,22 @@ s.fab_gate       = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
 s.fab_en         = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));
 s.large_packets  = num2str(strcmp(get_param(blk_name, 'large_frames'),'on'));
 
-%convert (more intuitive) mask values to defines to be passed on
+%convert (more intuitive) mask values to defines to be passed on if using ROACH2
 switch s.hw_sys
-  case 'ROACH2', %taken from ug366 transceiver user guide (should match with tengbe_v2_loadfcn)
+  case {'ROACH'},
+    s.port = get_param(blk_name, 'port_r1');
+
+  case {'ROACH2'}, 
+    %get the port from the appropriate parameter, roach2 mezzanine slot 0 has 4-7, roach2 mezzanine slot 1 has 0-3, so barrel shift
+    if(strcmp(s.flavour,'cx4')),
+      s.port = num2str(str2num(get_param(blk_name, 'port_r2_cx4')) + 4*(mod(s.slot+1,2)));
+    elseif strcmp(s.flavour,'sfp+'),
+      s.port = num2str(str2num(get_param(blk_name, 'port_r2_sfpp')) + 4*(mod(s.slot+1,2)));
+    else
+    end
+
+    %values below taken from ug366 transceiver user guide (should match with tengbe_v2_loadfcn)
+
     postemph_lookup = [0.18;0.19;0.18;0.18;0.18;0.18;0.18;0.18;0.19;0.2;0.39;0.63;0.82;1.07;1.32;1.6;1.65;1.94;2.21;2.52;2.76;3.08;3.41;3.77;3.97;4.36;4.73;5.16;5.47;5.93;6.38;6.89];
     index = find(postemph_lookup == str2num(s.postemph_r2));
     if isempty(index), 
@@ -94,7 +107,7 @@ end
 
 % bus offset
 
-% ROACH has an OPB Ten Gig Eth interface
+% ROACH/ROACH2 have OPB Ten Gig Eth interfaces
 switch s.hw_sys
     case {'ROACH','ROACH2'},
         b = set(b,'opb_clk','epb_clk');
