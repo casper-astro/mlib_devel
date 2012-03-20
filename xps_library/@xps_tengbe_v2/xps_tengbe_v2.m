@@ -133,6 +133,7 @@ switch s.hw_sys
     parameters.DIFFCTRL       = s.swing_r2;
     parameters.RXEQMIX        = s.rxeqmix_r2;
   otherwise,
+    s.swing          = get_param(blk_name, 'swing');
     parameters.SWING          = s.swing;
     parameters.PREEMPHASYS    = s.preemph;
 end
