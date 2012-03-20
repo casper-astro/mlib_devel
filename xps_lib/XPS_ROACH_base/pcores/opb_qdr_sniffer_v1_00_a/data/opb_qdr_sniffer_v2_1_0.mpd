@@ -6,7 +6,7 @@ BEGIN opb_qdr_sniffer
   OPTION IPTYPE      = IP
   OPTION IMP_NETLIST = TRUE
   OPTION HDL         = VERILOG
-  OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
+  OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
 
 ## Bus Interfaces
   BUS_INTERFACE BUS = SOPB, BUS_TYPE = SLAVE,  BUS_STD = OPB
@@ -17,6 +17,7 @@ BEGIN opb_qdr_sniffer
   PARAMETER QDR_DATA_WIDTH   = 18,  DT = INTEGER
   PARAMETER QDR_BW_WIDTH     = 2,   DT = INTEGER
   PARAMETER QDR_ADDR_WIDTH   = 22,  DT = INTEGER
+  PARAMETER QDR_LATENCY      = 10,  DT = INTEGER
   PARAMETER ENABLE           = 0,   DT = INTEGER
 ## Generics for VHDL or Parameters for Verilog
   PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
@@ -75,10 +76,10 @@ BEGIN opb_qdr_sniffer
 ## QDR slave/fabric interface
   PORT slave_addr    = slave_addr,    DIR = I, VEC = [31:0]
   PORT slave_wr_strb = slave_wr_strb, DIR = I
-  PORT slave_wr_data = slave_wr_data, DIR = I, VEC = [35:0]
-  PORT slave_wr_be   = slave_wr_be,   DIR = I, VEC =  [3:0]
+  PORT slave_wr_data = slave_wr_data, DIR = I, VEC = [2*QDR_DATA_WIDTH-1:0]
+  PORT slave_wr_be   = slave_wr_be,   DIR = I, VEC = [2*QDR_BW_WIDTH-1:0]
   PORT slave_rd_strb = slave_rd_strb, DIR = I
-  PORT slave_rd_data = slave_rd_data, DIR = O, VEC = [35:0]
+  PORT slave_rd_data = slave_rd_data, DIR = O, VEC = [2*QDR_DATA_WIDTH-1:0]
   PORT slave_rd_dvld = slave_rd_dvld, DIR = O
   PORT slave_ack     = slave_ack,     DIR = O
 

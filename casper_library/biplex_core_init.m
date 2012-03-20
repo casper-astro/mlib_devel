@@ -135,18 +135,17 @@ if FFTSize ~= prev_stages,
             coeffs_bram = 'off';
         end
 
+        % default is to use HDL
         use_hdl = 'on';
         use_embedded = 'off';
         if strcmp(specify_mult, 'on'),
-            if (mult_spec(a) == 2),
-                use_hdl = 'on';
+            % 0 is core, 1 is embedded, 2 is HDL
+            if (mult_spec(a) == 0),
+                use_hdl = 'off';
                 use_embedded = 'off';
             elseif (mult_spec(a) == 1),
                 use_hdl = 'off';
                 use_embedded = 'on';
-            else
-                use_hdl = 'on';
-                use_embedded = 'off';
             end
         end
 

@@ -52,25 +52,25 @@ CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
 TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
 CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
 WindowType = get_var('WindowType', 'defaults', defaults, varargin{:});
-bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+%bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 nput = get_var('nput', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
+debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
 
 % Set coefficient vector
-try, 
+try
 	window('hamming',1024);
-catch,
+catch
 	disp('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
 	error('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
-	return;
 end
-alltaps = TotalTaps*2^PFBSize;
-windowval = transpose(window(WindowType, alltaps));
-total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
-for i=1:alltaps/2^n_inputs,
-    buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
-end
+%alltaps = TotalTaps*2^PFBSize;
+%windowval = transpose(window(WindowType, alltaps));
+%total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
+%for i=1:alltaps/2^n_inputs,
+%    buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
+%end
 
 delete_lines(blk);
 
@@ -88,7 +88,7 @@ reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
     'cnt_type', 'Free Running', 'n_bits', tostring(PFBSize-n_inputs), 'arith_type', 'Unsigned', ...
     'rst', 'on', 'explicit_period', 'on', 'Position', [65 75 115 125]);
 reuse_block(blk, 'Delay1', 'xbsIndex_r4/Delay', ...
-    'latency', tostring(bram_latency+1), 'Position', [290 12 335 58]);
+    'latency', 'bram_latency+1', 'Position', [290 12 335 58]);
 reuse_block(blk, 'Concat', 'xbsIndex_r4/Concat', ...
     'num_inputs', tostring(TotalTaps), 'Position', [310 97 365 643]);
 reuse_block(blk, 'Register', 'xbsIndex_r4/Register', ...
@@ -106,16 +106,25 @@ add_line(blk, 'Register/1', 'coeff/1');
 for a=1:TotalTaps,
     blkname = ['ROM', tostring(a)];
     pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a);
-    vecstr = ['pfb_coeff_gen_calc(', tostring(PFBSize), ', ', ...
-        tostring(TotalTaps), ',''', tostring(WindowType), ''',', ...
-        tostring(n_inputs), ', ', tostring(nput), ',', ...
-        tostring(fwidth), ',', tostring(a), ')'];
+    if strcmp(debug_mode, 'on'),
+        s = ((TotalTaps - a) * 2^PFBSize) + 1;
+        vecstr = [tostring(s), ':', tostring(s - 1 + 2^PFBSize)];
+        atype = 'Unsigned';
+        binpt = '0';
+    else
+        vecstr = ['pfb_coeff_gen_calc(', tostring(PFBSize), ', ', ...
+            tostring(TotalTaps), ',''', tostring(WindowType), ''',', ...
+            tostring(n_inputs), ', ', tostring(nput), ',', ...
+            tostring(fwidth), ',', tostring(a), ')'];
+        atype = 'Signed  (2''s comp)';
+        binpt = tostring(CoeffBitWidth-1);
+    end
     %v = mat2str(buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs)));
     %v
     reuse_block(blk, blkname, 'xbsIndex_r4/ROM', ...
-        'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vecstr, 'arith_type', 'Signed  (2''s comp)', ...
-        'n_bits', tostring(CoeffBitWidth), 'bin_pt', tostring(CoeffBitWidth-1), ...
-        'latency', tostring(bram_latency), 'use_rpm','on', 'Position', [150 65*(a-1)+74 200 65*(a-1)+126]);
+        'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vecstr, 'arith_type', atype, ...
+        'n_bits', tostring(CoeffBitWidth), 'bin_pt', binpt, ...
+        'latency', 'bram_latency', 'use_rpm','on', 'Position', [150 65*(a-1)+74 200 65*(a-1)+126]);
     add_line(blk, 'Counter/1', [blkname, '/1']);
     reintname = ['Reinterpret', tostring(a)];
     reuse_block(blk, reintname, 'xbsIndex_r4/Reinterpret', 'force_arith_type', 'On', ...
@@ -129,16 +138,19 @@ end
 % Set coefficient ROMs to use distribute memory (or not).
 for a=1:TotalTaps,
     blkname = ['ROM', tostring(a)];
-    if CoeffDistMem,
+    if strcmp(CoeffDistMem, 'on'),
         set_param([blk,'/',blkname], 'distributed_mem', 'Distributed memory');
-    else,
+    else
         set_param([blk,'/',blkname], 'distributed_mem', 'Block RAM');
     end
 end
 
 clean_blocks(blk);
 
-fmtstr = sprintf('PFBSize=%d, n_inputs=%d, taps=%d', PFBSize, n_inputs, TotalTaps);
+fmtstr = sprintf('PFBSize=%d, n_inputs=%d,\ntaps=%d, input=%d', PFBSize, n_inputs, TotalTaps, nput);
+if strcmp(debug_mode, 'on'),
+    fmtstr = [fmtstr, '\nDEBUG MODE!'];
+end
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 

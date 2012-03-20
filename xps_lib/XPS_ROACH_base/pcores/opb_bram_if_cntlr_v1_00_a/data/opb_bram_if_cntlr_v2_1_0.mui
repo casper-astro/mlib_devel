@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+########################################################################
+##
+## Copyright (c) 2005 Xilinx, Inc.  All rights reserved.
+##
+########################################################################
+-->
+
+<!DOCTYPE doc SYSTEM "../../ipdialog.dtd" [
+	<!ENTITY C_INCLUDE_BURST_SUPPORT '
+	<widget id="C_INCLUDE_BURST_SUPPORT">
+		<key>C_INCLUDE_BURST_SUPPORT</key>
+		<label>Support OPB Burst</label>
+		<tip></tip>
+	</widget>
+	'>
+]>
+
+<doc>
+	<view id="User">
+		<display>User</display>
+		<group id="All">
+			<display>All</display>
+			<item>&C_INCLUDE_BURST_SUPPORT;</item>
+		</group>
+	</view>
+	<view id="System">
+		<display>System</display>
+		<group id="Address">
+			<display>Address</display>
+			<item>&C_BASEADDR;</item>
+			<item>&C_HIGHADDR;</item>
+		</group>
+		<group id="OPB">
+		    <display>OPB</display>
+			<item>&C_OPB_DWIDTH;</item>
+			<item>&C_OPB_AWIDTH;</item>
+			<item>&C_OPB_CLK_PERIOD_PS;</item>
+		</group>
+	</view>
+</doc>

@@ -1,0 +1,105 @@
+<html>
+<head>
+	<title>
+Change log for opb_arbiter, 1.02.e
+	</title>
+	<meta cvs_header="$Id: ip_change_log_template.html,v 1.8.22.2 2010/02/02 20:58:06 akasat Exp $">
+	<link href="../../../../../../doc/usenglish/css/xilhtml.css" rel="stylesheet" type="text/css">
+	<style>
+		P.Level1Heading {
+			color: #000000;
+			font-weight: bold;
+			font-size: 1.05em;
+			margin-bottom: 0em;
+			margin-top: 0em;
+		}
+		P.Level2Heading  {
+			font-weight: bold;
+			margin-top: 2em;
+			margin-bottom: 0em;
+		}
+		P.Level3Heading {
+			font-weight: bold;
+			margin-top: 2em;
+		}
+		.GreyBackground {
+			background-color:#CCCCCC;
+		}
+		.PreformatFont  {
+			font-family: Fixed, Mono, Courier New, Courier;
+			font-size: .95em;
+		}
+	</style>
+</head>
+<body>
+	<h3 class="PageHeader">Xilinx Processor IP Library</h3>
+	<h1>
+Change log for opb_arbiter, 1.02.e
+	</h1>
+	<hr class="whs1">
+
+<!CORE-CHANGE-DATA>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 8.2.1, Update # 020
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.2.1 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_Im_SP1 CORE_NAME=opb_arbiter_v1_02_e TYPE=vhdl SUBTYPE=opb_arbiter --><pre>
+
+Modified the processes MASTER_LOOP and MASTERLOOP to remove the latch it was
+creating in priority_register_logic.vhd and arbitration_logic.vhd
+modules respectively.
+
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+		<!spacer><tr><td><p><br></p></td></tr>
+		<tr>
+			<td class="GreyBackground">
+				<p class="Level1Heading">
+Changes in 8.1.1, Update # 010
+				</p>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p class="Level2Heading">
+8.1.1 - Changes in VHDL sources (.vhd)
+				</p>
+				<hr class="whs1">
+			</td>
+		</tr>
+		<tr>
+			<td>
+<!--@BEGIN_CHANGELOG EDK_I_SP1 CORE_NAME=opb_arbiter_v1_02_e TYPE=vhdl SUBTYPE=opb_arbiter --><pre>
+
+Fixed issue with REG_HIGHADDR constant not being defined correctly.  This
+issue was causing a synthesis error.
+
+<!--@END_CHANGELOG --></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!end-change-data-table>
+
+	<p class="Copyright">
+	Copyright &copy; 1995-2010 Xilinx, Inc. All rights reserved.
+	</p>
+</body>
+</html>

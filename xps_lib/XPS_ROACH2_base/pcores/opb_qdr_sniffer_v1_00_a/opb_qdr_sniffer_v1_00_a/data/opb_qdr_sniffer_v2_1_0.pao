@@ -1,0 +1,4 @@
+lib opb_qdr_sniffer_v1_00_a opb_qdr_sniffer.v verilog
+lib opb_qdr_sniffer_v1_00_a async_qdr_interface.v verilog
+lib opb_qdr_sniffer_v1_00_a async_qdr_interface36.v verilog
+lib opb_qdr_sniffer_v1_00_a qdr_config.v verilog
