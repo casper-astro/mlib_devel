@@ -139,7 +139,7 @@ for i=[1:length(gateways_blk)]
     if found_xps_tag == 0
         disregard_blocks = find_system(gw_parent, 'FollowLinks','on','LookUnderMasks','all','masktype','Xilinx Disregard Subsystem For Generation');
         if isempty(disregard_blocks)
-            warning('Xilinx input gateways cannot be used in a design. Only XPS GPIO blocks should be used.');
+            error('Xilinx input gateways cannot be used in a design. Only XPS GPIO blocks should be used.');
         end
     end
 end

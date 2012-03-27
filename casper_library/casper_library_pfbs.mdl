@@ -1,6 +1,6 @@
 Library {
   Name			  "casper_library_pfbs"
-  Version		  7.4
+  Version		  7.2
   MdlSubVersion		  0
   SavedCharacterEncoding  "windows-1252"
   LibraryType		  "BlockLibrary"
@@ -8,12 +8,11 @@ Library {
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
   DisableAllScopes	  off
-  MaxMDLFileLineLength	  120
   Created		  "Thu Sep 02 12:37:19 2010"
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "griffin"
+  LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
   LastModifiedDate	  "Thu Mar  1 11:54:36 2012"
   RTWModifiedTimeStamp	  0
@@ -49,13 +48,11 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
-  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
-  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -84,13 +81,13 @@ Library {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      1
-      Version		      "1.6.0"
+      Version		      "1.5.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
 	  $ObjectID		  2
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -119,10 +116,11 @@ Library {
 	  AutoInsertRateTranBlk	  off
 	  SampleTimeConstraint	  "Unconstrained"
 	  InsertRTBMode		  "Whenever possible"
+	  SignalSizeVariationType "Allow only fixed size"
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  3
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -132,26 +130,23 @@ Library {
 	  LoadExternalInput	  off
 	  LoadInitialState	  off
 	  SaveFinalState	  off
-	  SaveCompleteFinalSimState off
 	  SaveFormat		  "Array"
 	  SaveOutput		  on
 	  SaveState		  off
 	  SignalLogging		  on
 	  InspectSignalLogs	  off
 	  SaveTime		  on
-	  ReturnWorkspaceOutputs  off
 	  StateSaveName		  "xout"
 	  TimeSaveName		  "tout"
 	  OutputSaveName	  "yout"
 	  SignalLoggingName	  "logsout"
 	  OutputOption		  "RefineOutputTimes"
 	  OutputTimes		  "[]"
-	  ReturnWorkspaceOutputsName "out"
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  4
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -165,18 +160,14 @@ Library {
 	  BooleanDataType	  off
 	  ConditionallyExecuteInputs on
 	  InlineParams		  off
-	  UseIntDivNetSlope	  off
 	  InlineInvariantSignals  off
 	  OptimizeBlockIOStorage  on
 	  BufferReuse		  on
 	  EnhancedBackFolding	  off
-	  StrengthReduction	  off
 	  EnforceIntegerDowncast  on
 	  ExpressionFolding	  on
-	  BooleansAsBitfields	  off
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
-	  PassReuseOutputArgsAs	  "Structure reference"
 	  ExpressionDepthLimit	  2147483647
 	  FoldNonRolledExpr	  on
 	  LocalBlockOutputs	  on
@@ -199,7 +190,7 @@ Library {
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  5
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -239,9 +230,6 @@ Library {
 	  ParameterUnderflowMsg	  "none"
 	  ParameterPrecisionLossMsg "warning"
 	  ParameterTunabilityLossMsg "warning"
-	  FixptConstUnderflowMsg  "none"
-	  FixptConstOverflowMsg	  "none"
-	  FixptConstPrecisionLossMsg "none"
 	  UnderSpecifiedDataTypeMsg "none"
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
@@ -266,14 +254,13 @@ Library {
 	  ModelReferenceSymbolNameMessage "warning"
 	  ModelReferenceExtraNoncontSigs "error"
 	  StateNameClashWarn	  "warning"
-	  SimStateInterfaceChecksumMismatchMsg "warning"
 	  StrictBusMsg		  "Warning"
 	  LoggingUnavailableSignals "error"
 	  BlockIODiagnostic	  "none"
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  6
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -300,7 +287,7 @@ Library {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  7
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  ModelReferenceNumInstancesAllowed "Multi"
@@ -309,21 +296,17 @@ Library {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  8
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
-	  SimBlas		  on
-	  SimCtrlC		  on
-	  SimExtrinsic		  on
-	  SimIntegrity		  on
 	  SimUseLocalCustomCode	  off
 	  SimBuildMode		  "sf_incremental_build"
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  9
-	  Version		  "1.6.0"
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -365,13 +348,12 @@ Library {
 	  GenerateTraceReportEml  off
 	  GenerateCodeInfo	  off
 	  RTWCompilerOptimization "Off"
-	  CheckMdlBeforeBuild	  "Off"
 	  Array {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      10
-	      Version		      "1.6.0"
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -412,7 +394,6 @@ Library {
 	      CustomSymbolStrType     "$N$R$M"
 	      CustomSymbolStrField    "$N$M"
 	      CustomSymbolStrFcn      "$R$N$M$F"
-	      CustomSymbolStrFcnArg   "rt$I$N$M"
 	      CustomSymbolStrBlkIO    "rtb_$N$M"
 	      CustomSymbolStrTmpVar   "$N$M"
 	      CustomSymbolStrMacro    "$R$N$M"
@@ -429,7 +410,7 @@ Library {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      11
-	      Version		      "1.6.0"
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		16
@@ -464,10 +445,8 @@ Library {
 	      GenerateTestInterfaces  off
 	      IsPILTarget	      off
 	      ModelReferenceCompliant on
-	      ParMdlRefBuildCompliant on
 	      CompOptLevelCompliant   on
 	      IncludeMdlTerminateFcn  on
-	      GeneratePreprocessorConditionals "Disable all"
 	      CombineOutputUpdateFcns off
 	      SuppressErrorStatus     off
 	      ERTFirstTimeCompliant   off
@@ -482,7 +461,6 @@ Library {
 	      PurelyIntegerCode	      off
 	      SupportContinuousTime   on
 	      SupportNonInlinedSFcns  on
-	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
 	      PortableWordSizes	      off
@@ -514,6 +492,7 @@ Library {
     PropName		    "ConfigurationSets"
   }
   BlockDefaults {
+    Orientation		    "right"
     ForegroundColor	    "black"
     BackgroundColor	    "white"
     DropShadow		    off
@@ -523,8 +502,6 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
     ShowName		    on
-    BlockRotation	    0
-    BlockMirror		    off
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -552,7 +529,6 @@ Library {
       BusObject		      "BusObject"
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       OutMin		      "[]"
       OutMax		      "[]"
@@ -574,7 +550,6 @@ Library {
       BusObject		      "BusObject"
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       OutMin		      "[]"
       OutMax		      "[]"
@@ -625,7 +600,6 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    109
     Block {
       BlockType		      SubSystem
       Name		      "first_tap"
@@ -668,7 +642,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "6|8|4|8|hamming|1|1|2|1|off|on"
       MaskTabNameString	      ",,,,,,,,,,"
@@ -687,7 +660,6 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	22
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
@@ -717,7 +689,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
-	  SID			  3
 	  Ports			  [2, 1]
 	  Position		  [345, 197, 395, 248]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -758,7 +729,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult1"
-	  SID			  4
 	  Ports			  [2, 1]
 	  Position		  [345, 132, 395, 183]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -799,7 +769,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
-	  SID			  5
 	  Ports			  [1, 1]
 	  Position		  [285, 219, 325, 251]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -828,7 +797,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
-	  SID			  6
 	  Ports			  [1, 1]
 	  Position		  [225, 221, 270, 249]
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -860,7 +828,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
-	  SID			  7
 	  Ports			  [1, 1]
 	  Position		  [225, 271, 270, 299]
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -892,7 +859,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "c_to_ri"
-	  SID			  8
 	  Ports			  [1, 2]
 	  Position		  [260, 144, 300, 186]
 	  AttributesFormatString  "8_7 r/i"
@@ -914,7 +880,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_bram"
-	  SID			  9
 	  Ports			  [1, 1]
 	  Position		  [345, 15, 385, 55]
 	  BackgroundColor	  "gray"
@@ -959,7 +924,6 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    18
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
@@ -1059,7 +1023,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
-	      SID		      17
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -1102,7 +1065,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
-	  SID			  18
 	  Ports			  [1, 1]
 	  Position		  [345, 74, 385, 116]
 	  LinkData {
@@ -1159,7 +1121,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
-	  SID			  22
 	  Position		  [485, 178, 515, 192]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -1315,7 +1276,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "6|8|4|8|hamming|1|3|2|1|off|on"
       MaskTabNameString	      ",,,,,,,,,,"
@@ -1334,7 +1294,6 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	95
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
@@ -1364,10 +1323,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
-	  SID			  79
 	  Ports			  [2, 1]
-	  Position		  [345, 197, 395, 248]
-	  LibraryVersion	  "1.2"
+	  Position		  [365, 172, 415, 223]
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -1391,7 +1348,7 @@ Library {
 	  use_rpm		  "on"
 	  placement_style	  "Rectangular shape"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,419,605"
+	  sggui_pos		  "20,20,348,434"
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,51,2,1,white,blue,0,beae5990,right,"
@@ -1417,50 +1374,6 @@ Library {
 	  "binary)."
 	  force_arith_type	  "on"
 	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "8"
-	  bin_pt		  "2"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  en			  "off"
-	  latency		  "mult_latency"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
-	  opt			  "Speed"
-	  use_embedded		  "on"
-	  optimum_pipeline	  "off"
-	  xl_use_area		  "off"
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  pipeline		  "on"
-	  use_rpm		  "on"
-	  placement_style	  "Rectangular shape"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,348,434"
-	  block_type		  "mult"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
-	  "ch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0.525 0.475 0"
-	  ".275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0.46875 0.25 0.093"
-	  "75 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('"
-	  "','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfpr"
-	  "intf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "Reinterpret"
-	  SID			  81
-	  Ports			  [1, 1]
-	  Position		  [285, 219, 325, 251]
-	  LibraryVersion	  "1.2"
-	  SourceBlock		  "xbsIndex_r4/Reinterpret"
-	  SourceType		  "Xilinx Type Reinterpreter Block"
-	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
-	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
-	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
-	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
-	  "binary)."
-	  force_arith_type	  "on"
-	  arith_type		  "Signed  (2's comp)"
 	  force_bin_pt		  "on"
 	  bin_pt		  "CoeffBitWidth - 1"
 	  has_advanced_control	  "0"
@@ -1477,11 +1390,37 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "Slice"
-	  SID			  82
+	  Name			  "Reinterpret2"
 	  Ports			  [1, 1]
-	  Position		  [225, 221, 270, 249]
-	  LibraryVersion	  "1.2"
+	  Position		  [290, 134, 330, 166]
+	  SourceBlock		  "xbsIndex_r4/Reinterpret"
+	  SourceType		  "Xilinx Type Reinterpreter Block"
+	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
+	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
+	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
+	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
+	  "binary)."
+	  force_arith_type	  "on"
+	  arith_type		  "Signed  (2's comp)"
+	  force_bin_pt		  "on"
+	  bin_pt		  "BitWidthIn - 1"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "reinterpret"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0.525 0.475 0"
+	  ".275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0.46875 0.25 0.093"
+	  "75 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('"
+	  "','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfpr"
+	  "intf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Slice"
+	  Ports			  [1, 1]
+	  Position		  [230, 196, 275, 224]
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -1496,7 +1435,7 @@ Library {
 	  base0			  "LSB of Input"
 	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,540,482"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,"
@@ -1511,7 +1450,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
-	  SID			  83
 	  Ports			  [1, 1]
 	  Position		  [230, 246, 275, 274]
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -1528,7 +1466,7 @@ Library {
 	  base0			  "LSB of Input"
 	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,540,482"
+	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,"
@@ -1543,11 +1481,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_bram"
-	  SID			  85
 	  Ports			  [1, 1]
-	  Position		  [340, 15, 380, 55]
+	  Position		  [355, 15, 395, 55]
 	  BackgroundColor	  "gray"
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "casper_library_delays/delay_bram"
 	  SourceType		  "delay_bram"
 	  ShowPortLabels	  "FromPortIcon"
@@ -1558,7 +1494,7 @@ Library {
 	  RTWMemSecDataConstants  "Inherit from model"
 	  RTWMemSecDataInternal	  "Inherit from model"
 	  RTWMemSecDataParameters "Inherit from model"
-	  DelayLen		  "2^(PFBSize+mux_inputs-n_inputs)"
+	  DelayLen		  "2^(PFBSize-n_inputs)"
 	  bram_latency		  "bram_latency"
 	  use_dsp48		  "off"
 	}
@@ -1638,12 +1574,12 @@ Library {
 	  SrcPort		  1
 	  Points		  [175, 0]
 	  Branch {
-	    DstBlock		    "delay_bram"
+	    Points		    [0, 115]
+	    DstBlock		    "Reinterpret2"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [0, 130]
-	    DstBlock		    "c_to_ri"
+	    DstBlock		    "delay_bram"
 	    DstPort		    1
 	  }
 	}
@@ -1680,15 +1616,15 @@ Library {
 	Line {
 	  SrcBlock		  "Reinterpret"
 	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mult1"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mult"
-	    DstPort		    2
-	  }
+	  DstBlock		  "Mult"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Reinterpret2"
+	  SrcPort		  1
+	  Points		  [10, 0; 0, 35]
+	  DstBlock		  "Mult"
+	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "coeffs"
@@ -1708,12 +1644,11 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "first_tap_real"
-      SID		      2
-      Ports		      [2, 4]
-      Position		      [55, 567, 160, 643]
+      Name		      "last_tap"
+      Ports		      [4, 2]
+      Position		      [330, 332, 435, 408]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
-      AttributesFormatString  "input=0, taps=4"
+      AttributesFormatString  "taps=4"
       UserDataPersistent      on
       UserData		      "DataTag3"
       MinAlgLoopOccurrences   off
@@ -1723,57 +1658,51 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskType		      "first_tap_real"
-      MaskPromptString	      "This is input number:|Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of "
-      "Taps:|Input Bitwidth:|Implement Coeff Gen in Distributed Memory:|Windowing Function:|Mult Latency|BRAM Latency|N"
-      "umber of Simultaneous Inputs: (2^?)|Bit Width (normal=1)|Use behavioral HDL for multlipliers|Use embedded multip"
-      "liers"
-      MaskStyleString	      "edit,edit,edit,edit,edit,edit,popup(bartlett|barthannwin|blackman|blackmanharris|bohamwin"
-      "|chebwin|flattopwin|gausswin|hamming|hann|kaiser|nuttallwin|parzenwin|rectwin|tukeywin|triang|userwindow),edit,e"
-      "dit,edit,edit,checkbox,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||||||use_hdl = get_param(gcb,'use_hdl');\nif( strcmp(use_hdl,'on')),\n    set_par"
-      "am(gcb, 'use_embedded','off');\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on','"
-      "on','on','on','on','off'});\nelse,\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','o"
-      "n','on','on','on','on','on'});    \nend\n|"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVariables	      "nput=@1;PFBSize=@2;CoeffBitWidth=@3;TotalTaps=@4;BitWidthIn=@5;CoeffDistMem=@6;WindowType=&"
-      "7;mult_latency=@8;bram_latency=@9;n_inputs=@10;fwidth=@11;use_hdl=&12;use_embedded=&13;"
-      MaskInitialization      "first_tap_real_init(gcb,...\n    'nput', nput,...\n    'PFBSize', PFBSize,...\n    'Coe"
-      "ffBitWidth', CoeffBitWidth,...\n    'TotalTaps', TotalTaps,...\n    'BitWidthIn', BitWidthIn,...\n    'CoeffDist"
-      "Mem', CoeffDistMem,...\n    'WindowType', WindowType,...\n    'mult_latency', mult_latency,...\n    'bram_latenc"
-      "y', bram_latency,...\n    'n_inputs', n_inputs,...\n    'fwidth', fwidth,...\n    'use_hdl', use_hdl,...\n    'u"
+      MaskType		      "last_tap"
+      MaskPromptString	      "Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add Latency|Mult "
+      "Latency|Quantization Behavior|Use behavioral HDL for multlipliers|Use embedded multipliers"
+      MaskStyleString	      "edit,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased:"
+      " Even Values)),checkbox,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||||||use_hdl = get_param(gcb,'use_hdl');\nif( strcmp(use_hdl,'on')),\n    set_param(g"
+      "cb, 'use_embedded','off');\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on','off'"
+      "});\nelse,\n    set_param(gcb, 'MaskVisibilities',{'on','on','on','on','on','on','on','on','on'});    \nend\n|"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,"
+      MaskVariables	      "TotalTaps=@1;BitWidthIn=@2;BitWidthOut=@3;CoeffBitWidth=@4;add_latency=@5;mult_latency=@6;q"
+      "uantization=&7;use_hdl=&8;use_embedded=&9;"
+      MaskInitialization      "last_tap_init(gcb,...\n    'TotalTaps', TotalTaps,...\n    'BitWidthIn', BitWidthIn,..."
+      "\n    'BitWidthOut', BitWidthOut,...\n    'CoeffBitWidth', CoeffBitWidth,...\n    'add_latency', add_latency,..."
+      "\n    'mult_latency', mult_latency,...\n    'quantization', quantization,...\n    'use_hdl', use_hdl,...\n    'u"
       "se_embedded', use_embedded);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|6|8|4|8|0|hamming|1|3|2|1|off|on"
+      MaskValueString	      "4|8|18|8|1|2|Truncate|off|on"
+      MaskTabNameString	      ",,,,,,,,"
       System {
-	Name			"first_tap_real"
-	Location		[351, 272, 885, 853]
+	Name			"last_tap"
+	Location		[781, 220, 1349, 627]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	14
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
-	  SID			  1
-	  Position		  [35, 33, 65, 47]
+	  Position		  [30, 148, 60, 162]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
@@ -1781,19 +1710,85 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
-	  SID			  2
-	  Position		  [35, 73, 65, 87]
+	  Position		  [280, 243, 310, 257]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
 	}
 	Block {
+	  BlockType		  Inport
+	  Name			  "coeff"
+	  Position		  [50, 228, 80, 242]
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "taps"
+	  Position		  [255, 208, 285, 222]
+	  Port			  "4"
+	  IconDisplay		  "Port number"
+	  OutDataType		  "sfix(16)"
+	  OutScaling		  "2^0"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Concat"
+	  Ports			  [2, 1]
+	  Position		  [315, 155, 365, 210]
+	  SourceBlock		  "xbsIndex_r4/Concat"
+	  SourceType		  "Xilinx Bus Concatenator Block"
+	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
+	  "ro."
+	  num_inputs		  "2"
+	  dbl_ovrd		  "off"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "concat"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "50,55,2,1,white,blue,0,97b7e8d2,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.22 0.06 0.3 0.06 0.22 0.48 0.56 0.64 0.92 0.7 0.48 0.32 0.56 0.32 0.48 0.7 0.92 0.64 0.56 0.48 0.22 ],[0.1454"
+	  "55 0.290909 0.509091 0.727273 0.872727 0.872727 0.8 0.872727 0.872727 0.672727 0.872727 0.727273 0.509091 0.290909 "
+	  "0.145455 0.345455 0.145455 0.145455 0.218182 0.145455 0.145455 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]"
+	  ");\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('"
+	  "input',1,'hi');\ncolor('black');port_label('input',2,'lo');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Delay"
+	  Ports			  [1, 1]
+	  Position		  [325, 227, 370, 273]
+	  SourceBlock		  "xbsIndex_r4/Delay"
+	  SourceType		  "Xilinx Delay Block"
+	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
+	  en			  "off"
+	  latency		  "mult_latency"
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "delay"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "45,46,1,1,white,blue,0,85ce9542,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.222222 0.0666667 0.311111 0.0666667 0.222222 0.488889 0.555556 0.622222 0.911111 0.688889 0.466667 0.311111 0"
+	  ".555556 0.311111 0.466667 0.688889 0.911111 0.622222 0.555556 0.488889 0.222222 ],[0.108696 0.26087 0.5 0.73913 0.8"
+	  "91304 0.891304 0.826087 0.891304 0.891304 0.673913 0.891304 0.73913 0.5 0.26087 0.108696 0.326087 0.108696 0.108696"
+	  " 0.173913 0.108696 0.108696 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon g"
+	  "raphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COM"
+	  "MENT: end icon text');\n"
+	}
+	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
-	  SID			  3
 	  Ports			  [2, 1]
-	  Position		  [365, 172, 415, 223]
+	  Position		  [160, 197, 210, 248]
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -1808,8 +1803,8 @@ Library {
 	  latency		  "mult_latency"
 	  dbl_ovrd		  "off"
 	  use_behavioral_HDL	  "off"
-	  use_embedded		  "on"
 	  opt			  "Speed"
+	  use_embedded		  "on"
 	  optimum_pipeline	  "off"
 	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
@@ -1820,20 +1815,60 @@ Library {
 	  sggui_pos		  "20,20,348,434"
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "50,51,2,1,white,blue,0,2b745779,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 55 55 ],[0.77 0.82 0.91]);\n"
-	  "patch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[6 15 28 41 50 50 46 50 50 38 50 41 28 15 6 1"
-	  "8 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('inpu"
-	  "t',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor('black');disp('\\newline\\bf{}\\newlinez^{-1}','te"
-	  "xmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "50,51,2,1,white,blue,0,9a78ff34,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.22 0.06 0.3 0.06 0.22 0.48 0.56 0.64 0.92 0.7 0.48 0.32 0.56 0.32 0.48 0.7 0.92 0.64 0.56 0.48 0.22 ],[0.1176"
+	  "47 0.27451 0.509804 0.745098 0.901961 0.901961 0.823529 0.901961 0.901961 0.686275 0.901961 0.745098 0.509804 0.274"
+	  "51 0.117647 0.333333 0.117647 0.117647 0.196078 0.117647 0.117647 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 "
+	  "0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_labe"
+	  "l('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor("
+	  "'black');disp('\\newline\\bf{}\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Mult1"
+	  Ports			  [2, 1]
+	  Position		  [160, 132, 210, 183]
+	  SourceBlock		  "xbsIndex_r4/Mult"
+	  SourceType		  "Xilinx Multiplier Block"
+	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
+	  "ne for maximum performance'."
+	  precision		  "Full"
+	  arith_type		  "Signed  (2's comp)"
+	  n_bits		  "8"
+	  bin_pt		  "2"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  en			  "off"
+	  latency		  "mult_latency"
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
+	  opt			  "Speed"
+	  use_embedded		  "on"
+	  optimum_pipeline	  "off"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  pipeline		  "on"
+	  use_rpm		  "on"
+	  placement_style	  "Rectangular shape"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,20,348,434"
+	  block_type		  "mult"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "50,51,2,1,white,blue,0,9a78ff34,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.22 0.06 0.3 0.06 0.22 0.48 0.56 0.64 0.92 0.7 0.48 0.32 0.56 0.32 0.48 0.7 0.92 0.64 0.56 0.48 0.22 ],[0.1176"
+	  "47 0.27451 0.509804 0.745098 0.901961 0.901961 0.823529 0.901961 0.901961 0.686275 0.901961 0.745098 0.509804 0.274"
+	  "51 0.117647 0.333333 0.117647 0.117647 0.196078 0.117647 0.117647 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 "
+	  "0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_labe"
+	  "l('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'(ab)');\ncolor("
+	  "'black');disp('\\newline\\bf{}\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
-	  SID			  4
 	  Ports			  [1, 1]
-	  Position		  [290, 194, 330, 226]
+	  Position		  [95, 219, 135, 251]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -1849,40 +1884,13 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "reinterpret"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "40,32,1,1,white,blue,0,8982c1db,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 0.91]);\n"
-	  "patch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 27 22 15 8 3 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');"
-	  "\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "Reinterpret2"
-	  SID			  5
-	  Ports			  [1, 1]
-	  Position		  [290, 134, 330, 166]
-	  SourceBlock		  "xbsIndex_r4/Reinterpret"
-	  SourceType		  "Xilinx Type Reinterpreter Block"
-	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
-	  "igned and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs nothing.<P><P>"
-	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
-	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
-	  "binary)."
-	  force_arith_type	  "on"
-	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
-	  bin_pt		  "BitWidthIn - 1"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "reinterpret"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "40,32,1,1,white,blue,0,8982c1db,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 0.91]);\n"
-	  "patch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 27 22 15 8 3 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');"
-	  "\n"
+	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0.525 0.475 0"
+	  ".275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0.46875 0.25 0.093"
+	  "75 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('"
+	  "','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfpr"
+	  "intf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1921,481 +1929,527 @@ Library {
 	  Opaque		  off
 	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
-	  MaskType		  "pfb_coeff_gen"
-	  MaskPromptString	  "Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of Taps:|Implement Coeff Gen in "
-	  "Distributed Memory|Windowing Function: |BRAM Latency|Number of Simultaneous Inputs: (2^?)|This is input number:|Bin"
-	  " Width (normal=1)"
-	  MaskStyleString	  "edit,edit,edit,edit,edit,edit,edit,edit,edit"
-	  MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
-	  MaskCallbackString	  "||||||||"
-	  MaskEnableString	  "on,on,on,on,on,on,on,on,on"
-	  MaskVisibilityString	  "on,on,on,on,on,on,on,on,on"
-	  MaskToolTipString	  "on,on,on,on,on,on,on,on,on"
-	  MaskVariables		  "PFBSize=@1;CoeffBitWidth=@2;TotalTaps=@3;CoeffDistMem=@4;WindowType=&5;bram_latency=@6;n_inputs=@"
-	  "7;nput=@8;fwidth=@9;"
-	  MaskInitialization	  "pfb_coeff_gen_init(gcb, ...\n    'PFBSize', PFBSize, ...\n    'CoeffBitWidth', CoeffBitWidth,"
-	  " ...\n    'TotalTaps', TotalTaps, ...\n    'CoeffDistMem', CoeffDistMem, ...\n    'WindowType', WindowType, ...\n  "
-	  "  'bram_latency', bram_latency, ...\n    'n_inputs', n_inputs, ...\n    'nput', nput, ...\n    'fwidth', fwidth);"
+	  MaskType		  "pfb_add_tree"
+	  MaskPromptString	  "Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add Latency|Quantization"
+	  " Behavior"
+	  MaskStyleString	  "edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values"
+	  "))"
+	  MaskTunableValueString  "on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||"
+	  MaskEnableString	  "on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on,on"
+	  MaskVarAliasString	  ",,,,,"
+	  MaskVariables		  "TotalTaps=@1;BitWidthIn=@2;BitWidthOut=@3;CoeffBitWidth=@4;add_latency=@5;quantization=&6;"
+	  MaskInitialization	  "pfb_add_tree_init(gcb, ...\n    'TotalTaps', TotalTaps, ...\n    'BitWidthIn', BitWidthIn, .."
+	  ".\n    'BitWidthOut', BitWidthOut, ...\n    'CoeffBitWidth', CoeffBitWidth, ...\n    'add_latency', add_latency, .."
+	  ".\n    'quantization', quantization);"
 	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
-	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "6|8|4|0|hamming|3|2|0|1"
+	  MaskValueString	  "4|8|18|8|1|Truncate"
+	  MaskTabNameString	  ",,,,,"
 	  System {
-	    Name		    "pfb_coeff_gen"
-	    Location		    [410, 101, 923, 771]
+	    Name		    "pfb_add_tree"
+	    Location		    [2, 79, 1670, 1011]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
 	    ScreenColor		    "white"
 	    PaperOrientation	    "landscape"
 	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+	    PaperType		    "A4"
+	    PaperUnits		    "centimeters"
+	    TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    18
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
-	      SID		      1
-	      Position		      [235, 28, 265, 42]
+	      Position		      [15, 123, 45, 137]
 	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "sync"
-	      SID		      2
-	      Position		      [15, 93, 45, 107]
+	      Position		      [15, 28, 45, 42]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Concat"
-	      SID		      3
-	      Ports		      [4, 1]
-	      Position		      [310, 99, 365, 646]
-	      SourceBlock	      "xbsIndex_r4/Concat"
-	      SourceType	      "Xilinx Bus Concatenator Block"
-	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
-	      "nt at zero."
-	      num_inputs	      "4"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "concat"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "55,547,1,1,white,blue,0,ad63c393,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 "
-	      "0.91]);\npatch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54"
-	      " 45 30 15 6 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'hi');\ncolor('b"
-	      "lack');port_label('input',4,'lo');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Counter"
-	      SID		      4
+	      Name		      "Reint0_1"
 	      Ports		      [1, 1]
-	      Position		      [65, 75, 115, 125]
-	      SourceBlock	      "xbsIndex_r4/Counter"
-	      SourceType	      "Xilinx Counter Block"
-	      infoedit		      "Hardware notes: Free running counters are the least expensive in hardware.  A count limited co"
-	      "unter is implemented by combining a counter with a comparator."
-	      cnt_type		      "Free Running"
-	      cnt_to		      "Inf"
-	      operation		      "Up"
-	      start_count	      "0"
-	      cnt_by_val	      "1"
-	      arith_type	      "Unsigned"
-	      n_bits		      "4"
-	      bin_pt		      "0"
-	      load_pin		      "off"
-	      rst		      "on"
-	      en		      "off"
-	      explicit_period	      "on"
-	      period		      "1"
-	      dbl_ovrd		      "off"
-	      use_behavioral_HDL      "off"
-	      use_rpm		      "on"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "counter"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,50,1,1,white,blue,0,300e9576,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 "
-	      "0.91]);\npatch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54"
-	      " 45 30 15 6 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rst');\ncolor('"
-	      "black');port_label('output',1,'out');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Delay"
-	      SID		      5
-	      Ports		      [1, 1]
-	      Position		      [65, 17, 110, 63]
-	      SourceBlock	      "xbsIndex_r4/Delay"
-	      SourceType	      "Xilinx Delay Block"
-	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
-	      "p."
-	      en		      "off"
-	      latency		      "bram_latency+1"
-	      dbl_ovrd		      "off"
-	      reg_retiming	      "off"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "delay"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,c2217bc4,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 46 46 ],[0.77 0.82 "
-	      "0.91]);\npatch([10 3 14 3 10 22 25 28 41 31 21 14 25 14 21 31 41 28 25 22 10 ],[5 12 23 34 41 41 38 41 41 31 41"
-	      " 34 23 12 5 15 5 5 8 5 5 ],[0.98 0.96 0.92]);\nplot([0 0 45 45 0 ],[0 46 46 0 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-4}','texmode','on');\nfprint"
-	      "f('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Delay1"
-	      SID		      6
-	      Ports		      [1, 1]
-	      Position		      [290, 17, 335, 63]
-	      SourceBlock	      "xbsIndex_r4/Delay"
-	      SourceType	      "Xilinx Delay Block"
-	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
-	      "p."
-	      en		      "off"
-	      latency		      "4"
-	      dbl_ovrd		      "off"
-	      reg_retiming	      "off"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "delay"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,c2217bc4,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49"
-	      " 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-4}','texmode','on');\nfprin"
-	      "tf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "ROM1"
-	      SID		      7
-	      Ports		      [1, 1]
-	      Position		      [150, 74, 200, 126]
-	      SourceBlock	      "xbsIndex_r4/ROM"
-	      SourceType	      "Xilinx Single Port Read-Only Memory Block"
-	      depth		      "16"
-	      initVector	      "pfb_coeff_gen_calc(6, 4,'hamming',2, 0,1,1)"
-	      distributed_mem	      "Block RAM"
-	      rst		      "off"
-	      init_reg		      "0"
-	      en		      "off"
-	      latency		      "3"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "8"
-	      bin_pt		      "7"
-	      dbl_ovrd		      "off"
-	      optimize		      "Area"
-	      use_rpm		      "on"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "sprom"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,debe86a8,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49"
-	      " 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor("
-	      "'black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "ROM2"
-	      SID		      8
-	      Ports		      [1, 1]
-	      Position		      [150, 139, 200, 191]
-	      SourceBlock	      "xbsIndex_r4/ROM"
-	      SourceType	      "Xilinx Single Port Read-Only Memory Block"
-	      depth		      "16"
-	      initVector	      "pfb_coeff_gen_calc(6, 4,'hamming',2, 0,1,2)"
-	      distributed_mem	      "Block RAM"
-	      rst		      "off"
-	      init_reg		      "0"
-	      en		      "off"
-	      latency		      "3"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "8"
-	      bin_pt		      "7"
-	      dbl_ovrd		      "off"
-	      optimize		      "Area"
-	      use_rpm		      "on"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "sprom"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,debe86a8,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49"
-	      " 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor("
-	      "'black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "ROM3"
-	      SID		      9
-	      Ports		      [1, 1]
-	      Position		      [150, 204, 200, 256]
-	      SourceBlock	      "xbsIndex_r4/ROM"
-	      SourceType	      "Xilinx Single Port Read-Only Memory Block"
-	      depth		      "16"
-	      initVector	      "pfb_coeff_gen_calc(6, 4,'hamming',2, 0,1,3)"
-	      distributed_mem	      "Block RAM"
-	      rst		      "off"
-	      init_reg		      "0"
-	      en		      "off"
-	      latency		      "3"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "8"
-	      bin_pt		      "7"
-	      dbl_ovrd		      "off"
-	      optimize		      "Area"
-	      use_rpm		      "on"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "sprom"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,debe86a8,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49"
-	      " 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor("
-	      "'black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "ROM4"
-	      SID		      10
-	      Ports		      [1, 1]
-	      Position		      [150, 269, 200, 321]
-	      SourceBlock	      "xbsIndex_r4/ROM"
-	      SourceType	      "Xilinx Single Port Read-Only Memory Block"
-	      depth		      "16"
-	      initVector	      "pfb_coeff_gen_calc(6, 4,'hamming',2, 0,1,4)"
-	      distributed_mem	      "Block RAM"
-	      rst		      "off"
-	      init_reg		      "0"
-	      en		      "off"
-	      latency		      "3"
-	      arith_type	      "Signed  (2's comp)"
-	      n_bits		      "8"
-	      bin_pt		      "7"
-	      dbl_ovrd		      "off"
-	      optimize		      "Area"
-	      use_rpm		      "on"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "sprom"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,debe86a8,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49"
-	      " 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor("
-	      "'black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Register"
-	      SID		      11
-	      Ports		      [1, 1]
-	      Position		      [385, 325, 430, 375]
-	      SourceBlock	      "xbsIndex_r4/Register"
-	      SourceType	      "Xilinx Register Block"
-	      init		      "0"
-	      rst		      "off"
-	      en		      "off"
-	      dbl_ovrd		      "off"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "register"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "45,50,1,1,white,blue,0,ac6b57db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49"
-	      " 40 28 16 7 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'d');\ncolor('bl"
-	      "ack');port_label('output',1,'q');\ncolor('black');disp('\\bf{z^{-1}}','texmode','on');\nfprintf('','COMMENT: en"
-	      "d icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Reinterpret1"
-	      SID		      12
-	      Ports		      [1, 1]
-	      Position		      [220, 84, 260, 116]
+	      Position		      [130, 139, 160, 151]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
-	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
-	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
-	      "ut of 56 (111000 in binary)."
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
 	      force_arith_type	      "on"
-	      arith_type	      "Unsigned"
+	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "0"
+	      bin_pt		      "14"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
-	      "ENT: end icon text');\n"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Reinterpret2"
-	      SID		      13
+	      Name		      "Reint0_2"
 	      Ports		      [1, 1]
-	      Position		      [220, 149, 260, 181]
+	      Position		      [130, 164, 160, 176]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
-	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
-	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
-	      "ut of 56 (111000 in binary)."
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
 	      force_arith_type	      "on"
-	      arith_type	      "Unsigned"
+	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "0"
+	      bin_pt		      "14"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
-	      "ENT: end icon text');\n"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Reinterpret3"
-	      SID		      14
+	      Name		      "Reint1_1"
 	      Ports		      [1, 1]
-	      Position		      [220, 214, 260, 246]
+	      Position		      [130, 189, 160, 201]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
-	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
-	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
-	      "ut of 56 (111000 in binary)."
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
 	      force_arith_type	      "on"
-	      arith_type	      "Unsigned"
+	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "0"
+	      bin_pt		      "14"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
-	      "ENT: end icon text');\n"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "Reinterpret4"
-	      SID		      15
+	      Name		      "Reint1_2"
 	      Ports		      [1, 1]
-	      Position		      [220, 279, 260, 311]
+	      Position		      [130, 214, 160, 226]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
 	      SourceType	      "Xilinx Type Reinterpreter Block"
 	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
-	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
-	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
-	      "ut of 56 (111000 in binary)."
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
 	      force_arith_type	      "on"
-	      arith_type	      "Unsigned"
+	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "0"
+	      bin_pt		      "14"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "9.1.01"
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
-	      "ENT: end icon text');\n"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
-	      BlockType		      Outport
-	      Name		      "dout"
-	      SID		      16
-	      Position		      [360, 28, 390, 42]
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
+	      BlockType		      Reference
+	      Name		      "Reint2_1"
+	      Ports		      [1, 1]
+	      Position		      [130, 239, 160, 251]
+	      SourceBlock	      "xbsIndex_r4/Reinterpret"
+	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
+	      force_arith_type	      "on"
+	      arith_type	      "Signed  (2's comp)"
+	      force_bin_pt	      "on"
+	      bin_pt		      "14"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "reinterpret"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
-	      BlockType		      Outport
-	      Name		      "sync_out"
-	      SID		      17
-	      Position		      [130, 28, 160, 42]
-	      Port		      "2"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
+	      BlockType		      Reference
+	      Name		      "Reint2_2"
+	      Ports		      [1, 1]
+	      Position		      [130, 264, 160, 276]
+	      SourceBlock	      "xbsIndex_r4/Reinterpret"
+	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
+	      force_arith_type	      "on"
+	      arith_type	      "Signed  (2's comp)"
+	      force_bin_pt	      "on"
+	      bin_pt		      "14"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "reinterpret"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
-	      BlockType		      Outport
-	      Name		      "coeff"
-	      SID		      18
-	      Position		      [450, 343, 480, 357]
-	      Port		      "3"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
+	      BlockType		      Reference
+	      Name		      "Reint3_1"
+	      Ports		      [1, 1]
+	      Position		      [130, 289, 160, 301]
+	      SourceBlock	      "xbsIndex_r4/Reinterpret"
+	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
+	      force_arith_type	      "on"
+	      arith_type	      "Signed  (2's comp)"
+	      force_bin_pt	      "on"
+	      bin_pt		      "14"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "reinterpret"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Reint3_2"
+	      Ports		      [1, 1]
+	      Position		      [130, 314, 160, 326]
+	      SourceBlock	      "xbsIndex_r4/Reinterpret"
+	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
+	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
+	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
+	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
+	      "output of 56 (111000 in binary)."
+	      force_arith_type	      "on"
+	      arith_type	      "Signed  (2's comp)"
+	      force_bin_pt	      "on"
+	      bin_pt		      "14"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "reinterpret"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,12,1,1,white,blue,0,6b04d0b0,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.4 0.333333 0.433333 0.333333 0.4 0.5 0.533333 0.566667 0.666667 0.566667 0.466667 0.4 0.5 0.4 0.4"
+	      "66667 0.566667 0.666667 0.566667 0.533333 0.5 0.4 ],[0.0833333 0.25 0.5 0.75 0.916667 0.916667 0.833333 0.91666"
+	      "7 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333 0.166667 0.0833333 0.0833333 "
+	      "],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
+	      "COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice0_1"
+	      Ports		      [1, 1]
+	      Position		      [70, 139, 115, 151]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "0"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice0_2"
+	      Ports		      [1, 1]
+	      Position		      [70, 164, 115, 176]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "-16"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice1_1"
+	      Ports		      [1, 1]
+	      Position		      [70, 189, 115, 201]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "-32"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice1_2"
+	      Ports		      [1, 1]
+	      Position		      [70, 214, 115, 226]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "-48"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice2_1"
+	      Ports		      [1, 1]
+	      Position		      [70, 239, 115, 251]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "-64"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice2_2"
+	      Ports		      [1, 1]
+	      Position		      [70, 264, 115, 276]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "-80"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice3_1"
+	      Ports		      [1, 1]
+	      Position		      [70, 289, 115, 301]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "-96"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Slice3_2"
+	      Ports		      [1, 1]
+	      Position		      [70, 314, 115, 326]
+	      SourceBlock	      "xbsIndex_r4/Slice"
+	      SourceType	      "Xilinx Bit Slice Extractor Block"
+	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
+	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
+	      "><br>Hardware notes: In hardware this block costs nothing."
+	      nbits		      "16"
+	      boolean_output	      "off"
+	      mode		      "Upper Bit Location + Width"
+	      bit1		      "-112"
+	      base1		      "MSB of Input"
+	      bit0		      "0"
+	      base0		      "MSB of Input"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "slice"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "45,12,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.422222 0.377778 0.444444 0.377778 0.422222 0.488889 0.511111 0.533333 0.6 0.533333 0.466667 0.422"
+	      "222 0.488889 0.422222 0.466667 0.533333 0.6 0.533333 0.511111 0.488889 0.422222 ],[0.0833333 0.25 0.5 0.75 0.91"
+	      "6667 0.916667 0.833333 0.916667 0.916667 0.666667 0.916667 0.75 0.5 0.25 0.0833333 0.333333 0.0833333 0.0833333"
+	      " 0.166667 0.0833333 0.0833333 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpri"
+	      "ntf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      SubSystem
@@ -3005,11 +3059,37 @@ Library {
 		}
 	      }
 	    }
-	    Line {
-	      SrcBlock		      "Concat"
-	      SrcPort		      1
-	      DstBlock		      "Register"
-	      DstPort		      1
+	    Block {
+	      BlockType		      Reference
+	      Name		      "convert1"
+	      Ports		      [1, 1]
+	      Position		      [500, 213, 530, 227]
+	      SourceBlock	      "xbsIndex_r4/Convert"
+	      SourceType	      "Xilinx Type Converter Block"
+	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
+	      " not."
+	      arith_type	      "Signed  (2's comp)"
+	      n_bits		      "18"
+	      bin_pt		      "17"
+	      quantization	      "Truncate"
+	      overflow		      "Saturate"
+	      latency		      "1"
+	      dbl_ovrd		      "off"
+	      pipeline		      "on"
+	      xl_use_area	      "off"
+	      xl_area		      "[0,0,0,0,0,0,0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "convert"
+	      block_version	      "11.4"
+	      sg_icon_stat	      "30,14,1,1,white,blue,0,d6ffdbcd,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
+	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
+	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
+	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
+	      "NT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newlinez^{-1}','t"
+	      "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -3246,110 +3326,280 @@ Library {
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Counter"
+	      SrcBlock		      "din"
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"ROM1"
+		DstBlock		"Slice3_2"
 		DstPort			1
 	      }
 	      Branch {
-		DstBlock		"ROM2"
+		DstBlock		"Slice3_1"
 		DstPort			1
 	      }
 	      Branch {
-		DstBlock		"ROM3"
+		DstBlock		"Slice2_2"
 		DstPort			1
 	      }
 	      Branch {
-		DstBlock		"ROM4"
+		DstBlock		"Slice2_1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice1_2"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice1_1"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice0_2"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Slice0_1"
 		DstPort			1
 	      }
 	    }
 	    Line {
-	      SrcBlock		      "ROM1"
+	      SrcBlock		      "delay1"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret1"
+	      DstBlock		      "sync_out"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "adder_tree1"
+	      SrcPort		      1
+	      DstBlock		      "delay1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "sync"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"adder_tree2"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"adder_tree1"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "ri_to_c"
+	      SrcPort		      1
+	      DstBlock		      "dout"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "convert2"
+	      SrcPort		      1
+	      DstBlock		      "ri_to_c"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "convert1"
+	      SrcPort		      1
+	      DstBlock		      "ri_to_c"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "scale2"
+	      SrcPort		      1
+	      DstBlock		      "convert2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "adder_tree2"
+	      SrcPort		      2
+	      DstBlock		      "scale2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "scale1"
+	      SrcPort		      1
+	      DstBlock		      "convert1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "adder_tree1"
+	      SrcPort		      2
+	      DstBlock		      "scale1"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "ri_to_c"
+	  Ports			  [2, 1]
+	  Position		  [235, 149, 275, 191]
+	  MinAlgLoopOccurrences	  off
+	  PropExecContextOutsideSubsystem off
+	  RTWSystemCode		  "Auto"
+	  FunctionWithSeparateData off
+	  Opaque		  off
+	  RequestExecContextInheritance	off
+	  MaskHideContents	  off
+	  System {
+	    Name		    "ri_to_c"
+	    Location		    [512, 151, 787, 285]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "A4"
+	    PaperUnits		    "centimeters"
+	    TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
+	    TiledPageScale	    1
+	    ShowPageBoundaries	    off
+	    ZoomFactor		    "100"
+	    Block {
+	      BlockType		      Inport
+	      Name		      "re"
+	      Position		      [25, 38, 55, 52]
+	      IconDisplay	      "Port number"
+	      OutDataType	      "sfix(16)"
+	      OutScaling	      "2^0"
+	    }
+	    Block {
+	      BlockType		      Inport
+	      Name		      "im"
+	      Position		      [25, 88, 55, 102]
+	      Port		      "2"
+	      IconDisplay	      "Port number"
+	      OutDataType	      "sfix(16)"
+	      OutScaling	      "2^0"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Concat"
+	      Ports		      [2, 1]
+	      Position		      [145, 40, 195, 95]
+	      SourceBlock	      "xbsIndex_r4/Concat"
+	      SourceType	      "Xilinx Bus Concatenator Block"
+	      SID		      "15"
+	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
+	      "nt at zero."
+	      num_inputs	      "2"
+	      dbl_ovrd		      "off"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "concat"
+	      block_version	      "9.1.01"
+	      sg_icon_stat	      "50,55,2,1,white,blue,0,df1e5aba,right"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 "
+	      "0.91]);\npatch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54"
+	      " 45 30 15 6 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end "
+	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'hi');\ncolor('b"
+	      "lack');port_label('input',2,'lo');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Reinterpret"
+	      Ports		      [1, 1]
+	      Position		      [80, 29, 120, 61]
+	      SourceBlock	      "xbsIndex_r4/Reinterpret"
+	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "16"
+	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
+	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
+	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
+	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
+	      "ut of 56 (111000 in binary)."
+	      force_arith_type	      "on"
+	      arith_type	      "Unsigned"
+	      force_bin_pt	      "on"
+	      bin_pt		      "0"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "reinterpret"
+	      block_version	      "9.1.01"
+	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
+	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
+	      "ENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Reinterpret1"
+	      Ports		      [1, 1]
+	      Position		      [80, 79, 120, 111]
+	      SourceBlock	      "xbsIndex_r4/Reinterpret"
+	      SourceType	      "Xilinx Type Reinterpreter Block"
+	      SID		      "17"
+	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
+	      "etween signed and unsigned, and relocate the binary point.<P><P>Hardware notes: In hardware this block costs no"
+	      "thing.<P><P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is force"
+	      "d to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an outp"
+	      "ut of 56 (111000 in binary)."
+	      force_arith_type	      "on"
+	      arith_type	      "Unsigned"
+	      force_bin_pt	      "on"
+	      bin_pt		      "0"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "reinterpret"
+	      block_version	      "9.1.01"
+	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
+	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
+	      "ENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "c"
+	      Position		      [220, 63, 250, 77]
+	      IconDisplay	      "Port number"
+	      OutDataType	      "sfix(16)"
+	      OutScaling	      "2^0"
+	    }
+	    Line {
+	      SrcBlock		      "Reinterpret"
+	      SrcPort		      1
+	      Points		      [0, 10]
+	      DstBlock		      "Concat"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "Reinterpret1"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "ROM2"
-	      SrcPort		      1
-	      DstBlock		      "Reinterpret2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Reinterpret2"
-	      SrcPort		      1
+	      Points		      [0, -15]
 	      DstBlock		      "Concat"
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "ROM3"
+	      SrcBlock		      "re"
 	      SrcPort		      1
-	      DstBlock		      "Reinterpret3"
+	      DstBlock		      "Reinterpret"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret3"
+	      SrcBlock		      "Concat"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
-	      DstPort		      3
-	    }
-	    Line {
-	      SrcBlock		      "ROM4"
-	      SrcPort		      1
-	      DstBlock		      "Reinterpret4"
+	      DstBlock		      "c"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "Reinterpret4"
+	      SrcBlock		      "im"
 	      SrcPort		      1
-	      DstBlock		      "Concat"
-	      DstPort		      4
+	      DstBlock		      "Reinterpret1"
+	      DstPort		      1
 	    }
 	  }
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sync_delay"
-	  SID			  10
-	  Ports			  [1, 1]
-	  Position		  [350, 74, 390, 116]
-	  LinkData {
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,636e1b21,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 26 26 ],[0.77 0.82 "
-	      "0.91]);\npatch([20 16 22 16 20 27 29 31 38 32 26 22 28 22 26 32 38 31 29 27 20 ],[3 7 13 19 23 23 21 23 23 17 2"
-	      "3 19 13 7 3 9 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 26 26 0 ]);\nfprintf('','COMMENT: end ic"
-	      "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'16');\nfprintf('"
-	      "','COMMENT: end icon text');\n"
-	    }
-	  }
-	  SourceBlock		  "casper_library_delays/sync_delay"
-	  SourceType		  "sync_delay"
-	  ShowPortLabels	  "FromPortIcon"
-	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
-	  RTWMemSecFuncInitTerm	  "Inherit from model"
-	  RTWMemSecFuncExecute	  "Inherit from model"
-	  RTWMemSecDataConstants  "Inherit from model"
-	  RTWMemSecDataInternal	  "Inherit from model"
-	  RTWMemSecDataParameters "Inherit from model"
-	  DelayLen		  "2^(PFBSize-n_inputs)"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
-	  SID			  11
-	  Position		  [415, 28, 445, 42]
+	  Position		  [510, 168, 540, 182]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
@@ -3357,108 +3607,90 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
-	  SID			  12
-	  Position		  [415, 88, 445, 102]
+	  Position		  [510, 198, 540, 212]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
 	  OutScaling		  "2^0"
 	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "coeff_out"
-	  SID			  13
-	  Position		  [300, 253, 330, 267]
-	  Port			  "3"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "taps_out"
-	  SID			  14
-	  Position		  [505, 193, 535, 207]
-	  Port			  "4"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
 	Line {
-	  SrcBlock		  "sync"
+	  SrcBlock		  "ri_to_c"
 	  SrcPort		  1
-	  Points		  [0, -15]
-	  DstBlock		  "pfb_coeff_gen"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "din"
-	  SrcPort		  1
-	  DstBlock		  "pfb_coeff_gen"
+	  DstBlock		  "Concat"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Mult"
 	  SrcPort		  1
-	  DstBlock		  "taps_out"
+	  Points		  [5, 0]
+	  DstBlock		  "ri_to_c"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Mult1"
+	  SrcPort		  1
+	  DstBlock		  "ri_to_c"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "pfb_coeff_gen"
-	  SrcPort		  3
-	  Points		  [60, 0; 0, 145]
-	  Branch {
-	    Points		    [0, 50]
-	    DstBlock		    "Slice1"
-	    DstPort		    1
-	  }
-	  Branch {
-	    Points		    [0, 0]
-	    DstBlock		    "Slice"
-	    DstPort		    1
-	  }
+	  SrcBlock		  "din"
+	  SrcPort		  1
+	  DstBlock		  "c_to_ri"
+	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "pfb_coeff_gen"
+	  SrcBlock		  "c_to_ri"
 	  SrcPort		  2
-	  Points		  [115, 0; 0, 45]
-	  DstBlock		  "sync_delay"
+	  Points		  [10, 0; 0, 45]
+	  DstBlock		  "Mult"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "pfb_coeff_gen"
+	  SrcBlock		  "c_to_ri"
 	  SrcPort		  1
-	  Points		  [95, 0]
-	  Branch {
-	    Points		    [0, 115]
-	    DstBlock		    "Reinterpret2"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "delay_bram"
-	    DstPort		    1
-	  }
-	}
-	Line {
-	  SrcBlock		  "delay_bram"
-	  SrcPort		  1
-	  DstBlock		  "dout"
+	  DstBlock		  "Mult1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "sync_delay"
+	  SrcBlock		  "Delay"
 	  SrcPort		  1
+	  DstBlock		  "pfb_add_tree"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "pfb_add_tree"
+	  SrcPort		  2
 	  DstBlock		  "sync_out"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Slice1"
+	  SrcBlock		  "pfb_add_tree"
 	  SrcPort		  1
-	  DstBlock		  "coeff_out"
+	  Points		  [0, -10]
+	  DstBlock		  "dout"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Slice"
+	  SrcBlock		  "sync"
+	  SrcPort		  1
+	  DstBlock		  "Delay"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "taps"
+	  SrcPort		  1
+	  Points		  [10, 0]
+	  DstBlock		  "Concat"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Concat"
+	  SrcPort		  1
+	  DstBlock		  "pfb_add_tree"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "coeff"
 	  SrcPort		  1
 	  DstBlock		  "Reinterpret"
 	  DstPort		  1
@@ -3466,15 +3698,15 @@ Library {
 	Line {
 	  SrcBlock		  "Reinterpret"
 	  SrcPort		  1
-	  DstBlock		  "Mult"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "Reinterpret2"
-	  SrcPort		  1
-	  Points		  [10, 0; 0, 35]
-	  DstBlock		  "Mult"
-	  DstPort		  1
+	  Points		  [0, 0; 5, 0]
+	  Branch {
+	    DstBlock		    "Mult1"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "Mult"
+	    DstPort		    2
+	  }
 	}
       }
     }
@@ -3520,7 +3752,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1|2|8|18|8|1|2|Truncate|on|off|on|off"
       MaskTabNameString	      ",,,,,,,,,,,"
@@ -3533,13 +3764,12 @@ Library {
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"A4"
-	PaperUnits		"centimeters"
-	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	20
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
@@ -3610,7 +3840,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
-	  SID			  6
 	  Ports			  [1, 1]
 	  Position		  [325, 227, 370, 273]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -3665,7 +3894,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
-	  SID			  7
 	  Ports			  [2, 1]
 	  Position		  [160, 197, 210, 248]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -3807,7 +4035,6 @@ Library {
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
-	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
 	  MaskValueString	  "1|2|8|18|8|1|Truncate|off"
 	  MaskTabNameString	  ",,,,,,,"
@@ -3826,7 +4053,6 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    7
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
@@ -9072,7 +9298,6 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret"
-	      SID		      6
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -9101,7 +9326,6 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret1"
-	      SID		      7
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -9418,7 +9642,6 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1|5|8|2|8|2|3|1|1|on|off|on|off"
       MaskTabNameString	      ",,,,,,,,,,,,"
@@ -9529,7 +9752,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
-	  SID			  2534
 	  Ports			  [2, 1]
 	  Position		  [345, 472, 395, 523]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -9570,7 +9792,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult1"
-	  SID			  2535
 	  Ports			  [2, 1]
 	  Position		  [345, 407, 395, 458]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -9645,7 +9866,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
-	  SID			  2537
 	  Ports			  [1, 1]
 	  Position		  [225, 496, 270, 524]
 	  ShowName		  off
@@ -9678,7 +9898,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
-	  SID			  2538
 	  Ports			  [1, 1]
 	  Position		  [225, 546, 270, 574]
 	  ShowName		  off
@@ -9784,7 +10003,6 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
-	  SID			  21
 	  Ports			  [2, 1]
 	  Position		  [425, 439, 465, 481]
 	  MinAlgLoopOccurrences	  off
@@ -9812,7 +10030,6 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
-	      SID		      22
 	      Position		      [25, 38, 55, 52]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -9821,7 +10038,6 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
-	      SID		      23
 	      Position		      [25, 88, 55, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -9831,7 +10047,6 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Concat"
-	      SID		      2544
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      SourceBlock	      "xbsIndex_r4/Concat"
@@ -9856,7 +10071,6 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret"
-	      SID		      2545
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -9885,7 +10099,6 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret1"
-	      SID		      2546
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -9914,7 +10127,6 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
-	      SID		      27
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	      OutDataType	      "sfix(16)"
@@ -9985,7 +10197,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
-	  SID			  2548
 	  Ports			  [1, 1]
 	  Position		  [345, 314, 385, 356]
 	  LinkData {
@@ -10234,7 +10445,6 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "tap_real"
-      SID		      33
       Ports		      [3, 4]
       Position		      [195, 607, 300, 683]
       BackgroundColor	      "gray"
@@ -10254,6 +10464,7 @@ Library {
       MaskEnableString	      "on,on,on,on,on,on,on,on"
       MaskVisibilityString    "on,on,on,on,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,"
       MaskVariables	      "mult_latency=@1;coeff_width=@2;coeff_frac_width=@3;delay=@4;data_width=@5;bram_latency=@6;u"
       "se_hdl=&7;use_embedded=&8;"
       MaskInitialization      "use_hdl = get_param(gcb,'use_hdl');\nuse_embedded = get_param(gcb,'use_embedded');\nset"
@@ -10263,9 +10474,9 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "2|12|3|4|8|1|on|off"
+      MaskTabNameString	      ",,,,,,,"
       System {
 	Name			"tap_real"
 	Location		[589, 339, 1091, 711]
@@ -10281,11 +10492,9 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	14
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
-	  SID			  1
 	  Position		  [20, 33, 50, 47]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -10294,7 +10503,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
-	  SID			  2
 	  Position		  [130, 98, 160, 112]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -10304,7 +10512,6 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeff"
-	  SID			  3
 	  Position		  [15, 178, 45, 192]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -10314,7 +10521,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
-	  SID			  4
 	  Ports			  [2, 1]
 	  Position		  [190, 147, 240, 198]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -10355,7 +10561,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
-	  SID			  5
 	  Ports			  [1, 1]
 	  Position		  [130, 169, 170, 201]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -10384,7 +10589,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret1"
-	  SID			  6
 	  Ports			  [1, 1]
 	  Position		  [70, 119, 110, 151]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -10413,7 +10617,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
-	  SID			  7
 	  Ports			  [1, 1]
 	  Position		  [70, 171, 115, 199]
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -10445,7 +10648,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
-	  SID			  8
 	  Ports			  [1, 1]
 	  Position		  [70, 216, 115, 244]
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -10477,7 +10679,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_bram"
-	  SID			  9
 	  Ports			  [1, 1]
 	  Position		  [190, 20, 230, 60]
 	  BackgroundColor	  "gray"
@@ -10498,7 +10699,6 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
-	  SID			  10
 	  Ports			  [1, 1]
 	  Position		  [190, 84, 230, 126]
 	  SourceBlock		  "casper_library_delays/sync_delay"
@@ -10516,7 +10716,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
-	  SID			  11
 	  Position		  [255, 33, 285, 47]
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -10525,7 +10724,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
-	  SID			  12
 	  Position		  [255, 98, 285, 112]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -10535,7 +10733,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff_out"
-	  SID			  13
 	  Position		  [130, 223, 160, 237]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -10545,7 +10742,6 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
-	  SID			  14
 	  Position		  [270, 168, 300, 182]
 	  Port			  "4"
 	  IconDisplay		  "Port number"

@@ -1,6 +1,7 @@
 module xaui_infrastructure_low #(
     parameter ENABLE = 8'b0000_0000,
-    parameter RX_LANE_STEER = 8'b0111_0111
+    parameter RX_LANE_STEER = 8'b0111_0111,
+    parameter RX_INVERT = 8'b0111_0111
   ) (
     input             mgt_reset,
 
@@ -127,7 +128,10 @@ module xaui_infrastructure_low #(
   wire [8*4-1:0] rx_resetdone;
   wire [8*4-1:0] tx_resetdone;
 
-  wire [8*4-1:0] rx_polarity = 32'h0fff_0fff;
+//  wire [8*4-1:0] rx_polarity = 32'h0fff_0fff;
+  wire [8*4-1:0] rx_polarity;
+  assign rx_polarity = { {4{RX_INVERT[7] == 1}}, {4{RX_INVERT[6] == 1}}, {4{RX_INVERT[5] == 1}}, {4{RX_INVERT[4] == 1}},
+                         {4{RX_INVERT[3] == 1}}, {4{RX_INVERT[2] == 1}}, {4{RX_INVERT[1] == 1}}, {4{RX_INVERT[0] == 1}}};
 
   genvar I;
 generate for (I=0; I < 8; I=I+1) begin : gtx_wrap_gen

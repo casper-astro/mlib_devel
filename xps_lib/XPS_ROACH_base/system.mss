@@ -1,7 +1,1 @@
-
- PARAMETER VERSION = 2.2.0
-
-
-
-
-
+parameter VERSION = 2.2.0
