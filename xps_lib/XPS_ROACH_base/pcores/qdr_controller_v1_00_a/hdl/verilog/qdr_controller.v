@@ -77,10 +77,10 @@ module qdr_controller (
     .clk180  (clk180),
     .clk270  (clk270),
     .div_clk (div_clk),
-    .reset   (reset | cal_fail_out),
+    .reset   (reset),
 
     .phy_rdy  (phy_rdy),
-    .cal_fail (cal_fail_out),
+    .cal_fail (cal_fail),
 
     .qdr_d         (qdr_d),
     .qdr_q         (qdr_q),
