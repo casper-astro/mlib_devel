@@ -50,7 +50,7 @@ switch s.hw_sys
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25_DT');
         ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
     % end case 'iBOB'
-    case 'ROACH'
+    case {'ROACH', 'ROACH2'}
         if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
             s.adc_str = s.hw_adc;
         else
@@ -60,18 +60,7 @@ switch s.hw_sys
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/s.adc_clk_rate*4),' ns']);
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
         ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
-    % end case 'ROACH'
-    case 'ROACH2'
-        if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
-            s.adc_str = s.hw_adc;
-        else
-            error(['Unsupported adc board: ',s.hw_adc]);
-        end % if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
-
-        ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/s.adc_clk_rate*4),' ns']);
-        ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
-        ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
-    % end case 'ROACH2'
+    % end case {'ROACH', 'ROACH2'}
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end % end switch s.hw_sys
@@ -83,10 +72,9 @@ b = set(b, 'ip_name', 'adc_interface');
 switch s.hw_sys
     case 'iBOB'
         b = set(b, 'ip_version', '1.00.a');
-    case 'ROACH'
+    case {'ROACH', 'ROACH2'}
         b = set(b, 'ip_version', '1.01.a');
-    case 'ROACH2'
-        b = set(b, 'ip_version', '1.01.a');
+        b = set(b, 'opb0_devices', 1); %controller
 end % switch s.hw_sys
 
 supp_ip_names    = {'', 'opb_adccontroller'};

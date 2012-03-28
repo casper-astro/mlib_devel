@@ -58,3 +58,5 @@ switch s.hw_sys
 end % end switch s.hw_sys
 
 b = class(s,'xps_qdr',blk_obj);
+
+b = set(b, 'opb0_devices', 2); %sniffer and controller
