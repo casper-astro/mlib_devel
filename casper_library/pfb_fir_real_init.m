@@ -85,33 +85,7 @@ adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 coeffs_share = get_var('coeffs_share', 'defaults', defaults, varargin{:});
 
 % check the multiplier specifications first off
-if (length(mult_spec) == 1),
-    mult_spec = ones(1, TotalTaps) * mult_spec;
-end
-if (length(mult_spec) ~= TotalTaps),
-    error_string = sprintf('Multiplier specification vector not the same length (%i) as the number of taps (%i).', length(mult_spec), TotalTaps);
-    clog(error_string,'error');
-    errordlg(error_string);
-    return;
-end
-temp.use_hdl = 'on'; temp.use_embedded = 'off';
-tap_multipliers = repmat(temp, TotalTaps);
-clear temp;
-for ctr = 1 : TotalTaps,
-    if (mult_spec(ctr) > 2) || (mult_spec(ctr) < 0),
-        error_string = sprintf('Multiplier specification of %i for tap %i is not valid.', mult_spec(ctr), ctr);
-        clog(error_string,'error');
-        errordlg(error_string);
-        return;
-    end
-    temp.use_hdl = 'on'; temp.use_embedded = 'off';
-    if mult_spec(ctr) == 0,
-        temp.use_hdl = 'off'; temp.use_embedded = 'off';
-    elseif mult_spec(ctr) == 1,
-        temp.use_hdl = 'off'; temp.use_embedded = 'on';
-    end
-    tap_multipliers(ctr) = temp;
-end
+tap_multipliers = multiplier_specification(mult_spec, TotalTaps, 'pfb_fir_real_init');
 
 % share coeffs in a 2-pol setup?
 pols = 1;

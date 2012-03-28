@@ -60,7 +60,6 @@ defaults = { ...
     'arch', 'Virtex5', ...
     'opt_target', 'logic', ...
     'coeffs_bit_limit', 8,  ...
-    'specify_mult', 'off', ...
     'mult_spec', [2], ...
     'hardcode_shifts', 'off', ...
     'shift_schedule', [1], ...
@@ -88,7 +87,6 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 arch = get_var('arch', 'defaults', defaults, varargin{:});
 opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
 coeffs_bit_limit = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
-specify_mult = get_var('specify_mult', 'defaults', defaults, varargin{:});
 mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 shift_schedule = get_var('shift_schedule', 'defaults', defaults, varargin{:});
@@ -96,11 +94,8 @@ dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
 clog(flatstrcell(varargin),'fft_direct_init_debug');
 
-if (strcmp(specify_mult, 'on') && (length(mult_spec) ~= FFTSize)),
-    error('fft_direct_init.m: Multiplier use specification for stages does not match FFT size');
-    clog('fft_direct_init.m: Multiplier use specification for stages does not match FFT size','error');
-    return;
-end
+% check the per-stage multiplier specification
+stage_mult_spec = multiplier_specification(mult_spec, FFTSize, 'fft_direct_init');
 
 current_stages = find_system(blk, ...
     'lookUnderMasks', 'all', ...
@@ -163,21 +158,7 @@ for stage=0:FFTSize,
 end
 
 % Add butterflies
-for stage=1:FFTSize,
-    % default is HDL
-    use_hdl = 'on';
-    use_embedded = 'off';
-    if strcmp(specify_mult, 'on'),
-        % 0 is core, 1 is embedded, 2 is HDL
-        if (mult_spec(stage) == 0),
-            use_hdl = 'off';
-            use_embedded = 'off';
-        elseif (mult_spec(stage) == 1),
-            use_hdl = 'off';
-            use_embedded = 'on';
-        end
-    end
-
+for stage = 1 : FFTSize,
     if (strcmp(hardcode_shifts, 'on') && (shift_schedule(stage) == 1)),
         downshift = 'on';
     else
@@ -241,8 +222,8 @@ for stage=1:FFTSize,
             'arch', tostring(arch), ...
             'opt_target', tostring(opt_target), ...
             'coeffs_bram', coeffs_bram, ...
-            'use_hdl', use_hdl, ...
-            'use_embedded', use_embedded, ...
+            'use_hdl', stage_mult_spec(stage).use_hdl, ...
+            'use_embedded', stage_mult_spec(stage).use_embedded, ...
             'hardcode_shifts', tostring(hardcode_shifts), ...
             'dsp48_adders', tostring(dsp48_adders));
 
