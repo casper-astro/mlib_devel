@@ -44,7 +44,7 @@ for i=1:length(xps_objs)
     %check ports in the same slot are using the same mezzanine flavour
     our_flavour = get(blk_obj,'flavour');    
     their_flavour = get(xps_objs{i},'flavour');      
-    our_slot = get(xps_objs{i},'slot');    
+    our_slot = get(blk_obj,'slot');    
     their_slot = get(xps_objs{i},'slot');    
     if strcmp(our_hw, 'ROACH2'),                %roach2      
       if strcmp(our_slot, their_slot),          % and card in the same slot
