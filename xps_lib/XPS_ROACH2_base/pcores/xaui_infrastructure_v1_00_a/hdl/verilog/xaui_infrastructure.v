@@ -10,11 +10,19 @@ module xaui_infrastructure #(
     parameter RX_LANE_STEER0    = 1,
     parameter RX_LANE_STEER1    = 1,
     parameter RX_LANE_STEER2    = 1,
-    parameter RX_LANE_STEER3    = 0,
+    parameter RX_LANE_STEER3    = 1,
     parameter RX_LANE_STEER4    = 1,
     parameter RX_LANE_STEER5    = 1,
     parameter RX_LANE_STEER6    = 1,
-    parameter RX_LANE_STEER7    = 0,
+    parameter RX_LANE_STEER7    = 1,
+    parameter TX_LANE_STEER0    = 0,
+    parameter TX_LANE_STEER1    = 0,
+    parameter TX_LANE_STEER2    = 0,
+    parameter TX_LANE_STEER3    = 0,
+    parameter TX_LANE_STEER4    = 0,
+    parameter TX_LANE_STEER5    = 0,
+    parameter TX_LANE_STEER6    = 0,
+    parameter TX_LANE_STEER7    = 0,
     parameter RX_INVERT0        = 1,
     parameter RX_INVERT1        = 1,
     parameter RX_INVERT2        = 1,
@@ -279,11 +287,13 @@ module xaui_infrastructure #(
 
   localparam ENABLE = {ENABLE7 == 1, ENABLE6 == 1, ENABLE5 == 1, ENABLE4 == 1, ENABLE3 == 1, ENABLE2 == 1, ENABLE1 == 1, ENABLE0 == 1};
   localparam RX_LANE_STEER = {RX_LANE_STEER7 == 1, RX_LANE_STEER6 == 1, RX_LANE_STEER5 == 1, RX_LANE_STEER4 == 1, RX_LANE_STEER3 == 1, RX_LANE_STEER2 == 1, RX_LANE_STEER1 == 1, RX_LANE_STEER0 == 1};
+  localparam TX_LANE_STEER = {TX_LANE_STEER7 == 1, TX_LANE_STEER6 == 1, TX_LANE_STEER5 == 1, TX_LANE_STEER4 == 1, TX_LANE_STEER3 == 1, TX_LANE_STEER2 == 1, TX_LANE_STEER1 == 1, TX_LANE_STEER0 == 1};
   localparam RX_INVERT = {RX_INVERT7 == 1, RX_INVERT6 == 1, RX_INVERT5 == 1, RX_INVERT4 == 1, RX_INVERT3 == 1, RX_INVERT2 == 1, RX_INVERT1 == 1, RX_INVERT0 == 1};
  
   xaui_infrastructure_low #(
     .ENABLE(ENABLE),
     .RX_LANE_STEER(RX_LANE_STEER),
+    .TX_LANE_STEER(TX_LANE_STEER),
     .RX_INVERT(RX_INVERT)
   ) xaui_infrastructure_low_inst (
     .mgt_reset(reset),

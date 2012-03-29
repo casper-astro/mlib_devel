@@ -1,6 +1,7 @@
 module xaui_infrastructure_low #(
     parameter ENABLE = 8'b0000_0000,
-    parameter RX_LANE_STEER = 8'b0111_0111,
+    parameter RX_LANE_STEER = 8'b1111_1111,
+    parameter TX_LANE_STEER = 8'b0000_0000,
     parameter RX_INVERT = 8'b0111_0111
   ) (
     input             mgt_reset,
@@ -50,6 +51,10 @@ module xaui_infrastructure_low #(
   wire  [8*4-1:0] mgt_rxbufferr_swap;
   wire  [8*4-1:0] mgt_rxelecidle_swap;
   wire  [8*4-1:0] mgt_rxlock_swap;
+  
+  /* TX Byte steering defines */
+  wire [8*64-1:0] mgt_txdata_swap;
+  wire  [8*8-1:0] mgt_txcharisk_swap;
 
   wire [2:0] gtx_refclk;
   wire [2:0] pma_reset;
@@ -174,8 +179,8 @@ generate for (I=0; I < 8; I=I+1) begin : gtx_wrap_gen
       .RXRESETDONE_OUT                (rx_resetdone[I*4+:4]),
       .RXPOLARITY_IN                  (rx_polarity[I*4+:4]),
       //---------------- Transmit Ports - TX Data Path interface -----------------
-      .TXCHARISK_IN                   (mgt_txcharisk[I*8+:8]),
-      .TXDATA_IN                      (mgt_txdata[I*64+:64]),
+      .TXCHARISK_IN                   (mgt_txcharisk_swap[I*8+:8]),
+      .TXDATA_IN                      (mgt_txdata_swap[I*64+:64]),
 
       .TXOUTCLK_OUT                   (gtxclk_out_map[I*4+:4]),        
       .TXRESET_IN                     (mgt_tx_rst[I]),
@@ -237,6 +242,29 @@ end endgenerate
     .rxelecidle_out     (mgt_rxelecidle),
     .rxlock_out         (mgt_rxlock),
     .rxencommaalign_out (mgt_rxencommaalign_swap)
+  );
+  
+  xaui_rx_steer #(
+    .LANE_STEER (TX_LANE_STEER)
+  ) xaui_tx_steer_inst (
+    .rxdata_in          (mgt_txdata),
+    .rxcharisk_in       (mgt_txcharisk),
+    .rxcodecomma_in     (),
+    .rxsyncok_in        (),
+    .rxcodevalid_in     (),
+    .rxbufferr_in       (),
+    .rxelecidle_in      (),
+    .rxlock_in          (),
+    .rxencommaalign_in  (),
+    .rxdata_out         (mgt_txdata_swap),
+    .rxcharisk_out      (mgt_txcharisk_swap),
+    .rxcodecomma_out    (),
+    .rxsyncok_out       (),
+    .rxcodevalid_out    (),
+    .rxbufferr_out      (),
+    .rxelecidle_out     (),
+    .rxlock_out         (),
+    .rxencommaalign_out ()
   );
   
 endmodule
