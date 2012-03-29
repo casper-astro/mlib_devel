@@ -20,17 +20,62 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [plb,opb] = probe_bus_usage(blk_obj)
-plb = 0;
-opb = 0;
+function [plbs, plb_addr_end, opbs, opb_addr_end, opb0_devices] = probe_bus_usage(blk_obj, plb_addr_start, opb_addr_start)
+
+%the number of interfaces hard-coded to reside on opb0
+opb0_devices = 0;
 try
-	if blk_obj.opb_address_offset ~= 0
-		opb = opb + 1;
-	end
+  opb0_devices = blk_obj.opb0_devices;
+end;
+
+opbs = 0;
+range_opb = 0;
+try
+  range_opb = blk_obj.opb_address_offset;
+end
+opbs = sum(range_opb ~= 0);
+
+plbs = 0;
+range_plb = 0;
+try
+  range_plb = blk_obj.plb_address_offset;
+end
+plbs = sum(range_plb ~= 0);
+
+align_opb = 0;
+try
+  align_opb = blk_obj.opb_address_align;
 end
 
+align_plb = 0;
 try
-	if blk_obj.plb_address_offset ~= 0
-		plb = plb + 1;
-	end
+  align_plb = blk_obj.plb_address_align;
+end
+
+if length(align_opb) ~= length(range_opb),
+  error(['opb_address_align and opb_address_offset lengths are different for ',blk_obj.simulink_name]); 
+end
+
+opb_addr_end = opb_addr_start;
+for opb = 1:length(range_opb),
+  if range_opb(opb) ~= 0, 
+    if align_opb(opb) ~= 0,
+      opb_addr_start = ceil(opb_addr_start/align_opb(opb)) * align_opb(opb);
+    end
+    opb_addr_end = opb_addr_start + range_opb(opb); 
+  end
+end
+
+if length(align_plb) ~= length(range_plb)
+  error(['plb_address_align and plb_address_offset lengths are different for ',blk_obj.simulink_name]); 
+end
+
+plb_addr_end = plb_addr_start;
+for plb = 1:length(range_plb),
+  if range_plb(plb) ~= 0,
+    if align_plb(plb) ~= 0,
+      plb_addr_start = ceil(plb_addr_start/align_plb(plb)) * align_plb(plb);
+    end
+    plb_addr_end = plb_addr_start + range_plb(plb);
+  end
 end

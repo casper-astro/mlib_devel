@@ -23,6 +23,8 @@ function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb
 
 
 str = '';
+
+%does not affect the allocation of address space
 opb_addr_end = opb_addr_start;
 plb_addr_end = plb_addr_start;
 
