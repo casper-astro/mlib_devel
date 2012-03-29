@@ -80,12 +80,14 @@ adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 % detecting symmetric coefficients
 coeff_round = round(coeff * 1e16) * 1e-16;
 
-if mod(length(coeff)/n_inputs,1) ~= 0,
-    clog('The number of coefficients must be integer multiples of the number of inputs','error');
-    error('The number of coefficients must be integer multiples of the number of inputs');
+% check that the number of inputs and coefficients are compatible
+if mod(length(coeff) / n_inputs, 1) ~= 0,
+    error_string = sprintf('The number of coefficients (%d) must be integer multiples of the number of inputs (%d).', length(coeff), n_inputs);
+    clog(error_string, 'error');
+    errordlg(error_string);
 end
 
-num_fir_col = length(coeff)/n_inputs;
+num_fir_col = length(coeff) / n_inputs;
 coeff_sym = 0;
 fir_col_type = 'fir_col';
 

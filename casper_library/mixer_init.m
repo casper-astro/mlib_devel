@@ -33,7 +33,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function mixer_init(blk,varargin)
+function mixer_init(blk, varargin)
 
 % Declare any default values for arguments you might like.
 defaults = {'n_bits', 8, 'bram_latency', 2, 'mult_latency', 3};
@@ -47,10 +47,11 @@ n_bits = get_var('n_bits','defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency','defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency','defaults', defaults, varargin{:});
 
-counter_step = mod(nstreams*freq,freq_div);
+counter_step = mod(nstreams * freq, freq_div);
 
 if log2(nstreams) ~= round(log2(nstreams)),
-    error('The number of inputs must be a positive power of 2 integer');
+    error_string = 'The number of inputs must be a positive power of 2 integer';
+    errordlg(error_string);
 end
 
 delete_lines(blk);
