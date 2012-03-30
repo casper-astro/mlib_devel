@@ -71,7 +71,7 @@ switch hw_sys
         str = [str, ' PORT clk0    = ', clk_src,              '\n'];
         str = [str, ' PORT clk180  = ', clk_src, '180',       '\n'];
         str = [str, ' PORT clk270  = ', clk_src, '270',       '\n'];
-        str = [str, ' PORT div_clk = epb_clk',                '\n'];
+        str = [str, ' PORT div_clk = dly_clk',                '\n'];
         str = [str, ' PORT reset   = ', inst_name, '_reset',  '\n'];
         
         str = [str, ' PORT qdr_k_n       = ', hw_qdr, '_k_n',       '\n'];
