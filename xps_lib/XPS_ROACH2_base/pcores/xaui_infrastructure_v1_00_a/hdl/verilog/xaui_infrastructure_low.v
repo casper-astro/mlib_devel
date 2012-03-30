@@ -122,7 +122,7 @@ module xaui_infrastructure_low #(
      Note that all clocks are generated from the source source using a PLL, this means
      that we can use one clock for all application interfaces */
   wire [8*4-1:0] gtxclk_out_map;
-  assign gtx_clk_o = gtxclk_out_map[2];
+//  assign gtx_clk_o = gtxclk_out_map[2];
 
   wire [8*8-1:0] mgt_rxdisperror;
   wire [8*8-1:0] mgt_rxnotintable;
@@ -138,9 +138,32 @@ module xaui_infrastructure_low #(
   assign rx_polarity = { {4{RX_INVERT[7] == 1}}, {4{RX_INVERT[6] == 1}}, {4{RX_INVERT[5] == 1}}, {4{RX_INVERT[4] == 1}},
                          {4{RX_INVERT[3] == 1}}, {4{RX_INVERT[2] == 1}}, {4{RX_INVERT[1] == 1}}, {4{RX_INVERT[0] == 1}}};
 
-  genvar I;
-generate for (I=0; I < 8; I=I+1) begin : gtx_wrap_gen
+//--- make the gtx_clk (xaui_clk) the output of the first gtx_quad instantiated
+generate 
+  if(ENABLE[0] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[0*4];
+  end else if (ENABLE[1] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[1*4];
+  end else if (ENABLE[2] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[2*4];
+  end else if (ENABLE[3] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[3*4];
+  end else if (ENABLE[4] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[4*4];
+  end else if (ENABLE[5] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[5*4];
+  end else if (ENABLE[6] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[6*4];
+  end else if (ENABLE[7] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[7*4];
+  end else begin
+    assign gtx_clk_o = 1'b0; //held low
+  end
+endgenerate
 
+genvar I;
+generate 
+for (I=0; I < 8; I=I+1) begin : gtx_wrap_gen
   if (ENABLE[I] == 1'b1)
   begin
     gtx_quad gtx_quad_inst (
