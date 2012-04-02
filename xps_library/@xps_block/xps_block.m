@@ -22,6 +22,27 @@
 
 function b = xps_block(blk,xsg_obj)
 
+s.ip_name = {};
+s.ip_version = {};
+s.supp_ip_names = {};
+s.supp_ip_versions = {};
+s.opb_clk = '';
+s.plb_clk = '';
+s.opb0_devices = 0;         %bus interfaces hard coded to opb0
+s.opb_address_offset = 0;
+s.plb_address_offset = 0;
+s.opb_address_align = 0;
+s.plb_address_align = 0;
+s.ports = {};
+s.ext_ports = {};
+s.misc_ports = {};
+s.parameters = {};
+s.soft_driver = {};
+s.c_params = '';
+s.buses = {};
+s.interfaces = {};
+s.borph_info = {};
+
 if ~isempty(blk)
   tmp = regexp(get_param(blk,'Tag'),'^xps:(\w+)','tokens');
   if isempty(tmp)
@@ -32,26 +53,6 @@ if ~isempty(blk)
   s.parent = get_param(blk,'parent');
   s.xsg_obj = xsg_obj;
   s.type = ['xps_',tmp{1}{1}];
-  s.ip_name = {};
-  s.ip_version = {};
-  s.supp_ip_names = {};
-  s.supp_ip_versions = {};
-  s.opb_clk = '';
-  s.plb_clk = '';
-  s.opb_address_offset = 0;
-  s.plb_address_offset = 0;
-  s.opb_address_align = 0;
-  s.plb_address_align = 0;
-  s.ports = {};
-  s.ext_ports = {};
-  s.misc_ports = {};
-  s.parameters = {};
-  s.soft_driver = {};
-  s.c_params = '';
-  s.buses = {};
-  s.interfaces = {};
-  s.borph_info = {};
-
   b = class(s,'xps_block');
 
   % add ports to the object
@@ -148,25 +149,6 @@ else
   s.parent = '';
   s.xsg_obj = '';
   s.type = '';
-  s.ip_name = {};
-  s.ip_version = {};
-  s.supp_ip_names = {};
-  s.supp_ip_versions = {};
-  s.opb_clk = '';
-  s.plb_clk = '';
-  s.opb_address_offset = 0;
-  s.plb_address_offset = 0;
-  s.opb_address_align = 0;
-  s.plb_address_align = 0;
-  s.ports = {};
-  s.ext_ports = {};
-  s.misc_ports = {};
-  s.parameters = {};
-  s.soft_driver = {};
-  s.c_params = '';
-  s.buses = {};
-  s.interfaces = {};
-  s.borph_info = {};
 
   b = class(s,'xps_block');
 end % if ~isempty(blk)

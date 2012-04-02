@@ -68,6 +68,9 @@ else
 	% opb bus offset
 	b = set(b, 'opb_address_offset', hex2dec('100'));
 	b = set(b, 'plb_address_offset', 0);
+
+        %number of hard-coded opb0 interfaces
+        b = set(b, 'opb0_devices', 2); %data and control interfaces on sniffer
 end
 
 % interfaces

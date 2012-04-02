@@ -44,7 +44,7 @@ use_sniffer    = get(blk_obj,'use_sniffer');
 % Generate 'infrastructure' MHS entry
 
 switch hw_sys
-   case 'ROACH'
+   case {'ROACH', 'ROACH2'}
      str = [str, 'BEGIN dram_infrastructure',                      '\n'];
      str = [str, ' PARAMETER INSTANCE = dram_infrastructure_inst', '\n'];
      str = [str, ' PARAMETER HW_VER   = 1.00.a',                   '\n'];
@@ -156,7 +156,7 @@ end % switch hw_sys
 % Generate 'sniffer' MHS entry
 
 switch hw_sys
-   case 'ROACH'
+   case {'ROACH', 'ROACH2'}
      str = [str, 'BEGIN opb_dram_sniffer',                                   '\n'];
      str = [str, ' PARAMETER INSTANCE = opb_dram_sniffer_inst',              '\n'];
      str = [str, ' PARAMETER HW_VER = 1.00.a',                               '\n'];
@@ -206,7 +206,7 @@ end % switch hw_sys
 % Generate 'async_ddr' MHS entry
 
 switch hw_sys
-   case 'ROACH'
+   case {'ROACH', 'ROACH2'}
      str = [str, 'BEGIN async_dram\n'];
      str = [str, ' PARAMETER INSTANCE      = async_dram_', dimm,              '\n'];
      str = [str, ' PARAMETER HW_VER        = 1.00.a',                         '\n'];
