@@ -48,15 +48,18 @@ latency = get_var('latency','defaults', defaults, varargin{:});
 counter_width = log2(freq_div);
 counter_step = mod(num_lo*freq,freq_div);
 
-if num_lo < 1 | log2(num_lo) ~= round(log2(num_lo))
-    error('The number of parallel LOs must be a power of 2 no less than 1');
+if num_lo < 1 || log2(num_lo) ~= round(log2(num_lo))
+    error_string = 'The number of parallel LOs must be a power of 2 no less than 1';
+    errordlg(error_string);
 end
-if freq < 0 | freq ~= round(freq)
-    error('The frequency factor must be a positive integer');
+if freq < 0 || freq ~= round(freq)
+    error_string = 'The frequency factor must be a positive integer';
+    errordlg(error_string);
 end
 
-if freq_div <= 0 | freq_div < num_lo | freq_div ~= round(freq_div) | freq_div/num_lo ~= round(freq_div/num_lo) | log2(freq_div) ~= round(log2(freq_div))
-    error('The frequency factor must be a positive power of 2 integer multiples of the number of LOs');
+if freq_div <= 0 || freq_div < num_lo || freq_div ~= round(freq_div) || freq_div/num_lo ~= round(freq_div/num_lo) || log2(freq_div) ~= round(log2(freq_div))
+    error_string = 'The frequency factor must be a positive power of 2 integer multiples of the number of LOs';
+    errordlg(error_string);
 end
 
 delete_lines(blk);
