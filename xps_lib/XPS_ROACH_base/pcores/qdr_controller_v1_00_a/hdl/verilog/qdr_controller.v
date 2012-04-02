@@ -70,7 +70,7 @@ module qdr_controller (
   
   wire qdr_rst;
   
-  assign qdr_rst (idelay_rdy == 1'b0 || reset == 1'b1) ? 1'b1 : 1'b0;
+  assign qdr_rst = (idelay_rdy == 1'b0 || reset == 1'b1) ? 1'b1 : 1'b0;
 
   qdrc_top #(
     .DATA_WIDTH   (DATA_WIDTH  ),
