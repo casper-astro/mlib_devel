@@ -22,7 +22,7 @@ BEGIN qdr_controller
   PORT clk270  = clk270,  DIR = I
   PORT div_clk = div_clk, DIR = I
   PORT reset   = reset,   DIR = I
-  PORT reset   = idelay_rdy,   DIR = I
+  PORT idelay_rdy   = idelay_rdy,   DIR = I
 
 ## External Ports
   PORT qdr_k_n       = qdr_k_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
