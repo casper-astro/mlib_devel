@@ -1,6 +1,8 @@
 module xaui_infrastructure_low #(
     parameter ENABLE = 8'b0000_0000,
-    parameter RX_LANE_STEER = 8'b0111_0111
+    parameter RX_LANE_STEER = 8'b1111_1111,
+    parameter TX_LANE_STEER = 8'b0000_0000,
+    parameter RX_INVERT = 8'b0111_0111
   ) (
     input             mgt_reset,
 
@@ -49,6 +51,10 @@ module xaui_infrastructure_low #(
   wire  [8*4-1:0] mgt_rxbufferr_swap;
   wire  [8*4-1:0] mgt_rxelecidle_swap;
   wire  [8*4-1:0] mgt_rxlock_swap;
+  
+  /* TX Byte steering defines */
+  wire [8*64-1:0] mgt_txdata_swap;
+  wire  [8*8-1:0] mgt_txcharisk_swap;
 
   wire [2:0] gtx_refclk;
   wire [2:0] pma_reset;
@@ -116,7 +122,7 @@ module xaui_infrastructure_low #(
      Note that all clocks are generated from the source source using a PLL, this means
      that we can use one clock for all application interfaces */
   wire [8*4-1:0] gtxclk_out_map;
-  assign gtx_clk_o = gtxclk_out_map[2];
+//  assign gtx_clk_o = gtxclk_out_map[2];
 
   wire [8*8-1:0] mgt_rxdisperror;
   wire [8*8-1:0] mgt_rxnotintable;
@@ -127,11 +133,37 @@ module xaui_infrastructure_low #(
   wire [8*4-1:0] rx_resetdone;
   wire [8*4-1:0] tx_resetdone;
 
-  wire [8*4-1:0] rx_polarity = 32'h0fff_0fff;
+//  wire [8*4-1:0] rx_polarity = 32'h0fff_0fff;
+  wire [8*4-1:0] rx_polarity;
+  assign rx_polarity = { {4{RX_INVERT[7] == 1}}, {4{RX_INVERT[6] == 1}}, {4{RX_INVERT[5] == 1}}, {4{RX_INVERT[4] == 1}},
+                         {4{RX_INVERT[3] == 1}}, {4{RX_INVERT[2] == 1}}, {4{RX_INVERT[1] == 1}}, {4{RX_INVERT[0] == 1}}};
 
-  genvar I;
-generate for (I=0; I < 8; I=I+1) begin : gtx_wrap_gen
+//--- make the gtx_clk (xaui_clk) the output of the first gtx_quad instantiated
+generate 
+  if(ENABLE[0] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[0*4];
+  end else if (ENABLE[1] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[1*4];
+  end else if (ENABLE[2] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[2*4];
+  end else if (ENABLE[3] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[3*4];
+  end else if (ENABLE[4] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[4*4];
+  end else if (ENABLE[5] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[5*4];
+  end else if (ENABLE[6] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[6*4];
+  end else if (ENABLE[7] == 1'b1) begin
+    assign gtx_clk_o = gtxclk_out_map[7*4];
+  end else begin
+    assign gtx_clk_o = 1'b0; //held low
+  end
+endgenerate
 
+genvar I;
+generate 
+for (I=0; I < 8; I=I+1) begin : gtx_wrap_gen
   if (ENABLE[I] == 1'b1)
   begin
     gtx_quad gtx_quad_inst (
@@ -170,8 +202,8 @@ generate for (I=0; I < 8; I=I+1) begin : gtx_wrap_gen
       .RXRESETDONE_OUT                (rx_resetdone[I*4+:4]),
       .RXPOLARITY_IN                  (rx_polarity[I*4+:4]),
       //---------------- Transmit Ports - TX Data Path interface -----------------
-      .TXCHARISK_IN                   (mgt_txcharisk[I*8+:8]),
-      .TXDATA_IN                      (mgt_txdata[I*64+:64]),
+      .TXCHARISK_IN                   (mgt_txcharisk_swap[I*8+:8]),
+      .TXDATA_IN                      (mgt_txdata_swap[I*64+:64]),
 
       .TXOUTCLK_OUT                   (gtxclk_out_map[I*4+:4]),        
       .TXRESET_IN                     (mgt_tx_rst[I]),
@@ -233,6 +265,29 @@ end endgenerate
     .rxelecidle_out     (mgt_rxelecidle),
     .rxlock_out         (mgt_rxlock),
     .rxencommaalign_out (mgt_rxencommaalign_swap)
+  );
+  
+  xaui_rx_steer #(
+    .LANE_STEER (TX_LANE_STEER)
+  ) xaui_tx_steer_inst (
+    .rxdata_in          (mgt_txdata),
+    .rxcharisk_in       (mgt_txcharisk),
+    .rxcodecomma_in     (),
+    .rxsyncok_in        (),
+    .rxcodevalid_in     (),
+    .rxbufferr_in       (),
+    .rxelecidle_in      (),
+    .rxlock_in          (),
+    .rxencommaalign_in  (),
+    .rxdata_out         (mgt_txdata_swap),
+    .rxcharisk_out      (mgt_txcharisk_swap),
+    .rxcodecomma_out    (),
+    .rxsyncok_out       (),
+    .rxcodevalid_out    (),
+    .rxbufferr_out      (),
+    .rxelecidle_out     (),
+    .rxlock_out         (),
+    .rxencommaalign_out ()
   );
   
 endmodule

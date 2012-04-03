@@ -41,7 +41,6 @@
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#PORT mgt_rx_p           = mgt_rx_p,  DIR = I, VEC = [8*4-1:0]
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#PORT mgt_tx_n           = mgt_tx_n,  DIR = O, VEC = [8*4-1:0]
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#PORT mgt_tx_p           = mgt_tx_p,  DIR = O, VEC = [8*4-1:0]
-
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#BEGIN xaui_infrastructure
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PARAMETER INSTANCE = xaui_infrastructure_inst
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PARAMETER HW_VER = 1.00.a
@@ -53,7 +52,38 @@
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5')#  PARAMETER ENABLE5  = 1
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6')#  PARAMETER ENABLE6  = 1
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#  PARAMETER ENABLE7  = 1
-#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PARAMETER RX_LANE_STEER = 0x77
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER0 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER0 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER1 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER1 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER2 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER2 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER3 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER3 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER4 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER4 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER5 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER5 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER6 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER6 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER TX_LANE_STEER7 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER TX_LANE_STEER7 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT0 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'0') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT0 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT1 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'1') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT1 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT2 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'2') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT2 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT3 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'3') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT3 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT4 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'4') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT4 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT5 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'5') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT5 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT6 = 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'6') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT6 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7') && strcmp(get(b, 'flavour'), 'cx4')#   PARAMETER RX_INVERT7 = 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7') && strcmp(get(b, 'flavour'), 'sfp+')#  PARAMETER RX_INVERT7 = 0
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PORT xaui_refclk_n = xaui_refclk_n
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PORT xaui_refclk_p = xaui_refclk_p
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#  PORT mgt_rx_n    = mgt_rx_n
@@ -80,7 +110,6 @@
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b,'port'),'7')#  BUS_INTERFACE PHY_CONF_7 = phy_conf7
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
-
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#BEGIN temac
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER INSTANCE  = temac_inst
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER HW_VER    = 1.00.a
@@ -92,7 +121,6 @@
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#  BUS_INTERFACE MAC   = mac
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#END
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#
-
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#BEGIN sgmii_phy
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER INSTANCE  = sgmii_phy_inst
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#  PARAMETER HW_VER    = 1.00.a
@@ -107,7 +135,6 @@
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#  BUS_INTERFACE SGMII = sgmii
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#END
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#
-
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#  # MARVELL PHY SGMII Pins
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_rx_n      = sgmii_rx_n_i, DIR = I
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_rx_p      = sgmii_rx_p_i, DIR = I
@@ -115,7 +142,6 @@
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_tx_p      = sgmii_tx_p_i, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_clkref_n  = sgmii_clkref_n_i, DIR = I
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#PORT sgmii_clkref_p  = sgmii_clkref_p_i, DIR = I
-
 #IF# ( strcmp(get(b,'type'),'xps_adc'))#BEGIN opb_adccontroller
 #IF# ( strcmp(get(b,'type'),'xps_adc'))# PARAMETER INSTANCE     = opb_adccontroller_0
 #IF# ( strcmp(get(b,'type'),'xps_adc'))# PARAMETER HW_VER       = 1.00.a
@@ -151,8 +177,6 @@
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
 #IF# ( strcmp(get(b,'type'),'xps_adc'))#END
 #IF# ( strcmp(get(b,'type'),'xps_adc'))#
-
-
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))#BEGIN opb_adc10d1000ctrl
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))# PARAMETER INSTANCE     = opb_adc10d1000ctrl_0
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))# PARAMETER HW_VER       = 1.00.a
@@ -192,8 +216,6 @@
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc_temp_sdo = adc_temp_sdo
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))#END
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))#
-
-
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_clk = adc0_adc3wire_clk, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_data = adc0_adc3wire_data, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe, DIR = O
@@ -202,7 +224,6 @@
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_data = adc1_adc3wire_data, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_modepin = adc1_modepin, DIR = O
-
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_clk = adc0_adc3wire_clk, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_data = adc0_adc3wire_data, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe, DIR = O
@@ -223,7 +244,6 @@
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc_temp_cs = adc_temp_cs, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc_temp_sck = adc_temp_sck, DIR = O
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')#PORT adc_temp_sdo = adc_temp_sdo, DIR = I
-
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_ser_clk = adc0_adc3wire_clk,    DIR = O
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_ser_dat = adc0_adc3wire_data,   DIR = O
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_ser_cs  = adc0_adc3wire_strobe, DIR = O
@@ -260,7 +280,6 @@
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psdone = adc1_psdone
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  #END
-
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) #### added 2011-05-05 kim.guzzino (copy of Homin's with name change)
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) #### changed 2011-08-04 rurik to adc5g
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b,'use_adc0')##

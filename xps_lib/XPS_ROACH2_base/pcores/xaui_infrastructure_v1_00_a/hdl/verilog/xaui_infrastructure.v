@@ -1,13 +1,36 @@
 module xaui_infrastructure #(
-    parameter ENABLE0 = 0,
-    parameter ENABLE1 = 0,
-    parameter ENABLE2 = 0,
-    parameter ENABLE3 = 0,
-    parameter ENABLE4 = 0,
-    parameter ENABLE5 = 0,
-    parameter ENABLE6 = 0,
-    parameter ENABLE7 = 0,
-    parameter RX_LANE_STEER = 8'b0111_0111 //for KAT CX4 mezzanine cards
+    parameter ENABLE0           = 0,
+    parameter ENABLE1           = 0,
+    parameter ENABLE2           = 0,
+    parameter ENABLE3           = 0,
+    parameter ENABLE4           = 0,
+    parameter ENABLE5           = 0,
+    parameter ENABLE6           = 0,
+    parameter ENABLE7           = 0,
+    parameter RX_LANE_STEER0    = 1,
+    parameter RX_LANE_STEER1    = 1,
+    parameter RX_LANE_STEER2    = 1,
+    parameter RX_LANE_STEER3    = 1,
+    parameter RX_LANE_STEER4    = 1,
+    parameter RX_LANE_STEER5    = 1,
+    parameter RX_LANE_STEER6    = 1,
+    parameter RX_LANE_STEER7    = 1,
+    parameter TX_LANE_STEER0    = 0,
+    parameter TX_LANE_STEER1    = 0,
+    parameter TX_LANE_STEER2    = 0,
+    parameter TX_LANE_STEER3    = 0,
+    parameter TX_LANE_STEER4    = 0,
+    parameter TX_LANE_STEER5    = 0,
+    parameter TX_LANE_STEER6    = 0,
+    parameter TX_LANE_STEER7    = 0,
+    parameter RX_INVERT0        = 1,
+    parameter RX_INVERT1        = 1,
+    parameter RX_INVERT2        = 1,
+    parameter RX_INVERT3        = 0,
+    parameter RX_INVERT4        = 1,
+    parameter RX_INVERT5        = 1,
+    parameter RX_INVERT6        = 1,
+    parameter RX_INVERT7        = 0
   ) (
     input             reset,
 
@@ -263,10 +286,15 @@ module xaui_infrastructure #(
   assign mgt_rxlock7         = mgt_rxlock[8*4-1:7*4]; 
 
   localparam ENABLE = {ENABLE7 == 1, ENABLE6 == 1, ENABLE5 == 1, ENABLE4 == 1, ENABLE3 == 1, ENABLE2 == 1, ENABLE1 == 1, ENABLE0 == 1};
+  localparam RX_LANE_STEER = {RX_LANE_STEER7 == 1, RX_LANE_STEER6 == 1, RX_LANE_STEER5 == 1, RX_LANE_STEER4 == 1, RX_LANE_STEER3 == 1, RX_LANE_STEER2 == 1, RX_LANE_STEER1 == 1, RX_LANE_STEER0 == 1};
+  localparam TX_LANE_STEER = {TX_LANE_STEER7 == 1, TX_LANE_STEER6 == 1, TX_LANE_STEER5 == 1, TX_LANE_STEER4 == 1, TX_LANE_STEER3 == 1, TX_LANE_STEER2 == 1, TX_LANE_STEER1 == 1, TX_LANE_STEER0 == 1};
+  localparam RX_INVERT = {RX_INVERT7 == 1, RX_INVERT6 == 1, RX_INVERT5 == 1, RX_INVERT4 == 1, RX_INVERT3 == 1, RX_INVERT2 == 1, RX_INVERT1 == 1, RX_INVERT0 == 1};
  
   xaui_infrastructure_low #(
     .ENABLE(ENABLE),
-    .RX_LANE_STEER(RX_LANE_STEER) 
+    .RX_LANE_STEER(RX_LANE_STEER),
+    .TX_LANE_STEER(TX_LANE_STEER),
+    .RX_INVERT(RX_INVERT)
   ) xaui_infrastructure_low_inst (
     .mgt_reset(reset),
     .xaui_refclk_n(xaui_refclk_n),
