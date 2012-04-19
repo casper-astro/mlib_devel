@@ -148,6 +148,14 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data0b_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data0c_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data0d_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0a_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0b_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0c_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0d_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0a_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
                        
   -- second core, "B"  
   signal data1         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -166,8 +174,16 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data1a_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data1b_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data1c_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
-  signal data1d_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
-                       
+  signal data1d_prebuf1: std_logic_vector(adc_bit_width-1 downto 0); 
+  signal data1a_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1b_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1c_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1d_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1a_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+                      
   -- third core, "C"   
   signal data2         : std_logic_vector(adc_bit_width-1 downto 0);
   signal data2a        : std_logic_vector(adc_bit_width-1 downto 0);
@@ -186,6 +202,14 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data2b_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data2c_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data2d_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2a_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2b_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2c_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2d_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2a_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
                        
   -- fourth core, "D"  
   signal data3         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -205,6 +229,14 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data3b_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data3c_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
   signal data3d_prebuf1: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3a_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3b_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3c_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3d_prebuf2: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3a_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
 
   -- Gray code to binary converter
   component gc2bin
@@ -288,7 +320,7 @@ begin
 
   -- Clocks
 
-  CBUF0:   IBUFGDS
+  CBUF0:   IBUFDS
     generic map(
       DIFF_TERM => TRUE,
       IOSTANDARD => "LVDS_25"
@@ -299,7 +331,7 @@ begin
       o=> adc_sync
       );
 
-  CBUF1:   IBUFGDS
+  CBUF1:   IBUFDS
     generic map(
       DIFF_TERM => TRUE,
       IOSTANDARD => "LVDS_25"
@@ -313,26 +345,27 @@ begin
 
   MMCM0: MMCM_ADV
     generic map (
-      BANDWIDTH          => "OPTIMIZED",
-      CLKFBOUT_MULT_F    => mmcm_m,
-      DIVCLK_DIVIDE      => mmcm_d,
-      CLKFBOUT_PHASE     => 0.0,
-      CLKIN1_PERIOD      => clkin_period,
-      CLKOUT1_DIVIDE     => mmcm_o0,
-      CLKOUT2_DIVIDE     => mmcm_o1,
-      CLKOUT3_DIVIDE     => mmcm_o1,
-      CLKOUT4_DIVIDE     => mmcm_o1,
-      CLKOUT5_DIVIDE     => mmcm_o1,
-      CLKOUT1_DUTY_CYCLE => 0.50,
-      CLKOUT2_DUTY_CYCLE => 0.50,
-      CLKOUT3_DUTY_CYCLE => 0.50,
-      CLKOUT4_DUTY_CYCLE => 0.50,
-      CLKOUT5_DUTY_CYCLE => 0.50,
-      CLKOUT1_PHASE      => 0.0,
-      CLKOUT2_PHASE      => 0.0,
-      CLKOUT3_PHASE      => 90.0,
-      CLKOUT4_PHASE      => 180.0,
-      CLKOUT5_PHASE      => 270.0
+      BANDWIDTH            => "OPTIMIZED",
+      CLKFBOUT_MULT_F      => mmcm_m,
+      DIVCLK_DIVIDE        => mmcm_d,
+      CLKFBOUT_PHASE       => 0.0,
+      CLKFBOUT_USE_FINE_PS => TRUE,
+      CLKIN1_PERIOD        => clkin_period,
+      CLKOUT1_DIVIDE       => mmcm_o0,
+      CLKOUT2_DIVIDE       => mmcm_o1,
+      CLKOUT3_DIVIDE       => mmcm_o1,
+      CLKOUT4_DIVIDE       => mmcm_o1,
+      CLKOUT5_DIVIDE       => mmcm_o1,
+      CLKOUT1_DUTY_CYCLE   => 0.50,
+      CLKOUT2_DUTY_CYCLE   => 0.50,
+      CLKOUT3_DUTY_CYCLE   => 0.50,
+      CLKOUT4_DUTY_CYCLE   => 0.50,
+      CLKOUT5_DUTY_CYCLE   => 0.50,
+      CLKOUT1_PHASE        => 0.0,
+      CLKOUT2_PHASE        => 0.0,
+      CLKOUT3_PHASE        => 90.0,
+      CLKOUT4_PHASE        => 180.0,
+      CLKOUT5_PHASE        => 270.0
       )
     port map (
       CLKFBIN   => mmcm_clkfbin,
@@ -596,6 +629,40 @@ begin
     D3B_1: FD port map (C => fifo_wr_clk, D => data3b_prebuf0(i), Q => data3b_prebuf1(i));
     D3C_1: FD port map (C => fifo_wr_clk, D => data3c_prebuf0(i), Q => data3c_prebuf1(i));
     D3D_1: FD port map (C => fifo_wr_clk, D => data3d_prebuf0(i), Q => data3d_prebuf1(i));
+    -- third stage of buffers
+    D0A_2: FD port map (C => fifo_wr_clk, D => data0a_prebuf1(i), Q => data0a_prebuf2(i));
+    D0B_2: FD port map (C => fifo_wr_clk, D => data0b_prebuf1(i), Q => data0b_prebuf2(i));
+    D0C_2: FD port map (C => fifo_wr_clk, D => data0c_prebuf1(i), Q => data0c_prebuf2(i));
+    D0D_2: FD port map (C => fifo_wr_clk, D => data0d_prebuf1(i), Q => data0d_prebuf2(i));
+    D1A_2: FD port map (C => fifo_wr_clk, D => data1a_prebuf1(i), Q => data1a_prebuf2(i));
+    D1B_2: FD port map (C => fifo_wr_clk, D => data1b_prebuf1(i), Q => data1b_prebuf2(i));
+    D1C_2: FD port map (C => fifo_wr_clk, D => data1c_prebuf1(i), Q => data1c_prebuf2(i));
+    D1D_2: FD port map (C => fifo_wr_clk, D => data1d_prebuf1(i), Q => data1d_prebuf2(i));
+    D2A_2: FD port map (C => fifo_wr_clk, D => data2a_prebuf1(i), Q => data2a_prebuf2(i));
+    D2B_2: FD port map (C => fifo_wr_clk, D => data2b_prebuf1(i), Q => data2b_prebuf2(i));
+    D2C_2: FD port map (C => fifo_wr_clk, D => data2c_prebuf1(i), Q => data2c_prebuf2(i));
+    D2D_2: FD port map (C => fifo_wr_clk, D => data2d_prebuf1(i), Q => data2d_prebuf2(i));
+    D3A_2: FD port map (C => fifo_wr_clk, D => data3a_prebuf1(i), Q => data3a_prebuf2(i));
+    D3B_2: FD port map (C => fifo_wr_clk, D => data3b_prebuf1(i), Q => data3b_prebuf2(i));
+    D3C_2: FD port map (C => fifo_wr_clk, D => data3c_prebuf1(i), Q => data3c_prebuf2(i));
+    D3D_2: FD port map (C => fifo_wr_clk, D => data3d_prebuf1(i), Q => data3d_prebuf2(i));
+    -- fourth stage of buffers
+    D0A_3: FD port map (C => fifo_wr_clk, D => data0a_prebuf2(i), Q => data0a_prebuf3(i));
+    D0B_3: FD port map (C => fifo_wr_clk, D => data0b_prebuf2(i), Q => data0b_prebuf3(i));
+    D0C_3: FD port map (C => fifo_wr_clk, D => data0c_prebuf2(i), Q => data0c_prebuf3(i));
+    D0D_3: FD port map (C => fifo_wr_clk, D => data0d_prebuf2(i), Q => data0d_prebuf3(i));
+    D1A_3: FD port map (C => fifo_wr_clk, D => data1a_prebuf2(i), Q => data1a_prebuf3(i));
+    D1B_3: FD port map (C => fifo_wr_clk, D => data1b_prebuf2(i), Q => data1b_prebuf3(i));
+    D1C_3: FD port map (C => fifo_wr_clk, D => data1c_prebuf2(i), Q => data1c_prebuf3(i));
+    D1D_3: FD port map (C => fifo_wr_clk, D => data1d_prebuf2(i), Q => data1d_prebuf3(i));
+    D2A_3: FD port map (C => fifo_wr_clk, D => data2a_prebuf2(i), Q => data2a_prebuf3(i));
+    D2B_3: FD port map (C => fifo_wr_clk, D => data2b_prebuf2(i), Q => data2b_prebuf3(i));
+    D2C_3: FD port map (C => fifo_wr_clk, D => data2c_prebuf2(i), Q => data2c_prebuf3(i));
+    D2D_3: FD port map (C => fifo_wr_clk, D => data2d_prebuf2(i), Q => data2d_prebuf3(i));
+    D3A_3: FD port map (C => fifo_wr_clk, D => data3a_prebuf2(i), Q => data3a_prebuf3(i));
+    D3B_3: FD port map (C => fifo_wr_clk, D => data3b_prebuf2(i), Q => data3b_prebuf3(i));
+    D3C_3: FD port map (C => fifo_wr_clk, D => data3c_prebuf2(i), Q => data3c_prebuf3(i));
+    D3D_3: FD port map (C => fifo_wr_clk, D => data3d_prebuf2(i), Q => data3d_prebuf3(i));
   end generate data_buf;
   
   -- purpose: control the FIFO read enable signal
@@ -614,10 +681,10 @@ begin
         fifo_rd_en <= fifo_afull;
         fifo_din(143 downto adc_bit_width*16) <= (others => '0');
         fifo_din(adc_bit_width*16-1 downto 0) <=
-          data0d_prebuf1 & data0c_prebuf1 & data0b_prebuf1 & data0a_prebuf1 &
-          data1d_prebuf1 & data1c_prebuf1 & data1b_prebuf1 & data1a_prebuf1 &
-          data2d_prebuf1 & data2c_prebuf1 & data2b_prebuf1 & data2a_prebuf1 &
-          data3d_prebuf1 & data3c_prebuf1 & data3b_prebuf1 & data3a_prebuf1;
+          data0d_prebuf3 & data0c_prebuf3 & data0b_prebuf3 & data0a_prebuf3 &
+          data1d_prebuf3 & data1c_prebuf3 & data1b_prebuf3 & data1a_prebuf3 &
+          data2d_prebuf3 & data2c_prebuf3 & data2b_prebuf3 & data2a_prebuf3 &
+          data3d_prebuf3 & data3c_prebuf3 & data3b_prebuf3 & data3a_prebuf3;
         fifo_din_buf0 <= fifo_din;
         fifo_din_buf1 <= fifo_din_buf0;
       end if;
