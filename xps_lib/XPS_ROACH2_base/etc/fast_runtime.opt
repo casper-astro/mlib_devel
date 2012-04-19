@@ -34,7 +34,7 @@ Program map
 -ol high;
 -xe n;
 -register_duplication;
--global_opt on;            # Try uncommenting if timing is an issue
+#-global_opt on;            # Try uncommenting if timing is an issue
 -o <design>_map.ncd;        # Output Mapped ncd file
 -w;                         # Overwrite output files.
 -pr b;                      # Pack internal FF/latches into IOBs
