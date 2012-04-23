@@ -47,7 +47,6 @@ clog(flatstrcell(varargin), 'coeff_gen_init_debug');
 if( ~isempty(find(real(Coeffs) > 1)) || ~isempty(find(imag(Coeffs) > 1)) ),
     clog(['coeff_gen_init: [',num2str(Coeffs,4),'] not all in range [-1->1]'],'error');
     error('coeff_gen_init: Coefficients specified are out of range');
-    return;
 end
 
 delete_lines(blk);

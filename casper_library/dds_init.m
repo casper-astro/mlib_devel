@@ -36,7 +36,7 @@ function dds_init(blk,varargin)
 % Declare any default values for arguments you might like.
 defaults = {'num_lo', 1, 'n_bits', 8, 'latency', 2};
 check_mask_type(blk, 'dds');
-if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+%if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
 
 freq_div = get_var('freq_div','defaults', defaults, varargin{:});
@@ -64,7 +64,7 @@ end
 
 delete_lines(blk);
 
-for i=0:num_lo-1,
+for i = 0 : num_lo - 1,
     sin_name = ['sin',num2str(i)];
     cos_name = ['cos',num2str(i)];
     % Add ports
