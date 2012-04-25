@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Apr 23 17:33:52 2012"
+  LastModifiedDate	  "Wed Apr 25 11:45:40 2012"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:104>"
+  ModelVersionFormat	  "1.%<AutoIncrement:105>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -701,14 +701,14 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  en			  "off"
+	  en			  off
 	  latency		  "mult_latency"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  off
 	  opt			  "Speed"
-	  use_embedded		  "on"
-	  optimum_pipeline	  "off"
-	  xl_use_area		  "off"
+	  use_embedded		  on
+	  optimum_pipeline	  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
@@ -741,14 +741,14 @@ Library {
 	  bin_pt		  "2"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
-	  en			  "off"
+	  en			  off
 	  latency		  "mult_latency"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  off
 	  opt			  "Speed"
-	  use_embedded		  "on"
-	  optimum_pipeline	  "off"
-	  xl_use_area		  "off"
+	  use_embedded		  on
+	  optimum_pipeline	  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  pipeline		  "on"
 	  use_rpm		  "on"
@@ -778,9 +778,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Signed  (2's comp)"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "CoeffBitWidth - 1"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -805,13 +805,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
 	  nbits			  "CoeffBitWidth"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Lower Bit Location + Width"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -836,13 +836,13 @@ Library {
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
 	  "notes: In hardware this block costs nothing."
 	  nbits			  "CoeffBitWidth * (TotalTaps - 1)"
-	  boolean_output	  "off"
+	  boolean_output	  off
 	  mode			  "Two Bit Locations"
 	  bit1			  "0"
 	  base1			  "MSB of Input"
 	  bit0			  "CoeffBitWidth"
 	  base0			  "LSB of Input"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "slice"
@@ -868,7 +868,7 @@ Library {
 	  SourceType		  "c_to_ri"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -887,7 +887,7 @@ Library {
 	  SourceType		  "delay_bram"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -895,7 +895,7 @@ Library {
 	  RTWMemSecDataParameters "Inherit from model"
 	  DelayLen		  "2^(PFBSize-n_inputs)"
 	  bram_latency		  "bram_latency"
-	  use_dsp48		  "off"
+	  use_dsp48		  off
 	}
 	Block {
 	  BlockType		  SubSystem
@@ -1084,7 +1084,7 @@ Library {
 	  SourceType		  "sync_delay"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -5720,7 +5720,7 @@ Library {
       }
       System {
 	Name			"pfb_coeff_gen"
-	Location		[1, 79, 1921, 1176]
+	Location		[1, 79, 1919, 1171]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5782,7 +5782,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "8"
-	  initVector		  "pfb_coeff_gen_calc(4, 4,'hamming',1, 0,1,4)"
+	  initVector		  "pfb_coeff_gen_calc('hamming', 4, 4, 3, 1, 0, 1, 0)"
 	  distributed_mem	  "Block RAM"
 	  rst			  off
 	  init_reg		  "0"
@@ -5816,7 +5816,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "8"
-	  initVector		  "pfb_coeff_gen_calc(4, 4,'hamming',1, 0,1,3)"
+	  initVector		  "pfb_coeff_gen_calc('hamming', 4, 4, 2, 1, 0, 1, 0)"
 	  distributed_mem	  "Block RAM"
 	  rst			  off
 	  init_reg		  "0"
@@ -5831,7 +5831,7 @@ Library {
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,44,419,340"
 	  block_type		  "sprom"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "50,30,1,1,white,blue,0,af4d5ca7,right,"
@@ -5850,7 +5850,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "8"
-	  initVector		  "pfb_coeff_gen_calc(4, 4,'hamming',1, 0,1,2)"
+	  initVector		  "pfb_coeff_gen_calc('hamming', 4, 4, 1, 1, 0, 1, 0)"
 	  distributed_mem	  "Block RAM"
 	  rst			  off
 	  init_reg		  "0"
@@ -5865,7 +5865,7 @@ Library {
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,44,419,340"
+	  sggui_pos		  "840,240,419,340"
 	  block_type		  "sprom"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "50,30,1,1,white,blue,0,af4d5ca7,right,"
@@ -5884,7 +5884,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "8"
-	  initVector		  "pfb_coeff_gen_calc(4, 4,'hamming',1, 0,1,1)"
+	  initVector		  "pfb_coeff_gen_calc('hamming', 4, 4, 0, 1, 0, 1, 0)"
 	  distributed_mem	  "Block RAM"
 	  rst			  off
 	  init_reg		  "0"
@@ -5899,7 +5899,7 @@ Library {
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,44,419,340"
+	  sggui_pos		  "715,168,419,340"
 	  block_type		  "sprom"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "50,30,1,1,white,blue,0,af4d5ca7,right,"
@@ -6048,7 +6048,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "addr_ctr"
 	  Ports			  [1, 1]
-	  Position		  [120, 279, 180, 331]
+	  Position		  [120, 275, 180, 325]
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
@@ -6075,14 +6075,13 @@ Library {
 	  sggui_pos		  "20,44,419,748"
 	  block_type		  "counter"
 	  block_version		  "11.4"
-	  sg_icon_stat		  "60,52,1,1,white,blue,0,c59595e6,right,"
+	  sg_icon_stat		  "60,50,1,1,white,blue,0,c59595e6,right,"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
-	  "ch([0.283333 0.133333 0.333333 0.133333 0.283333 0.516667 0.583333 0.65 0.9 0.7 0.516667 0.383333 0.583333 0.383333"
-	  " 0.516667 0.7 0.9 0.65 0.583333 0.516667 0.283333 ],[0.115385 0.288462 0.519231 0.75 0.923077 0.923077 0.846154 0.9"
-	  "23077 0.923077 0.692308 0.903846 0.75 0.519231 0.288462 0.134615 0.346154 0.115385 0.115385 0.192308 0.115385 0.115"
-	  "385 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','"
-	  "COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rst');\ncolor('black');port_label('output',1,'out"
-	  "');\nfprintf('','COMMENT: end icon text');\n"
+	  "ch([0.266667 0.133333 0.333333 0.133333 0.266667 0.483333 0.55 0.616667 0.85 0.666667 0.483333 0.35 0.55 0.35 0.483"
+	  "333 0.666667 0.85 0.616667 0.55 0.483333 0.266667 ],[0.1 0.26 0.5 0.74 0.9 0.9 0.82 0.9 0.9 0.68 0.9 0.74 0.5 0.26 "
+	  "0.1 0.32 0.1 0.1 0.18 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon"
+	  " graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rst');\ncolor('black');"
+	  "port_label('output',1,'out');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7153,11 +7152,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "bram_latency+1"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -7329,7 +7328,7 @@ Library {
 	  SourceType		  "last_tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7343,10 +7342,10 @@ Library {
 	  add_latency		  "1"
 	  mult_latency		  "2"
 	  quantization		  "Truncate"
-	  use_hdl		  on
-	  use_embedded		  off
-	  async			  on
-	  debug_mode		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
+	  async			  "on"
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7507,7 +7506,7 @@ Library {
 	  SourceType		  "last_tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7521,10 +7520,10 @@ Library {
 	  add_latency		  "1"
 	  mult_latency		  "2"
 	  quantization		  "Truncate"
-	  use_hdl		  on
-	  use_embedded		  off
-	  async			  on
-	  debug_mode		  off
+	  use_hdl		  "on"
+	  use_embedded		  "off"
+	  async			  "on"
+	  debug_mode		  "off"
 	}
 	Block {
 	  BlockType		  Outport
