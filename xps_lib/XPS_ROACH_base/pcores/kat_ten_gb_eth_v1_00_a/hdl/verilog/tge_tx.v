@@ -326,6 +326,7 @@ end endgenerate
   localparam TX_SEND_LAST  = 4'd8;
   localparam TX_CPU_WAIT   = 4'd9;
   localparam TX_SEND_CPU   = 4'd10;
+  localparam TX_SEND_HDR_1_MCAST = 4'd11;
 
   /* Outside interface registers */
   reg  packet_rd_reg;
@@ -381,7 +382,11 @@ end endgenerate
           if (!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) begin
             mac_data_valid <= {8{1'b1}};
             tx_size        <= packet_ctrl_size - 1;
-            tx_state       <= TX_SEND_HDR_1;
+            if (packet_ctrl_ip[31:28] == 4'b1110) begin
+                tx_state       <= TX_SEND_HDR_1_MCAST;
+            end else begin
+                tx_state       <= TX_SEND_HDR_1;
+            end
           end
 
           /* CPU Access take preference */
@@ -400,6 +405,11 @@ end endgenerate
           end
         end
         TX_SEND_HDR_1:    begin
+          if (mac_tx_ack) begin
+            tx_state      <= TX_SEND_HDR_2;
+          end
+        end
+        TX_SEND_HDR_1_MCAST: begin
           if (mac_tx_ack) begin
             tx_state      <= TX_SEND_HDR_2;
           end
@@ -508,6 +518,11 @@ end endgenerate
         /* {src_mac[4], src_mac[5], dest_mac[0], dest_mac[1] dest_mac[2], dest_mac[3], dest_mac[4], dest_mac[5]} */
         mac_data <= {local_mac[39:32], local_mac[47:40], dest_mac[ 7:0 ], dest_mac[15:8 ],
                       dest_mac[23:16],  dest_mac[31:24], dest_mac[39:32], dest_mac[47:40]};
+      end
+      TX_SEND_HDR_1_MCAST:    begin
+        /* {src_mac[4], src_mac[5], dest_mac[0], dest_mac[1] dest_mac[2], dest_mac[3], dest_mac[4], dest_mac[5]} */
+        mac_data <= {local_mac[39:32], local_mac[47:40], packet_ctrl_ip[ 7:0 ], packet_ctrl_ip[15:8 ],
+                     1'b0,packet_ctrl_ip[22:16], 8'b01011110, 8'b00000000, 8'b00000001};
       end
       TX_SEND_HDR_2:    begin
         /* {IP Type, IP version, Ethetype[0], Ethertype[1], src_mac[0], src_mac[1], src_mac[2], src_mac[3]} */
