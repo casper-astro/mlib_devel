@@ -46,8 +46,13 @@ switch hw_sys
     case 'ROACH2'
         data_width = 72;
         be_width = 8;
-        qdr_latency = 14;
+        qdr_latency = 10;
         n_qdr = 4;
+        %%data_width = 72;
+        %be_width = 8;
+        %%qdr_latency = 14;
+        %qdr_latency = 10;
+        %n_qdr = 4;
     % end case 'ROACH2'
 end % end switch hw_sys
 
@@ -70,18 +75,19 @@ input_parity_map  = 'b = {';
 output_parity_map = 'b = {';
 output_parity_map_top = '';
 output_parity_map_bottom = '';
+
 for i=[be_width-1:-1:0]
-    input_parity_map = [input_parity_map, 'a[', num2str(data_width-(be_width-i)), '],a[', num2str((i+1)*8-1), ':', num2str(i*8), ']'];
-    output_parity_map_top = [output_parity_map_top, 'a[', num2str(9*(i+1) - 1), ']'];
-    output_parity_map_bottom = [output_parity_map_bottom, 'a[', num2str(9*(i+1)-1 - 1), ':', num2str(9*(i+1)-1 - 8), ']'];
-    if i==0
-        input_parity_map = [input_parity_map, '}'];
-        output_parity_map = [output_parity_map, output_parity_map_top, ',', output_parity_map_bottom, '}'];
-    else
-        input_parity_map = [input_parity_map, ','];
-        output_parity_map_top = [output_parity_map_top, ','];
-        output_parity_map_bottom = [output_parity_map_bottom, ','];
-    end
+   input_parity_map = [input_parity_map, 'a[', num2str(data_width-(be_width-i)), '],a[', num2str((i+1)*8-1), ':', num2str(i*8), ']'];
+   output_parity_map_top = [output_parity_map_top, 'a[', num2str(9*(i+1) - 1), ']'];
+   output_parity_map_bottom = [output_parity_map_bottom, 'a[', num2str(9*(i+1)-1 - 1), ':', num2str(9*(i+1)-1 - 8), ']'];
+   if i==0
+       input_parity_map = [input_parity_map, '}'];
+       output_parity_map = [output_parity_map, output_parity_map_top, ',', output_parity_map_bottom, '}'];
+   else
+       input_parity_map = [input_parity_map, ','];
+       output_parity_map_top = [output_parity_map_top, ','];
+       output_parity_map_bottom = [output_parity_map_bottom, ','];
+   end
 end
 
 %update expressions in bitbasher blocks

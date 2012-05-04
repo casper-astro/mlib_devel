@@ -180,7 +180,7 @@ module async_qdr_interface #(
           end else if (qvld_shifter[QDR_LATENCY-1]) begin
             if (!second_word) begin
               resp_state <= IDLE;
-              host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+              host_datao_reg <= qdr_q[31:0];//{qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
               qdr_resp_ready <= 1'b1;
             end else begin
               resp_state <= FINAL;
@@ -189,7 +189,7 @@ module async_qdr_interface #(
         end
         FINAL: begin
           qdr_resp_ready <= 1'b1;
-          host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+          host_datao_reg <= qdr_q[31:0];//{qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
           resp_state <= IDLE;
         end
       endcase
