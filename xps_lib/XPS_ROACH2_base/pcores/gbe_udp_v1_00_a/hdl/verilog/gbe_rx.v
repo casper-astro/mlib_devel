@@ -141,19 +141,20 @@ module gbe_rx #(
           end
         end
         RX_HDR1: begin
-          if (hdr_progress == IP_HDR_SIZE - 1) begin
+//           if (hdr_progress == IP_HDR_SIZE - 1) begin
+//             rx_state     <= RX_HDR2;
+//             hdr_progress <= 6'd0;
+//           end
+
+          if ((hdr_progress == IP_HDR_SIZE - 1) && (icmp_unsearchable == 1'b0)) begin
             rx_state     <= RX_HDR2;
             hdr_progress <= 6'd0;
           end
-/*
-          if ((hdr_progress == IP_HDR_SIZE - 1) && (icmp_unsearchable == 0)) begin
+          if ((hdr_progress == IP_HDR_SIZE + 28 - 1) && (icmp_unsearchable == 1'b1)) begin
             rx_state     <= RX_HDR2;
             hdr_progress <= 6'd0;
           end
-          if ((hdr_progress == IP_HDR_SIZE + 20 - 1) && (icmp_unsearchable == 1)) begin
-            rx_state     <= RX_HDR2;
-            hdr_progress <= 6'd0;
-          end*/
+          
         end
         RX_HDR2: begin
           if (hdr_progress == UDP_HDR_SIZE - 1) begin
@@ -376,17 +377,17 @@ module gbe_rx #(
       end
       9: begin
         /* must be udp */
-        if (mac_data != 8'h11) begin
-          hdr1_app_ok <= 1'b0;
-        end
+//         if (mac_data != 8'h11) begin
+//           hdr1_app_ok <= 1'b0;
+//         end
+
         // must be udp or icmp unsearchable (loopback test)
-/*
         if ((mac_data != 8'h11) && (mac_data != 8'h1)) begin        
           hdr1_app_ok <= 1'b0;
-        end*/
+        end
         
         // if ICMP unsearchable
-        if (mac_data != 8'h1) begin        
+        if (mac_data == 8'h1) begin        
           icmp_unsearchable <= 1'b1;
         end        
         
