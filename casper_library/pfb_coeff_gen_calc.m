@@ -20,32 +20,29 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function coeff_vector = pfb_coeff_gen_calc(window_function, pfb_bits, pfb_taps, tap_num, par_bits, input_num, bin_scaling, debug)
+function coeff_vector = pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a)
 % Calculate the bram coeffiecients for the pfb_coeff_gen block
+%
+% coeff_vector = pfb_coeff_gen_calc(PFBSize,n_inputs,a)
 % 
 % Valid varnames for this block are:
-% window_function = the type of windowing function to use
-% pfb_bits = 2^pfb_bits = size of the FFT (2^FFTSize points)
-% pfb_taps = total number of taps in the PFB
-% tap_num = ZERO-indexed - index of this tap coeff rom (<0 will return all coefficients)
-% par_bits = 2^par_bits = number of parallel input streams
-% input_num = ZERO-indexed - which input this is, of par_bits parallel inputs
-% bin_scaling = the scaling of the bin width (1 is normal)
-% debug = return debug coefficients, just a ramp distributed over all the taps, 1 : alltaps
+% PFBSize = Size of the FFT (2^FFTSize points).
+% TotalTaps = Total number of taps in the PFB
+% WindowType = The type of windowing function to use.
+% n_inputs = Number of parallel input streams
+% nput = Which input this is (of the n_inputs parallel).
+% fwidth = The scaling of the bin width (1 is normal).
+% a = Index of this rom (passing less than 0 will return all coefficients).
 
-% set the coefficient vector
-alltaps = pfb_taps * 2^pfb_bits;
-windowval = transpose(window(window_function, alltaps));
-total_coeffs = windowval .* sinc(bin_scaling * ((0:alltaps - 1) / (2^pfb_bits) - pfb_taps / 2));
-if tap_num < 0
+% Set coefficient vector
+alltaps = TotalTaps*2^PFBSize;
+windowval = transpose(window(WindowType, alltaps));
+total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
+if a < 0
     coeff_vector = total_coeffs;
 else
-    if debug == 1
-        buf = input_num + 1 : 2^par_bits : alltaps;
-    else
-        buf = total_coeffs(input_num + 1 : 2^par_bits : alltaps);
+    for i=1:alltaps/2^n_inputs,
+        buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
     end
-    s_index = (tap_num * 2^(pfb_bits - par_bits)) + 1;
-    e_index = (tap_num + 1) * 2^(pfb_bits - par_bits);
-    coeff_vector = buf(s_index : e_index);
+    coeff_vector = buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs));
 end

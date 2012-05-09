@@ -15,8 +15,6 @@
 % n_inputs = Number of parallel input streams
 % nput = Which input this is (of the n_inputs parallel).
 % fwidth = The scaling of the bin width (1 is normal).
-% async = Run the block in asynchronous mode.
-% debug_mode = Draw and set up the block up in debug mode.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -42,6 +40,7 @@
 
 function pfb_coeff_gen_init(blk, varargin)
 
+
 % Declare any default values for arguments you might like.
 defaults = {};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
@@ -57,21 +56,14 @@ WindowType = get_var('WindowType', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 nput = get_var('nput', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
-async = get_var('async', 'defaults', defaults, varargin{:});
 debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
-
-asyncmode = false;
-if strcmp(async, 'on'),
-    asyncmode = true;
-end
 
 % Set coefficient vector
 try
-	window('hamming', 1024);
-catch err
-    errmsg = 'pfb_coeff_gen_init: Signal Processing Library absent or not working correctly';
-	disp(errmsg);
-	error(errmsg);
+	window('hamming',1024);
+catch
+	disp('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
+	error('pfb_coeff_gen_init:Signal Processing Library absent or not working correctly');
 end
 %alltaps = TotalTaps*2^PFBSize;
 %windowval = transpose(window(WindowType, alltaps));
@@ -82,86 +74,74 @@ end
 
 delete_lines(blk);
 
-% Add ports
-reuse_block(blk, 'din',     'built-in/inport',  'Position', getsize(1, 1, 1),    'Port', '1');
-reuse_block(blk, 'sync',    'built-in/inport',  'Position', getsize(2, 1, 1),     'Port', '2');
-reuse_block(blk, 'dout',    'built-in/outport', 'Position', getsize(1, 7, 1),    'Port', '1');
-reuse_block(blk, 'syncout', 'built-in/outport', 'Position', getsize(2, 7, 1),    'Port', '2');
-reuse_block(blk, 'coeff',   'built-in/outport', 'Position', getsize(5, 7, 1),  'Port', '3');
+% Add Ports
+reuse_block(blk, 'din', 'built-in/inport', 'Position', [235 28 265 42], 'Port', '1');
+reuse_block(blk, 'sync', 'built-in/inport', 'Position', [15 93 45 107], 'Port', '2');
+reuse_block(blk, 'dout', 'built-in/outport', 'Position', [360 28 390 42], 'Port', '1');
+reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [130 28 160 42], 'Port', '2');
+reuse_block(blk, 'coeff', 'built-in/outport', 'Position', [450 343 480 357], 'Port', '3');
 
-% Add static blocks
-reuse_block(blk, 'delay_sync', 'xbsIndex_r4/Delay', ...
-    'latency', 'bram_latency+1', 'Position', getsize(2, 2, 2));
-reuse_block(blk, 'delay_din', 'xbsIndex_r4/Delay', ...
-    'latency', 'bram_latency+1', 'Position', getsize(1, 2, 2));
-reuse_block(blk, 'addr_ctr', 'xbsIndex_r4/Counter', ...
+% Add Static Blocks
+reuse_block(blk, 'Delay', 'xbsIndex_r4/Delay', ...
+    'latency', 'bram_latency+1', 'Position', [65 12 110 58]);
+reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
     'cnt_type', 'Free Running', 'n_bits', tostring(PFBSize-n_inputs), 'arith_type', 'Unsigned', ...
-    'rst', 'on', 'explicit_period', 'on', 'Position', getsize(4, 2, 3));
+    'rst', 'on', 'explicit_period', 'on', 'Position', [65 75 115 125]);
+reuse_block(blk, 'Delay1', 'xbsIndex_r4/Delay', ...
+    'latency', 'bram_latency+1', 'Position', [290 12 335 58]);
 reuse_block(blk, 'Concat', 'xbsIndex_r4/Concat', ...
-    'num_inputs', tostring(TotalTaps), 'Position', getsize(5, 5, [50, TotalTaps * 60]));
+    'num_inputs', tostring(TotalTaps), 'Position', [310 97 365 643]);
 reuse_block(blk, 'Register', 'xbsIndex_r4/Register', ...
-    'Position', getsize(5, 6, 2));
+    'Position', [385 325 430 375]);
 
-add_line(blk, 'din/1',          'delay_din/1');
-add_line(blk, 'delay_din/1',    'dout/1');
-add_line(blk, 'sync/1',         'addr_ctr/1');
-add_line(blk, 'sync/1',         'delay_sync/1');
-add_line(blk, 'delay_sync/1',   'syncout/1');
-add_line(blk, 'Concat/1',       'Register/1');
-add_line(blk, 'Register/1',     'coeff/1');
+add_line(blk, 'din/1', 'Delay1/1');
+add_line(blk, 'Delay1/1', 'dout/1');
+add_line(blk, 'sync/1', 'Counter/1');
+add_line(blk, 'sync/1', 'Delay/1');
+add_line(blk, 'Delay/1', 'sync_out/1');
+add_line(blk, 'Concat/1', 'Register/1');
+add_line(blk, 'Register/1', 'coeff/1');
 
-% async mode?
-if asyncmode,
-    set_param([blk,'/addr_ctr'], 'en', 'on');
-    reuse_block(blk, 'dv',      'built-in/inport',  'Position', getsize(3, 1, 1),    'Port', '3');
-    reuse_block(blk, 'dvout',   'built-in/outport', 'Position', getsize(3, 7, 1),  'Port', '4');
-    reuse_block(blk, 'delay_dv', 'xbsIndex_r4/Delay', 'latency', 'bram_latency+1', 'Position', getsize(3, 2, 2));
-    add_line(blk, 'dv/1',          'delay_dv/1');
-    add_line(blk, 'delay_dv/1',    'dvout/1');
-    add_line(blk, 'dv/1',          'addr_ctr/2');
-else
-    set_param([blk,'/addr_ctr'], 'en', 'off');
-end
-
-% Add dynamic blocks
-startrow = 4;
-for tap = 1 : TotalTaps,
-    romname = ['ROM', tostring(TotalTaps + 1 - tap)];
-    reintname = ['Reinterpret', tostring(TotalTaps + 1 - tap)];
-    %coeff_vector = pfb_coeff_gen_calc(window_function, pfb_bits, pfb_taps, tap_num, par_bits, input_num, bin_scaling, debug)
+% Add Dynamic Blocks
+for a=1:TotalTaps,
+    blkname = ['ROM', tostring(a)];
+    pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a);
     if strcmp(debug_mode, 'on'),
-        vecstr = ['pfb_coeff_gen_calc(''', tostring(WindowType), ''', ', tostring(PFBSize), ', ', ...
-            tostring(TotalTaps), ', ', tostring(tap-1), ', ', ...
-            tostring(n_inputs), ', ', tostring(nput), ', ', ...
-            tostring(fwidth), ', 1)'];
+        s = ((TotalTaps - a) * 2^PFBSize) + 1;
+        vecstr = [tostring(s), ':', tostring(s - 1 + 2^PFBSize)];
         atype = 'Unsigned';
         binpt = '0';
     else
-        vecstr = ['pfb_coeff_gen_calc(''', tostring(WindowType), ''', ', tostring(PFBSize), ', ', ...
-            tostring(TotalTaps), ', ', tostring(tap-1), ', ', ...
-            tostring(n_inputs), ', ', tostring(nput), ', ', ...
-            tostring(fwidth), ', 0)'];
+        vecstr = ['pfb_coeff_gen_calc(', tostring(PFBSize), ', ', ...
+            tostring(TotalTaps), ',''', tostring(WindowType), ''',', ...
+            tostring(n_inputs), ', ', tostring(nput), ',', ...
+            tostring(fwidth), ',', tostring(a), ')'];
         atype = 'Signed  (2''s comp)';
-        binpt = tostring(CoeffBitWidth - 1);
+        binpt = tostring(CoeffBitWidth-1);
     end
-    %v = mat2str(buf((tap-1)*2^(PFBSize-n_inputs)+1 : tap*2^(PFBSize-n_inputs)))
-    reuse_block(blk, romname, 'xbsIndex_r4/ROM', ...
+    %v = mat2str(buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs)));
+    %v
+    reuse_block(blk, blkname, 'xbsIndex_r4/ROM', ...
         'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vecstr, 'arith_type', atype, ...
         'n_bits', tostring(CoeffBitWidth), 'bin_pt', binpt, ...
-        'latency', 'bram_latency', 'use_rpm','on', 'Position', getsize(startrow + tap - 1, 3, 2));
-    add_line(blk, 'addr_ctr/1', [romname, '/1']);
+        'latency', 'bram_latency', 'use_rpm','on', 'Position', [150 65*(a-1)+74 200 65*(a-1)+126]);
+    add_line(blk, 'Counter/1', [blkname, '/1']);
+    reintname = ['Reinterpret', tostring(a)];
     reuse_block(blk, reintname, 'xbsIndex_r4/Reinterpret', 'force_arith_type', 'On', ...
         'force_bin_pt','On',...
-        'Position', getsize(startrow + tap - 1, 4, 2));
+        'Position', [220 65*(a-1)+84 260 65*(a-1)+116]);
     set_param([blk,'/',reintname],'arith_type','Unsigned','bin_pt','0');
-    add_line(blk, [romname, '/1'], [reintname, '/1']);
-    add_line(blk, [reintname, '/1'], ['Concat/', tostring(tap)]);
-    
-    % set coefficient ROM to use distribute memory (or not).
+    add_line(blk, [blkname, '/1'], [reintname, '/1']);
+    add_line(blk, [reintname, '/1'], ['Concat/', tostring(a)]);
+end
+
+% Set coefficient ROMs to use distribute memory (or not).
+for a=1:TotalTaps,
+    blkname = ['ROM', tostring(a)];
     if strcmp(CoeffDistMem, 'on'),
-        set_param([blk, '/', romname], 'distributed_mem', 'Distributed memory');
+        set_param([blk,'/',blkname], 'distributed_mem', 'Distributed memory');
     else
-        set_param([blk, '/', romname], 'distributed_mem', 'Block RAM');
+        set_param([blk,'/',blkname], 'distributed_mem', 'Block RAM');
     end
 end
 
@@ -174,18 +154,4 @@ end
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 
-function rv = getsize(row, col, s)
-    xs = [30, 50, 60];
-    ys = [15, 30, 50];
-    cols = 30:90:1000;
-    rows = 30:90:1000;
-    ss = size(s);
-    if ss(2) == 1,
-        xss = xs(s);
-        yss = ys(s);
-    else
-        xss = s(1);
-        yss = s(2);
-    end
-    rv = [cols(col) rows(row)-(yss/2) cols(col)+xss rows(row)+(yss/2)];
-    return
+
