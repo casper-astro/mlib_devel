@@ -10,8 +10,8 @@ module qdrc_wr(
     phy_ben
   );
 
-  parameter DATA_WIDTH = 18;
-  parameter BW_WIDTH   = 2;
+  parameter DATA_WIDTH = 36;
+  parameter BW_WIDTH   = 4;
   parameter ADDR_WIDTH = 21;
   input  clk, reset;
 

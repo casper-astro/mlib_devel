@@ -10,11 +10,12 @@ BEGIN opb_qdr_sniffer
 
 ## Bus Interfaces
   BUS_INTERFACE BUS = SOPB, BUS_TYPE = SLAVE,  BUS_STD = OPB
+  BUS_INTERFACE BUS = COPB, BUS_TYPE = SLAVE,  BUS_STD = OPB
   BUS_INTERFACE BUS = SQDR, BUS_TYPE = TARGET, BUS_STD = QDR
 
 ## Peripheral parameter
-  PARAMETER QDR_DATA_WIDTH   = 18,  DT = INTEGER
-  PARAMETER QDR_BW_WIDTH     = 2,   DT = INTEGER
+  PARAMETER QDR_DATA_WIDTH   = 36,  DT = INTEGER
+  PARAMETER QDR_BW_WIDTH     = 4,   DT = INTEGER
   PARAMETER QDR_ADDR_WIDTH   = 22,  DT = INTEGER
   PARAMETER QDR_LATENCY      = 10,  DT = INTEGER
   PARAMETER ENABLE           = 0,   DT = INTEGER
@@ -23,6 +24,27 @@ BEGIN opb_qdr_sniffer
   PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector,                   BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
   PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
   PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
+## Generics for VHDL or Parameters for Verilog
+  PARAMETER C_CONFIG_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = COPB, ADDRESS = BASE, PAIR = C_CONFIG_HIGHADDR
+  PARAMETER C_CONFIG_HIGHADDR = 0x00000000, DT = std_logic_vector,                   BUS = COPB, ADDRESS = HIGH, PAIR = C_CONFIG_BASEADDR
+  PARAMETER C_CONFIG_OPB_AWIDTH = 32, DT = INTEGER, BUS = COPB
+  PARAMETER C_CONFIG_OPB_DWIDTH = 32, DT = INTEGER, BUS = COPB
+
+## Config OPB Interface
+  PORT OPB_Clk_config     = "",          DIR = I, BUS = COPB, SIGIS = Clk
+  PORT OPB_Rst_config     = OPB_Rst,     DIR = I, BUS = COPB, SIGIS = Rst
+  PORT Sl_DBus_config     = Sl_DBus,     DIR = O, BUS = COPB, VEC = [0:31]
+  PORT Sl_errAck_config   = Sl_errAck,   DIR = O, BUS = COPB
+  PORT Sl_retry_config    = Sl_retry,    DIR = O, BUS = COPB
+  PORT Sl_toutSup_config  = Sl_toutSup,  DIR = O, BUS = COPB
+  PORT Sl_xferAck_config  = Sl_xferAck,  DIR = O, BUS = COPB
+  PORT OPB_ABus_config    = OPB_ABus,    DIR = I, BUS = COPB, VEC = [0:31],     
+  PORT OPB_BE_config      = OPB_BE,      DIR = I, BUS = COPB, VEC = [0:3], 
+  PORT OPB_DBus_config    = OPB_DBus,    DIR = I, BUS = COPB, VEC = [0:31],     
+  PORT OPB_RNW_config     = OPB_RNW,     DIR = I, BUS = COPB
+  PORT OPB_select_config  = OPB_select,  DIR = I, BUS = COPB
+  PORT OPB_seqAddr_config = OPB_seqAddr, DIR = I, BUS = COPB
+
 
 ## OPB Interface
   PORT OPB_Clk     = "",          DIR = I, BUS = SOPB, SIGIS = Clk
@@ -41,8 +63,6 @@ BEGIN opb_qdr_sniffer
 
 ## QDR Clock
   PORT qdr_clk     = "",          DIR = I
-
-  PORT reset       = reset,       DIR = I
   
 ## QDR master/controller interface
   PORT master_addr    = qdr_addr,    BUS = SQDR, DIR = O, VEC = [  QDR_ADDR_WIDTH - 1:0]

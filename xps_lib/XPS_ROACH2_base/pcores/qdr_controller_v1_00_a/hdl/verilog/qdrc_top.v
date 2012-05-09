@@ -31,8 +31,8 @@ module qdrc_top (
     usr_wr_data,
     usr_wr_be /* 'byte' enable */
   );
-  parameter DATA_WIDTH   = 18;
-  parameter BW_WIDTH     = 2;
+  parameter DATA_WIDTH   = 36;
+  parameter BW_WIDTH     = 4;
   parameter ADDR_WIDTH   = 21;
   parameter BURST_LENGTH = 4;
   parameter CLK_FREQ     = 200;

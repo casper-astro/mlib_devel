@@ -23,8 +23,8 @@ module qdrc_phy_burst_align(
     qdr_q_rise_cal,
     qdr_q_fall_cal 
   );
-  parameter DATA_WIDTH   = 18;
-  parameter BW_WIDTH     = 2;
+  parameter DATA_WIDTH   = 36;
+  parameter BW_WIDTH     = 4;
   parameter ADDR_WIDTH   = 21;
   parameter CLK_FREQ     = 200;
   parameter BURST_LENGTH = 4;
@@ -96,7 +96,7 @@ end else begin                  :include_burst_align
 
   always @(posedge clk) begin
     if (reset) begin
-      qdr_burst_state <= {DATA_WIDTH{1'b0}};
+      qdr_burst_state <= {(DEFAULT_LATENCY + 3){1'b0}};
     end else if (burst_align_start) begin
       qdr_burst_state[0] <= 1'b1;
     end else begin

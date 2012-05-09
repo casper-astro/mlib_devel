@@ -319,11 +319,11 @@ endgenerate
     .O(dly_clk)
   );*/
 
-  /*IDELAYCTRL idelayctrl_inst(
-    .REFCLK (dly_clk),
+  IDELAYCTRL idelayctrl_inst(
+    .REFCLK (sys_clk2x),
     .RST    (idelay_rst),
     .RDY    (idelay_rdy)
-  );*/
+  );
 
 
 endmodule

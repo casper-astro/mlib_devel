@@ -39,8 +39,8 @@ module qdrc_infrastructure(
     dly_en,
     dly_rst       
   );
-  parameter DATA_WIDTH     = 18;
-  parameter BW_WIDTH       = 2;
+  parameter DATA_WIDTH     = 36;
+  parameter BW_WIDTH       = 4;
   parameter ADDR_WIDTH     = 21;
   parameter CLK_FREQ       = 200;
 
@@ -160,22 +160,31 @@ module qdrc_infrastructure(
     qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
   end
 
-  OBUF OBUF_addr[ADDR_WIDTH - 1:0](
+  OBUF #(
+    .IOSTANDARD ("HSTL_I")
+  ) OBUF_addr[ADDR_WIDTH - 1:0]  
+  (
     .I (qdr_sa_iob),
     .O (qdr_sa)
   );
 
-  OBUF OBUF_w_n(
+  OBUF #(
+    .IOSTANDARD ("HSTL_I")
+  ) OBUF_w_n(
     .I (qdr_w_n_iob),
     .O (qdr_w_n)
   );
 
-  OBUF OBUF_r_n(
+  OBUF #(
+    .IOSTANDARD ("HSTL_I")
+  ) OBUF_r_n(
     .I (qdr_r_n_iob),
     .O (qdr_r_n)
   );
 
-  OBUF OBUF_dll_off_n(
+  OBUF #(
+    .IOSTANDARD ("HSTL_I")
+  ) OBUF_dll_off_n(
     .I (qdr_dll_off_n_iob),
     .O (qdr_dll_off_n)
   );
@@ -230,13 +239,21 @@ module qdrc_infrastructure(
     qdr_bw_n_rise_reg  <= qdr_bw_n_rise_reg1;
     qdr_bw_n_fall_reg  <= qdr_bw_n_fall_reg1;
   end
+  
+  wire [DATA_WIDTH - 1:0] qdr_d_obuf;
+  OBUF #(
+    .IOSTANDARD ("HSTL_I")
+  ) obuf_qdrd [DATA_WIDTH - 1:0] (
+    .O (qdr_d),
+    .I (qdr_d_obuf)
+  );
 
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE"),
     .INIT         (1'b1),
     .SRTYPE       ("SYNC")
   ) ODDR_qdr_d [DATA_WIDTH - 1:0] (
-    .Q  (qdr_d),
+    .Q  (qdr_d_obuf),
     .C  (clk270),
     .CE (1'b1),
     .D1 (qdr_d_rise_reg), //Rising Edge
@@ -245,6 +262,7 @@ module qdrc_infrastructure(
     .S  (1'b0)
   );
 
+/*
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE"),
     .INIT         (1'b1),
@@ -258,6 +276,10 @@ module qdrc_infrastructure(
     .R  (1'b0),
     .S  (1'b0)
   );
+*/
+
+//assign qdr_bw_n = {BW_WIDTH{1'b0}};
+
 
   /******************* DDR Data Inputs ********************
    * IODELAY for training
@@ -266,7 +288,9 @@ module qdrc_infrastructure(
   wire [DATA_WIDTH - 1:0] qdr_q_ibuf;
   wire [DATA_WIDTH - 1:0] qdr_q_iodelay;
 
-  IBUF ibuf_qdrq [DATA_WIDTH - 1:0](
+  IBUF #(
+    .IOSTANDARD ("HSTL_I_DCI")
+  ) ibuf_qdrq [DATA_WIDTH - 1:0](
     .I (qdr_q),
     .O (qdr_q_ibuf)
   );
@@ -314,7 +338,7 @@ module qdrc_infrastructure(
    * IODELAY for training
    */
 
-
+/*
   IBUF ibuf_qdr_qvld(
     .I (qdr_qvld),
     .O (qdr_qvld_buf)
@@ -332,7 +356,7 @@ module qdrc_infrastructure(
     .CLR(1'b0)
     
   );
-
+*/
 // moo attribute HU_SET of qdr_w_n_reg  is SET_qdr_w_n
 // moo attribute HU_SET of qdr_w_n_reg0 is SET_qdr_w_n
 // moo attribute RLOC   of qdr_w_n_reg  is X0Y0
@@ -417,6 +441,14 @@ module qdrc_infrastructure(
 // moo attribute HU_SET of qdr_sa_reg0[18] is SET_qdr_sa18
 // moo attribute RLOC   of qdr_sa_reg[18]  is X0Y0
 // moo attribute RLOC   of qdr_sa_reg0[18] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[19]  is SET_qdr_sa19
+// moo attribute HU_SET of qdr_sa_reg0[19] is SET_qdr_sa19
+// moo attribute RLOC   of qdr_sa_reg[19]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[19] is X1Y0
+// moo attribute HU_SET of qdr_sa_reg[20]  is SET_qdr_sa20
+// moo attribute HU_SET of qdr_sa_reg0[20] is SET_qdr_sa20
+// moo attribute RLOC   of qdr_sa_reg[20]  is X0Y0
+// moo attribute RLOC   of qdr_sa_reg0[20] is X1Y0
 
 
 endmodule

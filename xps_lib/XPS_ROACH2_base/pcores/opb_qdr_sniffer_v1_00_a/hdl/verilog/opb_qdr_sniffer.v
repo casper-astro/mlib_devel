@@ -1,11 +1,16 @@
 module opb_qdr_sniffer #(
     /* config IF */
+    parameter C_CONFIG_BASEADDR     = 0,
+    parameter C_CONFIG_HIGHADDR     = 0,
+    parameter C_CONFIG_OPB_AWIDTH   = 0,
+    parameter C_CONFIG_OPB_DWIDTH   = 0,
+
     parameter C_BASEADDR     = 0,
     parameter C_HIGHADDR     = 0,
     parameter C_OPB_AWIDTH   = 0,
     parameter C_OPB_DWIDTH   = 0,
-    parameter QDR_ADDR_WIDTH = 32,
-    parameter QDR_DATA_WIDTH = 18,
+    parameter QDR_ADDR_WIDTH = 21,
+    parameter QDR_DATA_WIDTH = 36,
     parameter QDR_BW_WIDTH   = 2,
     parameter QDR_LATENCY    = 10,
     parameter ENABLE         = 0
@@ -24,8 +29,21 @@ module opb_qdr_sniffer #(
     input  OPB_select,
     input  OPB_seqAddr,
 
+    input  OPB_Clk_config,
+    input  OPB_Rst_config,
+    output [0:31] Sl_DBus_config,
+    output Sl_errAck_config,
+    output Sl_retry_config,
+    output Sl_toutSup_config,
+    output Sl_xferAck_config,
+    input  [0:31] OPB_ABus_config,
+    input  [0:3]  OPB_BE_config,
+    input  [0:31] OPB_DBus_config,
+    input  OPB_RNW_config,
+    input  OPB_select_config,
+    input  OPB_seqAddr_config,
+
     input  qdr_clk,
-    input  reset,
     /* Master interface to QDR controller */
     output   [QDR_ADDR_WIDTH - 1:0] master_addr,
     output master_wr_strb,
@@ -58,6 +76,15 @@ module opb_qdr_sniffer #(
 
 
 generate if (ENABLE == 1) begin: qdr_enabled
+
+  /* qdr_rst gen */
+  reg qdr_rst_reg;
+  reg qdr_rst_regR;
+  always @(posedge qdr_clk) begin
+    qdr_rst_reg  <= OPB_Rst;
+    qdr_rst_regR <= qdr_rst_reg;
+  end
+  wire qdr_rst = qdr_rst_regR;
 
   /***************** Async QDR interface ****************/
   /* backdoor interface */
@@ -114,7 +141,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
       .host_ack   (Sl_xferAck),
 
       .qdr_clk  (qdr_clk),
-      .qdr_rst  (reset),
+      .qdr_rst  (qdr_rst),
       .qdr_req  (backdoor_req),
       .qdr_ack  (backdoor_ack),
       .qdr_addr (backdoor_addr),
@@ -139,7 +166,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
       .host_ack   (Sl_xferAck),
 
       .qdr_clk  (qdr_clk),
-      .qdr_rst  (reset),
+      .qdr_rst  (qdr_rst),
       .qdr_req  (backdoor_req),
       .qdr_ack  (backdoor_ack),
       .qdr_addr (backdoor_addr),
@@ -158,7 +185,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
   /* TODO: arb_sel[1:0] are very high fan out signals, thus need to be duplicated to increase performance */
 
   always @(posedge qdr_clk) begin
-    if (reset) begin
+    if (qdr_rst) begin
       arb_sel   <= SLAVE;
     end else begin
       case (arb_sel)
@@ -197,7 +224,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
 
   assign master_wr_strb = slave_wr_strb && slave_ack || backdoor_w && backdoor_ack;
   assign master_rd_strb = slave_rd_strb && slave_ack || backdoor_r && backdoor_ack;
-  assign master_addr    =               slave_ack ? slave_addr  : backdoor_addr;
+  assign master_addr    = slave_ack ? slave_addr[QDR_ADDR_WIDTH - 1:0]  : backdoor_addr[QDR_ADDR_WIDTH - 1:0];
   assign master_wr_data = arb_sel == SLAVE || arb_sel == SLAVE_WAIT ? slave_wr_data : backdoor_d;
   assign master_wr_be   = arb_sel == SLAVE || arb_sel == SLAVE_WAIT ? slave_wr_be   : backdoor_be;
 
@@ -214,7 +241,7 @@ end else begin : qdr_disabled
   assign Sl_xferAck = 1'b0;
   assign Sl_DBus    = 32'b0;
 
-  assign master_addr    = slave_addr;
+  assign master_addr    = slave_addr[QDR_ADDR_WIDTH - 1:0];
   assign master_wr_strb = slave_wr_strb;
   assign master_wr_data = slave_wr_data;
   assign master_wr_be   = slave_wr_be;
@@ -223,5 +250,40 @@ end else begin : qdr_disabled
   assign slave_rd_dvld  = master_rd_dvld;
   assign slave_ack      = 1'b1;
 end endgenerate
+
+  reg phy_rdyR;
+  reg cal_failR;
+
+  always @(posedge OPB_Clk_config) begin
+    phy_rdyR <= phy_rdy;
+    cal_failR <= cal_fail;
+  end
+
+  qdr_config #(
+    /* config IF */
+    .C_BASEADDR   (C_CONFIG_BASEADDR),
+    .C_HIGHADDR   (C_CONFIG_HIGHADDR),
+    .C_OPB_AWIDTH (C_CONFIG_OPB_AWIDTH),
+    .C_OPB_DWIDTH (C_CONFIG_OPB_DWIDTH)
+  ) qdr_config_inst (
+    .OPB_Clk     (OPB_Clk_config),
+    .OPB_Rst     (OPB_Rst_config),
+    .Sl_DBus     (Sl_DBus_config),
+    .Sl_errAck   (Sl_errAck_config),
+    .Sl_retry    (Sl_retry_config),
+    .Sl_toutSup  (Sl_toutSup_config),
+    .Sl_xferAck  (Sl_xferAck_config),
+    .OPB_ABus    (OPB_ABus_config),
+    .OPB_BE      (OPB_BE_config),
+    .OPB_DBus    (OPB_DBus_config),
+    .OPB_RNW     (OPB_RNW_config),
+    .OPB_select  (OPB_select_config),
+    .OPB_seqAddr (OPB_seqAddr_config),
+    .qdr_reset   (qdr_reset),
+    .cal_fail    (cal_failR),
+    .phy_rdy     (phy_rdyR),
+    .qdr_clk     (qdr_clk)
+  );
+
 
 endmodule

@@ -1,5 +1,5 @@
 module qdrc_phy_bit_train #(
-    parameter DATA_WIDTH = 18
+    parameter DATA_WIDTH = 36
   ) (
     input                     clk,
     input                     reset,
@@ -20,7 +20,8 @@ module qdrc_phy_bit_train #(
   /* DLY_DELTA (in ps) is the delay increment when the IDELAY_CONF is configured with a 200 MHz clock */
   localparam DLY_DELTA  = 78;
   /* ILogic hold time in ps */
-  localparam HOLD_TIME  = 600;
+  //localparam HOLD_TIME  = 600;
+  localparam HOLD_TIME  = 400;
   /* The width of a bit in ps */
   localparam BIT_STEPS  = HOLD_TIME/DLY_DELTA + 1;
 
@@ -47,15 +48,15 @@ module qdrc_phy_bit_train #(
 
   /* Registers referenced by the state machine */
   reg dly_inc_dec_n_reg;
-  assign dly_inc_dec_n = {18{dly_inc_dec_n_reg}};
+  assign dly_inc_dec_n = {DATA_WIDTH{dly_inc_dec_n_reg}};
 
-  reg [17:0] dly_en_reg;
+  reg [DATA_WIDTH - 1:0] dly_en_reg;
   assign dly_en = dly_en_reg;
 
-  reg dly_rst_reg;
-  assign dly_rst = {18{dly_rst_reg}};
+  reg [DATA_WIDTH - 1:0] dly_rst_reg;
+  assign dly_rst = dly_rst_reg;
 
-  reg [17:0] aligned_reg;
+  reg [DATA_WIDTH - 1:0] aligned_reg;
   assign aligned = aligned_reg;
 
   reg train_fail_reg;
@@ -77,19 +78,24 @@ module qdrc_phy_bit_train #(
 
   wire history_stable = valid(curr) && curr == hist0 && hist0 == hist1 && hist1 == hist2;
 
-  reg [5:0] acquire_progress;
+  // ROACH2 has only 32 taps (Virtex6)
+  //reg [5:0] acquire_progress;
+  reg [4:0] acquire_progress;
 
-  reg [4:0] bit_index;
-  reg [5:0] progress;
-  reg [5:0] baddies;
+  //reg [4:0] bit_index;
+  reg [5:0] bit_index; // 4:0 max range is 0x1f (31), but QDR has 36 pins set to 5:0
+  //reg [5:0] progress;
+  reg [4:0] progress;
+  //reg [5:0] baddies;
+  reg [4:0] baddies;
 
   reg [DATA_WIDTH-1:0] q_rise_buf;
   reg [DATA_WIDTH-1:0] q_fall_buf;
 
   always @(posedge clk) begin
     /* Single cycle outputs */
-    dly_en_reg   <= 18'b0;
-    dly_rst_reg  <= 1'b0;
+    dly_en_reg   <= {DATA_WIDTH{1'b0}};
+    dly_rst_reg  <= {DATA_WIDTH{1'b0}};
 
     /* async registered iddr data */
     q_rise_buf <= q_rise;
@@ -103,20 +109,20 @@ module qdrc_phy_bit_train #(
       train_fail_reg <= 1'b0;
       train_done_reg <= 1'b0;
 
-      aligned_reg <= {18{1'b1}};
+      aligned_reg <= {DATA_WIDTH{1'b1}};
 
-      progress         <= 6'b0;
+      progress         <= 5'b0;//6'b0;
       acquire_progress <= 0;
 
-      baddies     <= 6'b0;
+      baddies     <= 5'b0;
 
       prev       <= 2'b0;
       hist0      <= 2'b0;
       hist1      <= 2'b0;
       hist2      <= 2'b0;
-      bit_index  <= 5'b0;
+      bit_index  <= 6'b0;
 
-      dly_rst_reg <= 1'b1;
+      dly_rst_reg <= {DATA_WIDTH{1'b1}};
     end else begin
       case (mode)
         MODE_DEFAULT: begin
@@ -129,8 +135,8 @@ module qdrc_phy_bit_train #(
                 state    <= STATE_SEARCH;
                 mode     <= MODE_ACQUIRE;
 
-                progress <= 6'b0;
-                baddies  <= 6'b0;
+                progress <= 5'b0;
+                baddies  <= 5'b0;
 
                 prev     <= 2'b0;
                 hist0    <= 2'b0;
@@ -150,10 +156,10 @@ module qdrc_phy_bit_train #(
 
               /* We have delayed as much as we could and have not found
                * a bit transition */
-              if (progress == 6'd63) begin
+              if (progress == 5'd31) begin
                   state           <= STATE_ALIGN;
                   train_fail_reg  <= 1'b1;
-                  dly_rst_reg     <= 1'b1;
+                  dly_rst_reg[bit_index] <= 1'b1;
               end 
 
               /* the first time we have a stable value, store it in 'prev' */
@@ -163,7 +169,7 @@ module qdrc_phy_bit_train #(
 
               /* if we have a stable value and there is a change in value */
               if (history_stable && valid(prev) && prev != curr) begin
-                if (progress + BIT_STEPS - HISTORY_LENGTH < 64) begin
+                if (progress + BIT_STEPS - HISTORY_LENGTH < 32) begin
                 /* if we have a stable value and there is a change in value */
                   state    <= STATE_FORWARD;
                   progress <= BIT_STEPS - HISTORY_LENGTH;
@@ -224,13 +230,13 @@ module qdrc_phy_bit_train #(
                 state      <= STATE_SEARCH;
                 mode       <= MODE_ACQUIRE;
 
-                progress   <= 6'b0;
-                baddies    <= 6'b0;
+                progress   <= 5'b0;
+                baddies    <= 5'b0;
                 prev       <= 2'b0;
                 hist0      <= 2'b0;
                 hist1      <= 2'b0;
                 hist2      <= 2'b0;
-                bit_index  <= bit_index + 1;
+                bit_index  <= bit_index + 1'b1;
               end else begin
                 train_done_reg <= 1'b1;
               end
@@ -239,9 +245,9 @@ module qdrc_phy_bit_train #(
         end
         MODE_ACQUIRE: begin
           acquire_progress <= acquire_progress + 1;
-          if (!acquire_progress[5]) begin
-            /* Latch the first value after waiting 32 cycles */
-            if (acquire_progress[4:0] == 5'b11111) begin
+          if (!acquire_progress[4]) begin
+            /* Latch the first value after waiting 16 cycles */
+            if (acquire_progress[3:0] == 4'b1111) begin
               curr <= curr_reg;
             end
           end else begin
@@ -257,7 +263,7 @@ module qdrc_phy_bit_train #(
               curr <= 2'b00; //invalid
             end
 
-            if (acquire_progress[4:0] == 5'b11111) begin
+            if (acquire_progress[3:0] == 4'b1111) begin
               mode <= MODE_DEFAULT;
             end
           end
