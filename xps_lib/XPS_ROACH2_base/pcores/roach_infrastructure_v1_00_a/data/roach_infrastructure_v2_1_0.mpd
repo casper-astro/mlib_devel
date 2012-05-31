@@ -6,7 +6,9 @@ OPTION HDL              = MIXED
 OPTION IP_GROUP         = USER
 OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
 
-PARAMETER CLK_FREQ  = 100, DT = INTEGER
+PARAMETER CLK_FREQ     = 100, DT = INTEGER
+PARAMETER CLK_HIGH_LOW = "LOW", DT = STRING
+PARAMETER CLK_SOURCE   = "LOW", DT = STRING
 
 PORT sys_clk_n      = "", DIR = IN, SIGIS = CLK
 PORT sys_clk_p      = "", DIR = IN, SIGIS = CLK
@@ -26,14 +28,14 @@ PORT sys_clk2x      = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = sys_clk_p, CLK_FA
 PORT sys_clk2x90    = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = sys_clk_p, CLK_FACTOR = 2
 PORT sys_clk2x180   = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = sys_clk_p, CLK_FACTOR = 2
 PORT sys_clk2x270   = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = sys_clk_p, CLK_FACTOR = 2
-PORT aux_clk        = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 1, CLK_PHASE = 0
-PORT aux_clk90      = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 1, CLK_PHASE = 90
-PORT aux_clk180     = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 1, CLK_PHASE = 180
-PORT aux_clk270     = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 1, CLK_PHASE = 270
-PORT aux_clk2x      = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 2
-PORT aux_clk2x90    = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 2
-PORT aux_clk2x180   = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 2
-PORT aux_clk2x270   = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux0_clk_p, CLK_FACTOR = 2
+PORT aux_clk        = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 1, CLK_PHASE = 0
+PORT aux_clk90      = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 1, CLK_PHASE = 90
+PORT aux_clk180     = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 1, CLK_PHASE = 180
+PORT aux_clk270     = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 1, CLK_PHASE = 270
+PORT aux_clk2x      = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 2
+PORT aux_clk2x90    = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 2
+PORT aux_clk2x180   = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 2
+PORT aux_clk2x270   = "", DIR = OUT, SIGIS = CLK, CLK_INPORT = aux_clk_p, CLK_FACTOR = 2
 PORT epb_clk        = "", DIR = OUT
 
 PORT idelay_rst     = "", DIR = IN

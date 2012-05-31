@@ -8,6 +8,17 @@ mpc_type     = get(xsg_obj,'mpc_type');
 app_clk      = get(xsg_obj,'clk_src');
 app_clk_rate = get(xsg_obj,'clk_rate');
 
+if findstr(app_clk, 'sys') | findstr(app_clk, 'arb')
+   clk_source = 'SYS'
+else
+   clk_source = 'AUX'
+end
+if app_clk_rate < 135
+   clk_high_low = 'low'
+else
+   clk_high_low = 'high'
+end
+
 while 1
     line = fgets(in_fid);
     if ~ischar(line)

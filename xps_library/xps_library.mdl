@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "dave"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue May 15 09:05:26 2012"
-  RTWModifiedTimeStamp	  258973520
-  ModelVersionFormat	  "1.%<AutoIncrement:443>"
+  LastModifiedDate	  "Tue May 29 16:03:13 2012"
+  RTWModifiedTimeStamp	  260208186
+  ModelVersionFormat	  "1.%<AutoIncrement:444>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -687,7 +687,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [188, 77, 1916, 1172]
+    Location		    [191, 79, 1919, 1174]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -35418,10 +35418,9 @@ Library {
       "k1|iBOB:mdr|iBOB:sma|BEE2_ctrl:led|BEE2_ctrl:downlink1|BEE2_ctrl:downlink2|BEE2_ctrl:downlink3|BEE2_ctrl:downlin"
       "k4|BEE2_usr:led|BEE2_usr:bus_ctrl|BEE2_usr:bus_data|BEE2_usr:uplink|BEE2_usr:leftlink|BEE2_usr:rightlink|ROACH:a"
       "ux0_clk|ROACH:aux1_clk|ROACH:led|ROACH:gpioa|ROACH:gpioa_oe_n|ROACH:gpiob|ROACH:gpiob_oe_n|ROACH:qsh|ROACH:zdok0"
-      "|ROACH:zdok1|ROACH2:aux0_clk|ROACH2:aux1_clk|ROACH2:led|ROACH2:gpio|ROACH2:qsh|ROACH2:zdok0|ROACH2:zdok1|CORR:fo"
-      "ur_buttons|CORR:six_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),popup(Boolean|Unsign"
-      "ed|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pull"
-      "down)"
+      "|ROACH:zdok1|ROACH2:aux_clk|ROACH2:led|ROACH2:gpio|ROACH2:qsh|ROACH2:zdok0|ROACH2:zdok1|CORR:four_buttons|CORR:s"
+      "ix_buttons|CORR:led|CORR:jumper_driver|CORR:jumper_receiver),popup(in|out),popup(Boolean|Unsigned|Signed  (2's c"
+      "omp)),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'iBOB:zdok0' 'iBOB:zdok1' 'iBOB:md"
       "r' 'ROACH:qsh' 'ROACH:zdok0' 'ROACH:zdok1'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on'"
@@ -35446,7 +35445,7 @@ Library {
       MaskTabNameString	      ",,,,,,,,,,,"
       System {
 	Name			"gpio"
-	Location		[539, 146, 998, 417]
+	Location		[618, 146, 1077, 417]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -35474,7 +35473,6 @@ Library {
 	  Position		  [80, 50, 110, 70]
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
-	  SID			  "2"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
 	  arith_type		  "Boolean"
 	  n_bits		  "1"
@@ -35482,9 +35480,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -35505,15 +35503,14 @@ Library {
 	  Position		  [150, 50, 190, 70]
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  SID			  "3"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  hdl_port		  "on"
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
