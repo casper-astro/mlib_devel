@@ -2,21 +2,29 @@ function detokenize(in_fid, out_fid, xps_objs);
 
 xsg_obj = xps_objs{1};
 
-hw_sys       = get(xsg_obj,'hw_sys');
-sw_os        = get(xsg_obj,'sw_os');
-mpc_type     = get(xsg_obj,'mpc_type');
-app_clk      = get(xsg_obj,'clk_src');
-app_clk_rate = get(xsg_obj,'clk_rate');
+hw_sys         = get(xsg_obj,'hw_sys');
+sw_os          = get(xsg_obj,'sw_os');
+mpc_type       = get(xsg_obj,'mpc_type');
+app_clk        = get(xsg_obj,'clk_src');
+app_clk_rate   = get(xsg_obj,'clk_rate');
+multiply       = 1;
+divide         = 1;
 
-if findstr(app_clk, 'sys') | findstr(app_clk, 'arb')
-   clk_source = 'SYS'
-else
-   clk_source = 'AUX'
-end
-if app_clk_rate < 135
-   clk_high_low = 'low'
-else
-   clk_high_low = 'high'
+if hw_sys == 'ROACH2'
+   clk_factors(app_clk_rate, app_clk_rate);
+   if findstr(app_clk, 'sys')
+      clk_source = 'SYS';
+      [multiply divide] = clk_factors(100, app_clk_rate);
+      app_clk_rate = 100;
+   else
+      clk_source = 'AUX';
+      [multiply divide] = clk_factors(app_clk_rate, app_clk_rate);
+   end
+   if app_clk_rate < 135
+      clk_high_low = 'low';
+   else
+      clk_high_low = 'high';
+   end
 end
 
 while 1

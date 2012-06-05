@@ -354,6 +354,8 @@ BEGIN roach_infrastructure
 #IF# 1 # ['  PARAMETER CLK_FREQ     = ', num2str(app_clk_rate), '\n']
 #IF# 1 # ['  PARAMETER CLK_HIGH_LOW = ', num2str(clk_high_low), '\n']
 #IF# 1 # ['  PARAMETER CLK_SOURCE   = ', num2str(clk_source),   '\n']
+#IF# 1 # ['  PARAMETER MULTIPLY     = ', num2str(multiply),     '\n']
+#IF# 1 # ['  PARAMETER DIVIDE       = ', num2str(divide),       '\n']
  #PARAMETER CLK_FREQ = 100
  PORT sys_clk_n = sys_clk_n
  PORT sys_clk_p = sys_clk_p

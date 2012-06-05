@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "dave"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue May 29 16:03:13 2012"
-  RTWModifiedTimeStamp	  260208186
-  ModelVersionFormat	  "1.%<AutoIncrement:444>"
+  LastModifiedDate	  "Mon Jun  4 16:04:19 2012"
+  RTWModifiedTimeStamp	  260726650
+  ModelVersionFormat	  "1.%<AutoIncrement:448>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -16211,11 +16211,10 @@ Library {
       MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH:sx95t|ROACH:lx110t|ROACH2:sx475t|CORR),checkbox,edit,"
       "popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|u"
       "sr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux0_clk2x|aux1_cl"
-      "k|aux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|arb_clk|aux_clk|aux_clk2x|adc0_clk|adc"
-      "1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:"
-      "gpio3|iBOB:sma|iBOB:zdok0|iBOB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST)"
-      ",edit"
-      MaskTunableValueString  "off,off,off,off,off,off,off,on,off,off,off,off,off,off,off"
+      "k|aux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|aux_clk|adc0_clk|adc1_clk|dac0_clk|dac1_clk),pop"
+      "up(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iB"
+      "OB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
+      MaskTunableValueString  "off,off,off,off,off,off,off,on,off,off,off,on,off,off,off"
       MaskCallbackString      "xps_xsg_conf_callback;|||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_cal"
       "lback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;||||||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,off,on,on,on"
@@ -16237,7 +16236,7 @@ Library {
       MaskTabNameString	      ",,,,,,,,,,,,,,"
       System {
 	Name			"XSG core config"
-	Location		[461, 144, 959, 444]
+	Location		[540, 144, 1038, 444]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -35480,9 +35479,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -35506,11 +35505,11 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  hdl_port		  on
+	  hdl_port		  "on"
 	  timing_constraint	  "None"
-	  locs_specified	  off
+	  locs_specified	  "off"
 	  LOCs			  "{}"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
