@@ -94,6 +94,14 @@ dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
 clog(flatstrcell(varargin),'fft_direct_init_debug');
 
+if FFTSize == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting fft_direct_init','trace');
+  return;
+end
 % check the per-stage multiplier specification
 stage_mult_spec = multiplier_specification(mult_spec, FFTSize, 'fft_direct_init');
 

@@ -112,6 +112,15 @@ use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
 hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+%default case for library storage, delete everything
+if isempty(Coeffs),
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting butterfly_direct_init', 'trace');
+end
+
 use_dsp48_mults = strcmp(use_embedded, 'on');
 use_dsp48_adders = strcmp(dsp48_adders, 'on');
 opt_logic = strcmp(opt_target, 'logic');
@@ -231,7 +240,7 @@ end
 %%%%%%%%%%%%%%%%%%
 
 % Delete all lines.
-delete_lines(blk)
+delete_lines(blk);
 
 %
 % Add inputs and outputs.

@@ -85,6 +85,16 @@ hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
 shift_schedule = get_var('shift_schedule', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+%default case for library, clean block
+if FFTSize == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting biplex_core_init','trace');
+  return;
+end
+
 if FFTSize < 2,
     errordlg('biplex_core_init.m: Biplex FFT must have length of at least 2^2, forcing size to 2.');
     clog('biplex_core_init.m: Biplex FFT must have length of at least 2^2, forcing size to 2.','error');
@@ -108,7 +118,6 @@ reuse_block(blk, 'pol1', 'built-in/inport', 'Port', '3', 'Position', [15 33 45 4
 reuse_block(blk, 'pol2', 'built-in/inport', 'Port', '4', 'Position', [15 58 45 72]);
 
 reuse_block(blk, 'Constant', 'xbsindex_r4/Constant', 'arith_type', 'Boolean', 'const', '0', 'Position', [55 82 85 98]);
-
 
 if FFTSize ~= prev_stages,
     delete_lines(blk);

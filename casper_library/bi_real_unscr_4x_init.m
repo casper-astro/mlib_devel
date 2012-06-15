@@ -71,6 +71,13 @@ bram_map = get_var('bram_map', 'defaults', defaults, varargin{:});
 bram_delays = get_var('bram_delays', 'defaults', defaults, varargin{:});
 dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+if FFTSize == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  save_state(blk, 'defaults', defaults, varargin{:});
+  return;
+end
+
 % Generate reorder maps.
 map_even = bit_reverse(0:2^(FFTSize-1)-1, FFTSize-1);
 map_odd = bit_reverse(2^(FFTSize-1)-1:-1:0, FFTSize-1);

@@ -51,6 +51,15 @@ end
 
 delete_lines(blk);
 
+%default case for library storage, do nothing
+if isempty(Coeffs),
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting coeff_gen_init','trace');
+  return;
+end
+
 reuse_block(blk, 'rst', 'built-in/inport', 'Port', '1', ...
     'Position', [25 48 55 62]);
 
