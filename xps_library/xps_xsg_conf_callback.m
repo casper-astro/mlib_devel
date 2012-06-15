@@ -116,30 +116,12 @@ switch hw_sys
         switch myclksrc
             case 'sys_clk'
                 set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
-                set_param(myname, 'clk_rate', '100');
-                set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','off','on','on','on'});
-            % end case 'sys_clk'
-            case 'sys_clk2x'
-                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
-                set_param(myname, 'clk_rate', '200');
-                set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','off','on','on','on'});
-            % end case 'sys_clk'
-            case 'aux_clk_0'
-                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
-            	  set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
-            % end case 'aux_clk_0'
-            case 'aux_clk_1'
-                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
-            	  set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
-            % end case 'aux_clk_1'
-            case 'arb_clk'
-                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
-              	set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
-            % end case 'arb_clk'
-            otherwise
-                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
                 set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
-            % end otherwise
+            % end case 'sys_clk'
+            case 'aux_clk'
+                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
+            	  set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
+            % end case 'aux_clk'
         end % switch myclksrc
     % end case 'ROACH2'
     case 'CORR'

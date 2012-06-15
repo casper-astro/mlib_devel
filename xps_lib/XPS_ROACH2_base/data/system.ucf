@@ -39,8 +39,8 @@ NET "sys_clk_n"          LOC = AP12;
 NET "sys_clk_p"          LOC = AP11;
 
 # aux clock (?? MHz)
-#NET "aux_clk_n"          LOC = AW16;
-#NET "aux_clk_p"          LOC = AV16;
+NET "aux_clk_n"          LOC = AW16;
+NET "aux_clk_p"          LOC = AV16;
 
 # aux sync in/out
 #NET "aux_synci_n"        LOC = BB17;
