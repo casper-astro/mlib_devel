@@ -122,6 +122,10 @@ switch hw_sys
                 set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
             	  set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
             % end case 'aux_clk'
+            otherwise
+                set_param(myname, 'MaskVisibilities', {'on','off','off','off','off','off','off','on','off','off','off','on','on','on','off'});
+                set_param(myname, 'MaskEnables', {'on','on','on','on','on','on','on','on','on','on','on','on','on','on','on'});
+            % end otherwise
         end % switch myclksrc
     % end case 'ROACH2'
     case 'CORR'
