@@ -44,7 +44,7 @@ clog('entering twiddle_general_dsp48e_init','trace');
 
 % Set default vararg values.
 defaults = { ...
-    'Coeffs', [0, j], ...
+    'Coeffs', [1+i 2+2i], ...
     'StepPeriod', 0, ...
     'input_bit_width', 18, ...
     'coeff_bit_width', 18, ...
@@ -61,7 +61,7 @@ if same_state(blk, 'defaults', defaults, varargin{:}),
   return
 end
 
-clog('twiddle_general_4mult_init post same_state', 'trace');
+clog('twiddle_general_dsp48e_init post same_state', 'trace');
 
 % Verify that this is the right mask for the block.
 check_mask_type(blk, 'twiddle_general_dsp48e');
@@ -81,7 +81,7 @@ quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 coeffs_bram = get_var('coeffs_bram', 'defaults', defaults, varargin{:});
 
-clog(flatstrcell(varargin),'twiddle_general_4mult_init_debug');
+clog(flatstrcell(varargin),'twiddle_general_dsp48e_init_debug');
 
 %%%%%%%%%%%%%%%%%%
 % Start drawing! %
@@ -89,6 +89,15 @@ clog(flatstrcell(varargin),'twiddle_general_4mult_init_debug');
 
 % Delete all lines.
 delete_lines(blk);
+
+%default case, leave clean block with nothing for storage in the libraries 
+if isempty(Coeffs)
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting twiddle_general_dsp48e_init', 'trace');
+  return;
+end
 
 %
 % Add inputs and outputs.
@@ -106,16 +115,16 @@ reuse_block(blk, 'sync_out', 'built-in/outport', 'Port', '5', 'Position', [185 3
 
 % Add input delays.
 
-reuse_block(blk, 'delay0', 'xbsIndex_r4/Delay', ...
+reuse_block(blk, 'a_delay', 'xbsIndex_r4/Delay', ...
     'Position', [95 15 135 55], ...
     'latency', 'bram_latency + 4 + conv_latency');
 
-reuse_block(blk, 'delay1', 'xbsIndex_r4/Delay', ...
+reuse_block(blk, 'b_delay', 'xbsIndex_r4/Delay', ...
     'Position', [95 105 135 145], ...
     'latency', 'bram_latency', ...
     'reg_retiming', 'on');
 
-reuse_block(blk, 'delay2', 'xbsIndex_r4/Delay', ...
+reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
     'Position', [95 290 135 330], ...
     'latency', 'bram_latency + 4 + conv_latency');
 
@@ -131,20 +140,20 @@ reuse_block(blk, 'coeff_gen', 'casper_library_ffts_twiddle_coeff_gen/coeff_gen',
 
 % Add input c_to_ri blocks.
 
-reuse_block(blk, 'c_to_ri0', 'casper_library_misc/c_to_ri', ...
+reuse_block(blk, 'a_c_to_ri', 'casper_library_misc/c_to_ri', ...
     'Position', [185 14 225 56], ...
     'n_bits', 'input_bit_width', ...
     'bin_pt', 'input_bit_width-1');
 
-reuse_block(blk, 'c_to_ri1', 'casper_library_misc/c_to_ri', ...
+reuse_block(blk, 'b_c_to_ri', 'casper_library_misc/c_to_ri', ...
     'Position', [185 104 225 146], ...
-    'n_bits', 'coeff_bit_width', ...
-    'bin_pt', 'coeff_bit_width-1');
-
-reuse_block(blk, 'c_to_ri2', 'casper_library_misc/c_to_ri', ...
-    'Position', [185 198 225 242], ...
     'n_bits', 'input_bit_width', ...
-    'bin_pt', 'input_bit_width-2');
+    'bin_pt', 'input_bit_width-1');
+
+reuse_block(blk, 'coeff_c_to_ri', 'casper_library_misc/c_to_ri', ...
+    'Position', [185 198 225 242], ...
+    'n_bits', 'coeff_bit_width', ...
+    'bin_pt', 'coeff_bit_width-2');
 
 % Add complex multiplier.
 
@@ -152,8 +161,8 @@ reuse_block(blk, 'cmult', 'casper_library_multipliers/cmult_dsp48e', ...
     'Position', [275 141 325 204], ...
     'n_bits_a', 'input_bit_width', ...
     'bin_pt_a', 'input_bit_width - 1', ...
-    'n_bits_b', 'input_bit_width', ...
-    'bin_pt_b', 'input_bit_width - 2', ...
+    'n_bits_b', 'coeff_bit_width', ...
+    'bin_pt_b', 'coeff_bit_width - 2', ...
     'conjugated', 'off', ...
     'full_precision', 'off', ...
     'n_bits_c', 'input_bit_width + 4', ...
@@ -166,26 +175,26 @@ reuse_block(blk, 'cmult', 'casper_library_multipliers/cmult_dsp48e', ...
 % Draw wires.
 %
 
-add_line(blk, 'a/1', 'delay0/1');
-add_line(blk, 'delay0/1', 'c_to_ri0/1');
-add_line(blk, 'c_to_ri0/1', 'a_re/1');
-add_line(blk, 'c_to_ri0/2', 'a_im/1');
+add_line(blk, 'a/1', 'a_delay/1');
+add_line(blk, 'a_delay/1', 'a_c_to_ri/1');
+add_line(blk, 'a_c_to_ri/1', 'a_re/1');
+add_line(blk, 'a_c_to_ri/2', 'a_im/1');
 
-add_line(blk, 'b/1', 'delay1/1');
-add_line(blk, 'delay1/1', 'c_to_ri1/1');
-add_line(blk, 'c_to_ri1/1', 'cmult/1');
-add_line(blk, 'c_to_ri1/2', 'cmult/2');
+add_line(blk, 'b/1', 'b_delay/1');
+add_line(blk, 'b_delay/1', 'b_c_to_ri/1');
+add_line(blk, 'b_c_to_ri/1', 'cmult/1');
+add_line(blk, 'b_c_to_ri/2', 'cmult/2');
 
 add_line(blk, 'sync/1', 'coeff_gen/1');
-add_line(blk, 'coeff_gen/1', 'c_to_ri2/1');
-add_line(blk, 'c_to_ri2/1', 'cmult/3');
-add_line(blk, 'c_to_ri2/2', 'cmult/4');
+add_line(blk, 'coeff_gen/1', 'coeff_c_to_ri/1');
+add_line(blk, 'coeff_c_to_ri/1', 'cmult/3');
+add_line(blk, 'coeff_c_to_ri/2', 'cmult/4');
 
 add_line(blk, 'cmult/1', 'bw_re/1');
 add_line(blk, 'cmult/2', 'bw_im/1');
 
-add_line(blk, 'sync/1', 'delay2/1');
-add_line(blk, 'delay2/1', 'sync_out/1');
+add_line(blk, 'sync/1', 'sync_delay/1');
+add_line(blk, 'sync_delay/1', 'sync_out/1');
 
 % Delete all unconnected blocks.
 clean_blocks(blk);
@@ -204,5 +213,5 @@ set_param(blk, 'AttributesFormatString', fmtstr);
 % Save block state to stop repeated init script runs.
 save_state(blk, 'defaults', defaults, varargin{:});
 
-clog('exiting twiddle_general_4mult_init', 'trace');
+clog('exiting twiddle_general_dsp48e_init', 'trace');
 
