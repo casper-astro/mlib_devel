@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-`define SIMLENGTH 40000
+`define SIMLENGTH 400000
 `define SYS_CLK_PERIOD 4
 
 module TB_opb_adc5g_controller();
@@ -134,12 +134,12 @@ module TB_opb_adc5g_controller();
       end else begin
 	 case (progress)
            0: begin
-              opb_data <= 32'b11;
-              opb_rnw  <= 0;
-              opb_addr <= 0;
-              opb_be   <= 4'b0001;
-              opb_select <= 1'b1;
-              progress <= 1;
+	      opb_data <= 32'b11;
+	      opb_rnw  <= 0;
+	      opb_addr <= 0;
+	      opb_be   <= 4'b0001;
+	      opb_select <= 1'b1;
+	      progress <= 1;
            end
            1: begin
               if (Sl_xferAck) begin
@@ -203,11 +203,21 @@ module TB_opb_adc5g_controller();
            end
            7: begin
               if (Sl_xferAck) begin
-		 opb_select <= 1'b0;
+		 opb_data <= 32'b0;
+		 opb_addr <= 12;
+		 opb_be   <= 4'b1111;
+		 opb_rnw  <= 1;
+		 opb_select <= 1'b1;
 		 progress <= 8;
               end
            end
-	   8: begin
+           8: begin
+              if (Sl_xferAck) begin
+		 opb_select <= 1'b0;
+		 progress <= 9;
+              end
+           end
+	   9: begin
 	      $finish;
 	   end
 	 endcase

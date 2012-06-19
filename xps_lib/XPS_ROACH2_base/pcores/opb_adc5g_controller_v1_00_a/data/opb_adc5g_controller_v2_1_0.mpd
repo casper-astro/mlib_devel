@@ -60,6 +60,9 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 ###	PORT adc0_ddrb            = "", DIR = O
 
 	PORT adc0_dcm_reset       = "", DIR = O
+	PORT adc0_dcm_locked      = "", DIR = I
+	PORT adc0_fifo_full_cnt        = "", DIR = I, VEC = [15:0]
+	PORT adc0_fifo_empty_cnt       = "", DIR = I, VEC = [15:0]
   PORT adc0_psclk           = "", DIR = O
   PORT adc0_psen            = "", DIR = O
   PORT adc0_psincdec        = "", DIR = O
@@ -81,6 +84,9 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 ###	PORT adc1_ddrb            = "", DIR = O
 
 	PORT adc1_dcm_reset       = "", DIR = O
+	PORT adc1_dcm_locked      = "", DIR = I
+	PORT adc1_fifo_full_cnt        = "", DIR = I, VEC = [15:0]
+	PORT adc1_fifo_empty_cnt       = "", DIR = I, VEC = [15:0]
   PORT adc1_psclk           = "", DIR = O
   PORT adc1_psen            = "", DIR = O
   PORT adc1_psincdec        = "", DIR = O

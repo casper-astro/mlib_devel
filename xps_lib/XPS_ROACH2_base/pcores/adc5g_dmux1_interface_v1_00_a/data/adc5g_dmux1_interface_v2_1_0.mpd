@@ -81,6 +81,8 @@ PORT ctrl_clk90_out  = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p_i, CLK_F
 PORT ctrl_clk180_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p_i, CLK_FACTOR = "1.0 / 2 " 
 PORT ctrl_clk270_out = "", DIR = O, SIGIS = CLK, CLK_INPORT = adc_clk_p_i, CLK_FACTOR = "1.0 / 2 "
 PORT ctrl_dcm_locked = "", DIR = O
+PORT fifo_full_cnt   = "", DIR = O, VEC = [15:0]
+PORT fifo_empty_cnt  = "", DIR = O, VEC = [15:0]
 PORT dcm_psclk       = "", DIR = I
 PORT dcm_psen        = "", DIR = I
 PORT dcm_psincdec    = "", DIR = I

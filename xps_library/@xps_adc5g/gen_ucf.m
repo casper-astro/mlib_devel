@@ -46,7 +46,7 @@ switch hw_sys
         % pass
     case 'ROACH2'
         if blk_obj.use_adc0
-            switch demux
+	    switch demux
 	        % Create an area group to place the FD close to the IOPAD
 		% which for some reason was traced to the other side of the
 	        % chip on ROACH2
@@ -60,35 +60,42 @@ switch hw_sys
                 case '1:1'
 		    % First the trouble-some bunch...
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[1].D1?_0"     AREA_GROUP     = ISD_1_1 ;\n'];
-                    str = [str, 'AREA_GROUP "ISD_1_1"     RANGE    = ', ...
+                        '/data_buf[1].D1?_1"    AREA_GROUP     = ZDOK_0_1_1 ;\n'];
+                    str = [str, 'AREA_GROUP "ZDOK_0_1_1"     RANGE    = ', ...
                         'SLICE_X0Y300:SLICE_X27Y320 ;\n'];
 		    % And then the rest...
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[0].D*_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[0].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[1].D0?_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[1].D0?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[1].D2?_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[1].D2?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[1].D3?_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[1].D3?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[2].D*_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[2].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[3].D*_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[3].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[4].D*_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[4].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[5].D*_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[5].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[6].D*_0"     AREA_GROUP     = ISD_REST ;\n'];
+                        '/data_buf[6].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
                     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                        '/data_buf[7].D*_0"     AREA_GROUP     = ISD_REST ;\n'];
-                    str = [str, 'AREA_GROUP "ISD_REST"     RANGE    = ', ...
+                        '/data_buf[7].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'AREA_GROUP "ZDOK_0_REST"     RANGE    = ', ...
 			   'SLICE_X76Y220:SLICE_X87Y259 ;\n'];
                 otherwise
                     % pass
             end
+	elseif blk_obj.use_adc1
+	     % This is for ZDOK1, we need to place the first buffers
+	     % close to the I/O pads to help timing
+	     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                 '/data_buf[?].D??_1"     AREA_GROUP     = ZDOK_1_ALL ;\n'];
+	     str = [str, 'AREA_GROUP "ZDOK_1_ALL"     RANGE    = ', ...
+                 'SLICE_X0Y270:SLICE_X11Y309 ;\n'];	
         end
     otherwise 
         % pass

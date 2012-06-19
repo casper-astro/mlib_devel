@@ -33,6 +33,9 @@ module opb_adc5g_controller(
 	  output        adc0_modepin,
 	  output        adc0_reset,
 	  output        adc0_dcm_reset,
+          input         adc0_dcm_locked,
+          input  [15:0] adc0_fifo_full_cnt,
+          input  [15:0] adc0_fifo_empty_cnt,
     output        adc0_psclk,
     output        adc0_psen,
     output        adc0_psincdec,
@@ -46,6 +49,9 @@ module opb_adc5g_controller(
 	  output        adc1_modepin,
 	  output        adc1_reset,
 	  output        adc1_dcm_reset,
+          input         adc1_dcm_locked,
+          input  [15:0] adc1_fifo_full_cnt,
+          input  [15:0] adc1_fifo_empty_cnt,
     output        adc1_psclk,
     output        adc1_psen,
     output        adc1_psincdec,
@@ -146,17 +152,17 @@ module opb_adc5g_controller(
         if (!OPB_RNW) begin
           case (opb_addr[3:2])
             0:  begin
-	      opb_ack <= 1'b1;
-              if (OPB_BE[3]) begin
-                adc0_reset_reg <= OPB_DBus[31];
-                adc1_reset_reg <= OPB_DBus[30];
-              end
-              if (OPB_BE[1]) begin
-                adc0_mmcm_psen_reg <= OPB_DBus[15];
-                adc1_mmcm_psen_reg <= OPB_DBus[11];
-                adc0_mmcm_psincdec_reg <= OPB_DBus[14];
-                adc1_mmcm_psincdec_reg <= OPB_DBus[10];
-              end
+	       opb_ack <= 1'b1;
+               if (OPB_BE[3]) begin
+                  adc0_reset_reg <= OPB_DBus[31];
+                  adc1_reset_reg <= OPB_DBus[30];
+	       end
+	       if (OPB_BE[1]) begin
+                  adc0_mmcm_psen_reg <= OPB_DBus[15];
+                  adc1_mmcm_psen_reg <= OPB_DBus[11];
+                  adc0_mmcm_psincdec_reg <= OPB_DBus[14];
+                  adc1_mmcm_psincdec_reg <= OPB_DBus[10];
+	       end
             end
             1:  begin
 	      if (adc0_config_done) begin
@@ -196,24 +202,41 @@ module opb_adc5g_controller(
             end
           endcase
         end else begin // if (!OPB_RNW)
-	  case (opb_addr[3:2])
+	  case (opb_addr[4:2])
 	    0: begin
 	       opb_ack <= 1'b1;
 	       opb_data_out <= {2'b0, adc1_psdone, adc0_psdone, 4'b0, 
-				2'b0, adc1_mmcm_psincdec_reg, adc1_mmcm_psen_reg, 
-				2'b0, adc0_mmcm_psincdec_reg, adc0_mmcm_psen_reg, 16'b0};
+	       			2'b0, adc1_mmcm_psincdec_reg, adc1_mmcm_psen_reg, 
+	       			2'b0, adc0_mmcm_psincdec_reg, adc0_mmcm_psen_reg, 16'b0};
 	    end
 	    1: begin
 	       opb_ack <= adc0_config_done ? 1'b1 : 1'b0;
-	       opb_data_out <= {adc0_read_data_reg[15:8], adc0_read_data_reg[7:0], adc0_config_addr_reg, 7'b0, adc0_config_done};
+	       opb_data_out <= {adc0_read_data_reg[15:8], 
+	       			adc0_read_data_reg[7:0], 
+	       			adc0_config_addr_reg, 7'b0, 
+	       			adc0_config_done};
 	    end
 	    2: begin
 	       opb_ack <= adc1_config_done ? 1'b1 : 1'b0;
-	       opb_data_out <= {adc1_read_data_reg[15:8], adc1_read_data_reg[7:0], adc1_config_addr_reg, 7'b0, adc1_config_done};
+	       opb_data_out <= {adc1_read_data_reg[15:8], 
+	       			adc1_read_data_reg[7:0], 
+	       			adc1_config_addr_reg, 
+	       			7'b0, adc1_config_done};
 	    end
 	    3: begin
 	       opb_ack <= 1'b1;
-	       opb_data_out <= {32'b0};
+	       opb_data_out <= {adc0_fifo_full_cnt[15:8], adc0_fifo_full_cnt[7:0], 
+	       			adc0_fifo_empty_cnt[15:8], adc0_fifo_empty_cnt[7:0]};
+	    end
+	    4: begin
+	       opb_ack <= 1'b1;
+	       opb_data_out <= {adc1_fifo_full_cnt[15:8], adc1_fifo_full_cnt[7:0], 
+	       			adc1_fifo_empty_cnt[15:8], adc1_fifo_empty_cnt[7:0]};
+	    end
+	    5: begin
+	       opb_ack <= 1'b1;
+	       opb_data_out <= {adc0_dcm_unlocked_cnt[15:8], adc0_dcm_unlocked_cnt[7:0],
+	       			adc1_dcm_unlocked_cnt[15:8], adc1_dcm_unlocked_cnt[7:0]};
 	    end
 	  endcase
 	end
@@ -226,6 +249,33 @@ module opb_adc5g_controller(
   assign Sl_retry    = 1'b0;
   assign Sl_toutSup  = 1'b0;
   assign Sl_xferAck  = opb_ack;
+
+
+   /***** DCM Unlocked Counter ******/
+
+   reg [15:0] adc0_dcm_unlocked_cnt;
+   reg [15:0] adc1_dcm_unlocked_cnt;
+	      
+   always @(posedge OPB_Clk) begin
+      
+      if (OPB_Rst) begin
+	 adc0_dcm_unlocked_cnt <= 15'b0;
+	 adc1_dcm_unlocked_cnt <= 15'b0;
+      end else begin
+
+	 if (!adc0_dcm_locked) begin
+	    adc0_dcm_unlocked_cnt <= adc0_dcm_unlocked_cnt + 1;
+	 end
+
+	 if (!adc1_dcm_locked) begin
+	    adc1_dcm_unlocked_cnt <= adc1_dcm_unlocked_cnt + 1;
+	 end
+
+      end // else: !if(OPB_Rst)
+
+   end // always @ (posedge OPB_Clk)
+
+
 
   /********* DCM Reset Gen *********/
 
@@ -265,8 +315,8 @@ module opb_adc5g_controller(
     end
   end
 
-  assign adc0_dcm_reset = ((adc0_reset_counter != 0) || (adc0_startup));
-  assign adc1_dcm_reset = ((adc1_reset_counter != 0) || (adc1_startup));
+  assign adc0_dcm_reset = adc0_startup;
+  assign adc1_dcm_reset = adc1_startup;
   assign adc0_reset = adc0_reset_counter != 0;//adc0_reset_iob;
   assign adc1_reset = adc1_reset_counter != 0;//adc1_reset_iob;
 

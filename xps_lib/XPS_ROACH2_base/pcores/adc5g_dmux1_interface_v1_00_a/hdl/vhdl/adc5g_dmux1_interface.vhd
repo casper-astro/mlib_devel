@@ -16,6 +16,7 @@
 ----------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 library unisim;
 use unisim.vcomponents.all;
@@ -64,6 +65,8 @@ entity adc5g_dmux1_interface is
     ctrl_clk180_out : out std_logic;
     ctrl_clk270_out : out std_logic;
     ctrl_dcm_locked : out std_logic;
+    fifo_full_cnt   : out std_logic_vector(15 downto 0);
+    fifo_empty_cnt  : out std_logic_vector(15 downto 0);
     user_data_i0    : out std_logic_vector(adc_bit_width-1 downto 0);
     user_data_i1    : out std_logic_vector(adc_bit_width-1 downto 0);
     user_data_i2    : out std_logic_vector(adc_bit_width-1 downto 0);
@@ -111,10 +114,18 @@ architecture behavioral of adc5g_dmux1_interface is
   signal isd_clkn      : std_logic;
   signal isd_clkdiv    : std_logic;
   signal isd_rst       : std_logic;
-  signal isd0_rst      : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd1_rst      : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd2_rst      : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd3_rst      : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd0_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd1_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd2_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd3_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd0_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd1_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd2_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd3_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd0_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd1_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd2_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
+  signal isd3_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
 
   -- FIFO signals
   signal fifo_rst      : std_logic;
@@ -125,6 +136,8 @@ architecture behavioral of adc5g_dmux1_interface is
   signal fifo_full     : std_logic;
   signal fifo_afull    : std_logic;
   signal fifo_empty    : std_logic;
+  signal fifo_full_ci  : std_logic_vector(15 downto 0);
+  signal fifo_empty_ci : std_logic_vector(15 downto 0);
   signal fifo_din      : std_logic_vector(143 downto 0);
   signal fifo_din_buf0 : std_logic_vector(143 downto 0);
   signal fifo_din_buf1 : std_logic_vector(143 downto 0);
@@ -156,6 +169,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data0b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data0c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data0d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0a_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0b_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0c_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0d_post   : std_logic_vector(adc_bit_width-1 downto 0);
                        
   -- second core, "B"  
   signal data1         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -183,6 +200,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data1b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data1c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data1d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1a_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1b_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1c_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1d_post   : std_logic_vector(adc_bit_width-1 downto 0);
                       
   -- third core, "C"   
   signal data2         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -210,6 +231,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data2b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data2c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data2d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2a_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2b_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2c_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2d_post   : std_logic_vector(adc_bit_width-1 downto 0);
                        
   -- fourth core, "D"  
   signal data3         : std_logic_vector(adc_bit_width-1 downto 0);
@@ -237,6 +262,10 @@ architecture behavioral of adc5g_dmux1_interface is
   signal data3b_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data3c_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
   signal data3d_prebuf3: std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3a_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3b_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3c_post   : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3d_post   : std_logic_vector(adc_bit_width-1 downto 0);
 
   -- Gray code to binary converter
   component gc2bin
@@ -266,57 +295,11 @@ architecture behavioral of adc5g_dmux1_interface is
   
 begin
 
-  -- Synchronize resets for all components 
-  ISD_R  : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q =>     isd_rst);
-  MMCM_R : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q =>    mmcm_rst);
-  FIFO_R : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q =>    fifo_rst);
-  ADC_R  : FD port map (C => ctrl_clk_in, D => ctrl_reset, Q => adc_reset_o);
-
-
-  chan1_mode: if (mode=0) generate
-    GC2BI0 : gc2bin port map (gc  => data0a, bin => user_data_i0);
-    GC2BI1 : gc2bin port map (gc  => data1a, bin => user_data_i1);
-    GC2BI2 : gc2bin port map (gc  => data2a, bin => user_data_i2);
-    GC2BI3 : gc2bin port map (gc  => data3a, bin => user_data_i3);
-    GC2BI4 : gc2bin port map (gc  => data0b, bin => user_data_i4);
-    GC2BI5 : gc2bin port map (gc  => data1b, bin => user_data_i5);
-    GC2BI6 : gc2bin port map (gc  => data2b, bin => user_data_i6);
-    GC2BI7 : gc2bin port map (gc  => data3b, bin => user_data_i7);
-                                                    
-    GC2BQ0 : gc2bin port map (gc  => data0c, bin => user_data_q0);
-    GC2BQ1 : gc2bin port map (gc  => data1c, bin => user_data_q1);
-    GC2BQ2 : gc2bin port map (gc  => data2c, bin => user_data_q2);
-    GC2BQ3 : gc2bin port map (gc  => data3c, bin => user_data_q3);
-    GC2BQ4 : gc2bin port map (gc  => data0d, bin => user_data_q4);
-    GC2BQ5 : gc2bin port map (gc  => data1d, bin => user_data_q5);
-    GC2BQ6 : gc2bin port map (gc  => data2d, bin => user_data_q6);
-    GC2BQ7 : gc2bin port map (gc  => data3d, bin => user_data_q7);
-  end generate chan1_mode;
-  
-  chan2_mode: if (mode=1) generate
-    GC2BI0 : gc2bin port map (gc  => data0a, bin => user_data_i0);
-    GC2BI1 : gc2bin port map (gc  => data2a, bin => user_data_i1);
-    GC2BI2 : gc2bin port map (gc  => data0b, bin => user_data_i2);
-    GC2BI3 : gc2bin port map (gc  => data2b, bin => user_data_i3);
-    GC2BI4 : gc2bin port map (gc  => data0c, bin => user_data_i4);
-    GC2BI5 : gc2bin port map (gc  => data2c, bin => user_data_i5);
-    GC2BI6 : gc2bin port map (gc  => data0d, bin => user_data_i6);
-    GC2BI7 : gc2bin port map (gc  => data2d, bin => user_data_i7);
-                                                    
-    GC2BQ0 : gc2bin port map (gc  => data1a, bin => user_data_q0);
-    GC2BQ1 : gc2bin port map (gc  => data3a, bin => user_data_q1);
-    GC2BQ2 : gc2bin port map (gc  => data1b, bin => user_data_q2);
-    GC2BQ3 : gc2bin port map (gc  => data3b, bin => user_data_q3);
-    GC2BQ4 : gc2bin port map (gc  => data1c, bin => user_data_q4);
-    GC2BQ5 : gc2bin port map (gc  => data3c, bin => user_data_q5);
-    GC2BQ6 : gc2bin port map (gc  => data1d, bin => user_data_q6);
-    GC2BQ7 : gc2bin port map (gc  => data3d, bin => user_data_q7);
-  end generate chan2_mode;
-
-
--------------------------------------------------------
--- Component Instantiation
--------------------------------------------------------
+  -- Resets
+  adc_reset_o <= '0';
+  isd_rst     <= ctrl_reset;
+  mmcm_rst    <= ctrl_reset;
+  fifo_rst    <= not mmcm_locked;
 
   -- Clocks
 
@@ -447,10 +430,8 @@ begin
   
   iserdesx : for i in adc_bit_width-1 downto 0 generate
 
-    isd0_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd0_rst(i));
-    iserdes0 : ISERDES_NODELAY
+    iserdes0  : ISERDES_NODELAY
       generic map (
-        BITSLIP_ENABLE =>  TRUE,
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
         INTERFACE_TYPE=> "NETWORKING",
@@ -474,15 +455,13 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data0(i),
         OCLK      => '0',
-        RST       => isd0_rst(i),
+        RST       => isd_rst,
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
-    isd1_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd1_rst(i));
-    iserdes1 : ISERDES_NODELAY
+    iserdes1  : ISERDES_NODELAY
       generic map (
-        BITSLIP_ENABLE =>  TRUE,
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
         INTERFACE_TYPE=> "NETWORKING",
@@ -506,15 +485,13 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data1(i),
         OCLK      => '0',
-        RST       => isd1_rst(i),
+        RST       => isd_rst,
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
-    isd2_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd2_rst(i));
-    iserdes2 : ISERDES_NODELAY
+    iserdes2  : ISERDES_NODELAY
       generic map (
-        BITSLIP_ENABLE =>  TRUE,
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
         INTERFACE_TYPE=> "NETWORKING",
@@ -538,15 +515,13 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data2(i),
         OCLK      => '0',
-        RST       => isd2_rst(i),
+        RST       => isd_rst,
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
-    isd3_rbuf: FD port map (C => ctrl_clk_in, D => isd_rst, Q => isd3_rst(i));
-    iserdes3 : ISERDES_NODELAY
+    iserdes3  : ISERDES_NODELAY
       generic map (
-        BITSLIP_ENABLE =>  TRUE,
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
         INTERFACE_TYPE=> "NETWORKING",
@@ -570,13 +545,85 @@ begin
         CLKDIV    => isd_clkdiv,
         D         => data3(i),
         OCLK      => '0',
-        RST       => isd3_rst(i),
+        RST       => isd_rst,
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
   end generate iserdesx;
 
-
+  -- Convert from gray-code to binary
+  GC2B0A : gc2bin port map (gc  => data0a_prebuf0, bin => data0a_prebuf1);
+  GC2B0B : gc2bin port map (gc  => data0b_prebuf0, bin => data0b_prebuf1);
+  GC2B0C : gc2bin port map (gc  => data0c_prebuf0, bin => data0c_prebuf1);
+  GC2B0D : gc2bin port map (gc  => data0d_prebuf0, bin => data0d_prebuf1);
+  GC2B1A : gc2bin port map (gc  => data1a_prebuf0, bin => data1a_prebuf1);
+  GC2B1B : gc2bin port map (gc  => data1b_prebuf0, bin => data1b_prebuf1);
+  GC2B1C : gc2bin port map (gc  => data1c_prebuf0, bin => data1c_prebuf1);
+  GC2B1D : gc2bin port map (gc  => data1d_prebuf0, bin => data1d_prebuf1);
+  GC2B2A : gc2bin port map (gc  => data2a_prebuf0, bin => data2a_prebuf1);
+  GC2B2B : gc2bin port map (gc  => data2b_prebuf0, bin => data2b_prebuf1);
+  GC2B2C : gc2bin port map (gc  => data2c_prebuf0, bin => data2c_prebuf1);
+  GC2B2D : gc2bin port map (gc  => data2d_prebuf0, bin => data2d_prebuf1);
+  GC2B3A : gc2bin port map (gc  => data3a_prebuf0, bin => data3a_prebuf1);
+  GC2B3B : gc2bin port map (gc  => data3b_prebuf0, bin => data3b_prebuf1);
+  GC2B3C : gc2bin port map (gc  => data3c_prebuf0, bin => data3c_prebuf1);
+  GC2B3D : gc2bin port map (gc  => data3d_prebuf0, bin => data3d_prebuf1);
+  
+  -- Buffer up samples (to help with timing on ROACH2 rev-1)
+  data_buf : for i in adc_bit_width-1 downto 0 generate
+    -- first stage of buffers
+    D0A_1: FD port map (C => isd_clkdiv, D => data0a_pre(i), Q => data0a_prebuf0(i));
+    D0B_1: FD port map (C => isd_clkdiv, D => data0b_pre(i), Q => data0b_prebuf0(i));
+    D0C_1: FD port map (C => isd_clkdiv, D => data0c_pre(i), Q => data0c_prebuf0(i));
+    D0D_1: FD port map (C => isd_clkdiv, D => data0d_pre(i), Q => data0d_prebuf0(i));
+    D1A_1: FD port map (C => isd_clkdiv, D => data1a_pre(i), Q => data1a_prebuf0(i));
+    D1B_1: FD port map (C => isd_clkdiv, D => data1b_pre(i), Q => data1b_prebuf0(i));
+    D1C_1: FD port map (C => isd_clkdiv, D => data1c_pre(i), Q => data1c_prebuf0(i));
+    D1D_1: FD port map (C => isd_clkdiv, D => data1d_pre(i), Q => data1d_prebuf0(i));
+    D2A_1: FD port map (C => isd_clkdiv, D => data2a_pre(i), Q => data2a_prebuf0(i));
+    D2B_1: FD port map (C => isd_clkdiv, D => data2b_pre(i), Q => data2b_prebuf0(i));
+    D2C_1: FD port map (C => isd_clkdiv, D => data2c_pre(i), Q => data2c_prebuf0(i));
+    D2D_1: FD port map (C => isd_clkdiv, D => data2d_pre(i), Q => data2d_prebuf0(i));
+    D3A_1: FD port map (C => isd_clkdiv, D => data3a_pre(i), Q => data3a_prebuf0(i));
+    D3B_1: FD port map (C => isd_clkdiv, D => data3b_pre(i), Q => data3b_prebuf0(i));
+    D3C_1: FD port map (C => isd_clkdiv, D => data3c_pre(i), Q => data3c_prebuf0(i));
+    D3D_1: FD port map (C => isd_clkdiv, D => data3d_pre(i), Q => data3d_prebuf0(i));
+    -- second stage of buffers
+    D0A_2: FD port map (C => isd_clkdiv, D => data0a_prebuf1(i), Q => data0a_prebuf2(i));
+    D0B_2: FD port map (C => isd_clkdiv, D => data0b_prebuf1(i), Q => data0b_prebuf2(i));
+    D0C_2: FD port map (C => isd_clkdiv, D => data0c_prebuf1(i), Q => data0c_prebuf2(i));
+    D0D_2: FD port map (C => isd_clkdiv, D => data0d_prebuf1(i), Q => data0d_prebuf2(i));
+    D1A_2: FD port map (C => isd_clkdiv, D => data1a_prebuf1(i), Q => data1a_prebuf2(i));
+    D1B_2: FD port map (C => isd_clkdiv, D => data1b_prebuf1(i), Q => data1b_prebuf2(i));
+    D1C_2: FD port map (C => isd_clkdiv, D => data1c_prebuf1(i), Q => data1c_prebuf2(i));
+    D1D_2: FD port map (C => isd_clkdiv, D => data1d_prebuf1(i), Q => data1d_prebuf2(i));
+    D2A_2: FD port map (C => isd_clkdiv, D => data2a_prebuf1(i), Q => data2a_prebuf2(i));
+    D2B_2: FD port map (C => isd_clkdiv, D => data2b_prebuf1(i), Q => data2b_prebuf2(i));
+    D2C_2: FD port map (C => isd_clkdiv, D => data2c_prebuf1(i), Q => data2c_prebuf2(i));
+    D2D_2: FD port map (C => isd_clkdiv, D => data2d_prebuf1(i), Q => data2d_prebuf2(i));
+    D3A_2: FD port map (C => isd_clkdiv, D => data3a_prebuf1(i), Q => data3a_prebuf2(i));
+    D3B_2: FD port map (C => isd_clkdiv, D => data3b_prebuf1(i), Q => data3b_prebuf2(i));
+    D3C_2: FD port map (C => isd_clkdiv, D => data3c_prebuf1(i), Q => data3c_prebuf2(i));
+    D3D_2: FD port map (C => isd_clkdiv, D => data3d_prebuf1(i), Q => data3d_prebuf2(i));
+    -- third stage of buffers
+    D0A_3: FD port map (C => isd_clkdiv, D => data0a_prebuf2(i), Q => data0a_prebuf3(i));
+    D0B_3: FD port map (C => isd_clkdiv, D => data0b_prebuf2(i), Q => data0b_prebuf3(i));
+    D0C_3: FD port map (C => isd_clkdiv, D => data0c_prebuf2(i), Q => data0c_prebuf3(i));
+    D0D_3: FD port map (C => isd_clkdiv, D => data0d_prebuf2(i), Q => data0d_prebuf3(i));
+    D1A_3: FD port map (C => isd_clkdiv, D => data1a_prebuf2(i), Q => data1a_prebuf3(i));
+    D1B_3: FD port map (C => isd_clkdiv, D => data1b_prebuf2(i), Q => data1b_prebuf3(i));
+    D1C_3: FD port map (C => isd_clkdiv, D => data1c_prebuf2(i), Q => data1c_prebuf3(i));
+    D1D_3: FD port map (C => isd_clkdiv, D => data1d_prebuf2(i), Q => data1d_prebuf3(i));
+    D2A_3: FD port map (C => isd_clkdiv, D => data2a_prebuf2(i), Q => data2a_prebuf3(i));
+    D2B_3: FD port map (C => isd_clkdiv, D => data2b_prebuf2(i), Q => data2b_prebuf3(i));
+    D2C_3: FD port map (C => isd_clkdiv, D => data2c_prebuf2(i), Q => data2c_prebuf3(i));
+    D2D_3: FD port map (C => isd_clkdiv, D => data2d_prebuf2(i), Q => data2d_prebuf3(i));
+    D3A_3: FD port map (C => isd_clkdiv, D => data3a_prebuf2(i), Q => data3a_prebuf3(i));
+    D3B_3: FD port map (C => isd_clkdiv, D => data3b_prebuf2(i), Q => data3b_prebuf3(i));
+    D3C_3: FD port map (C => isd_clkdiv, D => data3c_prebuf2(i), Q => data3c_prebuf3(i));
+    D3D_3: FD port map (C => isd_clkdiv, D => data3d_prebuf2(i), Q => data3d_prebuf3(i));
+  end generate data_buf;
+  
   -- Use FIFO to cross clock domains
   FIFO : fifo_generator_v5_3
     port map (
@@ -590,95 +637,24 @@ begin
       full        => fifo_full,
       almost_full => fifo_afull,
       empty       => fifo_empty
-      
       );
 
-  -- Buffer up FIFO inpus (to help with timing on ROACH2 rev-1)
-  data_buf : for i in adc_bit_width-1 downto 0 generate
-    -- first stage of buffers
-    D0A_0: FD port map (C => fifo_wr_clk, D => data0a_pre(i), Q => data0a_prebuf0(i));
-    D0B_0: FD port map (C => fifo_wr_clk, D => data0b_pre(i), Q => data0b_prebuf0(i));
-    D0C_0: FD port map (C => fifo_wr_clk, D => data0c_pre(i), Q => data0c_prebuf0(i));
-    D0D_0: FD port map (C => fifo_wr_clk, D => data0d_pre(i), Q => data0d_prebuf0(i));
-    D1A_0: FD port map (C => fifo_wr_clk, D => data1a_pre(i), Q => data1a_prebuf0(i));
-    D1B_0: FD port map (C => fifo_wr_clk, D => data1b_pre(i), Q => data1b_prebuf0(i));
-    D1C_0: FD port map (C => fifo_wr_clk, D => data1c_pre(i), Q => data1c_prebuf0(i));
-    D1D_0: FD port map (C => fifo_wr_clk, D => data1d_pre(i), Q => data1d_prebuf0(i));
-    D2A_0: FD port map (C => fifo_wr_clk, D => data2a_pre(i), Q => data2a_prebuf0(i));
-    D2B_0: FD port map (C => fifo_wr_clk, D => data2b_pre(i), Q => data2b_prebuf0(i));
-    D2C_0: FD port map (C => fifo_wr_clk, D => data2c_pre(i), Q => data2c_prebuf0(i));
-    D2D_0: FD port map (C => fifo_wr_clk, D => data2d_pre(i), Q => data2d_prebuf0(i));
-    D3A_0: FD port map (C => fifo_wr_clk, D => data3a_pre(i), Q => data3a_prebuf0(i));
-    D3B_0: FD port map (C => fifo_wr_clk, D => data3b_pre(i), Q => data3b_prebuf0(i));
-    D3C_0: FD port map (C => fifo_wr_clk, D => data3c_pre(i), Q => data3c_prebuf0(i));
-    D3D_0: FD port map (C => fifo_wr_clk, D => data3d_pre(i), Q => data3d_prebuf0(i));
-    -- second stage of buffers
-    D0A_1: FD port map (C => fifo_wr_clk, D => data0a_prebuf0(i), Q => data0a_prebuf1(i));
-    D0B_1: FD port map (C => fifo_wr_clk, D => data0b_prebuf0(i), Q => data0b_prebuf1(i));
-    D0C_1: FD port map (C => fifo_wr_clk, D => data0c_prebuf0(i), Q => data0c_prebuf1(i));
-    D0D_1: FD port map (C => fifo_wr_clk, D => data0d_prebuf0(i), Q => data0d_prebuf1(i));
-    D1A_1: FD port map (C => fifo_wr_clk, D => data1a_prebuf0(i), Q => data1a_prebuf1(i));
-    D1B_1: FD port map (C => fifo_wr_clk, D => data1b_prebuf0(i), Q => data1b_prebuf1(i));
-    D1C_1: FD port map (C => fifo_wr_clk, D => data1c_prebuf0(i), Q => data1c_prebuf1(i));
-    D1D_1: FD port map (C => fifo_wr_clk, D => data1d_prebuf0(i), Q => data1d_prebuf1(i));
-    D2A_1: FD port map (C => fifo_wr_clk, D => data2a_prebuf0(i), Q => data2a_prebuf1(i));
-    D2B_1: FD port map (C => fifo_wr_clk, D => data2b_prebuf0(i), Q => data2b_prebuf1(i));
-    D2C_1: FD port map (C => fifo_wr_clk, D => data2c_prebuf0(i), Q => data2c_prebuf1(i));
-    D2D_1: FD port map (C => fifo_wr_clk, D => data2d_prebuf0(i), Q => data2d_prebuf1(i));
-    D3A_1: FD port map (C => fifo_wr_clk, D => data3a_prebuf0(i), Q => data3a_prebuf1(i));
-    D3B_1: FD port map (C => fifo_wr_clk, D => data3b_prebuf0(i), Q => data3b_prebuf1(i));
-    D3C_1: FD port map (C => fifo_wr_clk, D => data3c_prebuf0(i), Q => data3c_prebuf1(i));
-    D3D_1: FD port map (C => fifo_wr_clk, D => data3d_prebuf0(i), Q => data3d_prebuf1(i));
-    -- third stage of buffers
-    D0A_2: FD port map (C => fifo_wr_clk, D => data0a_prebuf1(i), Q => data0a_prebuf2(i));
-    D0B_2: FD port map (C => fifo_wr_clk, D => data0b_prebuf1(i), Q => data0b_prebuf2(i));
-    D0C_2: FD port map (C => fifo_wr_clk, D => data0c_prebuf1(i), Q => data0c_prebuf2(i));
-    D0D_2: FD port map (C => fifo_wr_clk, D => data0d_prebuf1(i), Q => data0d_prebuf2(i));
-    D1A_2: FD port map (C => fifo_wr_clk, D => data1a_prebuf1(i), Q => data1a_prebuf2(i));
-    D1B_2: FD port map (C => fifo_wr_clk, D => data1b_prebuf1(i), Q => data1b_prebuf2(i));
-    D1C_2: FD port map (C => fifo_wr_clk, D => data1c_prebuf1(i), Q => data1c_prebuf2(i));
-    D1D_2: FD port map (C => fifo_wr_clk, D => data1d_prebuf1(i), Q => data1d_prebuf2(i));
-    D2A_2: FD port map (C => fifo_wr_clk, D => data2a_prebuf1(i), Q => data2a_prebuf2(i));
-    D2B_2: FD port map (C => fifo_wr_clk, D => data2b_prebuf1(i), Q => data2b_prebuf2(i));
-    D2C_2: FD port map (C => fifo_wr_clk, D => data2c_prebuf1(i), Q => data2c_prebuf2(i));
-    D2D_2: FD port map (C => fifo_wr_clk, D => data2d_prebuf1(i), Q => data2d_prebuf2(i));
-    D3A_2: FD port map (C => fifo_wr_clk, D => data3a_prebuf1(i), Q => data3a_prebuf2(i));
-    D3B_2: FD port map (C => fifo_wr_clk, D => data3b_prebuf1(i), Q => data3b_prebuf2(i));
-    D3C_2: FD port map (C => fifo_wr_clk, D => data3c_prebuf1(i), Q => data3c_prebuf2(i));
-    D3D_2: FD port map (C => fifo_wr_clk, D => data3d_prebuf1(i), Q => data3d_prebuf2(i));
-    -- fourth stage of buffers
-    D0A_3: FD port map (C => fifo_wr_clk, D => data0a_prebuf2(i), Q => data0a_prebuf3(i));
-    D0B_3: FD port map (C => fifo_wr_clk, D => data0b_prebuf2(i), Q => data0b_prebuf3(i));
-    D0C_3: FD port map (C => fifo_wr_clk, D => data0c_prebuf2(i), Q => data0c_prebuf3(i));
-    D0D_3: FD port map (C => fifo_wr_clk, D => data0d_prebuf2(i), Q => data0d_prebuf3(i));
-    D1A_3: FD port map (C => fifo_wr_clk, D => data1a_prebuf2(i), Q => data1a_prebuf3(i));
-    D1B_3: FD port map (C => fifo_wr_clk, D => data1b_prebuf2(i), Q => data1b_prebuf3(i));
-    D1C_3: FD port map (C => fifo_wr_clk, D => data1c_prebuf2(i), Q => data1c_prebuf3(i));
-    D1D_3: FD port map (C => fifo_wr_clk, D => data1d_prebuf2(i), Q => data1d_prebuf3(i));
-    D2A_3: FD port map (C => fifo_wr_clk, D => data2a_prebuf2(i), Q => data2a_prebuf3(i));
-    D2B_3: FD port map (C => fifo_wr_clk, D => data2b_prebuf2(i), Q => data2b_prebuf3(i));
-    D2C_3: FD port map (C => fifo_wr_clk, D => data2c_prebuf2(i), Q => data2c_prebuf3(i));
-    D2D_3: FD port map (C => fifo_wr_clk, D => data2d_prebuf2(i), Q => data2d_prebuf3(i));
-    D3A_3: FD port map (C => fifo_wr_clk, D => data3a_prebuf2(i), Q => data3a_prebuf3(i));
-    D3B_3: FD port map (C => fifo_wr_clk, D => data3b_prebuf2(i), Q => data3b_prebuf3(i));
-    D3C_3: FD port map (C => fifo_wr_clk, D => data3c_prebuf2(i), Q => data3c_prebuf3(i));
-    D3D_3: FD port map (C => fifo_wr_clk, D => data3d_prebuf2(i), Q => data3d_prebuf3(i));
-  end generate data_buf;
-  
   -- purpose: control the FIFO read enable signal
   -- type   : sequential
-  -- inputs : fifo_wr_clk, fifo_rst, fifo_afull
+  -- inputs : fifo_wr_clk, fifo_rst, fifo_empty
   -- outputs: fifo_rd_en, fifo_din_buf(n)
-  FIFO_RD_CTRL: process (fifo_wr_clk, fifo_rst, fifo_afull)
+  FIFO_RD_CTRL: process (fifo_wr_clk, fifo_rst, fifo_empty)
   begin  -- process FIFO_RD_CTRL
     if fifo_wr_clk'event and fifo_wr_clk = '1' then  -- rising clock edge
       if fifo_rst = '1' then              -- synchronous reset (active high)
+        fifo_wr_en <= '0';
         fifo_rd_en <= '0';
         fifo_din <= (others => '0');
         fifo_din_buf0 <= (others => '0');
         fifo_din_buf1 <= (others => '0');
       else
-        fifo_rd_en <= fifo_afull;
+        fifo_wr_en <= '1';
+        fifo_rd_en <= not fifo_empty;
         fifo_din(143 downto adc_bit_width*16) <= (others => '0');
         fifo_din(adc_bit_width*16-1 downto 0) <=
           data0d_prebuf3 & data0c_prebuf3 & data0b_prebuf3 & data0a_prebuf3 &
@@ -691,7 +667,38 @@ begin
     end if;
   end process FIFO_RD_CTRL;
 
-  fifo_wr_en <= '1';
+  -- purpose: count the number of times the FIFO's full signal is asserted
+  -- type   : sequential
+  -- inputs : fifo_wr_clk, ctrl_reset, fifo_full_ci
+  -- outputs: fifo_full_ci
+  FIFO_FULL_CNTR: process (fifo_wr_clk, ctrl_reset)
+  begin  -- process FIFO_FULL_CNTR
+    if ctrl_reset = '1' then              -- asynchronous reset (active high)
+      fifo_full_ci <= (others => '0');
+    elsif fifo_wr_clk'event and fifo_wr_clk = '1' then  -- rising clock edge
+      if fifo_full = '1' then
+        fifo_full_ci <= std_logic_vector(unsigned(fifo_full_ci) + 1);
+      end if;
+    end if;
+  end process;
+  fifo_full_cnt <= fifo_full_ci;
+
+  -- purpose: count the number of times the FIFO's empty signal is asserted
+  -- type   : sequential
+  -- inputs : fifo_rd_clk, ctrl_reset, fifo_empty_ci
+  -- outputs: fifo_empty_ci
+  FIFO_EMPTY_CNTR: process (fifo_rd_clk, ctrl_reset)
+  begin  -- process FIFO_EMPTY_CNTR
+    if ctrl_reset = '1' then              -- asynchronous reset (active high)
+      fifo_empty_ci <= (others => '0');
+    elsif fifo_rd_clk'event and fifo_rd_clk = '1' then  -- rising clock edge
+      if fifo_empty = '1' then
+        fifo_empty_ci <= std_logic_vector(unsigned(fifo_empty_ci) + 1);
+      end if;
+    end if;
+  end process;
+  fifo_empty_cnt <= fifo_empty_ci;
+
   fifo_wr_clk <= isd_clkdiv;
   fifo_rd_clk <= ctrl_clk_in;
   data0d <= fifo_dout(adc_bit_width*16-1 downto adc_bit_width*15); 
@@ -710,6 +717,48 @@ begin
   data3c <= fifo_dout(adc_bit_width*3-1  downto adc_bit_width*2);
   data3b <= fifo_dout(adc_bit_width*2-1  downto adc_bit_width);
   data3a <= fifo_dout(adc_bit_width-1    downto 0);
-
   
+  -- Re-order the outputs
+  -- when only one input is used (either A or C)
+  chan1_mode: if (mode=0) generate
+    user_data_i0 <= data0a;
+    user_data_i1 <= data1a;
+    user_data_i2 <= data2a;
+    user_data_i3 <= data3a;
+    user_data_i4 <= data0b;
+    user_data_i5 <= data1b;
+    user_data_i6 <= data2b;
+    user_data_i7 <= data3b;
+    user_data_q0 <= data0c;
+    user_data_q1 <= data1c;
+    user_data_q2 <= data2c;
+    user_data_q3 <= data3c;
+    user_data_q4 <= data0d;
+    user_data_q5 <= data1d;
+    user_data_q6 <= data2d;
+    user_data_q7 <= data3d;
+  end generate chan1_mode;
+  
+  -- Re-order the outputs
+  -- when both the A & C inputs are used
+  chan2_mode: if (mode=1) generate
+    user_data_i0 <= data0a;
+    user_data_i1 <= data2a;
+    user_data_i2 <= data0b;
+    user_data_i3 <= data2b;
+    user_data_i4 <= data0c;
+    user_data_i5 <= data2c;
+    user_data_i6 <= data0d;
+    user_data_i7 <= data2d;
+    user_data_q0 <= data1a;
+    user_data_q1 <= data3a;
+    user_data_q2 <= data1b;
+    user_data_q3 <= data3b;
+    user_data_q4 <= data1c;
+    user_data_q5 <= data3c;
+    user_data_q6 <= data1d;
+    user_data_q7 <= data3d;
+  end generate chan2_mode;
+
+
 end behavioral;    
