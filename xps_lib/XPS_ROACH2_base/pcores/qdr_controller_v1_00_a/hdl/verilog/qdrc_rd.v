@@ -9,7 +9,7 @@ module qdrc_rd(
     phy_strb,
     phy_data
   );
-  parameter DATA_WIDTH = 18;
+  parameter DATA_WIDTH = 36;
   parameter ADDR_WIDTH = 21;
 
   input  clk, reset, phy_rdy;

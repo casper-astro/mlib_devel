@@ -127,7 +127,10 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     fprintf(mhs_fid,'\n');
 
     if strcmp(mpc_type, 'powerpc440_ext'),
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %calculate number of fixed opb0 devices
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
       opb0_devs = 0;  
       opb_offset_tmp = opb_addr;        
       plb_offset_tmp = plb_addr;
@@ -144,7 +147,10 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
       opb_slaves = opb_slaves + opb0_devs;
       clog([num2str(opb0_devs),' fixed opb0 devices in total found'],'gen_xps_mod_mhs_debug');
 
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %calculate number of opb2opb bridges to be added to opb0
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
       opb2opbs = 0;
       redo = 1;
 
@@ -163,9 +169,11 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
           redo = 0;
 
           blk_obj = xps_objs{n};
+          opb_offset_tmp_old = opb_offset_tmp;
+          plb_offset_tmp_old = plb_offset_tmp;
+  
           [plb_cores, plb_offset_tmp, opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, plb_offset_tmp, opb_offset_tmp);
-
-          clog([get(blk_obj,'simulink_name'),' with ',num2str(plb_cores),': plb cores, ',num2str(opb_cores),': opb cores at ',num2str(plb_offset_tmp),': plb offset, ',num2str(opb_offset_tmp),': opb offset'],'gen_xps_mod_mhs_desperate_debug');
+%          clog(['0x',dec2hex(opb_offset_tmp_old,8),'-0x',dec2hex(opb_offset_tmp-1,8),' ',get(blk_obj,'simulink_name')],'gen_xps_mod_mhs_desperate_debug');
 
           bridge_start = opb_addr_init + ((opb2opbs_tmp+1) * opb_bridge_size);
 
@@ -173,25 +181,29 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
           of_devices = ((opb_slaves_tmp + opb_cores) > max_opb_per_bridge);
 
           if (of_space || of_devices),                                   %if we run out of space on bus
-            opb2opbs_tmp = opb2opbs_tmp + 1;
+            
+            if (of_space),
+              clog([get(blk_obj,'simulink_name'),' overflowed bus space for opb',num2str(opb2opbs),' ending at address 0x',dec2hex(opb_offset_tmp,8)],'gen_xps_mod_mhs_debug');
+            else
+              clog([get(blk_obj,'simulink_name'),' overflowed number of devices for opb',num2str(opb2opbs),'. ',num2str(max_opb_per_bridge),' allowed, got ',num2str(opb_slaves_tmp+opb_cores)],'gen_xps_mod_mhs_debug');
+            end
+  
+            opb2opbs_tmp = opb2opbs_tmp + 1;                             %  increase count of bridges 
+            opb_slaves_tmp = 0;                                          %  reset bridge slave count to 0
+            opb_offset_tmp = bridge_start;                               %  set address to start at bridge
+
             if (opb2opbs_tmp > opb2opbs),                                % and we need a bridge that pushes the number to more than we have already
-              if (of_space),
-                clog(['Overflowed bus space for opb',num2str(opb2opbs),' at device ',num2str(n),', ending at address 0x',dec2hex(opb_offset_tmp,8)],'gen_xps_mod_mhs_debug');
-              else
-                clog(['Overflowed number of devices for opb',num2str(opb2opbs),' at device ',num2str(n),'. ',num2str(max_opb_per_bridge),' allowed, got ',num2str(opb_slaves_tmp+opb_cores)],'gen_xps_mod_mhs_debug');
-              end
               redo = 1;                                                  %   then add to the master count of devices and start again 
               opb2opbs = opb2opbs + 1; 
               break;                                  
-            else                                                         % otherwise 
-              opb_slaves_tmp = opb_cores;                                %  reset slaves
-              opb_offset_tmp = bridge_start;                             %  set address to start at bridge
             end
           else                                                           %otherwise  
             opb_slaves_tmp = opb_slaves_tmp + opb_cores;                 % increment number of devices
             n = n + 1;                                                   % next block
-          end
-        end
+            
+            clog(['0x',dec2hex(opb_offset_tmp_old,8),'-0x',dec2hex(opb_offset_tmp-1,8), ' opbs: ',num2str(opb0_devices),' fixed opb0 + ', num2str(opb_cores),' on opb', num2str(opb2opbs_tmp),' (',num2str(opb_slaves_tmp),' so far)', ' (',get(blk_obj,'simulink_name'),')'],'gen_xps_mod_mhs_desperate_debug'); 
+          end %if of_space || of_devices
+        end %n
       end %while redo
       opb_slaves = opb_slaves + opb2opbs; %on the last iteration we have the number of bridges required on opb0
       clog(['Finished searching. ',num2str(opb2opbs),' opb2opb bridges found giving ',num2str(opb_slaves),' initial devices on opb0'], 'gen_xps_mod_mhs_debug')
@@ -208,6 +220,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
         plb_addr_start = plb_addr;
         opb_addr_start = opb_addr;
         [plb_cores, plb_offset_tmp, opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, plb_addr, opb_addr);
+        %clog(['0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_offset_tmp-1,8),' ',get(blk_obj,'simulink_name')],'gen_xps_mod_mhs_desperate_debug');
 
         if plb_cores + plb_slaves > 16
             error('The total number of slave cores on PLB bus exceed 16 devices');
@@ -264,6 +277,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
                     opb_slaves = opb_cores;   %put all cores on new bus
                     opb_name = ['opb',num2str(opb_bus_inst)];
                     opb_addr = bridge_start;
+                    opb_addr_start = opb_addr;
                     try
                         opb_bridge_obj = xps_opb2opb(opb_name, opb_addr, opb_bridge_size);
                     catch
@@ -277,7 +291,6 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
                     error('External PowerPC 440 does not support PLB devices.');
                 end
 
-                clog(['0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_addr,8), ' opbs: ',num2str(opb_cores),'(',num2str(opb0_devices), ') => ', num2str(opb_slaves),' on opb',num2str(opb_bus_inst),' (',get(blk_obj,'simulink_name'),')'],'gen_xps_mod_mhs_debug'); 
             % end case 'powerpc440_ext'
 
             otherwise
@@ -294,6 +307,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             disp(lasterr);
             error('Error found during Peripheral generation in MHS (gen_mhs_ip).');
         end
+        clog(['0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_addr-1,8), ' opbs: ',num2str(opb0_devices),' fixed opb0 + ', num2str(opb_cores),' on opb', num2str(opb_bus_inst),' (',num2str(opb_slaves),' so far)', ' (',get(blk_obj,'simulink_name'),')'],'gen_xps_mod_mhs_debug'); 
 
         fprintf(mhs_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
         fprintf(mhs_fid,str);

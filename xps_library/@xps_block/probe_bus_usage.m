@@ -65,6 +65,7 @@ for opb = 1:length(range_opb),
     opb_addr_end = opb_addr_start + range_opb(opb); 
   end
 end
+clog([get(blk_obj,'simulink_name'),': align (0x',dec2hex(align_opb,8),') range (0x',dec2hex(range_opb,8),') (0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_addr_end-1,8),')'],{'probe_bus_usage_debug'});
 
 if length(align_plb) ~= length(range_plb)
   error(['plb_address_align and plb_address_offset lengths are different for ',blk_obj.simulink_name]); 

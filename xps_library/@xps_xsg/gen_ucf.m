@@ -28,7 +28,7 @@ hw_sys  = blk_obj.hw_sys;
 app_clk = blk_obj.clk_src;
 app_clk_rate = blk_obj.clk_rate;
 
-if ~isempty(strmatch(app_clk, {'aux0_clk', 'aux1_clk', 'aux0_clk2x'}))
+if ~isempty(strmatch(app_clk, {'aux_clk', 'aux_clk2x', 'aux0_clk', 'aux1_clk', 'aux0_clk2x'}))
 
     toks = regexp(app_clk, '(.+_clk)2x', 'tokens');
 

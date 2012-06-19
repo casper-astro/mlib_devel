@@ -62,9 +62,7 @@ overflow = get_var('overflow', 'defaults', defaults, varargin{:});
 clog(flatstrcell(varargin),'twiddle_general_3mult_init_debug');
 
 if( strcmp(arch,'Virtex2Pro') ),
-%    disp('targeting V2Pro');
 elseif( strcmp(arch,'Virtex5') ),
-%    disp('targeting V5');
 else,
     clog(['twiddle_general_3mult_init: unknown target architecture ',arch],'error');
     error('twiddle_general_3mult_init.m: Unknown target architecture');
@@ -72,6 +70,15 @@ else,
 end
 
 delete_lines(blk);
+
+%default case, leave clean block with nothing for storage in the libraries 
+if isempty(Coeffs)
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting twiddle_general_3mult_init', 'trace');
+  return;
+end
 
 %a input signal path
 reuse_block(blk, 'a', 'built-in/inport', 'Port', '1', 'Position',[225 28 255 42]);

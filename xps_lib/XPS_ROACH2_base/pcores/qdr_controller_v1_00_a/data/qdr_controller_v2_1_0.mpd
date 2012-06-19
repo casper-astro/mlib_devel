@@ -10,9 +10,9 @@ BEGIN qdr_controller
 ## Bus Interfaces
   BUS_INTERFACE BUS = MQDR, BUS_TYPE = INITIATOR, BUS_STD = QDR
 ## Peripheral parameter
-  PARAMETER DATA_WIDTH   = 18,  DT = INTEGER
-  PARAMETER BW_WIDTH     = 2,   DT = INTEGER
-  PARAMETER ADDR_WIDTH   = 22,  DT = INTEGER
+  PARAMETER DATA_WIDTH   = 36,  DT = INTEGER
+  PARAMETER BW_WIDTH     = 4,   DT = INTEGER
+  PARAMETER ADDR_WIDTH   = 21,  DT = INTEGER
   PARAMETER BURST_LENGTH = 4,   DT = INTEGER
   PARAMETER CLK_FREQ     = 200, DT = INTEGER
 
@@ -22,6 +22,7 @@ BEGIN qdr_controller
   PORT clk270  = clk270,  DIR = I
   PORT div_clk = div_clk, DIR = I
   PORT reset   = reset,   DIR = I
+  PORT idelay_rdy   = idelay_rdy,   DIR = I
 
 ## External Ports
   PORT qdr_k_n       = qdr_k_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE

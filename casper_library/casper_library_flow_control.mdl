@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed May 11 16:04:53 2011"
+  LastModifiedDate	  "Thu May 10 15:59:20 2012"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:7>"
+  ModelVersionFormat	  "1.%<AutoIncrement:8>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -586,7 +586,7 @@ Library {
   }
   System {
     Name		    "casper_library_flow_control"
-    Location		    [274, 361, 806, 808]
+    Location		    [610, 375, 1142, 822]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -802,27 +802,28 @@ Library {
       "ed into the specified number\nof outputs with the specified arithmetic types.\nDivisions are made from most sign"
       "ificant bit."
       MaskPromptString	      "Mode:|Number of outputs:|Output width:|Output binary point position:|Output arithmetic t"
-      "ype: (Unsigned=0, Signed=1, Boolean=2)|Output to workspace?|Variable name prefix:|Output to model as well?"
-      MaskStyleString	      "popup(divisions of equal size|divisions of arbitrary size),edit,edit,edit,edit,checkbox,e"
-      "dit,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on"
-      MaskCallbackString      "bus_expand_callback();||bus_expand_callback();|||bus_expand_callback();||"
-      MaskEnableString	      "on,on,on,on,on,on,off,off"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,"
-      MaskVariables	      "mode=&1;outputNum=@2;outputWidth=@3;outputBinaryPt=@4;outputArithmeticType=@5;outputToWorks"
-      "pace=&6;variablePrefix=&7;outputToModelAsWell=&8;"
+      "ype: (Unsigned=0, Signed=1, Boolean=2)|Print format string?|Output to workspace?|Variable name prefix:|Output to"
+      " model as well?"
+      MaskStyleString	      "popup(divisions of equal size|divisions of arbitrary size),edit,edit,edit,edit,checkbox,c"
+      "heckbox,edit,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "bus_expand_callback();||bus_expand_callback();||||bus_expand_callback();||"
+      MaskEnableString	      "on,on,on,on,on,on,on,off,off"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,"
+      MaskVariables	      "mode=&1;outputNum=@2;outputWidth=@3;outputBinaryPt=@4;outputArithmeticType=@5;show_format=&"
+      "6;outputToWorkspace=&7;variablePrefix=&8;outputToModelAsWell=&9;"
       MaskInitialization      "bus_expand_init(gcb,...\n    'mode', mode, ...\n    'outputNum', outputNum, ...\n    'o"
       "utputWidth', outputWidth, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArit"
-      "hmeticType, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'variablePrefix', variablePrefix, ...\n   "
-      " 'outputToModelAsWell', outputToModelAsWell);"
+      "hmeticType, ...\n    'show_format', show_format, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'vari"
+      "ablePrefix', variablePrefix, ...\n    'outputToModelAsWell', outputToModelAsWell);"
       MaskIconFrame	      on
       MaskIconOpaque	      off
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "divisions of equal size|2|8|7|1|off|out|on"
-      MaskTabNameString	      ",,,,,,,"
+      MaskValueString	      "divisions of equal size|2|8|7|1|off|off|out|on"
+      MaskTabNameString	      ",,,,,,,,"
       System {
 	Name			"bus_expand"
 	Location		[647, 130, 1518, 588]
@@ -970,15 +971,22 @@ Library {
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  SrcBlock		  "reinterpret1"
+	  SrcBlock		  "bus_in"
 	  SrcPort		  1
-	  DstBlock		  "lsb_out1"
-	  DstPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "slice2"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "slice1"
+	    DstPort		    1
+	  }
 	}
 	Line {
-	  SrcBlock		  "slice1"
+	  SrcBlock		  "slice2"
 	  SrcPort		  1
-	  DstBlock		  "reinterpret1"
+	  DstBlock		  "reinterpret2"
 	  DstPort		  1
 	}
 	Line {
@@ -988,23 +996,16 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "slice2"
+	  SrcBlock		  "slice1"
 	  SrcPort		  1
-	  DstBlock		  "reinterpret2"
+	  DstBlock		  "reinterpret1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "bus_in"
+	  SrcBlock		  "reinterpret1"
 	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "slice1"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "slice2"
-	    DstPort		    1
-	  }
+	  DstBlock		  "lsb_out1"
+	  DstPort		  1
 	}
       }
     }
@@ -3132,31 +3133,32 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag1
-    Data		    "  %)30     .    \\ <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ )J2Z04.    8 <  "
-    " 8    (     @         %    \"     $    !     0         %  0 %0    $   \"]    9&5F875L=',                 ;6]D90   "
-    "                   ;W5T<'5T3G5M                ;W5T<'5T5VED=&@             ;W5T<'5T0FEN87)Y4'0         ;W5T<'5T07)"
-    "I=&AM971I8U1Y<&4 ;W5T<'5T5&]7;W)K<W!A8V4     =F%R:6%B;&50<F5F:7@         ;W5T<'5T5&]-;V1E;$%S5V5L;       #@   &@$ "
-    "  &    \"     $         !0    @    !    $     $         #@   #     &    \"     0         !0    @    !    !     $  "
-    "       $  $ &UO9&4.    2     8    (    !          %    \"     $    7     0         0    %P   &1I=FES:6]N<R!O9B!E<7"
-    "5A;\"!S:7IE  X   !     !@    @    $          4    (     0    D    !         !     )    ;W5T<'5T3G5M          X    "
-    "X    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !          % "
-    "   \"     $    +     0         0    \"P   &]U='!U=%=I9'1H       .    .     8    (    !@         %    \"     $    !"
-    "     0         )    \"            \"! #@   $     &    \"     0         !0    @    !    #@    $         $     X   !"
-    "O=71P=71\":6YA<GE0=   #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            <0 X   "
-    "!(    !@    @    $          4    (     0   !0    !         !     4    ;W5T<'5T07)I=&AM971I8U1Y<&4     #@   #@    &"
-    "    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !(    !@    @    $          4    ("
-    "     0   !$    !         !     1    ;W5T<'5T5&]7;W)K<W!A8V4         #@   #     &    \"     0         !0    @    ! "
-    "    P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    .     0         0    #@   '9A<FEA8F"
-    "QE4')E9FEX   .    ,     8    (    !          %    \"     $    #     0         0  , ;W5T  X   !(    !@    @    $   "
-    "       4    (     0   !,    !         !     3    ;W5T<'5T5&]-;V1E;$%S5V5L;       #@   #     &    \"     0         "
-    "!0    @    !     P    $         $  # &]F9@ .    2     8    (    !          %    \"     $    7     0         0    %"
-    "P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X    X    !@    @    &          4    (     0    $    !          D    (      "
-    "       $ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \""
-    "     8         !0    @    !     0    $         \"0    @            <0 X    X    !@    @    &          4    (     0"
-    "    $    !          D    (            \\#\\.    ,     8    (    !          %    \"     $    #     0         0  , ;"
-    "V9F  X    P    !@    @    $          4    (     0    ,    !         !   P!O=70 #@   #     &    \"     0         !0"
-    "    @    !     @    $         $  \" &]N   "
+    Data		    "  %)30     .    0 @   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ '\"DN0$.    L <  "
+    " 8    (     @         %    \"     $    !     0         %  0 %0    $   #2    9&5F875L=',                 ;6]D90    "
+    "                  ;W5T<'5T3G5M                ;W5T<'5T5VED=&@             ;W5T<'5T0FEN87)Y4'0         ;W5T<'5T07)I"
+    "=&AM971I8U1Y<&4 <VAO=U]F;W)M870             ;W5T<'5T5&]7;W)K<W!A8V4     =F%R:6%B;&50<F5F:7@         ;W5T<'5T5&]-;V"
+    "1E;$%S5V5L;           #@   &@$   &    \"     $         !0    @    !    $     $         #@   #     &    \"     0   "
+    "      !0    @    !    !     $         $  $ &UO9&4.    2     8    (    !          %    \"     $    7     0         "
+    "0    %P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X   !     !@    @    $          4    (     0    D    !         !     )"
+    "    ;W5T<'5T3G5M          X    X    !@    @    &          4    (     0    $    !          D    (             $ .  "
+    "  0     8    (    !          %    \"     $    +     0         0    \"P   &]U='!U=%=I9'1H       .    .     8    (  "
+    "  !@         %    \"     $    !     0         )    \"            \"! #@   $     &    \"     0         !0    @    !"
+    "    #@    $         $     X   !O=71P=71\":6YA<GE0=   #@   #@    &    \"     8         !0    @    !     0    $     "
+    "    \"0    @            <0 X   !(    !@    @    $          4    (     0   !0    !         !     4    ;W5T<'5T07)I="
+    "&AM971I8U1Y<&4     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !( "
+    "   !@    @    $          4    (     0   !$    !         !     1    ;W5T<'5T5&]7;W)K<W!A8V4         #@   #     &   "
+    " \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    .   "
+    "  0         0    #@   '9A<FEA8FQE4')E9FEX   .    ,     8    (    !          %    \"     $    #     0         0  , "
+    ";W5T  X   !(    !@    @    $          4    (     0   !,    !         !     3    ;W5T<'5T5&]-;V1E;$%S5V5L;       #@"
+    "   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    2     8    (    !          %    \" "
+    "    $    7     0         0    %P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X    X    !@    @    &          4    (     0 "
+    "   $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         )    \"  "
+    "          \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            <0 X    X    !@"
+    "    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !          %    \""
+    "     $    #     0         0  , ;V9F  X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@ "
+    "  #     &    \"     0         !0    @    !     P    $         $  # &]U=  .    ,     8    (    !          %    \"  "
+    "   $    \"     0         0  ( ;VX   "
   }
   DataRecord {
     Tag			    DataTag0

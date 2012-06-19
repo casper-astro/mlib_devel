@@ -34,7 +34,7 @@ module async_qdr_interface36 #(
      a single byte.
 
      An OPB word is 32 bits -> it takes
-     4 cycles to write a complete 144 bit burst (without parity)
+     4 cycles to write a complete 144 bit burst
   */
 
   reg [31:0] host_addr_reg;
@@ -78,7 +78,6 @@ module async_qdr_interface36 #(
   reg qdr_inputs_valid;
   /* Insert parity bits to pad to 36 bits */
   wire [35:0] host_data_parity_ext = {1'b0, host_datai_reg[31:24], 1'b0, host_datai_reg[23:16], 1'b0, host_datai_reg[15:8], 1'b0, host_datai_reg[7:0]};
-
   always @(posedge qdr_clk) begin
     if (qdr_rst) begin
       write_buffer <= 144'b0;
@@ -86,7 +85,7 @@ module async_qdr_interface36 #(
       if (!host_rnw_reg) begin //only update the output registers on a write operation
         case (host_addr_reg[3:2])
           2'd0: begin
-            write_buffer[ 35:0  ] <= host_data_parity_ext;
+          write_buffer[ 35:0  ] <= host_data_parity_ext;
           end
           2'd1: begin
             write_buffer[ 71:36 ] <= host_data_parity_ext;
@@ -242,9 +241,9 @@ module async_qdr_interface36 #(
             if (!word_id[1]) begin
               resp_state <= IDLE;
               if(!word_id[0]) begin
-                  host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+                  host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};//qdr_q[71:32];//32'h12345678;//{qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
               end else begin
-                  host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
+                  host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};//qdr_q[31:0];//32'habcdef09;//{qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
               end
               qdr_resp_ready <= 1'b1;
             end else begin
@@ -255,9 +254,9 @@ module async_qdr_interface36 #(
         FINAL: begin
           qdr_resp_ready <= 1'b1;
           if(!word_id[0]) begin
-              host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+              host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};//qdr_q[71:32];//32'hbabeface;//{qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
           end else begin
-              host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
+              host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};//qdr_q[31:0];//32'hcafedead;//{qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
           end
           resp_state <= IDLE;
         end

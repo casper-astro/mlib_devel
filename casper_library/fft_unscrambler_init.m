@@ -49,6 +49,15 @@ FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
 n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 
+%default setup for library
+if FFTSize == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  return;
+end
+
 % Validate input fields.
 
 if (n_inputs >= FFTSize - 2),

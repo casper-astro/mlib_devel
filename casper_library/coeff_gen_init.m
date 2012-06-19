@@ -47,10 +47,18 @@ clog(flatstrcell(varargin), 'coeff_gen_init_debug');
 if( ~isempty(find(real(Coeffs) > 1)) || ~isempty(find(imag(Coeffs) > 1)) ),
     clog(['coeff_gen_init: [',num2str(Coeffs,4),'] not all in range [-1->1]'],'error');
     error('coeff_gen_init: Coefficients specified are out of range');
-    return;
 end
 
 delete_lines(blk);
+
+%default case for library storage, do nothing
+if isempty(Coeffs),
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting coeff_gen_init','trace');
+  return;
+end
 
 reuse_block(blk, 'rst', 'built-in/inport', 'Port', '1', ...
     'Position', [25 48 55 62]);

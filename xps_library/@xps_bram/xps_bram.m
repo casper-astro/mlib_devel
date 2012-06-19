@@ -43,6 +43,9 @@ b = set(b,'soft_driver',{'bram' '1.00.a'});
 % address offset
 b = set(b,'opb_address_offset',s.data_width/8*(2^s.addr_width));
 
+% address alignment 
+b = set(b,'opb_address_align',(32/8) * 2^(s.addr_width+log2(s.data_width/32)));
+
 % software parameters
 b = set(b,'c_params',num2str((2^s.addr_width)*s.data_width/32));
 

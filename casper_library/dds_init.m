@@ -64,7 +64,7 @@ end
 
 delete_lines(blk);
 
-for i=0:num_lo-1,
+for i = 0 : num_lo - 1,
     sin_name = ['sin',num2str(i)];
     cos_name = ['cos',num2str(i)];
     % Add ports

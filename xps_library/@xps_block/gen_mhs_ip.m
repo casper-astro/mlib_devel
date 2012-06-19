@@ -148,6 +148,7 @@ if ~isempty(ip_name)
 		str = [str, ' PORT OPB_Clk = ', opb_clk, '\n'];
 
 	end % if range_opb ~= 0
+        clog([get(blk_obj,'simulink_name'),': align (0x',dec2hex(align_opb,8),') range (0x',dec2hex(range_opb,8),') (0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_addr_end-1,8),')'],{'gen_mhs_ip_debug'});
 
 	if range_plb ~= 0
 		if range_opb ~= 0
