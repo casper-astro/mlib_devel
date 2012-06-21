@@ -10,7 +10,7 @@ app_clk_rate   = get(xsg_obj,'clk_rate');
 multiply       = 1;
 divide         = 1;
 
-if hw_sys == 'ROACH2'
+if strcmp(hw_sys, 'ROACH2')
    clk_factors(app_clk_rate, app_clk_rate);
    if findstr(app_clk, 'sys')
       clk_source = 'SYS';
