@@ -43,8 +43,8 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 
 % check the params
 inputNum = get_var('inputNum', 'defaults', defaults, varargin{:});
-if ((inputNum < 2) || isnan(inputNum) || (~isnumeric(inputNum))),
-    errordlg('Need two or more inputs!'); error('Need two or more outputs!'); end;
+if (isnan(inputNum) || (~isnumeric(inputNum))),
+    errordlg('Number of inputs must be natural number'); error('Number of inputs must be natural number'); end;
 
 munge_block(blk, varargin{:});
 
@@ -62,10 +62,13 @@ yPos = 100;
 reuse_block(blk, 'bus_out', 'built-in/outport', ...
     'Position', [xStart + (xSize * 3 * 2), yPos + (ySize * (inputNum - 0.5)), xStart + (xSize * 3 * 2) + (xSize/2), yPos + (ySize * (inputNum + 0.5))]);
 concatSize = ySize * inputNum;
-reuse_block(blk, 'concatenate', 'xbsIndex_r4/Concat', ...
-    'Position', [xStart + (xSize * 2 * 2), yPos, xStart + (xSize * 2 * 2) + (xSize/2), yPos + (2 * ySize * inputNum) - ySize], ...
-    'num_inputs', num2str(inputNum));
-add_line(blk, ['concatenate', '/1'], ['bus_out', '/1'], 'autorouting', 'on');
+
+if inputNum > 1,
+  reuse_block(blk, 'concatenate', 'xbsIndex_r4/Concat', ...
+      'Position', [xStart + (xSize * 2 * 2), yPos, xStart + (xSize * 2 * 2) + (xSize/2), yPos + (2 * ySize * inputNum) - ySize], ...
+      'num_inputs', num2str(inputNum));
+  add_line(blk, ['concatenate', '/1'], ['bus_out', '/1'], 'autorouting', 'on');
+end
 
 % draw the inputs and convert blocks
 for p = 1 : inputNum,
@@ -83,7 +86,11 @@ for p = 1 : inputNum,
     yPos = yPos + (ySize * 2);
     % connect up the blocks
     add_line(blk, [inName, '/1'], [reinterpretName, '/1'], 'autorouting', 'on');
-    add_line(blk, [reinterpretName, '/1'], ['concatenate', '/', num2str(p)], 'autorouting', 'on');
+    if inputNum > 1,
+      add_line(blk, [reinterpretName, '/1'], ['concatenate', '/', num2str(p)], 'autorouting', 'on');
+    else
+      add_line(blk, [reinterpretName, '/1'], 'bus_out/1', 'autorouting', 'on');
+    end
 end;
 
 % remove unconnected blocks
