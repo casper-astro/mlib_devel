@@ -34,6 +34,8 @@ entity = {};
 while feof(fin) == 0
     line = fgets(fin);
     if regexp(line, '^entity ')
+        toks = regexp(line, '^entity (\w*) is', 'tokens');
+	entity_name = toks{1}{1};
         in_entity = 1;
         entity = {line};
     elseif in_entity
@@ -58,5 +60,7 @@ fprintf(fout,'use IEEE.std_logic_1164.all;\n\n');
 for k = 1:length(entity)
     fprintf(fout,'%s', entity{k});
 end
+fprintf(fout, ['\narchitecture structural of ', entity_name, ' is\n']);
+fprintf(fout, 'begin\nend structural;\n\n');
 fclose(fout);
 

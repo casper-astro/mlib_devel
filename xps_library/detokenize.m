@@ -12,13 +12,13 @@ divide         = 1;
 
 if strcmp(hw_sys, 'ROACH2')
    clk_factors(app_clk_rate, app_clk_rate);
-   if findstr(app_clk, 'sys')
-      clk_source = 'SYS';
-      [multiply divide] = clk_factors(100, app_clk_rate);
-      app_clk_rate = 100;
-   else
+   if strcmp(app_clk, 'aux_clk')
       clk_source = 'AUX';
       [multiply divide] = clk_factors(app_clk_rate, app_clk_rate);
+   else
+      clk_source = 'SYS';
+      app_clk_rate = 100;
+      [multiply divide] = clk_factors(100, app_clk_rate);
    end
    if app_clk_rate < 135
       clk_high_low = 'low';

@@ -1,0 +1,90 @@
+##############################################################################
+##
+## ***************************************************************************
+## **                                                                       **
+## ** Copyright (c) 1995-2004 Xilinx, Inc.  All rights reserved.            **
+## **                                                                       **
+## ** You may copy and modify these files for your own internal use solely  **
+## ** with Xilinx programmable logic devices and Xilinx EDK system or       **
+## ** create IP modules solely for Xilinx programmable logic devices and    **
+## ** Xilinx EDK system. No rights are granted to distribute any files      **
+## ** unless they are distributed in Xilinx programmable logic devices.     **
+## **                                                                       **
+## ***************************************************************************
+##
+##############################################################################
+## Filename:          C:\bsb\edk_build\pcores\opb_v20_v1_10_c\data\opb_v20_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Sun Oct 10 07:26:40 2004 (by Create and Import Peripheral Wizard)
+##############################################################################
+lib proc_utils_v1_00_a conv_funs_pkg
+lib proc_common_v2_00_a family
+lib proc_common_v2_00_a coregen_comp_defs
+lib proc_common_v2_00_a common_types_pkg
+lib proc_common_v2_00_a proc_common_pkg
+lib proc_common_v2_00_a conv_funs_pkg
+lib proc_common_v2_00_a ipif_pkg
+lib proc_common_v2_00_a addsub
+lib proc_common_v2_00_a counter_bit
+lib proc_common_v2_00_a counter
+lib proc_common_v2_00_a direct_path_cntr
+lib proc_common_v2_00_a direct_path_cntr_ai
+lib proc_common_v2_00_a down_counter
+lib proc_common_v2_00_a eval_timer
+lib proc_common_v2_00_a inferred_lut4
+lib proc_common_v2_00_a ipif_steer
+lib proc_common_v2_00_a ld_arith_reg
+lib proc_common_v2_00_a ld_arith_reg2
+lib proc_common_v2_00_a mux_onehot
+lib proc_common_v2_00_a or_bits
+lib proc_common_v2_00_a or_muxcy
+lib proc_common_v2_00_a or_gate
+lib proc_common_v2_00_a pf_adder_bit
+lib proc_common_v2_00_a pf_adder
+lib proc_common_v2_00_a pf_counter_bit
+lib proc_common_v2_00_a pf_counter
+lib proc_common_v2_00_a pf_counter_top
+lib proc_common_v2_00_a pf_occ_counter
+lib proc_common_v2_00_a pf_occ_counter_top
+lib proc_common_v2_00_a pf_dpram_select
+lib proc_common_v2_00_a pselect
+lib proc_common_v2_00_a pselect_mask
+lib proc_common_v2_00_a srl16_fifo
+lib proc_common_v2_00_a srl_fifo
+lib proc_common_v2_00_a srl_fifo2
+lib proc_common_v2_00_a srl_fifo_rbu
+lib proc_common_v2_00_a valid_be
+lib interrupt_control_v1_00_a interrupt_control
+lib wrpfifo_v1_01_b pf_dly1_mux
+lib wrpfifo_v1_01_b wrpfifo_dp_cntl
+lib wrpfifo_v1_01_b ipif_control_wr
+lib wrpfifo_v1_01_b wrpfifo_top
+lib rdpfifo_v1_01_b rdpfifo_dp_cntl
+lib rdpfifo_v1_01_b ipif_control_rd
+lib rdpfifo_v1_01_b rdpfifo_top
+lib opb_ipif_v3_01_a reset_mir
+lib opb_ipif_v3_01_a brst_addr_cntr
+lib opb_ipif_v3_01_a opb_flex_addr_cntr
+lib opb_ipif_v3_01_a brst_addr_cntr_reg
+lib opb_ipif_v3_01_a opb_be_gen
+lib opb_ipif_v3_01_a srl_fifo3
+lib opb_ipif_v3_01_a write_buffer
+lib opb_ipif_v3_01_a opb_bam
+lib opb_ipif_v3_01_a opb_ipif
+lib opb_arbiter_v1_02_e opb_arb_pkg
+lib opb_arbiter_v1_02_e or_muxcy
+lib opb_arbiter_v1_02_e mux_onehot
+lib opb_arbiter_v1_02_e or_bits
+lib opb_arbiter_v1_02_e or_gate
+lib opb_arbiter_v1_02_e priority_reg
+lib opb_arbiter_v1_02_e onehot2encoded
+lib opb_arbiter_v1_02_e arbitration_logic
+lib opb_arbiter_v1_02_e park_lock_logic
+lib opb_arbiter_v1_02_e watchdog_timer
+lib opb_arbiter_v1_02_e arb2bus_data_mux
+lib opb_arbiter_v1_02_e control_register_logic
+lib opb_arbiter_v1_02_e ipif_regonly_slave
+lib opb_arbiter_v1_02_e priority_register_logic
+lib opb_arbiter_v1_02_e opb_arbiter_core
+lib opb_arbiter_v1_02_e opb_arbiter
+lib opb_v20_v1_10_c opb_v20
