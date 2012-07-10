@@ -39,6 +39,14 @@ existing_blk = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
 if isempty(existing_blk)
     add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
 else
-    set_param([blk,'/',name], varargin{:});
+    reference = get_param(existing_blk, 'ReferenceBlock');
+    if strcmp(reference,'') || strcmp(reference, refblk),
+      clog([name,' of same type or empty reference so setting parameters'], 'reuse_block_debug');
+      set_param([blk,'/',name], varargin{:});
+    else
+      clog([name,' of different type so replacing'], 'reuse_block_debug');
+      delete_block([blk,'/',name]);
+      add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+    end
 end
 
