@@ -33,7 +33,7 @@ blk = gcb;
 check_mask_type(blk, 'ten_GbE_v2');
 
 %search for sysgen block and get target
-xps_xsg_blks    = find_system(gcs,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
+xps_xsg_blks    = find_system(bdroot,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
 
 if length(xps_xsg_blks) ~= 1,
   errordlg('ten_Gbe_v2 requires a single MSSGE (XSG core config) block to be instantiated at the top level');
