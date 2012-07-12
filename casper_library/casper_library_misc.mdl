@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jul 11 15:50:35 2012"
-  RTWModifiedTimeStamp	  263922634
-  ModelVersionFormat	  "1.%<AutoIncrement:18>"
+  LastModifiedDate	  "Thu Jul 12 11:39:09 2012"
+  RTWModifiedTimeStamp	  263993945
+  ModelVersionFormat	  "1.%<AutoIncrement:19>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -529,11 +529,6 @@ Library {
   }
   BlockParameterDefaults {
     Block {
-      BlockType		      Bias
-      Bias		      "0"
-      SaturateOnIntegerOverflow	on
-    }
-    Block {
       BlockType		      Constant
       Value		      "1"
       VectorParams1D	      on
@@ -649,7 +644,7 @@ Library {
   }
   System {
     Name		    "casper_library_misc"
-    Location		    [92, 188, 958, 805]
+    Location		    [138, 319, 1004, 936]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -663,255 +658,6 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    Block {
-      BlockType		      SubSystem
-      Name		      "adc_sim"
-      Ports		      [1, 8]
-      Position		      [445, 200, 540, 430]
-      MinAlgLoopOccurrences   off
-      PropExecContextOutsideSubsystem off
-      RTWSystemCode	      "Auto"
-      FunctionWithSeparateData off
-      Opaque		      off
-      RequestExecContextInheritance off
-      MaskHideContents	      off
-      MaskType		      "adc_sim"
-      MaskDescription	      "This block simulates the behavior of a demuxed ADC, which takes\nas input a waveform and "
-      "returns digital samples in parallel at\na slower rate.  \n\nThis block is used to simulate the behavior "
-      MaskPromptString	      "Number of Output Streams"
-      MaskStyleString	      "edit"
-      MaskTunableValueString  "on"
-      MaskEnableString	      "on"
-      MaskVisibilityString    "on"
-      MaskToolTipString	      "on"
-      MaskVariables	      "nStreams=@1;"
-      MaskInitialization      "adc_sim_init(gcb, ...\n    'nStreams', nStreams );"
-      MaskIconFrame	      on
-      MaskIconOpaque	      on
-      MaskIconRotate	      "none"
-      MaskIconUnits	      "autoscale"
-      MaskValueString	      "8"
-      System {
-	Name			"adc_sim"
-	Location		[100, 110, 645, 632]
-	Open			off
-	ModelBrowserVisibility	off
-	ModelBrowserWidth	200
-	ScreenColor		"white"
-	PaperOrientation	"landscape"
-	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
-	TiledPageScale		1
-	ShowPageBoundaries	off
-	ZoomFactor		"100"
-	Block {
-	  BlockType		  Inport
-	  Name			  "sim_adc_data_in"
-	  Position		  [310, 103, 340, 117]
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Bias
-	  Name			  "adc_bias"
-	  Position		  [445, 100, 475, 120]
-	  Bias			  "127.5"
-	}
-	Block {
-	  BlockType		  Gain
-	  Name			  "adc_gain"
-	  Position		  [390, 100, 420, 120]
-	  Gain			  "NaN"
-	  ParameterDataTypeMode	  "Inherit via internal rule"
-	  ParameterDataType	  "sfix(16)"
-	  ParameterScaling	  "2^0"
-	  ParamDataTypeStr	  "Inherit: Inherit via internal rule"
-	  OutDataTypeMode	  "Inherit via internal rule"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-	  SaturateOnIntegerOverflow off
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample0_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 93, 675, 127]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "1"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample1_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 143, 675, 177]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "2"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample2_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 193, 675, 227]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "3"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample3_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 243, 675, 277]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "4"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample4_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 293, 675, 327]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "5"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample5_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 343, 675, 377]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "6"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample6_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 393, 675, 427]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "7"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "sample7_ds"
-	  Ports			  [1, 1]
-	  Position		  [640, 443, 675, 477]
-	  SourceBlock		  "dspsigops/Downsample"
-	  SourceType		  "Downsample"
-	  N			  "8"
-	  phase			  "0"
-	  ic			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s0"
-	  Position		  [700, 103, 730, 117]
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s1"
-	  Position		  [700, 153, 730, 167]
-	  Port			  "2"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s2"
-	  Position		  [700, 203, 730, 217]
-	  Port			  "3"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s3"
-	  Position		  [700, 253, 730, 267]
-	  Port			  "4"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s4"
-	  Position		  [700, 303, 730, 317]
-	  Port			  "5"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s5"
-	  Position		  [700, 353, 730, 367]
-	  Port			  "6"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s6"
-	  Position		  [700, 403, 730, 417]
-	  Port			  "7"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "s7"
-	  Position		  [700, 453, 730, 467]
-	  Port			  "8"
-	  IconDisplay		  "Port number"
-	  OutDataType		  "sfix(16)"
-	  OutScaling		  "2^0"
-	}
-      }
-    }
     Block {
       BlockType		      SubSystem
       Name		      "adder_tree"
@@ -7002,11 +6748,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  off
+	  en			  "off"
 	  latency		  "1"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  reg_retiming		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -7029,10 +6775,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
 	  infoedit		  "Bitwise logical negation (one's complement) operator."
-	  en			  off
+	  en			  "off"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -7055,15 +6801,15 @@ Library {
 	  SourceType		  "Xilinx Logical Block Block"
 	  logical_function	  "AND"
 	  inputs		  "2"
-	  en			  off
+	  en			  "off"
 	  latency		  "0"
 	  precision		  "Full"
 	  arith_type		  "Unsigned"
 	  n_bits		  "8"
 	  bin_pt		  "2"
-	  align_bp		  on
-	  dbl_ovrd		  off
-	  xl_use_area		  off
+	  align_bp		  "on"
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
