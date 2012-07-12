@@ -112,17 +112,17 @@ function katadc_init(blk, varargin)
   reuse_block(blk, 'slc0', 'xbsIndex_r4/Slice', 'nbits', '1', 'mode', ...
     'Lower Bit Location + Width', 'bit0', '0', 'base0', 'LSB of input', ...
     'Position', [xtick*2-15 ytick*(yoff+1)-7.5 xtick*2+15 ytick*(yoff+1)+7.5]);
-  add_line(gcb, 'en0/1', 'slc0/1');
+  add_line(blk, 'en0/1', 'slc0/1');
   
   reuse_block(blk, 'atten0', 'built-in/inport', 'Port', num2str(4-il+2), ...
     'Position', [xtick*1-15 ytick*(yoff+2)-7.5 xtick*1+15 ytick*(yoff+2)+7.5]);
   reuse_block(blk, 'slc1', 'xbsIndex_r4/Slice', ...
     'nbits', '6', 'mode', 'Lower Bit Location + Width', 'bit0', '0', 'base0', 'LSB of input', ...
     'Position', [xtick*2-15 ytick*(yoff+2)-7.5 xtick*2+15 ytick*(yoff+2)+7.5]);
-  add_line(gcb, 'atten0/1', 'slc1/1');
+  add_line(blk, 'atten0/1', 'slc1/1');
   reuse_block(blk, 'inv0', 'xbsIndex_r4/Inverter', ...
     'Position', [xtick*3-15 ytick*(yoff+2)-7.5 xtick*3+15 ytick*(yoff+2)+7.5]);
-  add_line(gcb, 'slc1/1', 'inv0/1'); 
+  add_line(blk, 'slc1/1', 'inv0/1'); 
 
   %use input ports for non-interleaved mode, otherwise disable input with max attenuation on 'q' input
   if il == 0,
@@ -140,43 +140,43 @@ function katadc_init(blk, varargin)
   reuse_block(blk, 'slc2', 'xbsIndex_r4/Slice', ...
     'nbits', '1', 'mode', 'Lower Bit Location + Width', 'bit0', '0', 'base0', 'LSB of input', ...
     'Position', [xtick*2-15 ytick*(yoff+3)-7.5 xtick*2+15 ytick*(yoff+3)+7.5]);
-  add_line(gcb, [en1_name,'/1'], 'slc2/1');
+  add_line(blk, [en1_name,'/1'], 'slc2/1');
   reuse_block(blk, 'slc3', 'xbsIndex_r4/Slice', ...
     'nbits', '6', 'mode', 'Lower Bit Location + Width', 'bit0', '0', 'base0', 'LSB of input', ...
     'Position', [xtick*2-15 ytick*(yoff+4)-7.5 xtick*2+15 ytick*(yoff+4)+7.5]);
-  add_line(gcb, [atten1_name,'/1'], 'slc3/1');
+  add_line(blk, [atten1_name,'/1'], 'slc3/1');
   reuse_block(blk, 'inv1', 'xbsIndex_r4/Inverter', ...
     'Position', [xtick*3-15 ytick*(yoff+4)-7.5 xtick*3+15 ytick*(yoff+4)+7.5]);
-  add_line(gcb, 'slc3/1', 'inv1/1'); 
+  add_line(blk, 'slc3/1', 'inv1/1'); 
    
   %concat block 
   reuse_block(blk, 'con', 'xbsIndex_r4/Concat', ...
     'num_inputs', '5', 'Position', [xtick*5-15 ytick*yoff-25 xtick*5+15 ytick*(yoff+4)+25]);
-  add_line(gcb, 'trigger/1', 'con/1');
-  add_line(gcb, 'slc0/1', 'con/4');
-  add_line(gcb, 'inv0/1', 'con/5');
-  add_line(gcb, 'slc2/1', 'con/2');
-  add_line(gcb, 'inv1/1', 'con/3');
+  add_line(blk, 'trigger/1', 'con/1');
+  add_line(blk, 'slc0/1', 'con/4');
+  add_line(blk, 'inv0/1', 'con/5');
+  add_line(blk, 'slc2/1', 'con/2');
+  add_line(blk, 'inv1/1', 'con/3');
   
   %trigger constant, combined with 0 initial value here forces load after reset
   reuse_block(blk, 'reg', 'xbsIndex_r4/Register', ...
     'init', '0', 'Position', [xtick*6-25 ytick*(yoff+2)-20 xtick*6+25 ytick*(yoff+2)+20]);
-  add_line(gcb, 'con/1', 'reg/1');
+  add_line(blk, 'con/1', 'reg/1');
   
   reuse_block(blk, 'changed', 'xbsIndex_r4/Relational', 'mode', 'a!=b', 'latency', '1', ...
     'Position', [xtick*6-25 ytick*(yoff+3)-10 xtick*6+25 ytick*(yoff+4)+10]);
-  add_line(gcb, 'con/1', 'changed/2', 'autorouting', 'on');
-  add_line(gcb, 'reg/1', 'changed/1', 'autorouting', 'on');
+  add_line(blk, 'con/1', 'changed/2', 'autorouting', 'on');
+  add_line(blk, 'reg/1', 'changed/1', 'autorouting', 'on');
 
   reuse_block(blk, 'slc4', 'xbsIndex_r4/Slice', ...
     'nbits', '14', 'mode', 'Lower Bit Location + Width', 'bit0', '0', 'base0', 'LSB of input', ... 
     'Position', [xtick*7-15 ytick*(yoff+2)-7.5 xtick*7+15 ytick*(yoff+2)+7.5]);
-  add_line(gcb, 'reg/1', 'slc4/1');
+  add_line(blk, 'reg/1', 'slc4/1');
   
   reuse_block(blk, 'cast0', 'xbsIndex_r4/Convert', ...
     'arith_type', 'Unsigned', 'n_bits', '14', 'bin_pt', '0', ...
     'Position', [xtick*8-25 ytick*(yoff+2)-20 xtick*8+25 ytick*(yoff+2)+20]);
-  add_line(gcb, 'slc4/1', 'cast0/1');
+  add_line(blk, 'slc4/1', 'cast0/1');
   
   gw = clear_name([blk, '_gain_value']);
   reuse_block(blk, gw, 'xbsIndex_r4/Gateway Out', ...
@@ -185,7 +185,7 @@ function katadc_init(blk, varargin)
 
   reuse_block(blk, 'cast1', 'xbsIndex_r4/Convert', 'arith_type', 'Boolean', ...
     'Position', [xtick*8-25 ytick*(yoff+4)-20 xtick*8+25 ytick*(yoff+4)+20]);
-  add_line(gcb, 'changed/1', 'cast1/1');
+  add_line(blk, 'changed/1', 'cast1/1');
 
   gw = clear_name([blk, '_gain_load']);
   reuse_block(blk, gw, 'xbsIndex_r4/Gateway Out', ...
