@@ -34,7 +34,7 @@ catch
     hw_sys = 'ROACH';
 end %try/catch
 
-disp(['Drawing QDR block for platform: ', hw_sys]);
+clog(['Drawing QDR block for platform: ', hw_sys], qdr_mask_debug);
 
 switch hw_sys
     case 'ROACH'
@@ -58,7 +58,7 @@ end % end switch hw_sys
 
 % catch incorrect qdr selection
 which_qdr = get_param(myname, 'which_qdr');
-qdr_num = str2num(which_qdr(4))
+qdr_num = str2num(which_qdr(4));
 if (qdr_num > (n_qdr-1))
     warndlg(['Block configured for QDR ', num2str(qdr_num), '. ', hw_sys, ' only has ', num2str(n_qdr), ' QDR chips. Defaulting to QDR 0']);
     warning(['Block configured for QDR ', num2str(qdr_num), '. ', hw_sys, ' only has ', num2str(n_qdr), ' QDR chips. Defaulting to QDR 0']);
