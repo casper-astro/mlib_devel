@@ -34,7 +34,7 @@ catch
     hw_sys = 'ROACH';
 end %try/catch
 
-clog(['Drawing QDR block for platform: ', hw_sys], qdr_mask_debug);
+clog(['Drawing QDR block for platform: ', hw_sys], 'qdr_mask_debug');
 
 switch hw_sys
     case 'ROACH'
