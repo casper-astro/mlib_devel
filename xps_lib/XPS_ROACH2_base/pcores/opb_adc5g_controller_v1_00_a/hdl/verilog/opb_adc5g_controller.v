@@ -319,7 +319,9 @@ module opb_adc5g_controller(
   assign adc1_dcm_reset = adc1_startup;
   assign adc0_reset = adc0_reset_counter != 0;//adc0_reset_iob;
   assign adc1_reset = adc1_reset_counter != 0;//adc1_reset_iob;
-
+  assign adc0_adc3wire_spi_rst = 1'b1;
+  assign adc1_adc3wire_spi_rst = 1'b1;
+   
   /*** machine states ***/
   localparam CONFIG_IDLE        = 0;
   localparam CONFIG_STARTUP     = 1;
