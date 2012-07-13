@@ -9,7 +9,7 @@ OPTION IPTYPE = PERIPHERAL
 OPTION IMP_NETLIST = TRUE
 OPTION HDL = MIXED
 OPTION IP_GROUP = MICROBLAZE:PPC:USER
-OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX5SX=DEVELOPMENT)
+OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX5SX=DEVELOPMENT, VIRTEX6SX=DEVELOPMENT)
 OPTION DWIDTH = 32
 OPTION AWIDTH = 32
 OPTION NUM_WRITE_ENABLES = 4
@@ -25,10 +25,6 @@ PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
 PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
 PARAMETER C_FAMILY = virtex5, DT = STRING
 
-PARAMETER INTERLEAVED_0 = 0, DT = INTEGER
-PARAMETER INTERLEAVED_1 = 0, DT = INTEGER
-PARAMETER AUTOCONFIG_0  = 0, DT = INTEGER
-PARAMETER AUTOCONFIG_1  = 0, DT = INTEGER
 PARAMETER INITIAL_CONFIG_MODE_0 = 0, DT = INTEGER
 PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 
@@ -55,13 +51,18 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	######################################
 	PORT adc0_adc3wire_clk    = "", DIR = O
 	PORT adc0_adc3wire_data   = "", DIR = O
+	PORT adc0_adc3wire_data_o = "", DIR = I
 	PORT adc0_adc3wire_spi_rst = "", DIR = O
 	PORT adc0_modepin = "", DIR = O
+	PORT adc0_reset = "", DIR = O
 
 ###	PORT adc0_adc_reset       = "", DIR = O
 ###	PORT adc0_ddrb            = "", DIR = O
 
 	PORT adc0_dcm_reset       = "", DIR = O
+	PORT adc0_dcm_locked      = "", DIR = I
+	PORT adc0_fifo_full_cnt        = "", DIR = I, VEC = [15:0]
+	PORT adc0_fifo_empty_cnt       = "", DIR = I, VEC = [15:0]
   PORT adc0_psclk           = "", DIR = O
   PORT adc0_psen            = "", DIR = O
   PORT adc0_psincdec        = "", DIR = O
@@ -73,14 +74,19 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	######################################
 	PORT adc1_adc3wire_clk    = "", DIR = O
 	PORT adc1_adc3wire_data   = "", DIR = O
+	PORT adc1_adc3wire_data_o = "", DIR = I
 	PORT adc1_adc3wire_spi_rst = "", DIR = O
 	PORT adc1_modepin = "", DIR = O
+	PORT adc1_reset = "", DIR = O
 
 
 ###	PORT adc1_adc_reset       = "", DIR = O
 ###	PORT adc1_ddrb            = "", DIR = O
 
 	PORT adc1_dcm_reset       = "", DIR = O
+	PORT adc1_dcm_locked      = "", DIR = I
+	PORT adc1_fifo_full_cnt        = "", DIR = I, VEC = [15:0]
+	PORT adc1_fifo_empty_cnt       = "", DIR = I, VEC = [15:0]
   PORT adc1_psclk           = "", DIR = O
   PORT adc1_psen            = "", DIR = O
   PORT adc1_psincdec        = "", DIR = O

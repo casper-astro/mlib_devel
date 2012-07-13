@@ -1,0 +1,8 @@
+VCD info: dumpfile dump.vcd opened for output.
+sys: reset cleared
+adc1_conf: 8113c4
+adc0_conf: 8113c4
+adc0_conf: 8103c8
+adc0_conf: 010000
+adc1_conf: 8103c8
+adc1_conf: 010000
