@@ -468,3 +468,15 @@ BEGIN sys_block
 END
 
 
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#BEGIN sfp_mdio_controller
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')# PARAMETER HW_VER = 1.00.a                    
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')# PARAMETER INSTANCE = sfp_mdio_controller_inst                
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')# PARAMETER C_BASEADDR = 0x00060000           
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')# PARAMETER C_HIGHADDR = 0x0006FFFF          
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')# BUS_INTERFACE SOPB = opb0                    
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')# PORT OPB_Clk = epb_clk                        
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')# PORT mgt_gpio = mgt_gpio             
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#END 
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#PORT mgt_gpio = mgt_gpio, VEC = [11:0], DIR = IO  
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#
