@@ -114,7 +114,7 @@ module roach_infrastructure(
     .BANDWIDTH          (CLK_HIGH_LOW), // Jitter programming ("HIGH","LOW","OPTIMIZED")
     .CLKFBOUT_MULT_F    (MULTIPLY), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
     .CLKFBOUT_PHASE     (0.0),
-    .CLKIN1_PERIOD      (1000/CLK_FREQ),
+    .CLKIN1_PERIOD      (1000.0/CLK_FREQ),
     .CLKOUT0_DIVIDE_F   (1), // Divide amount for CLKOUT0 (1.000-128.000).
     .CLKOUT0_DUTY_CYCLE (0.5),
     .CLKOUT1_DUTY_CYCLE (0.5),

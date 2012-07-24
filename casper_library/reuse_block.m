@@ -35,18 +35,48 @@ function reuse_block(blk, name, refblk, varargin)
 % varargin = {'varname', 'value', ...} pairs
 
 existing_blk = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
-    'SearchDepth', 1, 'Name', name);
-if isempty(existing_blk)
-    add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
-else
-    reference = get_param(existing_blk, 'ReferenceBlock');
-    if strcmp(reference,'') || strcmp(reference, refblk),
-      clog([name,' of same type or empty reference so setting parameters'], 'reuse_block_debug');
-      set_param([blk,'/',name], varargin{:});
+  'SearchDepth', 1, 'Name', name);
+
+% add block straight away if does not yet exist
+if isempty(existing_blk),
+  add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+
+%if the block with that name does exist
+else,
+
+  %check Link status
+  link_status = get_param(existing_blk, 'StaticLinkStatus');
+ 
+  %inactive link (link disabled but not broken) so get AncestorBlock
+  if strcmp(link_status, 'inactive'),
+    source = get_param(existing_blk, 'AncestorBlock');
+  %resolved link (link in place) so get ReferenceBlock
+  elseif strcmp(link_status, 'resolved'),
+    source = get_param(existing_blk, 'ReferenceBlock'); 
+  
+  %no link (broken link, never existed, or built-in) so get block type 
+  elseif strcmp(link_status, 'none'),
+
+    block_type = get_param(existing_blk, 'BlockType');
+    %if unlinked and not built-in then force replacement
+    if strcmp(block_type, 'SubSystem') || strcmp(block_type, 'S-Function'),
+      source = '';
     else
-      clog([name,' of different type so replacing'], 'reuse_block_debug');
-      delete_block([blk,'/',name]);
-      add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+      %assuming built-in so convert type to lower for comparison
+      block_type = lower(block_type);
+      source = strcat('built-in/',block_type);
     end
+  else
+    source = '';
+  end
+  
+  if strcmp(source, refblk),
+    clog([name,' of same type so setting parameters'], 'reuse_block_debug');
+    set_param([blk,'/',name], varargin{:});
+  else,
+    clog([name,' of different type so replacing'], 'reuse_block_debug');
+    delete_block([blk,'/',name]);
+    add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+  end
 end
 

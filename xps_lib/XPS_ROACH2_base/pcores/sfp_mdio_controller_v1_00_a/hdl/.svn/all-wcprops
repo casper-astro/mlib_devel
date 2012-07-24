@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnROACH2/!svn/ver/330/gw/roach2_bsp/modules/emac_mdio/hdl
+END
+emac_mdio.v
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnROACH2/!svn/ver/328/gw/roach2_bsp/modules/emac_mdio/hdl/emac_mdio.v
+END
+emac_mdio_wb.v
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnROACH2/!svn/ver/330/gw/roach2_bsp/modules/emac_mdio/hdl/emac_mdio_wb.v
+END
