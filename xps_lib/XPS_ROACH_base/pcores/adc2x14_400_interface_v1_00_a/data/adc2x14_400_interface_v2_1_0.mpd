@@ -1,0 +1,57 @@
+
+BEGIN adc2x14_400_interface
+
+########################
+## Peripheral Options ##
+########################
+
+OPTION IPTYPE = IP
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VHDL
+OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=DEVELOPMENT, VIRTEX5=DEVELOPMENT)
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION STYLE = MIX
+
+####################
+## Bus Interfaces ##
+####################
+
+
+
+#################################################
+## Generics for VHDL or Parameters for Verilog ##
+#################################################
+
+PARAMETER OUTPUT_CLK = 0, DT = INTEGER, RANGE = (0:1)
+
+
+###########
+## Ports ##
+###########
+
+PORT DRDY_I_p       = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT DRDY_I_n       = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT DRDY_Q_p       = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT DRDY_Q_n       = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT DI_p           = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [13:0]
+PORT DI_n           = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [13:0]
+PORT DQ_p           = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [13:0]
+PORT DQ_n           = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, VEC = [13:0]
+PORT ADC_ext_in_p   = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ADC_ext_in_n   = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+
+PORT fpga_clk       = "", DIR = I, SIGIS = CLK
+PORT adc_clk_out    = "", DIR = O, SIGIS = CLK
+PORT adc_clk90_out    = "", DIR = O, SIGIS = CLK
+PORT adc_clk180_out    = "", DIR = O, SIGIS = CLK
+PORT adc_clk270_out    = "", DIR = O, SIGIS = CLK
+PORT adc_dcm_locked = "", DIR = O
+
+PORT user_data_i0   = "", DIR = O, VEC = [13:0]
+PORT user_data_i1   = "", DIR = O, VEC = [13:0]
+PORT user_data_q0   = "", DIR = O, VEC = [13:0]
+PORT user_data_q1   = "", DIR = O, VEC = [13:0]
+PORT user_sync	    = "", DIR = O
+
+
+END

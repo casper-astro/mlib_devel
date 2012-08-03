@@ -1,0 +1,3 @@
+
+lib adc2x14_400_interface_v1_00_a adc2x14_400_interface
+lib adc2x14_400_interface_v1_00_a async_fifo_28x128
