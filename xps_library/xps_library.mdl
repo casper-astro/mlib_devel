@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Aug  3 13:37:29 2012"
-  RTWModifiedTimeStamp	  265901842
-  ModelVersionFormat	  "1.%<AutoIncrement:450>"
+  LastModifiedDate	  "Fri Aug  3 14:47:43 2012"
+  RTWModifiedTimeStamp	  265906062
+  ModelVersionFormat	  "1.%<AutoIncrement:451>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -764,7 +764,7 @@ Library {
 	  Name			  "adc083000_ctrl"
 	  Tag			  "xps:adc083000_ctrl"
 	  Ports			  [2]
-	  Position		  [410, 28, 480, 57]
+	  Position		  [200, 38, 270, 67]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -1027,7 +1027,7 @@ Library {
 	  Name			  "adc2x14_400"
 	  Tag			  "xps:adc2x14_400"
 	  Ports			  [0, 5]
-	  Position		  [290, 511, 365, 759]
+	  Position		  [350, 381, 425, 629]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -2316,7 +2316,7 @@ Library {
 	  Name			  "adc2x14_400_4x"
 	  Tag			  "xps:adc2x14_400_4x"
 	  Ports			  [0, 9]
-	  Position		  [400, 512, 475, 758]
+	  Position		  [460, 382, 535, 628]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -4644,7 +4644,7 @@ Library {
 	  Name			  "adc_mkid"
 	  Tag			  "xps:adc_mkid"
 	  Ports			  [0, 5]
-	  Position		  [30, 41, 140, 289]
+	  Position		  [35, 49, 105, 211]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -4738,7 +4738,7 @@ Library {
 		  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at z"
 		  "ero."
 		  num_inputs		  "2"
-		  dbl_ovrd		  off
+		  dbl_ovrd		  "off"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "20,20,336,162"
 		  block_type		  "concat"
@@ -4759,10 +4759,10 @@ Library {
 		  SourceBlock		  "xbsIndex_r4/Inverter"
 		  SourceType		  "Xilinx Inverter Block"
 		  infoedit		  "Bitwise logical negation (one's complement) operator."
-		  en			  off
+		  en			  "off"
 		  latency		  "0"
-		  dbl_ovrd		  off
-		  xl_use_area		  off
+		  dbl_ovrd		  "off"
+		  xl_use_area		  "off"
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "-1,-1,-1,-1"
@@ -4788,9 +4788,9 @@ Library {
 		  "P>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned"
 		  " with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000"
 		  " in binary)."
-		  force_arith_type	  on
+		  force_arith_type	  "on"
 		  arith_type		  "Signed  (2's comp)"
-		  force_bin_pt		  on
+		  force_bin_pt		  "on"
 		  bin_pt		  "11"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "20,20,356,312"
@@ -4815,13 +4815,13 @@ Library {
 		  " is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardwar"
 		  "e notes: In hardware this block costs nothing."
 		  nbits			  "1"
-		  boolean_output	  off
+		  boolean_output	  "off"
 		  mode			  "Upper Bit Location + Width"
 		  bit1			  "0"
 		  base1			  "MSB of Input"
 		  bit0			  "0"
 		  base0			  "LSB of Input"
-		  dbl_ovrd		  off
+		  dbl_ovrd		  "off"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "20,20,460,407"
 		  block_type		  "slice"
@@ -4846,13 +4846,13 @@ Library {
 		  " is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardwar"
 		  "e notes: In hardware this block costs nothing."
 		  nbits			  "11"
-		  boolean_output	  off
+		  boolean_output	  "off"
 		  mode			  "Lower Bit Location + Width"
 		  bit1			  "0"
 		  base1			  "MSB of Input"
 		  bit0			  "0"
 		  base0			  "LSB of Input"
-		  dbl_ovrd		  off
+		  dbl_ovrd		  "off"
 		  has_advanced_control	  "0"
 		  sggui_pos		  "20,41,725,605"
 		  block_type		  "slice"
@@ -5629,11 +5629,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
@@ -5665,11 +5665,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
@@ -5701,11 +5701,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
@@ -5737,11 +5737,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
@@ -5773,11 +5773,11 @@ Library {
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
 	      period		      "1"
-	      dbl_ovrd		      off
+	      dbl_ovrd		      "off"
 	      timing_constraint	      "None"
-	      locs_specified	      off
+	      locs_specified	      "off"
 	      LOCs		      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
@@ -5899,7 +5899,7 @@ Library {
 	  Name			  "adc_mkid_4x"
 	  Tag			  "xps:adc_mkid_4x"
 	  Ports			  [0, 9]
-	  Position		  [525, 20, 680, 370]
+	  Position		  [335, 42, 440, 288]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -8273,585 +8273,10 @@ Library {
 	}
 	Block {
 	  BlockType		  SubSystem
-	  Name			  "adc_sim"
-	  Ports			  [1, 9]
-	  Position		  [165, 104, 260, 256]
-	  MinAlgLoopOccurrences	  off
-	  PropExecContextOutsideSubsystem off
-	  RTWSystemCode		  "Auto"
-	  FunctionWithSeparateData off
-	  Opaque		  off
-	  RequestExecContextInheritance	off
-	  MaskHideContents	  off
-	  MaskType		  "adc_sim"
-	  MaskDescription	  "This block simulates the behavior of a demuxed ADC, which takes\nas input a waveform and returns"
-	  " digital samples in parallel at\na slower rate.  \n\nThis block is used to simulate the behavior "
-	  MaskPromptString	  "Number of Output Streams|Sample Bit Width"
-	  MaskStyleString	  "edit,edit"
-	  MaskTunableValueString  "on,on"
-	  MaskCallbackString	  "|"
-	  MaskEnableString	  "on,on"
-	  MaskVisibilityString	  "on,on"
-	  MaskToolTipString	  "on,on"
-	  MaskVarAliasString	  ","
-	  MaskVariables		  "nStreams=@1;bit_width=@2;"
-	  MaskInitialization	  "adc_sim_init(gcb, ...\n    'nStreams', nStreams, ...\n    'bit_width', bit_width);"
-	  MaskIconFrame		  on
-	  MaskIconOpaque	  on
-	  MaskIconRotate	  "none"
-	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "8|8"
-	  MaskTabNameString	  ","
-	  System {
-	    Name		    "adc_sim"
-	    Location		    [101, 142, 1011, 669]
-	    Open		    off
-	    ModelBrowserVisibility  off
-	    ModelBrowserWidth	    200
-	    ScreenColor		    "white"
-	    PaperOrientation	    "landscape"
-	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
-	    TiledPageScale	    1
-	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
-	    Block {
-	      BlockType		      Inport
-	      Name		      "sim_adc_data_in"
-	      Position		      [310, 103, 340, 117]
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Bias
-	      Name		      "adc_bias"
-	      Position		      [445, 100, 475, 120]
-	      Bias		      "128"
-	    }
-	    Block {
-	      BlockType		      Gain
-	      Name		      "adc_gain"
-	      Position		      [390, 100, 420, 120]
-	      Gain		      "128"
-	      ParameterDataTypeMode   "Inherit via internal rule"
-	      ParameterDataType	      "sfix(16)"
-	      ParameterScaling	      "2^0"
-	      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-	      OutDataTypeMode	      "Inherit via internal rule"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-	      SaturateOnIntegerOverflow	off
-	    }
-	    Block {
-	      BlockType		      SubSystem
-	      Name		      "overflow_detector"
-	      Ports		      [8, 1]
-	      Position		      [740, 507, 850, 698]
-	      AncestorBlock	      "casper_library/Misc/of_detect_bus"
-	      MinAlgLoopOccurrences   off
-	      PropExecContextOutsideSubsystem off
-	      RTWSystemCode	      "Auto"
-	      FunctionWithSeparateData off
-	      Opaque		      off
-	      RequestExecContextInheritance off
-	      MaskHideContents	      off
-	      MaskType		      "of_detect_bus"
-	      MaskPromptString	      "Number of Streams|Bit Width"
-	      MaskStyleString	      "edit,edit"
-	      MaskTunableValueString  "on,on"
-	      MaskCallbackString      "|"
-	      MaskEnableString	      "on,on"
-	      MaskVisibilityString    "on,on"
-	      MaskToolTipString	      "on,on"
-	      MaskVarAliasString      ","
-	      MaskVariables	      "nStreams=@1;bit_width=@2;"
-	      MaskInitialization      "adc_overflow_detector_init(gcb, ...\n    'nStreams', nStreams, ...\n    'bit_width', b"
-	      "it_width);"
-	      MaskIconFrame	      on
-	      MaskIconOpaque	      on
-	      MaskIconRotate	      "none"
-	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "8|8"
-	      MaskTabNameString	      ","
-	      System {
-		Name			"overflow_detector"
-		Location		[584, 262, 941, 683]
-		Open			off
-		ModelBrowserVisibility	off
-		ModelBrowserWidth	200
-		ScreenColor		"white"
-		PaperOrientation	"landscape"
-		PaperPositionMode	"auto"
-		PaperType		"usletter"
-		PaperUnits		"inches"
-		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
-		TiledPageScale		1
-		ShowPageBoundaries	off
-		ZoomFactor		"100"
-		Block {
-		  BlockType		  Inport
-		  Name			  "s0"
-		  Position		  [45, 33, 75, 47]
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s1"
-		  Position		  [45, 118, 75, 132]
-		  Port			  "2"
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s2"
-		  Position		  [45, 203, 75, 217]
-		  Port			  "3"
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s3"
-		  Position		  [45, 288, 75, 302]
-		  Port			  "4"
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s4"
-		  Position		  [45, 58, 75, 72]
-		  Port			  "5"
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s5"
-		  Position		  [45, 143, 75, 157]
-		  Port			  "6"
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s6"
-		  Position		  [45, 228, 75, 242]
-		  Port			  "7"
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s7"
-		  Position		  [45, 313, 75, 327]
-		  Port			  "8"
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Block {
-		  BlockType		  Sum
-		  Name			  "Add"
-		  Ports			  [4, 1]
-		  Position		  [235, 117, 265, 153]
-		  Inputs		  "++++"
-		  InputSameDT		  off
-		  OutDataTypeMode	  "Inherit via internal rule"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^-10"
-		  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-		  SaturateOnIntegerOverflow off
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of0"
-		  Ports			  [2, 1]
-		  Position		  [105, 25, 145, 80]
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  SID			  "10"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of1"
-		  Ports			  [2, 1]
-		  Position		  [105, 110, 145, 165]
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  SID			  "11"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of2"
-		  Ports			  [2, 1]
-		  Position		  [105, 195, 145, 250]
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  SID			  "12"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of3"
-		  Ports			  [2, 1]
-		  Position		  [105, 280, 145, 335]
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  SID			  "13"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Outport
-		  Name			  "overflow"
-		  Position		  [285, 118, 315, 132]
-		  IconDisplay		  "Port number"
-		  OutDataType		  "fixdt(1, 16)"
-		  OutScaling		  "2^0"
-		}
-		Line {
-		  SrcBlock		  "s0"
-		  SrcPort		  1
-		  DstBlock		  "of0"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s4"
-		  SrcPort		  1
-		  DstBlock		  "of0"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of0"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s1"
-		  SrcPort		  1
-		  DstBlock		  "of1"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s5"
-		  SrcPort		  1
-		  DstBlock		  "of1"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of1"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "s2"
-		  SrcPort		  1
-		  DstBlock		  "of2"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s6"
-		  SrcPort		  1
-		  DstBlock		  "of2"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of2"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  3
-		}
-		Line {
-		  SrcBlock		  "s3"
-		  SrcPort		  1
-		  DstBlock		  "of3"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s7"
-		  SrcPort		  1
-		  DstBlock		  "of3"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of3"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  4
-		}
-		Line {
-		  SrcBlock		  "Add"
-		  SrcPort		  1
-		  DstBlock		  "overflow"
-		  DstPort		  1
-		}
-	      }
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample0_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 93, 675, 127]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "20"
-	      N			      "8"
-	      phase		      "1"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample1_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 143, 675, 177]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "21"
-	      N			      "8"
-	      phase		      "2"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample2_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 193, 675, 227]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "22"
-	      N			      "8"
-	      phase		      "3"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample3_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 243, 675, 277]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "23"
-	      N			      "8"
-	      phase		      "4"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample4_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 293, 675, 327]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "24"
-	      N			      "8"
-	      phase		      "5"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample5_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 343, 675, 377]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "25"
-	      N			      "8"
-	      phase		      "6"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample6_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 393, 675, 427]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "26"
-	      N			      "8"
-	      phase		      "7"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "sample7_ds"
-	      Ports		      [1, 1]
-	      Position		      [640, 443, 675, 477]
-	      SourceBlock	      "dspsigops/Downsample"
-	      SourceType	      "Downsample"
-	      SID		      "27"
-	      N			      "8"
-	      phase		      "0"
-	      ic		      "0"
-	      smode		      "Allow multirate"
-	      fmode		      "Maintain input frame size"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s0"
-	      Position		      [735, 103, 765, 117]
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s1"
-	      Position		      [735, 153, 765, 167]
-	      Port		      "2"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s2"
-	      Position		      [735, 203, 765, 217]
-	      Port		      "3"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s3"
-	      Position		      [735, 253, 765, 267]
-	      Port		      "4"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s4"
-	      Position		      [735, 303, 765, 317]
-	      Port		      "5"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s5"
-	      Position		      [735, 353, 765, 367]
-	      Port		      "6"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s6"
-	      Position		      [735, 403, 765, 417]
-	      Port		      "7"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "s7"
-	      Position		      [735, 453, 765, 467]
-	      Port		      "8"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "of"
-	      Position		      [865, 598, 895, 612]
-	      Port		      "9"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Line {
-	      SrcBlock		      "sim_adc_data_in"
-	      SrcPort		      1
-	      DstBlock		      "adc_gain"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "adc_gain"
-	      SrcPort		      1
-	      DstBlock		      "adc_bias"
-	      DstPort		      1
-	    }
-	  }
-	}
-	Block {
-	  BlockType		  SubSystem
 	  Name			  "asiaa_adc5g"
 	  Tag			  "xps:adc5g"
 	  Ports			  [2, 17]
-	  Position		  [35, 410, 195, 760]
+	  Position		  [45, 345, 205, 695]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag0"
@@ -10615,784 +10040,6 @@ Library {
 	      SrcBlock		      "sim_a"
 	      SrcPort		      1
 	      DstBlock		      "gain_a"
-	      DstPort		      1
-	    }
-	  }
-	}
-	Block {
-	  BlockType		  SubSystem
-	  Name			  "conv"
-	  Ports			  [1, 1]
-	  Position		  [170, 35, 250, 65]
-	  MinAlgLoopOccurrences	  off
-	  PropExecContextOutsideSubsystem off
-	  RTWSystemCode		  "Auto"
-	  FunctionWithSeparateData off
-	  Opaque		  off
-	  RequestExecContextInheritance	off
-	  MaskHideContents	  off
-	  MaskDescription	  "Converts an (8-bit) unsigned number to 2's complement.\nThis block should eventually be able to "
-	  "handle arbitrary \nwidth inputs."
-	  MaskPromptString	  "Bit Width"
-	  MaskStyleString	  "edit"
-	  MaskTunableValueString  "on"
-	  MaskEnableString	  "on"
-	  MaskVisibilityString	  "on"
-	  MaskToolTipString	  "on"
-	  MaskVariables		  "bit_width=@1;"
-	  MaskInitialization	  "% set_param([gcb, '/Slice1'], 'nbits', num2str(bit_width-1));\n% set_param([gcb, '/Reinterpre"
-	  "t'], 'bin_pt', num2str(bit_width-1));\n"
-	  MaskIconFrame		  on
-	  MaskIconOpaque	  on
-	  MaskIconRotate	  "none"
-	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "8"
-	  System {
-	    Name		    "conv"
-	    Location		    [683, 119, 1195, 283]
-	    Open		    off
-	    ModelBrowserVisibility  off
-	    ModelBrowserWidth	    200
-	    ScreenColor		    "white"
-	    PaperOrientation	    "landscape"
-	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
-	    TiledPageScale	    1
-	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
-	    Block {
-	      BlockType		      Inport
-	      Name		      "In1"
-	      Position		      [25, 38, 55, 52]
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Concat"
-	      Ports		      [2, 1]
-	      Position		      [265, 32, 315, 83]
-	      SourceBlock	      "xbsIndex_r4/Concat"
-	      SourceType	      "Xilinx Bus Concatenator Block"
-	      SID		      "39"
-	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
-	      "nt at zero."
-	      num_inputs	      "2"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "concat"
-	      block_version	      "8.2.02"
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,df1e5aba,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 "
-	      "0.91]);\npatch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54"
-	      " 45 30 15 6 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'hi');\ncolor('b"
-	      "lack');port_label('input',2,'lo');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Inverter"
-	      Ports		      [1, 1]
-	      Position		      [175, 28, 225, 62]
-	      SourceBlock	      "xbsIndex_r4/Inverter"
-	      SourceType	      "Xilinx Inverter Block"
-	      SID		      "40"
-	      infoedit		      "Bitwise logical negation (one's complement) operator."
-	      en		      "off"
-	      latency		      "0"
-	      dbl_ovrd		      "off"
-	      xl_use_area	      "off"
-	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
-	      block_type	      "inv"
-	      block_version	      "8.2.02"
-	      sg_icon_stat	      "50,34,1,1,white,blue,0,1ab4a85f,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 ],[0 0 58 58 ],[0.77 0.82 "
-	      "0.91]);\npatch([13 4 17 4 13 28 32 36 52 40 28 19 32 19 28 40 52 36 32 28 13 ],[7 16 29 42 51 51 47 51 51 39 51"
-	      " 42 29 16 7 19 7 7 11 7 7 ],[0.98 0.96 0.92]);\nplot([0 55 55 0 0 ],[0 0 58 58 0 ]);\nfprintf('','COMMENT: end "
-	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('not');\nfprintf('','COMMENT: en"
-	      "d icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Reinterpret"
-	      Ports		      [1, 1]
-	      Position		      [355, 44, 395, 76]
-	      SourceBlock	      "xbsIndex_r4/Reinterpret"
-	      SourceType	      "Xilinx Type Reinterpreter Block"
-	      SID		      "41"
-	      infoedit		      "Changes signal type without altering the binary representation.   You can changed the signal b"
-	      "etween signed and unsigned, and relocate the binary point.<br><br>Hardware notes: In hardware this block costs "
-	      "nothing.<br><br>Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is f"
-	      "orced to unsigned with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an "
-	      "output of 56 (111000 in binary)."
-	      force_arith_type	      "on"
-	      arith_type	      "Signed  (2's comp)"
-	      force_bin_pt	      "on"
-	      bin_pt		      "bit_width-1"
-	      has_advanced_control    "0"
-	      sggui_pos		      "15,25,372,364"
-	      block_type	      "reinterpret"
-	      block_version	      "8.2.02"
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
-	      "ENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Slice"
-	      Ports		      [1, 1]
-	      Position		      [100, 31, 145, 59]
-	      SourceBlock	      "xbsIndex_r4/Slice"
-	      SourceType	      "Xilinx Bit Slice Extractor Block"
-	      SID		      "42"
-	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
-	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P>"
-	      "<P>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "1"
-	      boolean_output	      "off"
-	      mode		      "Upper Bit Location + Width"
-	      bit1		      "0"
-	      base1		      "MSB of Input"
-	      bit0		      "0"
-	      base0		      "LSB of Input"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "20,20,442,407"
-	      block_type	      "slice"
-	      block_version	      "8.2.02"
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,b1026674,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 "
-	      "0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "6 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprin"
-	      "tf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Slice1"
-	      Ports		      [1, 1]
-	      Position		      [100, 86, 145, 114]
-	      SourceBlock	      "xbsIndex_r4/Slice"
-	      SourceType	      "Xilinx Bit Slice Extractor Block"
-	      SID		      "43"
-	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
-	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
-	      "><br>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "bit_width-1"
-	      boolean_output	      "off"
-	      mode		      "Lower Bit Location + Width"
-	      bit1		      "0"
-	      base1		      "MSB of Input"
-	      bit0		      "0"
-	      base0		      "LSB of Input"
-	      dbl_ovrd		      "off"
-	      has_advanced_control    "0"
-	      sggui_pos		      "0,0,537,482"
-	      block_type	      "slice"
-	      block_version	      "8.2.02"
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,b1026674,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 "
-	      "0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 2"
-	      "6 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end i"
-	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprin"
-	      "tf('','COMMENT: end icon text');\n"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "Out1"
-	      Position		      [420, 53, 450, 67]
-	      IconDisplay	      "Port number"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	    }
-	    Line {
-	      SrcBlock		      "Reinterpret"
-	      SrcPort		      1
-	      DstBlock		      "Out1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Concat"
-	      SrcPort		      1
-	      DstBlock		      "Reinterpret"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Slice1"
-	      SrcPort		      1
-	      Points		      [100, 0]
-	      DstBlock		      "Concat"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Inverter"
-	      SrcPort		      1
-	      DstBlock		      "Concat"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Slice"
-	      SrcPort		      1
-	      DstBlock		      "Inverter"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "In1"
-	      SrcPort		      1
-	      Points		      [0, 0; 15, 0]
-	      Branch {
-		DstBlock		"Slice"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 55]
-		DstBlock		"Slice1"
-		DstPort			1
-	      }
-	    }
-	  }
-	}
-	Block {
-	  BlockType		  SubSystem
-	  Name			  "of1"
-	  Ports			  [2, 1]
-	  Position		  [310, 15, 350, 70]
-	  MinAlgLoopOccurrences	  off
-	  PropExecContextOutsideSubsystem off
-	  RTWSystemCode		  "Auto"
-	  FunctionWithSeparateData off
-	  Opaque		  off
-	  RequestExecContextInheritance	off
-	  MaskHideContents	  off
-	  MaskType		  "of"
-	  MaskDescription	  "1-cycle overflow detector for an n-bit ADC outputs (simulation only)"
-	  MaskPromptString	  "Bit index of overflow detection bus:|Number of bits in ADC"
-	  MaskStyleString	  "edit,edit"
-	  MaskTunableValueString  "on,on"
-	  MaskCallbackString	  "|"
-	  MaskEnableString	  "on,on"
-	  MaskVisibilityString	  "on,on"
-	  MaskToolTipString	  "on,on"
-	  MaskVarAliasString	  ","
-	  MaskVariables		  "bit_num=@1;n_adc_bits=@2;"
-	  MaskIconFrame		  on
-	  MaskIconOpaque	  on
-	  MaskIconRotate	  "none"
-	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "0|8"
-	  MaskTabNameString	  ","
-	  System {
-	    Name		    "of1"
-	    Location		    [130, 286, 571, 640]
-	    Open		    off
-	    ModelBrowserVisibility  off
-	    ModelBrowserWidth	    200
-	    ScreenColor		    "white"
-	    PaperOrientation	    "landscape"
-	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
-	    TiledPageScale	    1
-	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s0"
-	      Position		      [15, 33, 45, 47]
-	      IconDisplay	      "Port number"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s1"
-	      Position		      [15, 73, 45, 87]
-	      Port		      "2"
-	      IconDisplay	      "Port number"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Compare\nTo Constant1"
-	      Ports		      [1, 1]
-	      Position		      [110, 53, 140, 67]
-	      ShowName		      off
-	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
-	      SourceType	      "Compare To Constant"
-	      SID		      "47"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      relop		      ">"
-	      const		      "2^n_adc_bits-1"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Compare\nTo Constant2"
-	      Ports		      [1, 1]
-	      Position		      [110, 93, 140, 107]
-	      ShowName		      off
-	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
-	      SourceType	      "Compare To Constant"
-	      SID		      "48"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      relop		      ">"
-	      const		      "2^n_adc_bits-1"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Compare\nTo Constant6"
-	      Ports		      [1, 1]
-	      Position		      [110, 33, 140, 47]
-	      ShowName		      off
-	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
-	      SourceType	      "Compare To Constant"
-	      SID		      "49"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      relop		      "<"
-	      const		      "0"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "Compare\nTo Constant7"
-	      Ports		      [1, 1]
-	      Position		      [110, 73, 140, 87]
-	      ShowName		      off
-	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
-	      SourceType	      "Compare To Constant"
-	      SID		      "50"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      relop		      "<"
-	      const		      "0"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
-	    }
-	    Block {
-	      BlockType		      Gain
-	      Name		      "Gain"
-	      Position		      [210, 55, 240, 85]
-	      Gain		      "2^(bit_num)"
-	      ParameterDataTypeMode   "Inherit via internal rule"
-	      ParameterDataType	      "sfix(16)"
-	      ParameterScaling	      "2^0"
-	      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-	      OutDataTypeMode	      "Inherit via internal rule"
-	      OutDataType	      "sfix(16)"
-	      OutScaling	      "2^0"
-	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-	      SaturateOnIntegerOverflow	off
-	    }
-	    Block {
-	      BlockType		      Logic
-	      Name		      "Logical\nOperator1"
-	      Ports		      [4, 1]
-	      Position		      [160, 29, 190, 111]
-	      ShowName		      off
-	      Operator		      "OR"
-	      Inputs		      "4"
-	      AllPortsSameDT	      off
-	      OutDataTypeMode	      "boolean"
-	      OutDataTypeStr	      "boolean"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "of"
-	      Position		      [265, 63, 295, 77]
-	      IconDisplay	      "Port number"
-	    }
-	    Line {
-	      SrcBlock		      "Gain"
-	      SrcPort		      1
-	      DstBlock		      "of"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "s1"
-	      SrcPort		      1
-	      Points		      [35, 0]
-	      Branch {
-		Points			[0, 20]
-		DstBlock		"Compare\nTo Constant2"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Compare\nTo Constant7"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Logical\nOperator1"
-	      SrcPort		      1
-	      DstBlock		      "Gain"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "s0"
-	      SrcPort		      1
-	      Points		      [35, 0]
-	      Branch {
-		Points			[0, 20]
-		DstBlock		"Compare\nTo Constant1"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Compare\nTo Constant6"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Compare\nTo Constant6"
-	      SrcPort		      1
-	      DstBlock		      "Logical\nOperator1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Compare\nTo Constant1"
-	      SrcPort		      1
-	      DstBlock		      "Logical\nOperator1"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Compare\nTo Constant7"
-	      SrcPort		      1
-	      DstBlock		      "Logical\nOperator1"
-	      DstPort		      3
-	    }
-	    Line {
-	      SrcBlock		      "Compare\nTo Constant2"
-	      SrcPort		      1
-	      DstBlock		      "Logical\nOperator1"
-	      DstPort		      4
-	    }
-	  }
-	}
-	Block {
-	  BlockType		  SubSystem
-	  Name			  "of_detect_bus"
-	  Ports			  [8, 1]
-	  Position		  [295, 105, 380, 255]
-	  MinAlgLoopOccurrences	  off
-	  PropExecContextOutsideSubsystem off
-	  RTWSystemCode		  "Auto"
-	  FunctionWithSeparateData off
-	  Opaque		  off
-	  RequestExecContextInheritance	off
-	  MaskHideContents	  off
-	  MaskType		  "of_detect_bus"
-	  MaskPromptString	  "Number of Streams|Bit Width"
-	  MaskStyleString	  "edit,edit"
-	  MaskTunableValueString  "on,on"
-	  MaskCallbackString	  "|"
-	  MaskEnableString	  "on,on"
-	  MaskVisibilityString	  "on,on"
-	  MaskToolTipString	  "on,on"
-	  MaskVarAliasString	  ","
-	  MaskVariables		  "nStreams=@1;bit_width=@2;"
-	  MaskInitialization	  "of_detect_bus_init(gcb, ...\n    'nStreams', nStreams, ...\n    'bit_width', bit_width);"
-	  MaskIconFrame		  on
-	  MaskIconOpaque	  on
-	  MaskIconRotate	  "none"
-	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "8|8"
-	  MaskTabNameString	  ","
-	  System {
-	    Name		    "of_detect_bus"
-	    Location		    [584, 262, 941, 683]
-	    Open		    off
-	    ModelBrowserVisibility  off
-	    ModelBrowserWidth	    200
-	    ScreenColor		    "white"
-	    PaperOrientation	    "landscape"
-	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
-	    TiledPageScale	    1
-	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s0"
-	      Position		      [45, 33, 75, 47]
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s1"
-	      Position		      [45, 118, 75, 132]
-	      Port		      "2"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s2"
-	      Position		      [45, 203, 75, 217]
-	      Port		      "3"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s3"
-	      Position		      [45, 288, 75, 302]
-	      Port		      "4"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s4"
-	      Position		      [45, 58, 75, 72]
-	      Port		      "5"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s5"
-	      Position		      [45, 143, 75, 157]
-	      Port		      "6"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s6"
-	      Position		      [45, 228, 75, 242]
-	      Port		      "7"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "s7"
-	      Position		      [45, 313, 75, 327]
-	      Port		      "8"
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Block {
-	      BlockType		      Sum
-	      Name		      "Add"
-	      Ports		      [4, 1]
-	      Position		      [235, 113, 265, 147]
-	      Inputs		      "++++"
-	      InputSameDT	      off
-	      OutDataTypeMode	      "Inherit via internal rule"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^-10"
-	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-	      SaturateOnIntegerOverflow	off
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "of0"
-	      Ports		      [2, 1]
-	      Position		      [105, 25, 145, 80]
-	      SourceBlock	      "casper_library/Misc/of1"
-	      SourceType	      "of"
-	      SID		      "64"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      bit_num		      "0"
-	      n_adc_bits	      "8"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "of1"
-	      Ports		      [2, 1]
-	      Position		      [105, 110, 145, 165]
-	      SourceBlock	      "casper_library/Misc/of1"
-	      SourceType	      "of"
-	      SID		      "65"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      bit_num		      "0"
-	      n_adc_bits	      "8"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "of2"
-	      Ports		      [2, 1]
-	      Position		      [105, 195, 145, 250]
-	      SourceBlock	      "casper_library/Misc/of1"
-	      SourceType	      "of"
-	      SID		      "66"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      bit_num		      "0"
-	      n_adc_bits	      "8"
-	    }
-	    Block {
-	      BlockType		      Reference
-	      Name		      "of3"
-	      Ports		      [2, 1]
-	      Position		      [105, 280, 145, 335]
-	      SourceBlock	      "casper_library/Misc/of1"
-	      SourceType	      "of"
-	      SID		      "67"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
-	      bit_num		      "0"
-	      n_adc_bits	      "8"
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "overflow"
-	      Position		      [285, 118, 315, 132]
-	      IconDisplay	      "Port number"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	    }
-	    Line {
-	      SrcBlock		      "Add"
-	      SrcPort		      1
-	      DstBlock		      "overflow"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "of3"
-	      SrcPort		      1
-	      DstBlock		      "Add"
-	      DstPort		      4
-	    }
-	    Line {
-	      SrcBlock		      "s7"
-	      SrcPort		      1
-	      DstBlock		      "of3"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "s3"
-	      SrcPort		      1
-	      DstBlock		      "of3"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "of2"
-	      SrcPort		      1
-	      DstBlock		      "Add"
-	      DstPort		      3
-	    }
-	    Line {
-	      SrcBlock		      "s6"
-	      SrcPort		      1
-	      DstBlock		      "of2"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "s2"
-	      SrcPort		      1
-	      DstBlock		      "of2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "of1"
-	      SrcPort		      1
-	      DstBlock		      "Add"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "s5"
-	      SrcPort		      1
-	      DstBlock		      "of1"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "s1"
-	      SrcPort		      1
-	      DstBlock		      "of1"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "of0"
-	      SrcPort		      1
-	      DstBlock		      "Add"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "s4"
-	      SrcPort		      1
-	      DstBlock		      "of0"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "s0"
-	      SrcPort		      1
-	      DstBlock		      "of0"
 	      DstPort		      1
 	    }
 	  }
