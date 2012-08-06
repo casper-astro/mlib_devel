@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Aug  3 14:47:43 2012"
-  RTWModifiedTimeStamp	  265906062
-  ModelVersionFormat	  "1.%<AutoIncrement:451>"
+  LastModifiedDate	  "Mon Aug  6 10:55:14 2012"
+  RTWModifiedTimeStamp	  266151307
+  ModelVersionFormat	  "1.%<AutoIncrement:452>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1027,7 +1027,7 @@ Library {
 	  Name			  "adc2x14_400"
 	  Tag			  "xps:adc2x14_400"
 	  Ports			  [0, 5]
-	  Position		  [350, 381, 425, 629]
+	  Position		  [330, 346, 405, 594]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -2316,7 +2316,7 @@ Library {
 	  Name			  "adc2x14_400_4x"
 	  Tag			  "xps:adc2x14_400_4x"
 	  Ports			  [0, 9]
-	  Position		  [460, 382, 535, 628]
+	  Position		  [465, 345, 540, 595]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
