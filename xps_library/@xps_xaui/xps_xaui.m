@@ -55,37 +55,6 @@ switch s.board
         else
             misc_ports.xaui_clk =    {1 'in'  'mgt_clk_1'};
         end
-    case 'CORR'
-        misc_ports.mgt_clk          = {1 'in' 'bref_clk'};
-    % end case 'CORR'
-    case 'iBOB'
-        switch s.port
-            case '0'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
-            case '1'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_bottom'};
-        end % switch s.port
-    % end case 'iBOB'
-    case 'BEE2_usr'
-        switch s.port
-            case '0'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
-            case '1'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
-            case '2'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_bottom'};
-            case '3'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_bottom'};
-        end % switch s.port
-    % end case 'BEE2_usr'
-    case 'BEE2_ctrl'
-        switch s.port
-            case '0'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
-            case '1'
-                misc_ports.mgt_clk  = {1 'in' 'bref_clk_top'};
-        end % switch s.port
-    % end case 'BEE2_ctrl'
 end % switch s.board
 
 b = set(b,'misc_ports',misc_ports);

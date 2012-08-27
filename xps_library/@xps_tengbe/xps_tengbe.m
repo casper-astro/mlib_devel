@@ -53,12 +53,6 @@ b = class(s,'xps_tengbe',blk_obj);
 b = set(b,'ip_name','ten_gb_eth');
 
 switch s.hw_sys
-    case 'BEE2_ctrl'
-        b = set(b,'ip_version','2.00.a');
-    case 'BEE2_usr'
-        b = set(b,'ip_version','2.00.a');
-    case 'iBOB'
-        b = set(b,'ip_version','2.00.b');
     case 'ROACH'
         b = set(b,'ip_version','3.00.a');
     otherwise
@@ -92,25 +86,8 @@ switch s.hw_sys
       parameters.DEFAULT_FABRIC_PORT    = s.fab_udp;
       parameters.DEFAULT_FABRIC_GATEWAY = s.fab_gate;
       parameters.FABRIC_RUN_ON_STARTUP  = s.fab_en;
-
-    case 'iBOB'
-      parameters.DEFAULT_FABRIC_MAC     = s.fab_mac;
-      parameters.DEFAULT_FABRIC_IP      = s.fab_ip;
-      parameters.DEFAULT_FABRIC_PORT    = s.fab_udp;
-      parameters.DEFAULT_FABRIC_GATEWAY = s.fab_gate;
-      parameters.FABRIC_RUN_ON_STARTUP  = s.fab_en;
-
-      parameters.CONNECTOR = s.port;
-      if strcmp(s.mac_lite, '1')
-          parameters.USE_XILINX_MAC = '0';
-          parameters.USE_UCB_MAC = '1';
-      else
-          parameters.USE_XILINX_MAC = '1';
-          parameters.USE_UCB_MAC = '0';
-      end
-
-
     % end case 'ROACH'
+    
     otherwise
       parameters.CONNECTOR = s.port;
 

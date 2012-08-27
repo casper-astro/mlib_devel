@@ -45,33 +45,7 @@ s.use_sniffer = num2str(strcmp(get_param(blk_name, 'use_sniffer'), 'on'));
 
 s.hw_sys   = xsg_hw_sys;
 
-if (strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
-	s.dimm  = get_param(blk_name, 'dimm');
-  s.clk_freq = 200;
-else
-	s.dimm = 1;
-  s.clk_freq = str2num(get_param(blk_name,'ip_clock'));
-end
 b = class(s, 'xps_dram', blk_obj);
-
-if( strcmp(xsg_hw_sys,'BEE2_ctrl') || strcmp(xsg_hw_sys,'BEE2_usr')),
-	% ip name
-	b = set(b, 'ip_name', 'plb_ddr2_sniffer');
-
-	% plb bus offset
-	b = set(b, 'plb_address_offset', hex2dec('100'));
-	b = set(b, 'opb_address_offset', 0);
-else
-	% ip name
-	b = set(b, 'ip_name', 'opb_dram_sniffer');
-
-	% opb bus offset
-	b = set(b, 'opb_address_offset', hex2dec('100'));
-	b = set(b, 'plb_address_offset', 0);
-
-        %number of hard-coded opb0 interfaces
-        b = set(b, 'opb0_devices', 2); %data and control interfaces on sniffer
-end
 
 % interfaces
 interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];
