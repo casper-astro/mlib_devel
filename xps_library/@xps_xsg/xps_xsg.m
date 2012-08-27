@@ -43,25 +43,6 @@ supp_ip_names = {};
 supp_ip_versions = {};
 
 switch s.hw_sys
-	case 'CORR'
-		s.sw_os = 'tinySH';
-    % end case 'CORR'
-
-	case 'iBOB'
-		s.sw_os = 'tinySH';
-
-		supp_ip_names       = {'',  'opb_clockcontroller', 'diffclk_buf'};
-		supp_ip_versions    = {'',  '1.00.a',              '1.01.a'};
-    % end case 'iBOB'
-
-	case 'BEE2_ctrl'
-		s.sw_os = 'tinySH';
-    % end case 'BEE2_ctrl'
-
-	case 'BEE2_usr'
-		s.sw_os = 'tinySH';
-    % end case 'BEE2_usr'
-
 	case 'ROACH'
 	    s.sw_os = 'none';
     % end case 'ROACH'
@@ -92,13 +73,3 @@ iobname = [s.gpioclk_hw_sys, '.', s.gpioclk_grp];
 iobindex = num2str(s.gpioclkbit);
 
 mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ',num2str(s.clk_rate*1e6));
-
-if strcmp(s.hw_sys, 'iBOB') & ~isempty(strmatch('usr_clk', s.clk_src))
-    if ~isempty(strmatch(s.gpioclk_grp, {'zdok0', 'zdok1', 'mdr'}));
-        ext_ports.usrclk_in_p = {1 'in' 'usrclk_in_p' [iobname,'_p([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD', 'LVDS_25') };
-        ext_ports.usrclk_in_n = {1 'in' 'usrclk_in_n' [iobname,'_n([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD', 'LVDS_25') };
-    else
-        ext_ports.usrclk_in   = {1 'in' 'usrclk_in'   [iobname,  '([',iobindex,']+1)'] 'vector=false' mhs_constraints struct('IOSTANDARD','LVCMOS25') };
-    end % if ~isempty(strmatch(s.gpioclk_grp, {'zdok0', 'zdok1', 'mdr'}));
-    b = set(b,'ext_ports',ext_ports);
-end % if strcmp(s.hw_sys, 'iBOB') & ~isempty(strmatch('usr_clk', s.clk_src))

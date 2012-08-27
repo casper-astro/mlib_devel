@@ -73,39 +73,6 @@ end
 % external ports
 
 switch s.hw_sys
-    case 'BEE2_usr'
-        switch s.io_group
-            case 'leftlink'
-                iostandard = 'LVCMOS25';
-            case 'rightlink'
-                iostandard = 'LVCMOS25';
-            case 'uplink'
-                iostandard = 'LVCMOS25';
-            otherwise
-                iostandard = 'LVCMOS18';
-        end
-    % end case 'BEE2_usr'
-    case 'BEE2_ctrl'
-        switch s.io_group
-            case 'downlink1'
-                iostandard = 'LVCMOS25';
-            case 'downlink2'
-                iostandard = 'LVCMOS25';
-            case 'downlink3'
-                iostandard = 'LVCMOS25';
-            case 'downlink4'
-                iostandard = 'LVCMOS25';
-            otherwise
-                iostandard = 'LVCMOS18';
-        end
-    % end case 'BEE2_ctrl'
-    case 'iBOB'
-        if use_diffio
-            iostandard = 'LVDS_25';
-        else
-            iostandard = 'LVCMOS25';
-        end
-    % end case 'iBOB'
     case 'ROACH'
         if use_diffio
             iostandard = 'LVDS_25';
