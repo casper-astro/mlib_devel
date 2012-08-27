@@ -1,6 +1,0 @@
-run
--ifn xst.prj
--ifmt mixed
--top xaui_v6_2_top
--ofn xaui_v6_2_top
--p virtex2p
