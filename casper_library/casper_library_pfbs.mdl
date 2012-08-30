@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Mar  1 11:54:36 2012"
+  LastModifiedDate	  "Mon Aug 27 16:17:31 2012"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:103>"
+  ModelVersionFormat	  "1.%<AutoIncrement:105>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -586,7 +586,7 @@ Library {
   }
   System {
     Name		    "casper_library_pfbs"
-    Location		    [1, 79, 1921, 1176]
+    Location		    [2376, 142, 3445, 983]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -3714,7 +3714,7 @@ Library {
       BlockType		      SubSystem
       Name		      "last_tap_async"
       Ports		      [5, 3]
-      Position		      [895, 332, 1000, 408]
+      Position		      [330, 462, 435, 538]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       AttributesFormatString  "input(1), tap(2,2)"
       UserDataPersistent      on
@@ -3757,8 +3757,8 @@ Library {
       MaskTabNameString	      ",,,,,,,,,,,"
       System {
 	Name			"last_tap_async"
-	Location		[1, 79, 1919, 1171]
-	Open			on
+	Location		[2, 53, 1678, 1046]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -5245,6 +5245,7 @@ Library {
 	  outputWidth		  "data_in_bits"
 	  outputBinaryPt	  "data_in_bits - 1"
 	  outputArithmeticType	  "1"
+	  show_format		  off
 	  outputToWorkspace	  off
 	  variablePrefix	  "out"
 	  outputToModelAsWell	  on
@@ -5398,7 +5399,7 @@ Library {
       BlockType		      SubSystem
       Name		      "last_tap_real"
       Ports		      [3, 2]
-      Position		      [340, 606, 445, 684]
+      Position		      [330, 606, 435, 684]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag15"
@@ -5666,7 +5667,7 @@ Library {
       Ports		      [2, 3]
       Position		      [55, 462, 150, 538]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
-      AttributesFormatString  "PFBSize=6, n_inputs=0,\ntaps=4, input=0"
+      AttributesFormatString  "PFBSize=2, n_inputs=0,\ntaps=4, input=0"
       UserDataPersistent      on
       UserData		      "DataTag16"
       MinAlgLoopOccurrences   off
@@ -5679,30 +5680,30 @@ Library {
       MaskType		      "pfb_coeff_gen"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of Taps:|Implement Coeff "
       "Gen in Distributed Memory|Windowing Function: |BRAM Latency|Number of Simultaneous Inputs: (2^?)|This is input n"
-      "umber:|Bin Width (normal=1)|Debug mode - coeffs are a [1:pfb_size*taps] ramp."
-      MaskStyleString	      "edit,edit,edit,checkbox,edit,edit,edit,edit,edit,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,"
+      "umber:|Bin Width (normal=1)|Debug mode - coeffs are a [1:pfb_size*taps] ramp.|Fanout latency"
+      MaskStyleString	      "edit,edit,edit,checkbox,edit,edit,edit,edit,edit,checkbox,edit"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,"
       MaskVariables	      "PFBSize=@1;CoeffBitWidth=@2;TotalTaps=@3;CoeffDistMem=&4;WindowType=&5;bram_latency=@6;n_in"
-      "puts=@7;nput=@8;fwidth=@9;debug_mode=&10;"
+      "puts=@7;nput=@8;fwidth=@9;debug_mode=&10;fan_latency=@11;"
       MaskInitialization      "pfb_coeff_gen_init(gcb, ...\n    'PFBSize', PFBSize, ...\n    'CoeffBitWidth', CoeffBit"
       "Width, ...\n    'TotalTaps', TotalTaps, ...\n    'CoeffDistMem', CoeffDistMem, ...\n    'WindowType', WindowType"
       ", ...\n    'bram_latency', bram_latency, ...\n    'n_inputs', n_inputs, ...\n    'nput', nput, ...\n    'fwidth'"
-      ", fwidth, ...\n    'debug_mode', debug_mode);"
+      ", fwidth, ...\n    'fan_latency', fan_latency, ...\n    'debug_mode', debug_mode);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "6|8|4|off|hamming|2|0|0|1|off"
-      MaskTabNameString	      ",,,,,,,,,"
+      MaskValueString	      "2|8|4|off|hamming|2|0|0|1|off|1"
+      MaskTabNameString	      ",,,,,,,,,,"
       System {
 	Name			"pfb_coeff_gen"
-	Location		[20, 102, 533, 772]
+	Location		[1760, 446, 2273, 1116]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5736,14 +5737,14 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Concat"
 	  Ports			  [4, 1]
-	  Position		  [310, 99, 365, 646]
+	  Position		  [360, 99, 415, 646]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
 	  "ro."
 	  num_inputs		  "4"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "concat"
@@ -5772,17 +5773,17 @@ Library {
 	  start_count		  "0"
 	  cnt_by_val		  "1"
 	  arith_type		  "Unsigned"
-	  n_bits		  "6"
+	  n_bits		  "2"
 	  bin_pt		  "0"
-	  load_pin		  "off"
-	  rst			  "on"
-	  en			  "off"
+	  load_pin		  off
+	  rst			  on
+	  en			  off
 	  explicit_period	  "on"
 	  period		  "1"
-	  dbl_ovrd		  "off"
-	  use_behavioral_HDL	  "off"
+	  dbl_ovrd		  off
+	  use_behavioral_HDL	  off
 	  implementation	  "Fabric"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -5806,14 +5807,14 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "bram_latency+1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "50,74,419,315"
+	  sggui_pos		  "1257,74,419,315"
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,46,1,1,white,blue,0,83e6bb61,right,"
@@ -5834,11 +5835,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "bram_latency+1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,315"
@@ -5857,23 +5858,23 @@ Library {
 	  BlockType		  Reference
 	  Name			  "ROM1"
 	  Ports			  [1, 1]
-	  Position		  [150, 74, 200, 126]
+	  Position		  [200, 74, 250, 126]
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
-	  depth			  "64"
-	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,1)"
+	  depth			  "4"
+	  initVector		  "pfb_coeff_gen_calc(2, 4,'hamming',0, 0,1,1)"
 	  distributed_mem	  "Block RAM"
-	  rst			  "off"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
-	  latency		  "2"
+	  en			  off
+	  latency		  "bram_latency"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,340"
@@ -5891,23 +5892,23 @@ Library {
 	  BlockType		  Reference
 	  Name			  "ROM2"
 	  Ports			  [1, 1]
-	  Position		  [150, 139, 200, 191]
+	  Position		  [200, 139, 250, 191]
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
-	  depth			  "64"
-	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,2)"
+	  depth			  "4"
+	  initVector		  "pfb_coeff_gen_calc(2, 4,'hamming',0, 0,1,2)"
 	  distributed_mem	  "Block RAM"
-	  rst			  "off"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
-	  latency		  "2"
+	  en			  off
+	  latency		  "bram_latency"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,340"
@@ -5925,23 +5926,23 @@ Library {
 	  BlockType		  Reference
 	  Name			  "ROM3"
 	  Ports			  [1, 1]
-	  Position		  [150, 204, 200, 256]
+	  Position		  [200, 204, 250, 256]
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
-	  depth			  "64"
-	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,3)"
+	  depth			  "4"
+	  initVector		  "pfb_coeff_gen_calc(2, 4,'hamming',0, 0,1,3)"
 	  distributed_mem	  "Block RAM"
-	  rst			  "off"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
-	  latency		  "2"
+	  en			  off
+	  latency		  "bram_latency"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,340"
@@ -5959,23 +5960,23 @@ Library {
 	  BlockType		  Reference
 	  Name			  "ROM4"
 	  Ports			  [1, 1]
-	  Position		  [150, 269, 200, 321]
+	  Position		  [200, 269, 250, 321]
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
-	  depth			  "64"
-	  initVector		  "pfb_coeff_gen_calc(6, 4,'hamming',0, 0,1,4)"
+	  depth			  "4"
+	  initVector		  "pfb_coeff_gen_calc(2, 4,'hamming',0, 0,1,4)"
 	  distributed_mem	  "Block RAM"
-	  rst			  "off"
+	  rst			  off
 	  init_reg		  "0"
-	  en			  "off"
-	  latency		  "2"
+	  en			  off
+	  latency		  "bram_latency"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  "on"
-	  xl_use_area		  "off"
+	  use_rpm		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,340"
@@ -5993,18 +5994,18 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Register"
 	  Ports			  [1, 1]
-	  Position		  [385, 325, 430, 375]
+	  Position		  [435, 325, 480, 375]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
 	  init			  "0"
-	  rst			  "off"
-	  en			  "off"
-	  dbl_ovrd		  "off"
-	  xl_use_area		  "off"
+	  rst			  off
+	  en			  off
+	  dbl_ovrd		  off
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "1700,25,419,209"
 	  block_type		  "register"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,50,1,1,white,blue,0,ef2275f7,right,"
@@ -6020,7 +6021,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Reinterpret1"
 	  Ports			  [1, 1]
-	  Position		  [220, 84, 260, 116]
+	  Position		  [270, 84, 310, 116]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -6029,9 +6030,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6049,7 +6050,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Reinterpret2"
 	  Ports			  [1, 1]
-	  Position		  [220, 149, 260, 181]
+	  Position		  [270, 149, 310, 181]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -6058,9 +6059,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6078,7 +6079,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Reinterpret3"
 	  Ports			  [1, 1]
-	  Position		  [220, 214, 260, 246]
+	  Position		  [270, 214, 310, 246]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -6087,9 +6088,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6107,7 +6108,7 @@ Library {
 	  BlockType		  Reference
 	  Name			  "Reinterpret4"
 	  Ports			  [1, 1]
-	  Position		  [220, 279, 260, 311]
+	  Position		  [270, 279, 310, 311]
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -6116,9 +6117,9 @@ Library {
 	  "Example:  Suppose the input is 6 bits wide, signed, with 2 fractional bits, and the output is forced to unsigned wi"
 	  "th 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 in "
 	  "binary)."
-	  force_arith_type	  "on"
+	  force_arith_type	  on
 	  arith_type		  "Unsigned"
-	  force_bin_pt		  "on"
+	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -6131,6 +6132,110 @@ Library {
 	  "75 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('"
 	  "','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfpr"
 	  "intf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "fan_delay1"
+	  Ports			  [1, 1]
+	  Position		  [150, 74, 180, 126]
+	  SourceBlock		  "xbsIndex_r4/Delay"
+	  SourceType		  "Xilinx Delay Block"
+	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
+	  en			  off
+	  latency		  "fan_latency"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "delay"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,52,1,1,white,blue,0,07b98262,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0.66"
+	  "6667 0.9 0.633333 0.566667 0.5 0.233333 ],[0.269231 0.365385 0.5 0.634615 0.730769 0.730769 0.692308 0.730769 0.730"
+	  "769 0.596154 0.711538 0.615385 0.5 0.384615 0.288462 0.403846 0.269231 0.269231 0.307692 0.269231 0.269231 ],[0.98 "
+	  "0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: beg"
+	  "in icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "fan_delay2"
+	  Ports			  [1, 1]
+	  Position		  [150, 139, 180, 191]
+	  SourceBlock		  "xbsIndex_r4/Delay"
+	  SourceType		  "Xilinx Delay Block"
+	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
+	  en			  off
+	  latency		  "fan_latency"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "delay"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,52,1,1,white,blue,0,07b98262,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0.66"
+	  "6667 0.9 0.633333 0.566667 0.5 0.233333 ],[0.269231 0.365385 0.5 0.634615 0.730769 0.730769 0.692308 0.730769 0.730"
+	  "769 0.596154 0.711538 0.615385 0.5 0.384615 0.288462 0.403846 0.269231 0.269231 0.307692 0.269231 0.269231 ],[0.98 "
+	  "0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: beg"
+	  "in icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "fan_delay3"
+	  Ports			  [1, 1]
+	  Position		  [150, 204, 180, 256]
+	  SourceBlock		  "xbsIndex_r4/Delay"
+	  SourceType		  "Xilinx Delay Block"
+	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
+	  en			  off
+	  latency		  "fan_latency"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "delay"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,52,1,1,white,blue,0,07b98262,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0.66"
+	  "6667 0.9 0.633333 0.566667 0.5 0.233333 ],[0.269231 0.365385 0.5 0.634615 0.730769 0.730769 0.692308 0.730769 0.730"
+	  "769 0.596154 0.711538 0.615385 0.5 0.384615 0.288462 0.403846 0.269231 0.269231 0.307692 0.269231 0.269231 ],[0.98 "
+	  "0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: beg"
+	  "in icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "fan_delay4"
+	  Ports			  [1, 1]
+	  Position		  [150, 269, 180, 321]
+	  SourceBlock		  "xbsIndex_r4/Delay"
+	  SourceType		  "Xilinx Delay Block"
+	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
+	  en			  off
+	  latency		  "fan_latency"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "delay"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,52,1,1,white,blue,0,07b98262,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.233333 0.0666667 0.3 0.0666667 0.233333 0.5 0.566667 0.633333 0.9 0.666667 0.466667 0.3 0.5 0.3 0.466667 0.66"
+	  "6667 0.9 0.633333 0.566667 0.5 0.233333 ],[0.269231 0.365385 0.5 0.634615 0.730769 0.730769 0.692308 0.730769 0.730"
+	  "769 0.596154 0.711538 0.615385 0.5 0.384615 0.288462 0.403846 0.269231 0.269231 0.307692 0.269231 0.269231 ],[0.98 "
+	  "0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: beg"
+	  "in icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport
@@ -6152,7 +6257,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff"
-	  Position		  [450, 343, 480, 357]
+	  Position		  [500, 343, 530, 357]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	  OutDataType		  "sfix(16)"
@@ -6206,21 +6311,27 @@ Library {
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  Branch {
-	    DstBlock		    "ROM1"
+	    DstBlock		    "fan_delay1"
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "ROM2"
+	    DstBlock		    "fan_delay2"
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "ROM3"
+	    DstBlock		    "fan_delay3"
 	    DstPort		    1
 	  }
 	  Branch {
-	    DstBlock		    "ROM4"
+	    DstBlock		    "fan_delay4"
 	    DstPort		    1
 	  }
+	}
+	Line {
+	  SrcBlock		  "fan_delay1"
+	  SrcPort		  1
+	  DstBlock		  "ROM1"
+	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "ROM1"
@@ -6232,6 +6343,12 @@ Library {
 	  SrcBlock		  "Reinterpret1"
 	  SrcPort		  1
 	  DstBlock		  "Concat"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "fan_delay2"
+	  SrcPort		  1
+	  DstBlock		  "ROM2"
 	  DstPort		  1
 	}
 	Line {
@@ -6247,6 +6364,12 @@ Library {
 	  DstPort		  2
 	}
 	Line {
+	  SrcBlock		  "fan_delay3"
+	  SrcPort		  1
+	  DstBlock		  "ROM3"
+	  DstPort		  1
+	}
+	Line {
 	  SrcBlock		  "ROM3"
 	  SrcPort		  1
 	  DstBlock		  "Reinterpret3"
@@ -6257,6 +6380,12 @@ Library {
 	  SrcPort		  1
 	  DstBlock		  "Concat"
 	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "fan_delay4"
+	  SrcPort		  1
+	  DstBlock		  "ROM4"
+	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "ROM4"
@@ -6276,7 +6405,7 @@ Library {
       BlockType		      SubSystem
       Name		      "pfb_fir"
       Ports		      [3, 3]
-      Position		      [55, 57, 145, 163]
+      Position		      [55, 54, 165, 176]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       AttributesFormatString  "taps=2, add_latency=1\nmax scale 0.500"
       UserDataPersistent      on
@@ -6292,44 +6421,44 @@ Library {
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Pfb_fir'')')"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Total Number of Taps:|Windowing Function: |Number of Simultaneou"
       "s Inputs: (2^?)|Make Biplex?|Input Bitwidth:|Output Bitwidth:|Coefficient Bitwidth:|Use Distributed Memory for C"
-      "oeffs|Add Latency|Mult Latency|BRAM Latency|Quantization Behavior|Bin Width Scaling (normal=1)|Multiplier specif"
-      "ication (0=core, 1=embedded, 2=behavioural) (left=1st tap, or just one value)|Share coefficients between polaris"
-      "ations (use less BRAM)?"
+      "oeffs|Add Latency|Mult Latency|BRAM Latency|Fanout Latency|Quantization Behavior|Bin Width Scaling (normal=1)|Mu"
+      "ltiplier specification (0=core, 1=embedded, 2=behavioural) (left=1st tap, or just one value)|Share coefficients "
+      "between polarisations (use less BRAM)?"
       MaskStyleString	      "edit,edit,popup(bartlett|barthannwin|blackman|blackmanharris|bohamwin|chebwin|flattopwin|"
       "gausswin|hamming|hann|kaiser|nuttallwin|parzenwin|rectwin|tukeywin|triang|userwindow),edit,checkbox,edit,edit,ed"
-      "it,checkbox,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),edit,edit,c"
-      "heckbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      "it,checkbox,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),edit,e"
+      "dit,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskCallbackString      "|%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = eval(get_param(gcb, 'mult_s"
       "pec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <= num_taps), \n%   new_siz"
       "e = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n) = old_vec(n); end\n%set_p"
-      "aram(gcb, 'mult_spec', mat2str(vec));||||||||||||%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = eval"
-      "(get_param(gcb, 'mult_spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <= n"
-      "um_taps), \n%    new_size = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n) ="
-      " old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));|%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%o"
-      "ld_vec = eval(get_param(gcb, 'mult_spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if("
-      "old_size <= num_taps), \n%    new_size = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_s"
-      "ize, vec(n) = old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));|"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,,,,,,"
+      "aram(gcb, 'mult_spec', mat2str(vec));|||||||||||||%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = eva"
+      "l(get_param(gcb, 'mult_spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <= "
+      "num_taps), \n%    new_size = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n) "
+      "= old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));|%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%"
+      "old_vec = eval(get_param(gcb, 'mult_spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if"
+      "(old_size <= num_taps), \n%    new_size = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_"
+      "size, vec(n) = old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));|"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,,,,,,"
       MaskVariables	      "PFBSize=@1;TotalTaps=@2;WindowType=&3;n_inputs=@4;MakeBiplex=&5;BitWidthIn=@6;BitWidthOut=@"
-      "7;CoeffBitWidth=@8;CoeffDistMem=&9;add_latency=@10;mult_latency=@11;bram_latency=@12;quantization=&13;fwidth=@14"
-      ";mult_spec=@15;coeffs_share=&16;"
+      "7;CoeffBitWidth=@8;CoeffDistMem=&9;add_latency=@10;mult_latency=@11;bram_latency=@12;fan_latency=@13;quantizatio"
+      "n=&14;fwidth=@15;mult_spec=@16;coeffs_share=&17;"
       MaskInitialization      "pfb_fir_init(gcb, ...\n    'PFBSize', PFBSize, ...\n    'TotalTaps', TotalTaps, ...\n  "
       "  'WindowType', WindowType, ...\n    'n_inputs', n_inputs, ...\n    'MakeBiplex', MakeBiplex, ...\n    'BitWidth"
       "In', BitWidthIn, ...\n    'BitWidthOut', BitWidthOut, ...\n    'CoeffBitWidth', CoeffBitWidth, ...\n    'CoeffDi"
       "stMem', CoeffDistMem, ...\n    'add_latency', add_latency, ...\n    'mult_latency', mult_latency, ...\n    'bram"
-      "_latency', bram_latency, ...\n    'quantization', quantization, ...\n    'fwidth', fwidth, ...\n    'mult_spec',"
-      " mult_spec, ...\n    'coeffs_share', coeffs_share);"
+      "_latency', bram_latency, ...\n    'fan_latency', fan_latency, ...\n    'quantization', quantization, ...\n    'f"
+      "width', fwidth, ...\n    'mult_spec', mult_spec, ...\n    'coeffs_share', coeffs_share);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|Round  (unbiased: Even Values)|1|2|on"
-      MaskTabNameString	      ",,,,,,,,,,,,,,,"
+      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|Round  (unbiased: Even Values)|1|2|on"
+      MaskTabNameString	      ",,,,,,,,,,,,,,,,"
       System {
 	Name			"pfb_fir"
 	Location		[512, 603, 1243, 1097]
@@ -6394,6 +6523,7 @@ Library {
 	  nput			  "0"
 	  fwidth		  "1"
 	  debug_mode		  off
+	  fan_latency		  "1"
 	}
 	Block {
 	  BlockType		  Reference
@@ -6663,6 +6793,7 @@ Library {
 	  nput			  "1"
 	  fwidth		  "1"
 	  debug_mode		  off
+	  fan_latency		  "1"
 	}
 	Block {
 	  BlockType		  Reference
@@ -7057,7 +7188,7 @@ Library {
       BlockType		      SubSystem
       Name		      "pfb_fir_async"
       Ports		      [4, 4]
-      Position		      [755, 62, 845, 178]
+      Position		      [340, 54, 450, 176]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       AttributesFormatString  "taps=2, add_latency=1\nmax scale 0.500"
       UserDataPersistent      on
@@ -7073,36 +7204,36 @@ Library {
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Pfb_fir'')')"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Total Number of Taps:|Windowing Function: |Number of Simultaneou"
       "s Inputs: (2^?)|Make Biplex?|Input Bitwidth:|Output Bitwidth:|Coefficient Bitwidth:|Use distributed memory for c"
-      "oeffs|Add Latency|Mult Latency|BRAM Latency|Quantization Behavior|Bin Width Scaling (normal=1)|Multiplier specif"
-      "ication (0=core, 1=embedded, 2=behavioural) (left=1st tap, or just one value)|Share coefficients between polaris"
-      "ations (use less BRAM)?|Make asynchronous|Debug mode - coeffs are a [1:pfb_size*taps] ramp."
+      "oeffs|Add Latency|Mult Latency|BRAM Latency|Fanout latency|Quantization Behavior|Bin Width Scaling (normal=1)|Mu"
+      "ltiplier specification (0=core, 1=embedded, 2=behavioural) (left=1st tap, or just one value)|Share coefficients "
+      "between polarisations (use less BRAM)?|Make asynchronous|Debug mode - coeffs are a [1:pfb_size*taps] ramp."
       MaskStyleString	      "edit,edit,popup(bartlett|barthannwin|blackman|blackmanharris|bohamwin|chebwin|flattopwin|"
       "gausswin|hamming|hann|kaiser|nuttallwin|parzenwin|rectwin|tukeywin|triang|userwindow),edit,checkbox,edit,edit,ed"
-      "it,checkbox,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),edit,edit,c"
-      "heckbox,checkbox,checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||||||||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,,,,,,,,"
+      "it,checkbox,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),edit,e"
+      "dit,checkbox,checkbox,checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||||||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,,,,,,,,"
       MaskVariables	      "pfb_bits=@1;total_taps=@2;window_type=&3;simul_bits=@4;make_biplex=&5;data_in_bits=@6;data_"
-      "out_bits=@7;coeff_bits=@8;coeffs_in_distmem=&9;add_latency=@10;mult_latency=@11;bram_latency=@12;quantization=&1"
-      "3;fwidth=@14;mult_spec=@15;coeffs_share=&16;async=&17;debug_mode=&18;"
+      "out_bits=@7;coeff_bits=@8;coeffs_in_distmem=&9;add_latency=@10;mult_latency=@11;bram_latency=@12;fan_latency=@13"
+      ";quantization=&14;fwidth=@15;mult_spec=@16;coeffs_share=&17;async=&18;debug_mode=&19;"
       MaskInitialization      "pfb_fir_async_init(gcb, ...\n    'pfb_bits', pfb_bits, ...\n    'total_taps', total_tap"
       "s, ...\n    'window_type', window_type, ...\n    'simul_bits', simul_bits, ...\n    'make_biplex', make_biplex, "
       "...\n    'data_in_bits', data_in_bits, ...\n    'data_out_bits', data_out_bits, ...\n    'coeff_bits', coeff_bit"
       "s, ...\n    'coeffs_in_distmem', coeffs_in_distmem, ...\n    'add_latency', add_latency, ...\n    'mult_latency'"
-      ", mult_latency, ...\n    'bram_latency', bram_latency, ...\n    'quantization', quantization, ...\n    'fwidth',"
-      " fwidth, ...\n    'mult_spec', mult_spec, ...\n    'coeffs_share', coeffs_share, ...\n    'async', async, ...\n "
-      "   'debug_mode', debug_mode);"
+      ", mult_latency, ...\n    'bram_latency', bram_latency, ...\n    'fan_latency', fan_latency, ...\n    'quantizati"
+      "on', quantization, ...\n    'fwidth', fwidth, ...\n    'mult_spec', mult_spec, ...\n    'coeffs_share', coeffs_s"
+      "hare, ...\n    'async', async, ...\n    'debug_mode', debug_mode);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "5|2|hamming|1|off|8|18|8|off|1|2|3|Truncate|1|2|off|on|off"
-      MaskTabNameString	      ",,,,,,,,,,,,,,,,,"
+      MaskValueString	      "5|2|hamming|1|off|8|18|8|off|1|2|3|1|Truncate|1|2|off|on|off"
+      MaskTabNameString	      ",,,,,,,,,,,,,,,,,,"
       System {
 	Name			"pfb_fir_async"
 	Location		[1, 79, 1921, 1176]
@@ -7153,11 +7284,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "bram_latency+1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -7183,7 +7314,7 @@ Library {
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7192,13 +7323,13 @@ Library {
 	  PFBSize		  "5"
 	  CoeffBitWidth		  "8"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  "off"
+	  CoeffDistMem		  off
 	  WindowType		  "hamming"
 	  bram_latency		  "3"
 	  n_inputs		  "1"
 	  nput			  "0"
 	  fwidth		  "1"
-	  debug_mode		  "off"
+	  debug_mode		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -7337,7 +7468,7 @@ Library {
 	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
 	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
 	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
+	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-2}}','texmode','on');\nfprintf('','COMMENT: end icon text"
 	      "');\n"
 	    }
 	    BlockName		    "pfb_add_tree_async/scale2"
@@ -7349,7 +7480,7 @@ Library {
 	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
 	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
 	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
+	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-2}}','texmode','on');\nfprintf('','COMMENT: end icon text"
 	      "');\n"
 	    }
 	  }
@@ -7359,7 +7490,7 @@ Library {
 	  SourceType		  "last_tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7373,10 +7504,10 @@ Library {
 	  add_latency		  "1"
 	  mult_latency		  "2"
 	  quantization		  "Truncate"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
-	  async			  "on"
-	  debug_mode		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
+	  async			  on
+	  debug_mode		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -7391,7 +7522,7 @@ Library {
 	  SourceType		  "tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7406,10 +7537,10 @@ Library {
 	  bram_latency		  "3"
 	  simul_bits		  "1"
 	  fwidth		  "1"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
-	  async			  "on"
-	  debug_mode		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
+	  async			  on
+	  debug_mode		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -7424,7 +7555,7 @@ Library {
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7433,13 +7564,13 @@ Library {
 	  PFBSize		  "5"
 	  CoeffBitWidth		  "8"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  "off"
+	  CoeffDistMem		  off
 	  WindowType		  "hamming"
 	  bram_latency		  "3"
 	  n_inputs		  "1"
 	  nput			  "1"
 	  fwidth		  "1"
-	  debug_mode		  "off"
+	  debug_mode		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -7578,7 +7709,7 @@ Library {
 	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
 	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
 	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
+	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-2}}','texmode','on');\nfprintf('','COMMENT: end icon text"
 	      "');\n"
 	    }
 	    BlockName		    "pfb_add_tree_async/scale2"
@@ -7590,7 +7721,7 @@ Library {
 	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
 	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
 	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
-	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text"
+	      "NT: begin icon text');\ncolor('black');disp('\\bf{2^{-2}}','texmode','on');\nfprintf('','COMMENT: end icon text"
 	      "');\n"
 	    }
 	  }
@@ -7600,7 +7731,7 @@ Library {
 	  SourceType		  "last_tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7614,10 +7745,10 @@ Library {
 	  add_latency		  "1"
 	  mult_latency		  "2"
 	  quantization		  "Truncate"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
-	  async			  "on"
-	  debug_mode		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
+	  async			  on
+	  debug_mode		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -7632,7 +7763,7 @@ Library {
 	  SourceType		  "tap_async"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -7647,10 +7778,10 @@ Library {
 	  bram_latency		  "3"
 	  simul_bits		  "1"
 	  fwidth		  "1"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
-	  async			  "on"
-	  debug_mode		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
+	  async			  on
+	  debug_mode		  off
 	}
 	Block {
 	  BlockType		  SubSystem
@@ -8223,7 +8354,7 @@ Library {
       BlockType		      SubSystem
       Name		      "pfb_fir_real"
       Ports		      [3, 3]
-      Position		      [210, 54, 300, 166]
+      Position		      [195, 54, 305, 176]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       AttributesFormatString  "taps=2, add_latency=1"
       UserDataPersistent      on
@@ -8241,39 +8372,39 @@ Library {
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Pfb_fir_real'')')"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Total Number of Taps:|Windowing Function: |Number of Simultaneou"
       "s Inputs: (2^?)|Make Biplex?|Input Bitwidth:|Output Bitwidth:|Coefficient Bitwidth:|Use Distributed Memory for C"
-      "oeffs|Add Latency|Mult Latency|BRAM Latency|Convert latency|Quantization Behavior|Bin Width Scaling (normal=1)|M"
-      "ultiplier specification (0=core, 1=embedded, 2=behavioural) (left=1st tap, or just one value)|Fold adders into D"
-      "SPs|Adder implementation|Share coefficients between polarisations (use less BRAM)?"
+      "oeffs|Add Latency|Mult Latency|BRAM Latency|Fanout latency|Convert latency|Quantization Behavior|Bin Width Scali"
+      "ng (normal=1)|Multiplier specification (0=core, 1=embedded, 2=behavioural) (left=1st tap, or just one value)|Fol"
+      "d adders into DSPs|Adder implementation|Share coefficients between polarisations (use less BRAM)?"
       MaskStyleString	      "edit,edit,popup(bartlett|barthannwin|blackman|blackmanharris|bohamwin|chebwin|flattopwin|"
       "gausswin|hamming|hann|kaiser|nuttallwin|parzenwin|rectwin|tukeywin|triang|userwindow),edit,checkbox,edit,edit,ed"
-      "it,checkbox,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),edit,e"
-      "dit,checkbox,popup(Behavioral|Fabric|DSP48),checkbox"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      "it,checkbox,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values)),e"
+      "dit,edit,checkbox,popup(Behavioral|Fabric|DSP48),checkbox"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskCallbackString      "|%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = eval(get_param(gcb, 'mult_s"
       "pec'));=-0l\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <= num_taps), \n%    ne"
       "w_size = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n) = old_vec(n); end\n%"
-      "set_param(gcb, 'mult_spec', mat2str(vec));|||||||||||||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,,,,,,,,,"
+      "set_param(gcb, 'mult_spec', mat2str(vec));||||||||||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,,,,,,,,,,,,,,"
       MaskVariables	      "PFBSize=@1;TotalTaps=@2;WindowType=&3;n_inputs=@4;MakeBiplex=&5;BitWidthIn=@6;BitWidthOut=@"
-      "7;CoeffBitWidth=@8;CoeffDistMem=&9;add_latency=@10;mult_latency=@11;bram_latency=@12;conv_latency=@13;quantizati"
-      "on=&14;fwidth=@15;mult_spec=@16;adder_folding=&17;adder_imp=&18;coeffs_share=&19;"
+      "7;CoeffBitWidth=@8;CoeffDistMem=&9;add_latency=@10;mult_latency=@11;bram_latency=@12;fan_latency=@13;conv_latenc"
+      "y=@14;quantization=&15;fwidth=@16;mult_spec=@17;adder_folding=&18;adder_imp=&19;coeffs_share=&20;"
       MaskInitialization      "pfb_fir_real_init(gcb, ...\n    'PFBSize', PFBSize, ...\n    'TotalTaps', TotalTaps, .."
       ".\n    'WindowType', WindowType, ...\n    'n_inputs', n_inputs, ...\n    'MakeBiplex', MakeBiplex, ...\n    'Bit"
       "WidthIn', BitWidthIn, ...\n    'BitWidthOut', BitWidthOut, ...\n    'CoeffBitWidth', CoeffBitWidth, ...\n    'Co"
       "effDistMem', CoeffDistMem, ...\n    'add_latency', add_latency, ...\n    'mult_latency', mult_latency, ...\n    "
-      "'bram_latency', bram_latency, ...\n    'conv_latency', conv_latency, ...\n    'quantization', quantization, ...\n"
-      "    'fwidth', fwidth, ...\n    'mult_spec', mult_spec, ...\n    'adder_folding', adder_folding, ...\n    'adder_"
-      "imp', adder_imp, ...\n    'coeffs_share', coeffs_share);"
+      "'bram_latency', bram_latency, ...\n    'fan_latency', fan_latency, ...\n    'conv_latency', conv_latency, ...\n "
+      "   'quantization', quantization, ...\n    'fwidth', fwidth, ...\n    'mult_spec', mult_spec, ...\n    'adder_fol"
+      "ding', adder_folding, ...\n    'adder_imp', adder_imp, ...\n    'coeffs_share', coeffs_share);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|Round  (unbiased: Even Values)|1|2|on|Fabric|off"
-      MaskTabNameString	      ",,,,,,,,,,,,,,,,,,"
+      MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|1|Round  (unbiased: Even Values)|1|2|on|Fabric|off"
+      MaskTabNameString	      ",,,,,,,,,,,,,,,,,,,"
       System {
 	Name			"pfb_fir_real"
 	Location		[362, 134, 1592, 819]
@@ -8342,7 +8473,7 @@ Library {
 	  SourceType		  "adder_tree"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8351,7 +8482,7 @@ Library {
 	  n_inputs		  "2"
 	  latency		  "1"
 	  adder_imp		  "Fabric"
-	  first_stage_hdl	  "on"
+	  first_stage_hdl	  on
 	}
 	Block {
 	  BlockType		  Reference
@@ -8386,7 +8517,7 @@ Library {
 	  SourceType		  "adder_tree"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8395,7 +8526,7 @@ Library {
 	  n_inputs		  "2"
 	  latency		  "1"
 	  adder_imp		  "Fabric"
-	  first_stage_hdl	  "on"
+	  first_stage_hdl	  on
 	}
 	Block {
 	  BlockType		  Reference
@@ -8411,9 +8542,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "1"
-	  dbl_ovrd		  "off"
-	  pipeline		  "on"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  on
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -8442,9 +8573,9 @@ Library {
 	  quantization		  "Round  (unbiased: Even Values)"
 	  overflow		  "Wrap"
 	  latency		  "1"
-	  dbl_ovrd		  "off"
-	  pipeline		  "on"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  on
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -8467,11 +8598,11 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  en			  "off"
+	  en			  off
 	  latency		  "1"
-	  dbl_ovrd		  "off"
-	  reg_retiming		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  reg_retiming		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -8498,7 +8629,7 @@ Library {
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8507,13 +8638,14 @@ Library {
 	  PFBSize		  "5"
 	  CoeffBitWidth		  "18"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  "off"
+	  CoeffDistMem		  off
 	  WindowType		  "hamming"
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  nput			  "0"
 	  fwidth		  "1"
-	  debug_mode		  "off"
+	  debug_mode		  off
+	  fan_latency		  "1"
 	}
 	Block {
 	  BlockType		  Reference
@@ -8528,7 +8660,7 @@ Library {
 	  SourceType		  "first_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8543,8 +8675,8 @@ Library {
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  fwidth		  "1"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -8558,7 +8690,7 @@ Library {
 	  SourceType		  "last_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8567,8 +8699,8 @@ Library {
 	  BitWidthIn		  "8"
 	  CoeffBitWidth		  "18"
 	  mult_latency		  "2"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -8583,7 +8715,7 @@ Library {
 	  SourceType		  "pfb_coeff_gen"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8592,13 +8724,14 @@ Library {
 	  PFBSize		  "5"
 	  CoeffBitWidth		  "18"
 	  TotalTaps		  "2"
-	  CoeffDistMem		  "off"
+	  CoeffDistMem		  off
 	  WindowType		  "hamming"
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  nput			  "1"
 	  fwidth		  "1"
-	  debug_mode		  "off"
+	  debug_mode		  off
+	  fan_latency		  "1"
 	}
 	Block {
 	  BlockType		  Reference
@@ -8613,7 +8746,7 @@ Library {
 	  SourceType		  "first_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8628,8 +8761,8 @@ Library {
 	  bram_latency		  "2"
 	  n_inputs		  "1"
 	  fwidth		  "1"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -8643,7 +8776,7 @@ Library {
 	  SourceType		  "last_tap_real"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData "off"
+	  FunctionWithSeparateData off
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -8652,8 +8785,8 @@ Library {
 	  BitWidthIn		  "8"
 	  CoeffBitWidth		  "18"
 	  mult_latency		  "2"
-	  use_hdl		  "on"
-	  use_embedded		  "off"
+	  use_hdl		  on
+	  use_embedded		  off
 	}
 	Block {
 	  BlockType		  Reference
@@ -8665,7 +8798,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "scale"
@@ -8689,7 +8822,7 @@ Library {
 	  infoedit		  "Scales input by a power of two by adjusting the binary point position.<br><br>Hardware notes: In hardw"
 	  "are this block costs nothing."
 	  scale_factor		  "-1"
-	  dbl_ovrd		  "off"
+	  dbl_ovrd		  off
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "scale"
@@ -9604,7 +9737,7 @@ Library {
       BlockType		      SubSystem
       Name		      "tap_async"
       Ports		      [4, 5]
-      Position		      [755, 332, 860, 408]
+      Position		      [195, 462, 300, 538]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       AttributesFormatString  "tap(1/2)"
       UserDataPersistent      on
@@ -10912,19 +11045,20 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag37
-    Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,XFT (.    > ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
+    Data		    "  %)30     .    4 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (\\=*@ .    P ,  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !01D)3:7IE         "
     "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
-    "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
-    "  !          X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!"
-    "O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &"
-    "          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    ! "
-    "    0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @     "
-    "      #P/PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    ("
-    "    !          %    \"     $    #     0         0  , ;V9F  "
+    "P=70             9G=I9'1H          !F86Y?;&%T96YC>0   &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @"
+    "               $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X"
+    "    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@       "
+    "  %    \"     $    !     0         )    \"             ! #@   #     &    \"     0         !0    @    !     P    $ "
+    "        $  # &]F9@ .    .     8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@  "
+    "  &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4  "
+    "  (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0      "
+    "   )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX"
+    "    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !      "
+    "    %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag36
@@ -10956,19 +11090,20 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag34
-    Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $TQ-P8.    > ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
-    "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
-    "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
-    "  !          X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!"
-    "O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &"
-    "          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    ! "
-    "    0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @     "
-    "          X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    ("
-    "    !          %    \"     $    #     0         0  , ;V9F  "
+    Data		    "  %)30     .    4 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (YA4@(.    P ,   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !01D)3:7IE         $"
+    "-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &YP"
+    "=70             9G=I9'1H          !F86Y?;&%T96YC>0   &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @ "
+    "              $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X "
+    "   X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@        "
+    " %    \"     $    !     0         )    \"             ! #@   #     &    \"     0         !0    @    !     P    $  "
+    "       $  # &]F9@ .    .     8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@   "
+    " &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4   "
+    " (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX "
+    "   X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !       "
+    "   %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag33
@@ -11006,59 +11141,60 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag31
-    Data		    "  %)30     .    2!$   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +S RP,.    N!    "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $    8 0  9&5F875L=',       !01D)3:7IE         %1"
-    "O=&%L5&%P<P      5VEN9&]W5'EP90    !N7VEN<'5T<P       $UA:V5\":7!L97@     0FET5VED=&A);@    !\":717:61T:$]U=    $-"
-    "O969F0FET5VED=&@ 0V]E9F9$:7-T365M  !A9&1?;&%T96YC>0   &UU;'1?;&%T96YC>0  8G)A;5]L871E;F-Y  !C;VYV7VQA=&5N8WD  '%U8"
-    "6YT:7IA=&EO;@  9G=I9'1H          !M=6QT7W-P96,      &%D9&5R7V9O;&1I;F< 861D97)?:6UP      !C;V5F9G-?<VAA<F4   X   \""
-    "H\"@  !@    @    !          4    (     0   \"@    !          X    X    !@    @    $          4    (     0    <    "
-    "!         !     '    4$9\"4VEZ90 .    .     8    (    !@         %    \"     $    !     0         )    \"         "
-    "   !1 #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !4;W1A;%1A<',         #@   #@   "
-    " &    \"     8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4   "
-    " (     0    H    !         !     *    5VEN9&]W5'EP90        X    X    !@    @    $          4    (     0    <    !"
-    "         !     '    :&%M;6EN9P .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP"
-    "=71S#@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $"
-    "          4    (     0    H    !         !     *    36%K94)I<&QE>         X    P    !@    @    $          4    (  "
-    "   0    ,    !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    \"@    $         $     H   !\":"
-    "717:61T:$EN        #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X   !  "
-    "   !@    @    $          4    (     0    L    !         !     +    0FET5VED=&A/=70       X    X    !@    @    &   "
-    "       4    (     0    $    !          D    (               .    0     8    (    !          %    \"     $    -    "
-    " 0         0    #0   $-O969F0FET5VED=&@    .    .     8    (    !@         %    \"     $    !     0         )    \""
-    "            #) #@   $     &    \"     0         !0    @    !    #     $         $     P   !#;V5F9D1I<W1-96T     #@"
-    "   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \" "
-    "    $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %    \"     $    !     0"
-    "         )    \"            / _#@   $     &    \"     0         !0    @    !    #     $         $     P   !M=6QT7V"
-    "QA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X   !     !@"
-    "    @    $          4    (     0    P    !         !     ,    8G)A;5]L871E;F-Y      X    X    !@    @    &        "
-    "  4    (     0    $    !          D    (             $ .    0     8    (    !          %    \"     $    ,     0   "
-    "      0    #    &-O;G9?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         )    \"    "
-    "        / _#@   $     &    \"     0         !0    @    !    #     $         $     P   !Q=6%N=&EZ871I;VX     #@   %"
-    "     &    \"     0         !0    @    !    &@    $         $    !H   !2;W5N9\" @*'5N8FEA<V5D.B K+RT@26YF*0        "
-    "X    X    !@    @    $          4    (     0    8    !         !     &    9G=I9'1H   .    .     8    (    !@      "
-    "   %    \"     $    !     0         )    \"            / _#@   $     &    \"     0         !0    @    !    \"0    "
-    "$         $     D   !M=6QT7W-P96,         #@   $     &    \"     8         !0    @    !     @    $         \"0   !"
-    "              0         ! #@   $     &    \"     0         !0    @    !    #0    $         $     T   !A9&1E<E]F;VQ"
-    "D:6YG    #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    0     8    (    !      "
-    "    %    \"     $    )     0         0    \"0   &%D9&5R7VEM<          .    .     8    (    !          %    \"     "
-    "$    &     0         0    !@   $9A8G)I8P  #@   $     &    \"     0         !0    @    !    #     $         $     P"
-    "   !C;V5F9G-?<VAA<F4     #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8 "
-    "   (    !          %    \"     $    +     0         0    \"P   &-O969F<U]F;VQD       .    ,     8    (    !       "
-    "   %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4    (     0    $    !          D  "
-    "  (            %$ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@  "
-    "  &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &          4   "
-    " (     0    $    !          D    (            \\#\\.    ,     8    (    !          %    \"     $    #     0       "
-    "  0  , ;V9F  X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @            R0 X    P    !@    @    $          4    (     0    ,    !         !   P!"
-    "O9F8 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    "
-    "&          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !"
-    "     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
-    "       #P/PX   !0    !@    @    $          4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87-E9#H@179E"
-    ";B!686QU97,I   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &"
-    "    \"     8         !0    @    !     0    $         \"0    @             0 X    P    !@    @    $          4    ("
-    "     0    (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    !    !@    $         $     8   !&8"
-    "6)R:6,   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
+    Data		    "  %)30     .    F!$   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ 'W_U@,.    \"!$  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $    F 0  9&5F875L=',       !01D)3:7IE         %"
+    "1O=&%L5&%P<P      5VEN9&]W5'EP90    !N7VEN<'5T<P       $UA:V5\":7!L97@     0FET5VED=&A);@    !\":717:61T:$]U=    $"
+    "-O969F0FET5VED=&@ 0V]E9F9$:7-T365M  !A9&1?;&%T96YC>0   &UU;'1?;&%T96YC>0  8G)A;5]L871E;F-Y  !F86Y?;&%T96YC>0   &-O"
+    ";G9?;&%T96YC>0  <75A;G1I>F%T:6]N  !F=VED=&@          &UU;'1?<W!E8P      861D97)?9F]L9&EN9P!A9&1E<E]I;7       &-O96"
+    "9F<U]S:&%R90     .    J H   8    (     0         %    \"     $    H     0         .    .     8    (    !          "
+    "%    \"     $    '     0         0    !P   %!&0E-I>F4 #@   #@    &    \"     8         !0    @    !     0    $    "
+    "     \"0    @            40 X   !     !@    @    $          4    (     0    D    !         !     )    5&]T86Q487!S"
+    "          X    X    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (  "
+    "  !          %    \"     $    *     0         0    \"@   %=I;F1O=U1Y<&4        .    .     8    (    !          %  "
+    "  \"     $    '     0         0    !P   &AA;6UI;F< #@   #@    &    \"     0         !0    @    !    \"     $      "
+    "   $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\. "
+    "   0     8    (    !          %    \"     $    *     0         0    \"@   $UA:V5\":7!L97@        .    ,     8    ("
+    "    !          %    \"     $    #     0         0  , ;V9F  X   !     !@    @    $          4    (     0    H    ! "
+    "        !     *    0FET5VED=&A);@        X    X    !@    @    &          4    (     0    $    !          D    (   "
+    "         ($ .    0     8    (    !          %    \"     $    +     0         0    \"P   $)I=%=I9'1H3W5T       .   "
+    " .     8    (    !@         %    \"     $    !     0         )    \"               #@   $     &    \"     0       "
+    "  !0    @    !    #0    $         $     T   !#;V5F9D)I=%=I9'1H    #@   #@    &    \"     8         !0    @    !   "
+    "  0    $         \"0    @            R0 X   !     !@    @    $          4    (     0    P    !         !     ,    "
+    "0V]E9F9$:7-T365M      X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   $     &    \""
+    "     0         !0    @    !    \"P    $         $     L   !A9&1?;&%T96YC>0      #@   #@    &    \"     8         !"
+    "0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4    (     0    P    !      "
+    "   !     ,    ;75L=%]L871E;F-Y      X    X    !@    @    &          4    (     0    $    !          D    (        "
+    "     $ .    0     8    (    !          %    \"     $    ,     0         0    #    &)R86U?;&%T96YC>0     .    .    "
+    " 8    (    !@         %    \"     $    !     0         )    \"             ! #@   $     &    \"     0         !0  "
+    "  @    !    #     $         $     P   !C;VYV7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0   "
+    " $         \"0    @           #P/PX   !     !@    @    $          4    (     0    P    !         !     ,    <75A;G"
+    "1I>F%T:6]N      X   !0    !@    @    $          4    (     0   !H    !         !     :    4F]U;F0@(\"AU;F)I87-E9#H"
+    "@*R\\M($EN9BD        .    .     8    (    !          %    \"     $    &     0         0    !@   &9W:61T:   #@   #@"
+    "    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4"
+    "    (     0    D    !         !     )    ;75L=%]S<&5C          X   !     !@    @    &          4    (     0    (  "
+    "  !          D    0             $          0 X   !     !@    @    $          4    (     0    T    !         !     "
+    "-    861D97)?9F]L9&EN9P    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   $     & "
+    "   \"     0         !0    @    !    \"0    $         $     D   !A9&1E<E]I;7          #@   #@    &    \"     0     "
+    "    !0    @    !    !@    $         $     8   !&86)R:6,   X   !     !@    @    $          4    (     0    P    !  "
+    "       !     ,    8V]E9F9S7W-H87)E      X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
+    "#@   $     &    \"     0         !0    @    !    \"P    $         $     L   !C;V5F9G-?9F]L9       #@   #     &    "
+    "\"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@         %    \"     $    !    "
+    " 0         )    \"            !1 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @        "
+    "     0 X    X    !@    @    $          4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !"
+    "@         %    \"     $    !     0         )    \"            / _#@   #     &    \"     0         !0    @    !    "
+    " P    $         $  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"!"
+    " #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            R0 X    X    !@    @    &   "
+    "       4    (     0    $    !          D    (            ,D .    ,     8    (    !          %    \"     $    #    "
+    " 0         0  , ;V9F  X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    "
+    ".     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8        "
+    " !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    !    "
+    "      D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            /"
+    " _#@   %     &    \"     0         !0    @    !    '@    $         $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N(%9A;'"
+    "5E<RD   X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8    (  "
+    "  !@         %    \"     $    !     0         )    \"             ! #@   #     &    \"     0         !0    @    ! "
+    "    @    $         $  \" &]N   .    .     8    (    !          %    \"     $    &     0         0    !@   $9A8G)I8"
+    "P  #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag30
@@ -11166,56 +11302,55 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag24
-    Data		    "  %)30     .    (!    8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !ICR0$.    D \\  "
-    " 8    (     @         %    \"     $    !     0         %  0 $@    $   !6 0  9&5F875L=',             <&9B7V)I=',   "
-    "          =&]T86Q?=&%P<P          =VEN9&]W7W1Y<&4         <VEM=6Q?8FET<P          ;6%K95]B:7!L97@         9&%T85]I"
-    ";E]B:71S        9&%T85]O=71?8FET<P      8V]E9F9?8FET<P          8V]E9F9S7VEN7V1I<W1M96T 861D7VQA=&5N8WD         ;7"
-    "5L=%]L871E;F-Y        8G)A;5]L871E;F-Y        <75A;G1I>F%T:6]N        9G=I9'1H                ;75L=%]S<&5C        "
-    "    8V]E9F9S7W-H87)E        87-Y;F,                 9&5B=6=?;6]D90             .    H D   8    (     0         %  "
-    "  \"     $    D     0         .    .     8    (    !          %    \"     $    (     0         0    \"    '!F8E]B:"
-    "71S#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X   !     !@    @    $ "
-    "         4    (     0    H    !         !     *    =&]T86Q?=&%P<P        X    X    !@    @    &          4    (   "
-    "  0    $    !          D    (             $ .    0     8    (    !          %    \"     $    +     0         0    "
-    "\"P   '=I;F1O=U]T>7!E       .    .     8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< "
-    "#@   $     &    \"     0         !0    @    !    \"@    $         $     H   !S:6UU;%]B:71S        #@   #@    &    "
-    "\"     8         !0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4    (    "
-    " 0    L    !         !     +    ;6%K95]B:7!L97@       X    P    !@    @    $          4    (     0    ,    !      "
-    "   !   P!O9F8 #@   $     &    \"     0         !0    @    !    #     $         $     P   !D871A7VEN7V)I=',     #@ "
-    "  #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X   !     !@    @    $       "
-    "   4    (     0    T    !         !     -    9&%T85]O=71?8FET<P    X    X    !@    @    &          4    (     0   "
-    " $    !          D    (               .    0     8    (    !          %    \"     $    *     0         0    \"@   "
-    "&-O969F7V)I=',        .    .     8    (    !@         %    \"     $    !     0         )    \"            #) #@   "
-    "$@    &    \"     0         !0    @    !    $0    $         $    !$   !C;V5F9G-?:6Y?9&ES=&UE;0         .    ,     "
-    "8    (    !          %    \"     $    #     0         0  , ;V9F  X   !     !@    @    $          4    (     0    L"
-    "    !         !     +    861D7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !          D  "
-    "  (            \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    &UU;'1?;&%T96YC>0  "
-    "   .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   $     &    \"     0"
-    "         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @ "
-    "   !     0    $         \"0    @             0 X   !     !@    @    $          4    (     0    P    !         !   "
-    "  ,    <75A;G1I>F%T:6]N      X   !0    !@    @    $          4    (     0   !H    !         !     :    4F]U;F0@(\""
-    "AU;F)I87-E9#H@*R\\M($EN9BD        .    .     8    (    !          %    \"     $    &     0         0    !@   &9W:6"
-    "1T:   #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !     !@    @   "
-    " $          4    (     0    P    !         !     ,    <W!E8VEF>5]M=6QT      X    P    !@    @    $          4    ("
-    "     0    ,    !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !M"
-    "=6QT7W-P96,         #@   $     &    \"     8         !0    @    !     @    $         \"0   !              0       "
-    "  ! #@   $     &    \"     0         !0    @    !    #     $         $     P   !C;V5F9G-?<VAA<F4     #@   #     & "
-    "   \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !          %    \"     $    % "
-    "    0         0    !0   &%S>6YC    #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .  "
-    "  .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   #@    &    \"     8      "
-    "   !0    @    !     0    $         \"0    @             0 X    X    !@    @    $          4    (     0    <    !  "
-    "       !     '    :&%M;6EN9P .    .     8    (    !@         %    \"     $    !     0         )    \"            /"
-    " _#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@         %   "
-    " \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $      "
-    "   \"0    @            R0 X    X    !@    @    &          4    (     0    $    !          D    (            ($ .  "
-    "  ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4    (   "
-    "  0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )  "
-    "  \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            (0 X    X "
-    "   !@    @    $          4    (     0    @    !         !     (    5')U;F-A=&4.    .     8    (    !@         %   "
-    " \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $       "
-    "  \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &   "
-    " \"     0         !0    @    !     @    $         $  \" &]N   .    ,     8    (    !          %    \"     $    #  "
-    "   0         0  , ;V9F  "
+    Data		    "  %)30     .    \\ \\   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1"
+    "A=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"*.EP8.    8 \\"
+    "   8    (     @         %    \"     $    !     0         %  0 $@    $   !H 0  9&5F875L=',             <&9B7V)I=', "
+    "            =&]T86Q?=&%P<P          =VEN9&]W7W1Y<&4         <VEM=6Q?8FET<P          ;6%K95]B:7!L97@         9&%T85"
+    "]I;E]B:71S        9&%T85]O=71?8FET<P      8V]E9F9?8FET<P          8V]E9F9S7VEN7V1I<W1M96T 861D7VQA=&5N8WD         "
+    ";75L=%]L871E;F-Y        8G)A;5]L871E;F-Y        9F%N7VQA=&5N8WD         <75A;G1I>F%T:6]N        9G=I9'1H          "
+    "      ;75L=%]S<&5C            8V]E9F9S7W-H87)E        87-Y;F,                 9&5B=6=?;6]D90          #@   \" )   "
+    "&    \"     $         !0    @    !    (@    $         #@   #@    &    \"     0         !0    @    !    \"     $   "
+    "      $     @   !P9F)?8FET<PX    X    !@    @    &          4    (     0    $    !          D    (            %$ ."
+    "    0     8    (    !          %    \"     $    *     0         0    \"@   '1O=&%L7W1A<',        .    .     8    ("
+    "    !@         %    \"     $    !     0         )    \"             ! #@   $     &    \"     0         !0    @    "
+    "!    \"P    $         $     L   !W:6YD;W=?='EP90      #@   #@    &    \"     0         !0    @    !    !P    $    "
+    "     $     <   !H86UM:6YG  X   !     !@    @    $          4    (     0    H    !         !     *    <VEM=6Q?8FET<"
+    "P        X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    0     8    ( "
+    "   !          %    \"     $    +     0         0    \"P   &UA:V5?8FEP;&5X       .    ,     8    (    !          % "
+    "   \"     $    #     0         0  , ;V9F  X   !     !@    @    $          4    (     0    P    !         !     ,  "
+    "  9&%T85]I;E]B:71S      X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    "
+    "0     8    (    !          %    \"     $    -     0         0    #0   &1A=&%?;W5T7V)I=',    .    .     8    (    !"
+    "@         %    \"     $    !     0         )    \"               #@   $     &    \"     0         !0    @    !    "
+    "\"@    $         $     H   !C;V5F9E]B:71S        #@   #@    &    \"     8         !0    @    !     0    $         "
+    "\"0    @            R0 X   !(    !@    @    $          4    (     0   !$    !         !     1    8V]E9F9S7VEN7V1I<"
+    "W1M96T         #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    ! "
+    "         %    \"     $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %    \""
+    "     $    !     0         )    \"            / _#@   $     &    \"     0         !0    @    !    #     $         $"
+    "     P   !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @          "
+    "   0 X   !     !@    @    $          4    (     0    P    !         !     ,    8G)A;5]L871E;F-Y      X    X    !@ "
+    "   @    &          4    (     0    $    !          D    (             $ .    0     8    (    !          %    \"   "
+    "  $    ,     0         0    #    '%U86YT:7IA=&EO;@     .    4     8    (    !          %    \"     $    :     0   "
+    "      0    &@   %)O=6YD(\" H=6YB:6%S960Z(\"LO+2!);F8I        #@   #@    &    \"     0         !0    @    !    !@  "
+    "  $         $     8   !F=VED=&@   X    X    !@    @    &          4    (     0    $    !          D    (          "
+    "  \\#\\.    0     8    (    !          %    \"     $    )     0         0    \"0   &UU;'1?<W!E8P         .    0   "
+    "  8    (    !@         %    \"     $    \"     0         )    $             !          $ .    0     8    (    !   "
+    "       %    \"     $    ,     0         0    #    &-O969F<U]S:&%R90     .    ,     8    (    !          %    \"   "
+    "  $    #     0         0  , ;V9F  X    X    !@    @    $          4    (     0    4    !         !     %    87-Y;F"
+    ",    .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4"
+    "    (     0    $    !          D    (            %$ .    .     8    (    !@         %    \"     $    !     0      "
+    "   )    \"             ! #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X "
+    "   X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !       "
+    "   %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4    (     0    $    !          D  "
+    "  (            ($ .    .     8    (    !@         %    \"     $    !     0         )    \"            #) #@   #@  "
+    "  &    \"     8         !0    @    !     0    $         \"0    @            @0 X    P    !@    @    $          4  "
+    "  (     0    ,    !         !   P!O9F8 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @  "
+    "         #P/PX    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     8    "
+    "(    !@         %    \"     $    !     0         )    \"             A #@   #@    &    \"     8         !0    @   "
+    " !     0    $         \"0    @           #P/PX    X    !@    @    $          4    (     0    @    !         !     "
+    "(    5')U;F-A=&4.    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    "
+    "&    \"     8         !0    @    !     0    $         \"0    @             0 X    P    !@    @    $          4    "
+    "(     0    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   "
+    ".    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag23
@@ -11251,19 +11386,20 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag21
-    Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,XFT (.    > ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
+    Data		    "  %)30     .    4 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (\\=*@ .    P ,  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !01D)3:7IE         "
     "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
-    "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
-    "  !          X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!"
-    "O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &"
-    "          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    ! "
-    "    0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @     "
-    "      #P/PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    ("
-    "    !          %    \"     $    #     0         0  , ;V9F  "
+    "P=70             9G=I9'1H          !F86Y?;&%T96YC>0   &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @"
+    "               $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X"
+    "    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@       "
+    "  %    \"     $    !     0         )    \"             ! #@   #     &    \"     0         !0    @    !     P    $ "
+    "        $  # &]F9@ .    .     8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@  "
+    "  &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4  "
+    "  (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0      "
+    "   )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX"
+    "    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !      "
+    "    %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag20
@@ -11299,84 +11435,87 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag18
-    Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $TQ-P8.    > ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
-    "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
-    "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
-    "  !          X    X    !@    @    &          4    (     0    $    !          D    (            %$ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !         !   P!"
-    "O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &"
-    "          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    ! "
-    "    0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @     "
-    "          X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    ("
-    "    !          %    \"     $    #     0         0  , ;V9F  "
+    Data		    "  %)30     .    4 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (YA4@(.    P ,   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !01D)3:7IE         $"
+    "-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &YP"
+    "=70             9G=I9'1H          !F86Y?;&%T96YC>0   &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @ "
+    "              $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X "
+    "   X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@        "
+    " %    \"     $    !     0         )    \"             ! #@   #     &    \"     0         !0    @    !     P    $  "
+    "       $  # &]F9@ .    .     8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@   "
+    " &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4   "
+    " (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX "
+    "   X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !       "
+    "   %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag17
-    Data		    "  %)30     .    V X   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,Q'VP8.    2 X   "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $   #N    9&5F875L=',       !01D)3:7IE         %1"
-    "O=&%L5&%P<P      5VEN9&]W5'EP90    !N7VEN<'5T<P       $UA:V5\":7!L97@     0FET5VED=&A);@    !\":717:61T:$]U=    $-"
-    "O969F0FET5VED=&@ 0V]E9F9$:7-T365M  !A9&1?;&%T96YC>0   &UU;'1?;&%T96YC>0  8G)A;5]L871E;F-Y  !Q=6%N=&EZ871I;VX  &9W:"
-    "61T:           ;75L=%]S<&5C      !C;V5F9G-?<VAA<F4     #@   !@)   &    \"     $         !0    @    !    (@    $   "
-    "      #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !01D)3:7IE  X    X    !@    @    "
-    "&          4    (     0    $    !          D    (            %$ .    0     8    (    !          %    \"     $    )"
-    "     0         0    \"0   %1O=&%L5&%P<P         .    .     8    (    !@         %    \"     $    !     0         )"
-    "    \"             ! #@   $     &    \"     0         !0    @    !    \"@    $         $     H   !7:6YD;W=4>7!E   "
-    "     #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    $"
-    "          4    (     0    @    !         !     (    ;E]I;G!U=',.    .     8    (    !@         %    \"     $    ! "
-    "    0         )    \"            / _#@   $     &    \"     0         !0    @    !    \"@    $         $     H   !-"
-    "86ME0FEP;&5X        #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    ( "
-    "   !          %    \"     $    *     0         0    \"@   $)I=%=I9'1H26X        .    .     8    (    !@         % "
-    "   \"     $    !     0         )    \"            \"! #@   $     &    \"     0         !0    @    !    \"P    $   "
-    "      $     L   !\":717:61T:$]U=       #@   #@    &    \"     8         !0    @    !     0    $         \"0    @  "
-    "             X   !     !@    @    $          4    (     0    T    !         !     -    0V]E9F9\":717:61T:     X   "
-    " X    !@    @    &          4    (     0    $    !          D    (            ,D .    0     8    (    !          %"
-    "    \"     $    ,     0         0    #    $-O969F1&ES=$UE;0     .    ,     8    (    !          %    \"     $    #"
-    "     0         0  , ;V9F  X   !     !@    @    $          4    (     0    L    !         !     +    861D7VQA=&5N8W"
-    "D       X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    0     8    (  "
-    "  !          %    \"     $    ,     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %   "
-    " \"     $    !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    #     $       "
-    "  $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @       "
-    "      0 X   !     !@    @    $          4    (     0    P    !         !     ,    <75A;G1I>F%T:6]N      X   !0    "
-    "!@    @    $          4    (     0   !H    !         !     :    4F]U;F0@(\"AU;F)I87-E9#H@*R\\M($EN9BD        .    "
-    ".     8    (    !          %    \"     $    &     0         0    !@   &9W:61T:   #@   #@    &    \"     8         "
-    "!0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4    (     0    D    !     "
-    "    !     )    ;75L=%]S<&5C          X   !     !@    @    &          4    (     0    (    !          D    0       "
-    "      $          0 X   !     !@    @    $          4    (     0    P    !         !     ,    8V]E9F9S7W-H87)E     "
-    " X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   $     &    \"     0         !0    "
-    "@    !    \"P    $         $     L   !C;V5F9G-?9F]L9       #@   #     &    \"     0         !0    @    !     P    "
-    "$         $  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   #"
-    "@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    $          "
-    "4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !@         %    \"     $    !     0     "
-    "    )    \"            / _#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8"
-    "    (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0   "
-    " @    !     0    $         \"0    @            R0 X    X    !@    @    &          4    (     0    $    !          "
-    "D    (            ,D .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @"
-    "    &          4    (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     "
-    "$    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0   "
-    " @             0 X   !0    !@    @    $          4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87-E9#"
-    "H@179E;B!686QU97,I   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #"
-    "@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    P    !@    @    $          "
-    "4    (     0    (    !         !   @!O;@  "
+    Data		    "  %)30     .    * \\   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (VX@04.    F X  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $   #\\    9&5F875L=',       !01D)3:7IE         "
+    "%1O=&%L5&%P<P      5VEN9&]W5'EP90    !N7VEN<'5T<P       $UA:V5\":7!L97@     0FET5VED=&A);@    !\":717:61T:$]U=    "
+    "$-O969F0FET5VED=&@ 0V]E9F9$:7-T365M  !A9&1?;&%T96YC>0   &UU;'1?;&%T96YC>0  8G)A;5]L871E;F-Y  !F86Y?;&%T96YC>0   '%"
+    "U86YT:7IA=&EO;@  9G=I9'1H          !M=6QT7W-P96,      &-O969F<U]S:&%R90        X    8\"0  !@    @    !          4 "
+    "   (     0   \"(    !          X    X    !@    @    $          4    (     0    <    !         !     '    4$9\"4VEZ"
+    "90 .    .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   $     &    \"     0"
+    "         !0    @    !    \"0    $         $     D   !4;W1A;%1A<',         #@   #@    &    \"     8         !0    @"
+    "    !     0    $         \"0    @             0 X   !     !@    @    $          4    (     0    H    !         !  "
+    "   *    5VEN9&]W5'EP90        X    X    !@    @    $          4    (     0    <    !         !     '    :&%M;6EN9P"
+    " .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #@    &    \"     8  "
+    "       !0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4    (     0    H   "
+    " !         !     *    36%K94)I<&QE>         X    P    !@    @    $          4    (     0    ,    !         !   P!O"
+    "9F8 #@   $     &    \"     0         !0    @    !    \"@    $         $     H   !\":717:61T:$EN        #@   #@    "
+    "&    \"     8         !0    @    !     0    $         \"0    @            @0 X   !     !@    @    $          4    "
+    "(     0    L    !         !     +    0FET5VED=&A/=70       X    X    !@    @    &          4    (     0    $    ! "
+    "         D    (               .    0     8    (    !          %    \"     $    -     0         0    #0   $-O969F0F"
+    "ET5VED=&@    .    .     8    (    !@         %    \"     $    !     0         )    \"            #) #@   $     &  "
+    "  \"     0         !0    @    !    #     $         $     P   !#;V5F9D1I<W1-96T     #@   #     &    \"     0       "
+    "  !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    +     0         0   "
+    " \"P   &%D9%]L871E;F-Y       .    .     8    (    !@         %    \"     $    !     0         )    \"            /"
+    " _#@   $     &    \"     0         !0    @    !    #     $         $     P   !M=6QT7VQA=&5N8WD     #@   #@    &   "
+    " \"     8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4    (   "
+    "  0    P    !         !     ,    8G)A;5]L871E;F-Y      X    X    !@    @    &          4    (     0    $    !     "
+    "     D    (             $ .    0     8    (    !          %    \"     $    ,     0         0    #    '%U86YT:7IA=&"
+    "EO;@     .    4     8    (    !          %    \"     $    :     0         0    &@   %)O=6YD(\" H=6YB:6%S960Z(\"LO+"
+    "2!);F8I        #@   #@    &    \"     0         !0    @    !    !@    $         $     8   !F=VED=&@   X    X    !@"
+    "    @    &          4    (     0    $    !          D    (            \\#\\.    0     8    (    !          %    \""
+    "     $    )     0         0    \"0   &UU;'1?<W!E8P         .    0     8    (    !@         %    \"     $    \"    "
+    " 0         )    $             !          $ .    0     8    (    !          %    \"     $    ,     0         0    #"
+    "    &-O969F<U]S:&%R90     .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !     !@"
+    "    @    $          4    (     0    L    !         !     +    8V]E9F9S7V9O;&0       X    P    !@    @    $        "
+    "  4    (     0    ,    !         !   P!O9F8 #@   #@    &    \"     8         !0    @    !     0    $         \"0  "
+    "  @            40 X    X    !@    @    &          4    (     0    $    !          D    (             $ .    .     "
+    "8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@    &    \"     8         !0    "
+    "@    !     0    $         \"0    @           #P/PX    P    !@    @    $          4    (     0    ,    !         ! "
+    "  P!O9F8 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X    X    !@    @"
+    "    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"            #) #@   #     &    \"     0         !0    @    !     P    $         $  # &]F"
+    "9@ .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8"
+    "         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $ "
+    "   !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         )    \"       "
+    "     / _#@   %     &    \"     0         !0    @    !    '@    $         $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N"
+    "(%9A;'5E<RD   X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8 "
+    "   (    !@         %    \"     $    !     0         )    \"             ! #@   #     &    \"     0         !0    @"
+    "    !     @    $         $  \" &]N   "
   }
   DataRecord {
     Tag			    DataTag16
-    Data		    "  %)30     .    \" 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .9 4P$.    > ,  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \":    9&5F875L=',       !01D)3:7IE         "
+    Data		    "  %)30     .    4 0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"M*Q@0.    P ,  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $   \"H    9&5F875L=',       !01D)3:7IE         "
     "$-O969F0FET5VED=&@ 5&]T86Q487!S      !#;V5F9D1I<W1-96T  %=I;F1O=U1Y<&4     8G)A;5]L871E;F-Y  !N7VEN<'5T<P       &Y"
-    "P=70             9G=I9'1H          !D96)U9U]M;V1E              X    H    !@    @    !          4    (             "
-    "  !          X    X    !@    @    &          4    (     0    $    !          D    (            &$ .    .     8    "
-    "(    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @  "
-    "  !     0    $         \"0    @            00 X    P    !@    @    $          4    (     0    ,    !         !   P"
-    "!O9F8 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    "
-    "&          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !"
-    "     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
-    "           X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    "
-    "(    !          %    \"     $    #     0         0  , ;V9F  "
+    "P=70             9G=I9'1H          !F86Y?;&%T96YC>0   &1E8G5G7VUO9&4     #@   \"@    &    \"     $         !0    @"
+    "               $         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X"
+    "    X    !@    @    &          4    (     0    $    !          D    (            ($ .    .     8    (    !@       "
+    "  %    \"     $    !     0         )    \"            !! #@   #     &    \"     0         !0    @    !     P    $ "
+    "        $  # &]F9@ .    .     8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@  "
+    "  &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4  "
+    "  (     0    $    !          D    (               .    .     8    (    !@         %    \"     $    !     0        "
+    " )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX  "
+    "  X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !        "
+    "  %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag15
