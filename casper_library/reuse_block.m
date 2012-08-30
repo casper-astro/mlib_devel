@@ -70,7 +70,7 @@ else,
     source = '';
   end
   
-  if strcmp(source, refblk),
+  if strcmp(source, lower(refblk)),
     clog([name,' of same type so setting parameters'], 'reuse_block_debug');
     set_param([blk,'/',name], varargin{:});
   else,
