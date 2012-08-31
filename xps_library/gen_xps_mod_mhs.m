@@ -15,7 +15,6 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 %   app_clk_rate    = mssge_proj.app_clk_rate;
     hw_sys          = mssge_proj.hw_sys;
     xsg_core_name   = mssge_proj.xsg_core_name;
-    mpc_type        = mssge_proj.mpc_type;
 
 %   XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
 %   simulink_path   = mssge_paths.simulink_path;
@@ -126,7 +125,8 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     fprintf(mhs_fid,'############################\n');
     fprintf(mhs_fid,'\n');
 
-    if strcmp(mpc_type, 'powerpc440_ext'),
+    switch hw_sys
+    case {'ROACH','ROACH2'}
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %calculate number of fixed opb0 devices
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -228,38 +228,8 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             plb_slaves = plb_slaves + plb_cores;
         end
 
-        switch mpc_type
-            case 'powerpc405'
-                if opb_cores + opb_slaves > 16
-                    opb_bus_inst = opb_bus_inst + 1;
-                    opb_slaves = 0;
-                    opb_name = ['opb',num2str(opb_bus_inst)];
-                    try
-                        opb_bridge_obj = xps_plb2opb(opb_name,opb_addr,opb_bridge_size);
-                    catch
-                        disp('Problem when generating plb2opb bridge: ')
-                        disp(lasterr);
-                        error('Error found during plb2opb bridge creation (xps_plb2opb).');
-                    end
-                    opb_addr = get(opb_bridge_obj,'opb_addr_start');
-                    xps_objs = [xps_objs,{opb_bridge_obj}];
-                else
-                    opb_slaves = opb_slaves + opb_cores;
-                end
-            % end case 'powerpc405'
-
-            case 'microblaze'
-                if plb_slaves ~= 0
-                    error('Microblaze processor does not support PLB devices.');
-                end
-                if opb_cores + opb_slaves > 16
-                    error('OPB exceeds 16 total slave devices.');
-                else
-                    opb_slaves = opb_slaves + opb_cores;
-                end
-            % end case 'microblaze'
-
-            case 'powerpc440_ext'
+        switch hw_sys
+            case {'ROACH','ROACH2'}
 
                 opb_slaves = opb_slaves + opb_cores;
                 bridge_start = opb_addr_init + ((opb_bus_inst+1) * opb_bridge_size);
@@ -294,7 +264,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             % end case 'powerpc440_ext'
 
             otherwise
-                error(['Unsupported MPC type: ',mpc_type]);
+                error(['Unsupported HW platform: ',hw_sys]);
             % end otherwise
 
         end % switch mpc_type

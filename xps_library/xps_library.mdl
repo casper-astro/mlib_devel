@@ -12,11 +12,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "root"
+  LastModifiedBy	  "dave"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Aug 27 16:08:13 2012"
-  RTWModifiedTimeStamp	  267984487
-  ModelVersionFormat	  "1.%<AutoIncrement:453>"
+  LastModifiedDate	  "Thu Aug 30 14:57:53 2012"
+  RTWModifiedTimeStamp	  268239471
+  ModelVersionFormat	  "1.%<AutoIncrement:456>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -687,8 +687,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [191, 79, 1919, 1174]
-    Open		    off
+    Location		    [1921, 205, 3601, 1200]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -746,8 +746,8 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[180, 165, 911, 973]
-	Open			on
+	Location		[259, 165, 990, 973]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -11245,7 +11245,7 @@ Library {
 	      SourceType	      "of"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData off
+	      FunctionWithSeparateData "off"
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -11263,7 +11263,7 @@ Library {
 	      SourceType	      "of"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData off
+	      FunctionWithSeparateData "off"
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -11281,7 +11281,7 @@ Library {
 	      SourceType	      "of"
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData off
+	      FunctionWithSeparateData "off"
 	      RTWMemSecFuncInitTerm   "Inherit from model"
 	      RTWMemSecFuncExecute    "Inherit from model"
 	      RTWMemSecDataConstants  "Inherit from model"
@@ -21505,26 +21505,19 @@ Library {
       "ee_xps toolflow."
       MaskHelp		      "eval('xlWeb([getenv(''MLIB_ROOT''), ''\\doc\\html\\sys_xsg_core_config\\sys_xsg_core_config.htm"
       "l''])')"
-      MaskPromptString	      "Hardware Platform|Include Linux add-on board support|User IP Clock source|User IP Clock "
-      "source|User IP Clock Source|User IP Clock Source|User IP Clock Source|User IP Clock Source|User IP Clock Source|"
-      "GPIO Clock Pin I/O group|GPIO Clock Pin bit index|User IP Clock Rate (MHz)|Sample Period|Synthesis Tool:|Process"
-      "or:"
-      MaskStyleString	      "popup(iBOB|BEE2_ctrl|BEE2_usr|ROACH:sx95t|ROACH:lx110t|ROACH2:sx475t|CORR),checkbox,edit,"
-      "popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|sys_clk2x|usr_clk|u"
-      "sr_clk2x),popup(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(sys_clk|sys_clk2x|arb_clk|aux0_clk|aux0_clk2x|aux1_cl"
-      "k|aux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|aux_clk|adc0_clk|adc1_clk|dac0_clk|dac1_clk),pop"
-      "up(sys_clk|sys_clk2x|usr_clk|usr_clk2x),popup(iBOB:gpio0|iBOB:gpio1|iBOB:gpio2|iBOB:gpio3|iBOB:sma|iBOB:zdok0|iB"
-      "OB:zdok1|iBOB:mdr),edit,edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST),edit"
-      MaskTunableValueString  "off,off,off,off,off,off,off,on,off,off,off,on,off,off,off"
-      MaskCallbackString      "xps_xsg_conf_callback;|||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_cal"
-      "lback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_callback;||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,off,on,on,on"
-      MaskVisibilityString    "on,on,off,on,off,off,off,off,off,off,off,on,on,on,off"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVarAliasString      ",,,,,,,,,,,,,,"
-      MaskVariables	      "hw_sys=@1;ibob_linux=@2;clk_src=@3;iBOB_clk_src=@4;BEE2_ctrl_clk_src=@5;BEE2_usr_clk_src=@6"
-      ";ROACH_clk_src=@7;ROACH2_clk_src=@8;CORR_clk_src=@9;gpio_clk_io_group=@10;gpio_clk_bit_index=@11;clk_rate=@12;sa"
-      "mple_period=@13;synthesis_tool=@14;mpc_type=@15;"
+      MaskPromptString	      "Hardware Platform|User IP Clock source|User IP Clock Source|User IP Clock Source|User IP"
+      " Clock Rate (MHz)|Sample Period|Synthesis Tool:"
+      MaskStyleString	      "popup(ROACH:sx95t|ROACH:lx110t|ROACH2:sx475t),edit,popup(sys_clk|sys_clk2x|arb_clk|aux0_c"
+      "lk|aux0_clk2x|aux1_clk|aux1_clk2x|adc0_clk|adc1_clk|dac0_clk|dac1_clk),popup(sys_clk|aux_clk|adc0_clk|adc1_clk|d"
+      "ac0_clk|dac1_clk),edit,edit,popup(Leonardo Spectrum|Synplify|Synplify Pro|XST)"
+      MaskTunableValueString  "off,off,off,on,on,off,off"
+      MaskCallbackString      "xps_xsg_conf_callback;||xps_xsg_conf_callback;|xps_xsg_conf_callback;|||"
+      MaskEnableString	      "on,on,on,on,off,on,on"
+      MaskVisibilityString    "on,off,off,off,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on"
+      MaskVarAliasString      ",,,,,,"
+      MaskVariables	      "hw_sys=@1;clk_src=@2;ROACH_clk_src=@3;ROACH2_clk_src=@4;clk_rate=@5;sample_period=@6;synthe"
+      "sis_tool=@7;"
       MaskInitialization      "xps_xsg_conf_mask;"
       MaskDisplay	      "fprintf(['MSSGE\\n', hw_sys]);\n"
       MaskSelfModifiable      on
@@ -21532,9 +21525,8 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "iBOB|off|sys_clk|sys_clk|sys_clk|sys_clk|dac1_clk|adc0_clk|sys_clk|iBOB:sma|0|100|1|XST|p"
-      "owerpc405"
-      MaskTabNameString	      ",,,,,,,,,,,,,,"
+      MaskValueString	      "ROACH:sx95t|sys_clk|dac1_clk|adc0_clk|100|1|XST"
+      MaskTabNameString	      ",,,,,,"
       System {
 	Name			"XSG core config"
 	Location		[540, 144, 1038, 444]
