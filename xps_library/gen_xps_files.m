@@ -145,9 +145,9 @@ for i=[1:length(gateways_blk)]
 end
 
 % set design paths
-XPS_LIB_PATH = getenv('BEE2_XPS_LIB_PATH');
+XPS_LIB_PATH = getenv('XPS_LIB_PATH');
 if isempty(XPS_LIB_PATH)
-    error('Environment variable BEE2_XPS_LIB_PATH must be defined');
+    error('Environment variable XPS_LIB_PATH must be defined');
 end
 
 simulink_path   = pwd;
@@ -165,8 +165,8 @@ if ~isempty(strfind(simulink_path, ' '))
 end
 
 if ~isempty(strfind(XPS_LIB_PATH, ' '))
-    warndlg(['Directory specified by the BEE2_XPS_LIB_PATH environment variable (', XPS_LIB_PATH, ') has a space in the pathname. This can cause problems with some of the tools. Please change its directory.']);
-    error('Directory specified by the BEE2_XPS_LIB_PATH environment variable has a space in the pathname.');
+    warndlg(['Directory specified by the XPS_LIB_PATH environment variable (', XPS_LIB_PATH, ') has a space in the pathname. This can cause problems with some of the tools. Please change its directory.']);
+    error('Directory specified by the XPS_LIB_PATH environment variable has a space in the pathname.');
 end
 
 % create design paths if non-existent
@@ -262,7 +262,6 @@ xps_objs = [{xsg_obj},xps_objs];
 hw_sys          = get(xsg_obj,'hw_sys');
 hw_subsys       = get(xsg_obj,'hw_subsys');
 sw_os           = get(xsg_obj,'sw_os');
-mpc_type        = get(xsg_obj,'mpc_type');
 app_clk         = get(xsg_obj,'clk_src');
 app_clk_rate    = get(xsg_obj,'clk_rate');
 xsg_core_name   = clear_name(get(xsg_obj,'parent'));
@@ -275,7 +274,6 @@ mssge_proj.design_name      = design_name;
 mssge_proj.hw_sys           = hw_sys;
 mssge_proj.hw_subsys        = hw_subsys;
 mssge_proj.sw_os            = sw_os;
-mssge_proj.mpc_type         = mpc_type;
 mssge_proj.app_clk          = app_clk;
 mssge_proj.app_clk_rate     = app_clk_rate;
 mssge_proj.xsg_core_name    = xsg_core_name;
@@ -391,7 +389,7 @@ if run_copy
 
     if exist(xps_path,'dir')
         rmdir(xps_path,'s');
-    end
+   end
     if exist([XPS_LIB_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
 
         source_dir      = [XPS_LIB_PATH, slash, 'XPS_', hw_sys, '_base']
@@ -625,16 +623,19 @@ if run_edk
     delete([xps_path, slash, 'implementation', slash, 'download.bit']);
     fid = fopen([xps_path, slash, 'run_xps.tcl'],'w');
 
-    mpc_type = get(xsg_obj,'mpc_type');
+    hw_sys   = get(xsg_obj,'hw_sys');
 
-    switch mpc_type
-        case 'powerpc440_ext'
+    switch hw_sys 
+        case 'roach'
+            fprintf(fid,['run bits\n']);
+        % end case 'powerpc440_ext'
+        case 'roach2'
             fprintf(fid,['run bits\n']);
         % end case 'powerpc440_ext'
         otherwise
             fprintf(fid,['run init_bram\n']);
         % end otherwise
-    end % switch mpc_type
+    end % switch hw_sys 
     fprintf(fid,['exit\n']);
     fclose(fid);
 

@@ -56,7 +56,6 @@ switch hw_sys
             % end case 'sx95t'
         end % switch hw_subsys
 
-        set_param(gcb,'mpc_type','powerpc440_ext');
     % end case 'ROACH
     case 'ROACH2'
         switch hw_subsys
@@ -68,7 +67,6 @@ switch hw_sys
                     'package', 'ff1759');
             % end case 'lx110t'
         end % switch hw_subsys
-        set_param(gcb,'mpc_type','powerpc440_ext');
     % end case 'ROACH2'
     
     otherwise

@@ -36,8 +36,6 @@ blk_name = get(blk_obj,'simulink_name');
 
 s.hw_sys = hw_sys;
 s.hw_subsys = hw_subsys;
-s.ibob_linux = get_param(blk_name,'ibob_linux');
-s.mpc_type = get_param(blk_name,'mpc_type');
 
 supp_ip_names = {};
 supp_ip_versions = {};
@@ -61,15 +59,9 @@ s.clk180_src = [s.clk_src,'180'];
 s.clk270_src = [s.clk_src,'270'];
 s.clk_rate   = eval_param(blk_name,'clk_rate');
 
-[s.gpioclk_hw_sys,s.gpioclk_grp] = xps_get_hw_info(get_param(blk_name,'gpio_clk_io_group'));
-s.gpioclkbit = eval_param(blk_name,'gpio_clk_bit_index');
-
 b = class(s,'xps_xsg',blk_obj);
 
 b = set(b, 'supp_ip_names', supp_ip_names);
 b = set(b, 'supp_ip_versions', supp_ip_versions);
-
-iobname = [s.gpioclk_hw_sys, '.', s.gpioclk_grp];
-iobindex = num2str(s.gpioclkbit);
 
 mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ',num2str(s.clk_rate*1e6));

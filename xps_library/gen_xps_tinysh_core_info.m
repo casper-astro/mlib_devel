@@ -8,7 +8,6 @@ function gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj
 %   hw_sys          = mssge_proj.hw_sys;
 %   hw_subsys       = mssge_proj.hw_subsys;
 %   sw_os           = mssge_proj.sw_os;
-%   mpc_type        = mssge_proj.mpc_type;
 %   app_clk         = mssge_proj.app_clk;
 %   app_clk_rate    = mssge_proj.app_clk_rate;
 %   xsg_core_name   = mssge_proj.xsg_core_name;
