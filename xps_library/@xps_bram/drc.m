@@ -47,11 +47,6 @@ switch hw_sys
       msg = ['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards'];
 	    result = 1;
     end
-  case {'BEE2_ctrl', 'BEE2_usr', 'iBOB'}
-    if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards';
-	    result = 1;
-    end
   otherwise
     if addr_width < 11
       msg = 'Shared BRAM address width cannot be less than 11 on unknown platform';

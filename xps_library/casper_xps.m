@@ -20,8 +20,8 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function varargout = bee_xps(varargin)
-% BEE_XPS BEE Xilinx ISE Batch Tools GUI
+function varargout = casper_xps(varargin)
+% CASPER_XPS CASPER Xilinx ISE Batch Tools GUI
 
 % Last Modified by GUIDE v2.5 21-Nov-2005 13:44:12
 
@@ -163,10 +163,10 @@ try
     disp(['    EDK/ISE backend..........',datestr(time_struct.edk     ,13)]);
     disp(['    Download Bitfile.........',datestr(time_struct.download,13)]);
     disp('===================================================================');
-    msgbox(['BEE XPS run successfully completed in ',datestr(time_total,13),'!']);
+    msgbox(['CASPER XPS run successfully completed in ',datestr(time_total,13),'!']);
 catch
     disp(lasterr);
-    errordlg('Error detected running BEE_XPS, please check Matlab command window for error messages');
+    errordlg('Error detected running CASPER XPS, please check Matlab command window for error messages');
 end
 
 
