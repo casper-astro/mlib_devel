@@ -54,22 +54,14 @@ if nargin == 0  % LAUNCH GUI
     end
 
     switch xsg
-        case {'8.2.02'}
-            set(handles.xsg_version,'String','8.2');
-        case {'9.1.01'}
-            set(handles.xsg_version,'String','9.1');
-        case {'10.1.1.1182'}
-            set(handles.xsg_version,'String','10.1');
-        case {'10.1.2.1250'}
-            set(handles.xsg_version,'String','10.1');
-        case {'10.1.3.1386'}
-            set(handles.xsg_version,'String','10.1');
         case {'11.3.2055'}
             set(handles.xsg_version,'String','11.3');
         case {'11.4.2254'}
             set(handles.xsg_version,'String','11.4');
         case {'11.5.2275'}
             set(handles.xsg_version,'String','11.5');
+        case {'14.2'}
+            set(handles.xsg_version,'String','14.2');
         otherwise
             errordlg(['Unsupported Xilinx System Generator version: ',xsg]);
             return;
