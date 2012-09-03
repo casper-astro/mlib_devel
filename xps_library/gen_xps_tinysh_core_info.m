@@ -12,7 +12,7 @@ function gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj
 %   app_clk_rate    = mssge_proj.app_clk_rate;
 %   xsg_core_name   = mssge_proj.xsg_core_name;
 
-%   XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
+%   XPS_BASE_PATH   = mssge_paths.XPS_BASE_PATH;
 %   simulink_path   = mssge_paths.simulink_path;
 %   work_path       = mssge_paths.work_path;
 %   src_path        = mssge_paths.src_path;

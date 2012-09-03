@@ -30,7 +30,7 @@ function [time_total, time_struct] = gen_xps_files(sys,flow_vec)
 %   xps_blks : All the blocks with tags xps:*
 %   xsg_blk : Point to the Xilinx System Generator block of the system
 %   xps_pcore_blks: All the pcore blocks tagged tiwh xps:pcore
-%   XPS_LIB_PATH: Sets to the value of the environment var of same name
+%   XPS_BASE_PATH: Sets to the value of the environment var of same name
 % Also, all the necessary directories have been created.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % close all previously opened files
@@ -145,9 +145,9 @@ for i=[1:length(gateways_blk)]
 end
 
 % set design paths
-XPS_LIB_PATH = getenv('XPS_LIB_PATH');
-if isempty(XPS_LIB_PATH)
-    error('Environment variable XPS_LIB_PATH must be defined');
+XPS_BASE_PATH = getenv('XPS_BASE_PATH');
+if isempty(XPS_BASE_PATH)
+    error('Environment variable XPS_BASE_PATH must be defined');
 end
 
 simulink_path   = pwd;
@@ -164,9 +164,9 @@ if ~isempty(strfind(simulink_path, ' '))
     error('Working directory has a space in the pathname.');
 end
 
-if ~isempty(strfind(XPS_LIB_PATH, ' '))
-    warndlg(['Directory specified by the XPS_LIB_PATH environment variable (', XPS_LIB_PATH, ') has a space in the pathname. This can cause problems with some of the tools. Please change its directory.']);
-    error('Directory specified by the XPS_LIB_PATH environment variable has a space in the pathname.');
+if ~isempty(strfind(XPS_BASE_PATH, ' '))
+    warndlg(['Directory specified by the XPS_BASE_PATH environment variable (', XPS_BASE_PATH, ') has a space in the pathname. This can cause problems with some of the tools. Please change its directory.']);
+    error('Directory specified by the XPS_BASE_PATH environment variable has a space in the pathname.');
 end
 
 % create design paths if non-existent
@@ -280,7 +280,7 @@ mssge_proj.xsg_core_name    = xsg_core_name;
 
 % Create structure of commonly-used paths
 mssge_paths                 = {};
-mssge_paths.XPS_LIB_PATH    = XPS_LIB_PATH;
+mssge_paths.XPS_BASE_PATH   = XPS_BASE_PATH;
 mssge_paths.simulink_path   = simulink_path;
 mssge_paths.work_path       = work_path;
 mssge_paths.src_path        = src_path;
@@ -390,9 +390,9 @@ if run_copy
     if exist(xps_path,'dir')
         rmdir(xps_path,'s');
    end
-    if exist([XPS_LIB_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
+    if exist([XPS_BASE_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
 
-        source_dir      = [XPS_LIB_PATH, slash, 'XPS_', hw_sys, '_base']
+        source_dir      = [XPS_BASE_PATH, slash, 'XPS_', hw_sys, '_base']
         destination_dir = [xps_path];
 
         if strcmp(system_os, 'windows')
@@ -416,11 +416,11 @@ if run_copy
         end % copy_result == copy_fail
     else
         error(['Base XPS package "','XPS_',hw_sys,'_base" does not exist.']);
-    end % exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
+    end % exist([XPS_BASE_PATH,'\XPS_',hw_sys,'_base'],'dir')
 
 %%%%%   BEGIN PCORE COPYING CODE
 %%%%%
-%%%%%    if exist([XPS_LIB_PATH,'\pcores'], 'dir')
+%%%%%    if exist([XPS_BASE_PATH,'\pcores'], 'dir')
 %%%%%        if ~exist([xps_path, '\copied_pcores'], 'dir')
 %%%%%            mkdir([xps_path, '\copied_pcores']);
 %%%%%        end
@@ -429,7 +429,7 @@ if run_copy
 %%%%%            disp(pcores_used{n})
 %%%%%            pcore_path = [xps_path, '\copied_pcores\', pcores_used{n}];
 %%%%%            mkdir(pcore_path);
-%%%%%            [copy_result, copy_message] = dos(['xcopy /Q /E /Y ', XPS_LIB_PATH, '\pcores\', pcores_used{n}, ' ', pcore_path, '\.']);
+%%%%%            [copy_result, copy_message] = dos(['xcopy /Q /E /Y ', XPS_BASE_PATH, '\pcores\', pcores_used{n}, ' ', pcore_path, '\.']);
 %%%%%
 %%%%%            if copy_result
 %%%%%                cd(simulink_path);
@@ -441,8 +441,8 @@ if run_copy
 %%%%%        end % for n=1:length(pcores_used)
 %%%%%    else
 %%%%%        cd(simulink_path);
-%%%%%        error(['PCores directory "', XPS_LIB_PATH, '\pcores" does not exist']);
-%%%%%    end % if exist([XPS_LIB_PATH,'\pcores'], 'dir') - else
+%%%%%        error(['PCores directory "', XPS_BASE_PATH, '\pcores" does not exist']);
+%%%%%    end % if exist([XPS_BASE_PATH,'\pcores'], 'dir') - else
 %%%%%
 %%%%%   END PCORE COPYING CODE
 
