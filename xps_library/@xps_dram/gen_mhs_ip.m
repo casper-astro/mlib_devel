@@ -19,16 +19,14 @@
 %   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
 
 str = '';
 opb_addr_end = opb_addr_start;
-plb_addr_end = plb_addr_start;
 
 ip_name        = get(blk_obj,'ip_name');
 interfaces     = get(blk_obj,'interfaces');
 misc_ports     = get(blk_obj,'misc_ports');
-range_plb      = get(blk_obj,'plb_address_offset');
 hw_sys         = get(blk_obj,'hw_sys');
 clk_freq       = get(blk_obj,'clk_freq');
 inst_name      = clear_name(get(blk_obj,'simulink_name'));

@@ -68,11 +68,6 @@ switch s.hw_sys
         b = set(b,'opb_address_offset',16384);
         b = set(b,'opb_address_align', hex2dec('4000'));
     % end case 'ROACH'
-    otherwise
-        b = set(b,'plb_clk','sys_clk');
-        b = set(b,'plb_address_offset',16384);
-        b = set(b,'plb_address_align', hex2dec('4000'));
-    % end otherwise
 end % switch s.hw_sys
 
 parameters.SWING                  = s.swing;
