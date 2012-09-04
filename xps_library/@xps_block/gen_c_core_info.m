@@ -28,11 +28,6 @@ try
 catch
 	range_opb = 0;
 end
-try
-	range_plb = blk_obj.plb_address_offset;
-catch
-	range_plb = 0;
-end
 
 short_name = regexp(blk_obj.simulink_name,'^\w*\/(.*)','tokens');
 try
@@ -43,7 +38,7 @@ end
 
 short_name = char(cellstr(short_name));
 
-if range_opb ~= 0 || range_plb ~= 0
+if range_opb ~= 0
 	str = ['{"',short_name,'",',blk_obj.type,',','XPAR_',upper(clear_name(blk_obj.simulink_name)),'_BASEADDR',',"',blk_obj.c_params,'"},\n'];
 else
 	str = ['{"',short_name,'",',blk_obj.type,',-1,"',blk_obj.c_params,'"},\n'];
