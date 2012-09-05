@@ -1119,3 +1119,146 @@ NET "epb_data<31>"      LOC = AJ33;
 #NET "ext_refclk_p<5>"    LOC = Y8;
 #NET "ext_refclk_p<6>"    LOC = AH8;
 #NET "ext_refclk_p<7>"    LOC = AW10;
+
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')## meerKAT ADC0
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')## ZDOK A
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<9>"     	LOC = L35  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB9+  	ZDOK A5,  P<2>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<9>"     	LOC = L36  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB9-		ZDOK A6,  N<2>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<6>"     	LOC = K35  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB6+  	ZDOK A7,  P<3>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<6>"     	LOC = K34  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB6-		ZDOK A8,  N<3>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<4>"     	LOC = J35  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB4+  	ZDOK A9   P<4>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<4>"     	LOC = H35  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB4-		ZDOK A10, N<4>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')## ZDOK D
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_reset"     		LOC = N28 	| IOSTANDARD = LVCMOS25; 					# ASYNC_RST ZDOK D1,  P<10>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')##NET "adc0_adc_i2c_sda"         	LOC = P28 	| IOSTANDARD = LVCMOS25; 					# i2c_sda   ZDOK D2,  N<10>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<7>"     	LOC = K39  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB7+  	ZDOK D7,  P<13>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<7>"     	LOC = K40  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB7-		ZDOK D8,  N<13>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_or_a_p"     		LOC = E42 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# AOR+  	ZDOK D13, P<16>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_or_a_n"     		LOC = F42 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# AOR-		ZDOK D14, N<16>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<6>"     	LOC = C40 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA6+  	ZDOK D15, P<17>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<6>"     	LOC = C41 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA6-		ZDOK D16, N<17>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<3>"     	LOC = E39  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA3+ 		ZDOK D17, P<18>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<3>"     	LOC = E38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA3-		ZDOK D18, N<18>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<1>"     	LOC = B37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA1+  	ZDOK D19, P<19>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<1>"     	LOC = A37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA1-		ZDOK D20, N<19>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')## ZDOK C
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_or_b_p"     		LOC = M36  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# BOR+ 		ZDOK C3,  P<21>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_or_b_n"     		LOC = M37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# BOR-		ZDOK C4,  N<21>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<8>"      	LOC = N29 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB8+ 		ZDOK C5,  P<22>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<8>"      	LOC = N30 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB8-		ZDOK C6,  N<22>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<5>"     	LOC = K37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB5+ 		ZDOK C7,  P<23>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<5>"     	LOC = L37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB5-		ZDOK C8,  N<23>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<3>"     	LOC = G34  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB3+		ZDOK C9,  P<24>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<3>"     	LOC = H34  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB3-		ZDOK C10, N<24>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<1>"      	LOC = F39 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB1+ 		ZDOK C11, P<25>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<1>"      	LOC = G39 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB1-		ZDOK C12, N<25>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<9>"     	LOC = F37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA9+ 		ZDOK C13, P<26>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<9>"     	LOC = E37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA9-		ZDOK C14, N<26>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<7>"     	LOC = D42  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA7+ 		ZDOK C15, P<27>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<7>"     	LOC = D41  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA7-		ZDOK C16, N<27>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<4>"      	LOC = A40 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA4+ 		ZDOK C17, P<28>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<4>"      	LOC = A41 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA4-		ZDOK C18, N<28>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')## ZDOK F
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_demux_bist"        LOC = L31 	| IOSTANDARD = LVCMOS25; 					# DMUX_BIST ZDOK F1, P<29>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')##NET "adc0_adc_i2c_scl"     	    LOC = L32 	| IOSTANDARD = LVCMOS25; 					# I2C_SCL   ZDOK F2, N<29>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_sync_p"     		LOC = J37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# SYNC+ 	ZDOK F3   P<30>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_sync_n"     		LOC = J36  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# SYNC- 	ZDOK F4   N<30>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<2>"     	LOC = H39 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB2+   	ZDOK F9   P<33>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<2>"     	LOC = H38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB2-   	ZDOK F10  N<33>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_p<0>"     	LOC = D40  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB0+   	ZDOK F11  P<34>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_b_n<0>"     	LOC = E40 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB0-   	ZDOK F12  N<34>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<8>"      	LOC = F40 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA8+   	ZDOK F13  P<35>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<8>"      	LOC = F41 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA8-   	ZDOK F14  N<35>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<5>"     	LOC = F35  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA5+ 		ZDOK F15, P<36>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<5>"     	LOC = F36  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA5- 		ZDOK F16, N<36>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<2>"     	LOC = D38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA2+  	ZDOK F17, P<37>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<2>"     	LOC = C38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA2-  	ZDOK F18, N<37>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_p<0>"      	LOC = P30 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA0+   	ZDOK F19, adc0_clk_p<1>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_adc_data_a_n<0>"      	LOC = P31 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA0-   	ZDOK F20, adc0_clk_n<1> 
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#TIMESPEC "TS_ASYNC_FIFO_DEMUX" = FROM FFS("*adc_*") TO FFS ("*user*") TIG;
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc0')#
+
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')## meerKAT ADC1
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')## ZDOK A
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<9>"     	LOC = W35  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB9+  	ZDOK A5,  P<2>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<9>"     	LOC = V35  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB9-		ZDOK A6,  N<2>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<6>"     	LOC = U32  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB6+  	ZDOK A7,  P<3>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<6>"     	LOC = U33  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB6-		ZDOK A8,  N<3>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<4>"     	LOC = U42  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB4+  	ZDOK A9   P<4>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<4>"     	LOC = U41  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB4-		ZDOK A10, N<4>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')## ZDOK D
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_reset"     		LOC = AA32 	| IOSTANDARD = LVCMOS25; 					# ASYNC_RST ZDOK D1,  P<10>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')##NET "adc1_adc_i2c_sda"         	LOC = Y32 	| IOSTANDARD = LVCMOS25; 					# i2c_sda   ZDOK D2,  N<10>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<7>"     	LOC = V41  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB7+  	ZDOK D7,  P<13>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<7>"     	LOC = W41  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB7-		ZDOK D8,  N<13>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_or_a_p"     		LOC = T41 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# AOR+  	ZDOK D13, P<16>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_or_a_n"     		LOC = T42 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# AOR-		ZDOK D14, N<16>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<6>"     	LOC = R39 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA6+  	ZDOK D15, P<17>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<6>"     	LOC = P38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA6-		ZDOK D16, N<17>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<3>"     	LOC = M31  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA3+ 		ZDOK D17, P<18>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<3>"     	LOC = N31 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA3-		ZDOK D18, N<18>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<1>"     	LOC = N40  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA1+  	ZDOK D19, P<19>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<1>"     	LOC = N41  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA1-		ZDOK D20, N<19>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')## ZDOK C
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_or_b_p"     		LOC = W32  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# BOR+ 		ZDOK C3,  P<21>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_or_b_n"     		LOC = Y33  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# BOR-		ZDOK C4,  N<21>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<8>"      	LOC = W36 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB8+ 		ZDOK C5,  P<22>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<8>"      	LOC = V36 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB8-		ZDOK C6,  N<22>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<5>"     	LOC = V40  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB5+ 		ZDOK C7,  P<23>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<5>"     	LOC = W40  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB5-		ZDOK C8,  N<23>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<3>"     	LOC = U37  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB3+		ZDOK C9,  P<24>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<3>"     	LOC = U38  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB3-		ZDOK C10, N<24>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<1>"      	LOC = T39 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB1+ 		ZDOK C11, P<25>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<1>"      	LOC = R38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DB1-		ZDOK C12, N<25>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<9>"     	LOC = P42  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA9+ 		ZDOK C13, P<26>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<9>"     	LOC = R42  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA9-		ZDOK C14, N<26>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<7>"     	LOC = P40  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA7+ 		ZDOK C15, P<27>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<7>"     	LOC = P41  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA7-		ZDOK C16, N<27>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<4>"      	LOC = M38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA4+ 		ZDOK C17, P<28>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<4>"      	LOC = M39 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE; 	# DA4-		ZDOK C18, N<28>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')## ZDOK F
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_demux_bist"        LOC = AA36 	| IOSTANDARD = LVCMOS25; 					# DMUX_BIST ZDOK F1, P<29>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')##NET "adc1_adc_i2c_scl"     	    LOC = AA37 	| IOSTANDARD = LVCMOS25; 					# I2C_SCL   ZDOK F2, N<29>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_sync_p"     		LOC = W42  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# SYNC+ 	ZDOK F3   P<30>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_sync_n"     		LOC = Y42  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# SYNC- 	ZDOK F4   N<30>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<2>"     	LOC = V34 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DB2+   	ZDOK F9   P<33>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<2>"     	LOC = U34 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DB2-   	ZDOK F10  N<33>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_p<0>"     	LOC = T34  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DB0+   	ZDOK F11  P<34>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_b_n<0>"     	LOC = T35 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DB0-   	ZDOK F12  N<34>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<8>"      	LOC = R40 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA8+   	ZDOK F13  P<35>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<8>"      	LOC = T40 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA8-   	ZDOK F14  N<35>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<5>"     	LOC = N36  	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA5+ 		ZDOK F15, P<36>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<5>"     	LOC = P37   | IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA5- 		ZDOK F16, N<36>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<2>"     	LOC = N38 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA2+  	ZDOK F17, P<37>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<2>"     	LOC = N39 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA2-  	ZDOK F18, N<37>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_p<0>"      	LOC = AE30 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA0+   	ZDOK F19, adc1_clk_p<1>
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_adc_data_a_n<0>"      	LOC = AF30 	| IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;	# DA0-   	ZDOK F20, adc1_clk_n<1> 
+#IF# (strcmp(get(b,'type'),'xps_mkadc')) && strcmp(get(b,'hw_adc'),'adc1')#
+
+
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_sda" LOC = P28 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_scl" LOC = L32 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_sda" LOC = Y32 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_scl" LOC = AA37 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#
+
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_clk" LOC = P27 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_dat" LOC = M33 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_cs"  LOC = R27 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_clk" LOC = AA34 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_dat" LOC = Y34 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_cs"  LOC = Y37 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+
+
