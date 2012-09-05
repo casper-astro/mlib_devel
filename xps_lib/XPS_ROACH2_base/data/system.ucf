@@ -1253,3 +1253,12 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_sda" LOC = Y32 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
 #IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_scl" LOC = AA37 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
 #IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#
+
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_clk" LOC = P27 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_dat" LOC = M33 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_cs"  LOC = R27 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_clk" LOC = AA34 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_dat" LOC = Y34 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_cs"  LOC = Y37 	| IOSTANDARD = LVCMOS25 | SLEW = SLOW;
+
+
