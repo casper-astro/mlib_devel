@@ -480,3 +480,40 @@ END
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#END 
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#PORT mgt_gpio = mgt_gpio, VEC = [11:0], DIR = IO  
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#
+
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_ser_clk = adc0_adc3wire_clk,    DIR = O
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_ser_dat = adc0_adc3wire_data,   DIR = O
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#PORT adc0_ser_cs  = adc0_adc3wire_strobe, DIR = O
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_ser_clk = adc1_adc3wire_clk,    DIR = O
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_ser_dat = adc1_adc3wire_data,   DIR = O
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#PORT adc1_ser_cs  = adc1_adc3wire_strobe, DIR = O
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  #BEGIN opb_katadccontroller
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  # PARAMETER INSTANCE     = opb_katadccontroller_0
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  # PARAMETER HW_VER       = 1.00.a
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  # PARAMETER C_BASEADDR   = 0x00020000
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  # PARAMETER C_HIGHADDR   = 0x0002ffff
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  # BUS_INTERFACE SOPB = opb0
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  # PORT OPB_Clk = epb_clk
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_data = adc0_adc3wire_data
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc_reset = adc0_adc_reset_i
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_mmcm_reset = adc0_mmcm_reset
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_clk = adc1_adc3wire_clk
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_data = adc1_adc3wire_data
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc3wire_strobe = adc1_adc3wire_strobe
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_adc_reset = adc1_adc_reset_i
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_mmcm_reset = adc1_mmcm_reset
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psclk = adc0_psclk
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psen = adc0_psen
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psincdec = adc0_psincdec
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_psdone = adc0_psdone
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_clk = adc0_clk
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psclk = adc1_psclk
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psen = adc1_psen
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psincdec = adc1_psincdec
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_psdone = adc1_psdone
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')# PORT adc1_clk = adc1_clk
+#IF# strcmp(get(b,'type'),'xps_mkadc')                                  #END
