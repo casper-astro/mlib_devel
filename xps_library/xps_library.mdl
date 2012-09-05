@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Sep  5 10:17:08 2012"
-  RTWModifiedTimeStamp	  268741012
-  ModelVersionFormat	  "1.%<AutoIncrement:454>"
+  LastModifiedDate	  "Wed Sep  5 15:10:23 2012"
+  RTWModifiedTimeStamp	  268758617
+  ModelVersionFormat	  "1.%<AutoIncrement:455>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -687,7 +687,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [2074, 58, 3802, 1055]
+    Location		    [1921, 58, 3649, 1055]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -28500,7 +28500,7 @@ Library {
       Name		      "adc1x1800-10"
       Tag		      "xps:mkadc"
       Ports		      [4, 18]
-      Position		      [1290, 872, 1465, 1323]
+      Position		      [1285, 971, 1465, 1329]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       AncestorBlock	      "xps_library/adc1x1800-10"
       MinAlgLoopOccurrences   off
@@ -28529,7 +28529,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "adc0|900|1|on"
+      MaskValueString	      "adc0|1800|1|on"
       MaskTabNameString	      ",,,"
       System {
 	Name			"adc1x1800-10"
