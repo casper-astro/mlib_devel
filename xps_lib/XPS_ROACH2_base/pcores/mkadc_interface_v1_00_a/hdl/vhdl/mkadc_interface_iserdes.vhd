@@ -258,29 +258,48 @@ architecture IMP of mkadc_interface is
     );
 end  component adc5g_dmux1_interface ;
 
+
+function gray_to_bin (gray_bus: std_logic_vector(9 downto 0))
+return std_logic_vector is
+variable bin_bus: std_logic_vector(9 downto 0);
+
+begin
+    bin_bus(9) := gray_bus(9);
+    bin_bus(8) := gray_bus(9) xor gray_bus(8);
+    bin_bus(7) := (gray_bus(9) xor gray_bus(8)) xor gray_bus(7);
+    bin_bus(6) := ((gray_bus(9) xor gray_bus(8)) xor gray_bus(7)) xor gray_bus(6);
+    bin_bus(5) := (((gray_bus(9) xor gray_bus(8)) xor gray_bus(7)) xor gray_bus(6)) xor gray_bus(5);
+    bin_bus(4) := ((((gray_bus(9) xor gray_bus(8)) xor gray_bus(7)) xor gray_bus(6)) xor gray_bus(5)) xor gray_bus(4);
+    bin_bus(3) := (((((gray_bus(9) xor gray_bus(8)) xor gray_bus(7)) xor gray_bus(6)) xor gray_bus(5)) xor gray_bus(4)) xor gray_bus(3);
+    bin_bus(2) := ((((((gray_bus(9) xor gray_bus(8)) xor gray_bus(7)) xor gray_bus(6)) xor gray_bus(5)) xor gray_bus(4)) xor gray_bus(3)) xor gray_bus(2);
+    bin_bus(1) := (((((((gray_bus(9) xor gray_bus(8)) xor gray_bus(7)) xor gray_bus(6)) xor gray_bus(5)) xor gray_bus(4)) xor gray_bus(3)) xor gray_bus(2)) xor gray_bus(1);
+    bin_bus(0) := ((((((((gray_bus(9) xor gray_bus(8)) xor gray_bus(7)) xor gray_bus(6)) xor gray_bus(5)) xor gray_bus(4)) xor gray_bus(3)) xor gray_bus(2)) xor gray_bus(1)) xor gray_bus(0);
+    return bin_bus;
+end gray_to_bin;
+
 begin
 
 -- Read enable managment
 gen_user_data : process(ctrl_clk_in, sRst) is
 begin
     if sRst = '1' then
-      user_data7_i <= (other=>'0'); 
-      user_data6_i <= (other=>'0');
-      user_data5_i <= (other=>'0');
-      user_data4_i <= (other=>'0');
-      user_data3_i <= (other=>'0');
-      user_data2_i <= (other=>'0');
-      user_data1_i <= (other=>'0');
-      user_data0_i <= (other=>'0');
+      user_data7_i <= (others=>'0'); 
+      user_data6_i <= (others=>'0');
+      user_data5_i <= (others=>'0');
+      user_data4_i <= (others=>'0');
+      user_data3_i <= (others=>'0');
+      user_data2_i <= (others=>'0');
+      user_data1_i <= (others=>'0');
+      user_data0_i <= (others=>'0');
 
-      user_data7 <= (other=>'0'); 
-      user_data6 <= (other=>'0');
-      user_data5 <= (other=>'0');
-      user_data4 <= (other=>'0');
-      user_data3 <= (other=>'0');
-      user_data2 <= (other=>'0');
-      user_data1 <= (other=>'0');
-      user_data0 <= (other=>'0');
+      user_data7 <= (others=>'0'); 
+      user_data6 <= (others=>'0');
+      user_data5 <= (others=>'0');
+      user_data4 <= (others=>'0');
+      user_data3 <= (others=>'0');
+      user_data2 <= (others=>'0');
+      user_data1 <= (others=>'0');
+      user_data0 <= (others=>'0');
 
       user_outofrange7 <= '0';
       user_outofrange6 <= '0';
