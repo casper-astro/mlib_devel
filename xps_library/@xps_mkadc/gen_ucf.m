@@ -33,68 +33,68 @@ adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
 disp('meerKAT ADC trying specific ucf generation')
 switch hw_sys
     case 'ROACH2'
-        str = [str,'\n'];
-        str = [str,'#Cut paths to and from AYNC FIFO for clock domain crossing\n'];
-        str = [str,'NET "*adc_clk180" TNM_NET="adc_clk_in";\n'];
-        str = [str,'NET "*adc0_clk" TNM_NET="gateware_clk_in";\n'];
-        str = [str,'TIMEGRP "adc_clk_grp" = "adc_clk_in";\n'];
-        str = [str,'TIMEGRP "gateware_clk_in_grp" = "gateware_clk_in";\n'];
-        str = [str,'TIMESPEC "TSpci_async1"=FROM "adc_clk_grp" TO "gateware_clk_in_grp" TIG;\n'];
-        str = [str,'TIMESPEC "TSpci_async2"=FROM "gateware_clk_in_grp" TO "adc_clk_grp" TIG;\n'];
+        %str = [str,'\n'];
+        %str = [str,'#Cut paths to and from AYNC FIFO for clock domain crossing\n'];
+        %str = [str,'NET "*adc_clk180" TNM_NET="adc_clk_in";\n'];
+        %str = [str,'NET "*adc0_clk" TNM_NET="gateware_clk_in";\n'];
+        %str = [str,'TIMEGRP "adc_clk_grp" = "adc_clk_in";\n'];
+        %str = [str,'TIMEGRP "gateware_clk_in_grp" = "gateware_clk_in";\n'];
+        %str = [str,'TIMESPEC "TSpci_async1"=FROM "adc_clk_grp" TO "gateware_clk_in_grp" TIG;\n'];
+        %str = [str,'TIMESPEC "TSpci_async2"=FROM "gateware_clk_in_grp" TO "adc_clk_grp" TIG;\n'];
 
         switch adc_str
             case 'adc0'
-                % MeerKAT ADC ZDOK 0 Data A (Even)
-                str = [str,'\n'];
-                str = [str,'#MeerKAT ADC ZDOK 0 Data A (Even)\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_10"   LOC = SLICE_X88Y200;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_30"   LOC = SLICE_X88Y200;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_11"   LOC = SLICE_X88Y276;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_31"   LOC = SLICE_X88Y276;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_12"   LOC = SLICE_X88Y266;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_32"   LOC = SLICE_X88Y266;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_13"   LOC = SLICE_X88Y262;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_33"   LOC = SLICE_X88Y262;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_14"   LOC = SLICE_X88Y264;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_34"   LOC = SLICE_X88Y264;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_15"   LOC = SLICE_X88Y258;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_35"   LOC = SLICE_X88Y258;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_16"   LOC = SLICE_X88Y252;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_36"   LOC = SLICE_X88Y252;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_17"   LOC = SLICE_X88Y248;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_37"   LOC = SLICE_X88Y248;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_18"   LOC = SLICE_X88Y246;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_38"   LOC = SLICE_X88Y246;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_19"   LOC = SLICE_X88Y270;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_39"   LOC = SLICE_X88Y270;\n'];
-                str = [str,'\n'];
+                %% MeerKAT ADC ZDOK 0 Data A (Even)
+                %str = [str,'\n'];
+                %str = [str,'#MeerKAT ADC ZDOK 0 Data A (Even)\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_10"   LOC = SLICE_X88Y200;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_30"   LOC = SLICE_X88Y200;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_11"   LOC = SLICE_X88Y276;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_31"   LOC = SLICE_X88Y276;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_12"   LOC = SLICE_X88Y266;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_32"   LOC = SLICE_X88Y266;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_13"   LOC = SLICE_X88Y262;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_33"   LOC = SLICE_X88Y262;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_14"   LOC = SLICE_X88Y264;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_34"   LOC = SLICE_X88Y264;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_15"   LOC = SLICE_X88Y258;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_35"   LOC = SLICE_X88Y258;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_16"   LOC = SLICE_X88Y252;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_36"   LOC = SLICE_X88Y252;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_17"   LOC = SLICE_X88Y248;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_37"   LOC = SLICE_X88Y248;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_18"   LOC = SLICE_X88Y246;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_38"   LOC = SLICE_X88Y246;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_19"   LOC = SLICE_X88Y270;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_39"   LOC = SLICE_X88Y270;\n'];
+                %str = [str,'\n'];
 
-                % MeerKAT ADC Data B (Odd)
-                str = [str,'\n'];
-                str = [str,'#MeerKAT ADC Data B (Odd)\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_0"    LOC = SLICE_X88Y244;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_20"   LOC = SLICE_X88Y244;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_1"    LOC = SLICE_X88Y254;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_21"   LOC = SLICE_X88Y254;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_2"    LOC = SLICE_X88Y226;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_22"   LOC = SLICE_X88Y226;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_3"    LOC = SLICE_X88Y260;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_23"   LOC = SLICE_X88Y260;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_4"    LOC = SLICE_X88Y274;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_24"   LOC = SLICE_X88Y274;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_5"    LOC = SLICE_X88Y216;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_25"   LOC = SLICE_X88Y216;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_6"    LOC = SLICE_X88Y234;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_26"   LOC = SLICE_X88Y234;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_7"    LOC = SLICE_X88Y206;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_27"   LOC = SLICE_X88Y206;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_8"    LOC = SLICE_X88Y228;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_28"   LOC = SLICE_X88Y228;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_9"    LOC = SLICE_X88Y224;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_29"   LOC = SLICE_X88Y224;\n'];
-                str = [str,'\n'];
+                %% MeerKAT ADC Data B (Odd)
+                %str = [str,'\n'];
+                %str = [str,'#MeerKAT ADC Data B (Odd)\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_0"    LOC = SLICE_X88Y244;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_20"   LOC = SLICE_X88Y244;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_1"    LOC = SLICE_X88Y254;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_21"   LOC = SLICE_X88Y254;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_2"    LOC = SLICE_X88Y226;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_22"   LOC = SLICE_X88Y226;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_3"    LOC = SLICE_X88Y260;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_23"   LOC = SLICE_X88Y260;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_4"    LOC = SLICE_X88Y274;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_24"   LOC = SLICE_X88Y274;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_5"    LOC = SLICE_X88Y216;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_25"   LOC = SLICE_X88Y216;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_6"    LOC = SLICE_X88Y234;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_26"   LOC = SLICE_X88Y234;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_7"    LOC = SLICE_X88Y206;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_27"   LOC = SLICE_X88Y206;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_8"    LOC = SLICE_X88Y228;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_28"   LOC = SLICE_X88Y228;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_9"    LOC = SLICE_X88Y224;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_29"   LOC = SLICE_X88Y224;\n'];
+                %str = [str,'\n'];
 
-                str = [str,'NET "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R*" MAXDELAY = 1.65ns;\n'];
+                %str = [str,'NET "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R*" MAXDELAY = 1.65ns;\n'];
 
                 %% MeerKAT ADC Over Range constraints
                 %str = [str,'#MeerKAT ADC Over Range constraints\n'];
@@ -104,11 +104,11 @@ switch hw_sys
                 %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_or_demuxed_x4R_b_1"    LOC = SLICE_X10Y318;\n'];
                 %str = [str,'\n'];
 
-                % MeerKAT ADC Sync constraints
-                str = [str,'#MeerKAT ADC Sync constraints\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_0"    LOC = SLICE_X88Y230;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_1"    LOC = SLICE_X88Y230;\n'];
-                str = [str,'\n'];
+                %% MeerKAT ADC Sync constraints
+                %str = [str,'#MeerKAT ADC Sync constraints\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_0"    LOC = SLICE_X88Y230;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_1"    LOC = SLICE_X88Y230;\n'];
+                %str = [str,'\n'];
 
                 % MeerKAT ADC Setup & Hold Constraints for FPGA
                 str = [str,'#ZDOK0 MeerKAT ADC Setup & Hold Constraints for FPGA\n'];
@@ -118,57 +118,57 @@ switch hw_sys
             % end case 'adc0'
 
             case 'adc1'
-                % MeerKAT ADC ZDOK 1 Data A (Even)
-                str = [str,'\n'];
-                str = [str,'#MeerKAT ADC ZDOK 1 Data A (Even)\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_10"   LOC = SLICE_X88Y198;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_30"   LOC = SLICE_X88Y198;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_11"   LOC = SLICE_X0Y296;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_31"   LOC = SLICE_X0Y296;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_12"   LOC = SLICE_X0Y308;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_32"   LOC = SLICE_X0Y308;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_13"   LOC = SLICE_X88Y204;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_33"   LOC = SLICE_X88Y204;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_14"   LOC = SLICE_X0Y314;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_34"   LOC = SLICE_X0Y314;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_15"   LOC = SLICE_X0Y306;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_35"   LOC = SLICE_X0Y306;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_16"   LOC = SLICE_X0Y302;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_36"   LOC = SLICE_X0Y302;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_17"   LOC = SLICE_X0Y292;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_37"   LOC = SLICE_X0Y292;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_18"   LOC = SLICE_X0Y284;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_38"   LOC = SLICE_X0Y284;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_19"   LOC = SLICE_X0Y288;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_39"   LOC = SLICE_X0Y288;\n'];
-                str = [str,'\n'];
+                %% MeerKAT ADC ZDOK 1 Data A (Even)
+                %str = [str,'\n'];
+                %str = [str,'#MeerKAT ADC ZDOK 1 Data A (Even)\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_10"   LOC = SLICE_X88Y198;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_30"   LOC = SLICE_X88Y198;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_11"   LOC = SLICE_X0Y296;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_31"   LOC = SLICE_X0Y296;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_12"   LOC = SLICE_X0Y308;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_32"   LOC = SLICE_X0Y308;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_13"   LOC = SLICE_X88Y204;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_33"   LOC = SLICE_X88Y204;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_14"   LOC = SLICE_X0Y314;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_34"   LOC = SLICE_X0Y314;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_15"   LOC = SLICE_X0Y306;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_35"   LOC = SLICE_X0Y306;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_16"   LOC = SLICE_X0Y302;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_36"   LOC = SLICE_X0Y302;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_17"   LOC = SLICE_X0Y292;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_37"   LOC = SLICE_X0Y292;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_18"   LOC = SLICE_X0Y284;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_38"   LOC = SLICE_X0Y284;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_19"   LOC = SLICE_X0Y288;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_39"   LOC = SLICE_X0Y288;\n'];
+                %str = [str,'\n'];
 
-                % MeerKAT ADC Data B (Odd)
-                str = [str,'\n'];
-                str = [str,'#MeerKAT ADC Data B (Odd)\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_0"    LOC = SLICE_X0Y282;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_20"   LOC = SLICE_X0Y282;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_1"    LOC = SLICE_X0Y298;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_21"   LOC = SLICE_X0Y298;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_2"    LOC = SLICE_X0Y258;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_22"   LOC = SLICE_X0Y258;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_3"    LOC = SLICE_X0Y276;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_23"   LOC = SLICE_X0Y276;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_4"    LOC = SLICE_X0Y272;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_24"   LOC = SLICE_X0Y272;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_5"    LOC = SLICE_X0Y256;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_25"   LOC = SLICE_X0Y256;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_6"    LOC = SLICE_X0Y246;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_26"   LOC = SLICE_X0Y246;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_7"    LOC = SLICE_X0Y252;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_27"   LOC = SLICE_X0Y252;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_8"    LOC = SLICE_X0Y274;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_28"   LOC = SLICE_X0Y274;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_9"    LOC = SLICE_X0Y266;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_29"   LOC = SLICE_X0Y266;\n'];
-                str = [str,'\n'];
+                %% MeerKAT ADC Data B (Odd)
+                %str = [str,'\n'];
+                %str = [str,'#MeerKAT ADC Data B (Odd)\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_0"    LOC = SLICE_X0Y282;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_20"   LOC = SLICE_X0Y282;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_1"    LOC = SLICE_X0Y298;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_21"   LOC = SLICE_X0Y298;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_2"    LOC = SLICE_X0Y258;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_22"   LOC = SLICE_X0Y258;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_3"    LOC = SLICE_X0Y276;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_23"   LOC = SLICE_X0Y276;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_4"    LOC = SLICE_X0Y272;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_24"   LOC = SLICE_X0Y272;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_5"    LOC = SLICE_X0Y256;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_25"   LOC = SLICE_X0Y256;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_6"    LOC = SLICE_X0Y246;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_26"   LOC = SLICE_X0Y246;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_7"    LOC = SLICE_X0Y252;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_27"   LOC = SLICE_X0Y252;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_8"    LOC = SLICE_X0Y274;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_28"   LOC = SLICE_X0Y274;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_9"    LOC = SLICE_X0Y266;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R_29"   LOC = SLICE_X0Y266;\n'];
+                %str = [str,'\n'];
 
-                str = [str,'NET "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R*" MAXDELAY = 1.65ns;\n'];
+                %str = [str,'NET "',simulink_name,'/',simulink_name,'/adc_data_demuxed_x4R*" MAXDELAY = 1.65ns;\n'];
 
                 %% MeerKAT ADC Over Range constraints
                 %str = [str,'#MeerKAT ADC Over Range constraints\n'];
@@ -178,11 +178,11 @@ switch hw_sys
                 %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_or_demuxed_x4R_3"    LOC = SLICE_X0Y260;\n'];
                 %str = [str,'\n'];
 
-                % MeerKAT ADC Sync constraints
-                str = [str,'#MeerKAT ADC Sync constraints\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_0"    LOC = SLICE_X0Y248;\n'];
-                str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_1"    LOC = SLICE_X0Y248;\n'];
-                str = [str,'\n'];
+                %% MeerKAT ADC Sync constraints
+                %str = [str,'#MeerKAT ADC Sync constraints\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_0"    LOC = SLICE_X0Y248;\n'];
+                %str = [str, 'INST "',simulink_name,'/',simulink_name,'/adc_sync_demuxed_x4R_1"    LOC = SLICE_X0Y248;\n'];
+                %str = [str,'\n'];
 
                 % MeerKAT ADC Setup & Hold Constraints for FPGA
                 str = [str,'#ZDOK0 MeerKAT ADC Setup & Hold Constraints for FPGA\n'];

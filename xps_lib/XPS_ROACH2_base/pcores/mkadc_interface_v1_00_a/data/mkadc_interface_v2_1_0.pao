@@ -18,6 +18,7 @@
 ## Date:              Fri Dec 03 21:08:57 2004 (by Create and Import Peripheral Wizard)
 ##############################################################################
 
-lib mkadc_interface_v1_00_a adc_fifo
-lib mkadc_interface_v1_00_a ddr_input
-lib mkadc_interface_v1_00_a mkadc_interface
+lib mkadc_interface_v1_00_a fifo_generator_v5_3 vhdl
+lib mkadc_interface_v1_00_a adc5g_dmux1_interface vhdl
+lib mkadc_interface_v1_00_a mkadc_interface_iserdes
+
