@@ -118,7 +118,7 @@ end
 
 % cd into the design directory
 sys_file = get_param(sys,'FileName');
-[sys_dir, temp1, temp2, temp3] = fileparts(sys_file);
+[sys_dir, temp1, temp2] = fileparts(sys_file);
 cd(sys_dir);
 
 % comb for gateway in blocks that aren't part of a yellow block
@@ -319,9 +319,7 @@ if run_xsg
         rmdir(xsg_path,'s');
     end
     disp('Running system generator ...');
-    xsg_blk
     xsg_result = xlGenerateButton(xsg_blk);
-    xsg_result
     if xsg_result == 0
         disp('XSG generation complete.');
     else
@@ -404,8 +402,6 @@ if run_copy
             copy_fail = 0; % copyfile failure returns 0
             [copy_result, msg, msgid] = copyfile(source_dir,destination_dir,'f');
             fprintf('Copying base package from:\n %s\n', source_dir)
-            msg
-            msgid
         end % if strcmp(system_os, 'windows')
 
         if copy_result == copy_fail
