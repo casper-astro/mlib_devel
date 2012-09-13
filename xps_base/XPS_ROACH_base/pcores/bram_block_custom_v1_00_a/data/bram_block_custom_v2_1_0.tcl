@@ -23,6 +23,7 @@ proc generate_bram {mhsinst} {
 	set outputFile [open $coregenfile "w"]
 
   puts $outputFile "# BEGIN Project Options"
+  puts $outputFile "NEWPROJECT ."
   puts $outputFile "SET addpads = False"
   puts $outputFile "SET asysymbol = True"
   puts $outputFile "SET busformat = BusFormatAngleBracketNotRipped"
