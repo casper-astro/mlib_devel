@@ -13,7 +13,7 @@ fft_size = get_var('fft_size', 'defaults', defaults, varargin{:});
 fft_simult_inputs = get_var('fft_simult_inputs', 'defaults', defaults, varargin{:});
 pfb_fir_taps = get_var('pfb_fir_taps', 'defaults', defaults, varargin{:});
 reorder_vec = get_var('reorder_vec', 'defaults', defaults, varargin{:});
-scale = get_var('scale','defaults',defaults,varargin(:));
+scale = get_var('scale','defaults',defaults,varargin{:});
 
 if pfb_fir_taps < 1,
     errordlg('Sync Generator: pfb_fir length must be >= 1')
@@ -27,7 +27,7 @@ for i=1:length(reorder_vec),
     lcm_reorder = lcm(lcm_reorder, reorder_vec(i));
 end
 
-sim_sync_period = sim_acc_len * pfb_fir_taps * fft_size * lcm_reorder / fft_simult_inputs;
+sim_sync_period = scale * sim_acc_len * pfb_fir_taps * fft_size * lcm_reorder / fft_simult_inputs;
 % fprintf( 'Simulation sync period set to %d\n', sim_sync_period );
 % gen_sync_period = gen_acc_len * pfb_fir_taps * fft_size * lcm_reorder / fft_simult_inputs;
 % fprintf('Gen params: acc len: %d, taps: %d, fft_size: %d, lcm: %d, fft_simult: %d\n', gen_acc_len, pfb_fir_taps, fft_size, lcm_reorder, fft_simult_inputs);
