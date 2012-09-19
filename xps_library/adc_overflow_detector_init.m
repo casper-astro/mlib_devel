@@ -14,10 +14,6 @@ if mod(nStreams,2) ~= 0
     errordlg('Must have an even number of polyphase samples');
 end
 
-
-
-
-    
 num_ddr_streams = nStreams/2;
 adder_inputs = [];
 for k=1:num_ddr_streams,
@@ -29,11 +25,11 @@ for k=0:num_ddr_streams-1,
     in0_pos = [45, 33+85*k, 75, 47+85*k];
     in1_pos = [45, 58+85*k, 75, 72+85*k];
     
-    reuse_block(cur_block_name, ['of', num2str(k)], 'casper_library/Misc/of1', ...
+    reuse_block(cur_block_name, ['of', num2str(k)], 'xps_library/ADCs/of1', ...
         'Position', of_pos);
-    reuse_block(cur_block_name, ['s', num2str(k)], 'simulink/Sources/In1', ...
+    reuse_block(cur_block_name, ['s', num2str(k)], 'built-in/Inport', ...
         'Position', in0_pos, 'Port', num2str(k+1));
-    reuse_block(cur_block_name, ['s', num2str(k+num_ddr_streams)], 'simulink/Sources/In1', ...
+    reuse_block(cur_block_name, ['s', num2str(k+num_ddr_streams)], 'built-in/Inport', ...
         'Position', in1_pos, 'Port', num2str(k+num_ddr_streams+1));
     add_line(cur_block_name, ['s', num2str(k), '/1'], ['of', num2str(k), '/1']);
     add_line(cur_block_name, ['s', num2str(k+num_ddr_streams), '/1'], ['of', num2str(k), '/2']);
@@ -50,7 +46,7 @@ for k=0:num_ddr_streams-1,
 %     add_line(cur_block_name, 'adc_bias/1', ['sample', num2str(k-1), '_ds/1']);
 %     ds_phase = ds_phase + 1;
 %     
-%     reuse_block(cur_block_name, ['s', num2str(k-1)], 'simulink/Sinks/Out1', ...
+%     reuse_block(cur_block_name, ['s', num2str(k-1)], 'built-in/Outport', ...
 %         'Position', output_pos);
 %     add_line(cur_block_name, ['sample', num2str(k-1), '_ds/1'], ['s', num2str(k-1),'/1']);
 end

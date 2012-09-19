@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Aug 27 11:12:00 2012"
-  RTWModifiedTimeStamp	  267964660
-  ModelVersionFormat	  "1.%<AutoIncrement:10>"
+  LastModifiedDate	  "Tue Aug 28 12:03:34 2012"
+  RTWModifiedTimeStamp	  268056209
+  ModelVersionFormat	  "1.%<AutoIncrement:12>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -592,7 +592,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_internal"
-    Location		    [327, 218, 907, 511]
+    Location		    [221, 209, 801, 502]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -728,6 +728,7 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
+      MaskType		      "biplex_cplx_unscrambler"
       MaskPromptString	      "Size of FFT: (2^? pnts)|BRAM Latency"
       MaskStyleString	      "edit,edit"
       MaskTunableValueString  "on,on"
@@ -737,11 +738,8 @@ Library {
       MaskToolTipString	      "on,on"
       MaskVarAliasString      ","
       MaskVariables	      "FFTSize=@1;bram_latency=@2;"
-      MaskInitialization      "blk = gcb;\nif same_state(blk, 'FFTSize', FFTSize, 'bram_latency', bram_latency), retur"
-      "n, end\nmap = bit_reverse(0:2^(FFTSize-1)-1, FFTSize-1);\nset_param([blk,'/reorder'],'map',mat2str([map,map+2^(F"
-      "FTSize-1)]));\nset_param([blk,'/reorder'],'bram_latency', num2str(bram_latency));\nset_param([blk,'/reorder1'],'"
-      "map',mat2str([map+2^(FFTSize-1),map]));\nset_param([blk,'/reorder1'],'bram_latency', num2str(bram_latency));\nsa"
-      "ve_state(blk, 'FFTSize', FFTSize, 'bram_latency', bram_latency);"
+      MaskInitialization      "biplex_cplx_unscrambler_init(gcb, ...\n    'FFTSize', FFTSize, ...\n    'bram_latency',"
+      " bram_latency);"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
@@ -794,7 +792,7 @@ Library {
 	  const			  "1"
 	  n_bits		  "1"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -803,7 +801,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -826,7 +824,7 @@ Library {
 	  const			  "2^(FFTSize-1)"
 	  n_bits		  "FFTSize"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -835,7 +833,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -859,7 +857,7 @@ Library {
 	  const			  "2^(FFTSize-1)"
 	  n_bits		  "FFTSize"
 	  bin_pt		  "0"
-	  explicit_period	  on
+	  explicit_period	  "on"
 	  period		  "1"
 	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
 	  equ			  "P=C"
@@ -868,7 +866,7 @@ Library {
 	  opr			  "+"
 	  inp1			  "P"
 	  carry			  "CIN"
-	  dbl_ovrd		  off
+	  dbl_ovrd		  "off"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "constant"
@@ -895,9 +893,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -925,9 +923,9 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -958,15 +956,15 @@ Library {
 	  arith_type		  "Unsigned"
 	  n_bits		  "FFTSize"
 	  bin_pt		  "0"
-	  load_pin		  off
-	  rst			  on
-	  en			  off
+	  load_pin		  "off"
+	  rst			  "on"
+	  en			  "off"
 	  explicit_period	  "off"
 	  period		  "1"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  off
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
 	  implementation	  "Fabric"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -999,15 +997,15 @@ Library {
 	  arith_type		  "Unsigned"
 	  n_bits		  "FFTSize"
 	  bin_pt		  "0"
-	  load_pin		  off
-	  rst			  on
-	  en			  off
+	  load_pin		  "off"
+	  rst			  "on"
+	  en			  "off"
 	  explicit_period	  "off"
 	  period		  "1"
-	  dbl_ovrd		  off
-	  use_behavioral_HDL	  off
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
 	  implementation	  "Fabric"
-	  xl_use_area		  off
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  use_rpm		  "on"
 	  has_advanced_control	  "0"
@@ -1031,10 +1029,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
 	  mode			  "a<=b"
-	  en			  off
+	  en			  "off"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1058,10 +1056,10 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
 	  mode			  "a<=b"
-	  en			  off
+	  en			  "off"
 	  latency		  "0"
-	  dbl_ovrd		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -1136,7 +1134,7 @@ Library {
 	  SourceType		  "barrel_switcher"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -1203,7 +1201,7 @@ Library {
 	  SourceType		  "barrel_switcher"
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
+	  FunctionWithSeparateData "off"
 	  RTWMemSecFuncInitTerm	  "Inherit from model"
 	  RTWMemSecFuncExecute	  "Inherit from model"
 	  RTWMemSecDataConstants  "Inherit from model"
@@ -1230,7 +1228,7 @@ Library {
 	  RTWMemSecDataConstants  "Inherit from model"
 	  RTWMemSecDataInternal	  "Inherit from model"
 	  RTWMemSecDataParameters "Inherit from model"
-	  map			  "getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'map')"
+	  map			  "[0 1 2 3]"
 	  n_inputs		  "1"
 	  bram_latency		  "2"
 	  map_latency		  "0"
@@ -1256,7 +1254,7 @@ Library {
 	  RTWMemSecDataConstants  "Inherit from model"
 	  RTWMemSecDataInternal	  "Inherit from model"
 	  RTWMemSecDataParameters "Inherit from model"
-	  map			  "getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'map')"
+	  map			  "[2 3 0 1]"
 	  n_inputs		  "1"
 	  bram_latency		  "2"
 	  map_latency		  "0"
@@ -8840,11 +8838,15 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag2
-    Data		    "  %)30     .    : $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,A7?@8.    V     "
-    "8    (     @         %    \"     $    !     0         %  0 #0    $    :    1D944VEZ90       &)R86U?;&%T96YC>0     "
-    "    .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     "
-    "8         !0    @    !     0    $         \"0    @             0 "
+    Data		    "  %)30     .    J (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &04Q 0.    & (   "
+    "8    (     @         %    \"     $    !     0         %  0 #0    $    G    9&5F875L=',      $9&5%-I>F4       !B<F%"
+    "M7VQA=&5N8WD   X    P 0  !@    @    !          4    (     0    0    !          X    X    !@    @    $          4  "
+    "  (     0    <    !         !     '    1D944VEZ90 .    .     8    (    !@         %    \"     $    !     0        "
+    " )    \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8W"
+    "D     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @   "
+    " &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    "
+    "!     0         )    \"             ! "
   }
   DataRecord {
     Tag			    DataTag1
