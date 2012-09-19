@@ -143,7 +143,7 @@ architecture IMP of mkadc_interface is
     signal adc_data5_i :  std_logic_vector(9 downto 0);
     signal adc_data6_i :  std_logic_vector(9 downto 0);
     signal adc_data7_i :  std_logic_vector(9 downto 0);
-    
+
     -- MMCM VCO frequency for this device of 600.000000 - 1200.000000 MHz
     component MMCM_BASE
         generic (
@@ -312,9 +312,10 @@ begin
 
       user_sync_i <= '0';
       user_sync   <= '0';
-    else
-        if ctrl_clk_in'event and ctrl_clk_in = '1' then            
 
+    else
+        if ctrl_clk_in'event and ctrl_clk_in = '1' then 
+                                            
             if user_bist = '0' then
                 -- decode gray when not in checker board mode
                 user_data7_i <= gray_to_bin(adc_data7_i);  -- ADC Sample No 8
@@ -479,7 +480,8 @@ adc5g_inst: adc5g_dmux1_interface
     adc_reset_o     => open
     );    
 
-    adc_demux_bist <= not user_bist;
+    adc_demux_bist <= '0' when (user_bist = '1') else 
+                      '1';
     adc_reset <= '0'; -- do NOT reset => no ADC clock.....
     sRst <= not sMMCM_locked;
     ctrl_mmcm_locked <= sMMCM_locked;
