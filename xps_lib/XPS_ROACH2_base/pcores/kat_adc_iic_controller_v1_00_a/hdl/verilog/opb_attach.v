@@ -61,7 +61,7 @@ module opb_attach #(
   wire addr_match = OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR;
   wire [31:0] local_addr = OPB_ABus - C_BASEADDR;
 
-  reg Sl_xferAck_reg;
+  reg Sl_xferAck_reg,Sl_xferAck_regR;
 
   reg fifo_rst_reg;
   assign fifo_rst = fifo_rst_reg;
@@ -71,7 +71,7 @@ module opb_attach #(
 
   always @(posedge OPB_Clk) begin
     // Single cycle strobes
-    Sl_xferAck_reg    <= 1'b0;
+    Sl_xferAck_reg    <= 1'b0;    
     fifo_rst_reg      <= 1'b0;
     op_fifo_wr_en_reg <= 1'b0;
     rx_fifo_rd_en_reg <= 1'b0;
@@ -85,9 +85,11 @@ module opb_attach #(
       op_fifo_over_reg  <= 1'b0;
       rx_fifo_over_reg  <= 1'b0;
       op_fifo_block_reg <= 1'b0;
+      Sl_xferAck_regR   <= 1'b0;
     end else begin
       if (addr_match && OPB_select && !Sl_xferAck_reg) begin
         Sl_xferAck_reg <= 1'b1;
+        Sl_xferAck_regR <= 1'b1;
         case (local_addr[3:2])
           REG_OP_FIFO: begin
             if (!OPB_RNW && OPB_BE[3]) begin
@@ -95,7 +97,7 @@ module opb_attach #(
             end
           end
           REG_RX_FIFO: begin
-            if (OPB_RNW && OPB_BE[3]) begin
+            if (OPB_RNW) begin
               rx_fifo_rd_en_reg <= 1'b1;
             end
           end
