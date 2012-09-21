@@ -96,7 +96,7 @@ switch s.hw_sys
         misc_ports.ctrl_mmcm_locked  = {1 'out' [s.adc_str,'_mmcm_locked']};
         misc_ports.mmcm_reset        = {1 'in'  [s.adc_str,'_mmcm_reset']};
         misc_ports.mmcm_psdone       = {1 'out' [s.adc_str,'_psdone']};
-        misc_ports.mmcm_psclk        = {1 'in'  [s.adc_str,'_psclk']};
+        misc_ports.mmcm_psclk        = {1 'in'  ['epb_clk']};
         misc_ports.mmcm_psen         = {1 'in'  [s.adc_str,'_psen']};
         misc_ports.mmcm_psincdec     = {1 'in'  [s.adc_str,'_psincdec']};
     otherwise

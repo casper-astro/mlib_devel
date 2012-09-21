@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
 
 hw_adc = get(blk_obj, 'hw_adc');
 
@@ -48,7 +48,7 @@ end
 blk_obj = set(blk_obj,'ports',foo);
 
 % Add the MHS entry for the ADC Interface
-[str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj.xps_block, opb_addr_start, plb_addr_start, plb_name, opb_name);
+[str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj.xps_block, opb_addr_start, opb_name);
 str = [str, '\n'];
 
 if (strcmp(hw_adc, 'adc1'))

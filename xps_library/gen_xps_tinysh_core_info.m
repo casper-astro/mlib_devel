@@ -8,12 +8,11 @@ function gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj
 %   hw_sys          = mssge_proj.hw_sys;
 %   hw_subsys       = mssge_proj.hw_subsys;
 %   sw_os           = mssge_proj.sw_os;
-%   mpc_type        = mssge_proj.mpc_type;
 %   app_clk         = mssge_proj.app_clk;
 %   app_clk_rate    = mssge_proj.app_clk_rate;
 %   xsg_core_name   = mssge_proj.xsg_core_name;
 
-%   XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
+%   XPS_BASE_PATH   = mssge_paths.XPS_BASE_PATH;
 %   simulink_path   = mssge_paths.simulink_path;
 %   work_path       = mssge_paths.work_path;
 %   src_path        = mssge_paths.src_path;
@@ -38,7 +37,7 @@ function gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj
     fprintf(nfo_fid,'#include <xparameters.h> \n');
     fprintf(nfo_fid,'\n');
 
-    fprintf(nfo_fid,'typedef enum blk_types {xps_adc,xps_block,xps_bram,xps_corr_adc,xps_corr_dac,xps_corr_mxfe,xps_corr_rf,xps_dram,xps_ethlite,xps_framebuffer,xps_fifo,xps_gpio,xps_interchip,xps_lwip,xps_plb2opb,xps_opb2opb,xps_probe,xps_quadc,xps_sram,xps_sw_reg,xps_tengbe,xps_vsi,xps_xaui,xps_xsg,xps_katadc,');
+    fprintf(nfo_fid,'typedef enum blk_types {xps_adc,xps_block,xps_bram,xps_corr_adc,xps_corr_dac,xps_corr_mxfe,xps_corr_rf,xps_dram,xps_ethlite,xps_framebuffer,xps_fifo,xps_gpio,xps_interchip,xps_lwip,xps_opb2opb,xps_probe,xps_quadc,xps_sram,xps_sw_reg,xps_tengbe,xps_vsi,xps_xaui,xps_xsg,xps_katadc,');
 
     custom_xps_types = {};
 %    for n=1:length(custom_xps_objs)
@@ -66,9 +65,7 @@ function gen_xps_tinysh_core_info(xsg_obj, xps_objs, custom_xps_objs, mssge_proj
     nb_objs = 0;
     for n=1:length(xps_objs)
         obj_type = get(xps_objs{n},'type');
-        if ~strcmp(obj_type, 'xps_plb2opb')
-            nb_objs = nb_objs + 1;
-        end
+        nb_objs = nb_objs + 1;
     end % for n=1:length(xps_objs)
 
     fprintf(nfo_fid,['#define NUM_CORES ',num2str(nb_objs),'\n']);

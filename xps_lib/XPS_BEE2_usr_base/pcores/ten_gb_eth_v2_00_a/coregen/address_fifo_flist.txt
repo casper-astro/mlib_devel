@@ -1,7 +1,0 @@
-# Output products list for <address_fifo>
-address_fifo.xco
-address_fifo.vhd
-address_fifo.vho
-address_fifo_fifo_generator_v3_1_xst_1.ngc
-address_fifo.edn
-address_fifo_flist.txt

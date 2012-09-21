@@ -20,10 +20,9 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,opb_addr_end,plb_addr_end] = gen_mhs_xsg(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+function [str,opb_addr_end] = gen_mhs_xsg(blk_obj,opb_addr_start,opb_name)
 str = '';
 opb_addr_end = opb_addr_start;
-plb_addr_end = plb_addr_start;
 
 ports = blk_obj.ports;
 buses = blk_obj.buses;

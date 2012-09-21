@@ -4,7 +4,6 @@ xsg_obj = xps_objs{1};
 
 hw_sys         = get(xsg_obj,'hw_sys');
 sw_os          = get(xsg_obj,'sw_os');
-mpc_type       = get(xsg_obj,'mpc_type');
 app_clk        = get(xsg_obj,'clk_src');
 app_clk_rate   = get(xsg_obj,'clk_rate');
 multiply       = 1;
