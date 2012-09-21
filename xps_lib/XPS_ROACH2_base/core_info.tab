@@ -3,7 +3,6 @@ sys_rev             3        4        4
 sys_rev_rcs         3        8        4  
 sys_scratchpad      3        c        4
 sys_clkcounter      3       10        4
-
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_gpio_data_in        3    60000        4
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_gpio_data_out       3    60004        4
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_gpio_data_oe        3    60008        4
@@ -16,7 +15,6 @@ sys_clkcounter      3       10        4
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_result       3    60024        4
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_dbg          3    60028        4
 #IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_dbg1         3    6002c        4
-
 #IF# strcmp(get(b,'type'),'xps_adc5g')#adc5g_controller     3    20000    1000
 #IF# strcmp(get(b,'type'),'xps_katadc')#kat_adc_controller     3    20000    1000
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#iic_adc0     3    40000    100
