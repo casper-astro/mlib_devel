@@ -587,22 +587,19 @@ if run_software
         % end otherwise
     end % switch sw_os
 
-    if strcmp(hw_sys, 'ROACH')
+    [s,w] = system('uname -m');
+    if strcmp(hw_sys, 'ROACH') | strcmp(hw_sys, 'ROACH2')
       fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
-      fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      if strcmp(w(1:6), 'x86_64')
+         fprintf(unix_fid, ['./mkbof_64 -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      else
+         fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      end
       fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
       fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
       fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
     end % strcmp(hw_sys, 'ROACH')
 
-    if strcmp(hw_sys, 'ROACH2')
-      fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
-      fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
-      fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
-      fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
-      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
-    end % strcmp(hw_sys, 'ROACH2')
-    
     fclose(win_fid);
     fclose(unix_fid);
 
