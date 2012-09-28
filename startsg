@@ -1,13 +1,12 @@
 #!/bin/bash
 ####### User to edit these accordingly ######
-MATLAB_PATH=/data/matlab
-XILINX_PATH=/data/Xilinx
-MLIB_DEVEL_PATH=/data/casper/mlib_devel
+export MATLAB_PATH=/opt/MATLAB/R2012a
+PLATFORM=lin64
+export XILINX_PATH=/opt/Xilinx/14.2/ISE_DS
+export MLIB_DEVEL_PATH=/opt/casper_library/mlib_devel
 #############################################
-source $XILINX_PATH/14.2/ISE_DS/settings64.sh
-export PLATFORM=lin64
-export XILINX_SYS_GEN=${XILINX}
-export PATH=${PATH}:${XILINX}/bin/${PLATFORM}:${XILINX_EDK}/bin/${PLATFORM}:${XILINX_SYS_GEN}/lib/${PLATFORM}
+source $XILINX_PATH/settings64.sh
+export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}
 export XPS_BASE_PATH=$MLIB_DEVEL_PATH/xps_base
 export MATLAB=$MATLAB_PATH
-$MATLAB/R2012a/bin/matlab
+$MATLAB/bin/matlab
