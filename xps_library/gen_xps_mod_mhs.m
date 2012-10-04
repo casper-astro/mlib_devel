@@ -32,7 +32,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     switch hw_sys
         case {'ROACH','ROACH2'}
             
-            opb_slaves_init = 1;  % The system block
+            opb_slaves_init = 2;  % The system block
             opb_slaves = opb_slaves_init;             
             max_opb_per_bridge = 32; 
 

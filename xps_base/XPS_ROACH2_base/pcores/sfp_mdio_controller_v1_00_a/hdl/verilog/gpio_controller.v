@@ -53,7 +53,7 @@ module gpio_controller #(
 
   always @(*) begin
     case (selected_function)
-      2'd0: wb_dat_o_reg <= gpio_in_val[31:0];
+      2'd0: wb_dat_o_reg <= gpio_in_val;
       2'd1: wb_dat_o_reg <= gpio_out_arr[selected_reg];
       2'd2: wb_dat_o_reg <= gpio_oe_arr[selected_reg];
       2'd3: wb_dat_o_reg <= gpio_ded_arr[selected_reg];
