@@ -3,7 +3,7 @@ module opb_wb_attach #(
     parameter C_BASEADDR      = 32'h0,
     parameter C_HIGHADDR      = 32'hffff,
     parameter C_OPB_AWIDTH    = 32'hffff,
-    parameter C_OPB_DWISTH    = 32'hffff
+    parameter C_OPB_DWIDTH    = 32'hffff
   )(
     //OPB attachment
     input         OPB_Clk,
