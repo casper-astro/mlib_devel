@@ -16,7 +16,6 @@ if strcmp(hw_sys, 'ROACH2')
       [multiply divide] = clk_factors(app_clk_rate, app_clk_rate);
    else
       clk_source = 'SYS';
-      app_clk_rate = 100;
       [multiply divide] = clk_factors(100, app_clk_rate);
    end
    if app_clk_rate < 135
