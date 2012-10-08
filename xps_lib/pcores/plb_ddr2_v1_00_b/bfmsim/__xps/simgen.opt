@@ -1,1 +1,0 @@
- -p virtex2p -lang vhdl   -s mti -X /opt/Xilinx/iselib -E /opt/Xilinx/edklib

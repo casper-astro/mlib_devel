@@ -1,6 +1,5 @@
-function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
 opb_addr_end = opb_addr_start;
-plb_addr_end = plb_addr_start;
 
 inst_name = clear_name(get(blk_obj,'simulink_name'));
 xsg_obj   = get(blk_obj,'xsg_obj');

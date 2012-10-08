@@ -30,7 +30,7 @@ function [time_total, time_struct] = gen_xps_files(sys,flow_vec)
 %   xps_blks : All the blocks with tags xps:*
 %   xsg_blk : Point to the Xilinx System Generator block of the system
 %   xps_pcore_blks: All the pcore blocks tagged tiwh xps:pcore
-%   XPS_LIB_PATH: Sets to the value of the environment var of same name
+%   XPS_BASE_PATH: Sets to the value of the environment var of same name
 % Also, all the necessary directories have been created.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % close all previously opened files
@@ -118,7 +118,7 @@ end
 
 % cd into the design directory
 sys_file = get_param(sys,'FileName');
-[sys_dir, temp1, temp2, temp3] = fileparts(sys_file);
+[sys_dir, temp1, temp2] = fileparts(sys_file);
 cd(sys_dir);
 
 % comb for gateway in blocks that aren't part of a yellow block
@@ -145,9 +145,9 @@ for i=[1:length(gateways_blk)]
 end
 
 % set design paths
-XPS_LIB_PATH = getenv('BEE2_XPS_LIB_PATH');
-if isempty(XPS_LIB_PATH)
-    error('Environment variable BEE2_XPS_LIB_PATH must be defined');
+XPS_BASE_PATH = getenv('XPS_BASE_PATH');
+if isempty(XPS_BASE_PATH)
+    error('Environment variable XPS_BASE_PATH must be defined');
 end
 
 simulink_path   = pwd;
@@ -164,9 +164,9 @@ if ~isempty(strfind(simulink_path, ' '))
     error('Working directory has a space in the pathname.');
 end
 
-if ~isempty(strfind(XPS_LIB_PATH, ' '))
-    warndlg(['Directory specified by the BEE2_XPS_LIB_PATH environment variable (', XPS_LIB_PATH, ') has a space in the pathname. This can cause problems with some of the tools. Please change its directory.']);
-    error('Directory specified by the BEE2_XPS_LIB_PATH environment variable has a space in the pathname.');
+if ~isempty(strfind(XPS_BASE_PATH, ' '))
+    warndlg(['Directory specified by the XPS_BASE_PATH environment variable (', XPS_BASE_PATH, ') has a space in the pathname. This can cause problems with some of the tools. Please change its directory.']);
+    error('Directory specified by the XPS_BASE_PATH environment variable has a space in the pathname.');
 end
 
 % create design paths if non-existent
@@ -237,7 +237,7 @@ for n = 1:length(xps_blks)
 
             xps_objs = [xps_objs,{blk_obj}];
 
-            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc5g' 'xps_adc083000x2' 'xps_adc' 'xps_katadc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_plb2opb' 'xps_probe' 'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
+            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc5g' 'xps_adc083000x2' 'xps_adc' 'xps_katadc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_probe' 'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
             else
                 if isempty(find(strcmp(get(blk_obj, 'type'), core_types)))
@@ -262,7 +262,6 @@ xps_objs = [{xsg_obj},xps_objs];
 hw_sys          = get(xsg_obj,'hw_sys');
 hw_subsys       = get(xsg_obj,'hw_subsys');
 sw_os           = get(xsg_obj,'sw_os');
-mpc_type        = get(xsg_obj,'mpc_type');
 app_clk         = get(xsg_obj,'clk_src');
 app_clk_rate    = get(xsg_obj,'clk_rate');
 xsg_core_name   = clear_name(get(xsg_obj,'parent'));
@@ -275,14 +274,13 @@ mssge_proj.design_name      = design_name;
 mssge_proj.hw_sys           = hw_sys;
 mssge_proj.hw_subsys        = hw_subsys;
 mssge_proj.sw_os            = sw_os;
-mssge_proj.mpc_type         = mpc_type;
 mssge_proj.app_clk          = app_clk;
 mssge_proj.app_clk_rate     = app_clk_rate;
 mssge_proj.xsg_core_name    = xsg_core_name;
 
 % Create structure of commonly-used paths
 mssge_paths                 = {};
-mssge_paths.XPS_LIB_PATH    = XPS_LIB_PATH;
+mssge_paths.XPS_BASE_PATH   = XPS_BASE_PATH;
 mssge_paths.simulink_path   = simulink_path;
 mssge_paths.work_path       = work_path;
 mssge_paths.src_path        = src_path;
@@ -321,9 +319,7 @@ if run_xsg
         rmdir(xsg_path,'s');
     end
     disp('Running system generator ...');
-    xsg_blk
     xsg_result = xlGenerateButton(xsg_blk);
-    xsg_result
     if xsg_result == 0
         disp('XSG generation complete.');
     else
@@ -391,10 +387,10 @@ if run_copy
 
     if exist(xps_path,'dir')
         rmdir(xps_path,'s');
-    end
-    if exist([XPS_LIB_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
+   end
+    if exist([XPS_BASE_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
 
-        source_dir      = [XPS_LIB_PATH, slash, 'XPS_', hw_sys, '_base']
+        source_dir      = [XPS_BASE_PATH, slash, 'XPS_', hw_sys, '_base']
         destination_dir = [xps_path];
 
         if strcmp(system_os, 'windows')
@@ -406,8 +402,6 @@ if run_copy
             copy_fail = 0; % copyfile failure returns 0
             [copy_result, msg, msgid] = copyfile(source_dir,destination_dir,'f');
             fprintf('Copying base package from:\n %s\n', source_dir)
-            msg
-            msgid
         end % if strcmp(system_os, 'windows')
 
         if copy_result == copy_fail
@@ -418,11 +412,11 @@ if run_copy
         end % copy_result == copy_fail
     else
         error(['Base XPS package "','XPS_',hw_sys,'_base" does not exist.']);
-    end % exist([XPS_LIB_PATH,'\XPS_',hw_sys,'_base'],'dir')
+    end % exist([XPS_BASE_PATH,'\XPS_',hw_sys,'_base'],'dir')
 
 %%%%%   BEGIN PCORE COPYING CODE
 %%%%%
-%%%%%    if exist([XPS_LIB_PATH,'\pcores'], 'dir')
+%%%%%    if exist([XPS_BASE_PATH,'\pcores'], 'dir')
 %%%%%        if ~exist([xps_path, '\copied_pcores'], 'dir')
 %%%%%            mkdir([xps_path, '\copied_pcores']);
 %%%%%        end
@@ -431,7 +425,7 @@ if run_copy
 %%%%%            disp(pcores_used{n})
 %%%%%            pcore_path = [xps_path, '\copied_pcores\', pcores_used{n}];
 %%%%%            mkdir(pcore_path);
-%%%%%            [copy_result, copy_message] = dos(['xcopy /Q /E /Y ', XPS_LIB_PATH, '\pcores\', pcores_used{n}, ' ', pcore_path, '\.']);
+%%%%%            [copy_result, copy_message] = dos(['xcopy /Q /E /Y ', XPS_BASE_PATH, '\pcores\', pcores_used{n}, ' ', pcore_path, '\.']);
 %%%%%
 %%%%%            if copy_result
 %%%%%                cd(simulink_path);
@@ -443,8 +437,8 @@ if run_copy
 %%%%%        end % for n=1:length(pcores_used)
 %%%%%    else
 %%%%%        cd(simulink_path);
-%%%%%        error(['PCores directory "', XPS_LIB_PATH, '\pcores" does not exist']);
-%%%%%    end % if exist([XPS_LIB_PATH,'\pcores'], 'dir') - else
+%%%%%        error(['PCores directory "', XPS_BASE_PATH, '\pcores" does not exist']);
+%%%%%    end % if exist([XPS_BASE_PATH,'\pcores'], 'dir') - else
 %%%%%
 %%%%%   END PCORE COPYING CODE
 
@@ -593,63 +587,19 @@ if run_software
         % end otherwise
     end % switch sw_os
 
-    if strcmp(hw_sys, 'iBOB') && strcmp(get(xsg_obj,'ibob_linux'), 'on')
-        fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 4 -c -v implementation\\download.bit\n');
-        fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 4 -c -v implementation/download.bit\n');
-        fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_',time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_',time_stamp,'.bof\n']);
-    end % if strcmp(hw_sys, 'iBOB') && strcmp(get(xsg_obj,'ibob_linux'), 'on')
-
-    if strcmp(hw_sys, 'BEE2_ctrl')
-        fprintf(win_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
-        fprintf(unix_fid,'xmd -tcl ./genace.tcl -opt bee2Genace.opt\n');
-        fprintf(win_fid,['copy implementation\\cflash.ace ..\\bit_files\\',design_name,'_',time_stamp,'.ace\n']);
-        fprintf(unix_fid,['cp implementation/cflash.ace ../bit_files/',design_name,'_',time_stamp,'.ace\n']);
-        fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 4 -c -v implementation\\download.bit\n');
-        fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 4 -c -v implementation/download.bit\n');
-        fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_',time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_',time_stamp,'.bof\n']);
-    end % if strcmp(hw_sys, 'BEE2_ctrl')
-
-    if strcmp(hw_sys, 'BEE2_usr')
-        fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -v implementation\\download.bit\n');
-        fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -v implementation/download.bit\n');
-        fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_floating_',time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_floating_',time_stamp,'.bof\n']);
-        fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 0 -v implementation\\download.bit\n');
-        fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 0 -v implementation/download.bit\n');
-        fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_fpga1_',time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga1_',time_stamp,'.bof\n']);
-        fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 1 -v implementation\\download.bit\n');
-        fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 1 -v implementation/download.bit\n');
-        fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_fpga2_',time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga2_',time_stamp,'.bof\n']);
-        fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 2 -v implementation\\download.bit\n');
-        fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 2 -v implementation/download.bit\n');
-        fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_fpga3_',time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga3_',time_stamp,'.bof\n']);
-        fprintf(win_fid,'mkbof.exe -o implementation\\download.bof -s core_info.tab -p 3 -v implementation\\download.bit\n');
-        fprintf(unix_fid,'./mkbof -o implementation/download.bof -s core_info.tab -p 3 -v implementation/download.bit\n');
-        fprintf(win_fid,['copy implementation\\download.bof ..\\bit_files\\',design_name,'_fpga4_',time_stamp,'.bof\n']);
-        fprintf(unix_fid,['cp implementation/download.bof ../bit_files/',design_name,'_fpga4_',time_stamp,'.bof\n']);
-    end % if strcmp(hw_sys, 'BEE2_usr')
-
-    if strcmp(hw_sys, 'ROACH')
+    [s,w] = system('uname -m');
+    if strcmp(hw_sys, 'ROACH') | strcmp(hw_sys, 'ROACH2')
       fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
-      fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      if strcmp(w(1:6), 'x86_64')
+         fprintf(unix_fid, ['./mkbof_64 -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      else
+         fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+      end
       fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
       fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
       fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
     end % strcmp(hw_sys, 'ROACH')
 
-    if strcmp(hw_sys, 'ROACH2')
-      fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
-      fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
-      fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
-      fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
-      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
-    end % strcmp(hw_sys, 'ROACH2')
-    
     fclose(win_fid);
     fclose(unix_fid);
 
@@ -666,16 +616,19 @@ if run_edk
     delete([xps_path, slash, 'implementation', slash, 'download.bit']);
     fid = fopen([xps_path, slash, 'run_xps.tcl'],'w');
 
-    mpc_type = get(xsg_obj,'mpc_type');
+    hw_sys   = get(xsg_obj,'hw_sys');
 
-    switch mpc_type
-        case 'powerpc440_ext'
+    switch hw_sys 
+        case 'roach'
+            fprintf(fid,['run bits\n']);
+        % end case 'powerpc440_ext'
+        case 'roach2'
             fprintf(fid,['run bits\n']);
         % end case 'powerpc440_ext'
         otherwise
             fprintf(fid,['run init_bram\n']);
         % end otherwise
-    end % switch mpc_type
+    end % switch hw_sys 
     fprintf(fid,['exit\n']);
     fclose(fid);
 

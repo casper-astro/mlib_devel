@@ -1,1 +1,0 @@
- -p virtex2p -lang vhdl -lp /home/alschult/BEE2_BSP/    -pe ppc405_0 test_bench/executable.elf -s mti

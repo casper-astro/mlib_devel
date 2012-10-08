@@ -216,10 +216,10 @@ switch hw_sys
                 %str = [str,'\n'];
 
                 % MeerKAT ADC Setup & Hold Constraints for FPGA
-                str = [str,'#ZDOK0 MeerKAT ADC Setup & Hold Constraints for FPGA\n'];
-                str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns VALID ',sprintf('%1.3f',(2000.0/adc_clk_rate)+0.5),' ns BEFORE "adc0_adc_clk_p" RISING;\n'];
-                str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns VALID ',sprintf('%1.3f',(2000.0/adc_clk_rate)+0.5),' ns BEFORE "adc0_adc_clk_p" FALLING;\n'];             
-                str = [str,'\n'];
+                %str = [str,'#ZDOK0 MeerKAT ADC Setup & Hold Constraints for FPGA\n'];
+                %str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns BEFORE "adc0_adc_clk_p" RISING;\n'];
+                %str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns BEFORE "adc0_adc_clk_p" FALLING;\n'];             
+                %str = [str,'\n'];
             % end case 'adc0'
 
             case 'adc1'
@@ -310,10 +310,10 @@ switch hw_sys
                 %str = [str,'\n'];
 
                 % MeerKAT ADC Setup & Hold Constraints for FPGA
-                str = [str,'#ZDOK0 MeerKAT ADC Setup & Hold Constraints for FPGA\n'];
-                str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns VALID ',sprintf('%1.3f',(2000.0/adc_clk_rate)+0.5),' ns BEFORE "adc1_adc_clk_p" RISING;\n'];
-                str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns VALID ',sprintf('%1.3f',(2000.0/adc_clk_rate)+0.5),' ns BEFORE "adc1_adc_clk_p" FALLING;\n'];             
-                str = [str,'\n'];
+                %str = [str,'#ZDOK0 MeerKAT ADC Setup & Hold Constraints for FPGA\n'];
+                %str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns BEFORE "adc1_adc_clk_p" RISING;\n'];
+                %str = [str, 'OFFSET=IN ',sprintf('%1.3f',(2000.0/adc_clk_rate)-0.5),' ns BEFORE "adc1_adc_clk_p" FALLING;\n'];             
+                %str = [str,'\n'];
 
             % end case 'adc1'
         end % switch adc_str

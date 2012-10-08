@@ -20,13 +20,13 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
 
 xaui_port   = get(blk_obj, 'port');
 open_phy    = get(blk_obj, 'open_phy');
 hw_sys      = get(blk_obj, 'hw_sys');
 
-[str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj.xps_block, opb_addr_start, plb_addr_start, plb_name, opb_name);
+[str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj.xps_block, opb_addr_start, opb_name);
 str = [str, '\n'];
 
 switch hw_sys

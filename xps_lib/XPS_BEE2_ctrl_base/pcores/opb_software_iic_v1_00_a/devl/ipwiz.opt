@@ -1,8 +1,0 @@
--batch 
--top opb_software_iic 
--ver 1.00.a 
--dir D:\BEE2\Test_suite\BEE2\Test_bench\Ctrlfpga\pcores\MyProcessorIPLib 
--lang vhdl 
--bus opb s 
--regn 1 8 
--xps 
