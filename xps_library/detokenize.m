@@ -13,12 +13,15 @@ divide         = 1;
 if strcmp(hw_sys, 'ROACH2')
    clk_factors(app_clk_rate, app_clk_rate);
    if strcmp(app_clk, 'aux_clk')
-      clk_source = 'AUX';
       input_clk_rate = app_clk_rate;
-      [multiply divide] = clk_factors(app_clk_rate, app_clk_rate);
+      [multiply divide] = clk_factors(100, 100);
+      fprintf(strcat('Running off aux_clk @ ', int2str(app_clk_rate), 'MHz', '\n'))
+   elseif strcmp(app_clk, 'sys_clk')
+      [multiply divide] = clk_factors(100, app_clk_rate)
+      fprintf(strcat('Running off sys_clk @ ', int2str(input_clk_rate*multiply/divide), 'MHz','\n'))
    else
-      clk_source = 'SYS';
-      [multiply divide] = clk_factors(100, app_clk_rate);
+      [multiply divide] = clk_factors(100, 100);
+      fprintf(strcat('Running off adc_clk @ ', int2str(app_clk_rate), 'MHz','\n')) 
    end
    if input_clk_rate < 135
       clk_high_low = 'low';
