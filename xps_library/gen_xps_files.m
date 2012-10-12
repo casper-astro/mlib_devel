@@ -619,10 +619,10 @@ if run_edk
     hw_sys   = get(xsg_obj,'hw_sys');
 
     switch hw_sys 
-        case 'roach'
+        case 'ROACH'
             fprintf(fid,['run bits\n']);
         % end case 'powerpc440_ext'
-        case 'roach2'
+        case 'ROACH2'
             fprintf(fid,['run bits\n']);
         % end case 'powerpc440_ext'
         otherwise
