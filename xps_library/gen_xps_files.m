@@ -47,7 +47,6 @@ if nargin == 2 & isstruct(flow_vec)
     run_elab     = flow_vec.elab    ;
     run_software = flow_vec.software;
     run_edk      = flow_vec.edk     ;
-    run_download = flow_vec.download;
 else
     run_update   = 1;
     run_drc      = 1;
@@ -58,7 +57,6 @@ else
     run_elab     = 1;
     run_software = 1;
     run_edk      = 1;
-    run_download = 0;
 end
 
 time_update   = 0;
@@ -70,7 +68,6 @@ time_edkgen   = 0;
 time_elab     = 0;
 time_software = 0;
 time_edk      = 0;
-time_download = 0;
 
 slash = '\';
 system_os = '';
@@ -662,23 +659,7 @@ if run_edk
 end % if run_edk
 time_edk = now - start_time;
 
-start_time = now;
-if run_download
-    fid = fopen([xps_path, slash, 'run_download.tcl'],'w');
-    fprintf(fid,['run download\n']);
-    fprintf(fid,['exit\n']);
-    fclose(fid);
-    eval(['cd ',xps_path]);
-    [status, message] = system(['xps -nw -scr run_download.tcl system.xmp']);
-    if status ~= 0
-        cd(simulink_path);
-        error('Download failed.');
-    end % if(system(['xps -nw -scr run_download.tcl system.xmp']))
-    cd(simulink_path);
-end % if run_download
-time_download = now - start_time;
-
-time_total = time_update + time_drc + time_xsg + time_copy + time_ip + time_edkgen + time_elab + time_software + time_edk + time_download;
+time_total = time_update + time_drc + time_xsg + time_copy + time_ip + time_edkgen + time_elab + time_software + time_edk;
 
 time_struct.update   = time_update   ;
 time_struct.drc      = time_drc      ;
@@ -689,4 +670,3 @@ time_struct.edkgen   = time_edkgen   ;
 time_struct.elab     = time_elab     ;
 time_struct.software = time_software ;
 time_struct.edk      = time_edk      ;
-time_struct.download = time_download ;

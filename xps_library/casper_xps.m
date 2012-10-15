@@ -23,7 +23,7 @@
 function varargout = casper_xps(varargin)
 % CASPER_XPS CASPER Xilinx ISE Batch Tools GUI
 
-% Last Modified by GUIDE v2.5 21-Nov-2005 13:44:12
+% Last Modified by GUIDE v2.5 09-Oct-2012 12:36:59
 
 if nargin == 0  % LAUNCH GUI
 
@@ -138,7 +138,6 @@ flow_vec.edkgen   = get(handles.run_edkgen  ,'Value');
 flow_vec.elab     = get(handles.run_elab    ,'Value');
 flow_vec.software = get(handles.run_software,'Value');
 flow_vec.edk      = get(handles.run_edk     ,'Value');
-flow_vec.download = get(handles.run_download,'Value');
 
 try
     [time_total, time_struct] = gen_xps_files(design_name,flow_vec);
@@ -153,7 +152,6 @@ try
     disp(['    IP elaboration...........',datestr(time_struct.elab    ,13)]);
     disp(['    Software creation........',datestr(time_struct.software,13)]);
     disp(['    EDK/ISE backend..........',datestr(time_struct.edk     ,13)]);
-    disp(['    Download Bitfile.........',datestr(time_struct.download,13)]);
     disp('===================================================================');
     msgbox(['CASPER XPS run successfully completed in ',datestr(time_total,13),'!']);
 catch
@@ -286,7 +284,6 @@ switch flow_shortcuts{flow_choice}
     	set(handles.run_elab    ,'Value',1);
     	set(handles.run_software,'Value',1);
     	set(handles.run_edk     ,'Value',1);
-    	set(handles.run_download,'Value',0);
     case 'Software Only'
     	set(handles.run_update  ,'Value',0);
     	set(handles.run_drc     ,'Value',0);
@@ -297,7 +294,6 @@ switch flow_shortcuts{flow_choice}
     	set(handles.run_elab    ,'Value',0);
     	set(handles.run_software,'Value',1);
     	set(handles.run_edk     ,'Value',1);
-    	set(handles.run_download,'Value',0);
     case 'Download'
     	set(handles.run_update  ,'Value',0);
     	set(handles.run_drc     ,'Value',0);
@@ -308,7 +304,6 @@ switch flow_shortcuts{flow_choice}
     	set(handles.run_elab    ,'Value',0);
     	set(handles.run_software,'Value',0);
     	set(handles.run_edk     ,'Value',0);
-    	set(handles.run_download,'Value',1);
     otherwise
         error(['Unknown design flow shortcut: ',flow_shortcuts{flow_choice}]);
 end
@@ -382,17 +377,6 @@ function run_software_Callback(hObject, eventdata, handles)
 
 
 
-% --- Executes on button press in run_download.
-function run_download_Callback(hObject, eventdata, handles)
-% hObject    handle to run_download (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of run_download
-
-
-
-
 % --- Executes on button press in run_edkgen.
 function run_edkgen_Callback(hObject, eventdata, handles)
 % hObject    handle to run_edkgen (see GCBO)
@@ -418,5 +402,3 @@ function run_update_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of run_update
-
-
