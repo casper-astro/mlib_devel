@@ -135,7 +135,7 @@ module roach_infrastructure #(
     .CLKOUT4   (sys_clk2x90_mmcm),
     .CLKOUT5   (sys_clk2x270_mmcm),
     .CLKOUT6   (),
-    .LOCKED    (),
+    .LOCKED    (sys_clk_mmcm_locked),
     
     .PWRDWN    (1'b0),
     .RST       (mmcm_reset)
