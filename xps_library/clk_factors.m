@@ -9,7 +9,7 @@ function [bestM, bestD] = clk_factors(clk_freq, target_freq)
      bestM = 0;
      bestD = 0;
      
-     M = (6:2:12);
+     M = (8:2:12);
      D = (2:1:64);
      best_diff = 100;
      for i = 1:length(M)
