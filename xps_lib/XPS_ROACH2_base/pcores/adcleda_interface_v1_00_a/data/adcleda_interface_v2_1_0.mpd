@@ -1,0 +1,47 @@
+BEGIN adcleda_interface
+
+##########################
+##  PERIPHERAL OPTIONS  ##
+##########################
+
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION STYLE = MIX
+OPTION HDL = VHDL
+OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT, VIRTEX6SX=DEVELOPMENT)
+OPTION DESC = "QUAD ADC controller"
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER mode = MASTER, DT = STRING
+
+#############
+##  PORTS  ##
+#############
+
+# Clocks
+PORT div_clk = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT ctrl_clk = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT data_clk = "", DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+
+# Data
+PORT clk_line_p = "", VEC = [3:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT clk_line_n = "", VEC = [3:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_a_p = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_a_n = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_b_p = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_b_n = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+# Reset
+PORT reset = "", DIR = I
+
+#control
+# Data
+PORT iserdes_bitslip = "", VEC = [3:0], DIR = I
+PORT load_phase_set = "", VEC = [3:0], DIR = I
+PORT p_data_a = "", VEC = [31:0], DIR = O
+PORT p_data_b = "", VEC = [31:0], DIR = O
+PORT p_data_c = "", VEC = [31:0], DIR = O
+PORT p_data_d = "", VEC = [31:0], DIR = O
+PORT delay_rst = "", VEC = [15:0], DIR = I
+PORT delay_tap = "", VEC = [4:0], DIR = I
+
+END

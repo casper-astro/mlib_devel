@@ -725,6 +725,17 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = M41 ;
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_reset              LOC = M39 ;
 
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))#### ADCLEDA Control Constraints
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))##
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))## signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))#NET adc0_adc3wire_clk       LOC = M28 ;
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))#NET adc0_adc3wire_data      LOC = K30 ;
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))#NET adc0_adc3wire_cs0       LOC = N19 ;
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))#NET adc0_adc3wire_cs1       LOC = N20 ;
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))#NET adc0_adc3wire_cs2       LOC = H18 ;
+#IF# (strcmp(get(b,'type'),'xps_adcleda'))#NET adc0_adc3wire_cs3       LOC = F16 ;
+
+
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = A39;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = B42;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_strobe    LOC = B41;
