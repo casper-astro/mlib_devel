@@ -1,8 +1,9 @@
 module roach_infrastructure #(
     parameter CLK_FREQ     = 100, 
     parameter CLK_HIGH_LOW = "low", // high >= 135, low < 135
+    parameter MULTIPLY     = 6,
     parameter DIVIDE       = 6,
-    parameter MULTIPLY     = 6
+    parameter DIVCLK       = 1
   )  (
     input  sys_clk_n,    sys_clk_p,
     output sys_clk,      sys_clk90,       sys_clk180,   sys_clk270,
@@ -91,7 +92,7 @@ module roach_infrastructure #(
     .BANDWIDTH          ("low"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
     .CLKFBOUT_MULT_F    (MULTIPLY), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
     .CLKFBOUT_PHASE     (0.0),
-    .CLKIN1_PERIOD      (1000.0/CLK_FREQ),
+    .CLKIN1_PERIOD      (1000.0/100),
     .CLKOUT0_DIVIDE_F   (1), // Divide amount for CLKOUT0 (1.000-128.000).
     .CLKOUT0_DUTY_CYCLE (0.5),
     .CLKOUT1_DUTY_CYCLE (0.5),
@@ -103,19 +104,19 @@ module roach_infrastructure #(
     .CLKOUT0_PHASE      (0.0),
     .CLKOUT1_PHASE      (0.0),
     .CLKOUT2_PHASE      (90.0),
-    .CLKOUT3_PHASE      (0.0),
-    .CLKOUT4_PHASE      (90.0),
+    .CLKOUT3_PHASE      (180.0),
+    .CLKOUT4_PHASE      (270.0),
     .CLKOUT5_PHASE      (0.0),
     .CLKOUT6_PHASE      (0.0),
     .CLKOUT1_DIVIDE     (DIVIDE), //THIS IS THE DIVISOR
     .CLKOUT2_DIVIDE     (DIVIDE),
-    .CLKOUT3_DIVIDE     (DIVIDE/2),
-    .CLKOUT4_DIVIDE     (DIVIDE/2),
-    .CLKOUT5_DIVIDE     (DIVIDE/2),
+    .CLKOUT3_DIVIDE     (DIVIDE),
+    .CLKOUT4_DIVIDE     (DIVIDE),
+    .CLKOUT5_DIVIDE     (MULTIPLY/DIVCLK/2),
     .CLKOUT6_DIVIDE     (),
     .CLKOUT4_CASCADE    ("FALSE"),
     .CLOCK_HOLD         ("FALSE"),
-    .DIVCLK_DIVIDE      (1), // Master division value (1-80)
+    .DIVCLK_DIVIDE      (DIVCLK), // Master division value (1-80)
     .REF_JITTER1        (0.0),
     .STARTUP_WAIT       ("FALSE")
   ) MMCM_BASE_sys_clk (
@@ -127,13 +128,10 @@ module roach_infrastructure #(
     .CLKOUT0   (),
     .CLKOUT0B  (),
     .CLKOUT1   (sys_clk_mmcm),
-    .CLKOUT1B  (sys_clk180_mmcm),
     .CLKOUT2   (sys_clk90_mmcm),
-    .CLKOUT2B  (sys_clk270_mmcm),
-    .CLKOUT3   (),
-    .CLKOUT3B  (sys_clk2x180_mmcm),
-    .CLKOUT4   (sys_clk2x90_mmcm),
-    .CLKOUT5   (sys_clk2x270_mmcm),
+    .CLKOUT3   (sys_clk180_mmcm),
+    .CLKOUT4   (sys_clk270_mmcm),
+    .CLKOUT5   (sys_clk2x_mmcm),
     .CLKOUT6   (),
     .LOCKED    (sys_clk_mmcm_locked),
     
@@ -154,10 +152,10 @@ module roach_infrastructure #(
 
   MMCM_BASE #(
     .BANDWIDTH          (CLK_HIGH_LOW), // Jitter programming ("HIGH","LOW","OPTIMIZED")
-    .CLKFBOUT_MULT_F    (5), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+    .CLKFBOUT_MULT_F    (6), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
     .CLKFBOUT_PHASE     (0.0),
     .CLKIN1_PERIOD      (1000.0/CLK_FREQ),
-    .CLKOUT0_DIVIDE_F   (5), // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKOUT0_DIVIDE_F   (6), // Divide amount for CLKOUT0 (1.000-128.000).
     .CLKOUT0_DUTY_CYCLE (0.5),
     .CLKOUT1_DUTY_CYCLE (0.5),
     .CLKOUT2_DUTY_CYCLE (0.5),
@@ -200,7 +198,7 @@ module roach_infrastructure #(
     .CLKOUT4   (),
     .CLKOUT5   (),
     .CLKOUT6   (),
-    .LOCKED    (),
+    .LOCKED    (aux_clk_mmcm_locked),
     
     .PWRDWN    (1'b0),
     .RST       (mmcm_reset)
@@ -228,42 +226,7 @@ module roach_infrastructure #(
     .I(dly_clk_int),
     .O(dly_clk)
   );*/
-  
  
-  // sys_clk_200
-  // this mmcm is dedicated to generating the 200MHz clock from the 100Mhz sys_clk
-  MMCM_BASE #(
-    .BANDWIDTH          ("LOW"), // Jitter programming ("HIGH","LOW","OPTIMIZED")
-    .CLKFBOUT_MULT_F    (6), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
-    .CLKFBOUT_PHASE     (0.0),
-    .CLKIN1_PERIOD      (10),
-    .CLKOUT0_DIVIDE_F   (6), // Divide amount for CLKOUT0 (1.000-128.000).
-    .CLKOUT1_DIVIDE     (6), //THIS IS THE DIVISOR
-    .CLOCK_HOLD         ("FALSE"),
-    .DIVCLK_DIVIDE      (1), // Master division value (1-80)
-    .REF_JITTER1        (0.0),
-    .STARTUP_WAIT       ("FALSE")
-  ) MMCM_BASE_sys_clk_200 (
-    .CLKIN1    (sys_clk_int),
-    .CLKFBIN   (sys_clk_200_fb),
-    .CLKFBOUT  (sys_clk_200_fb_int),
-    .CLKFBOUTB (),
-    
-    .CLKOUT0   (),
-    .CLKOUT0B  (),
-    .CLKOUT1   (sys_clk_200_mmcm),
-    .CLKOUT1B  (),
-    .LOCKED    (),
-    
-    .PWRDWN    (1'b0),
-    .RST       ()
-  );
-  
-  BUFG bufg_sys_clk_200(
-    .I(sys_clk200_fb_int),
-    .O(sys_clk200_fb)
-  );
-
   IDELAYCTRL idelayctrl_inst(
     .REFCLK (sys_clk2x),
     .RST    (idelay_rst),
