@@ -1,0 +1,3 @@
+lib adc5g_dmux1_interface_v1_00_a gc2bin verilog
+lib adc5g_dmux1_interface_v1_00_a fifo_generator_v5_3 vhdl
+lib adc5g_dmux1_interface_v1_00_a adc5g_dmux1_interface vhdl

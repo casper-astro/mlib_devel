@@ -516,7 +516,7 @@ if run_edkgen
             disp(copymessage);
         end % if ~copystatus
     end % if ~exist([xps_path, slash, xmpfile, '.bac'],'file')
-
+    
     % modifying MHS file
     gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 

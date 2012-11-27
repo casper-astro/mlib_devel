@@ -1,0 +1,586 @@
+################## Global Timing Constraints
+#
+
+Net sys_clk_n TNM_NET = sys_clk_n;
+TIMESPEC TS_sys_clk_n = PERIOD sys_clk_n 100 MHz;
+
+Net dly_clk_n TNM_NET = dly_clk_n;
+TIMESPEC TS_dly_clk_n = PERIOD dly_clk_n 200 MHz;
+
+Net epb_clk_in TNM_NET = epb_clk_in;
+TIMESPEC TS_epb_clk_in = PERIOD epb_clk 66 MHz;
+
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))## MGT Ref Clock Constraints
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))# Net mgt_clk_0 TNM_NET = mgt_clk_0;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))# TIMESPEC TS_mgt_clk_0 = PERIOD mgt_clk_0 156.25 MHz;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))# Net mgt_clk_1 TNM_NET = mgt_clk_1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))# TIMESPEC TS_mgt_clk_1 = PERIOD mgt_clk_1 156.25 MHz;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))## XAUI Clock Constraints
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))# Net xaui_infrastructure_inst/xaui_infrastructure_inst/mgt_clk_mult_2_b TNM_NET = mgt_clk_mult_2_b;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))# TIMESPEC TS_mgt_clk_mult_2_b = PERIOD mgt_clk_mult_2_b 156.25 MHz;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'0') || strcmp(get(b,'port'),'1'))#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))# Net xaui_infrastructure_inst/xaui_infrastructure_inst/mgt_clk_mult_2_t TNM_NET = mgt_clk_mult_2_t;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))# TIMESPEC TS_mgt_clk_mult_2_t = PERIOD mgt_clk_mult_2_t 156.25 MHz;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && (strcmp(get(b,'port'),'2') || strcmp(get(b,'port'),'3'))#
+
+################### Pin constraints
+#
+
+#
+# System signals
+#
+
+NET "sys_clk_n"  LOC = H13;
+NET "sys_clk_p"  LOC = J14;
+
+NET "aux0_clk_p" LOC = G15;
+NET "aux0_clk_n" LOC = G16;
+
+NET "aux1_clk_p" LOC = H14;
+NET "aux1_clk_n" LOC = H15;
+
+NET "dly_clk_n"  LOC = J17;
+NET "dly_clk_p"  LOC = J16;
+
+#
+# PPC External Peripheral Bus [EPB]
+#
+
+NET "ppc_irq_n"    IOSTANDARD = LVCMOS33 | LOC = G23;
+
+# transparent endian change
+
+NET "epb_data<15>" IOSTANDARD = LVCMOS33 | LOC = AH13;
+NET "epb_data<14>" IOSTANDARD = LVCMOS33 | LOC = AH14;
+NET "epb_data<13>" IOSTANDARD = LVCMOS33 | LOC = AH19;
+NET "epb_data<12>" IOSTANDARD = LVCMOS33 | LOC = AH20;
+NET "epb_data<11>" IOSTANDARD = LVCMOS33 | LOC = AG13;
+NET "epb_data<10>" IOSTANDARD = LVCMOS33 | LOC = AH12;
+NET "epb_data<9>"  IOSTANDARD = LVCMOS33 | LOC = AH22;
+NET "epb_data<8>"  IOSTANDARD = LVCMOS33 | LOC = AG22;
+NET "epb_data<7>"  IOSTANDARD = LVCMOS33 | LOC = AD19;
+NET "epb_data<6>"  IOSTANDARD = LVCMOS33 | LOC = AE19;
+NET "epb_data<5>"  IOSTANDARD = LVCMOS33 | LOC = AE17;
+NET "epb_data<4>"  IOSTANDARD = LVCMOS33 | LOC = AF16;
+NET "epb_data<3>"  IOSTANDARD = LVCMOS33 | LOC = AD20;
+NET "epb_data<2>"  IOSTANDARD = LVCMOS33 | LOC = AE21;
+NET "epb_data<1>"  IOSTANDARD = LVCMOS33 | LOC = AE16;
+NET "epb_data<0>"  IOSTANDARD = LVCMOS33 | LOC = AF15;
+
+# transparent endian change
+NET "epb_addr<0>"  IOSTANDARD = LVCMOS33 | LOC = AE23;
+NET "epb_addr<1>"  IOSTANDARD = LVCMOS33 | LOC = AE22;
+NET "epb_addr<2>"  IOSTANDARD = LVCMOS33 | LOC = AG18;
+NET "epb_addr<3>"  IOSTANDARD = LVCMOS33 | LOC = AG12;
+NET "epb_addr<4>"  IOSTANDARD = LVCMOS33 | LOC = AG15;
+NET "epb_addr<5>"  IOSTANDARD = LVCMOS33 | LOC = AG23;
+NET "epb_addr<6>"  IOSTANDARD = LVCMOS33 | LOC = AF19;
+NET "epb_addr<7>"  IOSTANDARD = LVCMOS33 | LOC = AE12;
+NET "epb_addr<8>"  IOSTANDARD = LVCMOS33 | LOC = AG16;
+NET "epb_addr<9>"  IOSTANDARD = LVCMOS33 | LOC = AF13;
+NET "epb_addr<10>" IOSTANDARD = LVCMOS33 | LOC = AG20;
+NET "epb_addr<11>" IOSTANDARD = LVCMOS33 | LOC = AF23;
+NET "epb_addr<12>" IOSTANDARD = LVCMOS33 | LOC = AH17;
+NET "epb_addr<13>" IOSTANDARD = LVCMOS33 | LOC = AH15;
+NET "epb_addr<14>" IOSTANDARD = LVCMOS33 | LOC = L20;
+NET "epb_addr<15>" IOSTANDARD = LVCMOS33 | LOC = J22;
+NET "epb_addr<16>" IOSTANDARD = LVCMOS33 | LOC = H22;
+NET "epb_addr<17>" IOSTANDARD = LVCMOS33 | LOC = L15;
+NET "epb_addr<18>" IOSTANDARD = LVCMOS33 | LOC = L16;
+NET "epb_addr<19>" IOSTANDARD = LVCMOS33 | LOC = K22;
+NET "epb_addr<20>" IOSTANDARD = LVCMOS33 | LOC = K21;
+NET "epb_addr<21>" IOSTANDARD = LVCMOS33 | LOC = K16;
+NET "epb_addr<22>" IOSTANDARD = LVCMOS33 | LOC = J15;
+
+# EPB multi purpose pins
+NET "epb_addr_gp<0>" IOSTANDARD = LVCMOS33 | LOC = L21; # DMA_REQ_2
+NET "epb_addr_gp<1>" IOSTANDARD = LVCMOS33 | LOC = G22; # DMA_ACK_2
+NET "epb_addr_gp<2>" IOSTANDARD = LVCMOS33 | LOC = K23; # EOT_TC_2
+NET "epb_addr_gp<3>" IOSTANDARD = LVCMOS33 | LOC = K14; # DMA_REQ_3
+NET "epb_addr_gp<4>" IOSTANDARD = LVCMOS33 | LOC = L14; # DMA_ACK_3
+NET "epb_addr_gp<5>" IOSTANDARD = LVCMOS33 | LOC = J12; # EOT_TC_3
+
+#NET "epb_cs_alt_n"   IOSTANDARD = LVCMOS33 | LOC = AG17;
+NET "epb_cs_n"       IOSTANDARD = LVCMOS33 | LOC = K13;
+NET "epb_be_n<1>"    IOSTANDARD = LVCMOS33 | LOC = AF18;
+NET "epb_be_n<0>"    IOSTANDARD = LVCMOS33 | LOC = AF14;
+NET "epb_r_w_n"      IOSTANDARD = LVCMOS33 | LOC = AF20;
+NET "epb_oe_n"       IOSTANDARD = LVCMOS33 | LOC = AF21;
+#NET "epb_blast_n"    IOSTANDARD = LVCMOS33 | LOC = H23;
+NET "epb_rdy"        IOSTANDARD = LVCMOS33 | LOC = K12;
+
+NET "epb_clk_in"    IOSTANDARD = LVCMOS33 | LOC = AH18;
+
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_clk" LOC = M31 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_dat" LOC = L34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_ser_cs"  LOC = L30 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_clk" LOC = AN34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_dat" LOC = AN32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_ser_cs"  LOC = AK26 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_sda" LOC = K34 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#NET "adc0_iic_scl" LOC = M30 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_sda" LOC = AP32 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#NET "adc1_iic_scl" LOC = AJ27 | SLEW = SLOW;
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#
+
+# ADC card 3 wire control
+#NET "adc0_adc3wire_clk"       IOSTANDARD = LVCMOS25 | LOC = F28;
+#NET "adc0_adc3wire_data"      IOSTANDARD = LVCMOS25 | LOC = D32;
+#NET "adc0_adc3wire_strobe"    IOSTANDARD = LVCMOS25 | LOC = C32;
+#NET "adc0_modepin"            IOSTANDARD = LVCMOS25 | LOC = E28;
+
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))############## MGT Signals #############
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Clock on tile 7
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_ref_clk_top_n"    LOC = C8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_ref_clk_top_p"    LOC = D8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Clock on tile 3
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_ref_clk_bottom_n" LOC = Y3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_ref_clk_bottom_p" LOC = Y4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 7
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_n<1>"    LOC = A7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_p<1>"    LOC = A6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_n<0>"    LOC = A8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_p<0>"    LOC = A9;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_n<1>"    LOC = B6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_p<1>"    LOC = B5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_n<0>"    LOC = B9;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_p<0>"    LOC = B10;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 6
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_n<3>"    LOC = C1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_p<3>"    LOC = D1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_n<2>"    LOC = A2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_1_p<2>"    LOC = A3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_n<3>"    LOC = D2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_p<3>"    LOC = E2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_n<2>"    LOC = B3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_1_p<2>"    LOC = B4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 5
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_n<1>"    LOC = J1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_p<1>"    LOC = K1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_n<0>"    LOC = H1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_p<0>"    LOC = G1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_n<1>"    LOC = K2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_p<1>"    LOC = L2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_n<0>"    LOC = G2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_p<0>"    LOC = F2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_n<3>"    LOC = R1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_p<3>"    LOC = T1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_n<2>"    LOC = P1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_top_0_p<2>"    LOC = N1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_n<3>"    LOC = T2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_p<3>"    LOC = U2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_n<2>"    LOC = N2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_top_0_p<2>"    LOC = M2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 3
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_n<1>" LOC = AA1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_p<1>" LOC = AB1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_n<0>" LOC = Y1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_p<0>" LOC = W1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_n<1>" LOC = AB2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_p<1>" LOC = AC2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_n<0>" LOC = W2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_p<0>" LOC = V2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 2
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_n<3>" LOC = AG1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_p<3>" LOC = AH1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_n<2>" LOC = AF1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_1_p<2>" LOC = AE1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_n<3>" LOC = AH2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_p<3>" LOC = AJ2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_n<2>" LOC = AE2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_1_p<2>" LOC = AD2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 1
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_n<1>" LOC = AP2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_p<1>" LOC = AP3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_n<0>" LOC = AM1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_p<0>" LOC = AL1;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_n<1>" LOC = AN3;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_p<1>" LOC = AN4;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_n<0>" LOC = AL2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_p<0>" LOC = AK2;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))## Tile 0
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_n<3>" LOC = AP8;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_p<3>" LOC = AP9;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_n<2>" LOC = AP7;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_rx_bottom_0_p<2>" LOC = AP6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_n<3>" LOC = AN9;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_p<3>" LOC = AN10;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_n<2>" LOC = AN6;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#NET "mgt_tx_bottom_0_p<2>" LOC = AN5;
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10))#
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')#
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')############## ADC Control Signals #############
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')#
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = F28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = D32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_strobe    LOC = C32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_modepin            LOC = E28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_clk       LOC = AE32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_data      LOC = AD34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_adc3wire_strobe    LOC = AC34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#NET adc1_modepin            LOC = AD32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc1')#
+
+
+
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))#### ADC5G Control Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))##
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_clk       LOC = F28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_data      LOC = C32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_data_o    LOC = D32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_adc3wire_spi_rst   LOC = C34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_modepin            LOC = E28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc0') #NET adc0_reset              LOC = D34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))## signals for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_clk       LOC = AE32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_data      LOC = AC34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_data_o    LOC = AD34 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_adc3wire_spi_rst   LOC = AB27 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = AD32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_reset              LOC = AC27 ;
+
+
+
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))############## ADC10D1000 Control Signals #############
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc0_adc3wire_clk       LOC = E31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc0_adc3wire_data      LOC = F28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc0_adc3wire_strobe    LOC = C32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_syns_rst_o          LOC = F31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_syns_errflag_i      LOC = E28 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_scsb_o		 LOC = AH33 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_sclk_o		 LOC = AE29 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_sdi		 LOC = AF30 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_sdo		 LOC = AD29 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_ece_o		 LOC = AG33 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_calrun_i		 LOC = AF29 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_i_le		 LOC = AB27 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_i_data	 LOC = H17 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_i_clk	 LOC = AC27 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_q_le		 LOC = G33 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_q_data	 LOC = J30 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_attn_q_clk	 LOC = J31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_temp_cs		 LOC = AJ31 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_temp_sck		 LOC = AJ32 ;
+#IF# (strcmp(get(b,'type'),'xps_adc10d1000'))#NET adc_temp_sdo		 LOC = AK31 ;
+
+#IF# strcmp(get(b,'type'),'xps_qdr')#
+#IF# strcmp(get(b,'type'),'xps_qdr')############## QDR Signals #############
+#IF# strcmp(get(b,'type'),'xps_qdr')#
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')##
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')## QDR2_0
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')##
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<0>"      IOSTANDARD = HSTL_I     | LOC = R11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<1>"      IOSTANDARD = HSTL_I     | LOC = T11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<2>"      IOSTANDARD = HSTL_I     | LOC = G7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<3>"      IOSTANDARD = HSTL_I     | LOC = E6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<4>"      IOSTANDARD = HSTL_I     | LOC = T10;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<5>"      IOSTANDARD = HSTL_I     | LOC = T9;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<6>"      IOSTANDARD = HSTL_I     | LOC = M7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<7>"      IOSTANDARD = HSTL_I     | LOC = R8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<8>"      IOSTANDARD = HSTL_I     | LOC = T8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<9>"      IOSTANDARD = HSTL_I     | LOC = U7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<10>"     IOSTANDARD = HSTL_I     | LOC = P6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<11>"     IOSTANDARD = HSTL_I     | LOC = R7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<12>"     IOSTANDARD = HSTL_I     | LOC = P7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<13>"     IOSTANDARD = HSTL_I     | LOC = N7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<14>"     IOSTANDARD = HSTL_I     | LOC = J6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<15>"     IOSTANDARD = HSTL_I     | LOC = N8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<16>"     IOSTANDARD = HSTL_I     | LOC = K7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_d<17>"     IOSTANDARD = HSTL_I     | LOC = E7;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<0>"      IOSTANDARD = HSTL_I_DCI | LOC = E11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<1>"      IOSTANDARD = HSTL_I_DCI | LOC = G11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<2>"      IOSTANDARD = HSTL_I_DCI | LOC = F10;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<3>"      IOSTANDARD = HSTL_I_DCI | LOC = G10;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<4>"      IOSTANDARD = HSTL_I_DCI | LOC = H10;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<5>"      IOSTANDARD = HSTL_I_DCI | LOC = H9;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<6>"      IOSTANDARD = HSTL_I_DCI | LOC = F8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<7>"      IOSTANDARD = HSTL_I_DCI | LOC = M10;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<8>"      IOSTANDARD = HSTL_I_DCI | LOC = H8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<9>"      IOSTANDARD = HSTL_I_DCI | LOC = M8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<10>"     IOSTANDARD = HSTL_I_DCI | LOC = N9;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<11>"     IOSTANDARD = HSTL_I_DCI | LOC = L9;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<12>"     IOSTANDARD = HSTL_I_DCI | LOC = N10;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<13>"     IOSTANDARD = HSTL_I_DCI | LOC = G8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<14>"     IOSTANDARD = HSTL_I_DCI | LOC = E8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<15>"     IOSTANDARD = HSTL_I_DCI | LOC = F9;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<16>"     IOSTANDARD = HSTL_I_DCI | LOC = K11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_q<17>"     IOSTANDARD = HSTL_I_DCI | LOC = J11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<21>"    IOSTANDARD = HSTL_I     | LOC = G12;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<20>"    IOSTANDARD = HSTL_I     | LOC = P5;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<19>"    IOSTANDARD = HSTL_I     | LOC = M6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<18>"    IOSTANDARD = HSTL_I     | LOC = A13;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<17>"    IOSTANDARD = HSTL_I     | LOC = C13;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<16>"    IOSTANDARD = HSTL_I     | LOC = B12;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<15>"    IOSTANDARD = HSTL_I     | LOC = F13;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<14>"    IOSTANDARD = HSTL_I     | LOC = G13;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<13>"    IOSTANDARD = HSTL_I     | LOC = E12;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<12>"    IOSTANDARD = HSTL_I     | LOC = B13;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<11>"    IOSTANDARD = HSTL_I     | LOC = E13;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<10>"    IOSTANDARD = HSTL_I     | LOC = C12;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<9>"     IOSTANDARD = HSTL_I     | LOC = D12;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<8>"     IOSTANDARD = HSTL_I     | LOC = F6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<7>"     IOSTANDARD = HSTL_I     | LOC = G6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<6>"     IOSTANDARD = HSTL_I     | LOC = D11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<5>"     IOSTANDARD = HSTL_I     | LOC = U10;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<4>"     IOSTANDARD = HSTL_I     | LOC = R6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<3>"     IOSTANDARD = HSTL_I     | LOC = K6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<2>"     IOSTANDARD = HSTL_I     | LOC = L4;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<1>"     IOSTANDARD = HSTL_I     | LOC = N5;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_sa<0>"     IOSTANDARD = HSTL_I     | LOC = T6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_w_n"       IOSTANDARD = HSTL_I     | LOC = M5;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_r_n"       IOSTANDARD = HSTL_I     | LOC = J5;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_dll_off_n" IOSTANDARD = HSTL_I     | LOC = E9;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_bw_n<0>"   IOSTANDARD = HSTL_I     | LOC = F5;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_bw_n<1>"   IOSTANDARD = HSTL_I     | LOC = L6;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_cq"        IOSTANDARD = HSTL_I_DCI | LOC = K8;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_cq_n"      IOSTANDARD = HSTL_I_DCI | LOC = K9;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k"         IOSTANDARD = HSTL_I     | LOC = H5;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k_n"       IOSTANDARD = HSTL_I     | LOC = G5;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_qvld"      IOSTANDARD = HSTL_I     | LOC = F11;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')##
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')## QDR2_1
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')##
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<0>"      IOSTANDARD = HSTL_I     | LOC = G21;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<1>"      IOSTANDARD = HSTL_I     | LOC = F21;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<2>"      IOSTANDARD = HSTL_I     | LOC = G20;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<3>"      IOSTANDARD = HSTL_I     | LOC = F20;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<4>"      IOSTANDARD = HSTL_I     | LOC = E19;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<5>"      IOSTANDARD = HSTL_I     | LOC = F16;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<6>"      IOSTANDARD = HSTL_I     | LOC = D17;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<7>"      IOSTANDARD = HSTL_I     | LOC = C17;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<8>"      IOSTANDARD = HSTL_I     | LOC = B17;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<9>"      IOSTANDARD = HSTL_I     | LOC = A16;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<10>"     IOSTANDARD = HSTL_I     | LOC = F18;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<11>"     IOSTANDARD = HSTL_I     | LOC = D21;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<12>"     IOSTANDARD = HSTL_I     | LOC = E21;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<13>"     IOSTANDARD = HSTL_I     | LOC = D22;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<14>"     IOSTANDARD = HSTL_I     | LOC = E22;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<15>"     IOSTANDARD = HSTL_I     | LOC = E23;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<16>"     IOSTANDARD = HSTL_I     | LOC = F23;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_d<17>"     IOSTANDARD = HSTL_I     | LOC = F24;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<0>"      IOSTANDARD = HSTL_I_DCI | LOC = A24;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<1>"      IOSTANDARD = HSTL_I_DCI | LOC = B23;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<2>"      IOSTANDARD = HSTL_I_DCI | LOC = B22;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<3>"      IOSTANDARD = HSTL_I_DCI | LOC = B21;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<4>"      IOSTANDARD = HSTL_I_DCI | LOC = A21;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<5>"      IOSTANDARD = HSTL_I_DCI | LOC = A20;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<6>"      IOSTANDARD = HSTL_I_DCI | LOC = C18;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<7>"      IOSTANDARD = HSTL_I_DCI | LOC = A19;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<8>"      IOSTANDARD = HSTL_I_DCI | LOC = B18;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<9>"      IOSTANDARD = HSTL_I_DCI | LOC = C19;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<10>"     IOSTANDARD = HSTL_I_DCI | LOC = B20;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<11>"     IOSTANDARD = HSTL_I_DCI | LOC = C20;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<12>"     IOSTANDARD = HSTL_I_DCI | LOC = A23;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<13>"     IOSTANDARD = HSTL_I_DCI | LOC = C22;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<14>"     IOSTANDARD = HSTL_I_DCI | LOC = C23;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<15>"     IOSTANDARD = HSTL_I_DCI | LOC = B25;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<16>"     IOSTANDARD = HSTL_I_DCI | LOC = C25;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_q<17>"     IOSTANDARD = HSTL_I_DCI | LOC = D26;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<21>"    IOSTANDARD = HSTL_I     | LOC = D31;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<20>"    IOSTANDARD = HSTL_I     | LOC = F14;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<19>"    IOSTANDARD = HSTL_I     | LOC = A14;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<18>"    IOSTANDARD = HSTL_I     | LOC = D27;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<17>"    IOSTANDARD = HSTL_I     | LOC = A30;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<16>"    IOSTANDARD = HSTL_I     | LOC = B30;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<15>"    IOSTANDARD = HSTL_I     | LOC = C30;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<14>"    IOSTANDARD = HSTL_I     | LOC = B31;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<13>"    IOSTANDARD = HSTL_I     | LOC = D30;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<12>"    IOSTANDARD = HSTL_I     | LOC = B26;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<11>"    IOSTANDARD = HSTL_I     | LOC = A29;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<10>"    IOSTANDARD = HSTL_I     | LOC = D29;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<9>"     IOSTANDARD = HSTL_I     | LOC = A31;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<8>"     IOSTANDARD = HSTL_I     | LOC = G17;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<7>"     IOSTANDARD = HSTL_I     | LOC = C27;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<6>"     IOSTANDARD = HSTL_I     | LOC = C28;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<5>"     IOSTANDARD = HSTL_I     | LOC = E16;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<4>"     IOSTANDARD = HSTL_I     | LOC = E17;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<3>"     IOSTANDARD = HSTL_I     | LOC = A15;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<2>"     IOSTANDARD = HSTL_I     | LOC = B15;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<1>"     IOSTANDARD = HSTL_I     | LOC = C14;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_sa<0>"     IOSTANDARD = HSTL_I     | LOC = B16;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_w_n"       IOSTANDARD = HSTL_I     | LOC = F15;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_r_n"       IOSTANDARD = HSTL_I     | LOC = C15;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_dll_off_n" IOSTANDARD = HSTL_I     | LOC = D20;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_bw_n<0>"   IOSTANDARD = HSTL_I     | LOC = D15;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_bw_n<1>"   IOSTANDARD = HSTL_I     | LOC = D16;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_cq"        IOSTANDARD = HSTL_I_DCI | LOC = C24;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_cq_n"      IOSTANDARD = HSTL_I_DCI | LOC = D25;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_k"         IOSTANDARD = HSTL_I     | LOC = D14;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_k_n"       IOSTANDARD = HSTL_I     | LOC = E14;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#NET "qdr1_qvld"      IOSTANDARD = HSTL_I     | LOC = A25;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#
+#IF# strcmp(get(b,'type'),'xps_dram')#
+#IF# strcmp(get(b,'type'),'xps_dram')################ DRAM Contraints ##################
+#IF# strcmp(get(b,'type'),'xps_dram')#
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<0>    IOSTANDARD = SSTL18_II_DCI | LOC = AL30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<1>    IOSTANDARD = SSTL18_II_DCI | LOC = AL31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<2>    IOSTANDARD = SSTL18_II_DCI | LOC = AP31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<3>    IOSTANDARD = SSTL18_II_DCI | LOC = AN30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<4>    IOSTANDARD = SSTL18_II_DCI | LOC = AM31;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<5>    IOSTANDARD = SSTL18_II_DCI | LOC = AL29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<6>    IOSTANDARD = SSTL18_II_DCI | LOC = AN29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<7>    IOSTANDARD = SSTL18_II_DCI | LOC = AM27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<8>    IOSTANDARD = SSTL18_II_DCI | LOC = AM28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<9>    IOSTANDARD = SSTL18_II_DCI | LOC = AP30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<10>   IOSTANDARD = SSTL18_II_DCI | LOC = AM22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<11>   IOSTANDARD = SSTL18_II_DCI | LOC = AN22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<12>   IOSTANDARD = SSTL18_II_DCI | LOC = AP29;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<13>   IOSTANDARD = SSTL18_II_DCI | LOC = AN28;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<14>   IOSTANDARD = SSTL18_II_DCI | LOC = AP27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<15>   IOSTANDARD = SSTL18_II_DCI | LOC = AN23;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<16>   IOSTANDARD = SSTL18_II_DCI | LOC = AJ19;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<17>   IOSTANDARD = SSTL18_II_DCI | LOC = AK19;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<18>   IOSTANDARD = SSTL18_II_DCI | LOC = AK22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<19>   IOSTANDARD = SSTL18_II_DCI | LOC = AJ22;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<20>   IOSTANDARD = SSTL18_II_DCI | LOC = AH24;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<21>   IOSTANDARD = SSTL18_II_DCI | LOC = AK24;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<22>   IOSTANDARD = SSTL18_II_DCI | LOC = AL20;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<23>   IOSTANDARD = SSTL18_II_DCI | LOC = AJ24;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<24>   IOSTANDARD = SSTL18_II_DCI | LOC = AL19;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<25>   IOSTANDARD = SSTL18_II_DCI | LOC = AM17;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<26>   IOSTANDARD = SSTL18_II_DCI | LOC = AJ14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<27>   IOSTANDARD = SSTL18_II_DCI | LOC = AK13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<28>   IOSTANDARD = SSTL18_II_DCI | LOC = AH23;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<29>   IOSTANDARD = SSTL18_II_DCI | LOC = AP17;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<30>   IOSTANDARD = SSTL18_II_DCI | LOC = AK18;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<31>   IOSTANDARD = SSTL18_II_DCI | LOC = AM15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<32>   IOSTANDARD = SSTL18_II_DCI | LOC = AM13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<33>   IOSTANDARD = SSTL18_II_DCI | LOC = AA10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<34>   IOSTANDARD = SSTL18_II_DCI | LOC = AC10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<35>   IOSTANDARD = SSTL18_II_DCI | LOC = AF11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<36>   IOSTANDARD = SSTL18_II_DCI | LOC = AN14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<37>   IOSTANDARD = SSTL18_II_DCI | LOC = AE11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<38>   IOSTANDARD = SSTL18_II_DCI | LOC = AP14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<39>   IOSTANDARD = SSTL18_II_DCI | LOC = AG11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<40>   IOSTANDARD = SSTL18_II_DCI | LOC = AF9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<41>   IOSTANDARD = SSTL18_II_DCI | LOC = AH10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<42>   IOSTANDARD = SSTL18_II_DCI | LOC = AP12;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<43>   IOSTANDARD = SSTL18_II_DCI | LOC = AM11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<44>   IOSTANDARD = SSTL18_II_DCI | LOC = AB10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<45>   IOSTANDARD = SSTL18_II_DCI | LOC = AC9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<46>   IOSTANDARD = SSTL18_II_DCI | LOC = AN13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<47>   IOSTANDARD = SSTL18_II_DCI | LOC = AJ9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<48>   IOSTANDARD = SSTL18_II_DCI | LOC = AC8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<49>   IOSTANDARD = SSTL18_II_DCI | LOC = AL10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<50>   IOSTANDARD = SSTL18_II_DCI | LOC = AK8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<51>   IOSTANDARD = SSTL18_II_DCI | LOC = AA9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<52>   IOSTANDARD = SSTL18_II_DCI | LOC = AJ10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<53>   IOSTANDARD = SSTL18_II_DCI | LOC = AB8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<54>   IOSTANDARD = SSTL18_II_DCI | LOC = AH9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<55>   IOSTANDARD = SSTL18_II_DCI | LOC = AK9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<56>   IOSTANDARD = SSTL18_II_DCI | LOC = W11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<57>   IOSTANDARD = SSTL18_II_DCI | LOC = V10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<58>   IOSTANDARD = SSTL18_II_DCI | LOC = Y8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<59>   IOSTANDARD = SSTL18_II_DCI | LOC = W9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<60>   IOSTANDARD = SSTL18_II_DCI | LOC = Y11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<61>   IOSTANDARD = SSTL18_II_DCI | LOC = U8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<62>   IOSTANDARD = SSTL18_II_DCI | LOC = W10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<63>   IOSTANDARD = SSTL18_II_DCI | LOC = V8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<64>   IOSTANDARD = SSTL18_II_DCI | LOC = AP16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<65>   IOSTANDARD = SSTL18_II_DCI | LOC = AJ12;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<66>   IOSTANDARD = SSTL18_II_DCI | LOC = AL13;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<67>   IOSTANDARD = SSTL18_II_DCI | LOC = AP15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<68>   IOSTANDARD = SSTL18_II_DCI | LOC = AL15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<69>   IOSTANDARD = SSTL18_II_DCI | LOC = AM16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<70>   IOSTANDARD = SSTL18_II_DCI | LOC = AN15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dq<71>   IOSTANDARD = SSTL18_II_DCI | LOC = AL14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<0>    IOSTANDARD = SSTL18_II | LOC = AM30;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<1>    IOSTANDARD = SSTL18_II | LOC = AN27;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<2>    IOSTANDARD = SSTL18_II | LOC = AK23;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<3>    IOSTANDARD = SSTL18_II | LOC = V9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<4>    IOSTANDARD = SSTL18_II | LOC = AK14;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<5>    IOSTANDARD = SSTL18_II | LOC = AA8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<6>    IOSTANDARD = SSTL18_II | LOC = AG10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<7>    IOSTANDARD = SSTL18_II | LOC = AM12;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dm<8>    IOSTANDARD = SSTL18_II | LOC = AN17;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<0> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AL26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<1> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AM25;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<2> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AK21;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<3> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ20;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<4> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<5> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AD11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<6> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AD9;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<7> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = V7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs_n<8> IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ15;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<0>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AM26;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<1>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AN25;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<2>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AL21;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<3>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ21;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<4>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AK11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<5>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AD10;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<6>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AE8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<7>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = W7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_dqs<8>   IOSTANDARD = DIFF_SSTL18_II_DCI | LOC = AJ16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<15>    IOSTANDARD = SSTL18_II | LOC = AE7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<14>    IOSTANDARD = SSTL18_II | LOC = AH7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<13>    IOSTANDARD = SSTL18_II | LOC = AC4;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<12>    IOSTANDARD = SSTL18_II | LOC = AJ7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<11>    IOSTANDARD = SSTL18_II | LOC = Y7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<10>    IOSTANDARD = SSTL18_II | LOC = AD6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<9>     IOSTANDARD = SSTL18_II | LOC = AK7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<8>     IOSTANDARD = SSTL18_II | LOC = AK6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<7>     IOSTANDARD = SSTL18_II | LOC = AC7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<6>     IOSTANDARD = SSTL18_II | LOC = W6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<5>     IOSTANDARD = SSTL18_II | LOC = AA6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<4>     IOSTANDARD = SSTL18_II | LOC = AE6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<3>     IOSTANDARD = SSTL18_II | LOC = Y6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<2>     IOSTANDARD = SSTL18_II | LOC = AF6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<1>     IOSTANDARD = SSTL18_II | LOC = AB6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_a<0>     IOSTANDARD = SSTL18_II | LOC = AJ6;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ba<2>    IOSTANDARD = SSTL18_II | LOC = AB7;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ba<1>    IOSTANDARD = SSTL18_II | LOC = AB5;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ba<0>    IOSTANDARD = SSTL18_II | LOC = AA5;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ras_n    IOSTANDARD = SSTL18_II | LOC = AD5;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cas_n    IOSTANDARD = SSTL18_II | LOC = AD4;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_we_n     IOSTANDARD = SSTL18_II | LOC = AC5;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_reset_n  IOSTANDARD = SSTL18_II | LOC = AM18;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cke<0>   IOSTANDARD = SSTL18_II | LOC = AL11;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cke<1>   IOSTANDARD = SSTL18_II | LOC = AK12;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cs_n<0>  IOSTANDARD = SSTL18_II | LOC = AM21;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_cs_n<1>  IOSTANDARD = SSTL18_II | LOC = AN19;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_odt<0>   IOSTANDARD = SSTL18_II | LOC = AN20;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_odt<1>   IOSTANDARD = SSTL18_II | LOC = AM20;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_n<0>  IOSTANDARD = DIFF_SSTL18_II | LOC = AF5;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck<0>    IOSTANDARD = DIFF_SSTL18_II | LOC = AG5;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_n<1>  IOSTANDARD = DIFF_SSTL18_II | LOC = AL16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck<1>    IOSTANDARD = DIFF_SSTL18_II | LOC = AK16;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck_n<2>  IOSTANDARD = DIFF_SSTL18_II | LOC = AH8;
+#IF# strcmp(get(b,'type'),'xps_dram')#NET dram_ck<2>    IOSTANDARD = DIFF_SSTL18_II | LOC = AG8;
+#IF# strcmp(get(b,'type'),'xps_dram')#
+#IF# strcmp(get(b,'type'),'xps_dram')##MIG 2.1: Eliminate Timegroup definitions for CLK0, and CLK90. Instead trace
+#IF# strcmp(get(b,'type'),'xps_dram')##          multicycle paths from originating flip-flop to ANY destination
+#IF# strcmp(get(b,'type'),'xps_dram')##          flip-flop (or in some cases, it can also be a BRAM)
+#IF# strcmp(get(b,'type'),'xps_dram')## MUX Select for either rising/falling CLK0 for 2nd stage read capture
+#IF# strcmp(get(b,'type'),'xps_dram')#
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_rd_data_sel*.u_ff_rd_data_sel" TNM = "TNM_RD_DATA_SEL";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_RD_DATA_SEL" = FROM "TNM_RD_DATA_SEL" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')## MUX select for read data - optional delay on data to account for byte skews
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_usr_rd/gen_rden_sel_mux*.u_ff_rden_sel_mux" TNM = "TNM_RDEN_SEL_MUX";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_RDEN_SEL_MUX" = FROM "TNM_RDEN_SEL_MUX" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')## Calibration/Initialization complete status flag (for PHY logic only) - can
+#IF# strcmp(get(b,'type'),'xps_dram')## be used to drive both flip-flops and BRAMs
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_init/u_ff_phy_init_data_sel" TNM = "TNM_PHY_INIT_DATA_SEL";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_PHY_INIT_DATA_SEL_0" = FROM "TNM_PHY_INIT_DATA_SEL" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_PHY_INIT_DATA_SEL_90" = FROM "TNM_PHY_INIT_DATA_SEL" TO RAMS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')## Select (address) bits for SRL32 shift registers used in stage3/stage4
+#IF# strcmp(get(b,'type'),'xps_dram')## calibration
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_gate_dly*.u_ff_gate_dly" TNM = "TNM_GATE_DLY";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_GATE_DLY" = FROM "TNM_GATE_DLY" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_rden_dly*.u_ff_rden_dly" TNM = "TNM_RDEN_DLY";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_RDEN_DLY" = FROM "TNM_RDEN_DLY" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#INST "*/u_phy_calib/gen_cal_rden_dly*.u_ff_cal_rden_dly" TNM = "TNM_CAL_RDEN_DLY";
+#IF# strcmp(get(b,'type'),'xps_dram')#TIMESPEC "TS_MC_CAL_RDEN_DLY" = FROM "TNM_CAL_RDEN_DLY" TO FFS 10 NS;
+#IF# strcmp(get(b,'type'),'xps_dram')#
