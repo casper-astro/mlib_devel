@@ -13,7 +13,7 @@ blk_name = get(blk_obj,'simulink_name');
 xsg_obj = get(blk_obj,'xsg_obj');
 
 s.hw_sys = get(xsg_obj,'hw_sys');
-s.hw_adc = get_param(blk_name,'adc_brd');
+s.hw_adc = lower(get_param(blk_name,'adc_brd'));
 
 switch s.hw_sys
     case {'ROACH2','ROACH'}
