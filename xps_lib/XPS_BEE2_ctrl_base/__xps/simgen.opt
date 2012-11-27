@@ -1,1 +1,0 @@
- -p virtex2p -lang verilog   -pe ppc405_0  $(PPC405_0_BOOTLOOP)  -s mti

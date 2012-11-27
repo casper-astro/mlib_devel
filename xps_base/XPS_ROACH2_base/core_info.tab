@@ -1,0 +1,34 @@
+sys_board_id        3        0        4
+sys_rev             3        4        4 
+sys_rev_rcs         3        8        4  
+sys_scratchpad      3        c        4
+sys_clkcounter      3       10        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_gpio_data_in        3    60000        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_gpio_data_out       3    60004        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_gpio_data_oe        3    60008        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_gpio_data_ded       3    6000c        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_mdio_sel        3    60010        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_issue        3    60014        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_type         3    60018        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_addr         3    6001c        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_data         3    60020        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_result       3    60024        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_dbg          3    60028        4
+#IF# (strcmp(get(b,'type'),'xps_xaui') || strncmp(get(b,'type'),'xps_tengbe',10)) && strcmp(get(b, 'flavour'), 'sfp+')#sfp_op_dbg1         3    6002c        4
+#IF# strcmp(get(b,'type'),'xps_adc5g')#adc5g_controller     3    20000    1000
+#IF# strcmp(get(b,'type'),'xps_katadc')#kat_adc_controller     3    20000    1000
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')#iic_adc0     3    40000    100
+#IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc1')#iic_adc1     3    48000    100
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#iic_adc0     3    40000    100
+#IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#iic_adc1     3    48000    100
+#IF# strcmp(get(b,'type'),'xps_adc')#iadc_controller     3    20000    10000
+#IF# strcmp(get(b,'type'),'xps_dram')#dram_controller     3    50000    10000
+#IF# strcmp(get(b,'type'),'xps_dram')#dram_memory         3  4000000  4000000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_memory         3  2000000  800000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_memory         3  2800000  800000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#qdr2_memory         3  3000000  800000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#qdr3_memory         3  3800000  800000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_ctrl           3  30000    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_ctrl           3  40000    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#qdr2_ctrl           3  50000    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#qdr3_ctrl           3  60000    100

@@ -19,14 +19,13 @@
 %   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
+function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
 
 
 str = '';
 
 %does not affect the allocation of address space
 opb_addr_end = opb_addr_start;
-plb_addr_end = plb_addr_start;
 
 opb_name = blk_obj.opb_name;
 opb_addr_start = blk_obj.opb_addr_start;

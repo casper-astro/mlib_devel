@@ -1,8 +1,0 @@
--batch 
--top diffclk_buf 
--ver 1.00.a 
--dir C:\edk_user_repository\MyProcessorIPLib 
--lang vhdl 
--bus opb s 
--regn 2 32 
--xps 

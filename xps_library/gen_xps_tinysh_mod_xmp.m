@@ -18,7 +18,7 @@ function gen_xps_tinysh_mod_xmp(xsg_obj, xps_objs, mssge_proj, mssge_paths, head
 %   xsg_core_name   = mssge_proj.xsg_core_name;
 %   mpc_type        = mssge_proj.mpc_type;
 
-%   XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
+%   XPS_BASE_PATH   = mssge_paths.XPS_BASE_PATH;
 %   simulink_path   = mssge_paths.simulink_path;
     work_path       = mssge_paths.work_path;
 %   src_path        = mssge_paths.src_path;

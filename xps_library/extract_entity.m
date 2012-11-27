@@ -48,7 +48,7 @@ end
 fclose(fin);
 
 % Open output file
-[pathpart, stem, ext, ver] = fileparts(vin);
+[pathpart, stem, ext] = fileparts(vin);
 vout = ['./', stem, '.vhd'];
 fout = fopen(vout, 'w');
 if fout == -1

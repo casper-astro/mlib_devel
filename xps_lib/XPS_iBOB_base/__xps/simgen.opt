@@ -1,1 +1,0 @@
- -p virtex2p -lang vhdl    -pe ppc405_1 Software/executable.elf -s mti
