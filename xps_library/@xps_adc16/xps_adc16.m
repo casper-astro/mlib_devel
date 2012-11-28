@@ -1,11 +1,11 @@
 
-function b = xps_adcleda(blk_obj)
+function b = xps_adc16(blk_obj)
 
 if ~isa(blk_obj,'xps_block')
     error('XPS_ADC class requires a xps_block class object');
 end
 
-if ~strcmp(get(blk_obj,'type'),'xps_adcleda')
+if ~strcmp(get(blk_obj,'type'),'xps_adc16')
     error(['Wrong XPS block type: ',get(blk_obj,'type')]);
 end
 
@@ -27,10 +27,10 @@ switch s.hw_sys
         error(['Unsupported hardware system: ',s.hw_sys]);
 end 
 
-b = class(s,'xps_adcleda',blk_obj);
+b = class(s,'xps_adc16',blk_obj);
 
 % ip name and version
-b = set(b, 'ip_name', 'adcleda_interface');
+b = set(b, 'ip_name', 'adc16_interface');
 switch s.hw_sys
   case {'ROACH', 'ROACH2'},
     b = set(b, 'ip_version', '1.00.a');
@@ -39,7 +39,7 @@ end
 b = set(b, 'opb0_devices',1); %controller
 
 % Tells which other PCORES are needed for this block
-supp_ip_names    = {'', 'opb_adcleda_controller'};
+supp_ip_names    = {'', 'opb_adc16_controller'};
 supp_ip_versions = {'','1.00.a'};
 b = set(b, 'supp_ip_names', supp_ip_names);
 b = set(b, 'supp_ip_versions', supp_ip_versions);

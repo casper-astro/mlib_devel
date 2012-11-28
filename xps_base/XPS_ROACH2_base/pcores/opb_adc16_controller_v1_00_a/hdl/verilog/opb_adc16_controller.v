@@ -4,7 +4,7 @@
  XPS_ROACH2_BASE/pcores/opb_katcontroller/hdl/verilog/opb_katcontroller.v
  
  */
-module opb_adcleda_controller(
+module opb_adc16_controller(
     input         OPB_Clk,
     input         OPB_Rst,
     output [0:31] Sl_DBus,

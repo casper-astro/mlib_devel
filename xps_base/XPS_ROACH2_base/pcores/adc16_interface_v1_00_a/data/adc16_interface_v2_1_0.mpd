@@ -1,4 +1,4 @@
-BEGIN adcleda_interface
+BEGIN adc16_interface
 
 ##########################
 ##  PERIPHERAL OPTIONS  ##
@@ -9,7 +9,7 @@ OPTION IMP_NETLIST = TRUE
 OPTION STYLE = MIX
 OPTION HDL = VHDL
 OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT, VIRTEX6SX=DEVELOPMENT)
-OPTION DESC = "QUAD ADC controller"
+OPTION DESC = "ADC16 controller"
 
 ## Generics for VHDL or Parameters for Verilog
 PARAMETER mode = MASTER, DT = STRING

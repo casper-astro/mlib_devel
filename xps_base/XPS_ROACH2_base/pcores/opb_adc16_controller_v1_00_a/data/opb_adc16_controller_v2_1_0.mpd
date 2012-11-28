@@ -1,6 +1,6 @@
-BEGIN opb_adcleda_controller
+BEGIN opb_adc16_controller
 
-## changed to work with opb_adcleda_controller,  jama 2012
+## changed to work with opb_adc16_controller,  jama 2012
 
 ## Peripheral Options
 OPTION IPTYPE = PERIPHERAL

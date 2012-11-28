@@ -6,7 +6,7 @@ use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
 
 -- entity declaraction
-entity  adcleda_interface  is
+entity  adc16_interface  is
     port (
 	            -- System
 					div_clk      :  out std_logic;
@@ -36,9 +36,9 @@ entity  adcleda_interface  is
                delay_tap        :  in  std_logic_vector(4 downto 0)			
     );
 
-end  adcleda_interface;
+end  adc16_interface;
 
-architecture adcleda_interface_arc of adcleda_interface is
+architecture adc16_interface_arc of adc16_interface is
 
      -- Components
 	  component adc_unit generic (
@@ -334,5 +334,5 @@ architecture adcleda_interface_arc of adcleda_interface is
                delay_tap => s_delay_tap(3)
 	  );
 	 	 
-end adcleda_interface_arc;
+end adc16_interface_arc;
 
