@@ -144,7 +144,10 @@ end
 % set design paths
 XPS_BASE_PATH = getenv('XPS_BASE_PATH');
 if isempty(XPS_BASE_PATH)
-    error('Environment variable XPS_BASE_PATH must be defined');
+    XPS_BASE_PATH = fullfile(getenv('MLIB_DEVEL_PATH'), 'xps_base');
+    if isempty(XPS_BASE_PATH)
+        error('Environment variable XPS_BASE_PATH or MLIB_DEVEL_PATH must be defined');
+    end
 end
 
 simulink_path   = pwd;
