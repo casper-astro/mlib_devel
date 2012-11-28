@@ -1,0 +1,7 @@
+
+lib adcleda_interface_v1_00_a fifo_generator_v8_2.vhd vhdl
+lib adcleda_interface_v1_00_a ADC_ISERDES.vhd vhdl
+lib adcleda_interface_v1_00_a ADC_MMCM.vhd vhdl
+lib adcleda_interface_v1_00_a MMCM_PCNTRL.vhd vhdl
+lib adcleda_interface_v1_00_a adcleda_interface.vhd vhdl
+lib adcleda_interface_v1_00_a adc_unit.vhd vhdl
