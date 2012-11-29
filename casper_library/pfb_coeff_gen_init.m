@@ -111,10 +111,10 @@ for a=1:TotalTaps,
     add_line(blk, 'Counter/1', [dblkname, '/1']);
     
     blkname = ['ROM', tostring(a)];
-    pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a);
+    %pfb_coeff_gen_calc(PFBSize, TotalTaps, WindowType, n_inputs, nput, fwidth, a);
     if strcmp(debug_mode, 'on'),
         s = ((TotalTaps - a) * 2^PFBSize) + 1;
-        vecstr = [tostring(s), ':', tostring(s - 1 + 2^PFBSize)];
+        vecstr = [tostring(s + nput), ':', tostring(2^n_inputs), ':', tostring(s - 1 + 2^PFBSize)];
         atype = 'Unsigned';
         binpt = '0';
     else
