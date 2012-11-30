@@ -53,25 +53,67 @@ module opb_adc16_controller(
 
   /*** Registers ****/
 
+  /* ADC0 3-Wire Register */
   reg [0:31] adc0_adc3wire_reg;
   assign adc0_adc3wire_wire = adc0_adc3wire_reg;
-  
-  assign adc0_adc3wire_clk = adc0_adc3wire_wire[0];
-  assign adc0_adc3wire_data = adc0_adc3wire_wire[1];
-  assign adc0_adc3wire_cs0 = adc0_adc3wire_wire[2];
-  assign adc0_adc3wire_cs1 = adc0_adc3wire_wire[3];
-  assign adc0_adc3wire_cs2 = adc0_adc3wire_wire[4];
-  assign adc0_adc3wire_cs3 = adc0_adc3wire_wire[5];
 
+  /* ======================================= */
+  /* ADC0 3-Wire Register Bits               */
+  /* ======================================= */
+  /* C = SCL (clock)                         */
+  /* D = SDA (data)                          */
+  /* 0 = CS0 (chip select 0)                 */
+  /* 1 = CS0 (chip select 1)                 */
+  /* 2 = CS0 (chip select 2)                 */
+  /* 3 = CS0 (chip select 3)                 */
+  /* ======================================= */
+  /* |<-- MSb                       LSb -->| */
+  /* 0000_0000_0011_1111_1111_2222_2222_2233 */
+  /* 0123_4567_8901_2345_6789_0123_4567_8901 */
+  /* C--- ---- ---- ---- ---- ---- ---- ---- */
+  /* -D-- ---- ---- ---- ---- ---- ---- ---- */
+  /* --0- ---- ---- ---- ---- ---- ---- ---- */
+  /* ---1 ---- ---- ---- ---- ---- ---- ---- */
+  /* ---- 2--- ---- ---- ---- ---- ---- ---- */
+  /* ---- -3-- ---- ---- ---- ---- ---- ---- */
+  /* ======================================= */
+
+  assign adc0_adc3wire_clk  = adc0_adc3wire_wire[0];
+  assign adc0_adc3wire_data = adc0_adc3wire_wire[1];
+  assign adc0_adc3wire_cs0  = adc0_adc3wire_wire[2];
+  assign adc0_adc3wire_cs1  = adc0_adc3wire_wire[3];
+  assign adc0_adc3wire_cs2  = adc0_adc3wire_wire[4];
+  assign adc0_adc3wire_cs3  = adc0_adc3wire_wire[5];
+
+  /* ADC0 Control Register */
   reg [0:31] adc0_ctrl_reg;
   assign adc0_ctrl_wire = adc0_ctrl_reg;
 
-  assign adc0_delay_rst = adc0_ctrl_wire[0:15];
-  assign adc0_delay_tap = adc0_ctrl_wire[16:20];
+  /* ======================================= */
+  /* ADC0 Control Register Bits              */
+  /* ======================================= */
+  /* D = Delay RST                           */
+  /* T = Delay Tap                           */
+  /* B = ISERDES Bit Slip                    */
+  /* P = Load Phase Set                      */
+  /* R = Reset                               */
+  /* ======================================= */
+  /* |<-- MSb                       LSb -->| */
+  /* 0000 0000 0011 1111 1111 2222 2222 2233 */
+  /* 0123 4567 8901 2345 6789 0123 4567 8901 */
+  /* DDDD DDDD DDDD DDDD ---- ---- ---- ---- */
+  /* ---- ---- ---- ---- TTTT T--- ---- ---- */
+  /* ---- ---- ---- ---- ---- -BBB B--- ---- */
+  /* ---- ---- ---- ---- ---- ---- -PPP P--- */
+  /* ---- ---- ---- ---- ---- ---- ---- -R-- */
+  /* ======================================= */
+
+  assign adc0_delay_rst       = adc0_ctrl_wire[ 0:15];
+  assign adc0_delay_tap       = adc0_ctrl_wire[16:20];
   assign adc0_iserdes_bitslip = adc0_ctrl_wire[21:24];
-  assign adc0_load_phase_set = adc0_ctrl_wire[25:28];
-  assign adc0_reset = adc0_ctrl_wire[29];
-  
+  assign adc0_load_phase_set  = adc0_ctrl_wire[25:28];
+  assign adc0_reset           = adc0_ctrl_wire[29   ];
+
   reg [31:0] opb_data_out;
 
   always @(posedge OPB_Clk) begin
