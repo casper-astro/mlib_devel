@@ -20,12 +20,12 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function coeff_vector = pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a)
+function coeff_vector = pfb_coeff_gen_calc(PFBSize, TotalTaps, WindowType, n_inputs, nput, fwidth, a, debug)
 % Calculate the bram coeffiecients for the pfb_coeff_gen block
 %
-% coeff_vector = pfb_coeff_gen_calc(PFBSize,n_inputs,a)
+% coeff_vector = pfb_coeff_gen_calc(PFBSize, TotalTaps, WindowType, n_inputs, nput, fwidth, a, debug)
 % 
-% Valid varnames for this block are:
+% Valid arguments for this block are:
 % PFBSize = Size of the FFT (2^FFTSize points).
 % TotalTaps = Total number of taps in the PFB
 % WindowType = The type of windowing function to use.
@@ -33,16 +33,22 @@ function coeff_vector = pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs
 % nput = Which input this is (of the n_inputs parallel).
 % fwidth = The scaling of the bin width (1 is normal).
 % a = Index of this rom (passing less than 0 will return all coefficients).
+% debug = the coefficients across all inputs and taps form a ramp across the window.
 
-% Set coefficient vector
+% set coefficient vector
 alltaps = TotalTaps*2^PFBSize;
-windowval = transpose(window(WindowType, alltaps));
-total_coeffs = windowval .* sinc(fwidth*([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
 if a < 0
-    coeff_vector = total_coeffs;
+    index = 1 : alltaps;
 else
-    for i=1:alltaps/2^n_inputs,
-        buf(i)=total_coeffs((i-1)*2^n_inputs + nput + 1);
-    end
-    coeff_vector = buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs));
+    cs = ((a - 1) * 2^PFBSize) + 1 + nput;
+    ce = ((a - 1) * 2^PFBSize) + 2^PFBSize;
+    index = cs : 2^n_inputs : ce;
 end
+if debug,
+    coeff_vector = index;
+else
+    windowval = transpose(window(WindowType, alltaps));
+    total_coeffs = windowval .* sinc(fwidth * ([0:alltaps-1]/(2^PFBSize)-TotalTaps/2));
+    coeff_vector = total_coeffs(index);
+end
+% end

@@ -120,7 +120,7 @@ end
 % root-sum-squares or RSS).
 
 % Get all coefficients of the pfb_fir in one vector (by passing -1 for a)
-all_coeffs = pfb_coeff_gen_calc(pfb_bits, total_taps, window_type, simul_bits, 0, fwidth, -1);
+all_coeffs = pfb_coeff_gen_calc(pfb_bits, total_taps, window_type, simul_bits, 0, fwidth, -1, false);
 % Rearrange into matrix with 2^pfb_bits rows and total_taps columns.
 % Each row contains coefficients for one sub-filter.
 all_filters = reshape(all_coeffs, 2^pfb_bits, total_taps);

@@ -35,7 +35,7 @@ function [max_gain bit_growth adder_n_bits_out adder_bin_pt_out] = pfb_bitgrowth
 % the sum of the squares of the coefficients (aka root-sum-squares or RSS).
 
 % Get all coefficients of the pfb_fir in one vector (by passing -1 for the tap index)
-all_coeffs = pfb_coeff_gen_calc(window_type, pfb_bits, total_taps, -1, par_input_bits, 0, bin_scaling, 0);
+all_coeffs = pfb_coeff_gen_calc(window_type, pfb_bits, total_taps, -1, par_input_bits, 0, bin_scaling, 0, false);
 % Rearrange into matrix with 2^PFBSize rows and TotalTaps columns.
 % Each row contains coefficients for one sub-filter.
 all_filters = reshape(all_coeffs, 2^pfb_bits, total_taps);
