@@ -728,13 +728,12 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#### ADC16 Control Constraints
 #IF# (strcmp(get(b,'type'),'xps_adc16'))##
 #IF# (strcmp(get(b,'type'),'xps_adc16'))## signals for adc0
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_clk       LOC = M28 ;
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_data      LOC = K30 ;
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs0       LOC = N19 ;
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs1       LOC = N20 ;
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs2       LOC = H18 ;
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs3       LOC = F16 ;
-
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_clk       LOC = M28 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2" ;
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_data      LOC = K30 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2" ;
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs0       LOC = N19 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2" ;
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs1       LOC = N20 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2" ;
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs2       LOC = H18 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2" ;
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_cs3       LOC = F16 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2" ;
 
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = A39;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = B42;
