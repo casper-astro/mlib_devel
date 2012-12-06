@@ -371,12 +371,12 @@
 
 #IF# (strcmp(get(b,'type'),'xps_adc16')) #### created for adc16 based on adc5g
 #IF# (strcmp(get(b,'type'),'xps_adc16')) ## control wires for adc0
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_clk     = adc0_adc3wire_clk, DIR = O
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_data    = adc0_adc3wire_data, DIR = O
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs0     = adc0_adc3wire_cs0, DIR = O
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs1     = adc0_adc3wire_cs1, DIR = O
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs2     = adc0_adc3wire_cs2, DIR = O
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs3     = adc0_adc3wire_cs3, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_sclk     = adc0_adc3wire_sclk, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_sdata    = adc0_adc3wire_sdata, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn1     = adc0_adc3wire_csn1, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn2     = adc0_adc3wire_csn2, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn3     = adc0_adc3wire_csn3, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn4     = adc0_adc3wire_csn4, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  ##
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  #BEGIN opb_adc16_controller
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # #
@@ -390,12 +390,12 @@
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # PORT OPB_Clk = epb_clk
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # #
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # # control signals for adc0
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_clk     = adc0_adc3wire_clk
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_data    = adc0_adc3wire_data
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs0     = adc0_adc3wire_cs0
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs1     = adc0_adc3wire_cs1
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs2     = adc0_adc3wire_cs2
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_cs3     = adc0_adc3wire_cs3
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_sclk     = adc0_adc3wire_sclk
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_sdata    = adc0_adc3wire_sdata
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn1     = adc0_adc3wire_csn1
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn2     = adc0_adc3wire_csn2
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn3     = adc0_adc3wire_csn3
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_adc3wire_csn4     = adc0_adc3wire_csn4
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # #
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_reset            = adc0_reset
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_iserdes_bitslip  = adc0_iserdes_bitslip

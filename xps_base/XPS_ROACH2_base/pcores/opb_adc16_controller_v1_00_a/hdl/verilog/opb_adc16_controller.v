@@ -19,12 +19,12 @@ module opb_adc16_controller(
     input         OPB_select,
     input         OPB_seqAddr,
 
-	  output        adc0_adc3wire_clk,
-	  output        adc0_adc3wire_data,
-	  output        adc0_adc3wire_cs0,
-	  output        adc0_adc3wire_cs1,
-	  output        adc0_adc3wire_cs2,
-	  output        adc0_adc3wire_cs3,
+	  output        adc0_adc3wire_csn1,
+	  output        adc0_adc3wire_csn2,
+	  output        adc0_adc3wire_csn3,
+	  output        adc0_adc3wire_csn4,
+	  output        adc0_adc3wire_sdata,
+	  output        adc0_adc3wire_sclk,
 	  
 	  output        adc0_reset,
 	  output        [0:3] adc0_iserdes_bitslip,
@@ -60,30 +60,30 @@ module opb_adc16_controller(
   /* ======================================= */
   /* ADC0 3-Wire Register Bits               */
   /* ======================================= */
-  /* C = SCL (clock)                         */
-  /* D = SDA (data)                          */
-  /* 0 = CS0 (chip select 0)                 */
-  /* 1 = CS0 (chip select 1)                 */
-  /* 2 = CS0 (chip select 2)                 */
-  /* 3 = CS0 (chip select 3)                 */
+  /* C = SCLK                                */
+  /* D = SDATA                               */
+  /* 1 = CSN1 (chip select 1, active low)    */
+  /* 2 = CSN2 (chip select 2, active low)    */
+  /* 3 = CSN3 (chip select 3, active low)    */
+  /* 4 = CSN4 (chip select 4, active low)    */
   /* ======================================= */
   /* |<-- MSb                       LSb -->| */
   /* 0000_0000_0011_1111_1111_2222_2222_2233 */
   /* 0123_4567_8901_2345_6789_0123_4567_8901 */
   /* C--- ---- ---- ---- ---- ---- ---- ---- */
   /* -D-- ---- ---- ---- ---- ---- ---- ---- */
-  /* --0- ---- ---- ---- ---- ---- ---- ---- */
-  /* ---1 ---- ---- ---- ---- ---- ---- ---- */
-  /* ---- 2--- ---- ---- ---- ---- ---- ---- */
-  /* ---- -3-- ---- ---- ---- ---- ---- ---- */
+  /* --1- ---- ---- ---- ---- ---- ---- ---- */
+  /* ---2 ---- ---- ---- ---- ---- ---- ---- */
+  /* ---- 3--- ---- ---- ---- ---- ---- ---- */
+  /* ---- -4-- ---- ---- ---- ---- ---- ---- */
   /* ======================================= */
 
-  assign adc0_adc3wire_clk  = adc0_adc3wire_wire[0];
-  assign adc0_adc3wire_data = adc0_adc3wire_wire[1];
-  assign adc0_adc3wire_cs0  = adc0_adc3wire_wire[2];
-  assign adc0_adc3wire_cs1  = adc0_adc3wire_wire[3];
-  assign adc0_adc3wire_cs2  = adc0_adc3wire_wire[4];
-  assign adc0_adc3wire_cs3  = adc0_adc3wire_wire[5];
+  assign adc0_adc3wire_sclk  = adc0_adc3wire_wire[0];
+  assign adc0_adc3wire_sdata = adc0_adc3wire_wire[1];
+  assign adc0_adc3wire_csn1  = adc0_adc3wire_wire[2];
+  assign adc0_adc3wire_csn2  = adc0_adc3wire_wire[3];
+  assign adc0_adc3wire_csn3  = adc0_adc3wire_wire[4];
+  assign adc0_adc3wire_csn4  = adc0_adc3wire_wire[5];
 
   /* ADC0 Control Register */
   reg [0:31] adc0_ctrl_reg;
