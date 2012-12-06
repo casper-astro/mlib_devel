@@ -155,23 +155,23 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLOCK_HOLD           => false,
       COMPENSATION         => "ZHOLD",
       STARTUP_WAIT         => false,
-      DIVCLK_DIVIDE        => 2,
-      CLKFBOUT_MULT_F      => 6.000,
+      DIVCLK_DIVIDE        => 2,     -- D = 2
+      CLKFBOUT_MULT_F      => 6.000, -- M = 6.000
       CLKFBOUT_PHASE       => 0.000,
       CLKFBOUT_USE_FINE_PS => false,
-      CLKOUT0_DIVIDE_F     => 3.000,
+      CLKOUT0_DIVIDE_F     => 3.000, -- Fout = (M * Fin) / (D * 3.000) = Fin (when D=2, M=6)
       CLKOUT0_PHASE        => 0.000,
       CLKOUT0_DUTY_CYCLE   => 0.500,
       CLKOUT0_USE_FINE_PS  => false,
-      CLKOUT1_DIVIDE       => 6,
+      CLKOUT1_DIVIDE       => 6,     -- Fout = (M * Fin) / (D * 6) = Fin / 2 (when D=2, M=6)
       CLKOUT1_PHASE        => 0.000,
       CLKOUT1_DUTY_CYCLE   => 0.500,
       CLKOUT1_USE_FINE_PS  => false,
-      CLKOUT2_DIVIDE       => 1,
+      CLKOUT2_DIVIDE       => 1,     -- Fout = (M * Fin) / (D * 1) = 3 * Fin (when D=2, M=6)
       CLKOUT2_PHASE        => 0.250,
       CLKOUT2_DUTY_CYCLE   => 0.500,
       CLKOUT2_USE_FINE_PS  => true,
-      CLKIN1_PERIOD        => 2.500,
+      CLKIN1_PERIOD        => 2.500, -- 400 MHz (should be calculated from user input)
       REF_JITTER1          => 0.010
 
       --BANDWIDTH            => "OPTIMIZED",
