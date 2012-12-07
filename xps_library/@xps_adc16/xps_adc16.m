@@ -14,7 +14,10 @@ xsg_obj = get(blk_obj,'xsg_obj');
 
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.hw_adc = lower(get_param(blk_name,'adc_brd'));
+s.num_inputs = 16;     % TODO Get from mask
+s.sample_mhz = 200; % TODO Get from mask
 
+% Validate hw_sys and hw_adc
 switch s.hw_sys
     case {'ROACH2','ROACH'}
         if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
@@ -26,6 +29,22 @@ switch s.hw_sys
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end 
+
+% Validate num_inputs and sample_mhz
+s.line_mhz = 2 * s.sample_mhz; % default is value for 16 input mode
+switch s.num_inputs
+    case 16
+        if s.sample_mhz> 250
+            error('Max sample rate with 16 inputs is 250 MHz');
+        end
+    % TODO Support additional operating modes
+    %case 8
+    %    % OK
+    %case 4
+    %    % OK
+    otherwise
+        error(['Unsupported number of inputs: ',s.num_inputs]);
+end
 
 b = class(s,'xps_adc16',blk_obj);
 
@@ -65,11 +84,18 @@ b = set(b,'misc_ports',misc_ports);
 
 % external ports
 mhs_constraints = struct();
-ucf_constraints_lvds = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
-ucf_constraints_standard = struct('IOSTANDARD', 'LVCMOS15');
+ucf_constraints_clk  = struct( ...
+    'IOSTANDARD', 'LVDS_25', ...
+    'DIFF_TERM', 'TRUE', ...
+    'PERIOD', [num2str(1000/s.line_mhz), ' ns']);
+ucf_constraints_lvds = struct( ...
+    'IOSTANDARD', 'LVDS_25', ...
+    'DIFF_TERM', 'TRUE');
+ucf_constraints_standard = struct( ...
+    'IOSTANDARD', 'LVCMOS15');
 
-ext_ports.clk_line_p = {4 'in'  [s.adc_str,'_clk_line_p']  '{''R28'',''H39'',''J42'',''P30''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.clk_line_n = {4 'in'  [s.adc_str,'_clk_line_n']  '{''R29'',''H38'',''K42'',''P31''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.clk_line_p = {4 'in'  [s.adc_str,'_clk_line_p']  '{''R28'',''H39'',''J42'',''P30''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
+ext_ports.clk_line_n = {4 'in'  [s.adc_str,'_clk_line_n']  '{''R29'',''H38'',''K42'',''P31''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
 ext_ports.ser_a_p    = {16 'in'  [s.adc_str,'_ser_a_p']  '{''J37'',''K33'',''L35'',''M36'',''J35'',''H40'',''K38'',''K37'',''F40'',''C40'',''E42'',''F37'',''B38'',''B41'',''D38'',''A40''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
 ext_ports.ser_a_n    = {16 'in'  [s.adc_str,'_ser_a_n']  '{''J36'',''K32'',''L36'',''M37'',''H35'',''H41'',''J38'',''L37'',''F41'',''C41'',''F42'',''E37'',''A39'',''B42'',''C38'',''A41''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
 ext_ports.ser_b_p    = {16 'in'  [s.adc_str,'_ser_b_p']  '{''L34'',''M33'',''L31'',''N28'',''K39'',''K35'',''N29'',''J40'',''H36'',''G41'',''D40'',''G37'',''F35'',''E39'',''B39'',''D42''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
