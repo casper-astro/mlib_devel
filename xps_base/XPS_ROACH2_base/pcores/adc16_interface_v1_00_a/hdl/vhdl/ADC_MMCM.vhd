@@ -9,25 +9,25 @@ use IEEE.numeric_std.all;
 entity  ADC_MMCM  is
 
     port (
-	            -- System
-					reset        :  in  std_logic;
-					locked       :  out std_logic;
-	 
-               -- Clock inputs
-					clkin        :  in  std_logic;
-					
-					-- Clock outputs
-					clkout0p     :  out std_logic;
-					clkout0n     :  out std_logic;
-					clkout1p     :  out std_logic;
-					clkout1n     :  out std_logic;
-					clkout2      :  out std_logic;
+               -- System
+               reset        :  in  std_logic;
+               locked       :  out std_logic;
 
-		         -- Phase shift
-					psincdec     :  in  std_logic;
-					psen         :  in  std_logic;
-					psclk        :  in  std_logic;
-					psdone       :  out std_logic					
+               -- Clock inputs
+               clkin        :  in  std_logic;
+
+               -- Clock outputs
+               clkout0p     :  out std_logic;
+               clkout0n     :  out std_logic;
+               clkout1p     :  out std_logic;
+               clkout1n     :  out std_logic;
+               clkout2      :  out std_logic;
+
+               -- Phase shift
+               psincdec     :  in  std_logic;
+               psen         :  in  std_logic;
+               psclk        :  in  std_logic;
+               psdone       :  out std_logic
     );
 
 end  ADC_MMCM;
@@ -35,15 +35,15 @@ end  ADC_MMCM;
 architecture ADC_MMCM_arc of ADC_MMCM is
 
      -- Components
-	  
-	  component IBUFGDS port (
-	   O     : out std_logic;
-	   I     : in  std_logic;
-	   IB	   : in  std_logic
-	  );
-	  end component;
-	  
-	  component MMCM_ADV generic (
+
+     component IBUFGDS port (
+      O     : out std_logic;
+      I     : in  std_logic;
+      IB    : in  std_logic
+     );
+     end component;
+
+     component MMCM_ADV generic (
       BANDWIDTH            : string;
       CLKOUT4_CASCADE      : boolean;
       CLOCK_HOLD           : boolean;
@@ -102,21 +102,21 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKFBSTOPPED : out std_logic;
       PWRDWN       : in  std_logic;
       RST          : in  std_logic
-		);
+      );
      end component;
-	  
-	  -- BUFG Signals
-	  signal ibufgds_clkinp  : std_logic;
-	  signal ibufgds_clkinn  : std_logic;
-	  signal ibufgds_clkout  : std_logic;
-	  
-	  -- MMCM Signals
-	  signal mmcm_clkfbout   : std_logic;
+
+     -- BUFG Signals
+     signal ibufgds_clkinp  : std_logic;
+     signal ibufgds_clkinn  : std_logic;
+     signal ibufgds_clkout  : std_logic;
+
+     -- MMCM Signals
+     signal mmcm_clkfbout   : std_logic;
      signal mmcm_clkout0    : std_logic;
      signal mmcm_clkout0b   : std_logic;
      signal mmcm_clkout1    : std_logic;
      signal mmcm_clkout1b   : std_logic;
-	  signal mmcm_clkout2    : std_logic;
+     signal mmcm_clkout2    : std_logic;
      signal mmcm_clkfbin    : std_logic;
      signal mmcm_clkin      : std_logic;
      signal mmcm_psclk      : std_logic;
@@ -125,29 +125,29 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      signal mmcm_psdone     : std_logic;
      signal mmcm_locked     : std_logic;
      signal mmcm_reset      : std_logic;
-	 
+
      begin
 
-	  -- Signal routing
-	  
-	  mmcm_reset <= reset;
-	  locked <= mmcm_locked;
-	  
-	  mmcm_clkin <= clkin;
-	  mmcm_clkfbin <= mmcm_clkfbout;
-	  
-	  clkout0p <= mmcm_clkout0;
-	  clkout0n <= mmcm_clkout0b;
-	  clkout1p <= mmcm_clkout1;
-	  clkout1n <= mmcm_clkout1b;
-	  clkout2  <= mmcm_clkout2;
-	  
-	  mmcm_psincdec <= psincdec;
-	  mmcm_psen <= psen;
-	  mmcm_psclk <= psclk;
-	  psdone <= mmcm_psdone;
-	  
-	  -- Clock input from adc @ around 1GHz
+     -- Signal routing
+
+     mmcm_reset <= reset;
+     locked <= mmcm_locked;
+
+     mmcm_clkin <= clkin;
+     mmcm_clkfbin <= mmcm_clkfbout;
+
+     clkout0p <= mmcm_clkout0;
+     clkout0n <= mmcm_clkout0b;
+     clkout1p <= mmcm_clkout1;
+     clkout1n <= mmcm_clkout1b;
+     clkout2  <= mmcm_clkout2;
+
+     mmcm_psincdec <= psincdec;
+     mmcm_psen <= psen;
+     mmcm_psclk <= psclk;
+     psdone <= mmcm_psdone;
+
+     -- Clock input from adc @ around 1GHz
      mmcm_adv_inst : MMCM_ADV
      GENERIC MAP (
       BANDWIDTH            => "OPTIMIZED",
@@ -239,7 +239,7 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKFBSTOPPED => open,
       PWRDWN       => '0',
       RST          => mmcm_reset
-      );  
-	  
+      );
+
 end ADC_MMCM_arc;
 
