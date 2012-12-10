@@ -12,9 +12,10 @@ entity  adc_unit  is
                -- System
                line_clk      :  out std_logic;
                div_clk       :  out std_logic;
-               ref_clk       :  out std_logic;
+               fabric_clk    :  out std_logic;
                i_line_clk    :  in  std_logic;
                i_div_clk     :  in  std_logic;
+               i_fabric_clk  :  in  std_logic;
                ctrl_clk      :  in  std_logic;
                data_clk      :  in  std_logic;
                reset         :  in  std_logic;
@@ -81,9 +82,9 @@ architecture adc_unit_arc of adc_unit is
                clkin        :  in  std_logic; -- line
                clkdiv       :  in  std_logic; -- frame/system
 
-               -- Phase shift
+               -- Data (serial in, parallel out)
                s_data       :  in  std_logic;
-               p_data       :  out std_logic_vector(3 downto 0)
+               p_data       :  out std_logic_vector(7 downto 0)
       );
      end component;
 
@@ -153,19 +154,19 @@ architecture adc_unit_arc of adc_unit is
      );
      end component;
 
-     -- FIFO
-     component fifo_generator_v8_2
-     port (
-      rst         : in  std_logic;
-      wr_clk      : in  std_logic;
-      rd_clk      : in  std_logic;
-      din         : in  std_logic_vector(31 downto 0);
-      wr_en       : in  std_logic;
-      rd_en       : in  std_logic;
-      dout        : out std_logic_vector(31 downto 0);
-      full        : out std_logic;
-      empty       : out std_logic);
-     end component;
+--     -- FIFO
+--     component fifo_generator_v8_2
+--     port (
+--      rst         : in  std_logic;
+--      wr_clk      : in  std_logic;
+--      rd_clk      : in  std_logic;
+--      din         : in  std_logic_vector(31 downto 0);
+--      wr_en       : in  std_logic;
+--      rd_en       : in  std_logic;
+--      dout        : out std_logic_vector(31 downto 0);
+--      full        : out std_logic;
+--      empty       : out std_logic);
+--     end component;
 
      -- Signals
      signal sysclk : std_logic;
@@ -188,6 +189,7 @@ architecture adc_unit_arc of adc_unit is
      signal adc_iserdes_data1 : std_logic_vector(31 downto 0);
      signal adc_iserdes_data1_delay : std_logic_vector(31 downto 0);
      signal adc_iserdes_data : std_logic_vector(31 downto 0);
+     signal adc_iserdes_sel : std_logic;
 
      signal mmcm_pcntrl_sysclk : std_logic;
      signal mmcm_pcntrl_reset : std_logic;
@@ -229,19 +231,19 @@ architecture adc_unit_arc of adc_unit is
 
      signal load_phase : std_logic;
 
-       -- FIFO signals
-     signal fifo_rst      : std_logic;
-     signal fifo_wr_clk   : std_logic;
-     signal fifo_rd_clk   : std_logic;
-     signal fifo_wr_en    : std_logic;
-     signal fifo_rd_en    : std_logic;
-     signal fifo_full     : std_logic;
-     signal fifo_afull    : std_logic;
-     signal fifo_empty    : std_logic;
-     signal fifo_din      : std_logic_vector(31 downto 0);
-     signal fifo_din_buf0 : std_logic_vector(31 downto 0);
-     signal fifo_din_buf1 : std_logic_vector(31 downto 0);
-     signal fifo_dout     : std_logic_vector(31 downto 0);
+--     -- FIFO signals
+--     signal fifo_rst      : std_logic;
+--     signal fifo_wr_clk   : std_logic;
+--     signal fifo_rd_clk   : std_logic;
+--     signal fifo_wr_en    : std_logic;
+--     signal fifo_rd_en    : std_logic;
+--     signal fifo_full     : std_logic;
+--     signal fifo_afull    : std_logic;
+--     signal fifo_empty    : std_logic;
+--     signal fifo_din      : std_logic_vector(31 downto 0);
+--     signal fifo_din_buf0 : std_logic_vector(31 downto 0);
+--     signal fifo_din_buf1 : std_logic_vector(31 downto 0);
+--     signal fifo_dout     : std_logic_vector(31 downto 0);
 
      -- delay signals
      type  delayTAPtype  is array (0 to 3) of std_logic_vector(4 downto 0);
@@ -263,7 +265,7 @@ architecture adc_unit_arc of adc_unit is
 
      line_clk <= bufg_o(0);
      div_clk <= bufg_o(1);
-     ref_clk <= bufg_o(2);
+     fabric_clk <= bufg_o(2);
 
      -- Differential signals
 
@@ -289,32 +291,32 @@ architecture adc_unit_arc of adc_unit is
      adc_iserdes_b_clkdiv <= i_div_clk;
      --adc_iserdes_a_s_data <= ibufds_ser1_o;
      --adc_iserdes_b_s_data <= ibufds_ser2_o;
-     p_data <= fifo_dout;
+--     p_data <= fifo_dout;
 
      mmcm_pcntrl_sysclk <= ctrl_clk;
      mmcm_pcntrl_reset <= reset;
-         mmcm_pcntrl_mode <= '0';
-         mmcm_pcntrl_shift <= '0';
-         mmcm_pcntrl_shift_val <= "00000000";
+     mmcm_pcntrl_mode <= '0';
+     mmcm_pcntrl_shift <= '0';
+     mmcm_pcntrl_shift_val <= "00000000";
      mmcm_pcntrl_psdone <= adc_mmcm_psdone;
-         mmcm_pcntrl_locked <= adc_mmcm_locked;
+     mmcm_pcntrl_locked <= adc_mmcm_locked;
      --mmcm_ready <= mmcm_pcntrl_ready;
      --mmcm_psdone <= mmcm_pcntrl_o_psdone;
 
      adc_mmcm_reset <= reset;
 
      --clock_m_gen : if mode = "MASTER" generate
-         adc_mmcm_clkin <= ibufds_clk_o;
+     adc_mmcm_clkin <= ibufds_clk_o;
      --end generate clock_m_gen;
 
      adc_mmcm_psincdec <= mmcm_pcntrl_psincdec;
      adc_mmcm_psen <= mmcm_pcntrl_psen;
      adc_mmcm_psclk <= mmcm_pcntrl_psclk;
 
-     fifo_rst <= reset;
-     --fifo_wr_clk <= ctrl_clk;
-         fifo_wr_clk <= i_div_clk;
-         fifo_rd_clk <= data_clk;
+--     fifo_rst <= reset;
+--     --fifo_wr_clk <= ctrl_clk;
+--         fifo_wr_clk <= i_div_clk;
+--         fifo_rd_clk <= data_clk;
 
      -- delay
      adc_iserdes_a_s_data <= delay_a_out;
@@ -323,96 +325,112 @@ architecture adc_unit_arc of adc_unit is
      adc_iserdes_b_s_data <= delay_b_out;
      delay_b_in <= ibufds_ser2_o;
 
-         delay_clock <= delay_clk;
-         delay_reset <= delay_rst;
-         delay_intap(0) <= delay_tap(4 downto 0);
+     delay_clock <= delay_clk;
+     delay_reset <= delay_rst;
+     delay_intap(0) <= delay_tap(4 downto 0);
      delay_intap(1) <= delay_tap(9 downto 5);
      delay_intap(2) <= delay_tap(14 downto 10);
      delay_intap(3) <= delay_tap(19 downto 15);
 
-     -- process
-     ----------------------------------------------
-     -- Data muxing
-     process (data_clk)
+     process (i_fabric_clk, adc_iserdes_sel, adc_iserdes_data0, adc_iserdes_data1)
      begin
+       -- Mux data based on adc_iserdes_sel state
+       if adc_iserdes_sel = '1' then
+         adc_iserdes_data <= adc_iserdes_data0;
+       else
+         adc_iserdes_data <= adc_iserdes_data1;
+       end if;
 
-         if rising_edge(data_clk) then
-            load_phase <= not load_phase;
-
-            adc_iserdes_data0 <= adc_iserdes_data0;
-            adc_iserdes_data1 <= adc_iserdes_data1;
-
-            if (load_phase = load_phase_set) then
-                adc_iserdes_data0(3 downto 0) <= adc_iserdes_a_p_data(3 downto 0);
-                adc_iserdes_data0(11 downto 8) <= adc_iserdes_a_p_data(7 downto 4);
-                adc_iserdes_data0(19 downto 16) <= adc_iserdes_a_p_data(11 downto 8);
-                adc_iserdes_data0(27 downto 24) <= adc_iserdes_a_p_data(15 downto 12);
-
-                adc_iserdes_data1(3 downto 0) <= adc_iserdes_b_p_data(3 downto 0);
-                adc_iserdes_data1(11 downto 8) <= adc_iserdes_b_p_data(7 downto 4);
-                adc_iserdes_data1(19 downto 16) <= adc_iserdes_b_p_data(11 downto 8);
-                adc_iserdes_data1(27 downto 24) <= adc_iserdes_b_p_data(15 downto 12);
-            else
-                adc_iserdes_data0(7 downto 4) <= adc_iserdes_a_p_data(3 downto 0);
-                adc_iserdes_data0(15 downto 12) <= adc_iserdes_a_p_data(7 downto 4);
-                adc_iserdes_data0(23 downto 20) <= adc_iserdes_a_p_data(11 downto 8);
-                adc_iserdes_data0(31 downto 28) <= adc_iserdes_a_p_data(15 downto 12);
-
-                adc_iserdes_data1(7 downto 4) <= adc_iserdes_b_p_data(3 downto 0);
-                adc_iserdes_data1(15 downto 12) <= adc_iserdes_b_p_data(7 downto 4);
-                adc_iserdes_data1(23 downto 20) <= adc_iserdes_b_p_data(11 downto 8);
-                adc_iserdes_data1(31 downto 28) <= adc_iserdes_b_p_data(15 downto 12);
-            end if;
-
-            adc_iserdes_data1_delay <= adc_iserdes_data1;
-         end if;
+       -- rising edge of fabric clock
+       if i_fabric_clk'event and i_fabric_clk = '1' then
+         p_data <= adc_iserdes_data;
+         adc_iserdes_sel <= not adc_iserdes_sel;
+       end if;
      end process;
 
-     process (load_phase, load_phase_set, adc_iserdes_data0, adc_iserdes_data1, adc_iserdes_data1_delay)
-     begin
-         if (load_phase = load_phase_set) then
-             adc_iserdes_data <= adc_iserdes_data0;
-         else
-             adc_iserdes_data <= adc_iserdes_data1_delay;
-         end if;
-     end process;
-     ----------------------------------------------
-
-     FIFO : fifo_generator_v8_2
-    port map (
-      rst         => fifo_rst,
-      wr_clk      => fifo_wr_clk,
-      rd_clk      => fifo_rd_clk,
-      din         => fifo_din_buf1,
-      wr_en       => fifo_wr_en,
-      rd_en       => fifo_rd_en,
-      dout        => fifo_dout,
-      full        => fifo_full,
-      empty       => fifo_empty
-      );
-
-  -- purpose: control the FIFO read enable signal
-  -- type   : sequential
-  -- inputs : fifo_wr_clk, fifo_rst, fifo_empty
-  -- outputs: fifo_rd_en, fifo_din_buf(n)
-  FIFO_RD_CTRL: process (fifo_wr_clk, fifo_rst, fifo_empty)
-  begin  -- process FIFO_RD_CTRL
-    if fifo_wr_clk'event and fifo_wr_clk = '1' then  -- rising clock edge
-      if fifo_rst = '1' then              -- synchronous reset (active high)
-        fifo_wr_en <= '0';
-        fifo_rd_en <= '0';
-        fifo_din <= (others => '0');
-        fifo_din_buf0 <= (others => '0');
-        fifo_din_buf1 <= (others => '0');
-      else
-        fifo_wr_en <= '1';
-        fifo_rd_en <= not fifo_empty;
-        fifo_din <= adc_iserdes_data;
-        fifo_din_buf0 <= fifo_din;
-        fifo_din_buf1 <= fifo_din_buf0;
-      end if;
-    end if;
-  end process FIFO_RD_CTRL;
+--     -- process
+--     ----------------------------------------------
+--     -- Data muxing
+--     process (data_clk)
+--     begin
+--
+--         if rising_edge(data_clk) then
+--            load_phase <= not load_phase;
+--
+--            adc_iserdes_data0 <= adc_iserdes_data0;
+--            adc_iserdes_data1 <= adc_iserdes_data1;
+--
+--            if (load_phase = load_phase_set) then
+--                adc_iserdes_data0(3 downto 0) <= adc_iserdes_a_p_data(3 downto 0);
+--                adc_iserdes_data0(11 downto 8) <= adc_iserdes_a_p_data(7 downto 4);
+--                adc_iserdes_data0(19 downto 16) <= adc_iserdes_a_p_data(11 downto 8);
+--                adc_iserdes_data0(27 downto 24) <= adc_iserdes_a_p_data(15 downto 12);
+--
+--                adc_iserdes_data1(3 downto 0) <= adc_iserdes_b_p_data(3 downto 0);
+--                adc_iserdes_data1(11 downto 8) <= adc_iserdes_b_p_data(7 downto 4);
+--                adc_iserdes_data1(19 downto 16) <= adc_iserdes_b_p_data(11 downto 8);
+--                adc_iserdes_data1(27 downto 24) <= adc_iserdes_b_p_data(15 downto 12);
+--            else
+--                adc_iserdes_data0(7 downto 4) <= adc_iserdes_a_p_data(3 downto 0);
+--                adc_iserdes_data0(15 downto 12) <= adc_iserdes_a_p_data(7 downto 4);
+--                adc_iserdes_data0(23 downto 20) <= adc_iserdes_a_p_data(11 downto 8);
+--                adc_iserdes_data0(31 downto 28) <= adc_iserdes_a_p_data(15 downto 12);
+--
+--                adc_iserdes_data1(7 downto 4) <= adc_iserdes_b_p_data(3 downto 0);
+--                adc_iserdes_data1(15 downto 12) <= adc_iserdes_b_p_data(7 downto 4);
+--                adc_iserdes_data1(23 downto 20) <= adc_iserdes_b_p_data(11 downto 8);
+--                adc_iserdes_data1(31 downto 28) <= adc_iserdes_b_p_data(15 downto 12);
+--            end if;
+--
+--            adc_iserdes_data1_delay <= adc_iserdes_data1;
+--         end if;
+--     end process;
+--
+--     process (load_phase, load_phase_set, adc_iserdes_data0, adc_iserdes_data1, adc_iserdes_data1_delay)
+--     begin
+--         if (load_phase = load_phase_set) then
+--             adc_iserdes_data <= adc_iserdes_data0;
+--         else
+--             adc_iserdes_data <= adc_iserdes_data1_delay;
+--         end if;
+--     end process;
+--     ----------------------------------------------
+--
+--     FIFO : fifo_generator_v8_2
+--    port map (
+--      rst         => fifo_rst,
+--      wr_clk      => fifo_wr_clk,
+--      rd_clk      => fifo_rd_clk,
+--      din         => fifo_din_buf1,
+--      wr_en       => fifo_wr_en,
+--      rd_en       => fifo_rd_en,
+--      dout        => fifo_dout,
+--      full        => fifo_full,
+--      empty       => fifo_empty
+--      );
+--
+--  -- purpose: control the FIFO read enable signal
+--  -- type   : sequential
+--  -- inputs : fifo_wr_clk, fifo_rst, fifo_empty
+--  -- outputs: fifo_rd_en, fifo_din_buf(n)
+--  FIFO_RD_CTRL: process (fifo_wr_clk, fifo_rst, fifo_empty)
+--  begin  -- process FIFO_RD_CTRL
+--    if fifo_wr_clk'event and fifo_wr_clk = '1' then  -- rising clock edge
+--      if fifo_rst = '1' then              -- synchronous reset (active high)
+--        fifo_wr_en <= '0';
+--        fifo_rd_en <= '0';
+--        fifo_din <= (others => '0');
+--        fifo_din_buf0 <= (others => '0');
+--        fifo_din_buf1 <= (others => '0');
+--      else
+--        fifo_wr_en <= '1';
+--        fifo_rd_en <= not fifo_empty;
+--        fifo_din <= adc_iserdes_data;
+--        fifo_din_buf0 <= fifo_din;
+--        fifo_din_buf1 <= fifo_din_buf0;
+--      end if;
+--    end if;
+--  end process FIFO_RD_CTRL;
 
      -- ISERDES block
      ISERDES_GEN : for i in 0 to 3 generate
@@ -424,7 +442,7 @@ architecture adc_unit_arc of adc_unit is
                clkin      => adc_iserdes_a_clkin,
                clkdiv     => adc_iserdes_a_clkdiv,
                s_data     => adc_iserdes_a_s_data(i),
-               p_data     => adc_iserdes_a_p_data(((i+1)*4)-1 downto i*4)
+               p_data     => adc_iserdes_data0(8*i+7 downto 8*i)
       );
      adc_iserdes_b_inst : ADC_ISERDES
      PORT MAP (
@@ -433,7 +451,7 @@ architecture adc_unit_arc of adc_unit is
                clkin      => adc_iserdes_b_clkin,
                clkdiv     => adc_iserdes_b_clkdiv,
                s_data     => adc_iserdes_b_s_data(i),
-               p_data     => adc_iserdes_b_p_data(((i+1)*4)-1 downto i*4)
+               p_data     => adc_iserdes_data1(8*i+7 downto 8*i)
       );
     ibufds_ser1_inst : IBUFDS
     generic map (

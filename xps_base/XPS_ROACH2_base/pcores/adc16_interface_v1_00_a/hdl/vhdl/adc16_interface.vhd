@@ -48,9 +48,10 @@ architecture adc16_interface_arc of adc16_interface is
                -- System
                line_clk      :  out std_logic;
                div_clk       :  out std_logic;
-               ref_clk       :  out std_logic;
+               fabric_clk       :  out std_logic;
                i_line_clk    :  in  std_logic;
                i_div_clk     :  in  std_logic;
+               i_fabric_clk  :  in  std_logic;
                ctrl_clk      :  in  std_logic;
                data_clk      :  in  std_logic;
                reset         :  in  std_logic;
@@ -83,9 +84,10 @@ architecture adc16_interface_arc of adc16_interface is
 
      signal s_line_clk : i4_v1;
      signal s_div_clk : i4_v1;
-     signal s_ref_clk : i4_v1;
+     signal s_fabric_clk : i4_v1;
      signal s_i_line_clk : i4_v1;
      signal s_i_div_clk : i4_v1;
+     signal s_i_fabric_clk : i4_v1;
      signal s_ctrl_clk : i4_v1;
      signal s_data_clk : i4_v1;
      signal s_reset : i4_v1;
@@ -112,11 +114,13 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Internal routing
 
-     div_clk <= s_div_clk(0);
+     --div_clk <= s_div_clk(0);
+     div_clk <= s_fabric_clk(0);
 
      -- ADC A
      s_i_line_clk(0) <= s_line_clk(0);
      s_i_div_clk(0) <= s_div_clk(0);
+     s_i_fabric_clk(0) <= s_fabric_clk(0);
      s_ctrl_clk(0) <= ctrl_clk;
      s_data_clk(0) <= data_clk;
      s_reset(0) <= reset;
@@ -142,6 +146,7 @@ architecture adc16_interface_arc of adc16_interface is
      -- ADC B
      s_i_line_clk(1) <= s_line_clk(0);
      s_i_div_clk(1) <= s_div_clk(0);
+     s_i_fabric_clk(1) <= s_fabric_clk(0);
      s_ctrl_clk(1) <= ctrl_clk;
      s_data_clk(1) <= data_clk;
      s_reset(1) <= reset;
@@ -167,6 +172,7 @@ architecture adc16_interface_arc of adc16_interface is
      -- ADC C
      s_i_line_clk(2) <= s_line_clk(0);
      s_i_div_clk(2) <= s_div_clk(0);
+     s_i_fabric_clk(2) <= s_fabric_clk(0);
      s_ctrl_clk(2) <= ctrl_clk;
      s_data_clk(2) <= data_clk;
      s_reset(2) <= reset;
@@ -192,6 +198,7 @@ architecture adc16_interface_arc of adc16_interface is
      -- ADC D
      s_i_line_clk(3) <= s_line_clk(0);
      s_i_div_clk(3) <= s_div_clk(0);
+     s_i_fabric_clk(3) <= s_fabric_clk(0);
      s_ctrl_clk(3) <= ctrl_clk;
      s_data_clk(3) <= data_clk;
      s_reset(3) <= reset;
@@ -221,9 +228,10 @@ architecture adc16_interface_arc of adc16_interface is
     port map (
                line_clk => s_line_clk(0),
                div_clk => s_div_clk(0),
-               ref_clk => s_ref_clk(0),
+               fabric_clk => s_fabric_clk(0),
                i_line_clk => s_i_line_clk(0),
                i_div_clk => s_i_div_clk(0),
+               i_fabric_clk => s_i_fabric_clk(0),
                ctrl_clk => s_ctrl_clk(0),
                data_clk => s_data_clk(0),
                reset => s_reset(0),
@@ -251,9 +259,10 @@ architecture adc16_interface_arc of adc16_interface is
     port map (
                line_clk => s_line_clk(1),
                div_clk => s_div_clk(1),
-               ref_clk => s_ref_clk(1),
+               fabric_clk => s_fabric_clk(1),
                i_line_clk => s_i_line_clk(1),
                i_div_clk => s_i_div_clk(1),
+               i_fabric_clk => s_i_fabric_clk(1),
                ctrl_clk => s_ctrl_clk(1),
                data_clk => s_data_clk(1),
                reset => s_reset(1),
@@ -281,9 +290,10 @@ architecture adc16_interface_arc of adc16_interface is
     port map (
                line_clk => s_line_clk(2),
                div_clk => s_div_clk(2),
-               ref_clk => s_ref_clk(2),
+               fabric_clk => s_fabric_clk(2),
                i_line_clk => s_i_line_clk(2),
                i_div_clk => s_i_div_clk(2),
+               i_fabric_clk => s_i_fabric_clk(2),
                ctrl_clk => s_ctrl_clk(2),
                data_clk => s_data_clk(2),
                reset => s_reset(2),
@@ -311,9 +321,10 @@ architecture adc16_interface_arc of adc16_interface is
     port map (
                line_clk => s_line_clk(3),
                div_clk => s_div_clk(3),
-               ref_clk => s_ref_clk(3),
+               fabric_clk => s_fabric_clk(3),
                i_line_clk => s_i_line_clk(3),
                i_div_clk => s_i_div_clk(3),
+               i_fabric_clk => s_i_fabric_clk(3),
                ctrl_clk => s_ctrl_clk(3),
                data_clk => s_data_clk(3),
                reset => s_reset(3),
