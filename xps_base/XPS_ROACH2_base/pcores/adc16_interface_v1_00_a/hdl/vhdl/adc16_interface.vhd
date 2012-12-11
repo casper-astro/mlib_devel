@@ -110,17 +110,20 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_delay_rst : i4_v4;
      signal s_delay_tap : i4_v20;
 
+     -- Set which ADC is the MASTER
+     constant master : integer := 2;
+
      begin
 
      -- Internal routing
 
      --div_clk <= s_div_clk(0);
-     div_clk <= s_fabric_clk(0);
+     div_clk <= s_fabric_clk(master);
 
      -- ADC A
-     s_i_line_clk(0) <= s_line_clk(0);
-     s_i_div_clk(0) <= s_div_clk(0);
-     s_i_fabric_clk(0) <= s_fabric_clk(0);
+     s_i_line_clk(0) <= s_line_clk(master);
+     s_i_div_clk(0) <= s_div_clk(master);
+     s_i_fabric_clk(0) <= s_fabric_clk(master);
      s_ctrl_clk(0) <= ctrl_clk;
      s_data_clk(0) <= data_clk;
      s_reset(0) <= reset;
@@ -139,14 +142,14 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_a <= s_p_data(0);
 
      -- Delay Controller
-     s_delay_clk(0) <= s_div_clk(0);
+     s_delay_clk(0) <= s_div_clk(master);
      s_delay_rst(0) <= delay_rst(3 downto 0);
      s_delay_tap(0) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
      -- ADC B
-     s_i_line_clk(1) <= s_line_clk(0);
-     s_i_div_clk(1) <= s_div_clk(0);
-     s_i_fabric_clk(1) <= s_fabric_clk(0);
+     s_i_line_clk(1) <= s_line_clk(master);
+     s_i_div_clk(1) <= s_div_clk(master);
+     s_i_fabric_clk(1) <= s_fabric_clk(master);
      s_ctrl_clk(1) <= ctrl_clk;
      s_data_clk(1) <= data_clk;
      s_reset(1) <= reset;
@@ -165,14 +168,14 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_b <= s_p_data(1);
 
      -- Delay Controller
-     s_delay_clk(1) <= s_div_clk(0);
+     s_delay_clk(1) <= s_div_clk(master);
      s_delay_rst(1) <= delay_rst(7 downto 4);
      s_delay_tap(1) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
      -- ADC C
-     s_i_line_clk(2) <= s_line_clk(0);
-     s_i_div_clk(2) <= s_div_clk(0);
-     s_i_fabric_clk(2) <= s_fabric_clk(0);
+     s_i_line_clk(2) <= s_line_clk(master);
+     s_i_div_clk(2) <= s_div_clk(master);
+     s_i_fabric_clk(2) <= s_fabric_clk(master);
      s_ctrl_clk(2) <= ctrl_clk;
      s_data_clk(2) <= data_clk;
      s_reset(2) <= reset;
@@ -191,14 +194,14 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_c <= s_p_data(2);
 
      -- Delay Controller
-     s_delay_clk(2) <= s_div_clk(0);
+     s_delay_clk(2) <= s_div_clk(master);
      s_delay_rst(2) <= delay_rst(11 downto 8);
      s_delay_tap(2) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
      -- ADC D
-     s_i_line_clk(3) <= s_line_clk(0);
-     s_i_div_clk(3) <= s_div_clk(0);
-     s_i_fabric_clk(3) <= s_fabric_clk(0);
+     s_i_line_clk(3) <= s_line_clk(master);
+     s_i_div_clk(3) <= s_div_clk(master);
+     s_i_fabric_clk(3) <= s_fabric_clk(master);
      s_ctrl_clk(3) <= ctrl_clk;
      s_data_clk(3) <= data_clk;
      s_reset(3) <= reset;
@@ -217,14 +220,14 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_d <= s_p_data(3);
 
      -- Delay Controller
-     s_delay_clk(3) <= s_div_clk(0);
+     s_delay_clk(3) <= s_div_clk(master);
      s_delay_rst(3) <= delay_rst(15 downto 12);
      s_delay_tap(3) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
     -- ADC A
     adc_A : adc_unit
     generic map (
-               mode => "MASTER")
+               mode => "SLAVE")
     port map (
                line_clk => s_line_clk(0),
                div_clk => s_div_clk(0),
@@ -286,7 +289,7 @@ architecture adc16_interface_arc of adc16_interface is
     -- ADC C
     adc_C : adc_unit
     generic map (
-               mode => "SLAVE")
+               mode => "MASTER")
     port map (
                line_clk => s_line_clk(2),
                div_clk => s_div_clk(2),
