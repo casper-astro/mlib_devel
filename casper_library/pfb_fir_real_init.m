@@ -167,7 +167,7 @@ for p=1:pols,
         if (p == 2) && (share_coefficients == true)
             blk_name = [in_name,'_delay'];
             reuse_block(blk, blk_name, 'xbsIndex_r4/Delay', ...
-                'latency', 'bram_latency+1', 'Position', [150 50*portnum*TotalTaps 150+100 50*portnum*TotalTaps+30]);
+                'latency', 'bram_latency+1+fan_latency', 'Position', [150 50*portnum*TotalTaps 150+100 50*portnum*TotalTaps+30]);
             add_line(blk, [in_name,'/1'], [blk_name,'/1']);
         else
             blk_name = [in_name,'_coeffs'];

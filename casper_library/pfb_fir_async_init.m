@@ -185,7 +185,7 @@ for p = 1 : pols,
         if (p == 2) && (share_coefficients == true)
             blk_name = [in_name,'_delay'];
             reuse_block(blk, blk_name, 'xbsIndex_r4/Delay', ...
-                'latency', 'bram_latency+1', 'Position', [150 150*portnum 150+x_size 150*portnum+y_size]);
+                'latency', 'bram_latency+1+fan_latency', 'Position', [150 150*portnum 150+x_size 150*portnum+y_size]);
             add_line(blk, [in_name,'/1'], [blk_name,'/1'], 'autorouting', autoroute);
         else
             blk_name = [in_name,'_coeffs'];
