@@ -154,20 +154,6 @@ architecture adc_unit_arc of adc_unit is
      );
      end component;
 
---     -- FIFO
---     component fifo_generator_v8_2
---     port (
---      rst         : in  std_logic;
---      wr_clk      : in  std_logic;
---      rd_clk      : in  std_logic;
---      din         : in  std_logic_vector(31 downto 0);
---      wr_en       : in  std_logic;
---      rd_en       : in  std_logic;
---      dout        : out std_logic_vector(31 downto 0);
---      full        : out std_logic;
---      empty       : out std_logic);
---     end component;
-
      -- Signals
      signal sysclk : std_logic;
 
@@ -231,20 +217,6 @@ architecture adc_unit_arc of adc_unit is
 
      signal load_phase : std_logic;
 
---     -- FIFO signals
---     signal fifo_rst      : std_logic;
---     signal fifo_wr_clk   : std_logic;
---     signal fifo_rd_clk   : std_logic;
---     signal fifo_wr_en    : std_logic;
---     signal fifo_rd_en    : std_logic;
---     signal fifo_full     : std_logic;
---     signal fifo_afull    : std_logic;
---     signal fifo_empty    : std_logic;
---     signal fifo_din      : std_logic_vector(31 downto 0);
---     signal fifo_din_buf0 : std_logic_vector(31 downto 0);
---     signal fifo_din_buf1 : std_logic_vector(31 downto 0);
---     signal fifo_dout     : std_logic_vector(31 downto 0);
-
      -- delay signals
      type  delayTAPtype  is array (0 to 3) of std_logic_vector(4 downto 0);
 
@@ -291,7 +263,6 @@ architecture adc_unit_arc of adc_unit is
      adc_iserdes_b_clkdiv <= i_div_clk;
      --adc_iserdes_a_s_data <= ibufds_ser1_o;
      --adc_iserdes_b_s_data <= ibufds_ser2_o;
---     p_data <= fifo_dout;
 
      mmcm_pcntrl_sysclk <= ctrl_clk;
      mmcm_pcntrl_reset <= reset;
@@ -312,11 +283,6 @@ architecture adc_unit_arc of adc_unit is
      adc_mmcm_psincdec <= mmcm_pcntrl_psincdec;
      adc_mmcm_psen <= mmcm_pcntrl_psen;
      adc_mmcm_psclk <= mmcm_pcntrl_psclk;
-
---     fifo_rst <= reset;
---     --fifo_wr_clk <= ctrl_clk;
---         fifo_wr_clk <= i_div_clk;
---         fifo_rd_clk <= data_clk;
 
      -- delay
      adc_iserdes_a_s_data <= delay_a_out;
@@ -347,90 +313,6 @@ architecture adc_unit_arc of adc_unit is
          adc_iserdes_sel <= not adc_iserdes_sel;
        end if;
      end process;
-
---     -- process
---     ----------------------------------------------
---     -- Data muxing
---     process (data_clk)
---     begin
---
---         if rising_edge(data_clk) then
---            load_phase <= not load_phase;
---
---            adc_iserdes_data0 <= adc_iserdes_data0;
---            adc_iserdes_data1 <= adc_iserdes_data1;
---
---            if (load_phase = load_phase_set) then
---                adc_iserdes_data0(3 downto 0) <= adc_iserdes_a_p_data(3 downto 0);
---                adc_iserdes_data0(11 downto 8) <= adc_iserdes_a_p_data(7 downto 4);
---                adc_iserdes_data0(19 downto 16) <= adc_iserdes_a_p_data(11 downto 8);
---                adc_iserdes_data0(27 downto 24) <= adc_iserdes_a_p_data(15 downto 12);
---
---                adc_iserdes_data1(3 downto 0) <= adc_iserdes_b_p_data(3 downto 0);
---                adc_iserdes_data1(11 downto 8) <= adc_iserdes_b_p_data(7 downto 4);
---                adc_iserdes_data1(19 downto 16) <= adc_iserdes_b_p_data(11 downto 8);
---                adc_iserdes_data1(27 downto 24) <= adc_iserdes_b_p_data(15 downto 12);
---            else
---                adc_iserdes_data0(7 downto 4) <= adc_iserdes_a_p_data(3 downto 0);
---                adc_iserdes_data0(15 downto 12) <= adc_iserdes_a_p_data(7 downto 4);
---                adc_iserdes_data0(23 downto 20) <= adc_iserdes_a_p_data(11 downto 8);
---                adc_iserdes_data0(31 downto 28) <= adc_iserdes_a_p_data(15 downto 12);
---
---                adc_iserdes_data1(7 downto 4) <= adc_iserdes_b_p_data(3 downto 0);
---                adc_iserdes_data1(15 downto 12) <= adc_iserdes_b_p_data(7 downto 4);
---                adc_iserdes_data1(23 downto 20) <= adc_iserdes_b_p_data(11 downto 8);
---                adc_iserdes_data1(31 downto 28) <= adc_iserdes_b_p_data(15 downto 12);
---            end if;
---
---            adc_iserdes_data1_delay <= adc_iserdes_data1;
---         end if;
---     end process;
---
---     process (load_phase, load_phase_set, adc_iserdes_data0, adc_iserdes_data1, adc_iserdes_data1_delay)
---     begin
---         if (load_phase = load_phase_set) then
---             adc_iserdes_data <= adc_iserdes_data0;
---         else
---             adc_iserdes_data <= adc_iserdes_data1_delay;
---         end if;
---     end process;
---     ----------------------------------------------
---
---     FIFO : fifo_generator_v8_2
---    port map (
---      rst         => fifo_rst,
---      wr_clk      => fifo_wr_clk,
---      rd_clk      => fifo_rd_clk,
---      din         => fifo_din_buf1,
---      wr_en       => fifo_wr_en,
---      rd_en       => fifo_rd_en,
---      dout        => fifo_dout,
---      full        => fifo_full,
---      empty       => fifo_empty
---      );
---
---  -- purpose: control the FIFO read enable signal
---  -- type   : sequential
---  -- inputs : fifo_wr_clk, fifo_rst, fifo_empty
---  -- outputs: fifo_rd_en, fifo_din_buf(n)
---  FIFO_RD_CTRL: process (fifo_wr_clk, fifo_rst, fifo_empty)
---  begin  -- process FIFO_RD_CTRL
---    if fifo_wr_clk'event and fifo_wr_clk = '1' then  -- rising clock edge
---      if fifo_rst = '1' then              -- synchronous reset (active high)
---        fifo_wr_en <= '0';
---        fifo_rd_en <= '0';
---        fifo_din <= (others => '0');
---        fifo_din_buf0 <= (others => '0');
---        fifo_din_buf1 <= (others => '0');
---      else
---        fifo_wr_en <= '1';
---        fifo_rd_en <= not fifo_empty;
---        fifo_din <= adc_iserdes_data;
---        fifo_din_buf0 <= fifo_din;
---        fifo_din_buf1 <= fifo_din_buf0;
---      end if;
---    end if;
---  end process FIFO_RD_CTRL;
 
      -- ISERDES block
      ISERDES_GEN : for i in 0 to 3 generate

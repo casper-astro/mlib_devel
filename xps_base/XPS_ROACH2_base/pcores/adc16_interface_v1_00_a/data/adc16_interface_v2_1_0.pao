@@ -1,5 +1,4 @@
 
-lib adc16_interface_v1_00_a fifo_generator_v8_2.vhd vhdl
 lib adc16_interface_v1_00_a ADC_ISERDES.vhd vhdl
 lib adc16_interface_v1_00_a ADC_MMCM.vhd vhdl
 lib adc16_interface_v1_00_a MMCM_PCNTRL.vhd vhdl
