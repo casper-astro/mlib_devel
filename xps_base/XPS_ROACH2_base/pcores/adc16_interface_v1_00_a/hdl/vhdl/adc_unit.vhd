@@ -34,7 +34,7 @@ entity  adc_unit  is
                load_phase_set   :  in  std_logic;
                p_data           :  out std_logic_vector(31 downto 0);
 
-               -- MMCM Controller
+               -- IODELAY Controller
                delay_clk        :  in  std_logic; -- 200MHz
                delay_rst        :  in  std_logic_vector(3 downto 0);
                delay_tap        :  in  std_logic_vector(19 downto 0)
@@ -88,24 +88,6 @@ architecture adc_unit_arc of adc_unit is
       );
      end component;
 
-     component MMCM_PCNTRL   port (
-               sysclk       :  in  std_logic;
-               reset        :  in  std_logic;
-               mode         :  in  std_logic;
-               shift        :  in  std_logic;
-               shift_val    :  in  std_logic_vector(7 downto 0);-- max 56
-               ready        :  out std_logic;
-               o_psdone     :  out std_logic;
-
-               -- DCM inputs/outputs
-               MMCM_PSCLK    :  out std_logic;
-               MMCM_PSEN     :  out std_logic;
-               MMCM_PSINCDEC :  out std_logic;
-               MMCM_PSDONE   :  in  std_logic;
-               MMCM_LOCKED   :  in  std_logic
-      );
-     end component;
-
      component ADC_MMCM   port (
                -- System
                reset        :  in  std_logic;
@@ -119,13 +101,7 @@ architecture adc_unit_arc of adc_unit is
                clkout0n     :  out std_logic;
                clkout1p     :  out std_logic;
                clkout1n     :  out std_logic;
-               clkout2      :  out std_logic;
-
-               -- Phase shift
-               psincdec     :  in  std_logic;
-               psen         :  in  std_logic;
-               psclk        :  in  std_logic;
-               psdone       :  out std_logic
+               clkout2      :  out std_logic
       );
      end component;
 
@@ -177,19 +153,6 @@ architecture adc_unit_arc of adc_unit is
      signal adc_iserdes_data : std_logic_vector(31 downto 0);
      signal adc_iserdes_sel : std_logic;
 
-     signal mmcm_pcntrl_sysclk : std_logic;
-     signal mmcm_pcntrl_reset : std_logic;
-     signal mmcm_pcntrl_mode : std_logic;
-     signal mmcm_pcntrl_shift : std_logic;
-     signal mmcm_pcntrl_shift_val : std_logic_vector(7 downto 0);
-     signal mmcm_pcntrl_ready : std_logic;
-     signal mmcm_pcntrl_o_psdone : std_logic;
-     signal mmcm_pcntrl_psclk : std_logic;
-     signal mmcm_pcntrl_psen : std_logic;
-     signal mmcm_pcntrl_psincdec : std_logic;
-     signal mmcm_pcntrl_psdone : std_logic;
-     signal mmcm_pcntrl_locked : std_logic;
-
      signal adc_mmcm_reset : std_logic;
      signal adc_mmcm_locked : std_logic;
      signal adc_mmcm_clkin : std_logic;
@@ -198,10 +161,6 @@ architecture adc_unit_arc of adc_unit is
      signal adc_mmcm_clkout1p : std_logic;
      signal adc_mmcm_clkout1n : std_logic;
      signal adc_mmcm_clkout2  : std_logic;
-     signal adc_mmcm_psincdec : std_logic;
-     signal adc_mmcm_psen : std_logic;
-     signal adc_mmcm_psclk : std_logic;
-     signal adc_mmcm_psdone : std_logic;
 
      signal bufg_i : std_logic_vector(2 downto 0);
      signal bufg_o : std_logic_vector(2 downto 0);
@@ -264,25 +223,11 @@ architecture adc_unit_arc of adc_unit is
      --adc_iserdes_a_s_data <= ibufds_ser1_o;
      --adc_iserdes_b_s_data <= ibufds_ser2_o;
 
-     mmcm_pcntrl_sysclk <= ctrl_clk;
-     mmcm_pcntrl_reset <= reset;
-     mmcm_pcntrl_mode <= '0';
-     mmcm_pcntrl_shift <= '0';
-     mmcm_pcntrl_shift_val <= "00000000";
-     mmcm_pcntrl_psdone <= adc_mmcm_psdone;
-     mmcm_pcntrl_locked <= adc_mmcm_locked;
-     --mmcm_ready <= mmcm_pcntrl_ready;
-     --mmcm_psdone <= mmcm_pcntrl_o_psdone;
-
      adc_mmcm_reset <= reset;
 
      --clock_m_gen : if mode = "MASTER" generate
      adc_mmcm_clkin <= ibufds_clk_o;
      --end generate clock_m_gen;
-
-     adc_mmcm_psincdec <= mmcm_pcntrl_psincdec;
-     adc_mmcm_psen <= mmcm_pcntrl_psen;
-     adc_mmcm_psclk <= mmcm_pcntrl_psclk;
 
      -- delay
      adc_iserdes_a_s_data <= delay_a_out;
@@ -417,23 +362,6 @@ architecture adc_unit_arc of adc_unit is
 
 
      master_gen : if mode = "MASTER" generate
-     -- MMCM_CNTRL block
-     mmcm_pcntrl_inst : MMCM_PCNTRL
-     PORT MAP (
-               sysclk         => mmcm_pcntrl_sysclk,
-               reset          => mmcm_pcntrl_reset,
-               mode           => mmcm_pcntrl_mode,
-               shift          => mmcm_pcntrl_shift,
-               shift_val      => mmcm_pcntrl_shift_val,
-               ready          => mmcm_pcntrl_ready,
-               o_psdone       => mmcm_pcntrl_o_psdone,
-               MMCM_PSCLK     => mmcm_pcntrl_psclk,
-               MMCM_PSEN      => mmcm_pcntrl_psen,
-               MMCM_PSINCDEC  => mmcm_pcntrl_psincdec,
-               MMCM_PSDONE    => mmcm_pcntrl_psdone,
-               MMCM_LOCKED    => mmcm_pcntrl_locked
-      );
-
      -- MMCM block
      adc_mmcm_inst : ADC_MMCM
      PORT MAP (
@@ -445,11 +373,7 @@ architecture adc_unit_arc of adc_unit is
                clkout0n     => adc_mmcm_clkout0n,
                clkout1p     => adc_mmcm_clkout1p,
                clkout1n     => adc_mmcm_clkout1n,
-               clkout2      => adc_mmcm_clkout2,
-               psincdec     => adc_mmcm_psincdec,
-               psen         => adc_mmcm_psen,
-               psclk        => adc_mmcm_psclk,
-               psdone       => adc_mmcm_psdone
+               clkout2      => adc_mmcm_clkout2
       );
 
     -- BUFG

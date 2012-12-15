@@ -21,13 +21,7 @@ entity  ADC_MMCM  is
                clkout0n     :  out std_logic;
                clkout1p     :  out std_logic; -- divided line clock (div_clk = line_clk/8)
                clkout1n     :  out std_logic;
-               clkout2      :  out std_logic; -- data clock (2 * div_clk)
-
-               -- Phase shift
-               psincdec     :  in  std_logic;
-               psen         :  in  std_logic;
-               psclk        :  in  std_logic;
-               psdone       :  out std_logic
+               clkout2      :  out std_logic  -- data clock (2 * div_clk)
     );
 
 end  ADC_MMCM;
@@ -125,10 +119,6 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      signal mmcm_clkout2    : std_logic;
      signal mmcm_clkfbin    : std_logic;
      signal mmcm_clkin      : std_logic;
-     signal mmcm_psclk      : std_logic;
-     signal mmcm_psen       : std_logic;
-     signal mmcm_psincdec   : std_logic;
-     signal mmcm_psdone     : std_logic;
      signal mmcm_locked     : std_logic;
      signal mmcm_reset      : std_logic;
 
@@ -147,11 +137,6 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      clkout1p <= mmcm_clkout1;
      clkout1n <= mmcm_clkout1b;
      clkout2  <= mmcm_clkout2;
-
-     mmcm_psincdec <= psincdec;
-     mmcm_psen <= psen;
-     mmcm_psclk <= psclk;
-     psdone <= mmcm_psdone;
 
      -- Clock input from adc @ around 1GHz
      mmcm_adv_inst : MMCM_ADV
@@ -235,10 +220,10 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       DRDY         => open,
       DWE          => '0',
       -- Ports for dynamic phase shift
-      PSCLK        => mmcm_psclk,
-      PSEN         => mmcm_psen,
-      PSINCDEC     => mmcm_psincdec,
-      PSDONE       => mmcm_psdone,
+      PSCLK        => '0',
+      PSEN         => '0',
+      PSINCDEC     => '0',
+      PSDONE       => open,
       -- Other control and status signals
       LOCKED       => mmcm_locked,
       CLKINSTOPPED => open,
