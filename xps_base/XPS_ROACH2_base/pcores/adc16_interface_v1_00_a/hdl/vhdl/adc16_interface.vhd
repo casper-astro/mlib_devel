@@ -30,7 +30,12 @@ entity  adc16_interface  is
 
                -- Delay Controller
                delay_rst        :  in  std_logic_vector(15 downto 0);
-               delay_tap        :  in  std_logic_vector(4 downto 0)
+               delay_tap        :  in  std_logic_vector(4 downto 0);
+
+               -- Snap Controller
+               snap_req         :  in  std_logic;
+               snap_we          :  out std_logic;
+               snap_addr        :  out std_logic_vector(9 downto 0)
     );
 
 end  adc16_interface;
@@ -98,6 +103,10 @@ architecture adc16_interface_arc of adc16_interface is
      -- Delay Controller
      signal s_delay_rst : i4_v4;
      signal s_delay_tap : i4_v20;
+
+     -- Snap Controller
+     signal s_snap_req : std_logic_vector(1 downto 0);
+     signal s_snap_counter: std_logic_vector(10 downto 0);
 
      -- Set which ADC is the MASTER
      constant master : integer := 2;
@@ -303,5 +312,24 @@ architecture adc16_interface_arc of adc16_interface is
                delay_tap => s_delay_tap(3)
      );
 
-end adc16_interface_arc;
+    process(s_fabric_clk(master))
+    begin
+      -- rising edge of s_fabric_clk(master)
+      if rising_edge(s_fabric_clk(master))  then
+        -- snap_req shift register
+        s_snap_req <= s_snap_req(0) & snap_req;
+        -- '0' to '1' transition on snap_req
+        if s_snap_req(1) = '0' and s_snap_req(0) = '1' then
+          -- Reset snap counter
+          s_snap_counter <= (others => '0');
+        elsif s_snap_counter(10) = '0'  then
+          -- Count until MSb is '1'
+          s_snap_counter <= s_snap_counter + 1;
+        end if;
+      end if;
+    end process;
 
+    snap_we <= not s_snap_counter(10);
+    snap_addr <= s_snap_counter(9 downto 0);
+
+end adc16_interface_arc;

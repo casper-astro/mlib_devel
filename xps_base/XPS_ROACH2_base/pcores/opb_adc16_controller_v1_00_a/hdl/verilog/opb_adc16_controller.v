@@ -30,7 +30,8 @@ module opb_adc16_controller(
 	  output        [0:3] adc0_iserdes_bitslip,
 	  
 	  output        [0:15] adc0_delay_rst,
-	  output        [0:4] adc0_delay_tap
+	  output        [0:4] adc0_delay_tap,
+	  output        adc0_snap_req
   );
   parameter C_BASEADDR    = 32'h00000000;
   parameter C_HIGHADDR    = 32'h0000FFFF;
@@ -95,6 +96,7 @@ module opb_adc16_controller(
   /* T = Delay Tap                           */
   /* B = ISERDES Bit Slip                    */
   /* R = Reset                               */
+  /* S = Snap Request                        */
   /* ======================================= */
   /* |<-- MSb                       LSb -->| */
   /* 0000 0000 0011 1111 1111 2222 2222 2233 */
@@ -103,12 +105,14 @@ module opb_adc16_controller(
   /* ---- ---- ---- ---- TTTT T--- ---- ---- */
   /* ---- ---- ---- ---- ---- -BBB B--- ---- */
   /* ---- ---- ---- ---- ---- ---- ---- -R-- */
+  /* ---- ---- ---- ---- ---- ---- ---- ---S */
   /* ======================================= */
 
   assign adc0_delay_rst       = adc0_ctrl_wire[ 0:15];
   assign adc0_delay_tap       = adc0_ctrl_wire[16:20];
   assign adc0_iserdes_bitslip = adc0_ctrl_wire[21:24];
   assign adc0_reset           = adc0_ctrl_wire[29   ];
+  assign adc0_snap_req        = adc0_ctrl_wire[31   ];
 
   reg [31:0] opb_data_out;
 

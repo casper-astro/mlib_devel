@@ -10,6 +10,7 @@ if ~strcmp(get(blk_obj,'type'),'xps_adc16')
 end
 
 blk_name = get(blk_obj,'simulink_name');
+inst_name = clear_name(blk_name);
 xsg_obj = get(blk_obj,'xsg_obj');
 
 s.hw_sys = get(xsg_obj,'hw_sys');
@@ -76,6 +77,10 @@ misc_ports.iserdes_bitslip  = {4 'in'  [s.adc_str,'_iserdes_bitslip']};
 
 misc_ports.delay_rst        = {16 'in'  [s.adc_str,'_delay_rst']};
 misc_ports.delay_tap   = {5 'in'  [s.adc_str,'_delay_tap']};
+
+misc_ports.snap_req  = {1 'in'  [s.adc_str,'_snap_req']};
+misc_ports.snap_we   = {1 'out' [inst_name,'_snap_we']};
+misc_ports.snap_addr = {10 'out' [inst_name,'_snap_addr']};
 
 b = set(b,'misc_ports',misc_ports);
 

@@ -20,25 +20,32 @@ PARAMETER mode = MASTER, DT = STRING
 
 # Clocks
 PORT fabric_clk = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
-
-# Data
 PORT clk_line_p = "", VEC = [3:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT clk_line_n = "", VEC = [3:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+
+# Data in
 PORT ser_a_p = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT ser_a_n = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT ser_b_p = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT ser_b_n = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
-# Reset
-PORT reset = "", DIR = I
 
-#control
-# Data
-PORT iserdes_bitslip = "", VEC = [3:0], DIR = I
+# Data out
 PORT p_data_a = "", VEC = [31:0], DIR = O
 PORT p_data_b = "", VEC = [31:0], DIR = O
 PORT p_data_c = "", VEC = [31:0], DIR = O
 PORT p_data_d = "", VEC = [31:0], DIR = O
+
+# Reset
+PORT reset = "", DIR = I
+
+# Control
+PORT iserdes_bitslip = "", VEC = [3:0], DIR = I
 PORT delay_rst = "", VEC = [15:0], DIR = I
 PORT delay_tap = "", VEC = [4:0], DIR = I
+
+# Snap
+PORT snap_req  = "",              DIR = I
+PORT snap_we   = "",              DIR = O
+PORT snap_addr = "", VEC = [9:0], DIR = O
 
 END
