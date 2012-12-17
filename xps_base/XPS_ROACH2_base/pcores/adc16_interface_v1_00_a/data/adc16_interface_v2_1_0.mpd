@@ -19,7 +19,7 @@ PARAMETER mode = MASTER, DT = STRING
 #############
 
 # Clocks
-PORT div_clk = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
 
 # Data
 PORT clk_line_p = "", VEC = [3:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE

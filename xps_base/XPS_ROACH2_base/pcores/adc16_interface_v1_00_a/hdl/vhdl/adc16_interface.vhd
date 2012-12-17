@@ -9,7 +9,7 @@ use IEEE.numeric_std.all;
 entity  adc16_interface  is
     port (
                -- System
-               div_clk      :  out std_logic;
+               fabric_clk    :  out std_logic;
                reset         :  in  std_logic;
 
                -- ZDOK
@@ -45,10 +45,10 @@ architecture adc16_interface_arc of adc16_interface is
      port (
                -- System
                line_clk      :  out std_logic;
-               div_clk       :  out std_logic;
-               fabric_clk       :  out std_logic;
+               frame_clk     :  out std_logic;
+               fabric_clk    :  out std_logic;
                i_line_clk    :  in  std_logic;
-               i_div_clk     :  in  std_logic;
+               i_frame_clk   :  in  std_logic;
                i_fabric_clk  :  in  std_logic;
                reset         :  in  std_logic;
 
@@ -78,10 +78,10 @@ architecture adc16_interface_arc of adc16_interface is
      type  i4_v32 is array (0 to 3) of std_logic_vector(31 downto 0);
 
      signal s_line_clk : i4_v1;
-     signal s_div_clk : i4_v1;
+     signal s_frame_clk : i4_v1;
      signal s_fabric_clk : i4_v1;
      signal s_i_line_clk : i4_v1;
-     signal s_i_div_clk : i4_v1;
+     signal s_i_frame_clk : i4_v1;
      signal s_i_fabric_clk : i4_v1;
      signal s_reset : i4_v1;
 
@@ -108,13 +108,11 @@ architecture adc16_interface_arc of adc16_interface is
      begin
 
      -- Internal routing
-
-     --div_clk <= s_div_clk(0);
-     div_clk <= s_fabric_clk(master);
+     fabric_clk <= s_fabric_clk(master);
 
      -- ADC A
      s_i_line_clk(0) <= s_line_clk(master);
-     s_i_div_clk(0) <= s_div_clk(master);
+     s_i_frame_clk(0) <= s_frame_clk(master);
      s_i_fabric_clk(0) <= s_fabric_clk(master);
      s_reset(0) <= reset;
 
@@ -137,7 +135,7 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ADC B
      s_i_line_clk(1) <= s_line_clk(master);
-     s_i_div_clk(1) <= s_div_clk(master);
+     s_i_frame_clk(1) <= s_frame_clk(master);
      s_i_fabric_clk(1) <= s_fabric_clk(master);
      s_reset(1) <= reset;
 
@@ -160,7 +158,7 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ADC C
      s_i_line_clk(2) <= s_line_clk(master);
-     s_i_div_clk(2) <= s_div_clk(master);
+     s_i_frame_clk(2) <= s_frame_clk(master);
      s_i_fabric_clk(2) <= s_fabric_clk(master);
      s_reset(2) <= reset;
 
@@ -183,7 +181,7 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ADC D
      s_i_line_clk(3) <= s_line_clk(master);
-     s_i_div_clk(3) <= s_div_clk(master);
+     s_i_frame_clk(3) <= s_frame_clk(master);
      s_i_fabric_clk(3) <= s_fabric_clk(master);
      s_reset(3) <= reset;
 
@@ -210,10 +208,10 @@ architecture adc16_interface_arc of adc16_interface is
                mode => "SLAVE")
     port map (
                line_clk => s_line_clk(0),
-               div_clk => s_div_clk(0),
+               frame_clk => s_frame_clk(0),
                fabric_clk => s_fabric_clk(0),
                i_line_clk => s_i_line_clk(0),
-               i_div_clk => s_i_div_clk(0),
+               i_frame_clk => s_i_frame_clk(0),
                i_fabric_clk => s_i_fabric_clk(0),
                reset => s_reset(0),
 
@@ -238,10 +236,10 @@ architecture adc16_interface_arc of adc16_interface is
                mode => "SLAVE")
     port map (
                line_clk => s_line_clk(1),
-               div_clk => s_div_clk(1),
+               frame_clk => s_frame_clk(1),
                fabric_clk => s_fabric_clk(1),
                i_line_clk => s_i_line_clk(1),
-               i_div_clk => s_i_div_clk(1),
+               i_frame_clk => s_i_frame_clk(1),
                i_fabric_clk => s_i_fabric_clk(1),
                reset => s_reset(1),
 
@@ -266,10 +264,10 @@ architecture adc16_interface_arc of adc16_interface is
                mode => "MASTER")
     port map (
                line_clk => s_line_clk(2),
-               div_clk => s_div_clk(2),
+               frame_clk => s_frame_clk(2),
                fabric_clk => s_fabric_clk(2),
                i_line_clk => s_i_line_clk(2),
-               i_div_clk => s_i_div_clk(2),
+               i_frame_clk => s_i_frame_clk(2),
                i_fabric_clk => s_i_fabric_clk(2),
                reset => s_reset(2),
 
@@ -294,10 +292,10 @@ architecture adc16_interface_arc of adc16_interface is
                mode => "SLAVE")
     port map (
                line_clk => s_line_clk(3),
-               div_clk => s_div_clk(3),
+               frame_clk => s_frame_clk(3),
                fabric_clk => s_fabric_clk(3),
                i_line_clk => s_i_line_clk(3),
-               i_div_clk => s_i_div_clk(3),
+               i_frame_clk => s_i_frame_clk(3),
                i_fabric_clk => s_i_fabric_clk(3),
                reset => s_reset(3),
 

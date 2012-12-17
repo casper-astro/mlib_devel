@@ -11,10 +11,10 @@ entity  adc_unit  is
     port (
                -- System
                line_clk      :  out std_logic;
-               div_clk       :  out std_logic;
+               frame_clk     :  out std_logic;
                fabric_clk    :  out std_logic;
                i_line_clk    :  in  std_logic;
-               i_div_clk     :  in  std_logic;
+               i_frame_clk   :  in  std_logic;
                i_fabric_clk  :  in  std_logic;
                reset         :  in  std_logic;
 
@@ -192,7 +192,7 @@ architecture adc_unit_arc of adc_unit is
      -- Internal routing
 
      line_clk <= bufg_o(0);
-     div_clk <= bufg_o(1);
+     frame_clk <= bufg_o(1);
      fabric_clk <= bufg_o(2);
 
      -- Differential signals
@@ -215,8 +215,8 @@ architecture adc_unit_arc of adc_unit is
      bufg_i(2) <= adc_mmcm_clkout2;
      adc_iserdes_a_clkin <= i_line_clk;
      adc_iserdes_b_clkin <= i_line_clk;
-     adc_iserdes_a_clkdiv <= i_div_clk;
-     adc_iserdes_b_clkdiv <= i_div_clk;
+     adc_iserdes_a_clkdiv <= i_frame_clk;
+     adc_iserdes_b_clkdiv <= i_frame_clk;
      --adc_iserdes_a_s_data <= ibufds_ser1_o;
      --adc_iserdes_b_s_data <= ibufds_ser2_o;
 
@@ -233,7 +233,7 @@ architecture adc_unit_arc of adc_unit is
      adc_iserdes_b_s_data <= delay_b_out;
      delay_b_in <= ibufds_ser2_o;
 
-     delay_clock <= i_div_clk;
+     delay_clock <= i_frame_clk;
      delay_reset <= delay_rst;
      delay_intap(0) <= delay_tap(4 downto 0);
      delay_intap(1) <= delay_tap(9 downto 5);

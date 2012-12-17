@@ -19,9 +19,9 @@ entity  ADC_MMCM  is
                -- Clock outputs
                clkout0p     :  out std_logic; -- serial line clock (line_clk)
                clkout0n     :  out std_logic;
-               clkout1p     :  out std_logic; -- divided line clock (div_clk = line_clk/8)
+               clkout1p     :  out std_logic; -- framing clock (frame_clk = line_clk/8)
                clkout1n     :  out std_logic;
-               clkout2      :  out std_logic  -- data clock (2 * div_clk)
+               clkout2      :  out std_logic  -- fabric clock (2 * frame_clk)
     );
 
 end  ADC_MMCM;
