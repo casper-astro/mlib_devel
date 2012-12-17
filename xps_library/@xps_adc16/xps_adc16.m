@@ -70,8 +70,6 @@ b = set(b, 'supp_ip_versions', supp_ip_versions);
 % misc ports
 
 misc_ports.div_clk = {1 'out'  'adc0_clk'};
-misc_ports.ctrl_clk = {1 'in'  'epb_clk'};
-misc_ports.data_clk = {1 'in'  'adc0_clk'};
 
 misc_ports.reset            = {1 'in'  [s.adc_str,'_reset']};
 misc_ports.iserdes_bitslip  = {4 'in'  [s.adc_str,'_iserdes_bitslip']};

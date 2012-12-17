@@ -16,8 +16,6 @@ entity  adc_unit  is
                i_line_clk    :  in  std_logic;
                i_div_clk     :  in  std_logic;
                i_fabric_clk  :  in  std_logic;
-               ctrl_clk      :  in  std_logic;
-               data_clk      :  in  std_logic;
                reset         :  in  std_logic;
 
                -- ZDOK

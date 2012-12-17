@@ -10,8 +10,6 @@ entity  adc16_interface  is
     port (
                -- System
                div_clk      :  out std_logic;
-               ctrl_clk      :  in  std_logic;
-               data_clk      :  in  std_logic;
                reset         :  in  std_logic;
 
                -- ZDOK
@@ -52,8 +50,6 @@ architecture adc16_interface_arc of adc16_interface is
                i_line_clk    :  in  std_logic;
                i_div_clk     :  in  std_logic;
                i_fabric_clk  :  in  std_logic;
-               ctrl_clk      :  in  std_logic;
-               data_clk      :  in  std_logic;
                reset         :  in  std_logic;
 
                -- ZDOK
@@ -87,8 +83,6 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_i_line_clk : i4_v1;
      signal s_i_div_clk : i4_v1;
      signal s_i_fabric_clk : i4_v1;
-     signal s_ctrl_clk : i4_v1;
-     signal s_data_clk : i4_v1;
      signal s_reset : i4_v1;
 
      -- ZDOK
@@ -122,8 +116,6 @@ architecture adc16_interface_arc of adc16_interface is
      s_i_line_clk(0) <= s_line_clk(master);
      s_i_div_clk(0) <= s_div_clk(master);
      s_i_fabric_clk(0) <= s_fabric_clk(master);
-     s_ctrl_clk(0) <= ctrl_clk;
-     s_data_clk(0) <= data_clk;
      s_reset(0) <= reset;
 
      -- ZDOK
@@ -147,8 +139,6 @@ architecture adc16_interface_arc of adc16_interface is
      s_i_line_clk(1) <= s_line_clk(master);
      s_i_div_clk(1) <= s_div_clk(master);
      s_i_fabric_clk(1) <= s_fabric_clk(master);
-     s_ctrl_clk(1) <= ctrl_clk;
-     s_data_clk(1) <= data_clk;
      s_reset(1) <= reset;
 
      -- ZDOK
@@ -172,8 +162,6 @@ architecture adc16_interface_arc of adc16_interface is
      s_i_line_clk(2) <= s_line_clk(master);
      s_i_div_clk(2) <= s_div_clk(master);
      s_i_fabric_clk(2) <= s_fabric_clk(master);
-     s_ctrl_clk(2) <= ctrl_clk;
-     s_data_clk(2) <= data_clk;
      s_reset(2) <= reset;
 
      -- ZDOK
@@ -197,8 +185,6 @@ architecture adc16_interface_arc of adc16_interface is
      s_i_line_clk(3) <= s_line_clk(master);
      s_i_div_clk(3) <= s_div_clk(master);
      s_i_fabric_clk(3) <= s_fabric_clk(master);
-     s_ctrl_clk(3) <= ctrl_clk;
-     s_data_clk(3) <= data_clk;
      s_reset(3) <= reset;
 
      -- ZDOK
@@ -229,8 +215,6 @@ architecture adc16_interface_arc of adc16_interface is
                i_line_clk => s_i_line_clk(0),
                i_div_clk => s_i_div_clk(0),
                i_fabric_clk => s_i_fabric_clk(0),
-               ctrl_clk => s_ctrl_clk(0),
-               data_clk => s_data_clk(0),
                reset => s_reset(0),
 
                clk_line_p => s_clk_line_p(0),
@@ -259,8 +243,6 @@ architecture adc16_interface_arc of adc16_interface is
                i_line_clk => s_i_line_clk(1),
                i_div_clk => s_i_div_clk(1),
                i_fabric_clk => s_i_fabric_clk(1),
-               ctrl_clk => s_ctrl_clk(1),
-               data_clk => s_data_clk(1),
                reset => s_reset(1),
 
                clk_line_p => s_clk_line_p(1),
@@ -289,8 +271,6 @@ architecture adc16_interface_arc of adc16_interface is
                i_line_clk => s_i_line_clk(2),
                i_div_clk => s_i_div_clk(2),
                i_fabric_clk => s_i_fabric_clk(2),
-               ctrl_clk => s_ctrl_clk(2),
-               data_clk => s_data_clk(2),
                reset => s_reset(2),
 
                clk_line_p => s_clk_line_p(2),
@@ -319,8 +299,6 @@ architecture adc16_interface_arc of adc16_interface is
                i_line_clk => s_i_line_clk(3),
                i_div_clk => s_i_div_clk(3),
                i_fabric_clk => s_i_fabric_clk(3),
-               ctrl_clk => s_ctrl_clk(3),
-               data_clk => s_data_clk(3),
                reset => s_reset(3),
 
                clk_line_p => s_clk_line_p(3),
