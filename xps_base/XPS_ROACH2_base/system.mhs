@@ -399,7 +399,6 @@
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # #
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_reset            = adc0_reset
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_iserdes_bitslip  = adc0_iserdes_bitslip
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_load_phase_set   = adc0_load_phase_set
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_delay_rst        = adc0_delay_rst
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  && strcmp(get(b,'hw_adc'),'adc0')  # PORT adc0_delay_tap        = adc0_delay_tap
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # #

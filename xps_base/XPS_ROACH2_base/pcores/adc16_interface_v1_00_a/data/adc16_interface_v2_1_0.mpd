@@ -34,7 +34,6 @@ PORT reset = "", DIR = I
 #control
 # Data
 PORT iserdes_bitslip = "", VEC = [3:0], DIR = I
-PORT load_phase_set = "", VEC = [3:0], DIR = I
 PORT p_data_a = "", VEC = [31:0], DIR = O
 PORT p_data_b = "", VEC = [31:0], DIR = O
 PORT p_data_c = "", VEC = [31:0], DIR = O

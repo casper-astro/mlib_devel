@@ -73,7 +73,6 @@ misc_ports.fabric_clk = {1 'out'  'adc0_clk'};
 
 misc_ports.reset            = {1 'in'  [s.adc_str,'_reset']};
 misc_ports.iserdes_bitslip  = {4 'in'  [s.adc_str,'_iserdes_bitslip']};
-misc_ports.load_phase_set  = {4 'in'  [s.adc_str,'_load_phase_set']};
 
 misc_ports.delay_rst        = {16 'in'  [s.adc_str,'_delay_rst']};
 misc_ports.delay_tap   = {5 'in'  [s.adc_str,'_delay_tap']};

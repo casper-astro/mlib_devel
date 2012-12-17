@@ -29,7 +29,6 @@ entity  adc_unit  is
 
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic;
-               load_phase_set   :  in  std_logic;
                p_data           :  out std_logic_vector(31 downto 0);
 
                -- IODELAY Controller
@@ -170,8 +169,6 @@ architecture adc_unit_arc of adc_unit is
      signal ibufds_ser2_i : std_logic_vector(3 downto 0);
      signal ibufds_ser2_ib : std_logic_vector(3 downto 0);
      signal ibufds_ser2_o : std_logic_vector(3 downto 0);
-
-     signal load_phase : std_logic;
 
      -- delay signals
      type  delayTAPtype  is array (0 to 3) of std_logic_vector(4 downto 0);

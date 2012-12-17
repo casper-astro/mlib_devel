@@ -23,7 +23,6 @@ entity  adc16_interface  is
 
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic_vector(3 downto 0);
-               load_phase_set   :  in  std_logic_vector(3 downto 0);
                p_data_a         :  out std_logic_vector(31 downto 0);
                p_data_b         :  out std_logic_vector(31 downto 0);
                p_data_c         :  out std_logic_vector(31 downto 0);
@@ -62,7 +61,6 @@ architecture adc16_interface_arc of adc16_interface is
 
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic;
-               load_phase_set   :  in  std_logic;
                p_data           :  out std_logic_vector(31 downto 0);
 
                -- Delay Controller
@@ -95,7 +93,6 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      signal s_iserdes_bitslip : i4_v1;
-     signal s_load_phase_set : i4_v1;
      signal s_p_data : i4_v32;
 
      -- Delay Controller
@@ -126,7 +123,6 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(0) <= iserdes_bitslip(0);
-     s_load_phase_set(0) <= load_phase_set(0);
      p_data_a <= s_p_data(0);
 
      -- Delay Controller
@@ -149,7 +145,6 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(1) <= iserdes_bitslip(1);
-     s_load_phase_set(1) <= load_phase_set(1);
      p_data_b <= s_p_data(1);
 
      -- Delay Controller
@@ -172,7 +167,6 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(2) <= iserdes_bitslip(2);
-     s_load_phase_set(2) <= load_phase_set(2);
      p_data_c <= s_p_data(2);
 
      -- Delay Controller
@@ -195,7 +189,6 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(3) <= iserdes_bitslip(3);
-     s_load_phase_set(3) <= load_phase_set(3);
      p_data_d <= s_p_data(3);
 
      -- Delay Controller
@@ -223,7 +216,6 @@ architecture adc16_interface_arc of adc16_interface is
                ser_b_n => s_ser_b_n(0),
 
                iserdes_bitslip => s_iserdes_bitslip(0),
-               load_phase_set => s_load_phase_set(0),
                p_data => s_p_data(0),
 
                delay_rst => s_delay_rst(0),
@@ -251,7 +243,6 @@ architecture adc16_interface_arc of adc16_interface is
                ser_b_n => s_ser_b_n(1),
 
                iserdes_bitslip => s_iserdes_bitslip(1),
-               load_phase_set => s_load_phase_set(1),
                p_data => s_p_data(1),
 
                delay_rst => s_delay_rst(1),
@@ -279,7 +270,6 @@ architecture adc16_interface_arc of adc16_interface is
                ser_b_n => s_ser_b_n(2),
 
                iserdes_bitslip => s_iserdes_bitslip(2),
-               load_phase_set => s_load_phase_set(2),
                p_data => s_p_data(2),
 
                delay_rst => s_delay_rst(2),
@@ -307,7 +297,6 @@ architecture adc16_interface_arc of adc16_interface is
                ser_b_n => s_ser_b_n(3),
 
                iserdes_bitslip => s_iserdes_bitslip(3),
-               load_phase_set => s_load_phase_set(3),
                p_data => s_p_data(3),
 
                delay_rst => s_delay_rst(3),

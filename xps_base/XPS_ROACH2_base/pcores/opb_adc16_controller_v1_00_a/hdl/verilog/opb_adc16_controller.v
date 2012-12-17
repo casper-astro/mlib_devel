@@ -28,7 +28,6 @@ module opb_adc16_controller(
 	  
 	  output        adc0_reset,
 	  output        [0:3] adc0_iserdes_bitslip,
-         output        [0:3] adc0_load_phase_set,
 	  
 	  output        [0:15] adc0_delay_rst,
 	  output        [0:4] adc0_delay_tap
@@ -95,7 +94,6 @@ module opb_adc16_controller(
   /* D = Delay RST                           */
   /* T = Delay Tap                           */
   /* B = ISERDES Bit Slip                    */
-  /* P = Load Phase Set                      */
   /* R = Reset                               */
   /* ======================================= */
   /* |<-- MSb                       LSb -->| */
@@ -104,14 +102,12 @@ module opb_adc16_controller(
   /* DDDD DDDD DDDD DDDD ---- ---- ---- ---- */
   /* ---- ---- ---- ---- TTTT T--- ---- ---- */
   /* ---- ---- ---- ---- ---- -BBB B--- ---- */
-  /* ---- ---- ---- ---- ---- ---- -PPP P--- */
   /* ---- ---- ---- ---- ---- ---- ---- -R-- */
   /* ======================================= */
 
   assign adc0_delay_rst       = adc0_ctrl_wire[ 0:15];
   assign adc0_delay_tap       = adc0_ctrl_wire[16:20];
   assign adc0_iserdes_bitslip = adc0_ctrl_wire[21:24];
-  assign adc0_load_phase_set  = adc0_ctrl_wire[25:28];
   assign adc0_reset           = adc0_ctrl_wire[29   ];
 
   reg [31:0] opb_data_out;
