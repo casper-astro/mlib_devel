@@ -35,7 +35,6 @@ entity  adc_unit  is
                p_data           :  out std_logic_vector(31 downto 0);
 
                -- IODELAY Controller
-               delay_clk        :  in  std_logic; -- 200MHz
                delay_rst        :  in  std_logic_vector(3 downto 0);
                delay_tap        :  in  std_logic_vector(19 downto 0)
     );
@@ -236,7 +235,7 @@ architecture adc_unit_arc of adc_unit is
      adc_iserdes_b_s_data <= delay_b_out;
      delay_b_in <= ibufds_ser2_o;
 
-     delay_clock <= delay_clk;
+     delay_clock <= i_div_clk;
      delay_reset <= delay_rst;
      delay_intap(0) <= delay_tap(4 downto 0);
      delay_intap(1) <= delay_tap(9 downto 5);

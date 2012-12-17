@@ -70,7 +70,6 @@ architecture adc16_interface_arc of adc16_interface is
                p_data           :  out std_logic_vector(31 downto 0);
 
                -- Delay Controller
-               delay_clk        :  in  std_logic; -- 200MHz
                delay_rst        :  in  std_logic_vector(3 downto 0);
                delay_tap        :  in  std_logic_vector(19 downto 0)
     );
@@ -106,7 +105,6 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_p_data : i4_v32;
 
      -- Delay Controller
-     signal s_delay_clk : i4_v1;
      signal s_delay_rst : i4_v4;
      signal s_delay_tap : i4_v20;
 
@@ -142,7 +140,6 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_a <= s_p_data(0);
 
      -- Delay Controller
-     s_delay_clk(0) <= s_div_clk(master);
      s_delay_rst(0) <= delay_rst(3 downto 0);
      s_delay_tap(0) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
@@ -168,7 +165,6 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_b <= s_p_data(1);
 
      -- Delay Controller
-     s_delay_clk(1) <= s_div_clk(master);
      s_delay_rst(1) <= delay_rst(7 downto 4);
      s_delay_tap(1) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
@@ -194,7 +190,6 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_c <= s_p_data(2);
 
      -- Delay Controller
-     s_delay_clk(2) <= s_div_clk(master);
      s_delay_rst(2) <= delay_rst(11 downto 8);
      s_delay_tap(2) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
@@ -220,7 +215,6 @@ architecture adc16_interface_arc of adc16_interface is
      p_data_d <= s_p_data(3);
 
      -- Delay Controller
-     s_delay_clk(3) <= s_div_clk(master);
      s_delay_rst(3) <= delay_rst(15 downto 12);
      s_delay_tap(3) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
@@ -250,7 +244,6 @@ architecture adc16_interface_arc of adc16_interface is
                load_phase_set => s_load_phase_set(0),
                p_data => s_p_data(0),
 
-               delay_clk => s_delay_clk(0),
                delay_rst => s_delay_rst(0),
                delay_tap => s_delay_tap(0)
      );
@@ -281,7 +274,6 @@ architecture adc16_interface_arc of adc16_interface is
                load_phase_set => s_load_phase_set(1),
                p_data => s_p_data(1),
 
-               delay_clk => s_delay_clk(1),
                delay_rst => s_delay_rst(1),
                delay_tap => s_delay_tap(1)
      );
@@ -312,7 +304,6 @@ architecture adc16_interface_arc of adc16_interface is
                load_phase_set => s_load_phase_set(2),
                p_data => s_p_data(2),
 
-               delay_clk => s_delay_clk(2),
                delay_rst => s_delay_rst(2),
                delay_tap => s_delay_tap(2)
      );
@@ -343,7 +334,6 @@ architecture adc16_interface_arc of adc16_interface is
                load_phase_set => s_load_phase_set(3),
                p_data => s_p_data(3),
 
-               delay_clk => s_delay_clk(3),
                delay_rst => s_delay_rst(3),
                delay_tap => s_delay_tap(3)
      );
