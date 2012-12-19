@@ -383,7 +383,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # PARAMETER INSTANCE     = opb_adc16_controller_0
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # PARAMETER HW_VER       = 1.00.a
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # PARAMETER C_BASEADDR   = 0x00020000
-#IF# (strcmp(get(b,'type'),'xps_adc16'))  # PARAMETER C_HIGHADDR   = 0x0002ffff
+#IF# (strcmp(get(b,'type'),'xps_adc16'))  # PARAMETER C_HIGHADDR   = 0x00020fff
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # BUS_INTERFACE SOPB = opb0
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # # 
 #IF# (strcmp(get(b,'type'),'xps_adc16'))  # # misc ports

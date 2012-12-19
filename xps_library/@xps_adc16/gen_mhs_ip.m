@@ -38,11 +38,11 @@ function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,o
 %
 % Here is the adc16_controller memory map:
 %
-% 0x0020_0000 - 0x0020_0FFF : Control registers
-% 0x0020_1000 - 0x0020_1FFF : Snapshot buffer for ADC A
-% 0x0020_2000 - 0x0020_2FFF : Snapshot buffer for ADC B
-% 0x0020_3000 - 0x0020_3FFF : Snapshot buffer for ADC C
-% 0x0020_4000 - 0x0020_4FFF : Snapshot buffer for ADC D
+% 0x0002_0000 - 0x0002_0FFF : Control registers
+% 0x0002_1000 - 0x0002_1FFF : Snapshot buffer for ADC A
+% 0x0002_2000 - 0x0002_2FFF : Snapshot buffer for ADC B
+% 0x0002_3000 - 0x0002_3FFF : Snapshot buffer for ADC C
+% 0x0002_4000 - 0x0002_4FFF : Snapshot buffer for ADC D
 %
 % Note that a single Shared BRAM consists of a trio of separate pcores:
 %
@@ -61,7 +61,7 @@ inst_name = clear_name(blk_name);
 xsg_obj = get(blk_obj,'xsg_obj');
 
 % Start address for embedded opb_adc16_controller instance
-adc_addr_start = hex2dec('00200000');
+adc_addr_start = hex2dec('00020000');
 
 snap_chan = {'a', 'b', 'c', 'd'};
 
