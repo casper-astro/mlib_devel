@@ -263,7 +263,7 @@ architecture adc_unit_arc of adc_unit is
                clkin      => adc_iserdes_a_clkin,
                clkdiv     => adc_iserdes_a_clkdiv,
                s_data     => adc_iserdes_a_s_data(i),
-               p_data     => adc_iserdes_data0(8*i+7 downto 8*i)
+               p_data     => adc_iserdes_data0(8*(3-i)+7 downto 8*(3-i))
       );
      adc_iserdes_b_inst : ADC_ISERDES
      PORT MAP (
@@ -272,7 +272,7 @@ architecture adc_unit_arc of adc_unit is
                clkin      => adc_iserdes_b_clkin,
                clkdiv     => adc_iserdes_b_clkdiv,
                s_data     => adc_iserdes_b_s_data(i),
-               p_data     => adc_iserdes_data1(8*i+7 downto 8*i)
+               p_data     => adc_iserdes_data1(8*(3-i)+7 downto 8*(3-i))
       );
     ibufds_ser1_inst : IBUFDS
     generic map (
