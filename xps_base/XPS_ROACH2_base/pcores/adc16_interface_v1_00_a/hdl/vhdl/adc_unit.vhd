@@ -147,7 +147,6 @@ architecture adc_unit_arc of adc_unit is
      signal adc_iserdes_data1 : std_logic_vector(31 downto 0);
      signal adc_iserdes_data1_delay : std_logic_vector(31 downto 0);
      signal adc_iserdes_data : std_logic_vector(31 downto 0);
-     signal adc_iserdes_sel : std_logic;
 
      signal adc_mmcm_reset : std_logic;
      signal adc_mmcm_locked : std_logic;
@@ -237,10 +236,10 @@ architecture adc_unit_arc of adc_unit is
      delay_intap(2) <= delay_tap(14 downto 10);
      delay_intap(3) <= delay_tap(19 downto 15);
 
-     process (i_fabric_clk, adc_iserdes_sel, adc_iserdes_data0, adc_iserdes_data1)
+     process (i_fabric_clk, i_frame_clk, adc_iserdes_data0, adc_iserdes_data1)
      begin
-       -- Mux data based on adc_iserdes_sel state
-       if adc_iserdes_sel = '1' then
+       -- Mux data based on framing clock
+       if i_frame_clk = '1' then
          adc_iserdes_data <= adc_iserdes_data0;
        else
          adc_iserdes_data <= adc_iserdes_data1;
@@ -249,7 +248,6 @@ architecture adc_unit_arc of adc_unit is
        -- rising edge of fabric clock
        if i_fabric_clk'event and i_fabric_clk = '1' then
          p_data <= adc_iserdes_data;
-         adc_iserdes_sel <= not adc_iserdes_sel;
        end if;
      end process;
 
