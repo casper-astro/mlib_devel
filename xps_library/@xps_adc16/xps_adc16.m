@@ -98,9 +98,9 @@ ucf_constraints_standard = struct( ...
 
 ext_ports.clk_line_p = {4 'in'  [s.adc_str,'_clk_line_p']  '{''R28'',''H39'',''J42'',''P30''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
 ext_ports.clk_line_n = {4 'in'  [s.adc_str,'_clk_line_n']  '{''R29'',''H38'',''K42'',''P31''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
-ext_ports.ser_a_p    = {16 'in'  [s.adc_str,'_ser_a_p']  '{''J37'',''K33'',''L35'',''M36'',''J35'',''H40'',''K38'',''K37'',''F40'',''C40'',''E42'',''F37'',''B38'',''B41'',''D38'',''A40''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_a_n    = {16 'in'  [s.adc_str,'_ser_a_n']  '{''J36'',''K32'',''L36'',''M37'',''H35'',''H41'',''J38'',''L37'',''F41'',''C41'',''F42'',''E37'',''A39'',''B42'',''C38'',''A41''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_b_p    = {16 'in'  [s.adc_str,'_ser_b_p']  '{''L34'',''M33'',''L31'',''N28'',''K39'',''K35'',''N29'',''J40'',''H36'',''G41'',''D40'',''G37'',''F35'',''E39'',''B39'',''D42''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_b_n    = {16 'in'  [s.adc_str,'_ser_b_n']  '{''M34'',''M32'',''L32'',''P28'',''K40'',''K34'',''N30'',''J41'',''G36'',''G42'',''E40'',''G38'',''F36'',''E38'',''C39'',''D41''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_a_p    = {16 'in'  [s.adc_str,'_ser_a_p']  '{''J37'',''L35'',''L34'',''L31'',''J35'',''K38'',''K39'',''N29'',''F40'',''E42'',''H36'',''D40'',''B38'',''D38'',''F35'',''B39''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_a_n    = {16 'in'  [s.adc_str,'_ser_a_n']  '{''J36'',''L36'',''M34'',''L32'',''H35'',''J38'',''K40'',''N30'',''F41'',''F42'',''G36'',''E40'',''A39'',''C38'',''F36'',''C39''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_b_p    = {16 'in'  [s.adc_str,'_ser_b_p']  '{''K33'',''M36'',''M33'',''N28'',''H40'',''K37'',''K35'',''J40'',''C40'',''F37'',''G41'',''G37'',''B41'',''A40'',''E39'',''D42''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_b_n    = {16 'in'  [s.adc_str,'_ser_b_n']  '{''K32'',''M37'',''M32'',''P28'',''H41'',''L37'',''K34'',''J41'',''C41'',''E37'',''G42'',''G38'',''B42'',''A41'',''E38'',''D41''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
 
 b = set(b,'ext_ports',ext_ports);
