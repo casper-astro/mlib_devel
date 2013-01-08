@@ -15,6 +15,7 @@ xsg_obj = get(blk_obj,'xsg_obj');
 
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.hw_adc = lower(get_param(blk_name,'adc_brd'));
+s.roach2_rev = get_param(blk_name,'roach2_rev');
 s.num_inputs = 16;     % TODO Get from mask
 s.sample_mhz = 200; % TODO Get from mask
 
@@ -64,6 +65,14 @@ supp_ip_versions = {'','1.00.a'};
 b = set(b, 'supp_ip_names', supp_ip_names);
 b = set(b, 'supp_ip_versions', supp_ip_versions);
 
+% These parameters become generics of the adc16_interface.  Even though we
+% really want G_ROACH2_REV to be a generic of adc16_controller, that is not
+% possible (at least to this yellow block developer) so we set them up as
+% generics of the adc16_interface which simply outputs them to the
+% adc16_controller (via wires in system.mhs).
+parameters.G_ROACH2_REV = s.roach2_rev;
+b = set(b,'parameters',parameters);
+
 % ports
 
 %b = set(b,'ports', ports);
@@ -81,6 +90,9 @@ misc_ports.delay_tap   = {5 'in'  [s.adc_str,'_delay_tap']};
 misc_ports.snap_req  = {1 'in'  [s.adc_str,'_snap_req']};
 misc_ports.snap_we   = {1 'out' [inst_name,'_snap_we']};
 misc_ports.snap_addr = {10 'out' [inst_name,'_snap_addr']};
+
+% TODO Only for ADC0?
+misc_ports.roach2_rev = {2 'out' [s.adc_str,'_roach2_rev']};
 
 b = set(b,'misc_ports',misc_ports);
 

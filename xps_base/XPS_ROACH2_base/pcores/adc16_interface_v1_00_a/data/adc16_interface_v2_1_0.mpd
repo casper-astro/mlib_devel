@@ -12,7 +12,7 @@ OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT, VIRTEX6SX=D
 OPTION DESC = "ADC16 controller"
 
 ## Generics for VHDL or Parameters for Verilog
-PARAMETER mode = MASTER, DT = STRING
+PARAMETER G_ROACH2_REV = 1, DT = integer
 
 #############
 ##  PORTS  ##
@@ -47,5 +47,8 @@ PORT delay_tap = "", VEC = [4:0], DIR = I
 PORT snap_req  = "",              DIR = I
 PORT snap_we   = "",              DIR = O
 PORT snap_addr = "", VEC = [9:0], DIR = O
+
+# ROACH2 Revision (output to adc16_controller)
+PORT roach2_rev = "", VEC = [1:0], DIR = O
 
 END

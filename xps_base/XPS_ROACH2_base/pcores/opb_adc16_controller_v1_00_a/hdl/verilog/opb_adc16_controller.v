@@ -31,7 +31,8 @@ module opb_adc16_controller(
 	  
 	  output        [0:15] adc0_delay_rst,
 	  output        [0:4] adc0_delay_tap,
-	  output        adc0_snap_req
+	  output        adc0_snap_req,
+	  input   [1:0] adc0_roach2_rev
   );
   parameter C_BASEADDR    = 32'h00000000;
   parameter C_HIGHADDR    = 32'h0000FFFF;
@@ -162,7 +163,8 @@ module opb_adc16_controller(
 	      case (opb_addr[2])
 	       0:  begin
 	               opb_ack <= 1'b1;
-	               opb_data_out <= adc0_adc3wire_reg;
+	               opb_data_out[31:2] <= adc0_adc3wire_reg[0:29];
+	               opb_data_out[1:0] <= adc0_roach2_rev;
 	           end
 	       1:  begin
 	               opb_ack <= 1'b1;

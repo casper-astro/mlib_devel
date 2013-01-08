@@ -7,6 +7,9 @@ use IEEE.numeric_std.all;
 
 -- entity declaraction
 entity  adc16_interface  is
+    generic (
+               G_ROACH2_REV : integer := 1
+    );
     port (
                -- System
                fabric_clk    :  out std_logic;
@@ -35,7 +38,10 @@ entity  adc16_interface  is
                -- Snap Controller
                snap_req         :  in  std_logic;
                snap_we          :  out std_logic;
-               snap_addr        :  out std_logic_vector(9 downto 0)
+               snap_addr        :  out std_logic_vector(9 downto 0);
+
+               -- ROACH2 rev (for adc16_controller)
+               roach2_rev       :  out std_logic_vector(1 downto 0)
     );
 
 end  adc16_interface;
@@ -115,6 +121,7 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Internal routing
      fabric_clk <= s_fabric_clk(master);
+     roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
 
      -- ADC A
      s_i_line_clk(0) <= s_line_clk(master);

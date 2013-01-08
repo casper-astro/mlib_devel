@@ -60,4 +60,6 @@ PORT adc0_delay_tap   = "", DIR = O, VEC = [4:0]
 
 PORT adc0_snap_req   = "", DIR = O
 
+PORT adc0_roach2_rev = "", DIR = I, VEC = [1:0]
+
 END
