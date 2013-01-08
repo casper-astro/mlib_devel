@@ -96,11 +96,197 @@ ucf_constraints_lvds = struct( ...
 ucf_constraints_standard = struct( ...
     'IOSTANDARD', 'LVCMOS15');
 
+% Setup pins for roach2 (rev2) zdok0 and zdok1
+r2_zdok0_ser_a_p_pins = {
+  'J37',
+  'L35',
+  'K37', % rev1: L34
+  'L31',
+  'J35',
+  'K38',
+  'K39',
+  'N29',
+  'F40',
+  'E42',
+  'H36',
+  'D40',
+  'B38',
+  'D38',
+  'F35',
+  'B39',
+};
+
+r2_zdok0_ser_a_n_pins = {
+  'J36',
+  'L36',
+  'L37', % rev1: M34
+  'L32',
+  'H35',
+  'J38',
+  'K40',
+  'N30',
+  'F41',
+  'F42',
+  'G36',
+  'E40',
+  'A39',
+  'C38',
+  'F36',
+  'C39',
+};
+
+r2_zdok0_ser_b_p_pins = {
+  'K33',
+  'M33', % rev1: M36
+  'M31', % rev1: M33
+  'N28',
+  'H40',
+  'L34', % rev1: K37
+  'K35',
+  'J40',
+  'C40',
+  'F37',
+  'G41',
+  'G37',
+  'B41',
+  'A40',
+  'E39',
+  'D42',
+};
+
+r2_zdok0_ser_b_n_pins = {
+  'K32',
+  'M32', % rev1: M37
+  'N31', % rev1: M32
+  'P28',
+  'H41',
+  'M34', % rev1: L37
+  'K34',
+  'J41',
+  'C41',
+  'E37',
+  'G42',
+  'G38',
+  'B42',
+  'A41',
+  'E38',
+  'D41',
+};
+
+r2_zdok1_ser_a_p_pins = {
+  'W42',
+  'W35',
+  'Y38',
+  'AA36',
+  'U42',
+  'V38',
+  'V41',
+  'W36',
+  'R40',
+  'T41',
+  'R35',
+  'T34',
+  'M41',
+  'N38',
+  'M36', % rev1: N36
+  'P36',
+};
+
+r2_zdok1_ser_a_n_pins = {
+  'Y42',
+  'V35',
+  'AA39',
+  'AA37',
+  'U41',
+  'W38',
+  'W41',
+  'V36',
+  'T40',
+  'T42',
+  'R34',
+  'T35',
+  'M42',
+  'N39',
+  'M37', % rev1: P37
+  'P35',
+};
+
+r2_zdok1_ser_b_p_pins = {
+  'V33',
+  'W32',
+  'W37',
+  'AA32',
+  'U39',
+  'V40',
+  'U32',
+  'Y40',
+  'R39',
+  'P42',
+  'R37',
+  'U36',
+  'L41',
+  'M38',
+  'N36', % rev1: M31
+  'P40',
+};
+
+r2_zdok1_ser_b_n_pins = {
+  'W33',
+  'Y33',
+  'Y37',
+  'Y32',
+  'V39',
+  'W40',
+  'U33',
+  'Y39',
+  'P38',
+  'R42',
+  'T37',
+  'T36',
+  'L42',
+  'M39',
+  'P37', % rev1: N31
+  'P41',
+};
+
+% Tweak pins for ROACH2 Revision 1
+if strcmp(s.roach2_rev,'1')
+  r2_zdok0_ser_a_p_pins{3} = 'L34';
+  r2_zdok0_ser_a_n_pins{3} = 'M34';
+
+  r2_zdok0_ser_b_p_pins{2} = 'M36';
+  r2_zdok0_ser_b_n_pins{2} = 'M37';
+
+  r2_zdok0_ser_b_p_pins{3} = 'M33';
+  r2_zdok0_ser_b_n_pins{3} = 'M32';
+
+  r2_zdok0_ser_b_p_pins{6} = 'K37';
+  r2_zdok0_ser_b_n_pins{6} = 'L37';
+
+  r2_zdok1_ser_a_p_pins{15} = 'N36';
+  r2_zdok1_ser_a_n_pins{15} = 'P37';
+
+  r2_zdok1_ser_b_p_pins{15} = 'M31';
+  r2_zdok1_ser_b_n_pins{15} = 'N31';
+end
+
+% TODO Select roach1 or roach2 and zdok0 or zdok1, but for now only roach2 zdok0
+ser_a_p_str = sprintf('''%s'',', r2_zdok0_ser_a_p_pins{:});
+ser_a_n_str = sprintf('''%s'',', r2_zdok0_ser_a_n_pins{:});
+ser_b_p_str = sprintf('''%s'',', r2_zdok0_ser_b_p_pins{:});
+ser_b_n_str = sprintf('''%s'',', r2_zdok0_ser_b_n_pins{:});
+
+% Remove trainling comma from pin strings and surround with braces
+ser_a_p_str = ['{', ser_a_p_str(1:end-1), '}'];
+ser_a_n_str = ['{', ser_a_n_str(1:end-1), '}'];
+ser_b_p_str = ['{', ser_b_p_str(1:end-1), '}'];
+ser_b_n_str = ['{', ser_b_n_str(1:end-1), '}'];
+
 ext_ports.clk_line_p = {4 'in'  [s.adc_str,'_clk_line_p']  '{''R28'',''H39'',''J42'',''P30''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
 ext_ports.clk_line_n = {4 'in'  [s.adc_str,'_clk_line_n']  '{''R29'',''H38'',''K42'',''P31''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
-ext_ports.ser_a_p    = {16 'in'  [s.adc_str,'_ser_a_p']  '{''J37'',''L35'',''L34'',''L31'',''J35'',''K38'',''K39'',''N29'',''F40'',''E42'',''H36'',''D40'',''B38'',''D38'',''F35'',''B39''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_a_n    = {16 'in'  [s.adc_str,'_ser_a_n']  '{''J36'',''L36'',''M34'',''L32'',''H35'',''J38'',''K40'',''N30'',''F41'',''F42'',''G36'',''E40'',''A39'',''C38'',''F36'',''C39''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_b_p    = {16 'in'  [s.adc_str,'_ser_b_p']  '{''K33'',''M36'',''M33'',''N28'',''H40'',''K37'',''K35'',''J40'',''C40'',''F37'',''G41'',''G37'',''B41'',''A40'',''E39'',''D42''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_b_n    = {16 'in'  [s.adc_str,'_ser_b_n']  '{''K32'',''M37'',''M32'',''P28'',''H41'',''L37'',''K34'',''J41'',''C41'',''E37'',''G42'',''G38'',''B42'',''A41'',''E38'',''D41''}'  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_a_p    = {16 'in'  [s.adc_str,'_ser_a_p']  ser_a_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_a_n    = {16 'in'  [s.adc_str,'_ser_a_n']  ser_a_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_b_p    = {16 'in'  [s.adc_str,'_ser_b_p']  ser_b_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_b_n    = {16 'in'  [s.adc_str,'_ser_b_n']  ser_b_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
 
 b = set(b,'ext_ports',ext_ports);
