@@ -13,6 +13,7 @@ OPTION DESC = "ADC16 controller"
 
 ## Generics for VHDL or Parameters for Verilog
 PARAMETER G_ROACH2_REV = 1, DT = integer
+PARAMETER G_NUM_UNITS  = 4, DT = integer
 
 #############
 ##  PORTS  ##
@@ -20,14 +21,14 @@ PARAMETER G_ROACH2_REV = 1, DT = integer
 
 # Clocks
 PORT fabric_clk = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
-PORT clk_line_p = "", VEC = [3:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
-PORT clk_line_n = "", VEC = [3:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT clk_line_p = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT clk_line_n = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 
 # Data in
-PORT ser_a_p = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
-PORT ser_a_n = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
-PORT ser_b_p = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
-PORT ser_b_n = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_a_p = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_a_n = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_b_p = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_b_n = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 
 # Data out
 PORT a1 = "", VEC = [7:0], DIR = O
@@ -46,13 +47,29 @@ PORT d1 = "", VEC = [7:0], DIR = O
 PORT d2 = "", VEC = [7:0], DIR = O
 PORT d3 = "", VEC = [7:0], DIR = O
 PORT d4 = "", VEC = [7:0], DIR = O
+PORT e1 = "", VEC = [7:0], DIR = O
+PORT e2 = "", VEC = [7:0], DIR = O
+PORT e3 = "", VEC = [7:0], DIR = O
+PORT e4 = "", VEC = [7:0], DIR = O
+PORT f1 = "", VEC = [7:0], DIR = O
+PORT f2 = "", VEC = [7:0], DIR = O
+PORT f3 = "", VEC = [7:0], DIR = O
+PORT f4 = "", VEC = [7:0], DIR = O
+PORT g1 = "", VEC = [7:0], DIR = O
+PORT g2 = "", VEC = [7:0], DIR = O
+PORT g3 = "", VEC = [7:0], DIR = O
+PORT g4 = "", VEC = [7:0], DIR = O
+PORT h1 = "", VEC = [7:0], DIR = O
+PORT h2 = "", VEC = [7:0], DIR = O
+PORT h3 = "", VEC = [7:0], DIR = O
+PORT h4 = "", VEC = [7:0], DIR = O
 
 # Reset
 PORT reset = "", DIR = I
 
 # Control
-PORT iserdes_bitslip = "", VEC = [3:0], DIR = I
-PORT delay_rst = "", VEC = [15:0], DIR = I
+PORT iserdes_bitslip = "", VEC = [7:0], DIR = I
+PORT delay_rst = "", VEC = [31:0], DIR = I
 PORT delay_tap = "", VEC = [4:0], DIR = I
 
 # Snap

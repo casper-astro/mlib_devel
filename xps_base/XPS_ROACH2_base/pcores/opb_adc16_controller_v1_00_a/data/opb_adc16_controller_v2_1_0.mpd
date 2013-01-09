@@ -51,11 +51,15 @@ PORT adc0_adc3wire_csn1   = "", DIR = O
 PORT adc0_adc3wire_csn2   = "", DIR = O
 PORT adc0_adc3wire_csn3   = "", DIR = O
 PORT adc0_adc3wire_csn4   = "", DIR = O
+PORT adc1_adc3wire_csn1   = "", DIR = O
+PORT adc1_adc3wire_csn2   = "", DIR = O
+PORT adc1_adc3wire_csn3   = "", DIR = O
+PORT adc1_adc3wire_csn4   = "", DIR = O
 
 PORT adc0_reset   = "", DIR = O
-PORT adc0_iserdes_bitslip   = "", DIR = O, VEC = [3:0]
+PORT adc0_iserdes_bitslip   = "", DIR = O, VEC = [7:0]
 
-PORT adc0_delay_rst   = "", DIR = O, VEC = [15:0]
+PORT adc0_delay_rst   = "", DIR = O, VEC = [31:0]
 PORT adc0_delay_tap   = "", DIR = O, VEC = [4:0]
 
 PORT adc0_snap_req   = "", DIR = O

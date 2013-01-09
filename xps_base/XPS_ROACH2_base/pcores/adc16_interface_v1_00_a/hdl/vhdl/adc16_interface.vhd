@@ -8,7 +8,8 @@ use IEEE.numeric_std.all;
 -- entity declaraction
 entity  adc16_interface  is
     generic (
-               G_ROACH2_REV : integer := 1
+               G_ROACH2_REV : integer := 1;
+               G_NUM_UNITS  : integer := 4 -- Typically 4 or 8
     );
     port (
                -- System
@@ -16,16 +17,15 @@ entity  adc16_interface  is
                reset         :  in  std_logic;
 
                -- ZDOK
-               clk_line_p    :  in  std_logic_vector(3 downto 0);
-               clk_line_n    :  in  std_logic_vector(3 downto 0);
-               ser_a_p       :  in  std_logic_vector(15 downto 0);
-               ser_a_n       :  in  std_logic_vector(15 downto 0);
-               ser_b_p       :  in  std_logic_vector(15 downto 0);
-               ser_b_n       :  in  std_logic_vector(15 downto 0);
+               clk_line_p    :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
+               clk_line_n    :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
+               ser_a_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
+               ser_a_n       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
+               ser_b_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
+               ser_b_n       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
 
-
-               -- ISERDES Controller
-               iserdes_bitslip  :  in  std_logic_vector(3 downto 0);
+               -- ISERDES Controller (always 8 bits even if G_NUM_UNITS=4)
+               iserdes_bitslip  :  in  std_logic_vector(7 downto 0);
 
                -- Parallel outputs
                a1  :  out std_logic_vector(7 downto 0);
@@ -44,9 +44,25 @@ entity  adc16_interface  is
                d2  :  out std_logic_vector(7 downto 0);
                d3  :  out std_logic_vector(7 downto 0);
                d4  :  out std_logic_vector(7 downto 0);
+               e1  :  out std_logic_vector(7 downto 0);
+               e2  :  out std_logic_vector(7 downto 0);
+               e3  :  out std_logic_vector(7 downto 0);
+               e4  :  out std_logic_vector(7 downto 0);
+               f1  :  out std_logic_vector(7 downto 0);
+               f2  :  out std_logic_vector(7 downto 0);
+               f3  :  out std_logic_vector(7 downto 0);
+               f4  :  out std_logic_vector(7 downto 0);
+               g1  :  out std_logic_vector(7 downto 0);
+               g2  :  out std_logic_vector(7 downto 0);
+               g3  :  out std_logic_vector(7 downto 0);
+               g4  :  out std_logic_vector(7 downto 0);
+               h1  :  out std_logic_vector(7 downto 0);
+               h2  :  out std_logic_vector(7 downto 0);
+               h3  :  out std_logic_vector(7 downto 0);
+               h4  :  out std_logic_vector(7 downto 0);
 
-               -- Delay Controller
-               delay_rst        :  in  std_logic_vector(15 downto 0);
+               -- Delay Controller (always 32 bits, even if G_NUM_UNITS=4)
+               delay_rst        :  in  std_logic_vector(31 downto 0);
                delay_tap        :  in  std_logic_vector(4 downto 0);
 
                -- Snap Controller
@@ -95,10 +111,10 @@ architecture adc16_interface_arc of adc16_interface is
     end component;
 
      -- Signals
-     type  i4_v1  is array (0 to 3) of std_logic;
-     type  i4_v4  is array (0 to 3) of std_logic_vector(3 downto 0);
-     type  i4_v20 is array (0 to 3) of std_logic_vector(19 downto 0);
-     type  i4_v32 is array (0 to 3) of std_logic_vector(31 downto 0);
+     type  i4_v1  is array (0 to G_NUM_UNITS-1) of std_logic;
+     type  i4_v4  is array (0 to G_NUM_UNITS-1) of std_logic_vector(3 downto 0);
+     type  i4_v20 is array (0 to G_NUM_UNITS-1) of std_logic_vector(19 downto 0);
+     type  i4_v32 is array (0 to G_NUM_UNITS-1) of std_logic_vector(31 downto 0);
 
      signal s_line_clk : i4_v1;
      signal s_frame_clk : i4_v1;
@@ -155,8 +171,46 @@ architecture adc16_interface_arc of adc16_interface is
      d3 <= s_p_data(3)(15 downto  8);
      d4 <= s_p_data(3)( 7 downto  0);
 
+     adc1_board: if G_NUM_UNITS = 8 generate
+       e1 <= s_p_data(4)(31 downto 24);
+       e2 <= s_p_data(4)(23 downto 16);
+       e3 <= s_p_data(4)(15 downto  8);
+       e4 <= s_p_data(4)( 7 downto  0);
+       f1 <= s_p_data(5)(31 downto 24);
+       f2 <= s_p_data(5)(23 downto 16);
+       f3 <= s_p_data(5)(15 downto  8);
+       f4 <= s_p_data(5)( 7 downto  0);
+       g1 <= s_p_data(6)(31 downto 24);
+       g2 <= s_p_data(6)(23 downto 16);
+       g3 <= s_p_data(6)(15 downto  8);
+       g4 <= s_p_data(6)( 7 downto  0);
+       h1 <= s_p_data(7)(31 downto 24);
+       h2 <= s_p_data(7)(23 downto 16);
+       h3 <= s_p_data(7)(15 downto  8);
+       h4 <= s_p_data(7)( 7 downto  0);
+     end generate;
+
+     adc1_dummy: if G_NUM_UNITS /= 8 generate
+       e1 <= "00000000";
+       e2 <= "00000000";
+       e3 <= "00000000";
+       e4 <= "00000000";
+       f1 <= "00000000";
+       f2 <= "00000000";
+       f3 <= "00000000";
+       f4 <= "00000000";
+       g1 <= "00000000";
+       g2 <= "00000000";
+       g3 <= "00000000";
+       g4 <= "00000000";
+       h1 <= "00000000";
+       h2 <= "00000000";
+       h3 <= "00000000";
+       h4 <= "00000000";
+     end generate;
+
      -- Generate adc_unit modules and associated wiring
-     ADC: for i in 0 to 3 generate
+     ADC: for i in 0 to G_NUM_UNITS-1 generate
 
        -- Clocks and reset
        s_i_line_clk(i) <= s_line_clk(master);
