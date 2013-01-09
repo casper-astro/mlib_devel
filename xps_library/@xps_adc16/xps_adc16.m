@@ -14,38 +14,20 @@ inst_name = clear_name(blk_name);
 xsg_obj = get(blk_obj,'xsg_obj');
 
 s.hw_sys = get(xsg_obj,'hw_sys');
-s.hw_adc = lower(get_param(blk_name,'adc_brd'));
 s.roach2_rev = get_param(blk_name,'roach2_rev');
-s.num_inputs = 16;     % TODO Get from mask
-s.sample_mhz = 200; % TODO Get from mask
+s.fabric_mhz = 200; % TODO Get from mask
+s.line_mhz = 2 * s.fabric_mhz; % default is value for 16 input mode
 
-% Validate hw_sys and hw_adc
+% Validate hw_sys
 switch s.hw_sys
-    case {'ROACH2','ROACH'}
-        if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
-            s.adc_str = s.hw_adc;
-        else
-            error(['Unsupported adc board: ',s.hw_adc]);
-        end
-    
+    case {'ROACH2'} %,'ROACH'}
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end 
 
-% Validate num_inputs and sample_mhz
-s.line_mhz = 2 * s.sample_mhz; % default is value for 16 input mode
-switch s.num_inputs
-    case 16
-        if s.sample_mhz> 250
-            error('Max sample rate with 16 inputs is 250 MHz');
-        end
-    % TODO Support additional operating modes
-    %case 8
-    %    % OK
-    %case 4
-    %    % OK
-    otherwise
-        error(['Unsupported number of inputs: ',s.num_inputs]);
+% Validate fabric_mhz
+if s.fabric_mhz> 250
+    error('Max fabric clock rate with ADC16 is 250 MHz');
 end
 
 b = class(s,'xps_adc16',blk_obj);
@@ -81,18 +63,17 @@ b = set(b,'parameters',parameters);
 
 misc_ports.fabric_clk = {1 'out'  'adc0_clk'};
 
-misc_ports.reset            = {1 'in'  [s.adc_str,'_reset']};
-misc_ports.iserdes_bitslip  = {4 'in'  [s.adc_str,'_iserdes_bitslip']};
+misc_ports.reset            = {1 'in'  'adc16_reset'};
+misc_ports.iserdes_bitslip  = {8 'in'  'adc16_iserdes_bitslip'};
 
-misc_ports.delay_rst        = {16 'in'  [s.adc_str,'_delay_rst']};
-misc_ports.delay_tap   = {5 'in'  [s.adc_str,'_delay_tap']};
+misc_ports.delay_rst   = {32 'in'  'adc16_delay_rst'};
+misc_ports.delay_tap   = { 5 'in'  'adc16_delay_tap'};
 
-misc_ports.snap_req  = {1 'in'  [s.adc_str,'_snap_req']};
-misc_ports.snap_we   = {1 'out' [inst_name,'_snap_we']};
-misc_ports.snap_addr = {10 'out' [inst_name,'_snap_addr']};
+misc_ports.snap_req  = { 1 'in'  'adc16_snap_req'};
+misc_ports.snap_we   = { 1 'out' 'adc16_snap_we'};
+misc_ports.snap_addr = {10 'out' 'adc16_snap_addr'};
 
-% TODO Only for ADC0?
-misc_ports.roach2_rev = {2 'out' [s.adc_str,'_roach2_rev']};
+misc_ports.roach2_rev = {2 'out' 'adc16_roach2_rev'};
 
 b = set(b,'misc_ports',misc_ports);
 
@@ -294,11 +275,11 @@ ser_a_n_str = ['{', ser_a_n_str(1:end-1), '}'];
 ser_b_p_str = ['{', ser_b_p_str(1:end-1), '}'];
 ser_b_n_str = ['{', ser_b_n_str(1:end-1), '}'];
 
-ext_ports.clk_line_p = {4 'in'  [s.adc_str,'_clk_line_p']  '{''R28'',''H39'',''J42'',''P30''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
-ext_ports.clk_line_n = {4 'in'  [s.adc_str,'_clk_line_n']  '{''R29'',''H38'',''K42'',''P31''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
-ext_ports.ser_a_p    = {16 'in'  [s.adc_str,'_ser_a_p']  ser_a_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_a_n    = {16 'in'  [s.adc_str,'_ser_a_n']  ser_a_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_b_p    = {16 'in'  [s.adc_str,'_ser_b_p']  ser_b_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
-ext_ports.ser_b_n    = {16 'in'  [s.adc_str,'_ser_b_n']  ser_b_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.clk_line_p = {4 'in'  'adc16_clk_line_p'  '{''R28'',''H39'',''J42'',''P30''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
+ext_ports.clk_line_n = {4 'in'  'adc16_clk_line_n'  '{''R29'',''H38'',''K42'',''P31''}'  'vector=true'  mhs_constraints ucf_constraints_clk };
+ext_ports.ser_a_p    = {16 'in'  'adc16_ser_a_p'  ser_a_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_a_n    = {16 'in'  'adc16_ser_a_n'  ser_a_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_b_p    = {16 'in'  'adc16_ser_b_p'  ser_b_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.ser_b_n    = {16 'in'  'adc16_ser_b_n'  ser_b_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
 
 b = set(b,'ext_ports',ext_ports);

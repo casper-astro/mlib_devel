@@ -68,7 +68,7 @@ snap_chan = {'a', 'b', 'c', 'd'};
 str = [str, '\n'];
 
 for k = 1:4
-  snap_name = [inst_name, '_snap_', snap_chan{k}];
+  snap_name = ['adc16_snap_', snap_chan{k}];
 
   str = [str, '# ', blk_name, ' - Embedded Shared BRAM for ADC ', upper(snap_chan{k}), '\n'];
   str = [str, 'BEGIN bram_if\n'];
@@ -77,13 +77,13 @@ for k = 1:4
   str = [str, ' PARAMETER ADDR_SIZE = 10\n'];
   str = [str, ' BUS_INTERFACE PORTA = ',snap_name,'_ramblk_porta\n'];
   str = [str, ' PORT clk_in   = ',get(xsg_obj,'clk_src'),'\n'];
-  str = [str, ' PORT addr     = ',inst_name,'_snap_addr\n'];
+  str = [str, ' PORT addr     = adc16_snap_addr\n'];
   str = [str, ' PORT data_in  = ',inst_name,'_',snap_chan{k}, '1 & ', ...
                                   inst_name,'_',snap_chan{k}, '2 & ', ...
                                   inst_name,'_',snap_chan{k}, '3 & ', ...
                                   inst_name,'_',snap_chan{k}, '4\n'];
   %str = [str, ' PORT data_out = \n'];
-  str = [str, ' PORT we       = ',inst_name,'_snap_we\n'];
+  str = [str, ' PORT we       = adc16_snap_we\n'];
   str = [str, 'END\n\n'];
 
   str = [str, 'BEGIN bram_block\n'];
