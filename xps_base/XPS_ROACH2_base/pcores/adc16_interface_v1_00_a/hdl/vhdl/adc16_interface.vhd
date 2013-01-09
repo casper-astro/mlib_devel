@@ -26,10 +26,24 @@ entity  adc16_interface  is
 
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic_vector(3 downto 0);
-               p_data_a         :  out std_logic_vector(31 downto 0);
-               p_data_b         :  out std_logic_vector(31 downto 0);
-               p_data_c         :  out std_logic_vector(31 downto 0);
-               p_data_d         :  out std_logic_vector(31 downto 0);
+
+               -- Parallel outputs
+               a1  :  out std_logic_vector(7 downto 0);
+               a2  :  out std_logic_vector(7 downto 0);
+               a3  :  out std_logic_vector(7 downto 0);
+               a4  :  out std_logic_vector(7 downto 0);
+               b1  :  out std_logic_vector(7 downto 0);
+               b2  :  out std_logic_vector(7 downto 0);
+               b3  :  out std_logic_vector(7 downto 0);
+               b4  :  out std_logic_vector(7 downto 0);
+               c1  :  out std_logic_vector(7 downto 0);
+               c2  :  out std_logic_vector(7 downto 0);
+               c3  :  out std_logic_vector(7 downto 0);
+               c4  :  out std_logic_vector(7 downto 0);
+               d1  :  out std_logic_vector(7 downto 0);
+               d2  :  out std_logic_vector(7 downto 0);
+               d3  :  out std_logic_vector(7 downto 0);
+               d4  :  out std_logic_vector(7 downto 0);
 
                -- Delay Controller
                delay_rst        :  in  std_logic_vector(15 downto 0);
@@ -139,7 +153,10 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(0) <= iserdes_bitslip(0);
-     p_data_a <= s_p_data(0);
+     a1 <= s_p_data(0)(31 downto 24);
+     a2 <= s_p_data(0)(23 downto 16);
+     a3 <= s_p_data(0)(15 downto  8);
+     a4 <= s_p_data(0)( 7 downto  0);
 
      -- Delay Controller
      s_delay_rst(0) <= delay_rst(3 downto 0);
@@ -161,7 +178,10 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(1) <= iserdes_bitslip(1);
-     p_data_b <= s_p_data(1);
+     b1 <= s_p_data(1)(31 downto 24);
+     b2 <= s_p_data(1)(23 downto 16);
+     b3 <= s_p_data(1)(15 downto  8);
+     b4 <= s_p_data(1)( 7 downto  0);
 
      -- Delay Controller
      s_delay_rst(1) <= delay_rst(7 downto 4);
@@ -183,7 +203,10 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(2) <= iserdes_bitslip(2);
-     p_data_c <= s_p_data(2);
+     c1 <= s_p_data(2)(31 downto 24);
+     c2 <= s_p_data(2)(23 downto 16);
+     c3 <= s_p_data(2)(15 downto  8);
+     c4 <= s_p_data(2)( 7 downto  0);
 
      -- Delay Controller
      s_delay_rst(2) <= delay_rst(11 downto 8);
@@ -205,7 +228,10 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- ISERDES Controller
      s_iserdes_bitslip(3) <= iserdes_bitslip(3);
-     p_data_d <= s_p_data(3);
+     d1 <= s_p_data(3)(31 downto 24);
+     d2 <= s_p_data(3)(23 downto 16);
+     d3 <= s_p_data(3)(15 downto  8);
+     d4 <= s_p_data(3)( 7 downto  0);
 
      -- Delay Controller
      s_delay_rst(3) <= delay_rst(15 downto 12);

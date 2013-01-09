@@ -78,7 +78,10 @@ for k = 1:4
   str = [str, ' BUS_INTERFACE PORTA = ',snap_name,'_ramblk_porta\n'];
   str = [str, ' PORT clk_in   = ',get(xsg_obj,'clk_src'),'\n'];
   str = [str, ' PORT addr     = ',inst_name,'_snap_addr\n'];
-  str = [str, ' PORT data_in  = ',inst_name,'_p_data_',snap_chan{k},'\n'];
+  str = [str, ' PORT data_in  = ',inst_name,'_',snap_chan{k}, '1 & ', ...
+                                  inst_name,'_',snap_chan{k}, '2 & ', ...
+                                  inst_name,'_',snap_chan{k}, '3 & ', ...
+                                  inst_name,'_',snap_chan{k}, '4\n'];
   %str = [str, ' PORT data_out = \n'];
   str = [str, ' PORT we       = ',inst_name,'_snap_we\n'];
   str = [str, 'END\n\n'];

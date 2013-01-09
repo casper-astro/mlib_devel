@@ -30,10 +30,22 @@ PORT ser_b_p = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT ser_b_n = "", VEC = [15:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 
 # Data out
-PORT p_data_a = "", VEC = [31:0], DIR = O
-PORT p_data_b = "", VEC = [31:0], DIR = O
-PORT p_data_c = "", VEC = [31:0], DIR = O
-PORT p_data_d = "", VEC = [31:0], DIR = O
+PORT a1 = "", VEC = [7:0], DIR = O
+PORT a2 = "", VEC = [7:0], DIR = O
+PORT a3 = "", VEC = [7:0], DIR = O
+PORT a4 = "", VEC = [7:0], DIR = O
+PORT b1 = "", VEC = [7:0], DIR = O
+PORT b2 = "", VEC = [7:0], DIR = O
+PORT b3 = "", VEC = [7:0], DIR = O
+PORT b4 = "", VEC = [7:0], DIR = O
+PORT c1 = "", VEC = [7:0], DIR = O
+PORT c2 = "", VEC = [7:0], DIR = O
+PORT c3 = "", VEC = [7:0], DIR = O
+PORT c4 = "", VEC = [7:0], DIR = O
+PORT d1 = "", VEC = [7:0], DIR = O
+PORT d2 = "", VEC = [7:0], DIR = O
+PORT d3 = "", VEC = [7:0], DIR = O
+PORT d4 = "", VEC = [7:0], DIR = O
 
 # Reset
 PORT reset = "", DIR = I
