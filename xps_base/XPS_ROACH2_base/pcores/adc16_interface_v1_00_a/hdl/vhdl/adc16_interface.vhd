@@ -137,213 +137,107 @@ architecture adc16_interface_arc of adc16_interface is
      fabric_clk <= s_fabric_clk(master);
      roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
 
-     -- ADC A
-     s_i_line_clk(0) <= s_line_clk(master);
-     s_i_frame_clk(0) <= s_frame_clk(master);
-     s_i_fabric_clk(0) <= s_fabric_clk(master);
-     s_reset(0) <= reset;
-
-     -- ZDOK
-     s_clk_line_p(0) <= clk_line_p(0);
-     s_clk_line_n(0) <= clk_line_n(0);
-     s_ser_a_p(0) <= ser_a_p(3 downto 0);
-     s_ser_a_n(0) <= ser_a_n(3 downto 0);
-     s_ser_b_p(0) <= ser_b_p(3 downto 0);
-     s_ser_b_n(0) <= ser_b_n(3 downto 0);
-
-     -- ISERDES Controller
-     s_iserdes_bitslip(0) <= iserdes_bitslip(0);
+     -- Parallel data outputs
      a1 <= s_p_data(0)(31 downto 24);
      a2 <= s_p_data(0)(23 downto 16);
      a3 <= s_p_data(0)(15 downto  8);
      a4 <= s_p_data(0)( 7 downto  0);
-
-     -- Delay Controller
-     s_delay_rst(0) <= delay_rst(3 downto 0);
-     s_delay_tap(0) <= delay_tap&delay_tap&delay_tap&delay_tap;
-
-     -- ADC B
-     s_i_line_clk(1) <= s_line_clk(master);
-     s_i_frame_clk(1) <= s_frame_clk(master);
-     s_i_fabric_clk(1) <= s_fabric_clk(master);
-     s_reset(1) <= reset;
-
-     -- ZDOK
-     s_clk_line_p(1) <= clk_line_p(1);
-     s_clk_line_n(1) <= clk_line_n(1);
-     s_ser_a_p(1) <= ser_a_p(7 downto 4);
-     s_ser_a_n(1) <= ser_a_n(7 downto 4);
-     s_ser_b_p(1) <= ser_b_p(7 downto 4);
-     s_ser_b_n(1) <= ser_b_n(7 downto 4);
-
-     -- ISERDES Controller
-     s_iserdes_bitslip(1) <= iserdes_bitslip(1);
      b1 <= s_p_data(1)(31 downto 24);
      b2 <= s_p_data(1)(23 downto 16);
      b3 <= s_p_data(1)(15 downto  8);
      b4 <= s_p_data(1)( 7 downto  0);
-
-     -- Delay Controller
-     s_delay_rst(1) <= delay_rst(7 downto 4);
-     s_delay_tap(1) <= delay_tap&delay_tap&delay_tap&delay_tap;
-
-     -- ADC C
-     s_i_line_clk(2) <= s_line_clk(master);
-     s_i_frame_clk(2) <= s_frame_clk(master);
-     s_i_fabric_clk(2) <= s_fabric_clk(master);
-     s_reset(2) <= reset;
-
-     -- ZDOK
-     s_clk_line_p(2) <= clk_line_p(2);
-     s_clk_line_n(2) <= clk_line_n(2);
-     s_ser_a_p(2) <= ser_a_p(11 downto 8);
-     s_ser_a_n(2) <= ser_a_n(11 downto 8);
-     s_ser_b_p(2) <= ser_b_p(11 downto 8);
-     s_ser_b_n(2) <= ser_b_n(11 downto 8);
-
-     -- ISERDES Controller
-     s_iserdes_bitslip(2) <= iserdes_bitslip(2);
      c1 <= s_p_data(2)(31 downto 24);
      c2 <= s_p_data(2)(23 downto 16);
      c3 <= s_p_data(2)(15 downto  8);
      c4 <= s_p_data(2)( 7 downto  0);
-
-     -- Delay Controller
-     s_delay_rst(2) <= delay_rst(11 downto 8);
-     s_delay_tap(2) <= delay_tap&delay_tap&delay_tap&delay_tap;
-
-     -- ADC D
-     s_i_line_clk(3) <= s_line_clk(master);
-     s_i_frame_clk(3) <= s_frame_clk(master);
-     s_i_fabric_clk(3) <= s_fabric_clk(master);
-     s_reset(3) <= reset;
-
-     -- ZDOK
-     s_clk_line_p(3) <= clk_line_p(3);
-     s_clk_line_n(3) <= clk_line_n(3);
-     s_ser_a_p(3) <= ser_a_p(15 downto 12);
-     s_ser_a_n(3) <= ser_a_n(15 downto 12);
-     s_ser_b_p(3) <= ser_b_p(15 downto 12);
-     s_ser_b_n(3) <= ser_b_n(15 downto 12);
-
-     -- ISERDES Controller
-     s_iserdes_bitslip(3) <= iserdes_bitslip(3);
      d1 <= s_p_data(3)(31 downto 24);
      d2 <= s_p_data(3)(23 downto 16);
      d3 <= s_p_data(3)(15 downto  8);
      d4 <= s_p_data(3)( 7 downto  0);
 
-     -- Delay Controller
-     s_delay_rst(3) <= delay_rst(15 downto 12);
-     s_delay_tap(3) <= delay_tap&delay_tap&delay_tap&delay_tap;
+     -- Generate adc_unit modules and associated wiring
+     ADC: for i in 0 to 3 generate
 
-    -- ADC A
-    adc_A : adc_unit
-    generic map (
-               mode => "SLAVE")
-    port map (
-               line_clk => s_line_clk(0),
-               frame_clk => s_frame_clk(0),
-               fabric_clk => s_fabric_clk(0),
-               i_line_clk => s_i_line_clk(0),
-               i_frame_clk => s_i_frame_clk(0),
-               i_fabric_clk => s_i_fabric_clk(0),
-               reset => s_reset(0),
+       -- Clocks and reset
+       s_i_line_clk(i) <= s_line_clk(master);
+       s_i_frame_clk(i) <= s_frame_clk(master);
+       s_i_fabric_clk(i) <= s_fabric_clk(master);
+       s_reset(i) <= reset;
 
-               clk_line_p => s_clk_line_p(0),
-               clk_line_n => s_clk_line_n(0),
-               ser_a_p => s_ser_a_p(0),
-               ser_a_n => s_ser_a_n(0),
-               ser_b_p => s_ser_b_p(0),
-               ser_b_n => s_ser_b_n(0),
+       -- ZDOK
+       s_clk_line_p(i) <= clk_line_p(i);
+       s_clk_line_n(i) <= clk_line_n(i);
+       s_ser_a_p(i) <= ser_a_p(4*i+3 downto 4*i);
+       s_ser_a_n(i) <= ser_a_n(4*i+3 downto 4*i);
+       s_ser_b_p(i) <= ser_b_p(4*i+3 downto 4*i);
+       s_ser_b_n(i) <= ser_b_n(4*i+3 downto 4*i);
 
-               iserdes_bitslip => s_iserdes_bitslip(0),
-               p_data => s_p_data(0),
+       -- ISERDES Controller
+       s_iserdes_bitslip(i) <= iserdes_bitslip(i);
 
-               delay_rst => s_delay_rst(0),
-               delay_tap => s_delay_tap(0)
-     );
+       -- Delay Controller
+       s_delay_rst(i) <= delay_rst(4*i+3 downto 4*i);
+       s_delay_tap(i) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
-    -- ADC B
-    adc_B : adc_unit
-    generic map (
-               mode => "SLAVE")
-    port map (
-               line_clk => s_line_clk(1),
-               frame_clk => s_frame_clk(1),
-               fabric_clk => s_fabric_clk(1),
-               i_line_clk => s_i_line_clk(1),
-               i_frame_clk => s_i_frame_clk(1),
-               i_fabric_clk => s_i_fabric_clk(1),
-               reset => s_reset(1),
+       -- TODO Figure out a cleaner way to set generic based on i=master
+       -- condition.  The generic setting is the only difference between these
+       -- two conditional generates.
+       master_adc: if i = master generate
+        master_unit : adc_unit
+        generic map (
+                   mode => "MASTER")
+        port map (
+                   line_clk => s_line_clk(i),
+                   frame_clk => s_frame_clk(i),
+                   fabric_clk => s_fabric_clk(i),
+                   i_line_clk => s_i_line_clk(i),
+                   i_frame_clk => s_i_frame_clk(i),
+                   i_fabric_clk => s_i_fabric_clk(i),
+                   reset => s_reset(i),
 
-               clk_line_p => s_clk_line_p(1),
-               clk_line_n => s_clk_line_n(1),
-               ser_a_p => s_ser_a_p(1),
-               ser_a_n => s_ser_a_n(1),
-               ser_b_p => s_ser_b_p(1),
-               ser_b_n => s_ser_b_n(1),
+                   clk_line_p => s_clk_line_p(i),
+                   clk_line_n => s_clk_line_n(i),
+                   ser_a_p => s_ser_a_p(i),
+                   ser_a_n => s_ser_a_n(i),
+                   ser_b_p => s_ser_b_p(i),
+                   ser_b_n => s_ser_b_n(i),
 
-               iserdes_bitslip => s_iserdes_bitslip(1),
-               p_data => s_p_data(1),
+                   iserdes_bitslip => s_iserdes_bitslip(i),
+                   p_data => s_p_data(i),
 
-               delay_rst => s_delay_rst(1),
-               delay_tap => s_delay_tap(1)
-     );
+                   delay_rst => s_delay_rst(i),
+                   delay_tap => s_delay_tap(i)
+         );
+       end generate;
 
-    -- ADC C
-    adc_C : adc_unit
-    generic map (
-               mode => "MASTER")
-    port map (
-               line_clk => s_line_clk(2),
-               frame_clk => s_frame_clk(2),
-               fabric_clk => s_fabric_clk(2),
-               i_line_clk => s_i_line_clk(2),
-               i_frame_clk => s_i_frame_clk(2),
-               i_fabric_clk => s_i_fabric_clk(2),
-               reset => s_reset(2),
+       slave_adc: if i /= master generate
+        slave_unit : adc_unit
+        generic map (
+                   mode => "SLAVE")
+        port map (
+                   line_clk => s_line_clk(i),
+                   frame_clk => s_frame_clk(i),
+                   fabric_clk => s_fabric_clk(i),
+                   i_line_clk => s_i_line_clk(i),
+                   i_frame_clk => s_i_frame_clk(i),
+                   i_fabric_clk => s_i_fabric_clk(i),
+                   reset => s_reset(i),
 
-               clk_line_p => s_clk_line_p(2),
-               clk_line_n => s_clk_line_n(2),
-               ser_a_p => s_ser_a_p(2),
-               ser_a_n => s_ser_a_n(2),
-               ser_b_p => s_ser_b_p(2),
-               ser_b_n => s_ser_b_n(2),
+                   clk_line_p => s_clk_line_p(i),
+                   clk_line_n => s_clk_line_n(i),
+                   ser_a_p => s_ser_a_p(i),
+                   ser_a_n => s_ser_a_n(i),
+                   ser_b_p => s_ser_b_p(i),
+                   ser_b_n => s_ser_b_n(i),
 
-               iserdes_bitslip => s_iserdes_bitslip(2),
-               p_data => s_p_data(2),
+                   iserdes_bitslip => s_iserdes_bitslip(i),
+                   p_data => s_p_data(i),
 
-               delay_rst => s_delay_rst(2),
-               delay_tap => s_delay_tap(2)
-     );
-
-    -- ADC D
-    adc_D : adc_unit
-    generic map (
-               mode => "SLAVE")
-    port map (
-               line_clk => s_line_clk(3),
-               frame_clk => s_frame_clk(3),
-               fabric_clk => s_fabric_clk(3),
-               i_line_clk => s_i_line_clk(3),
-               i_frame_clk => s_i_frame_clk(3),
-               i_fabric_clk => s_i_fabric_clk(3),
-               reset => s_reset(3),
-
-               clk_line_p => s_clk_line_p(3),
-               clk_line_n => s_clk_line_n(3),
-               ser_a_p => s_ser_a_p(3),
-               ser_a_n => s_ser_a_n(3),
-               ser_b_p => s_ser_b_p(3),
-               ser_b_n => s_ser_b_n(3),
-
-               iserdes_bitslip => s_iserdes_bitslip(3),
-               p_data => s_p_data(3),
-
-               delay_rst => s_delay_rst(3),
-               delay_tap => s_delay_tap(3)
-     );
+                   delay_rst => s_delay_rst(i),
+                   delay_tap => s_delay_tap(i)
+         );
+       end generate; -- i /= master
+     end generate; -- for i in...
 
     process(s_fabric_clk(master))
     begin
