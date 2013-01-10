@@ -70,8 +70,9 @@ entity  adc16_interface  is
                snap_we          :  out std_logic;
                snap_addr        :  out std_logic_vector(9 downto 0);
 
-               -- ROACH2 rev (for adc16_controller)
-               roach2_rev       :  out std_logic_vector(1 downto 0)
+               -- ROACH2 rev and number of ADC boards (for adc16_controller)
+               roach2_rev       :  out std_logic_vector(1 downto 0);
+               num_units        :  out std_logic_vector(3 downto 0)
     );
 
 end  adc16_interface;
@@ -152,6 +153,7 @@ architecture adc16_interface_arc of adc16_interface is
      -- Internal routing
      fabric_clk <= s_fabric_clk(master);
      roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
+     num_units  <= std_logic_vector(to_unsigned(G_NUM_UNITS,  num_units'length));
 
      -- Parallel data outputs
      a1 <= s_p_data(0)(31 downto 24);

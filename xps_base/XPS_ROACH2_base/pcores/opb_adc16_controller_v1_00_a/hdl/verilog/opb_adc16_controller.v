@@ -39,7 +39,8 @@ module opb_adc16_controller(
     output        [0:31] adc16_delay_rst,
     output        [0:4] adc16_delay_tap,
     output        adc16_snap_req,
-    input   [1:0] adc16_roach2_rev
+    input   [1:0] adc16_roach2_rev,
+    input   [3:0] adc16_num_units
   );
   parameter C_BASEADDR    = 32'h00000000;
   parameter C_HIGHADDR    = 32'h0000FFFF;
@@ -69,6 +70,7 @@ module opb_adc16_controller(
   /* ======================================= */
   /* ADC0 3-Wire Register (word 0)           */
   /* ======================================= */
+  /* NNNN = Number of ADC chips supported    */
   /* RR = ROACH2 revision expected/required  */
   /* C = SCLK                                */
   /* D = SDATA                               */
@@ -84,10 +86,17 @@ module opb_adc16_controller(
   /* |<-- MSb                       LSb -->| */
   /* 0000_0000_0011_1111_1111_2222_2222_2233 */
   /* 0123_4567_8901_2345_6789_0123_4567_8901 */
+  /* ---- ---- NNNN ---- ---- ---- ---- ---- */
   /* ---- ---- ---- --RR ---- ---- ---- ---- */
   /* ---- ---- ---- ---- ---- --C- ---- ---- */
   /* ---- ---- ---- ---- ---- ---D ---- ---- */
   /* ---- ---- ---- ---- ---- ---- 7654 3210 */
+  /* ======================================= */
+  /* NOTE: NNNN and RR are read-only values  */
+  /*       that are set at compile time.     */
+  /*       They do not indicate the state    */
+  /*       of the actual hardware in use     */
+  /*       at runtime.                       */
   /* ======================================= */
 
   assign adc1_adc3wire_sclk  =  adc16_adc3wire_wire[22];
@@ -221,7 +230,9 @@ module opb_adc16_controller(
           case (opb_addr[3:2])
            0:  begin
                    opb_ack <= 1'b1;
-                   opb_data_out[31:18] <= adc16_adc3wire_reg[0:13];
+                   opb_data_out[31:24] <= adc16_adc3wire_reg[ 0:7 ];
+                   opb_data_out[23:20] <= adc16_num_units;
+                   opb_data_out[19:18] <= adc16_adc3wire_reg[12:13];
                    opb_data_out[17:16] <= adc16_roach2_rev;
                    opb_data_out[15:0 ] <= adc16_adc3wire_reg[16:31];
                end

@@ -402,6 +402,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_delay_tap        = adc16_delay_tap
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_snap_req         = adc16_snap_req
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_roach2_rev       = adc16_roach2_rev
+#IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_num_units        = adc16_num_units
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # #
 #IF# (strcmp(get(b,'type'),'xps_adc16')) #END
 
