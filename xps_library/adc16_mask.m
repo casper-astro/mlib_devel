@@ -6,15 +6,24 @@ delete_lines(cursys);
 gw_name = clear_name(cursys);
 
 % TODO Get from mask parameter
-num_adcs = 1;
+board_count = str2num(get_param(cursys, 'board_count'));
 
 chips = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
-y=20;
+x =  0;
+y = 20;
 
 for chip=1:8
-  if chip > 4 && num_adcs == 1
-    break
+
+  % Chip 5 is the first chip of the second board
+  if chip == 5
+    if board_count == 1
+      break
+    else
+      % Second column
+      x = 210+30+50;
+      y = 20;
+    end
   end
 
   for channel=1:4
@@ -23,9 +32,9 @@ for chip=1:8
     gateway_name = sprintf('%s_%s%d', gw_name, chips{chip}, channel);
     outport_name = sprintf('%s%d', chips{chip}, channel);
 
-    inport_pos  = [ 20, y,    20+30, y+14];
-    gateway_pos = [100, y-3, 100+70, y+17];
-    outport_pos = [210, y,   210+30, y+14];
+    inport_pos  = [x+ 20, y,   x+ 20+30, y+14];
+    gateway_pos = [x+100, y-3, x+100+70, y+17];
+    outport_pos = [x+210, y,   x+210+30, y+14];
     y = y + 50;
 
     reuse_block(cursys, inport_name, 'built-in/inport', ...

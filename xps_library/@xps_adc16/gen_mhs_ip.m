@@ -63,11 +63,11 @@ xsg_obj = get(blk_obj,'xsg_obj');
 % Start address for embedded opb_adc16_controller instance
 adc_addr_start = hex2dec('00020000');
 
-snap_chan = {'a', 'b', 'c', 'd'};
+snap_chan = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
 str = [str, '\n'];
 
-for k = 1:4
+for k = 1:blk_obj.num_units
   snap_name = ['adc16_snap_', snap_chan{k}];
 
   str = [str, '# ', blk_name, ' - Embedded Shared BRAM for ADC ', upper(snap_chan{k}), '\n'];
