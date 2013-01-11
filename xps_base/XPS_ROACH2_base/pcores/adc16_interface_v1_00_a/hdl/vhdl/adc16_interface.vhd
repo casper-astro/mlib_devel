@@ -14,6 +14,7 @@ entity  adc16_interface  is
     port (
                -- System
                fabric_clk    :  out std_logic;
+               locked        :  out std_logic_vector(1 downto 0);
                reset         :  in  std_logic;
 
                -- ZDOK
@@ -88,6 +89,7 @@ architecture adc16_interface_arc of adc16_interface is
                line_clk      :  out std_logic;
                frame_clk     :  out std_logic;
                fabric_clk    :  out std_logic;
+               locked        :  out std_logic;
                i_line_clk    :  in  std_logic;
                i_frame_clk   :  in  std_logic;
                i_fabric_clk  :  in  std_logic;
@@ -120,6 +122,7 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_line_clk : i4_v1;
      signal s_frame_clk : i4_v1;
      signal s_fabric_clk : i4_v1;
+     signal s_locked : i4_v1;
      signal s_i_line_clk : i4_v1;
      signal s_i_frame_clk : i4_v1;
      signal s_i_fabric_clk : i4_v1;
@@ -155,7 +158,7 @@ architecture adc16_interface_arc of adc16_interface is
      roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
      num_units  <= std_logic_vector(to_unsigned(G_NUM_UNITS,  num_units'length));
 
-     -- Parallel data outputs
+     -- Parallel data outputs (and locked(0))
      a1 <= s_p_data(0)(31 downto 24);
      a2 <= s_p_data(0)(23 downto 16);
      a3 <= s_p_data(0)(15 downto  8);
@@ -172,6 +175,7 @@ architecture adc16_interface_arc of adc16_interface is
      d2 <= s_p_data(3)(23 downto 16);
      d3 <= s_p_data(3)(15 downto  8);
      d4 <= s_p_data(3)( 7 downto  0);
+     locked(0) <= s_locked(master);
 
      adc1_board: if G_NUM_UNITS = 8 generate
        e1 <= s_p_data(4)(31 downto 24);
@@ -190,6 +194,7 @@ architecture adc16_interface_arc of adc16_interface is
        h2 <= s_p_data(7)(23 downto 16);
        h3 <= s_p_data(7)(15 downto  8);
        h4 <= s_p_data(7)( 7 downto  0);
+       locked(1) <= s_locked(master+4);
      end generate;
 
      adc1_dummy: if G_NUM_UNITS /= 8 generate
@@ -209,6 +214,7 @@ architecture adc16_interface_arc of adc16_interface is
        h2 <= "00000000";
        h3 <= "00000000";
        h4 <= "00000000";
+       locked(1) <= '0';
      end generate;
 
      -- Generate adc_unit modules and associated wiring
@@ -246,6 +252,7 @@ architecture adc16_interface_arc of adc16_interface is
                    line_clk => s_line_clk(i),
                    frame_clk => s_frame_clk(i),
                    fabric_clk => s_fabric_clk(i),
+                   locked => s_locked(i),
                    i_line_clk => s_i_line_clk(i),
                    i_frame_clk => s_i_frame_clk(i),
                    i_fabric_clk => s_i_fabric_clk(i),
@@ -274,6 +281,7 @@ architecture adc16_interface_arc of adc16_interface is
                    line_clk => s_line_clk(i),
                    frame_clk => s_frame_clk(i),
                    fabric_clk => s_fabric_clk(i),
+                   locked => s_locked(i),
                    i_line_clk => s_i_line_clk(i),
                    i_frame_clk => s_i_frame_clk(i),
                    i_fabric_clk => s_i_fabric_clk(i),

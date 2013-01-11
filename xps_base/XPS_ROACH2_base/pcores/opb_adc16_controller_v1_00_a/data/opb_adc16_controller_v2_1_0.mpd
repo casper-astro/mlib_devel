@@ -64,6 +64,7 @@ PORT adc16_delay_tap   = "", DIR = O, VEC = [4:0]
 
 PORT adc16_snap_req   = "", DIR = O
 
+PORT adc16_locked     = "", DIR = I, VEC = [1:0]
 PORT adc16_roach2_rev = "", DIR = I, VEC = [1:0]
 PORT adc16_num_units  = "", DIR = I, VEC = [3:0]
 

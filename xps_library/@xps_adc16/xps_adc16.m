@@ -81,6 +81,7 @@ misc_ports.snap_req  = { 1 'in'  'adc16_snap_req'};
 misc_ports.snap_we   = { 1 'out' 'adc16_snap_we'};
 misc_ports.snap_addr = {10 'out' 'adc16_snap_addr'};
 
+misc_ports.locked     = {2 'out' 'adc16_locked'};
 misc_ports.roach2_rev = {2 'out' 'adc16_roach2_rev'};
 misc_ports.num_units  = {4 'out' 'adc16_num_units'};
 

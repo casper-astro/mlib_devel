@@ -13,6 +13,7 @@ entity  adc_unit  is
                line_clk      :  out std_logic;
                frame_clk     :  out std_logic;
                fabric_clk    :  out std_logic;
+               locked        :  out std_logic;
                i_line_clk    :  in  std_logic;
                i_frame_clk   :  in  std_logic;
                i_fabric_clk  :  in  std_logic;
@@ -352,6 +353,9 @@ architecture adc_unit_arc of adc_unit is
 
      end generate ISERDES_GEN;
 
+     slave_gen : if mode /= "MASTER" generate
+         locked <= '0';
+     end generate;
 
      master_gen : if mode = "MASTER" generate
      -- MMCM block
@@ -396,6 +400,8 @@ architecture adc_unit_arc of adc_unit is
                IB  => ibufds_clk_ib,
                O   => ibufds_clk_o
      );
+
+    locked <= adc_mmcm_locked;
 
     end generate master_gen;
 
