@@ -13,6 +13,9 @@ entity  adc_unit  is
                line_clk      :  out std_logic;
                frame_clk     :  out std_logic;
                fabric_clk    :  out std_logic;
+               fabric_clk_90  :  out std_logic;
+               fabric_clk_180 :  out std_logic;
+               fabric_clk_270 :  out std_logic;
                locked        :  out std_logic;
                i_line_clk    :  in  std_logic;
                i_frame_clk   :  in  std_logic;
@@ -98,7 +101,10 @@ architecture adc_unit_arc of adc_unit is
                clkout0n     :  out std_logic;
                clkout1p     :  out std_logic;
                clkout1n     :  out std_logic;
-               clkout2      :  out std_logic
+               clkout2      :  out std_logic;
+               clkout2_90   :  out std_logic;
+               clkout2_180  :  out std_logic;
+               clkout2_270  :  out std_logic
       );
      end component;
 
@@ -157,9 +163,12 @@ architecture adc_unit_arc of adc_unit is
      signal adc_mmcm_clkout1p : std_logic;
      signal adc_mmcm_clkout1n : std_logic;
      signal adc_mmcm_clkout2  : std_logic;
+     signal adc_mmcm_clkout2_90 : std_logic;
+     signal adc_mmcm_clkout2_180 : std_logic;
+     signal adc_mmcm_clkout2_270 : std_logic;
 
-     signal bufg_i : std_logic_vector(2 downto 0);
-     signal bufg_o : std_logic_vector(2 downto 0);
+     signal bufg_i : std_logic_vector(5 downto 0);
+     signal bufg_o : std_logic_vector(5 downto 0);
      signal ibufds_clk_i : std_logic;
      signal ibufds_clk_ib : std_logic;
      signal ibufds_clk_o : std_logic;
@@ -191,6 +200,9 @@ architecture adc_unit_arc of adc_unit is
      line_clk <= bufg_o(0);
      frame_clk <= bufg_o(1);
      fabric_clk <= bufg_o(2);
+     fabric_clk_90 <= bufg_o(3);
+     fabric_clk_180 <= bufg_o(4);
+     fabric_clk_270 <= bufg_o(5);
 
      -- Differential signals
 
@@ -210,6 +222,9 @@ architecture adc_unit_arc of adc_unit is
      bufg_i(0) <= adc_mmcm_clkout0p;
      bufg_i(1) <= adc_mmcm_clkout1p;
      bufg_i(2) <= adc_mmcm_clkout2;
+     bufg_i(3) <= adc_mmcm_clkout2_90;
+     bufg_i(4) <= adc_mmcm_clkout2_180;
+     bufg_i(5) <= adc_mmcm_clkout2_270;
      adc_iserdes_a_clkin <= i_line_clk;
      adc_iserdes_b_clkin <= i_line_clk;
      adc_iserdes_a_clkdiv <= i_frame_clk;
@@ -369,7 +384,10 @@ architecture adc_unit_arc of adc_unit is
                clkout0n     => adc_mmcm_clkout0n,
                clkout1p     => adc_mmcm_clkout1p,
                clkout1n     => adc_mmcm_clkout1n,
-               clkout2      => adc_mmcm_clkout2
+               clkout2      => adc_mmcm_clkout2,
+               clkout2_90   => adc_mmcm_clkout2_90,
+               clkout2_180  => adc_mmcm_clkout2_180,
+               clkout2_270  => adc_mmcm_clkout2_270
       );
 
     -- BUFG
@@ -389,6 +407,24 @@ architecture adc_unit_arc of adc_unit is
     PORT MAP (
                O => bufg_o(2),
                I => bufg_i(2)
+      );
+
+    bufg4_inst : BUFG
+    PORT MAP (
+               O => bufg_o(3),
+               I => bufg_i(3)
+      );
+
+    bufg5_inst : BUFG
+    PORT MAP (
+               O => bufg_o(4),
+               I => bufg_i(4)
+      );
+
+    bufg6_inst : BUFG
+    PORT MAP (
+               O => bufg_o(5),
+               I => bufg_i(5)
       );
 
     ibufds_clk_inst : IBUFDS

@@ -13,9 +13,12 @@ entity  adc16_interface  is
     );
     port (
                -- System
-               fabric_clk    :  out std_logic;
-               locked        :  out std_logic_vector(1 downto 0);
-               reset         :  in  std_logic;
+               fabric_clk     :  out std_logic;
+               fabric_clk_90  :  out std_logic;
+               fabric_clk_180 :  out std_logic;
+               fabric_clk_270 :  out std_logic;
+               locked         :  out std_logic_vector(1 downto 0);
+               reset          :  in  std_logic;
 
                -- ZDOK
                clk_line_p    :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
@@ -89,6 +92,9 @@ architecture adc16_interface_arc of adc16_interface is
                line_clk      :  out std_logic;
                frame_clk     :  out std_logic;
                fabric_clk    :  out std_logic;
+               fabric_clk_90  :  out std_logic;
+               fabric_clk_180 :  out std_logic;
+               fabric_clk_270 :  out std_logic;
                locked        :  out std_logic;
                i_line_clk    :  in  std_logic;
                i_frame_clk   :  in  std_logic;
@@ -122,6 +128,9 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_line_clk : i4_v1;
      signal s_frame_clk : i4_v1;
      signal s_fabric_clk : i4_v1;
+     signal s_fabric_clk_90 : i4_v1;
+     signal s_fabric_clk_180 : i4_v1;
+     signal s_fabric_clk_270 : i4_v1;
      signal s_locked : i4_v1;
      signal s_i_line_clk : i4_v1;
      signal s_i_frame_clk : i4_v1;
@@ -155,6 +164,9 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Internal routing
      fabric_clk <= s_fabric_clk(master);
+     fabric_clk_90 <= s_fabric_clk_90(master);
+     fabric_clk_180 <= s_fabric_clk_180(master);
+     fabric_clk_270 <= s_fabric_clk_270(master);
      roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
      num_units  <= std_logic_vector(to_unsigned(G_NUM_UNITS,  num_units'length));
 
@@ -252,6 +264,9 @@ architecture adc16_interface_arc of adc16_interface is
                    line_clk => s_line_clk(i),
                    frame_clk => s_frame_clk(i),
                    fabric_clk => s_fabric_clk(i),
+                   fabric_clk_90 => s_fabric_clk_90(i),
+                   fabric_clk_180 => s_fabric_clk_180(i),
+                   fabric_clk_270 => s_fabric_clk_270(i),
                    locked => s_locked(i),
                    i_line_clk => s_i_line_clk(i),
                    i_frame_clk => s_i_frame_clk(i),
@@ -281,6 +296,9 @@ architecture adc16_interface_arc of adc16_interface is
                    line_clk => s_line_clk(i),
                    frame_clk => s_frame_clk(i),
                    fabric_clk => s_fabric_clk(i),
+                   fabric_clk_90 => s_fabric_clk_90(i),
+                   fabric_clk_180 => s_fabric_clk_180(i),
+                   fabric_clk_270 => s_fabric_clk_270(i),
                    locked => s_locked(i),
                    i_line_clk => s_i_line_clk(i),
                    i_frame_clk => s_i_frame_clk(i),

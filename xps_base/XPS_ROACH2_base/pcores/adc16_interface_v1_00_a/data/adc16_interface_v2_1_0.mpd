@@ -20,7 +20,10 @@ PARAMETER G_NUM_UNITS  = 4, DT = integer
 #############
 
 # Clocks
-PORT fabric_clk = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk     = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk_90  = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk_180 = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk_270 = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
 PORT clk_line_p = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 PORT clk_line_n = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 

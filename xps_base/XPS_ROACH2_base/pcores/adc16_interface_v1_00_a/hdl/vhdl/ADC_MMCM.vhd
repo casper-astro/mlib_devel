@@ -21,7 +21,10 @@ entity  ADC_MMCM  is
                clkout0n     :  out std_logic;
                clkout1p     :  out std_logic; -- framing clock (frame_clk = line_clk/8)
                clkout1n     :  out std_logic;
-               clkout2      :  out std_logic  -- fabric clock (2 * frame_clk)
+               clkout2      :  out std_logic; -- fabric clock (2 * frame_clk) @   0 degrees phase
+               clkout2_90   :  out std_logic; -- fabric clock (2 * frame_clk) @  90 degrees phase
+               clkout2_180  :  out std_logic; -- fabric clock (2 * frame_clk) @ 180 degrees phase
+               clkout2_270  :  out std_logic  -- fabric clock (2 * frame_clk) @ 270 degrees phase
     );
 
 end  ADC_MMCM;
@@ -65,6 +68,18 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT2_PHASE        : real;
       CLKOUT2_DUTY_CYCLE   : real;
       CLKOUT2_USE_FINE_PS  : boolean;
+      CLKOUT3_DIVIDE       : integer;
+      CLKOUT3_PHASE        : real;
+      CLKOUT3_DUTY_CYCLE   : real;
+      CLKOUT3_USE_FINE_PS  : boolean;
+      CLKOUT4_DIVIDE       : integer;
+      CLKOUT4_PHASE        : real;
+      CLKOUT4_DUTY_CYCLE   : real;
+      CLKOUT4_USE_FINE_PS  : boolean;
+      CLKOUT5_DIVIDE       : integer;
+      CLKOUT5_PHASE        : real;
+      CLKOUT5_DUTY_CYCLE   : real;
+      CLKOUT5_USE_FINE_PS  : boolean;
       CLKIN1_PERIOD        : real;
       REF_JITTER1          : real
       );
@@ -117,6 +132,9 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      signal mmcm_clkout1    : std_logic;
      signal mmcm_clkout1b   : std_logic;
      signal mmcm_clkout2    : std_logic;
+     signal mmcm_clkout2_90  : std_logic;
+     signal mmcm_clkout2_180 : std_logic;
+     signal mmcm_clkout2_270 : std_logic;
      signal mmcm_clkfbin    : std_logic;
      signal mmcm_clkin      : std_logic;
      signal mmcm_locked     : std_logic;
@@ -137,6 +155,9 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      clkout1p <= mmcm_clkout1;
      clkout1n <= mmcm_clkout1b;
      clkout2  <= mmcm_clkout2;
+     clkout2_90  <= mmcm_clkout2_90;
+     clkout2_180 <= mmcm_clkout2_180;
+     clkout2_270 <= mmcm_clkout2_270;
 
      -- Clock input from adc @ around 1GHz
      mmcm_adv_inst : MMCM_ADV
@@ -162,6 +183,18 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT2_PHASE        => 0.000,
       CLKOUT2_DUTY_CYCLE   => 0.500,
       CLKOUT2_USE_FINE_PS  => false,
+      CLKOUT3_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT3_PHASE        => 90.000,
+      CLKOUT3_DUTY_CYCLE   => 0.500,
+      CLKOUT3_USE_FINE_PS  => false,
+      CLKOUT4_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT4_PHASE        => 180.000,
+      CLKOUT4_DUTY_CYCLE   => 0.500,
+      CLKOUT4_USE_FINE_PS  => false,
+      CLKOUT5_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT5_PHASE        => 270.000,
+      CLKOUT5_DUTY_CYCLE   => 0.500,
+      CLKOUT5_USE_FINE_PS  => false,
       CLKIN1_PERIOD        => 2.500, -- 400 MHz (should be calculated from user input)
       REF_JITTER1          => 0.010
 
@@ -200,10 +233,10 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT1B     => mmcm_clkout1b,
       CLKOUT2      => mmcm_clkout2,
       CLKOUT2B     => open,
-      CLKOUT3      => open,
+      CLKOUT3      => mmcm_clkout2_90,
       CLKOUT3B     => open,
-      CLKOUT4      => open,
-      CLKOUT5      => open,
+      CLKOUT4      => mmcm_clkout2_180,
+      CLKOUT5      => mmcm_clkout2_270,
       CLKOUT6      => open,
       -- Input clock control
       CLKFBIN      => mmcm_clkfbin,
