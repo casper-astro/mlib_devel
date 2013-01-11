@@ -45,12 +45,14 @@ PORT OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB
 ## configuration signals to ADC 0
 ######################################
   
-PORT adc0_adc3wire_sclk    = "", DIR = O
-PORT adc0_adc3wire_sdata   = "", DIR = O
+PORT adc0_adc3wire_sclk   = "", DIR = O
+PORT adc0_adc3wire_sdata  = "", DIR = O
 PORT adc0_adc3wire_csn1   = "", DIR = O
 PORT adc0_adc3wire_csn2   = "", DIR = O
 PORT adc0_adc3wire_csn3   = "", DIR = O
 PORT adc0_adc3wire_csn4   = "", DIR = O
+PORT adc1_adc3wire_sclk   = "", DIR = O
+PORT adc1_adc3wire_sdata  = "", DIR = O
 PORT adc1_adc3wire_csn1   = "", DIR = O
 PORT adc1_adc3wire_csn2   = "", DIR = O
 PORT adc1_adc3wire_csn3   = "", DIR = O

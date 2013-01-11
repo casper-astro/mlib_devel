@@ -375,6 +375,12 @@
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc0_adc3wire_csn2     = adc0_adc3wire_csn2, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc0_adc3wire_csn3     = adc0_adc3wire_csn3, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc0_adc3wire_csn4     = adc0_adc3wire_csn4, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_sclk     = adc1_adc3wire_sclk, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_sdata    = adc1_adc3wire_sdata, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn1     = adc1_adc3wire_csn1, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn2     = adc1_adc3wire_csn2, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn3     = adc1_adc3wire_csn3, DIR = O
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn4     = adc1_adc3wire_csn4, DIR = O
 #IF# (strcmp(get(b,'type'),'xps_adc16')) ##
 #IF# (strcmp(get(b,'type'),'xps_adc16')) #BEGIN opb_adc16_controller
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # #
@@ -394,6 +400,12 @@
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc0_adc3wire_csn2     = adc0_adc3wire_csn2
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc0_adc3wire_csn3     = adc0_adc3wire_csn3
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc0_adc3wire_csn4     = adc0_adc3wire_csn4
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_sclk     = adc1_adc3wire_sclk
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_sdata    = adc1_adc3wire_sdata
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn1     = adc1_adc3wire_csn1
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn2     = adc1_adc3wire_csn2
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn3     = adc1_adc3wire_csn3
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 # PORT adc1_adc3wire_csn4     = adc1_adc3wire_csn4
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # #
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # # Control signals to/from adc16_interface
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_reset            = adc16_reset
