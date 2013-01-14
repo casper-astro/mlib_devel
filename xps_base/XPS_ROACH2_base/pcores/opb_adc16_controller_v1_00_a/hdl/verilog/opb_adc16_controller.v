@@ -223,16 +223,16 @@ module opb_adc16_controller(
            2:  begin
                 opb_ack <= 1'b1;
                 if (OPB_BE[0]) begin
-                    adc16_ctrl_reg[0:7] <= OPB_DBus[0:7];
+                    adc16_delay_strobe_reg[0:7] <= OPB_DBus[0:7];
                 end
                 if (OPB_BE[1]) begin
-                    adc16_ctrl_reg[8:15] <= OPB_DBus[8:15];
+                    adc16_delay_strobe_reg[8:15] <= OPB_DBus[8:15];
                 end
                 if (OPB_BE[2]) begin
-                    adc16_ctrl_reg[16:23] <= OPB_DBus[16:23];
+                    adc16_delay_strobe_reg[16:23] <= OPB_DBus[16:23];
                 end
                 if (OPB_BE[3]) begin
-                    adc16_ctrl_reg[24:31] <= OPB_DBus[24:31];
+                    adc16_delay_strobe_reg[24:31] <= OPB_DBus[24:31];
                 end
            end
           endcase
