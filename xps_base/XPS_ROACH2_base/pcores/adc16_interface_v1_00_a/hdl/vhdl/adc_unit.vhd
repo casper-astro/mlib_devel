@@ -152,6 +152,8 @@ architecture adc_unit_arc of adc_unit is
 
      signal adc_iserdes_data0 : std_logic_vector(31 downto 0);
      signal adc_iserdes_data1 : std_logic_vector(31 downto 0);
+     signal adc_iserdes_data0_pipelined : std_logic_vector(31 downto 0);
+     signal adc_iserdes_data1_pipelined : std_logic_vector(31 downto 0);
      signal adc_iserdes_data1_delay : std_logic_vector(31 downto 0);
      signal adc_iserdes_data : std_logic_vector(31 downto 0);
 
@@ -254,14 +256,20 @@ architecture adc_unit_arc of adc_unit is
 
      process (i_fabric_clk, i_frame_clk, adc_iserdes_data0, adc_iserdes_data1)
      begin
-       -- Mux data based on framing clock
-       if i_frame_clk = '1' then
-         adc_iserdes_data <= adc_iserdes_data0;
-       else
-         adc_iserdes_data <= adc_iserdes_data1;
+       -- Pipeline serdes outputs (using slower fram clock)
+       if i_frame_clk'event and i_frame_clk = '1' then
+         adc_iserdes_data0_pipelined <= adc_iserdes_data0;
+         adc_iserdes_data1_pipelined <= adc_iserdes_data1;
        end if;
 
-       -- rising edge of fabric clock
+       -- Mux pipelined data based on framing clock
+       if i_frame_clk = '1' then
+         adc_iserdes_data <= adc_iserdes_data0_pipelined;
+       else
+         adc_iserdes_data <= adc_iserdes_data1_pipelined;
+       end if;
+
+       -- Capture mux output on rising edge of fabric clock
        if i_fabric_clk'event and i_fabric_clk = '1' then
          p_data <= adc_iserdes_data;
        end if;
