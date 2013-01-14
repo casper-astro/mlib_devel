@@ -148,6 +148,7 @@ architecture adc16_interface_arc of adc16_interface is
      -- ISERDES Controller
      signal s_iserdes_bitslip : i4_v1;
      signal s_p_data : i4_v32;
+     signal s_p_data0 : i4_v32;
 
      -- Delay Controller
      signal s_delay_rst : i4_v4;
@@ -281,7 +282,7 @@ architecture adc16_interface_arc of adc16_interface is
                    ser_b_n => s_ser_b_n(i),
 
                    iserdes_bitslip => s_iserdes_bitslip(i),
-                   p_data => s_p_data(i),
+                   p_data => s_p_data0(i),
 
                    delay_rst => s_delay_rst(i),
                    delay_tap => s_delay_tap(i)
@@ -313,7 +314,7 @@ architecture adc16_interface_arc of adc16_interface is
                    ser_b_n => s_ser_b_n(i),
 
                    iserdes_bitslip => s_iserdes_bitslip(i),
-                   p_data => s_p_data(i),
+                   p_data => s_p_data0(i),
 
                    delay_rst => s_delay_rst(i),
                    delay_tap => s_delay_tap(i)
@@ -325,6 +326,9 @@ architecture adc16_interface_arc of adc16_interface is
     begin
       -- rising edge of s_fabric_clk(master)
       if rising_edge(s_fabric_clk(master))  then
+        -- s_p_data pipeline
+        s_p_data <= s_p_data0;
+
         -- snap_req shift register
         s_snap_req <= s_snap_req(0) & snap_req;
         -- '0' to '1' transition on snap_req
