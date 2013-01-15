@@ -184,6 +184,7 @@ module opb_adc16_controller(
 
     adc16_adc3wire_reg <= adc16_adc3wire_reg;
     adc16_ctrl_reg <= adc16_ctrl_reg;
+    adc16_delay_strobe_reg <= adc16_delay_strobe_reg;
 
     if (OPB_Rst) begin
     end else begin
