@@ -115,7 +115,7 @@ architecture adc16_interface_arc of adc16_interface is
 
                -- Delay Controller
                delay_rst        :  in  std_logic_vector(3 downto 0);
-               delay_tap        :  in  std_logic_vector(19 downto 0)
+               delay_tap        :  in  std_logic_vector(4 downto 0)
     );
     end component;
 
@@ -152,7 +152,6 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Delay Controller
      signal s_delay_rst : i4_v4;
-     signal s_delay_tap : i4_v20;
 
      -- Snap Controller
      signal s_snap_req : std_logic_vector(1 downto 0);
@@ -252,7 +251,6 @@ architecture adc16_interface_arc of adc16_interface is
 
        -- Delay Controller
        s_delay_rst(i) <= delay_rst(4*i+3 downto 4*i);
-       s_delay_tap(i) <= delay_tap&delay_tap&delay_tap&delay_tap;
 
        -- TODO Figure out a cleaner way to set generic based on i=master
        -- condition.  The generic setting is the only difference between these
@@ -285,7 +283,7 @@ architecture adc16_interface_arc of adc16_interface is
                    p_data => s_p_data0(i),
 
                    delay_rst => s_delay_rst(i),
-                   delay_tap => s_delay_tap(i)
+                   delay_tap => delay_tap
          );
        end generate;
 
@@ -317,7 +315,7 @@ architecture adc16_interface_arc of adc16_interface is
                    p_data => s_p_data0(i),
 
                    delay_rst => s_delay_rst(i),
-                   delay_tap => s_delay_tap(i)
+                   delay_tap => delay_tap
          );
        end generate; -- i /= master
      end generate; -- for i in...

@@ -37,7 +37,7 @@ entity  adc_unit  is
 
                -- IODELAY Controller
                delay_rst        :  in  std_logic_vector(3 downto 0);
-               delay_tap        :  in  std_logic_vector(19 downto 0)
+               delay_tap        :  in  std_logic_vector(4 downto 0)
     );
 
 end  adc_unit;
@@ -192,7 +192,6 @@ architecture adc_unit_arc of adc_unit is
      signal delay_b_in      : std_logic_vector(3 downto 0);
      signal delay_clock     : std_logic;
      signal delay_reset   : std_logic_vector(3 downto 0);
-     signal delay_intap   : delayTAPtype;
      signal delay_outtap  : delayTAPtype;
 
      begin
@@ -249,14 +248,10 @@ architecture adc_unit_arc of adc_unit is
 
      delay_clock <= i_frame_clk;
      delay_reset <= delay_rst;
-     delay_intap(0) <= delay_tap(4 downto 0);
-     delay_intap(1) <= delay_tap(9 downto 5);
-     delay_intap(2) <= delay_tap(14 downto 10);
-     delay_intap(3) <= delay_tap(19 downto 15);
 
      process (i_fabric_clk, i_frame_clk, adc_iserdes_data0, adc_iserdes_data1)
      begin
-       -- Pipeline serdes outputs (using slower fram clock)
+       -- Pipeline serdes outputs (using slower frame clock)
        if i_frame_clk'event and i_frame_clk = '1' then
          adc_iserdes_data0_pipelined <= adc_iserdes_data0;
          adc_iserdes_data1_pipelined <= adc_iserdes_data1;
@@ -340,7 +335,7 @@ architecture adc_unit_arc of adc_unit is
          ODATAIN                => '0',
          RST                    => delay_reset(i),
          T                      => '1',
-         CNTVALUEIN             => delay_intap(i), --DELAY_TAP_IN,
+         CNTVALUEIN             => delay_tap,       --DELAY_TAP_IN,
          CNTVALUEOUT            => delay_outtap(i), --DELAY_TAP_OUT,
          CLKIN                  => '0',
          CINVCTRL               => '0'
@@ -368,7 +363,7 @@ architecture adc_unit_arc of adc_unit is
          ODATAIN                => '0',
          RST                    => delay_reset(i),
          T                      => '1',
-         CNTVALUEIN             => delay_intap(i), --DELAY_TAP_IN,
+         CNTVALUEIN             => delay_tap,       --DELAY_TAP_IN,
          CNTVALUEOUT            => delay_outtap(i), --DELAY_TAP_OUT,
          CLKIN                  => '0',
          CINVCTRL               => '0'
