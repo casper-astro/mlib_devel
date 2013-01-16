@@ -152,6 +152,9 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Delay Controller
      signal s_delay_rst : i4_v4;
+     signal delay_rst0     : std_logic_vector(31 downto 0);
+     signal delay_rst1     : std_logic_vector(31 downto 0);
+     signal delay_rst_edge : std_logic_vector(31 downto 0);
 
      -- Snap Controller
      signal s_snap_req : std_logic_vector(1 downto 0);
@@ -250,7 +253,7 @@ architecture adc16_interface_arc of adc16_interface is
        s_iserdes_bitslip(i) <= iserdes_bitslip(i);
 
        -- Delay Controller
-       s_delay_rst(i) <= delay_rst(4*i+3 downto 4*i);
+       s_delay_rst(i) <= delay_rst_edge(4*i+3 downto 4*i);
 
        -- TODO Figure out a cleaner way to set generic based on i=master
        -- condition.  The generic setting is the only difference between these
@@ -327,8 +330,16 @@ architecture adc16_interface_arc of adc16_interface is
         -- s_p_data pipeline
         s_p_data <= s_p_data0;
 
+        -- delay_rst shift register
+        delay_rst1 <= delay_rst0;
+        delay_rst0 <= delay_rst;
+
+        -- delay_rst rising edge detector
+        delay_rst_edge <= (not delay_rst1) and delay_rst0;
+
         -- snap_req shift register
         s_snap_req <= s_snap_req(0) & snap_req;
+
         -- '0' to '1' transition on snap_req
         if s_snap_req(1) = '0' and s_snap_req(0) = '1' then
           -- Reset snap counter
