@@ -40,12 +40,6 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      );
      end component;
 
-     component BUFG port (
-      O     : out std_logic;
-      I     : in  std_logic
-     );
-     end component;
-
      component MMCM_ADV generic (
       BANDWIDTH            : string;
       CLKOUT4_CASCADE      : boolean;
@@ -148,7 +142,7 @@ architecture ADC_MMCM_arc of ADC_MMCM is
      locked <= mmcm_locked;
 
      mmcm_clkin <= clkin;
-     --mmcm_clkfbin <= mmcm_clkfbout;
+     mmcm_clkfbin <= mmcm_clkfbout;
 
      clkout0p <= mmcm_clkout0;
      clkout0n <= mmcm_clkout0b;
@@ -263,12 +257,6 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKFBSTOPPED => open,
       PWRDWN       => '0',
       RST          => mmcm_reset
-      );
-
-    clkfb_bufg_inst : BUFG
-    PORT MAP (
-               O => mmcm_clkfbin,
-               I => mmcm_clkfbout
       );
 
 end ADC_MMCM_arc;
