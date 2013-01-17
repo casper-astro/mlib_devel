@@ -63,8 +63,8 @@ module epb32_opb_bridge(
         cmnd_got_reg <= 1'b1;      
       end
 
-      //if (cmnd_ack) begin
-      if (!epb_trans) begin
+      if (cmnd_ack) begin
+      //if (!epb_trans) begin
         cmnd_got_reg <= 1'b0;
       end
     end
