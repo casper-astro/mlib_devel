@@ -154,6 +154,7 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_delay_rst : i4_v4;
      signal delay_rst0     : std_logic_vector(31 downto 0);
      signal delay_rst1     : std_logic_vector(31 downto 0);
+     signal delay_rst2     : std_logic_vector(31 downto 0);
      signal delay_rst_edge : std_logic_vector(31 downto 0);
 
      -- Snap Controller
@@ -331,11 +332,13 @@ architecture adc16_interface_arc of adc16_interface is
         s_p_data <= s_p_data0;
 
         -- delay_rst shift register
+        delay_rst2 <= delay_rst1;
         delay_rst1 <= delay_rst0;
         delay_rst0 <= delay_rst;
 
-        -- delay_rst rising edge detector
-        delay_rst_edge <= (not delay_rst1) and delay_rst0;
+        -- delay_rst rising edge detector (output must be two cycles wide to
+        -- guaranty that it is high when frame clock is high).
+        delay_rst_edge <= (not delay_rst2) and (delay_rst1 or delay_rst0);
 
         -- snap_req shift register
         s_snap_req <= s_snap_req(0) & snap_req;
