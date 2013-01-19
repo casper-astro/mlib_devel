@@ -65,8 +65,8 @@ entity  adc16_interface  is
                h3  :  out std_logic_vector(7 downto 0);
                h4  :  out std_logic_vector(7 downto 0);
 
-               -- Delay Controller (always 32 bits, even if G_NUM_UNITS=4)
-               delay_rst        :  in  std_logic_vector(31 downto 0);
+               -- Delay Controller (always 64 bits, even if G_NUM_UNITS=4)
+               delay_rst        :  in  std_logic_vector(63 downto 0);
                delay_tap        :  in  std_logic_vector(4 downto 0);
 
                -- Snap Controller
@@ -114,7 +114,8 @@ architecture adc16_interface_arc of adc16_interface is
                p_data           :  out std_logic_vector(31 downto 0);
 
                -- Delay Controller
-               delay_rst        :  in  std_logic_vector(3 downto 0);
+               delay_rst_a      :  in  std_logic_vector(3 downto 0);
+               delay_rst_b      :  in  std_logic_vector(3 downto 0);
                delay_tap        :  in  std_logic_vector(4 downto 0)
     );
     end component;
@@ -151,11 +152,12 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_p_data0 : i4_v32;
 
      -- Delay Controller
-     signal s_delay_rst : i4_v4;
-     signal delay_rst0     : std_logic_vector(31 downto 0);
-     signal delay_rst1     : std_logic_vector(31 downto 0);
-     signal delay_rst2     : std_logic_vector(31 downto 0);
-     signal delay_rst_edge : std_logic_vector(31 downto 0);
+     signal s_delay_rst_a  : i4_v4;
+     signal s_delay_rst_b  : i4_v4;
+     signal delay_rst0     : std_logic_vector(63 downto 0);
+     signal delay_rst1     : std_logic_vector(63 downto 0);
+     signal delay_rst2     : std_logic_vector(63 downto 0);
+     signal delay_rst_edge : std_logic_vector(63 downto 0);
 
      -- Snap Controller
      signal s_snap_req : std_logic_vector(1 downto 0);
@@ -253,8 +255,9 @@ architecture adc16_interface_arc of adc16_interface is
        -- ISERDES Controller
        s_iserdes_bitslip(i) <= iserdes_bitslip(i);
 
-       -- Delay Controller
-       s_delay_rst(i) <= delay_rst_edge(4*i+3 downto 4*i);
+       -- Delay Controller (lower half is for "a"; upper half is for "b")
+       s_delay_rst_a(i) <= delay_rst_edge(4*i+3    downto 4*i);
+       s_delay_rst_b(i) <= delay_rst_edge(4*i+3+32 downto 4*i+32);
 
        -- TODO Figure out a cleaner way to set generic based on i=master
        -- condition.  The generic setting is the only difference between these
@@ -286,7 +289,8 @@ architecture adc16_interface_arc of adc16_interface is
                    iserdes_bitslip => s_iserdes_bitslip(i),
                    p_data => s_p_data0(i),
 
-                   delay_rst => s_delay_rst(i),
+                   delay_rst_a => s_delay_rst_a(i),
+                   delay_rst_b => s_delay_rst_b(i),
                    delay_tap => delay_tap
          );
        end generate;
@@ -318,7 +322,8 @@ architecture adc16_interface_arc of adc16_interface is
                    iserdes_bitslip => s_iserdes_bitslip(i),
                    p_data => s_p_data0(i),
 
-                   delay_rst => s_delay_rst(i),
+                   delay_rst_a => s_delay_rst_a(i),
+                   delay_rst_b => s_delay_rst_b(i),
                    delay_tap => delay_tap
          );
        end generate; -- i /= master

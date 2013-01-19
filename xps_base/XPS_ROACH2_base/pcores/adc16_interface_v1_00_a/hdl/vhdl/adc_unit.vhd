@@ -36,7 +36,8 @@ entity  adc_unit  is
                p_data           :  out std_logic_vector(31 downto 0);
 
                -- IODELAY Controller
-               delay_rst        :  in  std_logic_vector(3 downto 0);
+               delay_rst_a      :  in  std_logic_vector(3 downto 0);
+               delay_rst_b      :  in  std_logic_vector(3 downto 0);
                delay_tap        :  in  std_logic_vector(4 downto 0)
     );
 
@@ -191,7 +192,8 @@ architecture adc_unit_arc of adc_unit is
      signal delay_b_out     : std_logic_vector(3 downto 0);
      signal delay_b_in      : std_logic_vector(3 downto 0);
      signal delay_clock     : std_logic;
-     signal delay_reset   : std_logic_vector(3 downto 0);
+     signal delay_reset_a   : std_logic_vector(3 downto 0);
+     signal delay_reset_b   : std_logic_vector(3 downto 0);
      signal delay_outtap  : delayTAPtype;
 
      begin
@@ -247,7 +249,8 @@ architecture adc_unit_arc of adc_unit is
      delay_b_in <= ibufds_ser2_o;
 
      delay_clock <= i_frame_clk;
-     delay_reset <= delay_rst;
+     delay_reset_a <= delay_rst_a;
+     delay_reset_b <= delay_rst_b;
 
      process (i_fabric_clk, i_frame_clk, adc_iserdes_data0, adc_iserdes_data1)
      begin
@@ -333,7 +336,7 @@ architecture adc_unit_arc of adc_unit is
          INC                    => '0', --DELAY_DATA_INC,
          IDATAIN                => delay_a_in(i), -- Driven by IOB
          ODATAIN                => '0',
-         RST                    => delay_reset(i),
+         RST                    => delay_reset_a(i),
          T                      => '1',
          CNTVALUEIN             => delay_tap,       --DELAY_TAP_IN,
          CNTVALUEOUT            => delay_outtap(i), --DELAY_TAP_OUT,
@@ -361,7 +364,7 @@ architecture adc_unit_arc of adc_unit is
          INC                    => '0', --DELAY_DATA_INC,
          IDATAIN                => delay_b_in(i), -- Driven by IOB
          ODATAIN                => '0',
-         RST                    => delay_reset(i),
+         RST                    => delay_reset_b(i),
          T                      => '1',
          CNTVALUEIN             => delay_tap,       --DELAY_TAP_IN,
          CNTVALUEOUT            => delay_outtap(i), --DELAY_TAP_OUT,
