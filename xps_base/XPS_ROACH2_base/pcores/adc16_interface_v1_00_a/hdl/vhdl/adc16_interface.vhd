@@ -324,6 +324,16 @@ architecture adc16_interface_arc of adc16_interface is
        end generate; -- i /= master
      end generate; -- for i in...
 
+    -- Capture snap_req on rising edge of frame clock so that A/B will be even/odd consistent
+    process(s_frame_clk(master))
+    begin
+      -- rising edge of s_frame_clk(master)
+      if rising_edge(s_frame_clk(master))  then
+        -- snap_req shift register
+        s_snap_req <= s_snap_req(0) & snap_req;
+      end if;
+    end process;
+
     process(s_fabric_clk(master))
     begin
       -- rising edge of s_fabric_clk(master)
@@ -339,9 +349,6 @@ architecture adc16_interface_arc of adc16_interface is
         -- delay_rst rising edge detector (output must be two cycles wide to
         -- guaranty that it is high when frame clock is high).
         delay_rst_edge <= (not delay_rst2) and (delay_rst1 or delay_rst0);
-
-        -- snap_req shift register
-        s_snap_req <= s_snap_req(0) & snap_req;
 
         -- '0' to '1' transition on snap_req
         if s_snap_req(1) = '0' and s_snap_req(0) = '1' then
