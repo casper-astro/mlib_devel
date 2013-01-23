@@ -23,6 +23,8 @@ entity  adc16_interface  is
                -- ZDOK
                clk_line_p    :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
                clk_line_n    :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
+               clk_frame_p   :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
+               clk_frame_n   :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
                ser_a_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
                ser_a_n       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
                ser_b_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
@@ -84,26 +86,15 @@ end  adc16_interface;
 architecture adc16_interface_arc of adc16_interface is
 
      -- Components
-     component adc_unit generic (
-               mode          :  string
-               );
-     port (
+
+     component adc_unit port (
                -- System
-               line_clk      :  out std_logic;
-               frame_clk     :  out std_logic;
-               fabric_clk    :  out std_logic;
-               fabric_clk_90  :  out std_logic;
-               fabric_clk_180 :  out std_logic;
-               fabric_clk_270 :  out std_logic;
-               locked        :  out std_logic;
-               i_line_clk    :  in  std_logic;
-               i_frame_clk   :  in  std_logic;
-               i_fabric_clk  :  in  std_logic;
+               fabric_clk    :  in std_logic;
+               line_clk      :  in std_logic;
+               frame_clk     :  in std_logic;
                reset         :  in  std_logic;
 
                -- ZDOK
-               clk_line_p    :  in  std_logic;
-               clk_line_n    :  in  std_logic;
                ser_a_p       :  in  std_logic_vector(3 downto 0);
                ser_a_n       :  in  std_logic_vector(3 downto 0);
                ser_b_p       :  in  std_logic_vector(3 downto 0);
@@ -117,30 +108,77 @@ architecture adc16_interface_arc of adc16_interface is
                delay_rst_a      :  in  std_logic_vector(3 downto 0);
                delay_rst_b      :  in  std_logic_vector(3 downto 0);
                delay_tap        :  in  std_logic_vector(4 downto 0)
-    );
-    end component;
+     );
+     end component;
+
+     component ADC_MMCM   port (
+               -- System
+               reset        :  in  std_logic;
+               locked       :  out std_logic;
+
+               -- Clock inputs
+               clkin        :  in  std_logic;
+
+               -- Clock outputs
+               clkout0p     :  out std_logic;
+               clkout0n     :  out std_logic;
+               clkout1p     :  out std_logic;
+               clkout1n     :  out std_logic;
+               clkout2      :  out std_logic;
+               clkout2_90   :  out std_logic;
+               clkout2_180  :  out std_logic;
+               clkout2_270  :  out std_logic
+     );
+     end component;
+
+     component IBUFDS  generic (
+               DIFF_TERM    : boolean;
+               IOSTANDARD   : string
+     );
+     port (
+               I            : in  std_logic;
+               IB           : in  std_logic;
+               O            : out std_logic
+     );
+     end component;
+
+     component BUFG  port  (
+               O            : out std_logic;
+               I            : in  std_logic
+     );
+     end component;
+
+     -- Attribute declarations
+
+     attribute keep : string;
+     attribute s    : string;
 
      -- Signals
+
      type  i4_v1  is array (0 to G_NUM_UNITS-1) of std_logic;
      type  i4_v4  is array (0 to G_NUM_UNITS-1) of std_logic_vector(3 downto 0);
      type  i4_v20 is array (0 to G_NUM_UNITS-1) of std_logic_vector(19 downto 0);
      type  i4_v32 is array (0 to G_NUM_UNITS-1) of std_logic_vector(31 downto 0);
 
-     signal s_line_clk : i4_v1;
-     signal s_frame_clk : i4_v1;
-     signal s_fabric_clk : i4_v1;
-     signal s_fabric_clk_90 : i4_v1;
-     signal s_fabric_clk_180 : i4_v1;
-     signal s_fabric_clk_270 : i4_v1;
-     signal s_locked : i4_v1;
-     signal s_i_line_clk : i4_v1;
-     signal s_i_frame_clk : i4_v1;
-     signal s_i_fabric_clk : i4_v1;
-     signal s_reset : i4_v1;
+     -- Clocking (keep and s attributes retain unused clocks)
+     signal line_clk_in : std_logic_vector(G_NUM_UNITS-1 downto 0);
+     attribute keep of line_clk_in : signal is "true";
+     attribute s    of line_clk_in : signal is "yes";
+
+     -- frame_clk_in signals are not used (they exist for termination only)
+     signal frame_clk_in : std_logic_vector(G_NUM_UNITS-1 downto 0);
+     attribute keep of frame_clk_in : signal is "true";
+     attribute s    of frame_clk_in : signal is "yes";
+
+     signal line_clk     : std_logic;
+     signal frame_clk    : std_logic;
+     signal fabric_clk_0 : std_logic;
+
+     -- MMCM BUFGs
+     signal bufg_i : std_logic_vector(5 downto 0);
+     signal bufg_o : std_logic_vector(5 downto 0);
 
      -- ZDOK
-     signal s_clk_line_p : i4_v1;
-     signal s_clk_line_n : i4_v1;
      signal s_ser_a_p : i4_v4;
      signal s_ser_a_n : i4_v4;
      signal s_ser_b_p : i4_v4;
@@ -164,19 +202,73 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_snap_counter: std_logic_vector(10 downto 0);
 
      -- Set which ADC is the MASTER
-     constant master : integer := 2;
+     constant master : integer := 0;
 
      begin
 
+     -- Clocking
+
+     adc_mmcm_0 : ADC_MMCM
+     PORT MAP (
+       reset        => reset,
+       locked       => locked(0),
+       clkin        => line_clk_in(master),
+       clkout0p     => bufg_i(0),
+       clkout0n     => open,
+       clkout1p     => bufg_i(1),
+       clkout1n     => open,
+       clkout2      => bufg_i(2),
+       clkout2_90   => bufg_i(3),
+       clkout2_180  => bufg_i(4),
+       clkout2_270  => bufg_i(5)
+     );
+
+     -- MMCM BUFGs
+     bufg_gen: for i in 0 to 5 generate
+       inst : BUFG
+       PORT MAP (
+         O => bufg_o(i),
+         I => bufg_i(i)
+       );
+     end generate;
+
+     -- IBUFDS for clocks
+     ibufds_clk: for i in 0 to G_NUM_UNITS-1 generate
+       -- ADC line clocks
+       line_clk_inst : IBUFDS
+       generic map (
+         DIFF_TERM  => TRUE,
+         IOSTANDARD => "LVDS_25")
+       port map (
+         I   => clk_line_p(i),
+         IB  => clk_line_n(i),
+         O   => line_clk_in(i)
+       );
+       -- ADC frame clocks
+       frame_clk_inst : IBUFDS
+       generic map (
+         DIFF_TERM  => TRUE,
+         IOSTANDARD => "LVDS_25")
+       port map (
+         I   => clk_frame_p(i),
+         IB  => clk_frame_n(i),
+         O   => frame_clk_in(i)
+       );
+     end generate;
+
      -- Internal routing
-     fabric_clk <= s_fabric_clk(master);
-     fabric_clk_90 <= s_fabric_clk_90(master);
-     fabric_clk_180 <= s_fabric_clk_180(master);
-     fabric_clk_270 <= s_fabric_clk_270(master);
+     line_clk       <= bufg_o(0);
+     frame_clk      <= bufg_o(1);
+     fabric_clk_0   <= bufg_o(2);
+     fabric_clk     <= fabric_clk_0;
+     fabric_clk_90  <= bufg_o(3);
+     fabric_clk_180 <= bufg_o(4);
+     fabric_clk_270 <= bufg_o(5);
+
      roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
      num_units  <= std_logic_vector(to_unsigned(G_NUM_UNITS,  num_units'length));
 
-     -- Parallel data outputs (and locked(0))
+     -- Parallel data outputs
      a1 <= s_p_data(0)(31 downto 24);
      a2 <= s_p_data(0)(23 downto 16);
      a3 <= s_p_data(0)(15 downto  8);
@@ -193,7 +285,6 @@ architecture adc16_interface_arc of adc16_interface is
      d2 <= s_p_data(3)(23 downto 16);
      d3 <= s_p_data(3)(15 downto  8);
      d4 <= s_p_data(3)( 7 downto  0);
-     locked(0) <= s_locked(master);
 
      adc1_board: if G_NUM_UNITS = 8 generate
        e1 <= s_p_data(4)(31 downto 24);
@@ -212,7 +303,22 @@ architecture adc16_interface_arc of adc16_interface is
        h2 <= s_p_data(7)(23 downto 16);
        h3 <= s_p_data(7)(15 downto  8);
        h4 <= s_p_data(7)( 7 downto  0);
-       locked(1) <= s_locked(master+4);
+
+       adc_mmcm_1 : ADC_MMCM
+       PORT MAP (
+         reset        => reset,
+         locked       => locked(1),
+         clkin        => line_clk_in(master+4),
+         clkout0p     => open,
+         clkout0n     => open,
+         clkout1p     => open,
+         clkout1n     => open,
+         clkout2      => open,
+         clkout2_90   => open,
+         clkout2_180  => open,
+         clkout2_270  => open
+       );
+
      end generate;
 
      adc1_dummy: if G_NUM_UNITS /= 8 generate
@@ -238,15 +344,7 @@ architecture adc16_interface_arc of adc16_interface is
      -- Generate adc_unit modules and associated wiring
      ADC: for i in 0 to G_NUM_UNITS-1 generate
 
-       -- Clocks and reset
-       s_i_line_clk(i) <= s_line_clk(master);
-       s_i_frame_clk(i) <= s_frame_clk(master);
-       s_i_fabric_clk(i) <= s_fabric_clk(master);
-       s_reset(i) <= reset;
-
        -- ZDOK
-       s_clk_line_p(i) <= clk_line_p(i);
-       s_clk_line_n(i) <= clk_line_n(i);
        s_ser_a_p(i) <= ser_a_p(4*i+3 downto 4*i);
        s_ser_a_n(i) <= ser_a_n(4*i+3 downto 4*i);
        s_ser_b_p(i) <= ser_b_p(4*i+3 downto 4*i);
@@ -259,28 +357,13 @@ architecture adc16_interface_arc of adc16_interface is
        s_delay_rst_a(i) <= delay_rst_edge(4*i+3    downto 4*i);
        s_delay_rst_b(i) <= delay_rst_edge(4*i+3+32 downto 4*i+32);
 
-       -- TODO Figure out a cleaner way to set generic based on i=master
-       -- condition.  The generic setting is the only difference between these
-       -- two conditional generates.
-       master_adc: if i = master generate
-        master_unit : adc_unit
-        generic map (
-                   mode => "MASTER")
-        port map (
-                   line_clk => s_line_clk(i),
-                   frame_clk => s_frame_clk(i),
-                   fabric_clk => s_fabric_clk(i),
-                   fabric_clk_90 => s_fabric_clk_90(i),
-                   fabric_clk_180 => s_fabric_clk_180(i),
-                   fabric_clk_270 => s_fabric_clk_270(i),
-                   locked => s_locked(i),
-                   i_line_clk => s_i_line_clk(i),
-                   i_frame_clk => s_i_frame_clk(i),
-                   i_fabric_clk => s_i_fabric_clk(i),
-                   reset => s_reset(i),
+       adc_unit_inst: adc_unit
+       port map (
+                   fabric_clk => fabric_clk_0,
+                   line_clk   => line_clk,
+                   frame_clk  => frame_clk,
+                   reset      => reset,
 
-                   clk_line_p => s_clk_line_p(i),
-                   clk_line_n => s_clk_line_n(i),
                    ser_a_p => s_ser_a_p(i),
                    ser_a_n => s_ser_a_n(i),
                    ser_b_p => s_ser_b_p(i),
@@ -292,57 +375,23 @@ architecture adc16_interface_arc of adc16_interface is
                    delay_rst_a => s_delay_rst_a(i),
                    delay_rst_b => s_delay_rst_b(i),
                    delay_tap => delay_tap
-         );
-       end generate;
-
-       slave_adc: if i /= master generate
-        slave_unit : adc_unit
-        generic map (
-                   mode => "SLAVE")
-        port map (
-                   line_clk => s_line_clk(i),
-                   frame_clk => s_frame_clk(i),
-                   fabric_clk => s_fabric_clk(i),
-                   fabric_clk_90 => s_fabric_clk_90(i),
-                   fabric_clk_180 => s_fabric_clk_180(i),
-                   fabric_clk_270 => s_fabric_clk_270(i),
-                   locked => s_locked(i),
-                   i_line_clk => s_i_line_clk(i),
-                   i_frame_clk => s_i_frame_clk(i),
-                   i_fabric_clk => s_i_fabric_clk(i),
-                   reset => s_reset(i),
-
-                   clk_line_p => s_clk_line_p(i),
-                   clk_line_n => s_clk_line_n(i),
-                   ser_a_p => s_ser_a_p(i),
-                   ser_a_n => s_ser_a_n(i),
-                   ser_b_p => s_ser_b_p(i),
-                   ser_b_n => s_ser_b_n(i),
-
-                   iserdes_bitslip => s_iserdes_bitslip(i),
-                   p_data => s_p_data0(i),
-
-                   delay_rst_a => s_delay_rst_a(i),
-                   delay_rst_b => s_delay_rst_b(i),
-                   delay_tap => delay_tap
-         );
-       end generate; -- i /= master
+       );
      end generate; -- for i in...
 
     -- Capture snap_req on rising edge of frame clock so that A/B will be even/odd consistent
-    process(s_frame_clk(master))
+    process(frame_clk)
     begin
-      -- rising edge of s_frame_clk(master)
-      if rising_edge(s_frame_clk(master))  then
+      -- rising edge of frame_clk
+      if rising_edge(frame_clk)  then
         -- snap_req shift register
         s_snap_req <= s_snap_req(0) & snap_req;
       end if;
     end process;
 
-    process(s_fabric_clk(master))
+    process(fabric_clk_0)
     begin
-      -- rising edge of s_fabric_clk(master)
-      if rising_edge(s_fabric_clk(master))  then
+      -- rising edge of fabric_clk_0
+      if rising_edge(fabric_clk_0)  then
         -- s_p_data pipeline
         s_p_data <= s_p_data0;
 

@@ -7,29 +7,18 @@ use IEEE.numeric_std.all;
 
 -- entity declaraction
 entity  adc_unit  is
-    generic ( mode : string := "MASTER" );
     port (
                -- System
-               line_clk      :  out std_logic;
-               frame_clk     :  out std_logic;
-               fabric_clk    :  out std_logic;
-               fabric_clk_90  :  out std_logic;
-               fabric_clk_180 :  out std_logic;
-               fabric_clk_270 :  out std_logic;
-               locked        :  out std_logic;
-               i_line_clk    :  in  std_logic;
-               i_frame_clk   :  in  std_logic;
-               i_fabric_clk  :  in  std_logic;
-               reset         :  in  std_logic;
+               fabric_clk    :  in std_logic;
+               line_clk      :  in std_logic;
+               frame_clk     :  in std_logic;
+               reset         :  in std_logic;
 
                -- ZDOK
-               clk_line_p    :  in  std_logic;
-               clk_line_n    :  in  std_logic;
                ser_a_p       :  in  std_logic_vector(3 downto 0);
                ser_a_n       :  in  std_logic_vector(3 downto 0);
                ser_b_p       :  in  std_logic_vector(3 downto 0);
                ser_b_n       :  in  std_logic_vector(3 downto 0);
-
 
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic;
@@ -89,40 +78,6 @@ architecture adc_unit_arc of adc_unit is
       );
      end component;
 
-     component ADC_MMCM   port (
-               -- System
-               reset        :  in  std_logic;
-               locked       :  out std_logic;
-
-               -- Clock inputs
-               clkin        :  in  std_logic;
-
-               -- Clock outputs
-               clkout0p     :  out std_logic;
-               clkout0n     :  out std_logic;
-               clkout1p     :  out std_logic;
-               clkout1n     :  out std_logic;
-               clkout2      :  out std_logic;
-               clkout2_90   :  out std_logic;
-               clkout2_180  :  out std_logic;
-               clkout2_270  :  out std_logic
-      );
-     end component;
-
-     component BUFR  port  (
-               CE           : in  std_logic;
-               CLR          : in  std_logic;
-               O            : out std_logic;
-               I            : in  std_logic
-      );
-     end component;
-
-     component BUFG  port  (
-               O            : out std_logic;
-               I            : in  std_logic
-      );
-     end component;
-
      component IBUFDS  generic (
                DIFF_TERM    : boolean;
                IOSTANDARD   : string
@@ -135,140 +90,37 @@ architecture adc_unit_arc of adc_unit is
      end component;
 
      -- Signals
-     signal sysclk : std_logic;
-
-     signal adc_iserdes_a_reset : std_logic;
-     signal adc_iserdes_a_bitslip : std_logic;
-     signal adc_iserdes_a_clkin : std_logic;
-     signal adc_iserdes_a_clkdiv : std_logic;
-     signal adc_iserdes_a_s_data : std_logic_vector(3 downto 0);
-     signal adc_iserdes_a_p_data : std_logic_vector(15 downto 0);
-
-     signal adc_iserdes_b_reset : std_logic;
-     signal adc_iserdes_b_bitslip : std_logic;
-     signal adc_iserdes_b_clkin : std_logic;
-     signal adc_iserdes_b_clkdiv : std_logic;
-     signal adc_iserdes_b_s_data : std_logic_vector(3 downto 0);
-     signal adc_iserdes_b_p_data : std_logic_vector(15 downto 0);
-
-     signal adc_iserdes_data0 : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data1 : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data0_pipelined : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data1_pipelined : std_logic_vector(31 downto 0);
-     signal adc_iserdes_data1_delay : std_logic_vector(31 downto 0);
+     signal adc_iserdes_data_a : std_logic_vector(31 downto 0);
+     signal adc_iserdes_data_b : std_logic_vector(31 downto 0);
+     signal adc_iserdes_data_a_pipelined : std_logic_vector(31 downto 0);
+     signal adc_iserdes_data_b_pipelined : std_logic_vector(31 downto 0);
      signal adc_iserdes_data : std_logic_vector(31 downto 0);
 
-     signal adc_mmcm_reset : std_logic;
-     signal adc_mmcm_locked : std_logic;
-     signal adc_mmcm_clkin : std_logic;
-     signal adc_mmcm_clkout0p : std_logic;
-     signal adc_mmcm_clkout0n : std_logic;
-     signal adc_mmcm_clkout1p : std_logic;
-     signal adc_mmcm_clkout1n : std_logic;
-     signal adc_mmcm_clkout2  : std_logic;
-     signal adc_mmcm_clkout2_90 : std_logic;
-     signal adc_mmcm_clkout2_180 : std_logic;
-     signal adc_mmcm_clkout2_270 : std_logic;
-
-     signal bufg_i : std_logic_vector(5 downto 0);
-     signal bufg_o : std_logic_vector(5 downto 0);
-     signal ibufds_clk_i : std_logic;
-     signal ibufds_clk_ib : std_logic;
-     signal ibufds_clk_o : std_logic;
-     signal ibufds_ser1_i : std_logic_vector(3 downto 0);
-     signal ibufds_ser1_ib : std_logic_vector(3 downto 0);
-     signal ibufds_ser1_o : std_logic_vector(3 downto 0);
-     signal ibufds_ser2_i : std_logic_vector(3 downto 0);
-     signal ibufds_ser2_ib : std_logic_vector(3 downto 0);
-     signal ibufds_ser2_o : std_logic_vector(3 downto 0);
-
-     -- delay signals
-     type  delayTAPtype  is array (0 to 3) of std_logic_vector(4 downto 0);
-
-    -- now define the RAM itself (initialized to X)
+     signal ibuf_ser_a : std_logic_vector(3 downto 0);
+     signal ibuf_ser_b : std_logic_vector(3 downto 0);
 
      signal delay_a_out     : std_logic_vector(3 downto 0);
-     signal delay_a_in      : std_logic_vector(3 downto 0);
      signal delay_b_out     : std_logic_vector(3 downto 0);
-     signal delay_b_in      : std_logic_vector(3 downto 0);
-     signal delay_clock     : std_logic;
-     signal delay_reset_a   : std_logic_vector(3 downto 0);
-     signal delay_reset_b   : std_logic_vector(3 downto 0);
-     signal delay_outtap  : delayTAPtype;
 
      begin
 
-     -- Internal routing
-
-     line_clk <= bufg_o(0);
-     frame_clk <= bufg_o(1);
-     fabric_clk <= bufg_o(2);
-     fabric_clk_90 <= bufg_o(3);
-     fabric_clk_180 <= bufg_o(4);
-     fabric_clk_270 <= bufg_o(5);
-
-     -- Differential signals
-
-     ibufds_clk_i <= clk_line_p;
-     ibufds_clk_ib <= clk_line_n;
-     ibufds_ser1_i <= ser_a_p;
-     ibufds_ser1_ib <= ser_a_n;
-     ibufds_ser2_i <= ser_b_p;
-     ibufds_ser2_ib <= ser_b_n;
-
-     -- Everything else
-
-     adc_iserdes_a_reset <= reset;
-     adc_iserdes_b_reset <= reset;
-     adc_iserdes_a_bitslip <= iserdes_bitslip;
-     adc_iserdes_b_bitslip <= iserdes_bitslip;
-     bufg_i(0) <= adc_mmcm_clkout0p;
-     bufg_i(1) <= adc_mmcm_clkout1p;
-     bufg_i(2) <= adc_mmcm_clkout2;
-     bufg_i(3) <= adc_mmcm_clkout2_90;
-     bufg_i(4) <= adc_mmcm_clkout2_180;
-     bufg_i(5) <= adc_mmcm_clkout2_270;
-     adc_iserdes_a_clkin <= i_line_clk;
-     adc_iserdes_b_clkin <= i_line_clk;
-     adc_iserdes_a_clkdiv <= i_frame_clk;
-     adc_iserdes_b_clkdiv <= i_frame_clk;
-     --adc_iserdes_a_s_data <= ibufds_ser1_o;
-     --adc_iserdes_b_s_data <= ibufds_ser2_o;
-
-     adc_mmcm_reset <= reset;
-
-     --clock_m_gen : if mode = "MASTER" generate
-     adc_mmcm_clkin <= ibufds_clk_o;
-     --end generate clock_m_gen;
-
-     -- delay
-     adc_iserdes_a_s_data <= delay_a_out;
-     delay_a_in <= ibufds_ser1_o;
-
-     adc_iserdes_b_s_data <= delay_b_out;
-     delay_b_in <= ibufds_ser2_o;
-
-     delay_clock <= i_frame_clk;
-     delay_reset_a <= delay_rst_a;
-     delay_reset_b <= delay_rst_b;
-
-     process (i_fabric_clk, i_frame_clk, adc_iserdes_data0, adc_iserdes_data1)
+     process (fabric_clk, frame_clk, adc_iserdes_data_a, adc_iserdes_data_b)
      begin
        -- Pipeline serdes outputs (using slower frame clock)
-       if i_frame_clk'event and i_frame_clk = '1' then
-         adc_iserdes_data0_pipelined <= adc_iserdes_data0;
-         adc_iserdes_data1_pipelined <= adc_iserdes_data1;
+       if frame_clk'event and frame_clk = '1' then
+         adc_iserdes_data_a_pipelined <= adc_iserdes_data_a;
+         adc_iserdes_data_b_pipelined <= adc_iserdes_data_b;
        end if;
 
        -- Mux pipelined data based on framing clock
-       if i_frame_clk = '1' then
-         adc_iserdes_data <= adc_iserdes_data0_pipelined;
+       if frame_clk = '1' then
+         adc_iserdes_data <= adc_iserdes_data_a_pipelined;
        else
-         adc_iserdes_data <= adc_iserdes_data1_pipelined;
+         adc_iserdes_data <= adc_iserdes_data_b_pipelined;
        end if;
 
        -- Capture mux output on rising edge of fabric clock
-       if i_fabric_clk'event and i_fabric_clk = '1' then
+       if fabric_clk'event and fabric_clk = '1' then
          p_data <= adc_iserdes_data;
        end if;
      end process;
@@ -278,43 +130,43 @@ architecture adc_unit_arc of adc_unit is
      begin
      adc_iserdes_a_inst : ADC_ISERDES
      PORT MAP (
-               reset      => adc_iserdes_a_reset,
-               bitslip    => adc_iserdes_a_bitslip,
-               clkin      => adc_iserdes_a_clkin,
-               clkdiv     => adc_iserdes_a_clkdiv,
-               s_data     => adc_iserdes_a_s_data(i),
-               p_data     => adc_iserdes_data0(8*(3-i)+7 downto 8*(3-i))
+               reset      => reset,
+               bitslip    => iserdes_bitslip,
+               clkin      => line_clk,
+               clkdiv     => frame_clk,
+               s_data     => delay_a_out(i),
+               p_data     => adc_iserdes_data_a(8*(3-i)+7 downto 8*(3-i))
       );
+
      adc_iserdes_b_inst : ADC_ISERDES
      PORT MAP (
-               reset      => adc_iserdes_b_reset,
-               bitslip    => adc_iserdes_b_bitslip,
-               clkin      => adc_iserdes_b_clkin,
-               clkdiv     => adc_iserdes_b_clkdiv,
-               s_data     => adc_iserdes_b_s_data(i),
-               p_data     => adc_iserdes_data1(8*(3-i)+7 downto 8*(3-i))
+               reset      => reset,
+               bitslip    => iserdes_bitslip,
+               clkin      => line_clk,
+               clkdiv     => frame_clk,
+               s_data     => delay_b_out(i),
+               p_data     => adc_iserdes_data_b(8*(3-i)+7 downto 8*(3-i))
       );
-    ibufds_ser1_inst : IBUFDS
-    generic map (
+
+     ibufds_ser_a_inst : IBUFDS
+     generic map (
                DIFF_TERM  => TRUE,
                IOSTANDARD => "LVDS_25")
-    port map (
-               I   => ibufds_ser1_i(i),
-               IB  => ibufds_ser1_ib(i),
-               O   => ibufds_ser1_o(i)
+     port map (
+               I   => ser_a_p(i),
+               IB  => ser_a_n(i),
+               O   => ibuf_ser_a(i)
      );
 
-    ibufds_ser2_inst : IBUFDS
-    generic map (
+     ibufds_ser_b_inst : IBUFDS
+     generic map (
                DIFF_TERM  => TRUE,
                IOSTANDARD => "LVDS_25")
-    port map (
-               I   => ibufds_ser2_i(i),
-               IB  => ibufds_ser2_ib(i),
-               O   => ibufds_ser2_o(i)
-     );
-
-
+     port map (
+               I   => ser_b_p(i),
+               IB  => ser_b_n(i),
+               O   => ibuf_ser_b(i)
+      );
 
      iodelay1_a : IODELAYE1
        generic map (
@@ -326,20 +178,20 @@ architecture adc_unit_arc of adc_unit is
          ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
          ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
          REFCLK_FREQUENCY       => 200.0,
-         SIGNAL_PATTERN         => "DATA"           -- CLOCK, DATA
+         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
          )
        port map (
          DATAOUT                => delay_a_out(i),
-         DATAIN                 => '0', -- Data from FPGA logic
-         C                      => delay_clock,
-         CE                     => '0', --DELAY_DATA_CE,
-         INC                    => '0', --DELAY_DATA_INC,
-         IDATAIN                => delay_a_in(i), -- Driven by IOB
+         DATAIN                 => '0',              -- Data from FPGA logic
+         C                      => frame_clk,
+         CE                     => '0',              -- DELAY_DATA_CE,
+         INC                    => '0',              -- DELAY_DATA_INC,
+         IDATAIN                => ibuf_ser_a(i),    -- Driven by IOB
          ODATAIN                => '0',
-         RST                    => delay_reset_a(i),
+         RST                    => delay_rst_a(i),
          T                      => '1',
-         CNTVALUEIN             => delay_tap,       --DELAY_TAP_IN,
-         CNTVALUEOUT            => delay_outtap(i), --DELAY_TAP_OUT,
+         CNTVALUEIN             => delay_tap,        -- DELAY_TAP_IN,
+         CNTVALUEOUT            => open,             -- DELAY_TAP_OUT,
          CLKIN                  => '0',
          CINVCTRL               => '0'
          );
@@ -354,98 +206,25 @@ architecture adc_unit_arc of adc_unit is
          ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
          ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
          REFCLK_FREQUENCY       => 200.0,
-         SIGNAL_PATTERN         => "DATA"           -- CLOCK, DATA
+         SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
          )
        port map (
          DATAOUT                => delay_b_out(i),
-         DATAIN                 => '0', -- Data from FPGA logic
-         C                      => delay_clock,
-         CE                     => '0', --DELAY_DATA_CE,
-         INC                    => '0', --DELAY_DATA_INC,
-         IDATAIN                => delay_b_in(i), -- Driven by IOB
+         DATAIN                 => '0',              -- Data from FPGA logic
+         C                      => frame_clk,
+         CE                     => '0',              -- DELAY_DATA_CE,
+         INC                    => '0',              -- DELAY_DATA_INC,
+         IDATAIN                => ibuf_ser_b(i),    -- Driven by IOB
          ODATAIN                => '0',
-         RST                    => delay_reset_b(i),
+         RST                    => delay_rst_b(i),
          T                      => '1',
-         CNTVALUEIN             => delay_tap,       --DELAY_TAP_IN,
-         CNTVALUEOUT            => delay_outtap(i), --DELAY_TAP_OUT,
+         CNTVALUEIN             => delay_tap,        -- DELAY_TAP_IN,
+         CNTVALUEOUT            => open,             -- DELAY_TAP_OUT,
          CLKIN                  => '0',
          CINVCTRL               => '0'
          );
 
      end generate ISERDES_GEN;
-
-     slave_gen : if mode /= "MASTER" generate
-         locked <= '0';
-     end generate;
-
-     master_gen : if mode = "MASTER" generate
-     -- MMCM block
-     adc_mmcm_inst : ADC_MMCM
-     PORT MAP (
-     -- System
-               reset        => adc_mmcm_reset,
-               locked       => adc_mmcm_locked,
-               clkin        => adc_mmcm_clkin,
-               clkout0p     => adc_mmcm_clkout0p,
-               clkout0n     => adc_mmcm_clkout0n,
-               clkout1p     => adc_mmcm_clkout1p,
-               clkout1n     => adc_mmcm_clkout1n,
-               clkout2      => adc_mmcm_clkout2,
-               clkout2_90   => adc_mmcm_clkout2_90,
-               clkout2_180  => adc_mmcm_clkout2_180,
-               clkout2_270  => adc_mmcm_clkout2_270
-      );
-
-    -- BUFG
-    bufg1_inst : BUFG
-    PORT MAP (
-               O => bufg_o(0),
-               I => bufg_i(0)
-      );
-
-    bufg2_inst : BUFG
-    PORT MAP (
-               O => bufg_o(1),
-               I => bufg_i(1)
-      );
-
-    bufg3_inst : BUFG
-    PORT MAP (
-               O => bufg_o(2),
-               I => bufg_i(2)
-      );
-
-    bufg4_inst : BUFG
-    PORT MAP (
-               O => bufg_o(3),
-               I => bufg_i(3)
-      );
-
-    bufg5_inst : BUFG
-    PORT MAP (
-               O => bufg_o(4),
-               I => bufg_i(4)
-      );
-
-    bufg6_inst : BUFG
-    PORT MAP (
-               O => bufg_o(5),
-               I => bufg_i(5)
-      );
-
-    ibufds_clk_inst : IBUFDS
-    generic map (
-               DIFF_TERM  => TRUE,
-               IOSTANDARD => "LVDS_25")
-    port map (
-               I   => ibufds_clk_i,
-               IB  => ibufds_clk_ib,
-               O   => ibufds_clk_o
-     );
-
-    locked <= adc_mmcm_locked;
-
-    end generate master_gen;
 
 end adc_unit_arc;
 
