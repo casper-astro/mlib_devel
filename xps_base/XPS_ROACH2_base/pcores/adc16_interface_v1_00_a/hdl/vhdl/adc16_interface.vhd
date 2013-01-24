@@ -202,7 +202,7 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_snap_counter: std_logic_vector(10 downto 0);
 
      -- Set which ADC is the MASTER
-     constant master : integer := 0;
+     constant master : integer := 3;
 
      begin
 
