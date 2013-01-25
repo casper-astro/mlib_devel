@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [207.0, 45.0, 1680.0, 1050.0]
+      Location		      [197.0, 18.0, 1940.0, 1072.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -42,10 +42,10 @@ Library {
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
 	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"151"
-	Extents			[1638.0, 893.0]
+	LoadSaveID		"436"
+	Extents			[1884.0, 885.0]
 	ZoomFactor		[1.0]
-	Offset			[60.0, 0.0]
+	Offset			[-8.125, 0.0]
       }
     }
   }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "jmanley"
+  LastModifiedBy	  "henno"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jan 17 18:37:06 2013"
-  RTWModifiedTimeStamp	  280348617
-  ModelVersionFormat	  "1.%<AutoIncrement:476>"
+  LastModifiedDate	  "Fri Jan 25 07:55:40 2013"
+  RTWModifiedTimeStamp	  281000990
+  ModelVersionFormat	  "1.%<AutoIncrement:477>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -819,7 +819,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [207, 45, 1887, 1095]
+    Location		    [197, 18, 2137, 1090]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -959,32 +959,39 @@ Library {
 	      Position		      [230, 45, 285, 65]
 	      ZOrder		      -3
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
+	      gui_display_data_type   "Fixed-point"
 	      arith_type	      "Unsigned"
 	      n_bits		      "3"
 	      bin_pt		      "0"
+	      float_type	      "Single"
+	      exp_bits		      "8"
+	      fraction_bits	      "24"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
+	      en		      off
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
 	      block_type	      "convert"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "55,20,1,1,white,blue,0,5129c5aa,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.4 0.345455 0.436364 0.345455 0.4 0.490909 0.509091 0.527273 0.636364 0.563636 0.490909 0.436364 0"
-	      ".527273 0.436364 0.490909 0.563636 0.636364 0.527273 0.509091 0.490909 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0."
-	      "9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);"
-	      "\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label"
-	      "('output',1,'cast');\ncolor('black');disp('\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon tex"
-	      "t');\n"
+	      sg_icon_stat	      "55,20,1,1,white,blue,0,b61d041b,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 20 20 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 55 55 0 0 ],[0 0 20 20 0 ]);\npatch([22.55 25.44 27.44 29.44 31.44 27.44 24.55 22.55 ],[1"
+	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([24.55 27.44 25.44 22.55 24.55 ],[10.22 10.2"
+	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([22.55 25.44 27.44 24.55 22.55 ],[8.22 8.22 10.22 10.22 8.2"
+	      "2 ],[1 1 1 ]);\npatch([24.55 31.44 29.44 27.44 25.44 22.55 24.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
+	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
+	      "black');port_label('output',1,'cast');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\ncolor('black')"
+	      ";disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -994,32 +1001,39 @@ Library {
 	      Position		      [230, 120, 285, 140]
 	      ZOrder		      -4
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
 	      " not."
+	      gui_display_data_type   "Fixed-point"
 	      arith_type	      "Unsigned"
 	      n_bits		      "32"
 	      bin_pt		      "0"
+	      float_type	      "Single"
+	      exp_bits		      "8"
+	      fraction_bits	      "24"
 	      quantization	      "Truncate"
 	      overflow		      "Wrap"
+	      en		      off
 	      latency		      "2"
-	      dbl_ovrd		      "off"
-	      pipeline		      "off"
-	      xl_use_area	      "off"
+	      dbl_ovrd		      off
+	      pipeline		      off
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
 	      block_type	      "convert"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "55,20,1,1,white,blue,0,5129c5aa,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.4 0.345455 0.436364 0.345455 0.4 0.490909 0.509091 0.527273 0.636364 0.563636 0.490909 0.436364 0"
-	      ".527273 0.436364 0.490909 0.563636 0.636364 0.527273 0.509091 0.490909 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0."
-	      "9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);"
-	      "\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label"
-	      "('output',1,'cast');\ncolor('black');disp('\\newlinez^{-2}','texmode','on');\nfprintf('','COMMENT: end icon tex"
-	      "t');\n"
+	      sg_icon_stat	      "55,20,1,1,white,blue,0,b61d041b,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 20 20 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 55 55 0 0 ],[0 0 20 20 0 ]);\npatch([22.55 25.44 27.44 29.44 31.44 27.44 24.55 22.55 ],[1"
+	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([24.55 27.44 25.44 22.55 24.55 ],[10.22 10.2"
+	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([22.55 25.44 27.44 24.55 22.55 ],[8.22 8.22 10.22 10.22 8.2"
+	      "2 ],[1 1 1 ]);\npatch([24.55 31.44 29.44 27.44 25.44 22.55 24.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
+	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
+	      "black');port_label('output',1,'cast');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\ncolor('black')"
+	      ";disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -1029,30 +1043,32 @@ Library {
 	      Position		      [120, 45, 180, 65]
 	      ZOrder		      -5
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br"
 	      "><br>Hardware notes: In hardware this block costs nothing."
 	      nbits		      "3"
-	      boolean_output	      "off"
+	      boolean_output	      off
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
 	      base1		      "MSB of Input"
 	      bit0		      "0"
 	      base0		      "LSB of Input"
-	      dbl_ovrd		      "off"
+	      dbl_ovrd		      off
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,631,621"
 	      block_type	      "slice"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "60,20,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
-	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
-	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfpr"
-	      "intf('','COMMENT: end icon text');\n"
+	      sg_icon_stat	      "60,20,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 20 20 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 20 20 0 ]);\npatch([25.55 28.44 30.44 32.44 34.44 30.44 27.55 25.55 ],[1"
+	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([27.55 30.44 28.44 25.55 27.55 ],[10.22 10.2"
+	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([25.55 28.44 30.44 27.55 25.55 ],[8.22 8.22 10.22 10.22 8.2"
+	      "2 ],[1 1 1 ]);\npatch([27.55 34.44 32.44 30.44 28.44 25.55 27.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
+	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
+	      "black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Terminator
@@ -1077,29 +1093,34 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [360, 45, 420, 65]
 	      ZOrder		      -8
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      inherit_from_input      off
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      UseAsDAC		      off
+	      DACChannel	      "'1'"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayout"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "60,20,1,1,white,yellow,0,cc31b7ac,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
-	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
-	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('b"
-	      "lack');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text')"
-	      ";\n"
+	      sg_icon_stat	      "60,20,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 20 20 0 ],[0.95 0"
+	      ".93 0.65 ]);\nplot([0 60 60 0 0 ],[0 0 20 20 0 ]);\npatch([25.55 28.44 30.44 32.44 34.44 30.44 27.55 25.55 ],[1"
+	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([27.55 30.44 28.44 25.55 27.55 ],[10.22 10.2"
+	      "2 12.22 12.22 10.22 ],[0.985 0.979 0.895 ]);\npatch([25.55 28.44 30.44 27.55 25.55 ],[8.22 8.22 10.22 10.22 8.2"
+	      "2 ],[1 1 1 ]);\npatch([27.55 34.44 32.44 30.44 28.44 25.55 27.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.985"
+	      " 0.979 0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bl"
+	      "ack');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','o"
+	      "n');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -1108,29 +1129,34 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [360, 120, 420, 140]
 	      ZOrder		      -9
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      hdl_port		      "on"
+	      inherit_from_input      off
+	      hdl_port		      on
 	      timing_constraint	      "None"
-	      locs_specified	      "off"
+	      locs_specified	      off
 	      LOCs		      "{}"
-	      xl_use_area	      "off"
+	      UseAsDAC		      off
+	      DACChannel	      "'1'"
+	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "gatewayout"
 	      block_version	      "11.4"
-	      sg_icon_stat	      "60,20,1,1,white,yellow,0,cc31b7ac,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65"
-	      "]);\npatch([0.4 0.35 0.433333 0.35 0.4 0.483333 0.5 0.516667 0.616667 0.55 0.483333 0.433333 0.516667 0.433333 "
-	      "0.483333 0.55 0.616667 0.516667 0.5 0.483333 0.4 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.2"
-	      "5 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end"
-	      " icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,' ');\ncolor('b"
-	      "lack');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end icon text')"
-	      ";\n"
+	      sg_icon_stat	      "60,20,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 20 20 0 ],[0.95 0"
+	      ".93 0.65 ]);\nplot([0 60 60 0 0 ],[0 0 20 20 0 ]);\npatch([25.55 28.44 30.44 32.44 34.44 30.44 27.55 25.55 ],[1"
+	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([27.55 30.44 28.44 25.55 27.55 ],[10.22 10.2"
+	      "2 12.22 12.22 10.22 ],[0.985 0.979 0.895 ]);\npatch([25.55 28.44 30.44 27.55 25.55 ],[8.22 8.22 10.22 10.22 8.2"
+	      "2 ],[1 1 1 ]);\npatch([27.55 34.44 32.44 30.44 28.44 25.55 27.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.985"
+	      " 0.979 0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bl"
+	      "ack');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','o"
+	      "n');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Line {
 	      SrcBlock		      "xps_library_ADCs_adc083000_ctrl_sdata_bus"
@@ -12169,7 +12195,7 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "98"
+	    SIDHighWatermark	    "126"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "data_i0"
@@ -15249,7 +15275,7 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "128"
+	    SIDHighWatermark	    "137"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "data_i0"
@@ -19393,7 +19419,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"55"
+	SIDHighWatermark	"66"
 	Block {
 	  BlockType		  Inport
 	  Name			  "addr"
@@ -30425,8 +30451,8 @@ Library {
       }
       System {
 	Name			"adc1x1800-10"
-	Location		[12, 45, 1978, 1277]
-	Open			off
+	Location		[197, 18, 2137, 1090]
+	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -30487,7 +30513,7 @@ Library {
 	  Position		  [615, 228, 645, 242]
 	  ZOrder		  -5
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -30503,7 +30529,7 @@ Library {
 	  Position		  [615, 323, 645, 337]
 	  ZOrder		  -6
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -30519,7 +30545,7 @@ Library {
 	  Position		  [615, 692, 645, 708]
 	  ZOrder		  -7
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -30535,7 +30561,7 @@ Library {
 	  Position		  [615, 633, 645, 647]
 	  ZOrder		  -8
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30551,7 +30577,7 @@ Library {
 	  Position		  [615, 673, 645, 687]
 	  ZOrder		  -9
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30567,7 +30593,7 @@ Library {
 	  Position		  [615, 787, 645, 803]
 	  ZOrder		  -10
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -30583,7 +30609,7 @@ Library {
 	  Position		  [615, 728, 645, 742]
 	  ZOrder		  -11
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30599,7 +30625,7 @@ Library {
 	  Position		  [615, 768, 645, 782]
 	  ZOrder		  -12
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30615,7 +30641,7 @@ Library {
 	  Position		  [615, 267, 645, 283]
 	  ZOrder		  -13
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -30631,7 +30657,7 @@ Library {
 	  Position		  [615, 208, 645, 222]
 	  ZOrder		  -14
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30647,7 +30673,7 @@ Library {
 	  Position		  [615, 248, 645, 262]
 	  ZOrder		  -15
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30663,7 +30689,7 @@ Library {
 	  Position		  [615, 362, 645, 378]
 	  ZOrder		  -16
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -30679,7 +30705,7 @@ Library {
 	  Position		  [615, 303, 645, 317]
 	  ZOrder		  -17
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30695,7 +30721,7 @@ Library {
 	  Position		  [615, 343, 645, 357]
 	  ZOrder		  -18
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  "<"
@@ -30711,7 +30737,7 @@ Library {
 	  Position		  [615, 653, 645, 667]
 	  ZOrder		  -19
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -30727,7 +30753,7 @@ Library {
 	  Position		  [615, 748, 645, 762]
 	  ZOrder		  -20
 	  ShowName		  off
-	  LibraryVersion	  "1.260"
+	  LibraryVersion	  "1.281"
 	  SourceBlock		  "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	  SourceType		  "Compare To Constant"
 	  relop			  ">"
@@ -31025,7 +31051,7 @@ Library {
 	  SID			  "436:39"
 	  Position		  [165, 380, 195, 400]
 	  ZOrder		  -39
-	  Bias			  "127.5"
+	  Bias			  "511.5"
 	}
 	Block {
 	  BlockType		  Reference
@@ -31034,7 +31060,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 15, 1055, 45]
 	  ZOrder		  -40
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -31140,7 +31166,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 65, 1055, 95]
 	  ZOrder		  -41
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -31246,7 +31272,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 115, 1055, 145]
 	  ZOrder		  -42
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -31352,7 +31378,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 165, 1055, 195]
 	  ZOrder		  -43
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -31458,7 +31484,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 440, 1055, 470]
 	  ZOrder		  -44
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -31564,7 +31590,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 490, 1055, 520]
 	  ZOrder		  -45
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -31670,7 +31696,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 540, 1055, 570]
 	  ZOrder		  -46
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -31776,7 +31802,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [975, 590, 1055, 620]
 	  ZOrder		  -47
-	  LibraryVersion	  "1.474"
+	  LibraryVersion	  "1.476"
 	  LinkData {
 	    BlockName		    "Concat"
 	    DialogParameters {
@@ -32017,7 +32043,7 @@ Library {
 	  SID			  "436:58"
 	  Position		  [95, 380, 125, 400]
 	  ZOrder		  -58
-	  Gain			  "127.5"
+	  Gain			  "511.5"
 	}
 	Block {
 	  BlockType		  Reference
@@ -33792,8 +33818,8 @@ Library {
       }
       System {
 	Name			"dram"
-	Location		[207, 45, 1887, 1095]
-	Open			on
+	Location		[197, 18, 2137, 1090]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -33804,7 +33830,7 @@ Library {
 	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"80"
 	SIDHighWatermark	"258"
 	Block {
 	  BlockType		  Inport
@@ -48366,7 +48392,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"110"
+	SIDHighWatermark	"129"
 	Block {
 	  BlockType		  Inport
 	  Name			  "rd_en"
