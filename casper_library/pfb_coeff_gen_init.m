@@ -15,6 +15,7 @@
 % n_inputs = Number of parallel input streams
 % nput = Which input this is (of the n_inputs parallel).
 % fwidth = The scaling of the bin width (1 is normal).
+% debug_mode = true or false, is the block being used in debug mode or not. Changes the coefficients.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -40,8 +41,7 @@
 
 function pfb_coeff_gen_init(blk, varargin)
 
-
-% Declare any default values for arguments you might like.
+% declare any default values for arguments you might like.
 defaults = {};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'pfb_coeff_gen');
@@ -110,27 +110,25 @@ for a=1:TotalTaps,
     'latency', 'fan_latency', 'Position', [150 65*(a-1)+74 180 65*(a-1)+126]);
     add_line(blk, 'Counter/1', [dblkname, '/1']);
     
-    blkname = ['ROM', tostring(a)];
-    pfb_coeff_gen_calc(PFBSize,TotalTaps,WindowType,n_inputs,nput,fwidth,a);
     if strcmp(debug_mode, 'on'),
-        s = ((TotalTaps - a) * 2^PFBSize) + 1;
-        vecstr = [tostring(s), ':', tostring(s - 1 + 2^PFBSize)];
         atype = 'Unsigned';
         binpt = '0';
+        debug_option = 'true';
     else
-        vecstr = ['pfb_coeff_gen_calc(', tostring(PFBSize), ', ', ...
-            tostring(TotalTaps), ',''', tostring(WindowType), ''',', ...
-            tostring(n_inputs), ', ', tostring(nput), ',', ...
-            tostring(fwidth), ',', tostring(a), ')'];
         atype = 'Signed  (2''s comp)';
         binpt = tostring(CoeffBitWidth-1);
+        debug_option = 'false';
     end
-    %v = mat2str(buf((a-1)*2^(PFBSize-n_inputs)+1 : a*2^(PFBSize-n_inputs)));
-    %v
+    vector_str = ['pfb_coeff_gen_calc(', tostring(PFBSize), ', ', ...
+        tostring(TotalTaps), ',''', tostring(WindowType), ''',', ...
+        tostring(n_inputs), ', ', tostring(nput), ',', ...
+        tostring(fwidth), ',', tostring(a), ',', debug_option, ')'];
+    blkname = ['ROM', tostring(a)];
     reuse_block(blk, blkname, 'xbsIndex_r4/ROM', ...
-        'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vecstr, 'arith_type', atype, ...
+        'depth', tostring(2^(PFBSize-n_inputs)), 'initVector', vector_str, 'arith_type', atype, ...
         'n_bits', tostring(CoeffBitWidth), 'bin_pt', binpt, ...
         'latency', 'bram_latency', 'use_rpm','on', 'Position', [200 65*(a-1)+74 250 65*(a-1)+126]);
+
     add_line(blk, [dblkname, '/1'], [blkname, '/1']);
     reintname = ['Reinterpret', tostring(a)];
     reuse_block(blk, reintname, 'xbsIndex_r4/Reinterpret', 'force_arith_type', 'On', ...

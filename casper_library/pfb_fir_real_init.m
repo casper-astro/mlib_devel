@@ -111,7 +111,7 @@ end
 % the sum of the squares of the coefficients (aka root-sum-squares or RSS).
 
 % Get all coefficients of the pfb_fir in one vector (by passing -1 for a)
-all_coeffs = pfb_coeff_gen_calc(PFBSize, TotalTaps, WindowType, n_inputs, 0, fwidth, -1);
+all_coeffs = pfb_coeff_gen_calc(PFBSize, TotalTaps, WindowType, n_inputs, 0, fwidth, -1, false);
 % Rearrange into matrix with 2^PFBSize rows and TotalTaps columns.
 % Each row contains coefficients for one sub-filter.
 all_filters = reshape(all_coeffs, 2^PFBSize, TotalTaps);
@@ -167,7 +167,7 @@ for p=1:pols,
         if (p == 2) && (share_coefficients == true)
             blk_name = [in_name,'_delay'];
             reuse_block(blk, blk_name, 'xbsIndex_r4/Delay', ...
-                'latency', 'bram_latency+1', 'Position', [150 50*portnum*TotalTaps 150+100 50*portnum*TotalTaps+30]);
+                'latency', 'bram_latency+1+fan_latency', 'Position', [150 50*portnum*TotalTaps 150+100 50*portnum*TotalTaps+30]);
             add_line(blk, [in_name,'/1'], [blk_name,'/1']);
         else
             blk_name = [in_name,'_coeffs'];
