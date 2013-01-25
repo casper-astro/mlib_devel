@@ -1,6 +1,4 @@
 module epb_opb_bridge(
-    sys_reset,
-
     epb_data_oe_n,
     epb_cs_n, epb_r_w_n, epb_be_n, 
     epb_oe_n,
@@ -26,8 +24,6 @@ module epb_opb_bridge(
     OPB_timeout,
     OPB_DBus
   );
-  input  sys_reset;
-
   output epb_data_oe_n;
   input  epb_cs_n, epb_oe_n, epb_r_w_n;
   input   [1:0] epb_be_n;
@@ -158,7 +154,7 @@ module epb_opb_bridge(
     opb_state_z <= opb_state;
 
     //strobes
-    if (OPB_Rst | sys_reset) begin
+    if (OPB_Rst) begin
       M_select_reg <= 1'b0;
       opb_state    <= OPB_STATE_IDLE;
     end else begin
