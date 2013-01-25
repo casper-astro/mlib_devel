@@ -9,25 +9,22 @@ use IEEE.numeric_std.all;
 entity  ADC_MMCM  is
 
     port (
-	            -- System
-					reset        :  in  std_logic;
-					locked       :  out std_logic;
-	 
-               -- Clock inputs
-					clkin        :  in  std_logic;
-					
-					-- Clock outputs
-					clkout0p     :  out std_logic;
-					clkout0n     :  out std_logic;
-					clkout1p     :  out std_logic;
-					clkout1n     :  out std_logic;
-					clkout2      :  out std_logic;
+               -- System
+               reset        :  in  std_logic;
+               locked       :  out std_logic;
 
-		         -- Phase shift
-					psincdec     :  in  std_logic;
-					psen         :  in  std_logic;
-					psclk        :  in  std_logic;
-					psdone       :  out std_logic					
+               -- Clock inputs
+               clkin        :  in  std_logic;
+
+               -- Clock outputs
+               clkout0p     :  out std_logic; -- serial line clock (line_clk)
+               clkout0n     :  out std_logic;
+               clkout1p     :  out std_logic; -- framing clock (frame_clk = line_clk/8)
+               clkout1n     :  out std_logic;
+               clkout2      :  out std_logic; -- fabric clock (2 * frame_clk) @   0 degrees phase
+               clkout2_90   :  out std_logic; -- fabric clock (2 * frame_clk) @  90 degrees phase
+               clkout2_180  :  out std_logic; -- fabric clock (2 * frame_clk) @ 180 degrees phase
+               clkout2_270  :  out std_logic  -- fabric clock (2 * frame_clk) @ 270 degrees phase
     );
 
 end  ADC_MMCM;
@@ -35,15 +32,15 @@ end  ADC_MMCM;
 architecture ADC_MMCM_arc of ADC_MMCM is
 
      -- Components
-	  
-	  component IBUFGDS port (
-	   O     : out std_logic;
-	   I     : in  std_logic;
-	   IB	   : in  std_logic
-	  );
-	  end component;
-	  
-	  component MMCM_ADV generic (
+
+     component IBUFGDS port (
+      O     : out std_logic;
+      I     : in  std_logic;
+      IB    : in  std_logic
+     );
+     end component;
+
+     component MMCM_ADV generic (
       BANDWIDTH            : string;
       CLKOUT4_CASCADE      : boolean;
       CLOCK_HOLD           : boolean;
@@ -65,6 +62,18 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT2_PHASE        : real;
       CLKOUT2_DUTY_CYCLE   : real;
       CLKOUT2_USE_FINE_PS  : boolean;
+      CLKOUT3_DIVIDE       : integer;
+      CLKOUT3_PHASE        : real;
+      CLKOUT3_DUTY_CYCLE   : real;
+      CLKOUT3_USE_FINE_PS  : boolean;
+      CLKOUT4_DIVIDE       : integer;
+      CLKOUT4_PHASE        : real;
+      CLKOUT4_DUTY_CYCLE   : real;
+      CLKOUT4_USE_FINE_PS  : boolean;
+      CLKOUT5_DIVIDE       : integer;
+      CLKOUT5_PHASE        : real;
+      CLKOUT5_DUTY_CYCLE   : real;
+      CLKOUT5_USE_FINE_PS  : boolean;
       CLKIN1_PERIOD        : real;
       REF_JITTER1          : real
       );
@@ -102,52 +111,49 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKFBSTOPPED : out std_logic;
       PWRDWN       : in  std_logic;
       RST          : in  std_logic
-		);
+      );
      end component;
-	  
-	  -- BUFG Signals
-	  signal ibufgds_clkinp  : std_logic;
-	  signal ibufgds_clkinn  : std_logic;
-	  signal ibufgds_clkout  : std_logic;
-	  
-	  -- MMCM Signals
-	  signal mmcm_clkfbout   : std_logic;
+
+     -- BUFG Signals
+     signal ibufgds_clkinp  : std_logic;
+     signal ibufgds_clkinn  : std_logic;
+     signal ibufgds_clkout  : std_logic;
+
+     -- MMCM Signals
+     signal mmcm_clkfbout   : std_logic;
      signal mmcm_clkout0    : std_logic;
      signal mmcm_clkout0b   : std_logic;
      signal mmcm_clkout1    : std_logic;
      signal mmcm_clkout1b   : std_logic;
-	  signal mmcm_clkout2    : std_logic;
+     signal mmcm_clkout2    : std_logic;
+     signal mmcm_clkout2_90  : std_logic;
+     signal mmcm_clkout2_180 : std_logic;
+     signal mmcm_clkout2_270 : std_logic;
      signal mmcm_clkfbin    : std_logic;
      signal mmcm_clkin      : std_logic;
-     signal mmcm_psclk      : std_logic;
-     signal mmcm_psen       : std_logic;
-     signal mmcm_psincdec   : std_logic;
-     signal mmcm_psdone     : std_logic;
      signal mmcm_locked     : std_logic;
      signal mmcm_reset      : std_logic;
-	 
+
      begin
 
-	  -- Signal routing
-	  
-	  mmcm_reset <= reset;
-	  locked <= mmcm_locked;
-	  
-	  mmcm_clkin <= clkin;
-	  mmcm_clkfbin <= mmcm_clkfbout;
-	  
-	  clkout0p <= mmcm_clkout0;
-	  clkout0n <= mmcm_clkout0b;
-	  clkout1p <= mmcm_clkout1;
-	  clkout1n <= mmcm_clkout1b;
-	  clkout2  <= mmcm_clkout2;
-	  
-	  mmcm_psincdec <= psincdec;
-	  mmcm_psen <= psen;
-	  mmcm_psclk <= psclk;
-	  psdone <= mmcm_psdone;
-	  
-	  -- Clock input from adc @ around 1GHz
+     -- Signal routing
+
+     mmcm_reset <= reset;
+     locked <= mmcm_locked;
+
+     mmcm_clkin <= clkin;
+     mmcm_clkfbin <= mmcm_clkfbout;
+
+     clkout0p <= mmcm_clkout0;
+     clkout0n <= mmcm_clkout0b;
+     clkout1p <= mmcm_clkout1;
+     clkout1n <= mmcm_clkout1b;
+     clkout2  <= mmcm_clkout2;
+     clkout2_90  <= mmcm_clkout2_90;
+     clkout2_180 <= mmcm_clkout2_180;
+     clkout2_270 <= mmcm_clkout2_270;
+
+     -- Clock input from adc @ around 1GHz
      mmcm_adv_inst : MMCM_ADV
      GENERIC MAP (
       BANDWIDTH            => "OPTIMIZED",
@@ -155,23 +161,35 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLOCK_HOLD           => false,
       COMPENSATION         => "ZHOLD",
       STARTUP_WAIT         => false,
-      DIVCLK_DIVIDE        => 2,
-      CLKFBOUT_MULT_F      => 6.000,
+      DIVCLK_DIVIDE        => 8,      -- D = 8
+      CLKFBOUT_MULT_F      => 16.000, -- M = 16.000
       CLKFBOUT_PHASE       => 0.000,
       CLKFBOUT_USE_FINE_PS => false,
-      CLKOUT0_DIVIDE_F     => 3.000,
+      CLKOUT0_DIVIDE_F     => 2.000, -- Fout = (M * Fin) / (D * 2.000) = Fin (when D=8, M=16)
       CLKOUT0_PHASE        => 0.000,
       CLKOUT0_DUTY_CYCLE   => 0.500,
       CLKOUT0_USE_FINE_PS  => false,
-      CLKOUT1_DIVIDE       => 6,
+      CLKOUT1_DIVIDE       => 8,     -- Fout = (M * Fin) / (D * 8) = Fin / 4 (when D=8, M=16)
       CLKOUT1_PHASE        => 0.000,
       CLKOUT1_DUTY_CYCLE   => 0.500,
       CLKOUT1_USE_FINE_PS  => false,
-      CLKOUT2_DIVIDE       => 1,
-      CLKOUT2_PHASE        => 0.250,
+      CLKOUT2_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT2_PHASE        => 0.000,
       CLKOUT2_DUTY_CYCLE   => 0.500,
-      CLKOUT2_USE_FINE_PS  => true,
-      CLKIN1_PERIOD        => 2.500,
+      CLKOUT2_USE_FINE_PS  => false,
+      CLKOUT3_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT3_PHASE        => 90.000,
+      CLKOUT3_DUTY_CYCLE   => 0.500,
+      CLKOUT3_USE_FINE_PS  => false,
+      CLKOUT4_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT4_PHASE        => 180.000,
+      CLKOUT4_DUTY_CYCLE   => 0.500,
+      CLKOUT4_USE_FINE_PS  => false,
+      CLKOUT5_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT5_PHASE        => 270.000,
+      CLKOUT5_DUTY_CYCLE   => 0.500,
+      CLKOUT5_USE_FINE_PS  => false,
+      CLKIN1_PERIOD        => 2.500, -- 400 MHz (should be calculated from user input)
       REF_JITTER1          => 0.010
 
       --BANDWIDTH            => "OPTIMIZED",
@@ -209,10 +227,10 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT1B     => mmcm_clkout1b,
       CLKOUT2      => mmcm_clkout2,
       CLKOUT2B     => open,
-      CLKOUT3      => open,
+      CLKOUT3      => mmcm_clkout2_90,
       CLKOUT3B     => open,
-      CLKOUT4      => open,
-      CLKOUT5      => open,
+      CLKOUT4      => mmcm_clkout2_180,
+      CLKOUT5      => mmcm_clkout2_270,
       CLKOUT6      => open,
       -- Input clock control
       CLKFBIN      => mmcm_clkfbin,
@@ -229,17 +247,17 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       DRDY         => open,
       DWE          => '0',
       -- Ports for dynamic phase shift
-      PSCLK        => mmcm_psclk,
-      PSEN         => mmcm_psen,
-      PSINCDEC     => mmcm_psincdec,
-      PSDONE       => mmcm_psdone,
+      PSCLK        => '0',
+      PSEN         => '0',
+      PSINCDEC     => '0',
+      PSDONE       => open,
       -- Other control and status signals
       LOCKED       => mmcm_locked,
       CLKINSTOPPED => open,
       CLKFBSTOPPED => open,
       PWRDWN       => '0',
       RST          => mmcm_reset
-      );  
-	  
+      );
+
 end ADC_MMCM_arc;
 

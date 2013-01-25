@@ -1,5 +1,5 @@
 Model {
-  Name			  "adcleda"
+  Name			  "adc16"
   Version		  7.7
   MdlSubVersion		  0
   GraphicalInterface {
@@ -64,12 +64,12 @@ Model {
     $PropName		    "DataLoggingOverride"
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "adcleda"
+    model_		    "adc16"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "adcleda"
+      Cell		      "adc16"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -699,7 +699,7 @@ Model {
     }
   }
   System {
-    Name		    "adcleda"
+    Name		    "adc16"
     Location		    [734, 148, 1314, 408]
     Open		    on
     ModelBrowserVisibility  off
@@ -717,9 +717,9 @@ Model {
     SIDHighWatermark	    "100"
     Block {
       BlockType		      SubSystem
-      Name		      "adcleda"
+      Name		      "adc16"
       SID		      "90"
-      Tag		      "xps:adcleda"
+      Tag		      "xps:adc16"
       Ports		      [0, 4]
       Position		      [150, 49, 210, 106]
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
@@ -730,14 +730,14 @@ Model {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskInitialization      "adcleda_mask"
+      MaskInitialization      "adc16_mask"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       System {
-	Name			"adcleda"
+	Name			"adc16"
 	Location		[170, 70, 719, 695]
 	Open			off
 	ModelBrowserVisibility	off
@@ -759,7 +759,7 @@ Model {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adcleda_adcleda_p_data_a"
+	  Name			  "adc16_adc16_p_data_a"
 	  SID			  "94"
 	  Ports			  [1, 1]
 	  Position		  [335, 165, 405, 185]
@@ -804,7 +804,7 @@ Model {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adcleda_adcleda_p_data_b"
+	  Name			  "adc16_adc16_p_data_b"
 	  SID			  "95"
 	  Ports			  [1, 1]
 	  Position		  [345, 265, 415, 285]
@@ -849,7 +849,7 @@ Model {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adcleda_adcleda_p_data_c"
+	  Name			  "adc16_adc16_p_data_c"
 	  SID			  "99"
 	  Ports			  [1, 1]
 	  Position		  [355, 365, 425, 385]
@@ -894,7 +894,7 @@ Model {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "adcleda_adcleda_p_data_d"
+	  Name			  "adc16_adc16_p_data_d"
 	  SID			  "100"
 	  Ports			  [1, 1]
 	  Position		  [365, 465, 435, 485]
