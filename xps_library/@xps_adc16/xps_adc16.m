@@ -46,7 +46,7 @@ switch s.hw_sys
     b = set(b, 'ip_version', '1.00.a');
 end
 
-b = set(b, 'opb0_devices',1); %controller
+b = set(b, 'opb0_devices', 1 + s.num_units); % controller plus snap BRAMs
 
 % Tells which other PCORES are needed for this block
 supp_ip_names    = {'', 'opb_adc16_controller'};
