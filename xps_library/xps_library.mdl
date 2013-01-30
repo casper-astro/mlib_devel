@@ -15,9 +15,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Jan 25 11:13:15 2013"
-  RTWModifiedTimeStamp	  281013138
-  ModelVersionFormat	  "1.%<AutoIncrement:476>"
+  LastModifiedDate	  "Tue Jan 29 15:22:32 2013"
+  RTWModifiedTimeStamp	  281373682
+  ModelVersionFormat	  "1.%<AutoIncrement:477>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -40897,21 +40897,22 @@ Library {
       MaskPromptString	      "I/O group|I/O direction|Data Type|Data bitwidth|Data binary point|GPIO bit index|Sample "
       "period|Use as single-ended|Use DDR|Pack register in the pad|Register clock phase|Termination method"
       MaskStyleString	      "popup(ROACH:aux0_clk|ROACH:aux1_clk|ROACH:led|ROACH:gpioa|ROACH:gpioa_oe_n|ROACH:gpiob|RO"
-      "ACH:gpiob_oe_n|ROACH:qsh|ROACH:zdok0|ROACH:zdok1|ROACH2:aux_clk|ROACH2:led|ROACH2:gpio|ROACH2:qsh|ROACH2:zdok0|R"
-      "OACH2:zdok1),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,edit,edit,checkbox,checkbox,chec"
-      "kbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
+      "ACH:gpiob_oe_n|ROACH:qsh|ROACH:zdok0|ROACH:zdok1|ROACH2:aux_clk|ROACH2:led|ROACH2:gpio|ROACH2:qsh|ROACH2:sync_in"
+      "|ROACH2:sync_out|ROACH2:zdok0|ROACH2:zdok1),popup(in|out),popup(Boolean|Unsigned|Signed  (2's comp)),edit,edit,e"
+      "dit,edit,checkbox,checkbox,checkbox,popup(0|90|180|270),popup(None|Pullup|Pulldown)"
       MaskVariables	      "io_group=@1;io_dir=@2;arith_type=@3;bitwidth=@4;bin_pt=@5;bit_index=@6;sample_period=@7;use"
       "_single_ended=@8;use_ddr=@9;reg_iob=@10;reg_clk_phase=@11;termination=@12;"
       MaskTunableValueString  "off,off,off,off,off,off,off,off,off,off,off,off"
       MaskCallbackString      "if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'ROACH:qsh' 'ROACH:zdok0' 'ROACH:z"
-      "dok1'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','on','on','on','on'})"
-      ";\nelse\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','off','on','on','on','on'});"
-      "\nend|if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'ROACH:qsh' 'ROACH:zdok0' 'ROACH:zdok1'})))\n    set_"
-      "param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','on','on','on','on','on'});\nelse\n    set_pa"
-      "ram(gcb, 'MaskVisibilities', {'on','on','on','on','on','on','on','off','on','on','on','on'});\nend|||||||if strc"
-      "mp(get_param(gcb,'use_ddr'),'on')\n    set_param(gcb,'reg_iob','on');\n    set_param(gcb,'MaskEnables', {'on' 'o"
-      "n' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'off' 'on' 'on'});\nelse\n    set_param(gcb,'MaskEnables', {'on' 'on' 'on'"
-      " 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on'});\nend|||"
+      "dok1' 'ROACH2:sync_in' 'ROACH2:sync_out'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','"
+      "on','on','on','on','on','on','on'});\nelse\n    set_param(gcb, 'MaskVisibilities', {'on','on','on','on','on','on"
+      "','on','off','on','on','on','on'});\nend|if ~isempty(find(strcmp(get_param(gcb, 'io_group'), {'ROACH:qsh' 'ROACH"
+      ":zdok0' 'ROACH:zdok1' 'ROACH2:sync_in' 'ROACH2:sync_out'})))\n    set_param(gcb, 'MaskVisibilities', {'on','on',"
+      "'on','on','on','on','on','on','on','on','on','on'});\nelse\n    set_param(gcb, 'MaskVisibilities', {'on','on','o"
+      "n','on','on','on','on','off','on','on','on','on'});\nend|||||||if strcmp(get_param(gcb,'use_ddr'),'on')\n    set"
+      "_param(gcb,'reg_iob','on');\n    set_param(gcb,'MaskEnables', {'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'off"
+      "' 'on' 'on'});\nelse\n    set_param(gcb,'MaskEnables', {'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' 'on' '"
+      "on'});\nend|||"
       MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on"
       MaskVisibilityString    "on,on,on,on,on,on,on,off,on,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on"
@@ -40938,7 +40939,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"4"
+	SIDHighWatermark	"6"
 	Block {
 	  BlockType		  Inport
 	  Name			  "gpio_out"
@@ -40949,62 +40950,70 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert"
-	  SID			  "209:2"
+	  SID			  "209:6"
 	  Ports			  [1, 1]
 	  Position		  [80, 50, 110, 70]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
+	  gui_display_data_type	  "Fixed-point"
 	  arith_type		  "Boolean"
 	  n_bits		  "1"
 	  bin_pt		  "0"
+	  float_type		  "Single"
+	  exp_bits		  "8"
+	  fraction_bits		  "24"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
+	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  "off"
-	  pipeline		  "off"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  off
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
-	  block_version		  "11.4"
-	  sg_icon_stat		  "30,20,1,1,white,blue,0,edca21da,right,"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
-	  "ch([0.3 0.2 0.366667 0.2 0.3 0.466667 0.5 0.533333 0.733333 0.6 0.466667 0.366667 0.533333 0.366667 0.466667 0.6 0."
-	  "733333 0.533333 0.5 0.466667 0.3 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0."
-	  "15 0.1 0.1 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprin"
-	  "tf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon te"
-	  "xt');\n"
+	  sg_icon_stat		  "30,20,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 20 20 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[12.22 12.22 1"
+	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[10.22 10.22 12.22 12.22 10"
+	  ".22 ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
+	  "h([12.55 19.44 17.44 15.44 13.44 10.55 12.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nfprint"
+	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',"
+	  "1,'cast');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_gpio_gateway"
-	  SID			  "209:3"
+	  SID			  "209:5"
 	  Ports			  [1, 1]
 	  Position		  [150, 50, 190, 70]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
-	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
-	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
-	  "ending on how they are configured."
-	  hdl_port		  "on"
+	  infoedit		  "Gateway out block.  Converts Xilinx fixed point or floating-point type inputs into ouputs of type Simu"
+	  "link integer, double, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output port"
+	  "s or are discarded, depending on how they are configured."
+	  hdl_port		  on
 	  timing_constraint	  "None"
-	  locs_specified	  "off"
+	  locs_specified	  off
 	  LOCs			  "{}"
-	  xl_use_area		  "off"
+	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "gatewayout"
-	  block_version		  "11.4"
-	  sg_icon_stat		  "40,20,1,1,white,yellow,0,cc31b7ac,right,"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.95 0.93 0.65]);\npat"
-	  "ch([0.35 0.275 0.4 0.275 0.35 0.475 0.5 0.525 0.675 0.575 0.475 0.4 0.525 0.4 0.475 0.575 0.675 0.525 0.5 0.475 0.3"
-	  "5 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);"
-	  "\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	  "');\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','t"
-	  "exmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "40,20,1,1,white,yellow,0,cc31b7ac,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 20 20 0 ],[0.95 0.93 0.65"
+	  " ]);\nplot([0 40 40 0 0 ],[0 0 20 20 0 ]);\npatch([15.55 18.44 20.44 22.44 24.44 20.44 17.55 15.55 ],[12.22 12.22 1"
+	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([17.55 20.44 18.44 15.55 17.55 ],[10.22 10.22 12.22 12.22 10"
+	  ".22 ],[0.985 0.979 0.895 ]);\npatch([15.55 18.44 20.44 17.55 15.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
+	  "h([17.55 24.44 22.44 20.44 18.44 15.55 17.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.985 0.979 0.895 ]);\nfprint"
+	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'"
+	  " ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end i"
+	  "con text');"
 	}
 	Block {
 	  BlockType		  Outport
