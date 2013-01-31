@@ -154,36 +154,36 @@ else
 end
     
 if clock_sync,
-    reuse_block(cursys, 'sim_adc_data_in', 'simulink/Sources/In1', ...
+    reuse_block(cursys, 'sim_adc_data_in', 'built-in/Inport', ...
         'Position', [310   208   340   222])
     % if the location of 'adc_sim' changes...
     reuse_block(cursys, 'adc_sim', 'xps_library/ADCs/adc_sim', ...
         'Position', [425   100   520   330], ...
         'nStreams', num2str(16 + 16*demux_adc), ...
         'bit_width', num2str(sample_bit_width));
-    reuse_line(cursys, 'sim_adc_data_in/1', 'adc_sim/1');
+    add_line(cursys, 'sim_adc_data_in/1', 'adc_sim/1');
 else
     if use_adc0,
-        reuse_block(cursys, 'sim_adc0_data_in', 'simulink/Sources/In1', ...
+        reuse_block(cursys, 'sim_adc0_data_in', 'built-in/Inport', ...
             'Position', [310   208   340   222])
         % if the location of 'adc_sim' changes...
         reuse_block(cursys, 'adc0_sim', 'xps_library/ADCs/adc_sim', ...
             'Position', [425   100   520   330], ...
             'nStreams', num2str(8 + 8*demux_adc), ...
             'bit_width', num2str(sample_bit_width));
-        reuse_line(cursys, 'sim_adc0_data_in/1', 'adc0_sim/1');
+        add_line(cursys, 'sim_adc0_data_in/1', 'adc0_sim/1');
     end
     
     
     if use_adc1,
-        reuse_block(cursys, 'sim_adc1_data_in', 'simulink/Sources/In1', ...
+        reuse_block(cursys, 'sim_adc1_data_in', 'built-in/Inport', ...
             'Position', [305   683   335   697])
         % if the location of 'adc_sim' changes...
         reuse_block(cursys, 'adc1_sim', 'xps_library/ADCs/adc_sim', ...
             'Position', [420   575   515   805], ...
             'nStreams', num2str(8 + 8*demux_adc), ...
             'bit_width', num2str(sample_bit_width));
-        reuse_line(cursys, 'sim_adc1_data_in/1', 'adc1_sim/1');
+        add_line(cursys, 'sim_adc1_data_in/1', 'adc1_sim/1');
     end
 end
     
@@ -225,7 +225,7 @@ for k=1:length(portnames),
         'arith_type', 'Unsigned');
 
     
-    reuse_block(cursys, port, 'simulink/Sinks/Out1', ...
+    reuse_block(cursys, port, 'built-in/Outport', ...
         'Position', output_port_pos, ...
         'Port', num2str(k));
 
@@ -245,10 +245,10 @@ for k=1:length(portnames),
             'bit_width', num2str(sample_bit_width));
 
 
-        reuse_line( cursys, [adc_sim_block, '/', num2str( mod(sim_port,port_mod_factor)+1 )], [gateway_in_name, '/1'] );
+        add_line( cursys, [adc_sim_block, '/', num2str( mod(sim_port,port_mod_factor)+1 )], [gateway_in_name, '/1'] );
         sim_port = sim_port +1;
-        reuse_line( cursys, [gateway_in_name,'/1'], [gateway_in_name, '_conv/1']);
-        reuse_line( cursys, [gateway_in_name, '_conv/1'], [port, '/1']);
+        add_line( cursys, [gateway_in_name,'/1'], [gateway_in_name, '_conv/1']);
+        add_line( cursys, [gateway_in_name, '_conv/1'], [port, '/1']);
     elseif regexp( port, '(adc\d+)_outofrange' ),
         toks = regexp( port, '(adc\d+)_(\w+)$', 'tokens');
         if clock_sync,
@@ -257,15 +257,15 @@ for k=1:length(portnames),
             adc_sim_block = [toks{1}{1}, '_sim'];
             ds_factor = 8;
         end
-        reuse_line(cursys, [adc_sim_block, '/', num2str(num_demux_data_phases+1)], [gateway_in_name,'/1']);
-        reuse_block(cursys, [port, '_sim'], 'simulink/Sources/In1', ...
+        add_line(cursys, [adc_sim_block, '/', num2str(num_demux_data_phases+1)], [gateway_in_name,'/1']);
+        reuse_block(cursys, [port, '_sim'], 'built-in/Inport', ...
             'Position', [310, 53+50*k, 340, 67+50*k]);
-        reuse_line( cursys, [gateway_in_name,'/1'], [port, '/1']);
+        add_line( cursys, [gateway_in_name,'/1'], [port, '/1']);
     else
-        reuse_block(cursys, [port, '_sim'], 'simulink/Sources/In1', ...
+        reuse_block(cursys, [port, '_sim'], 'built-in/Inport', ...
             'Position', [310, 53+50*k, 340, 67+50*k]);
-        reuse_line( cursys, [port, '_sim/1'], [gateway_in_name,'/1']);
-        reuse_line( cursys, [gateway_in_name,'/1'], [port, '/1']);
+        add_line( cursys, [port, '_sim/1'], [gateway_in_name,'/1']);
+        add_line( cursys, [gateway_in_name,'/1'], [port, '/1']);
     end
     
 end

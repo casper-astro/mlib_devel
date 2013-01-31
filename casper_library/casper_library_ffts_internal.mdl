@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "root"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Jun 15 14:00:56 2012"
-  RTWModifiedTimeStamp	  261669567
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  LastModifiedDate	  "Tue Aug 28 12:03:34 2012"
+  RTWModifiedTimeStamp	  268056209
+  ModelVersionFormat	  "1.%<AutoIncrement:12>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -592,7 +592,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_internal"
-    Location		    [249, 451, 829, 744]
+    Location		    [221, 209, 801, 502]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -712,6 +712,742 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "biplex_cplx_unscrambler"
+      Ports		      [3, 3]
+      Position		      [370, 20, 460, 120]
+      UserDataPersistent      on
+      UserData		      "DataTag2"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      MaskType		      "biplex_cplx_unscrambler"
+      MaskPromptString	      "Size of FFT: (2^? pnts)|BRAM Latency"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskVarAliasString      ","
+      MaskVariables	      "FFTSize=@1;bram_latency=@2;"
+      MaskInitialization      "biplex_cplx_unscrambler_init(gcb, ...\n    'FFTSize', FFTSize, ...\n    'bram_latency',"
+      " bram_latency);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "2|2"
+      MaskTabNameString	      ","
+      System {
+	Name			"biplex_cplx_unscrambler"
+	Location		[161, 313, 1177, 1035]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "even"
+	  Position		  [25, 148, 55, 162]
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "odd"
+	  Position		  [25, 173, 55, 187]
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "sync"
+	  Position		  [25, 123, 55, 137]
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Constant"
+	  Ports			  [0, 1]
+	  Position		  [285, 230, 325, 250]
+	  SourceBlock		  "xbsIndex_r4/Constant"
+	  SourceType		  "Xilinx Constant Block Block"
+	  arith_type		  "Boolean"
+	  const			  "1"
+	  n_bits		  "1"
+	  bin_pt		  "0"
+	  explicit_period	  "on"
+	  period		  "1"
+	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
+	  equ			  "P=C"
+	  opselect		  "C"
+	  inp2			  "PCIN>>17"
+	  opr			  "+"
+	  inp1			  "P"
+	  carry			  "CIN"
+	  dbl_ovrd		  "off"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "constant"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "40,20,0,1,white,blue,0,1c72b5be,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.35 0.275 0.4 0.275 0.35 0.475 0.5 0.525 0.675 0.575 0.475 0.4 0.525 0.4 0.475 0.575 0.675 0.525 0.5 0.475 0.3"
+	  "5 ],[0.1 0.25 0.5 0.75 0.9 0.9 0.85 0.9 0.9 0.7 0.9 0.75 0.5 0.25 0.1 0.3 0.1 0.1 0.15 0.1 0.1 ],[0.98 0.96 0.92]);"
+	  "\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
+	  "');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Constant1"
+	  Ports			  [0, 1]
+	  Position		  [100, 31, 135, 49]
+	  SourceBlock		  "xbsIndex_r4/Constant"
+	  SourceType		  "Xilinx Constant Block Block"
+	  arith_type		  "Unsigned"
+	  const			  "2^(FFTSize-1)"
+	  n_bits		  "FFTSize"
+	  bin_pt		  "0"
+	  explicit_period	  "on"
+	  period		  "1"
+	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
+	  equ			  "P=C"
+	  opselect		  "C"
+	  inp2			  "PCIN>>17"
+	  opr			  "+"
+	  inp1			  "P"
+	  carry			  "CIN"
+	  dbl_ovrd		  "off"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "constant"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "35,18,0,1,white,blue,0,fca86624,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.371429 0.285714 0.4 0.285714 0.371429 0.514286 0.542857 0.571429 0.714286 0.6 0.485714 0.4 0.514286 0.4 0.485"
+	  "714 0.6 0.714286 0.571429 0.542857 0.514286 0.371429 ],[0.111111 0.277778 0.5 0.722222 0.888889 0.888889 0.833333 0"
+	  ".888889 0.888889 0.666667 0.888889 0.722222 0.5 0.277778 0.111111 0.333333 0.111111 0.111111 0.166667 0.111111 0.11"
+	  "1111 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('',"
+	  "'COMMENT: begin icon text');\ncolor('black');port_label('output',1,'2');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Constant2"
+	  Ports			  [0, 1]
+	  Position		  [560, 16, 595, 34]
+	  SourceBlock		  "xbsIndex_r4/Constant"
+	  SourceType		  "Xilinx Constant Block Block"
+	  arith_type		  "Unsigned"
+	  const			  "2^(FFTSize-1)"
+	  n_bits		  "FFTSize"
+	  bin_pt		  "0"
+	  explicit_period	  "on"
+	  period		  "1"
+	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
+	  equ			  "P=C"
+	  opselect		  "C"
+	  inp2			  "PCIN>>17"
+	  opr			  "+"
+	  inp1			  "P"
+	  carry			  "CIN"
+	  dbl_ovrd		  "off"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "constant"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "35,18,0,1,white,blue,0,fca86624,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.371429 0.285714 0.4 0.285714 0.371429 0.514286 0.542857 0.571429 0.714286 0.6 0.485714 0.4 0.514286 0.4 0.485"
+	  "714 0.6 0.714286 0.571429 0.542857 0.514286 0.371429 ],[0.111111 0.277778 0.5 0.722222 0.888889 0.888889 0.833333 0"
+	  ".888889 0.888889 0.666667 0.888889 0.722222 0.5 0.277778 0.111111 0.333333 0.111111 0.111111 0.166667 0.111111 0.11"
+	  "1111 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('',"
+	  "'COMMENT: begin icon text');\ncolor('black');port_label('output',1,'2');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Convert"
+	  Ports			  [1, 1]
+	  Position		  [220, 66, 245, 94]
+	  SourceBlock		  "xbsIndex_r4/Convert"
+	  SourceType		  "Xilinx Type Converter Block"
+	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
+	  arith_type		  "Unsigned"
+	  n_bits		  "1"
+	  bin_pt		  "0"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  latency		  "0"
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "convert"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "25,28,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0.68 0.6 0.52 0.24 ],[0.142"
+	  "857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.857143 0.642857 0.821429 0.678571 0.5 0.321429 0.17"
+	  "8571 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\n"
+	  "fprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('outp"
+	  "ut',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Convert1"
+	  Ports			  [1, 1]
+	  Position		  [675, 56, 700, 84]
+	  SourceBlock		  "xbsIndex_r4/Convert"
+	  SourceType		  "Xilinx Type Converter Block"
+	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
+	  arith_type		  "Unsigned"
+	  n_bits		  "1"
+	  bin_pt		  "0"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  latency		  "0"
+	  dbl_ovrd		  "off"
+	  pipeline		  "off"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "convert"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "25,28,1,1,white,blue,0,edca21da,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0.68 0.6 0.52 0.24 ],[0.142"
+	  "857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.857143 0.642857 0.821429 0.678571 0.5 0.321429 0.17"
+	  "8571 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\n"
+	  "fprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('outp"
+	  "ut',1,'cast');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Counter"
+	  Ports			  [1, 1]
+	  Position		  [100, 72, 135, 108]
+	  SourceBlock		  "xbsIndex_r4/Counter"
+	  SourceType		  "Xilinx Counter Block"
+	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
+	  " implemented by combining a counter with a comparator."
+	  cnt_type		  "Free Running"
+	  cnt_to		  "Inf"
+	  operation		  "Up"
+	  start_count		  "0"
+	  cnt_by_val		  "1"
+	  arith_type		  "Unsigned"
+	  n_bits		  "FFTSize"
+	  bin_pt		  "0"
+	  load_pin		  "off"
+	  rst			  "on"
+	  en			  "off"
+	  explicit_period	  "off"
+	  period		  "1"
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
+	  implementation	  "Fabric"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  use_rpm		  "on"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "counter"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "35,36,1,1,white,blue,0,c59595e6,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.228571 0.0571429 0.285714 0.0571429 0.228571 0.485714 0.571429 0.657143 0.942857 0.714286 0.514286 0.371429 0"
+	  ".6 0.371429 0.514286 0.714286 0.942857 0.657143 0.571429 0.485714 0.228571 ],[0.111111 0.277778 0.5 0.722222 0.8888"
+	  "89 0.888889 0.805556 0.888889 0.888889 0.666667 0.861111 0.722222 0.5 0.277778 0.138889 0.333333 0.111111 0.111111 "
+	  "0.194444 0.111111 0.111111 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon gr"
+	  "aphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rst');\ncolor('black');por"
+	  "t_label('output',1,'out');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Counter1"
+	  Ports			  [1, 1]
+	  Position		  [565, 62, 600, 98]
+	  SourceBlock		  "xbsIndex_r4/Counter"
+	  SourceType		  "Xilinx Counter Block"
+	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
+	  " implemented by combining a counter with a comparator."
+	  cnt_type		  "Free Running"
+	  cnt_to		  "Inf"
+	  operation		  "Up"
+	  start_count		  "0"
+	  cnt_by_val		  "1"
+	  arith_type		  "Unsigned"
+	  n_bits		  "FFTSize"
+	  bin_pt		  "0"
+	  load_pin		  "off"
+	  rst			  "on"
+	  en			  "off"
+	  explicit_period	  "off"
+	  period		  "1"
+	  dbl_ovrd		  "off"
+	  use_behavioral_HDL	  "off"
+	  implementation	  "Fabric"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  use_rpm		  "on"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "counter"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "35,36,1,1,white,blue,0,c59595e6,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.228571 0.0571429 0.285714 0.0571429 0.228571 0.485714 0.571429 0.657143 0.942857 0.714286 0.514286 0.371429 0"
+	  ".6 0.371429 0.514286 0.714286 0.942857 0.657143 0.571429 0.485714 0.228571 ],[0.111111 0.277778 0.5 0.722222 0.8888"
+	  "89 0.888889 0.805556 0.888889 0.888889 0.666667 0.861111 0.722222 0.5 0.277778 0.138889 0.333333 0.111111 0.111111 "
+	  "0.194444 0.111111 0.111111 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon gr"
+	  "aphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rst');\ncolor('black');por"
+	  "t_label('output',1,'out');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Relational"
+	  Ports			  [2, 1]
+	  Position		  [155, 58, 200, 102]
+	  SourceBlock		  "xbsIndex_r4/Relational"
+	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
+	  mode			  "a<=b"
+	  en			  "off"
+	  latency		  "0"
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "relational"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "45,44,2,1,white,blue,0,aa55cc08,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.222222 0.0666667 0.288889 0.0666667 0.222222 0.488889 0.555556 0.622222 0.888889 0.666667 0.466667 0.311111 0"
+	  ".511111 0.311111 0.466667 0.666667 0.888889 0.622222 0.555556 0.488889 0.222222 ],[0.113636 0.272727 0.5 0.727273 0"
+	  ".886364 0.886364 0.818182 0.886364 0.886364 0.659091 0.863636 0.704545 0.5 0.295455 0.136364 0.340909 0.113636 0.11"
+	  "3636 0.181818 0.113636 0.113636 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end ic"
+	  "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');"
+	  "port_label('input',2,'b');\ncolor('black');disp('\\newline\\bf{a<=b}\\newlinez^{-0}','texmode','on');\nfprintf('','"
+	  "COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Relational1"
+	  Ports			  [2, 1]
+	  Position		  [620, 48, 665, 92]
+	  SourceBlock		  "xbsIndex_r4/Relational"
+	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
+	  mode			  "a<=b"
+	  en			  "off"
+	  latency		  "0"
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "relational"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "45,44,2,1,white,blue,0,aa55cc08,right,"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91]);\npat"
+	  "ch([0.222222 0.0666667 0.288889 0.0666667 0.222222 0.488889 0.555556 0.622222 0.888889 0.666667 0.466667 0.311111 0"
+	  ".511111 0.311111 0.466667 0.666667 0.888889 0.622222 0.555556 0.488889 0.222222 ],[0.113636 0.272727 0.5 0.727273 0"
+	  ".886364 0.886364 0.818182 0.886364 0.886364 0.659091 0.863636 0.704545 0.5 0.295455 0.136364 0.340909 0.113636 0.11"
+	  "3636 0.181818 0.113636 0.113636 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end ic"
+	  "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'a');\ncolor('black');"
+	  "port_label('input',2,'b');\ncolor('black');disp('\\newline\\bf{a<=b}\\newlinez^{-0}','texmode','on');\nfprintf('','"
+	  "COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "barrel_switcher"
+	  Ports			  [4, 3]
+	  Position		  [270, 87, 365, 198]
+	  AttributesFormatString  "n_inputs=1"
+	  LinkData {
+	    BlockName		    "Delay_sync"
+	    DialogParameters {
+	      sg_icon_stat	      "30,14,1,1,white,blue,0,07b98262,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
+	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
+	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
+	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
+	      "NT: begin icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	    BlockName		    "Mux11"
+	    DialogParameters {
+	      sg_icon_stat	      "25,66,3,1,white,blue,3,a150fb03,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],["
+	      "0.77 0.82 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0"
+	      ".68 0.6 0.52 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636"
+	      "364 0.575758 0.5 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\n"
+	      "plot([0 1 1 0 0 ],[0 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT:"
+	      " begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\nc"
+	      "olor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','C"
+	      "OMMENT: end icon text');\n"
+	    }
+	    BlockName		    "Mux21"
+	    DialogParameters {
+	      sg_icon_stat	      "25,66,3,1,white,blue,3,a150fb03,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],["
+	      "0.77 0.82 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0"
+	      ".68 0.6 0.52 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636"
+	      "364 0.575758 0.5 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\n"
+	      "plot([0 1 1 0 0 ],[0 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT:"
+	      " begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\nc"
+	      "olor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','C"
+	      "OMMENT: end icon text');\n"
+	    }
+	    BlockName		    "Slice1"
+	    DialogParameters {
+	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
+	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
+	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
+	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
+	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
+	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	  }
+	  UserDataPersistent	  on
+	  UserData		  "DataTag3"
+	  SourceBlock		  "casper_library_reorder/barrel_switcher"
+	  SourceType		  "barrel_switcher"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData "off"
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
+	  n_inputs		  "1"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "barrel_switcher1"
+	  Ports			  [4, 3]
+	  Position		  [720, 77, 815, 188]
+	  AttributesFormatString  "n_inputs=1"
+	  LinkData {
+	    BlockName		    "Delay_sync"
+	    DialogParameters {
+	      sg_icon_stat	      "30,14,1,1,white,blue,0,07b98262,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.366667 0.3 0.4 0.3 0.366667 0.5 0.533333 0.566667 0.7 0.6 0.5 0.433333 0.533333 0.433333 0.5 0.6 "
+	      "0.7 0.566667 0.533333 0.5 0.366667 ],[0.142857 0.285714 0.5 0.714286 0.857143 0.857143 0.785714 0.857143 0.8571"
+	      "43 0.642857 0.857143 0.714286 0.5 0.285714 0.142857 0.357143 0.142857 0.142857 0.214286 0.142857 0.142857 ],[0."
+	      "98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMME"
+	      "NT: begin icon text');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	    BlockName		    "Mux11"
+	    DialogParameters {
+	      sg_icon_stat	      "25,66,3,1,white,blue,3,a150fb03,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],["
+	      "0.77 0.82 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0"
+	      ".68 0.6 0.52 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636"
+	      "364 0.575758 0.5 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\n"
+	      "plot([0 1 1 0 0 ],[0 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT:"
+	      " begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\nc"
+	      "olor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','C"
+	      "OMMENT: end icon text');\n"
+	    }
+	    BlockName		    "Mux21"
+	    DialogParameters {
+	      sg_icon_stat	      "25,66,3,1,white,blue,3,a150fb03,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0.142857 0.857143 1 ],["
+	      "0.77 0.82 0.91]);\npatch([0.24 0.08 0.32 0.08 0.24 0.52 0.6 0.68 0.96 0.72 0.52 0.36 0.56 0.36 0.52 0.72 0.96 0"
+	      ".68 0.6 0.52 0.24 ],[0.348485 0.409091 0.5 0.590909 0.651515 0.651515 0.621212 0.651515 0.651515 0.560606 0.636"
+	      "364 0.575758 0.5 0.424242 0.363636 0.439394 0.348485 0.348485 0.378788 0.348485 0.348485 ],[0.98 0.96 0.92]);\n"
+	      "plot([0 1 1 0 0 ],[0 0.142857 0.857143 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT:"
+	      " begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\nc"
+	      "olor('black');port_label('input',3,'d1');\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','C"
+	      "OMMENT: end icon text');\n"
+	    }
+	    BlockName		    "Slice1"
+	    DialogParameters {
+	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
+	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
+	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
+	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
+	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
+	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
+	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	  }
+	  UserDataPersistent	  on
+	  UserData		  "DataTag4"
+	  SourceBlock		  "casper_library_reorder/barrel_switcher"
+	  SourceType		  "barrel_switcher"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData "off"
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
+	  n_inputs		  "1"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "reorder"
+	  Ports			  [3, 3]
+	  Position		  [410, 84, 505, 156]
+	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
+	  AttributesFormatString  "order=1"
+	  UserDataPersistent	  on
+	  UserData		  "DataTag5"
+	  SourceBlock		  "casper_library_reorder/reorder"
+	  SourceType		  "reorder"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
+	  map			  "[0 1 2 3]"
+	  n_inputs		  "1"
+	  bram_latency		  "2"
+	  map_latency		  "0"
+	  double_buffer		  "0"
+	  bram_map		  off
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "reorder1"
+	  Ports			  [3, 3]
+	  Position		  [415, 189, 510, 261]
+	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
+	  AttributesFormatString  "order=2"
+	  UserDataPersistent	  on
+	  UserData		  "DataTag6"
+	  SourceBlock		  "casper_library_reorder/reorder"
+	  SourceType		  "reorder"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
+	  map			  "[2 3 0 1]"
+	  n_inputs		  "1"
+	  bram_latency		  "2"
+	  map_latency		  "0"
+	  double_buffer		  "0"
+	  bram_map		  off
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "pol1"
+	  Position		  [875, 128, 905, 142]
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "pol2"
+	  Position		  [875, 163, 905, 177]
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "sync_out"
+	  Position		  [875, 93, 905, 107]
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  SrcBlock		  "barrel_switcher"
+	  SrcPort		  1
+	  Points		  [0, 0; 15, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "reorder"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, 90]
+	    DstBlock		    "reorder1"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "barrel_switcher"
+	  SrcPort		  2
+	  DstBlock		  "reorder"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "barrel_switcher"
+	  SrcPort		  3
+	  Points		  [5, 0; 0, 70]
+	  DstBlock		  "reorder1"
+	  DstPort		  3
+	}
+	Line {
+	  Labels		  [1, 0]
+	  SrcBlock		  "reorder"
+	  SrcPort		  1
+	  Points		  [40, 0]
+	  Branch {
+	    Points		    [0, 25]
+	    DstBlock		    "barrel_switcher1"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "Counter1"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "reorder"
+	  SrcPort		  3
+	  DstBlock		  "barrel_switcher1"
+	  DstPort		  3
+	}
+	Line {
+	  Labels		  [2, 0]
+	  SrcBlock		  "reorder1"
+	  SrcPort		  3
+	  Points		  [35, 0; 0, -80]
+	  DstBlock		  "barrel_switcher1"
+	  DstPort		  4
+	}
+	Line {
+	  SrcBlock		  "even"
+	  SrcPort		  1
+	  DstBlock		  "barrel_switcher"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "odd"
+	  SrcPort		  1
+	  DstBlock		  "barrel_switcher"
+	  DstPort		  4
+	}
+	Line {
+	  SrcBlock		  "barrel_switcher1"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "sync_out"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "barrel_switcher1"
+	  SrcPort		  2
+	  Points		  [0, 0]
+	  DstBlock		  "pol1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "barrel_switcher1"
+	  SrcPort		  3
+	  Points		  [0, 0]
+	  DstBlock		  "pol2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "sync"
+	  SrcPort		  1
+	  Points		  [0, 0; 25, 0]
+	  Branch {
+	    DstBlock		    "barrel_switcher"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "Counter"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant"
+	  SrcPort		  1
+	  Points		  [70, 0; 0, -15]
+	  Branch {
+	    Points		    [-5, 0]
+	    DstBlock		    "reorder"
+	    DstPort		    2
+	  }
+	  Branch {
+	    DstBlock		    "reorder1"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant1"
+	  SrcPort		  1
+	  DstBlock		  "Relational"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Counter"
+	  SrcPort		  1
+	  DstBlock		  "Relational"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Counter1"
+	  SrcPort		  1
+	  DstBlock		  "Relational1"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Constant2"
+	  SrcPort		  1
+	  Points		  [5, 0]
+	  DstBlock		  "Relational1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Relational"
+	  SrcPort		  1
+	  DstBlock		  "Convert"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Relational1"
+	  SrcPort		  1
+	  DstBlock		  "Convert1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Convert1"
+	  SrcPort		  1
+	  DstBlock		  "barrel_switcher1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Convert"
+	  SrcPort		  1
+	  Points		  [0, 25]
+	  DstBlock		  "barrel_switcher"
+	  DstPort		  1
+	}
       }
     }
     Block {
@@ -1180,7 +1916,7 @@ Library {
 	  AttributesFormatString  "18_17 r/i"
 	  AncestorBlock		  "casper_library_misc/c_to_ri"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag2"
+	  UserData		  "DataTag7"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -1415,7 +2151,7 @@ Library {
 	  AttributesFormatString  "18_17 r/i"
 	  AncestorBlock		  "casper_library_misc/c_to_ri"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag3"
+	  UserData		  "DataTag8"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -1649,7 +2385,7 @@ Library {
 	  Position		  [395, 44, 435, 86]
 	  AncestorBlock		  "casper_library_misc/ri_to_c"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag4"
+	  UserData		  "DataTag9"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -1833,7 +2569,7 @@ Library {
 	  Position		  [395, 109, 435, 151]
 	  AncestorBlock		  "casper_library_misc/ri_to_c"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag5"
+	  UserData		  "DataTag10"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -2482,7 +3218,7 @@ Library {
 	  AttributesFormatString  "18_17 r/i"
 	  AncestorBlock		  "casper_library_misc/c_to_ri"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag6"
+	  UserData		  "DataTag11"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -2717,7 +3453,7 @@ Library {
 	  AttributesFormatString  "18_17 r/i"
 	  AncestorBlock		  "casper_library_ffts_internal/sincos_dsp48e/c_to_ri0"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag7"
+	  UserData		  "DataTag12"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -2953,7 +3689,7 @@ Library {
 	  AttributesFormatString  "18_17 + 18_17 ==> 19_17\nMode=Addition\nLatency=2"
 	  AncestorBlock		  "casper_library_misc/caddsub_dsp48e"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag8"
+	  UserData		  "DataTag13"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -4137,7 +4873,7 @@ Library {
 	  AttributesFormatString  "18_17 + 18_17 ==> 19_17\nMode=Subtraction\nLatency=2"
 	  AncestorBlock		  "casper_library_misc/caddsub_dsp48e"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag9"
+	  UserData		  "DataTag14"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -5319,7 +6055,7 @@ Library {
 	  Position		  [460, 24, 500, 66]
 	  AncestorBlock		  "casper_library_misc/ri_to_c"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag10"
+	  UserData		  "DataTag15"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -5503,7 +6239,7 @@ Library {
 	  Position		  [460, 149, 500, 191]
 	  AncestorBlock		  "casper_library_misc/ri_to_c"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag11"
+	  UserData		  "DataTag16"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -5855,7 +6591,7 @@ Library {
       Ports		      [9, 5]
       Position		      [120, 14, 220, 246]
       UserDataPersistent      on
-      UserData		      "DataTag12"
+      UserData		      "DataTag17"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -6458,7 +7194,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag13"
+	      UserData		      "DataTag18"
 	      SourceBlock	      "casper_library_misc/c_to_ri"
 	      SourceType	      "c_to_ri"
 	      SID		      "416"
@@ -6628,7 +7364,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag14"
+	      UserData		      "DataTag19"
 	      SourceBlock	      "casper_library_misc/ri_to_c"
 	      SourceType	      "ri_to_c"
 	      SID		      "422"
@@ -6774,7 +7510,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag15"
+	      UserData		      "DataTag20"
 	      SourceBlock	      "casper_library_misc/c_to_ri"
 	      SourceType	      "c_to_ri"
 	      SID		      "426"
@@ -6944,7 +7680,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag16"
+	      UserData		      "DataTag21"
 	      SourceBlock	      "casper_library_misc/ri_to_c"
 	      SourceType	      "ri_to_c"
 	      SID		      "432"
@@ -7090,7 +7826,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag17"
+	      UserData		      "DataTag22"
 	      SourceBlock	      "casper_library_misc/c_to_ri"
 	      SourceType	      "c_to_ri"
 	      SID		      "436"
@@ -7260,7 +7996,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag18"
+	      UserData		      "DataTag23"
 	      SourceBlock	      "casper_library_misc/ri_to_c"
 	      SourceType	      "ri_to_c"
 	      SID		      "442"
@@ -7406,7 +8142,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag19"
+	      UserData		      "DataTag24"
 	      SourceBlock	      "casper_library_misc/c_to_ri"
 	      SourceType	      "c_to_ri"
 	      SID		      "446"
@@ -7576,7 +8312,7 @@ Library {
 		}
 	      }
 	      UserDataPersistent      on
-	      UserData		      "DataTag20"
+	      UserData		      "DataTag25"
 	      SourceBlock	      "casper_library_misc/ri_to_c"
 	      SourceType	      "ri_to_c"
 	      SID		      "452"
@@ -7869,30 +8605,60 @@ Library {
   }
 }
 MatData {
-  NumRecords		  21
+  NumRecords		  26
   DataRecord {
-    Tag			    DataTag20
+    Tag			    DataTag25
     Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
     "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
+  }
+  DataRecord {
+    Tag			    DataTag24
+    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
+    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            <0 "
+  }
+  DataRecord {
+    Tag			    DataTag23
+    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
+    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
+  }
+  DataRecord {
+    Tag			    DataTag22
+    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
+    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            <0 "
+  }
+  DataRecord {
+    Tag			    DataTag21
+    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
+    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
+  }
+  DataRecord {
+    Tag			    DataTag20
+    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
+    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            <0 "
   }
   DataRecord {
     Tag			    DataTag19
-    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
-    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
-    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
-    "   @            <0 "
-  }
-  DataRecord {
-    Tag			    DataTag18
     Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
     "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
   }
   DataRecord {
-    Tag			    DataTag17
+    Tag			    DataTag18
     Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
     "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
     " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
     "   @            <0 "
+  }
+  DataRecord {
+    Tag			    DataTag17
+    Data		    "  %)30     .    H     8    (     @         %    \"     $    !     0         %  0 \"@    $    *    :&%S:"
+    "%]C;V1E          X   !0    !@    @    $          4    (     0   \"     !         !     @    -C<Y834W-64T,61E8S,W93"
+    "$Y-30X.#-C938R-C8R,F8"
   }
   DataRecord {
     Tag			    DataTag16
@@ -7901,41 +8667,11 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag15
-    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
-    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
-    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
-    "   @            <0 "
+    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
+    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
   }
   DataRecord {
     Tag			    DataTag14
-    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
-    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
-  }
-  DataRecord {
-    Tag			    DataTag13
-    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
-    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
-    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
-    "   @            <0 "
-  }
-  DataRecord {
-    Tag			    DataTag12
-    Data		    "  %)30     .    H     8    (     @         %    \"     $    !     0         %  0 \"@    $    *    :&%S:"
-    "%]C;V1E          X   !0    !@    @    $          4    (     0   \"     !         !     @    -C<Y834W-64T,61E8S,W93"
-    "$Y-30X.#-C938R-C8R,F8"
-  }
-  DataRecord {
-    Tag			    DataTag11
-    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
-    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
-  }
-  DataRecord {
-    Tag			    DataTag10
-    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
-    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
-  }
-  DataRecord {
-    Tag			    DataTag9
     Data		    "  %)30     .    Z D   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /98S 8.    6 D   "
     "8    (     @         %    \"     $    !     0         %  0 #P    $   \"T    9&5F875L=',         ;6]D90            "
@@ -7969,7 +8705,7 @@ MatData {
     "  $    !          D    (               "
   }
   DataRecord {
-    Tag			    DataTag8
+    Tag			    DataTag13
     Data		    "  %)30     .    X D   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ #C2DP$.    4 D   "
     "8    (     @         %    \"     $    !     0         %  0 #P    $   \"T    9&5F875L=',         ;6]D90            "
@@ -8003,6 +8739,37 @@ MatData {
     "       )    \"               "
   }
   DataRecord {
+    Tag			    DataTag12
+    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
+    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            <0 "
+  }
+  DataRecord {
+    Tag			    DataTag11
+    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
+    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            <0 "
+  }
+  DataRecord {
+    Tag			    DataTag10
+    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
+    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
+  }
+  DataRecord {
+    Tag			    DataTag9
+    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
+    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
+  }
+  DataRecord {
+    Tag			    DataTag8
+    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
+    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            <0 "
+  }
+  DataRecord {
     Tag			    DataTag7
     Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
     "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
@@ -8011,34 +8778,75 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag6
-    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
-    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
-    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
-    "   @            <0 "
+    Data		    "  %)30     .    $ 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,A[808.    @ 4   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   !B    9&5F875L=',       !M87               &Y"
+    "?:6YP=71S        8G)A;5]L871E;F-Y  !M87!?;&%T96YC>0   &1O=6)L95]B=69F97( 8G)A;5]M87                 .    2 ,   8  "
+    "  (     0         %    \"     $    ,     0         .    ,     8    (    !          %    \"     $    #     0       "
+    "  0  , ;6%P  X   !0    !@    @    &          4    (     0    0    !          D    @                      #P/P     "
+    "   !         \"$ .    0     8    (    !          %    \"     $    +     0         0    \"P   &UA<%]L871E;F-Y      "
+    " .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0  "
+    "       !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @   "
+    " !     0    $         \"0    @           #P/PX    X    !@    @    $          4    (     0    @    !         !     "
+    "(    ;E]I;G!U=',.    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     "
+    "&    \"     0         !0    @    !    #0    $         $     T   !D;W5B;&5?8G5F9F5R    #@   #@    &    \"     8    "
+    "     !0    @    !     0    $         \"0    @               X    X    !@    @    $          4    (     0    @    !"
+    "         !     (    8G)A;5]M87 .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !0 "
+    "   !@    @    &          4    (     0    0    !          D    @             $         (0                   \\#\\. "
+    "   .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8     "
+    "    !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    ! "
+    "         D    (               .    .     8    (    !@         %    \"     $    !     0         )    \"            "
+    "   #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag5
-    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
-    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
+    Data		    "  %)30     .    $ 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,B+)00.    @ 4   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   !B    9&5F875L=',       !M87               &Y"
+    "?:6YP=71S        8G)A;5]L871E;F-Y  !M87!?;&%T96YC>0   &1O=6)L95]B=69F97( 8G)A;5]M87                 .    2 ,   8  "
+    "  (     0         %    \"     $    ,     0         .    ,     8    (    !          %    \"     $    #     0       "
+    "  0  , ;6%P  X   !0    !@    @    &          4    (     0    0    !          D    @                      #P/P     "
+    "   !         \"$ .    0     8    (    !          %    \"     $    +     0         0    \"P   &UA<%]L871E;F-Y      "
+    " .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0  "
+    "       !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @   "
+    " !     0    $         \"0    @           #P/PX    X    !@    @    $          4    (     0    @    !         !     "
+    "(    ;E]I;G!U=',.    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     "
+    "&    \"     0         !0    @    !    #0    $         $     T   !D;W5B;&5?8G5F9F5R    #@   #@    &    \"     8    "
+    "     !0    @    !     0    $         \"0    @               X    X    !@    @    $          4    (     0    @    !"
+    "         !     (    8G)A;5]M87 .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !0 "
+    "   !@    @    &          4    (     0    0    !          D    @                      #P/P        !         \"$ .  "
+    "  .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8      "
+    "   !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    !  "
+    "        D    (               .    .     8    (    !@         %    \"     $    !     0         )    \"             "
+    "  #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag4
-    Data		    "  %)30     .    <     8    (     0         %    \"     $    !     0         .    0     8    (    !     "
-    "     %    \"     $    ,     0         0    #    ')I7W1O7V-?:6YI=      "
+    Data		    "  %)30     .    4 $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /-W?P8.    P     "
+    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', ;E]I;G!U=',         #@   \""
+    "@    &    \"     $         !0    @               $         #@   #@    &    \"     8         !0    @    !     0    "
+    "$         \"0    @           #P/P"
   }
   DataRecord {
     Tag			    DataTag3
-    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
-    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
-    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
-    "   @            <0 "
+    Data		    "  %)30     .    4 $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /-W?P8.    P     "
+    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', ;E]I;G!U=',         #@   \""
+    "@    &    \"     $         !0    @               $         #@   #@    &    \"     8         !0    @    !     0    "
+    "$         \"0    @           #P/P"
   }
   DataRecord {
     Tag			    DataTag2
-    Data		    "  %)30     .    \\     8    (     0         %    \"     $    #     0         .    0     8    (    !    "
-    "      %    \"     $    ,     0         0    #    &-?=&]?<FE?:6YI=      .    .     8    (    !@         %    \"    "
-    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
-    "   @            <0 "
+    Data		    "  %)30     .    J (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &04Q 0.    & (   "
+    "8    (     @         %    \"     $    !     0         %  0 #0    $    G    9&5F875L=',      $9&5%-I>F4       !B<F%"
+    "M7VQA=&5N8WD   X    P 0  !@    @    !          4    (     0    0    !          X    X    !@    @    $          4  "
+    "  (     0    <    !         !     '    1D944VEZ90 .    .     8    (    !@         %    \"     $    !     0        "
+    " )    \"             ! #@   $     &    \"     0         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8W"
+    "D     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @   "
+    " &          4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    "
+    "!     0         )    \"             ! "
   }
   DataRecord {
     Tag			    DataTag1
