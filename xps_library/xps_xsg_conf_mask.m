@@ -37,6 +37,46 @@ ngc_config.include_clockwrapper = 1;
 ngc_config.include_cf = 0;
 
 switch hw_sys
+    case 'iBOB'
+        xlsetparam(xsg_blk,'xilinxfamily', 'Virtex2P',...
+            'part', 'xc2vp50',...
+            'speed', '-7',...
+            'testbench', 'off',...
+            'package', 'ff1152');
+        set_param(gcb,'mpc_type','powerpc405');
+    % end case 'iBOB'
+    case 'CORR'
+        xlsetparam(xsg_blk,'xilinxfamily', 'Virtex2P',...
+            'part', 'xc2vp20',...
+            'speed', '-6',...
+            'testbench', 'off',...
+            'package', 'ff896');
+        set_param(gcb,'mpc_type','powerpc405');
+    % end case 'CORR'
+    case 'BEE2_ctrl'
+        xlsetparam(xsg_blk,'xilinxfamily', 'Virtex2P',...
+            'part', 'xc2vp70',...
+            'speed', '-7',...
+            'testbench', 'off',...
+            'package', 'ff1704');
+        set_param(gcb,'mpc_type','powerpc405');
+    % end case 'BEE2_ctrl'
+    case 'BEE2_usr'
+        xlsetparam(xsg_blk,'xilinxfamily', 'Virtex2P',...
+            'part', 'xc2vp70',...
+            'speed', '-7',...
+            'testbench', 'off',...
+            'package', 'ff1704');
+        set_param(gcb,'mpc_type','powerpc405');
+    % end case 'BEE2_usr'
+    case 'ML402'
+        xlsetparam(xsg_blk,'xilinxfamily', 'Virtex4',...
+            'part', 'xc4vsx35',...
+            'speed', '-10',...
+            'testbench', 'off',...
+            'package', 'ff668');
+        set_param(gcb,'mpc_type','microblaze');
+    % end case 'ML402'
     case 'ROACH'
         switch hw_subsys
             case 'lx110t'
@@ -56,6 +96,7 @@ switch hw_sys
             % end case 'sx95t'
         end % switch hw_subsys
 
+        set_param(gcb,'mpc_type','powerpc440_ext');
     % end case 'ROACH
     case 'ROACH2'
         switch hw_subsys
@@ -67,6 +108,7 @@ switch hw_sys
                     'package', 'ff1759');
             % end case 'lx110t'
         end % switch hw_subsys
+        set_param(gcb,'mpc_type','powerpc440_ext');
     % end case 'ROACH2'
     
     otherwise
@@ -92,7 +134,7 @@ xlsetparam(xsg_blk,'clock_loc','d7hack')
 switch clk_src
     case {'sys_clk' 'sys_clk2x'}
     case {'usr_clk' 'usr_clk2x'}
-        if (strcmp(hw_sys,{'ROACH', 'ROACH2'}))
+        if (strcmp(hw_sys,{'CORR', 'ROACH', 'ROACH2'}))
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'aux_clk'}
@@ -104,7 +146,7 @@ switch clk_src
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     case {'adc0_clk' 'adc1_clk' 'dac0_clk' 'dac1_clk'}
-        if isempty(find(strcmp(hw_sys,{'ROACH', 'ROACH2'})))
+        if isempty(find(strcmp(hw_sys,{'iBOB', 'ROACH', 'ROACH2'})))
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     otherwise

@@ -15,8 +15,9 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 %   app_clk_rate    = mssge_proj.app_clk_rate;
     hw_sys          = mssge_proj.hw_sys;
     xsg_core_name   = mssge_proj.xsg_core_name;
+    mpc_type        = mssge_proj.mpc_type;
 
-%   XPS_BASE_PATH   = mssge_paths.XPS_BASE_PATH;
+%   XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
 %   simulink_path   = mssge_paths.simulink_path;
 %   src_path        = mssge_paths.src_path;
 %   xsg_path        = mssge_paths.xsg_path;
@@ -32,25 +33,30 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     switch hw_sys
         case {'ROACH','ROACH2'}
             
+            plb_slaves = 0;
             opb_slaves_init = 1;  % The system block
             opb_slaves = opb_slaves_init;             
             max_opb_per_bridge = 32; 
 
             opb_addr_init   = hex2dec('01000000');
             opb_addr        = opb_addr_init;
+            plb_addr        = hex2dec('04000000');
             opb_bridge_size = hex2dec('00080000');
             opb_addr_max    = hex2dec('01FFFFFF'); %upper limit of address space allocated
         % end case {'ROACH','ROACH2'}
         otherwise
+            plb_slaves = 2; % the memory and the opb bridge
             opb_slaves = 3; % the UART, the selectmap fifo and the serial switch reader
             max_opb = 16;
 
             opb_addr = hex2dec('d0000000');
+            plb_addr = hex2dec('40000000');
             opb_bridge_size = 2^24;
         % end case otherwise
     end % switch hw_sys
 
     opb_bus_inst = 0;
+    plb_name = 'plb';
     opb_name = 'opb0';
 
 
@@ -99,7 +105,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     try
         for n = 1:length(xps_objs)
             blk_obj = xps_objs{n};
-            [str, opb_addr] = gen_mhs_xsg(blk_obj,opb_addr,opb_name);
+            [str, opb_addr, plb_addr] = gen_mhs_xsg(blk_obj,opb_addr,plb_addr,plb_name,opb_name);
             fprintf(mhs_fid,str);
         end
     catch
@@ -120,19 +126,19 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     fprintf(mhs_fid,'############################\n');
     fprintf(mhs_fid,'\n');
 
-    switch hw_sys
-    case {'ROACH','ROACH2'}
+    if strcmp(mpc_type, 'powerpc440_ext'),
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %calculate number of fixed opb0 devices
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
       opb0_devs = 0;  
       opb_offset_tmp = opb_addr;        
+      plb_offset_tmp = plb_addr;
       n = 1;        
       clog(['Searching for fixed opb0 devices. ',num2str(opb_slaves),' initial fixed devices'],'gen_xps_mod_mhs_debug');
       while (n <= length(xps_objs)),
         blk_obj = xps_objs{n};
-        [opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, opb_offset_tmp);
+        [plb_cores, plb_offset_tmp, opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, plb_offset_tmp, opb_offset_tmp);
         clog([get(blk_obj,'simulink_name'),': ',num2str(opb0_devices),' opb0 devices found'],'gen_xps_mod_mhs_desperate_debug');
         if opb0_devices ~= 0, clog([get(blk_obj,'simulink_name'),': ', num2str(opb0_devices),' opb0 devices'],'gen_xps_mod_mhs_debug'); end
         opb0_devs = opb0_devs + opb0_devices;
@@ -154,6 +160,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
       while redo == 1, 
         opb2opbs_tmp = 0;                         %restart counting bridges
         opb_offset_tmp = opb_addr;        
+        plb_offset_tmp = plb_addr;        
         opb_slaves_tmp = opb_slaves + opb2opbs;   %initial number of slaves is inital value + number bridges
         clog(['Searching for opb bridges from address 0x',dec2hex(opb_offset_tmp,8),'. ',num2str(opb2opbs),' bridges and ',num2str(opb0_devs),' fixed devices found giving ',num2str(opb_slaves_tmp),' initial devices on opb0'],'gen_xps_mod_mhs_desperate_debug');
         
@@ -163,8 +170,9 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 
           blk_obj = xps_objs{n};
           opb_offset_tmp_old = opb_offset_tmp;
+          plb_offset_tmp_old = plb_offset_tmp;
   
-          [opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, opb_offset_tmp);
+          [plb_cores, plb_offset_tmp, opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, plb_offset_tmp, opb_offset_tmp);
 %          clog(['0x',dec2hex(opb_offset_tmp_old,8),'-0x',dec2hex(opb_offset_tmp-1,8),' ',get(blk_obj,'simulink_name')],'gen_xps_mod_mhs_desperate_debug');
 
           bridge_start = opb_addr_init + ((opb2opbs_tmp+1) * opb_bridge_size);
@@ -209,12 +217,49 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     while n <= length(xps_objs)
         blk_obj = xps_objs{n};
 
+        plb_addr_start = plb_addr;
         opb_addr_start = opb_addr;
-        [opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, opb_addr);
+        [plb_cores, plb_offset_tmp, opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, plb_addr, opb_addr);
         %clog(['0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_offset_tmp-1,8),' ',get(blk_obj,'simulink_name')],'gen_xps_mod_mhs_desperate_debug');
 
-        switch hw_sys
-            case {'ROACH','ROACH2'}
+        if plb_cores + plb_slaves > 16
+            error('The total number of slave cores on PLB bus exceed 16 devices');
+        else
+            plb_slaves = plb_slaves + plb_cores;
+        end
+
+        switch mpc_type
+            case 'powerpc405'
+                if opb_cores + opb_slaves > 16
+                    opb_bus_inst = opb_bus_inst + 1;
+                    opb_slaves = 0;
+                    opb_name = ['opb',num2str(opb_bus_inst)];
+                    try
+                        opb_bridge_obj = xps_plb2opb(opb_name,opb_addr,opb_bridge_size);
+                    catch
+                        disp('Problem when generating plb2opb bridge: ')
+                        disp(lasterr);
+                        error('Error found during plb2opb bridge creation (xps_plb2opb).');
+                    end
+                    opb_addr = get(opb_bridge_obj,'opb_addr_start');
+                    xps_objs = [xps_objs,{opb_bridge_obj}];
+                else
+                    opb_slaves = opb_slaves + opb_cores;
+                end
+            % end case 'powerpc405'
+
+            case 'microblaze'
+                if plb_slaves ~= 0
+                    error('Microblaze processor does not support PLB devices.');
+                end
+                if opb_cores + opb_slaves > 16
+                    error('OPB exceeds 16 total slave devices.');
+                else
+                    opb_slaves = opb_slaves + opb_cores;
+                end
+            % end case 'microblaze'
+
+            case 'powerpc440_ext'
 
                 opb_slaves = opb_slaves + opb_cores;
                 bridge_start = opb_addr_init + ((opb_bus_inst+1) * opb_bridge_size);
@@ -242,17 +287,20 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
                     end
                     xps_objs = [xps_objs,{opb_bridge_obj}];
                 end
+                if plb_cores ~= 0
+                    error('External PowerPC 440 does not support PLB devices.');
+                end
 
             % end case 'powerpc440_ext'
 
             otherwise
-                error(['Unsupported HW platform: ',hw_sys]);
+                error(['Unsupported MPC type: ',mpc_type]);
             % end otherwise
 
         end % switch mpc_type
 
         try
-            [str, opb_addr, this_opb_addr_start] = gen_mhs_ip(blk_obj, opb_addr, opb_name);
+            [str, opb_addr, plb_addr,this_opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr,plb_addr,plb_name,opb_name);
         catch
             disp('Problem with block : ')
             display(blk_obj);

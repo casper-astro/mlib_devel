@@ -20,9 +20,10 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,opb_addr_end] = gen_mhs_xsg(blk_obj,opb_addr_start,opb_name)
+function [str,opb_addr_end,plb_addr_end] = gen_mhs_xsg(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
 str = '';
 opb_addr_end = opb_addr_start;
+plb_addr_end = plb_addr_start;
 
 str = [str, ' PARAMETER INSTANCE = ',clear_name(get(blk_obj,'simulink_name')),'\n'];
 str = [str, ' PARAMETER HW_VER = 1.00.a\n'];

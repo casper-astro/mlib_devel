@@ -20,10 +20,11 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
+function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
 
 str = '';
 opb_addr_end = opb_addr_start;
+plb_addr_end = plb_addr_start;
 
 try
 	ip_name = blk_obj.ip_name;
@@ -74,15 +75,32 @@ catch
 end
 
 try
+    plb_clk = blk_obj.plb_clk;
+catch
+    plb_clk = '';
+end
+
+try
 	range_opb = blk_obj.opb_address_offset;
 catch
 	range_opb = 0;
+end
+try
+	range_plb = blk_obj.plb_address_offset;
+catch
+	range_plb = 0;
 end
 
 try
     align_opb = blk_obj.opb_address_align;
 catch
     align_opb = 0;
+end
+
+try
+    align_plb = blk_obj.plb_address_align;
+catch
+    align_plb = 0;
 end
 
 
@@ -100,6 +118,10 @@ if ~isempty(ip_name)
         opb_clk = 'sys_clk';
     end % if isempty(opb_clk)
 
+    if isempty(plb_clk)
+        plb_clk = 'sys_clk';
+    end % if isempty(plb_clk)
+
 	if ~isempty(parameters)
 		prop_names = fieldnames(parameters);
 
@@ -110,6 +132,10 @@ if ~isempty(ip_name)
 	end % if ~isempty(parameters)
 
 	if range_opb ~= 0
+		if range_plb ~= 0
+			error('The default gen_mhs_ip does not support multiple bus attachments. You should write your own gen_mhs_ip for this interface.');
+		end % if range_plb ~= 0
+
 		if align_opb ~= 0
 			opb_addr_start = ceil(opb_addr_start/align_opb) * align_opb;
 		end % if align_opb ~= 0
@@ -123,6 +149,24 @@ if ~isempty(ip_name)
 
 	end % if range_opb ~= 0
         clog([get(blk_obj,'simulink_name'),': align (0x',dec2hex(align_opb,8),') range (0x',dec2hex(range_opb,8),') (0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_addr_end-1,8),')'],{'gen_mhs_ip_debug'});
+
+	if range_plb ~= 0
+		if range_opb ~= 0
+			error('The default gen_mhs_ip does not support multiple bus attachments. You should write your own gen_mhs_ip for this interface.');
+		end % if range_opb ~= 0
+
+		if align_plb ~= 0
+			plb_addr_start = ceil(plb_addr_start/align_plb) * align_plb;
+		end % if align_plb ~= 0
+
+	    plb_addr_end = plb_addr_start + range_plb;
+
+	    str = [str, ' PARAMETER C_BASEADDR = 0x',dec2hex(plb_addr_start, 8),'\n'];
+	    str = [str, ' PARAMETER C_HIGHADDR = 0x',dec2hex(plb_addr_end-1, 8),'\n'];
+	    str = [str, ' BUS_INTERFACE SPLB = ',plb_name,'\n'];
+	    str = [str, ' PORT PLB_Clk = ', plb_clk, '\n'];
+
+    end % if range_plb ~=0
 
 	if ~isempty(interfaces)
 		interfaces_names = fieldnames(interfaces);

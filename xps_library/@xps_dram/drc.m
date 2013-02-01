@@ -27,6 +27,13 @@ msg = '';
 for i=1:length(xps_objs)
 
 	try
+	    if ( strcmp(get(xps_objs{i},'type'), 'xps_xsg') && strcmp(get(xps_objs{i},'hw_sys'), 'BEE2_ctrl') && strcmp(get(blk_obj,'dimm'), '1') )
+	        msg = ['DRAM ', get(blk_obj,'simulink_name'), ' is set to use DIMM 1, which is reserved on the BEE2 CTRL FPGA for Linux.'];
+	        result = 1;
+	    end
+	end
+
+	try
 		if strcmp(get(blk_obj,'dimm'),get(xps_objs{i},'dimm'))
 			if ~strcmp(get(blk_obj,'simulink_name'),get(xps_objs{i},'simulink_name'))
 				msg = ['DRAM ',get(blk_obj,'simulink_name'),' and DRAM ',get(xps_objs{i},'simulink_name'),' are both trying to use DIMM ', get(blk_obj,'dimm'), '.'];

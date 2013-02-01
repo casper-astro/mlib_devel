@@ -1,11 +1,12 @@
-function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
+function [str,opb_addr_end,plb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,plb_addr_start,plb_name,opb_name)
 str = '';
 
 opb_addr_end = opb_addr_start;
+plb_addr_end = plb_addr_start;
 
 clk_src = get(blk_obj, 'clk_src');
 
-[str,dummy_opb_addr_end,dummy_opb_addr_start] = gen_mhs_ip(blk_obj.xps_block,opb_addr_start,opb_name);
+[str,dummy_opb_addr_end,dummy_plb_addr_end,dummy_opb_addr_start] = gen_mhs_ip(blk_obj.xps_block,opb_addr_start,plb_addr_start,plb_name,opb_name);
 str = [str, '\n'];
 
 if strcmp(clk_src, 'arb_clk')

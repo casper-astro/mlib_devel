@@ -16,8 +16,9 @@ function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     app_clk         = mssge_proj.app_clk;
     app_clk_rate    = mssge_proj.app_clk_rate;
 %   xsg_core_name   = mssge_proj.xsg_core_name;
+%   mpc_type        = mssge_proj.mpc_type;
 
-%   XPS_BASE_PATH   = mssge_paths.XPS_BASE_PATH;
+%   XPS_LIB_PATH    = mssge_paths.XPS_LIB_PATH;
 %   simulink_path   = mssge_paths.simulink_path;
 %   src_path        = mssge_paths.src_path;
 %   xsg_path        = mssge_paths.xsg_path;

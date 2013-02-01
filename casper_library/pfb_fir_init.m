@@ -74,7 +74,6 @@ CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
 CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
-fan_latency = get_var('fan_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 quantization = get_var('quantization', 'defaults', defaults, varargin{:});
 fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
