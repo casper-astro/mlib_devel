@@ -58,7 +58,6 @@ module qdrc_phy_burst_align(
   input [DATA_WIDTH-1:0] sel;
   integer i;
     begin
-      bitwise_multiplex[i] = {DATA_WIDTH{1'b0}};
       for (i=0; i < DATA_WIDTH; i = i+1) begin
         bitwise_multiplex[i] = sel[i] ? in1[i] : in0[i];
       end
