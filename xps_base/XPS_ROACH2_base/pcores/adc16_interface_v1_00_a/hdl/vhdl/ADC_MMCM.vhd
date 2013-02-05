@@ -66,14 +66,6 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT3_PHASE        : real;
       CLKOUT3_DUTY_CYCLE   : real;
       CLKOUT3_USE_FINE_PS  : boolean;
-      CLKOUT4_DIVIDE       : integer;
-      CLKOUT4_PHASE        : real;
-      CLKOUT4_DUTY_CYCLE   : real;
-      CLKOUT4_USE_FINE_PS  : boolean;
-      CLKOUT5_DIVIDE       : integer;
-      CLKOUT5_PHASE        : real;
-      CLKOUT5_DUTY_CYCLE   : real;
-      CLKOUT5_USE_FINE_PS  : boolean;
       CLKIN1_PERIOD        : real;
       REF_JITTER1          : real
       );
@@ -161,34 +153,26 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLOCK_HOLD           => false,
       COMPENSATION         => "ZHOLD",
       STARTUP_WAIT         => false,
-      DIVCLK_DIVIDE        => 8,      -- D = 8
-      CLKFBOUT_MULT_F      => 16.000, -- M = 16.000
+      DIVCLK_DIVIDE        => 2,     -- D = 2
+      CLKFBOUT_MULT_F      => 5.000, -- M = 5.000
       CLKFBOUT_PHASE       => 0.000,
       CLKFBOUT_USE_FINE_PS => false,
-      CLKOUT0_DIVIDE_F     => 2.000, -- Fout = (M * Fin) / (D * 2.000) = Fin (when D=8, M=16)
+      CLKOUT0_DIVIDE_F     => 2.500, -- Fout = (M * Fin) / (D * 2.500) = Fin (when D=2, M=5)
       CLKOUT0_PHASE        => 0.000,
       CLKOUT0_DUTY_CYCLE   => 0.500,
       CLKOUT0_USE_FINE_PS  => false,
-      CLKOUT1_DIVIDE       => 8,     -- Fout = (M * Fin) / (D * 8) = Fin / 4 (when D=8, M=16)
+      CLKOUT1_DIVIDE       => 10,    -- Fout = (M * Fin) / (D * 10) = Fin / 4 (when D=2, M=5)
       CLKOUT1_PHASE        => 0.000,
       CLKOUT1_DUTY_CYCLE   => 0.500,
       CLKOUT1_USE_FINE_PS  => false,
-      CLKOUT2_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT2_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
       CLKOUT2_PHASE        => 0.000,
       CLKOUT2_DUTY_CYCLE   => 0.500,
       CLKOUT2_USE_FINE_PS  => false,
-      CLKOUT3_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
+      CLKOUT3_DIVIDE       => 5,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=2, M=5)
       CLKOUT3_PHASE        => 90.000,
       CLKOUT3_DUTY_CYCLE   => 0.500,
       CLKOUT3_USE_FINE_PS  => false,
-      CLKOUT4_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
-      CLKOUT4_PHASE        => 180.000,
-      CLKOUT4_DUTY_CYCLE   => 0.500,
-      CLKOUT4_USE_FINE_PS  => false,
-      CLKOUT5_DIVIDE       => 4,     -- Fout = (M * Fin) / (D * 4) = Fin / 2 (when D=8, M=16)
-      CLKOUT5_PHASE        => 270.000,
-      CLKOUT5_DUTY_CYCLE   => 0.500,
-      CLKOUT5_USE_FINE_PS  => false,
       CLKIN1_PERIOD        => 2.500, -- 400 MHz (should be calculated from user input)
       REF_JITTER1          => 0.010
 
@@ -226,11 +210,11 @@ architecture ADC_MMCM_arc of ADC_MMCM is
       CLKOUT1      => mmcm_clkout1,
       CLKOUT1B     => mmcm_clkout1b,
       CLKOUT2      => mmcm_clkout2,
-      CLKOUT2B     => open,
+      CLKOUT2B     => mmcm_clkout2_180,
       CLKOUT3      => mmcm_clkout2_90,
-      CLKOUT3B     => open,
-      CLKOUT4      => mmcm_clkout2_180,
-      CLKOUT5      => mmcm_clkout2_270,
+      CLKOUT3B     => mmcm_clkout2_270,
+      CLKOUT4      => open,
+      CLKOUT5      => open,
       CLKOUT6      => open,
       -- Input clock control
       CLKFBIN      => mmcm_clkfbin,
