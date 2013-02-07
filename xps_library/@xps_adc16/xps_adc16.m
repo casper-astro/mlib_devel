@@ -92,15 +92,9 @@ b = set(b,'misc_ports',misc_ports);
 
 % external ports
 mhs_constraints = struct();
-ucf_constraints_clk  = struct( ...
-    'IOSTANDARD', 'LVDS_25', ...
-    'DIFF_TERM', 'TRUE', ...
-    'TNM_NET', 'adc16_line_clk');
 ucf_constraints_lvds = struct( ...
     'IOSTANDARD', 'LVDS_25', ...
     'DIFF_TERM', 'TRUE');
-ucf_constraints_standard = struct( ...
-    'IOSTANDARD', 'LVCMOS15');
 
 % Setup pins for roach2 (rev2) zdok0 and zdok1
 
@@ -330,8 +324,8 @@ else
   ser_b_n_str = ['{', zdok0_ser_b_n_str, zdok1_ser_b_n_str(1:end-1), '}'];
 end
 
-ext_ports.clk_line_p = {  s.num_units 'in'  'adc16_clk_line_p'  clock_p_str  'vector=true'  mhs_constraints ucf_constraints_clk  };
-ext_ports.clk_line_n = {  s.num_units 'in'  'adc16_clk_line_n'  clock_n_str  'vector=true'  mhs_constraints ucf_constraints_clk  };
+ext_ports.clk_line_p = {  s.num_units 'in'  'adc16_clk_line_p'  clock_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
+ext_ports.clk_line_n = {  s.num_units 'in'  'adc16_clk_line_n'  clock_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
 ext_ports.clk_frame_p = { s.num_units 'in'  'adc16_clk_frame_p' frame_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
 ext_ports.clk_frame_n = { s.num_units 'in'  'adc16_clk_frame_n' frame_n_str  'vector=true'  mhs_constraints ucf_constraints_lvds };
 ext_ports.ser_a_p    = {4*s.num_units 'in'  'adc16_ser_a_p'     ser_a_p_str  'vector=true'  mhs_constraints ucf_constraints_lvds };

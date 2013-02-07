@@ -727,14 +727,11 @@ NET "epb_data<31>"      LOC = AJ33;
 
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#### ADC16 Clock Constraints
 #IF# (strcmp(get(b,'type'),'xps_adc16'))##
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## Set period for line clock of ZDOK0 chip D.  This is properly propagated through
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## to the CLKOUTnB MMCM outputs (even in 13.3) despite what is desbribed in Xilinx
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## Answer Record 46398 (http://www.xilinx.com/support/answers/46398.htm).
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET "adc16_clk_line_p<3>" TNM_NET = "adc16_line_clk";
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#['TIMESPEC "TS_adc16_line_clk" = PERIOD "adc16_line_clk" ' num2str(1000/get(b,'line_mhz')) ' ns;' 10]
-#IF# (strcmp(get(b,'type'),'xps_adc16'))## The following lines explicitly declare phase relationships that are NOT
-#IF# (strcmp(get(b,'type'),'xps_adc16'))## automatically propagated through the MMCM when using 13.x (or earlier).
-#IF# (strcmp(get(b,'type'),'xps_adc16'))## See http://www.xilinx.com/support/answers/46398.htm for details.
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET "adc0_clk180" TNM_NET = "adc0_clk180";
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET "adc0_clk270" TNM_NET = "adc0_clk270";
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#['TIMESPEC "TS_adc0_clk180" = PERIOD "adc0_clk180" "TS_adc16_line_clk" * 2 PHASE + ' num2str(1000/get(b,'line_mhz')) ' ns;' 10]
-#IF# (strcmp(get(b,'type'),'xps_adc16'))#['TIMESPEC "TS_adc0_clk270" = PERIOD "adc0_clk270" "TS_adc16_line_clk" * 2 PHASE + ' num2str(1500/get(b,'line_mhz')) ' ns;' 10]
 #IF# (strcmp(get(b,'type'),'xps_adc16'))##
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#### ADC16 Control Constraints
 #IF# (strcmp(get(b,'type'),'xps_adc16'))##
