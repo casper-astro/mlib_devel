@@ -725,6 +725,17 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = M41 ;
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_reset              LOC = M39 ;
 
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#### ADC16 Clock Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc16'))##
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#['TIMESPEC "TS_adc16_line_clk" = PERIOD "adc16_line_clk" ' num2str(1000/get(b,'line_mhz')) ' ns;' 10]
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## The following lines explicitly declare phase relationships that are NOT
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## automatically propagated through the MMCM when using 13.x (or earlier).
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## See http://www.xilinx.com/support/answers/46398.htm for details.
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET "adc0_clk180" TNM_NET = "adc0_clk180";
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#NET "adc0_clk270" TNM_NET = "adc0_clk270";
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#['TIMESPEC "TS_adc0_clk180" = PERIOD "adc0_clk180" "TS_adc16_line_clk" * 2 PHASE + ' num2str(1000/get(b,'line_mhz')) ' ns;' 10]
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#['TIMESPEC "TS_adc0_clk270" = PERIOD "adc0_clk270" "TS_adc16_line_clk" * 2 PHASE + ' num2str(1500/get(b,'line_mhz')) ' ns;' 10]
+#IF# (strcmp(get(b,'type'),'xps_adc16'))##
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#### ADC16 Control Constraints
 #IF# (strcmp(get(b,'type'),'xps_adc16'))##
 #IF# (strcmp(get(b,'type'),'xps_adc16'))## signals for adc0
@@ -734,6 +745,7 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_csn4  LOC = N19 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2";
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_sdata LOC = K30 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2";
 #IF# (strcmp(get(b,'type'),'xps_adc16'))#NET adc0_adc3wire_sclk  LOC = M28 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2";
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## signals for adc1
 #IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #NET adc1_adc3wire_csn1  LOC =  H30 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2";
 #IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #NET adc1_adc3wire_csn2  LOC =  L30 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2";
 #IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #NET adc1_adc3wire_csn3  LOC = AG33 | IOSTANDARD = "LVCMOS15" | SLEW = "SLOW" | DRIVE = "2";
