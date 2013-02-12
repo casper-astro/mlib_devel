@@ -23,6 +23,7 @@ entity  adc_unit  is
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic;
                p_data           :  out std_logic_vector(31 downto 0);
+               absel            :  in std_logic;
 
                -- IODELAY Controller
                delay_rst_a      :  in  std_logic_vector(3 downto 0);
@@ -104,21 +105,27 @@ architecture adc_unit_arc of adc_unit is
 
      begin
 
-     process (fabric_clk, frame_clk, adc_iserdes_data_a, adc_iserdes_data_b)
+     process (frame_clk, adc_iserdes_data_a, adc_iserdes_data_b)
      begin
        -- Pipeline serdes outputs (using slower frame clock)
        if frame_clk'event and frame_clk = '1' then
          adc_iserdes_data_a_pipelined <= adc_iserdes_data_a;
          adc_iserdes_data_b_pipelined <= adc_iserdes_data_b;
        end if;
+     end process;
 
-       -- Mux pipelined data based on framing clock
-       if frame_clk = '1' then
+     process (absel, adc_iserdes_data_a_pipelined, adc_iserdes_data_b_pipelined)
+     begin
+       -- Mux pipelined data based on absel signal
+       if absel = '0' then
          adc_iserdes_data <= adc_iserdes_data_a_pipelined;
        else
          adc_iserdes_data <= adc_iserdes_data_b_pipelined;
        end if;
+     end process;
 
+     process (fabric_clk, adc_iserdes_data)
+     begin
        -- Capture mux output on rising edge of fabric clock
        if fabric_clk'event and fabric_clk = '1' then
          p_data <= adc_iserdes_data;

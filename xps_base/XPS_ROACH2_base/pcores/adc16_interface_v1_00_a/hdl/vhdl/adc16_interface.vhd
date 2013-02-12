@@ -103,6 +103,7 @@ architecture adc16_interface_arc of adc16_interface is
                -- ISERDES Controller
                iserdes_bitslip  :  in  std_logic;
                p_data           :  out std_logic_vector(31 downto 0);
+               absel            :  in std_logic;
 
                -- Delay Controller
                delay_rst_a      :  in  std_logic_vector(3 downto 0);
@@ -173,6 +174,8 @@ architecture adc16_interface_arc of adc16_interface is
      signal line_clk     : std_logic;
      signal frame_clk    : std_logic;
      signal fabric_clk_0 : std_logic;
+     signal absel        : std_logic;
+     signal absel_enable : std_logic;
 
      -- MMCM BUFGs
      signal bufg_i : std_logic_vector(5 downto 0);
@@ -371,6 +374,7 @@ architecture adc16_interface_arc of adc16_interface is
 
                    iserdes_bitslip => s_iserdes_bitslip(i),
                    p_data => s_p_data0(i),
+                   absel => absel,
 
                    delay_rst_a => s_delay_rst_a(i),
                    delay_rst_b => s_delay_rst_b(i),
@@ -378,20 +382,33 @@ architecture adc16_interface_arc of adc16_interface is
        );
      end generate; -- for i in...
 
-    -- Capture snap_req on rising edge of frame clock so that A/B will be even/odd consistent
     process(frame_clk)
     begin
       -- rising edge of frame_clk
-      if rising_edge(frame_clk)  then
-        -- snap_req shift register
+      if rising_edge(frame_clk) then
+        -- snap_req shift register - Capture snap_req on rising edge
+        -- of frame clock so that A/B will be even/odd consistent.
         s_snap_req <= s_snap_req(0) & snap_req;
+
+        -- First rising edge of frame_clk enables absel toggling
+        -- to ensure that absel has known phase relation to frame_clk.
+        absel_enable <= '1';
+      end if;
+    end process;
+
+    process(fabric_clk_0, absel_enable)
+    begin
+      -- rising edge of fabric_clk_0
+      if rising_edge(fabric_clk_0) and absel_enable = '1' then
+        -- Toggle a/b lane selector
+        absel <= not absel;
       end if;
     end process;
 
     process(fabric_clk_0)
     begin
       -- rising edge of fabric_clk_0
-      if rising_edge(fabric_clk_0)  then
+      if rising_edge(fabric_clk_0) then
         -- s_p_data pipeline
         s_p_data <= s_p_data0;
 
