@@ -176,6 +176,7 @@ architecture adc16_interface_arc of adc16_interface is
      signal fabric_clk_0 : std_logic;
      signal absel        : std_logic;
      signal absel_enable : std_logic;
+     signal locked_0     : std_logic;
 
      -- MMCM BUFGs
      signal bufg_i : std_logic_vector(5 downto 0);
@@ -210,11 +211,12 @@ architecture adc16_interface_arc of adc16_interface is
      begin
 
      -- Clocking
+     locked(0) <= locked_0;
 
      adc_mmcm_0 : ADC_MMCM
      PORT MAP (
        reset        => reset,
-       locked       => locked(0),
+       locked       => locked_0,
        clkin        => line_clk_in(master),
        clkout0p     => bufg_i(0),
        clkout0n     => open,
@@ -384,24 +386,29 @@ architecture adc16_interface_arc of adc16_interface is
 
     process(frame_clk)
     begin
-      -- rising edge of frame_clk
       if rising_edge(frame_clk) then
         -- snap_req shift register - Capture snap_req on rising edge
         -- of frame clock so that A/B will be even/odd consistent.
         s_snap_req <= s_snap_req(0) & snap_req;
-
-        -- First rising edge of frame_clk enables absel toggling
-        -- to ensure that absel has known phase relation to frame_clk.
-        absel_enable <= '1';
       end if;
     end process;
 
-    process(fabric_clk_0, absel_enable)
+    process(frame_clk, locked_0)
+    begin
+      -- If MMCM is unlocked, reset absel_enable
+      if rising_edge(frame_clk) then
+        -- Rising edge of frame_clk enables absel toggling if MMCM locked
+        -- to ensure that absel has known phase relation to frame_clk.
+        absel_enable <= locked_0;
+      end if;
+    end process;
+
+    process(fabric_clk_0, absel_enable, locked_0)
     begin
       -- rising edge of fabric_clk_0
-      if rising_edge(fabric_clk_0) and absel_enable = '1' then
+      if rising_edge(fabric_clk_0) then
         -- Toggle a/b lane selector
-        absel <= not absel;
+        absel <= (not absel) and absel_enable;
       end if;
     end process;
 
