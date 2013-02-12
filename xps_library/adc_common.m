@@ -96,7 +96,15 @@ function [yoffset] = adc_common(blk, varargin)
       reuse_block(blk, ['d',num2str(d),'_ds',num2str(ds)], 'dspsigops/Downsample', ...
         'N', num2str(out), 'phase', num2str(ds), ...
         'Position', [xtick*4-20 ytick*yoff-10 xtick*4+20 ytick*yoff+10]);
-      
+      % Try to set options required for Downsample block of newer DSP blockset
+      % versions, but not available in older versions.
+      try
+        set_param([blk, '/d',num2str(d),'_ds',num2str(ds)], ...
+          'InputProcessing', 'Elements as channels (sample based)', ...
+          'RateOptions', 'Allow multirate processing');
+      catch
+      end;
+
       clog(['downsampler_',num2str(d),'_ds',num2str(ds),' line'],'adc_common_detailed_trace');
       add_line(blk, ['bias',num2str(d),'/1'], ['d',num2str(d),'_ds',num2str(ds),'/1']);
 
@@ -220,6 +228,14 @@ function [yoffset] = adc_common(blk, varargin)
       reuse_block(blk, ['sync_ds',num2str(ds)], 'dspsigops/Downsample', ...
         'N', num2str(out), 'phase', num2str(ds*(2^il)), ...
         'Position', [xtick*4-20 ytick*(dv+1+ds)-10 xtick*4+20 ytick*(dv+1+ds)+10]);
+      % Try to set options required for Downsample block of newer DSP blockset
+      % versions, but not available in older versions.
+      try
+        set_param([blk, '/sync_ds',num2str(ds)], ...
+          'InputProcessing', 'Elements as channels (sample based)', ...
+          'RateOptions', 'Allow multirate processing');
+      catch
+      end;
       add_line(blk,'sim_sync/1', ['sync_ds',num2str(ds),'/1']);
 
       %delay
