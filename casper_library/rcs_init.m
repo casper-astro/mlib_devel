@@ -84,9 +84,12 @@ function rcs_init(blk, varargin),
   end 
 
   % libraries info
-  path = getenv('MLIB_ROOT'); %the path to CASPER libraries
+  path = getenv('MLIB_DEVEL_PATH'); %the new path to the CASPER libraries
   if isempty(path),
-    disp('rcs_init: MLIB_ROOT must be defined in your system, using current time as revision');
+    path = getenv('MLIB_ROOT'); %the older path to CASPER libraries
+  end
+  if isempty(path), %neither paths give us anything
+    disp('rcs_init: MLIB_DEVEL_PATH or MLIB_ROOT must be defined in your system, using current time as revision');
     lib_src = 'timestamp';
   end
   
