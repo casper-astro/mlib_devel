@@ -25,9 +25,9 @@ function dram_sim (this_block)
     xps_library_path = getenv('XPS_LIBRARY_PATH');
     if isempty(xps_library_path)
         % try to fall back on MLIB_ROOT.
-        mlib_root = getenv('MLIB_ROOT');
+        mlib_root = getenv('MLIB_DEVEL_PATH');
         if isempty(mlib_root)
-            error('XPS_LIBRARY_PATH environment variable must be set to point to xps_library directory.');
+            error('MLIB_DEVEL_PATH environment variable must be set to point to xps_library directory.');
         else
             warning('MLIB_ROOT environment variable is deprecated.')
             xps_library_path = [mlib_root, '\xps_library'];

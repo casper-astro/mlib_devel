@@ -20,6 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,opb_name)
+fprintf('Calling DRAM function...')
 
 str = '';
 opb_addr_end = opb_addr_start;
@@ -31,6 +32,7 @@ hw_sys         = get(blk_obj,'hw_sys');
 clk_freq       = get(blk_obj,'clk_freq');
 inst_name      = clear_name(get(blk_obj,'simulink_name'));
 xsg_obj        = get(blk_obj,'xsg_obj');
+fprintf('Looking for dimm number...')
 dimm           = num2str(get(blk_obj,'dimm'));
 half_burst     = get(blk_obj,'half_burst');
 wide_data      = get(blk_obj,'wide_data');

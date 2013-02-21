@@ -229,8 +229,12 @@ end
 for n = 1:length(xps_blks)
     if ~(strcmp(get_param(xps_blks(n),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'),'xps:pcore'))
         try
+            %get_param(xps_blks(n),'tag')
             blk_obj = xps_block(xps_blks{n},xsg_obj);
+            %fprintf('Created block!')
+            assignin('base','last_blk_obj',blk_obj);
             eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
+            %fprintf('Evaluated block!')
 
             xps_objs = [xps_objs,{blk_obj}];
 
