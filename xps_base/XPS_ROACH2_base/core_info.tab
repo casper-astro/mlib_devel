@@ -28,7 +28,7 @@ sys_clkcounter      3       10        4
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_memory         3  2800000  800000
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#qdr2_memory         3  3000000  800000
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#qdr3_memory         3  3800000  800000
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_ctrl           3  30000    100
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_ctrl           3  40000    100
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#qdr2_ctrl           3  50000    100
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#qdr3_ctrl           3  60000    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_ctrl           3  70000    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_ctrl           3  80000    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#qdr2_ctrl           3  90000    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#qdr3_ctrl           3  a0000    100
