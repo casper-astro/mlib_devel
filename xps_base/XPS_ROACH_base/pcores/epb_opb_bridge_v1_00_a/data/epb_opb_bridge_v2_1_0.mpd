@@ -9,8 +9,6 @@ OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT)
 
 BUS_INTERFACE BUS = MOPB, BUS_STD = OPB, BUS_TYPE = MASTER
 
-PORT sys_reset     = "", DIR = I
-
 PORT epb_data_oe_n = "", DIR = O
 PORT epb_cs_n      = "", DIR = I
 PORT epb_oe_n      = "", DIR = I
