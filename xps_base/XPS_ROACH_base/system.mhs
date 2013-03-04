@@ -276,7 +276,6 @@ BEGIN epb_opb_bridge
   PARAMETER HW_VER   = 1.00.a
   BUS_INTERFACE MOPB = opb0
   PORT OPB_Clk       = epb_clk
-  PORT sys_reset     = power_on_rst
   PORT epb_data_oe_n = epb_data_oe_n
   PORT epb_cs_n      = epb_cs_n_int
   PORT epb_oe_n      = epb_oe_n_int
