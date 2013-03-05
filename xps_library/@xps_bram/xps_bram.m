@@ -30,8 +30,20 @@ end
 
 blk_name = get(blk_obj,'simulink_name');
 s.hw_sys = 'any';
-s.addr_width = eval_param(blk_name,'addr_width');
-s.data_width = eval_param(blk_name,'data_width');
+s.addr_width      = eval_param(blk_name,'addr_width');
+s.data_width      = eval_param(blk_name,'data_width');
+s.optimization    = eval_param(blk_name,'optimization');
+if strcmpi(eval_param(blk_name,'reg_core_output'), 'on')
+   s.reg_core_output = 'true';
+else
+   s.reg_core_output = 'false';
+end
+if strcmpi(eval_param(blk_name,'reg_prim_output'), 'on')
+   s.reg_prim_output = 'true';
+else
+   s.reg_prim_output = 'false';
+end
+
 b = class(s,'xps_bram',blk_obj);
 
 % ip name
