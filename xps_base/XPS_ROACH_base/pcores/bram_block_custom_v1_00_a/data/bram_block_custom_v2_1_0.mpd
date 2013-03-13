@@ -19,6 +19,9 @@ PARAMETER C_PORTA_DWIDTH = 32, DT = integer, RANGE = (8, 16, 32, 64, 128, 256)
 PARAMETER C_PORTA_AWIDTH = 32, DT = integer
 PARAMETER C_PORTA_NUM_WE = 4,  DT = integer, RANGE = (1, 2, 4, 8, 16, 32)
 PARAMETER C_PORTA_DEPTH  = 10, DT = integer
+PARAMETER OPTIMIZATION    = "Minimum_Area", DT = string
+PARAMETER REG_CORE_OUTPUT = "true",         DT = string
+PARAMETER REG_PRIM_OUTPUT = "true",         DT = string
 
 PARAMETER C_PORTB_DWIDTH = 32, DT = integer, BUS = PORTB, RANGE = (8, 16, 32, 64, 128, 256)
 PARAMETER C_PORTB_AWIDTH = 32, DT = integer, BUS = PORTB
@@ -27,6 +30,7 @@ PARAMETER C_PORTB_DEPTH  = 10, DT = integer
 
 ## Ports
 PORT clk          = "", DIR = I
+PORT bram_en_a    = "", DIR = I
 PORT bram_we      = "", DIR = I
 PORT bram_addr    = "", DIR = I, VEC = [C_PORTA_DEPTH -1:0]
 PORT bram_rd_data = "", DIR = O, VEC = [C_PORTA_DWIDTH-1:0]

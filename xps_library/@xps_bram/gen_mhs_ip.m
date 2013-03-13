@@ -24,9 +24,12 @@ function [str,opb_addr_end,opb_addr_start] = gen_mhs_ip(blk_obj,opb_addr_start,o
 str = '';
 opb_addr_end = opb_addr_start;
 
-data_width = blk_obj.data_width;
-addr_width = blk_obj.addr_width;
-portb_width = addr_width + log2(data_width/32);
+data_width      = blk_obj.data_width;
+addr_width      = blk_obj.addr_width;
+portb_width     = addr_width + log2(data_width/32);
+optimization    = blk_obj.optimization;
+reg_core_output = blk_obj.reg_core_output;
+reg_prim_output = blk_obj.reg_prim_output;
 num_we = data_width/8;
 
 inst_name = clear_name(get(blk_obj,'simulink_name'));
@@ -63,10 +66,13 @@ else
   str = [str, ' PARAMETER INSTANCE = ',inst_name,'_ramblk\n'];
   str = [str, ' PARAMETER HW_VER = 1.00.a\n'];
 
-  str = [str, ' PARAMETER C_PORTA_DWIDTH = ', num2str(data_width),  '\n'];
-  str = [str, ' PARAMETER C_PORTA_NUM_WE = ', num2str(num_we),      '\n'];
-  str = [str, ' PARAMETER C_PORTA_DEPTH  = ', num2str(addr_width),  '\n'];
-  str = [str, ' PARAMETER C_PORTB_DEPTH  = ', num2str(portb_width), '\n'];
+  str = [str, ' PARAMETER C_PORTA_DWIDTH   = ', num2str(data_width),  '\n'];
+  str = [str, ' PARAMETER C_PORTA_NUM_WE   = ', num2str(num_we),      '\n'];
+  str = [str, ' PARAMETER C_PORTA_DEPTH    = ', num2str(addr_width),  '\n'];
+  str = [str, ' PARAMETER C_PORTB_DEPTH    = ', num2str(portb_width), '\n'];
+  str = [str, ' PARAMETER OPTIMIZATION     = ', optimization,         '\n'];
+  str = [str, ' PARAMETER REG_CORE_OUTPUT  = ', reg_core_output,      '\n'];
+  str = [str, ' PARAMETER REG_PRIM_OUTPUT  = ', reg_prim_output,      '\n'];
 
   str = [str, ' PORT clk           = ',get(xsg_obj,'clk_src'),'\n'];
   str = [str, ' PORT bram_addr     = ',inst_name,'_addr    \n'];
