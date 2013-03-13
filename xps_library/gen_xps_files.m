@@ -601,12 +601,14 @@ if run_software
       end
       fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
       end
-      fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
+      if strcmp(hw_sys, 'ROACH')
+         fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
+      end % if ROACH
       fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
       if strcmp(hw_sys, 'ROACH2')
-	 fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
-         fprintf(unix_fid,['chmod +x ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
-    end % strcmp(hw_sys, 'ROACH')
+         fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
+      end % if ROACH2
+    end % if ROACH or ROACH2
 
     fclose(win_fid);
     fclose(unix_fid);
