@@ -39,7 +39,7 @@ if strcmp(clk_src, 'arb_clk')
   %      also phase dcm could be replaced with PLL on V5
   str = [str, 'BEGIN dcm_module',                                            '\n'];
   str = [str, '  PARAMETER INSTANCE = arb_clk_dcm',                          '\n'];
-  str = [str, '  PARAMETER HW_VER = 1.00.d',                                 '\n'];
+  str = [str, '  PARAMETER HW_VER = 1.00.e',                                 '\n'];
   str = [str, '  PARAMETER C_EXT_RESET_HIGH = 0',                            '\n'];
   str = [str, '  PARAMETER C_CLK0_BUF = TRUE',                               '\n'];
   str = [str, '  PARAMETER C_CLKFX_BUF = TRUE',                              '\n'];
@@ -57,7 +57,7 @@ if strcmp(clk_src, 'arb_clk')
   str = [str,                                                                '\n'];
   str = [str, 'BEGIN dcm_module',                                            '\n'];
   str = [str, '  PARAMETER INSTANCE = arb_clk_dcm_phasegen',                 '\n'];
-  str = [str, '  PARAMETER HW_VER = 1.00.d',                                 '\n'];
+  str = [str, '  PARAMETER HW_VER = 1.00.e',                                 '\n'];
   str = [str, '  PARAMETER C_EXT_RESET_HIGH = 0',                            '\n'];
   str = [str, '  PARAMETER C_CLK0_BUF = TRUE',                               '\n'];
   str = [str, '  PARAMETER C_CLK90_BUF = TRUE',                              '\n'];
