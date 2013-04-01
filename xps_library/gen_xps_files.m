@@ -600,7 +600,6 @@ if run_software
          fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
       end
       fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
-      end
       if strcmp(hw_sys, 'ROACH')
          fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
       end % if ROACH
