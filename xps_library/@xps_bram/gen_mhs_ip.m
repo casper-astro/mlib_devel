@@ -34,8 +34,7 @@ num_we = data_width/8;
 
 inst_name = clear_name(get(blk_obj,'simulink_name'));
 xsg_obj = get(blk_obj,'xsg_obj');
-
-if (data_width == 32)
+if (data_width == 32 && strcmpi(reg_core_output,'false') && strcmpi(reg_prim_output,'false'))
   % Use the non-coregen scheme for the 32 bit case which is a lot faster.
   str = [str, 'BEGIN bram_if\n'];
   str = [str, ' PARAMETER INSTANCE = ',inst_name,'_ramif\n'];
@@ -61,7 +60,6 @@ if (data_width == 32)
   str = [str, 'END\n\n'];
 else
   % Use the bram_block_custom block which calls coregen to generate multiport bram netlist
-   
   str = [str, 'BEGIN bram_block_custom\n'];
   str = [str, ' PARAMETER INSTANCE = ',inst_name,'_ramblk\n'];
   str = [str, ' PARAMETER HW_VER = 1.00.a\n'];
