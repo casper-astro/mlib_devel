@@ -50,7 +50,7 @@ proc generate_bram {mhsinst} {
  puts $outputFile "SET vhdlsim = False"
  puts $outputFile "# END Project Options"
  puts $outputFile "# BEGIN Select"
- puts $outputFile "SELECT Block_Memory_Generator xilinx.com:ip:blk_mem_gen:7.3"
+ puts $outputFile "SELECT Block_Memory_Generator xilinx.com:ip:blk_mem_gen:6.1"
  puts $outputFile "# END Select"
  puts $outputFile "# BEGIN Parameters"
  puts $outputFile "CSET additional_inputs_for_power_estimation=false"
