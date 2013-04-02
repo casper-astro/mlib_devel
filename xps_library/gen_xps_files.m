@@ -394,7 +394,7 @@ if run_copy
    end
     if exist([XPS_BASE_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
 
-        source_dir      = [XPS_BASE_PATH, slash, 'XPS_', hw_sys, '_base']
+        source_dir      = [XPS_BASE_PATH, slash, 'XPS_', hw_sys, '_base'];
         destination_dir = [xps_path];
 
         if strcmp(system_os, 'windows')
