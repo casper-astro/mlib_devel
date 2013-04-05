@@ -93,10 +93,10 @@ else
   system_os = 'linux';
 end
 
-xps_blks        = find_system(sys,'FollowLinks','on','LookUnderMasks','all','RegExp','on','Tag','^xps:');
-xps_xsg_blks    = find_system(sys,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
-xps_pcore_blks  = find_system(sys,'FollowLinks','on','LookUnderMasks','all','Tag','xps:pcore');
-sysgen_blk      = find_system(sys, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','genX');
+xps_blks        = find_system(sys,'FollowLinks','on','LookUnderMasks','all','RegExp','on',      'Tag','^xps:');
+xps_xsg_blks    = find_system(sys,'FollowLinks','on','LookUnderMasks','all',                    'Tag','xps:xsg');
+xps_pcore_blks  = find_system(sys,'FollowLinks','on','LookUnderMasks','all',                    'Tag','xps:pcore');
+sysgen_blk      = find_system(sys,'FollowLinks','on','LookUnderMasks','all','SearchDepth', 1,   'Tag','genX');
 
 % check if the system name is correct
 if upper(sys(1))==sys(1)
@@ -515,6 +515,9 @@ if run_edkgen
     % modifying MHS file
     gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
+    % add the register descriptions to the core_info.tab file
+    gen_xps_mod_mhs_bitreg(sys, mssge_paths, slash);
+    
     % modifying MSS file
     gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 

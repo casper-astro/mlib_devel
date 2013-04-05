@@ -33,11 +33,11 @@ function value = get_var(varname, varargin)
 i = find(strcmp(varname,varargin));
 if i >= 1,
     value = varargin{i+1};
-else,
+else
     i = find(strcmp('defaults',varargin));
     if i >= 1,
         value = get_var(varname,varargin{i+1}{:});
-    else,
+    else
         value = nan;
     end
 end
