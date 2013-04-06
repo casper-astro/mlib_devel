@@ -91,7 +91,7 @@ num_fir_col = length(coeff) / n_inputs;
 coeff_sym = 0;
 fir_col_type = 'fir_col';
 
-if mod(length(coeff),2) == 0, 
+if mod(length(coeff),2) == 0 && mod(num_fir_col, 2)==0 
   if coeff_round(1:length(coeff)/2) == coeff_round(length(coeff):-1:length(coeff)/2+1),
     num_fir_col = num_fir_col / 2;
     fir_col_type = 'fir_dbl_col';
