@@ -105,4 +105,3 @@ switch get_param(cursys,'io_dir')
 end
 
 clean_ports(cursys,old_ports);
-set_param(cursys,'Position', [x y x+100 y+30]);
