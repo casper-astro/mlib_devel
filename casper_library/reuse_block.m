@@ -34,7 +34,7 @@ function reuse_block(blk, name, refblk, varargin)
 % refblk = the library block to instantiate
 % varargin = {'varname', 'value', ...} pairs
 
-existing_blk = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
+existing_blk = find_system(blk, 'LookUnderMasks', 'all', 'FollowLinks','on', ...
   'SearchDepth', 1, 'Name', name);
 
 % add block straight away if does not yet exist
