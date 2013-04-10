@@ -54,5 +54,6 @@ end
 add_line(cur_block_name, 'Add/1', 'overflow/1');
 
 clean_blocks(cur_block_name);
+save_state(cur_block_name, 'defaults', defaults, varargin{:});
    
 end
