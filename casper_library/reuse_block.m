@@ -62,19 +62,27 @@ else,
     if strcmp(block_type, 'SubSystem') || strcmp(block_type, 'S-Function'),
       source = '';
     else
-      %assuming built-in so convert type to lower for comparison
-      block_type = lower(block_type);
+      %assuming built-in
       source = strcat('built-in/',block_type);
     end
   else
     source = '';
   end
+
+  % If source is a cell, take its first element so we can log it
+  if iscell(source)
+    % TODO Warn if length(source) > 1?
+    source = source{1};
+  end
   
-  if strcmp(source, lower(refblk)),
-    clog([name,' of same type so setting parameters'], 'reuse_block_debug');
+  % Do case-insensitive string comparison
+  if strcmpi(source, refblk),
+    msg = sprintf('%s is already a "%s" so just setting parameters', name, source);
+    clog(msg, 'reuse_block_debug');
     set_param([blk,'/',name], varargin{:});
   else,
-    clog([name,' of different type so replacing'], 'reuse_block_debug');
+    msg = sprintf('%s is a "%s" but want "%s" so replacing', name, source, refblk);
+    clog(msg, 'reuse_block_debug');
     delete_block([blk,'/',name]);
     add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
   end
