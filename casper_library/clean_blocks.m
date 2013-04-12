@@ -26,6 +26,8 @@ function clean_blocks(cursys)
 %
 % clean_blocks(cursys)
 
+try
+
 blocks = get_param(cursys, 'Blocks');
 for i=1:length(blocks),
     blk = [cursys,'/',blocks{i}];
@@ -43,4 +45,6 @@ for i=1:length(blocks),
         delete_block(blk);
     end
 end
-
+catch ex
+  dump_and_rethrow(ex);
+end % try/catch

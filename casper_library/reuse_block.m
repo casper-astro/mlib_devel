@@ -34,6 +34,9 @@ function reuse_block(blk, name, refblk, varargin)
 % refblk = the library block to instantiate
 % varargin = {'varname', 'value', ...} pairs
 
+% Wrap whole function in try/catch
+try
+
 existing_blk = find_system(blk, 'LookUnderMasks', 'all', 'FollowLinks','on', ...
   'SearchDepth', 1, 'Name', name);
 
@@ -86,5 +89,8 @@ else,
     delete_block([blk,'/',name]);
     add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
   end
-end
-
+end % if isempty(existing_blk)
+catch ex
+    dump_and_rethrow(ex)
+end % try/catch
+end % function
