@@ -84,11 +84,11 @@ else,
   % Do case-insensitive string comparison
   if strcmpi(source, refblk),
     msg = sprintf('%s is already a "%s" so just setting parameters', name, source);
-    clog(msg, 'reuse_block_debug');
+    clog(msg, {'reuse_block_debug', 'reuse_block_reuse'});
     set_param([blk,'/',name], varargin{:});
   else,
     msg = sprintf('%s is a "%s" but want "%s" so replacing', name, source, refblk);
-    clog(msg, 'reuse_block_debug');
+    clog(msg, {'reuse_block_debug', 'reuse_block_replace'});
     delete_block([blk,'/',name]);
     add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
   end
