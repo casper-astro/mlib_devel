@@ -77,6 +77,9 @@ else,
     % TODO Warn if length(source) > 1?
     source = source{1};
   end
+
+  % Change newlines in source to spaces
+  source = strrep(source, char(10), ' ');
   
   % Do case-insensitive string comparison
   if strcmpi(source, refblk),
