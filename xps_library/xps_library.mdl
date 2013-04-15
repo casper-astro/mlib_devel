@@ -16,9 +16,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Apr 15 15:20:40 2013"
+  LastModifiedDate	  "Mon Apr 15 15:29:04 2013"
   RTWModifiedTimeStamp	  287939668
-  ModelVersionFormat	  "1.%<AutoIncrement:481>"
+  ModelVersionFormat	  "1.%<AutoIncrement:483>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -764,7 +764,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "438"
+    SIDHighWatermark	    "439"
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -814,7 +814,7 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[225, 46, 1004, 1089]
+	Location		[220, 22, 999, 1065]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -8676,6 +8676,8 @@ Library {
 	  Ports			  [1, 9]
 	  Position		  [320, 634, 415, 786]
 	  ZOrder		  -6
+	  UserDataPersistent	  on
+	  UserData		  "DataTag0"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -8695,6 +8697,7 @@ Library {
 	  MaskVisibilityString	  "on,on"
 	  MaskToolTipString	  "on,on"
 	  MaskInitialization	  "adc_sim_init(gcb, ...\n    'nStreams', nStreams, ...\n    'bit_width', bit_width);"
+	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
@@ -8716,10 +8719,11 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
+	    SIDHighWatermark	    "440"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "sim_adc_data_in"
-	      SID		      "18"
+	      SID		      "17:18"
 	      Position		      [310, 103, 340, 117]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -8727,7 +8731,7 @@ Library {
 	    Block {
 	      BlockType		      Bias
 	      Name		      "adc_bias"
-	      SID		      "19"
+	      SID		      "17:19"
 	      Position		      [445, 100, 475, 120]
 	      ZOrder		      -2
 	      Bias		      "128"
@@ -8735,7 +8739,7 @@ Library {
 	    Block {
 	      BlockType		      Gain
 	      Name		      "adc_gain"
-	      SID		      "20"
+	      SID		      "17:20"
 	      Position		      [390, 100, 420, 120]
 	      ZOrder		      -3
 	      Gain		      "128"
@@ -8744,429 +8748,184 @@ Library {
 	      SaturateOnIntegerOverflow	off
 	    }
 	    Block {
-	      BlockType		      SubSystem
+	      BlockType		      Reference
 	      Name		      "overflow_detector"
-	      SID		      "21"
+	      SID		      "17:440"
 	      Ports		      [8, 1]
 	      Position		      [740, 507, 850, 698]
-	      ZOrder		      -4
-	      AncestorBlock	      "casper_library/Misc/of_detect_bus"
-	      LibraryVersion	      "*"
-	      MinAlgLoopOccurrences   off
-	      PropExecContextOutsideSubsystem off
-	      RTWSystemCode	      "Auto"
-	      FunctionWithSeparateData off
-	      Opaque		      off
-	      RequestExecContextInheritance off
-	      MaskHideContents	      off
-	      MaskType		      "of_detect_bus"
-	      MaskPromptString	      "Number of Streams|Bit Width"
-	      MaskStyleString	      "edit,edit"
-	      MaskVariables	      "nStreams=@1;bit_width=@2;"
-	      MaskTunableValueString  "on,on"
-	      MaskCallbackString      "|"
-	      MaskEnableString	      "on,on"
-	      MaskVisibilityString    "on,on"
-	      MaskToolTipString	      "on,on"
-	      MaskInitialization      "adc_overflow_detector_init(gcb, ...\n    'nStreams', nStreams, ...\n    'bit_width', b"
-	      "it_width);"
-	      MaskIconFrame	      on
-	      MaskIconOpaque	      on
-	      MaskIconRotate	      "none"
-	      MaskPortRotate	      "default"
-	      MaskIconUnits	      "autoscale"
-	      MaskValueString	      "8|8"
-	      System {
-		Name			"overflow_detector"
-		Location		[550, 143, 955, 799]
-		Open			off
-		ModelBrowserVisibility	off
-		ModelBrowserWidth	200
-		ScreenColor		"white"
-		PaperOrientation	"landscape"
-		PaperPositionMode	"auto"
-		PaperType		"usletter"
-		PaperUnits		"inches"
-		TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
-		TiledPageScale		1
-		ShowPageBoundaries	off
-		ZoomFactor		"100"
-		SIDHighWatermark	"14"
-		Block {
-		  BlockType		  Inport
-		  Name			  "s0"
-		  SID			  "21:1"
-		  Position		  [45, 33, 75, 47]
-		  ZOrder		  -1
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s1"
-		  SID			  "21:2"
-		  Position		  [45, 118, 75, 132]
-		  ZOrder		  -2
-		  Port			  "2"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s2"
-		  SID			  "21:3"
-		  Position		  [45, 203, 75, 217]
-		  ZOrder		  -3
-		  Port			  "3"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s3"
-		  SID			  "21:4"
-		  Position		  [45, 288, 75, 302]
-		  ZOrder		  -4
-		  Port			  "4"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s4"
-		  SID			  "21:5"
-		  Position		  [45, 58, 75, 72]
-		  ZOrder		  -5
-		  Port			  "5"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s5"
-		  SID			  "21:6"
-		  Position		  [45, 143, 75, 157]
-		  ZOrder		  -6
-		  Port			  "6"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s6"
-		  SID			  "21:7"
-		  Position		  [45, 228, 75, 242]
-		  ZOrder		  -7
-		  Port			  "7"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Inport
-		  Name			  "s7"
-		  SID			  "21:8"
-		  Position		  [45, 313, 75, 327]
-		  ZOrder		  -8
-		  Port			  "8"
-		  IconDisplay		  "Port number"
-		}
-		Block {
-		  BlockType		  Sum
-		  Name			  "Add"
-		  SID			  "21:9"
-		  Ports			  [4, 1]
-		  Position		  [235, 117, 265, 153]
-		  ZOrder		  -9
-		  Inputs		  "++++"
-		  InputSameDT		  off
-		  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-		  SaturateOnIntegerOverflow off
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of0"
-		  SID			  "21:10"
-		  Ports			  [2, 1]
-		  Position		  [105, 25, 145, 80]
-		  ZOrder		  -10
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of1"
-		  SID			  "21:11"
-		  Ports			  [2, 1]
-		  Position		  [105, 110, 145, 165]
-		  ZOrder		  -11
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of2"
-		  SID			  "21:12"
-		  Ports			  [2, 1]
-		  Position		  [105, 195, 145, 250]
-		  ZOrder		  -12
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "of3"
-		  SID			  "21:13"
-		  Ports			  [2, 1]
-		  Position		  [105, 280, 145, 335]
-		  ZOrder		  -13
-		  SourceBlock		  "casper_library/Misc/of1"
-		  SourceType		  "of"
-		  ShowPortLabels	  "FromPortIcon"
-		  SystemSampleTime	  "-1"
-		  FunctionWithSeparateData "off"
-		  RTWMemSecFuncInitTerm	  "Inherit from model"
-		  RTWMemSecFuncExecute	  "Inherit from model"
-		  RTWMemSecDataConstants  "Inherit from model"
-		  RTWMemSecDataInternal	  "Inherit from model"
-		  RTWMemSecDataParameters "Inherit from model"
-		  bit_num		  "0"
-		  n_adc_bits		  "8"
-		}
-		Block {
-		  BlockType		  Outport
-		  Name			  "overflow"
-		  SID			  "21:14"
-		  Position		  [285, 118, 315, 132]
-		  ZOrder		  -14
-		  IconDisplay		  "Port number"
-		}
-		Line {
-		  SrcBlock		  "s0"
-		  SrcPort		  1
-		  DstBlock		  "of0"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s4"
-		  SrcPort		  1
-		  DstBlock		  "of0"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of0"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s1"
-		  SrcPort		  1
-		  DstBlock		  "of1"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s5"
-		  SrcPort		  1
-		  DstBlock		  "of1"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of1"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "s2"
-		  SrcPort		  1
-		  DstBlock		  "of2"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s6"
-		  SrcPort		  1
-		  DstBlock		  "of2"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of2"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  3
-		}
-		Line {
-		  SrcBlock		  "s3"
-		  SrcPort		  1
-		  DstBlock		  "of3"
-		  DstPort		  1
-		}
-		Line {
-		  SrcBlock		  "s7"
-		  SrcPort		  1
-		  DstBlock		  "of3"
-		  DstPort		  2
-		}
-		Line {
-		  SrcBlock		  "of3"
-		  SrcPort		  1
-		  DstBlock		  "Add"
-		  DstPort		  4
-		}
-		Line {
-		  SrcBlock		  "Add"
-		  SrcPort		  1
-		  DstBlock		  "overflow"
-		  DstPort		  1
-		}
-	      }
+	      ZOrder		      -10
+	      LibraryVersion	      "1.481"
+	      UserDataPersistent      on
+	      UserData		      "DataTag1"
+	      SourceBlock	      "xps_library/ADCs/of_detect_bus"
+	      SourceType	      "of_detect_bus"
+	      nStreams		      "8"
+	      bit_width		      "8"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample0_ds"
-	      SID		      "360"
+	      SID		      "17:360"
 	      Ports		      [1, 1]
 	      Position		      [640, 93, 675, 127]
 	      ZOrder		      -5
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag2"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "1"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample1_ds"
-	      SID		      "361"
+	      SID		      "17:361"
 	      Ports		      [1, 1]
 	      Position		      [640, 143, 675, 177]
 	      ZOrder		      -6
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag3"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "2"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample2_ds"
-	      SID		      "22"
+	      SID		      "17:22"
 	      Ports		      [1, 1]
 	      Position		      [640, 193, 675, 227]
 	      ZOrder		      -7
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag4"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "3"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample3_ds"
-	      SID		      "23"
+	      SID		      "17:23"
 	      Ports		      [1, 1]
 	      Position		      [640, 243, 675, 277]
 	      ZOrder		      -8
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag5"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "4"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample4_ds"
-	      SID		      "24"
+	      SID		      "17:24"
 	      Ports		      [1, 1]
 	      Position		      [640, 293, 675, 327]
 	      ZOrder		      -9
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag6"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "5"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample5_ds"
-	      SID		      "25"
+	      SID		      "17:25"
 	      Ports		      [1, 1]
 	      Position		      [640, 343, 675, 377]
 	      ZOrder		      -10
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag7"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "6"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample6_ds"
-	      SID		      "26"
+	      SID		      "17:26"
 	      Ports		      [1, 1]
 	      Position		      [640, 393, 675, 427]
 	      ZOrder		      -11
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag8"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "7"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sample7_ds"
-	      SID		      "27"
+	      SID		      "17:27"
 	      Ports		      [1, 1]
 	      Position		      [640, 443, 675, 477]
 	      ZOrder		      -12
+	      LibraryVersion	      "1.726"
+	      UserDataPersistent      on
+	      UserData		      "DataTag9"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "8"
 	      phase		      "0"
-	      ic		      "0"
-	      smode		      "Allow multirate"
+	      InputProcessing	      "Inherited (this choice will be removed - see release notes)"
+	      RateOptions	      "Enforce single-rate processing"
+	      smode		      "Force single rate"
 	      fmode		      "Maintain input frame size"
+	      ic		      "0"
 	    }
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s0"
-	      SID		      "30"
+	      SID		      "17:30"
 	      Position		      [735, 103, 765, 117]
 	      ZOrder		      -13
 	      IconDisplay	      "Port number"
@@ -9174,7 +8933,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s1"
-	      SID		      "31"
+	      SID		      "17:31"
 	      Position		      [735, 153, 765, 167]
 	      ZOrder		      -14
 	      Port		      "2"
@@ -9183,7 +8942,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s2"
-	      SID		      "32"
+	      SID		      "17:32"
 	      Position		      [735, 203, 765, 217]
 	      ZOrder		      -15
 	      Port		      "3"
@@ -9192,7 +8951,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s3"
-	      SID		      "33"
+	      SID		      "17:33"
 	      Position		      [735, 253, 765, 267]
 	      ZOrder		      -16
 	      Port		      "4"
@@ -9201,7 +8960,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s4"
-	      SID		      "34"
+	      SID		      "17:34"
 	      Position		      [735, 303, 765, 317]
 	      ZOrder		      -17
 	      Port		      "5"
@@ -9210,7 +8969,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s5"
-	      SID		      "35"
+	      SID		      "17:35"
 	      Position		      [735, 353, 765, 367]
 	      ZOrder		      -18
 	      Port		      "6"
@@ -9219,7 +8978,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s6"
-	      SID		      "36"
+	      SID		      "17:36"
 	      Position		      [735, 403, 765, 417]
 	      ZOrder		      -19
 	      Port		      "7"
@@ -9228,7 +8987,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "s7"
-	      SID		      "37"
+	      SID		      "17:37"
 	      Position		      [735, 453, 765, 467]
 	      ZOrder		      -20
 	      Port		      "8"
@@ -9237,7 +8996,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "of"
-	      SID		      "38"
+	      SID		      "17:38"
 	      Position		      [865, 598, 895, 612]
 	      ZOrder		      -21
 	      Port		      "9"
@@ -9255,6 +9014,153 @@ Library {
 	      DstBlock		      "adc_bias"
 	      DstPort		      1
 	    }
+	    Line {
+	      SrcBlock		      "overflow_detector"
+	      SrcPort		      1
+	      DstBlock		      "of"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "adc_bias"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"sample0_ds"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"sample1_ds"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"sample2_ds"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"sample3_ds"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"sample4_ds"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"sample5_ds"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"sample6_ds"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"sample7_ds"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample0_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"s0"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample1_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			2
+	      }
+	      Branch {
+		DstBlock		"s1"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample2_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			3
+	      }
+	      Branch {
+		DstBlock		"s2"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample3_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			4
+	      }
+	      Branch {
+		DstBlock		"s3"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample4_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			5
+	      }
+	      Branch {
+		DstBlock		"s4"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample5_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			6
+	      }
+	      Branch {
+		DstBlock		"s5"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample6_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			7
+	      }
+	      Branch {
+		DstBlock		"s6"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "sample7_ds"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"overflow_detector"
+		DstPort			8
+	      }
+	      Branch {
+		DstBlock		"s7"
+		DstPort			1
+	      }
+	    }
 	  }
 	}
 	Block {
@@ -9267,7 +9173,7 @@ Library {
 	  ZOrder		  -7
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag0"
+	  UserData		  "DataTag10"
 	  ShowPortLabels	  "SignalName"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
@@ -9996,7 +9902,7 @@ Library {
 	      ZOrder		      -21
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag1"
+	      UserData		      "DataTag11"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "2"
@@ -10013,7 +9919,7 @@ Library {
 	      ZOrder		      -22
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag2"
+	      UserData		      "DataTag12"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10030,7 +9936,7 @@ Library {
 	      ZOrder		      -23
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag3"
+	      UserData		      "DataTag13"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10047,7 +9953,7 @@ Library {
 	      ZOrder		      -24
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag4"
+	      UserData		      "DataTag14"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10064,7 +9970,7 @@ Library {
 	      ZOrder		      -25
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag5"
+	      UserData		      "DataTag15"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10081,7 +9987,7 @@ Library {
 	      ZOrder		      -26
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag6"
+	      UserData		      "DataTag16"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10098,7 +10004,7 @@ Library {
 	      ZOrder		      -27
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag7"
+	      UserData		      "DataTag17"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10115,7 +10021,7 @@ Library {
 	      ZOrder		      -28
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag8"
+	      UserData		      "DataTag18"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10132,7 +10038,7 @@ Library {
 	      ZOrder		      -29
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag9"
+	      UserData		      "DataTag19"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10149,7 +10055,7 @@ Library {
 	      ZOrder		      -30
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag10"
+	      UserData		      "DataTag20"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10166,7 +10072,7 @@ Library {
 	      ZOrder		      -31
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag11"
+	      UserData		      "DataTag21"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10183,7 +10089,7 @@ Library {
 	      ZOrder		      -32
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag12"
+	      UserData		      "DataTag22"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10200,7 +10106,7 @@ Library {
 	      ZOrder		      -33
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag13"
+	      UserData		      "DataTag23"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10217,7 +10123,7 @@ Library {
 	      ZOrder		      -34
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag14"
+	      UserData		      "DataTag24"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10234,7 +10140,7 @@ Library {
 	      ZOrder		      -35
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag15"
+	      UserData		      "DataTag25"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10251,7 +10157,7 @@ Library {
 	      ZOrder		      -36
 	      LibraryVersion	      "1.225"
 	      UserDataPersistent      on
-	      UserData		      "DataTag16"
+	      UserData		      "DataTag26"
 	      SourceBlock	      "simulink/Discrete/Integer Delay"
 	      SourceType	      "Integer Delay"
 	      NumDelays		      "1"
@@ -10268,7 +10174,7 @@ Library {
 	      ZOrder		      -37
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag17"
+	      UserData		      "DataTag27"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10288,7 +10194,7 @@ Library {
 	      ZOrder		      -38
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag18"
+	      UserData		      "DataTag28"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10308,7 +10214,7 @@ Library {
 	      ZOrder		      -39
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag19"
+	      UserData		      "DataTag29"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10328,7 +10234,7 @@ Library {
 	      ZOrder		      -40
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag20"
+	      UserData		      "DataTag30"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10348,7 +10254,7 @@ Library {
 	      ZOrder		      -41
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag21"
+	      UserData		      "DataTag31"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10368,7 +10274,7 @@ Library {
 	      ZOrder		      -42
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag22"
+	      UserData		      "DataTag32"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10388,7 +10294,7 @@ Library {
 	      ZOrder		      -43
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag23"
+	      UserData		      "DataTag33"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10408,7 +10314,7 @@ Library {
 	      ZOrder		      -44
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag24"
+	      UserData		      "DataTag34"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10428,7 +10334,7 @@ Library {
 	      ZOrder		      -45
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag25"
+	      UserData		      "DataTag35"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10448,7 +10354,7 @@ Library {
 	      ZOrder		      -46
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag26"
+	      UserData		      "DataTag36"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10468,7 +10374,7 @@ Library {
 	      ZOrder		      -47
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag27"
+	      UserData		      "DataTag37"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10488,7 +10394,7 @@ Library {
 	      ZOrder		      -48
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag28"
+	      UserData		      "DataTag38"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10508,7 +10414,7 @@ Library {
 	      ZOrder		      -49
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag29"
+	      UserData		      "DataTag39"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10528,7 +10434,7 @@ Library {
 	      ZOrder		      -50
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag30"
+	      UserData		      "DataTag40"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10548,7 +10454,7 @@ Library {
 	      ZOrder		      -51
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag31"
+	      UserData		      "DataTag41"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -10568,7 +10474,7 @@ Library {
 	      ZOrder		      -52
 	      LibraryVersion	      "1.707"
 	      UserDataPersistent      on
-	      UserData		      "DataTag32"
+	      UserData		      "DataTag42"
 	      SourceBlock	      "dspsigops/Downsample"
 	      SourceType	      "Downsample"
 	      N			      "16"
@@ -11412,7 +11318,7 @@ Library {
 	  MaskValueString	  "0|8"
 	  System {
 	    Name		    "of1"
-	    Location		    [96, 167, 585, 756]
+	    Location		    [91, 143, 580, 732]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -11450,20 +11356,13 @@ Library {
 	      Position		      [110, 53, 140, 67]
 	      ZOrder		      -3
 	      ShowName		      off
+	      LibraryVersion	      "1.260"
 	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	      SourceType	      "Compare To Constant"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
 	      relop		      ">"
 	      const		      "2^n_adc_bits-1"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
+	      OutDataTypeStr	      "boolean"
+	      ZeroCross		      off
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -11473,20 +11372,13 @@ Library {
 	      Position		      [110, 93, 140, 107]
 	      ZOrder		      -4
 	      ShowName		      off
+	      LibraryVersion	      "1.260"
 	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	      SourceType	      "Compare To Constant"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
 	      relop		      ">"
 	      const		      "2^n_adc_bits-1"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
+	      OutDataTypeStr	      "boolean"
+	      ZeroCross		      off
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -11496,20 +11388,13 @@ Library {
 	      Position		      [110, 33, 140, 47]
 	      ZOrder		      -5
 	      ShowName		      off
+	      LibraryVersion	      "1.260"
 	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	      SourceType	      "Compare To Constant"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
 	      relop		      "<"
 	      const		      "0"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
+	      OutDataTypeStr	      "boolean"
+	      ZeroCross		      off
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -11519,20 +11404,13 @@ Library {
 	      Position		      [110, 73, 140, 87]
 	      ZOrder		      -6
 	      ShowName		      off
+	      LibraryVersion	      "1.260"
 	      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Constant"
 	      SourceType	      "Compare To Constant"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
 	      relop		      "<"
 	      const		      "0"
-	      LogicOutDataTypeMode    "boolean"
-	      ZeroCross		      "off"
+	      OutDataTypeStr	      "boolean"
+	      ZeroCross		      off
 	    }
 	    Block {
 	      BlockType		      Gain
@@ -11639,6 +11517,8 @@ Library {
 	  Ports			  [8, 1]
 	  Position		  [600, 640, 685, 790]
 	  ZOrder		  -10
+	  UserDataPersistent	  on
+	  UserData		  "DataTag43"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -11656,6 +11536,7 @@ Library {
 	  MaskVisibilityString	  "on,on"
 	  MaskToolTipString	  "on,on"
 	  MaskInitialization	  "of_detect_bus_init(gcb, ...\n    'nStreams', nStreams, ...\n    'bit_width', bit_width);"
+	  MaskSelfModifiable	  on
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
@@ -11677,10 +11558,11 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
+	    SIDHighWatermark	    "440"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s0"
-	      SID		      "129"
+	      SID		      "128:129"
 	      Position		      [45, 33, 75, 47]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -11688,7 +11570,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s1"
-	      SID		      "130"
+	      SID		      "128:130"
 	      Position		      [45, 118, 75, 132]
 	      ZOrder		      -2
 	      Port		      "2"
@@ -11697,7 +11579,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s2"
-	      SID		      "131"
+	      SID		      "128:131"
 	      Position		      [45, 203, 75, 217]
 	      ZOrder		      -3
 	      Port		      "3"
@@ -11706,7 +11588,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s3"
-	      SID		      "132"
+	      SID		      "128:132"
 	      Position		      [45, 288, 75, 302]
 	      ZOrder		      -4
 	      Port		      "4"
@@ -11715,7 +11597,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s4"
-	      SID		      "133"
+	      SID		      "128:133"
 	      Position		      [45, 58, 75, 72]
 	      ZOrder		      -5
 	      Port		      "5"
@@ -11724,7 +11606,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s5"
-	      SID		      "134"
+	      SID		      "128:134"
 	      Position		      [45, 143, 75, 157]
 	      ZOrder		      -6
 	      Port		      "6"
@@ -11733,7 +11615,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s6"
-	      SID		      "135"
+	      SID		      "128:135"
 	      Position		      [45, 228, 75, 242]
 	      ZOrder		      -7
 	      Port		      "7"
@@ -11742,7 +11624,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "s7"
-	      SID		      "136"
+	      SID		      "128:136"
 	      Position		      [45, 313, 75, 327]
 	      ZOrder		      -8
 	      Port		      "8"
@@ -11751,7 +11633,7 @@ Library {
 	    Block {
 	      BlockType		      Sum
 	      Name		      "Add"
-	      SID		      "137"
+	      SID		      "128:137"
 	      Ports		      [4, 1]
 	      Position		      [235, 113, 265, 147]
 	      ZOrder		      -9
@@ -11762,71 +11644,141 @@ Library {
 	    }
 	    Block {
 	      BlockType		      Reference
+	      Name		      "of0"
+	      SID		      "128:440"
+	      Ports		      [2, 1]
+	      Position		      [105, 25, 145, 80]
+	      ZOrder		      1
+	      LibraryVersion	      "1.481"
+	      SourceBlock	      "xps_library/ADCs/of1"
+	      SourceType	      "of"
+	      bit_num		      "0"
+	      n_adc_bits	      "8"
+	    }
+	    Block {
+	      BlockType		      Reference
 	      Name		      "of1"
-	      SID		      "138"
+	      SID		      "128:138"
 	      Ports		      [2, 1]
 	      Position		      [105, 110, 145, 165]
 	      ZOrder		      -10
+	      LibraryVersion	      "1.27"
 	      SourceBlock	      "casper_library_misc/of1"
 	      SourceType	      "of"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
 	      bit_num		      "0"
 	      n_adc_bits	      "8"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "of2"
-	      SID		      "139"
+	      SID		      "128:139"
 	      Ports		      [2, 1]
 	      Position		      [105, 195, 145, 250]
 	      ZOrder		      -11
+	      LibraryVersion	      "1.27"
 	      SourceBlock	      "casper_library_misc/of1"
 	      SourceType	      "of"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
 	      bit_num		      "0"
 	      n_adc_bits	      "8"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "of3"
-	      SID		      "140"
+	      SID		      "128:140"
 	      Ports		      [2, 1]
 	      Position		      [105, 280, 145, 335]
 	      ZOrder		      -12
+	      LibraryVersion	      "1.27"
 	      SourceBlock	      "casper_library_misc/of1"
 	      SourceType	      "of"
-	      ShowPortLabels	      "FromPortIcon"
-	      SystemSampleTime	      "-1"
-	      FunctionWithSeparateData "off"
-	      RTWMemSecFuncInitTerm   "Inherit from model"
-	      RTWMemSecFuncExecute    "Inherit from model"
-	      RTWMemSecDataConstants  "Inherit from model"
-	      RTWMemSecDataInternal   "Inherit from model"
-	      RTWMemSecDataParameters "Inherit from model"
 	      bit_num		      "0"
 	      n_adc_bits	      "8"
 	    }
 	    Block {
 	      BlockType		      Outport
 	      Name		      "overflow"
-	      SID		      "141"
+	      SID		      "128:141"
 	      Position		      [285, 118, 315, 132]
 	      ZOrder		      -13
 	      IconDisplay	      "Port number"
+	    }
+	    Line {
+	      SrcBlock		      "s0"
+	      SrcPort		      1
+	      DstBlock		      "of0"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "s4"
+	      SrcPort		      1
+	      DstBlock		      "of0"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "of0"
+	      SrcPort		      1
+	      DstBlock		      "Add"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "s1"
+	      SrcPort		      1
+	      DstBlock		      "of1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "s5"
+	      SrcPort		      1
+	      DstBlock		      "of1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "of1"
+	      SrcPort		      1
+	      DstBlock		      "Add"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "s2"
+	      SrcPort		      1
+	      DstBlock		      "of2"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "s6"
+	      SrcPort		      1
+	      DstBlock		      "of2"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "of2"
+	      SrcPort		      1
+	      DstBlock		      "Add"
+	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "s3"
+	      SrcPort		      1
+	      DstBlock		      "of3"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "s7"
+	      SrcPort		      1
+	      DstBlock		      "of3"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "of3"
+	      SrcPort		      1
+	      DstBlock		      "Add"
+	      DstPort		      4
+	    }
+	    Line {
+	      SrcBlock		      "Add"
+	      SrcPort		      1
+	      DstBlock		      "overflow"
+	      DstPort		      1
 	    }
 	  }
 	}
@@ -12503,7 +12455,7 @@ Library {
 		  Position		  [455, 132, 510, 198]
 		  ZOrder		  -13
 		  UserDataPersistent	  on
-		  UserData		  "DataTag33"
+		  UserData		  "DataTag44"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -13008,7 +12960,7 @@ Library {
 		  Position		  [455, 287, 510, 353]
 		  ZOrder		  -14
 		  UserDataPersistent	  on
-		  UserData		  "DataTag34"
+		  UserData		  "DataTag45"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -15702,7 +15654,7 @@ Library {
 		  Position		  [460, 136, 505, 194]
 		  ZOrder		  -13
 		  UserDataPersistent	  on
-		  UserData		  "DataTag35"
+		  UserData		  "DataTag46"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -16557,7 +16509,7 @@ Library {
 		  Position		  [455, 283, 505, 347]
 		  ZOrder		  -14
 		  UserDataPersistent	  on
-		  UserData		  "DataTag36"
+		  UserData		  "DataTag47"
 		  MinAlgLoopOccurrences	  off
 		  PropExecContextOutsideSubsystem off
 		  RTWSystemCode		  "Auto"
@@ -20252,7 +20204,7 @@ Library {
 	      AncestorBlock	      "casper_library_flow_control/munge"
 	      LibraryVersion	      "*"
 	      UserDataPersistent      on
-	      UserData		      "DataTag37"
+	      UserData		      "DataTag48"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
 	      RTWSystemCode	      "Auto"
@@ -20331,7 +20283,7 @@ Library {
 	      AncestorBlock	      "casper_library_flow_control/munge"
 	      LibraryVersion	      "*"
 	      UserDataPersistent      on
-	      UserData		      "DataTag38"
+	      UserData		      "DataTag49"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
 	      RTWSystemCode	      "Auto"
@@ -20535,7 +20487,7 @@ Library {
 	  AncestorBlock		  "casper_library_flow_control/munge"
 	  LibraryVersion	  "*"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag39"
+	  UserData		  "DataTag50"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -20614,7 +20566,7 @@ Library {
 	  AncestorBlock		  "casper_library_flow_control/munge"
 	  LibraryVersion	  "*"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag40"
+	  UserData		  "DataTag51"
 	  MinAlgLoopOccurrences	  off
 	  PropExecContextOutsideSubsystem off
 	  RTWSystemCode		  "Auto"
@@ -29657,7 +29609,7 @@ Library {
       MaskValueString	      "adc0|1800|1|on"
       System {
 	Name			"adc1x1800-10"
-	Location		[-5, 0, 1915, 1072]
+	Location		[-10, -24, 1910, 1048]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -29976,7 +29928,7 @@ Library {
 	  ZOrder		  -21
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag41"
+	  UserData		  "DataTag52"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -29996,7 +29948,7 @@ Library {
 	  ZOrder		  -22
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag42"
+	  UserData		  "DataTag53"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30016,7 +29968,7 @@ Library {
 	  ZOrder		  -23
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag43"
+	  UserData		  "DataTag54"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30036,7 +29988,7 @@ Library {
 	  ZOrder		  -24
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag44"
+	  UserData		  "DataTag55"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30056,7 +30008,7 @@ Library {
 	  ZOrder		  -25
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag45"
+	  UserData		  "DataTag56"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30076,7 +30028,7 @@ Library {
 	  ZOrder		  -26
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag46"
+	  UserData		  "DataTag57"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30096,7 +30048,7 @@ Library {
 	  ZOrder		  -27
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag47"
+	  UserData		  "DataTag58"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30116,7 +30068,7 @@ Library {
 	  ZOrder		  -28
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag48"
+	  UserData		  "DataTag59"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30136,7 +30088,7 @@ Library {
 	  ZOrder		  -29
 	  LibraryVersion	  "1.726"
 	  UserDataPersistent	  on
-	  UserData		  "DataTag49"
+	  UserData		  "DataTag60"
 	  SourceBlock		  "dspsigops/Downsample"
 	  SourceType		  "Downsample"
 	  N			  "8"
@@ -30275,7 +30227,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv"
-	    Location		    [183, 48, 706, 421]
+	    Location		    [178, 77, 701, 450]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -40570,7 +40522,7 @@ Library {
       Position		      [195, 704, 285, 901]
       ZOrder		      -12
       UserDataPersistent      on
-      UserData		      "DataTag50"
+      UserData		      "DataTag61"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -42336,7 +42288,7 @@ Library {
       ZOrder		      -14
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       UserDataPersistent      on
-      UserData		      "DataTag51"
+      UserData		      "DataTag62"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -54754,9 +54706,9 @@ Library {
   }
 }
 MatData {
-  NumRecords		  52
+  NumRecords		  63
   DataRecord {
-    Tag			    DataTag51
+    Tag			    DataTag62
     Data		    "  %)30     .    ( 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \": R 4.    D 4  "
     " 8    (     @         %    \"     $    !     0         %  0 #P    $   !X    9&5F875L=',         ;F%M90            "
@@ -54778,7 +54730,7 @@ MatData {
     "      B4 .    .     8    (    !@         %    \"     $    !     0         )    \"            / _"
   }
   DataRecord {
-    Tag			    DataTag50
+    Tag			    DataTag61
     Data		    "  %)30     .    : 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
     "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,F2^0,.    V 4   "
     "8    (     @         %    \"     $    !     0         %  0 #0    $   !H    9&5F875L=',      &EN              !O=70"
@@ -54801,39 +54753,150 @@ MatData {
     "VX   X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 "
   }
   DataRecord {
-    Tag			    DataTag49
+    Tag			    DataTag60
     Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
     "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag59
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag58
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag57
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag56
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag55
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag54
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag53
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag52
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+  }
+  DataRecord {
+    Tag			    DataTag51
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
+  }
+  DataRecord {
+    Tag			    DataTag50
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
+  }
+  DataRecord {
+    Tag			    DataTag49
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag48
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
+    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
+    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
+    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
+    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
+    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
+    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
+    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag47
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            / _"
   }
   DataRecord {
     Tag			    DataTag46
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            / _"
   }
   DataRecord {
     Tag			    DataTag45
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            #! "
   }
   DataRecord {
     Tag			    DataTag44
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            #! "
   }
   DataRecord {
     Tag			    DataTag43
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    F $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ '/C0@(.    \" $  "
+    " 8    (     @         %    \"     $    !     0         %  0 \"@    $    >    9&5F875L=',  &Y3=')E86US  !B:71?=VED="
+    "&@    .    *     8    (     0         %    \"                0         .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            @0 "
   }
   DataRecord {
     Tag			    DataTag42
@@ -54847,95 +54910,43 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag40
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag39
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag38
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag37
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *_O8@<.    V (   "
-    "8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ90"
-    "  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          4"
-    "    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &1"
-    "I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @"
-    "    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $ "
-    "   !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @"
-    "           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            0$ .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"               "
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag36
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            / _"
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag35
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !$I5P8.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            ,4 .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            / _"
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag34
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            #! "
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag33
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            #! "
+    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
+    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
   }
   DataRecord {
     Tag			    DataTag32
@@ -55049,8 +55060,27 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag10
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    N 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ % X8P(.    * 8   "
+    "8    (     @         %    \"     $    !     0         %  0 #@    $   !P    9&5F875L=',       !I;G!U=%]M;V1E     &1"
+    "E;75X            861C7V-L:U]R871E  !A9&-?8FET7W=I9'1H &%D8U]B<F0         =7-I;F=?8W1R;     !T97-T7W)A;7        X  "
+    " #( P  !@    @    !          4    (     0    X    !          X   !     !@    @    $          4    (     0    H    "
+    "!         !     *    :6YP=71?;6]D90        X   !(    !@    @    $          4    (     0   !(    !         !     2 "
+    "   5'=O+6-H86YN96P@+2T@029#        #@   #@    &    \"     0         !0    @    !    !0    $         $     4   !D96"
+    "UU>     X    P    !@    @    $          4    (     0    ,    !         !   P Q.C$ #@   $     &    \"     0        "
+    " !0    @    !    #     $         $     P   !A9&-?8VQK7W)A=&4     #@   #@    &    \"     8         !0    @    !    "
+    " 0    $         \"0    @          \"!\\0 X   !     !@    @    $          4    (     0    T    !         !     -   "
+    " 861C7V)I=%]W:61T:     X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    ."
+    "     8    (    !          %    \"     $    '     0         0    !P   &%D8U]B<F0 #@   #@    &    \"     0         !"
+    "0    @    !    !@    $         $     8   !:1$]+(#    X   !     !@    @    $          4    (     0    H    !       "
+    "  !     *    =7-I;F=?8W1R;         X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   "
+    "$     &    \"     0         !0    @    !    \"0    $         $     D   !T97-T7W)A;7          #@   #     &    \"   "
+    "  0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    0     0   "
+    "      0    $    $]N92UC:&%N;F5L(\"TM($$.    ,     8    (    !          %    \"     $    #     0         0  , ,3HR "
+    " X    X    !@    @    &          4    (     0    $    !          D    (          \"(HT .    .     8    (    !@    "
+    "     %    \"     $    !     0         )    \"            !! #@   #@    &    \"     0         !0    @    !    !@   "
+    " $         $     8   !:1$]+(#    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   # "
+    "    &    \"     0         !0    @    !     P    $         $  # &]F9@ "
   }
   DataRecord {
     Tag			    DataTag9
@@ -55094,31 +55124,20 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag1
-    Data		    "  %)30     .    B     8    (     @         %    \"     $    !     0         %  0 $P    $    3    :&%S26"
-    "YH97)I=&5D3W!T:6]N        #@   #     &    \"     D\"        !0    @    !     0    $          @ !  $    "
+    Data		    "  %)30     .    F $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ '/C0@(.    \" $  "
+    " 8    (     @         %    \"     $    !     0         %  0 \"@    $    >    9&5F875L=',  &Y3=')E86US  !B:71?=VED="
+    "&@    .    *     8    (     0         %    \"                0         .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            @0 "
   }
   DataRecord {
     Tag			    DataTag0
-    Data		    "  %)30     .    N 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ % X8P(.    * 8   "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $   !P    9&5F875L=',       !I;G!U=%]M;V1E     &1"
-    "E;75X            861C7V-L:U]R871E  !A9&-?8FET7W=I9'1H &%D8U]B<F0         =7-I;F=?8W1R;     !T97-T7W)A;7        X  "
-    " #( P  !@    @    !          4    (     0    X    !          X   !     !@    @    $          4    (     0    H    "
-    "!         !     *    :6YP=71?;6]D90        X   !(    !@    @    $          4    (     0   !(    !         !     2 "
-    "   5'=O+6-H86YN96P@+2T@029#        #@   #@    &    \"     0         !0    @    !    !0    $         $     4   !D96"
-    "UU>     X    P    !@    @    $          4    (     0    ,    !         !   P Q.C$ #@   $     &    \"     0        "
-    " !0    @    !    #     $         $     P   !A9&-?8VQK7W)A=&4     #@   #@    &    \"     8         !0    @    !    "
-    " 0    $         \"0    @          \"!\\0 X   !     !@    @    $          4    (     0    T    !         !     -   "
-    " 861C7V)I=%]W:61T:     X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    ."
-    "     8    (    !          %    \"     $    '     0         0    !P   &%D8U]B<F0 #@   #@    &    \"     0         !"
-    "0    @    !    !@    $         $     8   !:1$]+(#    X   !     !@    @    $          4    (     0    H    !       "
-    "  !     *    =7-I;F=?8W1R;         X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   "
-    "$     &    \"     0         !0    @    !    \"0    $         $     D   !T97-T7W)A;7          #@   #     &    \"   "
-    "  0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    0     0   "
-    "      0    $    $]N92UC:&%N;F5L(\"TM($$.    ,     8    (    !          %    \"     $    #     0         0  , ,3HR "
-    " X    X    !@    @    &          4    (     0    $    !          D    (          \"(HT .    .     8    (    !@    "
-    "     %    \"     $    !     0         )    \"            !! #@   #@    &    \"     0         !0    @    !    !@   "
-    " $         $     8   !:1$]+(#    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   # "
-    "    &    \"     0         !0    @    !     P    $         $  # &]F9@ "
+    Data		    "  %)30     .    F $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ '/C0@(.    \" $  "
+    " 8    (     @         %    \"     $    !     0         %  0 \"@    $    >    9&5F875L=',  &Y3=')E86US  !B:71?=VED="
+    "&@    .    *     8    (     0         %    \"                0         .    .     8    (    !@         %    \"    "
+    " $    !     0         )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0 "
+    "   @            @0 "
   }
 }
