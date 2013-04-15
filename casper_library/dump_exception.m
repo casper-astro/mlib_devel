@@ -25,7 +25,7 @@ function dump_exception(ex)
   persistent last_dumped;
 
   % Do not re-dump ex if it has laready been dumped
-  if last_dumped ~= ex
+  if ~isa(last_dumped, 'MException') || last_dumped ~= ex
     last_dumped = ex;
     fprintf('%s: %s\n', ex.identifier, ex.message);
     stack = ex.stack;
