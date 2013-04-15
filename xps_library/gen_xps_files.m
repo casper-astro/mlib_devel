@@ -603,6 +603,7 @@ if run_software
       end
       fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
       fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
+      fprintf(unix_fid,['cp registers.info ../bit_files/', design_name,'_',time_stamp,'.reginfo\n']);
       if strcmp(hw_sys, 'ROACH2')
 	 fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
          fprintf(unix_fid,['chmod +x ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
