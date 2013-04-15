@@ -36539,8 +36539,6 @@ Library {
 	      Position		      [785, 97, 835, 113]
 	      ShowName		      off
 	      GotoTag		      "rdvld"
-  ParameterDataTypeMode   "Inherit via internal rule"
-  OutDataTypeMode   "Inherit via internal rule"
 	    }
 	    Block {
 	      BlockType		      Goto
@@ -36548,7 +36546,6 @@ Library {
 	      Position		      [125, 842, 170, 858]
 	      ShowName		      off
 	      GotoTag		      "rd_ack"
-  OutDataTypeMode   "boolean"
 	    }
 	    Block {
 	      BlockType		      Goto
@@ -50909,8 +50906,6 @@ Library {
 	  Position		  [1095, 678, 1125, 692]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
-  ParameterDataTypeMode   "Inherit via internal rule"
-  OutDataTypeMode   "Inherit via internal rule"
 	}
 	Block {
 	  BlockType		  Outport
@@ -50918,7 +50913,6 @@ Library {
 	  Position		  [1095, 733, 1125, 747]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
-  OutDataTypeMode   "boolean"
 	}
 	Block {
 	  BlockType		  Outport
