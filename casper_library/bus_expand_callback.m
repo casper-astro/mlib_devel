@@ -47,4 +47,16 @@ mask_enables{ismember(mask_names, 'variablePrefix')} = outputToWorkspace;
 mask_enables{ismember(mask_names, 'outputToModelAsWell')} = outputToWorkspace;
 set_param(gcb, 'MaskEnables', mask_enables);
 
+temp = get_param(blk, 'MaskPrompts');
+if strcmp(en, 'off'),
+    temp(3) = {'Output width [msb ... lsb]:'};
+    temp(4) = {'Output binary point position [msb ... lsb]:'};
+    temp(5) = {'Output arithmetic type (ufix=0, fix=1, bool=2) [msb ... lsb]:'};
+else
+    temp(3) = {'Output width:'};
+    temp(4) = {'Output binary point position:'};
+    temp(5) = {'Output arithmetic type (ufix=0, fix=1, bool=2):'};
+end
+set_param(blk, 'MaskPrompts', temp);
+    
 clog('exiting bus_expand_callback', 'trace');

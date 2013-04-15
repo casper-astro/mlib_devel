@@ -61,13 +61,17 @@ module opb_attach #(
   wire addr_match = OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR;
   wire [31:0] local_addr = OPB_ABus - C_BASEADDR;
 
-  reg Sl_xferAck_reg,Sl_xferAck_regR;
+  reg Sl_xferAck_reg;
 
   reg fifo_rst_reg;
   assign fifo_rst = fifo_rst_reg;
 
   reg op_fifo_block_reg;
   assign op_fifo_block = op_fifo_block_reg;
+
+  reg op_start,op_start1,op_busy;
+
+  reg [7:0] busy_cnt,rx_fifo_rd_dataR;
 
   always @(posedge OPB_Clk) begin
     // Single cycle strobes
@@ -81,24 +85,40 @@ module opb_attach #(
     op_fifo_over_reg <= op_fifo_over_reg | op_fifo_over;
     rx_fifo_over_reg <= rx_fifo_over_reg | rx_fifo_over;
 
+    op_start <= addr_match & OPB_select;
+    op_start1 <= op_start;
+
+    if (op_busy && (busy_cnt < 8'hff)) 
+      busy_cnt <= busy_cnt + 1'b1;
+    else if (op_busy && (busy_cnt == 8'hff)) begin
+      op_busy <= 1'b0;  
+      busy_cnt <= 8'h00;
+    end
+
     if (OPB_Rst) begin
       op_fifo_over_reg  <= 1'b0;
       rx_fifo_over_reg  <= 1'b0;
       op_fifo_block_reg <= 1'b0;
-      Sl_xferAck_regR   <= 1'b0;
+      op_start          <= 1'b0;
+      op_start1         <= 1'b0;
+      op_busy           <= 1'b0;
+      busy_cnt          <= 8'h00;
     end else begin
       if (addr_match && OPB_select && !Sl_xferAck_reg) begin
         Sl_xferAck_reg <= 1'b1;
-        Sl_xferAck_regR <= 1'b1;
+        op_busy <= 1'b1;
+      end
+      if (addr_match && OPB_select && !op_busy) begin
         case (local_addr[3:2])
           REG_OP_FIFO: begin
-            if (!OPB_RNW && OPB_BE[3]) begin
+            if (!OPB_RNW) begin
               op_fifo_wr_en_reg <= 1'b1;
             end
           end
           REG_RX_FIFO: begin
             if (OPB_RNW) begin
               rx_fifo_rd_en_reg <= 1'b1;
+              rx_fifo_rd_dataR <= rx_fifo_rd_data;
             end
           end
           REG_STATUS: begin
@@ -110,7 +130,7 @@ module opb_attach #(
             end
           end
           REG_CTRL: begin
-            if (!OPB_RNW && OPB_BE[3]) begin
+            if (!OPB_RNW) begin
               op_fifo_block_reg <= OPB_DBus[31];
             end
           end
@@ -126,7 +146,7 @@ module opb_attach #(
         opb_dout <= 32'b0;
       end
       REG_RX_FIFO: begin
-        opb_dout <= {24'b0, rx_fifo_rd_data};
+        opb_dout <= {24'b0, rx_fifo_rd_dataR};
       end
       REG_STATUS: begin
         opb_dout <= {16'b0, 7'b0, op_error_reg, 1'b0, op_fifo_over_reg, op_fifo_full, op_fifo_empty, 1'b0, rx_fifo_over_reg, rx_fifo_full, rx_fifo_empty};
