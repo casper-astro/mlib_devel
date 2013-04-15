@@ -1,8 +1,8 @@
 Library {
   Name			  "casper_library_flow_control"
-  Version		  8.0
+  Version		  7.9
   MdlSubVersion		  0
-  SavedCharacterEncoding  "UTF-8"
+  SavedCharacterEncoding  "US-ASCII"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
@@ -10,53 +10,14 @@ Library {
   DisableAllScopes	  off
   FPTRunName		  "Run 1"
   MaxMDLFileLineLength	  120
-  Object {
-    $PropName		    "BdWindowsInfo"
-    $ObjectID		    1
-    $ClassName		    "Simulink.BDWindowsInfo"
-    Object {
-      $PropName		      "WindowsInfo"
-      $ObjectID		      2
-      $ClassName	      "Simulink.WindowInfo"
-      IsActive		      [1]
-      Location		      [0.0, 25.0, 1920.0, 1175.0]
-      Object {
-	$PropName		"ModelBrowserInfo"
-	$ObjectID		3
-	$ClassName		"Simulink.ModelBrowserInfo"
-	Visible			[0]
-	DockPosition		"Left"
-	Width			[50]
-	Height			[50]
-	Filter			[9]
-      }
-      Object {
-	$PropName		"ExplorerBarInfo"
-	$ObjectID		4
-	$ClassName		"Simulink.ExplorerBarInfo"
-	Visible			[1]
-      }
-      Object {
-	$PropName		"EditorsInfo"
-	$ObjectID		5
-	$ClassName		"Simulink.EditorInfo"
-	IsActive		[1]
-	ViewObjType		"SimulinkTopLevel"
-	LoadSaveID		"0"
-	Extents			[1884.0, 1010.0]
-	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
-      }
-    }
-  }
   Created		  "Thu Sep 02 12:37:18 2010"
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "paulp"
+  LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Apr 05 14:29:28 2013"
-  RTWModifiedTimeStamp	  287072914
+  LastModifiedDate	  "Mon Apr 15 14:59:13 2013"
+  RTWModifiedTimeStamp	  287938685
   ModelVersionFormat	  "1.%<AutoIncrement:10>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
@@ -125,14 +86,14 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      6
-      Version		      "1.12.1"
+      $ObjectID		      1
+      Version		      "1.12.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  7
-	  Version		  "1.12.1"
+	  $ObjectID		  2
+	  Version		  "1.12.0"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -166,8 +127,8 @@ Library {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  8
-	  Version		  "1.12.1"
+	  $ObjectID		  3
+	  Version		  "1.12.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -198,8 +159,8 @@ Library {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  9
-	  Version		  "1.12.1"
+	  $ObjectID		  4
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -250,8 +211,8 @@ Library {
 	  ParallelExecutionInRapidAccelerator on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  10
-	  Version		  "1.12.1"
+	  $ObjectID		  5
+	  Version		  "1.12.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -300,7 +261,7 @@ Library {
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
 	  InvalidFcnCallConnMsg	  "error"
-	  FcnCallInpInsideContextMsg "UseLocalSettings"
+	  FcnCallInpInsideContextMsg "Enable All"
 	  SignalLabelMismatchMsg  "none"
 	  UnconnectedInputMsg	  "warning"
 	  UnconnectedOutputMsg	  "warning"
@@ -336,12 +297,10 @@ Library {
 	  SFNoUnconditionalDefaultTransitionDiag "warning"
 	  SFTransitionOutsideNaturalParentDiag "warning"
 	  SFUnconditionalTransitionShadowingDiag "warning"
-	  SFUndirectedBroadcastEventsDiag "warning"
-	  SFTransitionActionBeforeConditionDiag	"warning"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  11
-	  Version		  "1.12.1"
+	  $ObjectID		  6
+	  Version		  "1.12.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -377,8 +336,8 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  12
-	  Version		  "1.12.1"
+	  $ObjectID		  7
+	  Version		  "1.12.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  EnableParallelModelReferenceBuilds off
@@ -392,8 +351,8 @@ Library {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  13
-	  Version		  "1.12.1"
+	  $ObjectID		  8
+	  Version		  "1.12.0"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -407,8 +366,8 @@ Library {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  14
-	  Version		  "1.12.1"
+	  $ObjectID		  9
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -424,7 +383,6 @@ Library {
 	  GenCodeOnly		  off
 	  MakeCommand		  "make_rtw"
 	  GenerateMakefile	  on
-	  PackageGeneratedCodeAndArtifacts off
 	  TemplateMakefile	  "grt_default_tmf"
 	  GenerateReport	  off
 	  SaveLog		  off
@@ -441,13 +399,6 @@ Library {
 	  RTWUseSimCustomCode	  off
 	  IncludeHyperlinkInReport off
 	  LaunchReport		  off
-	  PortableWordSizes	  off
-	  GenerateErtSFunction	  off
-	  CreateSILPILBlock	  "None"
-	  CodeExecutionProfiling  off
-	  CodeExecutionProfileVariable "executionProfile"
-	  CodeProfilingSaveOptions "SummaryOnly"
-	  CodeProfilingInstrumentation off
 	  TargetLang		  "C"
 	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
 	  IncludeERTFirstTime	  off
@@ -467,8 +418,8 @@ Library {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      15
-	      Version		      "1.12.1"
+	      $ObjectID		      10
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -500,7 +451,6 @@ Library {
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
-	      OperatorAnnotations     off
 	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
@@ -523,15 +473,14 @@ Library {
 	      SimulinkBlockComments   on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
-	      InternalIdentifier      "Classic"
 	      InlinedPrmAccess	      "Literals"
 	      ReqsInCode	      off
 	      UseSimReservedNames     off
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      16
-	      Version		      "1.12.1"
+	      $ObjectID		      11
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -558,6 +507,7 @@ Library {
 	      CodeReplacementLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
+	      CodeExecutionProfiling  off
 	      ERTMultiwordLength      256
 	      MultiwordLength	      2048
 	      GenerateFullHeader      on
@@ -588,6 +538,7 @@ Library {
 	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
+	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
@@ -648,25 +599,6 @@ Library {
     FontSize		    9
     FontWeight		    "normal"
     FontAngle		    "normal"
-  }
-  MaskDefaults {
-    SelfModifiable	    "off"
-    IconFrame		    "on"
-    IconOpaque		    "on"
-    RunInitForIconRedraw    "off"
-    IconRotate		    "none"
-    PortRotate		    "default"
-    IconUnits		    "autoscale"
-  }
-  MaskParameterDefaults {
-    Evaluate		    "on"
-    Tunable		    "on"
-    NeverSave		    "off"
-    Internal		    "off"
-    ReadOnly		    "off"
-    Enabled		    "on"
-    Visible		    "on"
-    ToolTip		    "on"
   }
   BlockParameterDefaults {
     Block {
@@ -730,7 +662,7 @@ Library {
   }
   System {
     Name		    "casper_library_flow_control"
-    Location		    [0, 25, 1920, 1200]
+    Location		    [75, 130, 726, 412]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -762,22 +694,21 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		17
-	$ClassName		"Simulink.Mask"
-	Type			"bus_create"
-	Initialization		"bus_create_init(gcb,...\n    'inputNum', inputNum);"
-	Object {
-	  $PropName		  "Parameters"
-	  $ObjectID		  18
-	  $ClassName		  "Simulink.MaskParameter"
-	  Type			  "edit"
-	  Name			  "inputNum"
-	  Prompt		  "Number of inputs:"
-	  Value			  "2"
-	}
-      }
+      MaskType		      "bus_create"
+      MaskPromptString	      "Number of inputs:"
+      MaskStyleString	      "edit"
+      MaskVariables	      "inputNum=@1;"
+      MaskTunableValueString  "on"
+      MaskEnableString	      "on"
+      MaskVisibilityString    "on"
+      MaskToolTipString	      "on"
+      MaskInitialization      "bus_create_init(gcb,...\n    'inputNum', inputNum);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "2"
       System {
 	Name			"bus_create"
 	Location		[12, 45, 1978, 1372]
@@ -955,104 +886,32 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		19
-	$ClassName		"Simulink.Mask"
-	Type			"bus_expand"
-	Description		"Expands a 'bus' made using a bus_create or Xilinx\nconcat block.\nThe input will be divided into the sp"
-	"ecified number\nof outputs with the specified arithmetic types.\nDivisions are made from most significant bit."
-	Initialization		"bus_expand_init(gcb,...\n    'mode', mode, ...\n    'outputNum', outputNum, ...\n    'outputWidth', "
-	"outputWidth, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArithmeticType, ...\n "
-	"   'show_format', show_format, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'variablePrefix', variablePr"
-	"efix, ...\n    'outputToModelAsWell', outputToModelAsWell);"
-	IconOpaque		"off"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  9
-	  Object {
-	    $ObjectID		    20
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      2
-	      Cell		      "divisions of equal size"
-	      Cell		      "divisions of arbitrary size"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "mode"
-	    Prompt		    "Mode:"
-	    Value		    "divisions of equal size"
-	    Evaluate		    "off"
-	    Callback		    "bus_expand_callback();"
-	  }
-	  Object {
-	    $ObjectID		    21
-	    Type		    "edit"
-	    Name		    "outputNum"
-	    Prompt		    "Number of outputs:"
-	    Value		    "2"
-	  }
-	  Object {
-	    $ObjectID		    22
-	    Type		    "edit"
-	    Name		    "outputWidth"
-	    Prompt		    "Output width:"
-	    Value		    "io_widths"
-	    Callback		    "bus_expand_callback();"
-	  }
-	  Object {
-	    $ObjectID		    23
-	    Type		    "edit"
-	    Name		    "outputBinaryPt"
-	    Prompt		    "Output binary point position:"
-	    Value		    "io_bp"
-	  }
-	  Object {
-	    $ObjectID		    24
-	    Type		    "edit"
-	    Name		    "outputArithmeticType"
-	    Prompt		    "Output arithmetic type: (Unsigned=0, Signed=1, Boolean=2)"
-	    Value		    "io_type"
-	  }
-	  Object {
-	    $ObjectID		    25
-	    Type		    "checkbox"
-	    Name		    "show_format"
-	    Prompt		    "Print format string?"
-	    Value		    "off"
-	    Evaluate		    "off"
-	  }
-	  Object {
-	    $ObjectID		    26
-	    Type		    "checkbox"
-	    Name		    "outputToWorkspace"
-	    Prompt		    "Output to workspace?"
-	    Value		    "off"
-	    Evaluate		    "off"
-	    Callback		    "bus_expand_callback();"
-	  }
-	  Object {
-	    $ObjectID		    27
-	    Type		    "edit"
-	    Name		    "variablePrefix"
-	    Prompt		    "Variable name prefix:"
-	    Value		    "out"
-	    Evaluate		    "off"
-	    Enabled		    "off"
-	  }
-	  Object {
-	    $ObjectID		    28
-	    Type		    "checkbox"
-	    Name		    "outputToModelAsWell"
-	    Prompt		    "Output to model as well?"
-	    Value		    "on"
-	    Evaluate		    "off"
-	    Enabled		    "off"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "bus_expand"
+      MaskDescription	      "Expands a 'bus' made using a bus_create or Xilinx\nconcat block.\nThe input will be divid"
+      "ed into the specified number\nof outputs with the specified arithmetic types.\nDivisions are made from most sign"
+      "ificant bit."
+      MaskPromptString	      "Mode:|Number of outputs:|Output width:|Output binary point position:|Output arithmetic t"
+      "ype: (Unsigned=0, Signed=1, Boolean=2)|Print format string?|Output to workspace?|Variable name prefix:|Output to"
+      " model as well?"
+      MaskStyleString	      "popup(divisions of equal size|divisions of arbitrary size),edit,edit,edit,edit,checkbox,c"
+      "heckbox,edit,checkbox"
+      MaskVariables	      "mode=&1;outputNum=@2;outputWidth=@3;outputBinaryPt=@4;outputArithmeticType=@5;show_format=&"
+      "6;outputToWorkspace=&7;variablePrefix=&8;outputToModelAsWell=&9;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "bus_expand_callback();||bus_expand_callback();||||bus_expand_callback();||"
+      MaskEnableString	      "on,on,on,on,on,on,on,off,off"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
+      MaskInitialization      "bus_expand_init(gcb,...\n    'mode', mode, ...\n    'outputNum', outputNum, ...\n    'o"
+      "utputWidth', outputWidth, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArit"
+      "hmeticType, ...\n    'show_format', show_format, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'vari"
+      "ablePrefix', variablePrefix, ...\n    'outputToModelAsWell', outputToModelAsWell);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      off
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "divisions of equal size|2|io_widths|io_bp|io_type|off|off|out|on"
       System {
 	Name			"bus_expand"
 	Location		[0, 25, 1920, 1200]
@@ -1278,42 +1137,25 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		29
-	$ClassName		"Simulink.Mask"
-	Type			"munge"
-	Description		"Splits an input bus into the specified number of divisions and then recombines them in the order specif"
-	"ied (most significant division = 0,least = number divisions-1)"
-	Initialization		"munge_init(gcb, ...\n    'divisions', divisions, ...\n    'div_size', div_size, ...\n    'order', or"
-	"der);"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  3
-	  Object {
-	    $ObjectID		    30
-	    Type		    "edit"
-	    Name		    "divisions"
-	    Prompt		    "Number of divisions"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    31
-	    Type		    "edit"
-	    Name		    "div_size"
-	    Prompt		    "Division size (bits)"
-	    Value		    "0"
-	  }
-	  Object {
-	    $ObjectID		    32
-	    Type		    "edit"
-	    Name		    "order"
-	    Prompt		    "Division packing order"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "munge"
+      MaskDescription	      "Splits an input bus into the specified number of divisions and then recombines them in th"
+      "e order specified (most significant division = 0,least = number divisions-1)"
+      MaskPromptString	      "Number of divisions|Division size (bits)|Division packing order"
+      MaskStyleString	      "edit,edit,edit"
+      MaskVariables	      "divisions=@1;div_size=@2;order=@3;"
+      MaskTunableValueString  "on,on,on"
+      MaskCallbackString      "||"
+      MaskEnableString	      "on,on,on"
+      MaskVisibilityString    "on,on,on"
+      MaskToolTipString	      "on,on,on"
+      MaskInitialization      "munge_init(gcb, ...\n    'divisions', divisions, ...\n    'div_size', div_size, ...\n  "
+      "  'order', order);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0|0"
       System {
 	Name			"munge"
 	Location		[384, 480, 1532, 1080]
@@ -1370,75 +1212,33 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		33
-	$ClassName		"Simulink.Mask"
-	Type			"packetizer"
-	Description		"This block is intended to serialize data that is 'bursty', that is,\nthe average data rate is small but"
-	" per cycle the data is highly\nparallel and can contain many points simultaneously.  This situation\nis common with t"
-	"he streaming CASPER FFTs and related blocks. \n\nThe serialization buffers the data when valid and independently \nse"
-	"rializes the data when the buffer is non-empty.  For convenience, the\ndata is counted as it is serialized and signal"
-	"s exist to indicate\nthat the serial output is valid or that a buffer overflow has occured.  The\nblock will not stop"
-	" in the case of an overflow, and the overflow\nsignal is not held high after it occurs.\n\nFor example usage, see 'ro"
-	"ach_spec_2adc_borph' in 'SVNROOT/trunk/projects/roach_spec/'\nor the test case in 'SVNROOT/trunk/mlib_devel_10_1/Test"
-	"s/packetizer_test.mdl'\n\nFor extended documentation, please see the CASPER wiki"
-	Initialization		"packetizer_init(gcb, 'pin_width', pin_width, 'sout_width', sout_width, 'total_words', total_words, '"
-	"fifo_depth', fifo_depth)\n% packetizer_init(gcb, ...\n%     'pin_width', pin_width, ...\n%     'sout_width', sout_wid"
-	"th, ...\n%   %  'fifo_depth', fifo_depth, ...\n%     'total_words', total_words);"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  4
-	  Object {
-	    $ObjectID		    34
-	    Type		    "edit"
-	    Name		    "pin_width"
-	    Prompt		    "Parallel Input Width"
-	    Value		    "512"
-	  }
-	  Object {
-	    $ObjectID		    35
-	    Type		    "edit"
-	    Name		    "sout_width"
-	    Prompt		    "Serial Output Width"
-	    Value		    "64"
-	  }
-	  Object {
-	    $ObjectID		    36
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      13
-	      Cell		      "16"
-	      Cell		      "32"
-	      Cell		      "64"
-	      Cell		      "128"
-	      Cell		      "256"
-	      Cell		      "512"
-	      Cell		      "1K"
-	      Cell		      "2K"
-	      Cell		      "4K"
-	      Cell		      "8K"
-	      Cell		      "16K"
-	      Cell		      "32K"
-	      Cell		      "64K"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "fifo_depth"
-	    Prompt		    "FIFO depth"
-	    Value		    "64"
-	    Evaluate		    "off"
-	  }
-	  Object {
-	    $ObjectID		    37
-	    Type		    "edit"
-	    Name		    "total_words"
-	    Prompt		    "Total number of data points"
-	    Value		    "64"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "packetizer"
+      MaskDescription	      "This block is intended to serialize data that is 'bursty', that is,\nthe average data rat"
+      "e is small but per cycle the data is highly\nparallel and can contain many points simultaneously.  This situatio"
+      "n\nis common with the streaming CASPER FFTs and related blocks. \n\nThe serialization buffers the data when vali"
+      "d and independently \nserializes the data when the buffer is non-empty.  For convenience, the\ndata is counted a"
+      "s it is serialized and signals exist to indicate\nthat the serial output is valid or that a buffer overflow has "
+      "occured.  The\nblock will not stop in the case of an overflow, and the overflow\nsignal is not held high after i"
+      "t occurs.\n\nFor example usage, see 'roach_spec_2adc_borph' in 'SVNROOT/trunk/projects/roach_spec/'\nor the test"
+      " case in 'SVNROOT/trunk/mlib_devel_10_1/Tests/packetizer_test.mdl'\n\nFor extended documentation, please see the"
+      " CASPER wiki"
+      MaskPromptString	      "Parallel Input Width|Serial Output Width|FIFO depth|Total number of data points"
+      MaskStyleString	      "edit,edit,popup(16|32|64|128|256|512|1K|2K|4K|8K|16K|32K|64K),edit"
+      MaskVariables	      "pin_width=@1;sout_width=@2;fifo_depth=&3;total_words=@4;"
+      MaskTunableValueString  "on,on,on,on"
+      MaskCallbackString      "|||"
+      MaskEnableString	      "on,on,on,on"
+      MaskVisibilityString    "on,on,on,on"
+      MaskToolTipString	      "on,on,on,on"
+      MaskInitialization      "packetizer_init(gcb, 'pin_width', pin_width, 'sout_width', sout_width, 'total_words', t"
+      "otal_words, 'fifo_depth', fifo_depth)\n% packetizer_init(gcb, ...\n%     'pin_width', pin_width, ...\n%     'sou"
+      "t_width', sout_width, ...\n%   %  'fifo_depth', fifo_depth, ...\n%     'total_words', total_words);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "512|64|64|64"
       System {
 	Name			"packetizer"
 	Location		[73, 45, 1193, 1034]
@@ -1765,40 +1565,30 @@ Library {
 	  Opaque		  off
 	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
-	  Object {
-	    $PropName		    "MaskObject"
-	    $ObjectID		    38
-	    $ClassName		    "Simulink.Mask"
-	    Type		    "parallel_to_serial_converter"
-	    Description		    "This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' is ass"
-	    "erted, this data is broken into \npieces of width specified by the serial output width and \nstored into differen"
-	    "t registers chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift register\n"
-	    "returns as output a new piece of data of width sout_width.  This data\nis the next least significant piece of the"
-	    " original bus.  The converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically loads the l"
-	    "east significant\nbits into the register closest to the output, so the first 'shift' \nassertion changes the data"
-	    " output from bits [sout_width-1:0] to\nbits [2*sout_width-1:sout_width]."
-	    Initialization	    "parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_width'"
-	    ", sout_width);"
-	    Array {
-	      Type		      "Simulink.MaskParameter"
-	      Dimension		      2
-	      Object {
-		$ObjectID		39
-		Type			"edit"
-		Name			"pin_width"
-		Prompt			"Parallel Input Width"
-		Value			"512"
-	      }
-	      Object {
-		$ObjectID		40
-		Type			"edit"
-		Name			"sout_width"
-		Prompt			"Serial Output Width"
-		Value			"64"
-	      }
-	      PropName		      "Parameters"
-	    }
-	  }
+	  MaskType		  "parallel_to_serial_converter"
+	  MaskDescription	  "This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' is asse"
+	  "rted, this data is broken into \npieces of width specified by the serial output width and \nstored into different r"
+	  "egisters chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift register\nretu"
+	  "rns as output a new piece of data of width sout_width.  This data\nis the next least significant piece of the origi"
+	  "nal bus.  The converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically loads the least sig"
+	  "nificant\nbits into the register closest to the output, so the first 'shift' \nassertion changes the data output fr"
+	  "om bits [sout_width-1:0] to\nbits [2*sout_width-1:sout_width]."
+	  MaskPromptString	  "Parallel Input Width|Serial Output Width"
+	  MaskStyleString	  "edit,edit"
+	  MaskVariables		  "pin_width=@1;sout_width=@2;"
+	  MaskTunableValueString  "on,on"
+	  MaskCallbackString	  "|"
+	  MaskEnableString	  "on,on"
+	  MaskVisibilityString	  "on,on"
+	  MaskToolTipString	  "on,on"
+	  MaskInitialization	  "parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_width'"
+	  ", sout_width);"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "512|64"
 	  System {
 	    Name		    "parallel_to_serial_converter"
 	    Location		    [12, 45, 1328, 899]
@@ -2777,40 +2567,30 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		41
-	$ClassName		"Simulink.Mask"
-	Type			"parallel_to_serial_converter"
-	Description		"This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' is asserted, t"
-	"his data is broken into \npieces of width specified by the serial output width and \nstored into different registers "
-	"chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift register\nreturns as outp"
-	"ut a new piece of data of width sout_width.  This data\nis the next least significant piece of the original bus.  The"
-	" converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically loads the least significant\nbits "
-	"into the register closest to the output, so the first 'shift' \nassertion changes the data output from bits [sout_wid"
-	"th-1:0] to\nbits [2*sout_width-1:sout_width]."
-	Initialization		"parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_width', sout_"
-	"width);"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    42
-	    Type		    "edit"
-	    Name		    "pin_width"
-	    Prompt		    "Parallel Input Width"
-	    Value		    "128"
-	  }
-	  Object {
-	    $ObjectID		    43
-	    Type		    "edit"
-	    Name		    "sout_width"
-	    Prompt		    "Serial Output Width"
-	    Value		    "16"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "parallel_to_serial_converter"
+      MaskDescription	      "This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' "
+      "is asserted, this data is broken into \npieces of width specified by the serial output width and \nstored into d"
+      "ifferent registers chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift r"
+      "egister\nreturns as output a new piece of data of width sout_width.  This data\nis the next least significant pi"
+      "ece of the original bus.  The converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically "
+      "loads the least significant\nbits into the register closest to the output, so the first 'shift' \nassertion chan"
+      "ges the data output from bits [sout_width-1:0] to\nbits [2*sout_width-1:sout_width]."
+      MaskPromptString	      "Parallel Input Width|Serial Output Width"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "pin_width=@1;sout_width=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskInitialization      "parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_"
+      "width', sout_width);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "128|16"
       System {
 	Name			"parallel_to_serial_converter"
 	Location		[12, 45, 1336, 899]
@@ -3291,33 +3071,23 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		44
-	$ClassName		"Simulink.Mask"
-	Type			"shifter_unit"
-	Description		"This block is simply a wrapper for a register with a multiplexer on the input.  \nPlease see the docume"
-	"nation for the 'parallel_to_serial_converter'."
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    45
-	    Type		    "edit"
-	    Name		    "data_width"
-	    Prompt		    "Data Width"
-	    Value		    "16"
-	  }
-	  Object {
-	    $ObjectID		    46
-	    Type		    "edit"
-	    Name		    "pin_offset"
-	    Prompt		    "pin offset"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "shifter_unit"
+      MaskDescription	      "This block is simply a wrapper for a register with a multiplexer on the input.  \nPlease "
+      "see the documenation for the 'parallel_to_serial_converter'."
+      MaskPromptString	      "Data Width|pin offset"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "data_width=@1;pin_offset=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "16|0"
       System {
 	Name			"shifter_unit"
 	Location		[231, 249, 677, 688]
@@ -3518,13 +3288,46 @@ Library {
 MatData {
   NumRecords		  6
   DataRecord {
-    Tag			    DataTag0
-    Data		    "  %)30     .    T $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .0$H 8.    0 $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', :6YP=71.=6T         #@   *"
-    "@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    \"    "
-    " $         $     @   !I;G!U=$YU;0X    X    !@    @    &          4    (     0    $    !          D    (           "
-    "  $ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! "
+    Tag			    DataTag5
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            #! "
+  }
+  DataRecord {
+    Tag			    DataTag4
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -YWH  .    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            @$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            %! "
+  }
+  DataRecord {
+    Tag			    DataTag3
+    Data		    "  %)30     .    , (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %QQC  .    H $   "
+    "8    (     @         %    \"     $    !     0         %  0 #     $    \\    9&5F875L=',     <&EN7W=I9'1H    <V]U=%"
+    "]W:61T:   =&]T86Q?=V]R9', 9FEF;U]D97!T:         X    H    !@    @    !          4    (               !          X "
+    "   X    !@    @    &          4    (     0    $    !          D    (            @$ .    .     8    (    !@        "
+    " %    \"     $    !     0         )    \"            %! #@   #@    &    \"     8         !0    @    !     0    $  "
+    "       \"0    @           !00 X    P    !@    @    $          4    (     0    (    !         !   @ V-   "
+  }
+  DataRecord {
+    Tag			    DataTag2
+    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"1_6@0.    V (  "
+    " 8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ9"
+    "0  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          "
+    "4    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $ "
+    "   !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &"
+    "1I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    "
+    "@    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $"
+    "    !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    "
+    "@           #P/PX    X    !@    @    &          4    (     0    $    !          D    (               .    .     8 "
+    "   (    !@         %    \"     $    !     0         )    \"               "
   }
   DataRecord {
     Tag			    DataTag1
@@ -3556,45 +3359,12 @@ MatData {
     "   8    (    !          %    \"     $    \"     0         0  ( ;VX   "
   }
   DataRecord {
-    Tag			    DataTag2
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"1_6@0.    V (  "
-    " 8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ9"
-    "0  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          "
-    "4    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $ "
-    "   !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &"
-    "1I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    "
-    "@    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $"
-    "    !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    "
-    "@           #P/PX    X    !@    @    &          4    (     0    $    !          D    (               .    .     8 "
-    "   (    !@         %    \"     $    !     0         )    \"               "
-  }
-  DataRecord {
-    Tag			    DataTag3
-    Data		    "  %)30     .    , (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %QQC  .    H $   "
-    "8    (     @         %    \"     $    !     0         %  0 #     $    \\    9&5F875L=',     <&EN7W=I9'1H    <V]U=%"
-    "]W:61T:   =&]T86Q?=V]R9', 9FEF;U]D97!T:         X    H    !@    @    !          4    (               !          X "
-    "   X    !@    @    &          4    (     0    $    !          D    (            @$ .    .     8    (    !@        "
-    " %    \"     $    !     0         )    \"            %! #@   #@    &    \"     8         !0    @    !     0    $  "
-    "       \"0    @           !00 X    P    !@    @    $          4    (     0    (    !         !   @ V-   "
-  }
-  DataRecord {
-    Tag			    DataTag4
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -YWH  .    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            @$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            %! "
-  }
-  DataRecord {
-    Tag			    DataTag5
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            #! "
+    Tag			    DataTag0
+    Data		    "  %)30     .    T $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .0$H 8.    0 $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', :6YP=71.=6T         #@   *"
+    "@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    \"    "
+    " $         $     @   !I;G!U=$YU;0X    X    !@    @    &          4    (     0    $    !          D    (           "
+    "  $ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! "
   }
 }
