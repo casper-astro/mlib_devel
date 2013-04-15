@@ -87,10 +87,18 @@ else,
     clog(msg, {'reuse_block_debug', 'reuse_block_reuse'});
     set_param([blk,'/',name], varargin{:});
   else,
-    msg = sprintf('%s is a "%s" but want "%s" so replacing', name, source, refblk);
-    clog(msg, {'reuse_block_debug', 'reuse_block_replace'});
-    delete_block([blk,'/',name]);
-    add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+    if evalin('base','exist(''casper_force_reuse_block'')') ...
+    && evalin('base','casper_force_reuse_block')
+      msg = sprintf('%s is a "%s" and want "%s" but reuse is being forced', name, source, refblk);
+      % Log as reuse_block_replace even though reuse is being forced
+      clog(msg, {'reuse_block_debug', 'reuse_block_replace'});
+      set_param([blk,'/',name], varargin{:});
+    else
+      msg = sprintf('%s is a "%s" but want "%s" so replacing', name, source, refblk);
+      clog(msg, {'reuse_block_debug', 'reuse_block_replace'});
+      delete_block([blk,'/',name]);
+      add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+    end
   end
 end % if isempty(existing_blk)
 catch ex

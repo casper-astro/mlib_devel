@@ -21,10 +21,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function dump_exception(ex)
-  fprintf('%s: %s\n', ex.identifier, ex.message);
-  stack = ex.stack;
-  for k=1:length(stack)
-    fprintf('Backtrace %d: <a href="matlab: opentoline(''%s'',%d,0)">%s:%d</a>\n', ...
-        k, stack(k).file, stack(k).line, stack(k).name, stack(k).line);
+
+  persistent last_dumped;
+
+  % Do not re-dump ex if it has laready been dumped
+  if last_dumped ~= ex
+    last_dumped = ex;
+    fprintf('%s: %s\n', ex.identifier, ex.message);
+    stack = ex.stack;
+    for k=1:length(stack)
+      fprintf('Backtrace %d: <a href="matlab: opentoline(''%s'',%d,0)">%s:%d</a>\n', ...
+          k, stack(k).file, stack(k).line, stack(k).name, stack(k).line);
+    end
   end
 end
