@@ -1,8 +1,8 @@
 Library {
   Name			  "casper_library_scopes"
-  Version		  8.0
+  Version		  7.9
   MdlSubVersion		  0
-  SavedCharacterEncoding  "UTF-8"
+  SavedCharacterEncoding  "US-ASCII"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
@@ -10,53 +10,14 @@ Library {
   DisableAllScopes	  off
   FPTRunName		  "Run 1"
   MaxMDLFileLineLength	  120
-  Object {
-    $PropName		    "BdWindowsInfo"
-    $ObjectID		    1
-    $ClassName		    "Simulink.BDWindowsInfo"
-    Object {
-      $PropName		      "WindowsInfo"
-      $ObjectID		      2
-      $ClassName	      "Simulink.WindowInfo"
-      IsActive		      [1]
-      Location		      [2316.0, 2.0, 1172.0, 801.0]
-      Object {
-	$PropName		"ModelBrowserInfo"
-	$ObjectID		3
-	$ClassName		"Simulink.ModelBrowserInfo"
-	Visible			[0]
-	DockPosition		"Left"
-	Width			[50]
-	Height			[50]
-	Filter			[9]
-      }
-      Object {
-	$PropName		"ExplorerBarInfo"
-	$ObjectID		4
-	$ClassName		"Simulink.ExplorerBarInfo"
-	Visible			[1]
-      }
-      Object {
-	$PropName		"EditorsInfo"
-	$ObjectID		5
-	$ClassName		"Simulink.EditorInfo"
-	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"335"
-	Extents			[1134.0, 638.0]
-	ZoomFactor		[1.0]
-	Offset			[0.0, -1.0]
-      }
-    }
-  }
   Created		  "Thu Sep 02 12:37:20 2010"
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "wnew"
+  LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Mar 15 11:28:59 2013"
-  RTWModifiedTimeStamp	  285247737
+  LastModifiedDate	  "Mon Apr 15 15:52:28 2013"
+  RTWModifiedTimeStamp	  287941902
   ModelVersionFormat	  "1.%<AutoIncrement:76>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
@@ -125,14 +86,14 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      6
-      Version		      "1.12.1"
+      $ObjectID		      1
+      Version		      "1.12.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  7
-	  Version		  "1.12.1"
+	  $ObjectID		  2
+	  Version		  "1.12.0"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -166,8 +127,8 @@ Library {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  8
-	  Version		  "1.12.1"
+	  $ObjectID		  3
+	  Version		  "1.12.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -198,8 +159,8 @@ Library {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  9
-	  Version		  "1.12.1"
+	  $ObjectID		  4
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -250,8 +211,8 @@ Library {
 	  ParallelExecutionInRapidAccelerator on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  10
-	  Version		  "1.12.1"
+	  $ObjectID		  5
+	  Version		  "1.12.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -300,7 +261,7 @@ Library {
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
 	  InvalidFcnCallConnMsg	  "error"
-	  FcnCallInpInsideContextMsg "UseLocalSettings"
+	  FcnCallInpInsideContextMsg "Enable All"
 	  SignalLabelMismatchMsg  "none"
 	  UnconnectedInputMsg	  "warning"
 	  UnconnectedOutputMsg	  "warning"
@@ -336,12 +297,10 @@ Library {
 	  SFNoUnconditionalDefaultTransitionDiag "warning"
 	  SFTransitionOutsideNaturalParentDiag "warning"
 	  SFUnconditionalTransitionShadowingDiag "warning"
-	  SFUndirectedBroadcastEventsDiag "warning"
-	  SFTransitionActionBeforeConditionDiag	"warning"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  11
-	  Version		  "1.12.1"
+	  $ObjectID		  6
+	  Version		  "1.12.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -377,8 +336,8 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  12
-	  Version		  "1.12.1"
+	  $ObjectID		  7
+	  Version		  "1.12.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  EnableParallelModelReferenceBuilds off
@@ -392,8 +351,8 @@ Library {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  13
-	  Version		  "1.12.1"
+	  $ObjectID		  8
+	  Version		  "1.12.0"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -407,8 +366,8 @@ Library {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  14
-	  Version		  "1.12.1"
+	  $ObjectID		  9
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -424,7 +383,6 @@ Library {
 	  GenCodeOnly		  off
 	  MakeCommand		  "make_rtw"
 	  GenerateMakefile	  on
-	  PackageGeneratedCodeAndArtifacts off
 	  TemplateMakefile	  "grt_default_tmf"
 	  GenerateReport	  off
 	  SaveLog		  off
@@ -441,13 +399,6 @@ Library {
 	  RTWUseSimCustomCode	  off
 	  IncludeHyperlinkInReport off
 	  LaunchReport		  off
-	  PortableWordSizes	  off
-	  GenerateErtSFunction	  off
-	  CreateSILPILBlock	  "None"
-	  CodeExecutionProfiling  off
-	  CodeExecutionProfileVariable "executionProfile"
-	  CodeProfilingSaveOptions "SummaryOnly"
-	  CodeProfilingInstrumentation off
 	  TargetLang		  "C"
 	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
 	  IncludeERTFirstTime	  off
@@ -467,8 +418,8 @@ Library {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      15
-	      Version		      "1.12.1"
+	      $ObjectID		      10
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -500,7 +451,6 @@ Library {
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
-	      OperatorAnnotations     off
 	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
@@ -523,15 +473,14 @@ Library {
 	      SimulinkBlockComments   on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
-	      InternalIdentifier      "Classic"
 	      InlinedPrmAccess	      "Literals"
 	      ReqsInCode	      off
 	      UseSimReservedNames     off
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      16
-	      Version		      "1.12.1"
+	      $ObjectID		      11
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -558,6 +507,7 @@ Library {
 	      CodeReplacementLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
+	      CodeExecutionProfiling  off
 	      ERTMultiwordLength      256
 	      MultiwordLength	      2048
 	      GenerateFullHeader      on
@@ -588,6 +538,7 @@ Library {
 	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
+	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
@@ -649,25 +600,6 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
   }
-  MaskDefaults {
-    SelfModifiable	    "off"
-    IconFrame		    "on"
-    IconOpaque		    "on"
-    RunInitForIconRedraw    "off"
-    IconRotate		    "none"
-    PortRotate		    "default"
-    IconUnits		    "autoscale"
-  }
-  MaskParameterDefaults {
-    Evaluate		    "on"
-    Tunable		    "on"
-    NeverSave		    "off"
-    Internal		    "off"
-    ReadOnly		    "off"
-    Enabled		    "on"
-    Visible		    "on"
-    ToolTip		    "on"
-  }
   BlockParameterDefaults {
     Block {
       BlockType		      Constant
@@ -695,7 +627,6 @@ Library {
     }
     Block {
       BlockType		      From
-      GotoTag		      "A"
       IconDisplay	      "Tag"
       TagVisibility	      "local"
     }
@@ -729,7 +660,6 @@ Library {
       DataPortIndices	      "{1,2,3}"
       DataPortForDefault      "Last data port"
       DiagnosticForDefault    "Error"
-      zeroidx		      off
       InputSameDT	      on
       OutMin		      "[]"
       OutMax		      "[]"
@@ -830,8 +760,8 @@ Library {
   }
   System {
     Name		    "casper_library_scopes"
-    Location		    [1112, 272, 1778, 1008]
-    Open		    off
+    Location		    [43, 106, 563, 699]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -861,39 +791,28 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		17
-	$ClassName		"Simulink.Mask"
-	Type			"data_capture"
-	Description		"This block is useful for capturing parallel data streams\nsimultaneously and sending the data in struct"
-	"ures for analysis\nusing MATLAB.  It is intended as a partial replacement for the\nSimulink scope block when used wit"
-	"h the functions in data_capture_tools.\n\nThe block does not alter the data at all and costs no hardware\nbecause it "
-	"is purely a simulation block.  The block's Simulink\noutputs are exactly the same as its inputs with no delay."
-	Initialization		"data_capture_init(gcb, ...\n    'stream_name', stream_name, ...\n    'nsimult_streams', nsimult_stre"
-	"ams);"
-	IconOpaque		"off"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    18
-	    Type		    "edit"
-	    Name		    "stream_name"
-	    Prompt		    "Stream Name"
-	    Value		    "adc_dout"
-	    Evaluate		    "off"
-	  }
-	  Object {
-	    $ObjectID		    19
-	    Type		    "edit"
-	    Name		    "nsimult_streams"
-	    Prompt		    "Number Of Simultaneous Streams"
-	    Value		    "4"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "data_capture"
+      MaskDescription	      "This block is useful for capturing parallel data streams\nsimultaneously and sending the "
+      "data in structures for analysis\nusing MATLAB.  It is intended as a partial replacement for the\nSimulink scope "
+      "block when used with the functions in data_capture_tools.\n\nThe block does not alter the data at all and costs "
+      "no hardware\nbecause it is purely a simulation block.  The block's Simulink\noutputs are exactly the same as its"
+      " inputs with no delay."
+      MaskPromptString	      "Stream Name|Number Of Simultaneous Streams"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "stream_name=&1;nsimult_streams=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskInitialization      "data_capture_init(gcb, ...\n    'stream_name', stream_name, ...\n    'nsimult_streams',"
+      " nsimult_streams);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      off
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "adc_dout|4"
       System {
 	Name			"data_capture"
 	Location		[452, 45, 1257, 882]
@@ -1143,52 +1062,30 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		20
-	$ClassName		"Simulink.Mask"
-	Type			"dsp_scope"
-	Description		"This block provides a convenient interface to plotting waveforms\nof blocks with serial data output in "
-	"parallel.  The core example\nis of the ADC, which outputs 8 samples / clock.  This scope (simulation only)\nsamples s"
-	"ufficently fast (based on the number of parallel inputs)\nto serialize the output for view in a standard simulink sco"
-	"pe.  \n\nThe input must be concatenated parallel data streams, and\neach data binary point must be 0.  The easiest wa"
-	"y to do this is\nto push  all the inputs through a \"cram\" block from the\nGAVRT blockset.  \neasy "
-	Initialization		"dsp_scope_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'slice_width', slice_width, ...\n    'bi"
-	"n_pt', bin_pt, ...\n    'arith_type', arith_type);"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  4
-	  Object {
-	    $ObjectID		    21
-	    Type		    "edit"
-	    Name		    "n_inputs"
-	    Prompt		    "Number of inputs"
-	    Value		    "4"
-	  }
-	  Object {
-	    $ObjectID		    22
-	    Type		    "edit"
-	    Name		    "slice_width"
-	    Prompt		    "Width of each input"
-	    Value		    "18"
-	  }
-	  Object {
-	    $ObjectID		    23
-	    Type		    "edit"
-	    Name		    "bin_pt"
-	    Prompt		    "Output Binary Point"
-	    Value		    "17"
-	  }
-	  Object {
-	    $ObjectID		    24
-	    Type		    "edit"
-	    Name		    "arith_type"
-	    Prompt		    "Output Arithmetic Type (0=Unsigned, 1 = Signed)"
-	    Value		    "1"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "dsp_scope"
+      MaskDescription	      "This block provides a convenient interface to plotting waveforms\nof blocks with serial d"
+      "ata output in parallel.  The core example\nis of the ADC, which outputs 8 samples / clock.  This scope (simulati"
+      "on only)\nsamples sufficently fast (based on the number of parallel inputs)\nto serialize the output for view in"
+      " a standard simulink scope.  \n\nThe input must be concatenated parallel data streams, and\neach data binary poi"
+      "nt must be 0.  The easiest way to do this is\nto push  all the inputs through a \"cram\" block from the\nGAVRT b"
+      "lockset.  \neasy "
+      MaskPromptString	      "Number of inputs|Width of each input|Output Binary Point|Output Arithmetic Type (0=Unsig"
+      "ned, 1 = Signed)"
+      MaskStyleString	      "edit,edit,edit,edit"
+      MaskVariables	      "n_inputs=@1;slice_width=@2;bin_pt=@3;arith_type=@4;"
+      MaskTunableValueString  "on,on,on,on"
+      MaskCallbackString      "|||"
+      MaskEnableString	      "on,on,on,on"
+      MaskVisibilityString    "on,on,on,on"
+      MaskToolTipString	      "on,on,on,on"
+      MaskInitialization      "dsp_scope_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'slice_width', slice_width,"
+      " ...\n    'bin_pt', bin_pt, ...\n    'arith_type', arith_type);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "4|18|17|1"
       System {
 	Name			"dsp_scope"
 	Location		[258, 105, 1318, 1010]
@@ -1328,39 +1225,29 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		25
-	$ClassName		"Simulink.Mask"
-	Type			"sc"
-	Description		"The 'sc' block is a modified version of the 'snap' block in \nthe same library.  The modification inten"
-	"ds to move the software\nregister which has partial control over the 'we' line to the\nbram as an external port so th"
-	"at multiple brams can use the same\ngated write enable, i.e. they can share the software register\nthat enables writi"
-	"ng to the bram.  This will simplify synchronous writing\nto multiple brams.\n\nThe 'sc' core is used in the 'snap_32n"
-	"' block to mask the \n32-bit word limitation of the bram."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Snap'')')"
-	Initialization		"deprecation_warning('the sc block is to be removed from the casper library, please use the snapshot "
-	"block instead', 'sc');"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    26
-	    Type		    "edit"
-	    Name		    "nsamples"
-	    Prompt		    "No. of samples(2^?)"
-	    Value		    "11"
-	  }
-	  Object {
-	    $ObjectID		    27
-	    Type		    "edit"
-	    Name		    "offset"
-	    Prompt		    "Parallel Bus Offset"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "sc"
+      MaskDescription	      "The 'sc' block is a modified version of the 'snap' block in \nthe same library.  The modi"
+      "fication intends to move the software\nregister which has partial control over the 'we' line to the\nbram as an "
+      "external port so that multiple brams can use the same\ngated write enable, i.e. they can share the software regi"
+      "ster\nthat enables writing to the bram.  This will simplify synchronous writing\nto multiple brams.\n\nThe 'sc' "
+      "core is used in the 'snap_32n' block to mask the \n32-bit word limitation of the bram."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Snap'')')"
+      MaskPromptString	      "No. of samples(2^?)|Parallel Bus Offset"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "nsamples=@1;offset=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskInitialization      "deprecation_warning('the sc block is to be removed from the casper library, please use "
+      "the snapshot block instead', 'sc');"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "11|0"
       System {
 	Name			"sc"
 	Location		[132, 205, 1086, 808]
@@ -1792,27 +1679,27 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		28
-	$ClassName		"Simulink.Mask"
-	Type			"snap"
-	Description		"The <i>snap</i> block provides a packaged solution to capturing data from\nthe FPGA fabric and making i"
-	"t accessible from the CPU.  The block comes in\n2 flavors: <i>snap</i> (which captures to a 32 bit wide Shared BRAM),"
-	" and\n<i>snap64</i> (which captures to 2x32 bit wide Shared BRAMs to effect a\n64 bit capture)."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Snap'')')"
-	Initialization		"deprecation_warning('the snap block is to be removed from the casper library, please use the snapsho"
-	"t block instead', 'snap');"
-	Object {
-	  $PropName		  "Parameters"
-	  $ObjectID		  29
-	  $ClassName		  "Simulink.MaskParameter"
-	  Type			  "edit"
-	  Name			  "nsamples"
-	  Prompt		  "No. of samples(2^?)"
-	  Value			  "11"
-	}
-      }
+      MaskType		      "snap"
+      MaskDescription	      "The <i>snap</i> block provides a packaged solution to capturing data from\nthe FPGA fabri"
+      "c and making it accessible from the CPU.  The block comes in\n2 flavors: <i>snap</i> (which captures to a 32 bit"
+      " wide Shared BRAM), and\n<i>snap64</i> (which captures to 2x32 bit wide Shared BRAMs to effect a\n64 bit capture"
+      ")."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Snap'')')"
+      MaskPromptString	      "No. of samples(2^?)"
+      MaskStyleString	      "edit"
+      MaskVariables	      "nsamples=@1;"
+      MaskTunableValueString  "on"
+      MaskEnableString	      "on"
+      MaskVisibilityString    "on"
+      MaskToolTipString	      "on"
+      MaskInitialization      "deprecation_warning('the snap block is to be removed from the casper library, please us"
+      "e the snapshot block instead', 'snap');"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "11"
       System {
 	Name			"snap"
 	Location		[115, 109, 1069, 712]
@@ -2674,27 +2561,27 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		30
-	$ClassName		"Simulink.Mask"
-	Type			"snap64"
-	Description		"The <i>snap</i> block provides a packaged solution to capturing data from\nthe FPGA fabric and making i"
-	"t accessible from the CPU.  The block comes in\n2 flavors: <i>snap</i> (which captures to a 32 bit wide Shared BRAM),"
-	" and\n<i>snap64</i> (which captures to 2x32 bit wide Shared BRAMs to effect a\n64 bit capture)."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Snap'')')"
-	Initialization		"deprecation_warning('the snap64 block is to be removed from the casper library, please use the snaps"
-	"hot block instead', 'snap64');"
-	Object {
-	  $PropName		  "Parameters"
-	  $ObjectID		  31
-	  $ClassName		  "Simulink.MaskParameter"
-	  Type			  "edit"
-	  Name			  "nsamples"
-	  Prompt		  "No. of samples(2^?)"
-	  Value			  "11"
-	}
-      }
+      MaskType		      "snap64"
+      MaskDescription	      "The <i>snap</i> block provides a packaged solution to capturing data from\nthe FPGA fabri"
+      "c and making it accessible from the CPU.  The block comes in\n2 flavors: <i>snap</i> (which captures to a 32 bit"
+      " wide Shared BRAM), and\n<i>snap64</i> (which captures to 2x32 bit wide Shared BRAMs to effect a\n64 bit capture"
+      ")."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Snap'')')"
+      MaskPromptString	      "No. of samples(2^?)"
+      MaskStyleString	      "edit"
+      MaskVariables	      "nsamples=@1;"
+      MaskTunableValueString  "on"
+      MaskEnableString	      "on"
+      MaskVisibilityString    "on"
+      MaskToolTipString	      "on"
+      MaskInitialization      "deprecation_warning('the snap64 block is to be removed from the casper library, please "
+      "use the snapshot block instead', 'snap64');"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "11"
       System {
 	Name			"snap64"
 	Location		[98, 45, 992, 676]
@@ -3699,27 +3586,26 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		32
-	$ClassName		"Simulink.Mask"
-	Type			"snap_10gbe_rx"
-	Description		"This snap block provides a packaged solution to capturing a 10GbE datastream from the FPGA fabric and m"
-	"aking it accessible from the CPU.  The block captures data in 3 32-bit brams, two for the main data stream and one fo"
-	"r out-of-band data (IP addresses, link status, buffer overflow warnings etc).\n\nThere are two versions, one tailored"
-	" for RX data streams and one tailored for TX data streams. "
-	Initialization		"deprecation_warning('the snap_10gbe_rx block is to be removed from the casper library, please use th"
-	"e snapshot block instead', 'snap_10gbe_rx');"
-	Object {
-	  $PropName		  "Parameters"
-	  $ObjectID		  33
-	  $ClassName		  "Simulink.MaskParameter"
-	  Type			  "edit"
-	  Name			  "nsamples"
-	  Prompt		  "No. of samples(2^?)"
-	  Value			  "11"
-	}
-      }
+      MaskType		      "snap_10gbe_rx"
+      MaskDescription	      "This snap block provides a packaged solution to capturing a 10GbE datastream from the FPG"
+      "A fabric and making it accessible from the CPU.  The block captures data in 3 32-bit brams, two for the main dat"
+      "a stream and one for out-of-band data (IP addresses, link status, buffer overflow warnings etc).\n\nThere are tw"
+      "o versions, one tailored for RX data streams and one tailored for TX data streams. "
+      MaskPromptString	      "No. of samples(2^?)"
+      MaskStyleString	      "edit"
+      MaskVariables	      "nsamples=@1;"
+      MaskTunableValueString  "on"
+      MaskEnableString	      "on"
+      MaskVisibilityString    "on"
+      MaskToolTipString	      "on"
+      MaskInitialization      "deprecation_warning('the snap_10gbe_rx block is to be removed from the casper library, "
+      "please use the snapshot block instead', 'snap_10gbe_rx');"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "11"
       System {
 	Name			"snap_10gbe_rx"
 	Location		[12, 45, 1445, 970]
@@ -6745,27 +6631,26 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		34
-	$ClassName		"Simulink.Mask"
-	Type			"snap_10gbe_tx"
-	Description		"This snap block provides a packaged solution to capturing a 10GbE datastream from the FPGA fabric and m"
-	"aking it accessible from the CPU.  The block captures data in 3 32-bit brams, two for the main data stream and one fo"
-	"r out-of-band data (IP addresses, link status, buffer overflow warnings etc).\n\nThere are two versions, one tailored"
-	" for RX data streams and one tailored for TX data streams. "
-	Initialization		"deprecation_warning('the snap_10gbe_tx block is to be removed from the casper library, please use th"
-	"e snapshot block instead', 'snap_10gbe_tx');"
-	Object {
-	  $PropName		  "Parameters"
-	  $ObjectID		  35
-	  $ClassName		  "Simulink.MaskParameter"
-	  Type			  "edit"
-	  Name			  "nsamples"
-	  Prompt		  "No. of samples(2^?)"
-	  Value			  "11"
-	}
-      }
+      MaskType		      "snap_10gbe_tx"
+      MaskDescription	      "This snap block provides a packaged solution to capturing a 10GbE datastream from the FPG"
+      "A fabric and making it accessible from the CPU.  The block captures data in 3 32-bit brams, two for the main dat"
+      "a stream and one for out-of-band data (IP addresses, link status, buffer overflow warnings etc).\n\nThere are tw"
+      "o versions, one tailored for RX data streams and one tailored for TX data streams. "
+      MaskPromptString	      "No. of samples(2^?)"
+      MaskStyleString	      "edit"
+      MaskVariables	      "nsamples=@1;"
+      MaskTunableValueString  "on"
+      MaskEnableString	      "on"
+      MaskVisibilityString    "on"
+      MaskToolTipString	      "on"
+      MaskInitialization      "deprecation_warning('the snap_10gbe_tx block is to be removed from the casper library, "
+      "please use the snapshot block instead', 'snap_10gbe_tx');"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "11"
       System {
 	Name			"snap_10gbe_tx"
 	Location		[12, 45, 1437, 970]
@@ -9566,37 +9451,28 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		36
-	$ClassName		"Simulink.Mask"
-	Type			"snap_32n"
-	Description		"Like the snap64 block, this block contains multiple sub-cores \nthat each have a separate bram.  The pu"
-	"rpose is to be able to\nextend the functionality of the 'snap' and 'sc' blocks to beyond\nthe 32-bit word limitation "
-	"of a single bram by synchronously \nwriting different parts of a larger bus to separate BRAMs.  UNLIKE\nthe snap64 bl"
-	"ock, the bus width on the 'snap_32n' block is\nparameterizable to any multiple of 32."
-	Initialization		"deprecation_warning('The snap_32n block is to be removed from the casper library, please use the sna"
-	"pshot block instead', 'snap_32n');\nsnap_32n_init(gcb, ...\n    'nsamples', nsamples, ...\n    'width', width);"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    37
-	    Type		    "edit"
-	    Name		    "nsamples"
-	    Prompt		    "Number of Samples (2^"
-	    Value		    "11"
-	  }
-	  Object {
-	    $ObjectID		    38
-	    Type		    "edit"
-	    Name		    "width"
-	    Prompt		    "Input Bus Width (32x"
-	    Value		    "4"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "snap_32n"
+      MaskDescription	      "Like the snap64 block, this block contains multiple sub-cores \nthat each have a separate"
+      " bram.  The purpose is to be able to\nextend the functionality of the 'snap' and 'sc' blocks to beyond\nthe 32-b"
+      "it word limitation of a single bram by synchronously \nwriting different parts of a larger bus to separate BRAMs"
+      ".  UNLIKE\nthe snap64 block, the bus width on the 'snap_32n' block is\nparameterizable to any multiple of 32."
+      MaskPromptString	      "Number of Samples (2^|Input Bus Width (32x"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "nsamples=@1;width=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskInitialization      "deprecation_warning('The snap_32n block is to be removed from the casper library, pleas"
+      "e use the snapshot block instead', 'snap_32n');\nsnap_32n_init(gcb, ...\n    'nsamples', nsamples, ...\n    'wid"
+      "th', width);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "11|4"
       System {
 	Name			"snap_32n"
 	Location		[598, 99, 1093, 743]
@@ -10725,29 +10601,28 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		39
-	$ClassName		"Simulink.Mask"
-	Type			"snap_circ"
-	Description		"Backwards compatible with the normal snap block, but with the following upgrades:\n 1) Ability to offse"
-	"t the trigger. Optionally delay the fabric trigger by a user-specified number of valids.\n 2) 'Addr' register's MSb n"
-	"ow indicates 'busy capturing'.\n 3) Ability to capture continuously until a stop pulse is received. Data is captured "
-	"into BRAM continuously, with old data being overwritten until a stop command is received. Then stop capturing when me"
-	"mory is filled. This enables you to get some data before and some data after the stop pulse. Use the 'tr_en_cnt' regi"
-	"ster to determine where you are in your vector. "
-	Initialization		"deprecation_warning('the snap_circ block is to be removed from the casper library, please use the sn"
-	"apshot block instead', 'snap_circ');"
-	Object {
-	  $PropName		  "Parameters"
-	  $ObjectID		  40
-	  $ClassName		  "Simulink.MaskParameter"
-	  Type			  "edit"
-	  Name			  "nsamples"
-	  Prompt		  "Number of Samples (2^?)"
-	  Value			  "10"
-	}
-      }
+      MaskType		      "snap_circ"
+      MaskDescription	      "Backwards compatible with the normal snap block, but with the following upgrades:\n 1) Ab"
+      "ility to offset the trigger. Optionally delay the fabric trigger by a user-specified number of valids.\n 2) 'Add"
+      "r' register's MSb now indicates 'busy capturing'.\n 3) Ability to capture continuously until a stop pulse is rec"
+      "eived. Data is captured into BRAM continuously, with old data being overwritten until a stop command is received"
+      ". Then stop capturing when memory is filled. This enables you to get some data before and some data after the st"
+      "op pulse. Use the 'tr_en_cnt' register to determine where you are in your vector. "
+      MaskPromptString	      "Number of Samples (2^?)"
+      MaskStyleString	      "edit"
+      MaskVariables	      "nsamples=@1;"
+      MaskTunableValueString  "on"
+      MaskEnableString	      "on"
+      MaskVisibilityString    "on"
+      MaskToolTipString	      "on"
+      MaskInitialization      "deprecation_warning('the snap_circ block is to be removed from the casper library, plea"
+      "se use the snapshot block instead', 'snap_circ');"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "10"
       System {
 	Name			"snap_circ"
 	Location		[12, 45, 1056, 934]
@@ -15045,141 +14920,38 @@ Library {
       Opaque		      off
       RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		41
-	$ClassName		"Simulink.Mask"
-	Type			"snapshot"
-	Description		"Standard snap block, but with the following optional extras;\n 1) Optionally delay the fabric trigger b"
-	"y a user-specified number of valids.\n 2) Capture continuously after a trigger until a stop pulse is received. Data i"
-	"s captured into BRAM continuously, with old data being overwritten until a stop command is received. Then stop captur"
-	"ing when memory is filled. This enables you to get some data before and some data after the stop pulse. Use the 'tr_e"
-	"n_cnt' register to determine where you are in your vector. 'Addr' register's MSb now indicates 'busy capturing'.\n 3)"
-	" Optionally capture a value on an input port to a register at the same time as the first data sample.\n 4) Implement "
-	"counters using DSP48Es to save resources."
-	Initialization		"snapshot_init(gcb, ...\n    'storage', storage, ...\n    'dram_dimm', dram_dimm, ...\n    'dram_cloc"
-	"k', dram_clock, ...\n    'nsamples', nsamples, ...\n    'data_width', data_width, ...\n    'offset', offset, ...\n   "
-	" 'circap', circap, ...\n    'value', value, ...\n    'use_dsp48', use_dsp48);"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  9
-	  Object {
-	    $ObjectID		    42
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      2
-	      Cell		      "bram"
-	      Cell		      "dram"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "storage"
-	    Prompt		    "Storage medium"
-	    Value		    "bram"
-	    Evaluate		    "off"
-	    Callback		    "snapshot_callback();"
-	  }
-	  Object {
-	    $ObjectID		    43
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      4
-	      Cell		      "1"
-	      Cell		      "2"
-	      Cell		      "3"
-	      Cell		      "4"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "dram_dimm"
-	    Prompt		    "DRAM dimm"
-	    Value		    "1"
-	    Evaluate		    "off"
-	    Visible		    "off"
-	  }
-	  Object {
-	    $ObjectID		    44
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      5
-	      Cell		      "200"
-	      Cell		      "250"
-	      Cell		      "266"
-	      Cell		      "300"
-	      Cell		      "333"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "dram_clock"
-	    Prompt		    "DRAM clock rate"
-	    Value		    "200"
-	    Evaluate		    "off"
-	    Visible		    "off"
-	  }
-	  Object {
-	    $ObjectID		    45
-	    Type		    "edit"
-	    Name		    "nsamples"
-	    Prompt		    "Number of Samples (2^?)"
-	    Value		    "10"
-	  }
-	  Object {
-	    $ObjectID		    46
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      5
-	      Cell		      "8"
-	      Cell		      "16"
-	      Cell		      "32"
-	      Cell		      "64"
-	      Cell		      "128"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "data_width"
-	    Prompt		    "Data width"
-	    Value		    "32"
-	    Evaluate		    "off"
-	  }
-	  Object {
-	    $ObjectID		    47
-	    Type		    "checkbox"
-	    Name		    "offset"
-	    Prompt		    "Start delay support "
-	    Value		    "on"
-	    Evaluate		    "off"
-	  }
-	  Object {
-	    $ObjectID		    48
-	    Type		    "checkbox"
-	    Name		    "circap"
-	    Prompt		    "Circular capture support"
-	    Value		    "on"
-	    Evaluate		    "off"
-	  }
-	  Object {
-	    $ObjectID		    49
-	    Type		    "checkbox"
-	    Name		    "value"
-	    Prompt		    "Extra value capture support"
-	    Value		    "off"
-	    Evaluate		    "off"
-	  }
-	  Object {
-	    $ObjectID		    50
-	    Type		    "checkbox"
-	    Name		    "use_dsp48"
-	    Prompt		    "Use DSP48s to implement counters"
-	    Value		    "on"
-	    Evaluate		    "off"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "snapshot"
+      MaskDescription	      "Standard snap block, but with the following optional extras;\n 1) Optionally delay the fa"
+      "bric trigger by a user-specified number of valids.\n 2) Capture continuously after a trigger until a stop pulse "
+      "is received. Data is captured into BRAM continuously, with old data being overwritten until a stop command is re"
+      "ceived. Then stop capturing when memory is filled. This enables you to get some data before and some data after "
+      "the stop pulse. Use the 'tr_en_cnt' register to determine where you are in your vector. 'Addr' register's MSb no"
+      "w indicates 'busy capturing'.\n 3) Optionally capture a value on an input port to a register at the same time as"
+      " the first data sample.\n 4) Implement counters using DSP48Es to save resources."
+      MaskPromptString	      "Storage medium|DRAM dimm|DRAM clock rate|Number of Samples (2^?)|Data width|Start delay "
+      "support |Circular capture support|Extra value capture support|Use DSP48s to implement counters"
+      MaskStyleString	      "popup(bram|dram),popup(1|2|3|4),popup(200|250|266|300|333),edit,popup(8|16|32|64|128),che"
+      "ckbox,checkbox,checkbox,checkbox"
+      MaskVariables	      "storage=&1;dram_dimm=&2;dram_clock=&3;nsamples=@4;data_width=&5;offset=&6;circap=&7;value=&"
+      "8;use_dsp48=&9;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "snapshot_callback();||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,off,off,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
+      MaskInitialization      "snapshot_init(gcb, ...\n    'storage', storage, ...\n    'dram_dimm', dram_dimm, ...\n "
+      "   'dram_clock', dram_clock, ...\n    'nsamples', nsamples, ...\n    'data_width', data_width, ...\n    'offset'"
+      ", offset, ...\n    'circap', circap, ...\n    'value', value, ...\n    'use_dsp48', use_dsp48);"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "bram|1|200|10|32|on|on|off|on"
       System {
 	Name			"snapshot"
-	Location		[2316, 2, 3488, 803]
-	Open			on
+	Location		[254, 124, 1426, 925]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -15235,7 +15007,7 @@ Library {
 	  Position		  [930, 128, 1005, 292]
 	  ZOrder		  1
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  LibraryVersion	  "1.480"
+	  LibraryVersion	  "1.485"
 	  SourceBlock		  "xps_library/Shared BRAM"
 	  SourceType		  ""
 	  arith_type		  "Unsigned"
@@ -15294,54 +15066,23 @@ Library {
 	  Opaque		  off
 	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
-	  Object {
-	    $PropName		    "MaskObject"
-	    $ObjectID		    51
-	    $ClassName		    "Simulink.Mask"
-	    Initialization	    "set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/add"
-	    "_gen'],'implementation','DSP48');\nelse\n    set_param([gcb,'/add_gen'],'implementation','Fabric');\nend"
-	    Array {
-	      Type		      "Simulink.MaskParameter"
-	      Dimension		      5
-	      Object {
-		$ObjectID		52
-		Type			"edit"
-		Name			"counter_size"
-		Prompt			"Address counter size (2^?)"
-		Value			"32"
-	      }
-	      Object {
-		$ObjectID		53
-		Type			"edit"
-		Name			"increment"
-		Prompt			"Address counter increment"
-		Value			"4"
-	      }
-	      Object {
-		$ObjectID		54
-		Type			"edit"
-		Name			"nsamples"
-		Prompt			"Number of samples (2^?)"
-		Value			"10"
-	      }
-	      Object {
-		$ObjectID		55
-		Type			"edit"
-		Name			"burst_size"
-		Prompt			"Burst size (2^?)"
-		Value			"0"
-	      }
-	      Object {
-		$ObjectID		56
-		Type			"checkbox"
-		Name			"use_dsp48"
-		Prompt			"dsp48 counter/s"
-		Value			"on"
-		Evaluate		"off"
-	      }
-	      PropName		      "Parameters"
-	    }
-	  }
+	  MaskPromptString	  "Address counter size (2^?)|Address counter increment|Number of samples (2^?)|Burst size (2^?)|d"
+	  "sp48 counter/s"
+	  MaskStyleString	  "edit,edit,edit,edit,checkbox"
+	  MaskVariables		  "counter_size=@1;increment=@2;nsamples=@3;burst_size=@4;use_dsp48=&5;"
+	  MaskTunableValueString  "on,on,on,on,on"
+	  MaskCallbackString	  "||||"
+	  MaskEnableString	  "on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,on,on,on"
+	  MaskToolTipString	  "on,on,on,on,on"
+	  MaskInitialization	  "set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/add"
+	  "_gen'],'implementation','DSP48');\nelse\n    set_param([gcb,'/add_gen'],'implementation','Fabric');\nend"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "32|4|10|0|on"
 	  System {
 	    Name		    "add_gen"
 	    Location		    [258, 115, 1391, 1136]
@@ -16105,95 +15846,34 @@ Library {
 	      Opaque		      off
 	      RequestExecContextInheritance off
 	      MaskHideContents	      off
-	      Object {
-		$PropName		"MaskObject"
-		$ObjectID		57
-		$ClassName		"Simulink.Mask"
-		Type			"edge_detect"
-		Description		"Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or both)."
-		Help			"Output is active for one-cycle after each edge of the specified type (i.e. rising, falling, or both).  Laten"
-		"cy is zero."
-		Initialization		"edge_detect_init(gcb,...\n    'edge',edge,...\n    'polarity',polarity,...\n    'x_in',x_in,...\n  "
-		"  'x_out',x_out,...\n    'y_in',y_in,...\n    'y_out',y_out);\n\nx_in_num=str2num(getfield(getfield(get_param(gcb,'U"
-		"serData'),'parameters'),'x_in'));\nx_out_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'x_ou"
-		"t'));\ny_in_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'y_in'));\ny_out_num=str2num(getfi"
-		"eld(getfield(get_param(gcb,'UserData'),'parameters'),'y_out'));"
-		SelfModifiable		"on"
-		Display			"plot(x_in_num,0.5+y_in_num*0.2);\nplot(x_out_num,0.5+y_out_num*0.2);"
-		IconUnits		"normalized"
-		Array {
-		  Type			  "Simulink.MaskParameter"
-		  Dimension		  6
-		  Object {
-		    $ObjectID		    58
-		    Type		    "popup"
-		    Array {
-		    Type		    "Cell"
-		    Dimension		    3
-		    Cell		    "Rising"
-		    Cell		    "Falling"
-		    Cell		    "Both"
-		    PropName		    "TypeOptions"
-		    }
-		    Name		    "edge"
-		    Prompt		    "Edge Type"
-		    Value		    "Both"
-		    Evaluate		    "off"
-		  }
-		  Object {
-		    $ObjectID		    59
-		    Type		    "popup"
-		    Array {
-		    Type		    "Cell"
-		    Dimension		    2
-		    Cell		    "Active High"
-		    Cell		    "Active Low"
-		    PropName		    "TypeOptions"
-		    }
-		    Name		    "polarity"
-		    Prompt		    "Output Polarity"
-		    Value		    "Active High"
-		    Evaluate		    "off"
-		  }
-		  Object {
-		    $ObjectID		    60
-		    Type		    "edit"
-		    Name		    "x_in"
-		    Prompt		    "Input X Positions"
-		    Value		    "[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]"
-		    Evaluate		    "off"
-		    Visible		    "off"
-		  }
-		  Object {
-		    $ObjectID		    61
-		    Type		    "edit"
-		    Name		    "y_in"
-		    Prompt		    "Input Y Positions"
-		    Value		    "[-1 -1  1  1  1  1 -1 -1 -1 -1]"
-		    Evaluate		    "off"
-		    Visible		    "off"
-		  }
-		  Object {
-		    $ObjectID		    62
-		    Type		    "edit"
-		    Name		    "x_out"
-		    Prompt		    "Output X Positions"
-		    Value		    "[0.6 0.68 0.68 0.76 0.76 0.84 0.84 0.92 0.92 1]"
-		    Evaluate		    "off"
-		    Visible		    "off"
-		  }
-		  Object {
-		    $ObjectID		    63
-		    Type		    "edit"
-		    Name		    "y_out"
-		    Prompt		    "Output Y Positions"
-		    Value		    "[-1 -1  1  1 -1 -1  1  1 -1 -1]"
-		    Evaluate		    "off"
-		    Visible		    "off"
-		  }
-		  PropName		  "Parameters"
-		}
-	      }
+	      MaskType		      "edge_detect"
+	      MaskDescription	      "Output is active for one-cycle after each edge of the specified type (i.e. rising, falli"
+	      "ng or both)."
+	      MaskHelp		      "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling, or"
+	      " both).  Latency is zero."
+	      MaskPromptString	      "Edge Type|Output Polarity|Input X Positions|Input Y Positions|Output X Positions|Output"
+	      " Y Positions"
+	      MaskStyleString	      "popup(Rising|Falling|Both),popup(Active High|Active Low),edit,edit,edit,edit"
+	      MaskVariables	      "edge=&1;polarity=&2;x_in=&3;y_in=&4;x_out=&5;y_out=&6;"
+	      MaskTunableValueString  "on,on,on,on,on,on"
+	      MaskCallbackString      "|||||"
+	      MaskEnableString	      "on,on,on,on,on,on"
+	      MaskVisibilityString    "on,on,off,off,off,off"
+	      MaskToolTipString	      "on,on,on,on,on,on"
+	      MaskInitialization      "edge_detect_init(gcb,...\n    'edge',edge,...\n    'polarity',polarity,...\n    'x_in'"
+	      ",x_in,...\n    'x_out',x_out,...\n    'y_in',y_in,...\n    'y_out',y_out);\n\nx_in_num=str2num(getfield(getfiel"
+	      "d(get_param(gcb,'UserData'),'parameters'),'x_in'));\nx_out_num=str2num(getfield(getfield(get_param(gcb,'UserDat"
+	      "a'),'parameters'),'x_out'));\ny_in_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'y_in'"
+	      "));\ny_out_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'y_out'));"
+	      MaskSelfModifiable      on
+	      MaskDisplay	      "plot(x_in_num,0.5+y_in_num*0.2);\nplot(x_out_num,0.5+y_out_num*0.2);"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      "none"
+	      MaskPortRotate	      "default"
+	      MaskIconUnits	      "normalized"
+	      MaskValueString	      "Both|Active High|[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]|[-1 -1  1  1  1  1 -1 -"
+	      "1 -1 -1]|[0.6 0.68 0.68 0.76 0.76 0.84 0.84 0.92 0.92 1]|[-1 -1  1  1 -1 -1  1  1 -1 -1]"
 	      System {
 		Name			"edge_detect"
 		Location		[399, 284, 1055, 684]
@@ -16837,32 +16517,21 @@ Library {
 	  Opaque		  off
 	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
-	  Object {
-	    $PropName		    "MaskObject"
-	    $ObjectID		    64
-	    $ClassName		    "Simulink.Mask"
-	    Initialization	    "set_param(gcb,'LinkStatus','inactive');\nset_param([gcb,'/dram_munge'], 'dram', dram);\n\n"
-	    Array {
-	      Type		      "Simulink.MaskParameter"
-	      Dimension		      2
-	      Object {
-		$ObjectID		65
-		Type			"checkbox"
-		Name			"dram"
-		Prompt			"dram"
-		Value			"off"
-		Evaluate		"off"
-	      }
-	      Object {
-		$ObjectID		66
-		Type			"edit"
-		Name			"data_width"
-		Prompt			"data width"
-		Value			"32"
-	      }
-	      PropName		      "Parameters"
-	    }
-	  }
+	  MaskPromptString	  "dram|data width"
+	  MaskStyleString	  "checkbox,edit"
+	  MaskVariables		  "dram=&1;data_width=@2;"
+	  MaskTunableValueString  "on,on"
+	  MaskCallbackString	  "|"
+	  MaskEnableString	  "on,on"
+	  MaskVisibilityString	  "on,on"
+	  MaskToolTipString	  "on,on"
+	  MaskInitialization	  "set_param(gcb,'LinkStatus','inactive');\nset_param([gcb,'/dram_munge'], 'dram', dram);\n\n"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "off|32"
 	  System {
 	    Name		    "basic_ctrl"
 	    Location		    [522, 160, 1523, 1081]
@@ -17346,35 +17015,24 @@ Library {
 	      Opaque		      off
 	      RequestExecContextInheritance off
 	      MaskHideContents	      off
-	      Object {
-		$PropName		"MaskObject"
-		$ObjectID		67
-		$ClassName		"Simulink.Mask"
-		Initialization		"set_param(gcb,'LinkStatus','inactive');\nif strcmp(dram,'on'),\n    set_param([gcb,'/dram'], 'const"
-		"', '1');\nelse,\n    set_param([gcb,'/dram'], 'const', '0');\nend\nset_param([gcb,'/data_choice'], ...\n        'pre"
-		"cision', 'User Defined', ...\n        'arith_type', 'Unsigned', ...\n        'n_bits', num2str(data_width), 'bin_pt'"
-		", '0', ...\n        'quantization', 'Truncate', ...\n        'overflow', 'Wrap');"
-		Array {
-		  Type			  "Simulink.MaskParameter"
-		  Dimension		  2
-		  Object {
-		    $ObjectID		    68
-		    Type		    "checkbox"
-		    Name		    "dram"
-		    Prompt		    "dram"
-		    Value		    "off"
-		    Evaluate		    "off"
-		  }
-		  Object {
-		    $ObjectID		    69
-		    Type		    "edit"
-		    Name		    "data_width"
-		    Prompt		    "data width"
-		    Value		    "data_width"
-		  }
-		  PropName		  "Parameters"
-		}
-	      }
+	      MaskPromptString	      "dram|data width"
+	      MaskStyleString	      "checkbox,edit"
+	      MaskVariables	      "dram=&1;data_width=@2;"
+	      MaskTunableValueString  "on,on"
+	      MaskCallbackString      "|"
+	      MaskEnableString	      "on,on"
+	      MaskVisibilityString    "on,on"
+	      MaskToolTipString	      "on,on"
+	      MaskInitialization      "set_param(gcb,'LinkStatus','inactive');\nif strcmp(dram,'on'),\n    set_param([gcb,'/d"
+	      "ram'], 'const', '1');\nelse,\n    set_param([gcb,'/dram'], 'const', '0');\nend\nset_param([gcb,'/data_choice'],"
+	      " ...\n        'precision', 'User Defined', ...\n        'arith_type', 'Unsigned', ...\n        'n_bits', num2st"
+	      "r(data_width), 'bin_pt', '0', ...\n        'quantization', 'Truncate', ...\n        'overflow', 'Wrap');"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      "none"
+	      MaskPortRotate	      "default"
+	      MaskIconUnits	      "autoscale"
+	      MaskValueString	      "off|data_width"
 	      System {
 		Name			"dram_munge"
 		Location		[737, 99, 1625, 1011]
@@ -19423,7 +19081,7 @@ Library {
 	  Position		  [215, 235, 315, 265]
 	  ZOrder		  -12
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  LibraryVersion	  "1.480"
+	  LibraryVersion	  "1.485"
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  ""
 	  io_dir		  "From Processor"
@@ -19479,33 +19137,22 @@ Library {
 	  Opaque		  off
 	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
-	  Object {
-	    $PropName		    "MaskObject"
-	    $ObjectID		    70
-	    $ClassName		    "Simulink.Mask"
-	    Initialization	    "set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/cou"
-	    "nter'],'implementation','DSP48');\nelse\n    set_param([gcb,'/counter'],'implementation','Fabric');\nend"
-	    Array {
-	      Type		      "Simulink.MaskParameter"
-	      Dimension		      2
-	      Object {
-		$ObjectID		71
-		Type			"checkbox"
-		Name			"use_dsp48"
-		Prompt			"dsp48 counter/s"
-		Value			"on"
-		Evaluate		"off"
-	      }
-	      Object {
-		$ObjectID		72
-		Type			"edit"
-		Name			"word_size"
-		Prompt			"word byte size?"
-		Value			"4"
-	      }
-	      PropName		      "Parameters"
-	    }
-	  }
+	  MaskPromptString	  "dsp48 counter/s|word byte size?"
+	  MaskStyleString	  "checkbox,edit"
+	  MaskVariables		  "use_dsp48=&1;word_size=@2;"
+	  MaskTunableValueString  "on,on"
+	  MaskCallbackString	  "|"
+	  MaskEnableString	  "on,on"
+	  MaskVisibilityString	  "on,on"
+	  MaskToolTipString	  "on,on"
+	  MaskInitialization	  "set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/cou"
+	  "nter'],'implementation','DSP48');\nelse\n    set_param([gcb,'/counter'],'implementation','Fabric');\nend"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "on|4"
 	  System {
 	    Name		    "delay"
 	    Location		    [208, 306, 883, 1187]
@@ -20392,7 +20039,7 @@ Library {
 	  Position		  [905, 305, 1005, 335]
 	  ZOrder		  -20
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  LibraryVersion	  "1.480"
+	  LibraryVersion	  "1.485"
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  ""
 	  io_dir		  "To Processor"
@@ -21109,7 +20756,7 @@ Library {
 	  Position		  [905, 360, 1005, 390]
 	  ZOrder		  -22
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  LibraryVersion	  "1.480"
+	  LibraryVersion	  "1.485"
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  ""
 	  io_dir		  "To Processor"
@@ -21128,7 +20775,7 @@ Library {
 	  Position		  [215, 314, 315, 346]
 	  ZOrder		  -23
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  LibraryVersion	  "1.480"
+	  LibraryVersion	  "1.485"
 	  SourceBlock		  "xps_library/software register"
 	  SourceType		  ""
 	  io_dir		  "From Processor"
@@ -21509,13 +21156,79 @@ Library {
 MatData {
   NumRecords		  5
   DataRecord {
-    Tag			    DataTag0
-    Data		    "  %)30     .    J $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /N+F08.    & $   "
-    "8    (     @         %    \"     $    !     0         %  0 $     $    P    9&5F875L=',          '-T<F5A;5]N86UE   "
-    "   !N<VEM=6QT7W-T<F5A;7, #@   \"@    &    \"     $         !0    @               $         #@   #@    &    \"     "
-    "0         !0    @    !    \"     $         $     @   !A9&-?9&]U= X    X    !@    @    &          4    (     0    $"
-    "    !          D    (            $$ "
+    Tag			    DataTag4
+    Data		    "  %)30     .    L 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /0)!@(.    ( 8   "
+    "8    (     @         %    \"     $    !     0         %  0 \"0    $    _    9&5F875L=', 961G90      <&]L87)I='D >%"
+    "]I;@      >%]O=70     >5]I;@      >5]O=70       X   \"8 P  !@    @    !          4    (     0    P    !          X"
+    "    P    !@    @    $          4    (     0    0    !         !  ! !E9&=E#@   #@    &    \"     0         !0    @ "
+    "   !    !@    $         $     8   !2:7-I;F<   X    X    !@    @    $          4    (     0    @    !         !    "
+    " (    <&]L87)I='D.    0     8    (    !          %    \"     $    +     0         0    \"P   $%C=&EV92!(:6=H      "
+    " .    ,     8    (    !          %    \"     $    $     0         0  0 >%]I;@X   !@    !@    @    $          4    "
+    "(     0   \"\\    !         !     O    6S L,\"XP.\"PP+C X+# N,38L,\"XQ-BPP+C(T+# N,C0L,\"XS,BPP+C,R+# N-%T #@   #@"
+    "    &    \"     0         !0    @    !    !0    $         $     4   !X7V]U=     X   !@    !@    @    $          4 "
+    "   (     0   \"\\    !         !     O    6S N-BPP+C8X+# N-C@L,\"XW-BPP+C<V+# N.#0L,\"XX-\"PP+CDR+# N.3(L,5T #@   "
+    "#     &    \"     0         !0    @    !    !     $         $  $ 'E?:6X.    4     8    (    !          %    \"    "
+    " $    ?     0         0    'P   %LM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,5T #@   #@    &    \"     0         !0    "
+    "@    !    !0    $         $     4   !Y7V]U=     X   !0    !@    @    $          4    (     0   !\\    !         ! "
+    "    ?    6RTQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ70 .    .     8    (    !          %    \"     $    &   "
+    "  0         0    !@   %)I<VEN9P  #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !!8W1"
+    "I=F4@2&EG:       #@   &     &    \"     0         !0    @    !    +P    $         $    \"\\   !;,\" P+C X(# N,#@@,"
+    "\"XQ-B P+C$V(# N,C0@,\"XR-\" P+C,R(# N,S(@,\"XT70 .    8     8    (    !          %    \"     $    O     0        "
+    " 0    +P   %LP+C8@,\"XV.\" P+C8X(# N-S8@,\"XW-B P+C@T(# N.#0@,\"XY,B P+CDR(#%=  X   !0    !@    @    $          4 "
+    "   (     0   !\\    !         !     ?    6RTQ(\"TQ(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q70 .    4     8    (    "
+    "!          %    \"     $    ?     0         0    'P   %LM,2 M,2 @,2 @,2 M,2 M,2 M,2 M,2 M,2 M,5T "
+  }
+  DataRecord {
+    Tag			    DataTag3
+    Data		    "  %)30     .    J 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +E+\"P,.    & 8  "
+    " 8    (     @         %    \"     $    !     0         %  0 \"0    $    _    9&5F875L=', 961G90      <&]L87)I='D >"
+    "%]I;@      >%]O=70     >5]I;@      >5]O=70       X   \"8 P  !@    @    !          4    (     0    P    !          "
+    "X    P    !@    @    $          4    (     0    0    !         !  ! !E9&=E#@   #@    &    \"     0         !0    @"
+    "    !    !@    $         $     8   !2:7-I;F<   X    X    !@    @    $          4    (     0    @    !         !   "
+    "  (    <&]L87)I='D.    0     8    (    !          %    \"     $    +     0         0    \"P   $%C=&EV92!(:6=H     "
+    "  .    ,     8    (    !          %    \"     $    $     0         0  0 >%]I;@X   !@    !@    @    $          4   "
+    " (     0   \"\\    !         !     O    6S L,\"XP.\"PP+C X+# N,38L,\"XQ-BPP+C(T+# N,C0L,\"XS,BPP+C,R+# N-%T #@   #"
+    "@    &    \"     0         !0    @    !    !0    $         $     4   !X7V]U=     X   !@    !@    @    $          4"
+    "    (     0   \"\\    !         !     O    6S N-BPP+C8X+# N-C@L,\"XW-BPP+C<V+# N.#0L,\"XX-\"PP+CDR+# N.3(L,5T #@  "
+    " #     &    \"     0         !0    @    !    !     $         $  $ 'E?:6X.    4     8    (    !          %    \"   "
+    "  $    ?     0         0    'P   %LM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,5T #@   #@    &    \"     0         !0   "
+    " @    !    !0    $         $     4   !Y7V]U=     X   !0    !@    @    $          4    (     0   !\\    !         !"
+    "     ?    6RTQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ70 .    ,     8    (    !          %    \"     $    $  "
+    "   0         0  0 0F]T: X   !     !@    @    $          4    (     0    L    !         !     +    06-T:79E($AI9V@ "
+    "      X   !@    !@    @    $          4    (     0   \"\\    !         !     O    6S @,\"XP.\" P+C X(# N,38@,\"XQ-"
+    "B P+C(T(# N,C0@,\"XS,B P+C,R(# N-%T #@   &     &    \"     0         !0    @    !    +P    $         $    \"\\   !"
+    ";,\"XV(# N-C@@,\"XV.\" P+C<V(# N-S8@,\"XX-\" P+C@T(# N.3(@,\"XY,B Q70 .    4     8    (    !          %    \"     "
+    "$    ?     0         0    'P   %LM,2 M,2 @,2 @,2 @,2 @,2 M,2 M,2 M,2 M,5T #@   %     &    \"     0         !0    @"
+    "    !    'P    $         $    !\\   !;+3$@+3$@(#$@(#$@+3$@+3$@(#$@(#$@+3$@+3%=  "
+  }
+  DataRecord {
+    Tag			    DataTag2
+    Data		    "  %)30     .    R <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .3 4P0.    . <   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $   !N    9&5F875L=',   !S=&]R86=E     &1R86U?9&"
+    "EM;0  9')A;5]C;&]C:P!N<V%M<&QE<P   &1A=&%?=VED=&@ ;V9F<V5T      !C:7)C87       '9A;'5E        =7-E7V1S<#0X      X "
+    "  \"(!   !@    @    !          4    (     0   !(    !          X    X    !@    @    $          4    (     0    <  "
+    "  !         !     '    <W1O<F%G90 .    ,     8    (    !          %    \"     $    $     0         0  0 8G)A;0X   "
+    "!     !@    @    $          4    (     0    D    !         !     )    9')A;5]D:6UM          X    P    !@    @    $"
+    "          4    (     0    $    !         !   0 Q    #@   $     &    \"     0         !0    @    !    \"@    $     "
+    "    $     H   !D<F%M7V-L;V-K        #@   #     &    \"     0         !0    @    !     P    $         $  # #(P,  . "
+    "   .     8    (    !          %    \"     $    (     0         0    \"    &YS86UP;&5S#@   #@    &    \"     8     "
+    "    !0    @    !     0    $         \"0    @            D0 X   !     !@    @    $          4    (     0    H    ! "
+    "        !     *    9&%T85]W:61T:         X    P    !@    @    $          4    (     0    (    !         !   @ S,@ "
+    " #@   #@    &    \"     0         !0    @    !    !@    $         $     8   !O9F9S970   X    P    !@    @    $    "
+    "      4    (     0    (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    !    !@    $         $"
+    "     8   !C:7)C87    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #@    &    \" "
+    "    0         !0    @    !    !0    $         $     4   !V86QU90    X    P    !@    @    $          4    (     0  "
+    "  ,    !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !U<V5?9'-P"
+    "-#@         #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    ,     8    (    !   "
+    "       %    \"     $    $     0         0  0 8G)A;0X    P    !@    @    $          4    (     0    $    !         "
+    "!   0 Q    #@   #     &    \"     0         !0    @    !     P    $         $  # #(P,  .    .     8    (    !@    "
+    "     %    \"     $    !     0         )    \"            \"1 #@   #     &    \"     0         !0    @    !     @  "
+    "  $         $  \" #,R   .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@ "
+    "   @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P  "
+    "  $         $  # &]F9@ .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   "
   }
   DataRecord {
     Tag			    DataTag1
@@ -21547,78 +21260,12 @@ MatData {
     " $    \"     0         0  ( ;VX   "
   }
   DataRecord {
-    Tag			    DataTag2
-    Data		    "  %)30     .    R <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .3 4P0.    . <   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $   !N    9&5F875L=',   !S=&]R86=E     &1R86U?9&"
-    "EM;0  9')A;5]C;&]C:P!N<V%M<&QE<P   &1A=&%?=VED=&@ ;V9F<V5T      !C:7)C87       '9A;'5E        =7-E7V1S<#0X      X "
-    "  \"(!   !@    @    !          4    (     0   !(    !          X    X    !@    @    $          4    (     0    <  "
-    "  !         !     '    <W1O<F%G90 .    ,     8    (    !          %    \"     $    $     0         0  0 8G)A;0X   "
-    "!     !@    @    $          4    (     0    D    !         !     )    9')A;5]D:6UM          X    P    !@    @    $"
-    "          4    (     0    $    !         !   0 Q    #@   $     &    \"     0         !0    @    !    \"@    $     "
-    "    $     H   !D<F%M7V-L;V-K        #@   #     &    \"     0         !0    @    !     P    $         $  # #(P,  . "
-    "   .     8    (    !          %    \"     $    (     0         0    \"    &YS86UP;&5S#@   #@    &    \"     8     "
-    "    !0    @    !     0    $         \"0    @            D0 X   !     !@    @    $          4    (     0    H    ! "
-    "        !     *    9&%T85]W:61T:         X    P    !@    @    $          4    (     0    (    !         !   @ S,@ "
-    " #@   #@    &    \"     0         !0    @    !    !@    $         $     8   !O9F9S970   X    P    !@    @    $    "
-    "      4    (     0    (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    !    !@    $         $"
-    "     8   !C:7)C87    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #@    &    \" "
-    "    0         !0    @    !    !0    $         $     4   !V86QU90    X    P    !@    @    $          4    (     0  "
-    "  ,    !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !U<V5?9'-P"
-    "-#@         #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    ,     8    (    !   "
-    "       %    \"     $    $     0         0  0 8G)A;0X    P    !@    @    $          4    (     0    $    !         "
-    "!   0 Q    #@   #     &    \"     0         !0    @    !     P    $         $  # #(P,  .    .     8    (    !@    "
-    "     %    \"     $    !     0         )    \"            \"1 #@   #     &    \"     0         !0    @    !     @  "
-    "  $         $  \" #,R   .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@ "
-    "   @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P  "
-    "  $         $  # &]F9@ .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   "
-  }
-  DataRecord {
-    Tag			    DataTag3
-    Data		    "  %)30     .    J 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +E+\"P,.    & 8  "
-    " 8    (     @         %    \"     $    !     0         %  0 \"0    $    _    9&5F875L=', 961G90      <&]L87)I='D >"
-    "%]I;@      >%]O=70     >5]I;@      >5]O=70       X   \"8 P  !@    @    !          4    (     0    P    !          "
-    "X    P    !@    @    $          4    (     0    0    !         !  ! !E9&=E#@   #@    &    \"     0         !0    @"
-    "    !    !@    $         $     8   !2:7-I;F<   X    X    !@    @    $          4    (     0    @    !         !   "
-    "  (    <&]L87)I='D.    0     8    (    !          %    \"     $    +     0         0    \"P   $%C=&EV92!(:6=H     "
-    "  .    ,     8    (    !          %    \"     $    $     0         0  0 >%]I;@X   !@    !@    @    $          4   "
-    " (     0   \"\\    !         !     O    6S L,\"XP.\"PP+C X+# N,38L,\"XQ-BPP+C(T+# N,C0L,\"XS,BPP+C,R+# N-%T #@   #"
-    "@    &    \"     0         !0    @    !    !0    $         $     4   !X7V]U=     X   !@    !@    @    $          4"
-    "    (     0   \"\\    !         !     O    6S N-BPP+C8X+# N-C@L,\"XW-BPP+C<V+# N.#0L,\"XX-\"PP+CDR+# N.3(L,5T #@  "
-    " #     &    \"     0         !0    @    !    !     $         $  $ 'E?:6X.    4     8    (    !          %    \"   "
-    "  $    ?     0         0    'P   %LM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,5T #@   #@    &    \"     0         !0   "
-    " @    !    !0    $         $     4   !Y7V]U=     X   !0    !@    @    $          4    (     0   !\\    !         !"
-    "     ?    6RTQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ70 .    ,     8    (    !          %    \"     $    $  "
-    "   0         0  0 0F]T: X   !     !@    @    $          4    (     0    L    !         !     +    06-T:79E($AI9V@ "
-    "      X   !@    !@    @    $          4    (     0   \"\\    !         !     O    6S @,\"XP.\" P+C X(# N,38@,\"XQ-"
-    "B P+C(T(# N,C0@,\"XS,B P+C,R(# N-%T #@   &     &    \"     0         !0    @    !    +P    $         $    \"\\   !"
-    ";,\"XV(# N-C@@,\"XV.\" P+C<V(# N-S8@,\"XX-\" P+C@T(# N.3(@,\"XY,B Q70 .    4     8    (    !          %    \"     "
-    "$    ?     0         0    'P   %LM,2 M,2 @,2 @,2 @,2 @,2 M,2 M,2 M,2 M,5T #@   %     &    \"     0         !0    @"
-    "    !    'P    $         $    !\\   !;+3$@+3$@(#$@(#$@+3$@+3$@(#$@(#$@+3$@+3%=  "
-  }
-  DataRecord {
-    Tag			    DataTag4
-    Data		    "  %)30     .    L 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /0)!@(.    ( 8   "
-    "8    (     @         %    \"     $    !     0         %  0 \"0    $    _    9&5F875L=', 961G90      <&]L87)I='D >%"
-    "]I;@      >%]O=70     >5]I;@      >5]O=70       X   \"8 P  !@    @    !          4    (     0    P    !          X"
-    "    P    !@    @    $          4    (     0    0    !         !  ! !E9&=E#@   #@    &    \"     0         !0    @ "
-    "   !    !@    $         $     8   !2:7-I;F<   X    X    !@    @    $          4    (     0    @    !         !    "
-    " (    <&]L87)I='D.    0     8    (    !          %    \"     $    +     0         0    \"P   $%C=&EV92!(:6=H      "
-    " .    ,     8    (    !          %    \"     $    $     0         0  0 >%]I;@X   !@    !@    @    $          4    "
-    "(     0   \"\\    !         !     O    6S L,\"XP.\"PP+C X+# N,38L,\"XQ-BPP+C(T+# N,C0L,\"XS,BPP+C,R+# N-%T #@   #@"
-    "    &    \"     0         !0    @    !    !0    $         $     4   !X7V]U=     X   !@    !@    @    $          4 "
-    "   (     0   \"\\    !         !     O    6S N-BPP+C8X+# N-C@L,\"XW-BPP+C<V+# N.#0L,\"XX-\"PP+CDR+# N.3(L,5T #@   "
-    "#     &    \"     0         !0    @    !    !     $         $  $ 'E?:6X.    4     8    (    !          %    \"    "
-    " $    ?     0         0    'P   %LM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,5T #@   #@    &    \"     0         !0    "
-    "@    !    !0    $         $     4   !Y7V]U=     X   !0    !@    @    $          4    (     0   !\\    !         ! "
-    "    ?    6RTQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ70 .    .     8    (    !          %    \"     $    &   "
-    "  0         0    !@   %)I<VEN9P  #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !!8W1"
-    "I=F4@2&EG:       #@   &     &    \"     0         !0    @    !    +P    $         $    \"\\   !;,\" P+C X(# N,#@@,"
-    "\"XQ-B P+C$V(# N,C0@,\"XR-\" P+C,R(# N,S(@,\"XT70 .    8     8    (    !          %    \"     $    O     0        "
-    " 0    +P   %LP+C8@,\"XV.\" P+C8X(# N-S8@,\"XW-B P+C@T(# N.#0@,\"XY,B P+CDR(#%=  X   !0    !@    @    $          4 "
-    "   (     0   !\\    !         !     ?    6RTQ(\"TQ(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q70 .    4     8    (    "
-    "!          %    \"     $    ?     0         0    'P   %LM,2 M,2 @,2 @,2 M,2 M,2 M,2 M,2 M,2 M,5T "
+    Tag			    DataTag0
+    Data		    "  %)30     .    J $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /N+F08.    & $   "
+    "8    (     @         %    \"     $    !     0         %  0 $     $    P    9&5F875L=',          '-T<F5A;5]N86UE   "
+    "   !N<VEM=6QT7W-T<F5A;7, #@   \"@    &    \"     $         !0    @               $         #@   #@    &    \"     "
+    "0         !0    @    !    \"     $         $     @   !A9&-?9&]U= X    X    !@    @    &          4    (     0    $"
+    "    !          D    (            $$ "
   }
 }
