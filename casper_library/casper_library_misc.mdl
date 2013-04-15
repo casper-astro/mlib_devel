@@ -16,9 +16,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Apr 15 15:03:55 2013"
+  LastModifiedDate	  "Mon Apr 15 15:05:00 2013"
   RTWModifiedTimeStamp	  287938985
-  ModelVersionFormat	  "1.%<AutoIncrement:25>"
+  ModelVersionFormat	  "1.%<AutoIncrement:26>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -946,20 +946,12 @@ Library {
       MaskHelp		      "The trig_out port will go high for one cycle during the first high cycle of trig_in.  Thereafte"
       "r, trig_out will only go high for one cycle during the first high cycle of trig_in after each rising edge of arm"
       "."
-      MaskPromptString	      "hidden"
-      MaskStyleString	      "edit"
-      MaskVariables	      "hidden=&1;"
-      MaskTunableValueString  "off"
-      MaskEnableString	      "off"
-      MaskVisibilityString    "off"
-      MaskToolTipString	      "on"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0"
       System {
 	Name			"armed_trigger"
 	Location		[422, 400, 991, 852]
