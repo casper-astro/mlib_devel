@@ -48343,7 +48343,7 @@ Library {
 	  Name			  "Convert"
 	  Ports			  [1, 1]
 	  Position		  [110, 45, 155, 75]
-	  SourceBlock		  "xbsIndex_r3/Convert"
+	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Converter Block"
 	  arith_type		  "Boolean"
 	  n_bits		  "1"
@@ -48370,7 +48370,7 @@ Library {
 	  Name			  "xps_library_probe_TRIG0"
 	  Ports			  [1, 1]
 	  Position		  [230, 50, 270, 70]
-	  SourceBlock		  "xbsIndex_r3/Gateway Out"
+	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out"
 	  output_type		  "Double"
 	  nbits			  "8"
