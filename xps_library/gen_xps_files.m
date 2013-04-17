@@ -515,7 +515,7 @@ if run_edkgen
     % modifying MHS file
     gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
-    % add the register descriptions to the core_info.tab file
+    % add the register descriptions to the registers.info file
     gen_xps_mod_mhs_bitreg(sys, mssge_paths, slash);
     
     % modifying MSS file
@@ -579,7 +579,7 @@ if run_software
     unix_fid = fopen([xps_path, slash, 'gen_prog_files'],'w');
     fprintf(unix_fid,['#!/bin/bash\n']);
     time_stamp = clear_name(datestr(now, 'yyyy-mmm-dd HHMM'));
-
+ 
     switch sw_os
         case 'none'
             fprintf(win_fid,['copy implementation\\system.bit ..\\bit_files\\',design_name,'_',time_stamp,'.bit\n']);
@@ -590,23 +590,27 @@ if run_software
             fprintf(unix_fid,['cp implementation/download.bit ../bit_files/',design_name,'_',time_stamp,'.bit\n']);
         % end otherwise
     end % switch sw_os
-
-    [s,w] = system('uname -m');
-    if strcmp(hw_sys, 'ROACH') | strcmp(hw_sys, 'ROACH2')
-      fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
-      if strcmp(w(1:6), 'x86_64')
-         fprintf(unix_fid, ['./mkbof_64 -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
-      else
-         fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
-      end
-      fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
-      end
-      fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
-      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
-      if strcmp(hw_sys, 'ROACH2')
-	 fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
-         fprintf(unix_fid,['chmod +x ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
-    end % strcmp(hw_sys, 'ROACH')
+    
+    [~,w] = system('uname -m');
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
+        fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
+        if strcmp(w(1:6), 'x86_64')
+           fprintf(unix_fid, ['./mkbof_64 -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+        else
+           fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+        end
+        fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
+        fprintf(unix_fid,'chmod +x implementation/system.bof\n');
+        fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
+        if exist([xps_path,  slash, 'registers.info'], 'file') == 2,
+            fprintf(win_fid,['copy registers.info ..\\bit_files\\', design_name,'_',time_stamp,'.reginfo\n']);
+            fprintf(unix_fid,['cp registers.info ../bit_files/', design_name,'_',time_stamp,'.reginfo\n']);
+        end
+        if strcmp(hw_sys, 'ROACH2')
+            fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
+            fprintf(unix_fid,['chmod +x ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
+        end % strcmp(hw_sys, 'ROACH2')
+    end % strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
 
     fclose(win_fid);
     fclose(unix_fid);

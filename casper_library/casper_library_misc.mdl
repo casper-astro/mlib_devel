@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [488.0, 140.0, 918.0, 878.0]
+      Location		      [1024.0, 346.0, 623.0, 516.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -28,7 +28,7 @@ Library {
 	DockPosition		"Left"
 	Width			[50]
 	Height			[50]
-	Filter			[8]
+	Filter			[9]
       }
       Object {
 	$PropName		"ExplorerBarInfo"
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[878.0, 711.0]
+	Extents			[581.0, 359.0]
 	ZoomFactor		[1.0]
 	Offset			[0.0, 0.0]
       }
@@ -53,11 +53,11 @@ Library {
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "paulp"
+  LastModifiedBy	  "jmanley"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Apr 05 15:16:27 2013"
-  RTWModifiedTimeStamp	  287075782
-  ModelVersionFormat	  "1.%<AutoIncrement:24>"
+  LastModifiedDate	  "Fri Apr 12 09:33:59 2013"
+  RTWModifiedTimeStamp	  287660021
+  ModelVersionFormat	  "1.%<AutoIncrement:25>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -776,7 +776,7 @@ Library {
   }
   System {
     Name		    "casper_library_misc"
-    Location		    [488, 140, 1406, 1018]
+    Location		    [1024, 346, 1647, 862]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1726,7 +1726,7 @@ Library {
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  LibraryVersion	  "1.480"
 	  SourceBlock		  "xps_library/software register"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  io_dir		  "From Processor"
 	  arith_type		  "Unsigned"
 	  bitwidth		  "32"
@@ -4243,7 +4243,7 @@ Library {
       }
       System {
 	Name			"complex_convert"
-	Location		[259, 51, 859, 494]
+	Location		[1089, 584, 1611, 888]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4256,7 +4256,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6"
+	SIDHighWatermark	"8"
 	Block {
 	  BlockType		  Inport
 	  Name			  "in"
@@ -4268,11 +4268,13 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "c_to_ri"
-	  SID			  "27:2"
+	  SID			  "27:7"
 	  Ports			  [1, 2]
 	  Position		  [95, 49, 135, 91]
-	  ZOrder		  -2
+	  ZOrder		  1
 	  AttributesFormatString  "8_7 r/i"
+	  AncestorBlock		  "casper_library_misc/c_to_ri"
+	  LibraryVersion	  "1.24"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag12"
 	  MinAlgLoopOccurrences	  off
@@ -4286,13 +4288,12 @@ Library {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    65
 	    $ClassName		    "Simulink.Mask"
-	    Type		    "Complex to Real-Imag"
-	    Description		    "Outputs real and imaginary components of a complex input."
-	    Help		    "<pre>\nDescription::\n\nOutputs real and imaginary components of a complex input.\nUseful for simplify"
-	    "ing interconnects.\nSee also: Real-Imag to Complex (ri_to_c)\n\nMask Parameters::\n\nBit Width (n_bits): Specifie"
-	    "s the width of the real/imaginary components.\nAssumed equal for both components.\n\nBinary Point (bin_pt): Speci"
-	    "fies the binary point location in the real/imaginary components.\nAssumed equal for both components.\n</pre>"
-	    Initialization	    "c_to_ri_init(gcb,n_bits,bin_pt);"
+	    Type		    "c_to_ri"
+	    Description		    "Outputs real and imaginary components of a complex input.\nUseful for simplifying interconnects"
+	    ".\nSee also: Real-Imag to Complex (ri_to_c)"
+	    Help		    "eval('xlWeb(''http://casper.berkeley.edu/wiki/C_to_ri'')')"
+	    Initialization	    "annotation=sprintf('%d_%d r/i',n_bits,bin_pt);\nset_param(gcb,'AttributesFormatString',annota"
+	    "tion);"
 	    SelfModifiable	    "on"
 	    Array {
 	      Type		      "Simulink.MaskParameter"
@@ -4316,24 +4317,25 @@ Library {
 	  }
 	  System {
 	    Name		    "c_to_ri"
-	    Location		    [533, 45, 851, 433]
+	    Location		    [664, 45, 982, 468]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
 	    ScreenColor		    "white"
 	    PaperOrientation	    "landscape"
 	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+	    PaperType		    "A4"
+	    PaperUnits		    "centimeters"
+	    TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
 	    SIDHighWatermark	    "7"
+	    SIDPrevWatermark	    "7"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "c"
-	      SID		      "27:2:1"
+	      SID		      "27:7:1"
 	      Position		      [20, 63, 50, 77]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -4341,7 +4343,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_im"
-	      SID		      "27:2:2"
+	      SID		      "27:7:2"
 	      Ports		      [1, 1]
 	      Position		      [150, 79, 190, 111]
 	      ZOrder		      -2
@@ -4355,22 +4357,22 @@ Library {
 	      force_arith_type	      "on"
 	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "7"
+	      bin_pt		      "bin_pt"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "10.1.3"
+	      block_version	      "9.1.01"
 	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([11 6 13 6 11 19 21 23 32 25 18 13 20 13 18 25 32 23 21 19 11 ],[3 8 15 22 27 27 25 27 27 20 27 "
-	      "22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end ico"
-	      "n graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMEN"
-	      "T: end icon text');\n"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
+	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
+	      "ENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_re"
-	      SID		      "27:2:3"
+	      SID		      "27:7:3"
 	      Ports		      [1, 1]
 	      Position		      [150, 29, 190, 61]
 	      ZOrder		      -3
@@ -4384,22 +4386,22 @@ Library {
 	      force_arith_type	      "on"
 	      arith_type	      "Signed  (2's comp)"
 	      force_bin_pt	      "on"
-	      bin_pt		      "7"
+	      bin_pt		      "bin_pt"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "10.1.3"
+	      block_version	      "9.1.01"
 	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([11 6 13 6 11 19 21 23 32 25 18 13 20 13 18 25 32 23 21 19 11 ],[3 8 15 22 27 27 25 27 27 20 27 "
-	      "22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end ico"
-	      "n graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMEN"
-	      "T: end icon text');\n"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
+	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
+	      "ENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_im"
-	      SID		      "27:2:4"
+	      SID		      "27:7:4"
 	      Ports		      [1, 1]
 	      Position		      [80, 81, 125, 109]
 	      ZOrder		      -4
@@ -4408,7 +4410,7 @@ Library {
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P>"
 	      "<P>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "8"
+	      nbits		      "n_bits"
 	      boolean_output	      "off"
 	      mode		      "Lower Bit Location + Width"
 	      bit1		      "0"
@@ -4419,18 +4421,18 @@ Library {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "slice"
-	      block_version	      "10.1.3"
+	      block_version	      "9.1.01"
 	      sg_icon_stat	      "45,28,1,1,white,blue,0,b1026674,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 28 28 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 10 17 10 15 22 24 26 34 28 22 18 26 18 22 28 34 26 24 22 15 ],[3 8 15 22 27 27 25 27 27 21 2"
-	      "7 23 15 7 3 9 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\nfprintf('','COMMENT: end ic"
-	      "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprint"
-	      "f('','COMMENT: end icon text');\n"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 "
+	      "0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "6 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprin"
+	      "tf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "slice_re"
-	      SID		      "27:2:5"
+	      SID		      "27:7:5"
 	      Ports		      [1, 1]
 	      Position		      [80, 31, 125, 59]
 	      ZOrder		      -5
@@ -4439,7 +4441,7 @@ Library {
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
 	      "ut type is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P>"
 	      "<P>Hardware notes: In hardware this block costs nothing."
-	      nbits		      "8"
+	      nbits		      "n_bits"
 	      boolean_output	      "off"
 	      mode		      "Upper Bit Location + Width"
 	      bit1		      "0"
@@ -4450,18 +4452,18 @@ Library {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "slice"
-	      block_version	      "10.1.3"
+	      block_version	      "9.1.01"
 	      sg_icon_stat	      "45,28,1,1,white,blue,0,b1026674,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 28 28 ],[0.77 0.82 "
-	      "0.91]);\npatch([15 10 17 10 15 22 24 26 34 28 22 18 26 18 22 28 34 26 24 22 15 ],[3 8 15 22 27 27 25 27 27 21 2"
-	      "7 23 15 7 3 9 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\nfprintf('','COMMENT: end ic"
-	      "on graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprint"
-	      "f('','COMMENT: end icon text');\n"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 "
+	      "0.91]);\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "6 21 15 9 4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprin"
+	      "tf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Outport
 	      Name		      "re"
-	      SID		      "27:2:6"
+	      SID		      "27:7:6"
 	      Position		      [215, 38, 245, 52]
 	      ZOrder		      -6
 	      IconDisplay	      "Port number"
@@ -4469,37 +4471,16 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "im"
-	      SID		      "27:2:7"
+	      SID		      "27:7:7"
 	      Position		      [215, 88, 245, 102]
 	      ZOrder		      -7
 	      Port		      "2"
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      SrcBlock		      "c"
+	      SrcBlock		      "slice_re"
 	      SrcPort		      1
-	      Points		      [5, 0]
-	      Branch {
-		Points			[0, 25]
-		DstBlock		"slice_im"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, -25]
-		DstBlock		"slice_re"
-		DstPort			1
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "force_im"
-	      SrcPort		      1
-	      DstBlock		      "im"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "force_re"
-	      SrcPort		      1
-	      DstBlock		      "re"
+	      DstBlock		      "force_re"
 	      DstPort		      1
 	    }
 	    Line {
@@ -4509,10 +4490,31 @@ Library {
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "slice_re"
+	      SrcBlock		      "force_re"
 	      SrcPort		      1
-	      DstBlock		      "force_re"
+	      DstBlock		      "re"
 	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "force_im"
+	      SrcPort		      1
+	      DstBlock		      "im"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "c"
+	      SrcPort		      1
+	      Points		      [5, 0]
+	      Branch {
+		Points			[0, -25]
+		DstBlock		"slice_re"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 25]
+		DstBlock		"slice_im"
+		DstPort			1
+	      }
 	    }
 	  }
 	}
@@ -4523,29 +4525,38 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [190, 72, 235, 88]
 	  ZOrder		  -3
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
+	  gui_display_data_type	  "Fixed-point"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
+	  float_type		  "Single"
+	  exp_bits		  "8"
+	  fraction_bits		  "24"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
+	  en			  off
 	  latency		  "3"
-	  dbl_ovrd		  "off"
-	  pipeline		  "on"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "45,16,1,1,white,blue,0,0b13ee9b,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newl"
-	  "inez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "45,16,1,1,white,blue,0,0bfac013,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 16 16 0 ]);\npatch([17.55 20.44 22.44 24.44 26.44 22.44 19.55 17.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([19.55 22.44 20.44 17.55 19.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([17.55 20.44 22.44 19.55 17.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([19"
+	  ".55 26.44 24.44 22.44 20.44 17.55 19.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'ca"
+	  "st');\ncolor('black');disp('z^{-3}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfprintf('','COMMENT:"
+	  " end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -4555,37 +4566,48 @@ Library {
 	  Position		  [190, 52, 235, 68]
 	  ZOrder		  -4
 	  NamePlacement		  "alternate"
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
+	  gui_display_data_type	  "Fixed-point"
 	  arith_type		  "Signed  (2's comp)"
 	  n_bits		  "8"
 	  bin_pt		  "7"
+	  float_type		  "Single"
+	  exp_bits		  "8"
+	  fraction_bits		  "24"
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
+	  en			  off
 	  latency		  "3"
-	  dbl_ovrd		  "off"
-	  pipeline		  "on"
-	  xl_use_area		  "off"
+	  dbl_ovrd		  off
+	  pipeline		  on
+	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,470,336"
 	  block_type		  "convert"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "45,16,1,1,white,blue,0,0b13ee9b,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 10 17 10 15 23 25 27 35 28 22 17 23 17 22 28 35 27 25 23 15 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'cast');\ncolor('black');disp('\\newl"
-	  "inez^{-3}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "45,16,1,1,white,blue,0,0bfac013,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 16 16 0 ]);\npatch([17.55 20.44 22.44 24.44 26.44 22.44 19.55 17.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([19.55 22.44 20.44 17.55 19.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([17.55 20.44 22.44 19.55 17.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([19"
+	  ".55 26.44 24.44 22.44 20.44 17.55 19.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'ca"
+	  "st');\ncolor('black');disp('z^{-3}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfprintf('','COMMENT:"
+	  " end icon text');"
 	}
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
-	  SID			  "27:5"
+	  SID			  "27:8"
 	  Ports			  [2, 1]
-	  Position		  [285, 49, 325, 91]
-	  ZOrder		  -5
+	  Position		  [280, 49, 320, 91]
+	  ZOrder		  2
+	  AncestorBlock		  "casper_library_misc/ri_to_c"
+	  LibraryVersion	  "1.24"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag13"
 	  MinAlgLoopOccurrences	  off
@@ -4599,11 +4621,10 @@ Library {
 	    $PropName		    "MaskObject"
 	    $ObjectID		    68
 	    $ClassName		    "Simulink.Mask"
-	    Type		    "Real-Imag to Complex"
-	    Description		    "Concatenates real and imaginary inputs into a complex output."
-	    Help		    "<pre>\nDescription::\n\nConcatenates a real and imaginary input into a complex output.\nUseful for sim"
-	    "plifying interconnects.\nSee also: Complex to Real-Imag (c_to_ri)\n\nMask Parameters::\n\n(N/A)\n</pre>"
-	    Initialization	    "ri_to_c_init(gcb);"
+	    Type		    "ri_to_c"
+	    Description		    "Concatenates real and imaginary inputs into a complex output.\nUseful for simplifying interconn"
+	    "ects.\nSee also: Complex to Real-Imag (c_to_ri)"
+	    Help		    "eval('xlWeb(''http://casper.berkeley.edu/wiki/Ri_to_c'')')"
 	    SelfModifiable	    "on"
 	  }
 	  System {
@@ -4615,17 +4636,18 @@ Library {
 	    ScreenColor		    "white"
 	    PaperOrientation	    "landscape"
 	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+	    PaperType		    "A4"
+	    PaperUnits		    "centimeters"
+	    TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
 	    SIDHighWatermark	    "6"
+	    SIDPrevWatermark	    "6"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
-	      SID		      "27:5:1"
+	      SID		      "27:8:1"
 	      Position		      [25, 38, 55, 52]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -4633,7 +4655,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
-	      SID		      "27:5:2"
+	      SID		      "27:8:2"
 	      Position		      [25, 88, 55, 102]
 	      ZOrder		      -2
 	      Port		      "2"
@@ -4642,7 +4664,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "concat"
-	      SID		      "27:5:3"
+	      SID		      "27:8:3"
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      ZOrder		      -3
@@ -4653,20 +4675,20 @@ Library {
 	      num_inputs	      "2"
 	      dbl_ovrd		      "off"
 	      has_advanced_control    "0"
-	      sggui_pos		      "-1,-1,-1,-1"
+	      sggui_pos		      "20,20,336,165"
 	      block_type	      "concat"
-	      block_version	      "10.1.3"
-	      sg_icon_stat	      "50,55,1,1,white,blue,0,df1e5aba,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 55 55 ],[0.77 0.82 "
-	      "0.91]);\npatch([11 3 15 3 11 24 28 32 46 35 24 16 28 16 24 35 46 32 28 24 11 ],[8 16 28 40 48 48 44 48 48 37 48"
-	      " 40 28 16 8 19 8 8 12 8 8 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 55 55 0 ]);\nfprintf('','COMMENT: end "
+	      block_version	      "9.1.01"
+	      sg_icon_stat	      "50,55,2,1,white,blue,0,df1e5aba,right"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 "
+	      "0.91]);\npatch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54"
+	      " 45 30 15 6 19 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end "
 	      "icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'hi');\ncolor('b"
 	      "lack');port_label('input',2,'lo');\nfprintf('','COMMENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_im"
-	      SID		      "27:5:4"
+	      SID		      "27:8:4"
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      ZOrder		      -4
@@ -4684,18 +4706,18 @@ Library {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "10.1.3"
+	      block_version	      "9.1.01"
 	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([11 6 13 6 11 19 21 23 32 25 18 13 20 13 18 25 32 23 21 19 11 ],[3 8 15 22 27 27 25 27 27 20 27 "
-	      "22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end ico"
-	      "n graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMEN"
-	      "T: end icon text');\n"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
+	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
+	      "ENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "force_re"
-	      SID		      "27:5:5"
+	      SID		      "27:8:5"
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      ZOrder		      -5
@@ -4713,38 +4735,27 @@ Library {
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
 	      block_type	      "reinterpret"
-	      block_version	      "10.1.3"
+	      block_version	      "9.1.01"
 	      sg_icon_stat	      "40,32,1,1,white,blue,0,8982c1db,right"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 ],[0 0 32 32 ],[0.77 0.82 "
-	      "0.91]);\npatch([11 6 13 6 11 19 21 23 32 25 18 13 20 13 18 25 32 23 21 19 11 ],[3 8 15 22 27 27 25 27 27 20 27 "
-	      "22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end ico"
-	      "n graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMMEN"
-	      "T: end icon text');\n"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 ],[0 0 32 32 ],[0.77 0.82 "
+	      "0.91]);\npatch([16 11 18 11 16 24 26 28 37 30 23 18 25 18 23 30 37 28 26 24 16 ],[3 8 15 22 27 27 25 27 27 20 2"
+	      "7 22 15 8 3 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\nfprintf('','COMMENT: end i"
+	      "con graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');disp('reinterpret');\nfprintf('','COMM"
+	      "ENT: end icon text');\n"
 	    }
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
-	      SID		      "27:5:6"
+	      SID		      "27:8:6"
 	      Position		      [220, 63, 250, 77]
 	      ZOrder		      -6
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      SrcBlock		      "im"
+	      SrcBlock		      "force_re"
 	      SrcPort		      1
-	      DstBlock		      "force_im"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "concat"
-	      SrcPort		      1
-	      DstBlock		      "c"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "re"
-	      SrcPort		      1
-	      DstBlock		      "force_re"
+	      Points		      [0, 10]
+	      DstBlock		      "concat"
 	      DstPort		      1
 	    }
 	    Line {
@@ -4755,10 +4766,21 @@ Library {
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "force_re"
+	      SrcBlock		      "re"
 	      SrcPort		      1
-	      Points		      [0, 10]
-	      DstBlock		      "concat"
+	      DstBlock		      "force_re"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "concat"
+	      SrcPort		      1
+	      DstBlock		      "c"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "im"
+	      SrcPort		      1
+	      DstBlock		      "force_im"
 	      DstPort		      1
 	    }
 	  }
