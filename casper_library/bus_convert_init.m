@@ -4,12 +4,12 @@ function bus_convert_init(blk, varargin)
   clog('entering bus_convert_init', 'trace');
   
   defaults = { ...
-    'n_bits_in',  [],  'bin_pt_in',       8 , 'type_in', 1,  'cmplx', 'off', ...
+    'n_bits_in',  [8 8 8],  'bin_pt_in',       8 , 'type_in', 1,  'cmplx', 'off', ...
     'n_bits_out',      8 ,  'bin_pt_out',      4 , 'type_out', 1, ...
-    'overflow', 1, 'quantization', 1,   'misc', 'on', 'latency', 2 ...
+    'overflow', 1 , 'quantization', 1,   'misc', 'on', 'latency', 2, 'of', 'on', ...
   };  
   
-  check_mask_type(blk, 'bus_cast');
+  check_mask_type(blk, 'bus_convert');
 
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   munge_block(blk, varargin{:});
@@ -34,6 +34,7 @@ function bus_convert_init(blk, varargin)
   quantization    = get_var('quantization', 'defaults', defaults, varargin{:});
   latency         = get_var('latency', 'defaults', defaults, varargin{:});
   misc            = get_var('misc', 'defaults', defaults, varargin{:});
+  of              = get_var('of', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
   
@@ -131,6 +132,9 @@ function bus_convert_init(blk, varargin)
     'Port', '1', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   ypos_tmp = ypos_tmp + yinc + convert_d*compi/2;
   
+  %space for of_bussify
+  if strcmp(of, 'on'), ypos_tmp = ypos_tmp + yinc + convert_d*compi; end
+  
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misci', 'built-in/inport', ...
       'Port', '2', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
@@ -185,32 +189,48 @@ function bus_convert_init(blk, varargin)
     end  
     switch overflow(index),
       case 0,
-        of = 'Wrap';
+        overflow = 'Wrap';
       case 1,
-        of = 'Saturate';
+        overflow = 'Saturate';
       case 2,
-        of = 'Flag as error';
+        overflow = 'Flag as error';
     end  
     clog(['output ',num2str(index),': (',num2str(n_bits_out(index)), ' ', ...
       num2str(bin_pt_out(index)),') ', arith_type,' ',quant,' ', of], ...
       'bus_convert_init_debug'); 
 
     conv_name = ['conv',num2str(index)];
-    reuse_block(blk, conv_name, 'xbsIndex_r4/Convert', ...
-      'n_bits', num2str(n_bits_out(index)), 'bin_pt', num2str(bin_pt_out(index)), ...
-      'overflow', of, 'quantization', quant, 'arith_type', arith_type, ...
-      'latency', 'latency',  'pipeline', 'on', ...
-      'Position', [xpos-convert_w/2 ypos_tmp xpos+convert_w/2 ypos_tmp+convert_d-20]);
+
+    position = [xpos-convert_w/2 ypos_tmp xpos+convert_w/2 ypos_tmp+convert_d-20];
+
+    if strcmp(of, 'on'),
+      reuse_block(blk, conv_name, 'casper_library_misc/convert_of', ...
+	'bit_width_i', num2str(n_bits_in(index)), 'binary_point_i', num2str(bin_pt_in(index)), ... 
+	'bit_width_o', num2str(n_bits_out(index)), 'binary_point_o', num2str(bin_pt_out(index)), ... 
+	'latency', 'latency', 'overflow', overflow, 'quantization', quant, ...
+	'Position', position);
+    else,
+      reuse_block(blk, conv_name, 'casper_library_misc/convert', ...
+	'bin_pt_in', num2str(bin_pt_in(index)), ...
+	'n_bits_out', num2str(n_bits_out(index)), 'bin_pt_out', num2str(bin_pt_out(index)), ...
+	'overflow', overflow, 'quantization', quant, 'latency', 'latency', ...  
+	'Position', position);
+    end
+
     ypos_tmp = ypos_tmp + convert_d;
 
     add_line(blk, ['debus/',num2str(index)], [conv_name,'/1']);
   end
  
   ypos_tmp = ypos + yinc + convert_d*compi;
+
+  %space for of_bussify
+  if strcmp(of, 'on'), ypos_tmp = ypos_tmp + yinc + convert_d*compi; end
+
   if strcmp(misc, 'on'),
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
       'latency', 'latency', ...
-      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+convert_d/2]);
+      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
     ypos_tmp = ypos_tmp + convert_d;
   end
@@ -230,6 +250,17 @@ function bus_convert_init(blk, varargin)
     add_line(blk, ['conv',num2str(index),'/1'], ['bussify/',num2str(index)]);
   end
 
+  if strcmp(of, 'on'),
+    ypos_tmp = ypos_tmp + yinc + compo*convert_d;
+    reuse_block(blk, 'of_bussify', 'casper_library_flow_control/bus_create', ...
+      'inputNum', num2str(compo), ...
+      'Position', [xpos-bus_create_w/2 ypos_tmp-convert_d*compo/2 xpos+bus_create_w/2 ypos_tmp+convert_d*compo/2]);
+  
+    for index = 1:compo,
+      add_line(blk, ['conv',num2str(index),'/2'], ['of_bussify/',num2str(index)]);
+    end
+  end
+
   %%%%%%%%%%%%%%%%%
   % output port/s %
   %%%%%%%%%%%%%%%%%
@@ -240,10 +271,23 @@ function bus_convert_init(blk, varargin)
     'Port', '1', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   add_line(blk, ['bussify/1'], ['dout/1']);
   
-  ypos_tmp = ypos + yinc + convert_d*compi;  
+  ypos_tmp = ypos_tmp + yinc + convert_d*compo/2;
+  
+  port_no = 1;
+  if strcmp(of, 'on'), 
+    ypos_tmp = ypos_tmp + convert_d*compo/2;
+    reuse_block(blk, 'overflow', 'built-in/outport', ...
+      'Port', num2str(port_no+1), ... 
+      'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
+
+    add_line(blk, 'of_bussify/1', 'overflow/1');
+    ypos_tmp = ypos_tmp + yinc + convert_d*compo/2;
+    port_no = port_no + 1;
+  end
+
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misco', 'built-in/outport', ...
-      'Port', '2', ... 
+      'Port', num2str(port_no + 1), ... 
       'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
 
     add_line(blk, 'dmisc/1', 'misco/1');
