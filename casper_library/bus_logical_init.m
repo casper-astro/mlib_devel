@@ -68,6 +68,7 @@ function bus_logical_init(blk, varargin)
 
   %determine number of components from clues   
   compa = max(a); compb = max(b); compo = max(o); comp = max(compa, compb);
+  compen = comp;
 
   %need to specify at least one set of input components
   if compo > comp,
@@ -89,6 +90,7 @@ function bus_logical_init(blk, varargin)
   n_bits_out    = repmat(n_bits_out, 1, comp/lenbo);
   bin_pt_out    = repmat(bin_pt_out, 1, comp/lenpo);
   type_o        = repmat(type_out, 1, comp/lento);
+    
 
   %if complex we need to double down on some of these
   if strcmp(cmplx, 'on'),
@@ -123,10 +125,11 @@ function bus_logical_init(blk, varargin)
 
   port_no = 2;
   if strcmp(en, 'on'),
+    ypos_tmp = ypos_tmp + op_d*compen/2;
     reuse_block(blk, 'en', 'built-in/inport', ...
       'Port', num2str(port_no+1), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
     port_no = port_no+1;
-    ypos_tmp = ypos_tmp + yinc + op_d*comp/2;
+    ypos_tmp = ypos_tmp + yinc + op_d*compen/2;
   end
 
   if strcmp(misc, 'on'),
@@ -162,21 +165,20 @@ function bus_logical_init(blk, varargin)
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-op_d*compb/2 xpos+bus_expand_w/2 ypos_tmp+op_d*compb/2]);
   add_line(blk, 'b/1', 'b_debus/1');
-  ypos_tmp = ypos_tmp + op_d*compa + yinc;
+  ypos_tmp = ypos_tmp + op_d*compb/2 + yinc;
 
   if strcmp(en, 'on'),
-    if strcmp(cmplx, 'on'), outNum = comp/2;
-    else outNum = comp;
-    end
+    ypos_tmp = ypos_tmp + op_d*compen/2;
     reuse_block(blk, 'en_debus', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', ...
-      'outputNum', num2str(outNum), ...
+      'outputNum', num2str(compen), ...
       'outputWidth', '1', 'outputBinaryPt', '0', ...
       'outputArithmeticType', '2', 'show_format', 'on', ...
       'outputToWorkspace', 'off', 'variablePrefix', '', ...
       'outputToModelAsWell', 'on', ...
-      'Position', [xpos-bus_expand_w/2 ypos_tmp-op_d*comp/2 xpos+bus_expand_w/2 ypos_tmp+op_d*comp/2]);
+      'Position', [xpos-bus_expand_w/2 ypos_tmp-op_d*compen/2 xpos+bus_expand_w/2 ypos_tmp+op_d*compen/2]);
     add_line(blk, 'en/1', 'en_debus/1');
+    ypos_tmp = ypos_tmp + op_d*compen/2 + yinc;
   end %if
 
   xpos = xpos + xinc + op_w/2;  
@@ -190,12 +192,7 @@ function bus_logical_init(blk, varargin)
   %need operation per component
   a_src = repmat([1:compa], 1, comp/compa);
   b_src = repmat([1:compb], 1, comp/compb);
-
-  if strcmp(cmplx, 'on'), 
-    en_src = repmat([[1:comp/2]; [1:comp/2]], 1, comp); 
-  else,	 
-    en_src = [1:comp]; 
-  end
+  en_src = repmat([1:compen], 1, comp/compen);
 
   clog(['making ',num2str(comp),' operation blocks'],'bus_logical_init_debug');
 
@@ -228,7 +225,7 @@ function bus_logical_init(blk, varargin)
 
   end %for
   ypos_tmp = ypos + op_d*(compb+compa) + 2*yinc;
-  if strcmp(en, 'on'), ypos_tmp = ypos_tmp + comp*op_d + yinc; end
+  if strcmp(en, 'on'), ypos_tmp = ypos_tmp + compen*op_d + yinc; end
   
   if strcmp(misc, 'on'),
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
@@ -252,17 +249,20 @@ function bus_logical_init(blk, varargin)
     add_line(blk, ['logical',num2str(index),'/1'], ['bussify/',num2str(index)]);
   end
 
-  %output port/s
+  %%%%%%%%%%%%%%%%%
+  % output port/s %
+  %%%%%%%%%%%%%%%%%
+
   ypos_tmp = ypos + op_d*comp/2;
   xpos = xpos + xinc + bus_create_w/2;
-  name = ['a',logical_function,'b'];
+  name = ['a ',logical_function,' b'];
   reuse_block(blk, name, 'built-in/outport', ...
     'Port', '1', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   add_line(blk, ['bussify/1'], [name,'/1']);
   ypos_tmp = ypos_tmp + yinc + port_d;  
 
   ypos_tmp = ypos + op_d*(compb+compa) + 2*yinc;
-  if strcmp(en, 'on'), ypos_tmp = ypos_tmp + comp*op_d + yinc; end
+  if strcmp(en, 'on'), ypos_tmp = ypos_tmp + compen*op_d + yinc; end
   
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misco', 'built-in/outport', ...
