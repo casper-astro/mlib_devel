@@ -37,7 +37,7 @@ function gen_xps_mod_mhs_bitreg(sys, mssge_paths, slash)
     for n = 1 : numel(bitregs),
         reg = bitregs(n);
         if numel(reg.fields) > 0,
-            fprintf(fid, '#%s|%s|%i|', reg.name, reg.direction, numel(reg.fields));
+            fprintf(fid, '#%s|%s|32|%i|', reg.name, reg.direction, numel(reg.fields));
             for f = 1 : numel(reg.fields),
                 field = reg.fields(f);
                 fprintf(fid, '%s(%i,%i,%i,%i)', field.name, field.msb_offset, field.width, field.binpt, field.type);
