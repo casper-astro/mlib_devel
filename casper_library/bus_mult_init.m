@@ -3,11 +3,11 @@ function bus_mult_init(blk, varargin)
   clog('entering bus_mult_init', 'trace');
   
   defaults = { ...
-    'n_bits_a', [8 8 8 8 8 8],  'bin_pt_a',     4,   'type_a',   1, 'cmplx_a', 'on', ...
-    'n_bits_b', [4 4 4 4 4 4],  'bin_pt_b',     3,   'type_b',   1, 'cmplx_b', 'on', ...
+    'n_bits_a', [8 8 8 8 8],  'bin_pt_a',     4,   'type_a',   1, 'cmplx_a', 'off', ...
+    'n_bits_b', [4],  'bin_pt_b',     3,   'type_b',   1, 'cmplx_b', 'on', ...
     'n_bits_out', 12 ,  'bin_pt_out',   7,   'type_out', 1, ...
     'overflow', 0,      'quantization', 0,   'misc', 'on', ...
-    'mult_latency', 3,  'add_latency', 1 ...
+    'mult_latency', 3,  'add_latency', 1 , 'max_fanout', 3, 'fan_latency', 1, ...
   };  
   
   check_mask_type(blk, 'bus_mult');
@@ -19,6 +19,7 @@ function bus_mult_init(blk, varargin)
   ypos = 50; yinc = 50;
 
   port_w = 30; port_d = 14;
+  rep_w = 50; rep_d = 30;
   bus_expand_w = 50;
   bus_create_w = 50;
   mult_w = 50; mult_d = 60;
@@ -39,6 +40,8 @@ function bus_mult_init(blk, varargin)
   quantization = get_var('quantization', 'defaults', defaults, varargin{:});
   add_latency  = get_var('add_latency', 'defaults', defaults, varargin{:});
   mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
+  max_fanout   = get_var('max_fanout', 'defaults', defaults, varargin{:});
+  fan_latency  = get_var('fan_latency', 'defaults', defaults, varargin{:});
   misc         = get_var('misc', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
@@ -51,6 +54,21 @@ function bus_mult_init(blk, varargin)
     error('exiting bus_mult_init');
     return;
   end
+
+  %%%%%%%%%%%%%%%%%%%%%%
+  % parameter checking %
+  %%%%%%%%%%%%%%%%%%%%%%
+
+  if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on') && max_fanout < 2,
+    clog('Complex multiplication without fanout of at least 2 is impossible','error');
+    error('Complex multiplication without fanout of at least 2 is impossible');
+  end
+
+  if max_fanout < 1,
+    clog('Maximum fanout must be 1 or greater','error');
+    error('Maximum fanout must be 1 or greater');
+  end
+
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % check input lists for consistency %
@@ -144,6 +162,47 @@ function bus_mult_init(blk, varargin)
     quantization= reshape([quantization; quantization], 1, compo); 
   end
 
+  %%%%%%%%%%%%%%%%%%
+  % fanout control %
+  %%%%%%%%%%%%%%%%%%
+
+  fa = compo/compa; fb = compo/compb;
+  if strcmp(cmplx_a, 'on'), 
+    fa = fa*2;
+    %if complex, fanout can only be a multiple of 2 (on the conservative side)
+    max_fanouta = max(1, floor(max_fanout/2)*2); 
+  else,
+    max_fanouta = max_fanout; 
+  end
+  if strcmp(cmplx_b, 'on'), 
+    fb = fb*2; 
+    %if complex, fanout can only be a multiple of 2 (on the conservative side)
+    max_fanoutb = max(1, floor(max_fanout/2)*2); 
+  else
+    max_fanoutb = max_fanout; 
+  end
+  dupa = ceil(fa/max_fanouta); dupb = ceil(fb/max_fanoutb);
+
+  %change constants to cater for fanout 
+  compa = compa*dupa; type_a = repmat(type_a, 1, dupa) ;
+  n_bits_a = repmat(n_bits_a, 1, dupa); bin_pt_a = repmat(bin_pt_a, 1, dupa);  
+
+  compb = compb*dupb; type_b = repmat(type_b, 1, dupb) ;
+  n_bits_b = repmat(n_bits_b, 1, dupb); bin_pt_b = repmat(bin_pt_b, 1, dupb); 
+
+  %initial connection vector
+  if strcmp(cmplx_b, 'on') && ~strcmp(cmplx_a,'on'), 
+    a_src = reshape(repmat([1:compa], ceil(compo/compa), 1), 1, ceil(compo/compa)*compa);
+  else,
+    a_src = repmat([1:compa], 1, ceil(compo/compa));
+  end
+  
+  if strcmp(cmplx_a, 'on') && ~strcmp(cmplx_b,'on'), 
+    b_src = reshape(repmat([1:compb], ceil(compo/compb), 1), 1, ceil(compo/compb)*compb);
+  else,
+    b_src = repmat([1:compb], 1, ceil(compo/compb));
+  end
+  
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % at this point all a, b, output lists should match %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,7 +214,10 @@ function bus_mult_init(blk, varargin)
   clog(['type_out = ',mat2str(type_out)],'bus_mult_init_debug');
   clog(['overflow = ',mat2str(overflow)],'bus_mult_init_debug');
   clog(['quantization = ',mat2str(quantization)],'bus_mult_init_debug');
+  clog(['duplication factors => a: ',num2str(dupa),' b: ',num2str(dupb)],'bus_mult_init_debug');
   clog(['compa = ',num2str(compa), ' compb = ',num2str(compb), ' compo = ', num2str(compo)],'bus_mult_init_debug');
+  clog(['connection vector for port a = ',mat2str(a_src)],'bus_mult_init_debug');
+  clog(['connection vector for port b = ',mat2str(b_src)],'bus_mult_init_debug');
 
   %%%%%%%%%%%%%%%
   % input ports %
@@ -175,6 +237,29 @@ function bus_mult_init(blk, varargin)
       'Port', '3', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   end
   xpos = xpos + xinc + port_w/2;  
+
+  %%%%%%%%%%%%%%%%%%
+  % fanout control %
+  %%%%%%%%%%%%%%%%%%
+
+  if dupa > 1 || dupb > 1, dup_latency = fan_latency; else dup_latency = 0; end
+
+  ypos_tmp = ypos + mult_d*compa/2;
+
+  %replicate busses
+  reuse_block(blk, 'repa', 'casper_library_bus/bus_replicate', ...
+    'replication', num2str(dupa), 'latency', num2str(dup_latency), 'misc', 'off', ... 
+    'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
+  add_line(blk, 'a/1', 'repa/1'); 
+
+  ypos_tmp = ypos_tmp + yinc + mult_d*(compa/2 + compb/2);
+  
+  reuse_block(blk, 'repb', 'casper_library_bus/bus_replicate', ...
+    'replication', num2str(dupb), 'latency', num2str(dup_latency), 'misc', 'off', ...
+    'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
+  add_line(blk, 'b/1', 'repb/1'); 
+  
+  xpos = xpos + xinc + rep_d;
 
   %%%%%%%%%%%%%%
   % bus expand %
@@ -200,7 +285,7 @@ function bus_mult_init(blk, varargin)
     'show_format', 'on', 'outputToWorkspace', 'off', ...
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-mult_d*compa/2 xpos+bus_expand_w/2 ypos_tmp+mult_d*compa/2]);
-  add_line(blk, 'a/1', 'a_debus/1');
+  add_line(blk, 'repa/1', 'a_debus/1');
   ypos_tmp = ypos_tmp + mult_d*(compa/2+compb/2) + yinc;
   
   if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on'),
@@ -221,7 +306,7 @@ function bus_mult_init(blk, varargin)
     'show_format', 'on', 'outputToWorkspace', 'off', ...
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-mult_d*compb/2 xpos+bus_expand_w/2 ypos_tmp+mult_d*compb/2]);
-  add_line(blk, 'b/1', 'b_debus/1');
+  add_line(blk, 'repb/1', 'b_debus/1');
   ypos_tmp = ypos_tmp + mult_d*compa + yinc;
 
   %%%%%%%%%%%%%%%%%%
@@ -230,22 +315,6 @@ function bus_mult_init(blk, varargin)
 
   xpos = xpos + xinc + mult_w/2;  
   ypos_tmp = ypos; %reset ypos 
-
-  %need multiplier per component
-  if strcmp(cmplx_b, 'on') && ~strcmp(cmplx_a,'on'), 
-    a_src = reshape(repmat([1:compa], compo/compa, 1), 1, compo);
-  else
-    a_src = repmat([1:compa], 1, compo/compa);
-  end
-  
-  if strcmp(cmplx_a, 'on') && ~strcmp(cmplx_b,'on'), 
-    b_src = reshape(repmat([1:compb], compo/compb, 1), 1, compo);
-  else
-    b_src = repmat([1:compb], 1, compo/compb);
-  end
-
-  clog(['connection vector for port a = ',mat2str(a_src)],'bus_mult_init_debug');
-  clog(['connection vector for port b = ',mat2str(b_src)],'bus_mult_init_debug');
 
   for index = 1:compo,
     clog([num2str(index),': type= ', num2str(type_out(index)), ...
@@ -306,9 +375,9 @@ function bus_mult_init(blk, varargin)
   ypos_tmp = ypos + mult_d*(compb+compa) + 2*yinc;
   if strcmp(misc, 'on'),
     if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on'),
-      latency = 'mult_latency+add_latency';
-    else
-      latency = 'mult_latency';
+      latency = ['mult_latency+add_latency+',num2str(dup_latency)];
+    else,
+      latency = ['mult_latency+',num2str(dup_latency)];
     end
 
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
