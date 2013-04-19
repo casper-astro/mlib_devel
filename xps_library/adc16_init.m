@@ -31,6 +31,7 @@ try
   clog('adc16_init: post same_state','trace');
 
   check_mask_type(blk, 'ADC16');
+  munge_block(blk, varargin{:});
   delete_lines(blk);
 
   gw_name = clear_name(blk);
