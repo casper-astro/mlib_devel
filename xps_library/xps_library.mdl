@@ -21432,7 +21432,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "pixels"
-      MaskValueString	      "Unsigned|10|32|on|on|Minimum_Area|0|[0:2^10-1]|1"
+      MaskValueString	      "Unsigned|10|32|off|off|Minimum_Area|0|[0:2^10-1]|1"
       System {
 	Name			"Shared BRAM"
 	Location		[2244, 71, 3351, 870]
