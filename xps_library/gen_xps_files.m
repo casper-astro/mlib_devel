@@ -254,9 +254,9 @@ for n = 1:length(xps_blks)
             catch
                 eval(['nb_objs.',get(blk_obj,'type'),' = 1;'])
             end
-        catch
+        catch ex
             disp(['Problem with block: ',xps_blks{n}]);
-            disp(lasterr);
+            dump_exception(ex);
             error('Error found during Object creation.');
         end
     end
