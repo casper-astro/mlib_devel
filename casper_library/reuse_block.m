@@ -4,6 +4,10 @@
 %   http://seti.ssl.berkeley.edu/casper/                                      %
 %   Copyright (C) 2006 David MacMahon, Aaron Parsons                          %
 %                                                                             %
+%   MeerKAT Radio Telescope Project                                           %
+%   www.kat.ac.za                                                             %
+%   Copyright (C) 2013 Andrew Martens (meerKAT)                               %
+%                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
 %   the Free Software Foundation; either version 2 of the License, or         %
@@ -34,47 +38,52 @@ function reuse_block(blk, name, refblk, varargin)
 % refblk = the library block to instantiate
 % varargin = {'varname', 'value', ...} pairs
 
-existing_blk = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
+existing_blks = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
   'SearchDepth', 1, 'Name', name);
 
 % add block straight away if does not yet exist
-if isempty(existing_blk),
+if isempty(existing_blks),
   add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
 
 %if the block with that name does exist
 else,
-
+  existing_blk = existing_blks{1};
+  
   %check Link status
   link_status = get_param(existing_blk, 'StaticLinkStatus');
  
   %inactive link (link disabled but not broken) so get AncestorBlock
   if strcmp(link_status, 'inactive'),
     source = get_param(existing_blk, 'AncestorBlock');
+
   %resolved link (link in place) so get ReferenceBlock
   elseif strcmp(link_status, 'resolved'),
     source = get_param(existing_blk, 'ReferenceBlock'); 
   
   %no link (broken link, never existed, or built-in) so get block type 
   elseif strcmp(link_status, 'none'),
-
     block_type = get_param(existing_blk, 'BlockType');
-    %if unlinked and not built-in then force replacement
+
+    %if unlinked  
     if strcmp(block_type, 'SubSystem') || strcmp(block_type, 'S-Function'),
+      clog([name,': built-in/',block_type,' so forcing replacement'], 'reuse_block_debug');
       source = '';
-    else
+    else,
       %assuming built-in so convert type to lower for comparison
-      block_type = lower(block_type);
-      source = strcat('built-in/',block_type);
+      source = ['built-in/',block_type];
     end
-  else
+  else,
+    clog([name,' not a library block and not built-in so force replace'], 'reuse_block_debug');
     source = '';
   end
   
-  if strcmp(source, lower(refblk)),
-    clog([name,' of same type so setting parameters'], 'reuse_block_debug');
+  clog([name,': ''',source, ''', reference: ''', refblk,''''], 'reuse_block_debug');
+
+  if strcmp(lower(source), lower(refblk)),
+    clog(['setting parameters for ',name], 'reuse_block_debug');
     set_param([blk,'/',name], varargin{:});
   else,
-    clog([name,' of different type so replacing'], 'reuse_block_debug');
+    clog(['replacing ',name], 'reuse_block_debug');
     delete_block([blk,'/',name]);
     add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
   end
