@@ -41,6 +41,7 @@ module opb_adc16_controller(
     output        adc16_snap_req,
     input   [1:0] adc16_locked,
     input   [1:0] adc16_roach2_rev,
+    input   [1:0] adc16_zdok_rev,
     input   [3:0] adc16_num_units
   );
   parameter C_BASEADDR    = 32'h00000000;
@@ -269,7 +270,9 @@ module opb_adc16_controller(
           case (opb_addr[3:2])
            0:  begin
                    opb_ack <= 1'b1;
-                   opb_data_out[31:26] <= 6'b000000;
+                   opb_data_out[31:30] <= 2'b00;
+                   opb_data_out[29:28] <= adc16_zdok_rev;
+                   opb_data_out[27:26] <= 2'b00;
                    opb_data_out[25:24] <= adc16_locked;
                    opb_data_out[23:20] <= adc16_num_units;
                    opb_data_out[19:18] <= 2'b00;

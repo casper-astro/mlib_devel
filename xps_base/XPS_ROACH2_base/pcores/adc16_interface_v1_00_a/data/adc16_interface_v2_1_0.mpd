@@ -13,6 +13,8 @@ OPTION DESC = "ADC16 controller"
 
 ## Generics for VHDL or Parameters for Verilog
 PARAMETER G_ROACH2_REV = 1, DT = integer
+PARAMETER G_ZDOK_REV   = 1, DT = integer
+PARAMETER G_NUM_CLOCKS = 4, DT = integer
 PARAMETER G_NUM_UNITS  = 4, DT = integer
 
 #############
@@ -24,10 +26,10 @@ PORT fabric_clk     = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS =
 PORT fabric_clk_90  = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
 PORT fabric_clk_180 = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
 PORT fabric_clk_270 = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
-PORT clk_line_p = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
-PORT clk_line_n = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
-PORT clk_frame_p = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
-PORT clk_frame_n = "", VEC = [G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT clk_line_p  = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT clk_line_n  = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT clk_frame_p = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT clk_frame_n = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
 
 # Data in
 PORT ser_a_p = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
@@ -85,6 +87,7 @@ PORT snap_addr = "", VEC = [9:0], DIR = O
 # Outputs to adc16_controller
 PORT locked     = "", VEC = [1:0], DIR = O
 PORT roach2_rev = "", VEC = [1:0], DIR = O
+PORT zdok_rev   = "", VEC = [1:0], DIR = O
 PORT num_units  = "", VEC = [3:0], DIR = O
 
 END

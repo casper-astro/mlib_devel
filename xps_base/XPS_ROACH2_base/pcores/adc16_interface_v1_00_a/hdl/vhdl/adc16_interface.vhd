@@ -9,6 +9,8 @@ use IEEE.numeric_std.all;
 entity  adc16_interface  is
     generic (
                G_ROACH2_REV : integer := 1;
+               G_ZDOK_REV   : integer := 1;
+               G_NUM_CLOCKS : integer := 4;
                G_NUM_UNITS  : integer := 4 -- Typically 4 or 8
     );
     port (
@@ -21,10 +23,10 @@ entity  adc16_interface  is
                reset          :  in  std_logic;
 
                -- ZDOK
-               clk_line_p    :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
-               clk_line_n    :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
-               clk_frame_p   :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
-               clk_frame_n   :  in  std_logic_vector(  G_NUM_UNITS-1 downto 0);
+               clk_line_p    :  in  std_logic_vector(  G_NUM_CLOCKS-1 downto 0);
+               clk_line_n    :  in  std_logic_vector(  G_NUM_CLOCKS-1 downto 0);
+               clk_frame_p   :  in  std_logic_vector(  G_NUM_CLOCKS-1 downto 0);
+               clk_frame_n   :  in  std_logic_vector(  G_NUM_CLOCKS-1 downto 0);
                ser_a_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
                ser_a_n       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
                ser_b_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
@@ -78,6 +80,7 @@ entity  adc16_interface  is
 
                -- ROACH2 rev and number of ADC boards (for adc16_controller)
                roach2_rev       :  out std_logic_vector(1 downto 0);
+               zdok_rev         :  out std_logic_vector(1 downto 0);
                num_units        :  out std_logic_vector(3 downto 0)
     );
 
@@ -162,12 +165,14 @@ architecture adc16_interface_arc of adc16_interface is
      type  i4_v32 is array (0 to G_NUM_UNITS-1) of std_logic_vector(31 downto 0);
 
      -- Clocking (keep and s attributes retain unused clocks)
-     signal line_clk_in : std_logic_vector(G_NUM_UNITS-1 downto 0);
+     signal line_clk_in_zdok0 : std_logic;
+     signal line_clk_in_zdok1 : std_logic;
+     signal line_clk_in       : std_logic_vector(G_NUM_CLOCKS-1 downto 0);
      attribute keep of line_clk_in : signal is "true";
      attribute s    of line_clk_in : signal is "yes";
 
      -- frame_clk_in signals are not used (they exist for termination only)
-     signal frame_clk_in : std_logic_vector(G_NUM_UNITS-1 downto 0);
+     signal frame_clk_in : std_logic_vector(G_NUM_CLOCKS-1 downto 0);
      attribute keep of frame_clk_in : signal is "true";
      attribute s    of frame_clk_in : signal is "yes";
 
@@ -205,10 +210,24 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_snap_req : std_logic_vector(1 downto 0);
      signal s_snap_counter: std_logic_vector(10 downto 0);
 
-     -- Set which ADC is the MASTER
-     constant master : integer := 3;
-
      begin
+
+     -- Select line clocks for zdok0 and zdok1
+     line_clk_zdok0_1: if G_ZDOK_REV = 1 generate
+       line_clk_in_zdok0 <= line_clk_in(3);
+     end generate;
+
+     line_clk_zdok0_2: if G_ZDOK_REV = 2 generate
+       line_clk_in_zdok0 <= line_clk_in(0);
+     end generate;
+
+     line_clk_zdok1_1: if G_ZDOK_REV = 1  and G_NUM_CLOCKS = 8 generate
+       line_clk_in_zdok1 <= line_clk_in(7);
+     end generate;
+
+     line_clk_zdok1_2: if G_ZDOK_REV = 2  and G_NUM_CLOCKS = 2 generate
+       line_clk_in_zdok1 <= line_clk_in(1);
+     end generate;
 
      -- Clocking
      locked(0) <= locked_0;
@@ -217,7 +236,7 @@ architecture adc16_interface_arc of adc16_interface is
      PORT MAP (
        reset        => reset,
        locked       => locked_0,
-       clkin        => line_clk_in(master),
+       clkin        => line_clk_in_zdok0,
        clkout0p     => bufg_i(0),
        clkout0n     => open,
        clkout1p     => bufg_i(1),
@@ -238,7 +257,7 @@ architecture adc16_interface_arc of adc16_interface is
      end generate;
 
      -- IBUFDS for clocks
-     ibufds_clk: for i in 0 to G_NUM_UNITS-1 generate
+     ibufds_clk: for i in 0 to G_NUM_CLOCKS-1 generate
        -- ADC line clocks
        line_clk_inst : IBUFDS
        generic map (
@@ -249,16 +268,18 @@ architecture adc16_interface_arc of adc16_interface is
          IB  => clk_line_n(i),
          O   => line_clk_in(i)
        );
-       -- ADC frame clocks
-       frame_clk_inst : IBUFDS
-       generic map (
-         DIFF_TERM  => TRUE,
-         IOSTANDARD => "LVDS_25")
-       port map (
-         I   => clk_frame_p(i),
-         IB  => clk_frame_n(i),
-         O   => frame_clk_in(i)
-       );
+       zdok_rev1_frame_clk: if G_ZDOK_REV = 1 generate
+         -- ADC frame clocks
+         frame_clk_inst : IBUFDS
+         generic map (
+           DIFF_TERM  => TRUE,
+           IOSTANDARD => "LVDS_25")
+         port map (
+           I   => clk_frame_p(i),
+           IB  => clk_frame_n(i),
+           O   => frame_clk_in(i)
+         );
+       end generate;
      end generate;
 
      -- Internal routing
@@ -271,6 +292,7 @@ architecture adc16_interface_arc of adc16_interface is
      fabric_clk_270 <= bufg_o(5);
 
      roach2_rev <= std_logic_vector(to_unsigned(G_ROACH2_REV, roach2_rev'length));
+     zdok_rev   <= std_logic_vector(to_unsigned(G_ZDOK_REV,   zdok_rev'length));
      num_units  <= std_logic_vector(to_unsigned(G_NUM_UNITS,  num_units'length));
 
      -- Parallel data outputs
@@ -313,7 +335,7 @@ architecture adc16_interface_arc of adc16_interface is
        PORT MAP (
          reset        => reset,
          locked       => locked(1),
-         clkin        => line_clk_in(master+4),
+         clkin        => line_clk_in_zdok1,
          clkout0p     => open,
          clkout0n     => open,
          clkout1p     => open,
