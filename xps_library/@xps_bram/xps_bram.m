@@ -32,16 +32,31 @@ blk_name = get(blk_obj,'simulink_name');
 s.hw_sys = 'any';
 s.addr_width      = eval_param(blk_name,'addr_width');
 s.data_width      = eval_param(blk_name,'data_width');
-s.optimization    = eval_param(blk_name,'optimization');
-if strcmpi(eval_param(blk_name,'reg_core_output'), 'on')
-   s.reg_core_output = 'true';
-else
-   s.reg_core_output = 'false';
+
+% Set s.optimation to default value, then try to set it
+% from block parameters.  Old blocks may not have this parameter.
+s.optimization = 'Minimum_Area';
+try
+  s.optimization    = eval_param(blk_name,'optimization');
+catch
+  % Issue warning that use might want to update links
+  warning('Shared BRAM block "%s" is out of date (needs its link restored)', blk_name);
 end
-if strcmpi(eval_param(blk_name,'reg_prim_output'), 'on')
-   s.reg_prim_output = 'true';
-else
-   s.reg_prim_output = 'false';
+
+% Old blocks may not have this parameter, start with default value.
+s.reg_core_output = 'false';
+try
+  if strcmpi(eval_param(blk_name,'reg_core_output'), 'on')
+     s.reg_core_output = 'true';
+  end
+end
+
+% Old blocks may not have this parameter, start with default value.
+s.reg_prim_output = 'false';
+try
+  if strcmpi(eval_param(blk_name,'reg_prim_output'), 'on')
+     s.reg_prim_output = 'true';
+  end
 end
 
 b = class(s,'xps_bram',blk_obj);
