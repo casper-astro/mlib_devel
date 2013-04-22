@@ -46,23 +46,34 @@ ex_loc = [];
 loc = [];
 % convert single element into cell array for comparison
 
+group_string = [];
 for n = 1:length(groups),
+  group = groups{n};  
+
   %search for log group in log groups to exclude
-  ex_loc = strmatch(groups{n}, sys_nolog_groups, 'exact');
+  ex_loc = strmatch(group, sys_nolog_groups, 'exact');
   %bail out first time we find it in the list to exclude
   if ~isempty(ex_loc) break; end
  
   %search for log group in log groups to display
-  if isempty(loc), loc = strmatch(groups{n}, sys_log_groups, 'exact'); end
+  if isempty(loc), loc = strmatch(group, sys_log_groups, 'exact'); end
 
+  %generate group string as we go
+  if n ~= 1, group_string = [group_string, ', ']; end
+  group_string = [group_string, group];  
 end
 
+%check message for sanity
+if ~isa(msg,'char'),
+  if isa(msg, 'cell') && (length(msg) == 1) && (isa(msg{1}, 'char')),
+    msg = msg{1};
+  else,
+    error('clog: Not passing char arrays as messages');
+    return;
+  end
+end
+ 
 %display if found in one of groups to include and not excluded
 if ~(isempty(loc) && isempty(loc_all)) && isempty(ex_loc) , 
-  group_string = [];
-  for n = 1:length(groups), 
-    if n ~= 1, group_string = [group_string, ', ']; end
-    group_string = [group_string, groups{n}];  
-  end
   disp([group_string,': ',msg]);
 end

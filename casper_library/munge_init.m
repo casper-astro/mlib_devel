@@ -44,27 +44,49 @@ munge_block(blk, varargin{:});
 
 divisions = get_var('divisions', 'defaults', defaults, varargin{:});
 div_size = get_var('div_size', 'defaults', defaults, varargin{:});
-order = get_var('order', 'defaults', defaults, varargin{:});
+output_order = get_var('order', 'defaults', defaults, varargin{:});
 
-if divisions > 1 && div_size < 1,
+if divisions < 1,
+  clog(['Number of divisions must be greater than 0'], 'error');
+  errordlg(['Number of divisions must be greater than 0']);
+  return;
+end
+
+if divisions > 1 && length(find(div_size < 1) ~= 0),
+  clog(['Divisions must have non-zero size'], 'error');
   errordlg(['Divisions must have non-zero size']);
   return;
 end
 
-if (divisions > 1) && (length(unique(order)) ~= divisions ||...
-        ~isempty(find(order < 0)) || ...
-        ~isempty(find(order > divisions-1))),
-    errordlg(['Order elements must be unique in range 0->',num2str(divisions-1)]);
+if length(div_size) > 1 && (length(div_size) ~= divisions),
+    clog(['Reported number of divisions, ',num2str(divisions-1),' does not match division description length ',num2str(len(div_size))], 'error');
+    errordlg(['Reported number of divisions, ',num2str(divisions-1),' does not match division description length ',num2str(len(div_size))]);
+    return;
+end
+
+if  length(find(output_order < 0)) ~= 0 || ... 
+    length(find(output_order > divisions-1)) ~= 0,
+    clog(['Output order elements must be in range 0->',num2str(divisions-1)], 'error');
+    errordlg(['Output order elements must be in range 0->',num2str(divisions-1)]);
     return;
 end
 
 delete_lines(blk);
 
 ytick = 20;
+
+if length(div_size) == 1,
+mode =  'divisions of equal size';
+inputNum = divisions;
+else,
+mode = 'divisions of arbitrary size';
+inputNum = length(output_order);
+end
+
 %input 
 reuse_block(blk, 'din', 'built-in/inport', 'Position', [40 10+ytick*(divisions+1)/2 70 30+ytick*(divisions+1)/2], 'Port', '1');
 %output
-reuse_block(blk, 'dout', 'built-in/outport', 'Position', [670 10+ytick*(divisions+1)/2 700 30+ytick*(divisions+1)/2], 'Port', '1');
+reuse_block(blk, 'dout', 'built-in/outport', 'Position', [670 10+ytick*(inputNum+1)/2 700 30+ytick*(inputNum+1)/2], 'Port', '1');
 
 if divisions < 2,
   add_line(blk, 'din/1', 'dout/1');
@@ -76,32 +98,36 @@ else
     'Position', [95 12+ytick*(divisions+1)/2 160 28+ytick*(divisions+1)/2]);
   add_line(blk, 'din/1', 'reinterpret/1');
 
+
+
   %bus expand
   reuse_block(blk, 'split', 'casper_library_flow_control/bus_expand', ...
-    'mode', 'divisions of equal size', ...
-    'outputNum', num2str(divisions), 'outputWidth', num2str(div_size), ...
-    'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
+    'mode', mode, ...
+    'outputNum', num2str(divisions), ...
+    'outputWidth', mat2str(div_size), ...
+    'outputBinaryPt', mat2str(zeros(1,divisions)), ...
+    'outputArithmeticType', mat2str(zeros(1,divisions)), ...
     'outputToWorkSpace', 'off', ...
     'Position', [190 10 270 30+ytick*divisions]);
   add_line(blk, 'reinterpret/1', 'split/1');
 
   %bus create
   reuse_block(blk, 'join', 'casper_library_flow_control/bus_create', ...
-    'inputNum', num2str(divisions), ...
-    'Position', [550 10 630 30+ytick*divisions]);
+    'inputNum', num2str(inputNum), ...
+    'Position', [550 10 630 30+ytick*inputNum]);
   add_line(blk, 'join/1', 'dout/1');
 
   %join
-  for div = 1:divisions,
-    add_line(blk, ['split/',num2str(order(div)+1)], ['join/',num2str(div)]);
+  for div = 1:length(output_order),
+    add_line(blk, ['split/',num2str(output_order(div)+1)], ['join/',num2str(div)]);
   end  
-end
+end %if
 
 % When finished drawing blocks and lines, remove all unused blocks.
 clean_blocks(blk);
 
 % Set attribute format string (block annotation)
-annotation=sprintf('[%s]\n%d bits',num2str(order),div_size);
+annotation=sprintf('split:%s\njoin:%s',mat2str(div_size), mat2str(output_order));
 set_param(blk,'AttributesFormatString',annotation);
 
 save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
