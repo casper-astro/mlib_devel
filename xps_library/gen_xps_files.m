@@ -518,6 +518,9 @@ if run_edkgen
     % add the register descriptions to the registers.info file
     gen_xps_mod_mhs_bitreg(sys, mssge_paths, slash);
     
+    % add the snapshot block descriptions to the snapshots.info file
+    gen_xps_mod_mhs_snapshot(sys, mssge_paths, slash);
+    
     % modifying MSS file
     gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
@@ -605,6 +608,10 @@ if run_software
         if exist([xps_path,  slash, 'registers.info'], 'file') == 2,
             fprintf(win_fid,['copy registers.info ..\\bit_files\\', design_name,'_',time_stamp,'.reginfo\n']);
             fprintf(unix_fid,['cp registers.info ../bit_files/', design_name,'_',time_stamp,'.reginfo\n']);
+        end
+        if exist([xps_path,  slash, 'snapshots.info'], 'file') == 2,
+            fprintf(win_fid,['copy snapshots.info ..\\bit_files\\', design_name,'_',time_stamp,'.snapinfo\n']);
+            fprintf(unix_fid,['cp snapshots.info ../bit_files/', design_name,'_',time_stamp,'.snapinfo\n']);
         end
         if strcmp(hw_sys, 'ROACH2')
             fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);

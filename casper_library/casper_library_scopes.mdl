@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [2316.0, 2.0, 1172.0, 801.0]
+      Location		      [489.0, 237.0, 1180.0, 853.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -41,11 +41,11 @@ Library {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"335"
-	Extents			[1134.0, 638.0]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[1140.0, 686.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, -1.0]
+	Offset			[0.0, 0.0]
       }
     }
   }
@@ -53,11 +53,11 @@ Library {
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "wnew"
+  LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Mar 15 11:28:59 2013"
-  RTWModifiedTimeStamp	  285247737
-  ModelVersionFormat	  "1.%<AutoIncrement:76>"
+  LastModifiedDate	  "Fri Apr 19 15:49:30 2013"
+  RTWModifiedTimeStamp	  288287365
+  ModelVersionFormat	  "1.%<AutoIncrement:78>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -830,8 +830,8 @@ Library {
   }
   System {
     Name		    "casper_library_scopes"
-    Location		    [1112, 272, 1778, 1008]
-    Open		    off
+    Location		    [489, 237, 1669, 1090]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -15032,6 +15032,7 @@ Library {
       BlockType		      SubSystem
       Name		      "snapshot"
       SID		      "335"
+      Tag		      "casper:snapshot"
       Ports		      [4]
       Position		      [155, 381, 195, 459]
       ZOrder		      -10
@@ -15178,8 +15179,8 @@ Library {
       }
       System {
 	Name			"snapshot"
-	Location		[2316, 2, 3488, 803]
-	Open			on
+	Location		[489, 237, 1669, 1090]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -15225,28 +15226,6 @@ Library {
 	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "BRAM"
-	  SID			  "2812"
-	  Tag			  "xps:bram"
-	  Ports			  [3, 1]
-	  Position		  [930, 128, 1005, 292]
-	  ZOrder		  1
-	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  LibraryVersion	  "1.480"
-	  SourceBlock		  "xps_library/Shared BRAM"
-	  SourceType		  ""
-	  arith_type		  "Unsigned"
-	  addr_width		  "10"
-	  data_width		  "32"
-	  reg_prim_output	  on
-	  reg_core_output	  on
-	  optimization		  "Minimum_Area"
-	  data_bin_pt		  "0"
-	  init_vals		  "[0:2^10-1]"
-	  sample_rate		  "1"
 	}
 	Block {
 	  BlockType		  Reference
@@ -19361,6 +19340,28 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
+	  Name			  "bram"
+	  SID			  "2812"
+	  Tag			  "xps:bram"
+	  Ports			  [3, 1]
+	  Position		  [930, 128, 1005, 292]
+	  ZOrder		  1
+	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
+	  LibraryVersion	  "1.480"
+	  SourceBlock		  "xps_library/Shared BRAM"
+	  SourceType		  ""
+	  arith_type		  "Unsigned"
+	  addr_width		  "10"
+	  data_width		  "32"
+	  reg_prim_output	  on
+	  reg_core_output	  on
+	  optimization		  "Minimum_Area"
+	  data_bin_pt		  "0"
+	  init_vals		  "[0:2^10-1]"
+	  sample_rate		  "1"
+	}
+	Block {
+	  BlockType		  Reference
 	  Name			  "cast"
 	  SID			  "465"
 	  Ports			  [1, 1]
@@ -21443,23 +21444,23 @@ Library {
 	Line {
 	  SrcBlock		  "add_del"
 	  SrcPort		  1
-	  DstBlock		  "BRAM"
+	  DstBlock		  "bram"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "dat_del"
 	  SrcPort		  1
-	  DstBlock		  "BRAM"
+	  DstBlock		  "bram"
 	  DstPort		  2
 	}
 	Line {
 	  SrcBlock		  "we_del"
 	  SrcPort		  1
-	  DstBlock		  "BRAM"
+	  DstBlock		  "bram"
 	  DstPort		  3
 	}
 	Line {
-	  SrcBlock		  "BRAM"
+	  SrcBlock		  "bram"
 	  SrcPort		  1
 	  DstBlock		  "gbram"
 	  DstPort		  1
