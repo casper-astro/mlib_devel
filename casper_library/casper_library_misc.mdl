@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Apr 23 09:36:54 2013"
-  RTWModifiedTimeStamp	  288610611
-  ModelVersionFormat	  "1.%<AutoIncrement:27>"
+  LastModifiedDate	  "Tue Apr 23 11:17:41 2013"
+  RTWModifiedTimeStamp	  288616657
+  ModelVersionFormat	  "1.%<AutoIncrement:28>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1793,7 +1793,7 @@ Library {
       Name		      "bitsnap"
       SID		      "2426"
       Tag		      "casper:bitsnap"
-      Ports		      [6]
+      Ports		      [5]
       Position		      [445, 364, 530, 536]
       ZOrder		      52
       BackgroundColor	      "[0.502000, 1.000000, 0.502000]"
@@ -1960,7 +1960,7 @@ Library {
 	    Type		    "checkbox"
 	    Name		    "snap_value"
 	    Prompt		    "Extra value capture support"
-	    Value		    "on"
+	    Value		    "off"
 	    Evaluate		    "off"
 	    Callback		    "bitsnap_callback();"
 	    TabName		    "Snapshot"
@@ -1979,7 +1979,8 @@ Library {
 	    Type		    "edit"
 	    Name		    "extra_names"
 	    Prompt		    "Names {msb...lsb}"
-	    Value		    "['c']"
+	    Value		    "{'c'}"
+	    Enabled		    "off"
 	    TabName		    "Extra Value"
 	  }
 	  Object {
@@ -1988,6 +1989,7 @@ Library {
 	    Name		    "extra_widths"
 	    Prompt		    "Widths [msb...lsb]"
 	    Value		    "[32]"
+	    Enabled		    "off"
 	    TabName		    "Extra Value"
 	  }
 	  Object {
@@ -1996,6 +1998,7 @@ Library {
 	    Name		    "extra_bps"
 	    Prompt		    "Binary pts [msb...lsb]"
 	    Value		    "[0]"
+	    Enabled		    "off"
 	    TabName		    "Extra Value"
 	  }
 	  Object {
@@ -2004,6 +2007,7 @@ Library {
 	    Name		    "extra_types"
 	    Prompt		    "Data types [msb...lsb], ufix=0, fix=1, bool=2"
 	    Value		    "[0]"
+	    Enabled		    "off"
 	    TabName		    "Extra Value"
 	  }
 	  PropName		  "Parameters"
@@ -2066,15 +2070,6 @@ Library {
 	  Position		  [485, 265, 535, 285]
 	  ZOrder		  77
 	  Port			  "5"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Inport
-	  Name			  "extra_val"
-	  SID			  "2432"
-	  Position		  [485, 315, 535, 335]
-	  ZOrder		  78
-	  Port			  "6"
 	  IconDisplay		  "Port number"
 	}
 	Block {
@@ -2282,7 +2277,7 @@ Library {
 	  Name			  "snapshot"
 	  SID			  "2434"
 	  Tag			  "casper:snapshot"
-	  Ports			  [5]
+	  Ports			  [4]
 	  Position		  [600, 130, 700, 300]
 	  ZOrder		  58
 	  BackgroundColor	  "[0.502000, 1.000000, 0.502000]"
@@ -2414,7 +2409,7 @@ Library {
 		Type			"checkbox"
 		Name			"value"
 		Prompt			"Extra value capture support"
-		Value			"on"
+		Value			"off"
 		Evaluate		"off"
 	      }
 	      Object {
@@ -2443,7 +2438,7 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "3115"
+	    SIDHighWatermark	    "3116"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
@@ -2477,15 +2472,6 @@ Library {
 	      Position		      [250, 282, 280, 298]
 	      ZOrder		      290
 	      Port		      "4"
-	      IconDisplay	      "Port number"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "vin"
-	      SID		      "2434:3110"
-	      Position		      [180, 82, 210, 98]
-	      ZOrder		      296
-	      Port		      "5"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
@@ -6956,172 +6942,6 @@ Library {
 		  IconDisplay		  "Port number"
 		}
 		Block {
-		  BlockType		  Reference
-		  Name			  "bitsnap_bitsnap_2_snapshot_bram_addr"
-		  SID			  "2434:3115:45"
-		  Ports			  [1, 1]
-		  Position		  [360, 189, 415, 211]
-		  ZOrder		  -12
-		  LibraryVersion	  "1.2"
-		  SourceBlock		  "xbsIndex_r4/Gateway Out"
-		  SourceType		  "Xilinx Gateway Out Block"
-		  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, "
-		  "or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
-		  "ending on how they are configured."
-		  inherit_from_input	  off
-		  hdl_port		  on
-		  timing_constraint	  "None"
-		  locs_specified	  off
-		  LOCs			  "{'A5','B9','A9','C1','A3','G6','E9','A6','A7','A8','B8','B1','B3','D9','B5','B4','B6','C2'}"
-		  UseAsDAC		  off
-		  DACChannel		  "'1'"
-		  xl_use_area		  off
-		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'}},'Xilinx'=>{'jtaghw"
-		  "cosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_B"
-		  "RAM_addr'}}}"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "21,71,403,473"
-		  block_type		  "gatewayout"
-		  block_version		  "9.1.01"
-		  sg_icon_stat		  "55,22,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 22 22 0 ],[0.95 0.93 0.6"
-		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\npatch([20.325 24.66 27.66 30.66 33.66 27.66 23.325 20.325 ],[14.33 14"
-		  ".33 17.33 14.33 17.33 17.33 17.33 14.33 ],[1 1 1 ]);\npatch([23.325 27.66 24.66 20.325 23.325 ],[11.33 11.33 14.33"
-		  " 14.33 11.33 ],[0.985 0.979 0.895 ]);\npatch([20.325 24.66 27.66 23.325 20.325 ],[8.33 8.33 11.33 11.33 8.33 ],[1 "
-		  "1 1 ]);\npatch([23.325 33.66 30.66 27.66 24.66 20.325 23.325 ],[5.33 5.33 8.33 5.33 8.33 8.33 5.33 ],[0.985 0.979 "
-		  "0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port"
-		  "_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf"
-		  "('','COMMENT: end icon text');"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "bitsnap_bitsnap_2_snapshot_bram_data_in"
-		  SID			  "2434:3115:64"
-		  Ports			  [1, 1]
-		  Position		  [360, 234, 415, 256]
-		  ZOrder		  -13
-		  LibraryVersion	  "1.2"
-		  SourceBlock		  "xbsIndex_r4/Gateway Out"
-		  SourceType		  "Xilinx Gateway Out Block"
-		  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, "
-		  "or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
-		  "ending on how they are configured."
-		  inherit_from_input	  off
-		  hdl_port		  on
-		  timing_constraint	  "None"
-		  locs_specified	  off
-		  LOCs			  "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-		  UseAsDAC		  off
-		  DACChannel		  "'1'"
-		  xl_use_area		  off
-		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'}},'Xilinx'=>{'jta"
-		  "ghwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Sh"
-		  "ared_BRAM_data_in'}}}"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "23,125,403,473"
-		  block_type		  "gatewayout"
-		  block_version		  "9.1.01"
-		  sg_icon_stat		  "55,22,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 22 22 0 ],[0.95 0.93 0.6"
-		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\npatch([20.325 24.66 27.66 30.66 33.66 27.66 23.325 20.325 ],[14.33 14"
-		  ".33 17.33 14.33 17.33 17.33 17.33 14.33 ],[1 1 1 ]);\npatch([23.325 27.66 24.66 20.325 23.325 ],[11.33 11.33 14.33"
-		  " 14.33 11.33 ],[0.985 0.979 0.895 ]);\npatch([20.325 24.66 27.66 23.325 20.325 ],[8.33 8.33 11.33 11.33 8.33 ],[1 "
-		  "1 1 ]);\npatch([23.325 33.66 30.66 27.66 24.66 20.325 23.325 ],[5.33 5.33 8.33 5.33 8.33 8.33 5.33 ],[0.985 0.979 "
-		  "0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port"
-		  "_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf"
-		  "('','COMMENT: end icon text');"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "bitsnap_bitsnap_2_snapshot_bram_data_out"
-		  SID			  "2434:3115:65"
-		  Ports			  [1, 1]
-		  Position		  [680, 235, 735, 255]
-		  ZOrder		  -14
-		  LibraryVersion	  "1.2"
-		  SourceBlock		  "xbsIndex_r4/Gateway In"
-		  SourceType		  "Xilinx Gateway In Block"
-		  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed "
-		  "point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
-		  gui_display_data_type	  "Fixed-point"
-		  arith_type		  "Unsigned"
-		  n_bits		  "data_width"
-		  bin_pt		  "data_bin_pt"
-		  preci_type		  "Single"
-		  exp_width		  "8"
-		  frac_width		  "24"
-		  quantization		  "Truncate"
-		  overflow		  "Wrap"
-		  period		  "sample_rate"
-		  dbl_ovrd		  off
-		  timing_constraint	  "None"
-		  locs_specified	  off
-		  LOCs			  "{}"
-		  UseAsADC		  off
-		  ADCChannel		  "'1'"
-		  xl_use_area		  off
-		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-		  inherit_from_input	  off
-		  hdl_port		  "on"
-		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'}},'Xilinx'=>{'jt"
-		  "aghwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_"
-		  "Shared_BRAM_data_out'}}}"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "24,152,419,481"
-		  block_type		  "gatewayin"
-		  block_version		  "9.1.01"
-		  sg_icon_stat		  "55,20,1,1,white,yellow,1,00d3666e,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 20 20 0 ],[0.95 0.93 0.6"
-		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 20 20 0 ]);\npatch([22.55 25.44 27.44 29.44 31.44 27.44 24.55 22.55 ],[12.22 12.22"
-		  " 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([24.55 27.44 25.44 22.55 24.55 ],[10.22 10.22 12.22 12.22"
-		  " 10.22 ],[0.985 0.979 0.895 ]);\npatch([22.55 25.44 27.44 24.55 22.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\n"
-		  "patch([24.55 31.44 29.44 27.44 25.44 22.55 24.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.985 0.979 0.895 ]);\nf"
-		  "printf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('inpu"
-		  "t',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT:"
-		  " end icon text');"
-		}
-		Block {
-		  BlockType		  Reference
-		  Name			  "bitsnap_bitsnap_2_snapshot_bram_we"
-		  SID			  "2434:3115:66"
-		  Ports			  [1, 1]
-		  Position		  [360, 279, 415, 301]
-		  ZOrder		  -15
-		  LibraryVersion	  "1.2"
-		  SourceBlock		  "xbsIndex_r4/Gateway Out"
-		  SourceType		  "Xilinx Gateway Out Block"
-		  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, "
-		  "or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
-		  "ending on how they are configured."
-		  inherit_from_input	  off
-		  hdl_port		  on
-		  timing_constraint	  "None"
-		  locs_specified	  off
-		  LOCs			  "{'A14'}"
-		  UseAsDAC		  off
-		  DACChannel		  "'1'"
-		  xl_use_area		  off
-		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'}},'Xilinx'=>{'jtaghwco"
-		  "sim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_"
-		  "we'}}}"
-		  has_advanced_control	  "0"
-		  sggui_pos		  "-1,-1,-1,-1"
-		  block_type		  "gatewayout"
-		  block_version		  "9.1.01"
-		  sg_icon_stat		  "55,22,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 22 22 0 ],[0.95 0.93 0.6"
-		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\npatch([20.325 24.66 27.66 30.66 33.66 27.66 23.325 20.325 ],[14.33 14"
-		  ".33 17.33 14.33 17.33 17.33 17.33 14.33 ],[1 1 1 ]);\npatch([23.325 27.66 24.66 20.325 23.325 ],[11.33 11.33 14.33"
-		  " 14.33 11.33 ],[0.985 0.979 0.895 ]);\npatch([20.325 24.66 27.66 23.325 20.325 ],[8.33 8.33 11.33 11.33 8.33 ],[1 "
-		  "1 1 ]);\npatch([23.325 33.66 30.66 27.66 24.66 20.325 23.325 ],[5.33 5.33 8.33 5.33 8.33 8.33 5.33 ],[0.985 0.979 "
-		  "0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port"
-		  "_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf"
-		  "('','COMMENT: end icon text');"
-		}
-		Block {
 		  BlockType		  SubSystem
 		  Name			  "calc_add"
 		  SID			  "2434:3115:4"
@@ -7551,6 +7371,172 @@ Library {
 		    Position		    [232, 322]
 		    }
 		  }
+		}
+		Block {
+		  BlockType		  Reference
+		  Name			  "casper_library_misc_bitsnap_snapshot_bram_addr"
+		  SID			  "2434:3115:45"
+		  Ports			  [1, 1]
+		  Position		  [360, 189, 415, 211]
+		  ZOrder		  -12
+		  LibraryVersion	  "1.2"
+		  SourceBlock		  "xbsIndex_r4/Gateway Out"
+		  SourceType		  "Xilinx Gateway Out Block"
+		  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, "
+		  "or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
+		  "ending on how they are configured."
+		  inherit_from_input	  off
+		  hdl_port		  on
+		  timing_constraint	  "None"
+		  locs_specified	  off
+		  LOCs			  "{'A5','B9','A9','C1','A3','G6','E9','A6','A7','A8','B8','B1','B3','D9','B5','B4','B6','C2'}"
+		  UseAsDAC		  off
+		  DACChannel		  "'1'"
+		  xl_use_area		  off
+		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'}},'Xilinx'=>{'jtaghw"
+		  "cosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_B"
+		  "RAM_addr'}}}"
+		  has_advanced_control	  "0"
+		  sggui_pos		  "21,71,403,473"
+		  block_type		  "gatewayout"
+		  block_version		  "9.1.01"
+		  sg_icon_stat		  "55,22,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 22 22 0 ],[0.95 0.93 0.6"
+		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\npatch([20.325 24.66 27.66 30.66 33.66 27.66 23.325 20.325 ],[14.33 14"
+		  ".33 17.33 14.33 17.33 17.33 17.33 14.33 ],[1 1 1 ]);\npatch([23.325 27.66 24.66 20.325 23.325 ],[11.33 11.33 14.33"
+		  " 14.33 11.33 ],[0.985 0.979 0.895 ]);\npatch([20.325 24.66 27.66 23.325 20.325 ],[8.33 8.33 11.33 11.33 8.33 ],[1 "
+		  "1 1 ]);\npatch([23.325 33.66 30.66 27.66 24.66 20.325 23.325 ],[5.33 5.33 8.33 5.33 8.33 8.33 5.33 ],[0.985 0.979 "
+		  "0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port"
+		  "_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf"
+		  "('','COMMENT: end icon text');"
+		}
+		Block {
+		  BlockType		  Reference
+		  Name			  "casper_library_misc_bitsnap_snapshot_bram_data_in"
+		  SID			  "2434:3115:64"
+		  Ports			  [1, 1]
+		  Position		  [360, 234, 415, 256]
+		  ZOrder		  -13
+		  LibraryVersion	  "1.2"
+		  SourceBlock		  "xbsIndex_r4/Gateway Out"
+		  SourceType		  "Xilinx Gateway Out Block"
+		  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, "
+		  "or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
+		  "ending on how they are configured."
+		  inherit_from_input	  off
+		  hdl_port		  on
+		  timing_constraint	  "None"
+		  locs_specified	  off
+		  LOCs			  "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
+		  UseAsDAC		  off
+		  DACChannel		  "'1'"
+		  xl_use_area		  off
+		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'}},'Xilinx'=>{'jta"
+		  "ghwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Sh"
+		  "ared_BRAM_data_in'}}}"
+		  has_advanced_control	  "0"
+		  sggui_pos		  "23,125,403,473"
+		  block_type		  "gatewayout"
+		  block_version		  "9.1.01"
+		  sg_icon_stat		  "55,22,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 22 22 0 ],[0.95 0.93 0.6"
+		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\npatch([20.325 24.66 27.66 30.66 33.66 27.66 23.325 20.325 ],[14.33 14"
+		  ".33 17.33 14.33 17.33 17.33 17.33 14.33 ],[1 1 1 ]);\npatch([23.325 27.66 24.66 20.325 23.325 ],[11.33 11.33 14.33"
+		  " 14.33 11.33 ],[0.985 0.979 0.895 ]);\npatch([20.325 24.66 27.66 23.325 20.325 ],[8.33 8.33 11.33 11.33 8.33 ],[1 "
+		  "1 1 ]);\npatch([23.325 33.66 30.66 27.66 24.66 20.325 23.325 ],[5.33 5.33 8.33 5.33 8.33 8.33 5.33 ],[0.985 0.979 "
+		  "0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port"
+		  "_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf"
+		  "('','COMMENT: end icon text');"
+		}
+		Block {
+		  BlockType		  Reference
+		  Name			  "casper_library_misc_bitsnap_snapshot_bram_data_out"
+		  SID			  "2434:3115:65"
+		  Ports			  [1, 1]
+		  Position		  [680, 235, 735, 255]
+		  ZOrder		  -14
+		  LibraryVersion	  "1.2"
+		  SourceBlock		  "xbsIndex_r4/Gateway In"
+		  SourceType		  "Xilinx Gateway In Block"
+		  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed "
+		  "point type.<br><br>Hardware notes:  In hardware these blocks become top level input ports."
+		  gui_display_data_type	  "Fixed-point"
+		  arith_type		  "Unsigned"
+		  n_bits		  "data_width"
+		  bin_pt		  "data_bin_pt"
+		  preci_type		  "Single"
+		  exp_width		  "8"
+		  frac_width		  "24"
+		  quantization		  "Truncate"
+		  overflow		  "Wrap"
+		  period		  "sample_rate"
+		  dbl_ovrd		  off
+		  timing_constraint	  "None"
+		  locs_specified	  off
+		  LOCs			  "{}"
+		  UseAsADC		  off
+		  ADCChannel		  "'1'"
+		  xl_use_area		  off
+		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+		  inherit_from_input	  off
+		  hdl_port		  "on"
+		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'}},'Xilinx'=>{'jt"
+		  "aghwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_"
+		  "Shared_BRAM_data_out'}}}"
+		  has_advanced_control	  "0"
+		  sggui_pos		  "24,152,419,481"
+		  block_type		  "gatewayin"
+		  block_version		  "9.1.01"
+		  sg_icon_stat		  "55,20,1,1,white,yellow,1,00d3666e,right,,[ ],[ ]"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 20 20 0 ],[0.95 0.93 0.6"
+		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 20 20 0 ]);\npatch([22.55 25.44 27.44 29.44 31.44 27.44 24.55 22.55 ],[12.22 12.22"
+		  " 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([24.55 27.44 25.44 22.55 24.55 ],[10.22 10.22 12.22 12.22"
+		  " 10.22 ],[0.985 0.979 0.895 ]);\npatch([22.55 25.44 27.44 24.55 22.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\n"
+		  "patch([24.55 31.44 29.44 27.44 25.44 22.55 24.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.985 0.979 0.895 ]);\nf"
+		  "printf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('inpu"
+		  "t',1,'\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT:"
+		  " end icon text');"
+		}
+		Block {
+		  BlockType		  Reference
+		  Name			  "casper_library_misc_bitsnap_snapshot_bram_we"
+		  SID			  "2434:3115:66"
+		  Ports			  [1, 1]
+		  Position		  [360, 279, 415, 301]
+		  ZOrder		  -15
+		  LibraryVersion	  "1.2"
+		  SourceBlock		  "xbsIndex_r4/Gateway Out"
+		  SourceType		  "Xilinx Gateway Out Block"
+		  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, "
+		  "or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
+		  "ending on how they are configured."
+		  inherit_from_input	  off
+		  hdl_port		  on
+		  timing_constraint	  "None"
+		  locs_specified	  off
+		  LOCs			  "{'A14'}"
+		  UseAsDAC		  off
+		  DACChannel		  "'1'"
+		  xl_use_area		  off
+		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+		  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'}},'Xilinx'=>{'jtaghwco"
+		  "sim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_"
+		  "we'}}}"
+		  has_advanced_control	  "0"
+		  sggui_pos		  "-1,-1,-1,-1"
+		  block_type		  "gatewayout"
+		  block_version		  "9.1.01"
+		  sg_icon_stat		  "55,22,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 22 22 0 ],[0.95 0.93 0.6"
+		  "5 ]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\npatch([20.325 24.66 27.66 30.66 33.66 27.66 23.325 20.325 ],[14.33 14"
+		  ".33 17.33 14.33 17.33 17.33 17.33 14.33 ],[1 1 1 ]);\npatch([23.325 27.66 24.66 20.325 23.325 ],[11.33 11.33 14.33"
+		  " 14.33 11.33 ],[0.985 0.979 0.895 ]);\npatch([20.325 24.66 27.66 23.325 20.325 ],[8.33 8.33 11.33 11.33 8.33 ],[1 "
+		  "1 1 ]);\npatch([23.325 33.66 30.66 27.66 24.66 20.325 23.325 ],[5.33 5.33 8.33 5.33 8.33 8.33 5.33 ],[0.985 0.979 "
+		  "0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port"
+		  "_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf"
+		  "('','COMMENT: end icon text');"
 		}
 		Block {
 		  BlockType		  Reference
@@ -8919,7 +8905,7 @@ Library {
 		Line {
 		  SrcBlock		  "mem"
 		  SrcPort		  1
-		  DstBlock		  "bitsnap_bitsnap_2_snapshot_bram_data_out"
+		  DstBlock		  "casper_library_misc_bitsnap_snapshot_bram_data_out"
 		  DstPort		  1
 		}
 		Line {
@@ -8929,7 +8915,7 @@ Library {
 		  DstPort		  1
 		}
 		Line {
-		  SrcBlock		  "bitsnap_bitsnap_2_snapshot_bram_data_out"
+		  SrcBlock		  "casper_library_misc_bitsnap_snapshot_bram_data_out"
 		  SrcPort		  1
 		  DstBlock		  "munge_out"
 		  DstPort		  1
@@ -8949,23 +8935,23 @@ Library {
 		Line {
 		  SrcBlock		  "convert_we"
 		  SrcPort		  1
-		  DstBlock		  "bitsnap_bitsnap_2_snapshot_bram_we"
+		  DstBlock		  "casper_library_misc_bitsnap_snapshot_bram_we"
 		  DstPort		  1
 		}
 		Line {
-		  SrcBlock		  "bitsnap_bitsnap_2_snapshot_bram_addr"
+		  SrcBlock		  "casper_library_misc_bitsnap_snapshot_bram_addr"
 		  SrcPort		  1
 		  DstBlock		  "mem"
 		  DstPort		  1
 		}
 		Line {
-		  SrcBlock		  "bitsnap_bitsnap_2_snapshot_bram_data_in"
+		  SrcBlock		  "casper_library_misc_bitsnap_snapshot_bram_data_in"
 		  SrcPort		  1
 		  DstBlock		  "mem"
 		  DstPort		  2
 		}
 		Line {
-		  SrcBlock		  "bitsnap_bitsnap_2_snapshot_bram_we"
+		  SrcBlock		  "casper_library_misc_bitsnap_snapshot_bram_we"
 		  SrcPort		  1
 		  DstBlock		  "mem"
 		  DstPort		  3
@@ -8991,13 +8977,13 @@ Library {
 		Line {
 		  SrcBlock		  "convert_addr"
 		  SrcPort		  1
-		  DstBlock		  "bitsnap_bitsnap_2_snapshot_bram_addr"
+		  DstBlock		  "casper_library_misc_bitsnap_snapshot_bram_addr"
 		  DstPort		  1
 		}
 		Line {
 		  SrcBlock		  "convert_din1"
 		  SrcPort		  1
-		  DstBlock		  "bitsnap_bitsnap_2_snapshot_bram_data_in"
+		  DstBlock		  "casper_library_misc_bitsnap_snapshot_bram_data_in"
 		  DstPort		  1
 		}
 		Line {
@@ -9080,7 +9066,7 @@ Library {
 	      bitwidth		      "32"
 	      bin_pt		      "0"
 	      sample_period	      "1"
-	      gw_name		      "bitsnap_bitsnap_2_snapshot_ctrl_user_data_out"
+	      gw_name		      "casper_library_misc_bitsnap_snapshot_ctrl_user_data_out"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -10096,7 +10082,7 @@ Library {
 	      bitwidth		      "32"
 	      bin_pt		      "0"
 	      sample_period	      "1"
-	      gw_name		      "bitsnap_bitsnap_2_snapshot_status_user_data_in"
+	      gw_name		      "casper_library_misc_bitsnap_snapshot_status_user_data_in"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -10174,7 +10160,7 @@ Library {
 	      bitwidth		      "32"
 	      bin_pt		      "0"
 	      sample_period	      "1"
-	      gw_name		      "bitsnap_bitsnap_2_snapshot_tr_en_cnt_user_data_in"
+	      gw_name		      "casper_library_misc_bitsnap_snapshot_tr_en_cnt_user_data_in"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -10182,7 +10168,7 @@ Library {
 	      SID		      "2434:3106"
 	      Tag		      "xps:sw_reg"
 	      Ports		      [1, 1]
-	      Position		      [215, 318, 315, 352]
+	      Position		      [215, 314, 315, 346]
 	      ZOrder		      292
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      LibraryVersion	      "1.480"
@@ -10193,26 +10179,47 @@ Library {
 	      bitwidth		      "32"
 	      bin_pt		      "0"
 	      sample_period	      "1"
-	      gw_name		      "bitsnap_bitsnap_2_snapshot_trig_offset_user_data_out"
+	      gw_name		      "casper_library_misc_bitsnap_snapshot_trig_offset_user_data_out"
 	    }
 	    Block {
 	      BlockType		      Reference
-	      Name		      "val"
-	      SID		      "2434:3111"
-	      Tag		      "xps:sw_reg"
-	      Ports		      [1, 1]
-	      Position		      [905, 85, 1005, 115]
-	      ZOrder		      297
-	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-	      LibraryVersion	      "1.480"
-	      SourceBlock	      "xps_library/software register"
-	      SourceType	      ""
-	      io_dir		      "To Processor"
-	      arith_type	      "Unsigned"
-	      bitwidth		      "32"
-	      bin_pt		      "0"
-	      sample_period	      "1"
-	      gw_name		      "bitsnap_bitsnap_2_snapshot_val_user_data_in"
+	      Name		      "vin_const"
+	      SID		      "2434:3116"
+	      Ports		      [0, 1]
+	      Position		      [250, 82, 280, 98]
+	      ZOrder		      302
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Constant"
+	      SourceType	      "Xilinx Constant Block Block"
+	      const		      "0"
+	      gui_display_data_type   "Fixed-point"
+	      arith_type	      "Boolean"
+	      n_bits		      "16"
+	      bin_pt		      "14"
+	      preci_type	      "Single"
+	      exp_width		      "8"
+	      frac_width	      "24"
+	      explicit_period	      on
+	      period		      "1"
+	      dsp48_infoedit	      "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
+	      equ		      "P=C"
+	      opselect		      "C"
+	      inp2		      "PCIN>>17"
+	      opr		      "+"
+	      inp1		      "P"
+	      carry		      "CIN"
+	      dbl_ovrd		      off
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "constant"
+	      sg_icon_stat	      "30,16,0,1,white,blue,0,bf4ddd8b,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[1"
+	      "0.22 10.22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 "
+	      "10.22 10.22 8.22 ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],["
+	      "1 1 1 ]);\npatch([12.55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.94"
+	      "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black')"
+	      ";port_label('output',1,'0');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Block {
 	      BlockType		      Reference
@@ -10247,39 +10254,214 @@ Library {
 	      "sp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Line {
-	      SrcBlock		      "bram"
+	      SrcBlock		      "din"
 	      SrcPort		      1
-	      DstBlock		      "gbram"
+	      DstBlock		      "ri"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "we_del"
+	      SrcBlock		      "ri"
 	      SrcPort		      1
-	      DstBlock		      "bram"
-	      DstPort		      3
+	      DstBlock		      "cast"
+	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "dat_del"
+	      SrcBlock		      "cast"
 	      SrcPort		      1
-	      DstBlock		      "bram"
+	      DstBlock		      "basic_ctrl"
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "add_del"
+	      SrcBlock		      "we"
 	      SrcPort		      1
-	      DstBlock		      "bram"
+	      DstBlock		      "basic_ctrl"
+	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "trig"
+	      SrcPort		      1
+	      DstBlock		      "basic_ctrl"
+	      DstPort		      4
+	    }
+	    Line {
+	      SrcBlock		      "stop"
+	      SrcPort		      1
+	      DstBlock		      "basic_ctrl"
+	      DstPort		      6
+	    }
+	    Line {
+	      SrcBlock		      "const0"
+	      SrcPort		      1
+	      DstBlock		      "ctrl"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "add_gen"
-	      SrcPort		      4
-	      DstBlock		      "we_del"
+	      SrcBlock		      "ctrl"
+	      SrcPort		      1
+	      Points		      [0, 0]
+	      Branch {
+		DstBlock		"basic_ctrl"
+		DstPort			5
+	      }
+	      Branch {
+		DstBlock		"stop_gen"
+		DstPort			7
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "const1"
+	      SrcPort		      1
+	      DstBlock		      "trig_offset"
 	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "add_gen"
+	      SrcBlock		      "basic_ctrl"
+	      SrcPort		      1
+	      DstBlock		      "delay"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "basic_ctrl"
+	      SrcPort		      2
+	      DstBlock		      "delay"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "basic_ctrl"
 	      SrcPort		      3
-	      DstBlock		      "dat_del"
+	      DstBlock		      "delay"
+	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "basic_ctrl"
+	      SrcPort		      4
+	      DstBlock		      "delay"
+	      DstPort		      4
+	    }
+	    Line {
+	      SrcBlock		      "basic_ctrl"
+	      SrcPort		      5
+	      DstBlock		      "delay"
+	      DstPort		      5
+	    }
+	    Line {
+	      SrcBlock		      "basic_ctrl"
+	      SrcPort		      6
+	      DstBlock		      "delay"
+	      DstPort		      6
+	    }
+	    Line {
+	      SrcBlock		      "trig_offset"
+	      SrcPort		      1
+	      DstBlock		      "delay"
+	      DstPort		      7
+	    }
+	    Line {
+	      SrcBlock		      "delay"
+	      SrcPort		      1
+	      DstBlock		      "stop_gen"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "delay"
+	      SrcPort		      2
+	      DstBlock		      "stop_gen"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "delay"
+	      SrcPort		      3
+	      DstBlock		      "stop_gen"
+	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "delay"
+	      SrcPort		      4
+	      DstBlock		      "stop_gen"
+	      DstPort		      4
+	    }
+	    Line {
+	      SrcBlock		      "delay"
+	      SrcPort		      5
+	      DstBlock		      "stop_gen"
+	      DstPort		      5
+	    }
+	    Line {
+	      SrcBlock		      "delay"
+	      SrcPort		      6
+	      DstBlock		      "stop_gen"
+	      DstPort		      6
+	    }
+	    Line {
+	      SrcBlock		      "tr_en_cnt"
+	      SrcPort		      1
+	      DstBlock		      "g_tr_en_cnt"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "stop_gen"
+	      SrcPort		      1
+	      DstBlock		      "add_gen"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "stop_gen"
+	      SrcPort		      2
+	      DstBlock		      "add_gen"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "stop_gen"
+	      SrcPort		      3
+	      DstBlock		      "add_gen"
+	      DstPort		      3
+	    }
+	    Line {
+	      SrcBlock		      "stop_gen"
+	      SrcPort		      4
+	      DstBlock		      "add_gen"
+	      DstPort		      4
+	    }
+	    Line {
+	      SrcBlock		      "stop_gen"
+	      SrcPort		      5
+	      DstBlock		      "add_gen"
+	      DstPort		      5
+	    }
+	    Line {
+	      SrcBlock		      "stop_gen"
+	      SrcPort		      6
+	      DstBlock		      "add_gen"
+	      DstPort		      6
+	    }
+	    Line {
+	      SrcBlock		      "add_gen"
+	      SrcPort		      5
+	      DstBlock		      "status"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "status"
+	      SrcPort		      1
+	      DstBlock		      "gstatus"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "vin_const"
+	      SrcPort		      1
+	      DstBlock		      "basic_ctrl"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "add_gen"
+	      SrcPort		      1
+	      DstBlock		      "gval"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "add_gen"
+	      SrcPort		      6
+	      DstBlock		      "tr_en_cnt"
 	      DstPort		      1
 	    }
 	    Line {
@@ -10290,219 +10472,38 @@ Library {
 	    }
 	    Line {
 	      SrcBlock		      "add_gen"
-	      SrcPort		      6
-	      DstBlock		      "tr_en_cnt"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "val"
-	      SrcPort		      1
-	      DstBlock		      "gval"
+	      SrcPort		      3
+	      DstBlock		      "dat_del"
 	      DstPort		      1
 	    }
 	    Line {
 	      SrcBlock		      "add_gen"
-	      SrcPort		      1
-	      DstBlock		      "val"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "vin"
-	      SrcPort		      1
-	      DstBlock		      "basic_ctrl"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "status"
-	      SrcPort		      1
-	      DstBlock		      "gstatus"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "add_gen"
-	      SrcPort		      5
-	      DstBlock		      "status"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "stop_gen"
-	      SrcPort		      6
-	      DstBlock		      "add_gen"
-	      DstPort		      6
-	    }
-	    Line {
-	      SrcBlock		      "stop_gen"
-	      SrcPort		      5
-	      DstBlock		      "add_gen"
-	      DstPort		      5
-	    }
-	    Line {
-	      SrcBlock		      "stop_gen"
 	      SrcPort		      4
-	      DstBlock		      "add_gen"
-	      DstPort		      4
+	      DstBlock		      "we_del"
+	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "stop_gen"
-	      SrcPort		      3
-	      DstBlock		      "add_gen"
-	      DstPort		      3
+	      SrcBlock		      "add_del"
+	      SrcPort		      1
+	      DstBlock		      "bram"
+	      DstPort		      1
 	    }
 	    Line {
-	      SrcBlock		      "stop_gen"
-	      SrcPort		      2
-	      DstBlock		      "add_gen"
+	      SrcBlock		      "dat_del"
+	      SrcPort		      1
+	      DstBlock		      "bram"
 	      DstPort		      2
 	    }
 	    Line {
-	      SrcBlock		      "stop_gen"
+	      SrcBlock		      "we_del"
 	      SrcPort		      1
-	      DstBlock		      "add_gen"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "tr_en_cnt"
-	      SrcPort		      1
-	      DstBlock		      "g_tr_en_cnt"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "delay"
-	      SrcPort		      6
-	      DstBlock		      "stop_gen"
-	      DstPort		      6
-	    }
-	    Line {
-	      SrcBlock		      "delay"
-	      SrcPort		      5
-	      DstBlock		      "stop_gen"
-	      DstPort		      5
-	    }
-	    Line {
-	      SrcBlock		      "delay"
-	      SrcPort		      4
-	      DstBlock		      "stop_gen"
-	      DstPort		      4
-	    }
-	    Line {
-	      SrcBlock		      "delay"
-	      SrcPort		      3
-	      DstBlock		      "stop_gen"
+	      DstBlock		      "bram"
 	      DstPort		      3
 	    }
 	    Line {
-	      SrcBlock		      "delay"
-	      SrcPort		      2
-	      DstBlock		      "stop_gen"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "delay"
+	      SrcBlock		      "bram"
 	      SrcPort		      1
-	      DstBlock		      "stop_gen"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "trig_offset"
-	      SrcPort		      1
-	      DstBlock		      "delay"
-	      DstPort		      7
-	    }
-	    Line {
-	      SrcBlock		      "basic_ctrl"
-	      SrcPort		      6
-	      DstBlock		      "delay"
-	      DstPort		      6
-	    }
-	    Line {
-	      SrcBlock		      "basic_ctrl"
-	      SrcPort		      5
-	      DstBlock		      "delay"
-	      DstPort		      5
-	    }
-	    Line {
-	      SrcBlock		      "basic_ctrl"
-	      SrcPort		      4
-	      DstBlock		      "delay"
-	      DstPort		      4
-	    }
-	    Line {
-	      SrcBlock		      "basic_ctrl"
-	      SrcPort		      3
-	      DstBlock		      "delay"
-	      DstPort		      3
-	    }
-	    Line {
-	      SrcBlock		      "basic_ctrl"
-	      SrcPort		      2
-	      DstBlock		      "delay"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "basic_ctrl"
-	      SrcPort		      1
-	      DstBlock		      "delay"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "const1"
-	      SrcPort		      1
-	      DstBlock		      "trig_offset"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "ctrl"
-	      SrcPort		      1
-	      Points		      [0, 0]
-	      Branch {
-		DstBlock		"stop_gen"
-		DstPort			7
-	      }
-	      Branch {
-		DstBlock		"basic_ctrl"
-		DstPort			5
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "const0"
-	      SrcPort		      1
-	      DstBlock		      "ctrl"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "stop"
-	      SrcPort		      1
-	      DstBlock		      "basic_ctrl"
-	      DstPort		      6
-	    }
-	    Line {
-	      SrcBlock		      "trig"
-	      SrcPort		      1
-	      DstBlock		      "basic_ctrl"
-	      DstPort		      4
-	    }
-	    Line {
-	      SrcBlock		      "we"
-	      SrcPort		      1
-	      DstBlock		      "basic_ctrl"
-	      DstPort		      3
-	    }
-	    Line {
-	      SrcBlock		      "cast"
-	      SrcPort		      1
-	      DstBlock		      "basic_ctrl"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "ri"
-	      SrcPort		      1
-	      DstBlock		      "cast"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "din"
-	      SrcPort		      1
-	      DstBlock		      "ri"
+	      DstBlock		      "gbram"
 	      DstPort		      1
 	    }
 	    Annotation {
@@ -10580,12 +10581,6 @@ Library {
 	  SrcPort		  1
 	  DstBlock		  "snapshot"
 	  DstPort		  4
-	}
-	Line {
-	  SrcBlock		  "extra_val"
-	  SrcPort		  1
-	  DstBlock		  "snapshot"
-	  DstPort		  5
 	}
       }
     }
@@ -26631,7 +26626,7 @@ MatData {
   DataRecord {
     Tag			    DataTag7
     Data		    "  %)30     .    R <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $ R1P4.    . <   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .IS# ,.    . <   "
     "8    (     @         %    \"     $    !     0         %  0 \"P    $   !N    9&5F875L=',   !S=&]R86=E     &1R86U?9&"
     "EM;0  9')A;5]C;&]C:P!N<V%M<&QE<P   &1A=&%?=VED=&@ ;V9F<V5T      !C:7)C87       '9A;'5E        =7-E7V1S<#0X      X "
     "  \"(!   !@    @    !          4    (     0   !(    !          X    X    !@    @    $          4    (     0    <  "
@@ -26652,8 +26647,8 @@ MatData {
     "!   0 R    #@   #     &    \"     0         !0    @    !     P    $         $  # #(U,  .    .     8    (    !@    "
     "     %    \"     $    !     0         )    \"            \"1 #@   #     &    \"     0         !0    @    !     @  "
     "  $         $  \" #,R   .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P    !@ "
-    "   @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     @  "
-    "  $         $  \" &]N   .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   "
+    "   @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     P  "
+    "  $         $  # &]F9@ .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   "
   }
   DataRecord {
     Tag			    DataTag8
