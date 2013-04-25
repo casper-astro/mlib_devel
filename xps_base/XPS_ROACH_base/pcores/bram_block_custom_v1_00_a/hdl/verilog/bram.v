@@ -58,19 +58,18 @@ parameter AW_B = 10;
 parameter DW_B = 32;
 parameter WE_B = 4;
 
-
-input clka;
-input ena;
-input [3 : 0] wea;
-input [31 : 0] addra;
-input [31 : 0] dina;
-output [31 : 0] douta;
-input clkb;
-input enb;
-input [3 : 0] web;
-input [31 : 0] addrb;
-input [31 : 0] dinb;
-output [31 : 0] doutb;
+input  clka;
+input  ena;
+input  [WE_A-1 : 0] wea;
+input  [AW_A-1 : 0] addra;
+input  [DW_A-1 : 0] dina;
+output [DW_A-1 : 0] douta;
+input  clkb;
+input  enb;
+input  [WE_B-1 : 0] web;
+input  [AW_B-1 : 0] addrb;
+input  [DW_B-1 : 0] dinb;
+output [DW_B-1 : 0] doutb;
 
 // synthesis translate_off
 

@@ -8,11 +8,15 @@ module bram_block_custom #(
 
     parameter C_PORTB_DWIDTH = 32,
     parameter C_PORTB_AWIDTH = 32,
-    parameter C_PORTB_NUM_WE = 4
+    parameter C_PORTB_NUM_WE = 4,
+    
+    parameter OPTIMIZATION    = "Minimum_Area",
+    parameter REG_CORE_OUTPUT = "true",
+    parameter REG_PRIM_OUTPUT = "true"
   ) (
     input                         clk,
-    input                         bram_en_a,
     input                         bram_we,
+    input                         bram_en_a,
     input  [C_PORTA_DEPTH  - 1:0] bram_addr,
     output [C_PORTA_DWIDTH - 1:0] bram_rd_data,
     input  [C_PORTA_DWIDTH - 1:0] bram_wr_data,
