@@ -41,20 +41,34 @@ function reuse_block(blk, name, refblk, varargin)
 % Wrap whole function in try/catch
 try
 
-existing_blks = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
-  'SearchDepth', 1, 'Name', name);
+  existing_blks = find_system(blk, ...
+    'lookUnderMasks', 'all', 'FollowLinks','on', ...
+    'SearchDepth', 1, 'Name', name);
 
-% add block straight away if does not yet exist
-if isempty(existing_blks)
-  add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+  % Just add block straight away if does not yet exist
+  if isempty(existing_blks)
+    add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+    % Done!
+    return
+  end
 
-% else if multiple block with that name exist
-elseif length(existing_blks) > 1
-  error('casper:MultipleBlocksForName', ...
-        'More than one block in "%s" has name "%s"', blk, name);
+  % If find_system returned more than one block (should "never" happen, but
+  % sometimes it does!)
+  if length(existing_blks) > 1
+    % Get their handles to see whether they are really the same block
+    handles = cell(size(existing_blks));
+    for k = 1:length(existing_blks)
+      handles{k} = num2str(get_param(existing_blks{k}, 'Handle'));
+    end
 
-% else, a block with that name does exist
-else
+    % If more than one handle (should "really never" happen...)
+    if length(unique(handles)) > 1
+      error('casper:MultipleBlocksForName', ...
+            'More than one block in "%s" has name "%s"', blk, name);
+    end
+  end
+
+  % A block with that name does exist, so re-use it
   existing_blk = existing_blks{1};
   
   %check Link status
@@ -113,7 +127,6 @@ else
       add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
     end
   end
-end % if isempty(existing_blk)
 catch ex
     dump_and_rethrow(ex)
 end % try/catch
