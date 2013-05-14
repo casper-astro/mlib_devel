@@ -226,6 +226,24 @@ else
     end % try
 end % if strcmp(adc_interleave,'on') else
 
+% Try to set options required for Downsample block of newer DSP blockset
+% versions, but not available in older versions.
+for k=0:3
+    try
+        set_param([myname, '/Downsamplei',num2str(k)], ...
+          'InputProcessing', 'Elements as channels (sample based)', ...
+          'RateOptions', 'Allow multirate processing');
+        set_param([myname, '/Downsampleq',num2str(k)], ...
+          'InputProcessing', 'Elements as channels (sample based)', ...
+          'RateOptions', 'Allow multirate processing');
+        set_param([myname, '/Downsamplesync',num2str(k)], ...
+          'InputProcessing', 'Elements as channels (sample based)', ...
+          'RateOptions', 'Allow multirate processing');
+    catch
+        break;
+    end
+end
+
 gateway_ins = find_system(gcb,'searchdepth',1,'FollowLinks', 'on', 'lookundermasks','all','masktype','Xilinx Gateway In Block');
 for n = 1:length(gateway_ins)
     gw = gateway_ins{n};
