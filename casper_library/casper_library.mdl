@@ -5,12 +5,12 @@ Library {
   SavedCharacterEncoding  "UTF-8"
   PostLoadFcn		  "% Stub definitions for mask variables\ndelay_depth=16;\nn_bits=8;\nbin_pt=7;\n% Pre-load sublibrarie"
   "s\nload_system('casper_library_accumulators');\nload_system('casper_library_communications');\nload_system('casper_l"
-  "ibrary_correlator');\nload_system('casper_library_delays');\nload_system('casper_library_downconverter');\nload_syst"
-  "em('casper_library_ffts');\nload_system('casper_library_ffts_internal');\nload_system('casper_library_ffts_twiddle')"
-  ";\nload_system('casper_library_ffts_twiddle_coeff_gen');\nload_system('casper_library_flow_control');\nload_system('"
-  "casper_library_misc');\nload_system('casper_library_multipliers');\nload_system('casper_library_pfbs');\nload_system"
-  "('casper_library_reorder');\nload_system('casper_library_scopes');\nload_system('casper_library_sources');\ncasper_l"
-  "ibrary_bus_init;\nload_system('casper_library_bus');\n\n"
+  "ibrary_correlator');\nload_system('casper_library_delays');\ncasper_library_downconverter_init;\nload_system('casper"
+  "_library_downconverter');\nload_system('casper_library_ffts');\nload_system('casper_library_ffts_internal');\nload_s"
+  "ystem('casper_library_ffts_twiddle');\nload_system('casper_library_ffts_twiddle_coeff_gen');\nload_system('casper_li"
+  "brary_flow_control');\nload_system('casper_library_misc');\nload_system('casper_library_multipliers');\nload_system("
+  "'casper_library_pfbs');\nload_system('casper_library_reorder');\nload_system('casper_library_scopes');\nload_system("
+  "'casper_library_sources');\ncasper_library_bus_init;\nload_system('casper_library_bus');\n\n"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
@@ -140,7 +140,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [211.0, 57.0, 608.0, 738.0]
+      Location		      [208.0, 33.0, 614.0, 765.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -164,7 +164,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[566.0, 580.0]
+	Extents			[572.0, 607.0]
 	ZoomFactor		[1.0]
 	Offset			[0.0, 0.0]
       }
@@ -176,9 +176,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Apr 11 13:15:42 2013"
-  RTWModifiedTimeStamp	  287586767
-  ModelVersionFormat	  "1.%<AutoIncrement:1271>"
+  LastModifiedDate	  "Wed May 15 14:10:59 2013"
+  RTWModifiedTimeStamp	  290527837
+  ModelVersionFormat	  "1.%<AutoIncrement:1272>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -822,7 +822,7 @@ Library {
   }
   System {
     Name		    "casper_library"
-    Location		    [211, 57, 819, 795]
+    Location		    [208, 33, 822, 798]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    212
