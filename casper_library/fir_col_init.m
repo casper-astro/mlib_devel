@@ -61,6 +61,19 @@ adder_imp = get_var('adder_imp','defaults', defaults, varargin{:});
 
 delete_lines(blk);
 
+%default library state
+if n_inputs == 0,
+  clean_blocks(blk);
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting fir_col_init', 'trace');
+  return;
+end
+
+if length(coeff) ~= n_inputs,
+  clog('number of coefficients must be the same as the number of inputs', {'fir_col_init_debug', 'error'});
+  error('number of coefficients must be the same as the number of inputs');
+end
+
 for i=1:n_inputs,
     reuse_block(blk, ['real',num2str(i)], 'built-in/inport', 'Position', [30 i*80 60 15+80*i]);
     reuse_block(blk, ['imag',num2str(i)], 'built-in/inport', 'Position', [30 i*80+30 60 45+80*i]);

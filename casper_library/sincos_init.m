@@ -1,6 +1,6 @@
 % Generate sine/cos.
 %
-% sinecos_init(blk, varargin)
+% sincos_init(blk, varargin)
 %
 % blk = The block to be configured.
 % varargin = {'varname', 'value', ...} pairs
@@ -46,6 +46,14 @@ depth_bits = get_var('depth_bits', 'defaults', defaults, varargin{:});
 handle_sync = get_var('handle_sync', 'defaults', defaults, varargin{:});
 
 delete_lines(blk);
+
+%default case for storage in library
+if depth_bits == 0,
+  % When finished drawing blocks and lines, remove all unused blocks.
+  clean_blocks(blk);
+  save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
+  return;
+end
 
 base = 0;
 %handle the sync

@@ -40,12 +40,20 @@ defaults = {'n_bits', 8, 'bram_latency', 2, 'mult_latency', 3};
 check_mask_type(blk, 'mixer');
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 munge_block(blk, varargin{:});
-freq_div = get_var('freq_div','defaults', defaults, varargin{:});
-freq = get_var('freq','defaults', defaults, varargin{:});
-nstreams = get_var('nstreams','defaults', defaults, varargin{:});
-n_bits = get_var('n_bits','defaults', defaults, varargin{:});
-bram_latency = get_var('bram_latency','defaults', defaults, varargin{:});
-mult_latency = get_var('mult_latency','defaults', defaults, varargin{:});
+freq_div      = get_var('freq_div','defaults', defaults, varargin{:});
+freq          = get_var('freq','defaults', defaults, varargin{:});
+nstreams      = get_var('nstreams','defaults', defaults, varargin{:});
+n_bits        = get_var('n_bits','defaults', defaults, varargin{:});
+bram_latency  = get_var('bram_latency','defaults', defaults, varargin{:});
+mult_latency  = get_var('mult_latency','defaults', defaults, varargin{:});
+
+if nstreams == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk,'AttributesFormatString','');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  return;
+end
 
 counter_step = mod(nstreams * freq, freq_div);
 

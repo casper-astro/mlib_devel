@@ -50,16 +50,30 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('fir_dbl_col_init post same_state', 'trace');
 munge_block(blk, varargin{:});
 
-n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-coeff = get_var('coeff', 'defaults', defaults, varargin{:});
-add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
-mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
+n_inputs =        get_var('n_inputs', 'defaults', defaults, varargin{:});
+coeff =           get_var('coeff', 'defaults', defaults, varargin{:});
+add_latency =     get_var('add_latency', 'defaults', defaults, varargin{:});
+mult_latency =    get_var('mult_latency', 'defaults', defaults, varargin{:});
 coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
-coeff_bin_pt = get_var('coeff_bin_pt', 'defaults', defaults, varargin{:});
+coeff_bin_pt =    get_var('coeff_bin_pt', 'defaults', defaults, varargin{:});
 first_stage_hdl = get_var('first_stage_hdl', 'defaults', defaults, varargin{:});
-adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
+adder_imp =       get_var('adder_imp', 'defaults', defaults, varargin{:});
 
 delete_lines(blk);
+
+%default library state
+if n_inputs == 0,
+  clean_blocks(blk);
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting fir_dbl_col_init', 'trace');
+  return;
+end
+
+if length(coeff) ~= n_inputs,
+  clog('number of coefficients must be the same as the number of inputs', {'fir_dbl_col_init_debug', 'error'});
+  error('number of coefficients must be the same as the number of inputs');
+end
+
 % Make sure these go through Ports in strictly increasing order, or
 % port assignments don't "stick".
 for i=1:n_inputs,
@@ -70,9 +84,9 @@ for i=1:n_inputs,
     reuse_block(blk, ['imag_out',num2str(i)], 'built-in/outport', 'Position', [350 i*80+30 380 45+80*i], 'Port', num2str(2*i));
 
     reuse_block(blk, ['fir_dbl_tap',num2str(i)], 'casper_library_downconverter/fir_dbl_tap', ...
-        'Position', [180 i*160-70 230 50+160*i], 'mult_latency', num2str(mult_latency),...
-        'add_latency', num2str(add_latency), 'factor', num2str(coeff(i)), ...
-	'coeff_bit_width', tostring(coeff_bit_width), 'coeff_bin_pt', tostring(coeff_bin_pt));
+        'Position', [180 i*160-70 230 50+160*i], 'mult_latency', 'mult_latency',...
+        'add_latency', 'add_latency', 'factor', num2str(coeff(i)), ...
+	'coeff_bit_width', 'coeff_bit_width', 'coeff_bin_pt', 'coeff_bin_pt');
 end
 for i=1:n_inputs,
     reuse_block(blk, ['real_back',num2str(i)], 'built-in/inport', 'Position', [30 n_inputs*80+i*80 60 n_inputs*80+15+80*i], 'Port', num2str(2*i-1+2*n_inputs));
