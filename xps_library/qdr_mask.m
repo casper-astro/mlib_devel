@@ -29,8 +29,8 @@ try
     xsg_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
     hw_sys = xps_get_hw_plat(get_param(xsg_blk{1},'hw_sys'));
 catch
-    warndlg('Count not find hardware platform for QDR configuration - is there an XSG block in this model? Defaulting platform to ROACH.');
-    warning('Count not find hardware platform for QDR configuration - is there an XSG block in this model? Defaulting platform to ROACH.');
+    warndlg('Could not find hardware platform for QDR configuration - is there an XSG block in this model? Defaulting platform to ROACH.');
+    warning('Could not find hardware platform for QDR configuration - is there an XSG block in this model? Defaulting platform to ROACH.');
     hw_sys = 'ROACH';
 end %try/catch
 
