@@ -1333,6 +1333,7 @@ Library {
       MaskToolTipString	      "on,on,on,on,on"
       MaskInitialization      "bitreg_init(gcb, ...\n    'io_dir', io_dir, ...\n    'io_names', io_names, ...\n    'io"
       "_widths', io_widths, ...\n    'io_bp', io_bp, ...\n    'io_type', io_type);"
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
