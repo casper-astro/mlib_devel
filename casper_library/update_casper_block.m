@@ -41,6 +41,39 @@ function update_casper_block(oldblk)
     return;
   end
 
+  % Special handling for deprecated "edge" blocks
+  switch src
+  case {'casper_library_misc/edge', ...
+        'casper_library_misc/negedge', ...
+        'casper_library_misc/posedge'}
+    % Get mask params for edge_detect block
+    switch src
+    case 'casper_library_misc/edge'
+      params = {'edge', 'Both', 'polarity', 'Active High'};
+    case 'casper_library_misc/negedge'
+      params = {'edge', 'Falling', 'polarity', 'Active High'};
+    case 'casper_library_misc/posedge'
+      params = {'edge', 'Rising', 'polarity', 'Active High'};
+    end
+    % Make sure casper_library_misc block diagram is loaded
+    if ~bdIsLoaded('casper_library_misc')
+      fprintf('loading library casper_library_misc\n');
+      load_system('casper_library_misc');
+    end
+    % Get position and orientation of oldblk
+    p = get_param(oldblk, 'position');
+    o = get_param(oldblk, 'orientation');
+    % Delete oldblk
+    delete_block(oldblk);
+    % Add edge detect block using oldblk's name
+    add_block('casper_library_misc/edge_detect', oldblk, ...
+        'orientation', o, ...
+        'position', p, ...
+        params{:});
+    % Done!
+    return
+  end % special deprecated handling
+
   % Make sure src's block diagram is loaded
   src_bd = regexprep(src, '/.*', '');
   if ~bdIsLoaded(src_bd)
@@ -104,13 +137,13 @@ function update_casper_block(oldblk)
   % Get position of oldblk, delete it, move newblk into its place, and rename.
   % Some blocks (e.g. software register blocks) need to be resized to get port
   % spacing correct so that's why we set position multiple times.
-  p = get_param(oldblk, 'Position');
-  o = get_param(oldblk, 'Orientation');
+  p = get_param(oldblk, 'position');
+  o = get_param(oldblk, 'orientation');
   delete_block(oldblk);
   set_param(newblk, ...
-      'Orientation', o, ...
-      'Position', p, ...
-      'Position', p + [0, -1, 0, 1], ...
-      'Position', p);
-  set_param(newblk, 'Name', regexprep(oldblk, '.*/', ''));
+      'orientation', o, ...
+      'position', p, ...
+      'position', p + [0, -1, 0, 1], ...
+      'position', p);
+  set_param(newblk, 'name', regexprep(oldblk, '.*/', ''));
 end
