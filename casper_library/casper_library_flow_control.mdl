@@ -814,6 +814,7 @@ Library {
       "utputWidth', outputWidth, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArit"
       "hmeticType, ...\n    'show_format', show_format, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'vari"
       "ablePrefix', variablePrefix, ...\n    'outputToModelAsWell', outputToModelAsWell);"
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      off
       MaskIconRotate	      "none"
