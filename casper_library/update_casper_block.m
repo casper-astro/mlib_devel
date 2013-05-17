@@ -37,7 +37,7 @@ function update_casper_block(oldblk)
   
   % Else, not supported
   else
-    fprintf('%s is not a linked library block\n', name);
+    fprintf('%s is not a linked library block\n', oldblk);
     return;
   end
 
@@ -81,8 +81,11 @@ function update_casper_block(oldblk)
     load_system(src_bd);
   end
 
-  % Add new block
-  newblk = [oldblk, '__tmp__'];
+  % Add new temporary block named "__x__tmp__x__" to root of block diagram.
+  % Adding it to the same subsystem as old_blk can cause parent subsystem mask
+  % initialization scripts to run which may, in turn, try to delete the new
+  % temporary block.
+  newblk = [bdroot(oldblk), '/__x__tmp__x__'];
   add_block(src, newblk);
 
   % Disable mask init script (assuming block supports same_state)
@@ -140,10 +143,12 @@ function update_casper_block(oldblk)
   p = get_param(oldblk, 'position');
   o = get_param(oldblk, 'orientation');
   delete_block(oldblk);
-  set_param(newblk, ...
+  % Copy new temporary block to oldblk
+  add_block(newblk, oldblk, ...
       'orientation', o, ...
       'position', p, ...
       'position', p + [0, -1, 0, 1], ...
       'position', p);
-  set_param(newblk, 'name', regexprep(oldblk, '.*/', ''));
+  % Remove temporary block
+  delete_block(newblk);
 end
