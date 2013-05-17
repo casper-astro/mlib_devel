@@ -4908,6 +4908,7 @@ Library {
       MaskInitialization      "convert_of_init(gcb, ...\n    'bit_width_i', bit_width_i, ...\n    'binary_point_i', bi"
       "nary_point_i, ...\n    'bit_width_o', bit_width_o, ...\n    'binary_point_o', binary_point_o, ...\n    'latency'"
       ", latency, ...\n    'overflow', overflow, ...\n    'quantization', quantization);\n    "
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
