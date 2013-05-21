@@ -22,9 +22,6 @@
 
 cursys = gcb;
 
-% Until using same_state/save_state, at least check for force_same_state
-if strcmp(get_param(cursys,'UserData'),'force_same_state'), return, end
-
 [hw_sys,io_group] = xps_get_hw_info(get_param(gcb,'io_group'));
 if ~exist(hw_sys) | ~isstruct(hw_sys)
     load hw_routes.mat;

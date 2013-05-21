@@ -22,9 +22,6 @@
 
 cursys = gcb;
 
-% Until using same_state/save_state, at least check for force_same_state
-if strcmp(get_param(cursys,'UserData'),'force_same_state'), return, end
-
 pos = get_param(cursys,'Position');
 x= pos(1);
 y= pos(2);

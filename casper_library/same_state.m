@@ -31,15 +31,12 @@
 
 function match = same_state(blk,varargin)
 
-match = 0;
 try
-    % Recognize 'force_same_state' to mean always return true.  Utility scripts
-    % such as update_block can use this to defer running the mask
-    % initialization script.
-    user_data = get_param(blk,'UserData');
-    if strcmp(user_data, 'force_same_state') ...
-    || getfield(user_data, 'state') == hashcell(varargin)
-      match = 1;
-    end
+    match = getfield( get_param(blk,'UserData'), 'state') == hashcell(varargin);
 catch
+    match = 0;
 end
+
+%forces update of mask
+%backpopulate_mask(blk,varargin{:});
+

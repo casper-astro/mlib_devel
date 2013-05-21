@@ -33,9 +33,6 @@
 % 
 function bitreg_init(blk, varargin)
 
-% Until using same_state/save_state, at least check for force_same_state
-if strcmp(get_param(blk,'UserData'),'force_same_state'), return, end
-
 defaults = {'io_dir', 'To Processor', 'io_names', {'a', 'b'}, 'io_widths', [1, 1]};
 
 io_dir = get_var('io_dir', 'defaults', defaults, varargin{:});
