@@ -26,15 +26,15 @@ function update_casper_block(oldblk)
 
   % Check link status
   link_status = get_param(oldblk, 'StaticLinkStatus');
- 
+
   % Inactive link (link disabled but not broken) so get AncestorBlock
   if strcmp(link_status, 'inactive'),
-    src = get_param(oldblk, 'AncestorBlock');
+    srcblk = get_param(oldblk, 'AncestorBlock');
 
   % Resolved link (link in place) so get ReferenceBlock
   elseif strcmp(link_status, 'resolved'),
-    src = get_param(oldblk, 'ReferenceBlock'); 
-  
+    srcblk = get_param(oldblk, 'ReferenceBlock');
+
   % Else, not supported
   else
     fprintf('%s is not a linked library block\n', oldblk);
@@ -42,12 +42,12 @@ function update_casper_block(oldblk)
   end
 
   % Special handling for deprecated "edge" blocks
-  switch src
+  switch srcblk
   case {'casper_library_misc/edge', ...
         'casper_library_misc/negedge', ...
         'casper_library_misc/posedge'}
     % Get mask params for edge_detect block
-    switch src
+    switch srcblk
     case 'casper_library_misc/edge'
       params = {'edge', 'Both', 'polarity', 'Active High'};
     case 'casper_library_misc/negedge'
@@ -74,38 +74,29 @@ function update_casper_block(oldblk)
     return
   end % special deprecated handling
 
-  % Make sure src's block diagram is loaded
-  src_bd = regexprep(src, '/.*', '');
-  if ~bdIsLoaded(src_bd)
-    fprintf('loading library %s\n', src_bd);
-    load_system(src_bd);
+  % Make sure srcblk's block diagram is loaded
+  srcblk_bd = regexprep(srcblk, '/.*', '');
+  if ~bdIsLoaded(srcblk_bd)
+    fprintf('loading library %s\n', srcblk_bd);
+    load_system(srcblk_bd);
   end
-
-  % Add new temporary block named "__x__tmp__x__" to root of block diagram.
-  % Adding it to the same subsystem as old_blk can cause parent subsystem mask
-  % initialization scripts to run which may, in turn, try to delete the new
-  % temporary block.
-  newblk = [bdroot(oldblk), '/__x__tmp__x__'];
-  add_block(src, newblk);
-
-  % Disable mask init script (assuming block supports same_state)
-  set_param(newblk, 'UserData', 'force_same_state');
 
   % Get old and new mask names
   oldblk_mask_names = get_param(oldblk, 'MaskNames');
-  newblk_mask_names = get_param(newblk, 'MaskNames');
+  newblk_mask_names = get_param(srcblk, 'MaskNames');
 
   % Save warning backtrace state then disable backtrace
   bt_state = warning('query', 'backtrace');
   warning off backtrace;
 
   % Try to populate newblk's mask parameters from oldblk
+  newblk_params = {};
   for k = 1:length(newblk_mask_names)
     % If oldblk has the same mask parameter name
     if find(strcmp(oldblk_mask_names, newblk_mask_names{k}))
-      % Copy mask parameter from oldblk to newblk
-      set_param(newblk, newblk_mask_names{k}, ...
-          get_param(oldblk, newblk_mask_names{k}));
+      % Add to new block parameters
+      newblk_params{end+1} = newblk_mask_names{k};
+      newblk_params{end+1} = get_param(oldblk, newblk_mask_names{k});
     else
       type = get_param(oldblk, 'MaskType');
       if ~isempty(type)
@@ -121,34 +112,25 @@ function update_casper_block(oldblk)
   % Restore warning backtrace state
   warning(bt_state);
 
-  % Re-enable mask init scripts by copying old block's UserData.
-  % If the user data is a structure with "state" and "parameters" fields,
-  % then set the state field to empty array to ensure mask init script runs.
-  ud = get_param(oldblk, 'UserData');
-  if isfield(ud, 'state') && isfield(ud, 'parameters')
-    ud.state = [];
-  end
-  set_param(newblk, 'UserData', ud);
-
-  % If block has at least one mask parameter,
-  if ~isempty(newblk_mask_names)
-    % Kick off mask init script by setting first mask parameter to itself
-    set_param(newblk, newblk_mask_names{1}, ...
-        get_param(newblk, newblk_mask_names{1}));
-  end
-
-  % Get position of oldblk, delete it, move newblk into its place, and rename.
-  % Some blocks (e.g. software register blocks) need to be resized to get port
-  % spacing correct so that's why we set position multiple times.
+  % Get position and orientation of oldblk.
   p = get_param(oldblk, 'position');
   o = get_param(oldblk, 'orientation');
+  % Delete old block
   delete_block(oldblk);
-  % Copy new temporary block to oldblk
-  add_block(newblk, oldblk, ...
+  % Re-add source block as oldblk, using new params.  Note that we position the
+  % new block at (0,0) with size of (0,0) rather than at original position.
+  % This prevents existing lines from connecting to unintended ports in the new
+  % block before the mask init script runs, which might change the number of
+  % ports and their position within the block.
+  add_block(srcblk, oldblk, ...
+      'position', [0,0,0,0], ...
       'orientation', o, ...
+      newblk_params{:});
+  % Set real position now that the block has redrawn itself.  Some blocks (e.g.
+  % software register blocks) need to be resized to get port spacing correct so
+  % that's why we set position multiple times.
+  set_param(oldblk, ...
       'position', p, ...
       'position', p + [0, -1, 0, 1], ...
       'position', p);
-  % Remove temporary block
-  delete_block(newblk);
 end
