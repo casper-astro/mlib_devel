@@ -115,22 +115,34 @@ function update_casper_block(oldblk)
   % Get position and orientation of oldblk.
   p = get_param(oldblk, 'position');
   o = get_param(oldblk, 'orientation');
-  % Delete old block
-  delete_block(oldblk);
-  % Re-add source block as oldblk, using new params.  Note that we position the
-  % new block at (0,0) with size of (0,0) rather than at original position.
-  % This prevents existing lines from connecting to unintended ports in the new
-  % block before the mask init script runs, which might change the number of
-  % ports and their position within the block.
-  add_block(srcblk, oldblk, ...
+
+  % Add new temporary block to top level of block diagram.  Adding it directly
+  % to oldblk's parent subsystem can cause the parent's mask init script to run
+  % before the new block is fully connected which might try to delete the block
+  % we are trying to add (e.g. if the parent's mask init script calls
+  % clean_blocks).
+  newblk = [bdroot(oldblk), '/__x__tmp__x__'];
+
+  % Add source block as newblk, using new params.  Note that we position the
+  % new block at (0,0) with size of (0,0) to minimize the possibility of it
+  % connecting to stray unconnected lines.
+  newblk = getfullname(add_block(srcblk, newblk, ...
+      'MakeNameUnique', 'on', ...
       'position', [0,0,0,0], ...
       'orientation', o, ...
-      newblk_params{:});
-  % Set real position now that the block has redrawn itself.  Some blocks (e.g.
-  % software register blocks) need to be resized to get port spacing correct so
-  % that's why we set position multiple times.
-  set_param(oldblk, ...
+      newblk_params{:}));
+
+  % Delete old block
+  delete_block(oldblk);
+
+  % Copy newblk to oldblk.  Some blocks (e.g.  software register blocks) need
+  % to be resized to get port spacing correct so that's why we set position
+  % multiple times.
+  add_block(newblk, oldblk, ...
       'position', p, ...
       'position', p + [0, -1, 0, 1], ...
       'position', p);
+
+  % Delete temporary block
+  delete_block(newblk);
 end
