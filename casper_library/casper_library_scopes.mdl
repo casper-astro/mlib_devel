@@ -15464,6 +15464,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "snapshot"
+      Tag		      "casper:snapshot"
       Ports		      [4]
       Position		      [155, 381, 195, 459]
       BackgroundColor	      "[0.502000, 1.000000, 0.502000]"
@@ -15546,7 +15547,7 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "BRAM"
+	  Name			  "bram"
 	  Tag			  "xps:bram"
 	  Ports			  [3, 1]
 	  Position		  [930, 128, 1005, 292]
@@ -21510,23 +21511,23 @@ Library {
 	Line {
 	  SrcBlock		  "add_del"
 	  SrcPort		  1
-	  DstBlock		  "BRAM"
+	  DstBlock		  "bram"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "dat_del"
 	  SrcPort		  1
-	  DstBlock		  "BRAM"
+	  DstBlock		  "bram"
 	  DstPort		  2
 	}
 	Line {
 	  SrcBlock		  "we_del"
 	  SrcPort		  1
-	  DstBlock		  "BRAM"
+	  DstBlock		  "bram"
 	  DstPort		  3
 	}
 	Line {
-	  SrcBlock		  "BRAM"
+	  SrcBlock		  "bram"
 	  SrcPort		  1
 	  DstBlock		  "gbram"
 	  DstPort		  1
