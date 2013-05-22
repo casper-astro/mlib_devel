@@ -41,6 +41,10 @@ function update_casper_block(oldblk)
     return;
   end
 
+  % Map srcblk through casper_library_forwarding_table in case it's a really
+  % old name.
+  srcblk = casper_library_forwarding_table(srcblk);
+
   % Special handling for deprecated "edge" blocks
   switch srcblk
   case {'casper_library_misc/edge', ...
