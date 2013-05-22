@@ -117,7 +117,7 @@ end
 % validate input fields
 
 % check the per-stage multiplier specification
-[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, 'fft_biplex_real_2x_init');
+[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
 % Derive useful values.

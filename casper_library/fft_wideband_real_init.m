@@ -118,7 +118,7 @@ if FFTSize == 0,
 end
 
 % validate input fields
-[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, 'fft_wideband_real_init');
+[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
 if n_inputs < 2,

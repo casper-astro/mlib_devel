@@ -103,7 +103,7 @@ if FFTSize == 0,
   return;
 end
 % check the per-stage multiplier specification
-stage_mult_spec = multiplier_specification(mult_spec, FFTSize, 'fft_direct_init');
+stage_mult_spec = multiplier_specification(mult_spec, FFTSize, blk);
 
 current_stages = find_system(blk, ...
     'lookUnderMasks', 'all', ...
