@@ -37,9 +37,10 @@ function cosin_init(blk,varargin)
   defaults = { ...
     'output0',      'cos', ...     
     'output1',      '-sin', ...  
-    'table_bits',   3, ...  
+    'table_bits',   5, ...  
     'n_bits',       18, ...      
-    'bin_pt',       17, ...      
+    'bin_pt',       17, ...    
+    'misc',         'off', ...  
     'bram_latency', 1, ...
     'add_latency',  1, ... 
     'mux_latency',  1, ... 
@@ -57,6 +58,7 @@ function cosin_init(blk,varargin)
   table_bits    = get_var('table_bits', 'defaults', defaults, varargin{:});
   n_bits        = get_var('n_bits', 'defaults', defaults, varargin{:});
   bin_pt        = get_var('bin_pt', 'defaults', defaults, varargin{:});
+  misc          = get_var('misc', 'defaults', defaults, varargin{:});
   bram_latency  = get_var('bram_latency', 'defaults', defaults, varargin{:});
   add_latency   = get_var('add_latency', 'defaults', defaults, varargin{:});
   mux_latency   = get_var('mux_latency', 'defaults', defaults, varargin{:});
@@ -69,13 +71,20 @@ function cosin_init(blk,varargin)
   delete_lines(blk);
 
   %default case for storage in the library
-  if (table_bits == 0) || (table_bits < 3 && ~(strcmp(fraction, 'full') && strcmp(pack,'on'))),
+  if table_bits == 0,
     clean_blocks(blk);
     set_param(blk, 'AttributesFormatString', '');
     save_state(blk, 'defaults', defaults, varargin{:});
     clog('exiting cosin_init',{'trace', 'cosin_init_debug'});
     return;
   end %if
+
+  if (table_bits < 3),
+    if ~(strcmp(fraction, 'full') && strcmp(pack,'on')),
+      clog('forcing full cycle, all values for small number of points',{'trace', 'cosin_init_debug'});
+    end
+    fraction = 'full'; pack = 'on';
+  end
 
   %%%%%%%%%%%%%%%
   % input ports %
@@ -93,9 +102,16 @@ function cosin_init(blk,varargin)
           'Position', [70 85 115 105]);
   add_line(blk, 'theta/1', 'assert/1');
 
-  reuse_block(blk, 'misci', 'built-in/Inport', ...
-          'Port', '2', ...
-          'Position', [10 238 40 252]);
+  if strcmp(misc, 'on'),
+    reuse_block(blk, 'misci', 'built-in/Inport', ...
+            'Port', '2', ...
+            'Position', [10 238 40 252]);
+  else
+    reuse_block(blk, 'misci', 'xbsIndex_r4/Constant', ...
+            'const', '0', 'n_bits', '1', 'arith_type', 'Unsigned', ...
+            'bin_pt', '0', 'explicit_period', 'on', 'period', '1', ...
+            'Position', [10 238 40 252]);
+  end
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % address manipulation logic %
@@ -130,13 +146,12 @@ function cosin_init(blk,varargin)
   %%%%%%%%%%%%%
   % ROM setup %
   %%%%%%%%%%%%%
-  
+ 
   %misc delay
   reuse_block(blk, 'Delay', 'xbsIndex_r4/Delay', ...
           'latency', 'bram_latency', ...
           'Position', [450 336 480 354]);
-  
-  add_line(blk,'add_convert1/3','Delay/1');
+  add_line(blk,'add_convert1/3', 'Delay/1');
 
   %determine memory implementation
   if strcmp(bram, 'BRAM'),
@@ -299,9 +314,13 @@ function cosin_init(blk,varargin)
           'Port', '2', ...
           'Position', [875 168 905 182]);
 
-  reuse_block(blk, 'misco', 'built-in/Outport', ...
-          'Port', '3', ...
-          'Position', [875 198 905 212]);
+  if strcmp(misc, 'on'),
+    reuse_block(blk, 'misco', 'built-in/Outport', ...
+            'Port', '3', ...
+            'Position', [875 198 905 212]);
+  else,
+    reuse_block(blk, 'misco', 'built-in/Terminator', 'Position', [875 198 905 212]);
+  end
 
   add_line(blk,'invert0/1',[output0,'/1']);
   add_line(blk,'invert1/2','misco/1');
