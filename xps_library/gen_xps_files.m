@@ -518,14 +518,14 @@ if run_edkgen
     % modifying MHS file
     gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
-    % add the register descriptions to the registers.info file
-    gen_xps_mod_mhs_bitreg(sys, mssge_paths, slash);
-    
     % modifying MSS file
     gen_xps_mod_mss(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
     % modifying UCF file
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
+    
+    % add extra register and snapshot info from the design
+    gen_xps_add_design_info(sys, mssge_paths, slash);
 
 end % if run_edkgen
 time_edkgen = now - start_time;
@@ -607,9 +607,9 @@ if run_software
            fprintf(unix_fid,'chmod +x implementation/system.bof\n');
          end
         fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
-        if exist([xps_path,  slash, 'registers.info'], 'file') == 2,
-            fprintf(win_fid,['copy registers.info ..\\bit_files\\', design_name,'_',time_stamp,'.reginfo\n']);
-            fprintf(unix_fid,['cp registers.info ../bit_files/', design_name,'_',time_stamp,'.reginfo\n']);
+        if exist([xps_path,  slash, 'design_info.casper'], 'file') == 2,
+            fprintf(win_fid,['copy design_info.casper ..\\bit_files\\', design_name,'_',time_stamp,'.design_info\n']);
+            fprintf(unix_fid,['cp design_info.casper ../bit_files/', design_name,'_',time_stamp,'.design_info\n']);
         end
         if strcmp(hw_sys, 'ROACH2')
             fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
