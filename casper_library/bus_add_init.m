@@ -3,6 +3,7 @@ function bus_add_init(blk, varargin)
   clog('entering bus_add_init', 'trace');
   
   defaults = { ...
+    'operation', 'a+b', ...
     'n_bits_a', [8 8 8 8 8 8 8 8] ,  'bin_pt_a',     [3],   'type_a',   1, ...
     'n_bits_b', [4 4 4 4 4 4 4 4]  ,  'bin_pt_b',     [3],   'type_b',   [1], ...
     'n_bits_out', 8 ,     'bin_pt_out',   [3],   'type_out', [1], ...
@@ -24,6 +25,7 @@ function bus_add_init(blk, varargin)
   add_w = 50; add_d = 60;
   del_w = 30; del_d = 20;
 
+  operation    = get_var('operation', 'defaults', defaults, varargin{:});
   n_bits_a     = get_var('n_bits_a', 'defaults', defaults, varargin{:});
   bin_pt_a     = get_var('bin_pt_a', 'defaults', defaults, varargin{:});
   type_a       = get_var('type_a', 'defaults', defaults, varargin{:});
@@ -42,7 +44,7 @@ function bus_add_init(blk, varargin)
   delete_lines(blk);
 
   %default state, do nothing 
-  if (isempty(n_bits_a) | isempty(n_bits_b)),
+  if (n_bits_a == 0) || (n_bits_b == 0),
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
     clog('exiting bus_add_init','trace');
@@ -161,7 +163,14 @@ function bus_add_init(blk, varargin)
   a_src = repmat([1:compa], 1, comp/compa);
   b_src = repmat([1:compb], 1, comp/compb);
 
-  clog(['making ',num2str(comp),' adders'],'bus_add_init_debug');
+  clog(['making ',num2str(comp),' AddSubs'],'bus_add_init_debug');
+
+  switch operation,
+    case 'a+b',
+      mode = 'Addition';
+    case 'a-b',
+      mode = 'Subtraction';
+  end  
 
   for add_index = 1:comp
     switch type_o(add_index),
@@ -184,6 +193,7 @@ function bus_add_init(blk, varargin)
       case 2,
         of = 'Flag as error';
     end  
+        
     clog(['output ',num2str(add_index),': ', ... 
       ' a[',num2str(a_src(add_index)),'] + b[',num2str(b_src(add_index)),'] = ', ...
       '(',num2str(n_bits_out(add_index)), ' ', num2str(bin_pt_out(add_index)),') ' ...
@@ -192,7 +202,7 @@ function bus_add_init(blk, varargin)
 
     add_name = ['add',num2str(add_index)]; 
     reuse_block(blk, add_name, 'xbsIndex_r4/AddSub', ...
-      'mode', 'Addition', 'latency', num2str(add_latency), ...
+      'mode', mode, 'latency', num2str(add_latency), ...
       'precision', 'User Defined', ...
       'n_bits', num2str(n_bits_out(add_index)), 'bin_pt', num2str(bin_pt_out(add_index)), ...  
       'arith_type', arith_type, 'quantization', quant, 'overflow', of, ... 
