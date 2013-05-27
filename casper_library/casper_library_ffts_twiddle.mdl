@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed May 22 08:30:12 2013"
-  RTWModifiedTimeStamp	  291111859
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  LastModifiedDate	  "Mon May 27 12:56:35 2013"
+  RTWModifiedTimeStamp	  291560161
+  ModelVersionFormat	  "1.%<AutoIncrement:15>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -49,13 +49,11 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
-  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
-  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -519,6 +517,7 @@ Library {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
+    UseDisplayTextAsClickCallback off
   }
   LineDefaults {
     FontName		    "Arial"
@@ -591,7 +590,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_twiddle"
-    Location		    [187, 61, 819, 976]
+    Location		    [153, 45, 833, 1070]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -624,7 +623,7 @@ Library {
       MaskIconUnits	      "autoscale"
       System {
 	Name			"coeff_gen"
-	Location		[412, 45, 1044, 816]
+	Location		[378, 45, 1058, 1051]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -676,7 +675,7 @@ Library {
       MaskValueString	      "0|18|1|2|2|0|logic"
       System {
 	Name			"twiddle_coeff_0"
-	Location		[413, 237, 1204, 1274]
+	Location		[379, 118, 1218, 1390]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -756,13 +755,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "10.1.3"
 	  sg_icon_stat		  "40,42,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 42 42 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 42 42 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[26.55 26.55 31.55"
-	  " 26.55 31.55 31.55 31.55 26.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[21.55 21.55 26.55 26.55 21.55 "
-	  "],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[16.55 16.55 21.55 21.55 16.55 ],[1 1 1 ]);\npatch("
-	  "[13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[11.55 11.55 16.55 11.55 16.55 16.55 11.55 ],[0.931 0.946 0.973 ]);\nfpr"
-	  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-5}','"
-	  "texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -785,13 +784,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "10.1.3"
 	  sg_icon_stat		  "40,42,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 42 42 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 42 42 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[26.55 26.55 31.55"
-	  " 26.55 31.55 31.55 31.55 26.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[21.55 21.55 26.55 26.55 21.55 "
-	  "],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[16.55 16.55 21.55 21.55 16.55 ],[1 1 1 ]);\npatch("
-	  "[13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[11.55 11.55 16.55 11.55 16.55 16.55 11.55 ],[0.931 0.946 0.973 ]);\nfpr"
-	  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-5}','"
-	  "texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -814,13 +813,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "10.1.3"
 	  sg_icon_stat		  "40,42,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 42 42 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 42 42 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[26.55 26.55 31.55"
-	  " 26.55 31.55 31.55 31.55 26.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[21.55 21.55 26.55 26.55 21.55 "
-	  "],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[16.55 16.55 21.55 21.55 16.55 ],[1 1 1 ]);\npatch("
-	  "[13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[11.55 11.55 16.55 11.55 16.55 16.55 11.55 ],[0.931 0.946 0.973 ]);\nfpr"
-	  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-5}','"
-	  "texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Outport
@@ -959,7 +958,7 @@ Library {
       MaskValueString	      "0|18|1|2|2|0|logic"
       System {
 	Name			"twiddle_coeff_1"
-	Location		[471, 45, 1264, 1081]
+	Location		[437, 45, 1278, 1316]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1039,13 +1038,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "35,18,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 18 18 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 18 18 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[11.22 11.22 1"
-	  "3.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[9.22 9.22 11.22 11.22 9.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\npatch([14"
-	  ".55 21.44 19.44 17.44 15.44 12.55 14.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-5}','texmode'"
-	  ",'on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1068,13 +1067,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "35,18,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 18 18 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 18 18 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[11.22 11.22 1"
-	  "3.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[9.22 9.22 11.22 11.22 9.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\npatch([14"
-	  ".55 21.44 19.44 17.44 15.44 12.55 14.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-5}','texmode'"
-	  ",'on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1097,13 +1096,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "35,18,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 18 18 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 18 18 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[11.22 11.22 1"
-	  "3.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[9.22 9.22 11.22 11.22 9.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\npatch([14"
-	  ".55 21.44 19.44 17.44 15.44 12.55 14.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-5}','texmode'"
-	  ",'on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1126,13 +1125,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "35,18,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 18 18 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 18 18 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[11.22 11.22 1"
-	  "3.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[9.22 9.22 11.22 11.22 9.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\npatch([14"
-	  ".55 21.44 19.44 17.44 15.44 12.55 14.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-5}','texmode'"
-	  ",'on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1157,14 +1156,13 @@ Library {
 	  block_type		  "negate"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "65,24,1,1,white,blue,0,d270103b,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 0 ],[0 0 24 24 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 65 65 0 0 ],[0 0 24 24 0 ]);\npatch([25.325 29.66 32.66 35.66 38.66 32.66 28.325 25.325 ],[15.33 15.3"
-	  "3 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([28.325 32.66 29.66 25.325 28.325 ],[12.33 12.33 15.33 15"
-	  ".33 12.33 ],[0.931 0.946 0.973 ]);\npatch([25.325 29.66 32.66 28.325 25.325 ],[9.33 9.33 12.33 12.33 9.33 ],[1 1 1 "
-	  "]);\npatch([28.325 38.66 35.66 32.66 29.66 25.325 28.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],[0.931 0.946 0.973"
-	  " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('"
-	  "z^{-5}\\newline ','texmode','on');\ncolor('black');disp(' \\newline\\bf{x(-1)}','texmode','on');\nfprintf('','COMME"
-	  "NT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 55 55 0 0 ],[0 0 56 56 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[35.77 35.7"
+	  "7 42.77 35.77 42.77 42.77 42.77 35.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[28.77 28.77 35.77 35"
+	  ".77 28.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[21.77 21.77 28.77 28.77 21.77 ],[1 1"
+	  " 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[14.77 14.77 21.77 14.77 21.77 21.77 14.77 ],[0.931 0"
+	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('blac"
+	  "k');disp('\\bf{x(-1)}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Outport
@@ -1331,7 +1329,7 @@ Library {
       "n,Implementation,Implementation,Implementation,Implementation,Implementation"
       System {
 	Name			"twiddle_general"
-	Location		[186, 119, 1007, 787]
+	Location		[152, 45, 1021, 948]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1379,7 +1377,7 @@ Library {
       MaskValueString	      "0|18|3|4|4|0|logic"
       System {
 	Name			"twiddle_pass_through"
-	Location		[356, 45, 1147, 1082]
+	Location		[322, 45, 1161, 1317]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1562,7 +1560,7 @@ Library {
       MaskValueString	      "5|18|1|2|2|1|multipliers"
       System {
 	Name			"twiddle_stage_2"
-	Location		[964, 45, 1730, 1019]
+	Location		[930, 45, 1744, 1254]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1655,8 +1653,7 @@ Library {
 	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 ]);\npatch([17."
 	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'cas"
-	  "t');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfprintf('','COMMENT: "
-	  "end icon text');"
+	  "t');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1690,13 +1687,13 @@ Library {
 	  block_type		  "counter"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,44,1,1,white,blue,0,803eba70,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 44 44 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 44 44 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[27.55 27.55 32.55"
-	  " 27.55 32.55 32.55 32.55 27.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[22.55 22.55 27.55 27.55 22.55 "
-	  "],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[17.55 17.55 22.55 22.55 17.55 ],[1 1 1 ]);\npatch("
-	  "[13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[12.55 12.55 17.55 12.55 17.55 17.55 12.55 ],[0.931 0.946 0.973 ]);\nfpr"
-	  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',"
-	  "1,'rst');\n\ncolor('black');disp('{\\fontsize{14}\\bf++}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 60 60 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[38.88 38.88 46.8"
+	  "8 38.88 46.88 46.88 46.88 38.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[30.88 30.88 38.88 38.88 30.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[22.88 22.88 30.88 30.88 22.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[14.88 14.88 22.88 14.88 22.88 22.88 14.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');disp('{\\fontsize{14}\\"
+	  "bf++}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1719,13 +1716,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "35,26,1,1,white,blue,0,d93bb731,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 26 26 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 26 26 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[16.33 16.3"
-	  "3 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[13.33 13.33 16.33 16"
-	  ".33 13.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[10.33 10.33 13.33 13.33 10.33 ],[1 1"
-	  " 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[7.33 7.33 10.33 7.33 10.33 10.33 7.33 ],[0.931 0.946"
-	  " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	  "disp('z^{-7}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1748,13 +1745,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "35,26,1,1,white,blue,0,d93bb731,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 26 26 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 26 26 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[16.33 16.3"
-	  "3 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[13.33 13.33 16.33 16"
-	  ".33 13.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[10.33 10.33 13.33 13.33 10.33 ],[1 1"
-	  " 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[7.33 7.33 10.33 7.33 10.33 10.33 7.33 ],[0.931 0.946"
-	  " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	  "disp('z^{-7}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1778,13 +1775,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,18,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 18 18 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 18 18 0 ]);\npatch([15.55 18.44 20.44 22.44 24.44 20.44 17.55 15.55 ],[11.22 11.22 1"
-	  "3.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([17.55 20.44 18.44 15.55 17.55 ],[9.22 9.22 11.22 11.22 9.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([15.55 18.44 20.44 17.55 15.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\npatch([17"
-	  ".55 24.44 22.44 20.44 18.44 15.55 17.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-4}','texmode'"
-	  ",'on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1808,13 +1805,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,18,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 18 18 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 18 18 0 ]);\npatch([15.55 18.44 20.44 22.44 24.44 20.44 17.55 15.55 ],[11.22 11.22 1"
-	  "3.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([17.55 20.44 18.44 15.55 17.55 ],[9.22 9.22 11.22 11.22 9.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([15.55 18.44 20.44 17.55 15.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\npatch([17"
-	  ".55 24.44 22.44 20.44 18.44 15.55 17.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-4}','texmode'"
-	  ",'on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1838,13 +1835,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "40,18,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 18 18 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 18 18 0 ]);\npatch([15.55 18.44 20.44 22.44 24.44 20.44 17.55 15.55 ],[11.22 11.22 1"
-	  "3.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([17.55 20.44 18.44 15.55 17.55 ],[9.22 9.22 11.22 11.22 9.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([15.55 18.44 20.44 17.55 15.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\npatch([17"
-	  ".55 24.44 22.44 20.44 18.44 15.55 17.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-4}','texmode'"
-	  ",'on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1867,13 +1864,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "35,26,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 26 26 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 26 26 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[16.33 16.3"
-	  "3 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[13.33 13.33 16.33 16"
-	  ".33 13.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[10.33 10.33 13.33 13.33 10.33 ],[1 1"
-	  " 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[7.33 7.33 10.33 7.33 10.33 10.33 7.33 ],[0.931 0.946"
-	  " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	  "disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1896,13 +1893,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "35,26,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 26 26 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 26 26 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[16.33 16.3"
-	  "3 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[13.33 13.33 16.33 16"
-	  ".33 13.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[10.33 10.33 13.33 13.33 10.33 ],[1 1"
-	  " 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[7.33 7.33 10.33 7.33 10.33 10.33 7.33 ],[0.931 0.946"
-	  " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	  "disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1925,13 +1922,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "35,26,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 26 26 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 26 26 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[16.33 16.3"
-	  "3 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[13.33 13.33 16.33 16"
-	  ".33 13.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[10.33 10.33 13.33 13.33 10.33 ],[1 1"
-	  " 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[7.33 7.33 10.33 7.33 10.33 10.33 7.33 ],[0.931 0.946"
-	  " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	  "disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1954,13 +1951,13 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "35,26,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 26 26 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 26 26 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[16.33 16.3"
-	  "3 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[13.33 13.33 16.33 16"
-	  ".33 13.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[10.33 10.33 13.33 13.33 10.33 ],[1 1"
-	  " 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[7.33 7.33 10.33 7.33 10.33 10.33 7.33 ],[0.931 0.946"
-	  " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	  "disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
+	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
+	  "de','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -2055,14 +2052,13 @@ Library {
 	  block_type		  "negate"
 	  block_version		  "11.4"
 	  sg_icon_stat		  "65,24,1,1,white,blue,0,fc5ddbd7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 0 ],[0 0 24 24 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 65 65 0 0 ],[0 0 24 24 0 ]);\npatch([25.325 29.66 32.66 35.66 38.66 32.66 28.325 25.325 ],[15.33 15.3"
-	  "3 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([28.325 32.66 29.66 25.325 28.325 ],[12.33 12.33 15.33 15"
-	  ".33 12.33 ],[0.931 0.946 0.973 ]);\npatch([25.325 29.66 32.66 28.325 25.325 ],[9.33 9.33 12.33 12.33 9.33 ],[1 1 1 "
-	  "]);\npatch([28.325 38.66 35.66 32.66 29.66 25.325 28.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],[0.931 0.946 0.973"
-	  " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('"
-	  "z^{-1}\\newline ','texmode','on');\ncolor('black');disp(' \\newline\\bf{x(-1)}','texmode','on');\nfprintf('','COMME"
-	  "NT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 55 55 0 0 ],[0 0 56 56 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[35.77 35.7"
+	  "7 42.77 35.77 42.77 42.77 42.77 35.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[28.77 28.77 35.77 35"
+	  ".77 28.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[21.77 21.77 28.77 28.77 21.77 ],[1 1"
+	  " 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[14.77 14.77 21.77 14.77 21.77 21.77 14.77 ],[0.931 0"
+	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('blac"
+	  "k');disp('\\bf{x(-1)}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
