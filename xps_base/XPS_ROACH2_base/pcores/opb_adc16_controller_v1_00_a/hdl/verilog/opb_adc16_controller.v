@@ -72,6 +72,7 @@ module opb_adc16_controller(
   /* ======================================= */
   /* ADC0 3-Wire Register (word 0)           */
   /* ======================================= */
+  /* ZZ = ZDOK Pinout Revision               */
   /* LL = Clock locked bits                  */
   /* NNNN = Number of ADC chips supported    */
   /* RR = ROACH2 revision expected/required  */
@@ -89,6 +90,7 @@ module opb_adc16_controller(
   /* |<-- MSb                       LSb -->| */
   /* 0000_0000_0011_1111_1111_2222_2222_2233 */
   /* 0123_4567_8901_2345_6789_0123_4567_8901 */
+  /* --ZZ ---- ---- ---- ---- ---- ---- ---- */
   /* ---- --LL ---- ---- ---- ---- ---- ---- */
   /* ---- ---- NNNN ---- ---- ---- ---- ---- */
   /* ---- ---- ---- --RR ---- ---- ---- ---- */
@@ -103,11 +105,11 @@ module opb_adc16_controller(
   /*       used, but bit 6 is only used when */
   /*       NNNN is 4 (or less).              */
   /* ======================================= */
-  /* NOTE: NNNN and RR are read-only values  */
-  /*       that are set at compile time.     */
-  /*       They do not indicate the state    */
-  /*       of the actual hardware in use     */
-  /*       at runtime.                       */
+  /* NOTE: NNNN, RR and ZZ are read-only     */
+  /*       values that are set at compile    */
+  /*       time.  They do not indicate the   */
+  /*       state of the actual hardware in   */
+  /*       use at runtime.                   */
   /* ======================================= */
 
   assign adc1_adc3wire_sclk  =  adc16_adc3wire_wire[22];

@@ -2,7 +2,7 @@ Library {
   Name			  "casper_library"
   Version		  7.2
   MdlSubVersion		  0
-  SavedCharacterEncoding  "UTF-8"
+  SavedCharacterEncoding  "US-ASCII"
   PostLoadFcn		  "% Stub definitions for mask variables\ndelay_depth=16;\nn_bits=8;\nbin_pt=7;\n% Pre-load sublibrarie"
   "s\nload_system('casper_library_accumulators');\nload_system('casper_library_communications');\nload_system('casper_l"
   "ibrary_correlator');\nload_system('casper_library_delays');\ncasper_library_downconverter_init;\nload_system('casper"
@@ -133,11 +133,11 @@ Library {
   Creator		  "mwagner"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "andrew"
+  LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed May 15 14:41:55 2013"
-  RTWModifiedTimeStamp	  290529404
-  ModelVersionFormat	  "1.%<AutoIncrement:1274>"
+  LastModifiedDate	  "Tue May 14 23:44:52 2013"
+  RTWModifiedTimeStamp	  290475428
+  ModelVersionFormat	  "1.%<AutoIncrement:1272>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -202,13 +202,13 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      6
+      $ObjectID		      1
       Version		      "1.5.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  7
+	  $ObjectID		  2
 	  Version		  "1.5.1"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
@@ -240,7 +240,7 @@ Library {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  8
+	  $ObjectID		  3
 	  Version		  "1.5.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
@@ -266,7 +266,7 @@ Library {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  9
+	  $ObjectID		  4
 	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
@@ -313,7 +313,7 @@ Library {
   EnforceIntegerDowncast   on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  10
+	  $ObjectID		  5
 	  Version		  "1.5.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
@@ -358,7 +358,7 @@ Library {
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
 	  InvalidFcnCallConnMsg	  "error"
-	  FcnCallInpInsideContextMsg "Use local settings"
+	  FcnCallInpInsideContextMsg "Enable All"
 	  SignalLabelMismatchMsg  "none"
 	  UnconnectedInputMsg	  "warning"
 	  UnconnectedOutputMsg	  "warning"
@@ -383,7 +383,7 @@ Library {
 	  BlockIODiagnostic	  "none"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  11
+	  $ObjectID		  6
 	  Version		  "1.5.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
@@ -410,7 +410,7 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  12
+	  $ObjectID		  7
 	  Version		  "1.5.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
@@ -419,7 +419,7 @@ Library {
 	  ModelReferenceMinAlgLoopOccurrences off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  13
+	  $ObjectID		  8
 	  Version		  "1.5.1"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
@@ -429,7 +429,7 @@ Library {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  14
+	  $ObjectID		  9
 	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
@@ -476,7 +476,7 @@ Library {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      15
+	      $ObjectID		      10
 	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
@@ -535,7 +535,7 @@ Library {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      16
+	      $ObjectID		      11
 	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
@@ -589,6 +589,7 @@ Library {
 	      SupportNonInlinedSFcns  on
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
+	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
@@ -669,7 +670,7 @@ Library {
   }
   System {
     Name		    "casper_library"
-    Location		    [171, 45, 982, 1016]
+    Location		    [211, 77, 819, 815]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    212

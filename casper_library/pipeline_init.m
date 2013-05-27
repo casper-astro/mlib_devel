@@ -32,7 +32,8 @@ function pipeline_init(blk, varargin)
 
 % Declare any default values for arguments you might like.
 defaults = {};
-%if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+
 check_mask_type(blk, 'pipeline');
 munge_block(blk, varargin{:});
 

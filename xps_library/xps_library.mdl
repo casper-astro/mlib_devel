@@ -920,13 +920,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -953,13 +950,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are di"
 	      "scarded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -1207,11 +1201,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1256,11 +1247,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1305,11 +1293,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1354,11 +1339,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1403,11 +1385,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1452,11 +1431,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1501,11 +1477,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1550,11 +1523,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1599,11 +1569,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1648,11 +1615,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1697,11 +1661,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1746,11 +1707,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1795,11 +1753,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1844,11 +1799,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1893,11 +1845,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1942,11 +1891,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -2372,11 +2318,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -2415,11 +2358,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -2458,11 +2398,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -2501,11 +2438,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -2544,11 +2478,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5518,11 +5449,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5561,11 +5489,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5604,11 +5529,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5647,11 +5569,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5690,11 +5609,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5733,11 +5649,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5776,11 +5689,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5819,11 +5729,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -5862,11 +5769,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -7048,11 +6952,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -7091,11 +6992,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -7134,11 +7032,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -7177,11 +7072,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -7220,11 +7112,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -9262,11 +9151,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -9305,11 +9191,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -9348,11 +9231,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -9391,11 +9271,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -9434,11 +9311,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -9477,11 +9351,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -9520,11 +9391,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -9563,11 +9431,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,406"
@@ -9606,11 +9471,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,348,408"
@@ -10710,11 +10572,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -10753,11 +10612,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -10796,11 +10652,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -10839,11 +10692,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -10882,11 +10732,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -10925,11 +10772,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -10968,11 +10812,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11011,11 +10852,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11054,11 +10892,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11097,11 +10932,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11140,11 +10972,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11183,11 +11012,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11226,11 +11052,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11269,11 +11092,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11312,11 +11132,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11355,11 +11172,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -11398,11 +11212,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -16207,13 +16018,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16241,13 +16049,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16274,13 +16079,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16307,13 +16109,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16340,13 +16139,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16373,13 +16169,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16406,13 +16199,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16439,13 +16229,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16472,13 +16259,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16505,13 +16289,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -16538,13 +16319,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20713,13 +20491,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20746,13 +20521,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20779,13 +20551,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20812,13 +20581,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20845,13 +20611,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20878,13 +20641,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20911,13 +20671,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20944,13 +20701,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -20977,13 +20731,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -21010,13 +20761,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -21043,13 +20791,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -21076,13 +20821,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -21109,13 +20851,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -21142,13 +20881,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -21175,13 +20911,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -22529,11 +22262,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}},'Xilinx'=>{'jtaghwcosim'=>"
 	      "{'non_memory_mapped_port'=>'sim_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}}}"
@@ -22574,11 +22304,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
 	      "'=>{'non_memory_mapped_port'=>'sim_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}}}"
@@ -22606,13 +22333,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_out'}},'Xilinx'=>{'jtaghwcosi"
@@ -22792,11 +22516,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_we'}},'Xilinx'=>{'jtaghwcosim'=>{'"
 	      "non_memory_mapped_port'=>'sim_we'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_we'}}}"
@@ -23044,13 +22765,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{'A5','B9','A9','C1','A3','G6','E9','A6','A7','A8','B8','B1','B3','D9','B5','B4','B6','C2'}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_addr'}},'Xilinx'=>{'jtaghwc"
@@ -23080,13 +22798,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_in'}},'Xilinx'=>{'jtag"
@@ -23129,11 +22844,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'}},'Xilinx'=>{'jta"
 	  "ghwcosim'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_data_out'},'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Sh"
@@ -23162,13 +22874,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{'A14'}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  sginterface		  "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'uprev_Shared_BRAM_we'}},'Xilinx'=>{'jtaghwcos"
@@ -23511,13 +23220,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -23557,11 +23263,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -23593,13 +23296,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -23639,11 +23339,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -23675,13 +23372,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -23708,13 +23402,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -24185,11 +23876,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -24228,11 +23916,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -24271,11 +23956,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -24301,13 +23983,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -24347,11 +24026,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -24390,11 +24066,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -24420,13 +24093,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -24466,11 +24136,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -24496,13 +24163,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -24542,11 +24206,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -24572,13 +24233,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -24605,13 +24263,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -27387,11 +27042,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27430,11 +27082,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -27473,11 +27122,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -27516,11 +27162,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27559,11 +27202,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27602,11 +27242,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27645,11 +27282,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27688,11 +27322,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27731,11 +27362,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27774,11 +27402,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27817,11 +27442,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27860,11 +27482,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27903,11 +27522,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27946,11 +27562,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -27989,11 +27602,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -28032,11 +27642,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -28075,11 +27682,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30061,11 +29665,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30104,11 +29705,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30147,11 +29745,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30213,11 +29808,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30265,11 +29857,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30317,11 +29906,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30369,11 +29955,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30421,11 +30004,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30473,11 +30053,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30525,11 +30102,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30577,11 +30151,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30620,11 +30191,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30664,11 +30232,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30707,11 +30272,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30759,11 +30321,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30811,11 +30370,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30863,11 +30419,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30915,11 +30468,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -30967,11 +30517,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -31019,11 +30566,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -31071,11 +30615,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -31123,11 +30664,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34135,13 +33673,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -34181,11 +33716,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -34224,11 +33756,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "2,18,419,479"
@@ -34267,11 +33796,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -34310,11 +33836,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -34353,11 +33876,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -34396,11 +33916,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -34439,11 +33956,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -34482,11 +33996,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -34525,11 +34036,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34568,11 +34076,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34611,11 +34116,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34654,11 +34156,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34697,11 +34196,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34740,11 +34236,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34783,11 +34276,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34826,11 +34316,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34869,11 +34356,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -34912,11 +34396,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0 0 0 0 8 0 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "11,18,419,479"
@@ -40743,11 +40224,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -40773,13 +40251,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -40806,13 +40281,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -40839,13 +40311,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -40872,13 +40341,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -40905,13 +40371,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -40951,11 +40414,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -40994,11 +40454,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -41037,11 +40494,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -41067,13 +40521,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -41100,13 +40551,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -41133,13 +40581,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -41179,11 +40624,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,356,432"
@@ -41914,11 +41356,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -41957,11 +41396,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42000,11 +41436,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42043,11 +41476,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42086,11 +41516,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42129,11 +41556,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42172,11 +41596,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -42215,11 +41636,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -43281,13 +42699,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point or floating-point type inputs into ouputs of type Simu"
 	  "link integer, double, or fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output port"
 	  "s or are discarded, depending on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -45225,13 +44640,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed-point or floating-point type inputs into ouputs of type Simu"
 	  "link integer, single, double, or fixed-point.<br><br>Hardware notes:  In hardware these blocks become top level out"
 	  "put ports or are discarded, depending on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -45257,13 +44669,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed-point or floating-point type inputs into ouputs of type Simu"
 	  "link integer, single, double, or fixed-point.<br><br>Hardware notes:  In hardware these blocks become top level out"
 	  "put ports or are discarded, depending on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -45303,11 +44712,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45346,11 +44752,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45389,11 +44792,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45432,11 +44832,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45475,11 +44872,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45518,11 +44912,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45561,11 +44952,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45604,11 +44992,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45647,11 +45032,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45690,11 +45072,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45733,11 +45112,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45776,11 +45152,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45819,11 +45192,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45862,11 +45232,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -45905,11 +45272,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -47794,11 +47158,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -47837,11 +47198,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -47867,13 +47225,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -47913,11 +47268,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -47956,11 +47308,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -47999,11 +47348,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -48042,11 +47388,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -48085,11 +47428,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -48115,13 +47455,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -48161,11 +47498,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -48204,11 +47538,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -48247,11 +47578,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -48277,13 +47605,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -48310,13 +47635,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -48343,13 +47665,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -48376,13 +47695,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -48409,13 +47725,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -48455,11 +47768,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,44,419,481"
@@ -48485,13 +47795,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -49011,13 +48318,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed-point or floating-point type inputs into ouputs of type Simu"
 	  "link integer, single, double, or fixed-point.<br><br>Hardware notes:  In hardware these blocks become top level out"
 	  "put ports or are discarded, depending on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -50729,11 +50033,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}},'Xilinx'=>{'jtaghwcosim'=>"
 	      "{'non_memory_mapped_port'=>'sim_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}}}"
@@ -50774,11 +50075,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}},'Xilinx'=>{'jtaghwcosim'=>"
 	      "{'non_memory_mapped_port'=>'sim_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}}}"
@@ -50806,13 +50104,10 @@ Library {
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
-	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
-	      UseAsDAC		      off
-	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_out'}},'Xilinx'=>{'jtaghwcosi"
@@ -50854,11 +50149,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
 	      "'=>{'non_memory_mapped_port'=>'sim_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}}}"
@@ -50899,11 +50191,8 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
-	      UseAsADC		      off
-	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
-	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
 	      "'=>{'non_memory_mapped_port'=>'sim_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}}}"
@@ -51219,11 +50508,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,348,406"
@@ -51249,13 +50535,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -51282,13 +50565,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -51328,11 +50608,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,348,406"
@@ -51358,13 +50635,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -51404,11 +50678,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,348,406"
@@ -51447,11 +50718,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,20,348,406"
@@ -51477,13 +50745,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -51510,13 +50775,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -51961,11 +51223,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -52004,11 +51263,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -52047,11 +51303,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -52090,11 +51343,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -52133,11 +51383,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -52176,11 +51423,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -52414,13 +51658,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -52995,11 +52236,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53038,11 +52276,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53081,11 +52316,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53111,13 +52343,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -53144,13 +52373,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -53190,11 +52416,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53233,11 +52456,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53276,11 +52496,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53319,11 +52536,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53362,11 +52576,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53405,11 +52616,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53448,11 +52656,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -53478,13 +52683,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -53511,13 +52713,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -53544,13 +52743,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -53577,13 +52773,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -53610,13 +52803,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -53643,13 +52833,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -54588,11 +53775,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -54631,11 +53815,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -54674,11 +53855,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -54704,13 +53882,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -54737,13 +53912,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -54783,11 +53955,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -54826,11 +53995,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -54869,11 +54035,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -54912,11 +54075,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -54942,13 +54102,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -54988,11 +54145,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,50,419,481"
@@ -55031,11 +54185,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,50,419,481"
@@ -55074,11 +54225,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -55117,11 +54265,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -55147,13 +54292,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -55180,13 +54322,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -55213,13 +54352,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -55246,13 +54382,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -55292,11 +54425,8 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsADC		  off
-	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -55322,13 +54452,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"

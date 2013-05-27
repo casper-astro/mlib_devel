@@ -26,7 +26,20 @@ pos = get_param(cursys,'Position');
 x= pos(1);
 y= pos(2);
 
-remove_all_blks(cursys);
+try
+  remove_all_blks(cursys);
+catch ex
+  % If remove_all_blks throws a CallbackDelete exception (more specifically a
+  % Simulink:Engine:CallbackDelete exception), then we're in a callback of some
+  % sort so we shouldn't be removing blocks or redrawing things anyway so just
+  % return.
+  if regexp(ex.identifier, 'CallbackDelete')
+    return
+  end
+  % Otherwise it's perhaps a legitamite exception so dump and rethrow it.
+  dump_and_rethrow(ex);
+end
+
 old_ports = ports_struct(get_param(cursys,'blocks'));
 
 switch get_param(cursys,'io_dir')
