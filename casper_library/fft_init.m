@@ -102,7 +102,7 @@ if FFTSize == 0,
   return;
 end
 
-[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, 'fft_init');
+[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
 % split up multiplier specification

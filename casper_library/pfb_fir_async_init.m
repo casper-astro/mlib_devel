@@ -88,7 +88,7 @@ async = get_var('async', 'defaults', defaults, varargin{:});
 debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
 
 % check the multiplier specifications first off
-tap_multipliers = multiplier_specification(mult_spec, total_taps, 'pfb_fir_async_init');
+tap_multipliers = multiplier_specification(mult_spec, total_taps, blk);
 
 % async?
 make_async = false;

@@ -97,7 +97,7 @@ if FFTSize == 0,
 end
 
 % check the per-stage multiplier specification
-[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, 'fft_biplex_init');
+[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
 %input ports

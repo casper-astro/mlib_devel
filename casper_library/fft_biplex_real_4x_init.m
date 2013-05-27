@@ -116,7 +116,7 @@ if FFTSize == 0,
 end
 
 % validate input fields
-[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, 'fft_biplex_real_4x_init');
+[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
 % Derive useful values.

@@ -82,7 +82,7 @@ mult_spec = get_var('mult_spec', 'defaults', defaults, varargin{:});
 coeffs_share = get_var('coeffs_share', 'defaults', defaults, varargin{:});
 
 % check the multiplier specifications first off
-tap_multipliers = multiplier_specification(mult_spec, TotalTaps, 'pfb_fir_init');
+tap_multipliers = multiplier_specification(mult_spec, TotalTaps, blk);
 
 % share coeffs in a 2-pol setup?
 pols = 1;
