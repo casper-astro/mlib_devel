@@ -517,7 +517,6 @@ Library {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
-    UseDisplayTextAsClickCallback off
   }
   LineDefaults {
     FontName		    "Arial"

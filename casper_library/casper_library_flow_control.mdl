@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Apr 15 15:00:52 2013"
-  RTWModifiedTimeStamp	  287938841
-  ModelVersionFormat	  "1.%<AutoIncrement:11>"
+  LastModifiedDate	  "Tue May 21 13:28:23 2013"
+  RTWModifiedTimeStamp	  291043703
+  ModelVersionFormat	  "1.%<AutoIncrement:13>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -49,11 +49,13 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
+  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
+  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -82,13 +84,13 @@ Library {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      1
-      Version		      "1.5.1"
+      Version		      "1.10.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
 	  $ObjectID		  2
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -120,7 +122,7 @@ Library {
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  3
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -146,7 +148,7 @@ Library {
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  4
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -190,7 +192,7 @@ Library {
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  5
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -260,7 +262,7 @@ Library {
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  6
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -287,7 +289,7 @@ Library {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  7
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  ModelReferenceNumInstancesAllowed "Multi"
@@ -296,7 +298,7 @@ Library {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  8
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -306,7 +308,7 @@ Library {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  9
-	  Version		  "1.5.1"
+	  Version		  "1.10.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -353,7 +355,7 @@ Library {
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      10
-	      Version		      "1.5.1"
+	      Version		      "1.10.0"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -410,7 +412,7 @@ Library {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      11
-	      Version		      "1.5.1"
+	      Version		      "1.10.0"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -434,7 +436,7 @@ Library {
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
 	      TargetLibSuffix	      ""
 	      TargetPreCompLibLocation ""
-	      TargetFunctionLibrary  "ANSI_C"
+	      TargetFunctionLibrary   "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
 	      ERTMultiwordLength      256
@@ -486,7 +488,7 @@ Library {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 520, 285, 1400, 915 ] 
+      ConfigPrmDlgPosition    " [ 520, 285, 1400, 915 ] "
     }
     PropName		    "ConfigurationSets"
   }
@@ -512,7 +514,6 @@ Library {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
-    UseDisplayTextAsClickCallback off
   }
   LineDefaults {
     FontName		    "Arial"
@@ -530,6 +531,7 @@ Library {
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
+      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
@@ -551,6 +553,7 @@ Library {
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
+      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
@@ -1340,10 +1343,7 @@ Library {
 	  Position		  [560, 398, 640, 512]
 	  SourceBlock		  "xbsIndex_r4/FIFO"
 	  SourceType		  "Xilinx FIFO Block Block"
-	  mem_type		  "Block RAM"
 	  performance_options	  "Standard_FIFO"
-	  infoedit1		  "Available only for V4, V5, V6, V7, K7, A7 and Zynq devices."
-	  embedded_registers	  off
 	  depth			  "64"
 	  percent_nbits		  "1"
 	  rst			  off
@@ -1355,6 +1355,7 @@ Library {
 	  use_almost_full	  off
 	  almost_full_thresh	  "14"
 	  dbl_ovrd		  off
+	  mem_type		  "Block RAM"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  explicit_period	  "off"
@@ -1564,43 +1565,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [220, 26, 280, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "0"
 	    }
@@ -1610,43 +1584,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [420, 26, 480, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "64"
 	    }
@@ -1656,43 +1603,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [620, 26, 680, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "128"
 	    }
@@ -1702,43 +1622,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [820, 26, 880, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "192"
 	    }
@@ -1748,43 +1641,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [1020, 26, 1080, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "256"
 	    }
@@ -1794,43 +1660,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [1220, 26, 1280, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "320"
 	    }
@@ -1840,43 +1679,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [1420, 26, 1480, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "384"
 	    }
@@ -1886,43 +1698,16 @@ Library {
 	      Ports		      [4, 1]
 	      Position		      [1620, 26, 1680, 74]
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
+	      ShowPortLabels	      "FromPortIcon"
+	      SystemSampleTime	      "-1"
+	      FunctionWithSeparateData off
+	      RTWMemSecFuncInitTerm   "Inherit from model"
+	      RTWMemSecFuncExecute    "Inherit from model"
+	      RTWMemSecDataConstants  "Inherit from model"
+	      RTWMemSecDataInternal   "Inherit from model"
+	      RTWMemSecDataParameters "Inherit from model"
 	      data_width	      "64"
 	      pin_offset	      "448"
 	    }
@@ -2499,35 +2284,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [220, 26, 280, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "0"
 	}
@@ -2537,35 +2303,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [420, 26, 480, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "16"
 	}
@@ -2575,35 +2322,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [620, 26, 680, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "32"
 	}
@@ -2613,35 +2341,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [820, 26, 880, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "48"
 	}
@@ -2651,35 +2360,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [1020, 26, 1080, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "64"
 	}
@@ -2689,35 +2379,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [1220, 26, 1280, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "80"
 	}
@@ -2727,35 +2398,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [1420, 26, 1480, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "96"
 	}
@@ -2765,35 +2417,16 @@ Library {
 	  Ports			  [4, 1]
 	  Position		  [1620, 26, 1680, 74]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
+	  ShowPortLabels	  "FromPortIcon"
+	  SystemSampleTime	  "-1"
+	  FunctionWithSeparateData off
+	  RTWMemSecFuncInitTerm	  "Inherit from model"
+	  RTWMemSecFuncExecute	  "Inherit from model"
+	  RTWMemSecDataConstants  "Inherit from model"
+	  RTWMemSecDataInternal	  "Inherit from model"
+	  RTWMemSecDataParameters "Inherit from model"
 	  data_width		  "16"
 	  pin_offset		  "112"
 	}

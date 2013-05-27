@@ -49,11 +49,13 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
+  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
+  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -517,7 +519,6 @@ Library {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
-    UseDisplayTextAsClickCallback off
   }
   LineDefaults {
     FontName		    "Arial"
@@ -713,7 +714,7 @@ Library {
 	  Name			  "c_to_ri"
 	  Ports			  [1, 2]
 	  Position		  [255, 14, 295, 56]
-	  AttributesFormatString  "18_17 r/i"
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag0"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -726,7 +727,7 @@ Library {
 	  Name			  "c_to_ri1"
 	  Ports			  [1, 2]
 	  Position		  [255, 84, 295, 126]
-	  AttributesFormatString  "18_17 r/i"
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag1"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -996,51 +997,7 @@ Library {
 	  Name			  "c_to_ri"
 	  Ports			  [1, 2]
 	  Position		  [105, 74, 175, 156]
-	  AttributesFormatString  "18_17 r/i"
-	  LinkData {
-	    BlockName		    "force_im"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "force_re"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_im"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_re"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	  }
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag2"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -1053,51 +1010,7 @@ Library {
 	  Name			  "c_to_ri1"
 	  Ports			  [1, 2]
 	  Position		  [105, 189, 175, 271]
-	  AttributesFormatString  "18_17 r/i"
-	  LinkData {
-	    BlockName		    "force_im"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "force_re"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_im"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_re"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	  }
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag3"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -1504,7 +1417,7 @@ Library {
 	  Name			  "c_to_ri"
 	  Ports			  [1, 2]
 	  Position		  [255, 14, 295, 56]
-	  AttributesFormatString  "18_17 r/i"
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag5"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -1517,7 +1430,7 @@ Library {
 	  Name			  "c_to_ri1"
 	  Ports			  [1, 2]
 	  Position		  [255, 84, 295, 126]
-	  AttributesFormatString  "18_17 r/i"
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag6"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -1687,51 +1600,7 @@ Library {
 	  Name			  "c_to_ri"
 	  Ports			  [1, 2]
 	  Position		  [255, 59, 295, 101]
-	  AttributesFormatString  "18_17 r/i"
-	  LinkData {
-	    BlockName		    "force_im"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "force_re"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_im"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_re"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	  }
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag7"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -1744,51 +1613,7 @@ Library {
 	  Name			  "c_to_ri1"
 	  Ports			  [1, 2]
 	  Position		  [70, 194, 110, 236]
-	  AttributesFormatString  "18_17 r/i"
-	  LinkData {
-	    BlockName		    "force_im"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "force_re"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.275 0.15 0.325 0.15 0.275 0.475 0.525 0.575 0.8 0.625 0.45 0.325 0.5 0.325 0.45 0.625 0.8 0.575 0"
-	      ".525 0.475 0.275 ],[0.09375 0.25 0.46875 0.6875 0.84375 0.84375 0.78125 0.84375 0.84375 0.625 0.84375 0.6875 0."
-	      "46875 0.25 0.09375 0.3125 0.09375 0.09375 0.15625 0.09375 0.09375 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 "
-	      "1 1 0 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');d"
-	      "isp('reinterpret');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_im"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	    BlockName		    "slice_re"
-	    DialogParameters {
-	      sg_icon_stat	      "45,28,1,1,white,blue,0,1fd851a7,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 1 1 0 ],[0 0 1 1 ],[0.77 0.82 0.91"
-	      "]);\npatch([0.333333 0.222222 0.377778 0.222222 0.333333 0.488889 0.533333 0.577778 0.755556 0.622222 0.488889 "
-	      "0.4 0.577778 0.4 0.488889 0.622222 0.755556 0.577778 0.533333 0.488889 0.333333 ],[0.107143 0.285714 0.535714 0"
-	      ".785714 0.964286 0.964286 0.892857 0.964286 0.964286 0.75 0.964286 0.821429 0.535714 0.25 0.107143 0.321429 0.1"
-	      "07143 0.107143 0.178571 0.107143 0.107143 ],[0.98 0.96 0.92]);\nplot([0 1 1 0 0 ],[0 0 1 1 0 ]);\nfprintf('','C"
-	      "OMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a"
-	      ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	    }
-	  }
+	  AttributesFormatString  "_ r/i"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag8"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
