@@ -98,23 +98,12 @@ function twiddle_stage_2_init(blk, varargin)
           'reg_retiming', sprintf('on'), ...
           'Position', sprintf('[260 397 295 423]'));
 
-  reuse_block(blk, 'negate', 'xbsIndex_r4/Negate'); %TODO bus_negate
-  set_param([blk,'/negate'], ...
-          'arith_type', sprintf('Signed  (2''s comp)'), ...
-          'n_bits', sprintf('input_bit_width'), ...
-          'bin_pt', sprintf('input_bit_width-1'), ...
-          'overflow', sprintf('Saturate'), ...
-          'latency', sprintf('1'), ...
-          'Position', sprintf('[345 333 410 357]'));
-
-  reuse_block(blk, 'convert', 'xbsIndex_r4/Convert'); %TODO bus_convert
-  set_param([blk,'/convert'], ...
-          'n_bits', sprintf('input_bit_width'), ...
-          'bin_pt', sprintf('input_bit_width - 1'), ...
-          'overflow', sprintf('Saturate'), ...
-          'latency', sprintf('conv_latency'), ...
-          'pipeline', sprintf('on'), ...
-          'Position', sprintf('[445 330 490 360]'));
+  reuse_block(blk, 'negate', 'casper_library_bus/bus_negate', ...
+          'n_bits_in', 'repmat(input_bit_width, n_inputs, 1)', ...
+          'bin_pt_in', 'input_bit_width-1', ...
+          'cmplx', 'off', 'misc', 'off', 'overflow', '1', ...
+          'latency', '1+conv_latency', ...
+          'Position', [245 333 310 357]);
 
   reuse_block(blk, 'mux0', 'xbsIndex_r4/Mux');
   set_param([blk,'/mux0'], ...
@@ -157,7 +146,7 @@ function twiddle_stage_2_init(blk, varargin)
   reuse_block(blk, 'munge_out', 'casper_library_flow_control/munge', ...
           'divisions', 'n_inputs*2', ...
           'div_size', 'repmat(input_bit_width, n_inputs*2, 1)', ...
-          'order', 'reshape([[0:2:(n_inputs-1)*2],[1:2:(n_inputs-1)*2+1]], n_inputs*2, 1)', ...
+          'order', 'reshape([[0:(n_inputs-1)];[n_inputs:(n_inputs*2)-1]], n_inputs*2, 1)', ...
           'Position', [720 214 760 236]);
 
   reuse_block(blk, 'ao', 'built-in/Outport');
@@ -175,32 +164,31 @@ function twiddle_stage_2_init(blk, varargin)
           'Port', sprintf('3'), ...
           'Position', sprintf('[785 403 815 417]'));
 
-  add_line(blk,'sync_in/1','delay7/1', 'autorouting', 'on');
-  add_line(blk,'bi/1','munge_in/1', 'autorouting', 'on');
-  add_line(blk,'ai/1','delay0/1', 'autorouting', 'on');
-  add_line(blk,'munge_in/1','bus_expand/1', 'autorouting', 'on');
-  add_line(blk,'bus_expand/2','delay6/1', 'autorouting', 'on');
-  add_line(blk,'bus_expand/1','delay5/1', 'autorouting', 'on');
-  add_line(blk,'bus_expand/1','negate/1', 'autorouting', 'on');
-  add_line(blk,'delay5/1','mux0/2', 'autorouting', 'on');
-  add_line(blk,'delay0/1','ao/1', 'autorouting', 'on');
+  add_line(blk,'sync_in/1','delay7/1');
+  add_line(blk,'bi/1','munge_in/1');
+  add_line(blk,'ai/1','delay0/1');
+  add_line(blk,'munge_in/1','bus_expand/1');
+  add_line(blk,'bus_expand/2','delay6/1');
+  add_line(blk,'bus_expand/1','delay5/1');
+  add_line(blk,'bus_expand/1','negate/1');
+  add_line(blk,'delay5/1','mux0/2');
+  add_line(blk,'delay0/1','ao/1');
   add_line(blk,'delay6/1','mux0/3');
   add_line(blk,'delay6/1','delay3/1');
-  add_line(blk,'counter/1','slice/1', 'autorouting', 'on');
+  add_line(blk,'counter/1','slice/1');
   add_line(blk,'slice/1','delay2/1');
   add_line(blk,'slice/1','mux0/1');
   add_line(blk,'delay7/1','counter/1', 'autorouting', 'on');
-  add_line(blk,'delay7/1','delay8/1', 'autorouting', 'on');
-  add_line(blk,'negate/1','convert/1', 'autorouting', 'on');
-  add_line(blk,'convert/1','delay4/1', 'autorouting', 'on');
+  add_line(blk,'delay7/1','delay8/1');
+  add_line(blk,'negate/1','delay4/1');
   add_line(blk,'mux0/1','bus_create/1', 'autorouting', 'on');
-  add_line(blk,'delay2/1','mux1/1', 'autorouting', 'on');
-  add_line(blk,'delay3/1','mux1/2', 'autorouting', 'on');
-  add_line(blk,'delay4/1','mux1/3', 'autorouting', 'on');
-  add_line(blk,'delay8/1','sync_out/1', 'autorouting', 'on');
-  add_line(blk,'mux1/1','bus_create/2', 'autorouting', 'on');
-  add_line(blk,'bus_create/1','munge_out/1', 'autorouting', 'on');
-  add_line(blk,'munge_out/1','bwo/1', 'autorouting', 'on');
+  add_line(blk,'delay2/1','mux1/1');
+  add_line(blk,'delay3/1','mux1/2');
+  add_line(blk,'delay4/1','mux1/3');
+  add_line(blk,'delay8/1','sync_out/1');
+  add_line(blk,'mux1/1','bus_create/2');
+  add_line(blk,'bus_create/1','munge_out/1');
+  add_line(blk,'munge_out/1','bwo/1');
   
   if strcmp(async, 'on'),
     reuse_block(blk, 'dvi', 'built-in/Inport', ...
