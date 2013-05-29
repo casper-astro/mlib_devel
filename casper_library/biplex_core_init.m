@@ -117,7 +117,11 @@ reuse_block(blk, 'shift', 'built-in/inport', 'Port', '2', 'Position', [15 193 45
 reuse_block(blk, 'pol1', 'built-in/inport', 'Port', '3', 'Position', [15 33 45 47]);
 reuse_block(blk, 'pol2', 'built-in/inport', 'Port', '4', 'Position', [15 58 45 72]);
 
-reuse_block(blk, 'Constant', 'xbsindex_r4/Constant', 'arith_type', 'Boolean', 'const', '0', 'Position', [55 82 85 98]);
+%TODO make n_bits take into account number inputs
+reuse_block(blk, 'Constant', 'xbsindex_r4/Constant', ...
+    'arith_type', 'Unsigned', 'const', '0', 'n_bits', '4', 'bin_pt', '0', ...
+    'explicit_period', 'on', 'period', '1', ...
+    'Position', [55 82 85 98]);
 
 if FFTSize ~= prev_stages,
     delete_lines(blk);
