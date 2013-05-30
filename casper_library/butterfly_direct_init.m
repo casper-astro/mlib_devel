@@ -12,7 +12,8 @@
 % * StepPeriod = Coefficient step period.
 % * coeffs_bram = Store coefficients in BRAM.
 % * coeff_bit_width = Bitwdith of coefficients.
-% * input_bit_width = Bitwidth of input and output data.
+% * input_bit_width = Bitwidth of input data.
+% * output_bit_width = Bitwidth of output data.
 % * downshift = Explicitly downshift output data.
 % * bram_latency = Latency of BRAM blocks.
 % * add_latency = Latency of adders blocks.
@@ -20,7 +21,6 @@
 % * conv_latency = Latency of cast blocks.
 % * quantization = Quantization behavior.
 % * overflow = Overflow behavior.
-% * arch = Target architecture.
 % * opt_target = Optimization target.
 % * use_hdl = Use behavioral HDL for multipliers.
 % * use_embedded = Use embedded multipliers.
@@ -33,6 +33,10 @@
 %   http://casper.berkeley.edu                                                %
 %   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
 %   Copyright (C) 2010 William Mallard, David MacMahon                        %
+%                                                                             %
+%   SKASA radio telescope project                                             %
+%   www.kat.ac.za                                                             %
+%   Copyright (C) 2013 Andrew Martens                                         %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
@@ -62,7 +66,8 @@ function butterfly_direct_init(blk, varargin)
       'Coeffs', [0], ...
       'StepPeriod', 1, ...
       'coeff_bit_width', 18, ...
-      'input_bit_width', 18, ...
+      'input_bit_width', 8, ...
+      'output_bit_width', 18, ...
       'downshift', 'off', ...
       'async', 'off', ...
       'add_latency', 1, ...
@@ -91,27 +96,28 @@ function butterfly_direct_init(blk, varargin)
   munge_block(blk, varargin{:});
 
   % Retrieve values from mask fields.
-  n_inputs        = get_var('n_inputs', 'defaults', defaults, varargin{:});
-  biplex          = get_var('biplex', 'defaults', defaults, varargin{:});
-  FFTSize         = get_var('FFTSize', 'defaults', defaults, varargin{:});
-  Coeffs          = get_var('Coeffs', 'defaults', defaults, varargin{:});
-  StepPeriod      = get_var('StepPeriod', 'defaults', defaults, varargin{:});
-  coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
-  input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
-  downshift       = get_var('downshift', 'defaults', defaults, varargin{:});
-  async           = get_var('async', 'defaults', defaults, varargin{:});
-  bram_latency    = get_var('bram_latency', 'defaults', defaults, varargin{:});
-  add_latency     = get_var('add_latency', 'defaults', defaults, varargin{:});
-  mult_latency    = get_var('mult_latency', 'defaults', defaults, varargin{:});
-  conv_latency    = get_var('conv_latency', 'defaults', defaults, varargin{:});
-  quantization    = get_var('quantization', 'defaults', defaults, varargin{:});
-  overflow        = get_var('overflow', 'defaults', defaults, varargin{:});
-  opt_target      = get_var('opt_target', 'defaults', defaults, varargin{:});
-  coeffs_bram     = get_var('coeffs_bram', 'defaults', defaults, varargin{:});
-  use_hdl         = get_var('use_hdl', 'defaults', defaults, varargin{:});
-  use_embedded    = get_var('use_embedded', 'defaults', defaults, varargin{:});
-  hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
-  dsp48_adders    = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
+  n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  biplex            = get_var('biplex', 'defaults', defaults, varargin{:});
+  FFTSize           = get_var('FFTSize', 'defaults', defaults, varargin{:});
+  Coeffs            = get_var('Coeffs', 'defaults', defaults, varargin{:});
+  StepPeriod        = get_var('StepPeriod', 'defaults', defaults, varargin{:});
+  coeff_bit_width   = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
+  input_bit_width   = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+  output_bit_width  = get_var('output_bit_width', 'defaults', defaults, varargin{:});
+  downshift         = get_var('downshift', 'defaults', defaults, varargin{:});
+  async             = get_var('async', 'defaults', defaults, varargin{:});
+  bram_latency      = get_var('bram_latency', 'defaults', defaults, varargin{:});
+  add_latency       = get_var('add_latency', 'defaults', defaults, varargin{:});
+  mult_latency      = get_var('mult_latency', 'defaults', defaults, varargin{:});
+  conv_latency      = get_var('conv_latency', 'defaults', defaults, varargin{:});
+  quantization      = get_var('quantization', 'defaults', defaults, varargin{:});
+  overflow          = get_var('overflow', 'defaults', defaults, varargin{:});
+  opt_target        = get_var('opt_target', 'defaults', defaults, varargin{:});
+  coeffs_bram       = get_var('coeffs_bram', 'defaults', defaults, varargin{:});
+  use_hdl           = get_var('use_hdl', 'defaults', defaults, varargin{:});
+  use_embedded      = get_var('use_embedded', 'defaults', defaults, varargin{:});
+  hardcode_shifts   = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
+  dsp48_adders      = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
   %default case for library storage, delete everything
   if n_inputs == 0 | FFTSize == 0,
@@ -340,8 +346,8 @@ function butterfly_direct_init(blk, varargin)
           'n_bits_in', mat2str(repmat(convert_in_bitwidth, 1, n_inputs*2)), ...
           'bin_pt_in', mat2str(repmat(convert_in_binpoint, 1, n_inputs*2)), ...
           'cmplx', 'on', ...
-          'n_bits_out', 'input_bit_width', ...
-          'bin_pt_out', 'input_bit_width-1', ...
+          'n_bits_out', num2str(output_bit_width), ...
+          'bin_pt_out', num2str(output_bit_width-1), ...
           'quantization', quant, 'overflow', of, ...
           'misc', 'off', 'of', 'on', 'latency', 'conv_latency', ...
           'Position', [635 56 690 149]);
@@ -462,7 +468,7 @@ function butterfly_direct_init(blk, varargin)
   end
 
   % Delete all unconnected blocks.
-  clean_blocks(blk);
+  %clean_blocks(blk);
 
   %%%%%%%%%%%%%%%%%%%
   % Finish drawing! %
