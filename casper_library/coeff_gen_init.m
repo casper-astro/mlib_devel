@@ -327,7 +327,7 @@ end %if length(ActualCoeffs)
 
 clean_blocks(blk);
 
-fmtstr = sprintf('%d @ (%d,%d)', length(ActualCoeffs), coeff_bit_width, coeff_bit_width-2);
+fmtstr = sprintf('%d @ (%d,%d)', length(ActualCoeffs), coeff_bit_width, coeff_bit_width-1);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 clog('exiting coeff_gen_init',{'trace', 'coeff_gen_init_debug'});
