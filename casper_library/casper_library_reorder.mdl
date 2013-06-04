@@ -2,7 +2,7 @@ Library {
   Name			  "casper_library_reorder"
   Version		  7.2
   MdlSubVersion		  0
-  SavedCharacterEncoding  "windows-1252"
+  SavedCharacterEncoding  "UTF-8"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
@@ -12,11 +12,11 @@ Library {
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "mdexter"
+  LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue May 21 13:25:11 2013"
-  RTWModifiedTimeStamp	  291043511
-  ModelVersionFormat	  "1.%<AutoIncrement:5>"
+  LastModifiedDate	  "Tue Jun 04 14:55:57 2013"
+  RTWModifiedTimeStamp	  292258208
+  ModelVersionFormat	  "1.%<AutoIncrement:9>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -49,13 +49,11 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
-  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
-  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -83,14 +81,14 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      1
-      Version		      "1.10.0"
+      $ObjectID		      6
+      Version		      "1.5.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  2
-	  Version		  "1.10.0"
+	  $ObjectID		  7
+	  Version		  "1.5.1"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -121,8 +119,8 @@ Library {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  3
-	  Version		  "1.10.0"
+	  $ObjectID		  8
+	  Version		  "1.5.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -147,8 +145,8 @@ Library {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  4
-	  Version		  "1.10.0"
+	  $ObjectID		  9
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -191,8 +189,8 @@ Library {
   EnforceIntegerDowncast   on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  5
-	  Version		  "1.10.0"
+	  $ObjectID		  10
+	  Version		  "1.5.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -261,8 +259,8 @@ Library {
 	  BlockIODiagnostic	  "none"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  6
-	  Version		  "1.10.0"
+	  $ObjectID		  11
+	  Version		  "1.5.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
@@ -288,8 +286,8 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  7
-	  Version		  "1.10.0"
+	  $ObjectID		  12
+	  Version		  "1.5.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  ModelReferenceNumInstancesAllowed "Multi"
@@ -297,8 +295,8 @@ Library {
 	  ModelReferenceMinAlgLoopOccurrences off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  8
-	  Version		  "1.10.0"
+	  $ObjectID		  13
+	  Version		  "1.5.1"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -307,8 +305,8 @@ Library {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  9
-	  Version		  "1.10.0"
+	  $ObjectID		  14
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -354,8 +352,8 @@ Library {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      10
-	      Version		      "1.10.0"
+	      $ObjectID		      15
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -411,8 +409,8 @@ Library {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      11
-	      Version		      "1.10.0"
+	      $ObjectID		      16
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -436,7 +434,7 @@ Library {
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
 	      TargetLibSuffix	      ""
 	      TargetPreCompLibLocation ""
-	      TargetFunctionLibrary   "ANSI_C"
+	      TargetFunctionLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
 	      ERTMultiwordLength      256
@@ -464,7 +462,6 @@ Library {
 	      SupportNonInlinedSFcns  on
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
-	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
@@ -488,7 +485,7 @@ Library {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition    " [ 520, 285, 1400, 915 ] "
+      ConfigPrmDlgPosition     [ 520, 285, 1400, 915 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -514,6 +511,7 @@ Library {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
+    UseDisplayTextAsClickCallback off
   }
   LineDefaults {
     FontName		    "Arial"
@@ -524,12 +522,14 @@ Library {
   BlockParameterDefaults {
     Block {
       BlockType		      From
+      GotoTag		      "A"
       IconDisplay	      "Tag"
       TagVisibility	      "local"
     }
     Block {
       BlockType		      Goto
       IconDisplay	      "Tag"
+      TagVisibility	      "local"
     }
     Block {
       BlockType		      Inport
@@ -540,7 +540,6 @@ Library {
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
@@ -562,7 +561,6 @@ Library {
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
@@ -600,7 +598,7 @@ Library {
   }
   System {
     Name		    "casper_library_reorder"
-    Location		    [480, 85, 1016, 386]
+    Location		    [149, 45, 781, 816]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -617,10 +615,9 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "barrel_switcher"
-      Ports		      [4, 3]
-      Position		      [165, 132, 260, 243]
+      Ports		      []
+      Position		      [166, 143, 244, 237]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
-      AttributesFormatString  "n_inputs=1"
       UserDataPersistent      on
       UserData		      "DataTag0"
       MinAlgLoopOccurrences   off
@@ -633,277 +630,36 @@ Library {
       MaskDescription	      "Shifts input to right by amount specified on sel,\nwrapping around into higher order bits"
       "."
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Barrel_switcher'')')"
-      MaskPromptString	      "Number of Inputs: (2^?)"
-      MaskStyleString	      "edit"
-      MaskVariables	      "n_inputs=@1;"
-      MaskTunableValueString  "on"
-      MaskEnableString	      "on"
-      MaskVisibilityString    "on"
-      MaskToolTipString	      "on"
-      MaskInitialization      "barrel_switcher_init(gcb,...\n    'n_inputs', n_inputs);"
+      MaskPromptString	      "Number of Inputs: (2^?)|Asynchronous operation"
+      MaskStyleString	      "edit,checkbox"
+      MaskVariables	      "n_inputs=@1;async=&2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskInitialization      "barrel_switcher_init(gcb,...\n    'n_inputs', n_inputs, ...\n    'async', async);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "1"
+      MaskValueString	      "0|off"
       System {
 	Name			"barrel_switcher"
-	Location		[2118, 207, 2661, 861]
+	Location		[574, 45, 1618, 893]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	Block {
-	  BlockType		  Inport
-	  Name			  "sel"
-	  Position		  [15, 23, 45, 37]
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Inport
-	  Name			  "sync_in"
-	  Position		  [15, 333, 45, 347]
-	  Port			  "2"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Inport
-	  Name			  "In1"
-	  Position		  [15, 173, 45, 187]
-	  Port			  "3"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Inport
-	  Name			  "In2"
-	  Position		  [15, 253, 45, 267]
-	  Port			  "4"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "Delay_sync"
-	  Ports			  [1, 1]
-	  Position		  [55, 333, 85, 347]
-	  SourceBlock		  "xbsIndex_r4/Delay"
-	  SourceType		  "Xilinx Delay Block"
-	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
-	  rst			  off
-	  infoeditControl	  "Selection of Reset will increase slice count due to use of real FFs and instead of SRLs"
-	  en			  off
-	  latency		  "1"
-	  dbl_ovrd		  off
-	  reg_retiming		  off
-	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "delay"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "30,14,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 14 14 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 30 30 0 0 ],[0 0 14 14 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[9.22 9.22 11."
-	  "22 9.22 11.22 11.22 11.22 9.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[7.22 7.22 9.22 9.22 7.22 ],[0."
-	  "931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[5.22 5.22 7.22 7.22 5.22 ],[1 1 1 ]);\npatch([12.55 19"
-	  ".44 17.44 15.44 13.44 10.55 12.55 ],[3.22 3.22 5.22 3.22 5.22 5.22 3.22 ],[0.931 0.946 0.973 ]);\nfprintf('','COMME"
-	  "NT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmode','on')"
-	  ";\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "Mux11"
-	  Ports			  [3, 1]
-	  Position		  [165, 147, 190, 213]
-	  SourceBlock		  "xbsIndex_r4/Mux"
-	  SourceType		  "Xilinx Bus Multiplexer Block"
-	  inputs		  "2"
-	  en			  off
-	  latency		  "1"
-	  precision		  "Full"
-	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "8"
-	  bin_pt		  "2"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "mux"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "25,66,3,1,white,blue,3,a150fb03,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ],[0.7"
-	  "7 0.82 0.91 ]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\npatch([5.325 9.66 12.66 15.66 18.66 12.66 8.325 5"
-	  ".325 ],[36.33 36.33 39.33 36.33 39.33 39.33 39.33 36.33 ],[1 1 1 ]);\npatch([8.325 12.66 9.66 5.325 8.325 ],[33.33 "
-	  "33.33 36.33 36.33 33.33 ],[0.931 0.946 0.973 ]);\npatch([5.325 9.66 12.66 8.325 5.325 ],[30.33 30.33 33.33 33.33 30"
-	  ".33 ],[1 1 1 ]);\npatch([8.325 18.66 15.66 12.66 9.66 5.325 8.325 ],[27.33 27.33 30.33 27.33 30.33 30.33 27.33 ],[0"
-	  ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bl"
-	  "ack');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3"
-	  ",'d1');\n\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "Mux21"
-	  Ports			  [3, 1]
-	  Position		  [165, 227, 190, 293]
-	  SourceBlock		  "xbsIndex_r4/Mux"
-	  SourceType		  "Xilinx Bus Multiplexer Block"
-	  inputs		  "2"
-	  en			  off
-	  latency		  "1"
-	  precision		  "Full"
-	  arith_type		  "Signed  (2's comp)"
-	  n_bits		  "8"
-	  bin_pt		  "2"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  dbl_ovrd		  off
-	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "mux"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "25,66,3,1,white,blue,3,a150fb03,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ],[0.7"
-	  "7 0.82 0.91 ]);\nplot([0 25 25 0 0 ],[0 9.42857 56.5714 66 0 ]);\npatch([5.325 9.66 12.66 15.66 18.66 12.66 8.325 5"
-	  ".325 ],[36.33 36.33 39.33 36.33 39.33 39.33 39.33 36.33 ],[1 1 1 ]);\npatch([8.325 12.66 9.66 5.325 8.325 ],[33.33 "
-	  "33.33 36.33 36.33 33.33 ],[0.931 0.946 0.973 ]);\npatch([5.325 9.66 12.66 8.325 5.325 ],[30.33 30.33 33.33 33.33 30"
-	  ".33 ],[1 1 1 ]);\npatch([8.325 18.66 15.66 12.66 9.66 5.325 8.325 ],[27.33 27.33 30.33 27.33 30.33 30.33 27.33 ],[0"
-	  ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bl"
-	  "ack');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3"
-	  ",'d1');\n\ncolor('black');disp('\\bf{  z^{-1}}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "Slice1"
-	  Ports			  [1, 1]
-	  Position		  [85, 91, 130, 119]
-	  SourceBlock		  "xbsIndex_r4/Slice"
-	  SourceType		  "Xilinx Bit Slice Extractor Block"
-	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
-	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<P><P>Hardware "
-	  "notes: In hardware this block costs nothing."
-	  nbits			  "1"
-	  boolean_output	  off
-	  mode			  "Upper Bit Location + Width"
-	  bit1			  "-0"
-	  base1			  "MSB of Input"
-	  bit0			  "0"
-	  base0			  "LSB of Input"
-	  dbl_ovrd		  off
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,533,427"
-	  block_type		  "slice"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[18.44 18.44 22.4"
-	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([17."
-	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
-	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a:"
-	  "b]');\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "sync_out"
-	  Position		  [95, 333, 125, 347]
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "Out1"
-	  Position		  [315, 173, 345, 187]
-	  Port			  "2"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "Out2"
-	  Position		  [315, 253, 345, 267]
-	  Port			  "3"
-	  IconDisplay		  "Port number"
-	}
-	Line {
-	  SrcBlock		  "sync_in"
-	  SrcPort		  1
-	  DstBlock		  "Delay_sync"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Delay_sync"
-	  SrcPort		  1
-	  DstBlock		  "sync_out"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "sel"
-	  SrcPort		  1
-	  DstBlock		  "Slice1"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Slice1"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux11"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "Mux21"
-	    DstPort		    1
-	  }
-	}
-	Line {
-	  SrcBlock		  "In1"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux11"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux21"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux11"
-	  SrcPort		  1
-	  DstBlock		  "Out1"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "In2"
-	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "Mux21"
-	    DstPort		    2
-	  }
-	  Branch {
-	    DstBlock		    "Mux11"
-	    DstPort		    3
-	  }
-	}
-	Line {
-	  SrcBlock		  "Mux21"
-	  SrcPort		  1
-	  DstBlock		  "Out2"
-	  DstPort		  1
-	}
       }
     }
     Block {
@@ -934,7 +690,7 @@ Library {
       MaskValueString	      "32|2"
       System {
 	Name			"dbl_buffer"
-	Location		[2770, 356, 3240, 907]
+	Location		[149, 45, 781, 816]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1201,20 +957,21 @@ Library {
 	  latency		  "latency"
 	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  off
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "spram"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "65,54,3,1,white,blue,0,e5f9a5f3,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 54 54 ],[0.77 0.82 0.91]);\n"
-	  "patch([16 7 20 7 16 30 34 38 53 41 29 21 35 21 29 41 53 38 34 30 16 ],[6 15 28 41 50 50 46 50 50 38 50 42 28 14 6 1"
-	  "8 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 54 54 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');port_label('i"
-	  "nput',2,'data');\ncolor('black');port_label('input',3,'we');\ncolor('black');disp('z^{-2}','texmode','on');\nfprint"
-	  "f('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "65,54,3,1,white,blue,0,558c5cad,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 0 ],[0 0 54 54 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 65 65 0 0 ],[0 0 54 54 0 ]);\npatch([16.425 26.54 33.54 40.54 47.54 33.54 23.425 16.425 ],[34.77 34.7"
+	  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([23.425 33.54 26.54 16.425 23.425 ],[27.77 27.77 34.77 34"
+	  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([16.425 26.54 33.54 23.425 16.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1"
+	  " 1 ]);\npatch([23.425 47.54 40.54 33.54 26.54 16.425 23.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0"
+	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
+	  "port_label('input',1,'addr');\ncolor('black');port_label('input',2,'data');\ncolor('black');port_label('input',3,'w"
+	  "e');\n\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1233,20 +990,21 @@ Library {
 	  latency		  "latency"
 	  dbl_ovrd		  off
 	  optimize		  "Area"
-	  use_rpm		  off
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "spram"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "65,54,3,1,white,blue,0,e5f9a5f3,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 54 54 ],[0.77 0.82 0.91]);\n"
-	  "patch([16 7 20 7 16 30 34 38 53 41 29 21 35 21 29 41 53 38 34 30 16 ],[6 15 28 41 50 50 46 50 50 38 50 42 28 14 6 1"
-	  "8 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 54 54 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');port_label('i"
-	  "nput',2,'data');\ncolor('black');port_label('input',3,'we');\ncolor('black');disp('z^{-2}','texmode','on');\nfprint"
-	  "f('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "65,54,3,1,white,blue,0,558c5cad,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 0 ],[0 0 54 54 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 65 65 0 0 ],[0 0 54 54 0 ]);\npatch([16.425 26.54 33.54 40.54 47.54 33.54 23.425 16.425 ],[34.77 34.7"
+	  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([23.425 33.54 26.54 16.425 23.425 ],[27.77 27.77 34.77 34"
+	  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([16.425 26.54 33.54 23.425 16.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1"
+	  " 1 ]);\npatch([23.425 47.54 40.54 33.54 26.54 16.425 23.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0"
+	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
+	  "port_label('input',1,'addr');\ncolor('black');port_label('input',2,'data');\ncolor('black');port_label('input',3,'w"
+	  "e');\n\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1268,12 +1026,14 @@ Library {
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
-	  sg_icon_stat		  "30,28,1,1,white,blue,0,eabd56db,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 56 56 ],[0.77 0.82 0.91]);\n"
-	  "patch([15 6 19 6 15 30 34 38 54 41 29 20 32 20 29 41 54 38 34 30 15 ],[6 15 28 41 50 50 46 50 50 37 49 40 28 16 7 1"
-	  "9 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('','COMMENT: end ic"
-	  "on text');\n"
+	  sg_icon_stat		  "30,28,1,1,white,blue,0,83e6bb61,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 28 28 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[18.44 18.44 22.44 "
+	  "18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[14.44 14.44 18.44 18.44 14.44 ],[0."
+	  "931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([10.1 23."
+	  "88 19.88 15.88 11.88 6.1 10.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMEN"
+	  "T: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-3}','texmode','on');"
+	  "\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -1356,7 +1116,7 @@ Library {
 	Line {
 	  SrcBlock		  "we"
 	  SrcPort		  1
-	  Points		  [0, 0; 55, 0]
+	  Points		  [55, 0]
 	  Branch {
 	    Points		    [0, 265]
 	    DstBlock		    "Mux5"
@@ -1384,7 +1144,6 @@ Library {
 	Line {
 	  SrcBlock		  "Mux6"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "dout"
 	  DstPort		  1
 	}
@@ -1398,7 +1157,7 @@ Library {
 	Line {
 	  SrcBlock		  "din1"
 	  SrcPort		  1
-	  Points		  [0, 0; 75, 0]
+	  Points		  [75, 0]
 	  Branch {
 	    Points		    [0, 255]
 	    DstBlock		    "delay2"
@@ -1425,7 +1184,7 @@ Library {
 	Line {
 	  SrcBlock		  "rd_addr"
 	  SrcPort		  1
-	  Points		  [0, 0; 70, 0]
+	  Points		  [70, 0]
 	  Branch {
 	    Points		    [0, 235]
 	    DstBlock		    "Mux3"
@@ -1439,7 +1198,7 @@ Library {
 	Line {
 	  SrcBlock		  "wr_addr"
 	  SrcPort		  1
-	  Points		  [0, 0; 35, 0]
+	  Points		  [35, 0]
 	  Branch {
 	    Points		    [0, 275]
 	    DstBlock		    "Mux3"
@@ -1453,7 +1212,16 @@ Library {
 	Line {
 	  SrcBlock		  "rw_mode"
 	  SrcPort		  1
-	  Points		  [0, 0; 85, 0]
+	  Points		  [85, 0]
+	  Branch {
+	    Points		    [0, -25]
+	    DstBlock		    "delay"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "Mux"
+	    DstPort		    1
+	  }
 	  Branch {
 	    Points		    [0, 170]
 	    Branch {
@@ -1470,18 +1238,6 @@ Library {
 		DstBlock		"Mux3"
 		DstPort			1
 	      }
-	    }
-	  }
-	  Branch {
-	    Points		    [0, 0]
-	    Branch {
-	      Points		      [0, -25]
-	      DstBlock		      "delay"
-	      DstPort		      1
-	    }
-	    Branch {
-	      DstBlock		      "Mux"
-	      DstPort		      1
 	    }
 	  }
 	}
@@ -1541,7 +1297,7 @@ Library {
       MaskValueString	      "9|9|qdr1"
       System {
 	Name			"qdr_transpose"
-	Location		[155, 286, 1146, 718]
+	Location		[149, 45, 781, 816]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1756,7 +1512,6 @@ Library {
 	  Position		  [130, 17, 195, 33]
 	  ShowName		  off
 	  GotoTag		  "synci"
-	  TagVisibility		  "local"
 	}
 	Block {
 	  BlockType		  Goto
@@ -1764,7 +1519,6 @@ Library {
 	  Position		  [870, 288, 915, 302]
 	  ShowName		  off
 	  GotoTag		  "WR"
-	  TagVisibility		  "local"
 	}
 	Block {
 	  BlockType		  Goto
@@ -1772,7 +1526,6 @@ Library {
 	  Position		  [870, 328, 915, 342]
 	  ShowName		  off
 	  GotoTag		  "RD"
-	  TagVisibility		  "local"
 	}
 	Block {
 	  BlockType		  Reference
@@ -2044,12 +1797,14 @@ Library {
 	  sggui_pos		  "20,20,449,376"
 	  block_type		  "slice"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "30,16,1,1,white,blue,0,b1026674,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end i"
-	  "con text');\n"
+	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
+	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
+	  ":b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -2100,12 +1855,14 @@ Library {
 	  sggui_pos		  "20,20,449,376"
 	  block_type		  "slice"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "30,16,1,1,white,blue,0,b1026674,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);\n"
-	  "patch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 4 1"
-	  "0 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end i"
-	  "con text');\n"
+	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
+	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
+	  ":b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -2118,14 +1875,6 @@ Library {
 	  UserData		  "DataTag1"
 	  SourceBlock		  "casper_library_misc/edge_detect"
 	  SourceType		  "edge_detect"
-	  ShowPortLabels	  "FromPortIcon"
-	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
-	  RTWMemSecFuncInitTerm	  "Inherit from model"
-	  RTWMemSecFuncExecute	  "Inherit from model"
-	  RTWMemSecDataConstants  "Inherit from model"
-	  RTWMemSecDataInternal	  "Inherit from model"
-	  RTWMemSecDataParameters "Inherit from model"
 	  edge			  "Rising"
 	  polarity		  "Active High"
 	  x_in			  "[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]"
@@ -2142,14 +1891,6 @@ Library {
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  SourceBlock		  "xps_library/qdr"
 	  SourceType		  "qdr"
-	  ShowPortLabels	  "FromPortIcon"
-	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
-	  RTWMemSecFuncInitTerm	  "Inherit from model"
-	  RTWMemSecFuncExecute	  "Inherit from model"
-	  RTWMemSecDataConstants  "Inherit from model"
-	  RTWMemSecDataInternal	  "Inherit from model"
-	  RTWMemSecDataParameters "Inherit from model"
 	  which_qdr		  "qdr1"
 	  qdr_awidth		  "odepth+idepth+1"
 	  use_sniffer		  off
@@ -2186,12 +1927,15 @@ Library {
 	  sggui_pos		  "20,20,348,619"
 	  block_type		  "counter"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "60,60,2,1,white,blue,0,46c73e85,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 0.91]);\n"
-	  "patch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54 45 30 15 6 1"
-	  "9 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rst');\ncolor('black');port_label('in"
-	  "put',2,'en');\ncolor('black');port_label('output',1,'out');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "60,60,2,1,white,blue,0,ae3608d6,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 60 60 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[38.88 38.88 46.8"
+	  "8 38.88 46.88 46.88 46.88 38.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[30.88 30.88 38.88 38.88 30.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[22.88 22.88 30.88 30.88 22.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[14.88 14.88 22.88 14.88 22.88 22.88 14.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rs"
+	  "t');\ncolor('black');port_label('input',2,'en');\n\ncolor('black');disp('{\\fontsize{14}\\bf++}','texmode','on');\n"
+	  "fprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
@@ -2200,19 +1944,384 @@ Library {
 	  Position		  [680, 24, 775, 96]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
 	  AttributesFormatString  "order=10"
+	  LinkData {
+	    BlockName		    "delay_din_bram0/Delay"
+	    DialogParameters {
+	      sg_icon_stat	      "45,30,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 30 30 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[19.4"
+	      "4 19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[15.44 15.44 19.4"
+	      "4 19.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1"
+	      " 1 1 ]);\npatch([17.1 30.88 26.88 22.88 18.88 13.1 17.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946"
+	      " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('blac"
+	      "k');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "delay_din_bram0/Single Port RAM"
+	    DialogParameters {
+	      sg_icon_stat	      "65,54,3,1,white,blue,0,558c5cad,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 65 65 0 0 ],[0 0 54 54 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 65 65 0 0 ],[0 0 54 54 0 ]);\npatch([16.425 26.54 33.54 40.54 47.54 33.54 23.425 16.425 ]"
+	      ",[34.77 34.77 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([23.425 33.54 26.54 16.425 23.425 ],[27.7"
+	      "7 27.77 34.77 34.77 27.77 ],[0.931 0.946 0.973 ]);\npatch([16.425 26.54 33.54 23.425 16.425 ],[20.77 20.77 27.7"
+	      "7 27.77 20.77 ],[1 1 1 ]);\npatch([23.425 47.54 40.54 33.54 26.54 16.425 23.425 ],[13.77 13.77 20.77 13.77 20.7"
+	      "7 20.77 13.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin i"
+	      "con text');\ncolor('black');port_label('input',1,'addr');\ncolor('black');port_label('input',2,'data');\ncolor("
+	      "'black');port_label('input',3,'we');\n\ncolor('black');disp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end"
+	      " icon text');"
+	    }
+	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag2"
 	  SourceBlock		  "casper_library_reorder/reorder"
 	  SourceType		  "reorder"
-	  ShowPortLabels	  "FromPortIcon"
-	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
-	  RTWMemSecFuncInitTerm	  "Inherit from model"
-	  RTWMemSecFuncExecute	  "Inherit from model"
-	  RTWMemSecDataConstants  "Inherit from model"
-	  RTWMemSecDataInternal	  "Inherit from model"
-	  RTWMemSecDataParameters "Inherit from model"
-	  map			  "getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'map')"
+	  map			  "[0                                      2                                      4                          "
+	  "            6                                      8                                     10                        "
+	  "             12                                     14                                     16                      "
+	  "               18                                     20                                     22                    "
+	  "                 24                                     26                                     28                  "
+	  "                   30                                     32                                     34                "
+	  "                     36                                     38                                     40              "
+	  "                       42                                     44                                     46            "
+	  "                         48                                     50                                     52          "
+	  "                           54                                     56                                     58        "
+	  "                             60                                     62                                     64      "
+	  "                               66                                     68                                     70    "
+	  "                                 72                                     74                                     76  "
+	  "                                   78                                     80                                     82"
+	  "                                     84                                     86                                     "
+	  "88                                     90                                     92                                   "
+	  "  94                                     96                                     98                                 "
+	  "   100                                    102                                    104                               "
+	  "     106                                    108                                    110                             "
+	  "       112                                    114                                    116                           "
+	  "         118                                    120                                    122                         "
+	  "           124                                    126                                    128                       "
+	  "             130                                    132                                    134                     "
+	  "               136                                    138                                    140                   "
+	  "                 142                                    144                                    146                 "
+	  "                   148                                    150                                    152               "
+	  "                     154                                    156                                    158             "
+	  "                       160                                    162                                    164           "
+	  "                         166                                    168                                    170         "
+	  "                           172                                    174                                    176       "
+	  "                             178                                    180                                    182     "
+	  "                               184                                    186                                    188   "
+	  "                                 190                                    192                                    194 "
+	  "                                   196                                    198                                    20"
+	  "0                                    202                                    204                                    "
+	  "206                                    208                                    210                                  "
+	  "  212                                    214                                    216                                "
+	  "    218                                    220                                    222                              "
+	  "      224                                    226                                    228                            "
+	  "        230                                    232                                    234                          "
+	  "          236                                    238                                    240                        "
+	  "            242                                    244                                    246                      "
+	  "              248                                    250                                    252                    "
+	  "                254                                    256                                    258                  "
+	  "                  260                                    262                                    264                "
+	  "                    266                                    268                                    270              "
+	  "                      272                                    274                                    276            "
+	  "                        278                                    280                                    282          "
+	  "                          284                                    286                                    288        "
+	  "                            290                                    292                                    294      "
+	  "                              296                                    298                                    300    "
+	  "                                302                                    304                                    306  "
+	  "                                  308                                    310                                    312"
+	  "                                    314                                    316                                    3"
+	  "18                                    320                                    322                                   "
+	  " 324                                    326                                    328                                 "
+	  "   330                                    332                                    334                               "
+	  "     336                                    338                                    340                             "
+	  "       342                                    344                                    346                           "
+	  "         348                                    350                                    352                         "
+	  "           354                                    356                                    358                       "
+	  "             360                                    362                                    364                     "
+	  "               366                                    368                                    370                   "
+	  "                 372                                    374                                    376                 "
+	  "                   378                                    380                                    382               "
+	  "                     384                                    386                                    388             "
+	  "                       390                                    392                                    394           "
+	  "                         396                                    398                                    400         "
+	  "                           402                                    404                                    406       "
+	  "                             408                                    410                                    412     "
+	  "                               414                                    416                                    418   "
+	  "                                 420                                    422                                    424 "
+	  "                                   426                                    428                                    43"
+	  "0                                    432                                    434                                    "
+	  "436                                    438                                    440                                  "
+	  "  442                                    444                                    446                                "
+	  "    448                                    450                                    452                              "
+	  "      454                                    456                                    458                            "
+	  "        460                                    462                                    464                          "
+	  "          466                                    468                                    470                        "
+	  "            472                                    474                                    476                      "
+	  "              478                                    480                                    482                    "
+	  "                484                                    486                                    488                  "
+	  "                  490                                    492                                    494                "
+	  "                    496                                    498                                    500              "
+	  "                      502                                    504                                    506            "
+	  "                        508                                    510                                    512          "
+	  "                          514                                    516                                    518        "
+	  "                            520                                    522                                    524      "
+	  "                              526                                    528                                    530    "
+	  "                                532                                    534                                    536  "
+	  "                                  538                                    540                                    542"
+	  "                                    544                                    546                                    5"
+	  "48                                    550                                    552                                   "
+	  " 554                                    556                                    558                                 "
+	  "   560                                    562                                    564                               "
+	  "     566                                    568                                    570                             "
+	  "       572                                    574                                    576                           "
+	  "         578                                    580                                    582                         "
+	  "           584                                    586                                    588                       "
+	  "             590                                    592                                    594                     "
+	  "               596                                    598                                    600                   "
+	  "                 602                                    604                                    606                 "
+	  "                   608                                    610                                    612               "
+	  "                     614                                    616                                    618             "
+	  "                       620                                    622                                    624           "
+	  "                         626                                    628                                    630         "
+	  "                           632                                    634                                    636       "
+	  "                             638                                    640                                    642     "
+	  "                               644                                    646                                    648   "
+	  "                                 650                                    652                                    654 "
+	  "                                   656                                    658                                    66"
+	  "0                                    662                                    664                                    "
+	  "666                                    668                                    670                                  "
+	  "  672                                    674                                    676                                "
+	  "    678                                    680                                    682                              "
+	  "      684                                    686                                    688                            "
+	  "        690                                    692                                    694                          "
+	  "          696                                    698                                    700                        "
+	  "            702                                    704                                    706                      "
+	  "              708                                    710                                    712                    "
+	  "                714                                    716                                    718                  "
+	  "                  720                                    722                                    724                "
+	  "                    726                                    728                                    730              "
+	  "                      732                                    734                                    736            "
+	  "                        738                                    740                                    742          "
+	  "                          744                                    746                                    748        "
+	  "                            750                                    752                                    754      "
+	  "                              756                                    758                                    760    "
+	  "                                762                                    764                                    766  "
+	  "                                  768                                    770                                    772"
+	  "                                    774                                    776                                    7"
+	  "78                                    780                                    782                                   "
+	  " 784                                    786                                    788                                 "
+	  "   790                                    792                                    794                               "
+	  "     796                                    798                                    800                             "
+	  "       802                                    804                                    806                           "
+	  "         808                                    810                                    812                         "
+	  "           814                                    816                                    818                       "
+	  "             820                                    822                                    824                     "
+	  "               826                                    828                                    830                   "
+	  "                 832                                    834                                    836                 "
+	  "                   838                                    840                                    842               "
+	  "                     844                                    846                                    848             "
+	  "                       850                                    852                                    854           "
+	  "                         856                                    858                                    860         "
+	  "                           862                                    864                                    866       "
+	  "                             868                                    870                                    872     "
+	  "                               874                                    876                                    878   "
+	  "                                 880                                    882                                    884 "
+	  "                                   886                                    888                                    89"
+	  "0                                    892                                    894                                    "
+	  "896                                    898                                    900                                  "
+	  "  902                                    904                                    906                                "
+	  "    908                                    910                                    912                              "
+	  "      914                                    916                                    918                            "
+	  "        920                                    922                                    924                          "
+	  "          926                                    928                                    930                        "
+	  "            932                                    934                                    936                      "
+	  "              938                                    940                                    942                    "
+	  "                944                                    946                                    948                  "
+	  "                  950                                    952                                    954                "
+	  "                    956                                    958                                    960              "
+	  "                      962                                    964                                    966            "
+	  "                        968                                    970                                    972          "
+	  "                          974                                    976                                    978        "
+	  "                            980                                    982                                    984      "
+	  "                              986                                    988                                    990    "
+	  "                                992                                    994                                    996  "
+	  "                                  998                                   1000                                   1002"
+	  "                                   1004                                   1006                                   10"
+	  "08                                   1010                                   1012                                   "
+	  "1014                                   1016                                   1018                                 "
+	  "  1020                                   1022                                      1                               "
+	  "       3                                      5                                      7                             "
+	  "         9                                     11                                     13                           "
+	  "          15                                     17                                     19                         "
+	  "            21                                     23                                     25                       "
+	  "              27                                     29                                     31                     "
+	  "                33                                     35                                     37                   "
+	  "                  39                                     41                                     43                 "
+	  "                    45                                     47                                     49               "
+	  "                      51                                     53                                     55             "
+	  "                        57                                     59                                     61           "
+	  "                          63                                     65                                     67         "
+	  "                            69                                     71                                     73       "
+	  "                              75                                     77                                     79     "
+	  "                                81                                     83                                     85   "
+	  "                                  87                                     89                                     91 "
+	  "                                    93                                     95                                     9"
+	  "7                                     99                                    101                                    "
+	  "103                                    105                                    107                                  "
+	  "  109                                    111                                    113                                "
+	  "    115                                    117                                    119                              "
+	  "      121                                    123                                    125                            "
+	  "        127                                    129                                    131                          "
+	  "          133                                    135                                    137                        "
+	  "            139                                    141                                    143                      "
+	  "              145                                    147                                    149                    "
+	  "                151                                    153                                    155                  "
+	  "                  157                                    159                                    161                "
+	  "                    163                                    165                                    167              "
+	  "                      169                                    171                                    173            "
+	  "                        175                                    177                                    179          "
+	  "                          181                                    183                                    185        "
+	  "                            187                                    189                                    191      "
+	  "                              193                                    195                                    197    "
+	  "                                199                                    201                                    203  "
+	  "                                  205                                    207                                    209"
+	  "                                    211                                    213                                    2"
+	  "15                                    217                                    219                                   "
+	  " 221                                    223                                    225                                 "
+	  "   227                                    229                                    231                               "
+	  "     233                                    235                                    237                             "
+	  "       239                                    241                                    243                           "
+	  "         245                                    247                                    249                         "
+	  "           251                                    253                                    255                       "
+	  "             257                                    259                                    261                     "
+	  "               263                                    265                                    267                   "
+	  "                 269                                    271                                    273                 "
+	  "                   275                                    277                                    279               "
+	  "                     281                                    283                                    285             "
+	  "                       287                                    289                                    291           "
+	  "                         293                                    295                                    297         "
+	  "                           299                                    301                                    303       "
+	  "                             305                                    307                                    309     "
+	  "                               311                                    313                                    315   "
+	  "                                 317                                    319                                    321 "
+	  "                                   323                                    325                                    32"
+	  "7                                    329                                    331                                    "
+	  "333                                    335                                    337                                  "
+	  "  339                                    341                                    343                                "
+	  "    345                                    347                                    349                              "
+	  "      351                                    353                                    355                            "
+	  "        357                                    359                                    361                          "
+	  "          363                                    365                                    367                        "
+	  "            369                                    371                                    373                      "
+	  "              375                                    377                                    379                    "
+	  "                381                                    383                                    385                  "
+	  "                  387                                    389                                    391                "
+	  "                    393                                    395                                    397              "
+	  "                      399                                    401                                    403            "
+	  "                        405                                    407                                    409          "
+	  "                          411                                    413                                    415        "
+	  "                            417                                    419                                    421      "
+	  "                              423                                    425                                    427    "
+	  "                                429                                    431                                    433  "
+	  "                                  435                                    437                                    439"
+	  "                                    441                                    443                                    4"
+	  "45                                    447                                    449                                   "
+	  " 451                                    453                                    455                                 "
+	  "   457                                    459                                    461                               "
+	  "     463                                    465                                    467                             "
+	  "       469                                    471                                    473                           "
+	  "         475                                    477                                    479                         "
+	  "           481                                    483                                    485                       "
+	  "             487                                    489                                    491                     "
+	  "               493                                    495                                    497                   "
+	  "                 499                                    501                                    503                 "
+	  "                   505                                    507                                    509               "
+	  "                     511                                    513                                    515             "
+	  "                       517                                    519                                    521           "
+	  "                         523                                    525                                    527         "
+	  "                           529                                    531                                    533       "
+	  "                             535                                    537                                    539     "
+	  "                               541                                    543                                    545   "
+	  "                                 547                                    549                                    551 "
+	  "                                   553                                    555                                    55"
+	  "7                                    559                                    561                                    "
+	  "563                                    565                                    567                                  "
+	  "  569                                    571                                    573                                "
+	  "    575                                    577                                    579                              "
+	  "      581                                    583                                    585                            "
+	  "        587                                    589                                    591                          "
+	  "          593                                    595                                    597                        "
+	  "            599                                    601                                    603                      "
+	  "              605                                    607                                    609                    "
+	  "                611                                    613                                    615                  "
+	  "                  617                                    619                                    621                "
+	  "                    623                                    625                                    627              "
+	  "                      629                                    631                                    633            "
+	  "                        635                                    637                                    639          "
+	  "                          641                                    643                                    645        "
+	  "                            647                                    649                                    651      "
+	  "                              653                                    655                                    657    "
+	  "                                659                                    661                                    663  "
+	  "                                  665                                    667                                    669"
+	  "                                    671                                    673                                    6"
+	  "75                                    677                                    679                                   "
+	  " 681                                    683                                    685                                 "
+	  "   687                                    689                                    691                               "
+	  "     693                                    695                                    697                             "
+	  "       699                                    701                                    703                           "
+	  "         705                                    707                                    709                         "
+	  "           711                                    713                                    715                       "
+	  "             717                                    719                                    721                     "
+	  "               723                                    725                                    727                   "
+	  "                 729                                    731                                    733                 "
+	  "                   735                                    737                                    739               "
+	  "                     741                                    743                                    745             "
+	  "                       747                                    749                                    751           "
+	  "                         753                                    755                                    757         "
+	  "                           759                                    761                                    763       "
+	  "                             765                                    767                                    769     "
+	  "                               771                                    773                                    775   "
+	  "                                 777                                    779                                    781 "
+	  "                                   783                                    785                                    78"
+	  "7                                    789                                    791                                    "
+	  "793                                    795                                    797                                  "
+	  "  799                                    801                                    803                                "
+	  "    805                                    807                                    809                              "
+	  "      811                                    813                                    815                            "
+	  "        817                                    819                                    821                          "
+	  "          823                                    825                                    827                        "
+	  "            829                                    831                                    833                      "
+	  "              835                                    837                                    839                    "
+	  "                841                                    843                                    845                  "
+	  "                  847                                    849                                    851                "
+	  "                    853                                    855                                    857              "
+	  "                      859                                    861                                    863            "
+	  "                        865                                    867                                    869          "
+	  "                          871                                    873                                    875        "
+	  "                            877                                    879                                    881      "
+	  "                              883                                    885                                    887    "
+	  "                                889                                    891                                    893  "
+	  "                                  895                                    897                                    899"
+	  "                                    901                                    903                                    9"
+	  "05                                    907                                    909                                   "
+	  " 911                                    913                                    915                                 "
+	  "   917                                    919                                    921                               "
+	  "     923                                    925                                    927                             "
+	  "       929                                    931                                    933                           "
+	  "         935                                    937                                    939                         "
+	  "           941                                    943                                    945                       "
+	  "             947                                    949                                    951                     "
+	  "               953                                    955                                    957                   "
+	  "                 959                                    961                                    963                 "
+	  "                   965                                    967                                    969               "
+	  "                     971                                    973                                    975             "
+	  "                       977                                    979                                    981           "
+	  "                         983                                    985                                    987         "
+	  "                           989                                    991                                    993       "
+	  "                             995                                    997                                    999     "
+	  "                              1001                                   1003                                   1005   "
+	  "                                1007                                   1009                                   1011 "
+	  "                                  1013                                   1015                                   101"
+	  "7                                   1019                                   1021                                   1"
+	  "023]"
 	  n_inputs		  "1"
 	  bram_latency		  "2"
 	  map_latency		  "3"
@@ -2224,16 +2333,32 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [540, 25, 630, 45]
+	  LinkData {
+	    BlockName		    "Constant3"
+	    DialogParameters {
+	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
+	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
+	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
+	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
+	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
+	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "Logical"
+	    DialogParameters {
+	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 31 31 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 31 31 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
+	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
+	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
+	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
+	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\ncolor('black');"
+	      "disp('or');\nfprintf('','COMMENT: end icon text');"
+	    }
+	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
-	  ShowPortLabels	  "FromPortIcon"
-	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
-	  RTWMemSecFuncInitTerm	  "Inherit from model"
-	  RTWMemSecFuncExecute	  "Inherit from model"
-	  RTWMemSecDataConstants  "Inherit from model"
-	  RTWMemSecDataInternal	  "Inherit from model"
-	  RTWMemSecDataParameters "Inherit from model"
 	  DelayLen		  "2^(idepth + odepth) + 10 + 1"
 	}
 	Block {
@@ -2268,12 +2393,15 @@ Library {
 	  sggui_pos		  "20,20,348,619"
 	  block_type		  "counter"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "60,60,2,1,white,blue,0,46c73e85,right"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 60 60 ],[0.77 0.82 0.91]);\n"
-	  "patch([14 4 18 4 14 30 34 38 55 42 29 20 35 20 29 42 55 38 34 30 14 ],[6 16 30 44 54 54 50 54 54 41 54 45 30 15 6 1"
-	  "9 6 6 10 6 6 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\nfprintf('','COMMENT: end icon graphics');\n"
-	  "fprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rst');\ncolor('black');port_label('in"
-	  "put',2,'en');\ncolor('black');port_label('output',1,'out');\nfprintf('','COMMENT: end icon text');\n"
+	  sg_icon_stat		  "60,60,2,1,white,blue,0,ae3608d6,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 60 60 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 60 60 0 0 ],[0 0 60 60 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[38.88 38.88 46.8"
+	  "8 38.88 46.88 46.88 46.88 38.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[30.88 30.88 38.88 38.88 30.88 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[22.88 22.88 30.88 30.88 22.88 ],[1 1 1 ]);\npatch([20."
+	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[14.88 14.88 22.88 14.88 22.88 22.88 14.88 ],[0.931 0.946 0.973 ]);\nfprintf("
+	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'rs"
+	  "t');\ncolor('black');port_label('input',2,'en');\n\ncolor('black');disp('{\\fontsize{14}\\bf++}','texmode','on');\n"
+	  "fprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Outport
@@ -2606,7 +2734,7 @@ Library {
       MaskValueString	      "getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'map')|1|1|1|0|off"
       System {
 	Name			"reorder"
-	Location		[486, 283, 1510, 854]
+	Location		[418, 45, 1538, 1086]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -2675,14 +2803,6 @@ Library {
 	  Position		  [620, 130, 660, 150]
 	  SourceBlock		  "casper_library_delays/delay_bram_en_plus"
 	  SourceType		  "delay_bram_en_plus"
-	  ShowPortLabels	  "FromPortIcon"
-	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
-	  RTWMemSecFuncInitTerm	  "Inherit from model"
-	  RTWMemSecFuncExecute	  "Inherit from model"
-	  RTWMemSecDataConstants  "Inherit from model"
-	  RTWMemSecDataInternal	  "Inherit from model"
-	  RTWMemSecDataParameters "Inherit from model"
 	  DelayLen		  "length(map)"
 	  bram_latency		  "bram_latency"
 	}
@@ -2839,16 +2959,21 @@ Library {
 	  Name			  "sync_delay_en"
 	  Ports			  [2, 1]
 	  Position		  [425, 15, 470, 35]
+	  LinkData {
+	    BlockName		    "Constant"
+	    DialogParameters {
+	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
+	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
+	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
+	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
+	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
+	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
+	    }
+	  }
 	  SourceBlock		  "casper_library_delays/sync_delay_en"
 	  SourceType		  "sync_delay_en"
-	  ShowPortLabels	  "FromPortIcon"
-	  SystemSampleTime	  "-1"
-	  FunctionWithSeparateData off
-	  RTWMemSecFuncInitTerm	  "Inherit from model"
-	  RTWMemSecFuncExecute	  "Inherit from model"
-	  RTWMemSecDataConstants  "Inherit from model"
-	  RTWMemSecDataInternal	  "Inherit from model"
-	  RTWMemSecDataParameters "Inherit from model"
 	  DelayLen		  "4"
 	}
 	Block {
@@ -2989,7 +3114,7 @@ Library {
       MaskValueString	      "0"
       System {
 	Name			"square_transposer"
-	Location		[344, 195, 1340, 843]
+	Location		[276, 45, 1368, 1163]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -3009,35 +3134,39 @@ Library {
 MatData {
   NumRecords		  5
   DataRecord {
-    Tag			    DataTag4
-    Data		    "  %)30     .    T $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $&@NP0.    0 $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', ;E]I;G!U=',         #@   *"
-    "@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    \"    "
-    " $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    (           "
-    " \"$ .    .     8    (    !@         %    \"     $    !     0         )    \"               "
+    Tag			    DataTag0
+    Data		    "  %)30     .    B (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &,\"8P,.    ^ $  "
+    " 8    (     @         %    \"     $    !     0         %  0 \"0    $    ;    9&5F875L=', ;E]I;G!U=', 87-Y;F,      "
+    "      .    ( $   8    (     0         %    \"     $    $     0         .    .     8    (    !          %    \"    "
+    " $    (     0         0    \"    &Y?:6YP=71S#@   #@    &    \"     8         !0    @    !     0    $         \"0  "
+    "  @           #P/PX    X    !@    @    $          4    (     0    4    !         !     %    87-Y;F,    .    ,     "
+    "8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4    (     0    $"
+    "    !          D    (               .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
-    Tag			    DataTag3
-    Data		    "  %)30     .    $ 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $A\"K 0.    @ 4  "
-    " 8    (     @         %    \"     $    !     0         %  0 #@    $   !B    9&5F875L=',       !M87               &"
-    "Y?:6YP=71S        8G)A;5]L871E;F-Y  !M87!?;&%T96YC>0   &1O=6)L95]B=69F97( 8G)A;5]M87                 .    2 ,   8 "
-    "   (     0         %    \"     $    ,     0         .    ,     8    (    !          %    \"     $    #     0      "
-    "   0  , ;6%P  X   !0    !@    @    &          4    (     0    0    !          D    @                      #P/P    "
-    "    !         \"$ .    0     8    (    !          %    \"     $    +     0         0    \"P   &UA<%]L871E;F-Y     "
-    "  .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0 "
-    "        !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @  "
-    "  !     0    $         \"0    @           #P/PX    X    !@    @    $          4    (     0    @    !         !    "
-    " (    ;E]I;G!U=',.    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $    "
-    " &    \"     0         !0    @    !    #0    $         $     T   !D;W5B;&5?8G5F9F5R    #@   #@    &    \"     8   "
-    "      !0    @    !     0    $         \"0    @               X    X    !@    @    $          4    (     0    @    "
-    "!         !     (    8G)A;5]M87 .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !0"
-    "    !@    @    &          4    (     0    0    !          D    @                      #P/P        !         \"$ . "
-    "   .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8     "
-    "    !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    ! "
-    "         D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"          "
-    "     #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
+    Tag			    DataTag1
+    Data		    "  %)30     .    L 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /0)!@(.    ( 8   "
+    "8    (     @         %    \"     $    !     0         %  0 \"0    $    _    9&5F875L=', 961G90      <&]L87)I='D >%"
+    "]I;@      >%]O=70     >5]I;@      >5]O=70       X   \"8 P  !@    @    !          4    (     0    P    !          X"
+    "    P    !@    @    $          4    (     0    0    !         !  ! !E9&=E#@   #@    &    \"     0         !0    @ "
+    "   !    !@    $         $     8   !2:7-I;F<   X    X    !@    @    $          4    (     0    @    !         !    "
+    " (    <&]L87)I='D.    0     8    (    !          %    \"     $    +     0         0    \"P   $%C=&EV92!(:6=H      "
+    " .    ,     8    (    !          %    \"     $    $     0         0  0 >%]I;@X   !@    !@    @    $          4    "
+    "(     0   \"\\    !         !     O    6S L,\"XP.\"PP+C X+# N,38L,\"XQ-BPP+C(T+# N,C0L,\"XS,BPP+C,R+# N-%T #@   #@"
+    "    &    \"     0         !0    @    !    !0    $         $     4   !X7V]U=     X   !@    !@    @    $          4 "
+    "   (     0   \"\\    !         !     O    6S N-BPP+C8X+# N-C@L,\"XW-BPP+C<V+# N.#0L,\"XX-\"PP+CDR+# N.3(L,5T #@   "
+    "#     &    \"     0         !0    @    !    !     $         $  $ 'E?:6X.    4     8    (    !          %    \"    "
+    " $    ?     0         0    'P   %LM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,5T #@   #@    &    \"     0         !0    "
+    "@    !    !0    $         $     4   !Y7V]U=     X   !0    !@    @    $          4    (     0   !\\    !         ! "
+    "    ?    6RTQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ70 .    .     8    (    !          %    \"     $    &   "
+    "  0         0    !@   %)I<VEN9P  #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !!8W1"
+    "I=F4@2&EG:       #@   &     &    \"     0         !0    @    !    +P    $         $    \"\\   !;,\" P+C X(# N,#@@,"
+    "\"XQ-B P+C$V(# N,C0@,\"XR-\" P+C,R(# N,S(@,\"XT70 .    8     8    (    !          %    \"     $    O     0        "
+    " 0    +P   %LP+C8@,\"XV.\" P+C8X(# N-S8@,\"XW-B P+C@T(# N.#0@,\"XY,B P+CDR(#%=  X   !0    !@    @    $          4 "
+    "   (     0   !\\    !         !     ?    6RTQ(\"TQ(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q70 .    4     8    (    "
+    "!          %    \"     $    ?     0         0    'P   %LM,2 M,2 @,2 @,2 M,2 M,2 M,2 M,2 M,2 M,5T "
   }
   DataRecord {
     Tag			    DataTag2
@@ -3160,35 +3289,34 @@ MatData {
     "    $  # &]F9@ "
   }
   DataRecord {
-    Tag			    DataTag1
-    Data		    "  %)30     .    L 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /0)!@(.    ( 8   "
-    "8    (     @         %    \"     $    !     0         %  0 \"0    $    _    9&5F875L=', 961G90      <&]L87)I='D >%"
-    "]I;@      >%]O=70     >5]I;@      >5]O=70       X   \"8 P  !@    @    !          4    (     0    P    !          X"
-    "    P    !@    @    $          4    (     0    0    !         !  ! !E9&=E#@   #@    &    \"     0         !0    @ "
-    "   !    !@    $         $     8   !2:7-I;F<   X    X    !@    @    $          4    (     0    @    !         !    "
-    " (    <&]L87)I='D.    0     8    (    !          %    \"     $    +     0         0    \"P   $%C=&EV92!(:6=H      "
-    " .    ,     8    (    !          %    \"     $    $     0         0  0 >%]I;@X   !@    !@    @    $          4    "
-    "(     0   \"\\    !         !     O    6S L,\"XP.\"PP+C X+# N,38L,\"XQ-BPP+C(T+# N,C0L,\"XS,BPP+C,R+# N-%T #@   #@"
-    "    &    \"     0         !0    @    !    !0    $         $     4   !X7V]U=     X   !@    !@    @    $          4 "
-    "   (     0   \"\\    !         !     O    6S N-BPP+C8X+# N-C@L,\"XW-BPP+C<V+# N.#0L,\"XX-\"PP+CDR+# N.3(L,5T #@   "
-    "#     &    \"     0         !0    @    !    !     $         $  $ 'E?:6X.    4     8    (    !          %    \"    "
-    " $    ?     0         0    'P   %LM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,2PM,5T #@   #@    &    \"     0         !0    "
-    "@    !    !0    $         $     4   !Y7V]U=     X   !0    !@    @    $          4    (     0   !\\    !         ! "
-    "    ?    6RTQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ+\"TQ70 .    .     8    (    !          %    \"     $    &   "
-    "  0         0    !@   %)I<VEN9P  #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !!8W1"
-    "I=F4@2&EG:       #@   &     &    \"     0         !0    @    !    +P    $         $    \"\\   !;,\" P+C X(# N,#@@,"
-    "\"XQ-B P+C$V(# N,C0@,\"XR-\" P+C,R(# N,S(@,\"XT70 .    8     8    (    !          %    \"     $    O     0        "
-    " 0    +P   %LP+C8@,\"XV.\" P+C8X(# N-S8@,\"XW-B P+C@T(# N.#0@,\"XY,B P+CDR(#%=  X   !0    !@    @    $          4 "
-    "   (     0   !\\    !         !     ?    6RTQ(\"TQ(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q(\" Q70 .    4     8    (    "
-    "!          %    \"     $    ?     0         0    'P   %LM,2 M,2 @,2 @,2 M,2 M,2 M,2 M,2 M,2 M,5T "
+    Tag			    DataTag3
+    Data		    "  %)30     .    $ 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $A\"K 0.    @ 4  "
+    " 8    (     @         %    \"     $    !     0         %  0 #@    $   !B    9&5F875L=',       !M87               &"
+    "Y?:6YP=71S        8G)A;5]L871E;F-Y  !M87!?;&%T96YC>0   &1O=6)L95]B=69F97( 8G)A;5]M87                 .    2 ,   8 "
+    "   (     0         %    \"     $    ,     0         .    ,     8    (    !          %    \"     $    #     0      "
+    "   0  , ;6%P  X   !0    !@    @    &          4    (     0    0    !          D    @                      #P/P    "
+    "    !         \"$ .    0     8    (    !          %    \"     $    +     0         0    \"P   &UA<%]L871E;F-Y     "
+    "  .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0 "
+    "        !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @  "
+    "  !     0    $         \"0    @           #P/PX    X    !@    @    $          4    (     0    @    !         !    "
+    " (    ;E]I;G!U=',.    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $    "
+    " &    \"     0         !0    @    !    #0    $         $     T   !D;W5B;&5?8G5F9F5R    #@   #@    &    \"     8   "
+    "      !0    @    !     0    $         \"0    @               X    X    !@    @    $          4    (     0    @    "
+    "!         !     (    8G)A;5]M87 .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !0"
+    "    !@    @    &          4    (     0    0    !          D    @                      #P/P        !         \"$ . "
+    "   .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8     "
+    "    !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    ! "
+    "         D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"          "
+    "     #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ "
   }
   DataRecord {
-    Tag			    DataTag0
-    Data		    "  %)30     .    4 $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /-W?P8.    P     "
-    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', ;E]I;G!U=',         #@   \""
-    "@    &    \"     $         !0    @               $         #@   #@    &    \"     8         !0    @    !     0    "
-    "$         \"0    @           #P/P"
+    Tag			    DataTag4
+    Data		    "  %)30     .    T $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $&@NP0.    0 $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', ;E]I;G!U=',         #@   *"
+    "@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    \"    "
+    " $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    (           "
+    " \"$ .    .     8    (    !@         %    \"     $    !     0         )    \"               "
   }
 }
