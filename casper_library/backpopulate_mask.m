@@ -37,6 +37,7 @@
 
 function backpopulate_mask(blk,varargin)
 
+try
   % Match mask names to {variables, values} in varargin
   masknames = get_param(blk, 'MaskNames');
   mv = {};
@@ -60,4 +61,6 @@ function backpopulate_mask(blk,varargin)
  
   %Back populate mask parameter values
   set_param(blk,'MaskValues',mv);       % This call echos blk name if mv contains a matrix ???
-
+catch ex
+  dump_and_rethrow(ex);
+end

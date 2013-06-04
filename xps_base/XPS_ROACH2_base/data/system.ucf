@@ -725,6 +725,31 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_modepin            LOC = M41 ;
 #IF# (strcmp(get(b,'type'),'xps_adc5g')) && get(b, 'use_adc1') #NET adc1_reset              LOC = M39 ;
 
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#### ADC16 Clock Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc16'))##
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## Set period for line clock from ZDOK0.  This is properly propagated through
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## to the CLKOUTnB MMCM outputs (even in 13.3) despite what is desbribed in Xilinx
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## Answer Record 46398 (http://www.xilinx.com/support/answers/46398.htm).
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('NET "adc16_clk_line_p<%d>" TNM_NET = "adc16_line_clk";\n', get(b, 'line_clk_index'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('TIMESPEC "TS_adc16_line_clk" = PERIOD "adc16_line_clk" %.6g ns;\n', 1000/get(b,'line_mhz'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))##
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#### ADC16 Control Constraints
+#IF# (strcmp(get(b,'type'),'xps_adc16'))##
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('NET adc0_adc3wire_csn1  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn1'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('NET adc0_adc3wire_csn2  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn2'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('NET adc0_adc3wire_csn3  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn3'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('NET adc0_adc3wire_csn4  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn4'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('NET adc0_adc3wire_sdata %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_sdata0'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))#sprintf('NET adc0_adc3wire_sclk  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_sclk0'))
+#IF# (strcmp(get(b,'type'),'xps_adc16'))## signals for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #sprintf('NET adc1_adc3wire_csn1  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn5'))
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #sprintf('NET adc1_adc3wire_csn2  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn6'))
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #sprintf('NET adc1_adc3wire_csn3  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn7'))
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #sprintf('NET adc1_adc3wire_csn4  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_csn8'))
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #sprintf('NET adc1_adc3wire_sdata %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_sdata1'))
+#IF# (strcmp(get(b,'type'),'xps_adc16')) && get(b,'num_units') > 4 #sprintf('NET adc1_adc3wire_sclk  %s | SLEW = "SLOW" | DRIVE = "2";\n', get(b, 'pin_sclk1'))
+
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_clk       LOC = A39;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_data      LOC = B42;
 #IF# (strcmp(get(b,'type'),'xps_adc') || strcmp(get(b,'type'),'xps_adc_3ghz')) && strcmp(get(b,'hw_adc'),'adc0')#NET adc0_adc3wire_strobe    LOC = B41;

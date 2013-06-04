@@ -17,7 +17,7 @@ if strcmp(hw_sys, 'ROACH2')
       [multiply divide divclk] = clk_factors(100, 100);
       fprintf(strcat('Running off aux_clk @ ', int2str(app_clk_rate), 'MHz', '\n'))
    elseif strcmp(app_clk, 'sys_clk')
-      [multiply divide divclk] = clk_factors(100, app_clk_rate)
+      [multiply divide divclk] = clk_factors(100, app_clk_rate);
       fprintf(strcat('Running off sys_clk @ ', int2str(input_clk_rate*multiply/divide/divclk), 'MHz','\n'))
    else
       [multiply divide divclk] = clk_factors(100, 100);

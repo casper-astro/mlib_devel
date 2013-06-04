@@ -48,6 +48,15 @@ end
 set_param([c_sys, '/convert_din'], 'arith_type', gcb_arith_type);
 set_param([c_sys, '/mem/sim_data_in'], 'arith_type', gcb_arith_type);
 
+latency = 1;
+if strcmp(get_param(c_sys, 'reg_prim_output'), 'on')
+  latency = latency + 1;
+end
+if strcmp(get_param(c_sys, 'reg_core_output'), 'on')
+  latency = latency + 1;
+end
+set_param([c_sys, '/mem/ram'], 'latency', num2str(latency));
+
 xsg_blk = [strtok(gcs, '/') '/ System Generator'];
 fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
 data_width = eval(get_param(c_sys, 'data_width'));

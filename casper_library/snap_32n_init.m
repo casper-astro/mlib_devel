@@ -22,4 +22,5 @@ for k=1:width,
 end
 
 clean_blocks(blk);    
+save_state(blk, 'defaults', defaults, varargin{:});
 end

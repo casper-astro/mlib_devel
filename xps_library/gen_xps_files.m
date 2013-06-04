@@ -93,10 +93,10 @@ else
   system_os = 'linux';
 end
 
-xps_blks        = find_system(sys,'FollowLinks','on','LookUnderMasks','all','RegExp','on','Tag','^xps:');
-xps_xsg_blks    = find_system(sys,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
-xps_pcore_blks  = find_system(sys,'FollowLinks','on','LookUnderMasks','all','Tag','xps:pcore');
-sysgen_blk      = find_system(sys, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','genX');
+xps_blks        = find_system(sys,'FollowLinks','on','LookUnderMasks','all','RegExp','on',      'Tag','^xps:');
+xps_xsg_blks    = find_system(sys,'FollowLinks','on','LookUnderMasks','all',                    'Tag','xps:xsg');
+xps_pcore_blks  = find_system(sys,'FollowLinks','on','LookUnderMasks','all',                    'Tag','xps:pcore');
+sysgen_blk      = find_system(sys,'FollowLinks','on','LookUnderMasks','all','SearchDepth', 1,   'Tag','genX');
 
 % check if the system name is correct
 if upper(sys(1))==sys(1)
@@ -144,7 +144,10 @@ end
 % set design paths
 XPS_BASE_PATH = getenv('XPS_BASE_PATH');
 if isempty(XPS_BASE_PATH)
-    error('Environment variable XPS_BASE_PATH must be defined');
+    XPS_BASE_PATH = fullfile(getenv('MLIB_DEVEL_PATH'), 'xps_base');
+    if isempty(XPS_BASE_PATH)
+        error('Environment variable XPS_BASE_PATH or MLIB_DEVEL_PATH must be defined');
+    end
 end
 
 simulink_path   = pwd;
@@ -229,12 +232,16 @@ end
 for n = 1:length(xps_blks)
     if ~(strcmp(get_param(xps_blks(n),'tag'),'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'),'xps:pcore'))
         try
+            %get_param(xps_blks(n),'tag')
             blk_obj = xps_block(xps_blks{n},xsg_obj);
+            %fprintf('Created block!')
+            assignin('base','last_blk_obj',blk_obj);
             eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
+            %fprintf('Evaluated block!')
 
             xps_objs = [xps_objs,{blk_obj}];
 
-            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc5g' 'xps_adc083000x2' 'xps_adc' 'xps_katadc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_probe' 'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
+            if isempty(find(strcmp(get(blk_obj, 'type'), {'xps_adc16' 'xps_adc5g' 'xps_adc083000x2' 'xps_adc' 'xps_katadc' 'xps_block' 'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite' 'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_probe' 'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'})))
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
             else
                 if isempty(find(strcmp(get(blk_obj, 'type'), core_types)))
@@ -247,9 +254,9 @@ for n = 1:length(xps_blks)
             catch
                 eval(['nb_objs.',get(blk_obj,'type'),' = 1;'])
             end
-        catch
+        catch ex
             disp(['Problem with block: ',xps_blks{n}]);
-            disp(lasterr);
+            dump_exception(ex);
             error('Error found during Object creation.');
         end
     end
@@ -387,7 +394,7 @@ if run_copy
    end
     if exist([XPS_BASE_PATH, slash, 'XPS_',hw_sys,'_base'],'dir')
 
-        source_dir      = [XPS_BASE_PATH, slash, 'XPS_', hw_sys, '_base']
+        source_dir      = [XPS_BASE_PATH, slash, 'XPS_', hw_sys, '_base'];
         destination_dir = [xps_path];
 
         if strcmp(system_os, 'windows')
@@ -516,6 +523,9 @@ if run_edkgen
 
     % modifying UCF file
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
+    
+    % add extra register and snapshot info from the design
+    gen_xps_add_design_info(sys, mssge_paths, slash);
 
 end % if run_edkgen
 time_edkgen = now - start_time;
@@ -572,7 +582,7 @@ if run_software
     unix_fid = fopen([xps_path, slash, 'gen_prog_files'],'w');
     fprintf(unix_fid,['#!/bin/bash\n']);
     time_stamp = clear_name(datestr(now, 'yyyy-mmm-dd HHMM'));
-
+ 
     switch sw_os
         case 'none'
             fprintf(win_fid,['copy implementation\\system.bit ..\\bit_files\\',design_name,'_',time_stamp,'.bit\n']);
@@ -585,17 +595,26 @@ if run_software
     end % switch sw_os
 
     [s,w] = system('uname -m');
-    if strcmp(hw_sys, 'ROACH') | strcmp(hw_sys, 'ROACH2')
-      fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
-      if strcmp(w(1:6), 'x86_64')
-         fprintf(unix_fid, ['./mkbof_64 -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
-      else
-         fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
-      end
-      fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
-      fprintf(unix_fid,['chmod +x implementation/system.bof\n']);
-      fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
-    end % strcmp(hw_sys, 'ROACH')
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
+        fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
+        if strcmp(w(1:6), 'x86_64')
+           fprintf(unix_fid, ['./mkbof_64 -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+        else
+           fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
+        end
+        fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
+        if strcmp(hw_sys, 'ROACH')
+           fprintf(unix_fid,'chmod +x implementation/system.bof\n');
+         end
+        fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
+        if exist([xps_path,  slash, 'design_info.casper'], 'file') == 2,
+            fprintf(win_fid,['copy design_info.casper ..\\bit_files\\', design_name,'_',time_stamp,'.design_info\n']);
+            fprintf(unix_fid,['cp design_info.casper ../bit_files/', design_name,'_',time_stamp,'.design_info\n']);
+        end
+        if strcmp(hw_sys, 'ROACH2')
+            fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
+        end % strcmp(hw_sys, 'ROACH2')
+    end % strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
 
     fclose(win_fid);
     fclose(unix_fid);

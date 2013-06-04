@@ -60,6 +60,8 @@ if nargin == 0  % LAUNCH GUI
             set(handles.xsg_version,'String','11.4');
         case {'11.5.2275'}
             set(handles.xsg_version,'String','11.5');
+        case {'13.3'}
+            set(handles.xsg_version,'String','13.3');
         case {'14.2'}
             set(handles.xsg_version,'String','14.2');
         case {'14.3'}

@@ -31,7 +31,6 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 
     switch hw_sys
         case {'ROACH','ROACH2'}
-            
             opb_slaves_init = 2;  % The system block
             opb_slaves = opb_slaves_init;             
             max_opb_per_bridge = 32; 
@@ -53,13 +52,12 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     opb_bus_inst = 0;
     opb_name = 'opb0';
 
-
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Backup and preprocess skeleton MHS and core_info.tab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist([xps_path, slash, 'system.mhs.bac'],'file')
-        [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, 'system.mhs'],[xps_path, slash, 'system.mhs.bac']);
+        [copystatus, copymessage, copymessageid] = copyfile([xps_path, slash, 'system.mhs'],[xps_path, slash, 'system.mhs.bac']);
         if ~copystatus
             disp('Error trying to backup system.mhs:');
             disp(copymessage)
@@ -67,16 +65,16 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     end % if ~exist([xps_path, slash, 'system.mhs.bac'],'file')
 
     if ~exist([xps_path, slash, 'core_info.tab.bac'],'file')
-        [copystatus,copymessage,copymessageid] = copyfile([xps_path, slash, 'core_info.tab'],[xps_path, slash, 'core_info.tab.bac']);
+        [copystatus, copymessage, copymessageid] = copyfile([xps_path, slash, 'core_info.tab'],[xps_path, slash, 'core_info.tab.bac']);
         if ~copystatus
             disp('Error trying to backup core_info.tab:');
             disp(copymessage);
         end % if ~copystatus
     end % if ~exist([xps_path, slash, 'core_info.tab.bac'],'file')
 
-    mhs_fid = fopen([xps_path, slash, 'system.mhs'],'w');
+    mhs_fid = fopen([xps_path,  slash, 'system.mhs'],'w');
     nfo_fid = fopen([work_path, slash, 'core_info.m'],'w');
-    bof_fid = fopen([xps_path, slash, 'core_info.tab'],'w');
+    bof_fid = fopen([xps_path,  slash, 'core_info.tab'],'w');
 
     in_fid = fopen([xps_path, slash, 'system.mhs.bac'],'r');
     detokenize(in_fid, mhs_fid, xps_objs);
@@ -261,14 +259,14 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
         end
         clog(['0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_addr-1,8), ' opbs: ',num2str(opb0_devices),' fixed opb0 + ', num2str(opb_cores),' on opb', num2str(opb_bus_inst),' (',num2str(opb_slaves),' so far)', ' (',get(blk_obj,'simulink_name'),')'],'gen_xps_mod_mhs_debug'); 
 
-        fprintf(mhs_fid,['# ',get(blk_obj,'simulink_name'),'\n']);
-        fprintf(mhs_fid,str);
-        fprintf(mhs_fid,'\n');
+        fprintf(mhs_fid, ['# ',get(blk_obj,'simulink_name'),'\n']);
+        fprintf(mhs_fid, str);
+        fprintf(mhs_fid, '\n');
 
         str = gen_m_core_info(blk_obj, str);
-        fprintf(nfo_fid,['%% ',get(blk_obj,'simulink_name'),'\n']);
-        fprintf(nfo_fid,str);
-        fprintf(nfo_fid,'\n');
+        fprintf(nfo_fid, ['%% ', get(blk_obj, 'simulink_name'), '\n']);
+        fprintf(nfo_fid, str);
+        fprintf(nfo_fid, '\n');
 
         try
             if strcmp(hw_sys, 'ROACH') ||  strcmp(hw_sys, 'ROACH2')
@@ -276,7 +274,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             else
               str = gen_borf_info(n-1, blk_obj, {});
             end
-            fprintf(bof_fid,str);
+            fprintf(bof_fid, str);
         catch
             disp('Problem with block : ')
             display(blk_obj);

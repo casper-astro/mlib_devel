@@ -45,6 +45,8 @@
 
 function munge_block(blk,varargin)
 
+try
+
   % Don't munge if blk lives in a library
   if is_library_block(blk), return, end
   
@@ -71,3 +73,6 @@ function munge_block(blk,varargin)
       case 'unmask'
         set_param(blk,'Mask','off');
   end
+catch ex
+  dump_and_rethrow(ex);
+end

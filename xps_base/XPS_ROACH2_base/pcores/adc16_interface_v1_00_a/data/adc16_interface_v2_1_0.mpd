@@ -1,0 +1,93 @@
+BEGIN adc16_interface
+
+##########################
+##  PERIPHERAL OPTIONS  ##
+##########################
+
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION STYLE = HDL
+OPTION HDL = VHDL
+OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT, VIRTEX6SX=DEVELOPMENT)
+OPTION DESC = "ADC16 controller"
+
+## Generics for VHDL or Parameters for Verilog
+PARAMETER G_ROACH2_REV = 1, DT = integer
+PARAMETER G_ZDOK_REV   = 1, DT = integer
+PARAMETER G_NUM_CLOCKS = 4, DT = integer
+PARAMETER G_NUM_UNITS  = 4, DT = integer
+
+#############
+##  PORTS  ##
+#############
+
+# Clocks
+PORT fabric_clk     = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk_90  = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk_180 = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT fabric_clk_270 = "", DIR = O, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT clk_line_p  = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT clk_line_n  = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE, SIGIS = CLK
+PORT clk_frame_p = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT clk_frame_n = "", VEC = [G_NUM_CLOCKS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+
+# Data in
+PORT ser_a_p = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_a_n = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_b_p = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+PORT ser_b_n = "", VEC = [4*G_NUM_UNITS-1:0], DIR = I, IOB_STATE = BUF, THREE_STATE = FALSE
+
+# Data out
+PORT a1 = "", VEC = [7:0], DIR = O
+PORT a2 = "", VEC = [7:0], DIR = O
+PORT a3 = "", VEC = [7:0], DIR = O
+PORT a4 = "", VEC = [7:0], DIR = O
+PORT b1 = "", VEC = [7:0], DIR = O
+PORT b2 = "", VEC = [7:0], DIR = O
+PORT b3 = "", VEC = [7:0], DIR = O
+PORT b4 = "", VEC = [7:0], DIR = O
+PORT c1 = "", VEC = [7:0], DIR = O
+PORT c2 = "", VEC = [7:0], DIR = O
+PORT c3 = "", VEC = [7:0], DIR = O
+PORT c4 = "", VEC = [7:0], DIR = O
+PORT d1 = "", VEC = [7:0], DIR = O
+PORT d2 = "", VEC = [7:0], DIR = O
+PORT d3 = "", VEC = [7:0], DIR = O
+PORT d4 = "", VEC = [7:0], DIR = O
+PORT e1 = "", VEC = [7:0], DIR = O
+PORT e2 = "", VEC = [7:0], DIR = O
+PORT e3 = "", VEC = [7:0], DIR = O
+PORT e4 = "", VEC = [7:0], DIR = O
+PORT f1 = "", VEC = [7:0], DIR = O
+PORT f2 = "", VEC = [7:0], DIR = O
+PORT f3 = "", VEC = [7:0], DIR = O
+PORT f4 = "", VEC = [7:0], DIR = O
+PORT g1 = "", VEC = [7:0], DIR = O
+PORT g2 = "", VEC = [7:0], DIR = O
+PORT g3 = "", VEC = [7:0], DIR = O
+PORT g4 = "", VEC = [7:0], DIR = O
+PORT h1 = "", VEC = [7:0], DIR = O
+PORT h2 = "", VEC = [7:0], DIR = O
+PORT h3 = "", VEC = [7:0], DIR = O
+PORT h4 = "", VEC = [7:0], DIR = O
+
+# Reset
+PORT reset = "", DIR = I
+
+# Control
+PORT iserdes_bitslip = "", VEC = [7:0], DIR = I
+PORT delay_rst = "", VEC = [63:0], DIR = I
+PORT delay_tap = "", VEC = [4:0], DIR = I
+
+# Snap
+PORT snap_req  = "",              DIR = I
+PORT snap_we   = "",              DIR = O
+PORT snap_addr = "", VEC = [9:0], DIR = O
+
+# Outputs to adc16_controller
+PORT locked     = "", VEC = [1:0], DIR = O
+PORT roach2_rev = "", VEC = [1:0], DIR = O
+PORT zdok_rev   = "", VEC = [1:0], DIR = O
+PORT num_units  = "", VEC = [3:0], DIR = O
+
+END

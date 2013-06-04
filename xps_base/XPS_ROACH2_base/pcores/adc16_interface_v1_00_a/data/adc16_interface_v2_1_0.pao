@@ -1,0 +1,5 @@
+
+lib adc16_interface_v1_00_a ADC_ISERDES.vhd vhdl
+lib adc16_interface_v1_00_a ADC_MMCM.vhd vhdl
+lib adc16_interface_v1_00_a adc16_interface.vhd vhdl
+lib adc16_interface_v1_00_a adc_unit.vhd vhdl

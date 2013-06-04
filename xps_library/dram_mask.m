@@ -19,27 +19,12 @@
 %   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function dram_mask(myname, use_sim, wide_data)
+function dram_mask(myname, wide_data)
 
 set_param([myname,'/convert_data_in'], 'arith_type', get_param(myname,'arith_type'));
 set_param([myname,'/convert_data_in'], 'bin_pt', num2str(get_param(myname,'bin_pt')));
 set_param([myname,'/force_rd_dout'], 'arith_type', get_param(myname,'arith_type'));
 set_param([myname,'/force_rd_dout'], 'bin_pt', num2str(get_param(myname,'bin_pt')));
-
-if strcmp(use_sim, 'on')
-    depth=length(regexp(myname,'/'));
-    str='';
-    for i=0:depth
-        str=[str,'../'];
-    end
-    str=[str,'ModelSim'];
-    set_param([myname, '/sim_wrapper/dram_sim'], 'engine_block', 'ModelSim');
-    set_param([myname, '/sim_wrapper/dram_sim'], 'sim_method', 'External co-simulator');
-    set_param([myname, '/sim_wrapper/dram_sim'], 'engine_block', str);
-else
-    set_param([myname, '/sim_wrapper/dram_sim'], 'engine_block', 'ModelSim');
-    set_param([myname, '/sim_wrapper/dram_sim'], 'sim_method', 'Inactive');
-end
 
 if strcmp(get_param(myname, 'wide_data'), 'on')
     set_param([myname,'/convert_data_in'],'n_bits', '288');

@@ -44,7 +44,7 @@ s.termtype = get_param(blk_name,'termination');
 s.single_ended = get_param(blk_name,'use_single_ended');
 b = class(s,'xps_gpio',blk_obj);
 
-use_diffio = ~isempty(strmatch(s.io_group, {'zdok0', 'zdok1', 'mdr', 'qsh'})) & strcmp(s.single_ended, 'off');
+use_diffio = ~isempty(strmatch(s.io_group, {'zdok0', 'zdok1', 'mdr', 'qsh', 'sync_in', 'sync_out'})) & strcmp(s.single_ended, 'off');
 
 if ~isempty(strmatch(s.termtype, {'Pullup', 'Pulldown'}))
     termination = s.termtype;

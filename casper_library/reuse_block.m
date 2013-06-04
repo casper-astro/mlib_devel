@@ -4,6 +4,10 @@
 %   http://seti.ssl.berkeley.edu/casper/                                      %
 %   Copyright (C) 2006 David MacMahon, Aaron Parsons                          %
 %                                                                             %
+%   MeerKAT Radio Telescope Project                                           %
+%   www.kat.ac.za                                                             %
+%   Copyright (C) 2013 Andrew Martens (meerKAT)                               %
+%                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
 %   the Free Software Foundation; either version 2 of the License, or         %
@@ -34,49 +38,83 @@ function reuse_block(blk, name, refblk, varargin)
 % refblk = the library block to instantiate
 % varargin = {'varname', 'value', ...} pairs
 
-existing_blk = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
+% Wrap whole function in try/catch
+try
+
+existing_blks = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
   'SearchDepth', 1, 'Name', name);
 
 % add block straight away if does not yet exist
-if isempty(existing_blk),
+if isempty(existing_blks)
   add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
 
-%if the block with that name does exist
-else,
+% else if multiple block with that name exist
+elseif length(existing_blks) > 1
+  error('casper:MultipleBlocksForName', ...
+        'More than one block in "%s" has name "%s"', blk, name);
 
+% else, a block with that name does exist
+else
+  existing_blk = existing_blks{1};
+  
   %check Link status
   link_status = get_param(existing_blk, 'StaticLinkStatus');
  
   %inactive link (link disabled but not broken) so get AncestorBlock
   if strcmp(link_status, 'inactive'),
     source = get_param(existing_blk, 'AncestorBlock');
+
   %resolved link (link in place) so get ReferenceBlock
   elseif strcmp(link_status, 'resolved'),
     source = get_param(existing_blk, 'ReferenceBlock'); 
   
   %no link (broken link, never existed, or built-in) so get block type 
   elseif strcmp(link_status, 'none'),
-
     block_type = get_param(existing_blk, 'BlockType');
-    %if unlinked and not built-in then force replacement
+
+    %if unlinked  
     if strcmp(block_type, 'SubSystem') || strcmp(block_type, 'S-Function'),
+      clog([name,': built-in/',block_type,' so forcing replacement'], 'reuse_block_debug');
       source = '';
     else
-      %assuming built-in so convert type to lower for comparison
-      block_type = lower(block_type);
+      %assuming built-in
       source = strcat('built-in/',block_type);
     end
-  else
+  else,
+    clog([name,' not a library block and not built-in so force replace'], 'reuse_block_debug');
     source = '';
   end
+
+  % If source is a cell, take its first element so we can log it
+  if iscell(source)
+    % TODO Warn if length(source) > 1?
+    source = source{1};
+  end
+
+  % Change newlines in source to spaces
+  source = strrep(source, char(10), ' ');
   
-  if strcmp(source, lower(refblk)),
-    clog([name,' of same type so setting parameters'], 'reuse_block_debug');
+  % Do case-insensitive string comparison
+  if strcmpi(source, refblk),
+    msg = sprintf('%s is already a "%s" so just setting parameters', name, source);
+    clog(msg, {'reuse_block_debug', 'reuse_block_reuse'});
     set_param([blk,'/',name], varargin{:});
   else,
-    clog([name,' of different type so replacing'], 'reuse_block_debug');
-    delete_block([blk,'/',name]);
-    add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+    if evalin('base','exist(''casper_force_reuse_block'')') ...
+    && evalin('base','casper_force_reuse_block')
+      msg = sprintf('%s is a "%s" and want "%s" but reuse is being forced', name, source, refblk);
+      % Log as reuse_block_replace even though reuse is being forced
+      clog(msg, {'reuse_block_debug', 'reuse_block_replace'});
+      set_param([blk,'/',name], varargin{:});
+    else
+      msg = sprintf('%s is a "%s" but want "%s" so replacing', name, source, refblk);
+      clog(msg, {'reuse_block_debug', 'reuse_block_replace'});
+      delete_block([blk,'/',name]);
+      add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+    end
   end
-end
-
+end % if isempty(existing_blk)
+catch ex
+    dump_and_rethrow(ex)
+end % try/catch
+end % function

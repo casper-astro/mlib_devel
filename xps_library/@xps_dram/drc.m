@@ -23,7 +23,6 @@
 function [result,msg] = drc(blk_obj, xps_objs)
 result = 0;
 msg = '';
-
 for i=1:length(xps_objs)
 
 	try

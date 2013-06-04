@@ -1,4 +1,4 @@
-function adc_overflow_detector_init(cur_block_name, varargin)
+function of_detect_bus_init(cur_block_name, varargin)
 
 defaults = {};
 if same_state(cur_block_name, 'defaults', defaults, varargin{:}), return, end
@@ -50,5 +50,6 @@ end
 add_line(cur_block_name, 'Add/1', 'overflow/1');
 
 clean_blocks(cur_block_name);
+save_state(cur_block_name, 'defaults', defaults, varargin{:});
    
 end

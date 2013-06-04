@@ -25,8 +25,11 @@ function delete_lines(cursys)
 %
 % delete_lines(cursys)
 
-lines = get_param(cursys, 'Lines');
-for i=1:length(lines),
-    delete_line(lines(i).Handle);
+try
+    lines = get_param(cursys, 'Lines');
+    for k=1:length(lines),
+        delete_line(lines(k).Handle);
+    end
+catch ex
+    dump_and_rethrow(ex);
 end
-

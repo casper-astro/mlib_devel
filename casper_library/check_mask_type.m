@@ -21,7 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function check_mask_type(blk,typename)
-% Errors out if mask type is incorrect.
+% Dumps/throws exception if mask type is incorrect.
 %
 % check_mask_type(blk,typename)
 %
@@ -30,6 +30,9 @@ function check_mask_type(blk,typename)
 
 masktype = get_param(blk, 'MaskType');
 if ~strcmp(masktype, typename),
-    s = sprintf('Mask type of selected block (%s) does not match expected type (%s)', masktype, typename);
-    error(s);
+    ex = MException('casper:MaskTypeMismatch', ...
+        'Mask type of selected block (%s) does not match expected type (%s)', ...
+        masktype, typename);
+    dump_exception(ex);
+    throw(ex);
 end

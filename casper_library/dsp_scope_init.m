@@ -15,19 +15,18 @@ delete_lines(cur_block_name);
 set_param([cur_block_name, '/sel'], 'NumBits', num2str(ceil( log2(n_inputs))) );
 set_param([cur_block_name, '/sel'], 'tsamp', num2str(1/n_inputs) );
 set_param([cur_block_name, '/switch'], 'Inputs', num2str(n_inputs));
-set_param([cur_block_name, '/uncram'], 'num_slice', num2str(n_inputs));
-set_param([cur_block_name, '/uncram'], 'slice_width', num2str(slice_width));
-set_param([cur_block_name, '/uncram'], 'bin_pt', num2str(bin_pt));
-set_param([cur_block_name, '/uncram'], 'arith_type', num2str(arith_type));
-add_line(cur_block_name, 'in/1', 'uncram/1');
+set_param([cur_block_name, '/bus_expand'], 'outputNum', num2str(n_inputs));
+set_param([cur_block_name, '/bus_expand'], 'outputWidth', num2str(slice_width));
+set_param([cur_block_name, '/bus_expand'], 'outputBinaryPt', num2str(bin_pt));
+set_param([cur_block_name, '/bus_expand'], 'outputArithmeticType', num2str(arith_type));
+add_line(cur_block_name, 'in/1', 'bus_expand/1');
 add_line(cur_block_name, 'switch/1', 'out/1');
 add_line(cur_block_name, 'sel/1', 'switch/1');
 for k=1:n_inputs,
-    add_line(cur_block_name, ['uncram/', num2str(k)], ['switch/', num2str(k+1)]);
+    add_line(cur_block_name, ['bus_expand/', num2str(k)], ['switch/', num2str(k+1)]);
 end
     
 % clean_blocks(cur_block_name);
-
-
+save_state(cur_block_name, 'defaults', defaults, varargin{:});
    
 end

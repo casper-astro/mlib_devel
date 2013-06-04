@@ -23,7 +23,6 @@
 
 lib_block_name = 'adc083000';
 fprintf('Running mask script for %s\n', lib_block_name);
-load_system('xbsBasic_r4');
 cursys = gcb;
 disp(cursys)
 
@@ -218,7 +217,7 @@ for k=1:length(portnames),
         gateway_in_name = [gateway_in_name, toks{1}{1}, '_user_', toks{1}{2}];
     end
     
-    reuse_block(cursys, gateway_in_name, 'xbsBasic_r4/Gateway In', ...
+    reuse_block(cursys, gateway_in_name, 'xbsIndex_r4/Gateway In', ...
         'Position', gateway_in_pos, ...
         'n_bits', num2str( portwidths(k) ), ...
         'bin_pt', num2str( 0 ), ...

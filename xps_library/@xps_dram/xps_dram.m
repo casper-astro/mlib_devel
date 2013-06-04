@@ -23,7 +23,7 @@
 function b = xps_dram(blk_obj)
 
 if ~isa(blk_obj,'xps_block')
-    error('XPS_SRAM class requires a xps_block class object');
+    error('XPS_DRAM class requires a xps_block class object');
 end
 
 if ~strcmp(get(blk_obj,'type'),'xps_dram')
@@ -42,10 +42,18 @@ s.wide_data   = num2str(strcmp(get_param(blk_name, 'wide_data'),   'on'));
 s.bram_fifos  = num2str(strcmp(get_param(blk_name, 'bram_fifos'),  'on'));
 s.disable_tag = num2str(strcmp(get_param(blk_name, 'disable_tag'), 'on'));
 s.use_sniffer = num2str(strcmp(get_param(blk_name, 'use_sniffer'), 'on')); 
-
+s.dimm = 1; %only one dimm on ROACH and ROACH2. BEE2 support removed.
 s.hw_sys   = xsg_hw_sys;
+s.clk_freq = str2num(get_param(blk_name,'ip_clock'));
 
 b = class(s, 'xps_dram', blk_obj);
+% IP name
+%b = set(b, 'ip_name', 'opb_dram_sniffer');
+% opb bus offset
+%b = set(b, 'opb_address_offset', hex2dec('100'));
+%b = set(b, 'plb_address_offset', 0);
+%number of hard-coded opb0 interfaces
+%b = set(b, 'opb0_devices', 2); %data and control interfaces on sniffer
 
 % interfaces
 interfaces.DDR2_USER = ['ddr2_user_dimm', s.dimm, '_async'];

@@ -1,0 +1,74 @@
+BEGIN opb_adc16_controller
+
+## changed to work with opb_adc16_controller,  jama 2012
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = MIXED
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION ARCH_SUPPORT_MAP = (VIRTEX5=DEVELOPMENT, VIRTEX5SX=DEVELOPMENT, VIRTEX6SX=DEVELOPMENT)
+OPTION DWIDTH = 32
+OPTION AWIDTH = 32
+OPTION NUM_WRITE_ENABLES = 4
+OPTION ADDR_SLICE = 29
+
+## Bus Interfaces
+BUS_INTERFACE BUS = SOPB, BUS_STD = OPB, BUS_TYPE = SLAVE
+
+## Generadc for VHDL or Parameters for Verilog
+PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x100, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
+PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR
+PARAMETER C_OPB_AWIDTH = 32, DT = INTEGER, BUS = SOPB
+PARAMETER C_OPB_DWIDTH = 32, DT = INTEGER, BUS = SOPB
+PARAMETER C_FAMILY = virtex5, DT = STRING
+
+## Ports
+######################################
+## OPB Bus signals
+######################################
+PORT OPB_Clk = "", DIR = I, SIGIS = Clk, BUS = SOPB
+PORT OPB_Rst = OPB_Rst, DIR = I, SIGIS = Rst, BUS = SOPB
+PORT Sl_DBus = Sl_DBus, DIR = O, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
+PORT Sl_errAck = Sl_errAck, DIR = O, BUS = SOPB
+PORT Sl_retry = Sl_retry, DIR = O, BUS = SOPB
+PORT Sl_toutSup = Sl_toutSup, DIR = O, BUS = SOPB
+PORT Sl_xferAck = Sl_xferAck, DIR = O, BUS = SOPB
+PORT OPB_ABus = OPB_ABus, DIR = I, VEC = [0:(C_OPB_AWIDTH-1)], BUS = SOPB
+PORT OPB_BE = OPB_BE, DIR = I, VEC = [0:((C_OPB_DWIDTH/8)-1)], BUS = SOPB
+PORT OPB_DBus = OPB_DBus, DIR = I, VEC = [0:(C_OPB_DWIDTH-1)], BUS = SOPB
+PORT OPB_RNW = OPB_RNW, DIR = I, BUS = SOPB
+PORT OPB_select = OPB_select, DIR = I, BUS = SOPB
+PORT OPB_seqAddr = OPB_seqAddr, DIR = I, BUS = SOPB
+
+######################################
+## configuration signals to ADC 0
+######################################
+  
+PORT adc0_adc3wire_sclk   = "", DIR = O
+PORT adc0_adc3wire_sdata  = "", DIR = O
+PORT adc0_adc3wire_csn1   = "", DIR = O
+PORT adc0_adc3wire_csn2   = "", DIR = O
+PORT adc0_adc3wire_csn3   = "", DIR = O
+PORT adc0_adc3wire_csn4   = "", DIR = O
+PORT adc1_adc3wire_sclk   = "", DIR = O
+PORT adc1_adc3wire_sdata  = "", DIR = O
+PORT adc1_adc3wire_csn1   = "", DIR = O
+PORT adc1_adc3wire_csn2   = "", DIR = O
+PORT adc1_adc3wire_csn3   = "", DIR = O
+PORT adc1_adc3wire_csn4   = "", DIR = O
+
+PORT adc16_reset   = "", DIR = O
+PORT adc16_iserdes_bitslip   = "", DIR = O, VEC = [7:0]
+
+PORT adc16_delay_rst   = "", DIR = O, VEC = [63:0]
+PORT adc16_delay_tap   = "", DIR = O, VEC = [4:0]
+
+PORT adc16_snap_req   = "", DIR = O
+
+PORT adc16_locked     = "", DIR = I, VEC = [1:0]
+PORT adc16_roach2_rev = "", DIR = I, VEC = [1:0]
+PORT adc16_zdok_rev   = "", DIR = I, VEC = [1:0]
+PORT adc16_num_units  = "", DIR = I, VEC = [3:0]
+
+END

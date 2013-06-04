@@ -21,15 +21,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function remove_all_blks(sys)
-blks = get_param(sys,'blocks');
-lines = get_param(sys,'lines');
-for i = 1:length(blks)
-    switch get_param([sys,'/',blks{i}],'BlockType')
-        case {'Inport' 'Outport'}
-        otherwise
-            delete_block([sys,'/',blks{i}]);
-    end
-end
-for i = 1:length(lines)
-    delete_line(lines(i).Handle);
-end
+
+% Wrap whole function in try/catch
+try
+
+  blks = get_param(sys,'blocks');
+  lines = get_param(sys,'lines');
+  for i = 1:length(blks)
+      switch get_param([sys,'/',blks{i}],'BlockType')
+          case {'Inport' 'Outport'}
+          otherwise
+              delete_block([sys,'/',blks{i}]);
+      end
+  end
+  for i = 1:length(lines)
+      delete_line(lines(i).Handle);
+  end
+catch ex
+    dump_and_rethrow(ex)
+end % try/catch
