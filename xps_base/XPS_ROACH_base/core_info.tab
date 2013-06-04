@@ -12,5 +12,5 @@ sys_clkcounter      3       10        4
 #IF# strcmp(get(b,'type'),'xps_dram')#dram_memory         3  4000000  4000000
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_memory         3  2000000  800000
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_memory         3  2800000  800000
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_ctrl           3  30000    100
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_ctrl           3  30100    100
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_ctrl           3  70000    10000
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_ctrl           3  80000    10000
