@@ -34,7 +34,9 @@ sim_sync_period = scale * sim_acc_len * pfb_fir_taps * fft_size * lcm_reorder / 
 % fprintf( 'Generation sync period set to %d\n', gen_sync_period );
 
 % Update prameters
-set_param([blk, '/sync_period_const'], 'const', num2str(sim_sync_period));
+% Set constant to compare counter to
+% Set to (sim_sync_period-2) since counter starts at 0, and comparator has one clock cycle latency
+set_param([blk, '/sync_period_const'], 'const', num2str(sim_sync_period-2));
 
 % % Update parameters
 % reuse_block( blk, 'sim_sync_period', 'xbsBasic_r4/Constant', 'Position', [385, 123, 510, 147], 'n_bits', num2str(32), 'bin_pt', num2str(0), 'const', num2str(sim_sync_period));
