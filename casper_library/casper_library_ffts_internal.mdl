@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jun 05 13:41:10 2013"
-  RTWModifiedTimeStamp	  292340417
-  ModelVersionFormat	  "1.%<AutoIncrement:19>"
+  LastModifiedDate	  "Wed Jun 05 14:06:13 2013"
+  RTWModifiedTimeStamp	  292341655
+  ModelVersionFormat	  "1.%<AutoIncrement:20>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -590,7 +590,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_internal"
-    Location		    [49, 170, 725, 933]
+    Location		    [15, 51, 739, 1049]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -641,7 +641,7 @@ Library {
       MaskTabNameString	      "Basic,Basic,Latency,Latency,Latency,Implementation,Implementation"
       System {
 	Name			"bi_real_unscr_2x"
-	Location		[12, 45, 742, 840]
+	Location		[12, 45, 790, 1075]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -693,7 +693,7 @@ Library {
       MaskTabNameString	      "Basic,Basic,Latency,Latency,Latency,Implementation,Implementation,Implementation"
       System {
 	Name			"bi_real_unscr_4x"
-	Location		[12, 45, 1097, 1052]
+	Location		[12, 45, 1145, 1287]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -739,7 +739,7 @@ Library {
       MaskValueString	      "0|2|off"
       System {
 	Name			"biplex_cplx_unscrambler"
-	Location		[473, 48, 1497, 950]
+	Location		[439, 45, 1511, 1182]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -758,7 +758,7 @@ Library {
       BlockType		      SubSystem
       Name		      "hilbert"
       Ports		      []
-      Position		      [255, 21, 320, 64]
+      Position		      [250, 26, 320, 74]
       UserDataPersistent      on
       UserData		      "DataTag3"
       MinAlgLoopOccurrences   off
@@ -770,24 +770,26 @@ Library {
       MaskType		      "hilbert"
       MaskDescription	      "FFT internal block.\n\nComputes (a+b*)/2 and (a-b*)/2i.\n\nIf a = w + ix and b = y + iz, "
       "then: \na+b = (w+y)/2 + i(x-z)/2\na-b = (x+z)/2 + i(y-w)/2"
-      MaskPromptString	      "Number simultaneous inputs|Bit Wdith|Add Latency|Convert Latency|Miscellaneous input"
-      MaskStyleString	      "edit,edit,edit,edit,checkbox"
-      MaskVariables	      "n_inputs=@1;BitWidth=@2;add_latency=@3;conv_latency=@4;misc=&5;"
-      MaskTunableValueString  "on,on,on,on,on"
-      MaskCallbackString      "||||"
-      MaskEnableString	      "on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on"
+      MaskPromptString	      "Number simultaneous inputs|Bit Width|Binary point in |Add Latency|Convert Latency|Miscel"
+      "laneous input"
+      MaskStyleString	      "edit,edit,edit,edit,edit,checkbox"
+      MaskVariables	      "n_inputs=@1;BitWidth=@2;bin_pt_in=@3;add_latency=@4;conv_latency=@5;misc=&6;"
+      MaskTunableValueString  "on,on,on,on,on,on"
+      MaskCallbackString      "|||||"
+      MaskEnableString	      "on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on"
       MaskInitialization      "hilbert_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'BitWidth', BitWidth, ...\n  "
-      "  'add_latency', add_latency, ...\n    'conv_latency', conv_latency, ...\n    'misc', misc);"
+      "  'bin_pt_in', bin_pt_in, ...\n    'add_latency', add_latency, ...\n    'conv_latency', conv_latency, ...\n    '"
+      "misc', misc);"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|18|1|1|off"
+      MaskValueString	      "0|18|17|1|1|off"
       System {
 	Name			"hilbert"
-	Location		[495, 119, 1580, 736]
+	Location		[527, 133, 1618, 777]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -806,7 +808,7 @@ Library {
       BlockType		      SubSystem
       Name		      "hilbert_dsp48e"
       Ports		      [2, 2]
-      Position		      [255, 88, 320, 132]
+      Position		      [250, 93, 320, 142]
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -830,7 +832,7 @@ Library {
       MaskValueString	      "18|2"
       System {
 	Name			"hilbert_dsp48e"
-	Location		[589, 45, 1289, 775]
+	Location		[555, 45, 1303, 1010]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1141,7 +1143,7 @@ Library {
 	  MaskValueString	  "BitWidth|BitWidth-1"
 	  System {
 	    Name		    "c_to_ri0"
-	    Location		    [630, 45, 996, 703]
+	    Location		    [596, 45, 1010, 938]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1371,7 +1373,7 @@ Library {
 	  MaskValueString	  "BitWidth|BitWidth-1"
 	  System {
 	    Name		    "c_to_ri1"
-	    Location		    [630, 45, 996, 703]
+	    Location		    [596, 45, 1010, 938]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1613,7 +1615,7 @@ Library {
 	  "ut Type"
 	  System {
 	    Name		    "cadd"
-	    Location		    [226, 45, 1342, 694]
+	    Location		    [192, 45, 1356, 929]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2820,7 +2822,7 @@ Library {
 	  "ut Type"
 	  System {
 	    Name		    "csub"
-	    Location		    [226, 45, 1342, 694]
+	    Location		    [192, 45, 1356, 929]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4003,7 +4005,7 @@ Library {
 	  MaskIconUnits		  "autoscale"
 	  System {
 	    Name		    "ri_to_c0"
-	    Location		    [444, 45, 815, 649]
+	    Location		    [410, 45, 829, 884]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4177,7 +4179,7 @@ Library {
 	  MaskIconUnits		  "autoscale"
 	  System {
 	    Name		    "ri_to_c1"
-	    Location		    [444, 45, 815, 649]
+	    Location		    [410, 45, 829, 884]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4528,7 +4530,7 @@ Library {
       MaskTabNameString	      "Basic,Basic,Latency,Latency,Latency"
       System {
 	Name			"mirror_spectrum"
-	Location		[12, 45, 647, 1089]
+	Location		[12, 45, 695, 1324]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -6160,22 +6162,25 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag3
-    Data		    "  %)30     .      4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ $-\"2 8.    < 0  "
-    " 8    (     @         %    \"     $    !     0         %  0 #0    $   !.    9&5F875L=',      &Y?:6YP=71S      !\":"
-    "717:61T:       861D7VQA=&5N8WD  &-O;G9?;&%T96YC>0!M:7-C               .    J (   8    (     0         %    \"     "
-    "$    *     0         .    .     8    (    !          %    \"     $    (     0         0    \"    &Y?:6YP=71S#@   #"
-    "@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    $          "
-    "4    (     0    @    !         !     (    0FET5VED=&@.    .     8    (    !@         %    \"     $    !     0     "
-    "    )    \"            #) #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !A9&1?;&%T96"
-    "YC>0      #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !     !@    "
-    "@    $          4    (     0    P    !         !     ,    8V]N=E]L871E;F-Y      X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            \\#\\.    ,     8    (    !          %    \"     $    $     0     "
-    "    0  0 ;6ES8PX    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    \"     8 "
-    "        !0    @    !     0    $         \"0    @               X    X    !@    @    &          4    (     0    $  "
-    "  !          D    (            ,D .    .     8    (    !@         %    \"     $    !     0         )    \"        "
-    "    / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    P    !@    @  "
-    "  $          4    (     0    ,    !         !   P!O9F8 "
+    Data		    "  %)30     .    V 4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !_R-P,.    2 4   "
+    "8    (     @         %    \"     $    !     0         %  0 #0    $   !;    9&5F875L=',      &Y?:6YP=71S      !\":7"
+    "17:61T:       8FEN7W!T7VEN     &%D9%]L871E;F-Y  !C;VYV7VQA=&5N8WD ;6ES8P                  #@   # #   &    \"     $"
+    "         !0    @    !    #     $         #@   #@    &    \"     0         !0    @    !    \"     $         $     @"
+    "   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8"
+    "    (    !          %    \"     $    (     0         0    \"    $)I=%=I9'1H#@   #@    &    \"     8         !0    "
+    "@    !     0    $         \"0    @            R0 X   !     !@    @    $          4    (     0    D    !         ! "
+    "    )    8FEN7W!T7VEN          X    X    !@    @    &          4    (     0    $    !          D    (            ,"
+    "4 .    0     8    (    !          %    \"     $    +     0         0    \"P   &%D9%]L871E;F-Y       .    .     8  "
+    "  (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0         !0    @ "
+    "   !    #     $         $     P   !C;VYV7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $  "
+    "       \"0    @           #P/PX    P    !@    @    $          4    (     0    0    !         !  ! !M:7-C#@   #    "
+    " &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@         %    \"     $   "
+    " !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @  "
+    "          R0 X    X    !@    @    &          4    (     0    $    !          D    (            ,4 .    .     8    "
+    "(    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @   "
+    " !     0    $         \"0    @           #P/PX    P    !@    @    $          4    (     0    ,    !         !   P!"
+    "O9F8 "
   }
   DataRecord {
     Tag			    DataTag4
