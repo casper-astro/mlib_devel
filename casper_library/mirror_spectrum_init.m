@@ -1,252 +1,152 @@
-function mirror_spectrum_init(FFTSize, input_bitwidth, bram_latency, negate_latency, negate_mode)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%   SKASA                                                                     %
+%   www.kat.ac.za                                                             %
+%   Copyright (C) Andrew Martens 2013                                         %
+%                                                                             %
+%   This program is free software; you can redistribute it and/or modify      %
+%   it under the terms of the GNU General Public License as published by      %
+%   the Free Software Foundation; either version 2 of the License, or         %
+%   (at your option) any later version.                                       %
+%                                                                             %
+%   This program is distributed in the hope that it will be useful,           %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             %
+%   GNU General Public License for more details.                              %
+%                                                                             %
+%   You should have received a copy of the GNU General Public License along   %
+%   with this program; if not, write to the Free Software Foundation, Inc.,   %
+%   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function mirror_spectrum_init(blk, varargin)
+
+  clog('entering mirror_spectrum_init', {'trace', 'mirror_spectrum_init_debug'});
+
+  % Set default vararg values.
+  defaults = { ...
+    'n_inputs', 1, ...
+    'FFTSize', 8, ...
+    'input_bitwidth', 18, ...
+    'bin_pt_in', 'input_bitwidth-1', ...
+    'bram_latency', 2, ...
+    'negate_latency', 1, ...
+    'negate_mode', 'Logic', ...
+    'async', 'on', ...
+  };
+
+%  if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+  check_mask_type(blk, 'mirror_spectrum');
+  munge_block(blk, varargin{:});
+
+  % Retrieve values from mask fields.
+  n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
+  input_bitwidth = get_var('input_bitwidth', 'defaults', defaults, varargin{:});
+  bin_pt_in = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
+  bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
+  negate_latency = get_var('negate_latency', 'defaults', defaults, varargin{:});
+  negate_mode = get_var('negate_mode', 'defaults', defaults, varargin{:});
+  async = get_var('async', 'defaults', defaults, varargin{:});
+
+  delete_lines(blk);
+
+  %default setup for library
+  if n_inputs == 0 | FFTSize == 0,
+    clean_blocks(blk);
+    save_state(blk, 'defaults', defaults, varargin{:});
+    clog('exiting mirror_spectrum_init',{'trace','mirror_spectrum_init_debug'});
+    return;
+  end
+
+  %
+  % sync and counter
+  %
+
+  reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [10 177 40 193]);
+
+  reuse_block(blk, 'sync_delay0', 'xbsIndex_r4/Delay', ...
+    'latency', num2str(bram_latency - 2 + 1 + negate_latency), 'Position', [65 174 100 196]);
+  add_line(blk, 'sync/1', 'sync_delay0/1');
+
+  reuse_block(blk, 'counter', 'xbsIndex_r4/Counter', ...
+          'rst', 'on', 'en', async, ...
+          'explicit_period', 'off', 'use_rpm', 'on', ...
+          'Position', [165 74 225 106]);
+  add_line(blk, 'sync_delay0/1', 'counter/1');
+
+  reuse_block(blk, 'constant', 'xbsIndex_r4/Constant', ...
+          'const', num2str(2^(FFTSize-1)), ...
+          'arith_type', 'Unsigned', 'n_bits', num2str(FFTSize), 'bin_pt', '0', ...
+          'explicit_period', 'on', 'period', '1', ...
+          'Position', [165 122 225 148]);
+
+  reuse_block(blk, 'relational', 'xbsIndex_r4/Relational', 'mode', 'a>b', 'Position', [245 69 285 156]);
+  add_line(blk, 'counter/1', 'relational/1');
+  add_line(blk, 'constant/1', 'relational/2');
+
+  reuse_block(blk, 'sync_delay1', 'xbsIndex_r4/Delay', 'latency', '2', 'Position', [410 172 450 198]);
+  add_line(blk, 'sync_delay0/1', 'sync_delay1/1');
+
+  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [480 177 510 193]);
+  add_line(blk, 'sync_delay1/1', 'sync_out/1');
+
+  %
+  % data
+  %
+
+  for index = 0:3,
+    reuse_block(blk, ['din',num2str(index)], 'built-in/Inport', ...
+      'Port', num2str((index+1)*2), 'Position', [10 310+(125*index) 40 325+(125*index)]);
+
+    reuse_block(blk, ['delay',num2str(index)], 'xbsIndex_r4/Delay', ...
+      'latency', num2str(bram_latency - 1 + 1 + negate_latency), 'Position', [65 307+(125*index) 100 329+(125*index)]);
+    add_line(blk, ['din',num2str(index),'/1'], ['delay',num2str(index),'/1']);
+    
+    reuse_block(blk, ['reo_in',num2str(index)], 'built-in/Inport', ...
+      'Port', num2str((index+1)*2+1), 'Position', [10 345+(125*index) 40 361+(125*index)]);
+    
+    %from original script (commit 8ea553 and earlier)
+    if strcmp(negate_mode, 'dsp48e'), cc_latency = 3;
+    else, cc_latency = negate_latency;
+    end
+    reuse_block(blk, ['complex_conj',num2str(index)], 'casper_library_misc/complex_conj', ...
+      'n_inputs', num2str(n_inputs), 'n_bits', num2str(input_bitwidth), ...
+      'bin_pt', num2str(bin_pt_in), 'latency', num2str(cc_latency), 'overflow', 'Wrap', ... %TODO Wrap really?
+      'Position', [65 343+(125*index) 100 363+(125*index)]);
+    add_line(blk, ['reo_in',num2str(index),'/1'], ['complex_conj',num2str(index),'/1']);
+
+    reuse_block(blk, ['mux',num2str(index)], 'xbsIndex_r4/Mux', ...
+      'precision', 'Full', 'latency', '1', 'Position', [410 266+(125*index) 445 370+(125*index)]);
+    add_line(blk, 'relational/1', ['mux',num2str(index),'/1']);
+    add_line(blk, ['delay',num2str(index),'/1'], ['mux',num2str(index),'/2']);
+    add_line(blk, ['complex_conj',num2str(index),'/1'], ['mux',num2str(index),'/3']);
+
+    reuse_block(blk, ['dout',num2str(index)], 'built-in/Outport', ...
+      'Port', num2str(index+1), 'Position', [480 310+(125*index) 510 325+(125*index)]);
+    add_line(blk, ['mux',num2str(index),'/1'], ['dout',num2str(index),'/1']);
+  end
+
+  if strcmp(async, 'on'),
+    reuse_block(blk, 'en', 'built-in/Inport', 'Port', '10', 'Position', [10 222 40 238]);
 
 
-%% inports
-sync = xInport('sync');
-din0 = xInport('din0');
-reo_in0 = xInport('reo_in0');
-din1 = xInport('din1');
-reo_in1 = xInport('reo_in1');
-din2 = xInport('din2');
-reo_in2 = xInport('reo_in2');
-din3 = xInport('din3');
-reo_in3 = xInport('reo_in3');
+    reuse_block(blk, 'en_delay0', 'xbsIndex_r4/Delay', ...
+      'latency', num2str(bram_latency - 1 + 1 + negate_latency), 'Position', [65 219 100 241]);
+    add_line(blk, 'en/1', 'en_delay0/1');
+    add_line(blk, 'en_delay0/1', 'counter/2');
 
-%% outports
-sync_out = xOutport('sync_out');
-dout0 = xOutport('dout0');
-dout1 = xOutport('dout1');
-dout2 = xOutport('dout2');
-dout3 = xOutport('dout3');
+    reuse_block(blk, 'en_delay1', 'xbsIndex_r4/Delay', 'latency', '1', 'Position', [410 217 450 243]);
+    add_line(blk, 'en_delay0/1', 'en_delay1/1');
+   
+    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '6', 'Position', [480 222 510 238]);
+    add_line(blk, 'en_delay1/1', 'dvalid/1');  
+  end
 
-input_bin_pt = input_bitwidth - 1;
+  % Delete all unconnected blocks.
+%  clean_blocks(blk);
 
-%% diagram
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Constant3
-Constant3_out1 = xSignal;
-Constant3 = xBlock(struct('source', 'Constant', 'name', 'Constant3'), ...
-                          struct('arith_type', 'Unsigned', ...
-                                 'const', 2^(FFTSize - 1), ...
-                                 'n_bits', FFTSize, ...
-                                 'bin_pt', 0, ...
-                                 'explicit_period', 'on'), ...
-                          {}, ...
-                          {Constant3_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Counter
-Delay1_out1 = xSignal;
-Counter_out1 = xSignal;
-Counter = xBlock(struct('source', 'Counter', 'name', 'Counter'), ...
-                        struct('n_bits', FFTSize, ...
-                               'rst', 'on', ...
-                               'explicit_period', 'off', ...
-                               'use_rpm', 'on'), ...
-                        {Delay1_out1}, ...
-                        {Counter_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Delay1
-Delay1 = xBlock(struct('source', 'Delay', 'name', 'Delay1'), ...
-                       struct('latency', bram_latency - 2 + 1 + negate_latency), ...
-                       {sync}, ...
-                       {Delay1_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Delay2
-Delay2 = xBlock(struct('source', 'Delay', 'name', 'Delay2'), ...
-                       struct('latency', 2), ...
-                       {Delay1_out1}, ...
-                       {sync_out});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Delay3
-Delay3_out1 = xSignal;
-Delay3 = xBlock(struct('source', 'Delay', 'name', 'Delay3'), ...
-                       struct('latency', bram_latency - 1 + 1 + negate_latency), ...
-                       {din0}, ...
-                       {Delay3_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Delay4
-Delay4_out1 = xSignal;
-Delay4 = xBlock(struct('source', 'Delay', 'name', 'Delay4'), ...
-                       struct('latency', bram_latency - 1 + 1 + negate_latency), ...
-                       {din1}, ...
-                       {Delay4_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Delay5
-Delay5_out1 = xSignal;
-Delay5 = xBlock(struct('source', 'Delay', 'name', 'Delay5'), ...
-                       struct('latency', bram_latency - 1 + 1 + negate_latency), ...
-                       {din2}, ...
-                       {Delay5_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Delay6
-Delay6_out1 = xSignal;
-Delay6 = xBlock(struct('source', 'Delay', 'name', 'Delay6'), ...
-                       struct('latency', bram_latency - 1 + 1 + negate_latency), ...
-                       {din3}, ...
-                       {Delay6_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Mux
-Relational_out1 = xSignal;
-complex_conj0_out1 = xSignal;
-Mux = xBlock(struct('source', 'Mux', 'name', 'Mux'), ...
-                    struct('latency', 1, ...
-                           'arith_type', 'Signed  (2''s comp)', ...
-                           'n_bits', 8, ...
-                           'bin_pt', 2), ...
-                    {Relational_out1, Delay3_out1, complex_conj0_out1}, ...
-                    {dout0});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Mux1
-complex_conj1_out1 = xSignal;
-Mux1 = xBlock(struct('source', 'Mux', 'name', 'Mux1'), ...
-                     struct('latency', 1, ...
-                            'arith_type', 'Signed  (2''s comp)', ...
-                            'n_bits', 8, ...
-                            'bin_pt', 2), ...
-                     {Relational_out1, Delay4_out1, complex_conj1_out1}, ...
-                     {dout1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Mux2
-complex_conj2_out1 = xSignal;
-Mux2 = xBlock(struct('source', 'Mux', 'name', 'Mux2'), ...
-                     struct('latency', 1, ...
-                            'arith_type', 'Signed  (2''s comp)', ...
-                            'n_bits', 8, ...
-                            'bin_pt', 2), ...
-                     {Relational_out1, Delay5_out1, complex_conj2_out1}, ...
-                     {dout2});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Mux3
-complex_conj3_out1 = xSignal;
-Mux3 = xBlock(struct('source', 'Mux', 'name', 'Mux3'), ...
-                     struct('latency', 1, ...
-                            'arith_type', 'Signed  (2''s comp)', ...
-                            'n_bits', 8, ...
-                            'bin_pt', 2), ...
-                     {Relational_out1, Delay6_out1, complex_conj3_out1}, ...
-                     {dout3});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/Relational
-Relational = xBlock(struct('source', 'Relational', 'name', 'Relational'), ...
-                           struct('mode', 'a>b'), ...
-                           {Counter_out1, Constant3_out1}, ...
-                           {Relational_out1});
-
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/complex_conj0
-complex_conj_config.source = str2func('complex_conj_init');
-complex_conj_config.name = 'complex_conj0';
-complex_conj_config.depend = {'complex_conj_init.m'};
-complex_conj0 = xBlock( complex_conj_config, {input_bitwidth, input_bin_pt, negate_latency, negate_mode}, ...
-    {reo_in0}, {complex_conj0_out1});
-
-complex_conj_config.name = 'complex_conj1';
-complex_conj1 = xBlock( complex_conj_config, {input_bitwidth, input_bin_pt, negate_latency, negate_mode}, ...
-    {reo_in1}, {complex_conj1_out1} );
-
-complex_conj_config.name = 'complex_conj2';
-complex_conj2 = xBlock( complex_conj_config, {input_bitwidth, input_bin_pt, negate_latency, negate_mode}, ...
-    {reo_in2}, {complex_conj2_out1});
-
-complex_conj_config.name = 'complex_conj3';
-complex_conj3 = xBlock( complex_conj_config, {input_bitwidth, input_bin_pt, negate_latency, negate_mode}, ...
-    {reo_in3}, {complex_conj3_out1});
-% complex_conj0_sub = complex_conj0(18, 17, negate_latency, 'logic');
-% complex_conj0_sub.bindPort({reo_in0}, {complex_conj0_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/complex_conj1
-% complex_conj1_sub = complex_conj1(18, 17, negate_latency, 'logic');
-% complex_conj1_sub.bindPort({reo_in1}, {complex_conj1_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/complex_conj2
-% complex_conj2_sub = complex_conj2(18, 17, negate_latency, 'logic');
-% complex_conj2_sub.bindPort({reo_in2}, {complex_conj2_out1});
-
-% block: single_pol/fft_wideband_real1/fft_biplex_real_4x0/bi_real_unscr_4x/mirror_spectrum1/complex_conj3
-% complex_conj3_sub = complex_conj3(18, 17, negate_latency, 'logic');
-% complex_conj3_sub.bindPort({reo_in3}, {complex_conj3_out1});
-
-% 
-% 
-% function xblock_obj = complex_conj0(bitwidth, bin_pt, latency, mode)
-% 
-% 
-% % Mask Initialization code
-% config.source = str2func('complex_conj_init');
-% 
-% config.depend = {'complex_conj_init.m'};
-% xblock_obj = xBlock( config, {bitwidth, bin_pt, latency, mode});
-% 
-% 
-% %% inports
-% 
-% %% outports
-% 
-% %% diagram
-% 
-% 
-% 
-% end
-% 
-% function xblock_obj = complex_conj1(bitwidth, bin_pt, latency, mode)
-% 
-% 
-% % Mask Initialization code
-% config.source = str2func('complex_conj_init');
-% 
-% config.depend = {'complex_conj_init.m'};
-% xblock_obj = xBlock( config, {bitwidth, bin_pt, latency, mode});
-% 
-% 
-% %% inports
-% 
-% %% outports
-% 
-% %% diagram
-% 
-% 
-% 
-% end
-% 
-% function xblock_obj = complex_conj2(bitwidth, bin_pt, latency, mode)
-% 
-% 
-% % Mask Initialization code
-% config.source = str2func('complex_conj_init');
-% 
-% config.depend = {'complex_conj_init.m'};
-% xblock_obj = xBlock( config, {bitwidth, bin_pt, latency, mode});
-% 
-% 
-% %% inports
-% 
-% %% outports
-% 
-% %% diagram
-% 
-% 
-% 
-% end
-% 
-% function xblock_obj = complex_conj3(bitwidth, bin_pt, latency, mode)
-% 
-% 
-% % Mask Initialization code
-% config.source = str2func('complex_conj_init');
-% 
-% config.depend = {'complex_conj_init.m'};
-% xblock_obj = xBlock( config, {bitwidth, bin_pt, latency, mode});
-% 
-% 
-% %% inports
-% 
-% %% outports
-% 
-% %% diagram
-% 
-% 
-% 
-% end
-
-end
-
+  % Save block state to stop repeated init script runs.
+  save_state(blk, 'defaults', defaults, varargin{:});
+end % mirror_spectrum_init
