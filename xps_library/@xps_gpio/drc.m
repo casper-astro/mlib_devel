@@ -25,7 +25,7 @@ result = 0;
 msg = '';
 
 if ~exist(blk_obj.hw_sys) | ~isstruct(blk_obj.hw_sys)
-    load hw_routes.mat;
+    hw_routes = load_hw_routes();
 end % ~exist(blk_obj.hw_sys) | ~isstruct(blk_obj.hw_sys)
 
 try

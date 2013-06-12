@@ -24,7 +24,7 @@ cursys = gcb;
 
 [hw_sys,io_group] = xps_get_hw_info(get_param(gcb,'io_group'));
 if ~exist(hw_sys) | ~isstruct(hw_sys)
-    load hw_routes.mat;
+    hw_routes = load_hw_routes();
 end
 
 try
