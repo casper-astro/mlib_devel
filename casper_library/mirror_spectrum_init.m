@@ -33,7 +33,7 @@ function mirror_spectrum_init(blk, varargin)
     'bram_latency', 2, ...
     'negate_latency', 1, ...
     'negate_mode', 'Logic', ...
-    'async', 'on', ...
+    'async', 'off', ...
   };
 
 %  if same_state(blk, 'defaults', defaults, varargin{:}), return, end
@@ -67,26 +67,28 @@ function mirror_spectrum_init(blk, varargin)
   reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [10 177 40 193]);
 
   reuse_block(blk, 'sync_delay0', 'xbsIndex_r4/Delay', ...
-    'latency', num2str(bram_latency - 2 + 1 + negate_latency), 'Position', [65 174 100 196]);
+    'latency', '1 + bram_latency + negate_latency', 'Position', [105 174 140 196]);
   add_line(blk, 'sync/1', 'sync_delay0/1');
 
   reuse_block(blk, 'counter', 'xbsIndex_r4/Counter', ...
+          'cnt_type', 'Free Running', 'operation', 'Up', 'start_count', '0', 'cnt_by_val', '1', ...
+          'arith_type', 'Unsigned', 'n_bits', 'FFTSize', 'bin_pt', '0', ...
           'rst', 'on', 'en', async, ...
           'explicit_period', 'off', 'use_rpm', 'on', ...
-          'Position', [165 74 225 106]);
+          'Position', [195 74 255 106]);
   add_line(blk, 'sync_delay0/1', 'counter/1');
 
   reuse_block(blk, 'constant', 'xbsIndex_r4/Constant', ...
           'const', num2str(2^(FFTSize-1)), ...
           'arith_type', 'Unsigned', 'n_bits', num2str(FFTSize), 'bin_pt', '0', ...
           'explicit_period', 'on', 'period', '1', ...
-          'Position', [165 122 225 148]);
+          'Position', [195 122 255 148]);
 
-  reuse_block(blk, 'relational', 'xbsIndex_r4/Relational', 'mode', 'a>b', 'Position', [245 69 285 156]);
+  reuse_block(blk, 'relational', 'xbsIndex_r4/Relational', 'mode', 'a>b', 'Position', [315 69 355 156]);
   add_line(blk, 'counter/1', 'relational/1');
   add_line(blk, 'constant/1', 'relational/2');
 
-  reuse_block(blk, 'sync_delay1', 'xbsIndex_r4/Delay', 'latency', '2', 'Position', [410 172 450 198]);
+  reuse_block(blk, 'sync_delay1', 'xbsIndex_r4/Delay', 'latency', '1', 'Position', [410 172 450 198]);
   add_line(blk, 'sync_delay0/1', 'sync_delay1/1');
 
   reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [480 177 510 193]);
@@ -101,7 +103,7 @@ function mirror_spectrum_init(blk, varargin)
       'Port', num2str((index+1)*2), 'Position', [10 310+(125*index) 40 325+(125*index)]);
 
     reuse_block(blk, ['delay',num2str(index)], 'xbsIndex_r4/Delay', ...
-      'latency', num2str(bram_latency - 1 + 1 + negate_latency), 'Position', [65 307+(125*index) 100 329+(125*index)]);
+      'latency', '1 + bram_latency + negate_latency', 'Position', [105 307+(125*index) 140 329+(125*index)]);
     add_line(blk, ['din',num2str(index),'/1'], ['delay',num2str(index),'/1']);
     
     reuse_block(blk, ['reo_in',num2str(index)], 'built-in/Inport', ...
@@ -114,7 +116,7 @@ function mirror_spectrum_init(blk, varargin)
     reuse_block(blk, ['complex_conj',num2str(index)], 'casper_library_misc/complex_conj', ...
       'n_inputs', num2str(n_inputs), 'n_bits', num2str(input_bitwidth), ...
       'bin_pt', num2str(bin_pt_in), 'latency', num2str(cc_latency), 'overflow', 'Wrap', ... %TODO Wrap really?
-      'Position', [65 343+(125*index) 100 363+(125*index)]);
+      'Position', [105 343+(125*index) 140 363+(125*index)]);
     add_line(blk, ['reo_in',num2str(index),'/1'], ['complex_conj',num2str(index),'/1']);
 
     reuse_block(blk, ['mux',num2str(index)], 'xbsIndex_r4/Mux', ...
@@ -124,7 +126,7 @@ function mirror_spectrum_init(blk, varargin)
     add_line(blk, ['complex_conj',num2str(index),'/1'], ['mux',num2str(index),'/3']);
 
     reuse_block(blk, ['dout',num2str(index)], 'built-in/Outport', ...
-      'Port', num2str(index+1), 'Position', [480 310+(125*index) 510 325+(125*index)]);
+      'Port', num2str(index+2), 'Position', [500 310+(125*index) 530 325+(125*index)]);
     add_line(blk, ['mux',num2str(index),'/1'], ['dout',num2str(index),'/1']);
   end
 
@@ -133,7 +135,7 @@ function mirror_spectrum_init(blk, varargin)
 
 
     reuse_block(blk, 'en_delay0', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(bram_latency - 1 + 1 + negate_latency), 'Position', [65 219 100 241]);
+      'latency', '1 + bram_latency + negate_latency', 'Position', [105 219 140 241]);
     add_line(blk, 'en/1', 'en_delay0/1');
     add_line(blk, 'en_delay0/1', 'counter/2');
 
