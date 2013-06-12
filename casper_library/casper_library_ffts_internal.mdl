@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 06 14:42:40 2013"
-  RTWModifiedTimeStamp	  292429979
-  ModelVersionFormat	  "1.%<AutoIncrement:22>"
+  LastModifiedDate	  "Wed Jun 12 14:28:35 2013"
+  RTWModifiedTimeStamp	  292947469
+  ModelVersionFormat	  "1.%<AutoIncrement:24>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -590,7 +590,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_internal"
-    Location		    [105, 58, 877, 1004]
+    Location		    [111, 150, 931, 864]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -641,7 +641,7 @@ Library {
       MaskTabNameString	      "Basic,Basic,Latency,Latency,Latency,Implementation,Implementation"
       System {
 	Name			"bi_real_unscr_2x"
-	Location		[12, 45, 838, 1310]
+	Location		[12, 45, 886, 1545]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -660,7 +660,7 @@ Library {
       BlockType		      SubSystem
       Name		      "bi_real_unscr_4x"
       Ports		      []
-      Position		      [15, 133, 100, 219]
+      Position		      [18, 139, 102, 226]
       BackgroundColor	      "gray"
       UserDataPersistent      on
       UserData		      "DataTag1"
@@ -672,37 +672,40 @@ Library {
       MaskHideContents	      off
       MaskType		      "bi_real_unscr_4x"
       MaskDescription	      "FFT internal block."
-      MaskPromptString	      "Size of FFT (2^?):|Sample Bit Width|Add Latency|Convert Latency|BRAM Latency|Use BlockRA"
-      "M for Map|Use BlockRAM for Delays|Use DSP48s for adders"
-      MaskStyleString	      "edit,edit,edit,edit,edit,checkbox,checkbox,checkbox"
-      MaskVariables	      "FFTSize=@1;n_bits=@2;add_latency=@3;conv_latency=@4;bram_latency=@5;bram_map=&6;bram_delays"
-      "=&7;dsp48_adders=&8;"
-      MaskTunableValueString  "on,on,on,on,on,off,off,off"
-      MaskCallbackString      "|||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on"
-      MaskInitialization      "bi_real_unscr_4x_init(gcb, ...\n    'FFTSize', FFTSize, ...\n    'n_bits', n_bits, ...\n"
-      "    'add_latency', add_latency, ...\n    'conv_latency', conv_latency, ...\n    'bram_latency', bram_latency, .."
-      ".\n    'bram_map', bram_map, ...\n    'bram_delays', bram_delays, ...\n    'dsp48_adders', dsp48_adders);"
+      MaskPromptString	      "Number simultaneous inputs (2*?)|Size of FFT (2^?):|Sample Bit Width|Sample binary point"
+      "|Add Latency|Convert Latency|BRAM Latency|Use BlockRAM for Map|Use BlockRAM for Delays|Use DSP48s for adders|Asy"
+      "nchonrous operation"
+      MaskStyleString	      "edit,edit,edit,edit,edit,edit,edit,checkbox,checkbox,checkbox,checkbox"
+      MaskVariables	      "n_inputs=@1;FFTSize=@2;n_bits=@3;bin_pt=@4;add_latency=@5;conv_latency=@6;bram_latency=@7;b"
+      "ram_map=&8;bram_delays=&9;dsp48_adders=&10;async=&11;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,off,off,off,on"
+      MaskCallbackString      "||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskInitialization      "bi_real_unscr_4x_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'FFTSize', FFTSize, "
+      "...\n    'n_bits', n_bits, ...\n    'bin_pt', bin_pt, ...\n    'add_latency', add_latency, ...\n    'conv_latenc"
+      "y', conv_latency, ...\n    'bram_latency', bram_latency, ...\n    'bram_map', bram_map, ...\n    'bram_delays', "
+      "bram_delays, ...\n    'dsp48_adders', dsp48_adders, ...\n    'async', async);"
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|18|1|1|2|off|off|off"
-      MaskTabNameString	      "Basic,Basic,Latency,Latency,Latency,Implementation,Implementation,Implementation"
+      MaskValueString	      "0|3|18|17|1|1|2|off|off|off|off"
+      MaskTabNameString	      "Basic,Basic,Basic,Basic,Latency,Latency,Latency,Implementation,Implementation,Implement"
+      "ation,Implementation"
       System {
 	Name			"bi_real_unscr_4x"
-	Location		[12, 45, 1193, 1522]
+	Location		[159, 0, 1680, 1025]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
@@ -739,7 +742,7 @@ Library {
       MaskValueString	      "0|2|off"
       System {
 	Name			"biplex_cplx_unscrambler"
-	Location		[405, 45, 1525, 1417]
+	Location		[371, 45, 1539, 1652]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -789,7 +792,7 @@ Library {
       MaskValueString	      "0|18|17|1|1|off"
       System {
 	Name			"hilbert"
-	Location		[493, 45, 1632, 924]
+	Location		[459, 45, 1646, 1159]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -832,7 +835,7 @@ Library {
       MaskValueString	      "18|2"
       System {
 	Name			"hilbert_dsp48e"
-	Location		[105, 58, 877, 1004]
+	Location		[71, 45, 891, 1226]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1147,7 +1150,7 @@ Library {
 	  MaskValueString	  "BitWidth|BitWidth-1"
 	  System {
 	    Name		    "c_to_ri0"
-	    Location		    [562, 45, 1024, 1173]
+	    Location		    [528, 45, 1038, 1408]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1377,7 +1380,7 @@ Library {
 	  MaskValueString	  "BitWidth|BitWidth-1"
 	  System {
 	    Name		    "c_to_ri1"
-	    Location		    [562, 45, 1024, 1173]
+	    Location		    [528, 45, 1038, 1408]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1619,7 +1622,7 @@ Library {
 	  "ut Type"
 	  System {
 	    Name		    "cadd"
-	    Location		    [158, 45, 1370, 1164]
+	    Location		    [124, 45, 1384, 1399]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2826,7 +2829,7 @@ Library {
 	  "ut Type"
 	  System {
 	    Name		    "csub"
-	    Location		    [158, 45, 1370, 1164]
+	    Location		    [124, 45, 1384, 1399]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4009,7 +4012,7 @@ Library {
 	  MaskIconUnits		  "autoscale"
 	  System {
 	    Name		    "ri_to_c0"
-	    Location		    [376, 45, 843, 1119]
+	    Location		    [342, 45, 857, 1354]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4183,7 +4186,7 @@ Library {
 	  MaskIconUnits		  "autoscale"
 	  System {
 	    Name		    "ri_to_c1"
-	    Location		    [376, 45, 843, 1119]
+	    Location		    [342, 45, 857, 1354]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4505,7 +4508,7 @@ Library {
       BlockType		      SubSystem
       Name		      "mirror_spectrum"
       Ports		      []
-      Position		      [125, 20, 225, 260]
+      Position		      [123, 19, 207, 106]
       UserDataPersistent      on
       UserData		      "DataTag10"
       MinAlgLoopOccurrences   off
@@ -4538,7 +4541,7 @@ Library {
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Latency,Latency,Implementation,Implementation"
       System {
 	Name			"mirror_spectrum"
-	Location		[745, 74, 1651, 783]
+	Location		[711, 45, 1665, 989]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4583,29 +4586,36 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag1
-    Data		    "  %)30     .    : <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"B\"LP<.    V 8 "
-    "  8    (     @         %    \"     $    !     0         %  0 #0    $   !U    9&5F875L=',      $9&5%-I>F4       !N7"
-    "V)I=',         861D7VQA=&5N8WD  &-O;G9?;&%T96YC>0!B<F%M7VQA=&5N8WD 8G)A;5]M87       &)R86U?9&5L87ES  !D<W T.%]A9&1"
-    "E<G,     #@   #@$   &    \"     $         !0    @    !    $     $         #@   #@    &    \"     0         !0    @"
-    "    !    !P    $         $     <   !&1E13:7IE  X    X    !@    @    &          4    (     0    $    !          D  "
-    "  (             $ .    .     8    (    !          %    \"     $    &     0         0    !@   &Y?8FET<P  #@   #@   "
-    " &    \"     8         !0    @    !     0    $         \"0    @            R0 X   !     !@    @    $          4   "
-    " (     0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !"
-    "          D    (            \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    &-O;G9"
-    "?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     "
-    "&    \"     0         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8    "
-    "     !0    @    !     0    $         \"0    @             0 X    X    !@    @    $          4    (     0    @    !"
-    "         !     (    8G)A;5]M87 .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !  "
-    "   !@    @    $          4    (     0    L    !         !     +    8G)A;5]D96QA>7,       X    P    !@    @    $   "
-    "       4    (     0    ,    !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    #     $         "
-    "$     P   !D<W T.%]A9&1E<G,     #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    ."
-    "     8    (    !@         %    \"     $    !     0         )    \"               #@   #@    &    \"     8         "
-    "!0    @    !     0    $         \"0    @            R0 X    X    !@    @    &          4    (     0    $    !     "
-    "     D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            / "
-    "_#@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    P    !@    @    $   "
-    "       4    (     0    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !     P    $         "
-    "$  # &]F9@ .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
+    Data		    "  %)30     .    P D   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,U(+P0.    , D   "
+    "8    (     @         %    \"     $    !     0         %  0 #0    $   \"<    9&5F875L=',      &Y?:6YP=71S      !&1E"
+    "13:7IE        ;E]B:71S         &)I;E]P=         !A9&1?;&%T96YC>0  8V]N=E]L871E;F-Y &)R86U?;&%T96YC>0!B<F%M7VUA<   "
+    "    8G)A;5]D96QA>7,  &1S<#0X7V%D9&5R<P!A<WEN8P                X   \"P!0  !@    @    !          4    (     0   !8  "
+    "  !          X    X    !@    @    $          4    (     0    @    !         !     (    ;E]I;G!U=',.    .     8    "
+    "(    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     0         !0    @   "
+    " !    !P    $         $     <   !&1E13:7IE  X    X    !@    @    &          4    (     0    $    !          D    ("
+    "            \"$ .    .     8    (    !          %    \"     $    &     0         0    !@   &Y?8FET<P  #@   #@    &"
+    "    \"     8         !0    @    !     0    $         \"0    @            R0 X    X    !@    @    $          4    ("
+    "     0    8    !         !     &    8FEN7W!T   .    .     8    (    !@         %    \"     $    !     0         ) "
+    "   \"            #% #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !A9&1?;&%T96YC>0  "
+    "    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $"
+    "          4    (     0    P    !         !     ,    8V]N=E]L871E;F-Y      X    X    !@    @    &          4    (  "
+    "   0    $    !          D    (            \\#\\.    0     8    (    !          %    \"     $    ,     0         0 "
+    "   #    &)R86U?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         )    \"            "
+    " ! #@   #@    &    \"     0         !0    @    !    \"     $         $     @   !B<F%M7VUA< X    P    !@    @    $ "
+    "         4    (     0    ,    !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    \"P    $      "
+    "   $     L   !B<F%M7V1E;&%Y<P      #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .  "
+    "  0     8    (    !          %    \"     $    ,     0         0    #    &1S<#0X7V%D9&5R<P     .    ,     8    (   "
+    " !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    $          4    (     0    4    !    "
+    "     !     %    87-Y;F,    .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    X    "
+    "!@    @    &          4    (     0    $    !          D    (               .    .     8    (    !@         %    \""
+    "     $    !     0         )    \"             A #@   #@    &    \"     8         !0    @    !     0    $         \""
+    "0    @            R0 X    X    !@    @    &          4    (     0    $    !          D    (            ,4 .    .  "
+    "   8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0"
+    "    @    !     0    $         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    !       "
+    "   D    (             $ .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@  "
+    "  @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !     P   "
+    " $         $  # &]F9@ .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag2
@@ -4738,7 +4748,7 @@ MatData {
   DataRecord {
     Tag			    DataTag10
     Data		    "  %)30     .    H <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $  _8%04.    $ <   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &MPY@,.    $ <   "
     "8    (     @         %    \"     $    !     0         %  0 #P    $   \"'    9&5F875L=',         ;E]I;G!U=',       "
     "  1D944VEZ90          :6YP=71?8FET=VED=&@ 8FEN7W!T7VEN        8G)A;5]L871E;F-Y    ;F5G871E7VQA=&5N8WD ;F5G871E7VUO"
     "9&4     87-Y;F,               X   !0!   !@    @    !          4    (     0   !     !          X    X    !@    @   "
@@ -4754,7 +4764,7 @@ MatData {
     "  0    $    !          D    (            \\#\\.    0     8    (    !          %    \"     $    +     0         0  "
     "  \"P   &YE9V%T95]M;V1E       .    .     8    (    !          %    \"     $    %     0         0    !0   $QO9VEC  "
     "  #@   #@    &    \"     0         !0    @    !    !0    $         $     4   !A<WEN8P    X    P    !@    @    $   "
-    "       4    (     0    (    !         !   @!O;@  #@   #@    &    \"     8         !0    @    !     0    $         "
+    "       4    (     0    ,    !         !   P!O9F8 #@   #@    &    \"     8         !0    @    !     0    $         "
     "\"0    @               X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    ."
     "     8    (    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         "
     "!0    @    !     0    $         \"0    @            Q0 X    X    !@    @    &          4    (     0    $    !     "
