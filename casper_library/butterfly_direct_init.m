@@ -6,26 +6,27 @@
 % varargin = {'varname', 'value', ...} pairs
 %
 % Valid varnames:
-% * biplex = Make biplex.
-% * FFTSize = Size of the FFT (2^FFTSize points).
-% * Coeffs = Coefficients for twiddle blocks.
-% * StepPeriod = Coefficient step period.
-% * coeffs_bram = Store coefficients in BRAM.
+% * biplex          = Make biplex.
+% * FFTSize         = Size of the FFT (2^FFTSize points).
+% * Coeffs          = Coefficients for twiddle blocks.
+% * StepPeriod      = Coefficient step period.
+% * coeffs_bram     = Store coefficients in BRAM.
 % * coeff_bit_width = Bitwdith of coefficients.
 % * input_bit_width = Bitwidth of input data.
-% * output_bit_width = Bitwidth of output data.
-% * downshift = Explicitly downshift output data.
-% * bram_latency = Latency of BRAM blocks.
-% * add_latency = Latency of adders blocks.
-% * mult_latency = Latency of multiplier blocks.
-% * conv_latency = Latency of cast blocks.
-% * quantization = Quantization behavior.
-% * overflow = Overflow behavior.
-% * opt_target = Optimization target.
-% * use_hdl = Use behavioral HDL for multipliers.
-% * use_embedded = Use embedded multipliers.
-% * hardcode_shifts = Enable downshift setting.
-% * dsp48_adders = Use DSP48-based adders.
+% * bin_pt_in       = Binary point position of input data.
+% * bitgrowth       = Option to grow non-fractional bits by so don't have to shift.
+% * downshift       = Explicitly downshift output data if shifting.
+% * bram_latency    = Latency of BRAM blocks.
+% * add_latency     = Latency of adders blocks.
+% * mult_latency    = Latency of multiplier blocks.
+% * conv_latency    = Latency of cast blocks.
+% * quantization    = Quantization behavior.
+% * overflow        = Overflow behavior.
+% * opt_target      = Optimization target.
+% * use_hdl         = Use behavioral HDL for multipliers.
+% * use_embedded    = Use embedded multipliers.
+% * hardcode_shifts = If not using bit growth, option to hardcode downshift setting.
+% * dsp48_adders    = Use DSP48-based adders.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -66,8 +67,9 @@ function butterfly_direct_init(blk, varargin)
       'Coeffs', [0], ...
       'StepPeriod', 1, ...
       'coeff_bit_width', 18, ...
-      'input_bit_width', 8, ...
-      'output_bit_width', 18, ...
+      'input_bit_width', 18, ...
+      'bin_pt_in', 17, ...
+      'bitgrowth', 'off', ...
       'downshift', 'off', ...
       'async', 'off', ...
       'add_latency', 1, ...
@@ -85,7 +87,7 @@ function butterfly_direct_init(blk, varargin)
   };
 
   % Skip init script if mask state has not changed.
-  %if same_state(blk, 'defaults', defaults, varargin{:}), return; end
+  if same_state(blk, 'defaults', defaults, varargin{:}), return; end
 
   clog('butterfly_direct_init post same_state', 'trace');
 
@@ -103,7 +105,8 @@ function butterfly_direct_init(blk, varargin)
   StepPeriod        = get_var('StepPeriod', 'defaults', defaults, varargin{:});
   coeff_bit_width   = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
   input_bit_width   = get_var('input_bit_width', 'defaults', defaults, varargin{:});
-  output_bit_width  = get_var('output_bit_width', 'defaults', defaults, varargin{:});
+  bin_pt_in         = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
+  bitgrowth         = get_var('bitgrowth', 'defaults', defaults, varargin{:});
   downshift         = get_var('downshift', 'defaults', defaults, varargin{:});
   async             = get_var('async', 'defaults', defaults, varargin{:});
   bram_latency      = get_var('bram_latency', 'defaults', defaults, varargin{:});
@@ -136,16 +139,12 @@ function butterfly_direct_init(blk, varargin)
 
   % Validate input fields.
 
-  if strcmp(coeffs_bram, 'on'),
-      coeff_type = 'BRAM';
-  else
-      coeff_type = 'slices';
+  if strcmp(coeffs_bram, 'on'), coeff_type = 'BRAM';
+  else coeff_type = 'slices';
   end
 
-  if strcmp(hardcode_shifts, 'on'),
-      mux_latency = 0;
-  else
-      mux_latency = 2;
+  if strcmp(bitgrowth, 'on') || strcmp(hardcode_shifts, 'on'), mux_latency = 0;
+  else mux_latency = 2;
   end
 
   if use_dsp48_adders,
@@ -178,30 +177,35 @@ function butterfly_direct_init(blk, varargin)
 
   % Compute bit widths into addsub and convert blocks.
   bw = input_bit_width + 3;
-  bd = input_bit_width;
+  bd = bin_pt_in+1;
   if strcmp(twiddle_type, 'twiddle_stage_2') ...
       || strcmp(twiddle_type, 'twiddle_coeff_0') ...
       || strcmp(twiddle_type, 'twiddle_coeff_1') ...
       || strcmp(twiddle_type, 'twiddle_pass_through'),
       bw = input_bit_width + 2;
-      bd = input_bit_width;
+      bd = bin_pt_in+1;
   end
 
   addsub_b_bitwidth = bw - 2;
   addsub_b_binpoint = bd - 1;
 
-  if strcmp(hardcode_shifts, 'on'),
+  if strcmp(bitgrowth, 'off') 
+    if strcmp(hardcode_shifts, 'on'),
       if strcmp(downshift, 'on'),
-          convert_in_bitwidth = bw - 1;
-          convert_in_binpoint = bd;
+        convert_in_bitwidth = bw - 1;
+        convert_in_binpoint = bd;
       else
-          convert_in_bitwidth = bw - 1;
-          convert_in_binpoint = bd - 1;
+        convert_in_bitwidth = bw - 1;
+        convert_in_binpoint = bd - 1;
       end
-  else
+    else
       convert_in_bitwidth = bw;
       convert_in_binpoint = bd;
-  end
+    end
+  else
+    convert_in_bitwidth = bw - 1;
+    convert_in_binpoint = bd - 1;
+  end   
 
   %%%%%%%%%%%%%%%%%%
   % Start drawing! %
@@ -272,15 +276,18 @@ function butterfly_direct_init(blk, varargin)
      
   if strcmp(twiddle_type, 'twiddle_coeff_1'),
       set_param([blk, '/twiddle'], ...
-        'input_bit_width', 'input_bit_width');
+        'input_bit_width', 'input_bit_width', ...
+        'bin_pt_in', 'bin_pt_in');
   elseif strcmp(twiddle_type, 'twiddle_stage_2'), 
       set_param([blk, '/twiddle'], ...
         'FFTSize', num2str(FFTSize), ...
-        'input_bit_width', 'input_bit_width');
+        'input_bit_width', 'input_bit_width', ...
+        'bin_pt_in', 'bin_pt_in');
   elseif strcmp(twiddle_type, 'twiddle_general'), 
       set_param([blk, '/twiddle'], ...
         'FFTSize', num2str(FFTSize), ...
         'input_bit_width', 'input_bit_width', ...
+        'bin_pt_in', 'bin_pt_in', ...
         'use_hdl', use_hdl, ...
         'use_embedded', use_embedded, ...
         'Coeffs', mat2str(Coeffs), ...
@@ -298,7 +305,7 @@ function butterfly_direct_init(blk, varargin)
   reuse_block(blk, 'bus_add', 'casper_library_bus/bus_addsub', ...
           'opmode', '0', ...
           'n_bits_a', mat2str(repmat(input_bit_width, 1, n_inputs)), ...
-          'bin_pt_a', mat2str(input_bit_width-1), ...
+          'bin_pt_a', mat2str(bin_pt_in), ...
           'misc', 'off', ...
           'n_bits_b', mat2str(repmat(addsub_b_bitwidth, 1, n_inputs)), ...
           'bin_pt_b', num2str(addsub_b_binpoint), ...
@@ -311,7 +318,7 @@ function butterfly_direct_init(blk, varargin)
   reuse_block(blk, 'bus_sub', 'casper_library_bus/bus_addsub', ...
           'opmode', '1', ...
           'n_bits_a', mat2str(repmat(input_bit_width, 1, n_inputs)), ...
-          'bin_pt_a', mat2str(input_bit_width-1), ...
+          'bin_pt_a', mat2str(bin_pt_in), ...
           'misc', 'off', ...
           'n_bits_b', mat2str(repmat(addsub_b_bitwidth, 1, n_inputs)), ...
           'bin_pt_b', num2str(addsub_b_binpoint), ...
@@ -342,12 +349,18 @@ function butterfly_direct_init(blk, varargin)
   else %TODO
   end
 
+  if strcmp(bitgrowth, 'on'),
+    n_bits_out = input_bit_width+1;
+  else
+    n_bits_out = input_bit_width;
+  end
+
   reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...
           'n_bits_in', mat2str(repmat(convert_in_bitwidth, 1, n_inputs*2)), ...
           'bin_pt_in', mat2str(repmat(convert_in_binpoint, 1, n_inputs*2)), ...
           'cmplx', 'on', ...
-          'n_bits_out', num2str(output_bit_width), ...
-          'bin_pt_out', num2str(output_bit_width-1), ...
+          'n_bits_out', num2str(n_bits_out), ...
+          'bin_pt_out', num2str(bin_pt_in), ...
           'quantization', quant, 'overflow', of, ...
           'misc', 'off', 'of', 'on', 'latency', 'conv_latency', ...
           'Position', [635 56 690 149]);
@@ -358,7 +371,7 @@ function butterfly_direct_init(blk, varargin)
   % Add scale 
   %
 
-  if strcmp(hardcode_shifts, 'off'),
+  if strcmp(bitgrowth, 'off') && strcmp(hardcode_shifts, 'off'),
       reuse_block(blk, 'delay2', 'xbsIndex_r4/Delay', ...
           'Position', [430 59 460 81], ...
           'latency', 'add_latency', ...
@@ -378,7 +391,7 @@ function butterfly_direct_init(blk, varargin)
       add_line(blk, 'Concat/1', 'bus_norm0/1');     
 
       reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
-          'n_bits_in', mat2str(repmat(addsub_b_bitwidth+1, 1, n_inputs*2)), ... %TODO check this
+          'n_bits_in', mat2str(repmat(addsub_b_bitwidth+1, 1, n_inputs*2)), ...
           'bin_pt_in', num2str(addsub_b_binpoint), ...
           'cmplx', 'on', ...
           'scale_factor', '-1', ...
@@ -414,9 +427,10 @@ function butterfly_direct_init(blk, varargin)
           'ShowName', 'off');
       add_line(blk, 'shift/1', 'Terminator/1');
 
-      if strcmp(downshift, 'on'),
+      %if we are not growing bits and need to downshift
+      if strcmp(bitgrowth, 'off') && strcmp(downshift, 'on'),
         reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
-            'n_bits_in', mat2str(repmat(addsub_b_bitwidth, 1, n_inputs*2)), ... %TODO check this
+            'n_bits_in', mat2str(repmat(addsub_b_bitwidth, 1, n_inputs*2)), ... 
             'bin_pt_in', num2str(addsub_b_binpoint), ...
             'cmplx', 'on', ...
             'scale_factor', '-1', ...
@@ -468,7 +482,7 @@ function butterfly_direct_init(blk, varargin)
   end
 
   % Delete all unconnected blocks.
-  %clean_blocks(blk);
+  clean_blocks(blk);
 
   %%%%%%%%%%%%%%%%%%%
   % Finish drawing! %
