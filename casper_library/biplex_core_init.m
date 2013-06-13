@@ -151,16 +151,13 @@ function biplex_core_init(blk, varargin)
 
       %if growing bits pre-calculate for every stage
       if strcmp(bitgrowth, 'on'), 
-        n_bits_stage = input_bit_width + stage - 1;
-        %if we are at the upper limit stop
-        if n_bits_stage > max_bits,
-          n_bits_stage = max_bits;
-          bitgrowth_stage = 'off';
-        else,
-          bitgrowth_stage = 'on';
+        n_bits_stage_in = min(max_bits, input_bit_width + stage - 1);
+        %if we are going to go above the max limit stop growing
+        if (n_bits_stage_in+1) > max_bits, bitgrowth_stage = 'off';
+        else, bitgrowth_stage = 'on';
         end
       else, 
-        n_bits_stage = input_bit_width; 
+        n_bits_stage_in = input_bit_width; 
         bitgrowth_stage = bitgrowth; 
       end
 
@@ -175,7 +172,7 @@ function biplex_core_init(blk, varargin)
           'Position', position, ...
           'FFTSize', num2str(FFTSize), ...
           'FFTStage', num2str(stage), ...
-          'input_bit_width', num2str(n_bits_stage), ...
+          'input_bit_width', num2str(n_bits_stage_in), ...
           'bin_pt_in', num2str(bin_pt_in), ...
           'coeff_bit_width', num2str(coeff_bit_width), ...
           'downshift', downshift, ...
