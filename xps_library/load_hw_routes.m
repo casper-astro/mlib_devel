@@ -22,7 +22,7 @@
 
 function hw_routes = load_hw_routes()
   hw_routes_file = getenv('CASPER_HW_ROUTES');
-  if isempty('hw_routes_file')
+  if isempty(hw_routes_file)
     hw_routes_file = 'hw_routes.mat';
   end
   hw_routes = load(hw_routes_file);
