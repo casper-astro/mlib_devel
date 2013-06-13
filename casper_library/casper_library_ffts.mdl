@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 04 16:54:40 2013"
-  RTWModifiedTimeStamp	  292265380
-  ModelVersionFormat	  "1.%<AutoIncrement:48>"
+  LastModifiedDate	  "Thu Jun 13 11:18:09 2013"
+  RTWModifiedTimeStamp	  293022787
+  ModelVersionFormat	  "1.%<AutoIncrement:49>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -548,7 +548,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts"
-    Location		    [12, 45, 1134, 1070]
+    Location		    [12, 45, 956, 714]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -581,7 +581,7 @@ Library {
       MaskIconUnits	      "autoscale"
       System {
 	Name			"Internal"
-	Location		[62, 45, 1078, 2696]
+	Location		[28, 45, 1092, 2931]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -615,7 +615,7 @@ Library {
       MaskIconUnits	      "autoscale"
       System {
 	Name			"Twiddle"
-	Location		[140, 45, 1156, 2696]
+	Location		[106, 45, 1170, 2931]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -685,7 +685,7 @@ Library {
       "plementation,Implementation,Implementation"
       System {
 	Name			"biplex_core"
-	Location		[780, 45, 1634, 807]
+	Location		[746, 45, 1648, 1042]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -757,7 +757,7 @@ Library {
       "plementation,Implementation"
       System {
 	Name			"butterfly_direct"
-	Location		[609, 45, 1559, 1277]
+	Location		[575, 45, 1573, 1512]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -825,7 +825,7 @@ Library {
       "plementation"
       System {
 	Name			"fft"
-	Location		[12, 45, 1387, 2945]
+	Location		[12, 45, 1435, 3180]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -895,7 +895,7 @@ Library {
       "plementation,Implementation,Implementation"
       System {
 	Name			"fft_biplex"
-	Location		[502, 142, 1484, 836]
+	Location		[468, 45, 1498, 974]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -962,7 +962,7 @@ Library {
       "ntation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation"
       System {
 	Name			"fft_biplex_real_2x"
-	Location		[450, 45, 1526, 2608]
+	Location		[416, 45, 1540, 2843]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -994,51 +994,57 @@ Library {
       MaskType		      "fft_biplex_real_4x"
       MaskDescription	      "A real-sampled biplex FFT, with output demuxed by 4."
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Fft_biplex_real_4x'')')"
-      MaskPromptString	      "Size of FFT: (2^? pts)|Input/Output Bit Width|Coefficient Bit Width|Add Latency|Mult Lat"
-      "ency|BRAM Latency|Convert latency|Quantization Behavior|Overflow Behavior|Architecture|Use less|Number bits abov"
-      "e which to store stage's coefficients in BRAM (2^? bits)|Number bits above which to implement stage's delays in "
-      "BRAM (2^? bits)|Multiplier impl. (0=core, 1=embedded, 2=behavioural) (left=1st stage, or just one value)|Hardcod"
-      "e shift schedule|Shift schedule|DSP48 adders in butterfly"
-      MaskStyleString	      "edit,edit,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbi"
-      "ased: Even Values)),popup(Wrap|Saturate|Error),popup(Virtex2Pro|Virtex5),popup(logic|multipliers),edit,edit,edit"
-      ",checkbox,edit,checkbox"
-      MaskVariables	      "FFTSize=@1;input_bit_width=@2;coeff_bit_width=@3;add_latency=@4;mult_latency=@5;bram_latenc"
-      "y=@6;conv_latency=@7;quantization=&8;overflow=&9;arch=&10;opt_target=&11;coeffs_bit_limit=@12;delays_bit_limit=@"
-      "13;mult_spec=@14;hardcode_shifts=&15;shift_schedule=@16;dsp48_adders=&17;"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||||fft_callback_arch(gcb);|||||hardcode_shifts = get_param(gcb, 'hardcode_shifts'"
-      ");\nset_param_state(gcb, 'shift_schedule', hardcode_shifts);||fft_callback_dsp48_adders(gcb);"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,off,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskInitialization      "fft_biplex_real_4x_init(gcb, ...\n    'FFTSize', FFTSize, ...\n    'input_bit_width', i"
-      "nput_bit_width, ...\n    'coeff_bit_width', coeff_bit_width, ...\n    'add_latency', add_latency, ...\n    'mult"
-      "_latency', mult_latency, ...\n    'bram_latency', bram_latency, ...\n    'conv_latency', conv_latency, ...\n    "
-      "'quantization', quantization, ...\n    'overflow', overflow, ...\n    'arch', arch, ...\n    'opt_target', opt_t"
-      "arget, ...\n    'coeffs_bit_limit', coeffs_bit_limit, ...\n    'delays_bit_limit', delays_bit_limit, ...    \n  "
-      "  'mult_spec', mult_spec, ...\n    'hardcode_shifts', hardcode_shifts, ...\n    'shift_schedule', shift_schedule"
-      ", ...\n    'dsp48_adders', dsp48_adders);"
+      MaskPromptString	      "Number simultaneous inputs (4*?)|Size of FFT: (2^? pts)|Input bit width|Input binary poi"
+      "nt|Coefficient Bit Width|Asynchronous operation|Add Latency|Mult Latency|BRAM Latency|Convert latency|Quantizati"
+      "on Behavior|Overflow Behavior|Use less|Number bits above which to store stage's coefficients in BRAM (2^? bits)|"
+      "Number bits above which to implement stage's delays in BRAM (2^? bits)|Multiplier impl. (0=core, 1=embedded, 2=b"
+      "ehavioural) (left=1st stage, or just one value)|Bitgrowth instead of shifting|Max bits to grow to|Hardcode shift"
+      " schedule|Shift schedule|DSP48 adders in butterfly|BRAM sharing in twiddle factor storage|Store a fraction of tw"
+      "iddle factors where useful"
+      MaskStyleString	      "edit,edit,edit,edit,edit,checkbox,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/"
+      "- Inf)|Round  (unbiased: Even Values)),popup(Wrap|Saturate|Error),popup(logic|multipliers),edit,edit,edit,checkb"
+      "ox,edit,checkbox,edit,checkbox,checkbox,checkbox"
+      MaskVariables	      "n_inputs=@1;FFTSize=@2;input_bit_width=@3;bin_pt_in=@4;coeff_bit_width=@5;async=&6;add_late"
+      "ncy=@7;mult_latency=@8;bram_latency=@9;conv_latency=@10;quantization=&11;overflow=&12;opt_target=&13;coeffs_bit_"
+      "limit=@14;delays_bit_limit=@15;mult_spec=@16;bitgrowth=&17;max_bits=@18;hardcode_shifts=&19;shift_schedule=@20;d"
+      "sp48_adders=&21;twiddle_sharing=&22;twiddle_decimation=&23;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||||||||||||||hardcode_shifts = get_param(gcb, 'hardcode_shifts');\nset_param_state"
+      "(gcb, 'shift_schedule', hardcode_shifts);||fft_callback_dsp48_adders(gcb);||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,off,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskInitialization      "fft_biplex_real_4x_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'FFTSize', FFTSize"
+      ", ...\n    'input_bit_width', input_bit_width, ...\n    'bin_pt_in', bin_pt_in, ...\n    'coeff_bit_width', coef"
+      "f_bit_width, ...\n    'async', async, ...\n    'add_latency', add_latency, ...\n    'mult_latency', mult_latency"
+      ", ...\n    'bram_latency', bram_latency, ...\n    'conv_latency', conv_latency, ...\n    'quantization', quantiz"
+      "ation, ...\n    'overflow', overflow, ...\n    'opt_target', opt_target, ...\n    'coeffs_bit_limit', coeffs_bit"
+      "_limit, ...\n    'delays_bit_limit', delays_bit_limit, ...    \n    'mult_spec', mult_spec, ...\n    'bitgrowth'"
+      ", bitgrowth, ...\n    'max_bits', max_bits, ...\n    'hardcode_shifts', hardcode_shifts, ...\n    'shift_schedul"
+      "e', shift_schedule, ...\n    'dsp48_adders', dsp48_adders, ...\n    'twiddle_sharing', twiddle_sharing, ...\n   "
+      " 'twiddle_decimation', twiddle_decimation);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|18|18|1|2|2|1|Round  (unbiased: +/- Inf)|Wrap|Virtex5|logic|8|8|2|off|[1               "
-      "                       1]|off"
-      MaskTabNameString	      "Basic,Basic,Basic,Latency,Latency,Latency,Latency,Implementation,Implementation,Impleme"
-      "ntation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation"
+      MaskValueString	      "0|2|18|17|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|logic|8|8|2|off|19|off|[1   "
+      "                                   1]|off|off|off"
+      MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Implementation,Impl"
+      "ementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementat"
+      "ion,Implementation,Implementation,Implementation,Implementation"
       System {
 	Name			"fft_biplex_real_4x"
-	Location		[340, 45, 1465, 2609]
+	Location		[664, 176, 1606, 818]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
@@ -1098,7 +1104,7 @@ Library {
       "ion"
       System {
 	Name			"fft_direct"
-	Location		[169, 45, 1775, 3183]
+	Location		[135, 45, 1789, 3418]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1171,7 +1177,7 @@ Library {
       "mentation,Implementation,Implementation"
       System {
 	Name			"fft_stage_n"
-	Location		[453, 45, 1571, 1044]
+	Location		[419, 45, 1585, 1279]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1219,7 +1225,7 @@ Library {
       MaskValueString	      "0|2|2"
       System {
 	Name			"fft_unscrambler"
-	Location		[307, 45, 1332, 2812]
+	Location		[273, 45, 1346, 3047]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1289,7 +1295,7 @@ Library {
       "mplementation,Implementation"
       System {
 	Name			"fft_wideband_real"
-	Location		[12, 45, 1385, 2944]
+	Location		[12, 45, 1433, 3179]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1601,54 +1607,69 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag5
-    Data		    "  %)30     .    < \\   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %?0^ <.    X X  "
-    " 8    (     @         %    \"     $    !     0         %  0 $0    $    R 0  9&5F875L=',           !&1E13:7IE      "
-    "       &EN<'5T7V)I=%]W:61T:   8V]E9F9?8FET7W=I9'1H  !A9&1?;&%T96YC>0       &UU;'1?;&%T96YC>0      8G)A;5]L871E;F-Y"
-    "      !C;VYV7VQA=&5N8WD      '%U86YT:7IA=&EO;@      ;W9E<F9L;W<           !A<F-H                 &]P=%]T87)G970   "
-    "      8V]E9F9S7V)I=%]L:6UI= !D96QA>7-?8FET7VQI;6ET &UU;'1?<W!E8P          :&%R9&-O9&5?<VAI9G1S  !S:&EF=%]S8VAE9'5L"
-    "90   &1S<#0X7V%D9&5R<P              #@   \" )   &    \"     $         !0    @    !    (@    $         #@   #@    &"
-    "    \"     0         !0    @    !    !P    $         $     <   !&1E13:7IE  X    X    !@    @    &          4    ( "
-    "    0    $    !          D    (             $ .    0     8    (    !          %    \"     $    /     0         0  "
-    "  #P   &EN<'5T7V)I=%]W:61T:  .    .     8    (    !@         %    \"     $    !     0         )    \"            #"
-    ") #@   $     &    \"     0         !0    @    !    #P    $         $     \\   !C;V5F9E]B:71?=VED=&@ #@   #@    &  "
-    "  \"     8         !0    @    !     0    $         \"0    @            R0 X   !     !@    @    $          4    (  "
-    "   0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !    "
-    "      D    (            \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    &UU;'1?;&%"
-    "T96YC>0     .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   $     &   "
-    " \"     0         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8        "
-    " !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4    (     0    P    !    "
-    "     !     ,    8V]N=E]L871E;F-Y      X    X    !@    @    &          4    (     0    $    !          D    (      "
-    "      \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    '%U86YT:7IA=&EO;@     .    4"
-    "     8    (    !          %    \"     $    :     0         0    &@   %)O=6YD(\" H=6YB:6%S960Z(\"LO+2!);F8I        "
-    "#@   #@    &    \"     0         !0    @    !    \"     $         $     @   !O=F5R9FQO=PX    X    !@    @    $    "
-    "      4    (     0    @    !         !     (    4V%T=7)A=&4.    ,     8    (    !          %    \"     $    $     "
-    "0         0  0 87)C: X    X    !@    @    $          4    (     0    <    !         !     '    5FER=&5X-0 .    0  "
-    "   8    (    !          %    \"     $    *     0         0    \"@   &]P=%]T87)G970        .    .     8    (    !  "
-    "        %    \"     $    %     0         0    !0   &QO9VEC    #@   $     &    \"     0         !0    @    !    $  "
-    "   $         $    !    !C;V5F9G-?8FET7VQI;6ET#@   #@    &    \"     8         !0    @    !     0    $         \"0 "
-    "   @            @0 X   !     !@    @    $          4    (     0   !     !         !     0    9&5L87ES7V)I=%]L:6UI="
-    " X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    0     8    (    !      "
-    "    %    \"     $    )     0         0    \"0   &UU;'1?<W!E8P         .    .     8    (    !@         %    \"     "
-    "$    !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    #P    $         $     "
-    "\\   !H87)D8V]D95]S:&EF=', #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     "
-    "8    (    !          %    \"     $    .     0         0    #@   '-H:69T7W-C:&5D=6QE   .    0     8    (    !@     "
-    "    %    \"     $    \"     0         )    $            / _        \\#\\.    0     8    (    !          %    \"   "
-    "  $    ,     0         0    #    &1S<#0X7V%D9&5R<P     .    ,     8    (    !          %    \"     $    #     0   "
-    "      0  , ;V9F  X    X    !@    @    &          4    (     0    $    !          D    (               .    .     8"
-    "    (    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    "
-    "@    !     0    $         \"0    @            R0 X    X    !@    @    &          4    (     0    $    !          D"
-    "    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   "
-    "#@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &         "
-    " 4    (     0    $    !          D    (            \\#\\.    4     8    (    !          %    \"     $    :     0  "
-    "       0    &@   %)O=6YD(\" H=6YB:6%S960Z(\"LO+2!);F8I        #@   #     &    \"     0         !0    @    !    !  "
-    "   $         $  $ %=R87 .    .     8    (    !          %    \"     $    '     0         0    !P   %9I<G1E>#4 #@  "
-    " #@    &    \"     0         !0    @    !    !0    $         $     4   !L;V=I8P    X    X    !@    @    &         "
-    " 4    (     0    $    !          D    (            ($ .    .     8    (    !@         %    \"     $    !     0    "
-    "     )    \"            \"! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             "
-    "0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   $     &    \"     8         !0   "
-    " @    !     @    $         \"0   !            #P/P       / _#@   #     &    \"     0         !0    @    !     P   "
-    " $         $  # &]F9@ "
+    Data		    "  %)30     .    >!0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /)&:0(.    Z!,   "
+    "8    (     @         %    \"     $    !     0         %  0 $P    $   #( 0  9&5F875L=',              &Y?:6YP=71S   "
+    "           !&1E13:7IE                :6YP=71?8FET7W=I9'1H     &)I;E]P=%]I;@            !C;V5F9E]B:71?=VED=&@     8"
+    "7-Y;F,                  &%D9%]L871E;F-Y          !M=6QT7VQA=&5N8WD         8G)A;5]L871E;F-Y         &-O;G9?;&%T96Y"
+    "C>0        !Q=6%N=&EZ871I;VX         ;W9E<F9L;W<              &]P=%]T87)G970           !C;V5F9G-?8FET7VQI;6ET    9"
+    "&5L87ES7V)I=%]L:6UI=    &UU;'1?<W!E8P            !B:71G<F]W=&@             ;6%X7V)I=',              &AA<F1C;V1E7W-"
+    "H:69T<P    !S:&EF=%]S8VAE9'5L90      9'-P-#A?861D97)S         '1W:61D;&5?<VAA<FEN9P    !T=VED9&QE7V1E8VEM871I;VX #"
+    "@   # ,   &    \"     $         !0    @    !    +@    $         #@   #@    &    \"     0         !0    @    !    \""
+    "     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    (       "
+    "      $ .    .     8    (    !          %    \"     $    '     0         0    !P   $9&5%-I>F4 #@   #@    &    \"  "
+    "   8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4    (     0  "
+    "  \\    !         !     /    :6YP=71?8FET7W=I9'1H  X    X    !@    @    &          4    (     0    $    !         "
+    " D    (            ,D .    0     8    (    !          %    \"     $    )     0         0    \"0   &)I;E]P=%]I;@   "
+    "      .    .     8    (    !@         %    \"     $    !     0         )    \"            #% #@   $     &    \"   "
+    "  0         !0    @    !    #P    $         $     \\   !C;V5F9E]B:71?=VED=&@ #@   #@    &    \"     8         !0  "
+    "  @    !     0    $         \"0    @            R0 X    X    !@    @    $          4    (     0    4    !         "
+    "!     %    87-Y;F,    .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !     !@    "
+    "@    $          4    (     0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            \\#\\.    0     8    (    !          %    \"     $    ,     0     "
+    "    0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         )    \"      "
+    "       ! #@   $     &    \"     0         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@ "
+    "   &    \"     8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4 "
+    "   (     0    P    !         !     ,    8V]N=E]L871E;F-Y      X    X    !@    @    &          4    (     0    $   "
+    " !          D    (            \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    '%U8"
+    "6YT:7IA=&EO;@     .    4     8    (    !          %    \"     $    :     0         0    &@   %)O=6YD(\" H=6YB:6%S9"
+    "60Z(\"LO+2!);F8I        #@   #@    &    \"     0         !0    @    !    \"     $         $     @   !O=F5R9FQO=PX "
+    "   X    !@    @    $          4    (     0    @    !         !     (    4V%T=7)A=&4.    0     8    (    !         "
+    " %    \"     $    *     0         0    \"@   &]P=%]T87)G970        .    .     8    (    !          %    \"     $  "
+    "  %     0         0    !0   &QO9VEC    #@   $     &    \"     0         !0    @    !    $     $         $    !    "
+    "!C;V5F9G-?8FET7VQI;6ET#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X   "
+    "!     !@    @    $          4    (     0   !     !         !     0    9&5L87ES7V)I=%]L:6UI= X    X    !@    @    &"
+    "          4    (     0    $    !          D    (            ($ .    0     8    (    !          %    \"     $    ) "
+    "    0         0    \"0   &UU;'1?<W!E8P         .    .     8    (    !@         %    \"     $    !     0         ) "
+    "   \"             ! #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !B:71G<F]W=&@     "
+    "    #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    .     8    (    !          %"
+    "    \"     $    (     0         0    \"    &UA>%]B:71S#@   #@    &    \"     8         !0    @    !     0    $    "
+    "     \"0    @            S0 X   !     !@    @    $          4    (     0    \\    !         !     /    :&%R9&-O9&5"
+    "?<VAI9G1S  X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   $     &    \"     0     "
+    "    !0    @    !    #@    $         $     X   !S:&EF=%]S8VAE9'5L90  #@   $     &    \"     8         !0    @    ! "
+    "    @    $         \"0   !            #P/P       / _#@   $     &    \"     0         !0    @    !    #     $      "
+    "   $     P   !D<W T.%]A9&1E<G,     #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .  "
+    "  0     8    (    !          %    \"     $    /     0         0    #P   '1W:61D;&5?<VAA<FEN9P .    ,     8    (   "
+    " !          %    \"     $    #     0         0  , ;V9F  X   !(    !@    @    $          4    (     0   !(    !    "
+    "     !     2    ='=I9&1L95]D96-I;6%T:6]N        #@   #     &    \"     0         !0    @    !     P    $         $"
+    "  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"               #@   #@    &    \""
+    "     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0"
+    "    $    !          D    (            ,D .    .     8    (    !@         %    \"     $    !     0         )    \" "
+    "           #% #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            R0 X    P    !@"
+    "    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    \"     8         !0    @    !     0 "
+    "   $         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    !          D    (        "
+    "     $ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"  "
+    "   8         !0    @    !     0    $         \"0    @           #P/PX   !0    !@    @    $          4    (     0  "
+    " !H    !         !     :    4F]U;F0@(\"AU;F)I87-E9#H@*R\\M($EN9BD        .    .     8    (    !          %    \"  "
+    "   $    (     0         0    \"    %-A='5R871E#@   #@    &    \"     0         !0    @    !    !0    $         $  "
+    "   4   !L;V=I8P    X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    .    "
+    " 8    (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &    \"     8         !0 "
+    "   @    !     0    $         \"0    @             0 X    P    !@    @    $          4    (     0    ,    !        "
+    " !   P!O9F8 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            S0 X    P    !@  "
+    "  @    $          4    (     0    ,    !         !   P!O9F8 #@   $     &    \"     8         !0    @    !     @   "
+    " $         \"0   !            #P/P       / _#@   #     &    \"     0         !0    @    !     P    $         $  # "
+    "&]F9@ .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@    @    $          "
+    "4    (     0    ,    !         !   P!O9F8 "
   }
   DataRecord {
     Tag			    DataTag6
