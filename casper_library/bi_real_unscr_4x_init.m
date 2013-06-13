@@ -385,7 +385,7 @@ end
 % Add delay blocks.
 %
 
-if strcmp(bram_delays, 'on'), delay_src = 'delay_bram';
+if strcmp(bram_delays, 'on') | eval(sync_delay) > 52 , delay_src = 'delay_bram';
 else delay_src = 'delay_srl';
 end
 
