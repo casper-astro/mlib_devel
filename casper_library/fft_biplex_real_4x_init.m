@@ -32,7 +32,7 @@ function fft_biplex_real_4x_init(blk, varargin)
 %   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
 %   Copyright (C) 2010 William Mallard                                        %
 %                                                                             %
-%   SKASA                                                                     %
+%   SKA Africa                                                                %
 %   www.kat.ac.za                                                             %
 %   Copyright (C) 2013 Andrew Martens                                         %
 %                                                                             %
