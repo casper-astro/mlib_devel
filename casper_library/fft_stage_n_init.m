@@ -150,7 +150,7 @@ reuse_block(blk, 'shift', 'built-in/Inport', ...
         'Position', [345 88 375 102]);
 
 if strcmp(async, 'on'),
-  reuse_block(blk, 'dvi', 'built-in/Inport', ...
+  reuse_block(blk, 'en', 'built-in/Inport', ...
           'Port', '6', ...
           'Position', [15 263 45 277]);
 end
@@ -172,7 +172,7 @@ reuse_block(blk, 'Counter', 'xbsIndex_r4/Counter', ...
 add_line(blk,'sync/1','Counter/1');
 
 if strcmp(async, 'on'), 
-  add_line(blk, 'dvi/1', 'Counter/2');
+  add_line(blk, 'en/1', 'Counter/2');
 end
 
 reuse_block(blk, 'Slice1', 'xbsIndex_r4/Slice', ...
@@ -206,10 +206,10 @@ if strcmp(async, 'on'),
   reuse_block(blk, 'Delay1', 'xbsIndex_r4/Delay', ...
           'latency', '1', ...
           'Position', [250 255 280 285]);
-  add_line(blk,'dvi/1','Delay1/1');
+  add_line(blk,'en/1','Delay1/1');
   reuse_block(blk, 'Delay2', 'xbsIndex_r4/Delay', ...
           'latency', '0', ...
-          'Position', [350 255 380 285]);
+          'Position', [380 255 405 285]);
   add_line(blk,'Delay1/1','Delay2/1');
 end
 
@@ -239,11 +239,17 @@ end
 
 reuse_block(blk, 'sync_delay', sync_delay_type, ...
         'DelayLen', '2^(FFTSize - FFTStage)', ...
-        'Position', [345 189 385 231]);
+        'Position', [315 189 355 231]);
 add_line(blk,'Delay/1','sync_delay/1');
 
 if strcmp(async, 'on'),
-  add_line(blk, 'dvi/1', 'delay_f/2');
+  reuse_block(blk, 'logical', 'xbsIndex_r4/Logical', ...
+    'logical_function', 'AND', 'inputs', '2', 'latency', '0', ...
+    'precision', 'Full', 'Position', [380 200 405 240]);
+  add_line(blk, 'sync_delay/1', 'logical/1');
+  add_line(blk, 'Delay1/1', 'logical/2');
+
+  add_line(blk, 'en/1', 'delay_f/2');
   add_line(blk, 'Delay1/1', 'sync_delay/2');
   add_line(blk, 'Delay1/1', 'delay_b/2');
 end
@@ -299,12 +305,15 @@ reuse_block(blk, 'butterfly_direct', 'casper_library_ffts/butterfly_direct', ...
     'Position', position);
 
 add_line(blk,'Mux/1','butterfly_direct/2');
-add_line(blk,'sync_delay/1','butterfly_direct/3');
+
 add_line(blk,'Slice/1','butterfly_direct/4');
 add_line(blk,'delay_b/1','butterfly_direct/1');
 
 if strcmp(async, 'on'), 
   add_line(blk, 'Delay2/1', 'butterfly_direct/5');
+  add_line(blk, 'logical/1','butterfly_direct/3');
+else,
+  add_line(blk, 'sync_delay/1','butterfly_direct/3');
 end
 
 reuse_block(blk, 'Logical1', 'xbsIndex_r4/Logical');
@@ -343,10 +352,10 @@ reuse_block(blk, 'sync_out', 'built-in/Outport', ...
 add_line(blk,'butterfly_direct/4','sync_out/1');
 
 if strcmp(async, 'on'),
-  reuse_block(blk, 'dvo', 'built-in/Outport', ...
+  reuse_block(blk, 'dvalid', 'built-in/Outport', ...
           'Port', '5', ...
           'Position', [595 123 625 137]);
-  add_line(blk,'butterfly_direct/5','dvo/1');
+  add_line(blk,'butterfly_direct/5','dvalid/1');
 end
 
 clean_blocks(blk);
