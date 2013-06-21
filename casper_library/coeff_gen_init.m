@@ -220,32 +220,34 @@ else,
     else bram = 'distributed RAM';
     end
     
+    table_bits = log2(length(Coeffs));
+
     %if can fit full cycle in BRAM, then store full cycle
     %using less logic, otherwise use more logic
     if strcmp(coeffs_bram, 'on'), 
-      if single_bram == 1, fraction = 'full';
-      else fraction = 'quarter';
+      if single_bram == 1, store = '0';
+      else store = '2';
       end
     else, %when using distributed RAM, use less storage 
           %TODO check how much resources this uses
-      fraction = 'quarter'; 
+      if table_bits <= 3, store = '0'; %force all values for small numbers
+      else store = '1';
+      end     
     end
 
     if strcmp(misc, 'on') || strcmp(dvalid, 'on'), cosin_misc = 'on';
     else, cosin_misc = 'off';
     end
 
+    clog(['adding cosin block to ',blk], 'coeff_gen_init_debug');
     %cosin block
     reuse_block(blk, 'cosin', 'casper_library_downconverter/cosin', ...
-      'output0', 'cos', 'output1', '-sin', ...
+      'output0', 'cos', 'output1', '-sin', 'fraction', '1', ...
       'table_bits', num2str(log2(length(Coeffs))), ...
       'n_bits', 'coeff_bit_width', 'bin_pt', 'coeff_bit_width-1', ...
       'bram_latency', 'bram_latency', 'add_latency', '1', ...
-      'mux_latency', '1', 'conv_latency', '1', ...
-      'fraction', fraction, ... 
-      'pack', pack, ...
-      'bram', bram, ...
-      'misc', cosin_misc, ...
+      'mux_latency', '1', 'neg_latency', '1', 'conv_latency', '1', ...
+      'store', store, 'pack', pack, 'bram', bram, 'misc', cosin_misc, ...
       'Position', [280 23 345 147]);
     add_line(blk, 'bit_reverse/1', 'cosin/1');
     add_line(blk, 'cosin/1', 'ri_to_c/1');
