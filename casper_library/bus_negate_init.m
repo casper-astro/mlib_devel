@@ -123,7 +123,7 @@ function bus_negate_init(blk, varargin)
 
   outputWidth           = mat2str(n_bits_in);
   outputBinaryPt        = mat2str(bin_pt_in);
-  outputArithmeticType  = ['ones(',num2str(compi),',1)'];
+  outputArithmeticType  = ['ones(1,',num2str(compi),')'];
 
   reuse_block(blk, 'debus', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of arbitrary size', ...
