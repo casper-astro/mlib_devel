@@ -1,4 +1,4 @@
-% Generate sine/cos.
+% Generate cos/sin
 %
 % cosin_init(blk, varargin)
 %
@@ -29,6 +29,8 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%TODO logic for where conditions don't allow optimization 
+
 function cosin_init(blk,varargin)
 
   clog('entering cosin_init',{'trace', 'cosin_init_debug'});
@@ -37,37 +39,41 @@ function cosin_init(blk,varargin)
   defaults = { ...
     'output0',      'cos', ...     
     'output1',      '-sin', ...  
+    'phase',        0, ...
+    'fraction',     0, ... 
+    'store',        0, ...   
     'table_bits',   5, ...  
     'n_bits',       18, ...      
     'bin_pt',       17, ...    
-    'misc',         'off', ...  
     'bram_latency', 1, ...
     'add_latency',  1, ... 
     'mux_latency',  1, ... 
     'neg_latency',  1, ... 
-    'conv_latency', 3, ...
-    'fraction',     'quarter', ...
+    'conv_latency', 2, ...
     'pack',         'off', ...
-    'bram',         'BRAM', ... 
+    'bram',         'BRAM', ... %'BRAM' or 'distributed RAM'
+    'misc',         'off', ...
   };
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   munge_block(blk, varargin{:});
 
   output0       = get_var('output0', 'defaults', defaults, varargin{:});
   output1       = get_var('output1', 'defaults', defaults, varargin{:});
+  phase         = get_var('phase', 'defaults', defaults, varargin{:});
+  fraction      = get_var('fraction', 'defaults', defaults, varargin{:});
+  store         = get_var('store', 'defaults', defaults, varargin{:});
   table_bits    = get_var('table_bits', 'defaults', defaults, varargin{:});
   n_bits        = get_var('n_bits', 'defaults', defaults, varargin{:});
   bin_pt        = get_var('bin_pt', 'defaults', defaults, varargin{:});
-  misc          = get_var('misc', 'defaults', defaults, varargin{:});
   bram_latency  = get_var('bram_latency', 'defaults', defaults, varargin{:});
   add_latency   = get_var('add_latency', 'defaults', defaults, varargin{:});
   mux_latency   = get_var('mux_latency', 'defaults', defaults, varargin{:});
   neg_latency   = get_var('neg_latency', 'defaults', defaults, varargin{:});
   conv_latency  = get_var('conv_latency', 'defaults', defaults, varargin{:});
-  fraction      = get_var('fraction', 'defaults', defaults, varargin{:});
   pack          = get_var('pack', 'defaults', defaults, varargin{:});
-  bram          = get_var('bram', 'defaults', defaults, varargin{:});         %'BRAM' or 'distributed RAM'
-
+  bram          = get_var('bram', 'defaults', defaults, varargin{:});         
+  misc          = get_var('misc', 'defaults', defaults, varargin{:});         
+ 
   delete_lines(blk);
 
   %default case for storage in the library
@@ -79,20 +85,11 @@ function cosin_init(blk,varargin)
     return;
   end %if
 
-  if (table_bits < 3),
-    if ~(strcmp(fraction, 'full') && strcmp(pack,'on')),
-      clog('forcing full cycle, all values for small number of points',{'trace', 'cosin_init_debug'});
-    end
-    fraction = 'full'; pack = 'on';
-  end
-
   %%%%%%%%%%%%%%%
   % input ports %
   %%%%%%%%%%%%%%%
 
-  reuse_block(blk, 'theta', 'built-in/Inport', ...
-          'Port', '1', ...
-          'Position', [10 88 40 102]);
+  reuse_block(blk, 'theta', 'built-in/Inport', 'Port', '1', 'Position', [10 88 40 102]);
 
   reuse_block(blk, 'assert', 'xbsIndex_r4/Assert', ...
           'assert_type', 'on', ...
@@ -103,9 +100,7 @@ function cosin_init(blk,varargin)
   add_line(blk, 'theta/1', 'assert/1');
 
   if strcmp(misc, 'on'),
-    reuse_block(blk, 'misci', 'built-in/Inport', ...
-            'Port', '2', ...
-            'Position', [10 238 40 252]);
+    reuse_block(blk, 'misci', 'built-in/Inport', 'Port', '2', 'Position', [10 238 40 252]);
   else
     reuse_block(blk, 'misci', 'xbsIndex_r4/Constant', ...
             'const', '0', 'n_bits', '1', 'arith_type', 'Unsigned', ...
@@ -117,31 +112,59 @@ function cosin_init(blk,varargin)
   % address manipulation logic %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+  %determine optimal lookup functions if not packed
   if strcmp(pack, 'on'),
     lookup0 = output0; lookup1 = output1; %not sharing values so store as specified
   else,
-    if strcmp(fraction, 'full') || strcmp(fraction, 'half'), 
+    if store == 0 || store == 1, 
       lookup0 = 'cos'; lookup1 = 'cos'; 
-    elseif strcmp(fraction, 'quarter'),
+    elseif store == 2,
       lookup0 = 'sin'; lookup1 = 'sin';  %minimise amplitude error for last sample with sin
-    end %if strcmp(fraction)
+    end %if store
   end %if strcmp(pack) 
 
-  if strcmp(fraction, 'full'),
-    lookup_bits_s = 'table_bits';
-    lookup_bits = table_bits;
-  elseif strcmp(fraction, 'half'),
-    lookup_bits_s = 'table_bits-1';
-    lookup_bits = table_bits-1;
-  elseif strcmp(fraction, 'quarter'),
-    lookup_bits_s = 'table_bits-2';
-    lookup_bits = table_bits-2;
+  %make sure storage and output fractions make sense
+  if fraction == 0,
+    full_cycle_bits = table_bits;
+  elseif fraction == 1, 
+    full_cycle_bits = table_bits+1;
+    if store == 0, 
+      clog('need half a cycle but want to store full, forcing half',{'warning','cosin_init_debug'});
+      store = 1; 
+    else, %TODO
+    end
+  elseif fraction == 2, 
+    full_cycle_bits = table_bits+2;
+    if store == 0, 
+      clog('need quarter a cycle but want to store full, forcing quarter',{'warning','cosin_init_debug'});
+      store = 2; 
+    elseif store == 1, 
+      clog('need quarter a cycle but want to store half, forcing quarter',{'warning','cosin_init_debug'});
+      store = 2;
+    else, %TODO
+    end
   end
-  vec_len = 2^(lookup_bits);
-  
-  initVector = [lookup0,'((2*pi)/(2^table_bits)*(0:(2^(',lookup_bits_s,')-1)))'];
 
-  draw_basic_partial_cycle(blk, table_bits, lookup_bits, lookup_bits_s, output0, output1, lookup0, lookup1);
+  %need full_cycle_bits to be at least 3 so can cut 2 above and 1 low in add_convert
+  if (full_cycle_bits < 3),
+    if ~(store == 0 && strcmp(pack,'on')),
+      clog('forcing full storage, all values for small number of points',{'trace', 'cosin_init_debug'});
+    end
+    store = fraction; pack = 'on';
+  end
+
+  %lookup size depends on fraction of cycle stored
+  if store == 0, 
+    lookup_bits = full_cycle_bits;
+  elseif store == 1,
+    lookup_bits = full_cycle_bits-1;
+  elseif store == 2,
+    lookup_bits = full_cycle_bits-2;
+  else, %TODO
+  end
+
+  address_bits = table_bits;
+  draw_basic_partial_cycle(blk, full_cycle_bits, address_bits, lookup_bits, output0, output1, lookup0, lookup1);
 
   %%%%%%%%%%%%%
   % ROM setup %
@@ -162,12 +185,16 @@ function cosin_init(blk,varargin)
     %TODO
   end
 
+  vec_len = 2^lookup_bits;
+  
+  initVector = [lookup0,'(((2*pi)/2^',num2str(phase),')+(2*pi)/(2^',num2str(full_cycle_bits),')*(0:(2^',num2str(lookup_bits),')-1))'];
+
   %pack two outputs into the same word from ROM
   if strcmp(pack, 'on'),
   
     %lookup ROM
     reuse_block(blk, 'ROM', 'xbsIndex_r4/ROM', ...
-            'depth', ['2^(',lookup_bits_s,')'], ...
+            'depth', ['2^(',num2str(lookup_bits),')'], ...
             'latency', 'bram_latency', ...
             'arith_type', 'Unsigned', ...
             'n_bits', 'n_bits*2', ...
@@ -180,11 +207,11 @@ function cosin_init(blk,varargin)
     add_line(blk,'add_convert1/2', 'Terminator4/1');
 
     %calculate values to be stored in ROM
-    vals0 = gen_vals(output0, table_bits, vec_len, n_bits, bin_pt);
+    vals0 = gen_vals(output0, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
     vals0 = fi(vals0, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
     vals0 = bitshift(vals0,bin_pt+n_bits); %shift up 
 
-    vals1 = gen_vals(output1, table_bits, vec_len, n_bits, bin_pt);
+    vals1 = gen_vals(output1, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
     vals1 = fi(vals1, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
     vals1 = bitshift(vals1,bin_pt); %shift up 
 
@@ -202,7 +229,7 @@ function cosin_init(blk,varargin)
     %lookup table
     reuse_block(blk, 'lookup', 'xbsIndex_r4/Dual Port RAM', ...
             'initVector', initVector, ...
-            'depth', sprintf('2^(%s)',lookup_bits_s), ...
+            'depth', sprintf('2^(%s)',num2str(lookup_bits)), ...
             'latency', 'bram_latency', ...
             'distributed_mem', distributed_mem, ...
             'Position', [435 137 490 298]);
@@ -339,7 +366,14 @@ function cosin_init(blk,varargin)
 
 end %cosin_init
 
-function draw_basic_partial_cycle(blk, address_bits, lookup_bits, lookup_bits_s, output0, output1, lookup_function0, lookup_function1)
+function draw_basic_partial_cycle(blk, full_cycle_bits, address_bits, lookup_bits, output0, output1, lookup_function0, lookup_function1)
+
+  clog(sprintf('full_cycle_bits = %d, address_bits = %d, lookup_bits = %d', full_cycle_bits, address_bits, lookup_bits), {'draw_basic_partial_cycle_debug', 'cosin_init_debug'});
+  
+    if full_cycle_bits < 3,
+      clog('parameters not sensible so returning', {'draw_basic_partial_cycle_debug', 'cosin_init_debug'});
+      return;
+    end
 
     reuse_block(blk, 'Constant4', 'xbsIndex_r4/Constant', ...
             'const', '0', ...
@@ -348,57 +382,34 @@ function draw_basic_partial_cycle(blk, address_bits, lookup_bits, lookup_bits_s,
             'bin_pt', '0', ...
             'explicit_period', 'on', ...
             'Position', [150 115 175 135]);
-
-    reuse_block(blk, 'add_convert0', 'built-in/SubSystem');
-    add_convert_gen([blk,'/add_convert0'], address_bits, lookup_bits, lookup_bits_s, lookup_function0, output0);
-    set_param([blk,'/add_convert0'], ...
-            'Position', [195 80 265 140]);
+  
+    clog(['adding ',[blk,'/add_convert0']], {'cosin_init_debug', 'draw_basic_partial_cycle_debug'});
+    reuse_block(blk, 'add_convert0', 'built-in/SubSystem', 'Position', [195 80 265 140]);
+    add_convert_init([blk,'/add_convert0'], full_cycle_bits, address_bits, lookup_bits, lookup_function0, output0);
 
     reuse_block(blk, 'Terminator', 'built-in/Terminator');
-    set_param([blk,'/Terminator'], ...
-            'Position', [285 120 305 140]);
+    set_param([blk,'/Terminator'], 'Position', [285 120 305 140]);
 
     add_line(blk,'assert/1','add_convert0/1');
     add_line(blk,'Constant4/1','add_convert0/2');
     add_line(blk,'add_convert0/3','Terminator/1');
     
-    reuse_block(blk, 'add_convert1', 'built-in/SubSystem');
-    add_convert_gen([blk,'/add_convert1'], address_bits, lookup_bits, lookup_bits_s, lookup_function1, output1);
-    set_param([blk,'/add_convert1'], ...
-            'Position', [195 200 265 260]);
+    clog(['adding ',[blk,'/add_convert1']], {'cosin_init_debug', 'draw_basic_partial_cycle_debug'});
+    reuse_block(blk, 'add_convert1', 'built-in/SubSystem', 'Position', [195 200 265 260]);
+    add_convert_init([blk,'/add_convert1'], full_cycle_bits, address_bits, lookup_bits, lookup_function1, output1);
     
     add_line(blk,'misci/1','add_convert1/2');
     add_line(blk,'assert/1','add_convert1/1');
 
 end %draw_basic_partial_cycle
 
-function add_convert_gen(blk, address_bits, lookup_bits, lookup_bits_s, lookup_function, output)
+function add_convert_init(blk, full_cycle_bits, address_bits, lookup_bits, lookup_function, output)
 
-	add_convert_mask(blk, lookup_bits_s, lookup_function, output);
-	add_convert_init(blk, address_bits, lookup_bits, lookup_function, output);
-end % add_convert_gen
+  clog(sprintf('full_cycle_bits = %d, address_bits = %d, lookup_bits = %d. lookup_function = %s, output = %s', full_cycle_bits, address_bits, lookup_bits, lookup_function, output), {'add_convert_init_debug', 'cosin_init_debug'});
 
-function add_convert_mask(blk, lookup_bits_s, lookup_function, output)
+  pad_bits = full_cycle_bits - address_bits;   %need to pad address bits in to get to full cycle 
 
-	set_param(blk, ...
-		'Mask', 'on', ...
-		'MaskSelfModifiable', 'off', ...
-		'MaskPromptString', 'address bits|lookup bits|required output|lookup function|large adder latency|mux latency|convert latency', ...
-		'MaskStyleString', 'edit,edit,popup(cos|-sin|-cos|sin),popup(cos|-sin|-cos|sin),edit,edit,edit', ...
-		'MaskCallbackString', '||||||', ...
-		'MaskEnableString', 'on,on,off,off,on,on,on', ...
-		'MaskVisibilityString', 'on,on,on,on,on,on,on', ...
-		'MaskToolTipString', 'on,on,on,on,on,on,on', ...
-		'MaskVariables', 'address_bits=@1;lookup_bits=@2;output=&3;lookup_function=&4;add_latency=@5;mux_latency=@6;conv_latency=@7;', ...
-		'MaskValueString', sprintf('table_bits|%s|%s|%s|add_latency|mux_latency|conv_latency',lookup_bits_s,output,lookup_function), ...
-		'BackgroundColor', 'white');
-
-end % add_convert_mask
-
-function add_convert_init(blk, address_bits, lookup_bits, lookup_function, output)
-  clog(sprintf('address_bits = %d, lookup_bits = %d. lookup_function = %s, output = %s', address_bits, lookup_bits, lookup_function, output), {'add_convert_init_debug', 'cosin_init_debug'});
-
-  diff_bits = address_bits - lookup_bits;
+  diff_bits = full_cycle_bits - lookup_bits;   %what fraction of a cycle are we storing 
 
   %reference using cos as lookup
   names = {'cos', '-sin', '-cos', 'sin'};
@@ -416,33 +427,40 @@ function add_convert_init(blk, address_bits, lookup_bits, lookup_function, outpu
     negate_offset = mod(direction_offset + 1,4);
   else
     negate_offset = direction_offset;
-  end %if strcmp 
+  end  
 
   clog(sprintf('direction offset = %d, diff_bits = %d', direction_offset, diff_bits), {'add_convert_init_debug', 'cosin_init_debug'});
 
-  reuse_block(blk, 'theta', 'built-in/Inport', ...
-          'Port', '1', ...
-          'Position', [20 213 50 227]);
+  reuse_block(blk, 'theta', 'built-in/Inport', 'Port', '1', 'Position', [20 213 50 227]);
+
+  if pad_bits ~= 0,
+    reuse_block(blk, 'pad', 'xbsIndex_r4/Constant', 'const', '0', ...
+            'arith_type', 'Unsigned', 'n_bits', num2str(pad_bits), ...
+            'bin_pt', '0', 'Position', [65 185 85 205]);
+
+    reuse_block(blk, 'fluff', 'xbsIndex_r4/Concat', ...
+            'num_inputs', '2', 'Position', [105 180 130 235]);
+    add_line(blk, 'theta/1', 'fluff/2');    
+    add_line(blk, 'pad/1', 'fluff/1');    
+  end
   
-  reuse_block(blk, 'add', 'built-in/Outport', ...
-          'Port', '2', ...
-          'Position', [840 203 870 217]);
+  reuse_block(blk, 'add', 'built-in/Outport', 'Port', '2', 'Position', [840 203 870 217]);
 
   reuse_block(blk, 'new_add', 'xbsIndex_r4/Slice', ...
-          'nbits', 'lookup_bits', ...
+          'nbits', num2str(lookup_bits), ...
           'mode', 'Lower Bit Location + Width', ...
           'Position', [380 242 410 268]);
 
+  %%%%%%%%%%%%%%%%%%%%%%%
+  % address translation %
+  %%%%%%%%%%%%%%%%%%%%%%%
+
   if ~(direction_offset == 0 && diff_bits == 0),
 
-    reuse_block(blk, 'quadrant', 'xbsIndex_r4/Slice', ...
-            'nbits', '2', ...
-            'Position', [150 172 180 198]);
-    add_line(blk,'theta/1','quadrant/1');
-
-    %%%%%%%%%%%%%%%%%%%%%%%
-    % address translation %
-    %%%%%%%%%%%%%%%%%%%%%%%
+    reuse_block(blk, 'quadrant', 'xbsIndex_r4/Slice', 'nbits', '2', 'Position', [150 172 180 198]);
+    if pad_bits == 0, add_line(blk,'theta/1','quadrant/1');
+    else add_line(blk, 'fluff/1', 'quadrant/1');
+    end
 
     reuse_block(blk, 'direction_offset', 'xbsIndex_r4/Constant', ...
             'const', num2str(direction_offset), ...
@@ -461,30 +479,29 @@ function add_convert_init(blk, address_bits, lookup_bits, lookup_function, outpu
     add_line(blk,'direction_offset/1','AddSub5/1');
     add_line(blk,'quadrant/1','AddSub5/2');
 
-    reuse_block(blk, 'lookup', 'xbsIndex_r4/Slice', ...
-            'nbits', 'address_bits-2', ...
-            'mode', 'Lower Bit Location + Width', ...
+    reuse_block(blk, 'lookup', 'xbsIndex_r4/Slice', 'nbits', num2str(full_cycle_bits-2), 'mode', 'Lower Bit Location + Width', ...
             'Position', [150 252 180 278]);
-    add_line(blk,'theta/1','lookup/1');
+    if pad_bits == 0, add_line(blk,'theta/1','lookup/1');
+    else add_line(blk, 'fluff/1', 'lookup/1');
+    end
 
-    reuse_block(blk, 'Concat', 'xbsIndex_r4/Concat', ...
-            'Position', [320 233 345 277]);
+    reuse_block(blk, 'Concat', 'xbsIndex_r4/Concat', 'num_inputs', '2', 'Position', [320 233 345 277]);
     add_line(blk,'lookup/1','Concat/2');
     add_line(blk,'AddSub5/1','Concat/1');
 
     add_line(blk,'Concat/1','new_add/1');
   else, 
-    add_line(blk,'theta/1','new_add/1');
+    if diff_bits == 0, add_line(blk,'theta/1','new_add/1');
+    else add_line(blk, 'fluff/1', 'new_add/1');
+    end
   end %if diff_bits == 0
 
-  reuse_block(blk, 'Delay14', 'xbsIndex_r4/Delay', ...
-          'latency', 'add_latency', ...
-          'Position', [540 201 570 219]);    
+  reuse_block(blk, 'Delay14', 'xbsIndex_r4/Delay', 'latency', 'add_latency', 'Position', [540 201 570 219]);    
   add_line(blk,'new_add/1','Delay14/1');
 
   reuse_block(blk, 'Convert2', 'xbsIndex_r4/Convert', ...
           'arith_type', 'Unsigned', ...
-          'n_bits', 'lookup_bits', ...
+          'n_bits', num2str(lookup_bits), ...
           'bin_pt', '0', ...
           'overflow', 'Saturate', ...
           'latency', 'conv_latency', ...
@@ -506,9 +523,9 @@ function add_convert_init(blk, address_bits, lookup_bits, lookup_function, outpu
             'Position', [380 166 410 184]);
 
     reuse_block(blk, 'Constant4', 'xbsIndex_r4/Constant', ...
-            'const', '2^lookup_bits', ...
+            'const', num2str(2^lookup_bits), ...
             'arith_type', 'Unsigned', ...
-            'n_bits', 'lookup_bits+1', ...
+            'n_bits', num2str(lookup_bits+1), ...
             'bin_pt', '0', ...
             'Position', [450 220 475 240]);
 
@@ -516,14 +533,12 @@ function add_convert_init(blk, address_bits, lookup_bits, lookup_function, outpu
             'mode', 'Subtraction', ...
             'latency', 'add_latency', ...
             'precision', 'User Defined', ...
-            'n_bits', 'lookup_bits+1', ...
+            'n_bits',  num2str(lookup_bits+1), ...
             'bin_pt', '0', ...
             'pipelined', 'on', ...
             'Position', [530 217 575 268]);
 
-    reuse_block(blk, 'Mux', 'xbsIndex_r4/Mux', ...
-            'latency', 'mux_latency', ...
-            'Position', [675 156 700 264]);
+    reuse_block(blk, 'Mux', 'xbsIndex_r4/Mux', 'latency', 'mux_latency', 'Position', [675 156 700 264]);
 
     reuse_block(blk, 'Delay13', 'xbsIndex_r4/Delay', ...
             'latency', 'add_latency', ...
@@ -540,9 +555,7 @@ function add_convert_init(blk, address_bits, lookup_bits, lookup_function, outpu
 
   else,
     %no backwards translation so just delay and put new address through
-    reuse_block(blk, 'Delay13', 'xbsIndex_r4/Delay', ...
-            'latency', 'mux_latency', ...
-            'Position', [675 201 705 219]);
+    reuse_block(blk, 'Delay13', 'xbsIndex_r4/Delay', 'latency', 'mux_latency', 'Position', [675 201 705 219]);
     add_line(blk,'Delay14/1','Delay13/1');
     add_line(blk,'Delay13/1','Convert2/1');
   
@@ -552,9 +565,7 @@ function add_convert_init(blk, address_bits, lookup_bits, lookup_function, outpu
   % invert logic chain %
   %%%%%%%%%%%%%%%%%%%%%% 
  
-  reuse_block(blk, 'negate', 'built-in/Outport', ...
-          'Port', '1', ...
-          'Position', [835 98 865 112]);
+  reuse_block(blk, 'negate', 'built-in/Outport', 'Port', '1', 'Position', [835 98 865 112]);
 
   %need inversion if not got full cycle 
   if (diff_bits ~= 0), 
@@ -624,16 +635,16 @@ function add_convert_init(blk, address_bits, lookup_bits, lookup_function, outpu
 
 end % add_convert_init
 
-function[vals] = gen_vals(func, table_bits, subset, n_bits, bin_pt),
+function[vals] = gen_vals(func, phase, table_bits, subset, n_bits, bin_pt),
     %calculate init vector
     if strcmp(func, 'sin'),
-        vals = sin([0:subset-1]*pi*2/(2^table_bits));
+        vals = sin((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
     elseif strcmp(func, 'cos'),
-        vals = cos([0:subset-1]*pi*2/(2^table_bits));
+        vals = cos((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
     elseif strcmp(func, '-sin'),
-        vals = -sin([0:subset-1]*pi*2/(2^table_bits));
+        vals = -sin((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
     elseif strcmp(func, '-cos'),
-        vals = -cos([0:subset-1]*pi*2/(2^table_bits));
+        vals = -cos((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
     end %if strcmp(func)
     vals = fi(vals, true, n_bits, bin_pt); %saturates at max so no overflow
     vals = fi(vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
