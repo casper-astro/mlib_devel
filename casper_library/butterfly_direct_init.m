@@ -339,7 +339,7 @@ function butterfly_direct_init(blk, varargin)
   %
   if strcmp(quantization, 'Truncate'), quant = '0';
   elseif strcmp(quantization, 'Round  (unbiased: +/- Inf)'), quant = '1';
-  elseif strcmp(quantization, 'Round (unbiased: Even Values)'), quant = '2';
+  elseif strcmp(quantization, 'Round  (unbiased: Even Values)'), quant = '2';
   else %TODO
   end
   
