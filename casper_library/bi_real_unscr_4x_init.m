@@ -54,7 +54,7 @@ defaults = { ...
     'bram_map', 'off', ...
     'bram_delays', 'off', ...
     'dsp48_adders', 'off', ...
-    'async', 'off', ...
+    'async', 'on', ...
 };
 
 % Skip init script if mask state has not changed.
@@ -195,12 +195,19 @@ add_line(blk, 'reorder_odd/1', 't0/1');
 reuse_block(blk, 't1', 'built-in/Terminator', 'Position', [195 335 215 355]);
 add_line(blk, 'reorder_odd/2', 't1/1');
 
-reuse_block(blk, 't2', 'built-in/Terminator', 'Position', [195 210 215 230]);
+reuse_block(blk, 't2', 'built-in/Terminator', 'Position', [195 212 210 228]);
 add_line(blk, 'reorder_even/2', 't2/1');
 
 if strcmp(async,'on'),
   add_line(blk, 'en/1', 'reorder_even/2');
   add_line(blk, 'en/1', 'reorder_odd/2');
+
+  reuse_block(blk, 'l0', 'xbsIndex_r4/Logical', ...
+    'logical_function', 'AND', 'inputs', '2', 'latency', '0', ...
+    'Position', [195 172 215 198]);
+  add_line(blk, 'reorder_even/1', 'l0/1'); 
+  add_line(blk, 'reorder_even/2', 'l0/2'); 
+
 else,
   add_line(blk, 'en_even/1', 'reorder_even/2');
   add_line(blk, 'en_odd/1', 'reorder_odd/2');
@@ -228,7 +235,6 @@ reuse_block(blk, 'count', 'xbsIndex_r4/Counter', ...
     'period', '1', ...
     'use_behavioral_HDL', 'off', ...
     'implementation', 'Fabric');...
-add_line(blk, 'reorder_even/1', 'count/1');
 
 reuse_block(blk, 'c0', 'xbsIndex_r4/Constant', ...
     'Position', [225 25 255 45], ...
@@ -276,7 +282,9 @@ reuse_block(blk, 'd0', 'xbsIndex_r4/Delay', ...
 add_line(blk, 'reorder_odd/3', 'd0/1');
 
 if strcmp(async, 'on'),
-  add_line(blk, 'reorder_even/2', 'count/2');
+  add_line(blk, 'l0/1', 'count/1');
+
+  add_line(blk, 'reorder_even/2', 'count/2', 'autorouting', 'on');
 
   reuse_block(blk, 'd1', 'xbsIndex_r4/Delay', ...
       'Position', [470 114 500 136], ...
@@ -285,6 +293,8 @@ if strcmp(async, 'on'),
   add_line(blk, 'reorder_even/2', 'd1/1');
 
   add_line(blk, 'reorder_odd/2', 'd0/2');
+else
+  add_line(blk, 'reorder_even/1', 'count/1');
 end
 
 %
@@ -337,7 +347,7 @@ sync_delay = '2^(FFTSize-1)';
 
 if (eval(sync_delay) > 52),
   if strcmp(async, 'on'), sync_delay_src = 'sync_delay_en';
-  else sync_delay_src = 'sync_delay';
+  else, sync_delay_src = 'sync_delay';
   end
 
   reuse_block(blk, 'sync_delay', ['casper_library_delays/',sync_delay_src], ...
@@ -345,7 +355,7 @@ if (eval(sync_delay) > 52),
         'LinkStatus', 'inactive', ...
         'DelayLen', num2str(eval(sync_delay)));
 
-else
+else %use register chain
   reuse_block(blk, 'sync_delay', 'casper_library_delays/delay_srl', ...
       'Position', [650 75 700 95], ...
       'async', async, ...
@@ -376,6 +386,13 @@ add_line(blk, 'mux2/1', 'hilbert1/1');
 add_line(blk, 'mux3/1', 'hilbert1/2');
 
 if strcmp(async, 'on'),
+  reuse_block(blk, 'l1', 'xbsIndex_r4/Logical', ...
+    'inputs', '2', 'logical_function', 'AND', 'latency', '0', ...
+    'Position', [740 79 760 106]);
+
+  add_line(blk, 'sync_delay/1', 'l1/1');
+  add_line(blk, 'hilbert0/3', 'l1/2');
+
   add_line(blk, 'd1/1', 'hilbert0/3');
   add_line(blk, 'd1/1', 'hilbert1/3');
   add_line(blk, 'hilbert0/3', 'sync_delay/2');
@@ -426,7 +443,6 @@ reuse_block(blk, 'mirror_spectrum', 'casper_library_ffts_internal/mirror_spectru
     'async', async, ...
     'negate_mode', 'logic', ...
     'negate_latency', num2str(ms_negate_latency));
-add_line(blk, 'sync_delay/1', 'mirror_spectrum/1');
 
 add_line(blk, 'delay0/1', 'mirror_spectrum/2');
 add_line(blk, 'delay1/1', 'mirror_spectrum/4');
@@ -440,8 +456,12 @@ add_line(blk, 'mirror_spectrum/4', 'pol3_out/1');
 add_line(blk, 'mirror_spectrum/5', 'pol4_out/1');
 
 if strcmp(async, 'on'),
+  add_line(blk, 'l1/1', 'mirror_spectrum/1');
+
   add_line(blk, 'hilbert1/3', 'mirror_spectrum/10');
   add_line(blk, 'mirror_spectrum/6', 'dvalid/1');
+else,
+  add_line(blk, 'sync_delay/1', 'mirror_spectrum/1');
 end
 
 %
@@ -457,15 +477,17 @@ reuse_block(blk, 'reorder_out', 'casper_library_reorder/reorder', ...
     'map_latency', num2str(map_latency), ...
     'double_buffer', '0', ...
     'bram_map', bram_map);
-add_line(blk, 'sync_delay/1', 'reorder_out/1');
+
 add_line(blk, 'delay0/1', 'reorder_out/3');
 add_line(blk, 'delay1/1', 'reorder_out/4');
 add_line(blk, 'hilbert1/1', 'reorder_out/5');
 add_line(blk, 'hilbert1/2', 'reorder_out/6');
 
 if strcmp(async, 'on'),
+  add_line(blk, 'l1/1', 'reorder_out/1');
   add_line(blk, 'hilbert1/3', 'reorder_out/2');
 else
+  add_line(blk, 'sync_delay/1', 'reorder_out/1');
   reuse_block(blk, 'en_out', 'xbsIndex_r4/Constant', ...
       'Position', [725 435 750 455], ...
       'arith_type', 'Boolean', ...
