@@ -88,4 +88,10 @@ PORT dcm_psen        = "", DIR = I
 PORT dcm_psincdec    = "", DIR = I
 PORT dcm_psdone      = "", DIR = O
 
+## IDELAY ports
+PORT clkin_tap       = "", DIR = I, VEC = [4:0]
+PORT datain_pin      = "", DIR = I, VEC = [4:0]
+PORT datain_tap      = "", DIR = I, VEC = [4:0]
+PORT tap_rst         = "", DIR = I
+
 END

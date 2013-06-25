@@ -12,51 +12,59 @@
  
  */
 module opb_adc5g_controller(
-    input         OPB_Clk,
-    input         OPB_Rst,
+    input 	  OPB_Clk,
+    input 	  OPB_Rst,
     output [0:31] Sl_DBus,
-    output        Sl_errAck,
-    output        Sl_retry,
-    output        Sl_toutSup,
-    output        Sl_xferAck,
-    input  [0:31] OPB_ABus,
-    input  [0:3]  OPB_BE,
-    input  [0:31] OPB_DBus,
-    input         OPB_RNW,
-    input         OPB_select,
-    input         OPB_seqAddr,
+    output 	  Sl_errAck,
+    output 	  Sl_retry,
+    output 	  Sl_toutSup,
+    output 	  Sl_xferAck,
+    input [0:31]  OPB_ABus,
+    input [0:3]   OPB_BE,
+    input [0:31]  OPB_DBus,
+    input 	  OPB_RNW,
+    input 	  OPB_select,
+    input 	  OPB_seqAddr,
 
-	  output        adc0_adc3wire_clk,
-	  output        adc0_adc3wire_data,
-	  input         adc0_adc3wire_data_o,
-	  output        adc0_adc3wire_spi_rst,
-	  output        adc0_modepin,
-	  output        adc0_reset,
-	  output        adc0_dcm_reset,
-          input         adc0_dcm_locked,
-          input  [15:0] adc0_fifo_full_cnt,
-          input  [15:0] adc0_fifo_empty_cnt,
-    output        adc0_psclk,
-    output        adc0_psen,
-    output        adc0_psincdec,
-    input         adc0_psdone,
-    input         adc0_clk,
+    output 	  adc0_adc3wire_clk,
+    output 	  adc0_adc3wire_data,
+    input 	  adc0_adc3wire_data_o,
+    output 	  adc0_adc3wire_spi_rst,
+    output 	  adc0_modepin,
+    output 	  adc0_reset,
+    output 	  adc0_dcm_reset,
+    input 	  adc0_dcm_locked,
+    input [15:0]  adc0_fifo_full_cnt,
+    input [15:0]  adc0_fifo_empty_cnt,
+    output 	  adc0_psclk,
+    output 	  adc0_psen,
+    output 	  adc0_psincdec,
+    input 	  adc0_psdone,
+    input 	  adc0_clk,
+    output 	  adc0_tap_rst,
+    output [4:0]  adc0_clkin_tap,
+    output [4:0]  adc0_datain_pin, 
+    output [4:0]  adc0_datain_tap, 
 
-	  output        adc1_adc3wire_clk,
-	  output        adc1_adc3wire_data,
-	  input         adc1_adc3wire_data_o,
-	  output        adc1_adc3wire_spi_rst,
-	  output        adc1_modepin,
-	  output        adc1_reset,
-	  output        adc1_dcm_reset,
-          input         adc1_dcm_locked,
-          input  [15:0] adc1_fifo_full_cnt,
-          input  [15:0] adc1_fifo_empty_cnt,
-    output        adc1_psclk,
-    output        adc1_psen,
-    output        adc1_psincdec,
-    input         adc1_psdone,
-    input         adc1_clk
+    output 	  adc1_adc3wire_clk,
+    output 	  adc1_adc3wire_data,
+    input 	  adc1_adc3wire_data_o,
+    output 	  adc1_adc3wire_spi_rst,
+    output 	  adc1_modepin,
+    output 	  adc1_reset,
+    output 	  adc1_dcm_reset,
+    input 	  adc1_dcm_locked,
+    input [15:0]  adc1_fifo_full_cnt,
+    input [15:0]  adc1_fifo_empty_cnt,
+    output 	  adc1_psclk,
+    output 	  adc1_psen,
+    output 	  adc1_psincdec,
+    input 	  adc1_psdone,
+    input 	  adc1_clk,
+    output 	  adc1_tap_rst,
+    output [4:0]  adc1_clkin_tap,
+    output [4:0]  adc1_datain_pin, 
+    output [4:0]  adc1_datain_tap
   );
   parameter C_BASEADDR    = 32'h00000000;
   parameter C_HIGHADDR    = 32'h0000FFFF;
@@ -131,6 +139,26 @@ module opb_adc5g_controller(
   assign adc1_config_addr  = adc1_config_addr_reg;
   assign adc1_config_start = adc1_config_start_reg;
 
+   /**** IODELAY control signals for ADC 0 ****/
+   reg 	     adc0_tap_rst_reg;
+   reg [4:0] adc0_clkin_tap_reg;
+   reg [4:0] adc0_datain_pin_reg;
+   reg [4:0] adc0_datain_tap_reg;
+   assign adc0_tap_rst    = adc0_tap_rst_reg;   
+   assign adc0_clkin_tap  = adc0_clkin_tap_reg;
+   assign adc0_datain_pin = adc0_datain_pin_reg;
+   assign adc0_datain_tap = adc0_datain_tap_reg;
+   
+   /**** IODELAY control signals for ADC 1 ****/
+   reg 	     adc1_tap_rst_reg;
+   reg [4:0] adc1_clkin_tap_reg;
+   reg [4:0] adc1_datain_pin_reg;
+   reg [4:0] adc1_datain_tap_reg;
+   assign adc1_tap_rst    = adc1_tap_rst_reg;   
+   assign adc1_clkin_tap  = adc1_clkin_tap_reg;
+   assign adc1_datain_pin = adc1_datain_pin_reg;
+   assign adc1_datain_tap = adc1_datain_tap_reg;   
+   
   reg [31:0] opb_data_out;
 
   always @(posedge OPB_Clk) begin
@@ -145,12 +173,15 @@ module opb_adc5g_controller(
     adc0_config_start_reg <= 1'b0;
     adc1_config_start_reg <= 1'b0;
 
+    adc0_tap_rst_reg <= 1'b0;
+    adc1_tap_rst_reg <= 1'b0;
+
     if (OPB_Rst) begin
     end else begin
       if (addr_match && OPB_select && !opb_ack) begin
         //opb_ack <= 1'b1;
         if (!OPB_RNW) begin
-          case (opb_addr[3:2])
+          case (opb_addr[4:2])
             0:  begin
 	       opb_ack <= 1'b1;
                if (OPB_BE[3]) begin
@@ -199,6 +230,36 @@ module opb_adc5g_controller(
 	      end
             end
             3:  begin
+	    end
+	    4:  begin
+	       opb_ack <= 1'b1;
+	       if (OPB_BE[3]) begin
+		  adc0_tap_rst_reg    <= OPB_DBus[31];
+	       end
+	       if (OPB_BE[2]) begin
+		  adc0_clkin_tap_reg  <= OPB_DBus[19:23];
+	       end
+	       if (OPB_BE[1]) begin
+		  adc0_datain_pin_reg <= OPB_DBus[11:15];
+	       end
+	       if (OPB_BE[0]) begin
+		  adc0_datain_tap_reg <= OPB_DBus[3:7];
+	       end
+	    end
+	    5:  begin
+	       opb_ack <= 1'b1;
+	       if (OPB_BE[3]) begin
+		  adc1_tap_rst_reg    <= OPB_DBus[31];
+	       end
+	       if (OPB_BE[2]) begin
+		  adc1_clkin_tap_reg  <= OPB_DBus[19:23];
+	       end
+	       if (OPB_BE[1]) begin
+		  adc1_datain_pin_reg <= OPB_DBus[11:15];
+	       end
+	       if (OPB_BE[0]) begin
+		  adc1_datain_tap_reg <= OPB_DBus[3:7];
+	       end
             end
           endcase
         end else begin // if (!OPB_RNW)
@@ -237,6 +298,20 @@ module opb_adc5g_controller(
 	       opb_ack <= 1'b1;
 	       opb_data_out <= {adc0_dcm_unlocked_cnt[15:8], adc0_dcm_unlocked_cnt[7:0],
 	       			adc1_dcm_unlocked_cnt[15:8], adc1_dcm_unlocked_cnt[7:0]};
+	    end
+	    6: begin
+	       opb_ack <= 1'b1;
+	       opb_data_out <= {3'b0, adc0_datain_tap_reg,
+				3'b0, adc0_datain_pin_reg,
+				3'b0, adc0_clkin_tap_reg,
+				adc0_tap_rst_reg, 7'b0};
+	    end
+	    7: begin
+	       opb_ack <= 1'b1;
+	       opb_data_out <= {3'b0, adc1_datain_tap_reg,
+				3'b0, adc1_datain_pin_reg,
+				3'b0, adc1_clkin_tap_reg,
+				adc1_tap_rst_reg, 7'b0};
 	    end
 	  endcase
 	end
