@@ -85,7 +85,6 @@ entity adc5g_dmux1_interface is
     user_data_q7    : out std_logic_vector(adc_bit_width-1 downto 0);
     adc_reset_o     : out std_logic;
 
-    clkin_tap       : in std_logic_vector(4 downto 0);
     datain_pin      : in std_logic_vector(4 downto 0);
     datain_tap      : in std_logic_vector(4 downto 0);
     tap_rst         : in std_logic
@@ -101,7 +100,6 @@ architecture behavioral of adc5g_dmux1_interface is
 
   -- Clock and sync signals
   signal adc_clk       : std_logic;
-  signal adc_clk_delay : std_logic;
   signal adc_sync      : std_logic;
   signal refclk        : std_logic;
 
@@ -151,8 +149,6 @@ architecture behavioral of adc5g_dmux1_interface is
   signal fifo_dout     : std_logic_vector(143 downto 0);
 
   -- IODELAY tap signals
-  signal tap_rstC      : std_logic;
-  signal clkin_tap_int : std_logic_vector(4 downto 0);
   signal tap_rst0      : std_logic_vector(adc_bit_width-1 downto 0) := (others=>'0');
   signal tap_rst1      : std_logic_vector(adc_bit_width-1 downto 0) := (others=>'0');
   signal tap_rst2      : std_logic_vector(adc_bit_width-1 downto 0) := (others=>'0');
@@ -347,34 +343,6 @@ begin
       o=> adc_clk
       );
 
-  CLKDLY0 : IODELAYE1
-    generic map (
-      CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
-      DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
-      HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
-      IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
-      IDELAY_VALUE           => 0,                -- 0 to 31
-      ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
-      ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
-      REFCLK_FREQUENCY       => 200.0,
-      SIGNAL_PATTERN         => "CLOCK"            -- CLOCK, DATA
-      )
-    port map (
-      DATAOUT                => adc_clk_delay,
-      DATAIN                 => '0',
-      C                      => isd_clkdiv,
-      CE                     => '0',
-      INC                    => '0',
-      IDATAIN                => adc_clk,
-      ODATAIN                => '0',
-      RST                    => tap_rstC,
-      T                      => '1',
-      CNTVALUEIN             => clkin_tap_int,
-      CNTVALUEOUT            => open,
-      CLKIN                  => '0',
-      CINVCTRL               => '0'
-      );
-
   MMCM0: MMCM_ADV
     generic map (
       BANDWIDTH            => "HIGH",
@@ -403,7 +371,7 @@ begin
       CLKFBIN   => mmcm_clkfbin,
       CLKFBOUT  => mmcm_clkfbout,
       CLKINSEL  => '1',
-      CLKIN1    => adc_clk_delay,
+      CLKIN1    => adc_clk,
       CLKIN2    => '0',
       CLKOUT0   => mmcm_clkout0,
       CLKOUT1   => mmcm_clkout1,
@@ -449,16 +417,12 @@ begin
   begin  -- process DECTAPS
     if isd_clkdiv'event and isd_clkdiv = '1' then  -- rising clock edge
 
-      tap_rstC <= '0';
       tap_rst0 <= (others => '0');
       tap_rst1 <= (others => '0');
       tap_rst2 <= (others => '0');
       tap_rst3 <= (others => '0');
 
       if tap_rst = '1' then
-
-        tap_rstC <= '1';
-        clkin_tap_int <= clkin_tap;
 
         case datain_pin(4 downto 3) is
           when "00" => datain_tap0(to_integer(unsigned(datain_pin(2 downto 0)))) <= datain_tap;

@@ -257,7 +257,6 @@ misc_ports.dcm_psincdec    = {1 'in'  [s.adc_str,'_psincdec']};
 misc_ports.fifo_full_cnt   = {16 'out' [s.adc_str,'_fifo_full_cnt']};
 misc_ports.fifo_empty_cnt  = {16 'out' [s.adc_str,'_fifo_empty_cnt']};
 misc_ports.tap_rst         = {1 'in' [s.adc_str,'_tap_rst']};
-misc_ports.clkin_tap       = {5 'in' [s.adc_str,'_clkin_tap']};
 misc_ports.datain_pin      = {5 'in' [s.adc_str,'_datain_pin']};
 misc_ports.datain_tap      = {5 'in' [s.adc_str,'_datain_tap']};
 b = set(b,'misc_ports',misc_ports);

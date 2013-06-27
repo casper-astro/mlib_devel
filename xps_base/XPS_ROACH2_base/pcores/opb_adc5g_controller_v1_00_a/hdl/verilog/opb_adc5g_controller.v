@@ -42,7 +42,6 @@ module opb_adc5g_controller(
     input 	  adc0_psdone,
     input 	  adc0_clk,
     output 	  adc0_tap_rst,
-    output [4:0]  adc0_clkin_tap,
     output [4:0]  adc0_datain_pin, 
     output [4:0]  adc0_datain_tap, 
 
@@ -62,7 +61,6 @@ module opb_adc5g_controller(
     input 	  adc1_psdone,
     input 	  adc1_clk,
     output 	  adc1_tap_rst,
-    output [4:0]  adc1_clkin_tap,
     output [4:0]  adc1_datain_pin, 
     output [4:0]  adc1_datain_tap
   );
@@ -141,21 +139,17 @@ module opb_adc5g_controller(
 
    /**** IODELAY control signals for ADC 0 ****/
    reg 	     adc0_tap_rst_reg;
-   reg [4:0] adc0_clkin_tap_reg;
    reg [4:0] adc0_datain_pin_reg;
    reg [4:0] adc0_datain_tap_reg;
    assign adc0_tap_rst    = adc0_tap_rst_reg;   
-   assign adc0_clkin_tap  = adc0_clkin_tap_reg;
    assign adc0_datain_pin = adc0_datain_pin_reg;
    assign adc0_datain_tap = adc0_datain_tap_reg;
    
    /**** IODELAY control signals for ADC 1 ****/
    reg 	     adc1_tap_rst_reg;
-   reg [4:0] adc1_clkin_tap_reg;
    reg [4:0] adc1_datain_pin_reg;
    reg [4:0] adc1_datain_tap_reg;
    assign adc1_tap_rst    = adc1_tap_rst_reg;   
-   assign adc1_clkin_tap  = adc1_clkin_tap_reg;
    assign adc1_datain_pin = adc1_datain_pin_reg;
    assign adc1_datain_tap = adc1_datain_tap_reg;   
    
@@ -236,9 +230,6 @@ module opb_adc5g_controller(
 	       if (OPB_BE[3]) begin
 		  adc0_tap_rst_reg    <= OPB_DBus[31];
 	       end
-	       if (OPB_BE[2]) begin
-		  adc0_clkin_tap_reg  <= OPB_DBus[19:23];
-	       end
 	       if (OPB_BE[1]) begin
 		  adc0_datain_pin_reg <= OPB_DBus[11:15];
 	       end
@@ -250,9 +241,6 @@ module opb_adc5g_controller(
 	       opb_ack <= 1'b1;
 	       if (OPB_BE[3]) begin
 		  adc1_tap_rst_reg    <= OPB_DBus[31];
-	       end
-	       if (OPB_BE[2]) begin
-		  adc1_clkin_tap_reg  <= OPB_DBus[19:23];
 	       end
 	       if (OPB_BE[1]) begin
 		  adc1_datain_pin_reg <= OPB_DBus[11:15];
@@ -303,14 +291,14 @@ module opb_adc5g_controller(
 	       opb_ack <= 1'b1;
 	       opb_data_out <= {3'b0, adc0_datain_tap_reg,
 				3'b0, adc0_datain_pin_reg,
-				3'b0, adc0_clkin_tap_reg,
+				8'b0,
 				adc0_tap_rst_reg, 7'b0};
 	    end
 	    7: begin
 	       opb_ack <= 1'b1;
 	       opb_data_out <= {3'b0, adc1_datain_tap_reg,
 				3'b0, adc1_datain_pin_reg,
-				3'b0, adc1_clkin_tap_reg,
+				8'b0, 
 				adc1_tap_rst_reg, 7'b0};
 	    end
 	  endcase

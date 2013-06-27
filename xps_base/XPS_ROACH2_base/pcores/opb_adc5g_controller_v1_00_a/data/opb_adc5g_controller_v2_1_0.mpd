@@ -69,7 +69,6 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	######################################
 	## IODELAY control signals to ADC 0
 	######################################
-	PORT adc0_clkin_tap       = "", DIR = O, VEC = [4:0]
 	PORT adc0_datain_pin      = "", DIR = O, VEC = [4:0]
 	PORT adc0_datain_tap      = "", DIR = O, VEC = [4:0]
 	PORT adc0_tap_rst         = "", DIR = O
@@ -97,7 +96,6 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	######################################
 	## IODELAY control signals to ADC 1
 	######################################
-	PORT adc1_clkin_tap       = "", DIR = O, VEC = [4:0]
 	PORT adc1_datain_pin      = "", DIR = O, VEC = [4:0]
 	PORT adc1_datain_tap      = "", DIR = O, VEC = [4:0]
 	PORT adc1_tap_rst         = "", DIR = O
