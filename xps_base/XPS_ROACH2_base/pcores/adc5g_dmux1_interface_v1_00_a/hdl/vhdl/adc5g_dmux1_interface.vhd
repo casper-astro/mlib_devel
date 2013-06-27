@@ -35,7 +35,7 @@ entity adc5g_dmux1_interface is
     mode            : integer :=0;    -- 1-channel mode
     mmcm_m          : real    :=2.0;  -- MMCM multiplier value
     mmcm_d          : integer :=1;    -- MMCM divide value
-    mmcm_o0         : integer :=2;    -- MMCM first clock divide
+    mmcm_o0         : real    :=2.0;  -- MMCM first clock divide
     mmcm_o1         : integer :=2     -- MMCM second clock divide
     );
   port (
@@ -377,27 +377,27 @@ begin
 
   MMCM0: MMCM_ADV
     generic map (
-      BANDWIDTH            => "OPTIMIZED",
+      BANDWIDTH            => "HIGH",
       CLKFBOUT_MULT_F      => mmcm_m,
       DIVCLK_DIVIDE        => mmcm_d,
       CLKFBOUT_PHASE       => 0.0,
       CLKFBOUT_USE_FINE_PS => TRUE,
       CLKIN1_PERIOD        => clkin_period,
-      CLKOUT1_DIVIDE       => mmcm_o0,
+      CLKOUT0_DIVIDE_F     => mmcm_o0,
+      CLKOUT1_DIVIDE       => mmcm_o1,
       CLKOUT2_DIVIDE       => mmcm_o1,
       CLKOUT3_DIVIDE       => mmcm_o1,
       CLKOUT4_DIVIDE       => mmcm_o1,
-      CLKOUT5_DIVIDE       => mmcm_o1,
+      CLKOUT0_DUTY_CYCLE   => 0.50,
       CLKOUT1_DUTY_CYCLE   => 0.50,
       CLKOUT2_DUTY_CYCLE   => 0.50,
       CLKOUT3_DUTY_CYCLE   => 0.50,
       CLKOUT4_DUTY_CYCLE   => 0.50,
-      CLKOUT5_DUTY_CYCLE   => 0.50,
+      CLKOUT0_PHASE        => 0.0,
       CLKOUT1_PHASE        => 0.0,
-      CLKOUT2_PHASE        => 0.0,
-      CLKOUT3_PHASE        => 90.0,
-      CLKOUT4_PHASE        => 180.0,
-      CLKOUT5_PHASE        => 270.0
+      CLKOUT2_PHASE        => 90.0,
+      CLKOUT3_PHASE        => 180.0,
+      CLKOUT4_PHASE        => 270.0
       )
     port map (
       CLKFBIN   => mmcm_clkfbin,
@@ -405,11 +405,11 @@ begin
       CLKINSEL  => '1',
       CLKIN1    => adc_clk_delay,
       CLKIN2    => '0',
-      CLKOUT1   => mmcm_clkout0,
-      CLKOUT2   => mmcm_clkout1,
-      CLKOUT3   => mmcm_clkout2,
-      CLKOUT4   => mmcm_clkout3,
-      CLKOUT5   => mmcm_clkout4,
+      CLKOUT0   => mmcm_clkout0,
+      CLKOUT1   => mmcm_clkout1,
+      CLKOUT2   => mmcm_clkout2,
+      CLKOUT3   => mmcm_clkout3,
+      CLKOUT4   => mmcm_clkout4,
       DADDR     => "0000000",
       DCLK      => '0',
       DEN       => '0',
