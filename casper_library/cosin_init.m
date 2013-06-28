@@ -40,8 +40,8 @@ function cosin_init(blk,varargin)
     'output0',      'cos', ...     
     'output1',      '-sin', ...  
     'phase',        0, ...
-    'fraction',     0, ... 
-    'store',        0, ...   
+    'fraction',     3, ... 
+    'store',        3, ...   
     'table_bits',   5, ...  
     'n_bits',       18, ...      
     'bin_pt',       17, ...    
@@ -112,6 +112,41 @@ function cosin_init(blk,varargin)
   % address manipulation logic %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+  %make sure not storing more than outputting and not storing too few points
+  if (store < fraction) || (fraction <= 2 && store > 2), 
+    clog(['need 1/',num2str(fraction),' cycle but want to store 1/',num2str(store),', forcing 1/',num2str(fraction)],{'warning','cosin_init_debug'});
+    warning(['need 1/',num2str(fraction),' cycle but want to store 1/',num2str(store),', forcing 1/',num2str(fraction)]);
+    store = fraction; 
+  end
+
+  full_cycle_bits = table_bits + fraction;
+
+  %need full_cycle_bits to be at least 3 so can cut 2 above and 1 low in add_convert
+  if (full_cycle_bits < 3),
+    if ~(store == fraction && strcmp(pack,'on')),
+      clog('forcing all values storage for small number of points',{'trace', 'cosin_init_debug'});
+      warning('forcing all value storage for small number of points');
+    end
+    store = fraction; pack = 'on';
+  end
+  
+  if (fraction > 2),
+    if ~(store == fraction && strcmp(pack,'on')),
+      clog('forcing full storage for output cycle fraction less than a quarter',{'trace', 'cosin_init_debug'});
+      warning('forcing full storage for output cycle fraction less than a quarter');
+    end
+    store = fraction; pack = 'on';
+  end
+
+  %force separate, complete storage if we have an initial phase offset
+  if phase ~= 0, 
+    if ~(store == fraction && strcmp(pack,'on')),
+      clog('forcing full storage for non zero initial phase',{'trace', 'cosin_init_debug'});
+      warning('forcing full storage for non zero initial phase');
+    end
+    store = fraction; pack = 'on';
+  end %if phase
+
   %determine optimal lookup functions if not packed
   if strcmp(pack, 'on'),
     lookup0 = output0; lookup1 = output1; %not sharing values so store as specified
@@ -123,45 +158,8 @@ function cosin_init(blk,varargin)
     end %if store
   end %if strcmp(pack) 
 
-  %make sure storage and output fractions make sense
-  if fraction == 0,
-    full_cycle_bits = table_bits;
-  elseif fraction == 1, 
-    full_cycle_bits = table_bits+1;
-    if store == 0, 
-      clog('need half a cycle but want to store full, forcing half',{'warning','cosin_init_debug'});
-      store = 1; 
-    else, %TODO
-    end
-  elseif fraction == 2, 
-    full_cycle_bits = table_bits+2;
-    if store == 0, 
-      clog('need quarter a cycle but want to store full, forcing quarter',{'warning','cosin_init_debug'});
-      store = 2; 
-    elseif store == 1, 
-      clog('need quarter a cycle but want to store half, forcing quarter',{'warning','cosin_init_debug'});
-      store = 2;
-    else, %TODO
-    end
-  end
-
-  %need full_cycle_bits to be at least 3 so can cut 2 above and 1 low in add_convert
-  if (full_cycle_bits < 3),
-    if ~(store == 0 && strcmp(pack,'on')),
-      clog('forcing full storage, all values for small number of points',{'trace', 'cosin_init_debug'});
-    end
-    store = fraction; pack = 'on';
-  end
-
   %lookup size depends on fraction of cycle stored
-  if store == 0, 
-    lookup_bits = full_cycle_bits;
-  elseif store == 1,
-    lookup_bits = full_cycle_bits-1;
-  elseif store == 2,
-    lookup_bits = full_cycle_bits-2;
-  else, %TODO
-  end
+  lookup_bits = full_cycle_bits - store;
 
   address_bits = table_bits;
   draw_basic_partial_cycle(blk, full_cycle_bits, address_bits, lookup_bits, output0, output1, lookup0, lookup1);
@@ -187,7 +185,7 @@ function cosin_init(blk,varargin)
 
   vec_len = 2^lookup_bits;
   
-  initVector = [lookup0,'(((2*pi)/2^',num2str(phase),')+(2*pi)/(2^',num2str(full_cycle_bits),')*(0:(2^',num2str(lookup_bits),')-1))'];
+  initVector = [lookup0,'((',num2str(phase),'*(2*pi))+(2*pi)/(2^',num2str(full_cycle_bits),')*(0:(2^',num2str(lookup_bits),')-1))'];
 
   %pack two outputs into the same word from ROM
   if strcmp(pack, 'on'),
@@ -361,7 +359,14 @@ function cosin_init(blk,varargin)
 
   fmtstr = sprintf('');
   set_param(blk, 'AttributesFormatString', fmtstr);
-  save_state(blk, 'defaults', defaults, varargin{:});
+  %ensure that parameters we have forced reflect in mask parameters (ensure this matches varargin
+  %passed by block so that hash in same_state can be compared)
+  args = { ...
+    'output0', output0, 'output1', output1, 'phase', phase, 'fraction', fraction, ...
+    'table_bits', table_bits, 'n_bits', n_bits, 'bin_pt', bin_pt, 'bram_latency', bram_latency, ...
+    'add_latency', add_latency, 'mux_latency', mux_latency, 'neg_latency', neg_latency, ...
+    'conv_latency', conv_latency, 'store', store, 'pack', pack, 'bram', bram, 'misc', misc};
+  save_state(blk, 'defaults', defaults, args{:});
   clog('exiting cosin_init',{'trace', 'cosin_init_debug'});
 
 end %cosin_init
@@ -638,13 +643,13 @@ end % add_convert_init
 function[vals] = gen_vals(func, phase, table_bits, subset, n_bits, bin_pt),
     %calculate init vector
     if strcmp(func, 'sin'),
-        vals = sin((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
+        vals = sin((phase*(2*pi))+[0:subset-1]*pi*2/(2^table_bits));
     elseif strcmp(func, 'cos'),
-        vals = cos((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
+        vals = cos((phase*(2*pi))+[0:subset-1]*pi*2/(2^table_bits));
     elseif strcmp(func, '-sin'),
-        vals = -sin((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
+        vals = -sin((phase*(2*pi))+[0:subset-1]*pi*2/(2^table_bits));
     elseif strcmp(func, '-cos'),
-        vals = -cos((2*pi/2^phase)+[0:subset-1]*pi*2/(2^table_bits));
+        vals = -cos((phase*(2*pi))+[0:subset-1]*pi*2/(2^table_bits));
     end %if strcmp(func)
     vals = fi(vals, true, n_bits, bin_pt); %saturates at max so no overflow
     vals = fi(vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive

@@ -100,8 +100,8 @@ reuse_block(blk, 'bwo', 'built-in/Outport', 'Port', '2', 'Position', [750 133 78
 
 %data valid for asynchronous operation
 if strcmp(async, 'on'),
-  reuse_block(blk, 'dvi', 'built-in/Inport', 'Port', '4', 'Position', [10 183 40 197]);
-  reuse_block(blk, 'dvo', 'built-in/Outport', 'Port', '4', 'Position', [750 333 780 347]);
+  reuse_block(blk, 'en', 'built-in/Inport', 'Port', '4', 'Position', [10 183 40 197]);
+  reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '4', 'Position', [750 333 780 347]);
 end
 
 reuse_block(blk, 'bus_create', 'casper_library_flow_control/bus_create', ...
@@ -116,13 +116,14 @@ reuse_block(blk, 'coeff_gen', 'casper_library_ffts_twiddle_coeff_gen/coeff_gen',
         'coeff_bit_width', 'coeff_bit_width', 'StepPeriod', 'StepPeriod', ...
         'dvalid', async, 'misc', 'on', ...
         'bram_latency', 'bram_latency', 'coeffs_bram', coeffs_bram, ...
-        'optimise', 'on', ... %TODO
+        'coeff_sharing', 'on', 'coeff_decimation', 'on', ... %TODO
+        'coeff_generation', 'on', 'cal_bits', '1', ...
         'Position', [225 78 285 302]);
 add_line(blk, 'sync_in/1', 'coeff_gen/1');
 
 if strcmp(async, 'on'), 
-  add_line(blk, 'dvi/1', 'bus_create/4'); 
-  add_line(blk, 'dvi/1', 'coeff_gen/2'); 
+  add_line(blk, 'en/1', 'bus_create/4'); 
+  add_line(blk, 'en/1', 'coeff_gen/2'); 
   add_line(blk, 'bus_create/1', 'coeff_gen/3'); 
   
   reuse_block(blk, 'Terminator', 'built-in/Terminator', 'Position', [305 180 325 200]);
@@ -208,7 +209,7 @@ add_line(blk,'bus_convert/2','bus_expand1/1');
 add_line(blk,'bus_expand1/1','sync_out/1');
 add_line(blk,'bus_expand1/2','ao/1');
 
-if strcmp(async, 'on'), add_line(blk,'bus_expand1/3','dvo/1'); end
+if strcmp(async, 'on'), add_line(blk,'bus_expand1/3','dvalid/1'); end
 
 clean_blocks(blk);
 
