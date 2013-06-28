@@ -395,8 +395,8 @@ begin
       );
 
 
-  CBUF2a:  BUFG     port map (i=> mmcm_clkfbout, o=> mmcm_clkfbin);
-  --mmcm_clkfbin <= mmcm_clkfbout;
+  --CBUF2a:  BUFG     port map (i=> mmcm_clkfbout, o=> mmcm_clkfbin);
+  mmcm_clkfbin <= mmcm_clkfbout;
   CBUF2b:  BUFG     port map (i=> mmcm_clkout0,  o=> isd_clk);
   CBUF2c:  BUFG     port map (i=> mmcm_clkout1,  o=> isd_clkdiv);
   CBUF2d:  BUFG     port map (i=> mmcm_clkout2,  o=> ctrl_clk90_out);
