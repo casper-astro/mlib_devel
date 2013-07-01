@@ -607,9 +607,9 @@ if run_software
            fprintf(unix_fid,'chmod +x implementation/system.bof\n');
          end
         fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
-        if exist([xps_path,  slash, 'design_info.casper'], 'file') == 2,
-            fprintf(win_fid,['copy design_info.casper ..\\bit_files\\', design_name,'_',time_stamp,'.design_info\n']);
-            fprintf(unix_fid,['cp design_info.casper ../bit_files/', design_name,'_',time_stamp,'.design_info\n']);
+        if exist([xps_path,  slash, 'casper_design_info.xml'], 'file') == 2,
+            fprintf(win_fid,['copy casper_design_info.xml ..\\bit_files\\', design_name,'_',time_stamp,'.xml\n']);
+            fprintf(unix_fid,['cp casper_design_info.xml ../bit_files/', design_name,'_',time_stamp,'.xml\n']);
         end
         if strcmp(hw_sys, 'ROACH2')
             fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);

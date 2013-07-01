@@ -2,7 +2,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     clog('entering gen_xps_add_design_info','trace');
 
     % check that we can write the file before we do anything
-    base_filename = 'design_info.casper';
+    base_filename = 'casper_design_info.xml';
     filename = [mssge_paths.xps_path, slash, base_filename];
     try
         fid = fopen(filename, 'w');
@@ -13,14 +13,15 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     fclose(fid);
     
     % make the DOM object
-    xml_dom = com.mathworks.xml.XMLUtils.createDocument('design_info.casper');
+    xml_dom = com.mathworks.xml.XMLUtils.createDocument(base_filename);
     xml_node_root = xml_dom.getDocumentElement;
     xml_node_root.setAttribute('version', '0.1');
     xml_node_root.setAttribute('sysname', sysname);
     xml_node_root.setAttribute('datestr', datestr(now));
     
     % process registers and bitregs
-    xml_node_registers = xml_dom.createElement('registers');
+    xml_node_registers = xml_dom.createElement('device_class');
+    xml_node_registers.setAttribute('class', 'register');
     xml_node_root.appendChild(xml_node_registers);
     %xml_node_registers.appendChild(xml_dom.createComment('Both bitreg and regular registers.'));
     reg_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:bitreg');
@@ -51,7 +52,8 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     end
     
     % and now snap blocks
-    xml_node_snapshots = xml_dom.createElement('snapshots');
+    xml_node_snapshots = xml_dom.createElement('device_class');
+    xml_node_snapshots.setAttribute('class', 'snapshot');
     xml_node_root.appendChild(xml_node_snapshots);
     bitsnap_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:bitsnap');
     snapshot_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:snapshot');
@@ -125,7 +127,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     end
 
     % and write the dom to file
-    xmlwrite('foo.xml', xml_dom);
+    xmlwrite(filename, xml_dom);
 
     clog('exiting gen_xps_add_design_info','trace');
 end % end function gen_xps_add_design_info
