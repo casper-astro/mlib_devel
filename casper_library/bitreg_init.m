@@ -38,10 +38,10 @@ defaults = {'io_dir', 'To Processor', 'io_names', {'a', 'b'}, 'io_widths', [1, 1
 io_dir = get_var('io_dir', 'defaults', defaults, varargin{:});
 io_names = get_var('io_names', 'defaults', defaults, varargin{:});
 io_widths = get_var('io_widths', 'defaults', defaults, varargin{:});
-io_bp = get_var('io_bp', 'defaults', defaults, varargin{:});
-io_type = get_var('io_type', 'defaults', defaults, varargin{:});
+io_bps = get_var('io_bps', 'defaults', defaults, varargin{:});
+io_types = get_var('io_types', 'defaults', defaults, varargin{:});
 
-if (numel(io_names) ~= numel(io_widths)) || (numel(io_names) ~= numel(io_bp)) || (numel(io_names) ~= numel(io_type)) || (numel(io_names) < 1),
+if (numel(io_names) ~= numel(io_widths)) || (numel(io_names) ~= numel(io_bps)) || (numel(io_names) ~= numel(io_types)) || (numel(io_names) < 1),
     error('Lengths of fields must match and be >0.');
 end
 num_ios = numel(io_names);
@@ -99,8 +99,8 @@ else
         'mode', 'divisions of arbitrary size', ...
         'outputNum', num2str(num_ios), ...
         'outputWidth', 'io_widths', ...
-        'outputBinaryPt', 'io_bp', ...
-        'outputArithmeticType', 'io_type');
+        'outputBinaryPt', 'io_bps', ...
+        'outputArithmeticType', 'io_types');
     add_line(blk, 'reg/1', 'expand/1');
     % out ports
     for p = 1 : num_ios,
