@@ -3,11 +3,12 @@ function bus_mult_init(blk, varargin)
   clog('entering bus_mult_init', 'trace');
   
   defaults = { ...
-    'n_bits_a', [8 8 8 8 8],  'bin_pt_a',     4,   'type_a',   1, 'cmplx_a', 'off', ...
+    'n_bits_a', 0,  'bin_pt_a',     4,   'type_a',   1, 'cmplx_a', 'off', ...
     'n_bits_b', [4],  'bin_pt_b',     3,   'type_b',   1, 'cmplx_b', 'on', ...
     'n_bits_out', 12 ,  'bin_pt_out',   7,   'type_out', 1, ...
     'overflow', 0,      'quantization', 0,   'misc', 'on', ...
-    'mult_latency', 3,  'add_latency', 1 , 'max_fanout', 3, 'fan_latency', 1, ...
+    'mult_latency', 3,  'add_latency', 1 , 'conv_latency', 1, ...
+    'max_fanout', 2, 'fan_latency', 0, ...
   };  
   
   check_mask_type(blk, 'bus_mult');
@@ -38,8 +39,9 @@ function bus_mult_init(blk, varargin)
   type_out     = get_var('type_out', 'defaults', defaults, varargin{:});
   overflow     = get_var('overflow', 'defaults', defaults, varargin{:});
   quantization = get_var('quantization', 'defaults', defaults, varargin{:});
-  add_latency  = get_var('add_latency', 'defaults', defaults, varargin{:});
   mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
+  add_latency  = get_var('add_latency', 'defaults', defaults, varargin{:});
+  conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
   max_fanout   = get_var('max_fanout', 'defaults', defaults, varargin{:});
   fan_latency  = get_var('fan_latency', 'defaults', defaults, varargin{:});
   misc         = get_var('misc', 'defaults', defaults, varargin{:});
@@ -47,11 +49,10 @@ function bus_mult_init(blk, varargin)
   delete_lines(blk);
 
   %default state, do nothing 
-  if (isempty(n_bits_a) | isempty(n_bits_b)),
+  if (n_bits_a == 0 | n_bits_b == 0),
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
     clog('exiting bus_mult_init','trace');
-    error('exiting bus_mult_init');
     return;
   end
 
@@ -59,7 +60,7 @@ function bus_mult_init(blk, varargin)
   % parameter checking %
   %%%%%%%%%%%%%%%%%%%%%%
 
-  if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on') && max_fanout < 2,
+  if (strcmp(cmplx_a, 'on') || strcmp(cmplx_b, 'on')) && max_fanout < 2,
     clog('Complex multiplication without fanout of at least 2 is impossible','error');
     error('Complex multiplication without fanout of at least 2 is impossible');
   end
@@ -242,7 +243,8 @@ function bus_mult_init(blk, varargin)
   % fanout control %
   %%%%%%%%%%%%%%%%%%
 
-  if dupa > 1 || dupb > 1, dup_latency = fan_latency; else dup_latency = 0; end
+  %if dupa > 1 || dupb > 1, dup_latency = fan_latency; else dup_latency = 0; end
+  dup_latency = fan_latency;
 
   ypos_tmp = ypos + mult_d*compa/2;
 
@@ -356,7 +358,7 @@ function bus_mult_init(blk, varargin)
         'n_bits_b', num2str(n_bits_b(b_src(index))), 'bin_pt_b', num2str(bin_pt_b(b_src(index))), ...
         'n_bits_ab', num2str(n_bits_out(index)), 'bin_pt_ab', num2str(bin_pt_out(index)), ...
         'quantization', quant, 'overflow', of, 'conjugated', 'off', ...
-        'mult_latency', 'mult_latency', 'add_latency', 'add_latency', ...
+        'mult_latency', 'mult_latency', 'add_latency', 'add_latency', 'conv_latency', 'conv_latency', ...
         'Position', [xpos-mult_w/2 ypos_tmp xpos+mult_w/2 ypos_tmp+mult_d-20] );
     else,                                              %standard multiplication 
       reuse_block(blk, mult_name, 'xbsIndex_r4/Mult', ...
@@ -375,9 +377,9 @@ function bus_mult_init(blk, varargin)
   ypos_tmp = ypos + mult_d*(compb+compa) + 2*yinc;
   if strcmp(misc, 'on'),
     if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on'),
-      latency = ['mult_latency+add_latency+',num2str(dup_latency)];
+      latency = ['mult_latency+add_latency+conv_latency+fan_latency'];
     else,
-      latency = ['mult_latency+',num2str(dup_latency)];
+      latency = ['mult_latency+fan_latency'];
     end
 
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...

@@ -61,7 +61,7 @@ function feedback_osc_init(blk, varargin)
 
   %pointless using this block if generating the same size sinusoid as lookup, will give error when trying to 
   %slice 0 bits
-  if (wcl_bits + ref_values_bits + 1) > phase_steps_bits,
+  if (wcl_bits + ref_values_bits) >= phase_steps_bits,
     clog('The number of calibration values requested is the same or larger than the number of output values requested',{'error', 'feedback_osc_init_debug'});
     error('feedback_osc_init: The number of calibration values requested is the same or larger than the number of output values requested');
   end
@@ -69,6 +69,7 @@ function feedback_osc_init(blk, varargin)
   %default state in library
   if n_bits == 0 | n_bits_rotation == 0,
     clean_blocks(blk);
+    set_param(blk, 'AttributesFormatString', '');
     save_state(blk, 'defaults', defaults, varargin{:});  
     return; 
   end
@@ -236,6 +237,9 @@ function feedback_osc_init(blk, varargin)
     'phase_step_bits', phase_step_bits, 'phase_steps_bits', phase_steps_bits, ...
     'ref_values_bits', ref_values_bits, 'bram_latency', bram_latency, 'mult_latency', mult_latency, ...
     'add_latency', add_latency, 'conv_latency', conv_latency, 'bram', bram, 'quantization', quantization};
+
+  fmtstr = sprintf('%d cal vals',num2str(2^(wcl_bits+ref_values_bits)));
+  set_param(blk, 'AttributesFormatString', fmtstr);
   save_state(blk, 'defaults', defaults, args{:});
 end % feedback_osc_new_init
 
