@@ -32,6 +32,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
             xml_node_bitreg = xml_dom.createElement('register');
             xml_node_bitreg.setAttribute('name', regname);
             xml_node_bitreg.setAttribute('direction', get_param(blk, 'io_dir'));
+            xml_node_bitreg.setAttribute('width', '32');
             xml_node_registers.appendChild(xml_node_bitreg);
             % fields
             append_field_nodes(blk, xml_dom, xml_node_bitreg, 'io', 'field');
@@ -45,6 +46,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
             xml_node_bitreg = xml_dom.createElement('register');
             xml_node_bitreg.setAttribute('name', regname);
             xml_node_bitreg.setAttribute('direction', get_param(blk, 'io_dir'));
+            xml_node_bitreg.setAttribute('width', '32');
             xml_node_registers.appendChild(xml_node_bitreg);
             xml_node_bitreg.appendChild(make_field_node(xml_dom.createElement('field'), 'field', 32, 0, 0, 0));
             clear regname;
