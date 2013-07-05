@@ -136,23 +136,9 @@ function coeff_gen_init(blk, varargin)
         'explicit_period', 'on', 'period', '1', ...
         'bin_pt', num2str(coeff_bit_width-1), 'Position', [190 83 335 107]);         
     add_line(blk, 'imaginary/1', 'ri_to_c/2');
-
-    %match delays for twiddle_coeff_0, twiddle_coeff_1 for when used in fft_direct
-    if strcmp(misc, 'on'),
-      reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
-        'latency', 'bram_latency+1+mult_latency+add_latency+conv_latency', ...
-        'Position', [235 242 295 268]);
-      add_line(blk, 'misci/1', 'dmisc/1');
-      add_line(blk, 'dmisc/1', 'misco/1');
-    end
-
-    if strcmp(async, 'on'),
-      reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
-        'latency', 'bram_latency+1+mult_latency+add_latency+conv_latency', ...
-        'Position', [235 192 295 218]);
-      add_line(blk, 'en/1', 'den/1');
-      add_line(blk, 'den/1', 'dvalid/1');
-    end
+    
+    if strcmp(misc, 'on'), add_line(blk, 'misci/1', 'misco/1'); end
+    if strcmp(async, 'on'), add_line(blk, 'en/1', 'dvalid/1'); end
 
   else,
     vlen = length(ActualCoeffs);
@@ -612,51 +598,6 @@ function coeff_gen_init(blk, varargin)
       error('Bad news, this state should not be reached');  
       %TODO
     end %if inorder
-
-  %  else,
-  %    %ROMS
-  %
-  %    if( strcmp(coeffs_bram, 'on')),
-  %        mem = 'Block RAM';
-  %    else
-  %        mem = 'Distributed memory';
-  %    end
-  %    real_coeffs = round( real(ActualCoeffs) * 2^(coeff_bit_width-2) ) / 2^(coeff_bit_width-2);
-  %    imag_coeffs = round( imag(ActualCoeffs) * 2^(coeff_bit_width-2)  ) / 2^(coeff_bit_width-2);
-  %    reuse_block(blk, 'ROM', 'xbsIndex_r4/ROM', ...
-  %        'depth', num2str(length(ActualCoeffs)), 'initVector', mat2str(real_coeffs), ...
-  %        'distributed_mem', mem, 'latency', 'bram_latency', ...
-  %        'arith_type', 'Signed  (2''s comp)', 'n_bits', 'coeff_bit_width', ...
-  %        'bin_pt', 'coeff_bit_width-1', 'Position', [210 30 260 82]);
-  %    add_line(blk, 'Slice/1', 'ROM/1');
-  %    add_line(blk, 'ROM/1','ri_to_c/1');
-  %
-  %    reuse_block(blk, 'ROM1', 'xbsIndex_r4/ROM', ...
-  %        'depth', num2str(length(ActualCoeffs)), 'initVector', mat2str(imag_coeffs), ...
-  %        'distributed_mem', mem, 'latency', 'bram_latency', ...
-  %        'arith_type', 'Signed  (2''s comp)', 'n_bits', 'coeff_bit_width', ...
-  %        'bin_pt', 'coeff_bit_width-1', 'Position', [210 95 260 147]);
-  %    add_line(blk, 'Slice/1', 'ROM1/1');
-  %    add_line(blk, 'ROM1/1','ri_to_c/2');
-  %
-  %    if strcmp(async, 'on'),
-  %      reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
-  %        'latency', 'bram_latency', ...
-  %        'Position', [220 195 250 215]);
-  %      add_line(blk, 'den/1', 'den/1');
-  %      add_line(blk, 'den/1', 'dvalid/1');
-  %    end
-  %
-  %    if strcmp(misc, 'on')
-  %      reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
-  %        'latency', 'bram_latency', ...
-  %        'Position', [220 244 250 266]);
-  %      add_line(blk, 'misci/1','dmisc/1');
-  %      add_line(blk, 'dmisc/1','misco/1');
-  %    end
-  %
-  %  end %willing and able
-  % 
   end %if length(ActualCoeffs)
 
   clean_blocks(blk);

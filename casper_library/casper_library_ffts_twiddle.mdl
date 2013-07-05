@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jul 04 20:41:56 2013"
-  RTWModifiedTimeStamp	  294871286
-  ModelVersionFormat	  "1.%<AutoIncrement:26>"
+  LastModifiedDate	  "Fri Jul 05 17:03:41 2013"
+  RTWModifiedTimeStamp	  294944206
+  ModelVersionFormat	  "1.%<AutoIncrement:27>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -548,7 +548,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_twiddle"
-    Location		    [64, 45, 732, 963]
+    Location		    [30, 45, 697, 744]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -581,7 +581,7 @@ Library {
       MaskIconUnits	      "autoscale"
       System {
 	Name			"coeff_gen"
-	Location		[140, 45, 1156, 2696]
+	Location		[106, 45, 1170, 2931]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -633,7 +633,7 @@ Library {
       MaskValueString	      "0|1|2|2|2|off"
       System {
 	Name			"twiddle_coeff_0"
-	Location		[410, 45, 1321, 1717]
+	Location		[376, 45, 1335, 1952]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -686,7 +686,7 @@ Library {
       MaskValueString	      "0|18|17|1|2|2|2|off"
       System {
 	Name			"twiddle_coeff_1"
-	Location		[443, 45, 1509, 1690]
+	Location		[409, 45, 1523, 1925]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -705,7 +705,7 @@ Library {
       BlockType		      SubSystem
       Name		      "twiddle_general"
       Ports		      []
-      Position		      [132, 152, 222, 258]
+      Position		      [130, 151, 220, 259]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag2"
@@ -749,14 +749,14 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|3|getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'Coeffs')|0|18|18|17|o"
-      "ff|1|2|2|2|[]|on|on|on|1|25|4|off|on|Round  (unbiased: +/- Inf)|Wrap"
+      MaskValueString	      "0|2|[0                                      1]|0|18|18|17|off|1|2|2|2|9|on|on|on|1|25|4|o"
+      "ff|on|Round  (unbiased: +/- Inf)|Wrap"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Impleme"
       "ntation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation"
       ",Implementation,Implementation,Implementation"
       System {
 	Name			"twiddle_general"
-	Location		[509, 45, 1363, 807]
+	Location		[661, 200, 1467, 727]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -805,7 +805,7 @@ Library {
       MaskValueString	      "0|off"
       System {
 	Name			"twiddle_pass_through"
-	Location		[410, 45, 1365, 1782]
+	Location		[376, 45, 1379, 2017]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -858,7 +858,7 @@ Library {
       MaskValueString	      "0|5|18|17|1|2|2|2|off"
       System {
 	Name			"twiddle_stage_2"
-	Location		[443, 45, 1509, 1690]
+	Location		[409, 45, 1523, 1925]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -928,8 +928,8 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag2
-    Data		    "  %)30     .    .!0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ )MET0,.    J!,   "
+    Data		    "  %)30     .    ,!0   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ /RH,P$.    H!,   "
     "8    (     @         %    \"     $    !     0         %  0 $0    $   \"8 0  9&5F875L=',           !&1E13:7IE      "
     "       &%S>6YC                ;E]I;G!U=',           !#;V5F9G,              %-T97!097)I;V0         8V]E9F9?8FET7W=I"
     "9'1H  !I;G!U=%]B:71?=VED=&@  &)I;E]P=%]I;@          861D7VQA=&5N8WD       !M=6QT7VQA=&5N8WD      &)R86U?;&%T96YC>0"
@@ -973,23 +973,23 @@ MatData {
     "    \"     0         !0    @    !    &@    $         $    !H   !2;W5N9\" @*'5N8FEA<V5D.B K+RT@26YF*0        X    X"
     "    !@    @    $          4    (     0    @    !         !     (    ;W9E<F9L;W<.    ,     8    (    !          %  "
     "  \"     $    $     0         0  0 5W)A< X    X    !@    @    &          4    (     0    $    !          D    (   "
-    "         \"$ .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &   "
-    "       4    (     0    $    !          D    (               .    4     8    (    !@         %    \"     $    $    "
-    " 0         )    (                       \\#\\         0         A #@   #@    &    \"     8         !0    @    !   "
-    "  0    $         \"0    @               X    X    !@    @    &          4    (     0    $    !          D    (    "
-    "        ,D .    .     8    (    !@         %    \"     $    !     0         )    \"            #) #@   #@    &    "
-    "\"     8         !0    @    !     0    $         \"0    @            Q0 X    X    !@    @    &          4    (    "
-    " 0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )   "
-    " \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X  "
-    "  !@    @    &          4    (     0    $    !          D    (             $ .    ,     8    (    !@         %    "
-    "\"                0         )          X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #"
-    "@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    ,     8    (    !          %    \""
-    "     $    \"     0         0  ( ;VX   X    X    !@    @    &          4    (     0    $    !          D    (      "
-    "      \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            #E #@   #@    &    "
-    "\"     8         !0    @    !     0    $         \"0    @            00 X    P    !@    @    $          4    (    "
-    " 0    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    "
-    "4     8    (    !          %    \"     $    :     0         0    &@   %)O=6YD(\" H=6YB:6%S960Z(\"LO+2!);F8I       "
-    " #@   #     &    \"     0         !0    @    !    !     $         $  $ %=R87 "
+    "          $ .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &    "
+    "      4    (     0    $    !          D    (               .    0     8    (    !@         %    \"     $    \"    "
+    " 0         )    $                       \\#\\.    .     8    (    !@         %    \"     $    !     0         )   "
+    " \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            R0 X    X  "
+    "  !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@         %    "
+    "\"     $    !     0         )    \"            #% #@   #@    &    \"     8         !0    @    !     0    $        "
+    " \"0    @           #P/PX    X    !@    @    &          4    (     0    $    !          D    (             $ .    "
+    ".     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8        "
+    " !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    !    "
+    "      D    (            (D .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X    P    "
+    "!@    @    $          4    (     0    (    !         !   @!O;@  #@   #     &    \"     0         !0    @    !     "
+    "@    $         $  \" &]N   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _"
+    "#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            Y0 X    X    !@    @    &    "
+    "      4    (     0    $    !          D    (            $$ .    ,     8    (    !          %    \"     $    #     "
+    "0         0  , ;V9F  X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   %     &    \" "
+    "    0         !0    @    !    &@    $         $    !H   !2;W5N9\" @*'5N8FEA<V5D.B K+RT@26YF*0        X    P    !@ "
+    "   @    $          4    (     0    0    !         !  ! !7<F%P"
   }
   DataRecord {
     Tag			    DataTag3

@@ -23,6 +23,10 @@ function twiddle_coeff_0_init(blk, varargin)
   conv_latency   = get_var('conv_latency', 'defaults', defaults, varargin{:});
   async          = get_var('async', 'defaults', defaults, varargin{:});
 
+  %the latency here must match twiddle_general with single coefficient so that
+  %latencies match when used in fft_direct
+  latency_s = '1+mult_latency+add_latency+conv_latency';
+
   if n_inputs == 0,
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});
@@ -30,74 +34,40 @@ function twiddle_coeff_0_init(blk, varargin)
     return;
   end
   
-  reuse_block(blk, 'ai', 'built-in/Inport');
-  set_param([blk,'/ai'], ...
-          'Port', sprintf('1'), ...
-          'Position', sprintf('[145 28 175 42]'));
+  reuse_block(blk, 'ai', 'built-in/Inport', 'Port', '1', 'Position', [145 28 175 42]);
+  reuse_block(blk, 'bi', 'built-in/Inport', 'Port', '2', 'Position', [145 93 175 107]);
+  reuse_block(blk, 'sync_in', 'built-in/Inport', 'Port', '3', 'Position', [145 163 175 177]);
+  reuse_block(blk, 'ao', 'built-in/Outport', 'Port', '1', 'Position', [255 28 285 42]);
+  reuse_block(blk, 'bwo', 'built-in/Outport', 'Port', '2', 'Position', [255 93 285 107]);
+  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '3', 'Position', [255 163 285 177]);
 
-  reuse_block(blk, 'bi', 'built-in/Inport');
-  set_param([blk,'/bi'], ...
-          'Port', sprintf('2'), ...
-          'Position', sprintf('[145 93 175 107]'));
 
-  reuse_block(blk, 'sync_in', 'built-in/Inport');
-  set_param([blk,'/sync_in'], ...
-          'Port', sprintf('3'), ...
-          'Position', sprintf('[145 163 175 177]'));
+  reuse_block(blk, 'da', 'xbsIndex_r4/Delay', ...
+          'latency', latency_s, 'reg_retiming', 'on', 'Position', [195 14 235 56]);
+  add_line(blk,'ai/1','da/1');
+  add_line(blk,'da/1','ao/1');
 
-  reuse_block(blk, 'delay0', 'xbsIndex_r4/Delay');
-  set_param([blk,'/delay0'], ...
-          'latency', sprintf('bram_latency+1+mult_latency+add_latency+conv_latency'), ...
-          'reg_retiming', sprintf('on'), ...
-          'Position', sprintf('[195 14 235 56]'));
+  reuse_block(blk, 'db', 'xbsIndex_r4/Delay', ...
+          'latency', latency_s, 'reg_retiming', 'on', 'Position', [195 79 235 121]);
+  add_line(blk,'bi/1','db/1');
+  add_line(blk,'db/1','bwo/1');
 
-  reuse_block(blk, 'delay1', 'xbsIndex_r4/Delay');
-  set_param([blk,'/delay1'], ...
-          'latency', sprintf('bram_latency+1+mult_latency+add_latency+conv_latency'), ...
-          'reg_retiming', sprintf('on'), ...
-          'Position', sprintf('[195 79 235 121]'));
-
-  reuse_block(blk, 'delay2', 'xbsIndex_r4/Delay');
-  set_param([blk,'/delay2'], ...
-          'latency', sprintf('bram_latency+1+mult_latency+add_latency+conv_latency'), ...
-          'reg_retiming', sprintf('on'), ...
-          'Position', sprintf('[195 149 235 191]'));
-
-  reuse_block(blk, 'ao', 'built-in/Outport');
-  set_param([blk,'/ao'], ...
-          'Port', sprintf('1'), ...
-          'Position', sprintf('[255 28 285 42]'));
-
-  reuse_block(blk, 'bwo', 'built-in/Outport');
-  set_param([blk,'/bwo'], ...
-          'Port', sprintf('2'), ...
-          'Position', sprintf('[255 93 285 107]'));
-
-  reuse_block(blk, 'sync_out', 'built-in/Outport');
-  set_param([blk,'/sync_out'], ...
-          'Port', sprintf('3'), ...
-          'Position', sprintf('[255 163 285 177]'));
-
-  add_line(blk,'bi/1','delay1/1');
-  add_line(blk,'sync_in/1','delay2/1');
-  add_line(blk,'ai/1','delay0/1');
-  add_line(blk,'delay0/1','ao/1');
-  add_line(blk,'delay1/1','bwo/1');
-  add_line(blk,'delay2/1','sync_out/1');
+  reuse_block(blk, 'dsync', 'xbsIndex_r4/Delay', ...
+          'latency', latency_s, 'reg_retiming', 'on', 'Position', [195 149 235 191]);
+  add_line(blk,'sync_in/1','dsync/1');
+  add_line(blk,'dsync/1','sync_out/1');
   
   if strcmp(async, 'on'),
     reuse_block(blk, 'en', 'built-in/Inport', ...
             'Port', '4', ...
             'Position', [145 163+65 175 177+65]);
-    reuse_block(blk, 'delay3', 'xbsIndex_r4/Delay', ...
-            'latency', 'bram_latency+1+mult_latency+add_latency+conv_latency', ...
-            'reg_retiming', 'on', ...
-            'Position', [195 149+65 235 191+65]);
+    reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
+            'latency', latency_s, 'reg_retiming', 'on', 'Position', [195 149+65 235 191+65]);
+    add_line(blk, 'en/1', 'den/1');
     reuse_block(blk, 'dvalid', 'built-in/Outport', ...
             'Port', '4', ...
             'Position', [255 163+65 285 177+65]);
-    add_line(blk, 'en/1', 'delay3/1');
-    add_line(blk, 'delay3/1', 'dvalid/1');
+    add_line(blk, 'den/1', 'dvalid/1');
   end
 
   clean_blocks(blk);
