@@ -361,7 +361,6 @@ clean_blocks(blk);
 del = 'slices';
 coeff = 'slices';
 if strcmp(delays_bram,'on') del = 'BRAM'; end
-if strcmp(coeffs_bram,'on') coeff = 'BRAM'; end
 
 if strcmp(bitgrowth, 'on')
   shifting = 'bit growth';
@@ -372,7 +371,7 @@ elseif strcmp(hardcode_shifts, 'on'),
 else
   shifting = 'dynamic shifting';
 end
-fmtstr = sprintf('[%d/%d]\ndelays in %s\ncoeffs in %s\n%s\n', FFTStage, FFTSize, del, coeff, shifting);
+fmtstr = sprintf('[%d/%d]\ndelays in %s\n%s\n', FFTStage, FFTSize, del, shifting);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
 clog('exiting fft_stage_n_init','trace');
