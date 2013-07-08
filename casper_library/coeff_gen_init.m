@@ -198,7 +198,7 @@ function coeff_gen_init(blk, varargin)
     else, 
       phase_offset = Coeffs(1); phase_step = Coeffs(2) - Coeffs(1);
     end
-    phase_offset_fraction = phase_offset/(2^FFTSize);
+    phase_offset_fraction = phase_offset/(2^(FFTSize-StepPeriod));
     phase_multiple = phase_offset/length(Coeffs);
     
     %what fraction of the cycle is required
@@ -210,7 +210,7 @@ function coeff_gen_init(blk, varargin)
       bottom = Coeffs(1);
     end
 
-    multiple = (2^FFTSize)/((top+phase_step)-bottom);
+    multiple = (2^(FFTSize-StepPeriod))/((top+phase_step)-bottom);
     multiple_bits = log2(multiple);
     step_bits = multiple_bits+log2(length(Coeffs));
 
