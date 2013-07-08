@@ -206,7 +206,7 @@ function butterfly_direct_init(blk, varargin)
       end
     else
       convert_in_bitwidth = n_bits_addsub_out+1;
-      convert_in_binpoint = n_bits_addsub_out+1;
+      convert_in_binpoint = bin_pt_addsub_out+1;
     end
   else
     convert_in_bitwidth = n_bits_addsub_out;
