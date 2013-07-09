@@ -46,6 +46,7 @@ function bus_expand_init(blk, varargin)
 clog('entering bus_expand_init','trace');
 
 check_mask_type(blk, 'bus_expand');
+munge_block(blk, varargin{:});
 
 defaults = {'mode', 'divisions of equal size', 'outputNum', 2, 'outputWidth', 8, ...
   'outputBinaryPt', 7, 'outputArithmeticType', 1, ...
