@@ -145,14 +145,14 @@ function barrel_switcher_init(blk, varargin)
   %
 
   if strcmp(async, 'on'),
-    reuse_block(blk, 'dvi', 'built-in/inport',...
+    reuse_block(blk, 'en', 'built-in/inport',...
         'Position', [15 (2^n_inputs+2)*80+95 45 109+80*(2^n_inputs+2)], 'Port', num2str(2^n_inputs+3));
-    reuse_block(blk, 'dvo', 'built-in/outport',...
+    reuse_block(blk, 'dvalid', 'built-in/outport',...
         'Position', [135 (2^n_inputs+2)*80+95 165 109+80*(2^n_inputs+2)], 'Port', num2str(2^n_inputs+2));
-    reuse_block(blk, 'delay_dvalid', 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
         'Position', [75 (2^n_inputs+2)*80+95 105 109+80*(2^n_inputs+2)], 'latency', num2str(n_inputs));
-    add_line(blk, 'dvi/1', 'delay_dvalid/1');
-    add_line(blk, 'delay_dvalid/1', 'dvo/1');
+    add_line(blk, 'en/1', 'den/1');
+    add_line(blk, 'den/1', 'dvalid/1');
   end
 
   clean_blocks(blk);

@@ -74,7 +74,7 @@ function biplex_cplx_unscrambler_init(blk, varargin)
   reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '3', 'Position', [25 118 55 132]);
 
   if strcmp(async, 'on'),
-    reuse_block(blk, 'dvi', 'built-in/Inport', 'Port', '4', 'Position', [25 298 55 312]);
+    reuse_block(blk, 'en', 'built-in/Inport', 'Port', '4', 'Position', [25 298 55 312]);
     en = 'on';
     position = [270 80 355 330];
   else,
@@ -127,8 +127,8 @@ function biplex_cplx_unscrambler_init(blk, varargin)
   add_line(blk,'Convert/1','barrel_switcher/1');
 
   if strcmp(async, 'on'),
-    add_line(blk, 'dvi/1', 'Counter/2'); 
-    add_line(blk, 'dvi/1', 'barrel_switcher/5'); 
+    add_line(blk, 'en/1', 'Counter/2'); 
+    add_line(blk, 'en/1', 'barrel_switcher/5'); 
   end
 
   %
@@ -227,10 +227,10 @@ function biplex_cplx_unscrambler_init(blk, varargin)
     add_line(blk, 'reorder/2', 'Counter1/2');
     add_line(blk, 'reorder1/2', 'barrel_switcher1/5');
 
-    reuse_block(blk, 'dvo', 'built-in/Outport', ...
+    reuse_block(blk, 'dvalid', 'built-in/Outport', ...
             'Port', '4', ...
             'Position', [875 258 905 272]);
-    add_line(blk,'barrel_switcher1/4','dvo/1');
+    add_line(blk,'barrel_switcher1/4','dvalid/1');
 
   else,
     reuse_block(blk, 'T1', 'built-in/Terminator', ...

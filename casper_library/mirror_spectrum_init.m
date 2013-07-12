@@ -36,7 +36,7 @@ function mirror_spectrum_init(blk, varargin)
     'async', 'off', ...
   };
 
-%  if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+  if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   check_mask_type(blk, 'mirror_spectrum');
   munge_block(blk, varargin{:});
 
@@ -147,7 +147,7 @@ function mirror_spectrum_init(blk, varargin)
   end
 
   % Delete all unconnected blocks.
-%  clean_blocks(blk);
+  clean_blocks(blk);
 
   % Save block state to stop repeated init script runs.
   save_state(blk, 'defaults', defaults, varargin{:});

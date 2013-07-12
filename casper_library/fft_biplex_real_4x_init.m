@@ -123,7 +123,7 @@ shift_schedule      = get_var('shift_schedule', 'defaults', defaults, varargin{:
 dsp48_adders        = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
 %default empty for storage in library
-if n_inputs == 0 | FFTSize == 0,
+if n_inputs == 0 || FFTSize == 0,
   delete_lines(blk);
   clean_blocks(blk);
   set_param(blk, 'AttributesFormatString', '');
@@ -165,7 +165,6 @@ reuse_block(blk, 'odd_bussify', 'casper_library_flow_control/bus_create', ...
 % prepare bus splitters
 %
 
-% TODO final bus width calculation
 if strcmp(bitgrowth,'on'), n_bits_out = min(input_bit_width+FFTSize, max_bits);
 else n_bits_out = input_bit_width;
 end
@@ -174,7 +173,7 @@ for index = 0:3,
   reuse_block(blk, ['pol',num2str(index),'_debus'], 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of equal size', 'outputNum', num2str(n_inputs), ...
     'outputWidth', num2str(n_bits_out*2), 'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
-    'Position', [490 49+(n_inputs*index)*60 580 81+((n_inputs*(index+1))-1)*60]);
+    'Position', [490 49+(n_inputs*index)*30 580 81+((n_inputs*(index+1))-1)*30]);
 end %for
 
 %
@@ -226,7 +225,6 @@ end
 %
 % Add biplex_core block.
 %
-%TODO twiddle decimation and sharing options to biplex_core
 
 reuse_block(blk, 'biplex_core', 'casper_library_ffts/biplex_core', ...
     'Position', [250 30 335 125], ...

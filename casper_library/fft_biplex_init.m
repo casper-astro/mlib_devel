@@ -24,6 +24,10 @@
 %   http://casper.berkeley.edu                                                %
 %   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
 %                                                                             %
+%   SKA Africa                                                                %
+%   www.kat.ac.za                                                             %
+%   Copyright (C) 2013 Andrew Martens                                         %
+%                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
 %   the Free Software Foundation; either version 2 of the License, or         %
@@ -45,12 +49,13 @@ clog('entering fft_biplex_init','trace');
 
 % Set default vararg values.
 defaults = { ...
+    'n_streams', 1, ...
     'n_inputs', 1, ...
     'FFTSize', 2, ...
     'input_bit_width', 18, ...
     'bin_pt_in', 17, ...
     'coeff_bit_width', 18, ...
-    'async', 'on', ...
+    'async', 'off', ...
     'add_latency', 1, ...
     'mult_latency', 2, ...
     'bram_latency', 2, ...
@@ -80,6 +85,7 @@ check_mask_type(blk, 'fft_biplex');
 munge_block(blk, varargin{:});
 
 % Retrieve values from mask fields.
+n_streams         = get_var('n_streams', 'defaults', defaults, varargin{:});
 n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
 FFTSize           = get_var('FFTSize', 'defaults', defaults, varargin{:});
 input_bit_width   = get_var('input_bit_width', 'defaults', defaults, varargin{:});
@@ -107,10 +113,12 @@ hardcode_shifts   = get_var('hardcode_shifts', 'defaults', defaults, varargin{:}
 shift_schedule    = get_var('shift_schedule', 'defaults', defaults, varargin{:});
 dsp48_adders      = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+ytick = 60;
+
 delete_lines(blk);
 
 %default setup for library
-if n_inputs == 0 | FFTSize == 0,
+if n_streams == 0 || n_inputs == 0 || FFTSize == 0,
   clean_blocks(blk);
   set_param(blk, 'AttributesFormatString', '');
   save_state(blk, 'defaults', defaults, varargin{:});
@@ -122,11 +130,69 @@ end
 [temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
 
+%
+% prepare bus creators
+%
+
+reuse_block(blk, 'even_bussify', 'casper_library_flow_control/bus_create', ...
+  'inputNum', num2str(n_inputs*n_streams), 'Position', [150 74 210 116+(((n_streams*n_inputs)-1)*ytick)]); 
+
+reuse_block(blk, 'odd_bussify', 'casper_library_flow_control/bus_create', ...
+  'inputNum', num2str(n_inputs*n_streams), 'Position', [150 74+((n_streams*n_inputs)*ytick) 210 116+((((n_streams*n_inputs)*2)-1)*ytick)]); 
+
+%
+% prepare bus splitters
+%
+
+if strcmp(bitgrowth,'on'), n_bits_out = min(input_bit_width+FFTSize, max_bits);
+else n_bits_out = input_bit_width;
+end
+
+for index = 0:1,
+  reuse_block(blk, ['pol',num2str(index),'_debus'], 'casper_library_flow_control/bus_expand', ...
+    'mode', 'divisions of equal size', 'outputNum', num2str(n_inputs*n_streams), ...
+    'outputWidth', num2str(n_bits_out*2), 'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
+    'Position', [490 49+((n_streams*n_inputs)*index)*ytick 580 81+(((n_streams*n_inputs)*(index+1))-1)*ytick]);
+end %for
+
 %input ports
-reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [15 37 45 53]);
-reuse_block(blk, 'shift', 'built-in/Inport', 'Port', '2', 'Position', [15 67 45 83]);
-reuse_block(blk, 'pol1', 'built-in/Inport', 'Port', '3', 'Position', [15 97 45 113]);
-reuse_block(blk, 'pol2', 'built-in/Inport', 'Port', '4', 'Position', [15 127 45 143]);
+reuse_block(blk, 'sync', 'built-in/inport', 'Position', [15 13 45 27], 'Port', '1');
+reuse_block(blk, 'shift', 'built-in/inport', 'Position', [15 43 45 57], 'Port', '2');
+reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [635 25 665 39], 'Port', '1');
+reuse_block(blk, 'of', 'built-in/outport', 'Position', [400 150 430 164], 'Port', num2str(1+((n_streams*n_inputs)*2)+1));
+
+if strcmp(async, 'on'),
+  reuse_block(blk, 'en', 'built-in/inport', ...
+    'Position', [180 73+(((n_streams*n_inputs*2)+1)*ytick) 210 87+(((n_streams*n_inputs*2)+1)*ytick)], 'Port', num2str(2+(n_streams*n_inputs*2)+1));
+  reuse_block(blk, 'dvalid', 'built-in/outport', ...
+    'Position', [490 73+(((n_streams*n_inputs*2)+1)*ytick) 520 87+(((n_streams*n_inputs*2)+1)*ytick)], 'Port', num2str(1+(n_streams*n_inputs*2)+1+1));
+end
+
+%data inputs, outputs, connections to bus creation and expansion blocks
+mult = 2;
+for s = 0:n_streams-1,
+  base = s*(n_inputs*mult);
+  for n = 0:(n_inputs*mult)-1,
+    in = ['pol',num2str(s),num2str(n),'_in'];
+    reuse_block(blk, in, 'built-in/inport', ...
+      'Position', [15 73+((base+n)*ytick) 45 87+((base+n)*ytick)], ...
+      'Port', num2str(3+base+n));
+
+    out = ['pol',num2str(s),num2str(n),'_out'];
+    reuse_block(blk, out, 'built-in/outport', ...
+      'Position', [635 53+((base+n)*ytick) 665 67+((base+n)*ytick)], ...
+      'Port', num2str(2+base+n));
+
+    %connect inputs to bus creators
+    if mod(n,mult) == 0, bussify_target = 'even';
+    else bussify_target = 'odd';
+    end
+    add_line(blk, [in,'/1'], [bussify_target, '_bussify/', num2str(floor((base+n)/mult)+1)]);
+
+    %connect debus outputs to output
+    add_line(blk, ['pol', num2str(mod((base+n),mult)), '_debus/', num2str(floor((base+n)/mult)+1)], [out,'/1']); 
+  end %for n
+end %for s
 
 reuse_block(blk, 'biplex_core', 'casper_library_ffts/biplex_core', ...
   'n_inputs', num2str(n_inputs), ...
@@ -146,50 +212,45 @@ reuse_block(blk, 'biplex_core', 'casper_library_ffts/biplex_core', ...
   'coeff_sharing', coeff_sharing, ...
   'coeff_decimation', coeff_decimation, ...
   'coeff_generation', coeff_generation, ...
-  'cal_bits', 'cal_bits', ...
-  'n_bits_rotation', 'n_bits_rotation', ...
-  'max_fanout', 'max_fanout', ...
-  'mult_spec', 'mult_spec', ...
+  'cal_bits', num2str(cal_bits), ...
+  'n_bits_rotation', num2str(n_bits_rotation), ...
+  'max_fanout', num2str(max_fanout), ...
+  'mult_spec', mat2str(mult_spec), ...
   'bitgrowth', bitgrowth, ...
   'max_bits', num2str(max_bits), ...
   'hardcode_shifts', hardcode_shifts, ...
-  'shift_schedule', 'shift_schedule', ...
+  'shift_schedule', mat2str(shift_schedule), ...
   'dsp48_adders', dsp48_adders, ...
-  'Position', [95 26 170 154]);
+  'Position', [250 30 335 125]);
 
-add_line(blk, ['sync/1'], ['biplex_core/1']);
-add_line(blk, ['shift/1'], ['biplex_core/2']);
-add_line(blk, ['pol1/1'], ['biplex_core/3']);
-add_line(blk, ['pol2/1'], ['biplex_core/4']);
+add_line(blk, 'sync/1', 'biplex_core/1');
+add_line(blk, 'shift/1', 'biplex_core/2');
+add_line(blk, 'even_bussify/1', 'biplex_core/3');
+add_line(blk, 'odd_bussify/1', 'biplex_core/4');
 
 reuse_block(blk, 'biplex_cplx_unscrambler', 'casper_library_ffts_internal/biplex_cplx_unscrambler', ...
   'FFTSize', num2str(FFTSize), ...
   'bram_latency', num2str(bram_latency), ...
   'async', async, ...
-  'Position', [285 25 375 125]) 
+  'Position', [380 30 455 120]) 
 
 add_line(blk, ['biplex_core/1'], ['biplex_cplx_unscrambler/3']);
 add_line(blk, ['biplex_core/2'], ['biplex_cplx_unscrambler/1']);
 add_line(blk, ['biplex_core/3'], ['biplex_cplx_unscrambler/2']);
 
+add_line(blk, 'biplex_core/4', 'of/1');
+
 %output ports
-reuse_block(blk, 'of', 'built-in/Outport', 'Port', '4', 'Position', [210 128 240 142]);
-add_line(blk, 'biplex_core/4', ['of/1']);
-reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [425 103 455 117]);
-add_line(blk, ['biplex_cplx_unscrambler/3'], ['sync_out/1']);
-reuse_block(blk, 'pol1_out', 'built-in/Outport', 'Port', '2', 'Position', [425 33 455 47]);
-add_line(blk, ['biplex_cplx_unscrambler/1'], ['pol1_out/1']);
-reuse_block(blk, 'pol2_out', 'built-in/Outport', 'Port', '3', 'Position', [425 68 455 82]);
-add_line(blk, ['biplex_cplx_unscrambler/2'], ['pol2_out/1']);
 
 if strcmp(async, 'on'),
-  reuse_block(blk, 'en', 'built-in/Inport', 'Port', '5', 'Position', [15 157 45 173]);
   add_line(blk, 'en/1', 'biplex_core/5');
   add_line(blk, 'biplex_core/5', 'biplex_cplx_unscrambler/4');
-  
-  reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '5', 'Position', [425 133 455 147]);
   add_line(blk, 'biplex_cplx_unscrambler/4', 'dvalid/1');
 end
+
+add_line(blk, 'biplex_cplx_unscrambler/3', 'sync_out/1');
+add_line(blk, 'biplex_cplx_unscrambler/1', 'pol0_debus/1');
+add_line(blk, 'biplex_cplx_unscrambler/2', 'pol1_debus/1');
 
 clean_blocks(blk);
 
