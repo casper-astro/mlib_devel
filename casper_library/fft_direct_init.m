@@ -142,7 +142,7 @@ reuse_block(blk, 'of', 'built-in/outport', 'Port', num2str((2^FFTSize*n_streams)
 
 if strcmp(async, 'on'),
   reuse_block(blk, 'en', 'built-in/inport', ...
-    'Port', num2str(n_dports+3), 'Position', [30 ytick*(n_dports+1)+100 60 ytick*(n_dports+1)+115]);
+    'Port', num2str(n_dports+3), 'Position', [90 ytick*(n_dports+1)+100 120 ytick*(n_dports+1)+115]);
   reuse_block(blk, 'dvalid', 'built-in/outport', 'Port', num2str(n_dports+3), ...
     'Position', [xtick*FFTSize+150 ytick*(n_dports+1)+100 xtick*FFTSize+180 ytick*(n_dports+1)+115]);
 end
@@ -353,7 +353,7 @@ for stage=0:FFTSize-1,
           else
             tname = ['en',num2str(floor(n/multiple))];
             reuse_block(blk, tname, 'built-in/Terminator', ...
-             'Position',  [xtick*FFTSize+130 (ytick*n*2*n_streams)+162 xtick*FFTSize+140 (ytick*n*2*n_streams)+177]);
+             'Position',  [xtick*FFTSize+80 (ytick*n*2*n_streams)+162 xtick*FFTSize+95 (ytick*n*2*n_streams)+177]);
             add_line(blk, [butterfly,'/5'], [tname,'/1']);
           end
         end
