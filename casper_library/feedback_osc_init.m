@@ -123,53 +123,67 @@ function feedback_osc_init(blk, varargin)
   indices = [];
   step = phase_steps_bits - ref_values_bits;      %spacing of reference values
   for ref_index = 0:(2^ref_values_bits)-1,
-    burst = ['[',num2str(ref_index*(2^step)),':',num2str(ref_index*(2^step)+((2^wcl_bits)-1)),']'];
-    clog(['burst ',num2str(ref_index),' = ', burst], 'feedback_osc_init_debug');
-    if ref_index ~= (2^ref_values_bits)-1, burst = [burst, ',']; 
-    end
+    burst = [ref_index*(2^step):ref_index*(2^step)+((2^wcl_bits)-1)];
+    clog(['burst ',num2str(ref_index),' = ', mat2str(burst)], 'feedback_osc_init_debug');
     indices = [indices, burst];
   end %for
 
   %initial phase
-  init = ['2*pi*',num2str(phase_initial)];
+  init = 2*pi*phase_initial;
 
   %arguments controlling complex exponential period
   fraction = phase_step_bits - phase_steps_bits;  %fraction of period stepping through
-  period = ['(2/(2^',num2str(fraction),'))'];
+  period = 2/(2^fraction);
+  period_s = ['(2/(2^',num2str(fraction),'))'];
 
-  reuse_block(blk, 'cos_reference', 'xbsIndex_r4/ROM', ...
+  bin_pt = n_bits-1;
+  cos_vals = cos(init+(pi*period)/(2^(phase_steps_bits)) * indices);
+  cos_vals = fi(cos_vals, true, n_bits, bin_pt); %saturates at max so no overflow
+  cos_vals = fi(cos_vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
+  cos_vals = fi(cos_vals, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
+  cos_vals = bitshift(cos_vals,bin_pt+n_bits); %shift up to lie in top n_bits of word 
+
+  sin_vals = -sin(init+(pi*period)/(2^(phase_steps_bits)) * indices);
+  sin_vals = fi(sin_vals, true, n_bits, bin_pt); %saturates at max so no overflow
+  sin_vals = fi(sin_vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
+  sin_vals = fi(sin_vals, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
+  sin_vals = bitshift(sin_vals, bin_pt); %shift up 
+
+  initVector = ['[',num2str(double(cos_vals+sin_vals)),']'];
+
+  reuse_block(blk, 'reference', 'xbsIndex_r4/ROM', ...
           'depth', ['2^(',num2str(ref_values_bits),'+',num2str(wcl_bits),')'], ...
-          'initVector', ['cos(',init,'+(pi*',period,')/(2^',num2str(phase_steps_bits),') * [',indices,'])'], ...
+          'initVector', initVector, 'arith_type', 'Unsigned',...
           'distributed_mem', bram, 'latency', num2str(bram_latency), ...
-          'n_bits', num2str(n_bits), 'bin_pt', num2str(n_bits-1), ...
+          'n_bits', num2str(n_bits*2), 'bin_pt', '0', ...
           'Position', [285 446 345 474]);
-  add_line(blk,'cc0/1','cos_reference/1');
+  add_line(blk,'cc0/1','reference/1');
 
-  reuse_block(blk, '-sin_reference', 'xbsIndex_r4/ROM', ...
-          'depth', ['2^(',num2str(ref_values_bits),'+',num2str(wcl_bits),')'], ...
-          'initVector', ['-sin(',init,'+(pi*',period,')/(2^',num2str(phase_steps_bits),') * [',indices,'])'], ...
-          'distributed_mem', bram, 'latency', num2str(bram_latency), ...
-          'n_bits', num2str(n_bits), 'bin_pt', num2str(n_bits-1), ...
-          'Position', [285 491 345 519]);
-  add_line(blk,'cc0/1','-sin_reference/1');
+%  reuse_block(blk, '-sin_reference', 'xbsIndex_r4/ROM', ...
+%          'depth', ['2^(',num2str(ref_values_bits),'+',num2str(wcl_bits),')'], ...
+%          'initVector', ['-sin(',init,'+(pi*',period,')/(2^',num2str(phase_steps_bits),') * [',indices,'])'], ...
+%          'distributed_mem', bram, 'latency', num2str(bram_latency), ...
+%          'n_bits', num2str(n_bits), 'bin_pt', num2str(n_bits-1), ...
+%          'Position', [285 491 345 519]);
+%  add_line(blk,'cc0/1','-sin_reference/1');
 
-  reuse_block(blk, 'ri_to_c0', 'casper_library_misc/ri_to_c', ...
-          'Position', [400 437 425 528]);
-  add_line(blk, 'cos_reference/1', 'ri_to_c0/1');
-  add_line(blk, '-sin_reference/1', 'ri_to_c0/2');
+%  reuse_block(blk, 'ri_to_c0', 'casper_library_misc/ri_to_c', ...
+%          'Position', [400 437 425 528]);
+%  add_line(blk, 'cos_reference/1', 'ri_to_c0/1');
+%  add_line(blk, '-sin_reference/1', 'ri_to_c0/2');
 
   reuse_block(blk, 'amux', 'xbsIndex_r4/Mux', ...
           'inputs', '2', 'en', 'on', 'latency', num2str(mux_latency), 'Position', [480 323 510 757]);
   add_line(blk, 'select/1', 'amux/1');
-  add_line(blk, 'ri_to_c0/1', 'amux/2');
+  add_line(blk, 'reference/1', 'amux/2');
 
   reuse_block(blk, 'rotation_real', 'xbsIndex_r4/Constant', ...
-          'const', ['cos(',num2str(2^wcl_bits),'*(pi*',period,'/2^',num2str(phase_steps_bits),'))' ], ...
+          'const', ['cos(',num2str(2^wcl_bits),'*(pi*',period_s,'/2^',num2str(phase_steps_bits),'))' ], ...
           'n_bits', num2str(n_bits_rotation), 'bin_pt', num2str(n_bits_rotation-1), ...
           'Position', [520 584 640 606]);
 
   reuse_block(blk, 'rotation_imag', 'xbsIndex_r4/Constant', ...
-          'const', ['-sin(',num2str(2^wcl_bits),'*(pi*',period,'/2^',num2str(phase_steps_bits),'))' ], ...
+          'const', ['-sin(',num2str(2^wcl_bits),'*(pi*',period_s,'/2^',num2str(phase_steps_bits),'))' ], ...
           'n_bits', num2str(n_bits_rotation), 'bin_pt', num2str(n_bits_rotation-1), ...
           'Position', [520 624 640 646]);
 
@@ -192,7 +206,7 @@ function feedback_osc_init(blk, varargin)
   reuse_block(blk, 'outmux', 'xbsIndex_r4/Mux', ...
           'inputs', '2', 'latency', '2', 'Position', [910 490 940 640]);
   add_line(blk, 'select/1', 'outmux/1', 'autorouting', 'on');
-  add_line(blk, 'ri_to_c0/1', 'outmux/2', 'autorouting', 'on');
+  add_line(blk, 'reference/1', 'outmux/2', 'autorouting', 'on');
   add_line(blk, 'cmult/1', 'outmux/3');
 
   reuse_block(blk, 'c_to_ri', 'casper_library_misc/c_to_ri', ...
@@ -238,7 +252,7 @@ function feedback_osc_init(blk, varargin)
     'ref_values_bits', ref_values_bits, 'bram_latency', bram_latency, 'mult_latency', mult_latency, ...
     'add_latency', add_latency, 'conv_latency', conv_latency, 'bram', bram, 'quantization', quantization};
 
-  fmtstr = sprintf('%d cal vals',num2str(2^(wcl_bits+ref_values_bits)));
+  fmtstr = sprintf('%d cal vals',2^(wcl_bits+ref_values_bits));
   set_param(blk, 'AttributesFormatString', fmtstr);
   save_state(blk, 'defaults', defaults, args{:});
 end % feedback_osc_new_init

@@ -467,10 +467,9 @@ function coeff_gen_init(blk, varargin)
       end
 
       %derived from feedback_osc_init
-      %TODO pack both sets of initial values into same BRAM and change this calculation
       pipeline_delay_bits = ceil(log2(mult_latency+add_latency+conv_latency+1)); 
   
-      coeffs_volume = (2^(pipeline_delay_bits+cal_bits)) * coeff_bit_width;
+      coeffs_volume = (2^(pipeline_delay_bits+cal_bits)) * coeff_bit_width * 2;
       if coeffs_volume > 2^coeffs_bit_limit, coeffs_bram = 'on'; 
       else, coeffs_bram = 'off';
       end
