@@ -48,23 +48,20 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
             xml_node_bitreg.setAttribute('direction', get_param(blk, 'io_dir'));
             xml_node_bitreg.setAttribute('width', '32');
             xml_node_registers.appendChild(xml_node_bitreg);
-            xml_node_bitreg.appendChild(make_field_node(xml_dom.createElement('field'), 'field', 32, 0, 0, 0));
+            xml_node_bitreg.appendChild(make_field_node(xml_dom.createElement('field'), 'data', 32, 0, 0, 0));
             clear regname;
         end
     end
     
-    % and now snap blocks
+    % and now bitsnaps and snap blocks
     xml_node_snapshots = xml_dom.createElement('device_class');
     xml_node_snapshots.setAttribute('class', 'snapshot');
     xml_node_root.appendChild(xml_node_snapshots);
     bitsnap_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:bitsnap');
-    snapshot_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:snapshot');
-    % take out snapshots that are inside bitsnaps
-    snapshot_blks = snapshot_blks(~strcmp(get_param(get_param(snapshot_blks, 'Parent'), 'Tag'), 'casper:bitsnap'));
     if numel(bitsnap_blks) > 0,
         for n = 1 : numel(bitsnap_blks),
             blk = bitsnap_blks(n);
-            xml_node_snapshot = make_snapshot_node(sysname, strcat(blk, '/ss'), xml_dom.createElement('snapshot'));
+            xml_node_snapshot = make_snapshot_node(xml_dom, sysname, strcat(blk, '/ss'));
             xml_node_snapshots.appendChild(xml_node_snapshot);
             % fields
             append_field_nodes(blk, xml_dom, xml_node_snapshot, 'io', 'field');
@@ -74,15 +71,32 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
             end
         end
     end
+    snapshot_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:snapshot');
+    % take out snapshots that are inside bitsnaps
+    snapshot_blks = snapshot_blks(~strcmp(get_param(get_param(snapshot_blks, 'Parent'), 'Tag'), 'casper:bitsnap'));
     if numel(snapshot_blks) > 0,
         for n = 1 : numel(snapshot_blks),
             blk = snapshot_blks(n);
-            xml_node_snapshot = make_snapshot_node(sysname, blk, xml_dom.createElement('snapshot'));
+            xml_node_snapshot = make_snapshot_node(xml_dom, sysname, blk);
             xml_node_snapshots.appendChild(xml_node_snapshot);
-            xml_node_snapshot.appendChild(make_field_node(xml_dom.createElement('field'), 'field', str2double(get_param(blk, 'data_width')), 0, 0, 0));
+            xml_node_snapshot.appendChild(make_field_node(xml_dom.createElement('field'), 'data', str2double(get_param(blk, 'data_width')), 0, 0, 0));
         end
     end
     
+    % now comments/info blocks
+    info_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:info');
+    xml_node_infos = xml_dom.createElement('design_info');
+    xml_node_root.appendChild(xml_node_infos);
+    if numel(info_blks) > 0,
+        for n = 1 : numel(info_blks),
+            blk = info_blks(n);
+            info_node = xml_dom.createElement('info');
+            xml_node_infos.appendChild(info_node);
+            info_node.setAttribute('info', get_param(blk, 'info'));
+        end
+    end
+    
+    % support functions
     function append_field_nodes(blk, dom, parent_node, param_prefix, name)
         field_names = fliplr(eval(char(get_param(blk, strcat(param_prefix, '_names')))));
         field_widths = fliplr(eval(char(get_param(blk, strcat(param_prefix, '_widths')))));
@@ -96,7 +110,8 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
         end
     end
     
-    function node = make_snapshot_node(sysname, blk, node)
+    function node = make_snapshot_node(xml_dom, sysname, blk)
+        node = xml_dom.createElement('snapshot');
         node.setAttribute('name', regexprep(regexprep(blk, ['^' sysname '/'], ''), '/', '_'));
         node.setAttribute('storage', get_param(blk, 'storage'));
         node.setAttribute('dram_dimm', get_param(blk, 'dram_dimm'));
