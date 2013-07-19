@@ -30,6 +30,8 @@ PARAMETER mode = 0, DT = INTEGER
 PARAMETER use_adc0   = 1, DT = INTEGER
 PARAMETER use_adc1   = 0, DT = INTEGER
 PARAMETER using_cntl = 1, DT = INTEGER
+PARAMETER bufr_div   = 4, DT = INTEGER
+PARAMETER bufr_div_str = "4", DT = STRING
 
 ###########
 ## Ports ##

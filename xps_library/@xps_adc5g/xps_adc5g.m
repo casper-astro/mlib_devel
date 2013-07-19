@@ -47,6 +47,7 @@ s.test_ramp = test_ramp;
 if strcmp(test_ramp, 'on')
     s.mode = 'MODE_TEST_RAMP';
 end
+
 s.hw_sys = get(xsg_obj,'hw_sys');
 s.using_ctrl = strcmp( get_param(blk_name, 'using_ctrl'), 'on' );
 actual_adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
@@ -92,7 +93,8 @@ switch s.hw_sys
         d_allowed = 1:52;
         o0_allowed = 1:128;
         o1_allowed = 1:128;
-	o0_prec = 1;
+        r_allowed = 1:1;
+        o0_prec = 1;
     case 'ROACH2'
         f_pfdmax = 450; % MHz, for bandwidth set to HIGH
         f_pfdmin = 135; % MHz, for bandwidth set to HIGH
@@ -100,66 +102,74 @@ switch s.hw_sys
         f_vcomin = 600; % MHz
         m_allowed = 5:64;
         d_allowed = 1:80;
-        o0_allowed = 1:128;
+        o0_allowed = 2:128;
         o1_allowed = 1:128;
-	o0_prec = 0.125;
+        r_allowed = 1:8;
+        o0_prec = 0.125;
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end
 
-% Determine the possible ranges for M and D
-d_min = ceil(s.adc_clk_rate/f_pfdmax);
-d_max = floor(s.adc_clk_rate/f_pfdmin);
-m_min = max(m_allowed(1), d_min*ceil(f_vcomin/s.adc_clk_rate));
-m_max = floor((d_max*f_vcomax)/s.adc_clk_rate);
-
 % Determine optimal M and D values
 optimum_found = 0;
-for d=d_min:d_max
-    pfd_freq = s.adc_clk_rate/d;
+for r=r_allowed
+  pll_freq = s.adc_clk_rate/r;
+
+  % Determine the possible ranges for M and D
+  d_min = ceil(pll_freq/f_pfdmax);
+  d_max = floor(pll_freq/f_pfdmin);
+  m_min = max(m_allowed(1), d_min*ceil(f_vcomin/pll_freq));
+  m_max = floor((d_max*f_vcomax)/pll_freq);
+
+  for d=d_min:d_max
+    pfd_freq = pll_freq/d;
     for m=m_min:m_max
         vco_freq = pfd_freq*m;
         o0 = vco_freq/s.adc_clk_rate;
         o1 = vco_freq/s.sysclk_rate;
-	disp(sprintf('%d %d %f %f %f %f', d, m, pfd_freq, vco_freq, o0, o1));
-        if (mod(o0, o0_prec)==0) && (mod(o1, 1)==0) 
-            if (m<m_allowed(1)) || (m>m_allowed(end))
-	        disp('m outside range');
-                continue
-            elseif (d<d_allowed(1)) || (d>d_allowed(end))
-	        disp('d outside range');
-                continue
-            elseif (o0<o0_allowed(1)) || (o0>o0_allowed(end))
-	        disp('o0 outside range');
-                continue
-            elseif (o1<o1_allowed(1)) || (o1>o1_allowed(end))
-	        disp('o1 outside range');
-                continue
-            elseif (pfd_freq<f_pfdmin) || (pfd_freq>f_pfdmax)
-	        disp('pfd freq outside range');
-                continue
-            elseif (vco_freq<f_vcomin) || (vco_freq>f_vcomax)
-	        disp('vco freq outside range');
-	        continue
-	    elseif (strcmp(s.hw_sys, 'ROACH2') && s.adc_clk_rate>315.0 && (d==3 || d==4))
-	        % Special case here for ROACH2
-		disp('adc_clk>315 and d is either 3 or 4');
-		continue
-            else
-                % Finally, we've found it!
-                
-                pll_m = m;
-                pll_d = d;
-                pll_o0 = o0;
-                pll_o1 = o1;
-                optimum_found = 1;
-                break
-            end
+        %disp(sprintf('%d %d %d %f %f %f %f', r, d, m, pfd_freq, vco_freq, o0, o1));
+	if (mod(o0, o0_prec)==0) && (mod(o1, 1)==0) 
+	  if (m<m_allowed(1)) || (m>m_allowed(end))
+	    %disp('m outside range');
+	    continue
+	  elseif (d<d_allowed(1)) || (d>d_allowed(end))
+	    %disp('d outside range');
+	    continue
+	  elseif (o0<o0_allowed(1)) || (o0>o0_allowed(end))
+	    %disp('o0 outside range');
+	    continue
+	  elseif (o1<o1_allowed(1)) || (o1>o1_allowed(end))
+	    %disp('o1 outside range');
+	    continue
+	  elseif (pfd_freq<f_pfdmin) || (pfd_freq>f_pfdmax)
+	    %disp('pfd freq outside range');
+	    continue
+	  elseif (vco_freq<f_vcomin) || (vco_freq>f_vcomax)
+	    %disp('vco freq outside range');
+	    continue
+	  elseif (strcmp(s.hw_sys, 'ROACH2') && s.adc_clk_rate>315.0 && (d==3 || d==4))
+	    % Special case here for ROACH2
+	    %disp('adc_clk>315 and d is either 3 or 4');
+	    continue
+	  else
+	    % Finally, we've found it!
+	    pll_m = m;
+	    pll_d = d;
+	    pll_o0 = o0;
+	    pll_o1 = o1;
+	    bufr_div = r;
+	    vco_final = vco_freq;
+	    pfd_final = pfd_freq;
+	    pll_final = pll_freq;
+	    optimum_found = 1;
+	    break
+	  end
         end
     end
     if optimum_found
-        break
+      break
     end
+  end
 end
 
 % Couldn't find ideal solution so GTFO
@@ -182,12 +192,13 @@ end
 % Print some useful debuging information
 disp(['ADC5G: requested sys_clk rate of ', num2str(s.sysclk_rate, '%.4f')]);
 disp(['ADC5G:   with an adc_clk rate of ', num2str(s.adc_clk_rate, '%.4f')]);
+disp(['ADC5G:     with an CLKIN rate of ', num2str(pll_final, '%.4f')]);
 disp(['ADC5G: ', s.adc_str, ': Chosen M = ', num2str(pll_m, '%d')]);
 disp(['ADC5G: ', s.adc_str, ': Chosen D = ', num2str(pll_d, '%d')]);
 disp(['ADC5G: ', s.adc_str, ': Chosen D0 = ', num2str(pll_o0, '%d')]);
 disp(['ADC5G: ', s.adc_str, ': Chosen D1 = ', num2str(pll_o1, '%d')]);
-disp(['ADC5G: ', s.adc_str, ': VCO Freq. = ', num2str(vco_freq, '%.4f')]);
-disp(['ADC5G: ', s.adc_str, ': PFD Freq. = ', num2str(pfd_freq, '%.4f')]);
+disp(['ADC5G: ', s.adc_str, ': VCO Freq. = ', num2str(vco_final, '%.4f')]);
+disp(['ADC5G: ', s.adc_str, ': PFD Freq. = ', num2str(pfd_final, '%.4f')]);
 
 % Set UCF constraints depending on which CASPER board we're on
 switch s.hw_sys
@@ -293,6 +304,8 @@ switch s.hw_sys
         parameters.MMCM_D = num2str(pll_d, '%d');
         parameters.MMCM_O0 = num2str(pll_o0, '%.4f');
         parameters.MMCM_O1 = num2str(pll_o1, '%d');
+	parameters.BUFR_DIV = num2str(bufr_div, '%d');
+	parameters.BUFR_DIV_STR = num2str(bufr_div, '"%d"');
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end

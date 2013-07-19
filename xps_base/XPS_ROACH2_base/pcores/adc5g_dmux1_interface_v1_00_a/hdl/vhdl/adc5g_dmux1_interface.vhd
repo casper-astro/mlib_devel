@@ -36,7 +36,9 @@ entity adc5g_dmux1_interface is
     mmcm_m          : real    :=2.0;  -- MMCM multiplier value
     mmcm_d          : integer :=1;    -- MMCM divide value
     mmcm_o0         : real    :=2.0;  -- MMCM first clock divide
-    mmcm_o1         : integer :=2     -- MMCM second clock divide
+    mmcm_o1         : integer :=2;    -- MMCM second clock divide
+    bufr_div        : integer :=4;
+    bufr_div_str    : string  :="4"
     );
   port (
     adc_clk_p_i     : in std_logic;
@@ -100,6 +102,7 @@ architecture behavioral of adc5g_dmux1_interface is
 
   -- Clock and sync signals
   signal adc_clk       : std_logic;
+  signal adc_clk_div   : std_logic;
   signal adc_sync      : std_logic;
   signal refclk        : std_logic;
 
@@ -343,6 +346,17 @@ begin
       o=> adc_clk
       );
 
+  DIVBUF: BUFR
+    generic map (
+      BUFR_DIVIDE => bufr_div_str
+      )
+    port map (
+      CE  => '1',
+      CLR => ctrl_reset,
+      O   => adc_clk_div,
+      I   => adc_clk
+      );
+  
   MMCM0: MMCM_ADV
     generic map (
       BANDWIDTH            => "HIGH",
@@ -350,7 +364,7 @@ begin
       DIVCLK_DIVIDE        => mmcm_d,
       CLKFBOUT_PHASE       => 0.0,
       CLKFBOUT_USE_FINE_PS => TRUE,
-      CLKIN1_PERIOD        => clkin_period,
+      CLKIN1_PERIOD        => clkin_period * real(bufr_div),
       CLKOUT0_DIVIDE_F     => mmcm_o0,
       CLKOUT1_DIVIDE       => mmcm_o1,
       CLKOUT2_DIVIDE       => mmcm_o1,
@@ -371,7 +385,7 @@ begin
       CLKFBIN   => mmcm_clkfbin,
       CLKFBOUT  => mmcm_clkfbout,
       CLKINSEL  => '1',
-      CLKIN1    => adc_clk,
+      CLKIN1    => adc_clk_div,
       CLKIN2    => '0',
       CLKOUT0   => mmcm_clkout0,
       CLKOUT1   => mmcm_clkout1,
