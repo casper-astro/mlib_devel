@@ -1,16 +1,17 @@
-function bus_add_init(blk, varargin)
+function bus_addsub_init(blk, varargin)
 
-  clog('entering bus_add_init', 'trace');
+  clog('entering bus_addsub_init', {'trace', 'bus_addsub_init_debug'});
   
   defaults = { ...
-    'n_bits_a', [8 8 8 8 8 8 8 8] ,  'bin_pt_a',     [3],   'type_a',   1, ...
-    'n_bits_b', [4 4 4 4 4 4 4 4]  ,  'bin_pt_b',     [3],   'type_b',   [1], ...
+    'opmode', [0], ...
+    'n_bits_a', [8] ,  'bin_pt_a',     [3],   'type_a',   1, ...
+    'n_bits_b', [4 ]  ,  'bin_pt_b',     [3],   'type_b',   [1], ...
     'n_bits_out', 8 ,     'bin_pt_out',   [3],   'type_out', [1], ...
-    'overflow', [1], 'quantization', [0], 'add_latency', 1, ...
+    'overflow', [1], 'quantization', [0], 'latency', 1, ...
     'cmplx', 'on', 'misc', 'on'
   };  
   
-  check_mask_type(blk, 'bus_add');
+  check_mask_type(blk, 'bus_addsub');
 
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   munge_block(blk, varargin{:});
@@ -24,6 +25,7 @@ function bus_add_init(blk, varargin)
   add_w = 50; add_d = 60;
   del_w = 30; del_d = 20;
 
+  opmode       = get_var('opmode', 'defaults', defaults, varargin{:});
   n_bits_a     = get_var('n_bits_a', 'defaults', defaults, varargin{:});
   bin_pt_a     = get_var('bin_pt_a', 'defaults', defaults, varargin{:});
   type_a       = get_var('type_a', 'defaults', defaults, varargin{:});
@@ -35,17 +37,17 @@ function bus_add_init(blk, varargin)
   type_out     = get_var('type_out', 'defaults', defaults, varargin{:});
   overflow     = get_var('overflow', 'defaults', defaults, varargin{:});
   quantization = get_var('quantization', 'defaults', defaults, varargin{:});
-  add_latency  = get_var('add_latency', 'defaults', defaults, varargin{:});
+  latency      = get_var('latency', 'defaults', defaults, varargin{:});
   misc         = get_var('misc', 'defaults', defaults, varargin{:});
   cmplx        = get_var('cmplx', 'defaults', defaults, varargin{:});
  
   delete_lines(blk);
 
   %default state, do nothing 
-  if (isempty(n_bits_a) | isempty(n_bits_b)),
+  if (n_bits_a == 0) | (n_bits_b == 0),
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
-    clog('exiting bus_add_init','trace');
+    clog('exiting bus_add_init',{'trace', 'bus_addsub_init_debug'});
     return;
   end
  
@@ -56,13 +58,13 @@ function bus_add_init(blk, varargin)
   b = [lenbb, lenpb, lentb];  
 
   lenbo = length(n_bits_out); lenpo = length(bin_pt_out); lento = length(type_out); 
-  lenq = length(quantization); leno = length(overflow);
-  o = [lenbo, lenpo, lento, lenq, leno];
+  lenm = length(opmode); lenq = length(quantization); leno = length(overflow);
+  o = [lenbo, lenpo, lento, lenm, lenq, leno];
 
   comps = unique([a, b, o]);
   %if have more than 2 unique components or have two but one isn't 1
   if ((length(comps) > 2) | (length(comps) == 2 && comps(1) ~= 1)),
-    clog('conflicting component sizes','error');
+    clog('conflicting component sizes',{'bus_addsub_init_debug', 'error'});
     return;
   end
 
@@ -71,7 +73,7 @@ function bus_add_init(blk, varargin)
 
   %need to specify at least one set of input components
   if compo > comp,
-    clog('more output components than inputs','error');
+    clog('more output components than inputs',{'bus_addsub_init_debug','error'});
     return;
   end
 
@@ -90,6 +92,7 @@ function bus_add_init(blk, varargin)
   bin_pt_out    = repmat(bin_pt_out, 1, comp/lenpo);
   type_o        = repmat(type_out, 1, comp/lento);
   overflow      = repmat(overflow, 1, comp/leno);
+  opmode        = repmat(opmode, 1, comp/lenm);
   quantization  = repmat(quantization, 1, comp/leno);
 
   %if complex we need to double down on some of these
@@ -109,6 +112,7 @@ function bus_add_init(blk, varargin)
     bin_pt_out    = reshape([bin_pt_out; bin_pt_out], 1, comp);
     type_o        = reshape([type_o; type_o], 1, comp);
     overflow      = reshape([overflow; overflow], 1, comp);
+    opmode        = reshape([opmode; opmode], 1, comp);
     quantization  = reshape([quantization; quantization], 1, comp);
   end
 
@@ -153,30 +157,30 @@ function bus_add_init(blk, varargin)
   add_line(blk, 'b/1', 'b_debus/1');
   ypos_tmp = ypos_tmp + add_d*compa + yinc;
 
-  %addition
+  %addsub
   xpos = xpos + xinc + add_w/2;  
   ypos_tmp = ypos; %reset ypos 
 
-  %need adder per component
+  %need addsub per component
   a_src = repmat([1:compa], 1, comp/compa);
   b_src = repmat([1:compb], 1, comp/compb);
 
-  clog(['making ',num2str(comp),' adders'],'bus_add_init_debug');
+  clog(['making ',num2str(comp),' AddSubs'],{'bus_addsub_init_debug'});
 
-  for add_index = 1:comp
-    switch type_o(add_index),
+  for index = 1:comp
+    switch type_o(index),
       case 0,
         arith_type = 'Unsigned';
       case 1,
         arith_type = 'Signed';
     end
-    switch quantization(add_index),
+    switch quantization(index),
       case 0,
         quant = 'Truncate';
       case 1,
         quant = 'Round  (unbiased: +/- Inf)';
     end  
-    switch overflow(add_index),
+    switch overflow(index),
       case 0,
         of = 'Wrap';
       case 1,
@@ -184,29 +188,38 @@ function bus_add_init(blk, varargin)
       case 2,
         of = 'Flag as error';
     end  
-    clog(['output ',num2str(add_index),': ', ... 
-      ' a[',num2str(a_src(add_index)),'] + b[',num2str(b_src(add_index)),'] = ', ...
-      '(',num2str(n_bits_out(add_index)), ' ', num2str(bin_pt_out(add_index)),') ' ...
-      arith_type,' ',quant,' ', of], ...
-      'bus_add_init_debug'); 
+    switch opmode(index),
+      case 0,
+        m = 'Addition';
+        symbol = '+';
+      case 1,
+        m = 'Subtraction';  
+        symbol = '-';
+    end  
+        
+    clog(['output ',num2str(index),': ', ... 
+      ' a[',num2str(a_src(index)),'] ',symbol,' b[',num2str(b_src(index)),'] = ', ...
+      '(',num2str(n_bits_out(index)), ' ', num2str(bin_pt_out(index)),') ' ...
+      ,arith_type,' ',quant,' ', of], ...
+      {'bus_addsub_init_debug'}); 
 
-    add_name = ['add',num2str(add_index)]; 
+    add_name = ['addsub',num2str(index)]; 
     reuse_block(blk, add_name, 'xbsIndex_r4/AddSub', ...
-      'mode', 'Addition', 'latency', num2str(add_latency), ...
+      'mode', m, 'latency', num2str(latency), ...
       'precision', 'User Defined', ...
-      'n_bits', num2str(n_bits_out(add_index)), 'bin_pt', num2str(bin_pt_out(add_index)), ...  
+      'n_bits', num2str(n_bits_out(index)), 'bin_pt', num2str(bin_pt_out(index)), ...  
       'arith_type', arith_type, 'quantization', quant, 'overflow', of, ... 
       'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
     ypos_tmp = ypos_tmp + add_d;
   
-    add_line(blk, ['a_debus/',num2str(a_src(add_index))], [add_name,'/1']);
-    add_line(blk, ['b_debus/',num2str(b_src(add_index))], [add_name,'/2']);
+    add_line(blk, ['a_debus/',num2str(a_src(index))], [add_name,'/1']);
+    add_line(blk, ['b_debus/',num2str(b_src(index))], [add_name,'/2']);
   end %for
 
   ypos_tmp = ypos + add_d*(compb+compa) + 2*yinc;
   if strcmp(misc, 'on'),
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(add_latency), ...
+      'latency', num2str(latency), ...
       'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
   end
@@ -215,20 +228,20 @@ function bus_add_init(blk, varargin)
   %bus create 
   ypos_tmp = ypos + add_d*comp/2; %reset ypos
  
-  reuse_block(blk, 'a+b_bussify', 'casper_library_flow_control/bus_create', ...
+  reuse_block(blk, 'op_bussify', 'casper_library_flow_control/bus_create', ...
     'inputNum', num2str(comp), ...
     'Position', [xpos-bus_create_w/2 ypos_tmp-add_d*comp/2 xpos+bus_create_w/2 ypos_tmp+add_d*comp/2]);
   
   for index = 1:comp,
-    add_line(blk, ['add',num2str(index),'/1'], ['a+b_bussify/',num2str(index)]);
+    add_line(blk, ['addsub',num2str(index),'/1'], ['op_bussify/',num2str(index)]);
   end
 
   %output port/s
   ypos_tmp = ypos + add_d*comp/2;
   xpos = xpos + xinc + bus_create_w/2;
-  reuse_block(blk, 'a+b', 'built-in/outport', ...
+  reuse_block(blk, 'dout', 'built-in/outport', ...
     'Port', '1', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
-  add_line(blk, ['a+b_bussify/1'], ['a+b/1']);
+  add_line(blk, ['op_bussify/1'], ['dout/1']);
   ypos_tmp = ypos_tmp + yinc + port_d;  
 
   ypos_tmp = ypos + add_d*(compb+compa) + 2*yinc;
@@ -245,7 +258,7 @@ function bus_add_init(blk, varargin)
 
   save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 
-  clog('exiting bus_add_init','trace');
+  clog('exiting bus_addsub_init', {'bus_addsub_init_debug', 'trace'});
 
-end %function bus_add_init
+end %function bus_addsub_init
 

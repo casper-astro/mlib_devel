@@ -76,6 +76,16 @@ coeff_bin_pt = get_var('coeff_bin_pt', 'defaults', defaults, varargin{:});
 absorb_adders = get_var('absorb_adders', 'defaults', defaults, varargin{:});
 adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 
+%default library state
+if n_inputs == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk,'AttributesFormatString','');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting dec_fir_init', 'trace');
+  return;
+end
+
 % round coefficients to make sure rounding error doesn't prevent us from
 % detecting symmetric coefficients
 coeff_round = round(coeff * 1e16) * 1e-16;

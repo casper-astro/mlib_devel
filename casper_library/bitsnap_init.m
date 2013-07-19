@@ -54,15 +54,27 @@ io_names = get_var('io_names', 'defaults', defaults, varargin{:});
 io_widths = get_var('io_widths', 'defaults', defaults, varargin{:});
 io_bps = get_var('io_bps', 'defaults', defaults, varargin{:});
 io_types = get_var('io_types', 'defaults', defaults, varargin{:});
-
 if (numel(io_names) ~= numel(io_widths)) || (numel(io_names) ~= numel(io_bps)) || (numel(io_names) ~= numel(io_types)) || (numel(io_names) < 1),
     error('Lengths of IO fields must match and be >0.');
 end
 num_ios = numel(io_names);
-
 % check that the widths of the inputs are not greater than the snap width
-if sum(io_widths) > str2num(snap_data_width),
-    error('%i-bit wide snapshot chosen, but %i bit inputs specified.', str2num(snap_data_width), sum(io_widths));
+if sum(io_widths) > str2double(snap_data_width),
+    error('%i-bit wide snapshot chosen, but %i bit inputs specified.', str2double(snap_data_width), sum(io_widths));
+end
+
+% extra vars
+extra_names = get_var('extra_names', 'defaults', defaults, varargin{:});
+extra_widths = get_var('extra_widths', 'defaults', defaults, varargin{:});
+extra_bps = get_var('extra_bps', 'defaults', defaults, varargin{:});
+extra_types = get_var('extra_types', 'defaults', defaults, varargin{:});
+if (numel(extra_names) ~= numel(extra_widths)) || (numel(extra_names) ~= numel(extra_bps)) || (numel(extra_names) ~= numel(extra_types)) || (numel(extra_names) < 1),
+    error('Lengths of Extra fields must match and be >0.');
+end
+num_extras = numel(extra_names);
+% check that the widths of the extras are not greater than the extra register width
+if sum(extra_widths) > 32,
+    error('%i bit extras specified do not fit into 32-bit wide extra value register.', sum(extra_widths), 32);
 end
 
 munge_block(blk, varargin{:});
@@ -80,7 +92,7 @@ reuse_block(blk, 'buscreate', 'casper_library_flow_control/bus_create', ...
         'inputNum', num2str(num_ios));
 
 % the snapshot block
-reuse_block(blk, 'snapshot', 'casper_library_scopes/snapshot', ...
+reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
         'Position', [x_start + (x_size * 5), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 5) + x_size, y_pos + (y_size * 10)], ...
         'storage', snap_storage, ...
         'dram_dimm', snap_dram_dimm, ...
@@ -91,7 +103,7 @@ reuse_block(blk, 'snapshot', 'casper_library_scopes/snapshot', ...
         'circap', snap_circap, ...
         'value', snap_value, ...
         'use_dsp48', snap_use_dsp48);
-add_line(blk, 'buscreate/1', 'snapshot/1');
+add_line(blk, 'buscreate/1', 'ss/1');
 
 % io ports
 y_pos_row = y_pos;
@@ -111,32 +123,44 @@ snapport = 2;
 y1 = 165;
 reuse_block(blk, 'we', 'built-in/inport', ...
     'Port', num2str(portnum), ...
-    'Position', [485, y1, 535, y1+20]);
-add_line(blk, 'we/1', ['snapshot/', num2str(snapport)]);
+    'Position', [485, y1, 535, y1+y_size]);
+add_line(blk, 'we/1', ['ss/', num2str(snapport)]);
 
 % trigger
 portnum = portnum + 1; y1 = y1 + 50; snapport = snapport + 1;
 reuse_block(blk, 'trig', 'built-in/inport', ...
     'Port', num2str(portnum), ...
-    'Position', [485, y1, 535, y1+20]);
-add_line(blk, 'trig/1', ['snapshot/', num2str(snapport)]);
+    'Position', [485, y1, 535, y1+y_size]);
+add_line(blk, 'trig/1', ['ss/', num2str(snapport)]);
 
 % stop
 if strcmp(snap_circap, 'on'),
     portnum = portnum + 1; y1 = y1 + 50; snapport = snapport + 1;
     reuse_block(blk, 'stop', 'built-in/inport', ...
         'Port', num2str(portnum), ...
-        'Position', [485, y1, 535, y1+20]);
-    add_line(blk, 'stop/1', ['snapshot/', num2str(snapport)]);
+        'Position', [485, y1, 535, y1+y_size]);
+    add_line(blk, 'stop/1', ['ss/', num2str(snapport)]);
 end
 
 % extra value
 if strcmp(snap_value, 'on'),
-    portnum = portnum + 1; y1 = y1 + 50; snapport = snapport + 1;
-    reuse_block(blk, 'extra_val', 'built-in/inport', ...
-        'Port', num2str(portnum), ...
-        'Position', [485, y1, 535, y1+20]);
-    add_line(blk, 'extra_val/1', ['snapshot/', num2str(snapport)]);
+    % buscreate block
+    reuse_block(blk, 'extracreate', 'casper_library_flow_control/bus_create', ...
+        'Position', [x_start + (x_size * 1), y_pos + 500 + (y_size * (num_extras - 0.5)), x_start + (x_size * 1) + x_size, y_pos + 500 + (y_size * (num_extras + 5.5))], ...
+        'inputNum', num2str(num_extras));
+    snapport = snapport + 1;
+    add_line(blk, 'extracreate/1', ['ss/', num2str(snapport)]);
+    % draw an input port for each field for the extra value
+    for p = 1 : num_extras,
+        idx = p;
+        in_name = sprintf('extra_%s', char(extra_names(idx)));
+        reuse_block(blk, in_name, 'built-in/inport', ...
+            'Port', num2str(p + portnum), ...
+            'Position', [x_start, y_pos_row + 500, x_start + (x_size/2), y_pos_row + 500 + y_size]);
+        add_line(blk, [in_name, '/1'], ['extracreate/', num2str(p)]);
+        y_pos_row = y_pos_row + (y_size*2.5);
+    end
+    
 end
 
 % remove unconnected blocks

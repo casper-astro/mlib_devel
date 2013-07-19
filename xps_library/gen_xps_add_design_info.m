@@ -1,225 +1,150 @@
-function gen_xps_add_design_info(sys, mssge_paths, slash)
+function gen_xps_add_design_info(sysname, mssge_paths, slash)
     clog('entering gen_xps_add_design_info','trace');
 
-    base_filename = 'design_info.casper';
-    
-    function fstr = field2string(field)
-        if ~isstruct(field),
-            fstr = 'name(msb_offset,width,binpt,type)';
-        else
-            fstr = sprintf('%s(%s,%s,%s,%s)', field.name, field.msb_offset, field.width, field.binpt, field.type);
-        end
-    end
-    function regstr = reg2str(reg)
-        fieldstring = field2string(NaN);
-        for p = 1 : numel(reg.bitfields),
-            f = reg.bitfields(p);
-            fieldstring = strcat(fieldstring, '|', field2string(f));
-        end
-        regstr = sprintf('name(%s)|direction(%s)|bitfields(%s)', reg.name, reg.direction, fieldstring);
-    end
-    
-    % load the bitreg structures for this system
-    reg_blks = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:bitreg');
-    plain_regs = find_system(sys, 'Tag', 'xps:sw_reg');
-    numregs = numel(reg_blks) + numel(plain_regs);
-    if numregs > 0,
-        bitregs(numregs) = struct('name', '', 'direction', '', 'bitfields', struct());
-        for n = 1 : numel(reg_blks),
-            blk = reg_blks(n);
-            field_names = eval(char(get_param(blk, 'io_names')));
-            field_widths = eval(char(get_param(blk, 'io_widths')));
-            field_bps = eval(char(get_param(blk, 'io_bp')));
-            field_types = eval(char(get_param(blk, 'io_type')));
-            fields(numel(field_names)) = struct('name', '', 'msb_offset', '-1', 'width', '0', 'binpt', '0', 'type', '0');
-            offset = 0;
-            for s = 1 : numel(field_names),
-                fields(s) = struct('name', field_names(s), 'msb_offset', num2str(offset), 'width', num2str(field_widths(s)), 'binpt', num2str(field_bps(s)), 'type', num2str(field_types(s)));
-                offset = offset + field_widths(s);
-            end
-            regname = [regexprep(char(blk),'^.*/',''), '_reg'];
-            bitregs(n) = struct('name', regname, 'direction', get_param(blk, 'io_dir'), 'bitfields', fields);
-            clear field_* regname fields;
-        end
-        for n = 1 : numel(plain_regs),
-            blk = plain_regs(n);
-            fields(1) = struct('name', 'field', 'msb_offset', '0', 'width', '32', 'binpt', '0', 'type', '0');
-            bitregs(numel(reg_blks) + n) = struct('name', regexprep(blk,'^.*/',''), 'direction', get_param(blk, 'io_dir'), 'bitfields', fields);
-            clear fields;
-        end
-        numregs = numel(bitregs);
-    end
-    % write reginfo to file
-    xps_path = mssge_paths.xps_path;    
-    filename = [xps_path,  slash, base_filename];
+    % check that we can write the file before we do anything
+    base_filename = 'casper_design_info.xml';
+    filename = [mssge_paths.xps_path, slash, base_filename];
     try
         fid = fopen(filename, 'w');
+        fprintf(fid, '');
     catch e
-        error(['Could not open ', base_filename, '.']);
+        error(['Could not open ', filename, '.']);
     end
-    fprintf(fid, 'register_info: NB: types can be (ufix=0,fix=1,bool=2)\n');
-    for n = 1 : numregs,
-        fprintf(fid, strcat(reg2str(bitregs(n)), '\n'));
-    end
-    fprintf(fid, '\\register_info\n');
     fclose(fid);
     
-    % load the bitsnap structures for this system
-    function snapstr = snap2str(snap)
-        bitfield_string = field2string(NaN);
-        for p = 1 : numel(snap.bitfields),
-            f = snap.bitfields(p);
-            bitfield_string = strcat(bitfield_string, '|', field2string(f));
+    % make the DOM object
+    xml_dom = com.mathworks.xml.XMLUtils.createDocument(base_filename);
+    xml_node_root = xml_dom.getDocumentElement;
+    xml_node_root.setAttribute('version', '0.1');
+    xml_node_root.setAttribute('sysname', sysname);
+    xml_node_root.setAttribute('datestr', datestr(now));
+    
+    % process registers and bitregs
+    xml_node_registers = xml_dom.createElement('device_class');
+    xml_node_registers.setAttribute('class', 'register');
+    xml_node_root.appendChild(xml_node_registers);
+    %xml_node_registers.appendChild(xml_dom.createComment('Both bitreg and regular registers.'));
+    reg_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:bitreg');
+    if numel(reg_blks) > 0,
+        for n = 1 : numel(reg_blks),
+            blk = reg_blks(n);
+            regname = [regexprep(char(blk), '^.*/', ''), '_reg'];
+            xml_node_bitreg = xml_dom.createElement('register');
+            xml_node_bitreg.setAttribute('name', regname);
+            xml_node_bitreg.setAttribute('direction', get_param(blk, 'io_dir'));
+            xml_node_bitreg.setAttribute('width', '32');
+            xml_node_registers.appendChild(xml_node_bitreg);
+            % fields
+            append_field_nodes(blk, xml_dom, xml_node_bitreg, 'io', 'field');
         end
-        extra_bitfield_string = field2string(NaN);
-        for p = 1 : numel(snap.extra_bitfields),
-            f = snap.extra_bitfields(p);
-            extra_bitfield_string = strcat(extra_bitfield_string, '|', field2string(f));
-        end
-        snapstr = sprintf('name(%s)|storage(%s)|dram_dimm(%s)|dram_clock(%s)|num_samples(%s)|width(%s)|start_delay(%s)|circular(%s)|extra_value(%s)|use_dsp48s(%s)|bitfields(%s)|extra_bitfields(%s)', ...
-            snap.name, snap.storage, snap.dram_dimm, snap.dram_clock, snap.num_samples, snap.width, snap.start_delay, snap.circular, snap.extra_value, snap.use_dsp48s, ...
-            bitfield_string, extra_bitfield_string);
     end
-    bitsnap_blks = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:bitsnap');
-    snapshot_blks = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:snapshot');
-    % take out duplicates
-    function new = pop(find, in)
-        new = {};
-        for m = 1 : numel(in),
-            if numel(strfind(char(in(m)), char(find))) == 0,
-                new(numel(new)+1) = in(m);
-            end
+    plain_regs = find_system(sysname, 'Tag', 'xps:sw_reg');
+    if numel(plain_regs) > 0,
+        for n = 1 : numel(plain_regs),
+            blk = plain_regs(n);
+            regname = regexprep(blk, '^.*/', '');
+            xml_node_bitreg = xml_dom.createElement('register');
+            xml_node_bitreg.setAttribute('name', regname);
+            xml_node_bitreg.setAttribute('direction', get_param(blk, 'io_dir'));
+            xml_node_bitreg.setAttribute('width', '32');
+            xml_node_registers.appendChild(xml_node_bitreg);
+            xml_node_bitreg.appendChild(make_field_node(xml_dom.createElement('field'), 'data', 32, 0, 0, 0));
+            clear regname;
         end
-    end
-    for p = 1 : numel(bitsnap_blks),
-        snapshot_blks = pop(bitsnap_blks(p), snapshot_blks);
     end
     
-    numsnaps = numel(bitsnap_blks) + numel(snapshot_blks);
-    if numsnaps > 0,
-        bitsnaps(numsnaps) = struct('name', '', 'storage', '', 'dram_dimm', '', 'dram_clock', '', ...
-            'num_samples', '', 'width', '', 'bitfields', struct(), 'start_delay', '', ...
-            'circular', '', 'use_dsp48s', '', 'extra_value', '', 'extra_bitfields', struct());
-        % bitsnap blocks
+    % and now bitsnaps and snap blocks
+    xml_node_snapshots = xml_dom.createElement('device_class');
+    xml_node_snapshots.setAttribute('class', 'snapshot');
+    xml_node_root.appendChild(xml_node_snapshots);
+    bitsnap_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:bitsnap');
+    if numel(bitsnap_blks) > 0,
         for n = 1 : numel(bitsnap_blks),
             blk = bitsnap_blks(n);
-            snap_name = regexprep(char(blk),'^.*/','');
-            snap_storage = char(get_param(blk, 'snap_storage'));
-            snap_dram_dimm = char(get_param(blk, 'snap_dram_dimm'));
-            snap_dram_clock = char(get_param(blk, 'snap_dram_clock'));
-            snap_num_samples = char(get_param(blk, 'snap_nsamples'));
-            snap_width = char(get_param(blk, 'snap_data_width'));
-            snap_start_delay = char(get_param(blk, 'snap_offset'));
-            snap_circular = char(get_param(blk, 'snap_circap'));
-            snap_use_dsp48s = char(get_param(blk, 'snap_use_dsp48'));
-            snap_extra_value = char(get_param(blk, 'snap_value'));
-            % main fields
-            field_names = eval(char(get_param(blk, 'io_names')));
-            field_widths = eval(char(get_param(blk, 'io_widths')));
-            field_bps = eval(char(get_param(blk, 'io_bps')));
-            field_types = eval(char(get_param(blk, 'io_types')));
-            snap_fields(numel(field_names)) = struct('name', '', 'msb_offset', '-1', 'width', '0', 'binpt', '0', 'type', '0');
-            offset = 0;
-            for s = 1 : numel(field_names),
-                snap_fields(s) = struct('name', field_names(s), 'msb_offset', num2str(offset), 'width', num2str(field_widths(s)), 'binpt', num2str(field_bps(s)), 'type', num2str(field_types(s)));
-                offset = offset + field_widths(s);
+            xml_node_snapshot = make_snapshot_node(xml_dom, sysname, strcat(blk, '/ss'));
+            xml_node_snapshots.appendChild(xml_node_snapshot);
+            % fields
+            append_field_nodes(blk, xml_dom, xml_node_snapshot, 'io', 'field');
+            % extra val?
+            if strcmp(get_param(strcat(blk, '/ss'), 'value'), 'on'),
+                append_field_nodes(blk, xml_dom, xml_node_snapshot, 'extra', 'extra_field');
             end
-            clear field_*;
-            % extra fields
-            if strcmp(snap_extra_value, 'on'),
-                field_names = eval(char(get_param(blk, 'extra_names')));
-                field_widths = eval(char(get_param(blk, 'extra_widths')));
-                field_bps = eval(char(get_param(blk, 'extra_bps')));
-                field_types = eval(char(get_param(blk, 'extra_types')));
-                snap_extra_value_fields(numel(field_names)) = struct('name', '', 'msb_offset', '-1', 'width', '0', 'binpt', '0', 'type', '0');
-                offset = 0;
-                for s = 1 : numel(field_names),
-                    snap_extra_value_fields(s) = struct('name', field_names(s), 'msb_offset', num2str(offset), 'width', ...
-                        num2str(field_widths(s)), 'binpt', num2str(field_bps(s)), 'type', num2str(field_types(s)));
-                    offset = offset + field_widths(s);
-                end
-                clear field_*;
-            else
-                snap_extra_value_fields = '';
-            end
-            snap = struct('name', snap_name, 'storage', snap_storage, 'dram_dimm', snap_dram_dimm, 'dram_clock', snap_dram_clock, ...
-                'num_samples', snap_num_samples, 'width', snap_width, 'bitfields', snap_fields, 'start_delay', snap_start_delay, ...
-                'circular', snap_circular, 'use_dsp48s', snap_use_dsp48s, 'extra_value', snap_extra_value, ...
-                'extra_bitfields', snap_extra_value_fields);
-            bitsnaps(n) = snap;
-            clear snap snap_*;
         end
-
-        % plain snap blocks
+    end
+    snapshot_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:snapshot');
+    % take out snapshots that are inside bitsnaps
+    snapshot_blks = snapshot_blks(~strcmp(get_param(get_param(snapshot_blks, 'Parent'), 'Tag'), 'casper:bitsnap'));
+    if numel(snapshot_blks) > 0,
         for n = 1 : numel(snapshot_blks),
             blk = snapshot_blks(n);
-            snap_name = regexprep(char(blk),'^.*/','');
-            snap_storage = char(get_param(blk, 'storage'));
-            snap_dram_dimm = char(get_param(blk, 'dram_dimm'));
-            snap_dram_clock = char(get_param(blk, 'dram_clock'));
-            snap_num_samples = char(get_param(blk, 'nsamples'));
-            snap_width = char(get_param(blk, 'data_width'));
-            snap_start_delay = char(get_param(blk, 'offset'));
-            snap_circular = char(get_param(blk, 'circap'));
-            snap_use_dsp48s = char(get_param(blk, 'use_dsp48'));
-            snap_extra_value = char(get_param(blk, 'value'));
-            snap_fields(1) = struct('name', 'word', 'msb_offset', '0', 'width', snap_width, 'binpt', '0', 'type', '0');
-            if strcmp(snap_extra_value, 'on'),
-                snap_extra_value_fields = struct('name', 'word', 'msb_offset', '0', 'width', '32', 'binpt', '0', 'type', '0');
-            else
-                snap_extra_value_fields = '';
-            end
-            snap = struct('name', snap_name, 'storage', snap_storage, 'dram_dimm', snap_dram_dimm, 'dram_clock', snap_dram_clock, ...
-                'num_samples', snap_num_samples, 'width', snap_width, 'bitfields', snap_fields, 'start_delay', snap_start_delay, ...
-                'circular', snap_circular, 'use_dsp48s', snap_use_dsp48s, 'extra_value', snap_extra_value, ...
-                'extra_bitfields', snap_extra_value_fields);
-            bitsnaps(n + numel(bitsnap_blks)) = snap;
-            clear snap snap_*;
+            xml_node_snapshot = make_snapshot_node(xml_dom, sysname, blk);
+            xml_node_snapshots.appendChild(xml_node_snapshot);
+            xml_node_snapshot.appendChild(make_field_node(xml_dom.createElement('field'), 'data', str2double(get_param(blk, 'data_width')), 0, 0, 0));
         end
-        numsnaps = numel(bitsnaps);
+    end
+    
+    % now comments/info blocks
+    info_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:info');
+    xml_node_infos = xml_dom.createElement('design_info');
+    xml_node_root.appendChild(xml_node_infos);
+    if numel(info_blks) > 0,
+        for n = 1 : numel(info_blks),
+            blk = info_blks(n);
+            info_node = xml_dom.createElement('info');
+            xml_node_infos.appendChild(info_node);
+            info_node.setAttribute('info', get_param(blk, 'info'));
+        end
+    end
+    
+    % support functions
+    function append_field_nodes(blk, dom, parent_node, param_prefix, name)
+        field_names = fliplr(eval(char(get_param(blk, strcat(param_prefix, '_names')))));
+        field_widths = fliplr(eval(char(get_param(blk, strcat(param_prefix, '_widths')))));
+        field_bps = fliplr(eval(char(get_param(blk, strcat(param_prefix, '_bps')))));
+        field_types = fliplr(eval(char(get_param(blk, strcat(param_prefix, '_types')))));
+        offset = 0;
+        for f = 1 : numel(field_names),
+            node = make_field_node(dom.createElement(name), field_names(f), field_widths(f), offset, field_bps(f), field_types(f));
+            parent_node.appendChild(node);
+            offset = offset + field_widths(f);
+        end
+    end
+    
+    function node = make_snapshot_node(xml_dom, sysname, blk)
+        node = xml_dom.createElement('snapshot');
+        node.setAttribute('name', regexprep(regexprep(blk, ['^' sysname '/'], ''), '/', '_'));
+        node.setAttribute('storage', get_param(blk, 'storage'));
+        node.setAttribute('dram_dimm', get_param(blk, 'dram_dimm'));
+        node.setAttribute('dram_clock', get_param(blk, 'dram_clock'));
+        node.setAttribute('nsamples', get_param(blk, 'nsamples'));
+        node.setAttribute('data_width', get_param(blk, 'data_width'));
+        node.setAttribute('offset', get_param(blk, 'offset'));
+        node.setAttribute('circap', get_param(blk, 'circap'));
+        node.setAttribute('value', get_param(blk, 'value'));
+        node.setAttribute('use_dsp48', get_param(blk, 'use_dsp48'));
+    end
+    
+    function node = make_field_node(node, name, width, lsb_offset, bin_pt, bin_type)
+        node.setAttribute('name', name);
+        node.setAttribute('lsb_offset', num2str(lsb_offset));
+        node.setAttribute('binpt', num2str(bin_pt));
+        node.setAttribute('type', typenum2str(bin_type));
+        node.setAttribute('width', num2str(width));
+    end
+    
+    function typestr = typenum2str(typenum)
+        switch(typenum),
+            case {2}
+                typestr = 'bool';
+            case {1}
+                typestr = 'fix';
+            case {0}
+                typestr = 'ufix';
+        end
     end
 
-    % write snap info to file
-    xps_path = mssge_paths.xps_path;    
-    filename = [xps_path,  slash, base_filename];
-    try
-        fid = fopen(filename, 'a');
-    catch e
-        error(['Could not open ', base_filename, '.']);
-    end
-    fprintf(fid, 'snapshot_info:\n');
-    for n = 1 : numsnaps,
-        snap = bitsnaps(n);
-        fprintf(fid, strcat(snap2str(snap), '\n'));
-%         fprintf(fid, '%s: storage(%s), dram_dimm(%s), dram_clock(%s), num_samples(%i), width(%s), support[circular(%s), offset(%s), extra_value(%s)], ', snap.name, ...
-%             snap.storage, snap.dram_dimm, snap.dram_clock, 2^str2double(snap.num_samples), snap.width, snap.circular, snap.start_delay, snap.extra_value);
-%         fprintf(fid, 'fields[');
-%         for p = 1 : numel(snap.fields),
-%             field = snap.fields(p);
-%             fprintf(fid, '%s(%s,%s,%s,%s)', field.name, field.msb_offset, field.width, field.binpt, field.type);
-%             if p == numel(snap.fields),
-%                 fprintf(fid, '], ');
-%             else
-%                 fprintf(fid, '|');
-%             end
-%         end
-%         fprintf(fid, 'extra_fields[');
-%         if numel(snap.extra_value_fields) == 0,
-%             fprintf(fid, ']\n');
-%         else
-%             for p = 1 : numel(snap.extra_value_fields),
-%                 field = snap.extra_value_fields(p);
-%                 fprintf(fid, '%s(%s,%s,%s,%s)', field.name, field.msb_offset, field.width, field.binpt, field.type);
-%                 if p == numel(snap.extra_value_fields),
-%                     fprintf(fid, ']\n');
-%                 else
-%                     fprintf(fid, '|');
-%                 end
-%             end
-%         end
-    end
-    fprintf(fid, '\\snapshot_info\n');
-    fclose(fid);
+    % and write the dom to file
+    xmlwrite(filename, xml_dom);
 
     clog('exiting gen_xps_add_design_info','trace');
-end % end function gen_xps_mod_mhs_bitreg
+end % end function gen_xps_add_design_info

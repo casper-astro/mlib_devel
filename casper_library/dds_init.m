@@ -1,3 +1,15 @@
+% dds_init(blk, varargin)
+%
+% blk = The block to initialize.
+% varargin = {'varname', 'value', ...} pairs
+%
+% Valid varnames for this block are:
+% freq_div = The (power of 2) denominator of the mixing frequency.
+% freq = The numerator of the mixing frequency
+% num_lo = The number of parallel streams provided
+% n_bits = The bitwidth of samples out
+% latency = The latency of sine/cos lookup table
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -21,17 +33,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function dds_init(blk,varargin)
-% dds_init(blk, varargin)
-%
-% blk = The block to initialize.
-% varargin = {'varname', 'value', ...} pairs
-%
-% Valid varnames for this block are:
-% freq_div = The (power of 2) denominator of the mixing frequency.
-% freq = The numerator of the mixing frequency
-% num_lo = The number of parallel streams provided
-% n_bits = The bitwidth of samples out
-% latency = The latency of sine/cos lookup table
 
 % Declare any default values for arguments you might like.
 defaults = {'num_lo', 1, 'n_bits', 8, 'latency', 2};
@@ -44,6 +45,16 @@ freq = get_var('freq','defaults', defaults, varargin{:});
 num_lo = get_var('num_lo','defaults', defaults, varargin{:});
 n_bits = get_var('n_bits','defaults', defaults, varargin{:});
 latency = get_var('latency','defaults', defaults, varargin{:});
+
+delete_lines(blk);
+
+%default for storing in the library
+if num_lo == 0,
+  clean_blocks(blk);
+  set_param(blk,'AttributesFormatString','');
+  save_state(blk, 'defaults', defaults, varargin{:});  
+  return; 
+end
 
 counter_width = log2(freq_div);
 counter_step = mod(num_lo*freq,freq_div);
@@ -61,8 +72,6 @@ if freq_div <= 0 || freq_div < num_lo || freq_div ~= round(freq_div) || freq_div
     error_string = 'The frequency factor must be a positive power of 2 integer multiples of the number of LOs';
     errordlg(error_string);
 end
-
-delete_lines(blk);
 
 for i = 0 : num_lo - 1,
     sin_name = ['sin',num2str(i)];

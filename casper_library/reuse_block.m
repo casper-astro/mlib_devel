@@ -1,3 +1,16 @@
+% Instantiate a block named 'name' from library template 'refblk', 
+% if no such block already exists.  Otherwise, just configure that
+% block with any parameter, value pairs provided in varargin.
+% If refblk is has an '_init' function, this may still need to be
+% called after this function is called.
+%
+% reuse_block(blk, name, refblk, varargin)
+%
+% blk = the overarching system
+% name = the name of the block to instantiate
+% refblk = the library block to instantiate
+% varargin = {'varname', 'value', ...} pairs
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
@@ -25,36 +38,38 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function reuse_block(blk, name, refblk, varargin)
-% Instantiate a block named 'name' from library template 'refblk', 
-% if no such block already exists.  Otherwise, just configure that
-% block with any parameter, value pairs provided in varargin.
-% If refblk is has an '_init' function, this may still need to be
-% called after this function is called.
-%
-% reuse_block(blk, name, refblk, varargin)
-%
-% blk = the overarching system
-% name = the name of the block to instantiate
-% refblk = the library block to instantiate
-% varargin = {'varname', 'value', ...} pairs
 
 % Wrap whole function in try/catch
 try
 
-existing_blks = find_system(blk, 'lookUnderMasks', 'all', 'FollowLinks','on', ...
-  'SearchDepth', 1, 'Name', name);
+  existing_blks = find_system(blk, ...
+    'lookUnderMasks', 'all', 'FollowLinks','on', ...
+    'SearchDepth', 1, 'Name', name);
 
-% add block straight away if does not yet exist
-if isempty(existing_blks)
-  add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+  % Just add block straight away if does not yet exist
+  if isempty(existing_blks)
+    add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
+    % Done!
+    return
+  end
 
-% else if multiple block with that name exist
-elseif length(existing_blks) > 1
-  error('casper:MultipleBlocksForName', ...
-        'More than one block in "%s" has name "%s"', blk, name);
+  % If find_system returned more than one block (should "never" happen, but
+  % sometimes it does!)
+  if length(existing_blks) > 1
+    % Get their handles to see whether they are really the same block
+    handles = cell(size(existing_blks));
+    for k = 1:length(existing_blks)
+      handles{k} = num2str(get_param(existing_blks{k}, 'Handle'));
+    end
 
-% else, a block with that name does exist
-else
+    % If more than one handle (should "really never" happen...)
+    if length(unique(handles)) > 1
+      error('casper:MultipleBlocksForName', ...
+            'More than one block in "%s" has name "%s"', blk, name);
+    end
+  end
+
+  % A block with that name does exist, so re-use it
   existing_blk = existing_blks{1};
   
   %check Link status
@@ -72,7 +87,7 @@ else
   elseif strcmp(link_status, 'none'),
     block_type = get_param(existing_blk, 'BlockType');
 
-    %if unlinked  
+    %if weird (subsystem or s-function not from library)   
     if strcmp(block_type, 'SubSystem') || strcmp(block_type, 'S-Function'),
       clog([name,': built-in/',block_type,' so forcing replacement'], 'reuse_block_debug');
       source = '';
@@ -80,6 +95,27 @@ else
       %assuming built-in
       source = strcat('built-in/',block_type);
     end
+  
+  %implicit library block
+  elseif strcmp(link_status, 'implicit'),
+    
+    anc_block = get_param(existing_blk, 'AncestorBlock');
+    %we have a block in the library derived from another block
+    if ~isempty(anc_block),
+      source = anc_block;
+    %we have a block without a source or built-in
+    else,
+      block_type = get_param(existing_blk, 'BlockType');
+
+      %if weird (subsystem or s-function not from library)   
+      if strcmp(block_type, 'SubSystem') || strcmp(block_type, 'S-Function'),
+        clog([name,': built-in/',block_type,' so forcing replacement'], 'reuse_block_debug');
+        source = '';
+      else,
+        %assuming built-in
+        source = strcat('built-in/',block_type);
+      end
+    end  %if ~isempty
   else,
     clog([name,' not a library block and not built-in so force replace'], 'reuse_block_debug');
     source = '';
@@ -98,7 +134,9 @@ else
   if strcmpi(source, refblk),
     msg = sprintf('%s is already a "%s" so just setting parameters', name, source);
     clog(msg, {'reuse_block_debug', 'reuse_block_reuse'});
-    set_param([blk,'/',name], varargin{:});
+    if ~isempty(varargin),
+      set_param([blk,'/',name], varargin{:});
+    end
   else,
     if evalin('base','exist(''casper_force_reuse_block'')') ...
     && evalin('base','casper_force_reuse_block')
@@ -113,7 +151,6 @@ else
       add_block(refblk, [blk,'/',name], 'Name', name, varargin{:});
     end
   end
-end % if isempty(existing_blk)
 catch ex
     dump_and_rethrow(ex)
 end % try/catch

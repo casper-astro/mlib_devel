@@ -2,15 +2,22 @@ function [multipliers_setup, spec_array] = multiplier_specification(spec_array, 
 % Multiplier implementation specification is done in a bunch of places, so
 % this function helps to do that.
 
-if (length(spec_array) == 1),
+if length(spec_array) == 1
+    % Replicate single value for desired_size
     spec_array = ones(1, desired_size) * spec_array;
+elseif length(spec_array) < desired_size
+    % Default missing specifiers to use HDL
+    missing = desired_size - length(spec_array);
+    warning('%s: defaulting %d missing multiplier specifiers to use HDL', ...
+        caller_name, missing);
+    spec_array = [reshape(spec_array, 1, []), ones(1, missing) * 2];
+elseif length(spec_array) > desired_size
+    % Ignore extra trailing specifiers
+    warning('%s: ignoring %d extra multiplier specifiers', ...
+        caller_name, length(spec_array) - desired_size);
+    spec_array = spec_array(1:desired_size);
 end
-if (length(spec_array) ~= desired_size),
-    error_string = sprintf('%s: multiplier specification vector not the same length (%i) as desired (%i).', caller_name, length(spec_array), desired_size);
-    clog(error_string,'error');
-    errordlg(error_string);
-    return;
-end
+
 temp.use_hdl = 'on'; temp.use_embedded = 'off';
 multipliers_setup = repmat(temp, desired_size);
 clear temp;

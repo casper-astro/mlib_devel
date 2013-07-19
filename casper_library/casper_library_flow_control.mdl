@@ -1,22 +1,63 @@
 Library {
   Name			  "casper_library_flow_control"
-  Version		  7.2
+  Version		  8.0
   MdlSubVersion		  0
-  SavedCharacterEncoding  "US-ASCII"
+  SavedCharacterEncoding  "UTF-8"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
   DisableAllScopes	  off
+  FPTRunName		  "Run 1"
+  MaxMDLFileLineLength	  120
+  Object {
+    $PropName		    "BdWindowsInfo"
+    $ObjectID		    1
+    $ClassName		    "Simulink.BDWindowsInfo"
+    Object {
+      $PropName		      "WindowsInfo"
+      $ObjectID		      2
+      $ClassName	      "Simulink.WindowInfo"
+      IsActive		      [1]
+      Location		      [12.0, 45.0, 696.0, 582.0]
+      Object {
+	$PropName		"ModelBrowserInfo"
+	$ObjectID		3
+	$ClassName		"Simulink.ModelBrowserInfo"
+	Visible			[0]
+	DockPosition		"Left"
+	Width			[50]
+	Height			[50]
+	Filter			[8]
+      }
+      Object {
+	$PropName		"ExplorerBarInfo"
+	$ObjectID		4
+	$ClassName		"Simulink.ExplorerBarInfo"
+	Visible			[1]
+      }
+      Object {
+	$PropName		"EditorsInfo"
+	$ObjectID		5
+	$ClassName		"Simulink.EditorInfo"
+	IsActive		[1]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[654.0, 424.0]
+	ZoomFactor		[1.0]
+	Offset			[0.0, 0.0]
+      }
+    }
+  }
   Created		  "Thu Sep 02 12:37:18 2010"
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "mdexter"
+  LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Apr 15 15:00:52 2013"
-  RTWModifiedTimeStamp	  287938841
-  ModelVersionFormat	  "1.%<AutoIncrement:11>"
+  LastModifiedDate	  "Fri Jul 19 13:02:50 2013"
+  RTWModifiedTimeStamp	  296139766
+  ModelVersionFormat	  "1.%<AutoIncrement:16>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -24,6 +65,7 @@ Library {
   WideLines		  off
   ShowLineDimensions	  off
   ShowPortDataTypes	  off
+  ShowDesignRanges	  off
   ShowLoopsOnError	  on
   IgnoreBidirectionalLines off
   ShowStorageClass	  off
@@ -49,11 +91,13 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
+  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
+  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -81,14 +125,14 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      1
-      Version		      "1.5.1"
+      $ObjectID		      6
+      Version		      "1.12.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  2
-	  Version		  "1.5.1"
+	  $ObjectID		  7
+	  Version		  "1.12.1"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -106,8 +150,11 @@ Library {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  SolverMode		  "SingleTasking"
+	  EnableConcurrentExecution off
+	  ConcurrentTasks	  off
 	  Solver		  "ode45"
 	  SolverName		  "ode45"
+	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
 	  ZeroCrossAlgorithm	  "Nonadaptive"
@@ -119,8 +166,8 @@ Library {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  3
-	  Version		  "1.5.1"
+	  $ObjectID		  8
+	  Version		  "1.12.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -130,23 +177,29 @@ Library {
 	  LoadExternalInput	  off
 	  LoadInitialState	  off
 	  SaveFinalState	  off
+	  SaveCompleteFinalSimState off
 	  SaveFormat		  "Array"
+	  SignalLoggingSaveFormat "ModelDataLogs"
 	  SaveOutput		  on
 	  SaveState		  off
 	  SignalLogging		  on
+	  DSMLogging		  on
 	  InspectSignalLogs	  off
 	  SaveTime		  on
+	  ReturnWorkspaceOutputs  off
 	  StateSaveName		  "xout"
 	  TimeSaveName		  "tout"
 	  OutputSaveName	  "yout"
 	  SignalLoggingName	  "logsout"
+	  DSMLoggingName	  "dsmout"
 	  OutputOption		  "RefineOutputTimes"
 	  OutputTimes		  "[]"
+	  ReturnWorkspaceOutputsName "out"
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  4
-	  Version		  "1.5.1"
+	  $ObjectID		  9
+	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -160,13 +213,20 @@ Library {
 	  BooleanDataType	  off
 	  ConditionallyExecuteInputs on
 	  InlineParams		  off
+	  UseIntDivNetSlope	  off
+	  UseFloatMulNetSlope	  off
+	  UseSpecifiedMinMax	  off
 	  InlineInvariantSignals  off
 	  OptimizeBlockIOStorage  on
 	  BufferReuse		  on
 	  EnhancedBackFolding	  off
+	  StrengthReduction	  off
 	  ExpressionFolding	  on
+	  BooleansAsBitfields	  off
+	  BitfieldContainerType	  "uint_T"
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
+	  PassReuseOutputArgsAs	  "Structure reference"
 	  ExpressionDepthLimit	  2147483647
 	  FoldNonRolledExpr	  on
 	  LocalBlockOutputs	  on
@@ -183,14 +243,15 @@ Library {
 	  EfficientMapNaN2IntZero on
 	  OptimizeModelRefInitCode off
 	  LifeSpan		  "inf"
+	  MaxStackSize		  "Inherit from target"
 	  BufferReusableBoundary  on
 	  SimCompilerOptimization "Off"
 	  AccelVerboseBuild	  off
-  EnforceIntegerDowncast   on
+	  ParallelExecutionInRapidAccelerator on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  5
-	  Version		  "1.5.1"
+	  $ObjectID		  10
+	  Version		  "1.12.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -213,6 +274,8 @@ Library {
 	  MinStepSizeMsg	  "warning"
 	  TimeAdjustmentMsg	  "none"
 	  MaxConsecutiveZCsMsg	  "error"
+	  MaskedZcDiagnostic	  "warning"
+	  IgnoredZcDiagnostic	  "warning"
 	  SolverPrmCheckMsg	  "none"
 	  InheritedTsInSrcMsg	  "warning"
 	  DiscreteInheritContinuousMsg "warning"
@@ -230,22 +293,27 @@ Library {
 	  ParameterUnderflowMsg	  "none"
 	  ParameterPrecisionLossMsg "warning"
 	  ParameterTunabilityLossMsg "warning"
+	  FixptConstUnderflowMsg  "none"
+	  FixptConstOverflowMsg	  "none"
+	  FixptConstPrecisionLossMsg "none"
 	  UnderSpecifiedDataTypeMsg "none"
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
 	  InvalidFcnCallConnMsg	  "error"
-	  FcnCallInpInsideContextMsg "Enable All"
+	  FcnCallInpInsideContextMsg "EnableAllAsWarning"
 	  SignalLabelMismatchMsg  "none"
 	  UnconnectedInputMsg	  "warning"
 	  UnconnectedOutputMsg	  "warning"
 	  UnconnectedLineMsg	  "warning"
 	  SFcnCompatibilityMsg	  "none"
+	  FrameProcessingCompatibilityMsg "warning"
 	  UniqueDataStoreMsg	  "none"
 	  BusObjectLabelMismatch  "warning"
 	  RootOutportRequireBusObject "warning"
 	  AssertControl		  "UseLocalSettings"
 	  EnableOverflowDetection off
 	  ModelReferenceIOMsg	  "none"
+	  ModelReferenceMultiInstanceNormalModeStructChecksumCheck "error"
 	  ModelReferenceVersionMismatchMessage "none"
 	  ModelReferenceIOMismatchMessage "none"
 	  ModelReferenceCSMismatchMessage "none"
@@ -254,17 +322,35 @@ Library {
 	  ModelReferenceSymbolNameMessage "warning"
 	  ModelReferenceExtraNoncontSigs "error"
 	  StateNameClashWarn	  "warning"
+	  SimStateInterfaceChecksumMismatchMsg "warning"
+	  SimStateOlderReleaseMsg "error"
+	  InitInArrayFormatMsg	  "warning"
 	  StrictBusMsg		  "Warning"
+	  BusNameAdapt		  "WarnAndRepair"
+	  NonBusSignalsTreatedAsBus "none"
 	  LoggingUnavailableSignals "error"
 	  BlockIODiagnostic	  "none"
+	  SFUnusedDataAndEventsDiag "warning"
+	  SFUnexpectedBacktrackingDiag "warning"
+	  SFInvalidInputDataAccessInChartInitDiag "warning"
+	  SFNoUnconditionalDefaultTransitionDiag "warning"
+	  SFTransitionOutsideNaturalParentDiag "warning"
+	  SFUnconditionalTransitionShadowingDiag "warning"
+	  SFUndirectedBroadcastEventsDiag "warning"
+	  SFTransitionActionBeforeConditionDiag	"warning"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  6
-	  Version		  "1.5.1"
+	  $ObjectID		  11
+	  Version		  "1.12.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
 	  ProdBitPerLong	  32
+	  ProdBitPerFloat	  32
+	  ProdBitPerDouble	  64
+	  ProdBitPerPointer	  32
+	  ProdLargestAtomicInteger "Char"
+	  ProdLargestAtomicFloat  "None"
 	  ProdIntDivRoundTo	  "Undefined"
 	  ProdEndianess		  "Unspecified"
 	  ProdWordSize		  32
@@ -274,6 +360,11 @@ Library {
 	  TargetBitPerShort	  16
 	  TargetBitPerInt	  32
 	  TargetBitPerLong	  32
+	  TargetBitPerFloat	  32
+	  TargetBitPerDouble	  64
+	  TargetBitPerPointer	  32
+	  TargetLargestAtomicInteger "Char"
+	  TargetLargestAtomicFloat "None"
 	  TargetShiftRightIntArith on
 	  TargetIntDivRoundTo	  "Undefined"
 	  TargetEndianess	  "Unspecified"
@@ -286,27 +377,38 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  7
-	  Version		  "1.5.1"
+	  $ObjectID		  12
+	  Version		  "1.12.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
+	  EnableParallelModelReferenceBuilds off
+	  ParallelModelReferenceErrorOnInvalidPool on
+	  ParallelModelReferenceMATLABWorkerInit "None"
 	  ModelReferenceNumInstancesAllowed "Multi"
+	  PropagateVarSize	  "Infer from blocks in model"
 	  ModelReferencePassRootInputsByReference on
 	  ModelReferenceMinAlgLoopOccurrences off
+	  PropagateSignalLabelsOutOfModel off
+	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  8
-	  Version		  "1.5.1"
+	  $ObjectID		  13
+	  Version		  "1.12.1"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
+	  SimBlas		  on
+	  SimCtrlC		  on
+	  SimExtrinsic		  on
+	  SimIntegrity		  on
 	  SimUseLocalCustomCode	  off
+	  SimParseCustomCode	  on
 	  SimBuildMode		  "sf_incremental_build"
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  9
-	  Version		  "1.5.1"
+	  $ObjectID		  14
+	  Version		  "1.12.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -322,6 +424,7 @@ Library {
 	  GenCodeOnly		  off
 	  MakeCommand		  "make_rtw"
 	  GenerateMakefile	  on
+	  PackageGeneratedCodeAndArtifacts off
 	  TemplateMakefile	  "grt_default_tmf"
 	  GenerateReport	  off
 	  SaveLog		  off
@@ -338,6 +441,13 @@ Library {
 	  RTWUseSimCustomCode	  off
 	  IncludeHyperlinkInReport off
 	  LaunchReport		  off
+	  PortableWordSizes	  off
+	  GenerateErtSFunction	  off
+	  CreateSILPILBlock	  "None"
+	  CodeExecutionProfiling  off
+	  CodeExecutionProfileVariable "executionProfile"
+	  CodeProfilingSaveOptions "SummaryOnly"
+	  CodeProfilingInstrumentation off
 	  TargetLang		  "C"
 	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
 	  IncludeERTFirstTime	  off
@@ -347,13 +457,18 @@ Library {
 	  GenerateTraceReportSf	  off
 	  GenerateTraceReportEml  off
 	  GenerateCodeInfo	  off
+	  GenerateWebview	  off
+	  GenerateCodeMetricsReport off
+	  GenerateCodeReplacementReport	off
 	  RTWCompilerOptimization "Off"
+	  CheckMdlBeforeBuild	  "Off"
+	  CustomRebuildMode	  "OnUpdate"
 	  Array {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      10
-	      Version		      "1.5.1"
+	      $ObjectID		      15
+	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -385,15 +500,18 @@ Library {
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
+	      OperatorAnnotations     off
 	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
+	      MATLABFcnDesc	      off
 	      IncDataTypeInIds	      off
 	      MangleLength	      1
 	      CustomSymbolStrGlobalVar "$R$N$M"
 	      CustomSymbolStrType     "$N$R$M"
 	      CustomSymbolStrField    "$N$M"
 	      CustomSymbolStrFcn      "$R$N$M$F"
+	      CustomSymbolStrFcnArg   "rt$I$N$M"
 	      CustomSymbolStrBlkIO    "rtb_$N$M"
 	      CustomSymbolStrTmpVar   "$N$M"
 	      CustomSymbolStrMacro    "$R$N$M"
@@ -401,16 +519,19 @@ Library {
 	      ParamNamingRule	      "None"
 	      SignalNamingRule	      "None"
 	      InsertBlockDesc	      off
+	      InsertPolySpaceComments off
 	      SimulinkBlockComments   on
+	      MATLABSourceComments    off
 	      EnableCustomComments    off
+	      InternalIdentifier      "Classic"
 	      InlinedPrmAccess	      "Literals"
 	      ReqsInCode	      off
 	      UseSimReservedNames     off
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      11
-	      Version		      "1.5.1"
+	      $ObjectID		      16
+	      Version		      "1.12.1"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -434,7 +555,7 @@ Library {
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
 	      TargetLibSuffix	      ""
 	      TargetPreCompLibLocation ""
-	      TargetFunctionLibrary  "ANSI_C"
+	      CodeReplacementLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
 	      ERTMultiwordLength      256
@@ -444,9 +565,13 @@ Library {
 	      GenerateTestInterfaces  off
 	      IsPILTarget	      off
 	      ModelReferenceCompliant on
+	      ParMdlRefBuildCompliant on
 	      CompOptLevelCompliant   on
+	      ConcurrentExecutionCompliant on
 	      IncludeMdlTerminateFcn  on
+	      GeneratePreprocessorConditionals "Disable all"
 	      CombineOutputUpdateFcns off
+	      CombineSignalStateStructs	off
 	      SuppressErrorStatus     off
 	      ERTFirstTimeCompliant   off
 	      IncludeFileDelimiter    "Auto"
@@ -460,12 +585,13 @@ Library {
 	      PurelyIntegerCode	      off
 	      SupportContinuousTime   on
 	      SupportNonInlinedSFcns  on
+	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
-	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
+	      GRTInterface	      on
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -477,6 +603,7 @@ Library {
 	      RTWCAPISignals	      off
 	      RTWCAPIParams	      off
 	      RTWCAPIStates	      off
+	      RTWCAPIRootIO	      off
 	      GenerateASAP2	      off
 	    }
 	    PropName		    "Components"
@@ -490,6 +617,7 @@ Library {
     }
     PropName		    "ConfigurationSets"
   }
+  ExplicitPartitioning	  off
   BlockDefaults {
     ForegroundColor	    "black"
     BackgroundColor	    "white"
@@ -500,7 +628,8 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
     ShowName		    on
-    Orientation		    "right"
+    BlockRotation	    0
+    BlockMirror		    off
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -520,27 +649,43 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
   }
+  MaskDefaults {
+    SelfModifiable	    "off"
+    IconFrame		    "on"
+    IconOpaque		    "on"
+    RunInitForIconRedraw    "off"
+    IconRotate		    "none"
+    PortRotate		    "default"
+    IconUnits		    "autoscale"
+  }
+  MaskParameterDefaults {
+    Evaluate		    "on"
+    Tunable		    "on"
+    NeverSave		    "off"
+    Internal		    "off"
+    ReadOnly		    "off"
+    Enabled		    "on"
+    Visible		    "on"
+    ToolTip		    "on"
+  }
   BlockParameterDefaults {
     Block {
       BlockType		      Inport
       Port		      "1"
+      OutputFunctionCall      off
       OutMin		      "[]"
       OutMax		      "[]"
       OutDataTypeStr	      "Inherit: auto"
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
+      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
       LatchByDelayingOutsideSignal off
-      LatchByCopyingInsideSignal off
+      LatchInputForFeedbackSignals off
       Interpolate	      on
-  DataType   "auto"
-  OutDataType   "fixdt(1,16,0)"
-  OutScaling   "[]"
-  UseBusObject   off
-  BusObject   "BusObject"
     }
     Block {
       BlockType		      Outport
@@ -551,17 +696,13 @@ Library {
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
+      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
       SourceOfInitialOutputValue "Dialog"
       OutputWhenDisabled      "held"
       InitialOutput	      "[]"
-  DataType   "auto"
-  OutDataType   "fixdt(1,16,0)"
-  OutScaling   "[]"
-  UseBusObject   off
-  BusObject   "BusObject"
     }
     Block {
       BlockType		      SubSystem
@@ -580,13 +721,17 @@ Library {
       RTWMemSecDataParameters "Inherit from model"
       SimViewingDevice	      off
       DataTypeOverride	      "UseLocalSettings"
+      DataTypeOverrideAppliesTo	"AllNumericTypes"
       MinMaxOverflowLogging   "UseLocalSettings"
+      SFBlockType	      "NONE"
+      Variant		      off
+      GeneratePreprocessorConditionals off
     }
   }
   System {
     Name		    "casper_library_flow_control"
-    Location		    [75, 130, 726, 412]
-    Open		    off
+    Location		    [12, 45, 708, 627]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -599,11 +744,14 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
+    SIDHighWatermark	    "62"
     Block {
       BlockType		      SubSystem
       Name		      "bus_create"
+      SID		      "1"
       Ports		      [2, 1]
       Position		      [270, 26, 320, 104]
+      ZOrder		      -1
       BackgroundColor	      "[0.502000, 1.000000, 0.502000]"
       UserDataPersistent      on
       UserData		      "DataTag0"
@@ -612,24 +760,27 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskType		      "bus_create"
-      MaskPromptString	      "Number of inputs:"
-      MaskStyleString	      "edit"
-      MaskVariables	      "inputNum=@1;"
-      MaskTunableValueString  "on"
-      MaskEnableString	      "on"
-      MaskVisibilityString    "on"
-      MaskToolTipString	      "on"
-      MaskInitialization      "bus_create_init(gcb,...\n    'inputNum', inputNum);"
-      MaskIconFrame	      on
-      MaskIconOpaque	      on
-      MaskIconRotate	      "none"
-      MaskIconUnits	      "autoscale"
-      MaskValueString	      "2"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		17
+	$ClassName		"Simulink.Mask"
+	Type			"bus_create"
+	Initialization		"bus_create_init(gcb,...\n    'inputNum', inputNum);"
+	Object {
+	  $PropName		  "Parameters"
+	  $ObjectID		  18
+	  $ClassName		  "Simulink.MaskParameter"
+	  Type			  "edit"
+	  Name			  "inputNum"
+	  Prompt		  "Number of inputs:"
+	  Value			  "2"
+	}
+      }
       System {
 	Name			"bus_create"
-	Location		[12, 45, 1978, 1372]
+	Location		[12, 45, 2074, 1842]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -645,21 +796,27 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "in1"
+	  SID			  "2"
 	  Position		  [100, 100, 150, 120]
+	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "in2"
+	  SID			  "3"
 	  Position		  [100, 140, 150, 160]
+	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "concatenate"
+	  SID			  "4"
 	  Ports			  [2, 1]
 	  Position		  [500, 100, 550, 160]
+	  ZOrder		  -3
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
@@ -683,8 +840,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterpret1"
+	  SID			  "5"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
+	  ZOrder		  -4
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -712,8 +871,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterpret2"
+	  SID			  "6"
 	  Ports			  [1, 1]
 	  Position		  [300, 140, 350, 160]
+	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -741,7 +902,9 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "bus_out"
+	  SID			  "7"
 	  Position		  [700, 130, 750, 150]
+	  ZOrder		  -6
 	  IconDisplay		  "Port number"
 	}
 	Line {
@@ -782,8 +945,10 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "bus_expand"
+      SID		      "8"
       Ports		      [1, 2]
-      Position		      [350, 27, 400, 103]
+      Position		      [360, 22, 410, 98]
+      ZOrder		      -2
       BackgroundColor	      "[0.502000, 1.000000, 0.502000]"
       AttributesFormatString  "2 outputs"
       UserDataPersistent      on
@@ -793,58 +958,136 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskType		      "bus_expand"
-      MaskDescription	      "Expands a 'bus' made using a bus_create or Xilinx\nconcat block.\nThe input will be divid"
-      "ed into the specified number\nof outputs with the specified arithmetic types.\nDivisions are made from most sign"
-      "ificant bit."
-      MaskPromptString	      "Mode:|Number of outputs:|Output width:|Output binary point position:|Output arithmetic t"
-      "ype: (Unsigned=0, Signed=1, Boolean=2)|Print format string?|Output to workspace?|Variable name prefix:|Output to"
-      " model as well?"
-      MaskStyleString	      "popup(divisions of equal size|divisions of arbitrary size),edit,edit,edit,edit,checkbox,c"
-      "heckbox,edit,checkbox"
-      MaskVariables	      "mode=&1;outputNum=@2;outputWidth=@3;outputBinaryPt=@4;outputArithmeticType=@5;show_format=&"
-      "6;outputToWorkspace=&7;variablePrefix=&8;outputToModelAsWell=&9;"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "bus_expand_callback();||bus_expand_callback();||||bus_expand_callback();||"
-      MaskEnableString	      "on,on,on,on,on,on,on,off,off"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on"
-      MaskInitialization      "bus_expand_init(gcb,...\n    'mode', mode, ...\n    'outputNum', outputNum, ...\n    'o"
-      "utputWidth', outputWidth, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArit"
-      "hmeticType, ...\n    'show_format', show_format, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'vari"
-      "ablePrefix', variablePrefix, ...\n    'outputToModelAsWell', outputToModelAsWell);"
-      MaskIconFrame	      on
-      MaskIconOpaque	      off
-      MaskIconRotate	      "none"
-      MaskIconUnits	      "autoscale"
-      MaskValueString	      "divisions of equal size|2|io_widths|io_bp|io_type|off|off|out|on"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		19
+	$ClassName		"Simulink.Mask"
+	Type			"bus_expand"
+	Description		"Expands a 'bus' made using a bus_create or Xilinx\nconcat block.\nThe input will be divided into the sp"
+	"ecified number\nof outputs with the specified arithmetic types.\nDivisions are made from most significant bit."
+	Initialization		"bus_expand_init(gcb,...\n    'mode', mode, ...\n    'outputNum', outputNum, ...\n    'outputWidth', "
+	"outputWidth, ...\n    'outputBinaryPt', outputBinaryPt, ...\n    'outputArithmeticType', outputArithmeticType, ...\n "
+	"   'show_format', show_format, ...\n    'outputToWorkspace', outputToWorkspace, ...\n    'variablePrefix', variablePr"
+	"efix, ...\n    'outputToModelAsWell', outputToModelAsWell);"
+	IconOpaque		"off"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  9
+	  Object {
+	    $ObjectID		    20
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      2
+	      Cell		      "divisions of equal size"
+	      Cell		      "divisions of arbitrary size"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "mode"
+	    Prompt		    "Mode:"
+	    Value		    "divisions of equal size"
+	    Evaluate		    "off"
+	    Callback		    "bus_expand_callback();"
+	  }
+	  Object {
+	    $ObjectID		    21
+	    Type		    "edit"
+	    Name		    "outputNum"
+	    Prompt		    "Number of outputs:"
+	    Value		    "2"
+	  }
+	  Object {
+	    $ObjectID		    22
+	    Type		    "edit"
+	    Name		    "outputWidth"
+	    Prompt		    "Output width:"
+	    Value		    "16"
+	    Callback		    "bus_expand_callback();"
+	  }
+	  Object {
+	    $ObjectID		    23
+	    Type		    "edit"
+	    Name		    "outputBinaryPt"
+	    Prompt		    "Output binary point position:"
+	    Value		    "0"
+	  }
+	  Object {
+	    $ObjectID		    24
+	    Type		    "edit"
+	    Name		    "outputArithmeticType"
+	    Prompt		    "Output arithmetic type (ufix=0, fix=1, bool=2):"
+	    Value		    "0"
+	  }
+	  Object {
+	    $ObjectID		    25
+	    Type		    "checkbox"
+	    Name		    "show_format"
+	    Prompt		    "Print format string?"
+	    Value		    "off"
+	    Evaluate		    "off"
+	  }
+	  Object {
+	    $ObjectID		    26
+	    Type		    "checkbox"
+	    Name		    "outputToWorkspace"
+	    Prompt		    "Output to workspace?"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    Callback		    "bus_expand_callback();"
+	  }
+	  Object {
+	    $ObjectID		    27
+	    Type		    "edit"
+	    Name		    "variablePrefix"
+	    Prompt		    "Variable name prefix:"
+	    Value		    "out"
+	    Evaluate		    "off"
+	    Enabled		    "off"
+	  }
+	  Object {
+	    $ObjectID		    28
+	    Type		    "checkbox"
+	    Name		    "outputToModelAsWell"
+	    Prompt		    "Output to model as well?"
+	    Value		    "on"
+	    Evaluate		    "off"
+	    Enabled		    "off"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
       System {
 	Name			"bus_expand"
-	Location		[0, 25, 1920, 1200]
+	Location		[12, 45, 2028, 1690]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
 	Block {
 	  BlockType		  Inport
 	  Name			  "bus_in"
+	  SID			  "9"
 	  Position		  [100, 100, 150, 120]
+	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterpret1"
+	  SID			  "10"
 	  Ports			  [1, 1]
 	  Position		  [500, 140, 550, 160]
+	  ZOrder		  -2
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can change the signal between si"
@@ -853,7 +1096,7 @@ Library {
 	  " with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 "
 	  "in binary)."
 	  force_arith_type	  on
-	  arith_type		  "Signed  (2's comp)"
+	  arith_type		  "Unsigned"
 	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
@@ -871,8 +1114,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterpret2"
+	  SID			  "11"
 	  Ports			  [1, 1]
 	  Position		  [500, 100, 550, 120]
+	  ZOrder		  -3
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can change the signal between si"
@@ -881,7 +1126,7 @@ Library {
 	  " with 0 fractional bits.  Then an input of -2.0 (1110.00 in binary 2's complement) becomes an output of 56 (111000 "
 	  "in binary)."
 	  force_arith_type	  on
-	  arith_type		  "Signed  (2's comp)"
+	  arith_type		  "Unsigned"
 	  force_bin_pt		  on
 	  bin_pt		  "0"
 	  has_advanced_control	  "0"
@@ -899,17 +1144,19 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice1"
+	  SID			  "12"
 	  Ports			  [1, 1]
 	  Position		  [300, 140, 350, 160]
+	  ZOrder		  -4
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
-	  nbits			  "3"
+	  nbits			  "16"
 	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
-	  bit1			  "-3"
+	  bit1			  "-16"
 	  base1			  "MSB of Input"
 	  bit0			  "0"
 	  base0			  "LSB of Input"
@@ -929,14 +1176,16 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "slice2"
+	  SID			  "13"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
+	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
 	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
 	  "e notes: In hardware this block costs nothing."
-	  nbits			  "3"
+	  nbits			  "16"
 	  boolean_output	  off
 	  mode			  "Upper Bit Location + Width"
 	  bit1			  "0"
@@ -959,26 +1208,37 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "msb_out2"
+	  SID			  "14"
 	  Position		  [700, 100, 750, 120]
+	  ZOrder		  -6
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "lsb_out1"
+	  SID			  "15"
 	  Position		  [700, 140, 750, 160]
+	  ZOrder		  -7
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  SrcBlock		  "reinterpret1"
+	  SrcBlock		  "bus_in"
 	  SrcPort		  1
-	  DstBlock		  "lsb_out1"
-	  DstPort		  1
+	  Points		  [0, 0]
+	  Branch {
+	    DstBlock		    "slice2"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "slice1"
+	    DstPort		    1
+	  }
 	}
 	Line {
-	  SrcBlock		  "slice1"
+	  SrcBlock		  "slice2"
 	  SrcPort		  1
-	  DstBlock		  "reinterpret1"
+	  DstBlock		  "reinterpret2"
 	  DstPort		  1
 	}
 	Line {
@@ -988,33 +1248,27 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "slice2"
+	  SrcBlock		  "slice1"
 	  SrcPort		  1
-	  DstBlock		  "reinterpret2"
+	  DstBlock		  "reinterpret1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "bus_in"
+	  SrcBlock		  "reinterpret1"
 	  SrcPort		  1
-	  Points		  [0, 0]
-	  Branch {
-	    DstBlock		    "slice1"
-	    DstPort		    1
-	  }
-	  Branch {
-	    DstBlock		    "slice2"
-	    DstPort		    1
-	  }
+	  DstBlock		  "lsb_out1"
+	  DstPort		  1
 	}
       }
     }
     Block {
       BlockType		      SubSystem
       Name		      "munge"
-      Ports		      [1, 1]
-      Position		      [270, 157, 310, 193]
+      SID		      "62"
+      Ports		      []
+      Position		      [275, 167, 315, 203]
+      ZOrder		      21
       BackgroundColor	      "[0.494000, 1.000000, 0.494000]"
-      AttributesFormatString  "[0]\n0 bits"
       UserDataPersistent      on
       UserData		      "DataTag2"
       MinAlgLoopOccurrences   off
@@ -1022,28 +1276,70 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskType		      "munge"
-      MaskDescription	      "Splits an input bus into the specified number of divisions and then recombines them in th"
-      "e order specified (most significant division = 0,least = number divisions-1)"
-      MaskPromptString	      "Number of divisions|Division size (bits)|Division packing order"
-      MaskStyleString	      "edit,edit,edit"
-      MaskVariables	      "divisions=@1;div_size=@2;order=@3;"
-      MaskTunableValueString  "on,on,on"
-      MaskCallbackString      "||"
-      MaskEnableString	      "on,on,on"
-      MaskVisibilityString    "on,on,on"
-      MaskToolTipString	      "on,on,on"
-      MaskInitialization      "munge_init(gcb, ...\n    'divisions', divisions, ...\n    'div_size', div_size, ...\n  "
-      "  'order', order);"
-      MaskIconFrame	      on
-      MaskIconOpaque	      on
-      MaskIconRotate	      "none"
-      MaskIconUnits	      "autoscale"
-      MaskValueString	      "1|0|0"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		29
+	$ClassName		"Simulink.Mask"
+	Type			"munge"
+	Description		"Splits an input bus into the specified number of divisions and then recombines them in the order specif"
+	"ied (most significant division = 0,least = number divisions-1)"
+	Initialization		"munge_init(gcb, ...\n    'divisions', divisions, ...\n    'div_size', div_size, ...\n    'order', or"
+	"der, ...\n    'arith_type_out', arith_type_out, ...\n    'bin_pt_out', bin_pt_out);"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  5
+	  Object {
+	    $ObjectID		    30
+	    Type		    "edit"
+	    Name		    "divisions"
+	    Prompt		    "Number of divisions"
+	    Value		    "0"
+	  }
+	  Object {
+	    $ObjectID		    31
+	    Type		    "edit"
+	    Name		    "div_size"
+	    Prompt		    "Division size (bits)"
+	    Value		    "1"
+	  }
+	  Object {
+	    $ObjectID		    32
+	    Type		    "edit"
+	    Name		    "order"
+	    Prompt		    "Division packing order"
+	    Value		    "0"
+	  }
+	  Object {
+	    $ObjectID		    33
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      3
+	      Cell		      "Unsigned"
+	      Cell		      "Signed  (2's comp)"
+	      Cell		      "Floating-point"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "arith_type_out"
+	    Prompt		    "Output arithmetic type"
+	    Value		    "Unsigned"
+	    Evaluate		    "off"
+	  }
+	  Object {
+	    $ObjectID		    34
+	    Type		    "edit"
+	    Name		    "bin_pt_out"
+	    Prompt		    "Output binary point"
+	    Value		    "0"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
       System {
 	Name			"munge"
-	Location		[384, 480, 1532, 1080]
+	Location		[492, 88, 1477, 750]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1056,31 +1352,15 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	Block {
-	  BlockType		  Inport
-	  Name			  "din"
-	  Position		  [40, 30, 70, 50]
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "dout"
-	  Position		  [670, 30, 700, 50]
-	  IconDisplay		  "Port number"
-	}
-	Line {
-	  SrcBlock		  "din"
-	  SrcPort		  1
-	  DstBlock		  "dout"
-	  DstPort		  1
-	}
       }
     }
     Block {
       BlockType		      SubSystem
       Name		      "packetizer"
+      SID		      "19"
       Ports		      [3, 4]
       Position		      [25, 115, 180, 205]
+      ZOrder		      -4
       AttributesFormatString  "Parallel Input Width: 512\nSerial Output Width: 64"
       UserDataPersistent      on
       UserData		      "DataTag3"
@@ -1089,36 +1369,80 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskType		      "packetizer"
-      MaskDescription	      "This block is intended to serialize data that is 'bursty', that is,\nthe average data rat"
-      "e is small but per cycle the data is highly\nparallel and can contain many points simultaneously.  This situatio"
-      "n\nis common with the streaming CASPER FFTs and related blocks. \n\nThe serialization buffers the data when vali"
-      "d and independently \nserializes the data when the buffer is non-empty.  For convenience, the\ndata is counted a"
-      "s it is serialized and signals exist to indicate\nthat the serial output is valid or that a buffer overflow has "
-      "occured.  The\nblock will not stop in the case of an overflow, and the overflow\nsignal is not held high after i"
-      "t occurs.\n\nFor example usage, see 'roach_spec_2adc_borph' in 'SVNROOT/trunk/projects/roach_spec/'\nor the test"
-      " case in 'SVNROOT/trunk/mlib_devel_10_1/Tests/packetizer_test.mdl'\n\nFor extended documentation, please see the"
-      " CASPER wiki"
-      MaskPromptString	      "Parallel Input Width|Serial Output Width|FIFO depth|Total number of data points"
-      MaskStyleString	      "edit,edit,popup(16|32|64|128|256|512|1K|2K|4K|8K|16K|32K|64K),edit"
-      MaskVariables	      "pin_width=@1;sout_width=@2;fifo_depth=&3;total_words=@4;"
-      MaskTunableValueString  "on,on,on,on"
-      MaskCallbackString      "|||"
-      MaskEnableString	      "on,on,on,on"
-      MaskVisibilityString    "on,on,on,on"
-      MaskToolTipString	      "on,on,on,on"
-      MaskInitialization      "packetizer_init(gcb, 'pin_width', pin_width, 'sout_width', sout_width, 'total_words', t"
-      "otal_words, 'fifo_depth', fifo_depth)\n% packetizer_init(gcb, ...\n%     'pin_width', pin_width, ...\n%     'sou"
-      "t_width', sout_width, ...\n%   %  'fifo_depth', fifo_depth, ...\n%     'total_words', total_words);"
-      MaskIconFrame	      on
-      MaskIconOpaque	      on
-      MaskIconRotate	      "none"
-      MaskIconUnits	      "autoscale"
-      MaskValueString	      "512|64|64|64"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		35
+	$ClassName		"Simulink.Mask"
+	Type			"packetizer"
+	Description		"This block is intended to serialize data that is 'bursty', that is,\nthe average data rate is small but"
+	" per cycle the data is highly\nparallel and can contain many points simultaneously.  This situation\nis common with t"
+	"he streaming CASPER FFTs and related blocks. \n\nThe serialization buffers the data when valid and independently \nse"
+	"rializes the data when the buffer is non-empty.  For convenience, the\ndata is counted as it is serialized and signal"
+	"s exist to indicate\nthat the serial output is valid or that a buffer overflow has occured.  The\nblock will not stop"
+	" in the case of an overflow, and the overflow\nsignal is not held high after it occurs.\n\nFor example usage, see 'ro"
+	"ach_spec_2adc_borph' in 'SVNROOT/trunk/projects/roach_spec/'\nor the test case in 'SVNROOT/trunk/mlib_devel_10_1/Test"
+	"s/packetizer_test.mdl'\n\nFor extended documentation, please see the CASPER wiki"
+	Initialization		"packetizer_init(gcb, 'pin_width', pin_width, 'sout_width', sout_width, 'total_words', total_words, '"
+	"fifo_depth', fifo_depth)\n% packetizer_init(gcb, ...\n%     'pin_width', pin_width, ...\n%     'sout_width', sout_wid"
+	"th, ...\n%   %  'fifo_depth', fifo_depth, ...\n%     'total_words', total_words);"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  4
+	  Object {
+	    $ObjectID		    36
+	    Type		    "edit"
+	    Name		    "pin_width"
+	    Prompt		    "Parallel Input Width"
+	    Value		    "512"
+	  }
+	  Object {
+	    $ObjectID		    37
+	    Type		    "edit"
+	    Name		    "sout_width"
+	    Prompt		    "Serial Output Width"
+	    Value		    "64"
+	  }
+	  Object {
+	    $ObjectID		    38
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      13
+	      Cell		      "16"
+	      Cell		      "32"
+	      Cell		      "64"
+	      Cell		      "128"
+	      Cell		      "256"
+	      Cell		      "512"
+	      Cell		      "1K"
+	      Cell		      "2K"
+	      Cell		      "4K"
+	      Cell		      "8K"
+	      Cell		      "16K"
+	      Cell		      "32K"
+	      Cell		      "64K"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "fifo_depth"
+	    Prompt		    "FIFO depth"
+	    Value		    "64"
+	    Evaluate		    "off"
+	  }
+	  Object {
+	    $ObjectID		    39
+	    Type		    "edit"
+	    Name		    "total_words"
+	    Prompt		    "Total number of data points"
+	    Value		    "64"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
       System {
 	Name			"packetizer"
-	Location		[73, 45, 1193, 1034]
+	Location		[12, 45, 1228, 1504]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1134,28 +1458,36 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "din_valid"
+	  SID			  "20"
 	  Position		  [365, 443, 395, 457]
+	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "21"
 	  Position		  [365, 408, 395, 422]
+	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync_reset"
+	  SID			  "22"
 	  Position		  [15, 173, 45, 187]
+	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter"
+	  SID			  "23"
 	  Ports			  [2, 1]
 	  Position		  [870, 15, 930, 75]
+	  ZOrder		  -4
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
@@ -1196,8 +1528,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Inverter"
+	  SID			  "24"
 	  Ports			  [1, 1]
 	  Position		  [425, 468, 445, 492]
+	  ZOrder		  -5
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Inverter"
 	  SourceType		  "Xilinx Inverter Block"
@@ -1223,8 +1557,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
+	  SID			  "25"
 	  Ports			  [2, 1]
 	  Position		  [475, 444, 500, 471]
+	  ZOrder		  -6
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
@@ -1256,8 +1592,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical1"
+	  SID			  "26"
 	  Ports			  [2, 1]
 	  Position		  [700, 569, 725, 596]
+	  ZOrder		  -7
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
@@ -1289,8 +1627,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "control_fsm"
+	  SID			  "27"
 	  Ports			  [4, 11]
 	  Position		  [205, 38, 505, 202]
+	  ZOrder		  -8
 	  SourceBlock		  "xbsIndex_r4/MCode"
 	  SourceType		  "Xilinx MCode Block Block"
 	  infoedit		  "Pass input values to a MATLAB function for evaluation in Xilinx fixed-point type. The input ports of t"
@@ -1335,8 +1675,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "data_buffer"
+	  SID			  "28"
 	  Ports			  [3, 4]
 	  Position		  [560, 398, 640, 512]
+	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/FIFO"
 	  SourceType		  "Xilinx FIFO Block Block"
 	  mem_type		  "Block RAM"
@@ -1376,8 +1718,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "data_counter"
+	  SID			  "29"
 	  Ports			  [2, 1]
 	  Position		  [320, 300, 380, 360]
+	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
@@ -1418,9 +1762,12 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "parallel_to_serial_converter"
+	  SID			  "30"
 	  Ports			  [3, 1]
 	  Position		  [730, 403, 780, 437]
+	  ZOrder		  -11
 	  AncestorBlock		  "casper_library_flow_control/parallel_to_serial_converter"
+	  LibraryVersion	  "*"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag4"
 	  MinAlgLoopOccurrences	  off
@@ -1428,33 +1775,45 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
-	  MaskType		  "parallel_to_serial_converter"
-	  MaskDescription	  "This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' is asse"
-	  "rted, this data is broken into \npieces of width specified by the serial output width and \nstored into different r"
-	  "egisters chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift register\nretu"
-	  "rns as output a new piece of data of width sout_width.  This data\nis the next least significant piece of the origi"
-	  "nal bus.  The converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically loads the least sig"
-	  "nificant\nbits into the register closest to the output, so the first 'shift' \nassertion changes the data output fr"
-	  "om bits [sout_width-1:0] to\nbits [2*sout_width-1:sout_width]."
-	  MaskPromptString	  "Parallel Input Width|Serial Output Width"
-	  MaskStyleString	  "edit,edit"
-	  MaskVariables		  "pin_width=@1;sout_width=@2;"
-	  MaskTunableValueString  "on,on"
-	  MaskCallbackString	  "|"
-	  MaskEnableString	  "on,on"
-	  MaskVisibilityString	  "on,on"
-	  MaskToolTipString	  "on,on"
-	  MaskInitialization	  "parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_width'"
-	  ", sout_width);"
-	  MaskIconFrame		  on
-	  MaskIconOpaque	  on
-	  MaskIconRotate	  "none"
-	  MaskIconUnits		  "autoscale"
-	  MaskValueString	  "512|64"
+	  Object {
+	    $PropName		    "MaskObject"
+	    $ObjectID		    40
+	    $ClassName		    "Simulink.Mask"
+	    Type		    "parallel_to_serial_converter"
+	    Description		    "This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' is ass"
+	    "erted, this data is broken into \npieces of width specified by the serial output width and \nstored into differen"
+	    "t registers chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift register\n"
+	    "returns as output a new piece of data of width sout_width.  This data\nis the next least significant piece of the"
+	    " original bus.  The converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically loads the l"
+	    "east significant\nbits into the register closest to the output, so the first 'shift' \nassertion changes the data"
+	    " output from bits [sout_width-1:0] to\nbits [2*sout_width-1:sout_width]."
+	    Initialization	    "parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_width'"
+	    ", sout_width);"
+	    Array {
+	      Type		      "Simulink.MaskParameter"
+	      Dimension		      2
+	      Object {
+		$ObjectID		41
+		Type			"edit"
+		Name			"pin_width"
+		Prompt			"Parallel Input Width"
+		Value			"512"
+	      }
+	      Object {
+		$ObjectID		42
+		Type			"edit"
+		Name			"sout_width"
+		Prompt			"Serial Output Width"
+		Value			"64"
+	      }
+	      PropName		      "Parameters"
+	    }
+	  }
 	  System {
 	    Name		    "parallel_to_serial_converter"
-	    Location		    [12, 45, 1328, 899]
+	    Location		    [12, 45, 1424, 1369]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1467,31 +1826,40 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
+	    SIDHighWatermark	    "15"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "pin"
+	      SID		      "30:1"
 	      Position		      [25, 243, 55, 257]
+	      ZOrder		      -1
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "ld"
+	      SID		      "30:2"
 	      Position		      [25, 28, 55, 42]
+	      ZOrder		      -2
 	      Port		      "2"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "shift"
+	      SID		      "30:3"
 	      Position		      [25, 198, 55, 212]
+	      ZOrder		      -3
 	      Port		      "3"
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Logical"
+	      SID		      "30:4"
 	      Ports		      [2, 1]
 	      Position		      [90, 157, 115, 188]
+	      ZOrder		      -4
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
 	      logical_function	      "OR"
@@ -1522,8 +1890,10 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "filler"
+	      SID		      "30:5"
 	      Ports		      [0, 1]
 	      Position		      [120, 32, 175, 58]
+	      ZOrder		      -5
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
 	      const		      "0"
@@ -1560,44 +1930,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit1"
+	      SID		      "30:6"
 	      Ports		      [4, 1]
 	      Position		      [220, 26, 280, 74]
+	      ZOrder		      -6
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1606,44 +1943,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit2"
+	      SID		      "30:7"
 	      Ports		      [4, 1]
 	      Position		      [420, 26, 480, 74]
+	      ZOrder		      -7
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1652,44 +1956,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit3"
+	      SID		      "30:8"
 	      Ports		      [4, 1]
 	      Position		      [620, 26, 680, 74]
+	      ZOrder		      -8
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1698,44 +1969,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit4"
+	      SID		      "30:9"
 	      Ports		      [4, 1]
 	      Position		      [820, 26, 880, 74]
+	      ZOrder		      -9
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1744,44 +1982,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit5"
+	      SID		      "30:10"
 	      Ports		      [4, 1]
 	      Position		      [1020, 26, 1080, 74]
+	      ZOrder		      -10
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1790,44 +1995,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit6"
+	      SID		      "30:11"
 	      Ports		      [4, 1]
 	      Position		      [1220, 26, 1280, 74]
+	      ZOrder		      -11
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1836,44 +2008,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit7"
+	      SID		      "30:12"
 	      Ports		      [4, 1]
 	      Position		      [1420, 26, 1480, 74]
+	      ZOrder		      -12
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1882,44 +2021,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "shifter_unit8"
+	      SID		      "30:13"
 	      Ports		      [4, 1]
 	      Position		      [1620, 26, 1680, 74]
+	      ZOrder		      -13
 	      BackgroundColor	      "gray"
-	      LinkData {
-		BlockName		"Mux2"
-		DialogParameters {
-		  sg_icon_stat		  "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ],[0."
-		  "77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6"
-		  ".1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[47.44 47.4"
-		  "4 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44 47.44 43.44 ],["
-		  "1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 39.44 ],[0.931 0.94"
-		  "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');po"
-		  "rt_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');port_label('input',3,'d1');"
-		  "\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Register1"
-		DialogParameters {
-		  sg_icon_stat		  "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44"
-		  ".88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88"
-		  " ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch("
-		  "[20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfpr"
-		  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input'"
-		  ",1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',1,'q');\ncolor('black');d"
-		  "isp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-		BlockName		"Slice"
-		DialogParameters {
-		  sg_icon_stat		  "60,30,1,1,white,blue,0,b1026674,right"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 ],[0 0 30 30 ],[0.77 0.82 0.91]);"
-		  "\npatch([22 17 24 17 22 30 32 34 42 35 29 24 30 24 29 35 42 34 32 30 22 ],[3 8 15 22 27 27 25 27 27 20 26 21 15 9 "
-		  "4 10 3 3 5 3 3 ],[0.98 0.96 0.92]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\nfprintf('','COMMENT: end icon graphics'"
-		  ");\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: "
-		  "end icon text');\n"
-		}
-	      }
 	      SourceBlock	      "casper_library_flow_control/shifter_unit"
 	      SourceType	      "shifter_unit"
 	      data_width	      "64"
@@ -1928,7 +2034,9 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "sout"
+	      SID		      "30:14"
 	      Position		      [1820, 26, 1880, 74]
+	      ZOrder		      -14
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
@@ -2107,6 +2215,7 @@ Library {
 	      }
 	    }
 	    Annotation {
+	      SID		      "30:15"
 	      Position		      [747, 444]
 	    }
 	  }
@@ -2114,8 +2223,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shift_counter"
+	  SID			  "31"
 	  Ports			  [2, 1]
 	  Position		  [320, 210, 380, 270]
+	  ZOrder		  -12
 	  SourceBlock		  "xbsIndex_r4/Counter"
 	  SourceType		  "Xilinx Counter Block"
 	  infoedit		  "Hardware notes: Free running counters are the least expensive in hardware.  A count limited counter is"
@@ -2156,27 +2267,35 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "data_addr"
+	  SID			  "32"
 	  Position		  [950, 38, 980, 52]
+	  ZOrder		  -13
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "data_sout"
+	  SID			  "33"
 	  Position		  [855, 413, 885, 427]
+	  ZOrder		  -14
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "data_valid"
+	  SID			  "34"
 	  Position		  [795, 68, 825, 82]
+	  ZOrder		  -15
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "buffer_overflow"
+	  SID			  "35"
 	  Position		  [755, 578, 785, 592]
+	  ZOrder		  -16
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
@@ -2354,8 +2473,10 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "parallel_to_serial_converter"
+      SID		      "36"
       Ports		      [3, 1]
       Position		      [145, 28, 195, 62]
+      ZOrder		      -5
       UserDataPersistent      on
       UserData		      "DataTag5"
       MinAlgLoopOccurrences   off
@@ -2363,33 +2484,45 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskType		      "parallel_to_serial_converter"
-      MaskDescription	      "This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' "
-      "is asserted, this data is broken into \npieces of width specified by the serial output width and \nstored into d"
-      "ifferent registers chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift r"
-      "egister\nreturns as output a new piece of data of width sout_width.  This data\nis the next least significant pi"
-      "ece of the original bus.  The converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically "
-      "loads the least significant\nbits into the register closest to the output, so the first 'shift' \nassertion chan"
-      "ges the data output from bits [sout_width-1:0] to\nbits [2*sout_width-1:sout_width]."
-      MaskPromptString	      "Parallel Input Width|Serial Output Width"
-      MaskStyleString	      "edit,edit"
-      MaskVariables	      "pin_width=@1;sout_width=@2;"
-      MaskTunableValueString  "on,on"
-      MaskCallbackString      "|"
-      MaskEnableString	      "on,on"
-      MaskVisibilityString    "on,on"
-      MaskToolTipString	      "on,on"
-      MaskInitialization      "parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_"
-      "width', sout_width);"
-      MaskIconFrame	      on
-      MaskIconOpaque	      on
-      MaskIconRotate	      "none"
-      MaskIconUnits	      "autoscale"
-      MaskValueString	      "128|16"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		43
+	$ClassName		"Simulink.Mask"
+	Type			"parallel_to_serial_converter"
+	Description		"This block takes as input a parallel bus of specified width. \nWhen the load signal 'ld' is asserted, t"
+	"his data is broken into \npieces of width specified by the serial output width and \nstored into different registers "
+	"chained to form a shift register.\nIf the 'shift' input is subsequently asserted, the shift register\nreturns as outp"
+	"ut a new piece of data of width sout_width.  This data\nis the next least significant piece of the original bus.  The"
+	" converter\nserializes SMALL ENDIAN.\n\nNote that the load operation automatically loads the least significant\nbits "
+	"into the register closest to the output, so the first 'shift' \nassertion changes the data output from bits [sout_wid"
+	"th-1:0] to\nbits [2*sout_width-1:sout_width]."
+	Initialization		"parallel_to_serial_converter_init(gcb, ...\n    'pin_width', pin_width, ...\n    'sout_width', sout_"
+	"width);"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  2
+	  Object {
+	    $ObjectID		    44
+	    Type		    "edit"
+	    Name		    "pin_width"
+	    Prompt		    "Parallel Input Width"
+	    Value		    "128"
+	  }
+	  Object {
+	    $ObjectID		    45
+	    Type		    "edit"
+	    Name		    "sout_width"
+	    Prompt		    "Serial Output Width"
+	    Value		    "16"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
       System {
 	Name			"parallel_to_serial_converter"
-	Location		[12, 45, 1336, 899]
+	Location		[12, 45, 1432, 1369]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -2405,28 +2538,36 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "pin"
+	  SID			  "37"
 	  Position		  [25, 243, 55, 257]
+	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "ld"
+	  SID			  "38"
 	  Position		  [25, 28, 55, 42]
+	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "shift"
+	  SID			  "39"
 	  Position		  [25, 198, 55, 212]
+	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical"
+	  SID			  "40"
 	  Ports			  [2, 1]
 	  Position		  [90, 157, 115, 188]
+	  ZOrder		  -4
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
 	  logical_function	  "OR"
@@ -2457,8 +2598,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "filler"
+	  SID			  "41"
 	  Ports			  [0, 1]
 	  Position		  [120, 32, 175, 58]
+	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  const			  "0"
@@ -2495,36 +2638,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit1"
+	  SID			  "42"
 	  Ports			  [4, 1]
 	  Position		  [220, 26, 280, 74]
+	  ZOrder		  -6
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2533,36 +2651,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit2"
+	  SID			  "43"
 	  Ports			  [4, 1]
 	  Position		  [420, 26, 480, 74]
+	  ZOrder		  -7
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2571,36 +2664,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit3"
+	  SID			  "44"
 	  Ports			  [4, 1]
 	  Position		  [620, 26, 680, 74]
+	  ZOrder		  -8
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2609,36 +2677,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit4"
+	  SID			  "45"
 	  Ports			  [4, 1]
 	  Position		  [820, 26, 880, 74]
+	  ZOrder		  -9
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2647,36 +2690,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit5"
+	  SID			  "46"
 	  Ports			  [4, 1]
 	  Position		  [1020, 26, 1080, 74]
+	  ZOrder		  -10
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2685,36 +2703,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit6"
+	  SID			  "47"
 	  Ports			  [4, 1]
 	  Position		  [1220, 26, 1280, 74]
+	  ZOrder		  -11
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2723,36 +2716,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit7"
+	  SID			  "48"
 	  Ports			  [4, 1]
 	  Position		  [1420, 26, 1480, 74]
+	  ZOrder		  -12
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2761,36 +2729,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "shifter_unit8"
+	  SID			  "49"
 	  Ports			  [4, 1]
 	  Position		  [1620, 26, 1680, 74]
+	  ZOrder		  -13
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "Mux2"
-	    DialogParameters {
-	      sg_icon_stat	      "30,94,3,1,white,blue,3,eb98d690,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 13.4286 80.5714 94 "
-	      "0 ],[0.77 0.82 0.91 ]);\nplot([0 30 30 0 0 ],[0 13.4286 80.5714 94 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15"
-	      ".88 10.1 6.1 ],[51.44 51.44 55.44 51.44 55.44 55.44 55.44 51.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 "
-	      "],[47.44 47.44 51.44 51.44 47.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[43.44 43.44 47.44"
-	      " 47.44 43.44 ],[1 1 1 ]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[39.44 39.44 43.44 39.44 43.44 43.44 "
-	      "39.44 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text"
-	      "');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,'d0');\ncolor('black');po"
-	      "rt_label('input',3,'d1');\n\ncolor('black');disp('\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text'"
-	      ");"
-	    }
-	    BlockName		    "Register1"
-	    DialogParameters {
-	      sg_icon_stat	      "60,56,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.8"
-	      "8 36.88 44.88 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.8"
-	      "8 36.88 28.88 ],[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1"
-	      " 1 1 ]);\npatch([20.2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0"
-	      ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('blac"
-	      "k');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output',"
-	      "1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_flow_control/shifter_unit"
 	  SourceType		  "shifter_unit"
 	  data_width		  "16"
@@ -2799,7 +2742,9 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sout"
+	  SID			  "50"
 	  Position		  [1820, 26, 1880, 74]
+	  ZOrder		  -14
 	  IconDisplay		  "Port number"
 	}
 	Line {
@@ -2979,6 +2924,7 @@ Library {
 	  }
 	}
 	Annotation {
+	  SID			  "51"
 	  Position		  [747, 444]
 	}
       }
@@ -2986,34 +2932,48 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "shifter_unit"
+      SID		      "52"
       Ports		      [4, 1]
       Position		      [25, 21, 85, 69]
+      ZOrder		      -6
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
-      MaskType		      "shifter_unit"
-      MaskDescription	      "This block is simply a wrapper for a register with a multiplexer on the input.  \nPlease "
-      "see the documenation for the 'parallel_to_serial_converter'."
-      MaskPromptString	      "Data Width|pin offset"
-      MaskStyleString	      "edit,edit"
-      MaskVariables	      "data_width=@1;pin_offset=@2;"
-      MaskTunableValueString  "on,on"
-      MaskCallbackString      "|"
-      MaskEnableString	      "on,on"
-      MaskVisibilityString    "on,on"
-      MaskToolTipString	      "on,on"
-      MaskIconFrame	      on
-      MaskIconOpaque	      on
-      MaskIconRotate	      "none"
-      MaskIconUnits	      "autoscale"
-      MaskValueString	      "16|0"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		46
+	$ClassName		"Simulink.Mask"
+	Type			"shifter_unit"
+	Description		"This block is simply a wrapper for a register with a multiplexer on the input.  \nPlease see the docume"
+	"nation for the 'parallel_to_serial_converter'."
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  2
+	  Object {
+	    $ObjectID		    47
+	    Type		    "edit"
+	    Name		    "data_width"
+	    Prompt		    "Data Width"
+	    Value		    "16"
+	  }
+	  Object {
+	    $ObjectID		    48
+	    Type		    "edit"
+	    Name		    "pin_offset"
+	    Prompt		    "pin offset"
+	    Value		    "0"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
       System {
 	Name			"shifter_unit"
-	Location		[231, 249, 677, 688]
+	Location		[163, 45, 705, 954]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -3029,35 +2989,45 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "sel"
+	  SID			  "53"
 	  Position		  [110, 38, 140, 52]
+	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "prev"
+	  SID			  "54"
 	  Position		  [110, 68, 140, 82]
+	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "pin"
+	  SID			  "55"
 	  Position		  [25, 98, 55, 112]
+	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "reg_en"
+	  SID			  "56"
 	  Position		  [165, 158, 195, 172]
+	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mux2"
+	  SID			  "57"
 	  Ports			  [3, 1]
 	  Position		  [165, 28, 195, 122]
+	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Mux"
 	  SourceType		  "Xilinx Bus Multiplexer Block"
 	  inputs		  "2"
@@ -3089,8 +3059,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Register1"
+	  SID			  "58"
 	  Ports			  [2, 1]
 	  Position		  [245, 47, 305, 103]
+	  ZOrder		  -6
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
 	  init			  "0"
@@ -3116,8 +3088,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
+	  SID			  "59"
 	  Ports			  [1, 1]
 	  Position		  [80, 90, 140, 120]
+	  ZOrder		  -7
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -3147,7 +3121,9 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "60"
 	  Position		  [320, 68, 350, 82]
+	  ZOrder		  -8
 	  IconDisplay		  "Port number"
 	}
 	Line {
@@ -3201,22 +3177,62 @@ Library {
 MatData {
   NumRecords		  6
   DataRecord {
-    Tag			    DataTag5
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            #! "
+    Tag			    DataTag0
+    Data		    "  %)30     .    T $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .0$H 8.    0 $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', :6YP=71.=6T         #@   *"
+    "@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    \"    "
+    " $         $     @   !I;G!U=$YU;0X    X    !@    @    &          4    (     0    $    !          D    (           "
+    "  $ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! "
   }
   DataRecord {
-    Tag			    DataTag4
-    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -YWH  .    $ $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
-    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
-    "   (     0    $    !          D    (            @$ .    .     8    (    !@         %    \"     $    !     0       "
-    "  )    \"            %! "
+    Tag			    DataTag1
+    Data		    "  %)30     .    0 @   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -E_< ,.    L <   "
+    "8    (     @         %    \"     $    !     0         %  0 %0    $   #2    9&5F875L=',                 ;6]D90     "
+    "                 ;W5T<'5T3G5M                ;W5T<'5T5VED=&@             ;W5T<'5T0FEN87)Y4'0         ;W5T<'5T07)I="
+    "&AM971I8U1Y<&4 <VAO=U]F;W)M870             ;W5T<'5T5&]7;W)K<W!A8V4     =F%R:6%B;&50<F5F:7@         ;W5T<'5T5&]-;V1"
+    "E;$%S5V5L;           #@   &@$   &    \"     $         !0    @    !    $     $         #@   #     &    \"     0    "
+    "     !0    @    !    !     $         $  $ &UO9&4.    2     8    (    !          %    \"     $    7     0         0"
+    "    %P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X   !     !@    @    $          4    (     0    D    !         !     ) "
+    "   ;W5T<'5T3G5M          X    X    !@    @    &          4    (     0    $    !          D    (             $ .   "
+    " 0     8    (    !          %    \"     $    +     0         0    \"P   &]U='!U=%=I9'1H       .    .     8    (   "
+    " !@         %    \"     $    !     0         )    \"            \"! #@   $     &    \"     0         !0    @    ! "
+    "   #@    $         $     X   !O=71P=71\":6YA<GE0=   #@   #@    &    \"     8         !0    @    !     0    $      "
+    "   \"0    @            <0 X   !(    !@    @    $          4    (     0   !0    !         !     4    ;W5T<'5T07)I=&"
+    "AM971I8U1Y<&4     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !(  "
+    "  !@    @    $          4    (     0   !$    !         !     1    ;W5T<'5T5&]7;W)K<W!A8V4         #@   #     &    "
+    "\"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    .    "
+    " 0         0    #@   '9A<FEA8FQE4')E9FEX   .    ,     8    (    !          %    \"     $    #     0         0  , ;"
+    "W5T  X   !(    !@    @    $          4    (     0   !,    !         !     3    ;W5T<'5T5&]-;V1E;$%S5V5L;       #@ "
+    "  #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    2     8    (    !          %    \"  "
+    "   $    7     0         0    %P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X    X    !@    @    &          4    (     0  "
+    "  $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         )    \"   "
+    "         #! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@  "
+    "  @    &          4    (     0    $    !          D    (               .    ,     8    (    !          %    \"    "
+    " $    #     0         0  , ;V9F  X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   # "
+    "    &    \"     0         !0    @    !     P    $         $  # &]U=  .    ,     8    (    !          %    \"     $"
+    "    \"     0         0  ( ;VX   "
+  }
+  DataRecord {
+    Tag			    DataTag2
+    Data		    "  %)30     .    , 4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %FM*P,.    H 0   "
+    "8    (     @         %    \"     $    !     0         %  0 #P    $   !:    9&5F875L=',         9&EV:7-I;VYS       "
+    " 9&EV7W-I>F4         ;W)D97(             87)I=&A?='EP95]O=70 8FEN7W!T7V]U=               #@   , \"   &    \"     $"
+    "         !0    @    !    \"@    $         #@   $     &    \"     0         !0    @    !    \"0    $         $     "
+    "D   !D:79I<VEO;G,         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/P"
+    "X    X    !@    @    $          4    (     0    @    !         !     (    9&EV7W-I>F4.    .     8    (    !@      "
+    "   %    \"     $    !     0         )    \"            / _#@   #@    &    \"     0         !0    @    !    !0    $"
+    "         $     4   !O<F1E<@    X    X    !@    @    &          4    (     0    $    !          D    (             "
+    "  .    0     8    (    !          %    \"     $    .     0         0    #@   &%R:71H7W1Y<&5?;W5T   .    .     8   "
+    " (    !          %    \"     $    (     0         0    \"    %5N<VEG;F5D#@   $     &    \"     0         !0    @  "
+    "  !    \"@    $         $     H   !B:6Y?<'1?;W5T        #@   #@    &    \"     8         !0    @    !     0    $  "
+    "       \"0    @               X    X    !@    @    &          4    (     0    $    !          D    (              "
+    " .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8  "
+    "       !0    @    !     0    $         \"0    @               X    X    !@    @    $          4    (     0    @   "
+    " !         !     (    56YS:6=N960.    .     8    (    !@         %    \"     $    !     0         )    \"         "
+    "      "
   }
   DataRecord {
     Tag			    DataTag3
@@ -3229,55 +3245,21 @@ MatData {
     "       \"0    @           !00 X    P    !@    @    $          4    (     0    (    !         !   @ V-   "
   }
   DataRecord {
-    Tag			    DataTag2
-    Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"1_6@0.    V (  "
-    " 8    (     @         %    \"     $    !     0         %  0 \"@    $    H    9&5F875L=',  &1I=FES:6]N<P!D:79?<VEZ9"
-    "0  ;W)D97(       X   \"P 0  !@    @    !          4    (     0    8    !          X   !     !@    @    $          "
-    "4    (     0    D    !         !     )    9&EV:7-I;VYS          X    X    !@    @    &          4    (     0    $ "
-    "   !          D    (            \\#\\.    .     8    (    !          %    \"     $    (     0         0    \"    &"
-    "1I=E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    "
-    "@    $          4    (     0    4    !         !     %    ;W)D97(    .    .     8    (    !@         %    \"     $"
-    "    !     0         )    \"               #@   #@    &    \"     8         !0    @    !     0    $         \"0    "
-    "@           #P/PX    X    !@    @    &          4    (     0    $    !          D    (               .    .     8 "
-    "   (    !@         %    \"     $    !     0         )    \"               "
+    Tag			    DataTag4
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -YWH  .    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            @$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            %! "
   }
   DataRecord {
-    Tag			    DataTag1
-    Data		    "  %)30     .    6 @   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &/$\\@<.    R <  "
-    " 8    (     @         %    \"     $    !     0         %  0 %0    $   #2    9&5F875L=',                 ;6]D90    "
-    "                  ;W5T<'5T3G5M                ;W5T<'5T5VED=&@             ;W5T<'5T0FEN87)Y4'0         ;W5T<'5T07)I"
-    "=&AM971I8U1Y<&4 <VAO=U]F;W)M870             ;W5T<'5T5&]7;W)K<W!A8V4     =F%R:6%B;&50<F5F:7@         ;W5T<'5T5&]-;V"
-    "1E;$%S5V5L;           #@   &@$   &    \"     $         !0    @    !    $     $         #@   #     &    \"     0   "
-    "      !0    @    !    !     $         $  $ &UO9&4.    2     8    (    !          %    \"     $    7     0         "
-    "0    %P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X   !     !@    @    $          4    (     0    D    !         !     )"
-    "    ;W5T<'5T3G5M          X    X    !@    @    &          4    (     0    $    !          D    (             $ .  "
-    "  0     8    (    !          %    \"     $    +     0         0    \"P   &]U='!U=%=I9'1H       .    .     8    (  "
-    "  !@         %    \"     $    !     0         )    \"            \"! #@   $     &    \"     0         !0    @    !"
-    "    #@    $         $     X   !O=71P=71\":6YA<GE0=   #@   #@    &    \"     8         !0    @    !     0    $     "
-    "    \"0    @            <0 X   !(    !@    @    $          4    (     0   !0    !         !     4    ;W5T<'5T07)I="
-    "&AM971I8U1Y<&4     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !( "
-    "   !@    @    $          4    (     0   !$    !         !     1    ;W5T<'5T5&]7;W)K<W!A8V4         #@   #     &   "
-    " \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $    .   "
-    "  0         0    #@   '9A<FEA8FQE4')E9FEX   .    ,     8    (    !          %    \"     $    #     0         0  , "
-    ";W5T  X   !(    !@    @    $          4    (     0   !,    !         !     3    ;W5T<'5T5&]-;V1E;$%S5V5L;       #@"
-    "   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    2     8    (    !          %    \" "
-    "    $    7     0         0    %P   &1I=FES:6]N<R!O9B!E<75A;\"!S:7IE  X    X    !@    @    &          4    (     0 "
-    "   $    !          D    (             $ .    0     8    (    !@         %    \"     $    \"     0         )    $  "
-    "           A         $$ .    0     8    (    !@         %    \"     $    \"     0         )    $                  "
-    "        .    0     8    (    !@         %    \"     $    \"     0         )    $            / _        \\#\\.    ,"
-    "     8    (    !          %    \"     $    #     0         0  , ;V9F  X    P    !@    @    $          4    (     0"
-    "    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !     P    $         $  # &]U=  .    ,  "
-    "   8    (    !          %    \"     $    \"     0         0  ( ;VX   "
-  }
-  DataRecord {
-    Tag			    DataTag0
-    Data		    "  %)30     .    T $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .0$H 8.    0 $   "
-    "8    (     @         %    \"     $    !     0         %  0 \"0    $    2    9&5F875L=', :6YP=71.=6T         #@   *"
-    "@    &    \"     $         !0    @    !     @    $         #@   #@    &    \"     0         !0    @    !    \"    "
-    " $         $     @   !I;G!U=$YU;0X    X    !@    @    &          4    (     0    $    !          D    (           "
-    "  $ .    .     8    (    !@         %    \"     $    !     0         )    \"             ! "
+    Tag			    DataTag5
+    Data		    "  %)30     .    H $   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .:^(@(.    $ $   "
+    "8    (     @         %    \"     $    !     0         %  0 \"P    $    A    9&5F875L=',   !P:6Y?=VED=&@  '-O=71?=V"
+    "ED=&@           X    H    !@    @    !          4    (               !          X    X    !@    @    &          4 "
+    "   (     0    $    !          D    (            8$ .    .     8    (    !@         %    \"     $    !     0       "
+    "  )    \"            #! "
   }
 }

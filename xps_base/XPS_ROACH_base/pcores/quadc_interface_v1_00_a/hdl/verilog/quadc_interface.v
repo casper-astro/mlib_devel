@@ -30,6 +30,8 @@ module quadc_interface (
                 adc3_clk,
 
                 adc0_clk90,
+                adc0_clk180,
+                adc0_clk270,
 
                 adc0_data,
                 adc1_data,
@@ -74,6 +76,8 @@ module quadc_interface (
     output          adc3_clk;
 
     output          adc0_clk90;
+    output          adc0_clk180;
+    output          adc0_clk270;
 
     output [7:0]    adc0_data;
     output [7:0]    adc1_data;
@@ -98,10 +102,14 @@ module quadc_interface (
 
     wire            adc0_clk_buf;
     wire            adc0_clk_90_buf;
+    wire            adc0_clk_180_buf;
+    wire            adc0_clk_270_buf;
     wire            adc0_clk_2x_buf;
 
     wire            adc0_clk;
     wire            adc0_clk_90;
+    wire            adc0_clk_180;
+    wire            adc0_clk_270;
     wire            adc0_clk_2x;
 
     wire            dcm_adc0_locked;
@@ -231,6 +239,16 @@ module quadc_interface (
             .O(adc0_clk_90)
         );
 
+    BUFG BUFG_ADC0CLK180 (
+            .I(adc0_clk_180_buf),
+            .O(adc0_clk_180)
+        );
+
+    BUFG BUFG_ADC0CLK270 (
+            .I(adc0_clk_270_buf),
+            .O(adc0_clk_270)
+        );
+
     BUFG BUFG_ADC0CLK2X (
             .I(adc0_clk_2x_buf),
             .O(adc0_clk_2x)
@@ -261,8 +279,8 @@ generate
                 .CLKIN   (adc0_clk_in),                         // Clock input (from IBUFG, BUFG or DCM)
                 .CLK0    (adc0_clk_buf),                        // 0 degree DCM CLK output
                 .CLK90   (adc0_clk_90_buf),                     // 90 degree DCM CLK output
-                .CLK180  (),                                    // 180 degree DCM CLK output
-                .CLK270  (),                                    // 270 degree DCM CLK output
+                .CLK180  (adc0_clk_180_buf),                    // 180 degree DCM CLK output
+                .CLK270  (adc0_clk_270_buf),                    // 270 degree DCM CLK output
                 .CLK2X   (adc0_clk_2x_buf),                     // 2X DCM CLK output
                 .CLK2X180(),                                    // 2X, 180 degree DCM CLK out
                 .CLKDV   (),                                    // Divided DCM CLK out (CLKDV_DIVIDE)
@@ -296,8 +314,8 @@ generate
                 .CLKIN   (adc0_clk_in),                         // Clock input (from IBUFG, BUFG or DCM)
                 .CLK0    (adc0_clk_buf),                        // 0 degree DCM CLK output
                 .CLK90   (adc0_clk_90_buf),                     // 90 degree DCM CLK output
-                .CLK180  (),                                    // 180 degree DCM CLK output
-                .CLK270  (),                                    // 270 degree DCM CLK output
+		.CLK180  (adc0_clk_180_buf),                    // 180 degree DCM CLK output
+                .CLK270  (adc0_clk_270_buf),                    // 270 degree DCM CLK output
                 .CLK2X   (adc0_clk_2x_buf),                     // 2X DCM CLK output
                 .CLK2X180(),                                    // 2X, 180 degree DCM CLK out
                 .CLKDV   (),                                    // Divided DCM CLK out (CLKDV_DIVIDE)
@@ -333,6 +351,8 @@ endgenerate
     );
 
     assign  adc0_clk90 = adc0_clk_90;
+    assign  adc0_clk180 = adc0_clk_180;
+    assign  adc0_clk270 = adc0_clk_270;
     assign  valid      = fifo_valid;
 
     always @ (negedge adc0_clk) begin

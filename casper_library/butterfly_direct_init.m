@@ -1,4 +1,3 @@
-function butterfly_direct_init(blk, varargin)
 % Initialize and configure a butterfly_direct block.
 %
 % butterfly_direct_init(blk, varargin)
@@ -7,26 +6,26 @@ function butterfly_direct_init(blk, varargin)
 % varargin = {'varname', 'value', ...} pairs
 %
 % Valid varnames:
-% * biplex = Make biplex.
-% * FFTSize = Size of the FFT (2^FFTSize points).
-% * Coeffs = Coefficients for twiddle blocks.
-% * StepPeriod = Coefficient step period.
-% * coeffs_bram = Store coefficients in BRAM.
+% * biplex          = Make biplex.
+% * FFTSize         = Size of the FFT (2^FFTSize points).
+% * Coeffs          = Coefficients for twiddle blocks.
+% * StepPeriod      = Coefficient step period.
+% * coeffs_bram     = Store coefficients in BRAM.
 % * coeff_bit_width = Bitwdith of coefficients.
-% * input_bit_width = Bitwidth of input and output data.
-% * downshift = Explicitly downshift output data.
-% * bram_latency = Latency of BRAM blocks.
-% * add_latency = Latency of adders blocks.
-% * mult_latency = Latency of multiplier blocks.
-% * conv_latency = Latency of cast blocks.
-% * quantization = Quantization behavior.
-% * overflow = Overflow behavior.
-% * arch = Target architecture.
-% * opt_target = Optimization target.
-% * use_hdl = Use behavioral HDL for multipliers.
-% * use_embedded = Use embedded multipliers.
-% * hardcode_shifts = Enable downshift setting.
-% * dsp48_adders = Use DSP48-based adders.
+% * input_bit_width = Bitwidth of input data.
+% * bin_pt_in       = Binary point position of input data.
+% * bitgrowth       = Option to grow non-fractional bits by so don't have to shift.
+% * downshift       = Explicitly downshift output data if shifting.
+% * bram_latency    = Latency of BRAM blocks.
+% * add_latency     = Latency of adders blocks.
+% * mult_latency    = Latency of multiplier blocks.
+% * conv_latency    = Latency of cast blocks.
+% * quantization    = Quantization behavior.
+% * overflow        = Overflow behavior.
+% * use_hdl         = Use behavioral HDL for multipliers.
+% * use_embedded    = Use embedded multipliers.
+% * hardcode_shifts = If not using bit growth, option to hardcode downshift setting.
+% * dsp48_adders    = Use DSP48-based adders.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -34,6 +33,10 @@ function butterfly_direct_init(blk, varargin)
 %   http://casper.berkeley.edu                                                %
 %   Copyright (C) 2007 Terry Filiba, Aaron Parsons                            %
 %   Copyright (C) 2010 William Mallard, David MacMahon                        %
+%                                                                             %
+%   SKASA radio telescope project                                             %
+%   www.kat.ac.za                                                             %
+%   Copyright (C) 2013 Andrew Martens                                         %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
@@ -51,526 +54,435 @@ function butterfly_direct_init(blk, varargin)
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clog('entering butterfly_direct_init', 'trace');
+function butterfly_direct_init(blk, varargin)
 
-% Set default vararg values.
-defaults = { ...
-    'biplex', 'on', ...
-    'FFTSize', 5, ...
-    'Coeffs', 0, ...
-    'StepPeriod', 0, ...
-    'coeff_bit_width', 18, ...
-    'input_bit_width', 18, ...
-    'downshift', 'off', ...
-    'add_latency', 1, ...
-    'mult_latency', 2, ...
-    'bram_latency', 2, ...
-    'conv_latency', 1, ...
-    'quantization', 'Round  (unbiased: +/- Inf)', ...
-    'overflow', 'Wrap', ...
-    'arch', 'Virtex5', ...
-    'opt_target', 'logic', ...
-    'coeffs_bram', 'off', ...
-    'use_hdl', 'on', ...
-    'use_embedded', 'off', ...
-    'hardcode_shifts', 'off', ...
-    'dsp48_adders', 'off', ...
-};
+  clog('entering butterfly_direct_init', {'trace', 'butterfly_direct_init_debug'});
 
-% Skip init script if mask state has not changed.
-if same_state(blk, 'defaults', defaults, varargin{:}),
-  return
-end
+  % Set default vararg values.
+  defaults = { ...
+      'n_inputs', 1, ...
+      'biplex', 'on', ...
+      'FFTSize', 6, ...
+      'Coeffs', bit_rev([0:2^5-1],5), ...
+      'StepPeriod', 1, ...
+      'coeff_bit_width', 18, ...
+      'input_bit_width', 18, ...
+      'bin_pt_in', 17, ...
+      'bitgrowth', 'off', ...
+      'downshift', 'off', ...
+      'async', 'off', ...
+      'add_latency', 1, ...
+      'mult_latency', 2, ...
+      'bram_latency', 2, ...
+      'conv_latency', 1, ...
+      'quantization', 'Truncate', ...
+      'overflow', 'Wrap', ...
+      'coeffs_bit_limit', 8, ...
+      'coeff_sharing', 'on', ...
+      'coeff_decimation', 'on', ...
+      'coeff_generation', 'on', ...
+      'cal_bits', 1, ...
+      'n_bits_rotation', 25, ...
+      'max_fanout', 4, ...
+      'use_hdl', 'off', ...
+      'use_embedded', 'off', ...
+      'hardcode_shifts', 'off', ...
+      'dsp48_adders', 'off', ...
+  };
 
-clog('butterfly_direct_init post same_state', 'trace');
+  % Skip init script if mask state has not changed.
+  if same_state(blk, 'defaults', defaults, varargin{:}), return; end
 
-% Verify that this is the right mask for the block.
-check_mask_type(blk, 'butterfly_direct');
+  clog('butterfly_direct_init post same_state', {'trace', 'butterfly_direct_init_debug'});
 
-% Disable link if state changes from default.
-munge_block(blk, varargin{:});
+  % Verify that this is the right mask for the block.
+  check_mask_type(blk, 'butterfly_direct');
 
-% Retrieve values from mask fields.
-biplex = get_var('biplex', 'defaults', defaults, varargin{:});
-FFTSize = get_var('FFTSize', 'defaults', defaults, varargin{:});
-Coeffs = get_var('Coeffs', 'defaults', defaults, varargin{:});
-StepPeriod = get_var('StepPeriod', 'defaults', defaults, varargin{:});
-coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
-input_bit_width = get_var('input_bit_width', 'defaults', defaults, varargin{:});
-downshift = get_var('downshift', 'defaults', defaults, varargin{:});
-bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
-add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
-mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
-conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
-quantization = get_var('quantization', 'defaults', defaults, varargin{:});
-overflow = get_var('overflow', 'defaults', defaults, varargin{:});
-arch = get_var('arch', 'defaults', defaults, varargin{:});
-opt_target = get_var('opt_target', 'defaults', defaults, varargin{:});
-coeffs_bram = get_var('coeffs_bram', 'defaults', defaults, varargin{:});
-use_hdl = get_var('use_hdl', 'defaults', defaults, varargin{:});
-use_embedded = get_var('use_embedded', 'defaults', defaults, varargin{:});
-hardcode_shifts = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
-dsp48_adders = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
+  % Disable link if state changes from default.
+  munge_block(blk, varargin{:});
 
-%default case for library storage, delete everything
-if isempty(Coeffs),
+  % Retrieve values from mask fields.
+  n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
+  biplex            = get_var('biplex', 'defaults', defaults, varargin{:});
+  FFTSize           = get_var('FFTSize', 'defaults', defaults, varargin{:});
+  Coeffs            = get_var('Coeffs', 'defaults', defaults, varargin{:});
+  StepPeriod        = get_var('StepPeriod', 'defaults', defaults, varargin{:});
+  coeff_bit_width   = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
+  input_bit_width   = get_var('input_bit_width', 'defaults', defaults, varargin{:});
+  bin_pt_in         = get_var('bin_pt_in', 'defaults', defaults, varargin{:});
+  bitgrowth         = get_var('bitgrowth', 'defaults', defaults, varargin{:});
+  downshift         = get_var('downshift', 'defaults', defaults, varargin{:});
+  async             = get_var('async', 'defaults', defaults, varargin{:});
+  bram_latency      = get_var('bram_latency', 'defaults', defaults, varargin{:});
+  add_latency       = get_var('add_latency', 'defaults', defaults, varargin{:});
+  mult_latency      = get_var('mult_latency', 'defaults', defaults, varargin{:});
+  conv_latency      = get_var('conv_latency', 'defaults', defaults, varargin{:});
+  quantization      = get_var('quantization', 'defaults', defaults, varargin{:});
+  overflow          = get_var('overflow', 'defaults', defaults, varargin{:});
+  coeffs_bit_limit  = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
+  coeff_sharing     = get_var('coeff_sharing', 'defaults', defaults, varargin{:});
+  coeff_decimation  = get_var('coeff_decimation', 'defaults', defaults, varargin{:});
+  coeff_generation  = get_var('coeff_generation', 'defaults', defaults, varargin{:});
+  cal_bits          = get_var('cal_bits', 'defaults', defaults, varargin{:});
+  n_bits_rotation   = get_var('n_bits_rotation', 'defaults', defaults, varargin{:});
+  max_fanout        = get_var('max_fanout', 'defaults', defaults, varargin{:});
+  use_hdl           = get_var('use_hdl', 'defaults', defaults, varargin{:});
+  use_embedded      = get_var('use_embedded', 'defaults', defaults, varargin{:});
+  hardcode_shifts   = get_var('hardcode_shifts', 'defaults', defaults, varargin{:});
+  dsp48_adders      = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
+
+  %default case for library storage, delete everything
+  if n_inputs == 0 | FFTSize == 0,
+    delete_lines(blk);
+    clean_blocks(blk);
+    set_param(blk, 'AttributesFormatString', '');
+    save_state(blk, 'defaults', defaults, varargin{:});
+    clog('exiting butterfly_direct_init', 'trace');
+    return;
+  end
+
+  use_dsp48_mults = strcmp(use_embedded, 'on');
+  use_dsp48_adders = strcmp(dsp48_adders, 'on');
+
+  % Validate input fields.
+
+  if strcmp(bitgrowth, 'on') || strcmp(hardcode_shifts, 'on'), mux_latency = 0;
+  else mux_latency = 2;
+  end
+
+  if use_dsp48_adders,
+      set_param(blk, 'add_latency', '2');
+      add_latency = 2;
+  end
+
+  % Optimize twiddle for coeff = 0, 1, or alternating 0-1
+  if length(Coeffs) == 1,
+      if Coeffs(1) == 0,
+          %if used in biplex core and first stage
+          if(strcmp(biplex, 'on')),
+              twiddle_type = 'twiddle_pass_through';
+          else, %otherwise do same but make sure have correct delay
+              twiddle_type = 'twiddle_coeff_0';
+          end
+      elseif Coeffs(1) == 1,
+          twiddle_type = 'twiddle_coeff_1';
+      else
+          twiddle_type = 'twiddle_general';
+      end
+  elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-2,
+      twiddle_type = 'twiddle_stage_2';
+  else
+      twiddle_type = 'twiddle_general';
+  end
+
+  clog([twiddle_type, ' for twiddle'], 'butterfly_direct_init_debug');
+  clog(['Coeffs = ', mat2str(Coeffs)], 'butterfly_direct_init_debug');
+
+  % Compute bit widths into addsub and convert blocks.
+  bw = input_bit_width + 3;
+  bd = bin_pt_in+1;
+  if strcmp(twiddle_type, 'twiddle_stage_2') ...
+      || strcmp(twiddle_type, 'twiddle_coeff_0') ...
+      || strcmp(twiddle_type, 'twiddle_coeff_1') ...
+      || strcmp(twiddle_type, 'twiddle_pass_through'),
+      bw = input_bit_width + 2;
+      bd = bin_pt_in+1;
+  end
+
+  addsub_b_bitwidth = bw - 2;
+  addsub_b_binpoint = bd - 1;
+
+  n_bits_addsub_out = addsub_b_bitwidth+1;
+  bin_pt_addsub_out = addsub_b_binpoint;
+
+  if strcmp(bitgrowth, 'off') 
+    if strcmp(hardcode_shifts, 'on'),
+      if strcmp(downshift, 'on'),
+        convert_in_bitwidth = n_bits_addsub_out;   
+        convert_in_binpoint = bin_pt_addsub_out+1;
+      else
+        convert_in_bitwidth = n_bits_addsub_out;
+        convert_in_binpoint = bin_pt_addsub_out;
+      end
+    else
+      convert_in_bitwidth = n_bits_addsub_out+1;
+      convert_in_binpoint = bin_pt_addsub_out+1;
+    end
+  else
+    convert_in_bitwidth = n_bits_addsub_out;
+    convert_in_binpoint = bin_pt_addsub_out;
+  end   
+
+  %%%%%%%%%%%%%%%%%%
+  % Start drawing! %
+  %%%%%%%%%%%%%%%%%%
+
+  % Delete all lines.
   delete_lines(blk);
-  clean_blocks(blk);
-  set_param(blk, 'AttributesFormatString', '');
-  save_state(blk, 'defaults', defaults, varargin{:});
-  clog('exiting butterfly_direct_init', 'trace');
-end
 
-use_dsp48_mults = strcmp(use_embedded, 'on');
-use_dsp48_adders = strcmp(dsp48_adders, 'on');
-opt_logic = strcmp(opt_target, 'logic');
-opt_mults = strcmp(opt_target, 'multipliers');
+  %
+  % Add inputs and outputs.
+  %
 
-clog(flatstrcell(varargin), 'butterfly_direct_init_debug');
+  reuse_block(blk, 'a', 'built-in/Inport', 'Port', '1', 'Position', [45 63 75 77]);
+  reuse_block(blk, 'b', 'built-in/Inport', 'Port', '2', 'Position', [45 123 75 137]);
+  reuse_block(blk, 'sync_in', 'built-in/Inport', 'Port', '3', 'Position', [45 183 75 197]);
+  reuse_block(blk, 'shift', 'built-in/Inport', 'Port', '4', 'Position', [380 63 410 77]);
+  if strcmp(async, 'on'), reuse_block(blk, 'en', 'built-in/Inport', 'Port', '5','Position', [45 243 75 257]);
+  end
+  
+  reuse_block(blk, 'a+bw', 'built-in/Outport', 'Port', '1', 'Position', [810 58 840 72]);
+  reuse_block(blk, 'a-bw', 'built-in/Outport', 'Port', '2', 'Position', [810 88 840 102]);
+  reuse_block(blk, 'of', 'built-in/Outport', 'Port', '3', 'Position', [810 123 840 137]);
+  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '4', 'Position', [810 183 840 197]);
+  if strcmp(async, 'on'),
+    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '5', 'Position', [810 243 840 257]);
+  end
 
-% Validate input fields.
+  %
+  % Add twiddle block.
+  %
 
-if ~strcmp(arch, 'Virtex5') && strcmp(dsp48_adders, 'on'),
-    fprintf('butterfly_direct_init: Cannot use dsp48e adders on a non-Virtex5 chip.\n');
-    clog(['butterfly_direct_init: Cannot use dsp48e adders on a non-Virtex5 chip.\n'], 'error');
-end
+  params = {'n_inputs', num2str(n_inputs), 'async', async};
 
-if strcmp(coeffs_bram, 'on'),
-    coeff_type = 'BRAM';
-else
-    coeff_type = 'slices';
-end
-
-if strcmp(hardcode_shifts, 'on'),
-    mux_latency = 0;
-else
-    mux_latency = 2;
-end
-
-if use_dsp48_adders,
-    set_param(blk, 'add_latency', '2');
-    add_latency = 2;
-end
-
-% Compute the complex, bit-reversed values of the twiddle factors
-br_indices = bit_rev(Coeffs, FFTSize-1);
-br_indices = -2*pi*1j*br_indices/2^FFTSize;
-ActualCoeffs = exp(br_indices);
-
-% Optimize twiddle for coeff = 0, 1, or alternating 0-1
-if length(Coeffs) == 1,
-    if Coeffs(1) == 0,
-        %if used in biplex core and first stage
-        if(strcmp(biplex, 'on')),
-            twiddle_type = 'twiddle_pass_through';
-        else
-            twiddle_type = 'twiddle_coeff_0';
-        end
-    elseif Coeffs(1) == 1,
-        twiddle_type = 'twiddle_coeff_1';
-    else
-        if opt_logic && use_dsp48_mults,
-            twiddle_type = 'twiddle_general_dsp48e';
-        elseif opt_logic,
-            twiddle_type = 'twiddle_general_4mult';
-        else
-           twiddle_type = 'twiddle_general_3mult';
-       end
-    end
-elseif length(Coeffs)==2 && Coeffs(1)==0 && Coeffs(2)==1 && StepPeriod==FFTSize-2,
-    twiddle_type = 'twiddle_stage_2';
-else
-    if opt_logic && use_dsp48_mults,
-        twiddle_type = 'twiddle_general_dsp48e';
-    elseif opt_logic,
-        twiddle_type = 'twiddle_general_4mult';
-    else
-        twiddle_type = 'twiddle_general_3mult';
-    end
-end
-
-clog([twiddle_type, ' for twiddle'], 'butterfly_direct_init_debug');
-clog(['Coeffs = ', tostring(Coeffs), ' ActualCoeffs = ', tostring(ActualCoeffs)], 'butterfly_direct_init_debug');
-
-% Compute bit widths into addsub and convert blocks.
-bw = input_bit_width + 7;
-bd = input_bit_width + 2;
-if strcmp(arch,'Virtex2Pro') && length(regexp(twiddle_type, 'twiddle_general_[34]mult'))
-    % Bit growth on Virtex2Pro is different from ROACH (for now) for both
-    % twiddle_general_3mult and twiddle_general_4mult.  Bit growth through the
-    % butterfly is 1 non-fractional bit for the twiddle, 1 non-fractional bit
-    % for the post-twiddle add, and 1 fractional bit for the shift mux.
-    bw = input_bit_width+3; 
-    bd = input_bit_width;
-elseif strcmp(twiddle_type, 'twiddle_general_3mult'),
-    bw = input_bit_width + 7;
-    bd = input_bit_width + 2;
-elseif strcmp(twiddle_type, 'twiddle_general_4mult') || strcmp(twiddle_type, 'twiddle_general_dsp48e'),
-    bw = input_bit_width + 6;
-    bd = input_bit_width + 2;
-elseif strcmp(twiddle_type, 'twiddle_stage_2') ...
-    || strcmp(twiddle_type, 'twiddle_coeff_0') ...
-    || strcmp(twiddle_type, 'twiddle_coeff_1') ...
-    || strcmp(twiddle_type, 'twiddle_pass_through'),
-    bw = input_bit_width + 2;
-    bd = input_bit_width;
-else
-    fprintf('butterfly_direct_init: Unknown twiddle %s\n', twiddle_type);
-    clog(['butterfly_direct_init: Unknown twiddle ', twiddle_type', '\n'], 'error');
-end
-
-addsub_b_bitwidth = bw - 2;
-addsub_b_binpoint = bd - 1;
-
-if strcmp(hardcode_shifts, 'on'),
-    if strcmp(downshift, 'on'),
-        convert_in_bitwidth = bw - 1;
-        convert_in_binpoint = bd;
-    else
-        convert_in_bitwidth = bw - 1;
-        convert_in_binpoint = bd - 1;
-    end
-else
-    convert_in_bitwidth = bw;
-    convert_in_binpoint = bd;
-end
-
-%%%%%%%%%%%%%%%%%%
-% Start drawing! %
-%%%%%%%%%%%%%%%%%%
-
-% Delete all lines.
-delete_lines(blk);
-
-%
-% Add inputs and outputs.
-%
-
-reuse_block(blk, 'a', 'built-in/inport', ...
-    'Position', [20 148 50 162], ...
-    'Port', '1');
-reuse_block(blk, 'b', 'built-in/inport', ...
-    'Position', [40 178 70 192], ...
-    'Port', '2');
-reuse_block(blk, 'sync', 'built-in/inport', ...
-    'Position', [15 208 45 222], ...
-    'Port', '3');
-reuse_block(blk, 'shift', 'built-in/inport', ...
-    'Position', [310 23 340 37], ...
-    'Port', '4');
-
-reuse_block(blk, 'a+bw', 'built-in/outport', ...
-    'Position', [880 83 910 97], ...
-    'Port', '1');
-reuse_block(blk, 'a-bw', 'built-in/outport', ...
-    'Position', [880 253 910 267], ...
-    'Port', '2');
-reuse_block(blk, 'of', 'built-in/outport', ...
-    'Position', [880 388 910 402], ...
-    'Port', '3');
-reuse_block(blk, 'sync_out', 'built-in/outport', ...
-    'Position', [410 413 440 427], ...
-    'Port', '4');
-
-%
-% Add twiddle block.
-%
-
-
-if strcmp(twiddle_type, 'twiddle_general_4mult') ...
-    || strcmp(twiddle_type, 'twiddle_general_3mult'),
-    reuse_block(blk, twiddle_type, ['casper_library_ffts_twiddle/', twiddle_type], ...
-        'Position', [110 141 200 229], ...
-        'Coeffs', tostring(ActualCoeffs), ...
-        'arch', tostring(arch), ...
-        'StepPeriod', tostring(StepPeriod), ...
-        'coeffs_bram', tostring(coeffs_bram), ...
+  if ~strcmp(twiddle_type, 'twiddle_pass_through'),
+      params = { params{:}, ... 
+          'add_latency', num2str(add_latency), ...
+          'mult_latency', num2str(mult_latency), ...
+          'bram_latency', num2str(bram_latency), ...
+          'conv_latency', num2str(conv_latency)};
+  end
+     
+  if strcmp(twiddle_type, 'twiddle_coeff_1'),
+      params = { params{:}, ...
         'input_bit_width', num2str(input_bit_width), ...
-        'coeff_bit_width', num2str(coeff_bit_width), ...
-        'add_latency', num2str(add_latency), ...
-        'mult_latency', num2str(mult_latency), ...
-        'bram_latency', num2str(bram_latency), ...
-        'conv_latency', num2str(conv_latency), ...
-        'use_hdl', tostring(use_hdl), ...
-        'use_embedded', tostring(use_embedded), ...
-        'quantization', tostring(quantization), ...
-        'overflow', tostring(overflow));
-elseif strcmp(twiddle_type, 'twiddle_general_dsp48e')
-    reuse_block(blk, twiddle_type, ['casper_library_ffts_twiddle/', twiddle_type], ...
-        'Position', [110 141 200 229], ...
-        'Coeffs', tostring(ActualCoeffs), ...
-        'StepPeriod', tostring(StepPeriod), ...
-        'coeffs_bram', tostring(coeffs_bram), ...
-        'input_bit_width', num2str(input_bit_width), ...
-        'coeff_bit_width', num2str(coeff_bit_width), ...
-        'bram_latency', num2str(bram_latency), ...
-        'conv_latency', num2str(conv_latency), ...
-        'quantization', tostring(quantization), ...
-        'overflow', tostring(overflow));    
-else
-    reuse_block(blk, twiddle_type, ['casper_library_ffts_twiddle/', twiddle_type], ...
-        'Position', [110 141 200 229], ...
+        'bin_pt_in', num2str(bin_pt_in)};
+  elseif strcmp(twiddle_type, 'twiddle_stage_2'), 
+      params = { params{:}, ...
         'FFTSize', num2str(FFTSize), ...
         'input_bit_width', num2str(input_bit_width), ...
-        'opt_target', tostring(opt_target), ...
-        'add_latency', num2str(add_latency), ...
-        'mult_latency', num2str(mult_latency), ...
-        'bram_latency', num2str(bram_latency), ...
-        'conv_latency', num2str(conv_latency));
-end
+        'bin_pt_in', num2str(bin_pt_in)};
+  elseif strcmp(twiddle_type, 'twiddle_general'), 
+      params = { params{:}, ...
+        'FFTSize', num2str(FFTSize), ...
+        'Coeffs', mat2str(Coeffs), ...
+        'StepPeriod', num2str(StepPeriod), ...
+        'coeff_bit_width', num2str(coeff_bit_width), ...
+        'input_bit_width', num2str(input_bit_width), ...
+        'bin_pt_in', num2str(bin_pt_in), ...
+        'coeffs_bit_limit', num2str(coeffs_bit_limit), ...
+        'coeff_sharing', coeff_sharing, ...
+        'coeff_decimation', coeff_decimation, ...
+        'coeff_generation', coeff_generation, ...
+        'cal_bits', num2str(cal_bits), ...
+        'n_bits_rotation', num2str(n_bits_rotation), ...
+        'max_fanout', num2str(max_fanout), ...
+        'use_hdl', use_hdl, ...
+        'use_embedded', use_embedded, ...
+        'quantization', quantization, ...
+        'overflow', overflow};    
+  end
+  reuse_block(blk, 'twiddle', ['casper_library_ffts_twiddle/', twiddle_type], ...
+          params{:}, 'Position', [120 37 205 283]);
+  add_line(blk, 'a/1', 'twiddle/1');
+  add_line(blk, 'b/1', 'twiddle/2');
+  add_line(blk, 'sync_in/1', 'twiddle/3');
 
-%
-% Add complex add/sub blocks.
-%
+  %
+  % Add complex add/sub blocks.
+  %
+  
+  reuse_block(blk, 'bus_add', 'casper_library_bus/bus_addsub', ...
+          'opmode', '0', ...
+          'n_bits_a', mat2str(repmat(input_bit_width, 1, n_inputs)), ...
+          'bin_pt_a', mat2str(bin_pt_in), ...
+          'misc', 'off', ...
+          'n_bits_b', mat2str(repmat(addsub_b_bitwidth, 1, n_inputs)), ...
+          'bin_pt_b', num2str(addsub_b_binpoint), ...
+          'n_bits_out', num2str(addsub_b_bitwidth+1), ...
+          'bin_pt_out', num2str(addsub_b_binpoint), ...
+          'Position', [270 64 310 91]);
+  add_line(blk, 'twiddle/1', 'bus_add/1');
+  add_line(blk, 'twiddle/2', 'bus_add/2');
 
-if use_dsp48_adders,
-    reuse_block(blk, 'cadd', 'casper_library_misc/caddsub_dsp48e', ...
-        'Position', [300 71 350 134], ...
-        'mode', 'Addition', ...
-        'n_bits_a', num2str(input_bit_width), ...
-        'bin_pt_a', num2str(input_bit_width-1), ...
-        'n_bits_b', num2str(addsub_b_bitwidth), ...
-        'bin_pt_b', num2str(addsub_b_binpoint), ...
-        'full_precision', 'on');
-    reuse_block(blk, 'csub', 'casper_library_misc/caddsub_dsp48e', ...
-        'Position', [300 241 350 304], ...
-        'mode', 'Subtraction', ...
-        'n_bits_a', num2str(input_bit_width), ...
-        'bin_pt_a', num2str(input_bit_width-1), ...
-        'n_bits_b', num2str(addsub_b_bitwidth), ...
-        'bin_pt_b', num2str(addsub_b_binpoint), ...
-        'full_precision', 'on');
-else
-    for i = 0:3,
-        yoffset = i*85;
-        reuse_block(blk, ['AddSub', num2str(i)], 'xbsIndex_r4/AddSub', ...
-            'Position', [300 68+yoffset 350 112+yoffset], ...
-            'latency', num2str(add_latency), ...
-            'precision', 'Full', ...
-            'use_behavioral_HDL', 'on');
-    end
-    set_param([blk, '/AddSub0'], 'mode', 'Addition');
-    set_param([blk, '/AddSub1'], 'mode', 'Addition');
-    set_param([blk, '/AddSub2'], 'mode', 'Subtraction');
-    set_param([blk, '/AddSub3'], 'mode', 'Subtraction');
-end
+  reuse_block(blk, 'bus_sub', 'casper_library_bus/bus_addsub', ...
+          'opmode', '1', ...
+          'n_bits_a', mat2str(repmat(input_bit_width, 1, n_inputs)), ...
+          'bin_pt_a', mat2str(bin_pt_in), ...
+          'misc', 'off', ...
+          'n_bits_b', mat2str(repmat(addsub_b_bitwidth, 1, n_inputs)), ...
+          'bin_pt_b', num2str(addsub_b_binpoint), ...
+          'n_bits_out', num2str(addsub_b_bitwidth+1), ...
+          'bin_pt_out', num2str(addsub_b_binpoint), ...
+          'Position', [270 109 310 136]);
+  add_line(blk, 'twiddle/1', 'bus_sub/1');
+  add_line(blk, 'twiddle/2', 'bus_sub/2');
 
-%
-% Add sync delay.
-%
+  reuse_block(blk, 'Concat', 'xbsIndex_r4/Concat', ...
+          'num_inputs', '2', ...
+          'Position', [340 59 370 146]);
+  add_line(blk, 'bus_add/1', 'Concat/1');
+  add_line(blk, 'bus_sub/1', 'Concat/2');
+  
+  %
+  % Convert
+  %
+  if strcmp(quantization, 'Truncate'), quant = '0';
+  elseif strcmp(quantization, 'Round  (unbiased: +/- Inf)'), quant = '1';
+  elseif strcmp(quantization, 'Round  (unbiased: Even Values)'), quant = '2';
+  else %TODO
+  end
+  
+  if strcmp(overflow, 'Wrap'), of = '0';
+  elseif strcmp(overflow, 'Saturate'), of = '1';
+  elseif strcmp(overflow, 'Flag as error'), of = '2';
+  else %TODO
+  end
 
-reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
-    'Position', [300 403 350 437], ...
-    'latency', num2str(add_latency + mux_latency + conv_latency), ...
-    'reg_retiming', 'on');
+  if strcmp(bitgrowth, 'on'),
+    n_bits_out = input_bit_width+1;
+  else
+    n_bits_out = input_bit_width;
+  end
 
-%
-% Add shifts.
-%
+  reuse_block(blk, 'bus_convert', 'casper_library_bus/bus_convert', ...
+          'n_bits_in', mat2str(repmat(convert_in_bitwidth, 1, n_inputs*2)), ...
+          'bin_pt_in', mat2str(repmat(convert_in_binpoint, 1, n_inputs*2)), ...
+          'cmplx', 'on', ...
+          'n_bits_out', num2str(n_bits_out), ...
+          'bin_pt_out', num2str(bin_pt_in), ...
+          'quantization', quant, 'overflow', of, ...
+          'misc', 'off', 'of', 'on', 'latency', 'conv_latency', ...
+          'Position', [635 56 690 149]);
 
-if strcmp(hardcode_shifts, 'off'),
-    reuse_block(blk, 'shift_delay', 'xbsIndex_r4/Delay', ...
-        'Position', [400 13 450 47], ...
-        'latency', num2str(add_latency), ...
-        'reg_retiming', 'off');
+  add_line(blk, 'bus_convert/2', 'of/1');
 
-    for i = 0:3,
-        yoffset = i*85;
-        reuse_block(blk, ['Scale', num2str(i)], 'xbsIndex_r4/Scale', ...
-            'Position', [400 99+yoffset 450 121+yoffset], ...
-            'scale_factor', '-1');
-    end
+  %
+  % Add scale 
+  %
 
-    for i = 0:3,
-        yoffset = i*85;
-        reuse_block(blk, ['Mux', num2str(i)], 'xbsIndex_r4/Mux', ...
-            'Position', [560 57+yoffset 585 123+yoffset], ...
-            'inputs', '2', ...
-            'latency', num2str(mux_latency), ...
-            'precision', 'Full');
-    end
-else
-    reuse_block(blk, 'Terminator', 'built-in/terminator', ...
-        'Position', [400 20 420 40], ...
-        'ShowName', 'off');
+  if strcmp(bitgrowth, 'off') && strcmp(hardcode_shifts, 'off'),
+      reuse_block(blk, 'delay2', 'xbsIndex_r4/Delay', ...
+          'Position', [430 59 460 81], ...
+          'latency', 'add_latency', ...
+          'reg_retiming', 'off');
+      add_line(blk, 'shift/1', 'delay2/1');
+      
+      %required to add padding to match bit width of other stream (from bus_scale)
+      reuse_block(blk, 'bus_norm0', 'casper_library_bus/bus_convert', ...
+              'n_bits_in', mat2str(repmat(addsub_b_bitwidth+1, 1, n_inputs*2)), ...
+              'bin_pt_in', mat2str(repmat(addsub_b_binpoint, 1, n_inputs*2)), ...
+              'cmplx', 'on', ...
+              'n_bits_out', num2str(addsub_b_bitwidth+2), ...
+              'bin_pt_out', num2str(addsub_b_binpoint+1), ...
+              'quantization', '0', 'overflow', '0', ...
+              'misc', 'off', 'of', 'off', 'latency', '0', ...
+              'Position', [500 92 545 118]);
+      add_line(blk, 'Concat/1', 'bus_norm0/1');     
 
-    if strcmp(downshift, 'on'),
-        for i = 0:3,
-            yoffset = i*85;
-            reuse_block(blk, ['Scale', num2str(i)], 'xbsIndex_r4/Scale', ...
-                'Position', [400 79+yoffset 450 101+yoffset], ...
-                'scale_factor', '-1');
-        end
-    end
-end
+      reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
+          'n_bits_in', mat2str(repmat(addsub_b_bitwidth+1, 1, n_inputs*2)), ...
+          'bin_pt_in', num2str(addsub_b_binpoint), ...
+          'cmplx', 'on', ...
+          'scale_factor', '-1', ...
+          'misc', 'off', ...
+          'Position', [405 127 450 153]);
+      add_line(blk, 'Concat/1', 'bus_scale/1');  
+     
+      %scaling causes binary point to be moved up by one place 
+      reuse_block(blk, 'bus_norm1', 'casper_library_bus/bus_convert', ...
+              'n_bits_in', mat2str(repmat(addsub_b_bitwidth+1, 1, n_inputs*2)), ...
+              'bin_pt_in', mat2str(repmat(addsub_b_binpoint+1, 1, n_inputs*2)), ...
+              'cmplx', 'on', ...
+              'n_bits_out', num2str(addsub_b_bitwidth+2), ...
+              'bin_pt_out', num2str(addsub_b_binpoint+1), ...
+              'quantization', '0', 'overflow', '0', ...
+              'misc', 'off', 'of', 'off', 'latency', '0', ...
+              'Position', [500 127 545 153]);
+      add_line(blk, 'bus_scale/1', 'bus_norm1/1');     
 
-%
-% Add convert blocks.
-%
+      reuse_block(blk, 'Mux', 'xbsIndex_r4/Mux', ...
+              'inputs', '2', ...
+              'Precision', 'Full', ...
+              'latency', num2str(mux_latency), ...
+              'Position', [580 53 610 157]);
+      add_line(blk, 'delay2/1', 'Mux/1');
+      add_line(blk, 'bus_norm0/1', 'Mux/2');
+      add_line(blk, 'bus_norm1/1', 'Mux/3');
+      add_line(blk, 'Mux/1', 'bus_convert/1');
+ 
+  else
+      reuse_block(blk, 'Terminator', 'built-in/terminator', 'Position', [430 59 460 81], 'ShowName', 'off');
+      add_line(blk, 'shift/1', 'Terminator/1');
 
-for i = 0:3,
-    yoffset = i*85;
-    reuse_block(blk, ['convert_of', num2str(i)], 'casper_library_misc/convert_of', ...
-        'Position', [630 70+yoffset 680 105+yoffset], ...
-        'bit_width_i', num2str(convert_in_bitwidth), ...
-        'binary_point_i', num2str(convert_in_binpoint), ...
-        'bit_width_o', num2str(input_bit_width), ...
-        'binary_point_o', num2str(input_bit_width-1), ...
-        'latency', num2str(conv_latency), ...
-        'quantization', tostring(quantization), ...
-        'overflow', tostring(overflow));
-end
+      %if we are not growing bits and need to downshift
+      if strcmp(bitgrowth, 'off') && strcmp(downshift, 'on'),
+        reuse_block(blk, 'bus_scale', 'casper_library_bus/bus_scale', ...
+            'n_bits_in', mat2str(repmat(addsub_b_bitwidth+1, 1, n_inputs*2)), ... 
+            'bin_pt_in', num2str(addsub_b_binpoint), ...
+            'cmplx', 'on', ...
+            'scale_factor', '-1', ...
+            'misc', 'off', ...
+            'Position', [405 127 450 153]);
+        add_line(blk, 'Concat/1', 'bus_scale/1');
+        add_line(blk, 'bus_scale/1', 'bus_convert/1');  
+      else
+        add_line(blk, 'Concat/1', 'bus_convert/1');
+      end
+  end %if hardcode_shifts
 
-%
-% Add ri_to_c and logic blocks.
-%
+  %
+  % bus_expand 
+  %
+  reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
+      'mode', 'divisions of equal size', ...
+      'outputNum', '2', 'outputWidth', mat2str(repmat(n_inputs*input_bit_width*2,1,2)), ...
+      'outputBinaryPt', '[0,0]', 'outputArithmeticType', '[0,0]', ...   
+      'Position', [720 49 770 111]);
+  add_line(blk, 'bus_convert/1', 'bus_expand/1');
+  add_line(blk, 'bus_expand/1', 'a+bw/1');
+  add_line(blk, 'bus_expand/2', 'a-bw/1');
 
-reuse_block(blk, 'ri_to_c01', 'casper_library_misc/ri_to_c', ...
-    'Position', [800 69 840 111]);
-reuse_block(blk, 'ri_to_c23', 'casper_library_misc/ri_to_c', ...
-    'Position', [800 69+2*85 840 111+2*85]);
-reuse_block(blk, 'Logical', 'xbsIndex_r4/Logical', ...
-    'Position', [800 359 840 426], ...
-    'logical_function', 'OR', ...
-    'inputs', '4', ...
-    'latency', '0', ...
-    'precision', 'Full', ...
-    'align_bp', 'on');
+  %
+  % sync delay.
+  %
 
-%
-% Draw wires.
-%
+  reuse_block(blk, 'delay0', 'xbsIndex_r4/Delay');
+  set_param([blk,'/delay0'], ...
+          'latency', ['add_latency+',num2str(mux_latency),'+conv_latency'], ...
+          'reg_retiming', 'on', ...
+          'Position', [580 179 610 201]);
+  add_line(blk, 'twiddle/3', 'delay0/1');  
+  add_line(blk, 'delay0/1', 'sync_out/1');  
 
-add_line(blk, 'a/1', [twiddle_type, '/1']);
-add_line(blk, 'b/1', [twiddle_type, '/2']);
-add_line(blk, 'sync/1', [twiddle_type, '/3']);
+  %
+  % dvalid delay.
+  %
 
-if strcmp(dsp48_adders, 'on'),
-    add_line(blk, [twiddle_type, '/1'], 'cadd/1');
-    add_line(blk, [twiddle_type, '/2'], 'cadd/2');
-    add_line(blk, [twiddle_type, '/3'], 'cadd/3');
-    add_line(blk, [twiddle_type, '/4'], 'cadd/4');
-    add_line(blk, [twiddle_type, '/1'], 'csub/1');
-    add_line(blk, [twiddle_type, '/2'], 'csub/2');
-    add_line(blk, [twiddle_type, '/3'], 'csub/3');
-    add_line(blk, [twiddle_type, '/4'], 'csub/4');
-else
-    add_line(blk, [twiddle_type, '/1'], 'AddSub0/1');
-    add_line(blk, [twiddle_type, '/2'], 'AddSub1/1');
-    add_line(blk, [twiddle_type, '/3'], 'AddSub0/2');
-    add_line(blk, [twiddle_type, '/4'], 'AddSub1/2');
-    add_line(blk, [twiddle_type, '/1'], 'AddSub2/1');
-    add_line(blk, [twiddle_type, '/2'], 'AddSub3/1');
-    add_line(blk, [twiddle_type, '/3'], 'AddSub2/2');
-    add_line(blk, [twiddle_type, '/4'], 'AddSub3/2');
-end
+  if strcmp(async, 'on'),
+    add_line(blk, 'en/1', 'twiddle/4');
+    reuse_block(blk, 'delay1', 'xbsIndex_r4/Delay', ...
+          'latency', ['add_latency+',num2str(mux_latency),'+conv_latency'], ...
+          'reg_retiming', 'on', ...
+          'Position', [580 239 610 261]);
+    add_line(blk, 'twiddle/4', 'delay1/1');  
+    add_line(blk, 'delay1/1', 'dvalid/1');  
+  end
 
-add_line(blk, [twiddle_type, '/5'], 'sync_delay/1');
+  % Delete all unconnected blocks.
+  clean_blocks(blk);
 
-if strcmp(hardcode_shifts, 'off'),
-    add_line(blk, 'shift/1', 'shift_delay/1');
+  %%%%%%%%%%%%%%%%%%%
+  % Finish drawing! %
+  %%%%%%%%%%%%%%%%%%%
 
-    add_line(blk, 'shift_delay/1', 'Mux0/1');
-    add_line(blk, 'shift_delay/1', 'Mux1/1');
-    add_line(blk, 'shift_delay/1', 'Mux2/1');
-    add_line(blk, 'shift_delay/1', 'Mux3/1');
+  % Set attribute format string (block annotation).
+  fmtstr = sprintf('%s', twiddle_type);
+  set_param(blk, 'AttributesFormatString', fmtstr);
 
-    if strcmp(dsp48_adders, 'on'),
-        add_line(blk, 'cadd/1', 'Mux0/2');
-        add_line(blk, 'cadd/2', 'Mux1/2');
-        add_line(blk, 'csub/1', 'Mux2/2');
-        add_line(blk, 'csub/2', 'Mux3/2');
-        add_line(blk, 'cadd/1', 'Scale0/1');
-        add_line(blk, 'cadd/2', 'Scale1/1');
-        add_line(blk, 'csub/1', 'Scale2/1');
-        add_line(blk, 'csub/2', 'Scale3/1');
-    else
-        add_line(blk, 'AddSub0/1', 'Mux0/2');
-        add_line(blk, 'AddSub1/1', 'Mux1/2');
-        add_line(blk, 'AddSub2/1', 'Mux2/2');
-        add_line(blk, 'AddSub3/1', 'Mux3/2');
-        add_line(blk, 'AddSub0/1', 'Scale0/1');
-        add_line(blk, 'AddSub1/1', 'Scale1/1');
-        add_line(blk, 'AddSub2/1', 'Scale2/1');
-        add_line(blk, 'AddSub3/1', 'Scale3/1');
-    end
+  % Save block state to stop repeated init script runs.
+  save_state(blk, 'defaults', defaults, varargin{:});
 
-    add_line(blk, 'Scale0/1', 'Mux0/3');
-    add_line(blk, 'Scale1/1', 'Mux1/3');
-    add_line(blk, 'Scale2/1', 'Mux2/3');
-    add_line(blk, 'Scale3/1', 'Mux3/3');
+  clog('exiting butterfly_direct_init', {'trace', 'butterfly_direct_init_debug'});
 
-    add_line(blk, 'Mux0/1', 'convert_of0/1');
-    add_line(blk, 'Mux1/1', 'convert_of1/1');
-    add_line(blk, 'Mux2/1', 'convert_of2/1');
-    add_line(blk, 'Mux3/1', 'convert_of3/1');
-else
-    add_line(blk, 'shift/1', 'Terminator/1');
-
-    if strcmp(downshift, 'on'),
-        if strcmp(dsp48_adders, 'on'),
-            add_line(blk, 'cadd/1', 'Scale0/1');
-            add_line(blk, 'cadd/2', 'Scale1/1');
-            add_line(blk, 'csub/1', 'Scale2/1');
-            add_line(blk, 'csub/2', 'Scale3/1');
-
-            add_line(blk, 'Scale0/1', 'convert_of0/1');
-            add_line(blk, 'Scale1/1', 'convert_of1/1');
-            add_line(blk, 'Scale2/1', 'convert_of2/1');
-            add_line(blk, 'Scale3/1', 'convert_of3/1');
-        else
-            add_line(blk, 'AddSub0/1', 'Scale0/1');
-            add_line(blk, 'AddSub1/1', 'Scale1/1');
-            add_line(blk, 'AddSub2/1', 'Scale2/1');
-            add_line(blk, 'AddSub3/1', 'Scale3/1');
-
-            add_line(blk, 'Scale0/1', 'convert_of0/1');
-            add_line(blk, 'Scale1/1', 'convert_of1/1');
-            add_line(blk, 'Scale2/1', 'convert_of2/1');
-            add_line(blk, 'Scale3/1', 'convert_of3/1');
-        end
-    else
-        if strcmp(dsp48_adders, 'on'),
-            add_line(blk, 'cadd/1', 'convert_of0/1');
-            add_line(blk, 'cadd/2', 'convert_of1/1');
-            add_line(blk, 'csub/1', 'convert_of2/1');
-            add_line(blk, 'csub/2', 'convert_of3/1');
-        else
-            add_line(blk, 'AddSub0/1', 'convert_of0/1');
-            add_line(blk, 'AddSub1/1', 'convert_of1/1');
-            add_line(blk, 'AddSub2/1', 'convert_of2/1');
-            add_line(blk, 'AddSub3/1', 'convert_of3/1');
-        end
-    end
-end
-
-add_line(blk, 'convert_of0/1', 'ri_to_c01/1');
-add_line(blk, 'convert_of1/1', 'ri_to_c01/2');
-add_line(blk, 'convert_of2/1', 'ri_to_c23/1');
-add_line(blk, 'convert_of3/1', 'ri_to_c23/2');
-add_line(blk, 'convert_of0/2', 'Logical/1');
-add_line(blk, 'convert_of1/2', 'Logical/2');
-add_line(blk, 'convert_of2/2', 'Logical/3');
-add_line(blk, 'convert_of3/2', 'Logical/4');
-
-add_line(blk, 'ri_to_c01/1', 'a+bw/1');
-add_line(blk, 'ri_to_c23/1', 'a-bw/1');
-add_line(blk, 'Logical/1', 'of/1');
-add_line(blk, 'sync_delay/1', 'sync_out/1');
-
-% Delete all unconnected blocks.
-clean_blocks(blk);
-
-%%%%%%%%%%%%%%%%%%%
-% Finish drawing! %
-%%%%%%%%%%%%%%%%%%%
-
-% Set attribute format string (block annotation).
-fmtstr = sprintf('%s\ncoeffs in %s', twiddle_type, coeff_type);
-set_param(blk, 'AttributesFormatString', fmtstr);
-
-% Save block state to stop repeated init script runs.
-save_state(blk, 'defaults', defaults, varargin{:});
-
-clog('exiting butterfly_direct_init', 'trace');
-
+end %function

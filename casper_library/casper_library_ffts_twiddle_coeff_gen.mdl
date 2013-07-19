@@ -2,7 +2,7 @@ Library {
   Name			  "casper_library_ffts_twiddle_coeff_gen"
   Version		  7.2
   MdlSubVersion		  0
-  SavedCharacterEncoding  "windows-1252"
+  SavedCharacterEncoding  "UTF-8"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
@@ -12,11 +12,11 @@ Library {
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "root"
+  LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Jun 15 10:59:48 2012"
-  RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:2>"
+  LastModifiedDate	  "Thu Jul 04 20:21:33 2013"
+  RTWModifiedTimeStamp	  294869642
+  ModelVersionFormat	  "1.%<AutoIncrement:6>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -44,6 +44,7 @@ Library {
   LinearizationMsg	  "none"
   Profile		  off
   ParamWorkspaceSource	  "MATLABWorkspace"
+  RecordCoverage	  off
   CovSaveName		  "covdata"
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
@@ -80,13 +81,13 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      1
+      $ObjectID		      6
       Version		      "1.5.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  2
+	  $ObjectID		  7
 	  Version		  "1.5.1"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
@@ -116,10 +117,9 @@ Library {
 	  AutoInsertRateTranBlk	  off
 	  SampleTimeConstraint	  "Unconstrained"
 	  InsertRTBMode		  "Whenever possible"
-	  SignalSizeVariationType "Allow only fixed size"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  3
+	  $ObjectID		  8
 	  Version		  "1.5.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
@@ -145,7 +145,7 @@ Library {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  4
+	  $ObjectID		  9
 	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
@@ -164,7 +164,6 @@ Library {
 	  OptimizeBlockIOStorage  on
 	  BufferReuse		  on
 	  EnhancedBackFolding	  off
-	  EnforceIntegerDowncast  on
 	  ExpressionFolding	  on
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
@@ -187,9 +186,10 @@ Library {
 	  BufferReusableBoundary  on
 	  SimCompilerOptimization "Off"
 	  AccelVerboseBuild	  off
+  EnforceIntegerDowncast   on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  5
+	  $ObjectID		  10
 	  Version		  "1.5.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
@@ -259,7 +259,7 @@ Library {
 	  BlockIODiagnostic	  "none"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  6
+	  $ObjectID		  11
 	  Version		  "1.5.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
@@ -286,7 +286,7 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  7
+	  $ObjectID		  12
 	  Version		  "1.5.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
@@ -295,7 +295,7 @@ Library {
 	  ModelReferenceMinAlgLoopOccurrences off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  8
+	  $ObjectID		  13
 	  Version		  "1.5.1"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
@@ -305,7 +305,7 @@ Library {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  9
+	  $ObjectID		  14
 	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
@@ -352,7 +352,7 @@ Library {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      10
+	      $ObjectID		      15
 	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
@@ -409,11 +409,11 @@ Library {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      11
+	      $ObjectID		      16
 	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
-		Dimension		16
+		Dimension		15
 		Cell			"IncludeMdlTerminateFcn"
 		Cell			"CombineOutputUpdateFcns"
 		Cell			"SuppressErrorStatus"
@@ -424,18 +424,17 @@ Library {
 		Cell			"CPPClassGenCompliant"
 		Cell			"MultiInstanceERTCode"
 		Cell			"PurelyIntegerCode"
-		Cell			"SupportNonFinite"
+		Cell			"PortableWordSizes"
 		Cell			"SupportComplex"
 		Cell			"SupportAbsoluteTime"
 		Cell			"SupportContinuousTime"
 		Cell			"SupportNonInlinedSFcns"
-		Cell			"PortableWordSizes"
 		PropName		"DisabledProps"
 	      }
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
 	      TargetLibSuffix	      ""
 	      TargetPreCompLibLocation ""
-	      TargetFunctionLibrary   "ANSI_C"
+	      TargetFunctionLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
 	      ERTMultiwordLength      256
@@ -463,7 +462,6 @@ Library {
 	      SupportNonInlinedSFcns  on
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
-	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
@@ -487,12 +485,11 @@ Library {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition    " [ 520, 285, 1400, 915 ] "
+      ConfigPrmDlgPosition     [ 520, 285, 1400, 915 ] 
     }
     PropName		    "ConfigurationSets"
   }
   BlockDefaults {
-    Orientation		    "right"
     ForegroundColor	    "black"
     BackgroundColor	    "white"
     DropShadow		    off
@@ -502,6 +499,7 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
     ShowName		    on
+    Orientation		    "right"
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -544,8 +542,8 @@ Library {
   }
   System {
     Name		    "casper_library_ffts_twiddle_coeff_gen"
-    Location		    [424, 564, 960, 865]
-    Open		    on
+    Location		    [136, 45, 624, 492]
+    Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -562,7 +560,7 @@ Library {
       BlockType		      SubSystem
       Name		      "coeff_gen"
       Ports		      []
-      Position		      [25, 19, 70, 61]
+      Position		      [20, 17, 80, 73]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag0"
@@ -571,44 +569,51 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "coeff_gen"
-      MaskDescription	      "Generates a sequence of complex coefficients"
-      MaskPromptString	      "Coefficients: (0 to 2^(FFTSize-1)-1)|Coefficient Bit Width:|Step Period: (2^?)|Latency:|"
-      "Store coefficients in BRAM"
-      MaskStyleString	      "edit,edit,edit,edit,checkbox"
-      MaskTunableValueString  "on,on,on,on,on"
-      MaskCallbackString      "Coeffs = eval(get_param(gcb, 'Coeffs'));\nif( length(Coeffs) == 1 ),\n    set_param(gcb"
-      ", 'MaskVisibilities',{'on','on','off','off','off'});\nelse\n    set_param(gcb, 'MaskVisibilities',{'on','on','on"
-      "','on','on'});    \nend||||"
-      MaskEnableString	      "on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on"
-      MaskVarAliasString      ",,,,"
-      MaskVariables	      "Coeffs=@1;coeff_bit_width=@2;StepPeriod=@3;bram_latency=@4;coeffs_bram=&5;"
-      MaskInitialization      "coeff_gen_init( gcb, ...\n    'Coeffs', Coeffs, ...\n    'coeff_bit_width', coeff_bit_w"
-      "idth, ...\n    'StepPeriod', StepPeriod, ...\n    'bram_latency', bram_latency, ...\n    'coeffs_bram', coeffs_b"
-      "ram);\n"
+      MaskDescription	      "Generates a sequence of complex coefficients for use in generating twiddle\nfactors for F"
+      "FTs."
+      MaskPromptString	      "fft size (2^?)|Coefficients|Coefficient Bit Width:|Step Period: (2^?)|asynchronous opera"
+      "tion|misc port|BRAM latency|Multiplier latency|Adder latency|Convert latency|Number bits above which to store st"
+      "age's coefficients in BRAM (2^? bits)|BRAM sharing in coeff storage|Store a fraction of coeff factors where usef"
+      "ul|Generate coeffs with multipliers where useful|Number calibration locations when generating coeffs (2^?)|Rotat"
+      "ion vector resolution|Quantization strategy"
+      MaskStyleString	      "edit,edit,edit,edit,checkbox,checkbox,edit,edit,edit,edit,edit,checkbox,checkbox,checkbox"
+      ",edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Values))"
+      MaskVariables	      "FFTSize=@1;Coeffs=@2;coeff_bit_width=@3;StepPeriod=@4;async=&5;misc=&6;bram_latency=@7;mult"
+      "_latency=@8;add_latency=@9;conv_latency=@10;coeffs_bit_limit=@11;coeff_sharing=&12;coeff_decimation=&13;coeff_ge"
+      "neration=&14;cal_bits=@15;n_bits_rotation=@16;quantization=&17;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskInitialization      "coeff_gen_init(gcb, ...\n   'FFTSize', FFTSize, ...\n   'Coeffs', Coeffs, ...\n   'coef"
+      "f_bit_width', coeff_bit_width, ...\n   'StepPeriod', StepPeriod, ...\n   'async', async, ...\n   'misc', misc, ."
+      "..\n   'bram_latency', bram_latency, ...\n   'mult_latency', mult_latency, ...\n   'add_latency', add_latency, ."
+      "..\n   'conv_latency', conv_latency, ...\n   'coeffs_bit_limit', coeffs_bit_limit, ...\n   'coeff_sharing', coef"
+      "f_sharing, ...\n   'coeff_decimation', coeff_decimation, ...\n   'coeff_generation', coeff_generation, ...\n   '"
+      "cal_bits', cal_bits, ...\n   'n_bits_rotation', n_bits_rotation, ...\n   'quantization', quantization);\n"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "|18|1|2|off"
-      MaskTabNameString	      ",,,,"
+      MaskValueString	      "0|4|18|0|off|off|2|2|1|2|8|on|on|on|1|25|Round  (unbiased: Even Values)"
+      MaskTabNameString	      "basic,basic,basic,basic,basic,basic,latency,latency,latency,latency,implementation,impl"
+      "ementation,implementation,implementation,implementation,implementation,implementation"
       System {
 	Name			"coeff_gen"
-	Location		[821, 252, 1388, 522]
+	Location		[193, 42, 1403, 961]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
@@ -620,22 +625,52 @@ MatData {
   NumRecords		  1
   DataRecord {
     Tag			    DataTag0
-    Data		    "  %)30     .    0 4   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ *GRO $.    L 0   "
-    "8    (     @         %    \"     $    !     0         %  0 $     $   !@    9&5F875L=',          $-O969F<P         "
-    "   !C;V5F9E]B:71?=VED=&@ 4W1E<%!E<FEO9        &)R86U?;&%T96YC>0    !C;V5F9G-?8G)A;0      #@   . \"   &    \"     $"
-    "         !0    @    !    \"@    $         #@   #@    &    \"     0         !0    @    !    !@    $         $     8"
-    "   !#;V5F9G,   X   !8    !@    @    &\"         4    (     0    (    !          D    0            \\#\\       #@/P"
-    "D    0                      #P/PX   !     !@    @    $          4    (     0    H    !         !     *    4W1E<%!E"
-    "<FEO9         X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    0     8 "
-    "   (    !          %    \"     $    /     0         0    #P   &-O969F7V)I=%]W:61T:  .    .     8    (    !@       "
-    "  %    \"     $    !     0         )    \"            #) #@   $     &    \"     0         !0    @    !    #     $ "
-    "        $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @ "
-    "            0 X   !     !@    @    $          4    (     0    L    !         !     +    8V]E9F9S7V)R86T       X   "
-    " P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &    \"     8         !0    @    "
-    "           $         \"0         .    .     8    (    !@         %    \"     $    !     0         )    \"         "
-    "   #) #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    X    !@    @   "
-    " &          4    (     0    $    !          D    (             $ .    ,     8    (    !          %    \"     $    "
-    "#     0         0  , ;V9F  "
+    Data		    "  %)30     .    * \\   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (H8:P$.    F X  "
+    " 8    (     @         %    \"     $    !     0         %  0 $0    $    R 0  9&5F875L=',           !&1E13:7IE      "
+    "       $-O969F<P              8V]E9F9?8FET7W=I9'1H  !3=&5P4&5R:6]D         &%S>6YC                ;6ES8P          "
+    "      !B<F%M7VQA=&5N8WD      &UU;'1?;&%T96YC>0      861D7VQA=&5N8WD       !C;VYV7VQA=&5N8WD      &-O969F<U]B:71?;&"
+    "EM:70 8V]E9F9?<VAA<FEN9P    !C;V5F9E]D96-I;6%T:6]N &-O969F7V=E;F5R871I;VX 8V%L7V)I=',           !N7V)I='-?<F]T871I"
+    ";VX  '%U86YT:7IA=&EO;@              #@   / (   &    \"     $         !0    @    !    (@    $         #@   #@    & "
+    "   \"     0         !0    @    !    !P    $         $     <   !&1E13:7IE  X    X    !@    @    &          4    (  "
+    "   0    $    !          D    (            &$ .    .     8    (    !          %    \"     $    &     0         0   "
+    " !@   $-O969F<P  #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            00 X   !    "
+    " !@    @    $          4    (     0    \\    !         !     /    8V]E9F9?8FET7W=I9'1H  X    X    !@    @    &    "
+    "      4    (     0    $    !          D    (            ,D .    0     8    (    !          %    \"     $    *     "
+    "0         0    \"@   %-T97!097)I;V0        .    .     8    (    !@         %    \"     $    !     0         )    \""
+    "               #@   #@    &    \"     0         !0    @    !    !0    $         $     4   !A<WEN8P    X    P    !@"
+    "    @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !    !  "
+    "   $         $  $ &UI<V,.    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  X   !     !@  "
+    "  @    $          4    (     0    P    !         !     ,    8G)A;5]L871E;F-Y      X    X    !@    @    &          "
+    "4    (     0    $    !          D    (             $ .    0     8    (    !          %    \"     $    ,     0     "
+    "    0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %    \"     $    !     0         )    \"      "
+    "       ! #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !A9&1?;&%T96YC>0      #@   #@"
+    "    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4"
+    "    (     0    P    !         !     ,    8V]N=E]L871E;F-Y      X    X    !@    @    &          4    (     0    $  "
+    "  !          D    (             $ .    0     8    (    !          %    \"     $    0     0         0    $    &-O96"
+    "9F<U]B:71?;&EM:70.    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   $   "
+    "  &    \"     0         !0    @    !    #0    $         $     T   !C;V5F9E]S:&%R:6YG    #@   #     &    \"     0  "
+    "       !0    @    !     @    $         $  \" &]N   .    0     8    (    !          %    \"     $    0     0       "
+    "  0    $    &-O969F7V1E8VEM871I;VX.    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X  "
+    " !     !@    @    $          4    (     0   !     !         !     0    8V]E9F9?9V5N97)A=&EO;@X    P    !@    @    "
+    "$          4    (     0    (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    !    \"     $    "
+    "     $     @   !C86Q?8FET<PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\"
+    ".    0     8    (    !          %    \"     $    /     0         0    #P   &Y?8FET<U]R;W1A=&EO;@ .    .     8    ("
+    "    !@         %    \"     $    !     0         )    \"            #E #@   $     &    \"     0         !0    @    "
+    "!    #     $         $     P   !Q=6%N=&EZ871I;VX     #@   %     &    \"     0         !0    @    !    '@    $     "
+    "    $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N(%9A;'5E<RD   X    X    !@    @    &          4    (     0    $    ! "
+    "         D    (               .    .     8    (    !@         %    \"     $    !     0         )    \"            "
+    "!! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            R0 X    X    !@    @    & "
+    "         4    (     0    $    !          D    (               .    ,     8    (    !          %    \"     $    #  "
+    "   0         0  , ;V9F  X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    "
+    "\"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (    "
+    " 0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0         )    \""
+    "            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !"
+    "@    @    &          4    (     0    $    !          D    (            ($ .    ,     8    (    !          %    \" "
+    "    $    \"     0         0  ( ;VX   X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@ "
+    "  #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    .     8    (    !@         %    \" "
+    "    $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \""
+    "0    @            Y0 X   !0    !@    @    $          4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87"
+    "-E9#H@179E;B!686QU97,I   "
   }
 }

@@ -580,21 +580,21 @@ if run_software
 
     win_fid = fopen([xps_path, slash, 'gen_prog_files.bat'],'w');
     unix_fid = fopen([xps_path, slash, 'gen_prog_files'],'w');
-    fprintf(unix_fid,['#!/bin/bash\n']);
-    time_stamp = clear_name(datestr(now, 'yyyy-mmm-dd HHMM'));
- 
+    fprintf(unix_fid, '#!/bin/bash\n');
+    files_name = [design_name, '_', clear_name(datestr(now, 'yyyy-mmm-dd HHMM'))];
+    
     switch sw_os
         case 'none'
-            fprintf(win_fid,['copy implementation\\system.bit ..\\bit_files\\',design_name,'_',time_stamp,'.bit\n']);
-            fprintf(unix_fid,['cp implementation/system.bit ../bit_files/',design_name,'_',time_stamp,'.bit\n']);
+            fprintf(win_fid,['copy implementation\\system.bit ..\\bit_files\\',files_name,'.bit\n']);
+            fprintf(unix_fid,['cp implementation/system.bit ../bit_files/',files_name,'.bit\n']);
         % end case 'none'
         otherwise
-            fprintf(win_fid,['copy implementation\\download.bit ..\\bit_files\\',design_name,'_',time_stamp,'.bit\n']);
-            fprintf(unix_fid,['cp implementation/download.bit ../bit_files/',design_name,'_',time_stamp,'.bit\n']);
+            fprintf(win_fid,['copy implementation\\download.bit ..\\bit_files\\',files_name,'.bit\n']);
+            fprintf(unix_fid,['cp implementation/download.bit ../bit_files/',files_name,'.bit\n']);
         % end otherwise
     end % switch sw_os
 
-    [s,w] = system('uname -m');
+    [s, w] = system('uname -m');
     if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
         fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
         if strcmp(w(1:6), 'x86_64')
@@ -602,17 +602,17 @@ if run_software
         else
            fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
         end
-        fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', design_name,'_', time_stamp,'.bof\n']);
+        fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', files_name,'.bof\n']);
         if strcmp(hw_sys, 'ROACH')
            fprintf(unix_fid,'chmod +x implementation/system.bof\n');
          end
-        fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', design_name,'_',time_stamp,'.bof\n']);
-        if exist([xps_path,  slash, 'design_info.casper'], 'file') == 2,
-            fprintf(win_fid,['copy design_info.casper ..\\bit_files\\', design_name,'_',time_stamp,'.design_info\n']);
-            fprintf(unix_fid,['cp design_info.casper ../bit_files/', design_name,'_',time_stamp,'.design_info\n']);
+        fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', files_name,'.bof\n']);
+        if exist([xps_path,  slash, 'casper_design_info.xml'], 'file') == 2,
+            fprintf(win_fid,['copy casper_design_info.xml ..\\bit_files\\', files_name,'.xml\n']);
+            fprintf(unix_fid,['cp casper_design_info.xml ../bit_files/', files_name,'.xml\n']);
         end
         if strcmp(hw_sys, 'ROACH2')
-            fprintf(unix_fid,['gzip -c ../bit_files/', design_name,'_',time_stamp,'.bof  > ../bit_files/', design_name,'_',time_stamp,'.bof.gz\n']);
+            fprintf(unix_fid,['gzip -c ../bit_files/', files_name, '.bof  > ../bit_files/', files_name,'.bof.gz\n']);
         end % strcmp(hw_sys, 'ROACH2')
     end % strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
 
