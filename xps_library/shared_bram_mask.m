@@ -95,6 +95,7 @@ for i =1:length(gateway_outs)
   end
 end
 
+set_param([c_sys, '/convert_din'], 'arith_type', arith_type);
 set_param([c_sys, '/mem/sim_data_in'], ...
   'arith_type', arith_type, 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
 
