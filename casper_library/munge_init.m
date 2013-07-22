@@ -66,7 +66,7 @@ if divisions > 1 && length(find(div_size < 1) ~= 0),
   return;
 end
 
-if length(div_size) ~= divisions,
+if length(div_size) ~= 1 && length(div_size) ~= divisions,
     clog(['Reported number of divisions, ',num2str(divisions),' does not match division description length ',num2str(length(div_size))], 'error');
     error(['Reported number of divisions, ',num2str(divisions),' does not match division description length ',num2str(length(div_size))]);
     return;
