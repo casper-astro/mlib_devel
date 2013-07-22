@@ -12,11 +12,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "rprimian"
+  LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Jul 19 15:08:25 2013"
-  RTWModifiedTimeStamp	  296146674
-  ModelVersionFormat	  "1.%<AutoIncrement:496>"
+  LastModifiedDate	  "Fri Jul 19 15:09:18 2013"
+  RTWModifiedTimeStamp	  296147058
+  ModelVersionFormat	  "1.%<AutoIncrement:494>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -21327,78 +21327,6 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "convert_addr"
-	  Ports			  [1, 1]
-	  Position		  [290, 188, 325, 212]
-	  SourceBlock		  "xbsIndex_r4/Convert"
-	  SourceType		  "Xilinx Type Converter Block"
-	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
-	  gui_display_data_type	  "Fixed-point"
-	  arith_type		  "Unsigned"
-	  n_bits		  "addr_width"
-	  bin_pt		  "0"
-	  float_type		  "Single"
-	  exp_bits		  "8"
-	  fraction_bits		  "24"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  en			  off
-	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "21,51,636,651"
-	  block_type		  "convert"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "35,24,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 24 24 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 24 24 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[15.33 15.3"
-	  "3 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[12.33 12.33 15.33 15"
-	  ".33 12.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[9.33 9.33 12.33 12.33 9.33 ],[1 1 1 "
-	  "]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],[0.931 0.946 0.973"
-	  " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_lab"
-	  "el('output',1,'cast');\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "convert_din"
-	  Ports			  [1, 1]
-	  Position		  [290, 233, 325, 257]
-	  SourceBlock		  "xbsIndex_r4/Convert"
-	  SourceType		  "Xilinx Type Converter Block"
-	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
-	  gui_display_data_type	  "Fixed-point"
-	  arith_type		  "Unsigned"
-	  n_bits		  "data_width"
-	  bin_pt		  "0"
-	  float_type		  "Single"
-	  exp_bits		  "8"
-	  fraction_bits		  "24"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  en			  off
-	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
-	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "21,51,636,651"
-	  block_type		  "convert"
-	  block_version		  "9.1.01"
-	  sg_icon_stat		  "35,24,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 24 24 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 35 35 0 0 ],[0 0 24 24 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ],[15.33 15.3"
-	  "3 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[12.33 12.33 15.33 15"
-	  ".33 12.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[9.33 9.33 12.33 12.33 9.33 ],[1 1 1 "
-	  "]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],[0.931 0.946 0.973"
-	  " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_lab"
-	  "el('output',1,'cast');\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Reference
 	  Name			  "convert_we"
 	  Ports			  [1, 1]
 	  Position		  [215, 278, 250, 302]
@@ -22845,7 +22773,7 @@ Library {
 	Line {
 	  SrcBlock		  "munge_in"
 	  SrcPort		  1
-	  DstBlock		  "convert_din"
+	  DstBlock		  "untitled_Shared_BRAM_data_in"
 	  DstPort		  1
 	}
 	Line {
@@ -22923,25 +22851,13 @@ Library {
 	Line {
 	  SrcBlock		  "calc_add"
 	  SrcPort		  1
-	  DstBlock		  "convert_addr"
+	  DstBlock		  "untitled_Shared_BRAM_addr"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "data_in_assert"
 	  SrcPort		  1
 	  DstBlock		  "munge_in"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_addr"
-	  SrcPort		  1
-	  DstBlock		  "untitled_Shared_BRAM_addr"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_din"
-	  SrcPort		  1
-	  DstBlock		  "untitled_Shared_BRAM_data_in"
 	  DstPort		  1
 	}
       }

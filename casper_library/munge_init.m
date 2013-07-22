@@ -82,11 +82,7 @@ end
 %calculate resultant word size
 n_bits_out = 0;
 for index = 1:length(output_order),
-    if length(div_size) == 1,
-        n_bits_out = n_bits_out+div_size*(output_order(index)+1);
-    else
-        n_bits_out = n_bits_out+div_size(output_order(index)+1);
-    end
+  n_bits_out = n_bits_out+div_size(output_order(index)+1);
 end
 if n_bits_out < bin_pt_out,
     clog(['binary point position ',num2str(bin_pt_out),' greater than number of bits ',num2str(n_bits_out)], {'error', 'munge_init_debug'});
