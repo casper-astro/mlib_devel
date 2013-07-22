@@ -39,7 +39,7 @@ function munge_init(blk,varargin)
 clog('entering munge_init', 'trace');
 check_mask_type(blk, 'munge');
 
-defaults = {'divisions', 1, 'div_size', 1, 'order', 0, 'arith_type_out', 'Unsigned', 'bin_pt_out', 0};
+defaults = {'divisions', 2, 'div_size', 32, 'order', [1 0], 'arith_type_out', 'Unsigned', 'bin_pt_out', 0};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 clog('munge_init: post same_state', 'trace');
 munge_block(blk, varargin{:});
@@ -66,9 +66,9 @@ if divisions > 1 && length(find(div_size < 1) ~= 0),
   return;
 end
 
-if length(div_size) > 1 && (length(div_size) ~= divisions),
-    clog(['Reported number of divisions, ',num2str(divisions-1),' does not match division description length ',num2str(len(div_size))], 'error');
-    error(['Reported number of divisions, ',num2str(divisions-1),' does not match division description length ',num2str(len(div_size))]);
+if length(div_size) ~= divisions,
+    clog(['Reported number of divisions, ',num2str(divisions),' does not match division description length ',num2str(length(div_size))], 'error');
+    error(['Reported number of divisions, ',num2str(divisions),' does not match division description length ',num2str(length(div_size))]);
     return;
 end
 
@@ -82,7 +82,11 @@ end
 %calculate resultant word size
 n_bits_out = 0;
 for index = 1:length(output_order),
-  n_bits_out = n_bits_out+div_size(output_order(index)+1);
+    if length(div_size) == 1,
+        n_bits_out = n_bits_out+div_size*(output_order(index)+1);
+    else
+        n_bits_out = n_bits_out+div_size(output_order(index)+1);
+    end
 end
 if n_bits_out < bin_pt_out,
     clog(['binary point position ',num2str(bin_pt_out),' greater than number of bits ',num2str(n_bits_out)], {'error', 'munge_init_debug'});
