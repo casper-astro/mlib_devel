@@ -56,17 +56,8 @@ if addr_width > 16,
   errordlg('Shared BRAM address width cannot be greater than 16');
 end
 
-%set up Asserts and data reinterpret on output
-try
-  set_param([c_sys,'/data_in_assert'], ...
-    'assert_rate', 'off', ...
-    'assert_type', 'on', 'type_source', 'Explicitly', 'arith_type', arith_type, ...
-    'n_bits', num2str(data_width), 'bin_pt', num2str(data_bin_pt));
-catch
-  warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
-end
-
 %set up address manipulation blocks
+
 try
   set_param([c_sys, '/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
   set_param([c_sys, '/mem/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
@@ -74,12 +65,16 @@ catch
   warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
 end
 
+%set up cast blocks
+
+set_param([c_sys, '/convert_din1'], 'n_bits', num2str(data_width), 'bin_pt', num2str(data_bin_pt));
+
 %set up gateways
 
 gateway_ins = find_system(c_sys, 'searchdepth', 1, 'FollowLinks', 'on', ...
   'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
 set_param(gateway_ins{1}, 'n_bits', num2str(data_width), ...
-  'arith_type', arith_type, 'bin_pt', num2str(data_bin_pt), 'Name', clear_name([c_sys,'_data_out']));
+  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'Name', clear_name([c_sys,'_data_out']));
 gateway_outs =find_system(c_sys, 'searchdepth', 1, 'FollowLinks', 'on', ...
   'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
 for i =1:length(gateway_outs)
@@ -96,7 +91,7 @@ for i =1:length(gateway_outs)
 end
 
 set_param([c_sys, '/mem/sim_data_in'], ...
-  'arith_type', arith_type, 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
+  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
 
 %set up simulation memory
 
@@ -113,16 +108,29 @@ set_param([c_sys, '/mem/ram'], 'latency', num2str(latency));
 
 set_param(c_sys,'LinkStatus','inactive');
 
-for name = {'munge_in', 'mem/sim_munge_in', 'munge_out', 'mem/sim_munge_out'},
+divisions = ceil(data_width/32);
+for name = {'munge_in', 'mem/sim_munge_out'},
   try
     set_param([c_sys, '/', name{1}], ... 
-      'divisions', num2str(ceil(data_width/32)), ...
-      'div_size', num2str(min(32, data_width)), ...
-      'order', ['[',num2str([ceil(data_width/32)-1:-1:0]),']'], ...
-      'arith_type_out', arith_type, ...
+      'divisions', num2str(divisions), ...
+      'div_size', mat2str(repmat(min(32, data_width),1,divisions)), ...
+      'order', ['[',num2str([divisions-1:-1:0]),']'], ...
+      'arith_type_out', 'Unsigned', ...
       'bin_pt_out', num2str(data_bin_pt));
   catch
     warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
   end
 end %for
 
+for name = {'mem/sim_munge_in', 'munge_out'},
+  try
+  set_param([c_sys, '/', name{1}], ... 
+    'divisions', num2str(divisions), ...
+    'div_size', mat2str(repmat(min(32, data_width),1,divisions)), ...
+    'order', ['[',num2str([divisions-1:-1:0]),']'], ...
+    'arith_type_out', arith_type, ...
+    'bin_pt_out', num2str(data_bin_pt));
+  catch
+    warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
+  end
+end
