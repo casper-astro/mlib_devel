@@ -24,15 +24,17 @@ function [result,msg] = drc(blk_obj, xps_objs)
 result = 0;
 msg = '';
 
+prefix = '';
 if ~exist(blk_obj.hw_sys) | ~isstruct(blk_obj.hw_sys)
     hw_routes = load_hw_routes();
+    prefix = 'hw_routes.';
 end % ~exist(blk_obj.hw_sys) | ~isstruct(blk_obj.hw_sys)
 
 try
-    eval(['pads = ',blk_obj.hw_sys,'.',blk_obj.io_group,';']);
+    eval(['pads = ',prefix,blk_obj.hw_sys,'.',blk_obj.io_group,';']);
 catch
     try
-        eval(['pads = ',blk_obj.hw_sys,'.',blk_obj.io_group,'_p;']);
+        eval(['pads = ',prefix,blk_obj.hw_sys,'.',blk_obj.io_group,'_p;']);
     catch
         msg = ['Undefined routing table for hardware system: ',blk_obj.hw_sys,'(',blk_obj.io_group,')'];
         result = 1;

@@ -23,15 +23,17 @@
 cursys = gcb;
 
 [hw_sys,io_group] = xps_get_hw_info(get_param(gcb,'io_group'));
+prefix = '';
 if ~exist(hw_sys) | ~isstruct(hw_sys)
     hw_routes = load_hw_routes();
+    prefix = 'hw_routes.';
 end
 
 try
-    eval(['pads = ',hw_sys,'.',io_group,';']);
+    eval(['pads = ',prefix,hw_sys,'.',io_group,';']);
 catch
     try
-        eval(['pads = ',hw_sys,'.',io_group,'_p;']);
+        eval(['pads = ',prefix,hw_sys,'.',io_group,'_p;']);
     catch
         errordlg(['Undefined routing table for hardware system: ',hw_sys,'(',io_group,')']);
     end
