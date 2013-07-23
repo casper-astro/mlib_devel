@@ -31,19 +31,20 @@
 
 function match = same_state(blk,varargin)
 
-% Validate that no parameters values are empty
+% Validate that no parameters values are empty (but empty "defaults" is OK)
 for j = 1:length(varargin)/2,
-  if isempty(varargin{j*2})
+  if isempty(varargin{j*2}) && ~strcmp('defaults', varargin{j*2-1})
     link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
         blk, blk);
     ex = MException('casper:emptyMaskParamError', ...
         'Parameter %s of %s is empty in same_state!', varargin{j*2-1}, link);
-    % We use dump_and_rethrow instead of just throw because chances are that
-    % this is running inside a mask init callback which will silently ignore
-    % the exception and abort the mask init callback.  Using dump_and_rethrow
-    % means that the user will be alerted to this error condition even if the
-    % caller ignores it.
-    dump_and_rethrow(ex);
+    % We explicitly dump and then throw the exception instead of just throwing
+    % it because chances are that this is running inside a mask init callback
+    % which will silently ignore the exception and abort the mask init
+    % callback.  Explicitly dumping it here means that the user will be alerted
+    % to this error condition even if the caller ignores it.
+    dump_exception(ex);
+    throw(ex);
   end
 end
 
