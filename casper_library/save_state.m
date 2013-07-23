@@ -38,10 +38,11 @@ if( mod(length(varargin),2) ~= 0 ) disp('save_state.m: Non-even parameter list')
 	
 struct.state = hashcell(varargin);
 struct.parameters = [];
-%construct struct of parameter values and validate that none are empty
+% Construct struct of parameter values and validate that none are empty (but
+% empty "defaults" is OK).
 for j = 1:length(varargin)/2,
 	struct.parameters = setfield( struct.parameters, varargin{j*2-1}, varargin{j*2} );
-  if isempty(varargin{j*2})
+  if isempty(varargin{j*2}) && ~strcmp('defaults', varargin{j*2-1})
     link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
         blk, blk);
     ex = MException('casper:emptyMaskParamError', ...

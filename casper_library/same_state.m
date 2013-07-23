@@ -31,9 +31,9 @@
 
 function match = same_state(blk,varargin)
 
-% Validate that no parameters values are empty
+% Validate that no parameters values are empty (but empty "defaults" is OK)
 for j = 1:length(varargin)/2,
-  if isempty(varargin{j*2})
+  if isempty(varargin{j*2}) && ~strcmp('defaults', varargin{j*2-1})
     link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
         blk, blk);
     ex = MException('casper:emptyMaskParamError', ...
