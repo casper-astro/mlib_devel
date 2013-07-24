@@ -59,5 +59,3 @@ end
 
 set_param(blk,'UserData',struct);
 set_param(blk,'UserDataPersistent','on');
-backpopulate_mask(blk,varargin{:});
-
