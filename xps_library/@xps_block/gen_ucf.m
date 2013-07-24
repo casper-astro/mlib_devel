@@ -31,6 +31,8 @@ end
 
 if ~isempty(ext_ports)
     hw_routes = load_hw_routes();
+    for n = (fieldnames(hw_routes))', eval([n{1},'=',['hw_routes.',n{1}],';']); end
+
     ext_port_names = fieldnames(ext_ports);
     for j = 1:length(ext_port_names)
         cur_ext_port = getfield(ext_ports,ext_port_names{j});

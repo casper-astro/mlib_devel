@@ -21,20 +21,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [result,msg] = drc(blk_obj, xps_objs)
+
+clog('entering xps_gpio/drc.m',{'trace', 'xps_gpio_drc_debug.m'});
 result = 0;
 msg = '';
 
-prefix = '';
+blk_obj.hw_sys
 if ~exist(blk_obj.hw_sys) | ~isstruct(blk_obj.hw_sys)
+    clog(['loading all hardware info'],{'xps_gpio_drc_debug'});
     hw_routes = load_hw_routes();
-    prefix = 'hw_routes.';
+    for n = (fieldnames(hw_routes))', eval([n{1},'=',['hw_routes.',n{1}],';']); end
 end % ~exist(blk_obj.hw_sys) | ~isstruct(blk_obj.hw_sys)
 
 try
-    eval(['pads = ',prefix,blk_obj.hw_sys,'.',blk_obj.io_group,';']);
+    eval(['pads = ',blk_obj.hw_sys,'.',blk_obj.io_group,';']);
 catch
     try
-        eval(['pads = ',prefix,blk_obj.hw_sys,'.',blk_obj.io_group,'_p;']);
+        eval(['pads = ',blk_obj.hw_sys,'.',blk_obj.io_group,'_p;']);
     catch
         msg = ['Undefined routing table for hardware system: ',blk_obj.hw_sys,'(',blk_obj.io_group,')'];
         result = 1;
@@ -131,3 +134,6 @@ for n=1:length(xps_objs)
         end % if strcmp(blk_obj.hw_sys,get(xps_objs{n},'hw_sys')) && strcmp(blk_obj.io_group,get(xps_objs{n},'io_group'))
     end % try
 end % for n=1:length(xps_objs)
+
+clog('exiting xps_gpio/drc.m',{'trace', 'xps_gpio_drc_debug.m'});
+
