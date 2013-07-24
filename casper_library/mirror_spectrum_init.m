@@ -84,7 +84,7 @@ function mirror_spectrum_init(blk, varargin)
           'explicit_period', 'on', 'period', '1', ...
           'Position', [195 122 255 148]);
 
-  reuse_block(blk, 'relational', 'xbsIndex_r4/Relational', 'mode', 'a>b', 'Position', [315 69 355 156]);
+  reuse_block(blk, 'relational', 'xbsIndex_r4/Relational', 'latency', '0', 'mode', 'a>b', 'Position', [315 69 355 156]);
   add_line(blk, 'counter/1', 'relational/1');
   add_line(blk, 'constant/1', 'relational/2');
 
