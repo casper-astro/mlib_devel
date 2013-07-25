@@ -39162,7 +39162,7 @@ Library {
 	$ObjectID		198
 	$ClassName		"Simulink.Mask"
 	Type			"dram"
-	Description		"Interface to 1GB DDR2 DIMM.\nCommands that are clocked-in are executed with an unknown delay, however, "
+	Description		"Interface to 1GB DDR2 DIMM of ROACH1 and the 2-4GB DDR3 DIMM of ROACH2.\nCommands that are clocked-in are executed with an unknown delay, however, "
 	"execution order is maintained."
 	Initialization		"dram_mask(gcb, wide_data);"
 	SelfModifiable		"on"

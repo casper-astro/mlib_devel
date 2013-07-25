@@ -1,0 +1,3 @@
+lib ddr3_async_fifo_v1_00_a ddr3_async_fifo.v        	verilog
+lib ddr3_async_fifo_v1_00_a ddr3_async_tx_fifo.v      	verilog
+lib ddr3_async_fifo_v1_00_a ddr3_async_rx_fifo.v    	verilog

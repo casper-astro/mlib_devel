@@ -1,0 +1,74 @@
+BEGIN ddr3_controller
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL = VERILOG
+OPTION IP_GROUP = USER
+OPTION STYLE = MIX
+OPTION DESC = DDR3_CONTROLLER
+
+## Bus Interface
+BUS_INTERFACE BUS = DDR3_CLK, BUS_STD = DDR3_CLK,  BUS_TYPE = TARGET
+BUS_INTERFACE BUS = DDR3_APP, BUS_STD = DDR3_APP, BUS_TYPE = TARGET
+
+## Parameters
+PARAMETER tCK = 2500, DT = REAL
+PARAMETER RANK_WIDTH = 1, DT = INTERGER
+PARAMETER BANK_WIDTH = 3, DT = INTERGER
+PARAMETER CK_WIDTH = 1, DT = INTERGER
+PARAMETER CKE_WIDTH = 1, DT = INTERGER
+PARAMETER COL_WIDTH = 10, DT = INTERGER
+PARAMETER CS_WIDTH = 1, DT = INTERGER
+PARAMETER DM_WIDTH = 9, DT = INTERGER
+PARAMETER DQ_WIDTH = 72, DT = INTERGER
+PARAMETER DQS_WIDTH = 9, DT = INTERGER
+PARAMETER ROW_WIDTH = 14, DT = INTERGER
+PARAMETER tPRDI = 1_000_000
+PARAMETER tREFI = 7800000
+PARAMETER ZQI = 512, DT = INTEGER
+PARAMETER ADDR_WIDTH = 29, DT = INTEGER
+PARAMETER DATA_WIDTH = 72, DT = INTEGER
+
+PORT phy_rdy  = "",    DIR = O #NC because this is used as an input for the cpu sniffer interface which is not implemented.
+PORT cal_fail = "",    DIR = O #NC because this is used as an input for the cpu sniffer interface which is not implemented. 
+
+## CLK BUS
+PORT clk_mem     = "ddr3_clk_mem",     BUS = DDR3_CLK, DIR = I
+PORT clk_rd_base = "ddr3_clk_rd_base", BUS = DDR3_CLK, DIR = I
+PORT rst_div2    = "ddr3_rst_div_1",   BUS = DDR3_CLK, DIR = I
+PORT clk_div2    = "ddr3_clk_app", DIR = I
+
+### DDR3 UI APP BUS
+PORT app_rd_data       = "app_rd_data",       BUS = DDR3_APP,  DIR = O,  VEC = [287:0]     
+PORT app_rd_data_end   = "app_rd_data_end",   BUS = DDR3_APP,  DIR = O
+PORT app_rd_data_valid = "app_rd_data_valid", BUS = DDR3_APP,  DIR = O
+PORT app_rdy           = "app_rdy",           BUS = DDR3_APP,  DIR = O
+PORT app_wdf_rdy       = "app_wdf_rdy",       BUS = DDR3_APP,  DIR = O
+PORT phy_rdy           = "phy_rdy",           BUS = DDR3_APP,  DIR = O
+PORT app_addr          = "app_addr",          BUS = DDR3_APP,  DIR = I,  VEC = [31:0]
+PORT app_cmd           = "app_cmd",           BUS = DDR3_APP,  DIR = I,  VEC = [2:0]
+PORT app_en            = "app_en",            BUS = DDR3_APP,  DIR = I
+PORT app_wdf_data      = "app_wdf_data",      BUS = DDR3_APP,  DIR = I,  VEC = [287:0]
+PORT app_wdf_end       = "app_wdf_end",       BUS = DDR3_APP,  DIR = I
+PORT app_wdf_mask      = "app_wdf_mask",      BUS = DDR3_APP,  DIR = I,  VEC = [35:0]
+PORT app_wdf_wren      = "app_wdf_wren",      BUS = DDR3_APP,  DIR = I    
+
+#pins - Physical output pins of the DDR3 controller.
+PORT ddr3_dq      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = IO, VEC = [71:0]
+PORT ddr3_addr    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [15:0]
+PORT ddr3_ba      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [2:0]
+PORT ddr3_ras_n   = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT ddr3_cas_n   = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT ddr3_we_n    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT ddr3_reset_n = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT ddr3_cs_n    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O#, VEC = [3:0]
+PORT ddr3_odt     = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O, VEC = [1:0]
+PORT ddr3_cke     = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O, VEC = [1:0]
+PORT ddr3_dm      = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O,  VEC = [8:0]
+PORT ddr3_dqs_p   = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = IO, VEC = [8:0]
+PORT ddr3_dqs_n   = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = IO, VEC = [8:0]
+PORT ddr3_ck_p    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+PORT ddr3_ck_n    = "", IOB_STATE=BUF, THREE_STATE=FALSE, DIR = O
+
+END
