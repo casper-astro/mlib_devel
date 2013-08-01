@@ -15,18 +15,18 @@ function resynth_netlist(dir_name, varargin)
 % changes/additions given by the OPT,VAL pairs.  Note that each OPT must start
 % with a '-'.
 
-    if mod(length(varargin), 2) ~= 0
-        error('options and values must be given in pairs');
-    end
-
     % If second argument does not start with a '-'.
     % treat it as netlist name; otherwise assume
     % netlist name is derived from dir_name.
     if length(varargin) > 0 && varargin{1}(1) ~= '-'
         netlist_name = varargin{1};
-        varargin = varargin{2:end};
+        varargin = {varargin{2:end}};
     else
         netlist_name = dir_name;
+    end
+
+    if mod(length(varargin), 2) ~= 0
+        error('options and values must be given in pairs');
     end
 
     % If netlist_name does not end with '.ngc', add it
