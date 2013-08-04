@@ -24,6 +24,9 @@
 % Mask parameters are copied over whenever possible.
 function update_casper_block(oldblk)
 
+  % Clear last dumped exception to ensure that all exceptions are shown.
+  dump_exception([]);
+
   % Check link status
   link_status = get_param(oldblk, 'StaticLinkStatus');
 
