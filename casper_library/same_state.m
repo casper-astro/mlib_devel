@@ -31,29 +31,63 @@
 
 function match = same_state(blk,varargin)
 
-% Validate that no parameters values are empty (but empty "defaults" is OK)
-for j = 1:length(varargin)/2,
-  if isempty(varargin{j*2}) && ~strcmp('defaults', varargin{j*2-1})
-    link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
-        blk, blk);
-    ex = MException('casper:emptyMaskParamError', ...
-        'Parameter %s of %s is empty in same_state!', varargin{j*2-1}, link);
-    % We explicitly dump and then throw the exception instead of just throwing
-    % it because chances are that this is running inside a mask init callback
-    % which will silently ignore the exception and abort the mask init
-    % callback.  Explicitly dumping it here means that the user will be alerted
-    % to this error condition even if the caller ignores it.
-    dump_exception(ex);
-    throw(ex);
-  end
-end
+% Many mask initialization function call same_state early on to see whether the
+% block's state has changed since the last time it was initialized.  Because
+% same_state is called so early in the initialization process, it is a good
+% place to check for illegitmately empty parameter values.  Some empty
+% parameter values are legitimate, but an empty parameter value can also be
+% indicative of an exception that was silently ignored by the mask when
+% evaluating parameter strings.  same_state now checks for empty parameter
+% values and thoroughly validates those that come from "evaulated" fields in
+% the mask.
 
+% Loop through all name/value pairs
+for j = 1:length(varargin)/2
+  param_value = varargin{2*j};
+  % If this parameter value is empty
+  if isempty(param_value)
+    param_name = varargin{j*2-1};
+    clog(sprintf('Checking empty value for parameter ''%s''...', param_name), ...
+         'same_state_debug');
+    % If it is an evaluated parameter
+    mask_vars = get_param(blk, 'MaskVariables');
+    pattern = sprintf('(^|;)%s=@', param_name);
+    if regexp(mask_vars, pattern)
+      clog('...it is an evaluated parameter', 'same_state_debug');
+      % Get its string value
+      param_str = get_param(blk, param_name);
+      % If its string value is not empty
+      if ~isempty(param_str)
+        clog(sprintf('...trying to evaluate its non-empty string: "%s"', ...
+                     param_str), 'same_state_debug');...
+        try
+          eval_val = eval_param(blk, param_name);
+          clog('...its non-empty string eval''d OK', 'same_state_debug');
+          % Raise exception if we did not also get an empty result
+          if ~isempty(eval_val)
+            link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
+                blk, blk);
+            ex = MException('casper:emptyMaskParamError', ...
+                'Parameter %s of %s is empty in same_state!', param_name, link);
+            throw(ex);
+          end
+        catch ex
+          % We really want to see this exception, even if its a duplicate of the
+          % previous exception, so reset dump_exception before calling
+          % dump_and_rethrow.
+          dump_exception([]);
+          dump_and_rethrow(ex);
+        end % try/catch
+      end % if non-empty param string
+    end % if evaluated
+    clog(sprintf('Empty value for parameter ''%s'' is OK.', param_name), ...
+         'same_state_debug');
+  end % if empty
+end % name/value pair loop
+
+% Determine whether the state has changed
 try
     match = getfield( get_param(blk,'UserData'), 'state') == hashcell(varargin);
 catch
     match = 0;
 end
-
-%forces update of mask
-%backpopulate_mask(blk,varargin{:});
-

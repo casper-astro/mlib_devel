@@ -38,23 +38,9 @@ if( mod(length(varargin),2) ~= 0 ) disp('save_state.m: Non-even parameter list')
 	
 struct.state = hashcell(varargin);
 struct.parameters = [];
-% Construct struct of parameter values and validate that none are empty (but
-% empty "defaults" is OK).
+% Construct struct of parameter values
 for j = 1:length(varargin)/2,
 	struct.parameters = setfield( struct.parameters, varargin{j*2-1}, varargin{j*2} );
-  if isempty(varargin{j*2}) && ~strcmp('defaults', varargin{j*2-1})
-    link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
-        blk, blk);
-    ex = MException('casper:emptyMaskParamError', ...
-        'Parameter %s of %s is empty in save_state!', varargin{j*2-1}, link);
-    % We explicitly dump and then throw the exception instead of just throwing
-    % it because chances are that this is running inside a mask init callback
-    % which will silently ignore the exception and abort the mask init
-    % callback.  Explicitly dumping it here means that the user will be alerted
-    % to this error condition even if the caller ignores it.
-    dump_exception(ex);
-    throw(ex);
-  end
 end
 
 set_param(blk,'UserData',struct);

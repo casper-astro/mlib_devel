@@ -29,6 +29,9 @@
 % find_system.
 function update_casper_blocks(sys, varargin)
 
+  % Clear last dumped exception to ensure that all exceptions are shown.
+  dump_exception([]);
+
   % For now, we require that sys is either an unlinked subsytem or a
   % block_diagram
   type = get_param(sys,'Type');

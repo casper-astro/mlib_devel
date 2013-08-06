@@ -20,11 +20,19 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function result = eval_param(blk,var_name)
-result = get_param(blk,var_name);
+function result = eval_param(blk,param_name)
+param_str = get_param(blk,param_name);
+
+% If it is empty or not an evaluated parameter, we're done!
+mask_vars = get_param(blk, 'MaskVariables');
+pattern = sprintf('(^|;)%s=@', param_name);
+if isempty(param_str) || ~regexp(mask_vars, pattern)
+  result = param_str;
+  return;
+end
 
 try
-    result = eval(result);
+    result = eval(param_str);
 catch
 
 	parents = {};
@@ -54,8 +62,6 @@ catch
 		end
 	end
 
-	try
-	    result = eval(result);
-	end
+	result = eval(param_str);
 
 end
