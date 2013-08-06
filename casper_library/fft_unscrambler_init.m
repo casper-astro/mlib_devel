@@ -33,6 +33,28 @@ function fft_unscrambler_init(blk, varargin)
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Make sure block is not too old for current init script
+try
+    get_param(blk, 'n_streams');
+catch
+    errmsg = sprintf(['Block %s is too old for current init script.\n', ...
+                      'Please run "update_casper_block(%s)".\n'], ...
+                      blk, blk);
+    % We are not initializing the block because it is too old.  Make sure the
+    % user knows this by using a modal error dialog.  Using a modal error
+    % dialog is a drastic step, but the situation really needs user attention.
+    errordlg(errmsg, 'FFT Block Too Old', 'modal');
+    try
+      ex = MException('casper:blockTooOldError', errmsg);
+      throw(ex);
+    catch ex
+      % We really want to dump this exception, even if its a duplicate of the
+      % previously dumped exception, so reset dump_exception before dumping.
+      dump_exception([]);
+      dump_and_rethrow(ex);
+    end
+end
+
 % Set default vararg values.
 defaults = { ...
     'n_streams', 3, ...
