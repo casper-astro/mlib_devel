@@ -143,22 +143,23 @@ function coeff_gen_init(blk, varargin)
   else,
     vlen = length(ActualCoeffs);
 
-    %get hardware platform from XSG block
+    % Get FPGA part from System Generator block
+    fpga = 'xc5v';
     try
-      xsg_blk = find_system(bdroot, 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
-      hw_sys = xps_get_hw_plat(get_param(xsg_blk{1},'hw_sys'));
+      xsg_blk = find_system(bdroot(blk), 'SearchDepth', 2, ...
+                    'MaskType','Xilinx System Generator Block');
+      fpga = get_param(xsg_blk{1},'part');
     catch,
-      clog('Could not find hardware platform - is there an XSG block in this model? Defaulting platform to ROACH.', {'coeff_gen_init_debug'});
-      warning('coeff_gen_init: Could not find hardware platform - is there an XSG block in this model? Defaulting platform to ROACH.');
-      hw_sys = 'ROACH';
+      clog('Could not find FPGA part name - is there a System Generator block in this model?  Defaulting FPGA to Virtex5.', {'coeff_gen_init_debug'});
+      warning('coeff_gen_init: Could not find FPGA part name - is there a System Generator block in this model?  Defaulting FPGA to Virtex5.');
     end %try/catch
 
     %parameters to decide optimisation parameters
-    switch hw_sys
-      case 'ROACH'
+    switch fpga(1:4)
+      case 'xc6v'
         port_width = 36; %upper limit
         bram_capacity = 2^9*36;
-      case 'ROACH2'
+      otherwise % including 'xc5v'
         port_width = 36; %upper limit
         bram_capacity = 2^9*36;
     end %switch
