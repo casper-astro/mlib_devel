@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jun 05 15:01:46 2013"
-  RTWModifiedTimeStamp	  292344939
-  ModelVersionFormat	  "1.%<AutoIncrement:20>"
+  LastModifiedDate	  "Mon Aug 05 13:46:31 2013"
+  RTWModifiedTimeStamp	  297609070
+  ModelVersionFormat	  "1.%<AutoIncrement:27>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -611,7 +611,7 @@ Library {
   }
   System {
     Name		    "casper_library_delays"
-    Location		    [144, 0, 944, 1025]
+    Location		    [104, 66, 1050, 764]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -651,7 +651,7 @@ Library {
       MaskValueString	      "17|18"
       System {
 	Name			"Datatype_Conv_Cos"
-	Location		[13, 45, 907, 1005]
+	Location		[12, 45, 1050, 1710]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1665,7 +1665,7 @@ Library {
       MaskValueString	      "17|18"
       System {
 	Name			"Datatype_Conv_Sine"
-	Location		[12, 45, 896, 900]
+	Location		[12, 45, 1040, 1605]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -2668,7 +2668,7 @@ Library {
       MaskValueString	      "1024|12|9"
       System {
 	Name			"Fine_del_sub_blk"
-	Location		[12, 45, 988, 928]
+	Location		[12, 45, 1132, 1633]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -3431,7 +3431,7 @@ Library {
       MaskValueString	      "1024|20|17|17|27"
       System {
 	Name			"Fringe_sub_blk"
-	Location		[12, 45, 1005, 1160]
+	Location		[12, 45, 1149, 1865]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4348,7 +4348,7 @@ Library {
       MaskValueString	      "sync_delay_prog|5|1|1|on"
       System {
 	Name			"data_delay_gen"
-	Location		[53, 45, 726, 737]
+	Location		[12, 45, 829, 1442]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4417,7 +4417,7 @@ Library {
       MaskValueString	      "0|2|off|off"
       System {
 	Name			"delay_bram"
-	Location		[362, 45, 1202, 810]
+	Location		[260, 45, 1244, 1515]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4464,7 +4464,7 @@ Library {
       MaskValueString	      "7|4"
       System {
 	Name			"delay_bram_en_plus"
-	Location		[69, 45, 945, 966]
+	Location		[12, 45, 1032, 1671]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4683,7 +4683,7 @@ Library {
       MaskValueString	      "7|4"
       System {
 	Name			"delay_bram_prog"
-	Location		[460, 115, 1022, 970]
+	Location		[358, 45, 1064, 1605]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5018,7 +5018,7 @@ Library {
       MaskValueString	      "4|4"
       System {
 	Name			"delay_bram_prog_dp"
-	Location		[12, 45, 644, 803]
+	Location		[12, 45, 788, 1508]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5359,7 +5359,7 @@ Library {
       MaskValueString	      "6|18|17|1|3"
       System {
 	Name			"delay_complex"
-	Location		[652, 60, 1122, 770]
+	Location		[550, 45, 1164, 1460]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5425,7 +5425,7 @@ Library {
 	  MaskValueString	  "delay|bram_latency"
 	  System {
 	    Name		    "delay1"
-	    Location		    [69, 45, 945, 966]
+	    Location		    [12, 45, 1032, 1671]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -5623,7 +5623,7 @@ Library {
 	  MaskValueString	  "delay|bram_latency"
 	  System {
 	    Name		    "delay2"
-	    Location		    [69, 45, 945, 966]
+	    Location		    [12, 45, 1032, 1671]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -5879,7 +5879,7 @@ Library {
       MaskValueString	      "0|off"
       System {
 	Name			"delay_slr"
-	Location		[509, 45, 1349, 810]
+	Location		[407, 45, 1391, 1515]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5928,7 +5928,7 @@ Library {
       MaskValueString	      "-1|off"
       System {
 	Name			"delay_srl"
-	Location		[813, 86, 1910, 757]
+	Location		[711, 45, 1952, 1421]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5977,7 +5977,7 @@ Library {
       MaskValueString	      "2|2"
       System {
 	Name			"delay_tree"
-	Location		[228, 206, 879, 1103]
+	Location		[126, 45, 921, 1647]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -6165,7 +6165,7 @@ Library {
       MaskValueString	      "1024|2|2|Dual Port"
       System {
 	Name			"delay_wideband_prog"
-	Location		[38, 45, 1385, 1411]
+	Location		[12, 45, 1503, 2116]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -6678,7 +6678,7 @@ Library {
 	  MaskValueString	  "2"
 	  System {
 	    Name		    "barrel_switcher"
-	    Location		    [2050, 45, 2689, 1169]
+	    Location		    [1948, 45, 2731, 1874]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -7931,7 +7931,7 @@ Library {
       MaskValueString	      "2|512|18|14|18|12"
       System {
 	Name			"finedelay_fstop_prog"
-	Location		[209, 45, 1041, 1116]
+	Location		[107, 45, 1083, 1821]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -9516,7 +9516,7 @@ Library {
 	  MaskValueString	  "sine and cosine|off|off|off|off|14|18|2"
 	  System {
 	    Name		    "SineCosine1"
-	    Location		    [365, 165, 959, 1015]
+	    Location		    [263, 45, 1001, 1600]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -9691,7 +9691,7 @@ Library {
 	  MaskValueString	  "sine and cosine|off|off|off|off|14|18|2"
 	  System {
 	    Name		    "SineCosine2"
-	    Location		    [365, 165, 959, 1015]
+	    Location		    [263, 45, 1001, 1600]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -10892,7 +10892,7 @@ Library {
       MaskValueString	      "2|1024|18|20|17|9|17|134217728"
       System {
 	Name			"finedelay_fstop_prog_cordic"
-	Location		[58, 45, 1149, 1177]
+	Location		[12, 45, 1247, 1882]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -11026,7 +11026,7 @@ Library {
 	  MaskValueString	  "9|20|17|ones(1,9)|9|[1  1  1  1  1  1  1  1  1]"
 	  System {
 	    Name		    "CORDIC_SINCOS1"
-	    Location		    [72, 45, 1054, 1086]
+	    Location		    [12, 45, 1138, 1791]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -11069,7 +11069,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"CORDIC Fine Angle PE"
-		Location		[12, 45, 994, 1065]
+		Location		[12, 45, 1138, 1770]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -11138,7 +11138,7 @@ Library {
 		  MaskValueString	  "0|pe_nbits|pe_binpt|atan||pipeline(1,1)"
 		  System {
 		    Name		    "CORDIC PE1"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -11632,7 +11632,7 @@ Library {
 		  MaskValueString	  "1|pe_nbits|pe_binpt|atan||pipeline(1,2)"
 		  System {
 		    Name		    "CORDIC PE2"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -12126,7 +12126,7 @@ Library {
 		  MaskValueString	  "2|pe_nbits|pe_binpt|atan||pipeline(1,3)"
 		  System {
 		    Name		    "CORDIC PE3"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -12620,7 +12620,7 @@ Library {
 		  MaskValueString	  "3|pe_nbits|pe_binpt|atan||pipeline(1,4)"
 		  System {
 		    Name		    "CORDIC PE4"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -13114,7 +13114,7 @@ Library {
 		  MaskValueString	  "4|pe_nbits|pe_binpt|atan||pipeline(1,5)"
 		  System {
 		    Name		    "CORDIC PE5"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -13608,7 +13608,7 @@ Library {
 		  MaskValueString	  "5|pe_nbits|pe_binpt|atan||pipeline(1,6)"
 		  System {
 		    Name		    "CORDIC PE6"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -14102,7 +14102,7 @@ Library {
 		  MaskValueString	  "6|pe_nbits|pe_binpt|atan||pipeline(1,7)"
 		  System {
 		    Name		    "CORDIC PE7"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -14596,7 +14596,7 @@ Library {
 		  MaskValueString	  "7|pe_nbits|pe_binpt|atan||pipeline(1,8)"
 		  System {
 		    Name		    "CORDIC PE8"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -15090,7 +15090,7 @@ Library {
 		  MaskValueString	  "8|pe_nbits|pe_binpt|atan||pipeline(1,9)"
 		  System {
 		    Name		    "CORDIC PE9"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -15925,7 +15925,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"Quadrant Correct"
-		Location		[46, 45, 942, 1084]
+		Location		[12, 45, 1052, 1789]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -16314,7 +16314,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"Quadrant Map"
-		Location		[67, 45, 917, 1167]
+		Location		[12, 45, 1006, 1872]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -16985,7 +16985,7 @@ Library {
 	  MaskValueString	  "9|20|17|ones(1,9)|9|[1  1  1  1  1  1  1  1  1]"
 	  System {
 	    Name		    "CORDIC_SINCOS2"
-	    Location		    [360, 45, 1342, 1086]
+	    Location		    [258, 45, 1384, 1791]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -17028,7 +17028,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"CORDIC Fine Angle PE"
-		Location		[360, 45, 1342, 1065]
+		Location		[258, 45, 1384, 1770]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -17097,7 +17097,7 @@ Library {
 		  MaskValueString	  "0|pe_nbits|pe_binpt|atan||pipeline(1,1)"
 		  System {
 		    Name		    "CORDIC PE1"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -17591,7 +17591,7 @@ Library {
 		  MaskValueString	  "1|pe_nbits|pe_binpt|atan||pipeline(1,2)"
 		  System {
 		    Name		    "CORDIC PE2"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -18085,7 +18085,7 @@ Library {
 		  MaskValueString	  "2|pe_nbits|pe_binpt|atan||pipeline(1,3)"
 		  System {
 		    Name		    "CORDIC PE3"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -18579,7 +18579,7 @@ Library {
 		  MaskValueString	  "3|pe_nbits|pe_binpt|atan||pipeline(1,4)"
 		  System {
 		    Name		    "CORDIC PE4"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -19073,7 +19073,7 @@ Library {
 		  MaskValueString	  "4|pe_nbits|pe_binpt|atan||pipeline(1,5)"
 		  System {
 		    Name		    "CORDIC PE5"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -19567,7 +19567,7 @@ Library {
 		  MaskValueString	  "5|pe_nbits|pe_binpt|atan||pipeline(1,6)"
 		  System {
 		    Name		    "CORDIC PE6"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -20061,7 +20061,7 @@ Library {
 		  MaskValueString	  "6|pe_nbits|pe_binpt|atan||pipeline(1,7)"
 		  System {
 		    Name		    "CORDIC PE7"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -20555,7 +20555,7 @@ Library {
 		  MaskValueString	  "7|pe_nbits|pe_binpt|atan||pipeline(1,8)"
 		  System {
 		    Name		    "CORDIC PE8"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -21049,7 +21049,7 @@ Library {
 		  MaskValueString	  "8|pe_nbits|pe_binpt|atan||pipeline(1,9)"
 		  System {
 		    Name		    "CORDIC PE9"
-		    Location		    [107, 45, 1003, 1084]
+		    Location		    [12, 45, 1052, 1789]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -21884,7 +21884,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"Quadrant Correct"
-		Location		[46, 45, 942, 1084]
+		Location		[12, 45, 1052, 1789]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -22273,7 +22273,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"Quadrant Map"
-		Location		[67, 45, 917, 1167]
+		Location		[12, 45, 1006, 1872]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -24410,7 +24410,7 @@ Library {
       MaskValueString	      "4|2"
       System {
 	Name			"partial_delay_prog"
-	Location		[12, 45, 1120, 1163]
+	Location		[12, 45, 1264, 1868]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -24930,7 +24930,7 @@ Library {
       MaskValueString	      "3"
       System {
 	Name			"pipeline"
-	Location		[298, 106, 976, 914]
+	Location		[196, 45, 1018, 1558]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -25094,7 +25094,7 @@ Library {
       MaskValueString	      "4"
       System {
 	Name			"sync_delay"
-	Location		[315, 45, 904, 1003]
+	Location		[213, 45, 946, 1708]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -25569,7 +25569,7 @@ Library {
       MaskValueString	      "4"
       System {
 	Name			"sync_delay_en"
-	Location		[315, 45, 842, 761]
+	Location		[213, 45, 884, 1466]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -26115,7 +26115,7 @@ Library {
       MaskValueString	      "4"
       System {
 	Name			"sync_delay_prog"
-	Location		[12, 45, 601, 1003]
+	Location		[12, 45, 745, 1708]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -26436,6 +26436,7 @@ Library {
       MaskEnableString	      "on"
       MaskVisibilityString    "on"
       MaskToolTipString	      "on"
+      MaskSelfModifiable      on
       MaskDisplay	      "fprintf('Z^-%d', delay)"
       MaskIconFrame	      on
       MaskIconOpaque	      on
@@ -26444,7 +26445,7 @@ Library {
       MaskValueString	      "10"
       System {
 	Name			"window_delay"
-	Location		[285, 260, 1242, 1036]
+	Location		[58, 46, 998, 717]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -26647,40 +26648,392 @@ Library {
 	  SampleTime		  "0"
 	}
 	Block {
-	  BlockType		  Reference
+	  BlockType		  SubSystem
 	  Name			  "negedge"
 	  Ports			  [1, 1]
 	  Position		  [220, 156, 255, 174]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
 	  AttributesFormatString  "falling edges\nactive high"
+	  AncestorBlock		  "casper_library_misc/edge_detect"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag26"
-	  SourceBlock		  "casper_library_misc/edge_detect"
-	  SourceType		  "edge_detect"
-	  edge			  "Falling"
-	  polarity		  "Active High"
-	  x_in			  "[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]"
-	  y_in			  "[1  1 -1 -1 -1 -1 -1 -1 -1 -1]"
-	  x_out			  "[0.6 0.68 0.68 0.76 0.76 0.84 0.84 0.92 0.92 1]"
-	  y_out			  "[-1 -1  1  1 -1 -1 -1 -1 -1 -1]"
+	  MinAlgLoopOccurrences	  off
+	  PropExecContextOutsideSubsystem off
+	  RTWSystemCode		  "Auto"
+	  FunctionWithSeparateData off
+	  Opaque		  off
+	  MaskHideContents	  off
+	  MaskType		  "edge_detect"
+	  MaskDescription	  "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or bo"
+	  "th)."
+	  MaskHelp		  "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling, or both). "
+	  " Latency is zero."
+	  MaskPromptString	  "Edge Type|Output Polarity|Input X Positions|Input Y Positions|Output X Positions|Output Y Posit"
+	  "ions"
+	  MaskStyleString	  "popup(Rising|Falling|Both),popup(Active High|Active Low),edit,edit,edit,edit"
+	  MaskVariables		  "edge=&1;polarity=&2;x_in=&3;y_in=&4;x_out=&5;y_out=&6;"
+	  MaskTunableValueString  "on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||"
+	  MaskEnableString	  "on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,off,off,off,off"
+	  MaskToolTipString	  "on,on,on,on,on,on"
+	  MaskInitialization	  "edge_detect_init(gcb,...\n    'edge',edge,...\n    'polarity',polarity,...\n    'x_in',x_in,."
+	  "..\n    'x_out',x_out,...\n    'y_in',y_in,...\n    'y_out',y_out);\n\nx_in_num=str2num(getfield(getfield(get_param"
+	  "(gcb,'UserData'),'parameters'),'x_in'));\nx_out_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters"
+	  "'),'x_out'));\ny_in_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'y_in'));\ny_out_num=str2"
+	  "num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'y_out'));"
+	  MaskSelfModifiable	  on
+	  MaskDisplay		  "plot(x_in_num,0.5+y_in_num*0.2);\nplot(x_out_num,0.5+y_out_num*0.2);"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "normalized"
+	  MaskValueString	  "Falling|Active High|[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]|[1  1 -1 -1 -1 -1 -1 -1 -1 -"
+	  "1]|[0.6 0.68 0.68 0.76 0.76 0.84 0.84 0.92 0.92 1]|[-1 -1  1  1 -1 -1 -1 -1 -1 -1]"
+	  System {
+	    Name		    "negedge"
+	    Location		    [58, 46, 998, 717]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "A4"
+	    PaperUnits		    "centimeters"
+	    TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
+	    TiledPageScale	    1
+	    ShowPageBoundaries	    off
+	    ZoomFactor		    "100"
+	    Block {
+	      BlockType		      Inport
+	      Name		      "in"
+	      Position		      [50, 53, 80, 67]
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Delay"
+	      Ports		      [1, 1]
+	      Position		      [180, 72, 225, 88]
+	      ShowName		      off
+	      SourceBlock	      "xbsIndex_r4/Delay"
+	      SourceType	      "Xilinx Delay Block"
+	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
+	      "p."
+	      rst		      off
+	      infoeditControl	      "Selection of Reset will increase slice count due to use of real FFs and instead of SRLs"
+	      en		      off
+	      latency		      "1"
+	      dbl_ovrd		      off
+	      reg_retiming	      off
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "delay"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "45,16,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 16 16 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 16 16 0 ]);\npatch([17.55 20.44 22.44 24.44 26.44 22.44 19.55 17.55 ],[1"
+	      "0.22 10.22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([19.55 22.44 20.44 17.55 19.55 ],[8.22 8.22 "
+	      "10.22 10.22 8.22 ],[0.931 0.946 0.973 ]);\npatch([17.55 20.44 22.44 19.55 17.55 ],[6.22 6.22 8.22 8.22 6.22 ],["
+	      "1 1 1 ]);\npatch([19.55 26.44 24.44 22.44 20.44 17.55 19.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.94"
+	      "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('bla"
+	      "ck');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Inverter"
+	      Ports		      [1, 1]
+	      Position		      [180, 52, 225, 68]
+	      ShowName		      off
+	      SourceBlock	      "xbsIndex_r4/Inverter"
+	      SourceType	      "Xilinx Inverter Block"
+	      infoedit		      "Bitwise logical negation (one's complement) operator."
+	      en		      off
+	      latency		      "0"
+	      dbl_ovrd		      off
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "inv"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "45,16,1,1,white,blue,0,267846e5,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 16 16 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 16 16 0 ]);\npatch([17.55 20.44 22.44 24.44 26.44 22.44 19.55 17.55 ],[1"
+	      "0.22 10.22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([19.55 22.44 20.44 17.55 19.55 ],[8.22 8.22 "
+	      "10.22 10.22 8.22 ],[0.931 0.946 0.973 ]);\npatch([17.55 20.44 22.44 19.55 17.55 ],[6.22 6.22 8.22 8.22 6.22 ],["
+	      "1 1 1 ]);\npatch([19.55 26.44 24.44 22.44 20.44 17.55 19.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.94"
+	      "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('bla"
+	      "ck');disp('not');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "edge_op"
+	      Ports		      [2, 1]
+	      Position		      [275, 48, 320, 92]
+	      SourceBlock	      "xbsIndex_r4/Logical"
+	      SourceType	      "Xilinx Logical Block Block"
+	      logical_function	      "AND"
+	      inputs		      "2"
+	      en		      off
+	      latency		      "0"
+	      precision		      "Full"
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "2"
+	      align_bp		      on
+	      dbl_ovrd		      off
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "logical"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "45,44,2,1,white,blue,0,83a4b621,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 44 44 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 44 44 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[28."
+	      "66 28.66 34.66 28.66 34.66 34.66 34.66 28.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[22.66 22.66 2"
+	      "8.66 28.66 22.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[16.66 16.66 22.66 22.66 16.66 "
+	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[10.66 10.66 16.66 10.66 16.66 16.66 10.66 ],[0"
+	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\n"
+	      "color('black');disp('and');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "out"
+	      Position		      [380, 63, 410, 77]
+	      IconDisplay	      "Port number"
+	    }
+	    Line {
+	      SrcBlock		      "Inverter"
+	      SrcPort		      1
+	      DstBlock		      "edge_op"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "edge_op"
+	      SrcPort		      1
+	      DstBlock		      "out"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "in"
+	      SrcPort		      1
+	      Points		      [40, 0]
+	      Branch {
+		DstBlock		"Inverter"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 20]
+		DstBlock		"Delay"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Delay"
+	      SrcPort		      1
+	      DstBlock		      "edge_op"
+	      DstPort		      2
+	    }
+	  }
 	}
 	Block {
-	  BlockType		  Reference
+	  BlockType		  SubSystem
 	  Name			  "posedge3"
 	  Ports			  [1, 1]
 	  Position		  [215, 61, 250, 79]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
 	  AttributesFormatString  "rising edges\nactive high"
+	  AncestorBlock		  "casper_library_misc/edge_detect"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag27"
-	  SourceBlock		  "casper_library_misc/edge_detect"
-	  SourceType		  "edge_detect"
-	  edge			  "Rising"
-	  polarity		  "Active High"
-	  x_in			  "[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]"
-	  y_in			  "[-1 -1  1  1  1  1  1  1  1  1]"
-	  x_out			  "[0.6 0.68 0.68 0.76 0.76 0.84 0.84 0.92 0.92 1]"
-	  y_out			  "[-1 -1  1  1 -1 -1 -1 -1 -1 -1]"
+	  MinAlgLoopOccurrences	  off
+	  PropExecContextOutsideSubsystem off
+	  RTWSystemCode		  "Auto"
+	  FunctionWithSeparateData off
+	  Opaque		  off
+	  MaskHideContents	  off
+	  MaskType		  "edge_detect"
+	  MaskDescription	  "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or bo"
+	  "th)."
+	  MaskHelp		  "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling, or both). "
+	  " Latency is zero."
+	  MaskPromptString	  "Edge Type|Output Polarity|Input X Positions|Input Y Positions|Output X Positions|Output Y Posit"
+	  "ions"
+	  MaskStyleString	  "popup(Rising|Falling|Both),popup(Active High|Active Low),edit,edit,edit,edit"
+	  MaskVariables		  "edge=&1;polarity=&2;x_in=&3;y_in=&4;x_out=&5;y_out=&6;"
+	  MaskTunableValueString  "on,on,on,on,on,on"
+	  MaskCallbackString	  "|||||"
+	  MaskEnableString	  "on,on,on,on,on,on"
+	  MaskVisibilityString	  "on,on,off,off,off,off"
+	  MaskToolTipString	  "on,on,on,on,on,on"
+	  MaskInitialization	  "edge_detect_init(gcb,...\n    'edge',edge,...\n    'polarity',polarity,...\n    'x_in',x_in,."
+	  "..\n    'x_out',x_out,...\n    'y_in',y_in,...\n    'y_out',y_out);\n\nx_in_num=str2num(getfield(getfield(get_param"
+	  "(gcb,'UserData'),'parameters'),'x_in'));\nx_out_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters"
+	  "'),'x_out'));\ny_in_num=str2num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'y_in'));\ny_out_num=str2"
+	  "num(getfield(getfield(get_param(gcb,'UserData'),'parameters'),'y_out'));"
+	  MaskSelfModifiable	  on
+	  MaskDisplay		  "plot(x_in_num,0.5+y_in_num*0.2);\nplot(x_out_num,0.5+y_out_num*0.2);"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "normalized"
+	  MaskValueString	  "Rising|Active High|[0 0.08 0.08 0.16 0.16 0.24 0.24 0.32 0.32 0.4]|[-1 -1  1  1  1  1  1  1  1  "
+	  "1]|[0.6 0.68 0.68 0.76 0.76 0.84 0.84 0.92 0.92 1]|[-1 -1  1  1 -1 -1 -1 -1 -1 -1]"
+	  System {
+	    Name		    "posedge3"
+	    Location		    [58, 46, 998, 717]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "A4"
+	    PaperUnits		    "centimeters"
+	    TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
+	    TiledPageScale	    1
+	    ShowPageBoundaries	    off
+	    ZoomFactor		    "100"
+	    Block {
+	      BlockType		      Inport
+	      Name		      "in"
+	      Position		      [50, 53, 80, 67]
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Delay"
+	      Ports		      [1, 1]
+	      Position		      [180, 72, 225, 88]
+	      ShowName		      off
+	      SourceBlock	      "xbsIndex_r4/Delay"
+	      SourceType	      "Xilinx Delay Block"
+	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
+	      "p."
+	      rst		      off
+	      infoeditControl	      "Selection of Reset will increase slice count due to use of real FFs and instead of SRLs"
+	      en		      off
+	      latency		      "1"
+	      dbl_ovrd		      off
+	      reg_retiming	      off
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "delay"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "45,16,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 16 16 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 16 16 0 ]);\npatch([17.55 20.44 22.44 24.44 26.44 22.44 19.55 17.55 ],[1"
+	      "0.22 10.22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([19.55 22.44 20.44 17.55 19.55 ],[8.22 8.22 "
+	      "10.22 10.22 8.22 ],[0.931 0.946 0.973 ]);\npatch([17.55 20.44 22.44 19.55 17.55 ],[6.22 6.22 8.22 8.22 6.22 ],["
+	      "1 1 1 ]);\npatch([19.55 26.44 24.44 22.44 20.44 17.55 19.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.94"
+	      "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('bla"
+	      "ck');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "Inverter"
+	      Ports		      [1, 1]
+	      Position		      [180, 52, 225, 68]
+	      ShowName		      off
+	      SourceBlock	      "xbsIndex_r4/Inverter"
+	      SourceType	      "Xilinx Inverter Block"
+	      infoedit		      "Bitwise logical negation (one's complement) operator."
+	      en		      off
+	      latency		      "0"
+	      dbl_ovrd		      off
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "inv"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "45,16,1,1,white,blue,0,267846e5,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 16 16 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 16 16 0 ]);\npatch([17.55 20.44 22.44 24.44 26.44 22.44 19.55 17.55 ],[1"
+	      "0.22 10.22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([19.55 22.44 20.44 17.55 19.55 ],[8.22 8.22 "
+	      "10.22 10.22 8.22 ],[0.931 0.946 0.973 ]);\npatch([17.55 20.44 22.44 19.55 17.55 ],[6.22 6.22 8.22 8.22 6.22 ],["
+	      "1 1 1 ]);\npatch([19.55 26.44 24.44 22.44 20.44 17.55 19.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.94"
+	      "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('bla"
+	      "ck');disp('not');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "edge_op"
+	      Ports		      [2, 1]
+	      Position		      [275, 48, 320, 92]
+	      SourceBlock	      "xbsIndex_r4/Logical"
+	      SourceType	      "Xilinx Logical Block Block"
+	      logical_function	      "NOR"
+	      inputs		      "2"
+	      en		      off
+	      latency		      "0"
+	      precision		      "Full"
+	      arith_type	      "Unsigned"
+	      n_bits		      "8"
+	      bin_pt		      "2"
+	      align_bp		      on
+	      dbl_ovrd		      off
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "-1,-1,-1,-1"
+	      block_type	      "logical"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "45,44,2,1,white,blue,0,affe8783,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 44 44 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 44 44 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[28."
+	      "66 28.66 34.66 28.66 34.66 34.66 34.66 28.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[22.66 22.66 2"
+	      "8.66 28.66 22.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[16.66 16.66 22.66 22.66 16.66 "
+	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[10.66 10.66 16.66 10.66 16.66 16.66 10.66 ],[0"
+	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\n"
+	      "color('black');disp('nor');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "out"
+	      Position		      [380, 63, 410, 77]
+	      IconDisplay	      "Port number"
+	    }
+	    Line {
+	      SrcBlock		      "Inverter"
+	      SrcPort		      1
+	      DstBlock		      "edge_op"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "edge_op"
+	      SrcPort		      1
+	      DstBlock		      "out"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "in"
+	      SrcPort		      1
+	      Points		      [40, 0]
+	      Branch {
+		DstBlock		"Inverter"
+		DstPort			1
+	      }
+	      Branch {
+		Points			[0, 20]
+		DstBlock		"Delay"
+		DstPort			1
+	      }
+	    }
+	    Line {
+	      SrcBlock		      "Delay"
+	      SrcPort		      1
+	      DstBlock		      "edge_op"
+	      DstPort		      2
+	    }
+	  }
 	}
 	Block {
 	  BlockType		  Reference
@@ -26688,6 +27041,17 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [310, 49, 350, 91]
 	  LinkData {
+	    BlockName		    "Constant2"
+	    DialogParameters {
+	      sg_icon_stat	      "45,26,0,1,white,blue,0,350ae870,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
+	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
+	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
+	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
+	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
+	      "text');\ncolor('black');port_label('output',1,'9');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "Constant3"
 	    DialogParameters {
 	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
@@ -26721,6 +27085,17 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [310, 144, 350, 186]
 	  LinkData {
+	    BlockName		    "Constant2"
+	    DialogParameters {
+	      sg_icon_stat	      "45,26,0,1,white,blue,0,350ae870,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
+	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
+	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
+	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
+	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
+	      "text');\ncolor('black');port_label('output',1,'9');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "Constant3"
 	    DialogParameters {
 	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
@@ -26953,13 +27328,13 @@ MatData {
   DataRecord {
     Tag			    DataTag6
     Data		    "  %)30     .    B (   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $  H0[08.    ^ $   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %?E  $.    ^ $   "
     "8    (     @         %    \"     $    !     0         %  0 \"0    $    ;    9&5F875L=', 1&5L87E,96X 87-Y;F,       "
     "     .    ( $   8    (     0         %    \"     $    $     0         .    .     8    (    !          %    \"     "
     "$    (     0         0    \"    $1E;&%Y3&5N#@   #@    &    \"     8         !0    @    !     0    $         \"0   "
-    " @               X    X    !@    @    $          4    (     0    4    !         !     %    87-Y;F,    .    ,     8"
-    "    (    !          %    \"     $    \"     0         0  ( ;VX   X    X    !@    @    &          4    (     0    $"
-    "    !          D    (            \\+\\.    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
+    " @           #P/PX    X    !@    @    $          4    (     0    4    !         !     %    87-Y;F,    .    ,     8"
+    "    (    !          %    \"     $    #     0         0  , ;V9F  X    X    !@    @    &          4    (     0    $ "
+    "   !          D    (            \\+\\.    ,     8    (    !          %    \"     $    #     0         0  , ;V9F  "
   }
   DataRecord {
     Tag			    DataTag7
