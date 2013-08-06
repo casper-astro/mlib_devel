@@ -470,6 +470,7 @@ BEGIN roach_infrastructure
  PORT idelay_rst = power_on_rst
  PORT idelay_rdy = idelay_rdy
  PORT op_power_on_rst  = power_on_rst
+ PORT clk_100 = clk_100
 END
 
 BEGIN reset_block

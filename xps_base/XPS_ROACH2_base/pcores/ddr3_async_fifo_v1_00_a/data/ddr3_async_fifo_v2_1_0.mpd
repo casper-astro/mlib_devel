@@ -1,0 +1,51 @@
+###################################################################
+##
+## Name     : ddr3_async_fifo
+##
+###################################################################
+
+BEGIN ddr3_async_fifo
+
+## Peripheral Options
+OPTION IPTYPE      = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL         = VERILOG
+OPTION STYLE       = MIX
+OPTION ARCH_SUPPORT_MAP = (OTHERS=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
+
+
+## Bus Interfaces
+BUS_INTERFACE BUS 	= DDR3_APP,	BUS_STD = DDR3_APP, 	BUS_TYPE = INITIATOR 
+BUS_INTERFACE BUS 	= DDR3_UI,   	BUS_STD = DDR3_UI,   	BUS_TYPE = TARGET
+
+## Clock signals
+PORT ui_app_clk    	= "",          		DIR = I
+PORT ddr3_app_clk	= "ddr3_clk_app",  	DIR = I
+
+### DDR3 UI APP BUS
+PORT app_rd_data       = "app_rd_data",       	BUS = DDR3_APP,  DIR = I,  VEC = [287:0]     
+PORT app_rd_data_end   = "app_rd_data_end",   	BUS = DDR3_APP,  DIR = I
+PORT app_rd_data_valid = "app_rd_data_valid", 	BUS = DDR3_APP,  DIR = I
+PORT app_rdy           = "app_rdy",           	BUS = DDR3_APP,  DIR = I
+PORT app_wdf_rdy       = "app_wdf_rdy",       	BUS = DDR3_APP,  DIR = I
+PORT phy_rdy           = "",	     				 DIR = I
+PORT app_addr          = "app_addr",          	BUS = DDR3_APP,  DIR = O,  VEC = [31:0]
+PORT app_cmd           = "app_cmd",           	BUS = DDR3_APP,  DIR = O,  VEC = [2:0]
+PORT app_en            = "app_en",            	BUS = DDR3_APP,  DIR = O
+PORT app_wdf_data      = "app_wdf_data",      	BUS = DDR3_APP,  DIR = O,  VEC = [287:0]
+PORT app_wdf_end       = "app_wdf_end",       	BUS = DDR3_APP,  DIR = O
+PORT app_wdf_mask      = "app_wdf_mask",      	BUS = DDR3_APP,  DIR = O,  VEC = [35:0]
+PORT app_wdf_wren      = "app_wdf_wren",      	BUS = DDR3_APP,  DIR = O    
+
+## Memory simulink interface
+PORT ui_rd_data	       = Mem_Rd_Dout,   	BUS = DDR3_UI,  DIR = O,  VEC = [287:0]     
+PORT ui_rd_valid       = Mem_Rd_Valid,  	BUS = DDR3_UI,  DIR = O
+PORT ui_cmd_ack        = Mem_Cmd_Ack,   	BUS = DDR3_UI,  DIR = O
+PORT ui_rst	       = "", 					DIR = I
+PORT ui_addr           = Mem_Cmd_Address,      	BUS = DDR3_UI,  DIR = I,  VEC = [31:0]
+PORT ui_cmd            = Mem_Cmd_RNW,       	BUS = DDR3_UI,  DIR = I 
+PORT ui_wr_data        = Mem_Wr_Din,   		BUS = DDR3_UI,  DIR = I,  VEC = [287:0]
+PORT ui_wr_mask        = Mem_Wr_BE,   		BUS = DDR3_UI,  DIR = I,  VEC = [35:0]
+PORT ui_wr_en          = Mem_Cmd_Valid,     	BUS = DDR3_UI,  DIR = I    
+
+END

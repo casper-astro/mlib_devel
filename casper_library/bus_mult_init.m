@@ -9,6 +9,7 @@ function bus_mult_init(blk, varargin)
     'overflow', 0,      'quantization', 0,   'misc', 'on', ...
     'mult_latency', 3,  'add_latency', 1 , 'conv_latency', 1, ...
     'max_fanout', 2, 'fan_latency', 0, ...
+    'multiplier_implementation', 'behavioral HDL', ... 'embedded multiplier core' 'standard core' ...
   };  
   
   check_mask_type(blk, 'bus_mult');
@@ -26,25 +27,26 @@ function bus_mult_init(blk, varargin)
   mult_w = 50; mult_d = 60;
   del_w = 30; del_d = 20;
 
-  n_bits_a     = get_var('n_bits_a', 'defaults', defaults, varargin{:});
-  bin_pt_a     = get_var('bin_pt_a', 'defaults', defaults, varargin{:});
-  type_a       = get_var('type_a', 'defaults', defaults, varargin{:});
-  cmplx_a      = get_var('cmplx_a', 'defaults', defaults, varargin{:});
-  n_bits_b     = get_var('n_bits_b', 'defaults', defaults, varargin{:});
-  bin_pt_b     = get_var('bin_pt_b', 'defaults', defaults, varargin{:});
-  type_b       = get_var('type_b', 'defaults', defaults, varargin{:});
-  cmplx_b      = get_var('cmplx_b', 'defaults', defaults, varargin{:});
-  n_bits_out   = get_var('n_bits_out', 'defaults', defaults, varargin{:});
-  bin_pt_out   = get_var('bin_pt_out', 'defaults', defaults, varargin{:});
-  type_out     = get_var('type_out', 'defaults', defaults, varargin{:});
-  overflow     = get_var('overflow', 'defaults', defaults, varargin{:});
-  quantization = get_var('quantization', 'defaults', defaults, varargin{:});
-  mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
-  add_latency  = get_var('add_latency', 'defaults', defaults, varargin{:});
-  conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
-  max_fanout   = get_var('max_fanout', 'defaults', defaults, varargin{:});
-  fan_latency  = get_var('fan_latency', 'defaults', defaults, varargin{:});
-  misc         = get_var('misc', 'defaults', defaults, varargin{:});
+  n_bits_a                   = get_var('n_bits_a', 'defaults', defaults, varargin{:});
+  bin_pt_a                   = get_var('bin_pt_a', 'defaults', defaults, varargin{:});
+  type_a                     = get_var('type_a', 'defaults', defaults, varargin{:});
+  cmplx_a                    = get_var('cmplx_a', 'defaults', defaults, varargin{:});
+  n_bits_b                   = get_var('n_bits_b', 'defaults', defaults, varargin{:});
+  bin_pt_b                   = get_var('bin_pt_b', 'defaults', defaults, varargin{:});
+  type_b                     = get_var('type_b', 'defaults', defaults, varargin{:});
+  cmplx_b                    = get_var('cmplx_b', 'defaults', defaults, varargin{:});
+  n_bits_out                 = get_var('n_bits_out', 'defaults', defaults, varargin{:});
+  bin_pt_out                 = get_var('bin_pt_out', 'defaults', defaults, varargin{:});
+  type_out                   = get_var('type_out', 'defaults', defaults, varargin{:});
+  overflow                   = get_var('overflow', 'defaults', defaults, varargin{:});
+  quantization               = get_var('quantization', 'defaults', defaults, varargin{:});
+  mult_latency               = get_var('mult_latency', 'defaults', defaults, varargin{:});
+  add_latency                = get_var('add_latency', 'defaults', defaults, varargin{:});
+  conv_latency               = get_var('conv_latency', 'defaults', defaults, varargin{:});
+  max_fanout                 = get_var('max_fanout', 'defaults', defaults, varargin{:});
+  fan_latency                = get_var('fan_latency', 'defaults', defaults, varargin{:});
+  misc                       = get_var('misc', 'defaults', defaults, varargin{:});
+  multiplier_implementation  = get_var('multiplier_implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
@@ -358,13 +360,28 @@ function bus_mult_init(blk, varargin)
         'n_bits_b', num2str(n_bits_b(b_src(index))), 'bin_pt_b', num2str(bin_pt_b(b_src(index))), ...
         'n_bits_ab', num2str(n_bits_out(index)), 'bin_pt_ab', num2str(bin_pt_out(index)), ...
         'quantization', quant, 'overflow', of, 'conjugated', 'off', ...
+        'multiplier_implementation', multiplier_implementation, ...
         'mult_latency', 'mult_latency', 'add_latency', 'add_latency', 'conv_latency', 'conv_latency', ...
         'Position', [xpos-mult_w/2 ypos_tmp xpos+mult_w/2 ypos_tmp+mult_d-20] );
-    else,                                              %standard multiplication 
+    else,  
+                                            %standard multiplication 
+      if strcmp(multiplier_implementation, 'behavioral HDL'),
+        use_behavioral_HDL = 'on';
+        use_embedded = 'off';
+      else
+        use_behavioral_HDL = 'off';
+        if strcmp(multiplier_implementation, 'embedded multiplier core'),
+          use_embedded = 'on';
+        elseif strcmp(multiplier_implementation, 'standard core'),
+          use_embedded = 'off';
+        else,
+        end
+      end
       reuse_block(blk, mult_name, 'xbsIndex_r4/Mult', ...
         'latency', 'mult_latency', 'precision', 'User Defined', ...
         'n_bits', num2str(n_bits_out(index)), 'bin_pt', num2str(bin_pt_out(index)), ...  
         'arith_type', arith_type, 'quantization', quant, 'overflow', of, ... 
+        'use_behavioral_HDL', use_behavioral_HDL, 'use_embedded', use_embedded, ...
         'Position', [xpos-mult_w/2 ypos_tmp xpos+mult_w/2 ypos_tmp+mult_d-20]);
     end
     ypos_tmp = ypos_tmp + mult_d;

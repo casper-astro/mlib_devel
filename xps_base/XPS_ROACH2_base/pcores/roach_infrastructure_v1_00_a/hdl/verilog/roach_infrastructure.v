@@ -17,7 +17,8 @@ module roach_infrastructure #(
     output idelay_rdy,
     input  aux_clk_n,  aux_clk_p,
     output aux_clk,    aux_clk90,   aux_clk180,   aux_clk270,
-    output aux_clk2x,  aux_clk2x90, aux_clk2x180, aux_clk2x270
+    output aux_clk2x,  aux_clk2x90, aux_clk2x180, aux_clk2x270,
+    output clk_100, clk_200
   );
 
 
@@ -67,6 +68,11 @@ module roach_infrastructure #(
 
   wire  mmcm_reset;
 
+ /* 200MHz clock for idelayctrl */
+  wire clk_200_mmcm;
+ /* 100MHz clock for ddr3 clk */
+ //wire clk_100_mmcm;
+
   // sys_clk diff buffer
   IBUFGDS #(
     .IOSTANDARD ("LVDS_25"),
@@ -93,7 +99,7 @@ module roach_infrastructure #(
     .CLKFBOUT_MULT_F    (MULTIPLY), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
     .CLKFBOUT_PHASE     (0.0),
     .CLKIN1_PERIOD      (1000.0/100),
-    .CLKOUT0_DIVIDE_F   (1), // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKOUT0_DIVIDE_F   (MULTIPLY/DIVCLK/2.0), // Divide amount for CLKOUT0 (1.000-128.000).
     .CLKOUT0_DUTY_CYCLE (0.5),
     .CLKOUT1_DUTY_CYCLE (0.5),
     .CLKOUT2_DUTY_CYCLE (0.5),
@@ -112,8 +118,8 @@ module roach_infrastructure #(
     .CLKOUT2_DIVIDE     (DIVIDE),
     .CLKOUT3_DIVIDE     (DIVIDE),
     .CLKOUT4_DIVIDE     (DIVIDE),
-    .CLKOUT5_DIVIDE     (MULTIPLY/DIVCLK/2),
-    .CLKOUT6_DIVIDE     (),
+    .CLKOUT5_DIVIDE     (DIVIDE/2),//(MULTIPLY/DIVCLK/2)
+    .CLKOUT6_DIVIDE     (MULTIPLY/DIVCLK),
     .CLKOUT4_CASCADE    ("FALSE"),
     .CLOCK_HOLD         ("FALSE"),
     .DIVCLK_DIVIDE      (DIVCLK), // Master division value (1-80)
@@ -125,14 +131,14 @@ module roach_infrastructure #(
     .CLKFBOUT  (sys_clk_fb_int),
     .CLKFBOUTB (),
     
-    .CLKOUT0   (),
+    .CLKOUT0   (clk_200_mmcm),
     .CLKOUT0B  (),
     .CLKOUT1   (sys_clk_mmcm),
     .CLKOUT2   (sys_clk90_mmcm),
     .CLKOUT3   (sys_clk180_mmcm),
     .CLKOUT4   (sys_clk270_mmcm),
-    .CLKOUT5   (sys_clk2x_mmcm),
-    .CLKOUT6   (),
+    .CLKOUT5   (),//(sys_clk2x_mmcm),
+    .CLKOUT6   (clk_100),//(ddr3_clk),
     .LOCKED    (sys_clk_mmcm_locked),
     
     .PWRDWN    (1'b0),
@@ -144,11 +150,25 @@ module roach_infrastructure #(
     .O({sys_clk,      sys_clk90,      sys_clk_fb    , sys_clk180     , sys_clk270})
   );
 
+//  BUFG bufg_sys_clk[3:0](
+//    .I({sys_clk_mmcm, sys_clk90_mmcm, sys_clk180_mmcm, sys_clk270_mmcm}),
+//    .O({sys_clk,      sys_clk90, sys_clk180     , sys_clk270})
+//  );
+
   BUFG bufg_sys_clk2x[3:0](
     .I({sys_clk2x_mmcm, sys_clk2x90_mmcm, sys_clk2x180_mmcm, sys_clk2x270_mmcm}),
     .O({sys_clk2x,      sys_clk2x90     , sys_clk2x180     , sys_clk2x270})
   );
   
+//  BUFG bufg_clk_100(
+//    .I(clk_100_mmcm),
+//    .O(clk_100)
+//  );
+
+ BUFG bufg_clk_200(
+    .I(clk_200_mmcm),
+    .O(clk_200)
+  );
 
   MMCM_BASE #(
     .BANDWIDTH          (CLK_HIGH_LOW), // Jitter programming ("HIGH","LOW","OPTIMIZED")
@@ -170,12 +190,12 @@ module roach_infrastructure #(
     .CLKOUT4_PHASE      (0.0),
     .CLKOUT5_PHASE      (0.0),
     .CLKOUT6_PHASE      (0.0),
-    .CLKOUT1_DIVIDE     (5), //THIS IS THE DIVISOR
-    .CLKOUT2_DIVIDE     (5),
-    .CLKOUT3_DIVIDE     (5),
-    .CLKOUT4_DIVIDE     (5),
-    .CLKOUT5_DIVIDE     (5),
-    .CLKOUT6_DIVIDE     (),
+    .CLKOUT1_DIVIDE     (6), //THIS IS THE DIVISOR
+    .CLKOUT2_DIVIDE     (6),
+    .CLKOUT3_DIVIDE     (6),
+    .CLKOUT4_DIVIDE     (6),
+    .CLKOUT5_DIVIDE     (6),
+    .CLKOUT6_DIVIDE     (6),
     .CLKOUT4_CASCADE    ("FALSE"),
     .CLOCK_HOLD         ("FALSE"),
     .DIVCLK_DIVIDE      (1), // Master division value (1-80)
@@ -197,7 +217,7 @@ module roach_infrastructure #(
     .CLKOUT3B  (),
     .CLKOUT4   (),
     .CLKOUT5   (),
-    .CLKOUT6   (),
+    .CLKOUT6   (aux_ddr3_clk),
     .LOCKED    (aux_clk_mmcm_locked),
     
     .PWRDWN    (1'b0),
@@ -228,7 +248,7 @@ module roach_infrastructure #(
   );*/
  
   IDELAYCTRL idelayctrl_inst(
-    .REFCLK (sys_clk2x),
+    .REFCLK (clk_200),
     .RST    (idelay_rst),
     .RDY    (idelay_rdy)
   );
