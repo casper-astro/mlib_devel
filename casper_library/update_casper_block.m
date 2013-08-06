@@ -88,6 +88,14 @@ function update_casper_block(oldblk)
     load_system(srcblk_bd);
   end
 
+  % Get info about oldblk for possible warning messages
+  type = get_param(oldblk, 'MaskType');
+  if ~isempty(type)
+    type = [type ' '];
+  end
+  link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
+      oldblk, oldblk);
+
   % Get old and new mask names
   oldblk_mask_names = get_param(oldblk, 'MaskNames');
   newblk_mask_names = get_param(srcblk, 'MaskNames');
@@ -105,14 +113,35 @@ function update_casper_block(oldblk)
       newblk_params{end+1} = newblk_mask_names{k};
       newblk_params{end+1} = get_param(oldblk, newblk_mask_names{k});
     else
-      type = get_param(oldblk, 'MaskType');
-      if ~isempty(type)
-        type = [type ' '];
-      end
-      link = sprintf('<a href="matlab:hilite_system(''%s'')">%s</a>', ...
-          oldblk, oldblk);
-      warning('old %sblock %s did not have mask parameter %s', ...
+      % Build warning message
+      warnmsg = sprintf('old %sblock %s did not have mask parameter %s', ...
           type, link, newblk_mask_names{k});
+
+      % Special handling for some special parameters
+      switch newblk_mask_names{k}
+      case 'n_streams'
+        % Newish FFT parameter.  Did not exist in old versions, so set to 1
+        % which is the effective value for old versions.  Current default of 0
+        % is special value for library use only.
+        warnmsg = sprintf('%s - setting to ''1''', warnmsg);
+        newblk_params{end+1} = newblk_mask_names{k};
+        newblk_params{end+1} = '1';
+      % Newish FFT parameter.  Did not exist in old versions, so set to
+      % "(input_bit_width)-1".
+      case 'bin_pt_in'
+        % Setup newval string value
+        newval = sprintf('(%s)-1', get_param(oldblk, 'input_bit_width'));
+        % Try to eval numeric newval
+        try
+          newval = num2str(eval_param(oldblk, 'input_bit_width')-1);
+        end
+        warnmsg = sprintf('%s - setting to ''%s''', warnmsg, newval);
+        newblk_params{end+1} = newblk_mask_names{k};
+        newblk_params{end+1} = newval;
+      end
+
+      % Issue warning message
+      warning(warnmsg);
     end
   end
 
