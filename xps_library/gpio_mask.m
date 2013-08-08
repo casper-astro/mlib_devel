@@ -24,8 +24,7 @@ cursys = gcb;
 
 [hw_sys,io_group] = xps_get_hw_info(get_param(gcb,'io_group'));
 if ~exist(hw_sys) | ~isstruct(hw_sys)
-    hw_routes = load_hw_routes();
-    for n = (fieldnames(hw_routes))', eval([n{1},'=',['hw_routes.',n{1}],';']); end
+    load_hw_routes();
 end
 
 try

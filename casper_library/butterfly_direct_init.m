@@ -141,6 +141,12 @@ function butterfly_direct_init(blk, varargin)
     return;
   end
 
+  % bin_pt_in == -1 is a special case for backwards compatibility
+  if bin_pt_in == -1
+    bin_pt_in = input_bit_width - 1;
+    set_mask_params(blk, 'bin_pt_in', num2str(bin_pt_in));
+  end
+
   use_dsp48_mults = strcmp(use_embedded, 'on');
   use_dsp48_adders = strcmp(dsp48_adders, 'on');
 

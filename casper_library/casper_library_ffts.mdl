@@ -680,7 +680,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|3|18|17|18|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|[2                  "
+      MaskValueString	      "0|3|18|-1|18|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|[2                  "
       "                    2]|on|20|off|[1                                      1]|off|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Implementation,Implementa"
       "tion,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Im"
@@ -758,8 +758,8 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|on|3|getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'Coeffs')|1|18|18|1"
-      "7|off|off|1|2|2|1|Truncate|Wrap|8|on|on|on|1|25|4|off|off|off|off|off"
+      MaskValueString	      "0|on|3|getfield( getfield( get_param( gcb,'UserData' ), 'parameters'),'Coeffs')|1|18|18|-"
+      "1|off|off|1|2|2|1|Truncate|Wrap|8|on|on|on|1|25|4|off|off|off|off|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Lat"
       "ency,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Im"
       "plementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation"
@@ -835,7 +835,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|7|2|18|17|18|off|on|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|9|on|on|on|1|25|4|2|o"
+      MaskValueString	      "1|-1|2|18|-1|18|off|on|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|9|on|on|on|1|25|4|2|o"
       "ff|19|off||off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Impleme"
       "ntation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation"
@@ -908,7 +908,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|1|2|18|17|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|2|off|18|off|["
+      MaskValueString	      "1|1|-1|18|-1|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|2|off|18|off|["
       "1                                      1]|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Implementatio"
       "n,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Imple"
@@ -981,7 +981,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|2|18|17|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|2|off|19|off|[1 "
+      MaskValueString	      "0|2|18|-1|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|2|off|19|off|[1 "
       "                                     1]|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Implementation,Impl"
       "ementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementat"
@@ -1054,7 +1054,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|2|18|17|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|2|off|19|off|[1 "
+      MaskValueString	      "0|2|18|-1|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|4|2|off|19|off|[1 "
       "                                     1]|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Implementation,Impl"
       "ementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementat"
@@ -1131,7 +1131,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|2|18|17|18|on|12|10|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|9|on|on|on|1|25|4|2"
+      MaskValueString	      "1|-1|18|-1|18|on|12|10|off|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|9|on|on|on|1|25|4|2"
       "|off|19|on|[1                                      1                                      0]|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,I"
       "mplementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implemen"
@@ -1206,7 +1206,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|4|4|18|17|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Wrap|off|[]|on|on|4|off|off|off|off"
+      MaskValueString	      "0|4|4|18|-1|18|off|1|2|2|1|Round  (unbiased: +/- Inf)|Wrap|off|[]|on|on|4|off|off|off|off"
       "|off|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Implementatio"
       "n,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Imple"
@@ -1260,7 +1260,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|5|2|18|2|off"
+      MaskValueString	      "1|-1|2|18|2|off"
       System {
 	Name			"fft_unscrambler"
 	Location		[480, 45, 1614, 1662]
@@ -1332,7 +1332,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "0|6|2|18|17|18|on|off|1|2|2|1|0|0|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|2|4|off|1"
+      MaskValueString	      "1|-1|2|18|-1|18|on|off|1|2|2|1|0|0|Round  (unbiased: +/- Inf)|Saturate|8|8|on|on|2|4|off|1"
       "9|off||off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Latency"
       ",Latency,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementatio"

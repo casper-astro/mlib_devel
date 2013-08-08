@@ -1,19 +1,8 @@
-% Saves blk's new state and parameters.
-%
-% save_state(blk,varargin)
-%
-% blk = The block to check
-% varargin = The things to compare.
-%
-% The block's UserData 'state' parameter is updated with the contents of the hash of
-% varargin, and the parameters saved in the 'parameters' struct.
-% the block's UserDataPersistent parameter is set to 'on'.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
 %   Center for Astronomy Signal Processing and Electronics Research           %
 %   http://seti.ssl.berkeley.edu/casper/                                      %
-%   Copyright (C) 2006 David MacMahon, Aaron Parsons                          %
+%   Copyright (C) 2013 David MacMahon
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %
@@ -31,17 +20,51 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function save_state(blk,varargin)
+% Function for setting one or more mask parameters.  This updates the
+% block's MaskValues parameter.  Unlike using set_param, this does NOT trigger
+% the mask init script and can be used to set mask parameters from within a
+% mask init script (e.g. to replace a placeholder value with a calculated
+% value).  Note that param_names and param_values must both be strings OR both
+% be cell arrays of equal length.
+%
+% Typical usage:
+%
+%    % Passing strings (sets latency=1 in mask)
+%    set_mask_params(gcb, 'latency', '1');
+%
+%    % Passing cells (sets latency=1 and n_inputs=4 in mask)
+%    set_mask_params(gcb, {'latency', 'n_inputs'}, {'1', '4'})
 
-%check varargin contains even number of variables
-if( mod(length(varargin),2) ~= 0 ) disp('save_state.m: Non-even parameter list'); return; end;
-	
-struct.state = hashcell(varargin);
-struct.parameters = [];
-% Construct struct of parameter values
-for j = 1:length(varargin)/2,
-	struct.parameters = setfield( struct.parameters, varargin{j*2-1}, varargin{j*2} );
+function params = set_mask_params(blk, param_names, param_values)
+  
+  % Make sure we are working with cells
+  if ~iscell(param_names)
+    param_names = {param_names};
+  end
+
+  if ~iscell(param_values)
+    param_values = {param_values};
+  end
+
+  % Make sure lengths agree
+  if length(param_names) ~= length(param_values)
+    error('param_names and param_values must have same length');
+  end
+
+  % Get mask names and values
+  mask_names  = get_param(blk, 'MaskNames');
+  mask_values = get_param(blk, 'MaskValues');
+
+  % For each parameter being set
+  for param_idx = 1:length(param_names)
+    % Find its index in the mask
+    mask_idx = find(strcmp(mask_names, param_names{param_idx}));
+    if mask_idx
+      % If found, update mask_values with new value
+      mask_values{mask_idx} = param_values{param_idx};
+    end
+  end
+
+  % Store updated mask_values
+  set_param(blk, 'MaskValues', mask_values);
 end
-
-set_param(blk,'UserData',struct);
-set_param(blk,'UserDataPersistent','on');

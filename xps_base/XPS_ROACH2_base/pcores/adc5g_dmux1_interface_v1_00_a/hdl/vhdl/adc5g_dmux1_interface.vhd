@@ -35,8 +35,10 @@ entity adc5g_dmux1_interface is
     mode            : integer :=0;    -- 1-channel mode
     mmcm_m          : real    :=2.0;  -- MMCM multiplier value
     mmcm_d          : integer :=1;    -- MMCM divide value
-    mmcm_o0         : integer :=2;    -- MMCM first clock divide
-    mmcm_o1         : integer :=2     -- MMCM second clock divide
+    mmcm_o0         : real    :=2.0;  -- MMCM first clock divide
+    mmcm_o1         : integer :=2;    -- MMCM second clock divide
+    bufr_div        : integer :=4;
+    bufr_div_str    : string  :="4"
     );
   port (
     adc_clk_p_i     : in std_logic;
@@ -83,7 +85,11 @@ entity adc5g_dmux1_interface is
     user_data_q5    : out std_logic_vector(adc_bit_width-1 downto 0);
     user_data_q6    : out std_logic_vector(adc_bit_width-1 downto 0);
     user_data_q7    : out std_logic_vector(adc_bit_width-1 downto 0);
-    adc_reset_o     : out std_logic
+    adc_reset_o     : out std_logic;
+
+    datain_pin      : in std_logic_vector(4 downto 0);
+    datain_tap      : in std_logic_vector(4 downto 0);
+    tap_rst         : in std_logic
     );
 end  adc5g_dmux1_interface ;
 
@@ -96,7 +102,9 @@ architecture behavioral of adc5g_dmux1_interface is
 
   -- Clock and sync signals
   signal adc_clk       : std_logic;
+  signal adc_clk_div   : std_logic;
   signal adc_sync      : std_logic;
+  signal refclk        : std_logic;
 
   -- MMCM signals
   signal mmcm_clkfbin  : std_logic;
@@ -143,8 +151,20 @@ architecture behavioral of adc5g_dmux1_interface is
   signal fifo_din_buf1 : std_logic_vector(143 downto 0);
   signal fifo_dout     : std_logic_vector(143 downto 0);
 
+  -- IODELAY tap signals
+  signal tap_rst0      : std_logic_vector(adc_bit_width-1 downto 0) := (others=>'0');
+  signal tap_rst1      : std_logic_vector(adc_bit_width-1 downto 0) := (others=>'0');
+  signal tap_rst2      : std_logic_vector(adc_bit_width-1 downto 0) := (others=>'0');
+  signal tap_rst3      : std_logic_vector(adc_bit_width-1 downto 0) := (others=>'0');
+  type tap_array is array (0 to adc_bit_width-1) of std_logic_vector(4 downto 0);
+  signal datain_tap0   : tap_array := ((others => (others=>'0')));
+  signal datain_tap1   : tap_array := ((others => (others=>'0')));
+  signal datain_tap2   : tap_array := ((others => (others=>'0')));
+  signal datain_tap3   : tap_array := ((others => (others=>'0')));
+  
   -- first core, "A"
   signal data0         : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data0_delay   : std_logic_vector(adc_bit_width-1 downto 0);
   signal data0a        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data0b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data0c        : std_logic_vector(adc_bit_width-1 downto 0);
@@ -176,6 +196,7 @@ architecture behavioral of adc5g_dmux1_interface is
                        
   -- second core, "B"  
   signal data1         : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data1_delay   : std_logic_vector(adc_bit_width-1 downto 0);
   signal data1a        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data1b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data1c        : std_logic_vector(adc_bit_width-1 downto 0);
@@ -207,6 +228,7 @@ architecture behavioral of adc5g_dmux1_interface is
                       
   -- third core, "C"   
   signal data2         : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data2_delay   : std_logic_vector(adc_bit_width-1 downto 0);
   signal data2a        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data2b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data2c        : std_logic_vector(adc_bit_width-1 downto 0);
@@ -238,6 +260,7 @@ architecture behavioral of adc5g_dmux1_interface is
                        
   -- fourth core, "D"  
   signal data3         : std_logic_vector(adc_bit_width-1 downto 0);
+  signal data3_delay   : std_logic_vector(adc_bit_width-1 downto 0);
   signal data3a        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data3b        : std_logic_vector(adc_bit_width-1 downto 0);
   signal data3c        : std_logic_vector(adc_bit_width-1 downto 0);
@@ -301,8 +324,6 @@ begin
   mmcm_rst    <= ctrl_reset;
   fifo_rst    <= not mmcm_locked;
 
-  -- Clocks
-
   CBUF0:   IBUFDS
     generic map(
       DIFF_TERM => TRUE,
@@ -325,42 +346,52 @@ begin
       o=> adc_clk
       );
 
-
+  DIVBUF: BUFR
+    generic map (
+      BUFR_DIVIDE => bufr_div_str
+      )
+    port map (
+      CE  => '1',
+      CLR => ctrl_reset,
+      O   => adc_clk_div,
+      I   => adc_clk
+      );
+  
   MMCM0: MMCM_ADV
     generic map (
-      BANDWIDTH            => "OPTIMIZED",
+      BANDWIDTH            => "HIGH",
       CLKFBOUT_MULT_F      => mmcm_m,
       DIVCLK_DIVIDE        => mmcm_d,
       CLKFBOUT_PHASE       => 0.0,
       CLKFBOUT_USE_FINE_PS => TRUE,
-      CLKIN1_PERIOD        => clkin_period,
-      CLKOUT1_DIVIDE       => mmcm_o0,
+      CLKIN1_PERIOD        => clkin_period * real(bufr_div),
+      CLKOUT0_DIVIDE_F     => mmcm_o0,
+      CLKOUT1_DIVIDE       => mmcm_o1,
       CLKOUT2_DIVIDE       => mmcm_o1,
       CLKOUT3_DIVIDE       => mmcm_o1,
       CLKOUT4_DIVIDE       => mmcm_o1,
-      CLKOUT5_DIVIDE       => mmcm_o1,
+      CLKOUT0_DUTY_CYCLE   => 0.50,
       CLKOUT1_DUTY_CYCLE   => 0.50,
       CLKOUT2_DUTY_CYCLE   => 0.50,
       CLKOUT3_DUTY_CYCLE   => 0.50,
       CLKOUT4_DUTY_CYCLE   => 0.50,
-      CLKOUT5_DUTY_CYCLE   => 0.50,
+      CLKOUT0_PHASE        => 0.0,
       CLKOUT1_PHASE        => 0.0,
-      CLKOUT2_PHASE        => 0.0,
-      CLKOUT3_PHASE        => 90.0,
-      CLKOUT4_PHASE        => 180.0,
-      CLKOUT5_PHASE        => 270.0
+      CLKOUT2_PHASE        => 90.0,
+      CLKOUT3_PHASE        => 180.0,
+      CLKOUT4_PHASE        => 270.0
       )
     port map (
       CLKFBIN   => mmcm_clkfbin,
       CLKFBOUT  => mmcm_clkfbout,
       CLKINSEL  => '1',
-      CLKIN1    => adc_clk,
+      CLKIN1    => adc_clk_div,
       CLKIN2    => '0',
-      CLKOUT1   => mmcm_clkout0,
-      CLKOUT2   => mmcm_clkout1,
-      CLKOUT3   => mmcm_clkout2,
-      CLKOUT4   => mmcm_clkout3,
-      CLKOUT5   => mmcm_clkout4,
+      CLKOUT0   => mmcm_clkout0,
+      CLKOUT1   => mmcm_clkout1,
+      CLKOUT2   => mmcm_clkout2,
+      CLKOUT3   => mmcm_clkout3,
+      CLKOUT4   => mmcm_clkout4,
       DADDR     => "0000000",
       DCLK      => '0',
       DEN       => '0',
@@ -378,7 +409,8 @@ begin
       );
 
 
-  CBUF2a:  BUFG     port map (i=> mmcm_clkfbout, o=> mmcm_clkfbin);
+  --CBUF2a:  BUFG     port map (i=> mmcm_clkfbout, o=> mmcm_clkfbin);
+  mmcm_clkfbin <= mmcm_clkfbout;
   CBUF2b:  BUFG     port map (i=> mmcm_clkout0,  o=> isd_clk);
   CBUF2c:  BUFG     port map (i=> mmcm_clkout1,  o=> isd_clkdiv);
   CBUF2d:  BUFG     port map (i=> mmcm_clkout2,  o=> ctrl_clk90_out);
@@ -391,6 +423,42 @@ begin
   ctrl_clk_out <= isd_clkdiv;
   isd_clkn <= not isd_clk;
 
+  -- purpose: Decode the datain pin and tap value
+  -- type   : sequential
+  -- inputs : isd_clkdiv, tap_rst, datain_pin, datain_tap
+  -- outputs: datain_tapN
+  DECTAPS: process (isd_clkdiv, tap_rst)
+  begin  -- process DECTAPS
+    if isd_clkdiv'event and isd_clkdiv = '1' then  -- rising clock edge
+
+      tap_rst0 <= (others => '0');
+      tap_rst1 <= (others => '0');
+      tap_rst2 <= (others => '0');
+      tap_rst3 <= (others => '0');
+
+      if tap_rst = '1' then
+
+        case datain_pin(4 downto 3) is
+          when "00" => datain_tap0(to_integer(unsigned(datain_pin(2 downto 0)))) <= datain_tap;
+          when "01" => datain_tap1(to_integer(unsigned(datain_pin(2 downto 0)))) <= datain_tap;
+          when "10" => datain_tap2(to_integer(unsigned(datain_pin(2 downto 0)))) <= datain_tap;
+          when "11" => datain_tap3(to_integer(unsigned(datain_pin(2 downto 0)))) <= datain_tap;
+          when others  => null;
+        end case;
+        
+        case datain_pin(4 downto 3) is
+          when "00" => tap_rst0(to_integer(unsigned(datain_pin(2 downto 0)))) <= '1';
+          when "01" => tap_rst1(to_integer(unsigned(datain_pin(2 downto 0)))) <= '1';
+          when "10" => tap_rst2(to_integer(unsigned(datain_pin(2 downto 0)))) <= '1';
+          when "11" => tap_rst3(to_integer(unsigned(datain_pin(2 downto 0)))) <= '1';
+          when others  => null;
+        end case;
+        
+      end if;
+
+    end if;
+  end process DECTAPS;
+
   
   IBUFDS0 : for i in adc_bit_width-1 downto 0 generate
     IBUFI0  :  IBUFDS_LVDS_25
@@ -400,6 +468,35 @@ begin
                   );
   end generate IBUFDS0;
 
+  DATADLY0 : for i in adc_bit_width-1 downto 0 generate
+    IODLY0: IODELAYE1
+      generic map (
+        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
+        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        IDELAY_VALUE           => 0,                -- 0 to 31
+        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
+        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
+        REFCLK_FREQUENCY       => 200.0,
+        SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
+        )
+      port map (
+        DATAOUT                => data0_delay(i),
+        DATAIN                 => '0',     
+        C                      => isd_clkdiv,
+        CE                     => '0',
+        INC                    => '0',
+        IDATAIN                => data0(i),
+        ODATAIN                => '0',
+        RST                    => tap_rst0(i),
+        T                      => '1',
+        CNTVALUEIN             => datain_tap0(i),
+        CNTVALUEOUT            => open,
+        CLKIN                  => '0',
+        CINVCTRL               => '0'
+        );
+  end generate DATADLY0;
 
   IBUFDS1 : for i in adc_bit_width-1 downto 0 generate
     IBUFI1  :  IBUFDS_LVDS_25
@@ -409,6 +506,35 @@ begin
                   );
   end generate IBUFDS1;
 
+  DATADLY1 : for i in adc_bit_width-1 downto 0 generate
+    IODLY1: IODELAYE1
+      generic map (
+        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
+        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        IDELAY_VALUE           => 0,                -- 0 to 31
+        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
+        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
+        REFCLK_FREQUENCY       => 200.0,
+        SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
+        )
+      port map (
+        DATAOUT                => data1_delay(i),
+        DATAIN                 => '0',     
+        C                      => isd_clkdiv,
+        CE                     => '0',
+        INC                    => '0',
+        IDATAIN                => data1(i),
+        ODATAIN                => '0',
+        RST                    => tap_rst1(i),
+        T                      => '1',
+        CNTVALUEIN             => datain_tap1(i),
+        CNTVALUEOUT            => open,
+        CLKIN                  => '0',
+        CINVCTRL               => '0'
+        );
+  end generate DATADLY1;
 
   IBUFDS2 : for i in adc_bit_width-1 downto 0 generate
     IBUFI2  :  IBUFDS_LVDS_25
@@ -418,6 +544,35 @@ begin
                   );
   end generate IBUFDS2;
 
+  DATADLY2 : for i in adc_bit_width-1 downto 0 generate
+    IODLY2: IODELAYE1
+      generic map (
+        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
+        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        IDELAY_VALUE           => 0,                -- 0 to 31
+        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
+        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
+        REFCLK_FREQUENCY       => 200.0,
+        SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
+        )
+      port map (
+        DATAOUT                => data2_delay(i),
+        DATAIN                 => '0',     
+        C                      => isd_clkdiv,
+        CE                     => '0',
+        INC                    => '0',
+        IDATAIN                => data2(i),
+        ODATAIN                => '0',
+        RST                    => tap_rst2(i),
+        T                      => '1',
+        CNTVALUEIN             => datain_tap2(i),
+        CNTVALUEOUT            => open,
+        CLKIN                  => '0',
+        CINVCTRL               => '0'
+        );
+  end generate DATADLY2;
 
   IBUFDS3 : for i in adc_bit_width-1 downto 0 generate
     IBUF3  :  IBUFDS_LVDS_25
@@ -427,7 +582,36 @@ begin
                   );
   end generate IBUFDS3;
 
-  
+  DATADLY3 : for i in adc_bit_width-1 downto 0 generate
+    IODLY3: IODELAYE1
+      generic map (
+        CINVCTRL_SEL           => FALSE,            -- TRUE, FALSE
+        DELAY_SRC              => "I",              -- I, IO, O, CLKIN, DATAIN
+        HIGH_PERFORMANCE_MODE  => TRUE,             -- TRUE, FALSE
+        IDELAY_TYPE            => "VAR_LOADABLE",   -- FIXED, DEFAULT, VARIABLE, or VAR_LOADABLE
+        IDELAY_VALUE           => 0,                -- 0 to 31
+        ODELAY_TYPE            => "FIXED",          -- Has to be set to FIXED when IODELAYE1 is configured for Input
+        ODELAY_VALUE           => 0,                -- Set to 0 as IODELAYE1 is configured for Input
+        REFCLK_FREQUENCY       => 200.0,
+        SIGNAL_PATTERN         => "DATA"            -- CLOCK, DATA
+        )
+      port map (
+        DATAOUT                => data3_delay(i),
+        DATAIN                 => '0',     
+        C                      => isd_clkdiv,
+        CE                     => '0',
+        INC                    => '0',
+        IDATAIN                => data3(i),
+        ODATAIN                => '0',
+        RST                    => tap_rst3(i),
+        T                      => '1',
+        CNTVALUEIN             => datain_tap3(i),
+        CNTVALUEOUT            => open,
+        CLKIN                  => '0',
+        CINVCTRL               => '0'
+        );
+  end generate DATADLY3;
+
   iserdesx : for i in adc_bit_width-1 downto 0 generate
 
     iserdes0  : ISERDES_NODELAY
@@ -453,7 +637,7 @@ begin
         CLK       => isd_clk,
         CLKB      => isd_clkn,
         CLKDIV    => isd_clkdiv,
-        D         => data0(i),
+        D         => data0_delay(i),
         OCLK      => '0',
         RST       => isd_rst,
         SHIFTIN1  => '0',
@@ -483,7 +667,7 @@ begin
         CLK       => isd_clk,
         CLKB      => isd_clkn,
         CLKDIV    => isd_clkdiv,
-        D         => data1(i),
+        D         => data1_delay(i),
         OCLK      => '0',
         RST       => isd_rst,
         SHIFTIN1  => '0',
@@ -513,7 +697,7 @@ begin
         CLK       => isd_clk,
         CLKB      => isd_clkn,
         CLKDIV    => isd_clkdiv,
-        D         => data2(i),
+        D         => data2_delay(i),
         OCLK      => '0',
         RST       => isd_rst,
         SHIFTIN1  => '0',
@@ -543,7 +727,7 @@ begin
         CLK       => isd_clk,
         CLKB      => isd_clkn,
         CLKDIV    => isd_clkdiv,
-        D         => data3(i),
+        D         => data3_delay(i),
         OCLK      => '0',
         RST       => isd_rst,
         SHIFTIN1  => '0',
