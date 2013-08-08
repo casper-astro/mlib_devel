@@ -47,6 +47,24 @@
 function fft_biplex_init(blk, varargin)
 clog('entering fft_biplex_init','trace');
 
+% If we are in a library, do nothing
+if is_library_block(blk)
+  clog('exiting fft_biplex_init (library block)','trace');
+  return
+end
+
+% If FFTSize is passed as 0, do nothing
+if get_var('FFTSize', varargin{:}) == 0
+  clog('exiting fft_biplex_init (FFTSize==0)','trace');
+  return
+end
+
+% If n_inputs is passed as 0, do nothing
+if get_var('n_inputs' varargin{:}) == 0
+  clog('exiting fft_biplex_init (n_inputs==0)','trace');
+  return
+end
+
 % Make sure block is not too old for current init script
 try
     get_param(blk, 'n_streams');
@@ -130,18 +148,15 @@ hardcode_shifts   = get_var('hardcode_shifts', 'defaults', defaults, varargin{:}
 shift_schedule    = get_var('shift_schedule', 'defaults', defaults, varargin{:});
 dsp48_adders      = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
+% bin_pt_in == -1 is a special case for backwards compatibility
+if bin_pt_in == -1
+  bin_pt_in = input_bit_width - 1;
+  set_mask_params(blk, 'bin_pt_in', num2str(bin_pt_in));
+end
+
 ytick = 60;
 
 delete_lines(blk);
-
-%default setup for library
-if n_streams == 0 || n_inputs == 0 || FFTSize == 0,
-  clean_blocks(blk);
-  set_param(blk, 'AttributesFormatString', '');
-  save_state(blk, 'defaults', defaults, varargin{:});
-  clog('exiting fft_biplex_init',{'trace','fft_biplex_init_debug'});
-  return;
-end
 
 % check the per-stage multiplier specification
 [temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);

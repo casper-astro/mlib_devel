@@ -47,6 +47,18 @@ function fft_direct_init(blk, varargin)
 
 clog('entering fft_direct_init','trace');
 
+% If we are in a library, do nothing
+if is_library_block(blk)
+  clog('exiting fft_direct_init (block in library)','trace');
+  return
+end
+
+% If FFTSize is passed as 0, do nothing
+if get_var('FFTSize', varargin{:}) == 0
+  clog('exiting fft_direct_init (FFTSize==0)','trace');
+  return
+end
+
 % Make sure block is not too old for current init script
 try
     get_param(blk, 'n_streams');
@@ -141,13 +153,10 @@ hardcode_shifts   = get_var('hardcode_shifts', 'defaults', defaults, varargin{:}
 shift_schedule    = get_var('shift_schedule', 'defaults', defaults, varargin{:});
 dsp48_adders      = get_var('dsp48_adders', 'defaults', defaults, varargin{:});
 
-if FFTSize == 0 || n_streams == 0,
-  delete_lines(blk);
-  clean_blocks(blk);
-  set_param(blk, 'AttributesFormatString', '');
-  save_state(blk, 'defaults', defaults, varargin{:});
-  clog('exiting fft_direct_init','trace');
-  return;
+% bin_pt_in == -1 is a special case for backwards compatibility
+if bin_pt_in == -1
+  bin_pt_in = input_bit_width - 1;
+  set_mask_params(blk, 'bin_pt_in', num2str(bin_pt_in));
 end
 
 % check the per-stage multiplier specification
