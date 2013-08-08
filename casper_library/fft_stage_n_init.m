@@ -120,6 +120,12 @@ if FFTSize == 0 | n_inputs == 0,
   return;
 end
 
+% bin_pt_in == -1 is a special case for backwards compatibility
+if bin_pt_in == -1
+  bin_pt_in = input_bit_width - 1;
+  set_mask_params(blk, 'bin_pt_in', num2str(bin_pt_in));
+end
+
 %flag error and over-ride if trying to use BRAMs but delay is less than BRAM latency
 if (2^(FFTSize-FFTStage) < bram_latency)
     if strcmp(delays_bram,'on')
