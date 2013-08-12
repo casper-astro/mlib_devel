@@ -1,7 +1,7 @@
-function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
+function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
 % Modifies the EDK project's MHS file to include design elements.
 %
-% gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
+% gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
 
     clog('entering gen_xps_mod_mhs','trace');
 
@@ -34,16 +34,14 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             opb_slaves_init = 2;  % The system block
             opb_slaves = opb_slaves_init;             
             max_opb_per_bridge = 32; 
-
             opb_addr_init   = hex2dec('01000000');
             opb_addr        = opb_addr_init;
             opb_bridge_size = hex2dec('00080000');
-            opb_addr_max    = hex2dec('01FFFFFF'); %upper limit of address space allocated
+            %opb_addr_max    = hex2dec('01FFFFFF'); %upper limit of address space allocated
         % end case {'ROACH','ROACH2'}
         otherwise
             opb_slaves = 3; % the UART, the selectmap fifo and the serial switch reader
-            max_opb = 16;
-
+            %max_opb = 16;
             opb_addr = hex2dec('d0000000');
             opb_bridge_size = 2^24;
         % end case otherwise
@@ -57,7 +55,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist([xps_path, slash, 'system.mhs.bac'],'file')
-        [copystatus, copymessage, copymessageid] = copyfile([xps_path, slash, 'system.mhs'],[xps_path, slash, 'system.mhs.bac']);
+        [copystatus, copymessage, ~] = copyfile([xps_path, slash, 'system.mhs'],[xps_path, slash, 'system.mhs.bac']);
         if ~copystatus
             disp('Error trying to backup system.mhs:');
             disp(copymessage)
@@ -65,7 +63,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     end % if ~exist([xps_path, slash, 'system.mhs.bac'],'file')
 
     if ~exist([xps_path, slash, 'core_info.tab.bac'],'file')
-        [copystatus, copymessage, copymessageid] = copyfile([xps_path, slash, 'core_info.tab'],[xps_path, slash, 'core_info.tab.bac']);
+        [copystatus, copymessage, ~] = copyfile([xps_path, slash, 'core_info.tab'],[xps_path, slash, 'core_info.tab.bac']);
         if ~copystatus
             disp('Error trying to backup core_info.tab:');
             disp(copymessage);
@@ -100,10 +98,10 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             [str, opb_addr] = gen_mhs_xsg(blk_obj,opb_addr,opb_name);
             fprintf(mhs_fid,str);
         end
-    catch
+    catch ex
         disp('Problem with block : ')
         display(blk_obj);
-        disp(lasterr);
+        warning(ex.identifier, '%s', ex.getReport('basic'));
         error('Error found during XSG IP core generation in MHS (gen_mhs_xsg).');
     end
     fprintf(mhs_fid,'END\n\n');
@@ -130,7 +128,7 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
       clog(['Searching for fixed opb0 devices. ',num2str(opb_slaves),' initial fixed devices'],'gen_xps_mod_mhs_debug');
       while (n <= length(xps_objs)),
         blk_obj = xps_objs{n};
-        [opb_cores, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, opb_offset_tmp);
+        [~, opb_offset_tmp, opb0_devices] = probe_bus_usage(blk_obj, opb_offset_tmp);
         clog([get(blk_obj,'simulink_name'),': ',num2str(opb0_devices),' opb0 devices found'],'gen_xps_mod_mhs_desperate_debug');
         if opb0_devices ~= 0, clog([get(blk_obj,'simulink_name'),': ', num2str(opb0_devices),' opb0 devices'],'gen_xps_mod_mhs_debug'); end
         opb0_devs = opb0_devs + opb0_devices;
@@ -233,12 +231,12 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
                     opb_addr_start = opb_addr;
                     try
                         opb_bridge_obj = xps_opb2opb(opb_name, opb_addr, opb_bridge_size);
-                    catch
-                        disp(['Problem when generating opb2opb bridge ',opb_name,':'])
-                        disp(lasterr);
+                    catch ex
+                        disp(['Problem when generating opb2opb bridge ',opb_name,':']);
+                        warning(ex.identifier, '%s', ex.getReport('basic')); 
                         error('Error found during opb2opb bridge creation (xps_opb2opb).');
                     end
-                    xps_objs = [xps_objs,{opb_bridge_obj}];
+                    xps_objs = [xps_objs, {opb_bridge_obj}];
                 end
 
             % end case 'powerpc440_ext'
@@ -251,10 +249,10 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
 
         try
             [str, opb_addr, this_opb_addr_start] = gen_mhs_ip(blk_obj, opb_addr, opb_name);
-        catch
+        catch ex
             disp('Problem with block : ')
             display(blk_obj);
-            disp(lasterr);
+            warning(ex.identifier, '%s', ex.getReport('basic')); 
             error('Error found during Peripheral generation in MHS (gen_mhs_ip).');
         end
         clog(['0x',dec2hex(opb_addr_start,8),'-0x',dec2hex(opb_addr-1,8), ' opbs: ',num2str(opb0_devices),' fixed opb0 + ', num2str(opb_cores),' on opb', num2str(opb_bus_inst),' (',num2str(opb_slaves),' so far)', ' (',get(blk_obj,'simulink_name'),')'],'gen_xps_mod_mhs_debug'); 
@@ -275,10 +273,10 @@ function gen_xps_mod_mhs(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
               str = gen_borf_info(n-1, blk_obj, {});
             end
             fprintf(bof_fid, str);
-        catch
-            disp('Problem with block : ')
+        catch ex
+            disp('Problem with block : ');
             display(blk_obj);
-            disp(lasterr);
+            warning(ex.identifier, '%s', ex.getReport('basic')); 
             error('Error found during Peripheral generation in BOF (gen_borf_info).');
         end
 
