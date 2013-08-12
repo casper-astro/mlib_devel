@@ -26,7 +26,7 @@ param_str = get_param(blk,param_name);
 % If it is empty or not an evaluated parameter, we're done!
 mask_vars = get_param(blk, 'MaskVariables');
 pattern = sprintf('(^|;)%s=@', param_name);
-if isempty(param_str) || ~regexp(mask_vars, pattern)
+if isempty(param_str) || isempty(regexp(mask_vars, pattern))
   result = param_str;
   return;
 end
