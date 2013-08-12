@@ -66,14 +66,25 @@ if strcmp(storage,'dram') && ((log2(data_width/8) + nsamples + 1) > 31),
   errordlg('snapshot does not support capture of more than 1Gbytes using DRAM');
 end
 
-%useful constants
-if strcmp(circap,'on'), circ = 1; else, circ = 0; end
-if strcmp(offset,'on'), off = 1; else, off = 0; end
-if strcmp(value,'on'), val = 1; else, val = 0; end
+% useful constants
+if strcmp(circap,'on'), circ = 1; else circ = 0; end
+if strcmp(offset,'on'), off = 1; else off = 0; end
+if strcmp(value,'on'), val = 1; else val = 0; end
 
 delete_lines(blk);
 
-%basic input ports
+% do the info blocks first
+reuse_block(blk, 'storage',             'casper_library_misc/info_block', 'info', storage,                  'Position', [0,0,50,30]);
+reuse_block(blk, 'dram_dimm',           'casper_library_misc/info_block', 'info', num2str(dram_dimm),       'Position', [0,0,50,30]);
+reuse_block(blk, 'dram_clock',          'casper_library_misc/info_block', 'info', num2str(dram_clock),      'Position', [0,0,50,30]);
+reuse_block(blk, 'length',              'casper_library_misc/info_block', 'info', num2str(pow2(nsamples)),  'Position', [0,0,50,30]);
+reuse_block(blk, 'data_width',          'casper_library_misc/info_block', 'info', num2str(data_width),      'Position', [0,0,50,30]);
+reuse_block(blk, 'start_offset',        'casper_library_misc/info_block', 'info', offset,                   'Position', [0,0,50,30]);
+reuse_block(blk, 'circular_capture',    'casper_library_misc/info_block', 'info', circap,                   'Position', [0,0,50,30]);
+reuse_block(blk, 'extra_value',         'casper_library_misc/info_block', 'info', value,                    'Position', [0,0,50,30]);
+reuse_block(blk, 'use_dsp48',           'casper_library_misc/info_block', 'info', use_dsp48,                'Position', [0,0,50,30]);
+
+% basic input ports
 reuse_block(blk, 'din', 'built-in/inport', 'Position', [180 122 210 138], 'Port', '1');
 reuse_block(blk, 'ri', 'xbsIndex_r4/Reinterpret', ...
   'force_arith_type', 'on', 'arith_type', 'Unsigned', ...
@@ -88,7 +99,7 @@ add_line(blk, 'ri/1', 'cast/1');
 reuse_block(blk, 'trig', 'built-in/inport', 'Position', [250 202 280 218], 'Port', '3');
 reuse_block(blk, 'we', 'built-in/inport', 'Position', [250 162 280 178], 'Port', '2');
 
-%basic_ctrl
+% basic_ctrl
 clog('basic_ctrl block', 'snapshot_init_detailed_trace');
 
 if strcmp(storage,'dram'), 
