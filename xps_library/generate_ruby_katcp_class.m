@@ -61,7 +61,7 @@ function generate_ruby_katcp_class(sys, varargin)
   % Make sure cells in varargin are doubly celled so that the conversion to
   % struct works OK.
   for k=1:length(varargin)
-    if iscell(varargin{k} && ~iscell(varargin{k}{1})
+    if iscell(varargin{k}) && ~iscell(varargin{k}{1})
       varargin{k} = {varargin{k}};
     end
   end
