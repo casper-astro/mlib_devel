@@ -137,8 +137,20 @@ function generate_ruby_katcp_class(sys, varargin)
                   type = ':bram';
               end
 
-          % QDR (treat as bram for now)
+          % QDR
           case 'xps:qdr'
+              % Add qdrN_ctrl device
+              chip = get_param(b, 'which_qdr');
+              typemap{end+1} = sprintf('%s_ctrl', chip);
+              typemap{end+1} = ':qdrctrl';
+              %% Treat as BRAM if CPU interface is enabled, otherwise skip
+              %if strcmp(get_param(gcb, 'use_sniffer'), 'on')
+              %    type = ':bram';
+              %else
+              %    type = ':skip';
+              %end
+              % Always treat as BRAM (even if CPU interface is disabled?!)
+              devname = sprintf('%s_memory', chip);
               type = ':bram';
 
           % Ethernet cores (all use :tenge for now)
