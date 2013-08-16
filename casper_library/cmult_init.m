@@ -35,6 +35,7 @@ function cmult_init(blk, varargin)
     'conv_latency', 1, ...
     'conjugated', 'off', ...
     'async', 'off', ...
+    'pipelined_enable', 'on', ...
     'multiplier_implementation', 'behavioral HDL', ... 'embedded multiplier core' 'standard core'
   };
 
@@ -55,6 +56,7 @@ function cmult_init(blk, varargin)
   conv_latency              = get_var('conv_latency','defaults',defaults,varargin{:});
   conjugated                = get_var('conjugated','defaults',defaults,varargin{:});
   async                     = get_var('async','defaults',defaults,varargin{:});
+  pipelined_enable          = get_var('pipelined_enable','defaults',defaults,varargin{:});
   multiplier_implementation = get_var('multiplier_implementation','defaults',defaults,varargin{:});
 
   delete_lines(blk);
@@ -143,8 +145,11 @@ function cmult_init(blk, varargin)
   end
 
   if strcmp(async, 'on'),
+    if strcmp(pipelined_enable, 'on'), latency = mult_latency;
+    else, latency = 0;
+    end
     reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(mult_latency), ...
+      'latency', num2str(latency), ...
       'Position', [300 435 330 455]);
     add_line(blk, 'en/1', 'den0/1');
     for name = {'rere', 'reim', 'imre', 'imim'}
@@ -183,8 +188,11 @@ function cmult_init(blk, varargin)
   end
   
   if strcmp(async, 'on'),
+    if strcmp(pipelined_enable, 'on'), latency = add_latency;
+    else, latency = 0;
+    end
     reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(add_latency), ...
+      'latency', num2str(latency), ...
       'Position', [410 435 440 455]);
     add_line(blk, 'den0/1', 'den1/1');
     
@@ -237,11 +245,13 @@ function cmult_init(blk, varargin)
   end
 
   if strcmp(async, 'on'),
-    reuse_block(blk, 'den2', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(conv_latency), ...
-      'Position', [525 435 555 455]);
-    add_line(blk, 'den1/1', 'den2/1');
-    
+    if strcmp(pipelined_enable, 'on'),
+      reuse_block(blk, 'den2', 'xbsIndex_r4/Delay', ...
+        'latency', num2str(latency), ...
+        'Position', [525 435 555 455]);
+      add_line(blk, 'den1/1', 'den2/1');
+    end
+ 
     for name = {'convert_re', 'convert_im'}
       add_line(blk, 'den1/1', [name{1},'/2']);
     end
@@ -259,7 +269,7 @@ function cmult_init(blk, varargin)
           'Position', [745 243 775 257]);
   add_line(blk,'ri_to_c/1','ab/1');
 
-  if strcmp(async, 'on'),
+  if strcmp(async, 'on') && strcmp(pipelined_enable, 'on'),
     reuse_block(blk, 'dvalid', 'built-in/Outport', ...
       'Port', '2', ...
       'Position', [745 438 775 452]);

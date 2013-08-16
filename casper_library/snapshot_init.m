@@ -66,14 +66,25 @@ if strcmp(storage,'dram') && ((log2(data_width/8) + nsamples + 1) > 31),
   errordlg('snapshot does not support capture of more than 1Gbytes using DRAM');
 end
 
-%useful constants
-if strcmp(circap,'on'), circ = 1; else, circ = 0; end
-if strcmp(offset,'on'), off = 1; else, off = 0; end
-if strcmp(value,'on'), val = 1; else, val = 0; end
+% useful constants
+if strcmp(circap,'on'), circ = 1; else circ = 0; end
+if strcmp(offset,'on'), off = 1; else off = 0; end
+if strcmp(value,'on'), val = 1; else val = 0; end
 
 delete_lines(blk);
 
-%basic input ports
+% do the info blocks first
+reuse_block(blk, 'storage',             'casper_library_misc/info_block', 'info', storage,                  'Position', [0,0,50,30]);
+reuse_block(blk, 'dram_dimm',           'casper_library_misc/info_block', 'info', num2str(dram_dimm),       'Position', [0,0,50,30]);
+reuse_block(blk, 'dram_clock',          'casper_library_misc/info_block', 'info', num2str(dram_clock),      'Position', [0,0,50,30]);
+reuse_block(blk, 'length',              'casper_library_misc/info_block', 'info', num2str(pow2(nsamples)),  'Position', [0,0,50,30]);
+reuse_block(blk, 'data_width',          'casper_library_misc/info_block', 'info', num2str(data_width),      'Position', [0,0,50,30]);
+reuse_block(blk, 'start_offset',        'casper_library_misc/info_block', 'info', offset,                   'Position', [0,0,50,30]);
+reuse_block(blk, 'circular_capture',    'casper_library_misc/info_block', 'info', circap,                   'Position', [0,0,50,30]);
+reuse_block(blk, 'extra_value',         'casper_library_misc/info_block', 'info', value,                    'Position', [0,0,50,30]);
+reuse_block(blk, 'use_dsp48',           'casper_library_misc/info_block', 'info', use_dsp48,                'Position', [0,0,50,30]);
+
+% basic input ports
 reuse_block(blk, 'din', 'built-in/inport', 'Position', [180 122 210 138], 'Port', '1');
 reuse_block(blk, 'ri', 'xbsIndex_r4/Reinterpret', ...
   'force_arith_type', 'on', 'arith_type', 'Unsigned', ...
@@ -88,7 +99,7 @@ add_line(blk, 'ri/1', 'cast/1');
 reuse_block(blk, 'trig', 'built-in/inport', 'Position', [250 202 280 218], 'Port', '3');
 reuse_block(blk, 'we', 'built-in/inport', 'Position', [250 162 280 178], 'Port', '2');
 
-%basic_ctrl
+% basic_ctrl
 clog('basic_ctrl block', 'snapshot_init_detailed_trace');
 
 if strcmp(storage,'dram'), 
@@ -109,7 +120,7 @@ add_line(blk, 'trig/1', 'basic_ctrl/4');
 if circ == 1
   reuse_block(blk, 'stop', 'built-in/inport', 'Position', [250 282 280 298], 'Port', '4');
   add_line(blk, 'stop/1', 'basic_ctrl/6');
-else,
+else
 % constant so that always stop
   reuse_block(blk, 'never', 'xbsIndex_r4/Constant', ...
     'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
@@ -117,22 +128,22 @@ else,
   add_line(blk, 'never/1', 'basic_ctrl/6');
 end  
 
-%ctrl reg
+% ctrl reg
 reuse_block(blk, 'const0', 'built-in/Constant', 'Value', '0', 'Position', [180 240 200 260]);
 reuse_block(blk, 'ctrl', 'xps_library/software register', ...
-  'io_dir', 'From Processor', 'arith_type', 'Unsigned', ...
+  'io_dir', 'From Processor', 'arith_type1', 'Unsigned', ...
   'Position', [215 235 315 265]);
 add_line(blk, 'const0/1', 'ctrl/1');
 add_line(blk, 'ctrl/1', 'basic_ctrl/5');
 
-%delay_block
+% delay_block
 if off == 1,
   clog('delay block', 'snapshot_init_detailed_trace');
   
   % offset register
   reuse_block(blk, 'const1', 'built-in/Constant', 'Value', '10', 'Position', [180 320 200 340]);
   reuse_block(blk, 'trig_offset', 'xps_library/software register', ...
-    'io_dir', 'From Processor', 'arith_type', 'Unsigned', ...
+    'io_dir', 'From Processor', 'arith_type1', 'Unsigned', ...
     'Position', [215 314 315 346]);
   add_line(blk, 'const1/1', 'trig_offset/1');
 
@@ -148,8 +159,8 @@ if off == 1,
   add_line(blk, 'basic_ctrl/6', 'delay/6'); %init  
   add_line(blk, 'trig_offset/1', 'delay/7'); %delay
 
-else,
-% don't really have anything to do if no offset 
+else
+    % don't really have anything to do if no offset 
 end
 
 % stop_gen block
@@ -177,7 +188,7 @@ if circ == 1,
 
   %tr_en_cnt register 
   reuse_block(blk, 'tr_en_cnt', 'xps_library/software register', ...
-    'io_dir', 'To Processor', 'arith_type', 'Unsigned', ...
+    'io_dir', 'To Processor', 'arith_type1', 'Unsigned', ...
     'Position', [905 360 1005 390]);
 
   add_line(blk, 'tr_en_cnt/1', 'g_tr_en_cnt/1');
@@ -227,7 +238,7 @@ add_line(blk, [src,'/6'], 'add_gen/6'); %init
 
 % status registers
 reuse_block(blk, 'status', 'xps_library/software register', ...
-  'io_dir', 'To Processor', 'arith_type', 'Unsigned', ...
+  'io_dir', 'To Processor', 'arith_type1', 'Unsigned', ...
   'Position', [905 305 1005 335]);
 add_line(blk, 'add_gen/5', 'status/1');
 reuse_block(blk, 'gstatus', 'built-in/Terminator', ...
@@ -244,7 +255,7 @@ if val == 1,
 
   % register
   reuse_block(blk, 'val', 'xps_library/software register', ...
-    'io_dir', 'To Processor', 'arith_type', 'Unsigned', ...
+    'io_dir', 'To Processor', 'arith_type1', 'Unsigned', ...
     'Position', [905 85 1005 115]);
 
   add_line(blk, 'add_gen/1', 'val/1');
@@ -337,8 +348,8 @@ if strcmp(storage, 'dram'),
     'Port', '1', 'Position', [1210 347 1240 363]);
   add_line(blk, 'dram/5', 'ready/1');
 
-else,
-  %shared BRAM
+else
+  % shared BRAM
   reuse_block(blk, 'bram', 'xps_library/Shared BRAM', ...
     'data_width', num2str(data_width), 'addr_width', num2str(nsamples), ...
     'Position', [930 129 1005 291]);
