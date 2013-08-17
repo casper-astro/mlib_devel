@@ -1787,13 +1787,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  off
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
