@@ -1,9 +1,10 @@
 function data_capture_init( blk, varargin )
 
-disp('Initializing a data_capture block');
+clog('data_capture_init: pre same_state', 'trace');
 
 defaults = {};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('data_capture_init: post same_state', 'trace');
 check_mask_type(blk, 'data_capture');
 munge_block(blk, varargin{:});
 
@@ -30,3 +31,4 @@ end
 
 clean_blocks(blk);
 save_state(blk, 'defaults', defaults, varargin{:});
+clog('data_capture_init: exiting', 'trace');
