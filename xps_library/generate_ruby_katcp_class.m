@@ -61,7 +61,7 @@ function generate_ruby_katcp_class(sys, varargin)
   % Make sure cells in varargin are doubly celled so that the conversion to
   % struct works OK.
   for k=1:length(varargin)
-    if iscell(varargin{k} && ~iscell(varargin{k}{1})
+    if iscell(varargin{k}) && ~iscell(varargin{k}{1})
       varargin{k} = {varargin{k}};
     end
   end
@@ -137,8 +137,20 @@ function generate_ruby_katcp_class(sys, varargin)
                   type = ':bram';
               end
 
-          % QDR (treat as bram for now)
+          % QDR
           case 'xps:qdr'
+              % Add qdrN_ctrl device
+              chip = get_param(b, 'which_qdr');
+              typemap{end+1} = sprintf('%s_ctrl', chip);
+              typemap{end+1} = ':qdrctrl';
+              %% Treat as BRAM if CPU interface is enabled, otherwise skip
+              %if strcmp(get_param(gcb, 'use_sniffer'), 'on')
+              %    type = ':bram';
+              %else
+              %    type = ':skip';
+              %end
+              % Always treat as BRAM (even if CPU interface is disabled?!)
+              devname = sprintf('%s_memory', chip);
               type = ':bram';
 
           % Ethernet cores (all use :tenge for now)
@@ -176,6 +188,18 @@ function generate_ruby_katcp_class(sys, varargin)
       typemap{end+1} = devname;
       typemap{end+1} = type;
   end
+
+  % Add system infrastructure registers
+  typemap{end+1} = 'sys_board_id';
+  typemap{end+1} = ':roreg';
+  typemap{end+1} = 'sys_clkcounter';
+  typemap{end+1} = ':roreg';
+  typemap{end+1} = 'sys_rev';
+  typemap{end+1} = ':roreg';
+  typemap{end+1} = 'sys_rev_rcs';
+  typemap{end+1} = ':roreg';
+  typemap{end+1} = 'sys_scratchpad';
+  typemap{end+1} = ':rwreg';
 
   % Create output file
   f = fopen(opts.filename, 'w');
