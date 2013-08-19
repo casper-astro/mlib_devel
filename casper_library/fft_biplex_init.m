@@ -60,7 +60,7 @@ if get_var('FFTSize', varargin{:}) == 0
 end
 
 % If n_inputs is passed as 0, do nothing
-if get_var('n_inputs' varargin{:}) == 0
+if get_var('n_inputs', varargin{:}) == 0
   clog('exiting fft_biplex_init (n_inputs==0)','trace');
   return
 end
