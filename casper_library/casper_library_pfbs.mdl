@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Aug 19 13:55:12 2013"
-  RTWModifiedTimeStamp	  298821248
-  ModelVersionFormat	  "1.%<AutoIncrement:115>"
+  LastModifiedDate	  "Mon Aug 19 16:27:37 2013"
+  RTWModifiedTimeStamp	  298830094
+  ModelVersionFormat	  "1.%<AutoIncrement:116>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -584,7 +584,7 @@ Library {
   }
   System {
     Name		    "casper_library_pfbs"
-    Location		    [12, 45, 1273, 1070]
+    Location		    [12, 45, 1321, 1070]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -642,7 +642,7 @@ Library {
       MaskValueString	      "6|8|4|8|hamming|1|1|2|1|off|on"
       System {
 	Name			"first_tap"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -904,7 +904,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [376, 45, 843, 1119]
+	    Location		    [342, 45, 857, 1354]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1286,7 +1286,7 @@ Library {
       MaskValueString	      "6|8|4|8|hamming|1|3|2|1|off|on"
       System {
 	Name			"first_tap_real"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1698,7 +1698,7 @@ Library {
       MaskValueString	      "4|8|18|8|1|2|Truncate|off|on"
       System {
 	Name			"last_tap"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1955,7 +1955,7 @@ Library {
 	  MaskValueString	  "4|8|18|8|1|Truncate"
 	  System {
 	    Name		    "pfb_add_tree"
-	    Location		    [12, 45, 1872, 1917]
+	    Location		    [12, 45, 1920, 2152]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2503,7 +2503,7 @@ Library {
 	      MaskValueString	      "4|1|Fabric|off"
 	      System {
 		Name			"adder_tree1"
-		Location		[609, 45, 1710, 1655]
+		Location		[575, 45, 1724, 1890]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -2810,7 +2810,7 @@ Library {
 	      MaskValueString	      "4|1|Fabric|off"
 	      System {
 		Name			"adder_tree2"
-		Location		[609, 45, 1710, 1655]
+		Location		[575, 45, 1724, 1890]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3481,7 +3481,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [376, 45, 843, 1119]
+	    Location		    [342, 45, 857, 1354]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -3784,7 +3784,7 @@ Library {
       MaskValueString	      "1|2|8|18|8|1|2|Truncate|on|off|on|off"
       System {
 	Name			"last_tap_async"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4065,7 +4065,7 @@ Library {
 	  MaskValueString	  "1|2|8|18|8|1|Truncate|off"
 	  System {
 	    Name		    "pfb_add_tree_async"
-	    Location		    [12, 45, 2124, 2082]
+	    Location		    [12, 45, 2172, 2317]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4386,7 +4386,7 @@ Library {
 	      MaskValueString	      "2|add_latency|Fabric|off"
 	      System {
 		Name			"adder_tree1"
-		Location		[609, 45, 1710, 1655]
+		Location		[575, 45, 1724, 1890]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4575,7 +4575,7 @@ Library {
 	      MaskValueString	      "2|add_latency|Fabric|off"
 	      System {
 		Name			"adder_tree2"
-		Location		[609, 45, 1710, 1655]
+		Location		[575, 45, 1724, 1890]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -5107,7 +5107,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [375, 45, 842, 1119]
+	    Location		    [341, 45, 856, 1354]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -5453,7 +5453,7 @@ Library {
       MaskValueString	      "8|8|2|on|off"
       System {
 	Name			"last_tap_real"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5713,7 +5713,7 @@ Library {
       MaskValueString	      "2|8|4|off|hamming|2|0|0|1|off|1"
       System {
 	Name			"pfb_coeff_gen"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -6501,7 +6501,7 @@ Library {
       MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|Round  (unbiased: Even Values)|1|2|on"
       System {
 	Name			"pfb_fir"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -6565,6 +6565,32 @@ Library {
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
 	  LinkData {
+	    BlockName		    "Mult"
+	    DialogParameters {
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
+	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
+	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
+	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
+	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
+	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "Mult1"
+	    DialogParameters {
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
+	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
+	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
+	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
+	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
+	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "delay_bram/constant"
 	    DialogParameters {
 	      sg_icon_stat	      "35,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
@@ -6769,6 +6795,32 @@ Library {
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
 	  LinkData {
+	    BlockName		    "Mult"
+	    DialogParameters {
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
+	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
+	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
+	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
+	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
+	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "Mult1"
+	    DialogParameters {
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
+	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
+	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
+	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
+	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
+	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "delay_bram/constant"
 	    DialogParameters {
 	      sg_icon_stat	      "35,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
@@ -7141,7 +7193,7 @@ Library {
       MaskValueString	      "5|2|hamming|1|off|8|18|8|off|1|2|3|1|Truncate|1|2|off|on|off"
       System {
 	Name			"pfb_fir_async"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -7217,6 +7269,78 @@ Library {
 	  Position		  [150, 150, 250, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "PFBSize=5, n_inputs=1,\ntaps=2, input=0"
+	  LinkData {
+	    BlockName		    "Delay"
+	    DialogParameters {
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
+	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
+	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
+	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
+	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
+	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "Delay1"
+	    DialogParameters {
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
+	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
+	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
+	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
+	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
+	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM1"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM2"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM3"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM4"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag27"
 	  SourceBlock		  "casper_library_pfbs/pfb_coeff_gen"
@@ -7254,6 +7378,16 @@ Library {
 	      hw_selection	      "Fabric"
 	      pipelined		      "on"
 	      use_rpm		      "on"
+	      sg_icon_stat	      "40,60,2,1,white,blue,0,e85d8a90,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 60 60 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 60 60 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[35.55"
+	      " 35.55 40.55 35.55 40.55 40.55 40.55 35.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[30.55 30.55 35"
+	      ".55 35.55 30.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[25.55 25.55 30.55 30.55 25.55 "
+	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[20.55 20.55 25.55 20.55 25.55 25.55 20.55 ],[0."
+	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
+	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
+	      "ut',1,'\\bf{a + b}','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');d"
+	      "isp(' \\newline\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr3"
 	    DialogParameters {
@@ -7336,6 +7470,17 @@ Library {
 	      overflow		      "Wrap"
 	      latency		      "add_latency"
 	      pipeline		      "on"
+	    }
+	    BlockName		    "pfb_add_tree_async/delay_dv"
+	    DialogParameters {
+	      sg_icon_stat	      "30,30,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 30 30 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 30 30 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
+	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
+	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
+	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
+	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');di"
+	      "sp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    BlockName		    "pfb_add_tree_async/scale1"
 	    DialogParameters {
@@ -7387,6 +7532,17 @@ Library {
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "tap(1/2)"
 	  LinkData {
+	    BlockName		    "sync_delay/Constant2"
+	    DialogParameters {
+	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
+	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
+	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
+	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
+	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
+	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "sync_delay/Logical"
 	    DialogParameters {
 	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
@@ -7424,6 +7580,78 @@ Library {
 	  Position		  [150, 300, 250, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "PFBSize=5, n_inputs=1,\ntaps=2, input=1"
+	  LinkData {
+	    BlockName		    "Delay"
+	    DialogParameters {
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
+	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
+	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
+	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
+	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
+	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "Delay1"
+	    DialogParameters {
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
+	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
+	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
+	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
+	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
+	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM1"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM2"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM3"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	    BlockName		    "ROM4"
+	    DialogParameters {
+	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
+	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
+	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
+	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
+	      "','COMMENT: end icon text');"
+	    }
+	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag30"
 	  SourceBlock		  "casper_library_pfbs/pfb_coeff_gen"
@@ -7461,6 +7689,16 @@ Library {
 	      hw_selection	      "Fabric"
 	      pipelined		      "on"
 	      use_rpm		      "on"
+	      sg_icon_stat	      "40,60,2,1,white,blue,0,e85d8a90,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 60 60 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 60 60 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[35.55"
+	      " 35.55 40.55 35.55 40.55 40.55 40.55 35.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[30.55 30.55 35"
+	      ".55 35.55 30.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[25.55 25.55 30.55 30.55 25.55 "
+	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[20.55 20.55 25.55 20.55 25.55 25.55 20.55 ],[0."
+	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
+	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
+	      "ut',1,'\\bf{a + b}','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');d"
+	      "isp(' \\newline\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    BlockName		    "pfb_add_tree_async/adder_tree1/addr3"
 	    DialogParameters {
@@ -7544,6 +7782,17 @@ Library {
 	      latency		      "add_latency"
 	      pipeline		      "on"
 	    }
+	    BlockName		    "pfb_add_tree_async/delay_dv"
+	    DialogParameters {
+	      sg_icon_stat	      "30,30,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 30 30 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 30 30 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
+	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
+	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
+	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
+	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');di"
+	      "sp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "pfb_add_tree_async/scale1"
 	    DialogParameters {
 	      scale_factor	      "-1"
@@ -7594,6 +7843,17 @@ Library {
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "tap(1/2)"
 	  LinkData {
+	    BlockName		    "sync_delay/Constant2"
+	    DialogParameters {
+	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
+	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
+	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
+	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
+	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
+	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "sync_delay/Logical"
 	    DialogParameters {
 	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
@@ -7637,7 +7897,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "sync_generate"
-	    Location		    [12, 45, 2124, 2082]
+	    Location		    [12, 45, 2172, 2317]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -8244,7 +8504,7 @@ Library {
       MaskTabNameString	      "basic,basic,basic,basic,basic,basic,basic,latency,latency,latency"
       System {
 	Name			"pfb_fir_coeff_gen"
-	Location		[12, 45, 1633, 1396]
+	Location		[12, 45, 1681, 1631]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -8277,42 +8537,42 @@ Library {
       MaskPromptString	      "Number input streams?|Size of PFB: (2^? pnts)|Total Number of Taps:|Windowing Function: "
       "|Number of Simultaneous Inputs: (2^?)|Input Bitwidth:|Output Bitwidth:|Coefficient Bitwidth:|Complex data inputs"
       "|Asynchronous operation|Add Latency|Mult Latency|BRAM Latency|Fanout Latency|Convert latency|Quantization Behavi"
-      "or|Bin Width Scaling (normal=1)|Fanout limit"
+      "or|Bin Width Scaling (normal=1)"
       MaskStyleString	      "edit,edit,edit,popup(bartlett|barthannwin|blackman|blackmanharris|bohamwin|chebwin|flatto"
       "pwin|gausswin|hamming|hann|kaiser|nuttallwin|parzenwin|rectwin|tukeywin|triang|userwindow),edit,edit,edit,edit,c"
       "heckbox,checkbox,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Value"
-      "s)),edit,edit"
+      "s)),edit"
       MaskVariables	      "n_streams=@1;PFBSize=@2;TotalTaps=@3;WindowType=&4;n_inputs=@5;BitWidthIn=@6;BitWidthOut=@7"
       ";CoeffBitWidth=@8;complex=&9;async=&10;add_latency=@11;mult_latency=@12;bram_latency=@13;fan_latency=@14;conv_la"
-      "tency=@15;quantization=&16;fwidth=@17;fanout=@18;"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      "tency=@15;quantization=&16;fwidth=@17;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskCallbackString      "||%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = eval(get_param(gcb, 'mult_"
       "spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <= num_taps), \n%   new_si"
       "ze = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n) = old_vec(n); end\n%set_"
       "param(gcb, 'mult_spec', mat2str(vec));||||||||||||||%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = e"
       "val(get_param(gcb, 'mult_spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <"
       "= num_taps), \n%    new_size = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n"
-      ") = old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));|"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      ") = old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskInitialization      "pfb_fir_generic_init(gcb, ...\n    'n_streams', n_streams, ...\n    'PFBSize', PFBSize,"
       " ...\n    'TotalTaps', TotalTaps, ...\n    'WindowType', WindowType, ...\n    'n_inputs', n_inputs, ...\n    'co"
       "mplex', complex, ...\n    'BitWidthIn', BitWidthIn, ...\n    'BitWidthOut', BitWidthOut, ...\n    'CoeffBitWidth"
       "', CoeffBitWidth, ...\n    'async', async, ...\n    'add_latency', add_latency, ...\n    'mult_latency', mult_la"
       "tency, ...\n    'bram_latency', bram_latency, ...\n    'fan_latency', fan_latency, ...\n    'conv_latency', conv"
-      "_latency, ...\n    'quantization', quantization, ...\n    'fwidth', fwidth, ...\n    'fanout', fanout);"
+      "_latency, ...\n    'quantization', quantization, ...\n    'fwidth', fwidth);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "1|5|0|hamming|0|8|18|12|off|off|1|2|2|1|1|Round  (unbiased: Even Values)|1|4"
+      MaskValueString	      "1|5|0|hamming|0|8|18|12|off|off|1|2|2|1|1|Round  (unbiased: Even Values)|1"
       MaskTabNameString	      "basic,basic,basic,implementation,basic,basic,basic,basic,basic,basic,latency,latency,la"
-      "tency,latency,latency,implementation,implementation,implementation"
+      "tency,latency,latency,implementation,implementation"
       System {
 	Name			"pfb_fir_generic"
-	Location		[12, 45, 1577, 1344]
+	Location		[12, 45, 1625, 1579]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -8381,7 +8641,7 @@ Library {
       MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|1|Round  (unbiased: Even Values)|1|2|on|Fabric|off"
       System {
 	Name			"pfb_fir_real"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -8657,6 +8917,19 @@ Library {
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
 	  LinkData {
+	    BlockName		    "Mult"
+	    DialogParameters {
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
+	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
+	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
+	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
+	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
+	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "sync_delay/Logical"
 	    DialogParameters {
 	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
@@ -8732,6 +9005,19 @@ Library {
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
 	  LinkData {
+	    BlockName		    "Mult"
+	    DialogParameters {
+	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
+	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
+	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
+	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
+	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
+	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
+	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
+	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
+	    }
 	    BlockName		    "sync_delay/Logical"
 	    DialogParameters {
 	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
@@ -9068,7 +9354,7 @@ Library {
       "lementation"
       System {
 	Name			"pfb_fir_taps"
-	Location		[38, 45, 1661, 1411]
+	Location		[12, 45, 1683, 1646]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -9119,7 +9405,7 @@ Library {
       MaskValueString	      "2|12|3|4|8|1|off|on"
       System {
 	Name			"tap"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -9378,6 +9664,19 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [190, 20, 230, 60]
 	  BackgroundColor	  "gray"
+	  LinkData {
+	    BlockName		    "constant"
+	    DialogParameters {
+	      sg_icon_stat	      "35,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 24 24 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 24 24 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ]"
+	      ",[15.33 15.33 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[12.3"
+	      "3 12.33 15.33 15.33 12.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[9.33 9.33 12.33 "
+	      "12.33 9.33 ],[1 1 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6"
+	      ".33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text')"
+	      ";\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
+	    }
+	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag46"
 	  SourceBlock		  "casper_library_delays/delay_bram"
@@ -9400,7 +9699,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [376, 45, 843, 1119]
+	    Location		    [342, 45, 857, 1354]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -9783,7 +10082,7 @@ Library {
       MaskValueString	      "1|5|8|2|8|2|3|1|1|on|off|on|off"
       System {
 	Name			"tap_async"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -10153,7 +10452,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [376, 45, 843, 1119]
+	    Location		    [342, 45, 857, 1354]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -10601,7 +10900,7 @@ Library {
       MaskValueString	      "2|12|3|4|8|1|on|off"
       System {
 	Name			"tap_real"
-	Location		[12, 45, 1273, 1070]
+	Location		[12, 45, 1321, 1305]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -11580,55 +11879,54 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag34
-    Data		    "  %)30     .    X \\   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
-    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ #JKJ@8.    4 \\ "
-    "  8    (     @         %    \"     $    !     0         %  0 #@    $    * 0  9&5F875L=',       !N7W-T<F5A;7,      "
-    "%!&0E-I>F4         5&]T86Q487!S      !7:6YD;W=4>7!E     &Y?:6YP=71S        8V]M<&QE>         !\":717:61T:$EN     $"
-    ")I=%=I9'1H3W5T    0V]E9F9\":717:61T: !A<WEN8P           &%D9%]L871E;F-Y    ;75L=%]L871E;F-Y  !B<F%M7VQA=&5N8WD  &9"
-    "A;E]L871E;F-Y    8V]N=E]L871E;F-Y  !Q=6%N=&EZ871I;VX  &9W:61T:           9F%N;W5T                   .    > D   8  "
-    "  (     0         %    \"     $    D     0         .    0     8    (    !          %    \"     $    )     0       "
-    "  0    \"0   &Y?<W1R96%M<P         .    .     8    (    !@         %    \"     $    !     0         )    \"       "
-    "     / _#@   #@    &    \"     0         !0    @    !    !P    $         $     <   !01D)3:7IE  X    X    !@    @  "
-    "  &          4    (     0    $    !          D    (            %$ .    0     8    (    !          %    \"     $   "
-    " )     0         0    \"0   %1O=&%L5&%P<P         .    .     8    (    !@         %    \"     $    !     0        "
-    " )    \"            !! #@   $     &    \"     0         !0    @    !    \"@    $         $     H   !7:6YD;W=4>7!E "
-    "       #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @   "
-    " $          4    (     0    @    !         !     (    ;E]I;G!U=',.    .     8    (    !@         %    \"     $    "
-    "!     0         )    \"               #@   $     &    \"     0         !0    @    !    \"@    $         $     H   "
-    "!\":717:61T:$EN        #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X  "
-    " !     !@    @    $          4    (     0    L    !         !     +    0FET5VED=&A/=70       X    X    !@    @    "
-    "&          4    (     0    $    !          D    (            ,D .    0     8    (    !          %    \"     $    -"
-    "     0         0    #0   $-O969F0FET5VED=&@    .    .     8    (    !@         %    \"     $    !     0         ) "
-    "   \"            \"A #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !C;VUP;&5X  X    P"
-    "    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    ! "
-    "   !0    $         $     4   !A<WEN8P    X    P    !@    @    $          4    (     0    (    !         !   @!O;@ "
-    " #@   $     &    \"     0         !0    @    !    #     $         $     P   !M=6QT7VQA=&5N8WD     #@   #@    &    "
-    "\"     8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4    (    "
-    " 0    L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !      "
-    "    D    (            \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    &)R86U?;&%T9"
-    "6YC>0     .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   $     &    \""
-    "     0         !0    @    !    \"P    $         $     L   !F86Y?;&%T96YC>0      #@   #@    &    \"     8         !"
-    "0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4    (     0    P    !      "
-    "   !     ,    8V]N=E]L871E;F-Y      X    X    !@    @    &          4    (     0    $    !          D    (        "
-    "    \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    '%U86YT:7IA=&EO;@     .    .  "
-    "   8    (    !          %    \"     $    (     0         0    \"    %1R=6YC871E#@   #@    &    \"     0         !0"
-    "    @    !    !@    $         $     8   !F=VED=&@   X    X    !@    @    &          4    (     0    $    !        "
-    "  D    (            \\#\\.    .     8    (    !          %    \"     $    &     0         0    !@   &9A;F]U=   #@ "
-    "  #@    &    \"     8         !0    @    !     0    $         \"0    @            00 X    X    !@    @    &       "
-    "   4    (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0"
-    "         )    \"            !1 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @          "
-    "     X    X    !@    @    $          4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !@ "
-    "        %    \"     $    !     0         )    \"               #@   #     &    \"     0         !0    @    !     P"
-    "    $         $  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #"
-    "@   #@    &    \"     8         !0    @    !     0    $         \"0    @            R0 X    X    !@    @    &     "
-    "     4    (     0    $    !          D    (            *$ .    ,     8    (    !          %    \"     $    #     0"
-    "         0  , ;V9F  X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    . "
-    "    8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8         !"
-    "0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    !      "
-    "    D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            / _"
-    "#@   %     &    \"     0         !0    @    !    '@    $         $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N(%9A;'5E"
-    "<RD   X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8    (    "
-    "!@         %    \"     $    !     0         )    \"            !! "
+    Data		    "  %)30     .    D \\   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !_(K 8.      \\ "
+    "  8    (     @         %    \"     $    !     0         %  0 #@    $   #\\    9&5F875L=',       !N7W-T<F5A;7,     "
+    " %!&0E-I>F4         5&]T86Q487!S      !7:6YD;W=4>7!E     &Y?:6YP=71S        8V]M<&QE>         !\":717:61T:$EN     "
+    "$)I=%=I9'1H3W5T    0V]E9F9\":717:61T: !A<WEN8P           &%D9%]L871E;F-Y    ;75L=%]L871E;F-Y  !B<F%M7VQA=&5N8WD  &"
+    "9A;E]L871E;F-Y    8V]N=E]L871E;F-Y  !Q=6%N=&EZ871I;VX  &9W:61T:                 X   !X\"0  !@    @    !          4"
+    "    (     0   \"0    !          X   !     !@    @    $          4    (     0    D    !         !     )    ;E]S=')E"
+    "86US          X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8 "
+    "   (    !          %    \"     $    '     0         0    !P   %!&0E-I>F4 #@   #@    &    \"     8         !0    @ "
+    "   !     0    $         \"0    @            40 X   !     !@    @    $          4    (     0    D    !         !   "
+    "  )    5&]T86Q487!S          X    X    !@    @    &          4    (     0    $    !          D    (            $$ "
+    ".    0     8    (    !          %    \"     $    *     0         0    \"@   %=I;F1O=U1Y<&4        .    .     8    "
+    "(    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@    &    \"     0         !0    @    "
+    "!    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    ("
+    "               .    0     8    (    !          %    \"     $    *     0         0    \"@   $)I=%=I9'1H26X        ."
+    "    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   $     &    \"     0   "
+    "      !0    @    !    \"P    $         $     L   !\":717:61T:$]U=       #@   #@    &    \"     8         !0    @  "
+    "  !     0    $         \"0    @            R0 X   !     !@    @    $          4    (     0    T    !         !    "
+    " -    0V]E9F9\":717:61T:     X    X    !@    @    &          4    (     0    $    !          D    (            *$ "
+    ".    .     8    (    !          %    \"     $    '     0         0    !P   &-O;7!L97@ #@   #     &    \"     0    "
+    "     !0    @    !     @    $         $  \" &]N   .    .     8    (    !          %    \"     $    %     0         "
+    "0    !0   &%S>6YC    #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    0     8    "
+    "(    !          %    \"     $    ,     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         %"
+    "    \"     $    !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    \"P    $   "
+    "      $     L   !A9&1?;&%T96YC>0      #@   #@    &    \"     8         !0    @    !     0    $         \"0    @   "
+    "        #P/PX   !     !@    @    $          4    (     0    P    !         !     ,    8G)A;5]L871E;F-Y      X    X"
+    "    !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !          %  "
+    "  \"     $    +     0         0    \"P   &9A;E]L871E;F-Y       .    .     8    (    !@         %    \"     $    ! "
+    "    0         )    \"            / _#@   $     &    \"     0         !0    @    !    #     $         $     P   !C;"
+    "VYV7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !  "
+    "   !@    @    $          4    (     0    P    !         !     ,    <75A;G1I>F%T:6]N      X    X    !@    @    $   "
+    "       4    (     0    @    !         !     (    5')U;F-A=&4.    .     8    (    !          %    \"     $    &    "
+    " 0         0    !@   &9W:61T:   #@   #@    &    \"     8         !0    @    !     0    $         \"0    @         "
+    "  #P/PX    X    !@    @    $          4    (     0    8    !         !     &    9F%N;W5T   .    .     8    (    !@"
+    "         %    \"     $    !     0         )    \"            !! #@   #@    &    \"     8         !0    @    !     "
+    "0    $         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    !          D    (      "
+    "      %$ .    .     8    (    !@         %    \"     $    !     0         )    \"               #@   #@    &    \""
+    "     0         !0    @    !    !P    $         $     <   !H86UM:6YG  X    X    !@    @    &          4    (     0 "
+    "   $    !          D    (               .    ,     8    (    !          %    \"     $    #     0         0  , ;V9F"
+    "  X    X    !@    @    &          4    (     0    $    !          D    (            ($ .    .     8    (    !@    "
+    "     %    \"     $    !     0         )    \"            #) #@   #@    &    \"     8         !0    @    !     0   "
+    " $         \"0    @            H0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #"
+    "@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    &          "
+    "4    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0     "
+    "    )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/P"
+    "X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    4     8    (    !     "
+    "     %    \"     $    >     0         0    '@   %)O=6YD(\" H=6YB:6%S960Z($5V96X@5F%L=65S*0  #@   #@    &    \"    "
+    " 8         !0    @    !     0    $         \"0    @           #P/P"
   }
   DataRecord {
     Tag			    DataTag35

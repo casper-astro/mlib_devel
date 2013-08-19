@@ -68,7 +68,6 @@ function pfb_fir_generic_init(blk, varargin)
   conv_latency                = get_var('conv_latency', 'defaults', defaults, varargin{:});
   quantization                = get_var('quantization', 'defaults', defaults, varargin{:});
   fwidth                      = get_var('fwidth', 'defaults', defaults, varargin{:});
-  fanout                      = get_var('fanout', 'defaults', defaults, varargin{:});
   multiplier_implementation   = get_var('multiplier_implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
@@ -79,6 +78,19 @@ function pfb_fir_generic_init(blk, varargin)
     set_param(blk, 'AttributesFormatString', '');
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
     clog('exiting pfb_fir_generic_init','trace');
+    return;
+  end
+
+  %check parameters
+  if TotalTaps < 3,
+    clog('need at least 3 taps', {'error', 'pfb_fir_generic_init_debug'});
+    error('need at least 3 taps');
+    return;
+  end
+    
+  if strcmp(async, 'on') && fan_latency < 1,
+    clog('fanout latency must be at least 1 for asynchonrous operation', {'error', 'pfb_fir_generic_init_debug'});
+    error('fanout latency must be at least 1 for asynchonrous operation');
     return;
   end
 
