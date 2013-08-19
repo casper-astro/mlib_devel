@@ -20,21 +20,18 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%TODO implement reset logic for port B on ROMs so that correct first value is
-%output when counter is 0
-
 function pfb_fir_coeff_gen_init(blk, varargin)
   clog('entering pfb_fir_coeff_gen_init', 'trace');
 
   defaults = { ...
-    'n_inputs', 0, ...
+    'n_inputs', 1, ...
     'pfb_size', 5, ...
     'n_taps', 4, ...
     'n_bits_coeff', 12, ...
     'WindowType', 'hamming', ...
     'fwidth', 1, ...
-    'async', 'off', ...
-    'bram_latency', 2, ...
+    'async', 'on', ...
+    'bram_latency', 1, ...
     'fan_latency', 1, ...
     'add_latency', 1, ...
   };
@@ -53,7 +50,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   WindowType                  = get_var('WindowType', 'defaults', defaults, varargin{:});
   fwidth                      = get_var('fwidth', 'defaults', defaults, varargin{:});
   async                       = get_var('async', 'defaults', defaults, varargin{:});
-  bram_latency                = get_var('bram_latency', 'defaults', defaults, varargin{:});
+  bram_latency                = 1;
+%  bram_latency                = get_var('bram_latency', 'defaults', defaults, varargin{:});
   fan_latency                 = get_var('fan_latency', 'defaults', defaults, varargin{:});
   add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
 
@@ -65,6 +63,19 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     set_param(blk, 'AttributesFormatString', '');
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
     clog('exiting pfb_fir_coeff_gen_init','trace');
+    return;
+  end
+
+  %check parameters
+  if n_taps < 3,
+    clog('need at least 3 taps', {'error', 'pfb_fir_coeff_gen_init_debug'});
+    error('need at least 3 taps');
+    return;
+  end
+    
+  if strcmp(async, 'on') && fan_latency < 1,
+    clog('fanout latency must be at least 1 for asynchonrous operation', {'error', 'pfb_fir_coeff_gen_init_debug'});
+    error('fanout latency must be at least 1 for asynchonrous operation');
     return;
   end
 
@@ -99,7 +110,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   % sync pipeline
   reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [15 8 45 22]);
   reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
-    'en', async, 'latency', 'fan_latency+bram_latency', 'Position', [410 4 455 51]);
+    'latency', num2str(fan_latency+bram_latency), 'Position', [410 4 455 51]);
   add_line(blk,'sync/1', 'sync_delay/1');
   reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [840 23 870 37]);
   add_line(blk,'sync_delay/1', 'sync_out/1');
@@ -107,7 +118,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   % din pipeline
   reuse_block(blk, 'din', 'built-in/Inport', 'Port', '2', 'Position', [15 73 45 87]);
   reuse_block(blk, 'din_delay', 'xbsIndex_r4/Delay', ...
-    'en', async, 'latency', 'fan_latency+bram_latency', 'Position', [410 69 455 116]);
+    'latency', num2str(fan_latency+bram_latency), 'Position', [410 69 455 116]);
   add_line(blk, 'din/1', 'din_delay/1');
   reuse_block(blk, 'dout', 'built-in/Outport', 'Port', '2', 'Position', [840 88 870 102]);
   add_line(blk,'din_delay/1', 'dout/1');
@@ -115,7 +126,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   % address generation
   reuse_block(blk, 'counter', 'xbsIndex_r4/Counter', ...
     'cnt_type', 'Free Running', 'operation', 'Up', 'start_count', '0', 'cnt_by_val', '1', ...
-    'n_bits', num2str(pfb_size), 'arith_type', 'Unsigned', 'bin_pt', '0', ...
+    'n_bits', num2str(pfb_size-n_inputs), 'arith_type', 'Unsigned', 'bin_pt', '0', ...
     'rst', 'on', 'en', async, ...
     'Position', [105 142 155 193]);
   add_line(blk, 'sync/1', 'counter/1'); 
@@ -126,25 +137,45 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     'latency', '1', 'en', async, ...
     'Position', [180 216 230 269]);
   add_line(blk, 'counter/1', 'inverter/1'); 
- 
+
+  % reset logic for port B. 
+  % Coefficients are not quite symmetrical, they are off by one, and do not overlap by one
+  % e.g with T taps and fft size of N: tap T-1, sample 0 is not the same as tap 0, sample N-1
+  % instead it is unique and not included in the coefficients for Tap 0
+  % Also, tap T-1, sample 1 is the same as tap 0, sample N-1
+  % So, we store the unique value as the reset value for the output register for port B
+  % and delay the addressing for port B by one.
+
+  reuse_block(blk, 'zero', 'xbsIndex_r4/Constant', ...
+        'const', '0', 'arith_type', 'Unsigned', ...
+        'n_bits', num2str(pfb_size-n_inputs), 'bin_pt', '0', ...
+        'explicit_period', 'on', 'period', '1', ...
+        'Position', [120 327 140 343]);
+  
+  reuse_block(blk, 'first', 'xbsIndex_r4/Relational' , ...
+        'mode', 'a=b', 'Position', [190 289 220 351]);
+  add_line(blk, 'counter/1', 'first/1');
+  add_line(blk, 'zero/1', 'first/2');
+
   yoff = 170; 
   % ROM generation
   for rom_index = 0:brams_required-1
     if rom_index < brams_required-1, outputs = port_multiple;
     else outputs = last_bram_outputs;
     end
+    clog(['Getting coeffs for ROM',num2str(rom_index),' requiring ',num2str(outputs), ' output streams'],{'pfb_fir_coeff_gen_init_debug'});
 
     % fanout latency
     fana_name = ['fana_delay',num2str(rom_index)];
     reuse_block(blk, fana_name, 'xbsIndex_r4/Delay', ...
-      'latency', 'fan_latency', 'Position', [280 yoff-15 305 yoff+15]);
+      'latency', num2str(fan_latency), 'Position', [280 yoff-8 305 yoff+8]);
     add_line(blk, 'counter/1', [fana_name,'/1']);
     fanb_name = ['fanb_delay',num2str(rom_index)];
     reuse_block(blk, fanb_name, 'xbsIndex_r4/Delay', ...
-      'latency', 'fan_latency', 'Position', [280 yoff+75-15 305 yoff+75+15]);
+      'latency', num2str(fan_latency), 'Position', [280 yoff+75-8 305 yoff+75+8]);
     add_line(blk, 'inverter/1', [fanb_name,'/1']);
    
-    %constants
+    % constants
     reuse_block(blk, ['rom_din',num2str(rom_index)], 'xbsIndex_r4/Constant', ...
           'NamePlacement', 'alternate', ...
           'const', '0', 'arith_type', 'Unsigned', ...
@@ -155,57 +186,76 @@ function pfb_fir_coeff_gen_init(blk, varargin)
           'const', '0', 'arith_type', 'Boolean', ...
           'explicit_period', 'on', 'period', '1', ...
           'Position', [335 yoff+42 355 yoff+58]);
+    
+    % reset fanout
+    rstb = ['rstb_delay',num2str(rom_index)];
+    reuse_block(blk, rstb, 'xbsIndex_r4/Delay', ...
+      'latency', num2str(fan_latency), 'Position', [280 yoff+150-8 305 yoff+150+8]);
+    add_line(blk, 'first/1', [rstb,'/1']);
 
     % generate values to be stored in ROM  
     init_vector = zeros(outputs, 2^(pfb_size-n_inputs));
+    init_val = zeros(outputs, 1);
     for out_index = 0:outputs-1,
       ref_index = (rom_index * port_multiple) + out_index;
       input_index = mod(ref_index, 2^n_inputs);
       tap_index = floor(ref_index/2^n_inputs) + 1;
       clog(['Getting coeffs for output ',num2str(ref_index),' => tap: ',num2str(tap_index),' input: ',num2str(input_index)],{'pfb_fir_coeff_gen_init_debug'});
       raw_vals = pfb_coeff_gen_calc(pfb_size, n_taps, WindowType, n_inputs, input_index, fwidth, tap_index, false);
-      vals = fi(raw_vals, true, n_bits_coeff, n_bits_coeff-1); %saturates at max so no overflow
-      vals = fi(vals, false, n_bits_coeff, n_bits_coeff-1, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
+      vals = fi(raw_vals, true, n_bits_coeff, n_bits_coeff-1);                        %saturates at max so no overflow
+      vals = fi(vals, false, n_bits_coeff, n_bits_coeff-1, 'OverflowMode', 'wrap');   %wraps negative component so can get back when positive
       vals = fi(vals, false, n_bits_coeff*(2+(outputs-out_index-1)), n_bits_coeff-1); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-      vals = bitshift(vals,n_bits_coeff-1+(n_bits_coeff*(outputs-out_index-1))); %shift up 
+      vals = bitshift(vals, n_bits_coeff-1+(n_bits_coeff*(outputs-out_index-1)));     %shift up 
       init_vector(out_index+1,:) = vals;
+
+      %find reset value for port B
+      clog(['Getting initial value for output ',num2str(ref_index),' => tap: ',num2str(n_taps-tap_index+1),' input: ',num2str(2^n_inputs-input_index-1)],{'pfb_fir_coeff_gen_init_debug'});
+      raw_vals = pfb_coeff_gen_calc(pfb_size, n_taps, WindowType, n_inputs, (2^n_inputs)-input_index-1, fwidth, n_taps-tap_index+1, false);
+      raw_val = raw_vals(1);
+      val = fi(raw_val, true, n_bits_coeff, n_bits_coeff-1);                        %saturates at max so no overflow
+      val = fi(val, false, n_bits_coeff, n_bits_coeff-1, 'OverflowMode', 'wrap');   %wraps negative component so can get back when positive
+      val = fi(val, false, n_bits_coeff*(2+(outputs-out_index-1)), n_bits_coeff-1); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
+      val = bitshift(val, n_bits_coeff-1+(n_bits_coeff*(outputs-out_index-1)));     %shift up 
+      init_val(out_index+1,1) = val;
     end
 
     % roms themselves
     rom_name = ['ROM',num2str(rom_index)];
     reuse_block(blk, rom_name, 'xbsIndex_r4/Dual Port RAM', ...
-            'initVector', mat2str(double(sum(init_vector))), ...
-            'depth', '2^pfb_size', ...
-            'latency', 'bram_latency', ...
+            'initVector', mat2str(double(sum(init_vector,1))), ...
+            'depth', '2^(pfb_size-n_inputs)', ...
+            'latency', '1', ... %when using reset value for port B, can only have latency of 1
             'distributed_mem', 'Block RAM', ...
             'en_a', async, 'en_b', async, ...
-            'Position', [410 yoff-8 455 yoff+183]);
+            'rst_b', 'on', 'init_b', num2str(double(sum(init_val,1))), ...
+            'Position', [410 yoff-7 455 yoff+207]);
     add_line(blk, [fana_name,'/1'], [rom_name,'/1']);
     add_line(blk, [fanb_name,'/1'], [rom_name,'/4']);
     add_line(blk, ['rom_din',num2str(rom_index),'/1'], [rom_name,'/2']);
     add_line(blk, ['rom_din',num2str(rom_index),'/1'], [rom_name,'/5']);
     add_line(blk, ['rom_we',num2str(rom_index),'/1'], [rom_name,'/3']);
     add_line(blk, ['rom_we',num2str(rom_index),'/1'], [rom_name,'/6']);
+    add_line(blk, [rstb,'/1'], [rom_name,'/7']);
   
     % coefficient extraction
     busa_expand_name = ['busa_expand',num2str(rom_index)];
     reuse_block(blk, busa_expand_name, 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', 'outputNum', num2str(outputs), ...
       'outputWidth', num2str(n_bits_coeff), 'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
-      'Position', [500 yoff 550 yoff+75]);
+      'Position', [500 yoff 550 yoff+88]);
     add_line(blk, [rom_name,'/1'], [busa_expand_name,'/1']);
     busb_expand_name = ['busb_expand',num2str(rom_index)];
     reuse_block(blk, busb_expand_name, 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', 'outputNum', num2str(outputs), ...
       'outputWidth', num2str(n_bits_coeff), 'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
-      'Position', [500 yoff+95 550 yoff+170]);
+      'Position', [500 yoff+117 550 yoff+193]);
     add_line(blk, [rom_name,'/2'], [busb_expand_name,'/1']);
 
     %increment yoffset
-    yoff = yoff + 220;
+    yoff = yoff + 270;
   end 
 
-  yoff = 180;
+  yoff = 170;
   reuse_block(blk, 'coeffs', 'built-in/Outport', 'Port', '3', ...
     'Position', [840 yoff+outputs_required*yinc-7 870 yoff+outputs_required*yinc+7]);
 
@@ -218,7 +268,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   % delays for each output
   for d_index = 0:outputs_required*2-1,
     d_name = ['d',num2str(d_index)];
-    latency = (outputs_required*2-d_index-1)*add_latency;
+    latency = (floor((outputs_required*2-d_index-1)/(2^n_inputs)))*add_latency;
     
     %force delay block with 0 latency to have no enable port
     if latency > 0, en = async;
@@ -248,12 +298,10 @@ function pfb_fir_coeff_gen_init(blk, varargin)
 
   % asynchronous pipeline
   if strcmp(async, 'on'),
-    yoff = 180;
+    yoff = 170;
 
     reuse_block(blk, 'en', 'built-in/Inport', 'Port', '3', ...
       'Position', [15 173 45 187]);
-    add_line(blk, 'en/1', 'sync_delay/2');  
-    add_line(blk, 'en/1', 'din_delay/2');  
     add_line(blk, 'en/1', 'counter/2');  
     add_line(blk, 'en/1', 'inverter/2');  
  
@@ -262,23 +310,39 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     add_line(blk, 'en/1', 'en_delay0/1');
 
     for rom_index = 0:brams_required-1,
+    
+      en_delay_name = ['en_rom',num2str(rom_index)];
+      reuse_block(blk, en_delay_name, 'xbsIndex_r4/Delay', 'NamePlacement', 'alternate', ...
+        'latency', num2str(fan_latency), 'Position', [280 yoff+240-8 305 yoff+240+8]);
+      add_line(blk, 'en/1', [en_delay_name,'/1']);
+      
       rom_name = ['ROM',num2str(rom_index)];
-      add_line(blk, 'en_delay0/1', [rom_name, '/7']);
-      add_line(blk, 'en_delay0/1', [rom_name, '/8']);
+      add_line(blk, [en_delay_name,'/1'], [rom_name, '/8']);
+      add_line(blk, [en_delay_name,'/1'], [rom_name, '/9']);
+
+      en_delays_name = ['en_delays',num2str(rom_index)];
+      reuse_block(blk, en_delays_name, 'xbsIndex_r4/Delay', ...
+        'latency', num2str(bram_latency), 'Position', [410 yoff+240-8 550 yoff+240+8]);
+      add_line(blk, [en_delay_name,'/1'], [en_delays_name,'/1']);
+  
+      yoff = yoff + 270;
     end
     
-    reuse_block(blk, 'en_delay1', 'xbsIndex_r4/Delay', 'latency', 'bram_latency', ...
+    yoff = 170;
+    reuse_block(blk, 'en_delay1', 'xbsIndex_r4/Delay', 'latency', num2str(bram_latency), ...
       'Position', [410 yoff+outputs_required*2*yinc+60-12 550 yoff+outputs_required*2*yinc+60+12]);
     add_line(blk, 'en_delay0/1', 'en_delay1/1');
     
-    for d_index = 0:outputs_required*2-2,
+    for d_index = 0:outputs_required*2-1-(2^n_inputs),
       d_name = ['d',num2str(d_index)];
-      add_line(blk, 'en_delay1/1', [d_name,'/2']);
+      en_delays_name = ['en_delays', num2str(floor(d_index/(port_multiple*2)))];
+      add_line(blk, [en_delays_name,'/1'], [d_name,'/2']);
     end
 
     reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '4', ...
       'Position', [840 yoff+outputs_required*2*yinc-7+60 870 yoff+outputs_required*2*yinc+7+60]);
     add_line(blk, 'en_delay1/1', 'dvalid/1');
+
   end %if async
 
   clean_blocks(blk);

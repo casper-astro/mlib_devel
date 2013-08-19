@@ -74,7 +74,7 @@ function pfb_fir_taps_init(blk, varargin)
   % input ports
 
   reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [35 28 65 42]);
-  reuse_block(blk, 'din', 'built-in/Inport', 'Port', '2', 'Position', [35 158 65 172]);
+  reuse_block(blk, 'din', 'built-in/Inport', 'Port', '2', 'Position', [35 123 65 137]);
   reuse_block(blk, 'coeffs', 'built-in/Inport', 'Port', '3', 'Position', [35 348 65 362]);
 
   if strcmp(async, 'on'),
@@ -88,7 +88,7 @@ function pfb_fir_taps_init(blk, varargin)
   end
 
   reuse_block(blk, 'sync_delay', delay_type , ...
-          'DelayLen', '(2^pfb_size+add_latency)*(n_taps-1)', ...
+          'DelayLen', '(2^(pfb_size-n_inputs)+add_latency)*(n_taps-1)', ...
           'Position', [330 26 370 64]);
   add_line(blk,'sync/1','sync_delay/1');
 
@@ -109,23 +109,23 @@ function pfb_fir_taps_init(blk, varargin)
 
   reuse_block(blk, 'youngest', 'xbsIndex_r4/Slice', ...
           'nbits', num2str(factor*n_bits_data*(n_taps-2)*n_streams*2^n_inputs), ...
-          'mode', 'Lower Bit Location + Width', ...
-          'Position', [130 121 160 139]);
+          'mode', 'Upper Bit Location + Width', 'bit1', '0', 'base1', 'MSB of Input', ...
+          'Position', [35 156 65 174]);
 
   reuse_block(blk, 'data_delay_chain', 'xbsIndex_r4/Concat', 'num_inputs', '2', 'Position', [225 114 255 181]);
-  add_line(blk,'youngest/1', 'data_delay_chain/1');
-  add_line(blk,'din/1','data_delay_chain/2');
+  add_line(blk, 'youngest/1', 'data_delay_chain/2');
+  add_line(blk, 'din/1', 'data_delay_chain/1');
 
   reuse_block(blk, 'data', 'xbsIndex_r4/Concat', 'num_inputs', '2', 'Position', [225 284 255 331]);
-  add_line(blk,'din/1', 'data/2');
+  add_line(blk,'din/1', 'data/1');
 
   reuse_block(blk, 'delay_bram', 'casper_library_delays/delay_bram', ...
-          'DelayLen', '2^pfb_size', 'bram_latency', 'bram_latency', 'async', async, 'Position', [330 129 370 216]);
+          'DelayLen', '2^(pfb_size-n_inputs)', 'bram_latency', 'bram_latency', 'async', async, 'Position', [330 129 370 216]);
   add_line(blk,'data_delay_chain/1','delay_bram/1');
 
   reuse_block(blk, 'd_delay', 'xbsIndex_r4/Delay', 'en', async, 'latency', 'add_latency', 'Position', [700 145 740 265]);
   add_line(blk,'d_delay/1', 'youngest/1', 'autorouting', 'on');
-  add_line(blk,'d_delay/1', 'data/1', 'autorouting', 'on');
+  add_line(blk,'d_delay/1', 'data/2', 'autorouting', 'on');
   add_line(blk,'delay_bram/1', 'd_delay/1');
 
   % coefficient multiplication
@@ -161,18 +161,19 @@ function pfb_fir_taps_init(blk, varargin)
           'const', '0', 'arith_type', 'Unsigned', ...
           'n_bits', num2str(n_bits_mult*n_outputs*factor), 'bin_pt', '0', ...
           'explicit_period', 'on', 'period', '1', ...
-          'Position', [445 417 465 433]);
+          'Position', [520 382 540 398]);
   
   reuse_block(blk, 'partial_sum', 'xbsIndex_r4/Slice', ...
           'nbits', num2str(sum([n_bits_mult+n_taps-2:-1:n_bits_mult])*n_outputs*factor), ...
-          'mode', 'Lower Bit Location + Width', 'Position', [515 384 545 406]);
+          'mode', 'Upper Bit Location + Width', 'bit1', '0', 'base1', 'MSB of Input', ...
+          'Position', [520 415 545 435]);
 
-  reuse_block(blk, 'tap_chain', 'xbsIndex_r4/Concat', 'Position', [600 381 630 439]);
-  add_line(blk, 'dummy/1', 'tap_chain/2');
-  add_line(blk, 'partial_sum/1', 'tap_chain/1');
+  reuse_block(blk, 'tap_chain', 'xbsIndex_r4/Concat', 'Position', [610 373 640 442]);
+  add_line(blk, 'dummy/1', 'tap_chain/1');
+  add_line(blk, 'partial_sum/1', 'tap_chain/2');
 
-  n_bits_b = reshape(repmat([[n_bits_mult+n_taps-2:-1:n_bits_mult], n_bits_mult], n_outputs*factor, 1), 1, n_outputs*factor*n_taps, 1);
-  n_bits_out = reshape(repmat([n_bits_mult+n_taps-1:-1:n_bits_mult], n_outputs*factor, 1), 1, n_outputs*factor*n_taps, 1);
+  n_bits_b = reshape(repmat([n_bits_mult, [n_bits_mult:n_bits_mult+n_taps-2]], n_outputs*factor, 1), 1, n_outputs*factor*n_taps, 1);
+  n_bits_out = reshape(repmat([n_bits_mult:n_bits_mult+n_taps-1], n_outputs*factor, 1), 1, n_outputs*factor*n_taps, 1);
   reuse_block(blk, 'bus_add', 'casper_library_bus/bus_addsub', ...
           'opmode', '0', ...
           'n_bits_a', mat2str(repmat(n_bits_data+n_bits_coeff, 1, n_outputs*n_taps*factor)), ... 
@@ -188,7 +189,10 @@ function pfb_fir_taps_init(blk, varargin)
   add_line(blk,'bus_add/1', 'partial_sum/1', 'autorouting', 'on');
   add_line(blk,'tap_chain/1', 'bus_add/2');
 
-  reuse_block(blk, 'final_sum', 'xbsIndex_r4/Slice', 'nbits', num2str((n_bits_mult+n_taps-1)*n_outputs*factor), 'Position', [845 344 875 366]);
+  reuse_block(blk, 'final_sum', 'xbsIndex_r4/Slice', ...
+    'nbits', num2str((n_bits_mult+n_taps-1)*n_outputs*factor), ...
+    'mode', 'Lower Bit Location + Width', 'bit0', '0', 'base0', 'LSB of Input', ...
+    'Position', [845 344 875 366]);
   add_line(blk,'bus_add/1', 'final_sum/1');
 
   reuse_block(blk, 'dout', 'built-in/Outport', 'Port', '2', 'Position', [935 348 965 362]);
