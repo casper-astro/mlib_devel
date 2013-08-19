@@ -46,11 +46,13 @@ catch
 		parent = parents{i};
 		if strcmp(get_param(parent,'type'),'block_diagram')
 			ws = get_param(parent,'ModelWorkSpace');
-			ws_arry = ws.whos;
-			for i=1:length(ws_arry)
-				ws_var = ws_arry(i);
-			    val = ws.evalin(ws_var.name);
-				eval([ws_var.name,' = val;']);
+			if ismethod(ws, 'whos')
+				ws_arry = ws.whos;
+				for i=1:length(ws_arry)
+					ws_var = ws_arry(i);
+						val = ws.evalin(ws_var.name);
+					eval([ws_var.name,' = val;']);
+				end
 			end
 		elseif strcmp(get_param(parent,'type'),'block')
 			ws_arry = get_param(parent,'MaskWSVariables');

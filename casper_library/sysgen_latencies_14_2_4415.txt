@@ -1,0 +1,39 @@
+xbsIndex_r4/Absolute                       0
+xbsIndex_r4/AddSub                         0
+xbsIndex_r4/CMult                          0
+xbsIndex_r4/Complex Multiplier 3.1        -1
+xbsIndex_r4/Convert                        0
+xbsIndex_r4/DAFIR v9_0                     1
+xbsIndex_r4/DDS Compiler 2.1               1
+xbsIndex_r4/DDS Compiler 3.0               1
+xbsIndex_r4/DDS Compiler 4.0               1
+xbsIndex_r4/DDS Compiler 5.0               1
+xbsIndex_r4/DDS Compiler v1_1              1
+xbsIndex_r4/DDS Compiler v2_0              1
+xbsIndex_r4/Delay                          1
+xbsIndex_r4/Divide                         0
+xbsIndex_r4/Divider Generator 2.0         25
+xbsIndex_r4/Divider Generator 3.0         25
+xbsIndex_r4/Divider Generator 4.0         20
+xbsIndex_r4/Down Sample                    1
+xbsIndex_r4/Dual Port RAM                  1
+xbsIndex_r4/Expression                     0
+xbsIndex_r4/Inverter                       0
+xbsIndex_r4/Logical                        0
+xbsIndex_r4/Mult                           3
+xbsIndex_r4/Mux                            0
+xbsIndex_r4/Natural Logarithm              0
+xbsIndex_r4/Negate                         0
+xbsIndex_r4/Parallel to Serial             0
+xbsIndex_r4/ROM                            1
+xbsIndex_r4/Reciprocal                     0
+xbsIndex_r4/Reciprocal SquareRoot          0
+xbsIndex_r4/Relational                     0
+xbsIndex_r4/Serial to Parallel             1
+xbsIndex_r4/Shared Memory                  1
+xbsIndex_r4/Shift                          0
+xbsIndex_r4/SineCosine                     2
+xbsIndex_r4/Single Port RAM                1
+xbsIndex_r4/SquareRoot                     0
+xbsIndex_r4/Threshold                      0
+xbsIndex_r4/Up Sample                      0
