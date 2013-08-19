@@ -7,8 +7,8 @@ function bus_addsub_init(blk, varargin)
     'n_bits_a', [8] ,  'bin_pt_a',     [3],   'type_a',   1, ...
     'n_bits_b', [4 ]  ,  'bin_pt_b',     [3],   'type_b',   [1], ...
     'n_bits_out', 8 ,     'bin_pt_out',   [3],   'type_out', [1], ...
-    'overflow', [1], 'quantization', [0], 'latency', 1, ...
-    'async', 'off', 'cmplx', 'on', 'misc', 'on'
+    'overflow', [1], 'quantization', [0], 'add_implementation', 'fabric core', ...
+    'latency', 1, 'async', 'off', 'cmplx', 'on', 'misc', 'on'
   };  
   
   check_mask_type(blk, 'bus_addsub');
@@ -37,6 +37,7 @@ function bus_addsub_init(blk, varargin)
   type_out     = get_var('type_out', 'defaults', defaults, varargin{:});
   overflow     = get_var('overflow', 'defaults', defaults, varargin{:});
   quantization = get_var('quantization', 'defaults', defaults, varargin{:});
+  add_implementation = get_var('add_implementation', 'defaults', defaults, varargin{:});
   latency      = get_var('latency', 'defaults', defaults, varargin{:});
   misc         = get_var('misc', 'defaults', defaults, varargin{:});
   cmplx        = get_var('cmplx', 'defaults', defaults, varargin{:});
@@ -214,12 +215,24 @@ function bus_addsub_init(blk, varargin)
       ,arith_type,' ',quant,' ', of], ...
       {'bus_addsub_init_debug'}); 
 
+    if strcmp(add_implementation, 'behavioral HDL'),
+      use_behavioral_HDL = 'on';
+      hw_selection = 'Fabric';
+    elseif strcmp(add_implementation, 'fabric core'),
+      use_behavioral_HDL = 'off';
+      hw_selection = 'Fabric';
+    elseif strcmp(add_implementation, 'DSP48 core'),
+      use_behavioral_HDL = 'off';
+      hw_selection = 'DSP48';
+    end
+
     add_name = ['addsub',num2str(index)]; 
     reuse_block(blk, add_name, 'xbsIndex_r4/AddSub', ...
       'mode', m, 'latency', num2str(latency), ...
       'en', async, 'precision', 'User Defined', ...
       'n_bits', num2str(n_bits_out(index)), 'bin_pt', num2str(bin_pt_out(index)), ...  
       'arith_type', arith_type, 'quantization', quant, 'overflow', of, ... 
+      'pipelined', 'on', 'use_behavioral_HDL', use_behavioral_HDL, 'hw_selection', hw_selection, ... 
       'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
     ypos_tmp = ypos_tmp + add_d;
   
