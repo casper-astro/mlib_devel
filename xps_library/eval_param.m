@@ -21,13 +21,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function result = eval_param(blk,param_name)
-param_str = get_param(blk,param_name);
 
-% If it is empty or not an evaluated parameter, we're done!
+param_str = get_param(blk,param_name);
+result = param_str;
+
+% If param_str is empty, we're done!
+if isempty(param_str)
+  return;
+end
+
+% If it is not an evaluated parameter, we're done!
 mask_vars = get_param(blk, 'MaskVariables');
-pattern = sprintf('(^|;)%s=@', param_name);
-if isempty(param_str) || isempty(regexp(mask_vars, pattern))
-  result = param_str;
+pattern = sprintf('(^|;)%s=@\\d+', param_name);
+mv_match = regexp(mask_vars, pattern, 'match', 'once');
+if isempty(mv_match)
+  return;
+end
+
+% If it is not an edit field parameter, we're done!  Some non-edit fields like
+% checkbox and popup are set to "evaluate" even though it makes no sense to
+% evaluate their values.  Because of this, we need to check explicitly whether
+% this parameter value comes from an edit field.
+%
+% Parse mask variable index from matched portion of MaskVariables.
+% (Is there a better way to do this?)
+mv_idx = str2num(regexp(mv_match, '\d+', 'match', 'once'));
+% Get cell array of all mask styles
+mask_styles = get_param(blk, 'MaskStyles');
+if ~strcmp(mask_styles{mv_idx}, 'edit')
   return;
 end
 
