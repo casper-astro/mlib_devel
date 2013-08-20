@@ -422,7 +422,8 @@ function bus_mult_init(blk, varargin)
     end
 
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
-      'latency', latency, 'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
+      'latency', latency, 'reg_retiming', 'on', ...
+      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
   end
   xpos = xpos + xinc + mult_d/2;

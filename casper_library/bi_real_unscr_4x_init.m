@@ -278,7 +278,7 @@ reuse_block(blk, 'd0', 'xbsIndex_r4/Delay', ...
     'Position', [225 360 255 380], ...
     'latency', '1', ...
     'en', async, ...
-    'reg_retiming', 'off');
+    'reg_retiming', 'on');
 add_line(blk, 'reorder_odd/3', 'd0/1');
 
 if strcmp(async, 'on'),
@@ -289,7 +289,7 @@ if strcmp(async, 'on'),
   reuse_block(blk, 'd1', 'xbsIndex_r4/Delay', ...
       'Position', [470 114 500 136], ...
       'latency', '1', ...
-      'reg_retiming', 'off');
+      'reg_retiming', 'on');
   add_line(blk, 'reorder_even/2', 'd1/1');
 
   add_line(blk, 'reorder_odd/2', 'd0/2');
@@ -304,7 +304,7 @@ end
 reuse_block(blk, 'd2', 'xbsIndex_r4/Delay', ...
     'Position', [470 70 600 90], ...
     'latency', 'add_latency + conv_latency + 1', ...
-    'reg_retiming', 'off');
+    'reg_retiming', 'on');
 add_line(blk, 'reorder_even/1', 'd2/1');
 
 reuse_block(blk, 'mux0', 'xbsIndex_r4/Mux', 'Position', [475 150 500 216]);
@@ -516,7 +516,7 @@ for index = 0:3,
   reuse_block(blk, ['d',num2str(index+3)], 'xbsIndex_r4/Delay', ...
       'Position', [995 65+(index*60) 1025 85+(index*60)], ...
       'latency', '1', 'en', async, ...
-      'reg_retiming', 'off');
+      'reg_retiming', 'on');
   add_line(blk, ['reorder_out/',num2str(3+index)], ['d',num2str(index+3),'/1']);
 
   if strcmp(async, 'on'), add_line(blk, 'reorder_out/2', ['d',num2str(index+3),'/2']);
@@ -524,8 +524,6 @@ for index = 0:3,
   
   add_line(blk, ['d',num2str(index+3),'/1'], ['mirror_spectrum/',num2str(1+((index+1)*2))]);
 end
-
-
 
 % Delete all unconnected blocks.
 clean_blocks(blk);
