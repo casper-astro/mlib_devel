@@ -1,9 +1,10 @@
 function gen_xps_add_design_info(sysname, mssge_paths, slash)
     clog('entering gen_xps_add_design_info','trace');
 
-    % exit if the right classes aren't found
-    if exist('Register', 'class') ~= 8,
-        clog('exiting gen_xps_add_design_info - no Register class support.','trace');
+    % exit if the right classes aren't found - at the moment it's not
+    % critical to have this working
+    if exist('design_info.Register', 'class') ~= 8,
+        clog('exiting gen_xps_add_design_info - no design_info class support.', 'trace');
         return
     end
     
@@ -20,10 +21,10 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     
     % process registers
     regs = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:sw_reg');
-    registers(1, numel(regs)) = Register;
+    registers(1, numel(regs)) = design_info.Register;
     if numel(regs) > 0,
         for n = 1 : numel(regs),
-            registers(n) = Register(regs{n});
+            registers(n) = design_info.Register(regs{n});
         end
     end
     clear regs;
@@ -34,10 +35,10 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     % take out snapshots that are inside bitsnaps or we'll have duplicates
     %snapshot_blks = snapshot_blks(~strcmp(get_param(get_param(snapshot_blks, 'Parent'), 'Tag'), 'casper:bitsnap'));
     %snaps = vertcat(bitsnap_blks, snapshot_blks);
-    snapshots(1, numel(snapshot_blks)) = Snapshot;
+    snapshots(1, numel(snapshot_blks)) = design_info.Snapshot;
     if numel(snapshot_blks) > 0,
         for n = 1 : numel(snapshot_blks),
-            snapshots(n) = Snapshot(snapshot_blks{n});
+            snapshots(n) = design_info.Snapshot(snapshot_blks{n});
         end
     end
     clear snapshot_blks;
@@ -78,19 +79,18 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     for n = 1 : numel(snapshots),
         snap = snapshots(n);
         [mem, extra, info] = snap.to_xml_nodes(xml_dom);
-        
         for node = 1 : numel(mem),
             xml_node_snapshots.appendChild(mem(node));
         end
-        
-        if ~isnan(extra),
+        if isa(extra, 'org.apache.xerces.dom.ElementImpl'),
             for node = 1 : numel(extra),
                 xml_node_registers.appendChild(extra(node));
             end
         end
-        
-        for node = 1 : numel(info),
-            xml_node_infos.appendChild(info(node));
+        if isa(info, 'org.apache.xerces.dom.ElementImpl'),
+            for node = 1 : numel(info),
+                xml_node_infos.appendChild(info(node));
+            end
         end
     end
     clear registers;
@@ -135,7 +135,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     
     % now comments/info blocks
     for n = 1 : numel(info_blks),
-        info = InfoBlock(info_blks(n));
+        info = design_info.InfoBlock(info_blks(n));
         xml_node_infos.appendChild(info.to_xml_node(xml_dom));
     end
     clear info_blks;
