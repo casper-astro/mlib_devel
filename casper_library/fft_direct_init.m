@@ -170,7 +170,7 @@ reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [xtick*FFTSize+150 
 
 n_dports = n_streams*2^FFTSize;
 reuse_block(blk, 'of', 'built-in/outport', 'Port', num2str((2^FFTSize*n_streams)+2), ...
-    'Position', [xtick*FFTSize+200 ytick*n_dports+100 xtick*FFTSize+230 ytick*n_dports+115]);
+    'Position', [xtick*(FFTSize+1/4)+280 ytick*n_dports+110 xtick*(FFTSize+1/4)+315 ytick*n_dports+125]);
 
 if strcmp(async, 'on'),
   reuse_block(blk, 'en', 'built-in/inport', ...
@@ -231,6 +231,8 @@ for s = 0:n_streams-1,
   end %for n
 end %for s 
 
+% overflow logic
+
 %FFTSize == 1 implies 1 input or block which generates an error
 if (FFTSize ~= 1),
   pos = [xtick*FFTSize+150 ytick*n_dports+100 xtick*FFTSize+180 ytick*n_dports+115+(FFTSize*10)];
@@ -239,7 +241,22 @@ if (FFTSize ~= 1),
       'logical_function', 'OR', ...
       'inputs', num2str(FFTSize), ...
       'latency', '1');
-  add_line(blk, 'of_or/1', 'of/1');
+  
+  reuse_block(blk, 'of_expand', 'casper_library_flow_control/bus_expand', ...
+    'mode', 'divisions of equal size', ...
+    'outputNum', num2str(2^(FFTSize-1)), 'outputWidth', num2str(n_streams), ...
+    'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
+    'Position', [xtick*FFTSize+215 ytick*n_dports+93 xtick*FFTSize+245 ytick*n_dports+122+(FFTSize*10)]);
+  add_line(blk, 'of_or/1', 'of_expand/1');
+
+  reuse_block(blk, 'combine', 'xbsIndex_r4/Logical', ...
+      'Position', [xtick*FFTSize+280 ytick*n_dports+93 xtick*FFTSize+310 ytick*n_dports+122+(FFTSize*10)], ...
+      'logical_function', 'OR', 'inputs', num2str(2^(FFTSize-1)), 'latency', '1');
+  for port = 1:2^(FFTSize-1),
+    add_line(blk, ['of_expand/',num2str(port)], ['combine/',num2str(port)]);
+  end
+
+  add_line(blk, 'combine/1', 'of/1');
 end
 
 %shift connection for each stage
