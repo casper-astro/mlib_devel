@@ -693,6 +693,7 @@ Library {
       MaskEnableString	      "on,on"
       MaskVisibilityString    "on,on"
       MaskToolTipString	      "on,on"
+      MaskSelfModifiable	  on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
@@ -1319,6 +1320,7 @@ Library {
       " = map(custom_map+1);\nend\n\n%generate map so that two samples from same position in \n%subsequent input vector"
       "s are written into same address\nmap = reshape([map; 2^idepth+map], 1, 2^(idepth+1));\n\nset_param([gcb, '/reord"
       "er'], ...\n    'map', ['[',num2str(map),']']);\nset_param([gcb, '/qdr'], 'which_qdr', which_qdr);"
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
@@ -4940,6 +4942,7 @@ Library {
       MaskToolTipString	      "on,on,on"
       MaskInitialization      "new_map = tostring([[0:2^odepth-1]*2 [0:2^odepth-1]*2 + 1]);\nset_param([gcb, '/reorder"
       "'], 'map', new_map);\nset_param([gcb, '/qdr'], 'which_qdr', which_qdr);"
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
