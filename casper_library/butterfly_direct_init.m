@@ -237,12 +237,12 @@ function butterfly_direct_init(blk, varargin)
   if strcmp(async, 'on'), reuse_block(blk, 'en', 'built-in/Inport', 'Port', '5','Position', [45 243 75 257]);
   end
   
-  reuse_block(blk, 'a+bw', 'built-in/Outport', 'Port', '1', 'Position', [810 58 840 72]);
-  reuse_block(blk, 'a-bw', 'built-in/Outport', 'Port', '2', 'Position', [810 88 840 102]);
-  reuse_block(blk, 'of', 'built-in/Outport', 'Port', '3', 'Position', [810 123 840 137]);
-  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '4', 'Position', [810 183 840 197]);
+  reuse_block(blk, 'a+bw', 'built-in/Outport', 'Port', '1', 'Position', [880 58 910 72]);
+  reuse_block(blk, 'a-bw', 'built-in/Outport', 'Port', '2', 'Position', [880 88 910 102]);
+  reuse_block(blk, 'of', 'built-in/Outport', 'Port', '3', 'Position', [880 143 910 157]);
+  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '4', 'Position', [880 183 910 197]);
   if strcmp(async, 'on'),
-    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '5', 'Position', [810 243 840 257]);
+    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '5', 'Position', [880 243 910 257]);
   end
 
   %
@@ -365,9 +365,7 @@ function butterfly_direct_init(blk, varargin)
           'bin_pt_out', num2str(bin_pt_in), ...
           'quantization', quant, 'overflow', of, ...
           'misc', 'off', 'of', 'on', 'latency', 'conv_latency', ...
-          'Position', [635 56 690 149]);
-
-  add_line(blk, 'bus_convert/2', 'of/1');
+          'Position', [635 86 690 119]);
 
   %
   % Add scale 
@@ -377,7 +375,7 @@ function butterfly_direct_init(blk, varargin)
       reuse_block(blk, 'delay2', 'xbsIndex_r4/Delay', ...
           'Position', [430 59 460 81], ...
           'latency', 'add_latency', ...
-          'reg_retiming', 'off');
+          'reg_retiming', 'on');
       add_line(blk, 'shift/1', 'delay2/1');
       
       %required to add padding to match bit width of other stream (from bus_scale)
@@ -446,14 +444,41 @@ function butterfly_direct_init(blk, varargin)
   %
   % bus_expand 
   %
+
   reuse_block(blk, 'bus_expand', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', ...
       'outputNum', '2', 'outputWidth', mat2str(repmat(n_inputs*n_bits_out*2,1,2)), ...
       'outputBinaryPt', '[0,0]', 'outputArithmeticType', '[0,0]', ...   
-      'Position', [720 49 770 111]);
+      'Position', [715 51 765 109]);
   add_line(blk, 'bus_convert/1', 'bus_expand/1');
   add_line(blk, 'bus_expand/1', 'a+bw/1');
   add_line(blk, 'bus_expand/2', 'a-bw/1');
+
+  %
+  % overflow detection for different input streams
+  %
+  
+  %need to move a and b input streams next to each other for each input 
+  reuse_block(blk, 'munge', 'casper_library_flow_control/munge', ...
+    'divisions', num2str(n_inputs * 2), ...
+    'div_size', mat2str(repmat(2, 1, n_inputs*2)), ...
+    'order', mat2str(reshape([[0:n_inputs-1];[n_inputs:n_inputs*2-1]],1,n_inputs*2)), ...
+    'arith_type_out', 'Unsigned', 'bin_pt_out', '0', ...
+    'Position', [720 147 760 173]);
+  add_line(blk, 'bus_convert/2', 'munge/1');
+  
+  reuse_block(blk, 'constant', 'xbsIndex_r4/Constant', ...
+    'const', '0', 'arith_type', 'Unsigned', 'n_bits', '4', 'bin_pt', '0', ...
+    'explicit_period', 'on', 'period', '1', 'Position', [775 127 790 143]);
+
+  reuse_block(blk, 'bus_relational', 'casper_library_bus/bus_relational', ...
+    'n_bits_a', '4', 'bin_pt_a', '0', 'type_a', '0', ...
+    'n_bits_b', mat2str(repmat(4, 1, n_inputs)), 'bin_pt_b', '0', 'type_b', '0', ...
+    'mode', 'a!=b', 'misc', 'off', 'en', 'off', 'latency', '0', ...
+    'Position', [820 123 850 172]);
+  add_line(blk, 'constant/1', 'bus_relational/1');
+  add_line(blk, 'munge/1', 'bus_relational/2');
+  add_line(blk, 'bus_relational/1', 'of/1');
 
   %
   % sync delay.
