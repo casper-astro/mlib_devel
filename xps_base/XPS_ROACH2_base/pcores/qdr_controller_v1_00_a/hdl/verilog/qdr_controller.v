@@ -24,6 +24,7 @@ module qdr_controller (
     /* State debug probes */
     bit_align_state_prb,
     bit_train_state_prb,
+    bit_train_error_prb,
     phy_state_prb,
     /* QDR read interface */
     usr_rd_strb,
@@ -74,6 +75,7 @@ module qdr_controller (
   
   output [3:0] 	      bit_align_state_prb;
   output [3:0] 	      bit_train_state_prb;
+  output [3:0] 	      bit_train_error_prb;
   output [3:0] 	      phy_state_prb;
 
   wire qdr_rst;
@@ -111,6 +113,7 @@ module qdr_controller (
 
     .bit_align_state_prb (bit_align_state_prb),
     .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb),
     .phy_state_prb       (phy_state_prb),
 
     .qdr_d         (qdr_d),

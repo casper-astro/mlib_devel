@@ -86,6 +86,7 @@ BEGIN opb_qdr_sniffer
 ## State debug probes from the controller
   PORT bit_align_state_prb = bit_align_state_prb,  DIR = I, VEC = [3:0]
   PORT bit_train_state_prb = bit_train_state_prb,  DIR = I, VEC = [3:0]
+  PORT bit_train_error_prb = bit_train_error_prb,  DIR = I, VEC = [3:0]
   PORT phy_state_prb       = phy_state_prb,        DIR = I, VEC = [3:0]
 
 ## Misc. ports

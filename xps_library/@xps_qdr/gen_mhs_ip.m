@@ -185,6 +185,7 @@ switch hw_sys
         
         str = [str, ' PORT bit_align_state_prb  = ', hw_qdr, '_bit_align_state_prb ', '\n'];
         str = [str, ' PORT bit_train_state_prb  = ', hw_qdr, '_bit_train_state_prb ', '\n'];
+        str = [str, ' PORT bit_train_error_prb  = ', hw_qdr, '_bit_train_error_prb ', '\n'];
         str = [str, ' PORT phy_state_prb  = ',       hw_qdr, '_phy_state_prb ',       '\n'];
 
         str = [str, ' PORT phy_rdy  = ', inst_name, '_phy_ready ', '\n'];
@@ -247,6 +248,7 @@ switch hw_sys
         
         str = [str, ' PORT bit_align_state_prb  = ', hw_qdr, '_bit_align_state_prb ', '\n'];
         str = [str, ' PORT bit_train_state_prb  = ', hw_qdr, '_bit_train_state_prb ', '\n'];
+        str = [str, ' PORT bit_train_error_prb  = ', hw_qdr, '_bit_train_error_prb ', '\n'];
         str = [str, ' PORT phy_state_prb  = ',       hw_qdr, '_phy_state_prb ',       '\n'];
 
         str = [str, ' PORT phy_rdy       = ', inst_name, '_phy_ready', '\n'];

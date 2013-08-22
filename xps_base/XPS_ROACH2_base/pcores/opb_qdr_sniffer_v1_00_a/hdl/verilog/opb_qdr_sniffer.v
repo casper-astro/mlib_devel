@@ -66,6 +66,7 @@ module opb_qdr_sniffer #(
     /* State debug probes */
     input [3:0] bit_align_state_prb,
     input [3:0] bit_train_state_prb,
+    input [3:0] bit_train_error_prb,
     input [3:0] phy_state_prb,
 
     /* Misc signals */
@@ -258,6 +259,7 @@ end endgenerate
 
   reg [3:0] bit_align_state_prbR;
   reg [3:0] bit_train_state_prbR;
+  reg [3:0] bit_train_error_prbR;
   reg [3:0] phy_state_prbR;
   reg phy_rdyR;
   reg cal_failR;
@@ -265,6 +267,7 @@ end endgenerate
   always @(posedge OPB_Clk_config) begin
     bit_align_state_prbR <= bit_align_state_prb;
     bit_train_state_prbR <= bit_train_state_prb;
+    bit_train_error_prbR <= bit_train_error_prb;
     phy_state_prbR <= phy_state_prb;
     phy_rdyR <= phy_rdy;
     cal_failR <= cal_fail;
@@ -292,6 +295,7 @@ end endgenerate
     .OPB_seqAddr (OPB_seqAddr_config),
     .bit_align_state_prb (bit_align_state_prbR),
     .bit_train_state_prb (bit_train_state_prbR),
+    .bit_train_error_prb (bit_train_error_prbR),
     .phy_state_prb       (phy_state_prbR),
     .qdr_reset   (qdr_reset),
     .cal_fail    (cal_failR),

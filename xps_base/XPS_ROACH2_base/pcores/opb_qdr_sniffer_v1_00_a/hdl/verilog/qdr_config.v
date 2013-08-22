@@ -22,6 +22,7 @@ module qdr_config #(
     /* State debug probes */
     input [3:0] bit_align_state_prb,
     input [3:0] bit_train_state_prb,
+    input [3:0] bit_train_error_prb,
     input [3:0] phy_state_prb,
 
     /* Misc signals */
@@ -36,6 +37,7 @@ module qdr_config #(
   localparam REG_RESET  = 0;
   localparam REG_STATUS = 1;
   localparam REG_SM_PRB = 2;
+  localparam REG_SM_ERR = 3;
 
   /**************** Control Registers OPB Attachment ******************/
   
@@ -84,6 +86,9 @@ module qdr_config #(
         end
         REG_SM_PRB: begin
           Sl_DBus_reg <= {8'hff, 8'b0, 4'b0, phy_state_prb, bit_align_state_prb, bit_train_state_prb};
+        end
+        REG_SM_ERR: begin
+          Sl_DBus_reg <= {8'hff, 8'b0, 8'b0, 4'b0, bit_train_error_prb};
         end
         default: begin
           Sl_DBus_reg <= 32'h0;

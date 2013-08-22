@@ -12,6 +12,7 @@ module qdrc_phy(
     /* state debug probes */
     bit_align_state_prb,
     bit_train_state_prb,
+    bit_train_error_prb,
     phy_state_prb,
 
     /* user/phy interface signals */
@@ -78,6 +79,7 @@ module qdrc_phy(
 
   output [3:0] 	      bit_align_state_prb;
   output [3:0] 	      bit_train_state_prb;
+  output [3:0] 	      bit_train_error_prb;
   output [3:0] 	      phy_state_prb;
 
   wire bit_align_start,   bit_align_done,   bit_align_fail;
@@ -157,7 +159,8 @@ module qdrc_phy(
 
      /* State probe */
     .bit_align_state_prb (bit_align_state_prb),
-    .bit_train_state_prb (bit_train_state_prb)
+    .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb)
   );
 
   /************ Burst Alignment Logic ***************/

@@ -23,6 +23,7 @@ module qdrc_top (
     /* State debug probes */
     bit_align_state_prb,
     bit_train_state_prb,
+    bit_train_error_prb,
     phy_state_prb,
     /* QDR read interface */
     usr_rd_strb,
@@ -72,6 +73,7 @@ module qdrc_top (
 
   output [3:0] 	      bit_align_state_prb;
   output [3:0] 	      bit_train_state_prb;
+  output [3:0] 	      bit_train_error_prb;
   output [3:0] 	      phy_state_prb;
 
   /********** QDR Infrastucture *********/
@@ -176,6 +178,7 @@ module qdrc_top (
      /* debug state probes */
     .bit_align_state_prb (bit_align_state_prb),
     .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb),
     .phy_state_prb       (phy_state_prb),
 
     /* user/phy interface signals */

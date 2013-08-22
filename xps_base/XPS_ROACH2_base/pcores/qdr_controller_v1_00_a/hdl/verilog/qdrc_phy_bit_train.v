@@ -16,7 +16,8 @@ module qdrc_phy_bit_train #(
     /* Final Half word alignment status */
     output [DATA_WIDTH - 1:0] aligned,
     /* Debug probes */
-    output [3:0] bit_train_state_prb
+    output [3:0] bit_train_state_prb,
+    output [3:0] bit_train_error_prb
   );
 
   /* DLY_DELTA (in ps) is the delay increment when the IDELAY_CONF is configured with a 200 MHz clock */
@@ -66,6 +67,16 @@ module qdrc_phy_bit_train #(
   reg train_fail_reg;
   assign train_fail = train_fail_reg;
 
+  /* Errors used for debugging */
+  localparam ERROR_NONE        = 4'd0;
+  localparam ERROR_NO_TRANS    = 4'd1;
+  localparam ERROR_CANT_BACK   = 4'd2;
+  localparam ERROR_INVAL_BACK  = 4'd3;
+  localparam ERROR_INVAL_FORW  = 4'd4;
+
+  reg train_err_reg;
+  assign bit_train_error_prb = train_err_reg;
+
   reg train_done_reg;
   assign train_done = train_done_reg;
 
@@ -112,6 +123,7 @@ module qdrc_phy_bit_train #(
 
       train_fail_reg <= 1'b0;
       train_done_reg <= 1'b0;
+      train_err_reg  <= ERROR_NONE;
 
       aligned_reg <= {DATA_WIDTH{1'b1}};
 
@@ -163,6 +175,7 @@ module qdrc_phy_bit_train #(
               if (progress == 5'd31) begin
                   state           <= STATE_ALIGN;
                   train_fail_reg  <= 1'b1;
+		  train_err_reg   <= ERROR_NO_TRANS;
                   dly_rst_reg[bit_index] <= 1'b1;
               end 
 
@@ -184,6 +197,7 @@ module qdrc_phy_bit_train #(
                   if (BIT_STEPS + baddies + HISTORY_LENGTH > progress) begin
                     /* we cant go back further than we went */
                     train_fail_reg  <= 1'b1;
+		    train_err_reg   <= ERROR_CANT_BACK;
                   end
                 end
               end else begin
@@ -207,6 +221,7 @@ module qdrc_phy_bit_train #(
                 state <= STATE_ALIGN;
                 if (!valid(curr)) begin
                   train_fail_reg <= 1'b1;
+		  train_err_reg  <= ERROR_INVAL_BACK;
                 end
               end
             end
@@ -221,6 +236,7 @@ module qdrc_phy_bit_train #(
                 state       <= STATE_ALIGN;
                 if (!valid(curr)) begin
                   train_fail_reg <= 1'b1;
+		  train_err_reg  <= ERROR_INVAL_FORW;
                 end
               end
             end

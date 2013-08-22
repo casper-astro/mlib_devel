@@ -31,7 +31,8 @@ module qdrc_phy_bit_align(
 
     /* Debug probes */ 
     bit_align_state_prb,
-    bit_train_state_prb
+    bit_train_state_prb,
+    bit_train_error_prb
   );
   parameter DATA_WIDTH   = 36;
   parameter BW_WIDTH     = 4;
@@ -64,6 +65,7 @@ module qdrc_phy_bit_align(
 
   output [3:0]		    bit_align_state_prb;
   output [3:0]		    bit_train_state_prb;
+  output [3:0]		    bit_train_error_prb;
    
 
   localparam STATE_IDLE   = 4'd0;
@@ -150,7 +152,8 @@ end else begin                  :include_bit_align
     .dly_en        (dly_en),
     .dly_rst       (dly_rst),
 
-    .bit_train_state_prb (bit_train_state_prb)
+    .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb)
   );
 
  

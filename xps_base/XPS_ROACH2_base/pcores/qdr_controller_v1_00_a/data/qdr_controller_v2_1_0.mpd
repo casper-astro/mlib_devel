@@ -45,6 +45,7 @@ BEGIN qdr_controller
 ## State debug probes
   PORT bit_align_state_prb = bit_align_state_prb,  DIR = O, VEC = [3:0]
   PORT bit_train_state_prb = bit_train_state_prb,  DIR = O, VEC = [3:0]
+  PORT bit_train_error_prb = bit_train_error_prb,  DIR = O, VEC = [3:0]
   PORT phy_state_prb       = phy_state_prb,        DIR = O, VEC = [3:0]
 
 ## QDR user interface
