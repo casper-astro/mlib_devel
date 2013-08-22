@@ -155,10 +155,11 @@ module roach_infrastructure #(
 //    .O({sys_clk,      sys_clk90, sys_clk180     , sys_clk270})
 //  );
 
-  BUFG bufg_sys_clk2x[3:0](
-    .I({sys_clk2x_mmcm, sys_clk2x90_mmcm, sys_clk2x180_mmcm, sys_clk2x270_mmcm}),
-    .O({sys_clk2x,      sys_clk2x90     , sys_clk2x180     , sys_clk2x270})
-  );
+//  // All of these I signals are undriven and should probably be deleted.
+//  BUFG bufg_sys_clk2x[3:0](
+//    .I({sys_clk2x_mmcm, sys_clk2x90_mmcm, sys_clk2x180_mmcm, sys_clk2x270_mmcm}),
+//    .O({sys_clk2x,      sys_clk2x90     , sys_clk2x180     , sys_clk2x270})
+//  );
   
 //  BUFG bufg_clk_100(
 //    .I(clk_100_mmcm),
@@ -169,6 +170,15 @@ module roach_infrastructure #(
     .I(clk_200_mmcm),
     .O(clk_200)
   );
+
+  // Since sys_clk2c_mmcm is undriven, just drive sys_clk2x from clk_200.
+  assign sys_clk2x = clk_200;
+
+  // sys_clk2x{90,180,270} have "always"(?) been undriven on ROACH2.  Why do
+  // we still carry them around as if they are real signals?
+  assign sys_clk2x90  = 1'b0;
+  assign sys_clk2x180 = 1'b0;
+  assign sys_clk2x270 = 1'b0;
 
   MMCM_BASE #(
     .BANDWIDTH          (CLK_HIGH_LOW), // Jitter programming ("HIGH","LOW","OPTIMIZED")
