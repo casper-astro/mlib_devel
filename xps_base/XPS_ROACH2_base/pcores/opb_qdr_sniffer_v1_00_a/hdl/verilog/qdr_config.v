@@ -85,10 +85,10 @@ module qdr_config #(
           Sl_DBus_reg <= {16'b0, 7'b0, cal_fail, 7'b0, phy_rdy};
         end
         REG_SM_PRB: begin
-          Sl_DBus_reg <= {8'hff, 8'b0, 4'b0, phy_state_prb, bit_align_state_prb, bit_train_state_prb};
+          Sl_DBus_reg <= {1'b1, 7'b0, 8'b0, 4'b0, phy_state_prb, bit_align_state_prb, bit_train_state_prb};
         end
         REG_SM_ERR: begin
-          Sl_DBus_reg <= {8'hff, 8'b0, 8'b0, 4'b0, bit_train_error_prb};
+          Sl_DBus_reg <= {1'b1, 7'b0, 8'b0, 8'b0, 4'b0, bit_train_error_prb};
         end
         default: begin
           Sl_DBus_reg <= 32'h0;
