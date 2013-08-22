@@ -14,7 +14,9 @@ module qdrc_phy_bit_train #(
     output [DATA_WIDTH - 1:0] dly_en,
     output [DATA_WIDTH - 1:0] dly_rst,
     /* Final Half word alignment status */
-    output [DATA_WIDTH - 1:0] aligned
+    output [DATA_WIDTH - 1:0] aligned,
+    /* Debug probes */
+    output [3:0] bit_train_state_prb
   );
 
   /* DLY_DELTA (in ps) is the delay increment when the IDELAY_CONF is configured with a 200 MHz clock */
@@ -34,13 +36,15 @@ module qdrc_phy_bit_train #(
    
   /* primary state machine */
 
-  reg [2:0] state;
-  localparam STATE_IDLE    = 3'd0;
-  localparam STATE_SEARCH  = 3'd1;
-  localparam STATE_BACK    = 3'd2;
-  localparam STATE_FORWARD = 3'd3;
-  localparam STATE_ALIGN   = 3'd4;
-  localparam STATE_DONE    = 3'd5;
+  reg [3:0] state;
+  assign bit_train_state_prb = state;
+   
+  localparam STATE_IDLE    = 4'd0;
+  localparam STATE_SEARCH  = 4'd1;
+  localparam STATE_BACK    = 4'd2;
+  localparam STATE_FORWARD = 4'd3;
+  localparam STATE_ALIGN   = 4'd4;
+  localparam STATE_DONE    = 4'd5;
 
   reg mode;
   localparam MODE_DEFAULT = 0;
