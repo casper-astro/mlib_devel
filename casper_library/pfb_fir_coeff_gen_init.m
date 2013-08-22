@@ -109,7 +109,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
 
   % sync pipeline
   reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [15 8 45 22]);
-  reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', ...
+  reuse_block(blk, 'sync_delay', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
     'latency', num2str(fan_latency+bram_latency), 'Position', [410 4 455 51]);
   add_line(blk,'sync/1', 'sync_delay/1');
   reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [840 23 870 37]);
@@ -117,7 +117,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
  
   % din pipeline
   reuse_block(blk, 'din', 'built-in/Inport', 'Port', '2', 'Position', [15 73 45 87]);
-  reuse_block(blk, 'din_delay', 'xbsIndex_r4/Delay', ...
+  reuse_block(blk, 'din_delay', 'xbsIndex_r4/Delay', 'reg_retiming', 'on',...
     'latency', num2str(fan_latency+bram_latency), 'Position', [410 69 455 116]);
   add_line(blk, 'din/1', 'din_delay/1');
   reuse_block(blk, 'dout', 'built-in/Outport', 'Port', '2', 'Position', [840 88 870 102]);
@@ -167,11 +167,11 @@ function pfb_fir_coeff_gen_init(blk, varargin)
 
     % fanout latency
     fana_name = ['fana_delay',num2str(rom_index)];
-    reuse_block(blk, fana_name, 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, fana_name, 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
       'latency', num2str(fan_latency), 'Position', [280 yoff-8 305 yoff+8]);
     add_line(blk, 'counter/1', [fana_name,'/1']);
     fanb_name = ['fanb_delay',num2str(rom_index)];
-    reuse_block(blk, fanb_name, 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, fanb_name, 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
       'latency', num2str(fan_latency), 'Position', [280 yoff+75-8 305 yoff+75+8]);
     add_line(blk, 'inverter/1', [fanb_name,'/1']);
    
@@ -189,7 +189,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     
     % reset fanout
     rstb = ['rstb_delay',num2str(rom_index)];
-    reuse_block(blk, rstb, 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, rstb, 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
       'latency', num2str(fan_latency), 'Position', [280 yoff+150-8 305 yoff+150+8]);
     add_line(blk, 'first/1', [rstb,'/1']);
 
@@ -275,7 +275,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     else, en = 'off';
     end
 
-    reuse_block(blk, d_name, 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, d_name, 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
       'en', en, 'latency', num2str(latency), ...
       'Position', [625 yoff+d_index*yinc-12 680 yoff+d_index*yinc+8]);
     add_line(blk, [d_name,'/1'], ['concat/',num2str(d_index+1)]);    
@@ -305,7 +305,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     add_line(blk, 'en/1', 'counter/2');  
     add_line(blk, 'en/1', 'inverter/2');  
  
-    reuse_block(blk, 'en_delay0', 'xbsIndex_r4/Delay', 'latency', 'fan_latency', ...
+    reuse_block(blk, 'en_delay0', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+      'latency', 'fan_latency', ...
       'Position', [280 yoff+outputs_required*2*yinc+60-12 305 yoff+outputs_required*2*yinc+60+12]);
     add_line(blk, 'en/1', 'en_delay0/1');
 
@@ -313,7 +314,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     
       en_delay_name = ['en_rom',num2str(rom_index)];
       reuse_block(blk, en_delay_name, 'xbsIndex_r4/Delay', 'NamePlacement', 'alternate', ...
-        'latency', num2str(fan_latency), 'Position', [280 yoff+240-8 305 yoff+240+8]);
+        'latency', num2str(fan_latency), 'reg_retiming', 'on', ...
+        'Position', [280 yoff+240-8 305 yoff+240+8]);
       add_line(blk, 'en/1', [en_delay_name,'/1']);
       
       rom_name = ['ROM',num2str(rom_index)];
@@ -321,7 +323,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
       add_line(blk, [en_delay_name,'/1'], [rom_name, '/9']);
 
       en_delays_name = ['en_delays',num2str(rom_index)];
-      reuse_block(blk, en_delays_name, 'xbsIndex_r4/Delay', ...
+      reuse_block(blk, en_delays_name, 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
         'latency', num2str(bram_latency), 'Position', [410 yoff+240-8 550 yoff+240+8]);
       add_line(blk, [en_delay_name,'/1'], [en_delays_name,'/1']);
   
@@ -329,7 +331,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     end
     
     yoff = 170;
-    reuse_block(blk, 'en_delay1', 'xbsIndex_r4/Delay', 'latency', num2str(bram_latency), ...
+    reuse_block(blk, 'en_delay1', 'xbsIndex_r4/Delay', ...
+      'latency', num2str(bram_latency), 'reg_retiming', 'on', ...
       'Position', [410 yoff+outputs_required*2*yinc+60-12 550 yoff+outputs_required*2*yinc+60+12]);
     add_line(blk, 'en_delay0/1', 'en_delay1/1');
     
