@@ -508,7 +508,7 @@ if run_edkgen,
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
     
     % add extra register and snapshot info from the design
-    gen_xps_add_design_info(sys, mssge_paths, slash);
+    %gen_xps_add_design_info(sys, mssge_paths, slash);
 
 end % if run_edkgen
 time_edkgen = now - start_time;
