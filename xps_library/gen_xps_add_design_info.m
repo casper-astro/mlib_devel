@@ -21,8 +21,10 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     
     % process registers
     regs = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:sw_reg');
-    registers(1, numel(regs)) = design_info.Register;
-    if numel(regs) > 0,
+    no_sw_registers = (numel(regs)==0);
+
+    if ~no_sw_registers
+        registers(1, numel(regs)) = design_info.Register;
         for n = 1 : numel(regs),
             registers(n) = design_info.Register(regs{n});
         end
@@ -35,8 +37,10 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     % take out snapshots that are inside bitsnaps or we'll have duplicates
     %snapshot_blks = snapshot_blks(~strcmp(get_param(get_param(snapshot_blks, 'Parent'), 'Tag'), 'casper:bitsnap'));
     %snaps = vertcat(bitsnap_blks, snapshot_blks);
-    snapshots(1, numel(snapshot_blks)) = design_info.Snapshot;
-    if numel(snapshot_blks) > 0,
+    no_snapshots = (numel(snapshot_blks)==0);
+
+    if ~no_snapshots
+        snapshots(1, numel(snapshot_blks)) = design_info.Snapshot;
         for n = 1 : numel(snapshot_blks),
             snapshots(n) = design_info.Snapshot(snapshot_blks{n});
         end
@@ -45,6 +49,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     
     % now comments/info blocks
     info_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:info');
+    no_info_blks = (numel(info_blks)==0);
     
     % write the XML - use a global id counter to id blocks
     
@@ -63,11 +68,13 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     xml_node_registers.setAttribute('class', 'register');
     xml_node_root.appendChild(xml_node_registers);
     %xml_node_registers.appendChild(xml_dom.createComment('Both bitreg and regular registers.'));
-    for n = 1 : numel(registers),
-        reg = registers(n);
-        nodes = reg.to_xml_nodes(xml_dom);
-        for node = 1 : numel(nodes),
-            xml_node_registers.appendChild(nodes(node));
+    if ~no_sw_registers
+        for n = 1 : numel(registers),
+            reg = registers(n);
+            nodes = reg.to_xml_nodes(xml_dom);
+            for node = 1 : numel(nodes),
+                xml_node_registers.appendChild(nodes(node));
+            end
         end
     end
     clear registers;
@@ -76,20 +83,22 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     xml_node_snapshots = xml_dom.createElement('device_class');
     xml_node_snapshots.setAttribute('class', 'snapshot');
     xml_node_root.appendChild(xml_node_snapshots);
-    for n = 1 : numel(snapshots),
-        snap = snapshots(n);
-        [mem, extra, info] = snap.to_xml_nodes(xml_dom);
-        for node = 1 : numel(mem),
-            xml_node_snapshots.appendChild(mem(node));
-        end
-        if isa(extra, 'org.apache.xerces.dom.ElementImpl'),
-            for node = 1 : numel(extra),
-                xml_node_registers.appendChild(extra(node));
+    if ~no_snapshots
+        for n = 1 : numel(snapshots),
+            snap = snapshots(n);
+            [mem, extra, info] = snap.to_xml_nodes(xml_dom);
+            for node = 1 : numel(mem),
+                xml_node_snapshots.appendChild(mem(node));
             end
-        end
-        if isa(info, 'org.apache.xerces.dom.ElementImpl'),
-            for node = 1 : numel(info),
-                xml_node_infos.appendChild(info(node));
+            if isa(extra, 'org.apache.xerces.dom.ElementImpl'),
+                for node = 1 : numel(extra),
+                    xml_node_registers.appendChild(extra(node));
+                end
+            end
+            if isa(info, 'org.apache.xerces.dom.ElementImpl'),
+                for node = 1 : numel(info),
+                    xml_node_infos.appendChild(info(node));
+                end
             end
         end
     end
@@ -134,9 +143,11 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
 %     clear snapshots;
     
     % now comments/info blocks
-    for n = 1 : numel(info_blks),
-        info = design_info.InfoBlock(info_blks(n));
-        xml_node_infos.appendChild(info.to_xml_node(xml_dom));
+    if ~no_info_blks
+        for n = 1 : numel(info_blks),
+            info = design_info.InfoBlock(info_blks(n));
+            xml_node_infos.appendChild(info.to_xml_node(xml_dom));
+        end
     end
     clear info_blks;
     
