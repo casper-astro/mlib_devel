@@ -85,6 +85,8 @@ misc_ports.adc1_clk  =  {1 'out' ['quadc0_', s.adc_brd, '_adc1_clk']};
 misc_ports.adc2_clk  =  {1 'out' ['quadc0_', s.adc_brd, '_adc2_clk']};
 misc_ports.adc3_clk  =  {1 'out' ['quadc0_', s.adc_brd, '_adc3_clk']};
 misc_ports.adc0_clk90 = {1 'out' [s.adc_str, '_clk90']};
+misc_ports.adc0_clk180 = {1 'out' [s.adc_str, '_clk180']};
+misc_ports.adc0_clk270 = {1 'out' [s.adc_str, '_clk270']};
 
 b = set(b,'misc_ports',misc_ports);
 
