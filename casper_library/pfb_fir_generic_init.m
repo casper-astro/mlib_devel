@@ -257,7 +257,8 @@ function pfb_fir_generic_init(blk, varargin)
   add_line(blk, 'sync/1', 'pfb_fir_coeff_gen/1');
   add_line(blk, 'pfb_fir_coeff_gen/1', 'pfb_fir_taps/1');
 
-  reuse_block(blk, 'sync_delay','xbsIndex_r4/Delay', 'latency', 'conv_latency', 'Position', [805 52 835 68]);
+  reuse_block(blk, 'sync_delay','xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+    'latency', 'conv_latency', 'Position', [805 52 835 68]);
   add_line(blk, 'pfb_fir_taps/1', 'sync_delay/1');
   reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [1155 52 1185 68]);
   add_line(blk, 'sync_delay/1', 'sync_out/1');
@@ -270,7 +271,8 @@ function pfb_fir_generic_init(blk, varargin)
       'Position', [95 yoff+(n_inputs_total*yinc)-8 125 yoff+(n_inputs_total*yinc)+8]);
     add_line(blk, 'en/1', 'pfb_fir_coeff_gen/3');
     add_line(blk, 'pfb_fir_coeff_gen/4', 'pfb_fir_taps/4');
-    reuse_block(blk, 'den', 'xbsIndex_r4/Delay', 'latency', 'conv_latency', 'Position', [805 162 835 178]);
+    reuse_block(blk, 'den', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+      'latency', 'conv_latency', 'Position', [805 162 835 178]);
     add_line(blk, 'pfb_fir_taps/3', 'den/1');
     reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', num2str(2+n_inputs_total), ...
       'Position', [1035 yoff+(n_inputs_total*yinc)-8 1065 yoff+(n_inputs_total*yinc)+8]);

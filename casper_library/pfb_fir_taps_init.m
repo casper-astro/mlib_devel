@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%TODO implement Dave's adder bit width optimizations
+%TODO Dave's adder width optimisations
 
 function pfb_fir_taps_init(blk, varargin)
   clog('entering pfb_fir_taps_init', 'trace');
@@ -92,10 +92,12 @@ function pfb_fir_taps_init(blk, varargin)
           'Position', [330 26 370 64]);
   add_line(blk,'sync/1','sync_delay/1');
 
-  reuse_block(blk, 'sync_delay0', 'xbsIndex_r4/Delay', 'latency', 'mult_latency+1', 'Position', [435 31 480 59]);
+  reuse_block(blk, 'sync_delay0', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+    'latency', 'mult_latency+1', 'Position', [435 31 480 59]);
   add_line(blk,'sync_delay/1','sync_delay0/1');
   
-  reuse_block(blk, 'sync_delay1', 'xbsIndex_r4/Delay', 'latency', 'add_latency', 'Position', [700 31 740 59]);
+  reuse_block(blk, 'sync_delay1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+    'latency', 'add_latency', 'Position', [700 31 740 59]);
   add_line(blk,'sync_delay0/1','sync_delay1/1', 'autorouting', 'on');
   
   reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [915 38 945 52]);
@@ -123,7 +125,8 @@ function pfb_fir_taps_init(blk, varargin)
           'DelayLen', '2^(pfb_size-n_inputs)', 'bram_latency', 'bram_latency', 'async', async, 'Position', [330 129 370 216]);
   add_line(blk,'data_delay_chain/1','delay_bram/1');
 
-  reuse_block(blk, 'd_delay', 'xbsIndex_r4/Delay', 'en', async, 'latency', 'add_latency', 'Position', [700 145 740 265]);
+  reuse_block(blk, 'd_delay', 'xbsIndex_r4/Delay', 'en', async, 'reg_retiming', 'on', ...
+    'latency', 'add_latency', 'Position', [700 145 740 265]);
   add_line(blk,'d_delay/1', 'youngest/1', 'autorouting', 'on');
   add_line(blk,'d_delay/1', 'data/2', 'autorouting', 'on');
   add_line(blk,'delay_bram/1', 'd_delay/1');
@@ -148,7 +151,8 @@ function pfb_fir_taps_init(blk, varargin)
   add_line(blk, 'coeffs/1', 'bus_mult/2');
 
   if strcmp(async, 'on'),
-    reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', 'latency', 'mult_latency+1', 'Position', [435 471 480 499]);
+    reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+      'latency', 'mult_latency+1', 'Position', [435 471 480 499]);
     add_line(blk, 'en/1', 'den0/1');
     add_line(blk,'en/1','d_delay/2', 'autorouting', 'on');
     add_line(blk,'en/1','delay_bram/2');
