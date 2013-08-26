@@ -20,6 +20,11 @@ module qdrc_top (
     qdr_qvld,
     /* QDR PHY ready */
     phy_rdy, cal_fail,
+    /* State debug probes */
+    bit_align_state_prb,
+    bit_train_state_prb,
+    bit_train_error_prb,
+    phy_state_prb,
     /* QDR read interface */
     usr_rd_strb,
     usr_wr_strb,
@@ -65,6 +70,11 @@ module qdrc_top (
 
   input  [2*DATA_WIDTH - 1:0] usr_wr_data;
   input    [2*BW_WIDTH - 1:0] usr_wr_be;
+
+  output [3:0] 	      bit_align_state_prb;
+  output [3:0] 	      bit_train_state_prb;
+  output [3:0] 	      bit_train_error_prb;
+  output [3:0] 	      phy_state_prb;
 
   /********** QDR Infrastucture *********/
 
@@ -164,6 +174,12 @@ module qdrc_top (
     /* phy status signals */
     .phy_rdy  (phy_rdy),
     .cal_fail (cal_fail),
+
+     /* debug state probes */
+    .bit_align_state_prb (bit_align_state_prb),
+    .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb),
+    .phy_state_prb       (phy_state_prb),
 
     /* user/phy interface signals */
     .phy_addr    (phy_addr),

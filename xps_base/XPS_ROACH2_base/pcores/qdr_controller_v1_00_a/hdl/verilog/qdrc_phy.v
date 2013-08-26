@@ -9,6 +9,12 @@ module qdrc_phy(
     phy_rdy,
     cal_fail,
 
+    /* state debug probes */
+    bit_align_state_prb,
+    bit_train_state_prb,
+    bit_train_error_prb,
+    phy_state_prb,
+
     /* user/phy interface signals */
     phy_addr,
 
@@ -71,9 +77,14 @@ module qdrc_phy(
   output   [DATA_WIDTH - 1:0] dly_en;
   output   [DATA_WIDTH - 1:0] dly_rst;
 
+  output [3:0] 	      bit_align_state_prb;
+  output [3:0] 	      bit_train_state_prb;
+  output [3:0] 	      bit_train_error_prb;
+  output [3:0] 	      phy_state_prb;
+
   wire bit_align_start,   bit_align_done,   bit_align_fail;
   wire burst_align_start, burst_align_done, burst_align_fail;
-
+   
   qdrc_phy_sm qdrc_phy_sm_inst (
     .clk   (clk0),
     .reset (reset),
@@ -88,7 +99,9 @@ module qdrc_phy(
     .bit_align_fail    (bit_align_fail),
     .burst_align_start (burst_align_start),
     .burst_align_done  (burst_align_done),
-    .burst_align_fail  (burst_align_fail)
+    .burst_align_fail  (burst_align_fail),
+     /* State probe */
+    .phy_state_prb     (phy_state_prb)
   );
 
   /************ Bit Alignment Logic ***************/
@@ -142,7 +155,12 @@ module qdrc_phy(
 
     /* Bit aligned Datal */
     .qdr_q_rise_cal (qdr_q_rise_cal),
-    .qdr_q_fall_cal (qdr_q_fall_cal)
+    .qdr_q_fall_cal (qdr_q_fall_cal),
+
+     /* State probe */
+    .bit_align_state_prb (bit_align_state_prb),
+    .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb)
   );
 
   /************ Burst Alignment Logic ***************/
@@ -189,7 +207,6 @@ module qdrc_phy(
 
     .qdr_q_rise_cal (qdr_q_rise_done),
     .qdr_q_fall_cal (qdr_q_fall_done)
-
   );
 
   /************ User signal assignments ***************/
