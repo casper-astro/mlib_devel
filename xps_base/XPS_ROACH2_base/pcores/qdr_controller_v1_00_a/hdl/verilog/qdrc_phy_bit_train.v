@@ -74,7 +74,7 @@ module qdrc_phy_bit_train #(
   localparam ERROR_INVAL_BACK  = 4'd3;
   localparam ERROR_INVAL_FORW  = 4'd4;
 
-  reg train_err_reg;
+  reg [3:0] train_err_reg;
   assign bit_train_error_prb = train_err_reg;
 
   reg train_done_reg;
