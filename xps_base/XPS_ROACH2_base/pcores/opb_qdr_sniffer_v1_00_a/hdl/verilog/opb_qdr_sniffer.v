@@ -69,6 +69,10 @@ module opb_qdr_sniffer #(
     input [3:0] bit_train_error_prb,
     input [3:0] phy_state_prb,
 
+    /* MMCM lock status */
+    input  fab_clk_lock,
+    input  sys_clk_lock,
+
     /* Misc signals */
     input  phy_rdy,
     input  cal_fail,
@@ -297,6 +301,8 @@ end endgenerate
     .bit_train_state_prb (bit_train_state_prbR),
     .bit_train_error_prb (bit_train_error_prbR),
     .phy_state_prb       (phy_state_prbR),
+    .fab_clk_lock        (fab_clk_lock),
+    .sys_clk_lock        (sys_clk_lock),
     .qdr_reset   (qdr_reset),
     .cal_fail    (cal_failR),
     .phy_rdy     (phy_rdyR),

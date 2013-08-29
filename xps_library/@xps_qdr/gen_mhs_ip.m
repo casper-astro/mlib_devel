@@ -251,6 +251,14 @@ switch hw_sys
         str = [str, ' PORT bit_train_error_prb  = ', hw_qdr, '_bit_train_error_prb ', '\n'];
         str = [str, ' PORT phy_state_prb  = ',       hw_qdr, '_phy_state_prb ',       '\n'];
 
+	if getenv('QDR_MMCM_LOCK_EN')
+	  str = [str, ' PORT fab_clk_lock  = ', clk_src, '_lock',  '\n'];
+	  str = [str, ' PORT sys_clk_lock  = ',   'sys_clk_lock', '\n'];
+	else
+	  str = [str, ' PORT fab_clk_lock  = 0b1\n'];
+	  str = [str, ' PORT sys_clk_lock  = 0b1\n'];
+	end
+
         str = [str, ' PORT phy_rdy       = ', inst_name, '_phy_ready', '\n'];
         str = [str, ' PORT cal_fail      = ', inst_name, '_cal_fail',  '\n'];
         str = [str, ' PORT qdr_reset     = ', inst_name, '_reset',     '\n'];
