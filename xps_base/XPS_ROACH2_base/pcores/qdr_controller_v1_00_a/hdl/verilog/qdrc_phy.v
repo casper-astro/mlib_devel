@@ -212,31 +212,31 @@ module qdrc_phy(
   /************ User signal assignments ***************/
 
   assign qdr_d_rise = !bit_align_done   ? qdr_d_rise_bit   :
-                      !burst_align_done ? qdr_d_rise_burst :
+                      !burst_align_done && !cal_fail ? qdr_d_rise_burst :
                                           phy_wr_data[DATA_WIDTH - 1:0];
 
   assign qdr_d_fall = !bit_align_done   ? qdr_d_fall_bit   :
-                      !burst_align_done ? qdr_d_fall_burst :
+                      !burst_align_done && !cal_fail ? qdr_d_fall_burst :
                                           phy_wr_data[2*DATA_WIDTH - 1:DATA_WIDTH];
 
   assign qdr_bw_n_rise = !bit_align_done   ? qdr_bw_n_rise_bit   :
-                         !burst_align_done ? qdr_bw_n_rise_burst :
+                         !burst_align_done && !cal_fail ? qdr_bw_n_rise_burst :
                                              ~phy_wr_ben[BW_WIDTH - 1:0];
 
   assign qdr_bw_n_fall = !bit_align_done   ? qdr_bw_n_fall_bit   :
-                         !burst_align_done ? qdr_bw_n_fall_burst :
+                         !burst_align_done && !cal_fail ? qdr_bw_n_fall_burst :
                                              ~phy_wr_ben[BW_WIDTH*2 - 1:BW_WIDTH];
 
   assign qdr_sa = !bit_align_done   ? qdr_sa_bit   :
-                  !burst_align_done ? qdr_sa_burst :
+                  !burst_align_done && !cal_fail ? qdr_sa_burst :
                                       phy_addr;
 
   assign qdr_w_n = !bit_align_done   ? qdr_w_n_bit   :
-                   !burst_align_done ? qdr_w_n_burst :
+                   !burst_align_done && !cal_fail ? qdr_w_n_burst :
                                        !phy_wr_strb;
 
   assign qdr_r_n = !bit_align_done   ? qdr_r_n_bit   :
-                   !burst_align_done ? qdr_r_n_burst :
+                   !burst_align_done && !cal_fail ? qdr_r_n_burst :
                                        !phy_rd_strb;
   
 
