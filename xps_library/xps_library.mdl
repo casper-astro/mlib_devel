@@ -24091,7 +24091,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "ROACH:sx95t|sys_clk|dac1_clk|adc0_clk|100|1|XST"
+      MaskValueString	      "ROACH:sx95t|sys_clk|sys_clk|adc0_clk|100|1|XST"
       System {
 	Name			"XSG core config"
 	Location		[404, 45, 1094, 1285]
