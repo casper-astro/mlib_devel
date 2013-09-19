@@ -7,7 +7,7 @@
 %                                                                             %
 %   Karoo Array Telesope                                                      %
 %   http://www.kat.ac.za                                                      %
-%   Copyright (C) 2009 Andrew Martens                                         %
+%   Copyright (C) 2013 Andrew Martens                                         %
 %                                                                             %
 %   This program is free software; you can redistribute it and/or modify      %
 %   it under the terms of the GNU General Public License as published by      %

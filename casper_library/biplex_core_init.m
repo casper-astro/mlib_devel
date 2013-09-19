@@ -117,6 +117,12 @@ function biplex_core_init(blk, varargin)
       error('biplex_core_init.m: Biplex FFT must have length of at least (2^)2.');
   end
 
+  % bin_pt_in == -1 is a special case for backwards compatibility
+  if bin_pt_in == -1
+    bin_pt_in = input_bit_width - 1;
+    set_mask_params(blk, 'bin_pt_in', num2str(bin_pt_in));
+  end
+
   % check the per-stage multiplier specification
   stage_mult_spec = multiplier_specification(mult_spec, FFTSize, blk);
 
@@ -129,9 +135,8 @@ function biplex_core_init(blk, varargin)
     reuse_block(blk, 'en', 'built-in/inport', 'Port', '5', 'Position', [15 158 45 172]);
   end
 
-  n_bits = n_inputs*4;
   reuse_block(blk, 'Constant', 'xbsindex_r4/Constant', ...
-      'arith_type', 'Unsigned', 'const', '0', 'n_bits', num2str(n_bits), 'bin_pt', '0', ...
+      'arith_type', 'Unsigned', 'const', '0', 'n_bits', num2str(n_inputs), 'bin_pt', '0', ...
       'explicit_period', 'on', 'period', '1', ...
       'Position', [55 82 85 98]);
 

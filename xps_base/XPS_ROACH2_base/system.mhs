@@ -338,7 +338,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_modepin          = adc0_modepin
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_reset            = adc0_reset
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_dcm_reset        = adc0_dcm_reset
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_dcm_locked       = adc0_dcm_locked
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_dcm_locked       = adc0_clk_lock
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_fifo_full_cnt    = adc0_fifo_full_cnt
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_fifo_empty_cnt   = adc0_fifo_empty_cnt
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_psclk            = adc0_psclk
@@ -346,6 +346,11 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_psincdec         = adc0_psincdec
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_psdone           = adc0_psdone
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_clk              = adc0_clk
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # #
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # # IDELAY control signals for adc0
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_tap_rst          = adc0_tap_rst
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_datain_pin       = adc0_datain_pin
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc0_datain_tap       = adc0_datain_tap
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # #
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # # control signals for adc1
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_adc3wire_clk     = adc1_adc3wire_clk
@@ -355,7 +360,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_modepin          = adc1_modepin
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_reset            = adc1_reset  
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_dcm_reset        = adc1_dcm_reset
-#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_dcm_locked       = adc1_dcm_locked
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_dcm_locked       = adc1_clk_lock
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_fifo_full_cnt    = adc1_fifo_full_cnt
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_fifo_empty_cnt   = adc1_fifo_empty_cnt
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_psclk            = adc1_psclk
@@ -363,6 +368,11 @@
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_psincdec         = adc1_psincdec
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_psdone           = adc1_psdone
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc1')# PORT adc1_clk              = adc1_clk
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # #
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  # # IDELAY control signals for adc1
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc1_tap_rst          = adc1_tap_rst
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc1_datain_pin       = adc1_datain_pin
+#IF# (strcmp(get(b,'type'),'xps_adc5g'))  && get(b,'use_adc0')# PORT adc1_datain_tap       = adc1_datain_tap
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  # #
 #IF# (strcmp(get(b,'type'),'xps_adc5g'))  #END
 
@@ -426,6 +436,7 @@ BEGIN roach_infrastructure
  PARAMETER HW_VER = 1.00.a
 #IF# 1 # ['  PARAMETER CLK_FREQ     = ', num2str(app_clk_rate), '\n']
 #IF# 1 # ['  PARAMETER CLK_HIGH_LOW = ', num2str(clk_high_low), '\n']
+#IF# getenv('IDCTRL_100') # ['  PARAMETER IDCTRL_100   = 1\n']
 #IF# 1 # ['  PARAMETER MULTIPLY     = ', num2str(multiply),    '\n']
 #IF# 1 # ['  PARAMETER DIVIDE       = ', num2str(divide),      '\n']
 #IF# 1 # ['  PARAMETER DIVCLK       = ', num2str(divclk),      '\n']
@@ -456,6 +467,7 @@ BEGIN roach_infrastructure
  PORT aux_clk2x90   = aux_clk2x90
  PORT aux_clk2x180  = aux_clk2x180
  PORT aux_clk2x270  = aux_clk2x270
+ PORT aux_clk_lock  = aux_clk_lock
  PORT epb_clk = epb_clk
  PORT idelay_rst = power_on_rst
  PORT idelay_rdy = idelay_rdy

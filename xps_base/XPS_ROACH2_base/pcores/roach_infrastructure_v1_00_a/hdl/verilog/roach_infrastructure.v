@@ -1,6 +1,7 @@
 module roach_infrastructure #(
     parameter CLK_FREQ     = 100, 
     parameter CLK_HIGH_LOW = "low", // high >= 135, low < 135
+    parameter IDCTRL_100   = 0,
     parameter MULTIPLY     = 6,
     parameter DIVIDE       = 6,
     parameter DIVCLK       = 1
@@ -18,6 +19,7 @@ module roach_infrastructure #(
     input  aux_clk_n,  aux_clk_p,
     output aux_clk,    aux_clk90,   aux_clk180,   aux_clk270,
     output aux_clk2x,  aux_clk2x90, aux_clk2x180, aux_clk2x270,
+    output aux_clk_lock,
     output clk_100, clk_200
   );
 
@@ -71,7 +73,7 @@ module roach_infrastructure #(
  /* 200MHz clock for idelayctrl */
   wire clk_200_mmcm;
  /* 100MHz clock for ddr3 clk */
- //wire clk_100_mmcm;
+  wire clk_100_mmcm;
 
   // sys_clk diff buffer
   IBUFGDS #(
@@ -138,7 +140,7 @@ module roach_infrastructure #(
     .CLKOUT3   (sys_clk180_mmcm),
     .CLKOUT4   (sys_clk270_mmcm),
     .CLKOUT5   (),//(sys_clk2x_mmcm),
-    .CLKOUT6   (clk_100),//(ddr3_clk),
+    .CLKOUT6   (clk_100_mmcm),//(ddr3_clk),
     .LOCKED    (sys_clk_mmcm_locked),
     
     .PWRDWN    (1'b0),
@@ -155,20 +157,30 @@ module roach_infrastructure #(
 //    .O({sys_clk,      sys_clk90, sys_clk180     , sys_clk270})
 //  );
 
-  BUFG bufg_sys_clk2x[3:0](
-    .I({sys_clk2x_mmcm, sys_clk2x90_mmcm, sys_clk2x180_mmcm, sys_clk2x270_mmcm}),
-    .O({sys_clk2x,      sys_clk2x90     , sys_clk2x180     , sys_clk2x270})
-  );
-  
-//  BUFG bufg_clk_100(
-//    .I(clk_100_mmcm),
-//    .O(clk_100)
+//  // All of these I signals are undriven and should probably be deleted.
+//  BUFG bufg_sys_clk2x[3:0](
+//    .I({sys_clk2x_mmcm, sys_clk2x90_mmcm, sys_clk2x180_mmcm, sys_clk2x270_mmcm}),
+//    .O({sys_clk2x,      sys_clk2x90     , sys_clk2x180     , sys_clk2x270})
 //  );
+  
+ BUFG bufg_clk_100(
+   .I(clk_100_mmcm),
+   .O(clk_100)
+ );
 
  BUFG bufg_clk_200(
     .I(clk_200_mmcm),
     .O(clk_200)
   );
+
+  // Since sys_clk2c_mmcm is undriven, just drive sys_clk2x from clk_200.
+  assign sys_clk2x = clk_200;
+
+  // sys_clk2x{90,180,270} have "always"(?) been undriven on ROACH2.  Why do
+  // we still carry them around as if they are real signals?
+  assign sys_clk2x90  = 1'b0;
+  assign sys_clk2x180 = 1'b0;
+  assign sys_clk2x270 = 1'b0;
 
   MMCM_BASE #(
     .BANDWIDTH          (CLK_HIGH_LOW), // Jitter programming ("HIGH","LOW","OPTIMIZED")
@@ -232,6 +244,7 @@ module roach_infrastructure #(
   assign op_power_on_rst = ~sys_clk_mmcm_locked;
   assign mmcm_reset = 1'b0;
   assign sys_clk_lock = sys_clk_mmcm_locked;
+  assign aux_clk_lock = aux_clk_mmcm_locked;
 
 
   /* Delay Clock */
@@ -246,11 +259,22 @@ module roach_infrastructure #(
     .I(dly_clk_int),
     .O(dly_clk)
   );*/
- 
+  generate if (IDCTRL_100) begin
+
+  IDELAYCTRL idelayctrl_inst(
+    .REFCLK (clk_100),
+    .RST    (idelay_rst),
+    .RDY    (idelay_rdy)
+  );
+
+  end else begin
+
   IDELAYCTRL idelayctrl_inst(
     .REFCLK (clk_200),
     .RST    (idelay_rst),
     .RDY    (idelay_rdy)
   );
+
+  end endgenerate
 
 endmodule

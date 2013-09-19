@@ -56,19 +56,23 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	PORT adc0_modepin = "", DIR = O
 	PORT adc0_reset = "", DIR = O
 
-###	PORT adc0_adc_reset       = "", DIR = O
-###	PORT adc0_ddrb            = "", DIR = O
-
 	PORT adc0_dcm_reset       = "", DIR = O
 	PORT adc0_dcm_locked      = "", DIR = I
 	PORT adc0_fifo_full_cnt        = "", DIR = I, VEC = [15:0]
 	PORT adc0_fifo_empty_cnt       = "", DIR = I, VEC = [15:0]
-  PORT adc0_psclk           = "", DIR = O
-  PORT adc0_psen            = "", DIR = O
-  PORT adc0_psincdec        = "", DIR = O
-  PORT adc0_psdone          = "", DIR = I
-  PORT adc0_clk             = "", DIR = I
+	PORT adc0_psclk           = "", DIR = O
+	PORT adc0_psen            = "", DIR = O
+  	PORT adc0_psincdec        = "", DIR = O
+  	PORT adc0_psdone          = "", DIR = I
+  	PORT adc0_clk             = "", DIR = I
 	
+	######################################
+	## IODELAY control signals to ADC 0
+	######################################
+	PORT adc0_datain_pin      = "", DIR = O, VEC = [4:0]
+	PORT adc0_datain_tap      = "", DIR = O, VEC = [4:0]
+	PORT adc0_tap_rst         = "", DIR = O
+
 	######################################
 	## configuration signals to ADC 1
 	######################################
@@ -79,18 +83,21 @@ PARAMETER INITIAL_CONFIG_MODE_1 = 0, DT = INTEGER
 	PORT adc1_modepin = "", DIR = O
 	PORT adc1_reset = "", DIR = O
 
-
-###	PORT adc1_adc_reset       = "", DIR = O
-###	PORT adc1_ddrb            = "", DIR = O
-
 	PORT adc1_dcm_reset       = "", DIR = O
 	PORT adc1_dcm_locked      = "", DIR = I
 	PORT adc1_fifo_full_cnt        = "", DIR = I, VEC = [15:0]
 	PORT adc1_fifo_empty_cnt       = "", DIR = I, VEC = [15:0]
-  PORT adc1_psclk           = "", DIR = O
-  PORT adc1_psen            = "", DIR = O
-  PORT adc1_psincdec        = "", DIR = O
-  PORT adc1_psdone          = "", DIR = I
-  PORT adc1_clk             = "", DIR = I
+ 	PORT adc1_psclk           = "", DIR = O
+  	PORT adc1_psen            = "", DIR = O
+	PORT adc1_psincdec        = "", DIR = O
+  	PORT adc1_psdone          = "", DIR = I
+  	PORT adc1_clk             = "", DIR = I
+
+	######################################
+	## IODELAY control signals to ADC 1
+	######################################
+	PORT adc1_datain_pin      = "", DIR = O, VEC = [4:0]
+	PORT adc1_datain_tap      = "", DIR = O, VEC = [4:0]
+	PORT adc1_tap_rst         = "", DIR = O
 
 END

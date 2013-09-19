@@ -1,10 +1,11 @@
 function parallel_to_serial_converter_init(blk, varargin)
 
-disp('Running mask script for block: parallel_to_serial_converter');
+clog('parallel_to_serial_converter_init: pre same_state', 'trace');
 
 defaults = {};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('parallel_to_serial_converter_init: post same_state', 'trace');
 
 check_mask_type(blk, 'parallel_to_serial_converter');
 munge_block(blk, varargin{:});
@@ -61,3 +62,4 @@ clean_blocks(blk);
 fmtstr = '';
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});
+clog('parallel_to_serial_converter_init: exiting', 'trace');

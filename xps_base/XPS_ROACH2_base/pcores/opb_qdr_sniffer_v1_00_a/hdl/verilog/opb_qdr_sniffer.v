@@ -63,6 +63,16 @@ module opb_qdr_sniffer #(
     output slave_rd_dvld,
     output slave_ack,
 
+    /* State debug probes */
+    input [3:0] bit_align_state_prb,
+    input [3:0] bit_train_state_prb,
+    input [3:0] bit_train_error_prb,
+    input [3:0] phy_state_prb,
+
+    /* MMCM lock status */
+    input  fab_clk_lock,
+    input  sys_clk_lock,
+
     /* Misc signals */
     input  phy_rdy,
     input  cal_fail,
@@ -251,10 +261,18 @@ end else begin : qdr_disabled
   assign slave_ack      = 1'b1;
 end endgenerate
 
+  reg [3:0] bit_align_state_prbR;
+  reg [3:0] bit_train_state_prbR;
+  reg [3:0] bit_train_error_prbR;
+  reg [3:0] phy_state_prbR;
   reg phy_rdyR;
   reg cal_failR;
 
   always @(posedge OPB_Clk_config) begin
+    bit_align_state_prbR <= bit_align_state_prb;
+    bit_train_state_prbR <= bit_train_state_prb;
+    bit_train_error_prbR <= bit_train_error_prb;
+    phy_state_prbR <= phy_state_prb;
     phy_rdyR <= phy_rdy;
     cal_failR <= cal_fail;
   end
@@ -279,6 +297,12 @@ end endgenerate
     .OPB_RNW     (OPB_RNW_config),
     .OPB_select  (OPB_select_config),
     .OPB_seqAddr (OPB_seqAddr_config),
+    .bit_align_state_prb (bit_align_state_prbR),
+    .bit_train_state_prb (bit_train_state_prbR),
+    .bit_train_error_prb (bit_train_error_prbR),
+    .phy_state_prb       (phy_state_prbR),
+    .fab_clk_lock        (fab_clk_lock),
+    .sys_clk_lock        (sys_clk_lock),
     .qdr_reset   (qdr_reset),
     .cal_fail    (cal_failR),
     .phy_rdy     (phy_rdyR),

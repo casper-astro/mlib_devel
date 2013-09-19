@@ -18,6 +18,18 @@ module qdr_config #(
     input  OPB_RNW,
     input  OPB_select,
     input  OPB_seqAddr,
+
+    /* State debug probes */
+    input [3:0] bit_align_state_prb,
+    input [3:0] bit_train_state_prb,
+    input [3:0] bit_train_error_prb,
+    input [3:0] phy_state_prb,
+
+    /* MMCM lock status */
+    input  fab_clk_lock,
+    input  sys_clk_lock,
+
+    /* Misc signals */
     output qdr_reset,
     input  cal_fail,
     input  phy_rdy,
@@ -28,6 +40,8 @@ module qdr_config #(
 
   localparam REG_RESET  = 0;
   localparam REG_STATUS = 1;
+  localparam REG_SM_PRB = 2;
+  localparam REG_SM_ERR = 3;
 
   /**************** Control Registers OPB Attachment ******************/
   
@@ -38,8 +52,9 @@ module qdr_config #(
 
   /* OPB Registers */
   reg Sl_xferAck_reg;
-  reg opb_data_sel;
+  reg [3:0] opb_data_sel;
 
+  reg qdr_hard_reset;
   reg [4:0] qdr_reset_shifter;
 
   always @(posedge OPB_Clk) begin
@@ -51,13 +66,15 @@ module qdr_config #(
     end else begin
       if (opb_sel && !Sl_xferAck_reg) begin
         Sl_xferAck_reg <= 1'b1;
-        opb_data_sel        <= opb_addr[2:2];
+        opb_data_sel        <= opb_addr[5:2];
 
-        case (opb_addr[2:2])  /* convert byte to word addressing */
+        case (opb_addr[5:2])  /* convert byte to word addressing */
           REG_RESET: begin
             if (!OPB_RNW) begin
               if (OPB_BE[3])
                 qdr_reset_shifter[0] <= OPB_DBus[31];
+              if (OPB_BE[2])
+                qdr_hard_reset       <= OPB_DBus[23];
             end
           end
         endcase
@@ -71,8 +88,17 @@ module qdr_config #(
   always @(*) begin
     if (Sl_xferAck_reg) begin
       case (opb_data_sel) 
+        REG_RESET: begin
+	  Sl_DBus_reg <= {8'b0, 7'b0, sys_clk_lock, 7'b0, fab_clk_lock, 7'b0, qdr_reset};
+        end
         REG_STATUS: begin
           Sl_DBus_reg <= {16'b0, 7'b0, cal_fail, 7'b0, phy_rdy};
+        end
+        REG_SM_PRB: begin
+          Sl_DBus_reg <= {1'b1, 7'b0, 8'b0, 4'b0, phy_state_prb, bit_align_state_prb, bit_train_state_prb};
+        end
+        REG_SM_ERR: begin
+          Sl_DBus_reg <= {1'b1, 7'b0, 8'b0, 8'b0, 4'b0, bit_train_error_prb};
         end
         default: begin
           Sl_DBus_reg <= 32'h0;
@@ -98,6 +124,6 @@ module qdr_config #(
     qdr_reset_R  <= |qdr_reset_shifter;
     qdr_reset_RR <= qdr_reset_R;
   end
-  assign qdr_reset = qdr_reset_RR;
+  assign qdr_reset = (qdr_reset_RR || qdr_hard_reset || !(fab_clk_lock && sys_clk_lock));
 
 endmodule

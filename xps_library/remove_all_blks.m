@@ -30,6 +30,7 @@ try
   for i = 1:length(blks)
       switch get_param([sys,'/',blks{i}],'BlockType')
           case {'Inport' 'Outport'}
+              % don't remove IO blocks
           otherwise
               delete_block([sys,'/',blks{i}]);
       end

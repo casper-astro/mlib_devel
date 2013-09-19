@@ -26,15 +26,20 @@
 
 c_sys = gcb;
 
-arith_type  = eval_param(c_sys, 'arith_type');
-data_width  = eval_param(c_sys, 'data_width');
+arith_type  = get_param(c_sys, 'arith_type');
+data_width  = str2num(get_param(c_sys, 'data_width'));
 data_bin_pt = eval_param(c_sys, 'data_bin_pt');
 addr_width  = eval_param(c_sys, 'addr_width');
 
 %check parameters
 
-xsg_blk = [strtok(gcs, '/') '/ System Generator'];
-fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
+fpga_arch = 'virtex5';
+try
+  % This is in a try/end block in case we are inside a library or other model
+  % without a system generator block.
+  xsg_blk = [strtok(gcs, '/') '/ System Generator'];
+  fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
+end
 
 switch fpga_arch
   case {'virtex6', 'Virtex6', 'virtex5', 'Virtex5'}

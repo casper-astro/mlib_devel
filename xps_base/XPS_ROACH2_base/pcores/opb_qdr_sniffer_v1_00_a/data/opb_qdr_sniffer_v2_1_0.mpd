@@ -83,6 +83,17 @@ BEGIN opb_qdr_sniffer
   PORT slave_rd_dvld = slave_rd_dvld, DIR = O
   PORT slave_ack     = slave_ack,     DIR = O
 
+## State debug probes from the controller
+  PORT bit_align_state_prb = bit_align_state_prb,  DIR = I, VEC = [3:0]
+  PORT bit_train_state_prb = bit_train_state_prb,  DIR = I, VEC = [3:0]
+  PORT bit_train_error_prb = bit_train_error_prb,  DIR = I, VEC = [3:0]
+  PORT phy_state_prb       = phy_state_prb,        DIR = I, VEC = [3:0]
+
+## MMCM status
+  PORT fab_clk_lock  = "",     DIR = I
+  PORT sys_clk_lock  = "",     DIR = I
+
+## Misc. ports
   PORT phy_rdy       = "",     DIR = I
   PORT cal_fail      = "",     DIR = I
   PORT qdr_reset     = "",     DIR = O

@@ -120,6 +120,12 @@ if FFTSize == 0 | n_inputs == 0,
   return;
 end
 
+% bin_pt_in == -1 is a special case for backwards compatibility
+if bin_pt_in == -1
+  bin_pt_in = input_bit_width - 1;
+  set_mask_params(blk, 'bin_pt_in', num2str(bin_pt_in));
+end
+
 %flag error and over-ride if trying to use BRAMs but delay is less than BRAM latency
 if (2^(FFTSize-FFTStage) < bram_latency)
     if strcmp(delays_bram,'on')
@@ -187,16 +193,19 @@ add_line(blk,'Slice1/1','Mux/1');
 
 reuse_block(blk, 'Delay', 'xbsIndex_r4/Delay', ...
         'latency', '1', ...
+        'reg_retiming', 'on', ...
         'Position', [250 195 280 225]);
 add_line(blk,'sync/1','Delay/1');
 
 if strcmp(async, 'on'),
   reuse_block(blk, 'Delay1', 'xbsIndex_r4/Delay', ...
           'latency', '1', ...
+          'reg_retiming', 'on', ...
           'Position', [250 255 280 285]);
   add_line(blk,'en/1','Delay1/1');
   reuse_block(blk, 'Delay2', 'xbsIndex_r4/Delay', ...
           'latency', '0', ...
+          'reg_retiming', 'on', ...
           'Position', [380 255 405 285]);
   add_line(blk,'Delay1/1','Delay2/1');
 end

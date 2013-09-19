@@ -21,6 +21,11 @@ module qdr_controller (
     qdr_qvld,
     /* QDR PHY ready */
     phy_rdy, cal_fail,
+    /* State debug probes */
+    bit_align_state_prb,
+    bit_train_state_prb,
+    bit_train_error_prb,
+    phy_state_prb,
     /* QDR read interface */
     usr_rd_strb,
     usr_wr_strb,
@@ -68,6 +73,11 @@ module qdr_controller (
   input  [2*DATA_WIDTH - 1:0] usr_wr_data;
   input    [2*BW_WIDTH - 1:0] usr_wr_be;
   
+  output [3:0] 	      bit_align_state_prb;
+  output [3:0] 	      bit_train_state_prb;
+  output [3:0] 	      bit_train_error_prb;
+  output [3:0] 	      phy_state_prb;
+
   wire qdr_rst;
   
   assign qdr_rst = (idelay_rdy == 1'b0 || reset == 1'b1) ? 1'b1 : 1'b0;
@@ -100,6 +110,11 @@ module qdr_controller (
 
     .phy_rdy  (phy_rdy),
     .cal_fail (cal_fail),
+
+    .bit_align_state_prb (bit_align_state_prb),
+    .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb),
+    .phy_state_prb       (phy_state_prb),
 
     .qdr_d         (qdr_d),
     .qdr_q         (qdr_q),

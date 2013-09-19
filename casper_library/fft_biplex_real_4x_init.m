@@ -126,6 +126,12 @@ if n_inputs == 0 || FFTSize == 0,
   return;
 end
 
+% bin_pt_in == -1 is a special case for backwards compatibility
+if bin_pt_in == -1
+  bin_pt_in = input_bit_width - 1;
+  set_mask_params(blk, 'bin_pt_in', num2str(bin_pt_in));
+end
+
 % validate input fields
 [temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
 clear temp;
