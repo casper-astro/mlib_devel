@@ -24,8 +24,11 @@ function dump_exception(ex)
 
   persistent last_dumped;
 
-  % Do not re-dump ex if it has laready been dumped
-  if ~isa(last_dumped, 'MException') || last_dumped ~= ex
+  % An empty ex means to clear last_dumped
+  if isempty(ex)
+    last_dumped = [];
+  % Do not re-dump ex if it has already been dumped
+  elseif ~isa(last_dumped, 'MException') || last_dumped ~= ex
     last_dumped = ex;
     fprintf('%s: %s\n', ex.identifier, ex.message);
     stack = ex.stack;

@@ -693,6 +693,7 @@ Library {
       MaskEnableString	      "on,on"
       MaskVisibilityString    "on,on"
       MaskToolTipString	      "on,on"
+      MaskSelfModifiable	  on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
@@ -1319,6 +1320,7 @@ Library {
       " = map(custom_map+1);\nend\n\n%generate map so that two samples from same position in \n%subsequent input vector"
       "s are written into same address\nmap = reshape([map; 2^idepth+map], 1, 2^(idepth+1));\n\nset_param([gcb, '/reord"
       "er'], ...\n    'map', ['[',num2str(map),']']);\nset_param([gcb, '/qdr'], 'which_qdr', which_qdr);"
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
@@ -1787,13 +1789,10 @@ Library {
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<br><br>Hardware notes:  In hardware these blocks become top level output ports or are discarded, dep"
 	  "ending on how they are configured."
-	  inherit_from_input	  off
 	  hdl_port		  off
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
@@ -4943,6 +4942,7 @@ Library {
       MaskToolTipString	      "on,on,on"
       MaskInitialization      "new_map = tostring([[0:2^odepth-1]*2 [0:2^odepth-1]*2 + 1]);\nset_param([gcb, '/reorder"
       "'], 'map', new_map);\nset_param([gcb, '/qdr'], 'which_qdr', which_qdr);"
+      MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"

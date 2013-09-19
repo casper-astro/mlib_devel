@@ -109,6 +109,16 @@ for i=0:length(inputs)-1
             'N', num2str(samples),...
             'phase', num2str(j),...
             'ic', '0');
+
+        % Try to set options required for Downsample block of newer DSP blockset
+        % versions, but not available in older versions.
+        try
+          set_param([blk, '/downsample_', inputs{i+1}, num2str(j)], ...
+            'InputProcessing', 'Elements as channels (sample based)', ...
+            'RateOptions', 'Allow multirate processing');
+        catch
+        end;
+
         add_line(blk, ['bias_', inputs{i+1}, '/1'],...
                       ['downsample_', inputs{i+1}, num2str(j), '/1']);
               

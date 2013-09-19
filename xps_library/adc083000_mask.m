@@ -21,10 +21,9 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-lib_block_name = 'adc083000';
-fprintf('Running mask script for %s\n', lib_block_name);
+clog('Running adc083000_mask', 'trace');
 cursys = gcb;
-disp(cursys)
+clog(cursys, 'debug');
 
 demux_adc = strcmp( get_param(cursys, 'demux_adc'), 'on');
 use_adc0 = strcmp( get_param(cursys, 'use_adc0'), 'on');

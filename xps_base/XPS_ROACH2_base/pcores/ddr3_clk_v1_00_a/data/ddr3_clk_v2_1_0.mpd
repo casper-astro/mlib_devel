@@ -1,0 +1,38 @@
+BEGIN ddr3_clk
+
+## Peripheral Options
+OPTION IPTYPE      = PERIPHERAL
+OPTION IMP_NETLIST = TRUE
+OPTION HDL         = VERILOG
+OPTION IP_GROUP    = USER
+OPTION DESC        = DDR3_CLK
+
+## Bus Interfaces
+BUS_INTERFACE BUS = DDR3_CLK, BUS_STD = DDR3_CLK, BUS_TYPE = INITIATOR
+  
+## Parameters
+PARAMETER DRAM_FREQUENCY = 400, DT = INTEGER, RANGE = (200:600)
+PARAMETER CLKFBOUT_MULT_F = 12, DT = INTEGER
+PARAMETER DIVCLK_DIVIDE = 1, DT = INTEGER
+PARAMETER CLKOUT0_DIVIDE_F = 3, DT = INTEGER
+PARAMETER CLKOUT1_DIVIDE = 6, DT = INTEGER
+PARAMETER CLKOUT2_DIVIDE = 3, DT = INTEGER
+PARAMETER PERIOD = 10.00, DT = REAL
+## Ports
+
+## System interface
+PORT clk_100           = "", DIR = I
+PORT sys_rst           = 0b0, DIR = I #Hard-wired to 0 (never reset - according to toplevel.v (roach2_test_gateware))
+PORT iodelay_ctrl_rdy  = "", DIR = I
+
+PORT clk_app	       = "ddr3_clk_app", DIR = O
+
+PORT clk_mem           = "ddr3_clk_mem",     BUS = DDR3_CLK, DIR = O
+PORT clk_rd_base       = "ddr3_clk_rd_base", BUS = DDR3_CLK, DIR = O
+PORT rstdiv0           = "ddr3_rst_div_1",   BUS = DDR3_CLK, DIR = O
+
+PORT PSEN              = 0b0, DIR = I #Hard-wired to 0 (never reset - according to toplevel.v (roach2_test_gateware))-Disables fine shift
+PORT PSINCDEC          = 0b0, DIR = I #Hard-wired to 0 (never reset - according to toplevel.v (roach2_test_gateware))-phase shift inc/dec = 0
+PORT PSDONE            = "", DIR = O
+
+END

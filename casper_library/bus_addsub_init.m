@@ -7,8 +7,8 @@ function bus_addsub_init(blk, varargin)
     'n_bits_a', [8] ,  'bin_pt_a',     [3],   'type_a',   1, ...
     'n_bits_b', [4 ]  ,  'bin_pt_b',     [3],   'type_b',   [1], ...
     'n_bits_out', 8 ,     'bin_pt_out',   [3],   'type_out', [1], ...
-    'overflow', [1], 'quantization', [0], 'latency', 1, ...
-    'cmplx', 'on', 'misc', 'on'
+    'overflow', [1], 'quantization', [0], 'add_implementation', 'fabric core', ...
+    'latency', 1, 'async', 'off', 'cmplx', 'on', 'misc', 'on'
   };  
   
   check_mask_type(blk, 'bus_addsub');
@@ -37,9 +37,11 @@ function bus_addsub_init(blk, varargin)
   type_out     = get_var('type_out', 'defaults', defaults, varargin{:});
   overflow     = get_var('overflow', 'defaults', defaults, varargin{:});
   quantization = get_var('quantization', 'defaults', defaults, varargin{:});
+  add_implementation = get_var('add_implementation', 'defaults', defaults, varargin{:});
   latency      = get_var('latency', 'defaults', defaults, varargin{:});
   misc         = get_var('misc', 'defaults', defaults, varargin{:});
   cmplx        = get_var('cmplx', 'defaults', defaults, varargin{:});
+  async        = get_var('async', 'defaults', defaults, varargin{:});
  
   delete_lines(blk);
 
@@ -126,11 +128,21 @@ function bus_addsub_init(blk, varargin)
     'Port', '2', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   ypos_tmp = ypos_tmp + yinc + add_d*compb/2;
 
+  port_no = 3;
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misci', 'built-in/inport', ...
-      'Port', '3', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
+      'Port', num2str(port_no), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
+    port_no = port_no+1;
   end
+  ypos_tmp = ypos_tmp + yinc;
+
   xpos = xpos + xinc + port_w/2;  
+
+  if strcmp(async, 'on'),
+    xpos = xpos + xinc + port_w/2;  
+    reuse_block(blk, 'en', 'built-in/inport', ...
+      'Port', num2str(port_no), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
+  end
 
   % bus expand
   ypos_tmp = ypos + add_d*compa/2; %reset ypos
@@ -203,17 +215,34 @@ function bus_addsub_init(blk, varargin)
       ,arith_type,' ',quant,' ', of], ...
       {'bus_addsub_init_debug'}); 
 
+    if strcmp(add_implementation, 'behavioral HDL'),
+      use_behavioral_HDL = 'on';
+      hw_selection = 'Fabric';
+    elseif strcmp(add_implementation, 'fabric core'),
+      use_behavioral_HDL = 'off';
+      hw_selection = 'Fabric';
+    elseif strcmp(add_implementation, 'DSP48 core'),
+      use_behavioral_HDL = 'off';
+      hw_selection = 'DSP48';
+    end
+
     add_name = ['addsub',num2str(index)]; 
     reuse_block(blk, add_name, 'xbsIndex_r4/AddSub', ...
       'mode', m, 'latency', num2str(latency), ...
-      'precision', 'User Defined', ...
+      'en', async, 'precision', 'User Defined', ...
       'n_bits', num2str(n_bits_out(index)), 'bin_pt', num2str(bin_pt_out(index)), ...  
       'arith_type', arith_type, 'quantization', quant, 'overflow', of, ... 
+      'pipelined', 'on', 'use_behavioral_HDL', use_behavioral_HDL, 'hw_selection', hw_selection, ... 
       'Position', [xpos-add_w/2 ypos_tmp xpos+add_w/2 ypos_tmp+add_d-20]);
     ypos_tmp = ypos_tmp + add_d;
   
     add_line(blk, ['a_debus/',num2str(a_src(index))], [add_name,'/1']);
     add_line(blk, ['b_debus/',num2str(b_src(index))], [add_name,'/2']);
+
+    if strcmp(async, 'on')
+      add_line(blk, 'en/1', [add_name,'/3']);
+    end
+
   end %for
 
   ypos_tmp = ypos + add_d*(compb+compa) + 2*yinc;
@@ -223,6 +252,15 @@ function bus_addsub_init(blk, varargin)
       'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
   end
+  ypos_tmp = ypos_tmp + yinc;
+  
+  if strcmp(async, 'on'),
+    reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
+      'latency', num2str(latency), ...
+      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
+    add_line(blk, 'en/1', 'den/1');
+  end
+
   xpos = xpos + xinc + add_d/2;
 
   %bus create 
@@ -245,12 +283,23 @@ function bus_addsub_init(blk, varargin)
   ypos_tmp = ypos_tmp + yinc + port_d;  
 
   ypos_tmp = ypos + add_d*(compb+compa) + 2*yinc;
+  port_no = 2;
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misco', 'built-in/outport', ...
-      'Port', '2', ... 
+      'Port', num2str(port_no), ... 
       'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
 
     add_line(blk, 'dmisc/1', 'misco/1');
+    port_no = port_no+1;
+  end
+  ypos_tmp = ypos_tmp + yinc;
+  
+  if strcmp(async, 'on'),
+    reuse_block(blk, 'dvalid', 'built-in/outport', ...
+      'Port', num2str(port_no), ... 
+      'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
+
+    add_line(blk, 'den/1', 'dvalid/1');
   end
   
   % When finished drawing blocks and lines, remove all unused blocks.

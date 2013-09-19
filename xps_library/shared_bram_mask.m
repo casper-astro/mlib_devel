@@ -26,40 +26,20 @@
 
 c_sys = gcb;
 
-gcb_arith_type = get_param(c_sys, 'arith_type');
-gateway_ins = find_system(c_sys, 'searchdepth', 1, 'FollowLinks', 'on', ...
-  'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
-set_param(gateway_ins{1}, 'arith_type', gcb_arith_type, 'Name', clear_name([c_sys,'_data_out']));
-gateway_outs =find_system(c_sys, 'searchdepth', 1, 'FollowLinks', 'on', ...
-  'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
-for i =1:length(gateway_outs)
-  gw = gateway_outs{i};
-  if regexp(get_param(gw, 'Name'), '_addr$')
-    set_param(gw, 'Name', clear_name([c_sys, '_addr']));
-  elseif regexp(get_param(gw, 'Name'), '_data_in$')
-    set_param(gw, 'Name', clear_name([c_sys, '_data_in']));
-  elseif regexp(get_param(gw, 'Name'), '_we$')
-    set_param(gw, 'Name', clear_name([c_sys, '_we']));
-  else
-    errordlg(['Unknown gateway: ', get_param(gw, 'Parent'), '/', get_param(gw, 'Name')]);
-  end
-end
+arith_type  = get_param(c_sys, 'arith_type');
+data_width  = str2num(get_param(c_sys, 'data_width'));
+data_bin_pt = eval_param(c_sys, 'data_bin_pt');
+addr_width  = eval_param(c_sys, 'addr_width');
 
-set_param([c_sys, '/convert_din'], 'arith_type', gcb_arith_type);
-set_param([c_sys, '/mem/sim_data_in'], 'arith_type', gcb_arith_type);
+%check parameters
 
-latency = 1;
-if strcmp(get_param(c_sys, 'reg_prim_output'), 'on')
-  latency = latency + 1;
+fpga_arch = 'virtex5';
+try
+  % This is in a try/end block in case we are inside a library or other model
+  % without a system generator block.
+  xsg_blk = [strtok(gcs, '/') '/ System Generator'];
+  fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
 end
-if strcmp(get_param(c_sys, 'reg_core_output'), 'on')
-  latency = latency + 1;
-end
-set_param([c_sys, '/mem/ram'], 'latency', num2str(latency));
-
-xsg_blk = [strtok(gcs, '/') '/ System Generator'];
-fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
-data_width = eval(get_param(c_sys, 'data_width'));
 
 switch fpga_arch
   case {'virtex6', 'Virtex6', 'virtex5', 'Virtex5'}
@@ -81,24 +61,81 @@ if addr_width > 16,
   errordlg('Shared BRAM address width cannot be greater than 16');
 end
 
+%set up address manipulation blocks
+
+try
+  set_param([c_sys, '/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
+  set_param([c_sys, '/mem/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
+catch
+  warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
+end
+
+%set up cast blocks
+
+set_param([c_sys, '/convert_din1'], 'n_bits', num2str(data_width), 'bin_pt', num2str(data_bin_pt));
+
+%set up gateways
+
+gateway_ins = find_system(c_sys, 'searchdepth', 1, 'FollowLinks', 'on', ...
+  'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
+set_param(gateway_ins{1}, 'n_bits', num2str(data_width), ...
+  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'Name', clear_name([c_sys,'_data_out']));
+gateway_outs =find_system(c_sys, 'searchdepth', 1, 'FollowLinks', 'on', ...
+  'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
+for i =1:length(gateway_outs)
+  gw = gateway_outs{i};
+  if regexp(get_param(gw, 'Name'), '_addr$')
+    set_param(gw, 'Name', clear_name([c_sys, '_addr']));
+  elseif regexp(get_param(gw, 'Name'), '_data_in$')
+    set_param(gw, 'Name', clear_name([c_sys, '_data_in']));
+  elseif regexp(get_param(gw, 'Name'), '_we$')
+    set_param(gw, 'Name', clear_name([c_sys, '_we']));
+  else
+    errordlg(['Unknown gateway: ', get_param(gw, 'Parent'), '/', get_param(gw, 'Name')]);
+  end
+end
+
+set_param([c_sys, '/mem/sim_data_in'], ...
+  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
+
+%set up simulation memory
+
+latency = 1;
+if strcmp(get_param(c_sys, 'reg_prim_output'), 'on')
+  latency = latency + 1;
+end
+if strcmp(get_param(c_sys, 'reg_core_output'), 'on')
+  latency = latency + 1;
+end
+set_param([c_sys, '/mem/ram'], 'latency', num2str(latency));
+
+%set up various munge blocks (which may have to redraw, so disable library link first)
+
 set_param(c_sys,'LinkStatus','inactive');
 
-set_param([c_sys, '/munge_in'], ... 
-  'divisions', num2str(ceil(data_width/32)), ...
-  'div_size', num2str(min(32, data_width)), ...
-  'order', ['[',num2str([ceil(data_width/32)-1:-1:0]),']']);
+divisions = ceil(data_width/32);
+for name = {'munge_in', 'mem/sim_munge_out'},
+  try
+    set_param([c_sys, '/', name{1}], ... 
+      'divisions', num2str(divisions), ...
+      'div_size', mat2str(repmat(min(32, data_width),1,divisions)), ...
+      'order', ['[',num2str([divisions-1:-1:0]),']'], ...
+      'arith_type_out', 'Unsigned', ...
+      'bin_pt_out', num2str(data_bin_pt));
+  catch
+    warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
+  end
+end %for
 
-set_param([c_sys, '/mem/sim_munge_in'], ... 
-  'divisions', num2str(ceil(data_width/32)), ...
-  'div_size', num2str(min(32, data_width)), ...
-  'order', ['[',num2str([ceil(data_width/32)-1:-1:0]),']']);
-
-set_param([c_sys, '/munge_out'], ... 
-  'divisions', num2str(ceil(data_width/32)), ...
-  'div_size', num2str(min(32, data_width)), ...
-  'order', ['[',num2str([ceil(data_width/32)-1:-1:0]),']']);
-
-set_param([c_sys, '/mem/sim_munge_out'], ... 
-  'divisions', num2str(ceil(data_width/32)), ...
-  'div_size', num2str(min(32, data_width)), ...
-  'order', ['[',num2str([ceil(data_width/32)-1:-1:0]),']']);
+for name = {'mem/sim_munge_in', 'munge_out'},
+  try
+  set_param([c_sys, '/', name{1}], ... 
+    'divisions', num2str(divisions), ...
+    'div_size', mat2str(repmat(min(32, data_width),1,divisions)), ...
+    'order', ['[',num2str([divisions-1:-1:0]),']'], ...
+    'arith_type_out', arith_type, ...
+    'bin_pt_out', num2str(data_bin_pt));
+  catch
+    warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
+  end
+end

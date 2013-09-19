@@ -12,7 +12,9 @@ module qdrc_phy_sm(
     bit_align_fail,
     burst_align_start,
     burst_align_done,
-    burst_align_fail
+    burst_align_fail,
+    /* Debug probes */ 
+    phy_state_prb
   );
   input  clk, reset;
   output qdr_dll_off_n;
@@ -23,12 +25,15 @@ module qdrc_phy_sm(
   output burst_align_start;
   input  burst_align_done, burst_align_fail;
 
-  reg [1:0] phy_state;
+  output [3:0] phy_state_prb;
 
-  localparam STATE_DLLOFF      = 2'd0;
-  localparam STATE_BIT_ALIGN   = 2'd1;
-  localparam STATE_BURST_ALIGN = 2'd2;
-  localparam STATE_DONE        = 2'd3;
+  reg [3:0] phy_state;
+  assign phy_state_prb = phy_state;
+
+  localparam STATE_DLLOFF      = 4'd0;
+  localparam STATE_BIT_ALIGN   = 4'd1;
+  localparam STATE_BURST_ALIGN = 4'd2;
+  localparam STATE_DONE        = 4'd3;
 
   reg [18:0] wait_counter;
   /* qdr_dll_off needs to be held high for 2048 cycle after reset is

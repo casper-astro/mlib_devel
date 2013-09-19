@@ -29,6 +29,9 @@
 % find_system.
 function update_casper_blocks(sys, varargin)
 
+  % Clear last dumped exception to ensure that all exceptions are shown.
+  dump_exception([]);
+
   % For now, we require that sys is either an unlinked subsytem or a
   % block_diagram
   type = get_param(sys,'Type');
@@ -52,9 +55,13 @@ function update_casper_blocks(sys, varargin)
     error('%s is not a block diagram or a block', sys);
   end
 
-  fprintf('searching for CASPER blocks in %s...', sys);
+  fprintf('searching for CASPER blocks to update in %s...', sys);
 
-  ref_blks = find_system(sys, 'RegExp', 'on', varargin{:}, ...
+  ref_blks = find_system(sys, ...
+      'RegExp', 'on', ...
+      'LookUnderMasks', 'all', ...
+      'FollowLinks', 'off', ...
+      varargin{:}, ...
       'ReferenceBlock', '(casper|xps)_library');
 
   %fprintf('found %d blocks with ReferenceBlock\n', length(ref_blks));
@@ -62,7 +69,11 @@ function update_casper_blocks(sys, varargin)
   %  fprintf('  %3d %s\n', k, ref_blks{k});
   %end
   
-  anc_blks = find_system(sys, 'RegExp', 'on', varargin{:}, ...
+  anc_blks = find_system(sys, ...
+      'RegExp', 'on', ...
+      'LookUnderMasks', 'all', ...
+      'FollowLinks', 'off', ...
+      varargin{:}, ...
       'AncestorBlock', '(casper|xps)_library');
 
   %fprintf('found %d blocks with AncestorBlock\n', length(anc_blks));
@@ -70,7 +81,24 @@ function update_casper_blocks(sys, varargin)
   %  fprintf('  %3d %s\n', k, anc_blks{k});
   %end
 
+  % Concatenate the lists of blocks then sort.  Sorting the list optimizes the
+  % culling process that follows.
   blks = sort([ref_blks; anc_blks]);
+
+  % Even though we say "FollowLinks=off", find_system will still search through
+  % block's with disabled links.  To make sure we don't update blocks inside
+  % subsystems with disabled links, we need to cull the list of blocks.  For
+  % each block found, we remove any blocks that start with "block_name/".
+  keepers = ones(size(blks));
+  for k = 1:length(blks)
+    % If this block has not yet been culled, cull its sub-blocks.  (If it has
+    % already been culled, then its sub-blocks have also been culled already.)
+    if keepers(k)
+      pattern = ['^', blks{k}, '/'];
+      keepers(find(cellfun('length', regexp(blks, pattern)))) = 0;
+    end
+  end
+  blks = blks(find(keepers));
 
   fprintf('found %d\n', length(blks));
 
@@ -82,27 +110,5 @@ function update_casper_blocks(sys, varargin)
   % Don't show done message for zero blocks
   if length(blks) > 0
     fprintf('done updating %d blocks in %s\n', length(blks), sys);
-  end
-
-  % Now look for masked subsystems that are not linked to a library and recurse
-  % into them.
-  subs = find_system(sys, ...
-      'BlockType',  'SubSystem', ...
-      'Mask',       'on', ...
-      'LinkStatus', 'none');
-
-  for k=1:length(subs)
-    % Don't recurse self!
-    if ~strcmp(sys, subs{k})
-      % Turn off this sub-block's mask so that our not-looking-under-masks
-      % find_system call will search in/under this block.
-      set_param(subs{k}, 'Mask', 'off');
-
-      % Update
-      update_casper_blocks(subs{k}, varargin{:});
-
-      % Turn this sub-block's mask back on
-      set_param(subs{k}, 'Mask', 'on');
-    end
   end
 end

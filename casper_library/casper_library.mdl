@@ -3,14 +3,14 @@ Library {
   Version		  7.2
   MdlSubVersion		  0
   SavedCharacterEncoding  "US-ASCII"
-  PostLoadFcn		  "% Stub definitions for mask variables\ndelay_depth=16;\nn_bits=8;\nbin_pt=7;\n% Pre-load sublibrarie"
-  "s\nload_system('casper_library_accumulators');\nload_system('casper_library_communications');\nload_system('casper_l"
-  "ibrary_correlator');\nload_system('casper_library_delays');\ncasper_library_downconverter_init;\nload_system('casper"
-  "_library_downconverter');\nload_system('casper_library_ffts');\nload_system('casper_library_ffts_internal');\nload_s"
-  "ystem('casper_library_ffts_twiddle');\nload_system('casper_library_ffts_twiddle_coeff_gen');\nload_system('casper_li"
-  "brary_flow_control');\nload_system('casper_library_misc');\nload_system('casper_library_multipliers');\nload_system("
-  "'casper_library_pfbs');\nload_system('casper_library_reorder');\nload_system('casper_library_scopes');\nload_system("
-  "'casper_library_sources');\ncasper_library_bus_init;\nload_system('casper_library_bus');\n\n"
+  PostLoadFcn		  "% Pre-load sublibraries\nload_system('casper_library_accumulators');\nload_system('casper_library_co"
+  "mmunications');\nload_system('casper_library_correlator');\nload_system('casper_library_delays');\ncasper_library_do"
+  "wnconverter_init;\nload_system('casper_library_downconverter');\nload_system('casper_library_ffts');\nload_system('c"
+  "asper_library_ffts_internal');\nload_system('casper_library_ffts_twiddle');\nload_system('casper_library_ffts_twiddl"
+  "e_coeff_gen');\nload_system('casper_library_flow_control');\nload_system('casper_library_misc');\nload_system('caspe"
+  "r_library_multipliers');\nload_system('casper_library_pfbs');\nload_system('casper_library_reorder');\nload_system('"
+  "casper_library_scopes');\nload_system('casper_library_sources');\ncasper_library_bus_init;\nload_system('casper_libr"
+  "ary_bus');\n\n"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000

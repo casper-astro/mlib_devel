@@ -27,7 +27,12 @@ module qdrc_phy_bit_align(
 
     /* Bit aligned Datal */
     qdr_q_rise_cal,
-    qdr_q_fall_cal 
+    qdr_q_fall_cal, 
+
+    /* Debug probes */ 
+    bit_align_state_prb,
+    bit_train_state_prb,
+    bit_train_error_prb
   );
   parameter DATA_WIDTH   = 36;
   parameter BW_WIDTH     = 4;
@@ -56,15 +61,20 @@ module qdrc_phy_bit_align(
   output [ADDR_WIDTH - 1:0] qdr_sa;
 
   output [DATA_WIDTH - 1:0] qdr_q_rise_cal;
-  output [DATA_WIDTH - 1:0] qdr_q_fall_cal; 
+  output [DATA_WIDTH - 1:0] qdr_q_fall_cal;
 
-  localparam STATE_IDLE   = 3'd0;
-  localparam STATE_WRITE  = 3'd1;
-  localparam STATE_WAIT   = 3'd2;
-  localparam STATE_TRAIN  = 3'd3;
-  localparam STATE_ALIGN  = 3'd4;
-  localparam STATE_FINISH = 3'd5;
-  localparam STATE_DONE   = 3'd6;
+  output [3:0]		    bit_align_state_prb;
+  output [3:0]		    bit_train_state_prb;
+  output [3:0]		    bit_train_error_prb;
+   
+
+  localparam STATE_IDLE   = 4'd0;
+  localparam STATE_WRITE  = 4'd1;
+  localparam STATE_WAIT   = 4'd2;
+  localparam STATE_TRAIN  = 4'd3;
+  localparam STATE_ALIGN  = 4'd4;
+  localparam STATE_FINISH = 4'd5;
+  localparam STATE_DONE   = 4'd6;
 
 /**************** GENERATE BYPASS PHY ************************/
 generate if (BYPASS == 1) begin :bypass_bit_align
@@ -140,11 +150,15 @@ end else begin                  :include_bit_align
 
     .dly_inc_dec_n (dly_inc_dec_n),
     .dly_en        (dly_en),
-    .dly_rst       (dly_rst)
+    .dly_rst       (dly_rst),
+
+    .bit_train_state_prb (bit_train_state_prb),
+    .bit_train_error_prb (bit_train_error_prb)
   );
 
  
-  reg [2:0] state;
+  reg [3:0] state;
+  assign bit_align_state_prb = state;
 
   assign bit_align_done = state == STATE_DONE;
   reg bit_align_fail_reg;
