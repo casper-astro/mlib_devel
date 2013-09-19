@@ -436,6 +436,7 @@ BEGIN roach_infrastructure
  PARAMETER HW_VER = 1.00.a
 #IF# 1 # ['  PARAMETER CLK_FREQ     = ', num2str(app_clk_rate), '\n']
 #IF# 1 # ['  PARAMETER CLK_HIGH_LOW = ', num2str(clk_high_low), '\n']
+#IF# getenv('IDCTRL_100') # ['  PARAMETER IDCTRL_100   = 1\n']
 #IF# 1 # ['  PARAMETER MULTIPLY     = ', num2str(multiply),    '\n']
 #IF# 1 # ['  PARAMETER DIVIDE       = ', num2str(divide),      '\n']
 #IF# 1 # ['  PARAMETER DIVCLK       = ', num2str(divclk),      '\n']
