@@ -16,11 +16,13 @@ classdef InfoBlock
                 return
             elseif nargin == 1,
                 obj = obj.load_from_block(varargin{1});    
-            else
+            elseif nargin == 4,
                 obj.block = varargin{1};
                 obj.info = varargin{2};
                 obj.parent_block = varargin{3};
                 obj.parent_tag = varargin{4};
+            else
+                error('Wrong number of arguments supplied. Need 1 or 4, got %i.', nargin);
             end
         end
 
@@ -40,7 +42,7 @@ classdef InfoBlock
             node = xml_dom.createElement('info');
             node.setAttribute('param', regexprep(obj.block, '.*/', ''));
             node.setAttribute('value', obj.info);
-            node.setAttribute('owner', regexprep(obj.parent_block, '^[^/]*/', ''));
+            node.setAttribute('owner', design_info.strip_system_from_name(obj.parent_block));
             node.setAttribute('owner_tag', obj.parent_tag);
         end
     end
