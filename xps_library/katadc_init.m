@@ -39,15 +39,20 @@ function katadc_init(blk, varargin)
   munge_block(blk, varargin{:});
   delete_lines(blk);
 
+  adc_brd = get_var('adc_brd', 'defaults', defaults, varargin{:});
   adc_interleave = get_var('adc_interleave', 'defaults', defaults, varargin{:});
+  bypass_auto = get_var('bypass_auto', 'defaults', defaults, varargin{:});
+  en_gain = get_var('en_gain', 'defaults', defaults, varargin{:});
+  adc_clk_rate = get_var('adc_clk_rate', 'defaults', defaults, varargin{:});
+  sample_period = get_var('sample_period', 'defaults', defaults, varargin{:});
 
-  %generic ADC parameters
+  % generic ADC parameters
   if strcmp(adc_interleave, 'on'), 
     or_per_input = 2;
     in = 1;
     out = 8;
     il = 1;
-  else, 
+  else
     or_per_input = 1;
     in = 2;
     out = 4;
@@ -59,7 +64,16 @@ function katadc_init(blk, varargin)
   dv_support = 'on'; dv = 1;
   xtick = 120; 
   ytick = 40+5*(or*out); 
- 
+
+%   % info blocks
+%   reuse_block(blk, 'adc_brd',           'casper_library_misc/info_block', 'info', adc_brd,                  'Position', [0,0,50,30]);
+%   reuse_block(blk, 'adc_interleave',    'casper_library_misc/info_block', 'info', adc_interleave,           'Position', [0,0,50,30]);
+%   reuse_block(blk, 'bypass_auto',       'casper_library_misc/info_block', 'info', bypass_auto,              'Position', [0,0,50,30]);
+%   reuse_block(blk, 'en_gain',           'casper_library_misc/info_block', 'info', en_gain,                  'Position', [0,0,50,30]);
+%   reuse_block(blk, 'adc_clk_rate',      'casper_library_misc/info_block', 'info', num2str(adc_clk_rate),    'Position', [0,0,50,30]);
+%   reuse_block(blk, 'sample_period',     'casper_library_misc/info_block', 'info', num2str(sample_period),   'Position', [0,0,50,30]);
+%   reuse_block(blk, 'adc_bits',          'casper_library_misc/info_block', 'info', num2str(8),               'Position', [0,0,50,30]);
+  
   clog('katadc_init: drawing common adc','trace');
 
   yoff = adc_common(blk, 'in', in, 'out', out, 'bits', bits, 'or_per_input', or_per_input, ...
@@ -74,13 +88,13 @@ function katadc_init(blk, varargin)
     if strcmp(adc_interleave, 'off'), 
         if input == 0, 
             label = 'i';
-        else, 
+        else
             label = 'q';
         end
-    else,
+    else
         if input == 0, 
             label = 'q';
-        else, 
+        else
             label = 'i';
         end
     end
@@ -191,7 +205,7 @@ function katadc_init(blk, varargin)
   reuse_block(blk, gw, 'xbsIndex_r4/Gateway Out', ...
     'Position', [xtick*9-20 ytick*(yoff+4)-10 xtick*9+20 ytick*(yoff+4)+10]);
   add_line(blk, 'cast1/1', [gw,'/1']);
-
+  
   %%%%
 
   clean_blocks(blk);
