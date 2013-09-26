@@ -206,15 +206,18 @@ function cosin_init(blk,varargin)
     add_line(blk,'add_convert1/2', 'Terminator4/1');
 
     %calculate values to be stored in ROM
-    vals0 = gen_vals(output0, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
-    vals0 = fi(vals0, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-    vals0 = bitshift(vals0,bin_pt+n_bits); %shift up 
+    real_vals = gen_vals(output0, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
+%    vals0 = fi(real_vals, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
+%    vals0 = bitshift(vals0,bin_pt+n_bits); %shift up 
 
-    vals1 = gen_vals(output1, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
-    vals1 = fi(vals1, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-    vals1 = bitshift(vals1,bin_pt); %shift up 
+    imag_vals = gen_vals(output1, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
+%    vals1 = fi(imag_vals, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
+%    vals1 = bitshift(vals1,bin_pt); %shift up 
+  
+    vals = doubles2unsigned([real_vals',imag_vals'], n_bits, bin_pt);
 
-    set_param([blk,'/ROM'], 'initVector', ['[',num2str(double(vals0+vals1)),']']);
+%    set_param([blk,'/ROM'], 'initVector', ['[',num2str(double(vals0+vals1)),']']);
+    set_param([blk,'/ROM'], 'initVector', ['[',num2str(vals),']']);
 
     %extract real and imaginary parts of vector
     reuse_block(blk, 'c_to_ri', 'casper_library_misc/c_to_ri', ...
@@ -659,8 +662,8 @@ function[vals] = gen_vals(func, phase, table_bits, subset, n_bits, bin_pt),
     elseif strcmp(func, '-cos'),
         vals = -cos((phase*(2*pi))+[0:subset-1]*pi*2/(2^table_bits));
     end %if strcmp(func)
-    vals = fi(vals, true, n_bits, bin_pt); %saturates at max so no overflow
-    vals = fi(vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
+%    vals = fi(vals, true, n_bits, bin_pt); %saturates at max so no overflow
+%    vals = fi(vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
 
 end %gen_vals
 

@@ -138,18 +138,21 @@ function feedback_osc_init(blk, varargin)
 
   bin_pt = n_bits-1;
   cos_vals = cos(init+(pi*period)/(2^(phase_steps_bits)) * indices);
-  cos_vals = fi(cos_vals, true, n_bits, bin_pt); %saturates at max so no overflow
-  cos_vals = fi(cos_vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
-  cos_vals = fi(cos_vals, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-  cos_vals = bitshift(cos_vals,bin_pt+n_bits); %shift up to lie in top n_bits of word 
+%  cos_vals_1 = fi(cos_vals, true, n_bits, bin_pt); %saturates at max so no overflow
+%  cos_vals_1 = fi(cos_vals_1, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
+%  cos_vals_1 = fi(cos_vals_1, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
+%  cos_vals_1 = bitshift(cos_vals_1,bin_pt+n_bits); %shift up to lie in top n_bits of word 
 
   sin_vals = -sin(init+(pi*period)/(2^(phase_steps_bits)) * indices);
-  sin_vals = fi(sin_vals, true, n_bits, bin_pt); %saturates at max so no overflow
-  sin_vals = fi(sin_vals, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
-  sin_vals = fi(sin_vals, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-  sin_vals = bitshift(sin_vals, bin_pt); %shift up 
+%  sin_vals_1 = fi(sin_vals, true, n_bits, bin_pt); %saturates at max so no overflow
+%  sin_vals_1 = fi(sin_vals_1, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
+%  sin_vals_1 = fi(sin_vals_1, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
+%  sin_vals_1 = bitshift(sin_vals_1, bin_pt); %shift up 
 
-  initVector = ['[',num2str(double(cos_vals+sin_vals)),']'];
+  vals = doubles2unsigned([cos_vals',sin_vals'], n_bits, bin_pt);
+
+  initVector = ['[',num2str(vals),']'];
+%  initVector = ['[',num2str(double(cos_vals_1+sin_vals_1)),']'];
 
   reuse_block(blk, 'reference', 'xbsIndex_r4/ROM', ...
           'depth', ['2^(',num2str(ref_values_bits),'+',num2str(wcl_bits),')'], ...
