@@ -20,8 +20,8 @@ OPTION DESC = OPB_DRAM_SNIFFER
 ## Bus Interfaces
 BUS_INTERFACE BUS = SOPB_MEM,  BUS_STD = OPB,       BUS_TYPE = SLAVE
 BUS_INTERFACE BUS = SOPB_CTRL, BUS_STD = OPB,       BUS_TYPE = SLAVE
-BUS_INTERFACE BUS = DRAM_CTRL, BUS_STD = DRAM_CTRL, BUS_TYPE = INITIATOR
-BUS_INTERFACE BUS = DRAM_APP,  BUS_STD = DRAM_APP,  BUS_TYPE = TARGET
+BUS_INTERFACE BUS = DRAM_CTRL, BUS_STD = DDR3_APP,  BUS_TYPE = INITIATOR
+BUS_INTERFACE BUS = DRAM_APP,  BUS_STD = DDR3_APP,  BUS_TYPE = TARGET
 
 ## Generics for VHDL or Parameters for Verilog
 PARAMETER MEM_C_BASEADDR  = 0xffffffff, DT = std_logic_vector, BUS = SOPB_MEM,  ADDRESS = BASE, PAIR = MEM_C_HIGHADDR
@@ -65,25 +65,32 @@ PORT dram_clk        = "",          DIR = I
 PORT dram_rst        = "",          DIR = I
 PORT phy_ready       = "",          DIR = I
 
-## DRAM Controller Bus
-PORT dram_cmd_addr   = "app_cmd_addr",   BUS = DRAM_CTRL,  DIR = O,  VEC = [31:0]
-PORT dram_cmd_rnw    = "app_cmd_rnw",    BUS = DRAM_CTRL,  DIR = O
-PORT dram_cmd_valid  = "app_cmd_valid",  BUS = DRAM_CTRL,  DIR = O 
-PORT dram_wr_data    = "app_wr_data",    BUS = DRAM_CTRL,  DIR = O,  VEC = [143:0]
-PORT dram_wr_be      = "app_wr_be",      BUS = DRAM_CTRL,  DIR = O,  VEC = [17:0]
-PORT dram_rd_data    = "app_rd_data",    BUS = DRAM_CTRL,  DIR = I,  VEC = [143:0]
-PORT dram_rd_valid   = "app_rd_valid",   BUS = DRAM_CTRL,  DIR = I
-PORT dram_fifo_ready = "app_fifo_ready", BUS = DRAM_CTRL,  DIR = I
+## To the DDR3 controller
+PORT ddr3_rd_data       = "app_rd_data",       	BUS = DRAM_CTRL,  DIR = I,  VEC = [287:0]     
+PORT ddr3_rd_data_end   = "app_rd_data_end",   	BUS = DRAM_CTRL,  DIR = I
+PORT ddr3_rd_data_valid = "app_rd_data_valid", 	BUS = DRAM_CTRL,  DIR = I
+PORT ddr3_rdy           = "app_rdy",           	BUS = DRAM_CTRL,  DIR = I
+PORT ddr3_wdf_rdy       = "app_wdf_rdy",       	BUS = DRAM_CTRL,  DIR = I
+PORT ddr3_addr          = "app_addr",          	BUS = DRAM_CTRL,  DIR = O,  VEC = [31:0]
+PORT ddr3_cmd           = "app_cmd",           	BUS = DRAM_CTRL,  DIR = O,  VEC = [2:0]
+PORT ddr3_en            = "app_en",            	BUS = DRAM_CTRL,  DIR = O
+PORT ddr3_wdf_data      = "app_wdf_data",      	BUS = DRAM_CTRL,  DIR = O,  VEC = [287:0]
+PORT ddr3_wdf_end       = "app_wdf_end",       	BUS = DRAM_CTRL,  DIR = O
+PORT ddr3_wdf_mask      = "app_wdf_mask",      	BUS = DRAM_CTRL,  DIR = O,  VEC = [35:0]
+PORT ddr3_wdf_wren      = "app_wdf_wren",      	BUS = DRAM_CTRL,  DIR = O    
 
-## DRAM Application Interface
-PORT app_cmd_addr   = "app_cmd_addr",   BUS = DRAM_APP,  DIR = I,  VEC = [31:0]
-PORT app_cmd_rnw    = "app_cmd_rnw",    BUS = DRAM_APP,  DIR = I
-PORT app_cmd_valid  = "app_cmd_valid",  BUS = DRAM_APP,  DIR = I 
-PORT app_cmd_ack    = "app_cmd_ack",    BUS = DRAM_APP,  DIR = O
-PORT app_wr_data    = "app_wr_data",    BUS = DRAM_APP,  DIR = I,  VEC = [143:0]
-PORT app_wr_be      = "app_wr_be",      BUS = DRAM_APP,  DIR = I,  VEC = [17:0]
-PORT app_rd_data    = "app_rd_data",    BUS = DRAM_APP,  DIR = O,  VEC = [143:0]
-PORT app_rd_valid   = "app_rd_valid",   BUS = DRAM_APP,  DIR = O
-
+## From the async fifo
+PORT app_rd_data       = "app_rd_data",       BUS = DRAM_APP,  DIR = O,  VEC = [287:0]     
+PORT app_rd_data_end   = "app_rd_data_end",   BUS = DRAM_APP,  DIR = O
+PORT app_rd_data_valid = "app_rd_data_valid", BUS = DRAM_APP,  DIR = O
+PORT app_rdy           = "app_rdy",           BUS = DRAM_APP,  DIR = O
+PORT app_wdf_rdy       = "app_wdf_rdy",       BUS = DRAM_APP,  DIR = O
+PORT app_addr          = "app_addr",          BUS = DRAM_APP,  DIR = I,  VEC = [31:0]
+PORT app_cmd           = "app_cmd",           BUS = DRAM_APP,  DIR = I,  VEC = [2:0]
+PORT app_en            = "app_en",            BUS = DRAM_APP,  DIR = I
+PORT app_wdf_data      = "app_wdf_data",      BUS = DRAM_APP,  DIR = I,  VEC = [287:0]
+PORT app_wdf_end       = "app_wdf_end",       BUS = DRAM_APP,  DIR = I
+PORT app_wdf_mask      = "app_wdf_mask",      BUS = DRAM_APP,  DIR = I,  VEC = [35:0]
+PORT app_wdf_wren      = "app_wdf_wren",      BUS = DRAM_APP,  DIR = I    
 
 END

@@ -19,298 +19,308 @@ module mem_opb_attach #(
     input          dram_clk,
     input          dram_rst,
 
-    output         dram_cmd_en,
-    output         dram_cmd_rnw,
-    output [143:0] dram_wr_data,
-    output  [17:0] dram_wr_be,
-    output  [31:0] dram_address,
-    input  [143:0] dram_rd_data,
-    input          dram_rd_dvld,
-    input          dram_ack
+    input [287:0]  dram_rd_data, //*
+    input 	   dram_rd_data_end,
+    input 	   dram_rd_data_valid, //*
+    input 	   dram_rdy, //*
+    input 	   dram_wdf_rdy, //*?
+    output [31:0]  dram_addr, //*?
+    output [2:0]   dram_cmd, //*
+    output 	   dram_en, //*
+    output [287:0] dram_wdf_data, //*
+    output 	   dram_wdf_end, //*?
+    output [35:0]  dram_wdf_mask, //*
+    output 	   dram_wdf_wren, //*?
+
+    /* debug outputs */
+    output [3:0]   dram_state,
+    output [3:0]   cpu_state
   );
 
-  /********************* Common signals **********************/
-  wire opb_trans_strb;
-  wire opb_resp_strb;
-  wire dram_resp_strb;
-  wire dram_trans_strb;
+   /* OPB states */
+   localparam OPB_IDLE     = 4'h0;
+   localparam OPB_READ     = 4'h1;
+   localparam OPB_WRITE    = 4'h2;
 
-  /************** OPB transaction extraction *****************/
-  
-  wire [31:0] opb_addr = OPB_ABus - C_BASEADDR;
-  wire opb_sel = (OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR) && OPB_select;
+   /* OPB signals */
+   reg [3:0] 	   opb_state;
+   reg 		   opb_ack;
+   reg 		   opb_error;
+   reg 		   opb_retry;
+   reg 		   opb_toutsup;
+   reg [0:31] 	   opb_addr;
+   reg [0:31] 	   opb_data_out;
 
-  /* cache hit signal */
-  wire cache_hit;
+   /* DDR3 states */
+   localparam DDR3_IDLE       = 4'h0;
+   localparam DDR3_READ_INIT  = 4'h1;
+   localparam DDR3_READ_HOLD  = 4'h2;
+   localparam DDR3_READ_WAIT  = 4'h3;
+   localparam DDR3_READ_RESP  = 4'h4;
+   localparam DDR3_WRITE_INIT = 4'h5;
+   localparam DDR3_WRITE_WAIT = 4'h6;
+   localparam DDR3_WRITE_RESP = 4'h7;
 
-  reg [1:0] opb_state;
-  localparam OPB_IDLE = 2'd0;
-  localparam OPB_WAIT = 2'd1;
-  localparam OPB_ACK  = 2'd2;
+   /* DDR3-to-OPB signals */
+   reg [3:0] 	   ddr3_state;
+   reg 		   ddr3_read_en;
+   reg 		   ddr3_read_en_z;
+   reg 		   ddr3_read_done;
+   reg [31:0]      ddr3_read_data;
+   reg 		   ddr3_write_en;
+   reg 		   ddr3_write_en_z;
+   reg 		   ddr3_write_done;
+   reg [31:0]      ddr3_write_data;
 
-  reg opb_trans_strb_reg;
+   /* DDR3 output registers */
+   reg [31:0] 	   dram_addr_reg;
+   reg [2:0] 	   dram_cmd_reg;
+   reg 		   dram_en_reg;
+   reg [287:0] 	   dram_wdf_data_reg;
+   reg 		   dram_wdf_end_reg;
+   reg 		   dram_wdf_mask_reg;
+   reg 		   dram_wdf_wren_reg;
 
-  always @(posedge OPB_Clk) begin
-    /* Single cycle strobe */
-    opb_trans_strb_reg <= 1'b0;
+   /* OPB state machine */
+   always @ (posedge OPB_Clk) begin
 
-    if (OPB_Rst) begin
-      opb_state <= OPB_IDLE;
-    end else begin
-      case (opb_state)
-        OPB_IDLE: begin
-          if (opb_sel) begin
-            if (cache_hit) begin /* cache hit, ack immediately */
-              opb_state <= OPB_ACK;
-            end else begin /* cache miss, get data from controller */
-              opb_state <= OPB_WAIT; 
-              opb_trans_strb_reg <= 1'b1;
-            end
-          end
-        end
-        OPB_WAIT: begin
-          if (!OPB_select || opb_resp_strb) begin
-            opb_state <= OPB_IDLE;
-          end
-        end
-        OPB_ACK: begin
-          opb_state <= OPB_IDLE;
-        end
-      endcase
-    end
-  end
+      if (OPB_Rst) begin
 
-  assign opb_trans_strb = opb_trans_strb_reg;
+	 opb_ack         <= 1'b0;
+	 opb_error       <= 1'b0;
+	 opb_retry       <= 1'b0;
+	 opb_toutsup     <= 1'b0;
+	 opb_data_out    <= 32'b0;
+	 opb_state       <= OPB_IDLE;
 
-  /*********** Read mini-cache logic ***********/
+	 ddr3_read_en    <= 1'b0;
+	 ddr3_write_en   <= 1'b0;
+	 ddr3_write_data <= 32'b0;
 
-  reg cache_valid;
-  reg [255:0] cache_data;
-  reg  [26:0] cache_addr;
+      end else begin // if (OPB_Rst)
+	
+	 opb_ack         <= 1'b0;
+	 opb_error       <= 1'b0;
+	 opb_retry       <= 1'b0;
+	 opb_toutsup     <= 1'b0;
+	 opb_data_out    <= 32'b0;
 
-  localparam CACHE_BITS     = 7;
-  localparam CACHE_LIFETIME = 127;
-  reg [CACHE_BITS - 1:0] cache_timer;
+	 case (opb_state)
 
-  always @(posedge OPB_Clk) begin
-    if (OPB_Rst) begin
-      cache_valid <= 1'b0;
-      cache_timer <= 0;
-    end else begin
-      if (cache_timer == 0 || (opb_trans_strb && !OPB_RNW)) begin
-        cache_valid <= 1'b0;
-      end
-      if (cache_timer) begin
-        cache_timer <= cache_timer - 1;
-      end
-      if (opb_resp_strb && OPB_RNW) begin
-        cache_addr  <= opb_addr[31:5];
-        cache_valid <= 1'b1;
-        cache_timer <= CACHE_LIFETIME;
-      end
-    end
-  end
+	   OPB_IDLE: begin
 
-  assign cache_hit = (cache_addr == opb_addr[31:5]) && OPB_RNW && cache_valid;
+	      /* Default idle/wait state */
 
-  /********** OPB output assignments ***********/
+	      if (OPB_select) begin
 
-  assign Sl_xferAck = opb_resp_strb || opb_state == OPB_ACK;
-  assign Sl_toutSup = opb_state == OPB_WAIT;
-  assign Sl_retry   = 1'b0;
-  assign Sl_errAck  = 1'b0;
+		 /* We've been selected by master */
 
-  reg [31:0] SL_DBus_reg;
-  always @(posedge OPB_Clk) begin
-    case (opb_addr[4:2])
-      3'd3: SL_DBus_reg <= cache_data[31:0];
-      3'd2: SL_DBus_reg <= cache_data[63:32];
-      3'd1: SL_DBus_reg <= cache_data[95:64];
-      3'd0: SL_DBus_reg <= cache_data[127:96];
-      3'd7: SL_DBus_reg <= cache_data[159:128];
-      3'd6: SL_DBus_reg <= cache_data[191:160];
-      3'd5: SL_DBus_reg <= cache_data[223:192];
-      3'd4: SL_DBus_reg <= cache_data[255:224];
-    endcase
-  end
-  assign Sl_DBus = Sl_xferAck ? SL_DBus_reg : 32'b0;
+		 if (OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR) begin
 
-  /********* transaction and response handshaking ************/
+		    /* Address is valid, move on */
 
-  reg trans_reg;
-  reg trans_regR;
-  reg trans_regRR;
-  //synthesis attribute HU_SET of trans_regR  is SET1
-  //synthesis attribute HU_SET of trans_regRR is SET1
-  //synthesis attribute RLOC   of trans_regR  is X0Y0
-  //synthesis attribute RLOC   of trans_regRR is X0Y1
+		    opb_addr     <= OPB_ABus - C_BASEADDR;
 
-  reg resp_reg;
-  reg resp_regR;
-  reg resp_regRR;
-  //synthesis attribute HU_SET of resp_regR  is SET0
-  //synthesis attribute HU_SET of resp_regRR is SET0
-  //synthesis attribute RLOC   of resp_regR  is X0Y0
-  //synthesis attribute RLOC   of resp_regRR is X0Y1
+		    if (OPB_RNW) begin
 
-  reg wait_clear;
+		       /* We're reading, change states */
 
-  always @(posedge OPB_Clk) begin
-    resp_regR  <= resp_reg;
-    resp_regRR <= resp_regR;
+		       opb_state <= OPB_READ;
 
-    if (OPB_Rst) begin
-      trans_reg  <= 1'b0;
-      wait_clear <= 1'b0;
-    end else begin
-      if (opb_trans_strb && !trans_reg) begin
-        trans_reg  <= 1'b1;
-        wait_clear <= 1'b0;
-      end
-      if (opb_trans_strb && trans_reg) begin
-        trans_reg  <= 1'b0;
-        /* fail. we have gotten a request while a response was pending.
-           Give up on both transactions.
-        */
-      end
-      if (resp_regRR) begin
-        trans_reg  <= 1'b0;
-        wait_clear <= 1'b1;
-      end
-      if (wait_clear && !resp_regRR) begin
-        wait_clear   <= 1'b0;
-      end
-    end
-  end
+		    end else begin // if (OPB_RNW)
 
-  reg wait_reg;
+		       /* We're writing, change states */
 
-  always @(posedge dram_clk) begin
-    trans_regR  <= trans_reg;
-    trans_regRR <= trans_regR;
-    if (dram_rst) begin
-      resp_reg <= 1'b0;
-      wait_reg <= 1'b0;
-    end else begin
-      if (trans_regRR && !(wait_reg || resp_reg)) begin
-        wait_reg <= 1'b1;
-      end
-      if (dram_resp_strb) begin
-        wait_reg <= 1'b0;
-        resp_reg <= 1'b1;
-      end
-      if (!trans_regRR) begin
-        wait_reg <= 1'b0;
-        resp_reg <= 1'b0;
-      end
-    end
-  end
+		       opb_state <= OPB_WRITE;
 
-  assign opb_resp_strb   =  wait_clear && !resp_regRR;
-  assign dram_trans_strb = trans_regRR && !(wait_reg || resp_reg);
+		    end // else: if (OPB_RNW)
 
-  /***************** DRAM command generation ************/
+		 end else begin // if (OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR)
 
-  reg [31:0] opb_wr_data_reg;
-  reg  [3:0] opb_be_reg;
-  reg opb_rnw_reg;
+		    /* Address invalid, send out an error */
 
-  always @(posedge dram_clk) begin
-    opb_wr_data_reg <= OPB_DBus;
-    opb_be_reg      <= OPB_BE;
-    opb_rnw_reg     <= OPB_RNW;
-  end
+		    opb_error <= 1'b1;
 
-  wire dram_wr_resp_strb;
-  wire dram_rd_resp_strb;
-  assign dram_resp_strb = dram_wr_resp_strb || dram_rd_resp_strb;
+		 end // else: !if(OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR)
 
-  wire second_cycle_sel    = opb_addr[4];
-  wire [1:0] dram_word_sel = opb_addr[3:2];
+	      end // if (OPB_select)
 
-  /* DRAM Command issue logic */
-  reg second_wr_cycle;
-  reg dram_cmd_en_reg;
+	   end // case: OPB_IDLE
 
-  always @(posedge dram_clk) begin
-    second_wr_cycle      <= 1'b0;
+	   OPB_READ: begin
 
-    if (dram_rst) begin
-      dram_cmd_en_reg <= 1'b0;
-    end else begin
-      if (dram_trans_strb) begin
-        dram_cmd_en_reg <= 1'b1;
-      end
-      if (dram_cmd_en && dram_ack) begin
-        dram_cmd_en_reg <= 1'b0;
-        if (second_cycle_sel)
-          second_wr_cycle    <= 1'b1;
-      end
-    end
-  end
+	      /* Start the DDR3 read */
 
-  /* write assignments */
-  assign dram_wr_resp_strb = dram_cmd_en && dram_ack && !dram_cmd_rnw;
-  assign dram_cmd_rnw = opb_rnw_reg;
-  assign dram_cmd_en  = dram_cmd_en_reg;
-  
-  reg [143:0] dram_wr_data_reg;
-  always @(*) begin
-    case (dram_word_sel)
-      2'd3: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 0;
-      2'd2: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 32;
-      2'd1: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 72;
-      2'd0: dram_wr_data_reg <= {112'b0, opb_wr_data_reg} << 104;
-    endcase
-  end
-  assign dram_wr_data = dram_wr_data_reg;
+	      opb_toutsup     <= 1'b1;
+	      ddr3_read_en    <= 1'b1;
 
-  reg [16:0] dram_wr_be_reg;
-  always @(*) begin
-    if (second_wr_cycle || dram_cmd_en && !second_cycle_sel) begin
-      case (dram_word_sel)
-        2'd3: dram_wr_be_reg <= {14'b0, opb_be_reg} << 0;
-        2'd2: dram_wr_be_reg <= {14'b0, opb_be_reg} << 4;
-        2'd1: dram_wr_be_reg <= {14'b0, opb_be_reg} << 9;
-        2'd0: dram_wr_be_reg <= {14'b0, opb_be_reg} << 13;
-      endcase
-    end else begin
-      dram_wr_be_reg <= 18'b0;
-    end
-  end
-  assign dram_wr_be = dram_wr_be_reg;
+	      if (ddr3_read_done) begin
 
-  /* DRAM Read response collection */
-  reg second_read_cycle;
-  reg dram_rd_resp_strb_reg;
+		 /* Read is done, transfer data */
 
-  always @(posedge dram_clk) begin
-    second_read_cycle     <= 1'b0;
-    dram_rd_resp_strb_reg <= 1'b0;
+		 ddr3_read_en    <= 1'b0;
 
-    if (dram_rst) begin
-    end else begin
-      if (second_read_cycle) begin
-        dram_rd_resp_strb_reg <= 1'b1;
-        cache_data[159:128] <=  dram_rd_data[ 31:0  ]; 
-        cache_data[191:160] <=  dram_rd_data[ 63:32 ]; 
-        cache_data[223:192] <=  dram_rd_data[103:72 ];
-        cache_data[255:224] <=  dram_rd_data[135:104];
-      end else begin
-        if (dram_rd_dvld) begin
-          second_read_cycle <= 1'b1;
-          cache_data[ 31:0 ] <= dram_rd_data[ 31:0  ]; 
-          cache_data[ 63:32] <= dram_rd_data[ 63:32 ]; 
-          cache_data[ 95:64] <= dram_rd_data[103:72 ];
-          cache_data[127:96] <= dram_rd_data[135:104];
-        end
-      end
-    end
-  end
+		 opb_state    <= OPB_IDLE;
+		 opb_data_out <= ddr3_read_data;
+		 opb_ack      <= 1'b1;
 
-  assign dram_address = {5'b0, opb_addr[31:5]};
+	      end // if (ddr3_read_done)
 
-  /* read assignments */
-  assign dram_rd_resp_strb = dram_rd_resp_strb_reg;
+	   end // case: OPB_READ
+	   
+	   OPB_WRITE: begin
+
+	      /* Start the DDR3 write */
+
+	      opb_toutsup     <= 1'b1;
+	      ddr3_write_en   <= 1'b1;
+	      ddr3_write_data <= OPB_DBus;
+
+	      if (ddr3_write_done) begin
+
+		 /* Write is done, finish up */
+		 
+		 opb_state    <= OPB_IDLE;
+		 opb_ack      <= 1'b1;
+
+	      end // if (ddr3_write_done)
+
+	   end // case: OPB_READ
+	   
+	 endcase // case (opb_state)
+
+      end // else: !if(OPB_Rst)
+
+   end // always @ (posedge OPB_Clk)
+
+   assign cpu_state  = opb_state;
+   assign Sl_xferAck = opb_ack;
+   assign Sl_errAck  = opb_error;
+   assign Sl_toutSup = opb_toutsup;
+   assign Sl_retry   = opb_retry;
+   assign Sl_DBus    = opb_data_out;
+
+
+   /* DDR3 access state machine */
+   always @ (posedge dram_clk) begin
+
+      if (dram_rst) begin
+
+	 ddr3_read_done    <= 1'b1;
+	 ddr3_write_done   <= 1'b1;
+	 ddr3_read_data    <= 32'b0;
+	 ddr3_state        <= DDR3_IDLE;
+
+	 dram_addr_reg     <= 32'b0;
+	 dram_cmd_reg      <= 3'b0;
+	 dram_en_reg       <= 1'b0;
+	 dram_wdf_data_reg <= 288'b0;
+	 dram_wdf_end_reg  <= 1'b0;
+	 dram_wdf_mask_reg <= 36'b0;
+	 dram_wdf_wren_reg <= 1'b0;
+
+      end else begin // if (dram_rst)
+
+	 ddr3_read_done  <= 1'b0;
+	 ddr3_write_done <= 1'b0;
+	 ddr3_read_en_z  <= ddr3_read_en;
+	 ddr3_write_en_z <= ddr3_write_en;
+
+	 case (ddr3_state)
+
+	   DDR3_IDLE: begin
+
+	      if (ddr3_read_en && !ddr3_read_en_z) begin
+
+		 /* OPB is requesting a read */
+
+		 ddr3_state <= DDR3_READ_INIT;
+
+	      end else if (ddr3_write_en && !ddr3_write_en_z) begin // if posedge(ddr3_read_en)
+
+		 /* OPB is requesting a write */
+
+		 ddr3_state <= DDR3_WRITE_INIT;
+
+	      end // else: if posedge(ddr3_write_en)
+
+	   end // case: DDR3_IDLE
+
+	   DDR3_READ_INIT: begin
+
+	      /* Issue DDR3 command then wait */
+
+	      ddr3_state    <= DDR3_READ_HOLD;
+	      dram_addr_reg <= opb_addr;
+	      dram_cmd_reg  <= 3'b001;
+	      dram_en_reg   <= 1'b1;
+
+	   end // case: DDR3_READ_INIT
+
+	   DDR3_READ_HOLD: begin
+
+	      /* Hold addr, cmd, end until dram_rdy */
+
+	      if (dram_rdy) begin
+
+		 ddr3_state     <= DDR3_READ_WAIT;
+		 dram_addr_reg  <= 32'b0;
+		 dram_cmd_reg   <= 3'b0;
+		 dram_en_reg    <= 1'b0;
+
+	      end // if (dram_rdy)
+
+	   end // case: DDR3_READ_HOLD
+		 
+	   DDR3_READ_WAIT: begin
+
+	      /* Wait for the read response */
+	      
+	      if (dram_rd_data_end) begin
+
+		 /* Second cycle, finish up */
+
+		 ddr3_state     <= DDR3_READ_RESP;
+
+	      end else if (dram_rd_data_valid) begin // if (dram_rd_data_end)
+
+		 /* First cylce read data is valid, grab it */
+
+		 ddr3_read_data <= dram_rd_data[31:0];
+
+	      end // else: if (dram_rd_data_valid)
+	      
+	   end // case: DDR3_READ_WAIT
+
+	   DDR3_READ_RESP: begin
+
+	      /* Wait for OPB to grab data */
+
+	      ddr3_read_done <= 1'b1;
+
+	      if (!ddr3_read_en) begin
+
+		 /* OPB is done, finish up */
+
+		 ddr3_state     <= DDR3_IDLE;
+
+	      end // if (!ddr3_read_en)
+
+	   end // case: DDR3_READ_RESP
+
+	 endcase // case (ddr3_state)
+
+      end // else: !if(dram_rst)
+
+   end // always @ (posedge dram_clk)
+
+   assign dram_state    = ddr3_state;
+   assign dram_addr     = dram_addr_reg;
+   assign dram_cmd      = dram_cmd_reg;
+   assign dram_en       = dram_en_reg;
+   assign dram_wdf_data = dram_wdf_data_reg;
+   assign dram_wdf_end  = dram_wdf_end_reg;
+   assign dram_wdf_mask = dram_wdf_mask_reg;
+   assign dram_wdf_wren = dram_wdf_wren_reg;
 
 endmodule
