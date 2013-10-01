@@ -126,7 +126,7 @@ switch hw_sys
      str = [str, ' PARAMETER HW_VER = 1.00.a',                         		   '\n'];
      str = [str, ' PARAMETER tCK = ',num2str(floor(1000*1000*(1/(clk_freq*2)))),   '\n'];
      str = [str, ' BUS_INTERFACE DDR3_CLK = ddr3_clk',                 		   '\n'];
-     str = [str, ' BUS_INTERFACE DDR3_APP = ddr3_app',				   '\n'];
+     str = [str, ' BUS_INTERFACE DDR3_APP = ddr3_ctrl',				   '\n'];
      str = [str, ' PORT clk_div2 = ddr3_clk_app',	     	        	   '\n'];
      str = [str, ' PORT ddr3_dq = ddr3_dq',                            		   '\n'];
      str = [str, ' PORT ddr3_addr = ddr3_a',                           		   '\n'];
