@@ -184,7 +184,24 @@ switch hw_sys
      str = [str, ' PORT phy_ready = ', inst_name, '_phy_ready',              '\n'];
      str = [str, 'END',                                                      '\n'];
      str = [str,                                                             '\n'];
-
+   case 'ROACH2'
+     str = [str, 'BEGIN opb_dram_sniffer',				     '\n'];
+     str = [str, ' PARAMETER INSTANCE = opb_dram_sniffer_inst',		     '\n'];
+     str = [str, ' PARAMETER HW_VER = 1.00.a',				     '\n'];
+     str = [str, ' PARAMETER CTRL_C_BASEADDR = 0x00050000',		     '\n'];
+     str = [str, ' PARAMETER CTRL_C_HIGHADDR = 0x0005FFFF',		     '\n'];
+     str = [str, ' PARAMETER MEM_C_BASEADDR  = 0x010B0000',		     '\n'];
+     str = [str, ' PARAMETER MEM_C_HIGHADDR  = 0x010BFFFF',		     '\n'];
+     str = [str, ' PARAMETER ENABLE          = 1',			     '\n'];
+     str = [str, ' BUS_INTERFACE SOPB_CTRL = opb0',			     '\n'];
+     str = [str, ' BUS_INTERFACE SOPB_MEM  = opb0',			     '\n'];
+     str = [str, ' BUS_INTERFACE DRAM_CTRL = ddr3_ctrl',		     '\n'];
+     str = [str, ' BUS_INTERFACE DRAM_APP  = ddr3_app',			     '\n'];
+     str = [str, ' PORT dram_clk  = ddr3_clk_app',			     '\n'];
+     str = [str, ' PORT dram_rst  = ', inst_name, '_Mem_Rst',    	     '\n'];
+     str = [str, ' PORT phy_ready = ', inst_name, '_phy_ready',	    	     '\n'];
+     str = [str, 'END',				    			     '\n'];
+     str = [str,							     '\n'];	
 end % switch hw_sys
 
 % Generate 'async_ddr' MHS entry
