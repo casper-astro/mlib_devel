@@ -135,13 +135,7 @@ module mem_opb_attach #(
 
 		    end // else: if (OPB_RNW)
 
-		 end else begin // if (OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR)
-
-		    /* Address invalid, send out an error */
-
-		    opb_error <= 1'b1;
-
-		 end // else: !if(OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR)
+		 end // if (OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR)
 
 	      end // if (OPB_select)
 
