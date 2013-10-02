@@ -194,6 +194,15 @@ if strcmp(hardcode_shifts, 'on'),
     shifts_direct = shift_schedule(FFTSize-n_inputs+1:FFTSize);
 end
 
+% % info blocks
+% reuse_block(blk, 'n_streams',           'casper_library_misc/info_block', 'info', num2str(n_streams),           'Position', [0,0,50,30]);
+% reuse_block(blk, 'fftsize',             'casper_library_misc/info_block', 'info', num2str(FFTSize),             'Position', [0,0,50,30]);
+% reuse_block(blk, 'n_inputs',            'casper_library_misc/info_block', 'info', num2str(n_inputs),            'Position', [0,0,50,30]);
+% reuse_block(blk, 'unscramble',          'casper_library_misc/info_block', 'info', unscramble,                   'Position', [0,0,50,30]);
+% reuse_block(blk, 'input_bit_width',     'casper_library_misc/info_block', 'info', num2str(input_bit_width),     'Position', [0,0,50,30]);
+% reuse_block(blk, 'bin_pt_in',           'casper_library_misc/info_block', 'info', num2str(bin_pt_in),           'Position', [0,0,50,30]);
+% reuse_block(blk, 'coeff_bit_width',     'casper_library_misc/info_block', 'info', num2str(coeff_bit_width),     'Position', [0,0,50,30]);
+
 %%%%%%%%%%%%%%%%
 % Draw blocks. %
 %%%%%%%%%%%%%%%%

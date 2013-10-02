@@ -40,6 +40,7 @@ end
 % if the number of parameters has changed then shenanigans are in order
 if existing_ios ~= numios,
     % close the dialog box so we can edit the mask
+    munge_block(blk);
     close_system(blk);
     mask = get_param(blk, 'MaskObject');
     % back up old values

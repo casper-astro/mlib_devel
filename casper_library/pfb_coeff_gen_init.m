@@ -47,17 +47,17 @@ if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'pfb_coeff_gen');
 munge_block(blk, varargin{:});
 
-PFBSize = get_var('PFBSize', 'defaults', defaults, varargin{:});
-CoeffBitWidth = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
-TotalTaps = get_var('TotalTaps', 'defaults', defaults, varargin{:});
-CoeffDistMem = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
-WindowType = get_var('WindowType', 'defaults', defaults, varargin{:});
-%bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
-fan_latency = get_var('fan_latency', 'defaults', defaults, varargin{:});
-n_inputs = get_var('n_inputs', 'defaults', defaults, varargin{:});
-nput = get_var('nput', 'defaults', defaults, varargin{:});
-fwidth = get_var('fwidth', 'defaults', defaults, varargin{:});
-debug_mode = get_var('debug_mode', 'defaults', defaults, varargin{:});
+PFBSize         = get_var('PFBSize', 'defaults', defaults, varargin{:});
+CoeffBitWidth   = get_var('CoeffBitWidth', 'defaults', defaults, varargin{:});
+TotalTaps       = get_var('TotalTaps', 'defaults', defaults, varargin{:});
+CoeffDistMem    = get_var('CoeffDistMem', 'defaults', defaults, varargin{:});
+WindowType      = get_var('WindowType', 'defaults', defaults, varargin{:});
+bram_latency    = get_var('bram_latency', 'defaults', defaults, varargin{:});
+fan_latency     = get_var('fan_latency', 'defaults', defaults, varargin{:});
+n_inputs        = get_var('n_inputs', 'defaults', defaults, varargin{:});
+nput            = get_var('nput', 'defaults', defaults, varargin{:});
+fwidth          = get_var('fwidth', 'defaults', defaults, varargin{:});
+debug_mode      = get_var('debug_mode', 'defaults', defaults, varargin{:});
 
 % Set coefficient vector
 try
