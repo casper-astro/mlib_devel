@@ -23,8 +23,8 @@ sys_clkcounter      3       10        4
 #IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc0')#iic_adc0     3    40000    100
 #IF# strcmp(get(b,'type'),'xps_mkadc') && strcmp(get(b,'hw_adc'),'adc1')#iic_adc1     3    48000    100
 #IF# strcmp(get(b,'type'),'xps_adc')#iadc_controller     3    20000    10000
-#IF# strcmp(get(b,'type'),'xps_dram') && strcmp(get(b,'hw_sys'),'ROACH')#dram_controller     3    50000    10000
-#IF# strcmp(get(b,'type'),'xps_dram') && strcmp(get(b,'hw_sys'),'ROACH')#dram_memory         3  4000000  4000000
+#IF# strcmp(get(b,'type'),'xps_dram') 					#ddr3_ctrl        3    50000     FFFF
+#IF# strcmp(get(b,'type'),'xps_dram') 					#ddr3_mem         3  10B0000     FFFF
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#qdr0_memory         3  2000000  800000
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#qdr1_memory         3  2800000  800000
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#qdr2_memory         3  3000000  800000
