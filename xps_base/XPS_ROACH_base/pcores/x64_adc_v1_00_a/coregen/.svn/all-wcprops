@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/2258/trunk/mlib_devel_10_1/xps_lib/XPS_ROACH_base/pcores/adc083000x2_interface_v1_00_a/coregen
+END
+async_fifo_64by16.xco
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/!svn/ver/2258/trunk/mlib_devel_10_1/xps_lib/XPS_ROACH_base/pcores/adc083000x2_interface_v1_00_a/coregen/async_fifo_64by16.xco
+END
+coregen.cgp
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/2258/trunk/mlib_devel_10_1/xps_lib/XPS_ROACH_base/pcores/adc083000x2_interface_v1_00_a/coregen/coregen.cgp
+END
