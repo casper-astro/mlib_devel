@@ -34,8 +34,8 @@ function flat = flatstrcell(c)
         if iscell(c{i}),
             flat = [flat, flatstrcell(c{i})];
         else
-%            flat = [flat, mat2str(c{i})];
-            flat = [flat, tostring(c{i})];
+            flat = [flat, mat2str(c{i})];
+%            flat = [flat, tostring(c{i})];
         end
     end
 end
