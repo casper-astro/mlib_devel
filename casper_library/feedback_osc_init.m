@@ -138,21 +138,12 @@ function feedback_osc_init(blk, varargin)
 
   bin_pt = n_bits-1;
   cos_vals = cos(init+(pi*period)/(2^(phase_steps_bits)) * indices);
-%  cos_vals_1 = fi(cos_vals, true, n_bits, bin_pt); %saturates at max so no overflow
-%  cos_vals_1 = fi(cos_vals_1, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
-%  cos_vals_1 = fi(cos_vals_1, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-%  cos_vals_1 = bitshift(cos_vals_1,bin_pt+n_bits); %shift up to lie in top n_bits of word 
 
   sin_vals = -sin(init+(pi*period)/(2^(phase_steps_bits)) * indices);
-%  sin_vals_1 = fi(sin_vals, true, n_bits, bin_pt); %saturates at max so no overflow
-%  sin_vals_1 = fi(sin_vals_1, false, n_bits, bin_pt, 'OverflowMode', 'wrap'); %wraps negative component so can get back when positive
-%  sin_vals_1 = fi(sin_vals_1, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-%  sin_vals_1 = bitshift(sin_vals_1, bin_pt); %shift up 
 
-  vals = doubles2unsigned([cos_vals',sin_vals'], n_bits, bin_pt);
+  vals = doubles2unsigned([cos_vals',sin_vals'], n_bits, bin_pt, n_bits*2);
 
-  initVector = ['[',num2str(vals),']'];
-%  initVector = ['[',num2str(double(cos_vals_1+sin_vals_1)),']'];
+  initVector = mat2str(vals');
 
   reuse_block(blk, 'reference', 'xbsIndex_r4/ROM', ...
           'depth', ['2^(',num2str(ref_values_bits),'+',num2str(wcl_bits),')'], ...
@@ -161,19 +152,6 @@ function feedback_osc_init(blk, varargin)
           'n_bits', num2str(n_bits*2), 'bin_pt', '0', ...
           'Position', [285 446 345 474]);
   add_line(blk,'cc0/1','reference/1');
-
-%  reuse_block(blk, '-sin_reference', 'xbsIndex_r4/ROM', ...
-%          'depth', ['2^(',num2str(ref_values_bits),'+',num2str(wcl_bits),')'], ...
-%          'initVector', ['-sin(',init,'+(pi*',period,')/(2^',num2str(phase_steps_bits),') * [',indices,'])'], ...
-%          'distributed_mem', bram, 'latency', num2str(bram_latency), ...
-%          'n_bits', num2str(n_bits), 'bin_pt', num2str(n_bits-1), ...
-%          'Position', [285 491 345 519]);
-%  add_line(blk,'cc0/1','-sin_reference/1');
-
-%  reuse_block(blk, 'ri_to_c0', 'casper_library_misc/ri_to_c', ...
-%          'Position', [400 437 425 528]);
-%  add_line(blk, 'cos_reference/1', 'ri_to_c0/1');
-%  add_line(blk, '-sin_reference/1', 'ri_to_c0/2');
 
   reuse_block(blk, 'amux', 'xbsIndex_r4/Mux', ...
           'inputs', '2', 'en', 'on', 'latency', num2str(mux_latency), 'Position', [480 323 510 757]);

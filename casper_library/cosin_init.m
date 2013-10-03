@@ -207,17 +207,12 @@ function cosin_init(blk,varargin)
 
     %calculate values to be stored in ROM
     real_vals = gen_vals(output0, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
-%    vals0 = fi(real_vals, false, n_bits*3, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-%    vals0 = bitshift(vals0,bin_pt+n_bits); %shift up 
 
     imag_vals = gen_vals(output1, phase, full_cycle_bits, vec_len, n_bits, bin_pt);
-%    vals1 = fi(imag_vals, false, n_bits*2, bin_pt); %expand whole bits, ready for shift up (being stored Unsigned so must be positive)
-%    vals1 = bitshift(vals1,bin_pt); %shift up 
   
-    vals = doubles2unsigned([real_vals',imag_vals'], n_bits, bin_pt);
+    vals = doubles2unsigned([real_vals',imag_vals'], n_bits, bin_pt, n_bits*2);
 
-%    set_param([blk,'/ROM'], 'initVector', ['[',num2str(double(vals0+vals1)),']']);
-    set_param([blk,'/ROM'], 'initVector', ['[',num2str(vals),']']);
+    set_param([blk,'/ROM'], 'initVector', mat2str(vals'));
 
     %extract real and imaginary parts of vector
     reuse_block(blk, 'c_to_ri', 'casper_library_misc/c_to_ri', ...
