@@ -321,8 +321,8 @@ begin
   -- Resets
   adc_reset_o <= '0';
   isd_rst     <= ctrl_reset;
-  mmcm_rst    <= ctrl_reset;
-  fifo_rst    <= not mmcm_locked;
+  mmcm_rst    <= dcm_reset;
+  fifo_rst    <= (not mmcm_locked) or ctrl_reset;
 
   CBUF0:   IBUFDS
     generic map(

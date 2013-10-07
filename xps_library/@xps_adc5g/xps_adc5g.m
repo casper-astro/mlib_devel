@@ -253,7 +253,7 @@ b = set(b, 'supp_ip_names', supp_ip_names);
 b = set(b, 'supp_ip_versions', supp_ip_versions);
 
 % Add ports not explicitly provided in the yellow block
-misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_dcm_reset']};
+misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_reset']};
 misc_ports.ctrl_clk_in     = {1 'in'  get(xsg_obj,'clk_src')};
 misc_ports.ctrl_clk_out    = {1 'out' [s.adc_str,'_clk']};
 misc_ports.ctrl_clk90_out  = {1 'out' [s.adc_str,'_clk90']};
