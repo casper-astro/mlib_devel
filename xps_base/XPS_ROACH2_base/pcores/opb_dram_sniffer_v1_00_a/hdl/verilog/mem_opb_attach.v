@@ -40,7 +40,9 @@ module mem_opb_attach #(
    /* OPB states */
    localparam OPB_IDLE     = 4'h0;
    localparam OPB_READ     = 4'h1;
-   localparam OPB_WRITE    = 4'h2;
+   localparam OPB_READ_X   = 4'h2;
+   localparam OPB_WRITE    = 4'h3;
+   localparam OPB_WRITE_X  = 4'h4;
 
    /* OPB signals */
    reg [3:0] 	   opb_state;
@@ -66,6 +68,7 @@ module mem_opb_attach #(
    reg 		   ddr3_read_en;
    reg 		   ddr3_read_en_z;
    reg 		   ddr3_read_done;
+   reg		   ddr3_read_done_z;
    reg [31:0]      ddr3_read_data;
    reg 		   ddr3_write_en;
    reg 		   ddr3_write_en_z;
@@ -104,11 +107,11 @@ module mem_opb_attach #(
 	 opb_retry       <= 1'b0;
 	 opb_toutsup     <= 1'b0;
 	 opb_data_out    <= 32'b0;
+         
 
 	 case (opb_state)
 
 	   OPB_IDLE: begin
-
 	      /* Default idle/wait state */
 
 	      if (OPB_select) begin
@@ -149,19 +152,22 @@ module mem_opb_attach #(
 	      ddr3_read_en    <= 1'b1;
 
 	      if (ddr3_read_done) begin
+	      //if (ddr3_read_done && !ddr3_read_done_z) begin //read variable holding dram value
 
 		 /* Read is done, transfer data */
 
-		 ddr3_read_en    <= 1'b0;
-
-		 opb_state    <= OPB_IDLE;
+		 ddr3_read_en <= 1'b0;
+		 opb_state    <= OPB_READ_X;
 		 opb_data_out <= ddr3_read_data;
 		 opb_ack      <= 1'b1;
 
-	      end // if (ddr3_read_done)
-
+	      end
 	   end // case: OPB_READ
 	   
+	   OPB_READ_X: begin
+              opb_state <= OPB_IDLE;
+           end
+ 
 	   OPB_WRITE: begin
 
 	      /* Start the DDR3 write */
@@ -174,8 +180,9 @@ module mem_opb_attach #(
 
 		 /* Write is done, finish up */
 		 
-		 opb_state    <= OPB_IDLE;
-		 opb_ack      <= 1'b1;
+		 ddr3_write_en <= 1'b0;
+		 opb_state     <= OPB_IDLE;
+		 opb_ack       <= 1'b1;
 
 	      end // if (ddr3_write_done)
 
@@ -219,7 +226,8 @@ module mem_opb_attach #(
 	 ddr3_write_done <= 1'b0;
 	 ddr3_read_en_z  <= ddr3_read_en;
 	 ddr3_write_en_z <= ddr3_write_en;
-
+         ddr3_read_done_z <= ddr3_read_done;   
+         
 	 case (ddr3_state)
 
 	   DDR3_IDLE: begin
@@ -291,12 +299,12 @@ module mem_opb_attach #(
 	      /* Wait for OPB to grab data */
 
 	      ddr3_read_done <= 1'b1;
-
+              
 	      if (!ddr3_read_en) begin
 
 		 /* OPB is done, finish up */
 
-		 ddr3_state     <= DDR3_IDLE;
+		     ddr3_state     <= DDR3_IDLE;
 
 	      end // if (!ddr3_read_en)
 
