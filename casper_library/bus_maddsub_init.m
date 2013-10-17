@@ -26,12 +26,12 @@ function bus_maddsub_init(blk, varargin)
   clog('entering bus_maddsub_init', {log_group, 'trace'});
   
   defaults = { ...
-    'n_bits_a', [4 4 4 4 4 4],  'bin_pt_a', 3, 'type_a', 1, ...
-    'n_bits_b', [4 4],          'bin_pt_b', 3, 'type_b', 1, 'replicate_ab', 'on', ...
+    'n_bits_a', [8 8 8 8],  'bin_pt_a', 3, 'type_a', 1, 'cmplx_a', 'off', ...
+    'n_bits_b', [4],        'bin_pt_b', 3, 'type_b', 1, 'replicate_ab', 'on', ...
     'mult_latency', 3, ...
     'multiplier_implementation', 'behavioral HDL', ... 'embedded multiplier core' 'standard core' ...
     'opmode', 'Addition', ...
-    'n_bits_c', [8 8 8 8 8 8],  'bin_pt_c', 3, 'type_c', 1, 'replicate_c', 'off', ...
+    'n_bits_c', [4 4 4 4],  'bin_pt_c', 3, 'type_c', 1, 'replicate_c', 'off', ...
     'add_implementation', 'fabric core', ... 'behavioral HDL' 'DSP48 core'
     'add_latency', 1, 'async_add', 'on', 'align_c', 'off', ...
     'n_bits_out', 12, 'bin_pt_out', 7, 'type_out', 1, ...
@@ -56,6 +56,7 @@ function bus_maddsub_init(blk, varargin)
   n_bits_a                   = get_var('n_bits_a', 'defaults', defaults, varargin{:});
   bin_pt_a                   = get_var('bin_pt_a', 'defaults', defaults, varargin{:});
   type_a                     = get_var('type_a', 'defaults', defaults, varargin{:});
+  cmplx_a                    = get_var('cmplx_a', 'defaults', defaults, varargin{:});
   n_bits_b                   = get_var('n_bits_b', 'defaults', defaults, varargin{:});
   bin_pt_b                   = get_var('bin_pt_b', 'defaults', defaults, varargin{:});
   type_b                     = get_var('type_b', 'defaults', defaults, varargin{:});
@@ -160,7 +161,7 @@ function bus_maddsub_init(blk, varargin)
   n_bits_a      = repmat(n_bits_a, 1, compa/lenba); 
   bin_pt_a      = repmat(bin_pt_a, 1, compa/lenpa); 
   type_a        = repmat(type_a, 1, compa/lenta);   
-
+  
   %replicate items if needed for b input
   n_bits_b      = repmat(n_bits_b, 1, compb/lenbb); 
   bin_pt_b      = repmat(bin_pt_b, 1, compb/lenpb);
@@ -192,11 +193,15 @@ function bus_maddsub_init(blk, varargin)
 
   fb = compo/compb;
   max_fanoutb = max_fanout; 
-  dupb = ceil(fb/max_fanoutb)
+  dupb = ceil(fb/max_fanoutb);
   compb = compb*dupb; type_b = repmat(type_b, 1, dupb) ;
   n_bits_b = repmat(n_bits_b, 1, dupb); bin_pt_b = repmat(bin_pt_b, 1, dupb); 
-  b_src = repmat([1:compb], 1, ceil(compo/compb));
-  
+  if strcmp(cmplx_a, 'on'),
+    b_src = repmat(reshape([[1:compb];[1:compb]], 1, compb*2), 1, ceil(compo/(compb*2)));
+  else,  
+    b_src = repmat([1:compb], 1, ceil(compo/compb));
+  end  
+
   fc = compo/compc;
   max_fanoutc = max_fanout; 
   dupc = ceil(fc/max_fanoutc);
@@ -400,14 +405,10 @@ function bus_maddsub_init(blk, varargin)
 
   ypos_tmp = ypos + mult_d*(compb+compa+compc+fanout) + 4*yinc;
   
-  if strcmp(replicate_c, 'on'), 
-    latency = mult_latency - 1;
-  end
-
   if strcmp(async_add, 'on'),
     %en 
     reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(latency-1), 'reg_retiming', 'on', ...
+      'latency', num2str(mult_latency-1), 'reg_retiming', 'on', ...
       'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, 'en/1', 'den0/1');
   end 
@@ -542,6 +543,7 @@ function bus_maddsub_init(blk, varargin)
     end
 
     add_name = ['addsub',num2str(index)]; 
+    
     reuse_block(blk, add_name, 'xbsIndex_r4/AddSub', ...
       'mode', opmode, 'latency', num2str(add_latency), ...
       'en', async_add, 'precision', 'User Defined', ...
