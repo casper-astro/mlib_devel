@@ -91,7 +91,7 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
     fprintf(mhs_fid,'# User XSG IP core                           #\n');
     fprintf(mhs_fid,'##############################################\n');
     fprintf(mhs_fid,'\n');
-    fprintf(mhs_fid,['BEGIN ',xsg_core_name,'\n']);
+    fprintf(mhs_fid,['BEGIN ', xsg_core_name, '\n']);
     try
         for n = 1:length(xps_objs)
             blk_obj = xps_objs{n};
@@ -218,7 +218,8 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
                 of_space = opb_offset_tmp > bridge_start;
                 of_devices = opb_slaves > max_opb_per_bridge;
                 
-                if (of_space || of_devices),                              % if need another bridge
+                % if need another bridge
+                if (of_space || of_devices),
                     if of_space,
                       clog(['adding opb bridge ',opb_name,' for ',get(blk_obj,'simulink_name'),' device number ',num2str(n),' causing address space overflow at addr 0x',dec2hex(opb_offset_tmp,8)],'gen_xps_mod_mhs_debug');
                     else
@@ -238,14 +239,13 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
                     end
                     xps_objs = [xps_objs, {opb_bridge_obj}];
                 end
-
-            % end case 'powerpc440_ext'
+            % end case {'ROACH','ROACH2'}
 
             otherwise
-                error(['Unsupported HW platform: ',hw_sys]);
+                error(['Unsupported HW platform: ', hw_sys]);
             % end otherwise
 
-        end % switch mpc_type
+        end % switch hw_sys
 
         try
             [str, opb_addr, this_opb_addr_start] = gen_mhs_ip(blk_obj, opb_addr, opb_name);
