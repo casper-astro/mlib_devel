@@ -153,7 +153,7 @@ function pfb_fir_generic_init(blk, varargin)
           'outputWidth', num2str(outputWidth), ...
           'outputBinaryPt', num2str(outputBinaryPt), ...
           'outputArithmeticType', num2str(outputArithmeticType), ...
-          'Position', [1000 yoff-15 1100 yoff+((n_inputs_total-1)*yinc)+15]);
+          'Position', [1020 yoff-15 1100 yoff+((n_inputs_total-1)*yinc)+15]);
 
   % data ports
 
@@ -197,13 +197,16 @@ function pfb_fir_generic_init(blk, varargin)
   output_order = reshape([0:n_coeffs-1], 2^n_inputs, TotalTaps);
   output_order = output_order(:, TotalTaps:-1:1);
   output_order = reshape(repmat(reshape(output_order, 1, n_coeffs), n_streams, 1), 1, n_coeffs*n_streams);
+  if strcmp(complex, 'on'), output_order = reshape([output_order; output_order], 1, length(output_order)*2);
+  end
+
   reuse_block(blk, 'coeff_munge', 'casper_library_flow_control/munge', ...
           'divisions', num2str(n_coeffs), ...
           'div_size', mat2str(repmat(CoeffBitWidth, 1, n_coeffs)), ...
           'order', mat2str(output_order), ...
           'arith_type_out', 'Unsigned', ...
           'bin_pt_out', '0', ...
-          'Position', [440 119 485 151]);
+          'Position', [500 199 550 231]);
   add_line(blk, 'pfb_fir_coeff_gen/3', 'coeff_munge/1');
 
   reuse_block(blk, 'pfb_fir_taps', 'casper_library_pfbs/pfb_fir_taps', ...
@@ -220,7 +223,7 @@ function pfb_fir_generic_init(blk, varargin)
           'add_latency', num2str(add_latency), ...
           'bram_latency', num2str(bram_latency), ...
           'multiplier_implementation', 'behavioral HDL', ...
-          'Position', [550 32 640 198]);
+          'Position', [675 32 765 198]);
   add_line(blk, 'pfb_fir_coeff_gen/2', 'pfb_fir_taps/2');
   add_line(blk, 'coeff_munge/1', 'pfb_fir_taps/3');
 
@@ -233,7 +236,7 @@ function pfb_fir_generic_init(blk, varargin)
           'n_bits_in', mat2str(repmat(BitWidthIn+CoeffBitWidth+TotalTaps-1, 1, n_outputs_total)), ...
           'bin_pt_in', num2str(BitWidthIn-1+CoeffBitWidth-1), ...
           'scale_factor', num2str(-bit_growth), ...
-          'misc', 'off', 'Position', [700 101 740 129]);
+          'misc', 'off', 'Position', [825 101 865 129]);
   add_line(blk, 'pfb_fir_taps/2', 'bus_scale/1');
 
   if strcmp(quantization, 'Truncate'), quant = 0;
@@ -247,7 +250,7 @@ function pfb_fir_generic_init(blk, varargin)
           'n_bits_out', num2str(BitWidthOut), 'bin_pt_out', num2str(BitWidthOut-1), ...
           'quantization', num2str(quant), 'overflow', '0', ...\
           'latency', num2str(conv_latency), 'of', 'off', 'misc', 'off', ...
-          'Position', [800 101 840 129]);
+          'Position', [920 101 960 129]);
   add_line(blk, 'bus_scale/1', 'bus_convert/1');
   add_line(blk, 'bus_convert/1', 'bus_expand/1');
 
@@ -258,7 +261,7 @@ function pfb_fir_generic_init(blk, varargin)
   add_line(blk, 'pfb_fir_coeff_gen/1', 'pfb_fir_taps/1');
 
   reuse_block(blk, 'sync_delay','xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-    'latency', 'conv_latency', 'Position', [805 52 835 68]);
+    'latency', 'conv_latency', 'Position', [925 52 955 68]);
   add_line(blk, 'pfb_fir_taps/1', 'sync_delay/1');
   reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [1155 52 1185 68]);
   add_line(blk, 'sync_delay/1', 'sync_out/1');
@@ -272,7 +275,7 @@ function pfb_fir_generic_init(blk, varargin)
     add_line(blk, 'en/1', 'pfb_fir_coeff_gen/3');
     add_line(blk, 'pfb_fir_coeff_gen/4', 'pfb_fir_taps/4');
     reuse_block(blk, 'den', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-      'latency', 'conv_latency', 'Position', [805 162 835 178]);
+      'latency', 'conv_latency', 'Position', [925 162 955 178]);
     add_line(blk, 'pfb_fir_taps/3', 'den/1');
     reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', num2str(2+n_inputs_total), ...
       'Position', [1035 yoff+(n_inputs_total*yinc)-8 1065 yoff+(n_inputs_total*yinc)+8]);

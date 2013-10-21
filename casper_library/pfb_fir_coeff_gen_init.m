@@ -34,7 +34,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     'async', 'on', ...
     'bram_latency', 2, ...
     'fan_latency', 2, ...
-    'add_latency', 2, ...
+    'add_latency', 1, ...
     'max_fanout', 4, ...
   };
   
@@ -42,7 +42,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
 
   yinc = 40;
 
-  %if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+  if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   munge_block(blk, varargin{:});
 
   n_inputs                    = get_var('n_inputs', 'defaults', defaults, varargin{:});
@@ -54,7 +54,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   async                       = get_var('async', 'defaults', defaults, varargin{:});
   bram_latency                = get_var('bram_latency', 'defaults', defaults, varargin{:});
   fan_latency                 = get_var('fan_latency', 'defaults', defaults, varargin{:});
-  add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
+%  add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
+  add_latency                 = 1; %add_latency must be 1 due to architectural constraints in pfb_fir_taps
   max_fanout                  = get_var('max_fanout', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
@@ -263,7 +264,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   
     if d_index >= outputs_required,
       if mod(d_index, 2^n_inputs) == 0, 
-        if mod(d_index, (n_taps/2)*2^n_inputs) ~= 0, latency = latency + 1;
+        if mod(d_index, (n_taps/2)*2^n_inputs) ~= 0, 
+          latency = latency + 1;
         end
       end
     end
@@ -323,6 +325,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     add_line(blk, 'en_replicate/1', 'en_expand/1');
 
     for d_index = 0:outputs_required*2-1,
+    
       latency = (floor((outputs_required*2-d_index-1)/(2^n_inputs)))*add_latency;
     
       if d_index >= outputs_required,
