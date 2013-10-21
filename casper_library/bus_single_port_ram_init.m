@@ -31,6 +31,8 @@ function bus_single_port_ram_init(blk, varargin)
     'max_fanout', 3, 'mem_type', 'Distributed memory', ... 
     'async', 'off', 'misc', 'off', ...
     'bram_latency', 1, 'fan_latency', 1, ...
+    'addr_register', 'on', 'din_register', 'on', ...
+    'we_register', 'on', 'en_register', 'on', ...
   };  
   
   check_mask_type(blk, 'bus_single_port_ram');
@@ -57,6 +59,10 @@ function bus_single_port_ram_init(blk, varargin)
   async                     = get_var('async', 'defaults', defaults, varargin{:});
   max_fanout                = get_var('max_fanout', 'defaults', defaults, varargin{:});
   fan_latency               = get_var('fan_latency', 'defaults', defaults, varargin{:});
+  addr_register             = get_var('addr_register', 'defaults', defaults, varargin{:});
+  din_register              = get_var('din_register', 'defaults', defaults, varargin{:});
+  we_register               = get_var('we_register', 'defaults', defaults, varargin{:});
+  en_register               = get_var('en_register', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
@@ -144,35 +150,47 @@ function bus_single_port_ram_init(blk, varargin)
 
   ypos_tmp  = ypos; %reset ypos
 
-  % replicate addra
+  % replicate addr
+  if strcmp(addr_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
   reuse_block(blk, 'rep_addr', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+    'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'addr/1', 'rep_addr/1');
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
-  % delay dina
+  % delay din
+  if strcmp(din_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
   reuse_block(blk, 'ddin', 'xbsIndex_r4/Delay', ...
-    'latency', num2str(fan_latency), 'reg_retiming', 'on', ...
+    'latency', num2str(latency), 'reg_retiming', 'on', ...
     'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
   add_line(blk, ['din/1'], 'ddin/1');
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
 
-  % replicate wea
+  % replicate we
+  if strcmp(we_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
   reuse_block(blk, 'rep_we', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+    'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'we/1', 'rep_we/1'); 
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
   if strcmp(async, 'on'),
-    % replicate ena
+    if strcmp(en_register, 'on'), latency = fan_latency;
+    else, latency = 0;
+    end
+    % replicate en
     ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
     reuse_block(blk, 'rep_en', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+      'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
     add_line(blk, 'en/1', 'rep_en/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
