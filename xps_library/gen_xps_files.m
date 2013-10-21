@@ -219,7 +219,7 @@ target_tags = {'xps_adc16' 'xps_adc5g' 'xps_adc083000x2' 'xps_adc' 'xps_katadc' 
     'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite'...
     'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_probe'...
     'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_sw_reg2' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'};
-for n = 1 : length(xps_blks)
+for n = 1 : length(xps_blks),
     if ~(strcmp(get_param(xps_blks(n),'tag'), 'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'), 'xps:pcore')),
         try
             %get_param(xps_blks(n),'tag')

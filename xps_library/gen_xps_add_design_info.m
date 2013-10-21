@@ -3,7 +3,8 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
 
     %%%%%%%%%%%%%%%%%%%%%%%
     % Add your tag here if you want it to be exported to the boffile design info
-    tag_list = {'xps:katadc', ...
+    tag_list = {'xps:xsg', ...
+        'xps:katadc', ...
         'casper:fft_wideband_real', ...
         'casper:fft', ...
         'casper:snapshot', ...
@@ -13,7 +14,8 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
         'casper:pfb_fir_real', ...
         'xps:bram', ...
         'xps:tengbe', ...
-        'xps:tengbe_v2'};
+        'xps:tengbe_v2', ...
+        'casper:info'};
     %index = find(not(cellfun('isempty', strfind(tag_list, s))));
     %%%%%%%%%%%%%%%%%%%%%%%
     
@@ -25,17 +27,35 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     end
     
     % check that we can write the file before we do anything
-    coreinfo_filename = 'casper_newcoreinfo.xml';
-    system_design_filename = 'casper_design_info.xml';
-    coreinfo_path = [mssge_paths.xps_path, slash, coreinfo_filename];
-    system_design_path = [mssge_paths.xps_path, slash, system_design_filename];
+    info_table_filename = 'newinfo.tab';
+    info_xml_filename = 'newinfo.xml';
+    design_xml_filename = 'design_info.xml';
+    % paths
+    info_table_path = [mssge_paths.xps_path, slash, info_table_filename];
+    info_xml_path = [mssge_paths.xps_path, slash, info_xml_filename];
+    design_xml_path = [mssge_paths.xps_path, slash, design_xml_filename];
     try
-        fid = fopen(coreinfo_path, 'w');
+        fid = fopen(info_table_path, 'w');
         fprintf(fid, '');
     catch e
         error(['Could not open ', coreinfo_path, '.']);
     end
     fclose(fid);
+    
+    % find all objects in the tag list
+    tagged_objects = {};
+    for ctr = 1 : numel(tag_list),
+        tag = tag_list{ctr};
+        blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', tag);
+        for b = 1 : numel(blks),
+            tagged_objects = [tagged_objects, blks{b}];
+        end
+    end
+    
+    % write the coreinfo table file
+    design_info.write_info_table(info_table_path, sysname, tagged_objects)
+    
+    return
     
     % info blocks
     info_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:info');
@@ -91,152 +111,12 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
         snapshots = [];
     end
     clear snapshot_blks;
-
-    % write the XML for the new coreinfo.xml
-    xml_dom = com.mathworks.xml.XMLUtils.createDocument(coreinfo_filename);
-    xml_node_root = xml_dom.getDocumentElement;
-    xml_node_root.setAttribute('version', '0.1');
-    xml_node_root.setAttribute('system', sysname);
-    xml_node_root.setAttribute('datestr', datestr(now));
-
-    % info element
-    xml_node_infos = xml_dom.createElement('design_info');
-    xml_node_root.appendChild(xml_node_infos);
     
-    % memory element
-    xml_node_memory = xml_dom.createElement('memory');
-    xml_node_root.appendChild(xml_node_memory);
-    
-    % process registers and bitregs
-    for n = 1 : numel(registers),
-        reg = registers(n);
-        nodes = reg.to_coreinfo(xml_dom);
-        for o = 1 : numel(nodes),
-            node = nodes(o);
-            xml_node_memory.appendChild(node);
-        end
-    end
-    
-    % process snapshots
-    for n = 1 : numel(snapshots),
-        snap = snapshots(n);
-        [mem, extra, info] = snap.to_coreinfo(xml_dom);
-        for o = 1 : numel(mem),
-            node = mem(o);
-            xml_node_memory.appendChild(node);
-        end
-        if isa(extra, 'org.apache.xerces.dom.ElementImpl'),
-            for o = 1 : numel(extra),
-                node = extra(o);
-                xml_node_memory.appendChild(node);
-            end
-        end
-%         if isa(info, 'org.apache.xerces.dom.ElementImpl[]'),
-%             for o = 1 : numel(info),
-%                 node = info(o);
-%                 xml_node_infos.appendChild(node);
-%             end
-%         end
-    end
-    
-    % now comments/info blocks
-    for n = 1 : numel(infoBlocks),
-        info_block = infoBlocks(n);
-        xml_node_infos.appendChild(info_block.to_xml_node(xml_dom));
-    end
-
-    % specified block tags
-    for ctr = 1 : numel(tag_list),
-        tag = tag_list{ctr};
-        blocks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', tag);
-        blockstr = '';
-        for blkctr = 1 : numel(blocks),
-            nodes = design_info.sblock_to_info_nodes(xml_dom, blocks{blkctr});
-            for n = 1 : numel(nodes),
-                xml_node_infos.appendChild(nodes(n));
-            end
-            blockstr = [blockstr, ',', design_info.strip_system_from_name(blocks{blkctr})];
-        end
-        infoblock = design_info.InfoBlock(tag, blockstr(2:end), '', '');
-        xml_node_infos.appendChild(infoblock.to_xml_node(xml_dom));
-    end
-    
-%     infoblock = design_info.InfoBlock('snapshots', snapshot_names, '', '');
-%     xml_node_infos.appendChild(infoblock.to_xml_node(xml_dom));
-%     infoblock = design_info.InfoBlock('registers', register_names, '', '');
-%     xml_node_infos.appendChild(infoblock.to_xml_node(xml_dom));
-    
-    % and write the dom to file
-    xmlwrite(coreinfo_path, xml_dom);
+    % write the coreinfo XML file
+    design_info.write_info_xml(info_xml_path, sysname, tag_list)
     
     % write the XML for the system design xml file
-    xml_dom = com.mathworks.xml.XMLUtils.createDocument(system_design_filename);
-    xml_node_root = xml_dom.getDocumentElement;
-    xml_node_root.setAttribute('version', '0.1');
-    xml_node_root.setAttribute('system', sysname);
-    xml_node_root.setAttribute('datestr', datestr(now));
-
-    % info element
-    xml_node_infos = xml_dom.createElement('design_info');
-    xml_node_root.appendChild(xml_node_infos);
-    
-    % memory elements all go under the memory node
-    xml_node_memory = xml_dom.createElement('memory');
-    xml_node_root.appendChild(xml_node_memory);
-    
-    % process shared brams
-    xml_node_sbrams = xml_dom.createElement('memory_class');
-    xml_node_sbrams.setAttribute('class', 'sbram');
-    xml_node_root.appendChild(xml_node_sbrams);
-    
-    % process registers and bitregs
-    xml_node_registers = xml_dom.createElement('memory_class');
-    xml_node_registers.setAttribute('class', 'register');
-    xml_node_memory.appendChild(xml_node_registers);
-    xml_node_registers.appendChild(xml_dom.createComment('Register information for this design.'));
-    for n = 1 : numel(registers),
-        reg = registers(n);
-        node = reg.to_xml_node(xml_dom);
-        xml_node_registers.appendChild(node);
-    end
-    clear registers;
-    
-    % process snapshots
-    xml_node_snapshots = xml_dom.createElement('memory_class');
-    xml_node_snapshots.setAttribute('class', 'snapshot');
-    xml_node_memory.appendChild(xml_node_snapshots);
-    xml_node_registers.appendChild(xml_dom.createComment('Snapshot information for this design.'));
-    for n = 1 : numel(snapshots),
-        snap = snapshots(n);
-        node = snap.to_xml_node(xml_dom);
-        xml_node_snapshots.appendChild(node);
-    end
-    clear snapshots;
-    
-    % now comments/info blocks
-    for n = 1 : numel(infoBlocks),
-        info_block = infoBlocks(n);
-        xml_node_infos.appendChild(info_block.to_xml_node(xml_dom));
-    end
-    clear infoBlocks;
-    
-    % specified tags
-    for ctr = 1 : numel(tag_list),
-        tag = tag_list{ctr};
-        blocks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', tag);
-        if numel(blocks) > 0,
-            tag_element = strrep(tag, ':', '_');
-            xml_node = xml_dom.createElement(tag_element);
-            xml_node_root.appendChild(xml_node);
-            for blkctr = 1 : numel(blocks),
-                node = design_info.sblock_to_xml(xml_dom, blocks{blkctr});
-                xml_node.appendChild(node);
-            end
-        end
-    end
-    
-    % and write the dom to file
-    xmlwrite(system_design_path, xml_dom);
+    design_info.write_xml(design_xml_path, sysname, tag_list)
 
     clog('exiting gen_xps_add_design_info','trace');
 end % end function gen_xps_add_design_info

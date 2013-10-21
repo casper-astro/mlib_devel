@@ -40,7 +40,7 @@ classdef Register
                 old_reg = false;
                 try
                     get_param(blockname, 'name1');
-                catch ex
+                catch
                     old_reg = true;
                 end
                 if old_reg,
@@ -53,14 +53,6 @@ classdef Register
             end
         end
         
-        function obj = load_from_sw_reg_old(obj)
-            % load the object from an original sw reg block
-            io_dir = get_param(obj.block, 'io_dir');
-            regname = strrep(regexprep(obj.block, '^[^/]*/', ''), '/', '_');
-            block_sans_system = regexprep(obj.block, '^[^/]*/', '');
-            obj.datawords = design_info.MemoryWord(block_sans_system, 32, regname, -1, 0, 32, 1, 0, 'Unsigned', 0, io_dir);
-        end
-        
         function regname = get_register_name(obj)
             regname = strrep(regexprep(obj.block, '^[^/]*/', ''), '/', '_');
         end
@@ -71,6 +63,14 @@ classdef Register
             else
                 blockname = obj.block;
             end
+        end
+        
+        function obj = load_from_sw_reg_old(obj)
+            % load the object from an original sw reg block
+            io_dir = get_param(obj.block, 'io_dir');
+            regname = strrep(regexprep(obj.block, '^[^/]*/', ''), '/', '_');
+            block_sans_system = regexprep(obj.block, '^[^/]*/', '');
+            obj.datawords = design_info.MemoryWord(block_sans_system, 32, regname, -1, 0, 32, 1, 0, 'Unsigned', 0, io_dir);
         end
         
         function obj = load_from_sw_reg(obj)

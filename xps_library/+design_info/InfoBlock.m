@@ -39,11 +39,23 @@ classdef InfoBlock
         end
 
         function node = to_xml_node(obj, xml_dom)
+            % Return an XML info node object representation of this
+            % InfoBlock.
             node = xml_dom.createElement('info');
             node.setAttribute('param', regexprep(obj.block, '.*/', ''));
             node.setAttribute('value', obj.info);
             node.setAttribute('owner', design_info.strip_system_from_name(obj.parent_block));
             node.setAttribute('owner_tag', obj.parent_tag);
+        end
+        
+        function str = to_table_row(obj)
+            % Return the InfoBlock information in string form for the
+            % information table.
+            str = '';
+            str = [str, design_info.strip_system_from_name(obj.parent_block), '\t'];
+            str = [str, obj.parent_tag, '\t'];
+            str = [str, regexprep(obj.block, '.*/', ''), '\t'];
+            str = [str, obj.info, '\n'];
         end
     end
     

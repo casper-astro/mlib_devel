@@ -140,6 +140,29 @@ classdef Snapshot
                 extravalue = NaN;
             end
         end
+        
+        function str = to_tablerow(obj)
+            %
+            % Returns a row of the info table
+            %
+            % data words
+            for d = numel(obj.datawords) : -1 : 1,
+                dword = obj.datawords(d);
+                node = dword.to_xml_node(xml_dom);
+                snapnodes(d) = node;
+            end
+            % info - will be in info blocks ideally
+            for n = numel(obj.infos) : -1 : 1,
+                infonodes(n) = obj.infos(n).to_xml_node(xml_dom);
+            end
+            % extra value
+            extra_value = get_param(obj.block, 'value');
+            if strcmp(extra_value, 'on'),
+                extravalue = obj.extra_value_register.to_coreinfo(xml_dom);
+            else
+                extravalue = NaN;
+            end
+        end
 
     end
 end
