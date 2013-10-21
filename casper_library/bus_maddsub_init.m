@@ -558,7 +558,7 @@ function bus_maddsub_init(blk, varargin)
     add_line(blk, ['c_debus/',num2str(c_src(index))], [add_name,'/2']);
 
     if strcmp(async_add, 'on')
-      add_line(blk, ['en_debus1/', num2str(floor((index-1)/max_fanout))+1], [add_name,'/3']);
+      add_line(blk, ['en_debus1/', num2str(floor((index-1)/max_fanout)+1)], [add_name,'/3']);
     end
 
   end %for
