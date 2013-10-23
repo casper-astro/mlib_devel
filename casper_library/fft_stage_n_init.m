@@ -191,23 +191,33 @@ reuse_block(blk, 'Mux', 'xbsIndex_r4/Mux', ...
 add_line(blk,'in1/1','Mux/3');
 add_line(blk,'Slice1/1','Mux/1');
 
-reuse_block(blk, 'Delay', 'xbsIndex_r4/Delay', ...
+reuse_block(blk, 'delay0', 'xbsIndex_r4/Delay', ...
         'latency', '1', ...
         'reg_retiming', 'on', ...
-        'Position', [250 195 280 225]);
-add_line(blk,'sync/1','Delay/1');
+        'Position', [250 200 280 220]);
+add_line(blk,'sync/1','delay0/1');
 
 if strcmp(async, 'on'),
-  reuse_block(blk, 'Delay1', 'xbsIndex_r4/Delay', ...
+  reuse_block(blk, 'delay1', 'xbsIndex_r4/Delay', ...
           'latency', '1', ...
-          'reg_retiming', 'on', ...
-          'Position', [250 255 280 285]);
-  add_line(blk,'en/1','Delay1/1');
-  reuse_block(blk, 'Delay2', 'xbsIndex_r4/Delay', ...
+          'reg_retiming', 'off', ...
+          'Position', [250 260 280 280]);
+  add_line(blk,'en/1','delay1/1');
+  reuse_block(blk, 'delay2', 'xbsIndex_r4/Delay', ...
+          'latency', '1', ...
+          'reg_retiming', 'off', ...
+          'Position', [250 300 280 320]);
+  add_line(blk,'en/1','delay2/1');
+  reuse_block(blk, 'delay3', 'xbsIndex_r4/Delay', ...
+          'latency', '1', ...
+          'reg_retiming', 'off', ...
+          'Position', [250 340 280 360]);
+  add_line(blk,'en/1','delay3/1');
+  reuse_block(blk, 'delay4', 'xbsIndex_r4/Delay', ...
           'latency', '0', ...
           'reg_retiming', 'on', ...
-          'Position', [380 255 405 285]);
-  add_line(blk,'Delay1/1','Delay2/1');
+          'Position', [380 260 410 280]);
+  add_line(blk,'delay3/1','delay4/1');
 end
 
 % Implement delays normally or in BRAM
@@ -230,25 +240,28 @@ add_line(blk,'delay_f/1','Mux/2');
 set_param([blk,'/delay_b'], 'Position', [340 30 385 70]);
 add_line(blk,'Mux1/1','delay_b/1');
 
-if strcmp(async, 'on'), sync_delay_type = 'casper_library_delays/sync_delay_en';
-else, sync_delay_type = 'casper_library_delays/sync_delay';
+if strcmp(async, 'on'), 
+  DelayLen = '2^(FFTSize - FFTStage) - 1'; 
+  sync_delay_type = 'casper_library_delays/sync_delay_en';
+else, 
+  DelayLen = '2^(FFTSize - FFTStage)'; 
+  sync_delay_type = 'casper_library_delays/sync_delay';
 end
 
 reuse_block(blk, 'sync_delay', sync_delay_type, ...
-        'DelayLen', '2^(FFTSize - FFTStage)', ...
-        'Position', [315 189 355 231]);
-add_line(blk,'Delay/1','sync_delay/1');
+        'DelayLen', DelayLen, 'Position', [315 189 355 231]);
+add_line(blk,'delay0/1','sync_delay/1');
 
 if strcmp(async, 'on'),
   reuse_block(blk, 'logical', 'xbsIndex_r4/Logical', ...
-    'logical_function', 'AND', 'inputs', '2', 'latency', '0', ...
-    'precision', 'Full', 'Position', [380 200 405 240]);
+    'logical_function', 'AND', 'inputs', '2', 'latency', '1', ...
+    'precision', 'Full', 'Position', [380 200 410 240]);
   add_line(blk, 'sync_delay/1', 'logical/1');
-  add_line(blk, 'Delay1/1', 'logical/2');
+  add_line(blk, 'delay3/1', 'logical/2');
 
   add_line(blk, 'en/1', 'delay_f/2');
-  add_line(blk, 'Delay1/1', 'sync_delay/2');
-  add_line(blk, 'Delay1/1', 'delay_b/2');
+  add_line(blk, 'delay2/1', 'sync_delay/2');
+  add_line(blk, 'delay1/1', 'delay_b/2');
 end
 
 reuse_block(blk, 'Slice', 'xbsIndex_r4/Slice', ...
@@ -312,7 +325,7 @@ add_line(blk,'Slice/1','butterfly_direct/4');
 add_line(blk,'delay_b/1','butterfly_direct/1');
 
 if strcmp(async, 'on'), 
-  add_line(blk, 'Delay2/1', 'butterfly_direct/5');
+  add_line(blk, 'delay4/1', 'butterfly_direct/5');
   add_line(blk, 'logical/1','butterfly_direct/3');
 else,
   add_line(blk, 'sync_delay/1','butterfly_direct/3');
