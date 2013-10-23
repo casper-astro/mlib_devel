@@ -138,10 +138,10 @@ function pfb_fir_taps_init(blk, varargin)
   end
 
   reuse_block(blk, 'sync_delay0', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-    'latency', 'mult_latency+1+add_latency', 'Position', [740 36 785 64]);
+    'latency', 'mult_latency+1+add_latency+1', 'Position', [740 36 785 64]);
   add_line(blk, 'sync_delay/1', 'sync_delay0/1');
   
-  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [940 43 970 57]);
+  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [1000 43 1030 57]);
   add_line(blk, 'sync_delay0/1', 'sync_out/1');
 
   % tap data delays
@@ -257,12 +257,20 @@ function pfb_fir_taps_init(blk, varargin)
     'Position', [850 369 880 391]);
   add_line(blk,'bus_madd/1', 'final_sum/1');
 
-  reuse_block(blk, 'dout', 'built-in/Outport', 'Port', '2', 'Position', [940 373 970 387]);
-  add_line(blk,'final_sum/1', 'dout/1');
+  reuse_block(blk, 'dfinal_sum', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+    'latency', '1', 'Position', [940 370 975 390]);
+  add_line(blk, 'final_sum/1', 'dfinal_sum/1');
+
+  reuse_block(blk, 'dout', 'built-in/Outport', 'Port', '2', 'Position', [1000 373 1030 387]);
+  add_line(blk,'dfinal_sum/1', 'dout/1');
 
   if strcmp(async, 'on'),
-    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '3', 'Position', [940 483 970 497]);
+    reuse_block(blk, 'dvalid', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
+      'latency', '1', 'Position', [940 480 975 500]);
     add_line(blk, 'bus_madd/2', 'dvalid/1');
+
+    reuse_block(blk, 'valid', 'built-in/Outport', 'Port', '3', 'Position', [1000 483 1030 497]);
+    add_line(blk, 'dvalid/1', 'valid/1');
   end
 
   clean_blocks(blk);
