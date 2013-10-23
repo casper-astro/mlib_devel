@@ -435,9 +435,9 @@ function bus_maddsub_init(blk, varargin)
     ypos_tmp = ypos_tmp + mult_d*fanout/2;
 
     reuse_block(blk, 'repen1', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(fanout), 'latency', '1', 'misc', 'off', ...
+      'replication', num2str(fanout), 'latency', num2str(mult_latency), 'misc', 'off', ...
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
-    add_line(blk, 'den0/1', 'repen1/1'); 
+    add_line(blk, 'en/1', 'repen1/1'); 
     
     ypos_tmp = ypos_tmp + yinc + mult_d*fanout/2;
 
