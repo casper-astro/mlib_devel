@@ -68,7 +68,8 @@ function barrel_switcher_init(blk, varargin)
   reuse_block(blk, 'sync_out', 'built-in/outport',...
       'Position', [135 (2^n_inputs+1)*80+95 165 109+80*(2^n_inputs+1)], 'Port', '1');
   reuse_block(blk, 'Delay_sync', 'xbsIndex_r4/Delay', ...
-      'Position', [75 (2^n_inputs+1)*80+95 105 109+80*(2^n_inputs+1)], 'latency', num2str(n_inputs));
+      'reg_retiming', 'on', 'latency', num2str(n_inputs), ...
+      'Position', [75 (2^n_inputs+1)*80+95 105 109+80*(2^n_inputs+1)]);
   add_line(blk, 'sync_in/1', 'Delay_sync/1');
   add_line(blk, 'Delay_sync/1', 'sync_out/1');
 
@@ -86,7 +87,7 @@ function barrel_switcher_init(blk, varargin)
   end
   for j=1:(n_inputs-1),
       reuse_block(blk, ['Delay', num2str(j)], 'xbsIndex_r4/Delay', ...
-          'Position', [15+150*j 15 45+150*j 45]);
+          'reg_retiming', 'on', 'Position', [15+150*j 15 45+150*j 45]);
   end
   for j=1:n_inputs,
       reuse_block(blk, ['Slice', num2str(j)], 'xbsIndex_r4/Slice', ...
@@ -150,7 +151,8 @@ function barrel_switcher_init(blk, varargin)
     reuse_block(blk, 'dvalid', 'built-in/outport',...
         'Position', [135 (2^n_inputs+2)*80+95 165 109+80*(2^n_inputs+2)], 'Port', num2str(2^n_inputs+2));
     reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
-        'Position', [75 (2^n_inputs+2)*80+95 105 109+80*(2^n_inputs+2)], 'latency', num2str(n_inputs));
+        'reg_retiming', 'on', 'latency', num2str(n_inputs), ...
+        'Position', [75 (2^n_inputs+2)*80+95 105 109+80*(2^n_inputs+2)]);
     add_line(blk, 'en/1', 'den/1');
     add_line(blk, 'den/1', 'dvalid/1');
   end
