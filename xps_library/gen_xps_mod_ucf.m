@@ -91,6 +91,35 @@ function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     end
     fprintf(ucf_fid,'\n');
 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Concatenate user-specified constraints files
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    user_ucf_path = getenv('USER_UCF_PATH');
+    
+    if(user_ucf_path)
+        
+        user_ucf_files = dir(fullfile(user_ucf_path, '*.ucf'));
+        
+        if(~isempty(user_ucf_files))
+
+            fprintf(ucf_fid,'##############################################\n');
+            fprintf(ucf_fid,'# User-specified constraints                 #\n');
+            fprintf(ucf_fid,'##############################################\n');
+
+            for n = 1:length(user_ucf_files)
+                file_path = which(fullfile(user_ucf_path, user_ucf_files(n).name));
+                fprintf(ucf_fid, '\n\n### BEGIN %s\n\n', file_path);
+                fprintf(ucf_fid, fileread(file_path));
+                fprintf(ucf_fid, '\n\n### END %s\n\n', file_path);
+            end
+            
+        else
+            error(['No *.ucf files  found in: USER_UCF_PATH=', user_ucf_path]);
+        end
+    
+    end
+    
     fclose(ucf_fid);
 
 % end function gen_xps_mod_ucf
