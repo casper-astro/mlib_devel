@@ -131,11 +131,11 @@ if bin_pt_in == -1
 end
 
 %flag error and over-ride if trying to use BRAMs but delay is less than BRAM latency
-if (2^(FFTSize-FFTStage) < bram_latency)
+if (2^(FFTSize-FFTStage) <= bram_latency)
     if strcmp(delays_bram,'on')
-        warning('fft_stage_n_init(n=%d): using BRAMs for delays but BRAM latency %d is larger than delay %d! Forcing use of distributed RAM.', ...
+        warning('fft_stage_n_init(n=%d): using BRAMs for delays but BRAM latency %d is not less than delay %d! Forcing use of distributed RAM.', ...
             FFTStage, bram_latency, 2^(FFTSize-FFTStage));
-        clog('using BRAMs for delays but BRAM latency larger than delay! Forcing use of distributed RAM.',{'error', 'fft_stage_n_init_debug'});
+        clog('using BRAMs for delays but BRAM latency not less than delay! Forcing use of distributed RAM.',{'error', 'fft_stage_n_init_debug'});
     end
     delays_bram = 'off';
 end
