@@ -54,8 +54,8 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   async                       = get_var('async', 'defaults', defaults, varargin{:});
   bram_latency                = get_var('bram_latency', 'defaults', defaults, varargin{:});
   fan_latency                 = get_var('fan_latency', 'defaults', defaults, varargin{:});
-%  add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
-  add_latency                 = 1; %add_latency must be 1 due to architectural constraints in pfb_fir_taps
+  add_latency                 = get_var('add_latency', 'defaults', defaults, varargin{:});
+%  add_latency                 = 1; %add_latency must be 1 due to architectural constraints in pfb_fir_taps
   max_fanout                  = get_var('max_fanout', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
@@ -200,7 +200,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
   add_line(blk, 'zero/1', 'first/1');
   
   reuse_block(blk, 'dfirst', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-    'latency', num2str(bram_latency+fan_latency-1), 'Position', [455 136 515 154] );
+    'latency', num2str(bram_latency+fan_latency-1-1), 'Position', [455 136 515 154] );
   add_line(blk, 'first/1', 'dfirst/1');
 
   % get the first value of the second half of the taps
@@ -230,7 +230,7 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     'divisions', num2str(outputs_required), ...
     'div_size', mat2str(repmat(n_bits_coeff, 1, outputs_required)), ...
     'order', mat2str(order), 'arith_type_out', 'Unsigned', 'bin_pt_out', '0', ... 
-    'Position', [440 352 480 378] );
+    'Position', [435 377 475 403] );
   add_line(blk, 'rom/2', 'munge/1');
   
   % coefficient extraction
@@ -308,15 +308,16 @@ function pfb_fir_coeff_gen_init(blk, varargin)
     add_line(blk, 'en/1', 'den0/1');
     
     reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
-      'latency', num2str(fan_latency), 'Position', [490 yoff+(outputs_required*2+2)*yinc 515 yoff+(outputs_required*2+2)*yinc+18]);
+      'latency', num2str(fan_latency), ...
+      'Position', [540 yoff+(outputs_required*2+2)*yinc 565 yoff+(outputs_required*2+2)*yinc+18]);
     add_line(blk, 'den0/1', 'den1/1');
     add_line(blk, 'den1/1', 'register/3');
 
     outputNum = outputs_required*2-(2^n_inputs-1);
     reuse_block(blk, 'en_replicate', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(outputNum), 'latency', num2str(fan_latency), 'misc', 'off', ...
-      'Position', [465 yoff+(outputs_required*2+4)*yinc 515 yoff+(outputs_required*2+4)*yinc+30]);
-    add_line(blk, 'den0/1', 'en_replicate/1');
+      'replication', num2str(outputNum), 'latency', num2str(fan_latency+bram_latency), 'misc', 'off', ...
+      'Position', [245 yoff+(outputs_required*2+4)*yinc 295 yoff+(outputs_required*2+4)*yinc+30]);
+    add_line(blk, 'en/1', 'en_replicate/1');
 
     reuse_block(blk, 'en_expand', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', 'outputNum', num2str(outputNum), ...
