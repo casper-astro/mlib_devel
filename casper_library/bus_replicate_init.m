@@ -69,7 +69,8 @@ function bus_replicate_init(blk, varargin)
 
       for rep_index = 0:rep_required-1,
         dname = ['din', num2str(stage_index), '_', num2str(rep_index)];
-        reuse_block(blk, dname, 'xbsIndex_r4/Register', 'en', 'off', ...
+        reuse_block(blk, dname, 'xbsIndex_r4/Delay', ...
+          'reg_retiming', 'off', 'latency', '1', ...
           'Position', [xpos_tmp-del_w/2 ypos_tmp-del_d/2 xpos_tmp+del_w/2 ypos_tmp+del_d/2]);
 
         if stage_index == 0, add_line(blk, 'in/1', [dname,'/1']); 
