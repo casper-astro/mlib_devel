@@ -100,7 +100,11 @@ if (n_inputs >= FFTSize - 2),
 end
 
 if (2^(FFTSize-1) * (FFTSize-1) >= 2^coeffs_bit_limit) && (2^(FFTSize-1) >= bram_latency),
-    map_latency = bram_latency;
+    % if we are addressing more than one BRAM in reorder, add extra latency for mux on output of mapping core
+    if (FFTSize - 1) > 11, map_latency = 3;
+    else, map_latency = 2;
+    end
+%    map_latency = 2;
     bram_map = 'on';
 else
     map_latency = 1;
