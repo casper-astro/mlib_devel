@@ -21,8 +21,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function bus_mult_init(blk, varargin)
+  log_group = 'bus_mult_init_debug';
 
-  clog('entering bus_mult_init', 'trace');
+  clog('entering bus_mult_init', {log_group, 'trace'});
   
   defaults = { ...
     'n_bits_a', 0,  'bin_pt_a',     4,   'type_a',   1, 'cmplx_a', 'off', ...
@@ -76,7 +77,7 @@ function bus_mult_init(blk, varargin)
   if (n_bits_a == 0 | n_bits_b == 0),
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
-    clog('exiting bus_mult_init','trace');
+    clog('exiting bus_mult_init', {log_group, 'trace'});
     return;
   end
 
@@ -84,16 +85,18 @@ function bus_mult_init(blk, varargin)
   % parameter checking %
   %%%%%%%%%%%%%%%%%%%%%%
 
-  if (strcmp(cmplx_a, 'on') || strcmp(cmplx_b, 'on')) && max_fanout < 2,
-    clog('Complex multiplication without fanout of at least 2 is impossible','error');
-    error('Complex multiplication without fanout of at least 2 is impossible');
-  end
-
   if max_fanout < 1,
-    clog('Maximum fanout must be 1 or greater','error');
+    clog('Maximum fanout must be 1 or greater', {'error', log_group});
     error('Maximum fanout must be 1 or greater');
   end
 
+  %need complex multiplication and will reduce fanout by two automatically
+  if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on'),   
+    dup_latency = fan_latency - 1;  
+    max_fanout = max_fanout*2;
+  else,
+    dup_latency = fan_latency;
+  end
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % check input lists for consistency %
@@ -119,21 +122,21 @@ function bus_mult_init(blk, varargin)
   conflict_a = (length(unique_a) == 2) && (unique_a(1) ~= 1);
   if too_many_a | conflict_a,
     error('conflicting component number for bus a');
-    clog('conflicting component number for bus a', 'error');
+    clog('conflicting component number for bus a', {'error', log_group});
   end
 
   too_many_b = length(unique_b) > 2;
   conflict_b = (length(unique_b) == 2) && (unique_b(1) ~= 1);
   if too_many_b | conflict_b,
     error('conflicting component number for bus b');
-    clog('conflicting component number for bus b', 'error');
+    clog('conflicting component number for bus b', {'error', log_group});
   end
 
   too_many_o = length(unique_o) > 2;
   conflict_o = (length(unique_o) == 2) && (unique_o(1) ~= 1);
   if too_many_o | conflict_o,
     error('conflicting component number for output bus');
-    clog('conflicting component number for output bus', 'error');
+    clog('conflicting component number for output bus', {'error', log_group});
   end
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -232,17 +235,17 @@ function bus_mult_init(blk, varargin)
   % at this point all a, b, output lists should match %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
-  clog(['n_bits_a = ',mat2str(n_bits_a)],'bus_mult_init_debug');
-  clog(['n_bits_b = ',mat2str(n_bits_b)],'bus_mult_init_debug');
-  clog(['n_bits_out = ',mat2str(n_bits_out)],'bus_mult_init_debug');
-  clog(['bin_pt_out = ',mat2str(bin_pt_out)],'bus_mult_init_debug');
-  clog(['type_out = ',mat2str(type_out)],'bus_mult_init_debug');
-  clog(['overflow = ',mat2str(overflow)],'bus_mult_init_debug');
-  clog(['quantization = ',mat2str(quantization)],'bus_mult_init_debug');
-  clog(['duplication factors => a: ',num2str(dupa),' b: ',num2str(dupb)],'bus_mult_init_debug');
-  clog(['compa = ',num2str(compa), ' compb = ',num2str(compb), ' compo = ', num2str(compo)],'bus_mult_init_debug');
-  clog(['connection vector for port a = ',mat2str(a_src)],'bus_mult_init_debug');
-  clog(['connection vector for port b = ',mat2str(b_src)],'bus_mult_init_debug');
+  clog(['n_bits_a = ',mat2str(n_bits_a)], log_group);
+  clog(['n_bits_b = ',mat2str(n_bits_b)], log_group);
+  clog(['n_bits_out = ',mat2str(n_bits_out)], log_group);
+  clog(['bin_pt_out = ',mat2str(bin_pt_out)], log_group);
+  clog(['type_out = ',mat2str(type_out)], log_group);
+  clog(['overflow = ',mat2str(overflow)], log_group);
+  clog(['quantization = ',mat2str(quantization)], log_group);
+  clog(['duplication factors => a: ',num2str(dupa),' b: ',num2str(dupb)], log_group);
+  clog(['compa = ',num2str(compa), ' compb = ',num2str(compb), ' compo = ', num2str(compo)], log_group);
+  clog(['connection vector for port a = ',mat2str(a_src)], log_group);
+  clog(['connection vector for port b = ',mat2str(b_src)], log_group);
 
   %%%%%%%%%%%%%%%
   % input ports %
@@ -267,21 +270,18 @@ function bus_mult_init(blk, varargin)
   % fanout control %
   %%%%%%%%%%%%%%%%%%
 
-  %if dupa > 1 || dupb > 1, dup_latency = fan_latency; else dup_latency = 0; end
-  dup_latency = fan_latency;
-
   ypos_tmp = ypos + mult_d*compa/2;
 
   %replicate busses
   reuse_block(blk, 'repa', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(dupa), 'latency', num2str(dup_latency), 'misc', 'off', ... 
+    'replication', num2str(dupa), 'latency', num2str(max(0, dup_latency)), 'misc', 'off', ... 
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'a/1', 'repa/1'); 
 
   ypos_tmp = ypos_tmp + yinc + mult_d*(compa/2 + compb/2);
   
   reuse_block(blk, 'repb', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(dupb), 'latency', num2str(dup_latency), 'misc', 'off', ...
+    'replication', num2str(dupb), 'latency', num2str(max(0, dup_latency)), 'misc', 'off', ...
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'b/1', 'repb/1'); 
   
@@ -345,14 +345,14 @@ function bus_mult_init(blk, varargin)
   for index = 1:compo,
     clog([num2str(index),': type= ', num2str(type_out(index)), ...
     ' quantization= ', num2str(quantization(index)), ...
-    ' overflow= ',num2str(overflow(index))],'bus_mult_init_debug');
+    ' overflow= ',num2str(overflow(index))], log_group);
     switch type_out(index),
       case 0,
         arith_type = 'Unsigned';
       case 1,
         arith_type = 'Signed';
       otherwise,
-        clog(['unknown arithmetic type ',num2str(arith_type)], 'error');
+        clog(['unknown arithmetic type ',num2str(arith_type)], {'error', log_group});
         error(['bus_mult_init: unknown arithmetic type ',num2str(arith_type)]);
     end
     switch quantization(index),
@@ -370,23 +370,26 @@ function bus_mult_init(blk, varargin)
         of = 'Flag as error';
     end  
     clog(['output ',num2str(index),': (',num2str(n_bits_out(index)), ' ', ...
-      num2str(bin_pt_out(index)),') ', arith_type,' ',quant,' ', of], ...
-      'bus_mult_init_debug'); 
+      num2str(bin_pt_out(index)),') ', arith_type,' ',quant,' ', of], log_group); 
 
     mult_name = ['mult',num2str(index)]; 
-    clog(['drawing ',mult_name], 'bus_mult_init_debug');
+    clog(['drawing ',mult_name], log_group);
    
     if strcmp(cmplx_a, 'on') && strcmp(cmplx_b, 'on'), %need complex multiplication
+      if dup_latency >= 0, in_latency = 1;
+      else, in_latency = 0;
+      end
       reuse_block(blk, mult_name, 'casper_library_multipliers/cmult',  ...
         'n_bits_a', num2str(n_bits_a(a_src(index))), 'bin_pt_a', num2str(bin_pt_a(a_src(index))), ...
         'n_bits_b', num2str(n_bits_b(b_src(index))), 'bin_pt_b', num2str(bin_pt_b(b_src(index))), ...
         'n_bits_ab', num2str(n_bits_out(index)), 'bin_pt_ab', num2str(bin_pt_out(index)), ...
         'quantization', quant, 'overflow', of, 'conjugated', 'off', ...
         'multiplier_implementation', multiplier_implementation, ...
-        'mult_latency', 'mult_latency', 'add_latency', 'add_latency', 'conv_latency', 'conv_latency', ...
+        'in_latency', num2str(in_latency), 'mult_latency', num2str(mult_latency), ... 
+        'add_latency', num2str(add_latency), 'conv_latency', num2str(conv_latency), ...
         'Position', [xpos-mult_w/2 ypos_tmp xpos+mult_w/2 ypos_tmp+mult_d-20] );
     else,  
-                                            %standard multiplication 
+      %standard multiplication 
       if strcmp(multiplier_implementation, 'behavioral HDL'),
         use_behavioral_HDL = 'on';
         use_embedded = 'off';
@@ -465,7 +468,7 @@ function bus_mult_init(blk, varargin)
 
   save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 
-  clog('exiting bus_mult_init','trace');
+  clog('exiting bus_mult_init', {log_group, 'trace'});
 
 end %function bus_mult_init
 
