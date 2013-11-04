@@ -197,19 +197,23 @@ function feedback_osc_init(blk, varargin)
   
   %en input
 
-  reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', 'latency', 'bram_latency', 'Position', [285 769 345 791]);
+  reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', ...
+    'reg_retiming', 'on', 'latency', 'bram_latency', 'Position', [285 769 345 791]);
   add_line(blk, 'en/1', 'den0/1');
   add_line(blk, 'den0/1', 'cmult/3');
   add_line(blk, 'den0/1', 'amux/4');
-  reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', 'latency', '2', 'Position', [895 769 955 791]);
+  reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', ...
+    'reg_retiming', 'on', 'latency', '2', 'Position', [895 769 955 791]);
   add_line(blk, 'den0/1', 'den1/1');
 
   %sync
-  reuse_block(blk, 'dsync', 'xbsIndex_r4/Delay', 'latency', 'bram_latency+2', 'Position', [550 859 610 881]);
+  reuse_block(blk, 'dsync', 'xbsIndex_r4/Delay', ...
+    'reg_retiming', 'on', 'latency', 'bram_latency+2', 'Position', [550 859 610 881]);
   add_line(blk, 'sync/1', 'dsync/1');
 
   %misc
-  reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', 'latency', 'bram_latency+2', 'Position', [550 809 610 831]);
+  reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
+    'reg_retiming', 'on', 'latency', 'bram_latency+2', 'Position', [550 809 610 831]);
   add_line(blk, 'misci/1', 'dmisc/1');
 
   %output ports
