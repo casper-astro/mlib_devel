@@ -152,7 +152,8 @@ function[dout, result] = doubles2unsigned(din, n_bits, bin_pt, max_word_size),
           clog(['shifting left over down by ', num2str(safe)], log_group);
           col = bitshift(raw, -1*safe);
           %cut off top bits
-          clog(['masking with 0x', dec2hex((2^extra)-1)], log_group);
+          if ((2^extra)-1 < 2^52), clog(['masking with 0x', dec2hex((2^extra)-1)], log_group);
+          end
           raw = bitand(col, (2^extra)-1);
           raw_bits = extra;
         end
