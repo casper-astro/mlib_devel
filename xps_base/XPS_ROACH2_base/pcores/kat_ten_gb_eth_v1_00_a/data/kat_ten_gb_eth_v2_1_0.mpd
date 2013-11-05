@@ -32,6 +32,7 @@ BEGIN kat_ten_gb_eth
   PARAMETER CPU_RX_ENABLE   = 0,              DT = integer
   PARAMETER CPU_TX_ENABLE   = 0,              DT = integer
   PARAMETER LARGE_PACKETS   = 0,              DT = integer
+  PARAMETER TTL             = 1,              DT = integer
 
   PARAMETER C_BASEADDR = 0xffffffff, DT = std_logic_vector, MIN_SIZE = 0x4000, BUS = SOPB, ADDRESS = BASE, PAIR = C_HIGHADDR
   PARAMETER C_HIGHADDR = 0x00000000, DT = std_logic_vector, BUS = SOPB, ADDRESS = HIGH, PAIR = C_BASEADDR

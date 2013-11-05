@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [12.0, 45.0, 1538.0, 1046.0]
+      Location		      [2136.0, 35.0, 1540.0, 1078.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -28,7 +28,7 @@ Library {
 	DockPosition		"Left"
 	Width			[50]
 	Height			[50]
-	Filter			[8]
+	Filter			[9]
       }
       Object {
 	$PropName		"ExplorerBarInfo"
@@ -41,11 +41,11 @@ Library {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"2"
-	Extents			[1498.0, 875.0]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[1502.0, 915.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
+	Offset			[-8.125, 0.0]
       }
     }
   }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "jack"
+  LastModifiedBy	  "wnew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Oct 02 15:24:15 2013"
-  RTWModifiedTimeStamp	  302628217
-  ModelVersionFormat	  "1.%<AutoIncrement:500>"
+  LastModifiedDate	  "Mon Nov 04 17:34:48 2013"
+  RTWModifiedTimeStamp	  305486393
+  ModelVersionFormat	  "1.%<AutoIncrement:501>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,8 +802,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [12, 45, 1550, 1091]
-    Open		    off
+    Location		    [2136, 35, 3676, 1113]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -866,8 +866,8 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[12, 45, 1550, 1091]
-	Open			on
+	Location		[2136, 35, 3676, 1113]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1430,6 +1430,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 15, 170, 35]
 	      ZOrder		      -17
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1449,8 +1450,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1478,6 +1482,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 65, 170, 85]
 	      ZOrder		      -18
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1497,8 +1502,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1526,6 +1534,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 115, 170, 135]
 	      ZOrder		      -19
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1545,8 +1554,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1574,6 +1586,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 165, 170, 185]
 	      ZOrder		      -20
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1593,8 +1606,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1622,6 +1638,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 215, 170, 235]
 	      ZOrder		      -21
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1641,8 +1658,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1670,6 +1690,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 265, 170, 285]
 	      ZOrder		      -22
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1689,8 +1710,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1718,6 +1742,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 315, 170, 335]
 	      ZOrder		      -23
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1737,8 +1762,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1766,6 +1794,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 365, 170, 385]
 	      ZOrder		      -24
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1785,8 +1814,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1814,6 +1846,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 415, 170, 435]
 	      ZOrder		      -25
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1833,8 +1866,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1862,6 +1898,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 465, 170, 485]
 	      ZOrder		      -26
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1881,8 +1918,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1910,6 +1950,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 515, 170, 535]
 	      ZOrder		      -27
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1929,8 +1970,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1958,6 +2002,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 565, 170, 585]
 	      ZOrder		      -28
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -1977,8 +2022,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -2006,6 +2054,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 615, 170, 635]
 	      ZOrder		      -29
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -2025,8 +2074,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -2054,6 +2106,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 665, 170, 685]
 	      ZOrder		      -30
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -2073,8 +2126,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -2102,6 +2158,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 715, 170, 735]
 	      ZOrder		      -31
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -2121,8 +2178,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -2150,6 +2210,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [100, 765, 170, 785]
 	      ZOrder		      -32
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to"
@@ -2169,8 +2230,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -28283,6 +28347,7 @@ Library {
 	    Name		    "clk_rate"
 	    Prompt		    "User IP Clock Rate (MHz)"
 	    Value		    "100"
+	    Enabled		    "off"
 	  }
 	  Object {
 	    $ObjectID		    168
@@ -60450,7 +60515,7 @@ Library {
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  21
+	  Dimension		  22
 	  Object {
 	    $ObjectID		    292
 	    Type		    "popup"
@@ -60774,6 +60839,15 @@ Library {
 	    Evaluate		    "off"
 	    Visible		    "off"
 	  }
+	  Object {
+	    $ObjectID		    313
+	    Type		    "edit"
+	    Name		    "ttl"
+	    Prompt		    "TTL"
+	    Value		    "hex2dec('123456789abc')"
+	    Evaluate		    "off"
+	    Visible		    "off"
+	  }
 	  PropName		  "Parameters"
 	}
       }
@@ -61043,6 +61117,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 82, 285, 98]
 	  ZOrder		  -29
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61081,6 +61156,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 567, 285, 583]
 	  ZOrder		  -30
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61119,6 +61195,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 607, 285, 623]
 	  ZOrder		  -31
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61157,6 +61234,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 267, 285, 283]
 	  ZOrder		  -32
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61195,6 +61273,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 307, 285, 323]
 	  ZOrder		  -33
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61233,6 +61312,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 387, 285, 403]
 	  ZOrder		  -34
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61271,6 +61351,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 347, 285, 363]
 	  ZOrder		  -35
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61309,6 +61390,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [235, 227, 285, 243]
 	  ZOrder		  -36
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -61342,11 +61424,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_led_rx"
+	  Name			  "xps_library_ten_Gbe_v2_led_rx"
 	  SID			  "326:37"
 	  Ports			  [1, 1]
 	  Position		  [665, 692, 765, 708]
 	  ZOrder		  -37
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61365,8 +61448,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61384,11 +61470,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_led_tx"
+	  Name			  "xps_library_ten_Gbe_v2_led_tx"
 	  SID			  "326:38"
 	  Ports			  [1, 1]
 	  Position		  [665, 737, 765, 753]
 	  ZOrder		  -38
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61407,8 +61494,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61426,11 +61516,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_led_up"
+	  Name			  "xps_library_ten_Gbe_v2_led_up"
 	  SID			  "326:39"
 	  Ports			  [1, 1]
 	  Position		  [665, 647, 765, 663]
 	  ZOrder		  -39
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61449,8 +61540,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61468,20 +61562,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rst"
+	  Name			  "xps_library_ten_Gbe_v2_rst"
 	  SID			  "326:40"
 	  Ports			  [1, 1]
 	  Position		  [405, 82, 455, 98]
 	  ZOrder		  -40
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -61500,20 +61598,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_ack"
+	  Name			  "xps_library_ten_Gbe_v2_rx_ack"
 	  SID			  "326:41"
 	  Ports			  [1, 1]
 	  Position		  [405, 567, 455, 583]
 	  ZOrder		  -41
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -61532,11 +61634,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_bad_frame"
+	  Name			  "xps_library_ten_Gbe_v2_rx_bad_frame"
 	  SID			  "326:42"
 	  Ports			  [1, 1]
 	  Position		  [665, 537, 765, 553]
 	  ZOrder		  -42
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61555,8 +61658,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61574,11 +61680,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_data"
+	  Name			  "xps_library_ten_Gbe_v2_rx_data"
 	  SID			  "326:43"
 	  Ports			  [1, 1]
 	  Position		  [665, 322, 765, 338]
 	  ZOrder		  -43
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61597,8 +61704,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61616,11 +61726,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_end_of_frame"
+	  Name			  "xps_library_ten_Gbe_v2_rx_end_of_frame"
 	  SID			  "326:44"
 	  Ports			  [1, 1]
 	  Position		  [665, 502, 765, 518]
 	  ZOrder		  -44
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61639,8 +61750,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61658,11 +61772,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_overrun"
+	  Name			  "xps_library_ten_Gbe_v2_rx_overrun"
 	  SID			  "326:45"
 	  Ports			  [1, 1]
 	  Position		  [665, 572, 765, 588]
 	  ZOrder		  -45
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61681,8 +61796,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61700,20 +61818,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_overrun_ack"
+	  Name			  "xps_library_ten_Gbe_v2_rx_overrun_ack"
 	  SID			  "326:46"
 	  Ports			  [1, 1]
 	  Position		  [405, 607, 455, 623]
 	  ZOrder		  -46
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -61732,11 +61854,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_source_ip"
+	  Name			  "xps_library_ten_Gbe_v2_rx_source_ip"
 	  SID			  "326:47"
 	  Ports			  [1, 1]
 	  Position		  [665, 412, 765, 428]
 	  ZOrder		  -47
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61755,8 +61878,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,50,419,481"
@@ -61774,11 +61900,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_source_port"
+	  Name			  "xps_library_ten_Gbe_v2_rx_source_port"
 	  SID			  "326:48"
 	  Ports			  [1, 1]
 	  Position		  [665, 457, 765, 473]
 	  ZOrder		  -48
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61797,8 +61924,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,50,419,481"
@@ -61816,11 +61946,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_rx_valid"
+	  Name			  "xps_library_ten_Gbe_v2_rx_valid"
 	  SID			  "326:49"
 	  Ports			  [1, 1]
 	  Position		  [665, 367, 765, 383]
 	  ZOrder		  -49
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61839,8 +61970,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61858,11 +61992,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_afull"
+	  Name			  "xps_library_ten_Gbe_v2_tx_afull"
 	  SID			  "326:50"
 	  Ports			  [1, 1]
 	  Position		  [665, 227, 765, 243]
 	  ZOrder		  -50
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -61881,8 +62016,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -61900,20 +62038,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_data"
+	  Name			  "xps_library_ten_Gbe_v2_tx_data"
 	  SID			  "326:51"
 	  Ports			  [1, 1]
 	  Position		  [405, 267, 455, 283]
 	  ZOrder		  -51
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -61932,20 +62074,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_dest_ip"
+	  Name			  "xps_library_ten_Gbe_v2_tx_dest_ip"
 	  SID			  "326:52"
 	  Ports			  [1, 1]
 	  Position		  [405, 307, 455, 323]
 	  ZOrder		  -52
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -61964,20 +62110,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_dest_port"
+	  Name			  "xps_library_ten_Gbe_v2_tx_dest_port"
 	  SID			  "326:53"
 	  Ports			  [1, 1]
 	  Position		  [405, 347, 455, 363]
 	  ZOrder		  -53
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -61996,20 +62146,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_end_of_frame"
+	  Name			  "xps_library_ten_Gbe_v2_tx_end_of_frame"
 	  SID			  "326:54"
 	  Ports			  [1, 1]
 	  Position		  [405, 387, 455, 403]
 	  ZOrder		  -54
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -62028,11 +62182,12 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_overflow"
+	  Name			  "xps_library_ten_Gbe_v2_tx_overflow"
 	  SID			  "326:55"
 	  Ports			  [1, 1]
 	  Position		  [665, 267, 765, 283]
 	  ZOrder		  -55
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
 	  SourceType		  "Xilinx Gateway In Block"
 	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx fixed p"
@@ -62051,8 +62206,11 @@ Library {
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -62070,20 +62228,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "roach2_10ge_port_ten_Gbe_v2_tx_valid"
+	  Name			  "xps_library_ten_Gbe_v2_tx_valid"
 	  SID			  "326:56"
 	  Ports			  [1, 1]
 	  Position		  [405, 227, 455, 243]
 	  ZOrder		  -56
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
 	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
 	  "ding on how they are configured."
+	  inherit_from_input	  off
 	  hdl_port		  on
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -62208,7 +62370,7 @@ Library {
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_led_tx"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_led_tx"
 	  SrcPort		  1
 	  DstBlock		  "led_tx"
 	  DstPort		  1
@@ -62216,11 +62378,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant4"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_led_tx"
+	  DstBlock		  "xps_library_ten_Gbe_v2_led_tx"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_led_rx"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_led_rx"
 	  SrcPort		  1
 	  DstBlock		  "led_rx"
 	  DstPort		  1
@@ -62228,11 +62390,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant3"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_led_rx"
+	  DstBlock		  "xps_library_ten_Gbe_v2_led_rx"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_led_up"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_led_up"
 	  SrcPort		  1
 	  DstBlock		  "led_up"
 	  DstPort		  1
@@ -62240,11 +62402,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant1"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_led_up"
+	  DstBlock		  "xps_library_ten_Gbe_v2_led_up"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_end_of_frame"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
 	  SrcPort		  1
 	  DstBlock		  "rx_end_of_frame"
 	  DstPort		  1
@@ -62252,11 +62414,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant10"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_end_of_frame"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_port"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
 	  SrcPort		  1
 	  DstBlock		  "rx_source_port"
 	  DstPort		  1
@@ -62264,23 +62426,23 @@ Library {
 	Line {
 	  SrcBlock		  "Constant9"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_port"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Constant8"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_ip"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_source_ip"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
 	  SrcPort		  1
 	  DstBlock		  "rx_source_ip"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_end_of_frame"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
 	  SrcPort		  1
 	  DstBlock		  "Terminator8"
 	  DstPort		  1
@@ -62289,7 +62451,7 @@ Library {
 	  SrcBlock		  "convert_tx_end_of_frame"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_end_of_frame"
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
 	  DstPort		  1
 	}
 	Line {
@@ -62300,7 +62462,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_port"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
 	  SrcPort		  1
 	  DstBlock		  "Terminator7"
 	  DstPort		  1
@@ -62309,7 +62471,7 @@ Library {
 	  SrcBlock		  "convert_tx_port"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_port"
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
 	  DstPort		  1
 	}
 	Line {
@@ -62320,7 +62482,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rst"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rst"
 	  SrcPort		  1
 	  DstBlock		  "Terminator5"
 	  DstPort		  1
@@ -62328,7 +62490,7 @@ Library {
 	Line {
 	  SrcBlock		  "convert_rst"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rst"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rst"
 	  DstPort		  1
 	}
 	Line {
@@ -62338,7 +62500,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_valid"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_valid"
 	  SrcPort		  1
 	  DstBlock		  "rx_valid"
 	  DstPort		  1
@@ -62346,11 +62508,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant7"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_valid"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_valid"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_ack"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_ack"
 	  SrcPort		  1
 	  DstBlock		  "Terminator3"
 	  DstPort		  1
@@ -62358,36 +62520,36 @@ Library {
 	Line {
 	  SrcBlock		  "Constant6"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_data"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_data"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Constant2"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_afull"
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_afull"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_valid"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_valid"
 	  SrcPort		  1
 	  DstBlock		  "Terminator2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_ip"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
 	  SrcPort		  1
 	  DstBlock		  "Terminator1"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_data"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_data"
 	  SrcPort		  1
 	  DstBlock		  "Terminator"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_afull"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_afull"
 	  SrcPort		  1
 	  Points		  [0, 0]
 	  DstBlock		  "tx_afull"
@@ -62397,7 +62559,7 @@ Library {
 	  SrcBlock		  "convert_tx_valid"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_valid"
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_valid"
 	  DstPort		  1
 	}
 	Line {
@@ -62411,7 +62573,7 @@ Library {
 	  SrcBlock		  "convert_tx_dest_ip"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_dest_ip"
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
 	  DstPort		  1
 	}
 	Line {
@@ -62425,7 +62587,7 @@ Library {
 	  SrcBlock		  "convert_tx_data"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_data"
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_data"
 	  DstPort		  1
 	}
 	Line {
@@ -62436,7 +62598,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_data"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_data"
 	  SrcPort		  1
 	  DstBlock		  "rx_data"
 	  DstPort		  1
@@ -62445,7 +62607,7 @@ Library {
 	  SrcBlock		  "convert_rx_ack"
 	  SrcPort		  1
 	  Points		  [0, 0]
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_ack"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_ack"
 	  DstPort		  1
 	}
 	Line {
@@ -62456,7 +62618,7 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_bad_frame"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
 	  SrcPort		  1
 	  DstBlock		  "rx_bad_frame"
 	  DstPort		  1
@@ -62464,11 +62626,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant5"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_bad_frame"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
 	  SrcPort		  1
 	  DstBlock		  "rx_overrun"
 	  DstPort		  1
@@ -62476,11 +62638,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant11"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun_ack"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_overrun_ack"
 	  SrcPort		  1
 	  DstBlock		  "Terminator6"
 	  DstPort		  1
@@ -62488,7 +62650,7 @@ Library {
 	Line {
 	  SrcBlock		  "convert_rx_overrun_ack"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_rx_overrun_ack"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun_ack"
 	  DstPort		  1
 	}
 	Line {
@@ -62500,11 +62662,11 @@ Library {
 	Line {
 	  SrcBlock		  "Constant12"
 	  SrcPort		  1
-	  DstBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_overflow"
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "roach2_10ge_port_ten_Gbe_v2_tx_overflow"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
 	  SrcPort		  1
 	  DstBlock		  "tx_overflow"
 	  DstPort		  1
@@ -62545,7 +62707,7 @@ MatData {
   DataRecord {
     Tag			    DataTag0
     Data		    "  %)30     .    : ,   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +MZ*P4.    V (   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !V=#04.    V (   "
     "8    (     @         %    \"     $    !     0         %  0 #     $    8    9&5F875L=',     8F]A<F1?8V]U;G0 #@   $ "
     "\"   &    \"     $         !0    @    !    \"     $         #@   $     &    \"     0         !0    @    !    \"@  "
     "  $         $     H   !B;&]C:U]N86UE        #@   %     &    \"     0         !0    @    !    '     $         $    "
