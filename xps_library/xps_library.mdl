@@ -60844,7 +60844,7 @@ Library {
 	    Type		    "edit"
 	    Name		    "ttl"
 	    Prompt		    "TTL"
-	    Value		    "hex2dec('123456789abc')"
+	    Value		    "hex2dec('FF')"
 	    Evaluate		    "off"
 	    Visible		    "off"
 	  }

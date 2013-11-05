@@ -50,7 +50,7 @@ s.fab_udp        = ['0x', dec2hex(eval(get_param(blk_name, 'fab_udp')))  ];
 s.fab_gate       = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
 s.fab_en         = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));
 s.large_packets  = num2str(strcmp(get_param(blk_name, 'large_frames'),'on'));
-s.ttl            = get_param(blk_name, 'ttl');
+s.ttl            = ['0x', dec2hex(eval(get_param(blk_name, 'ttl')))   ];
 
 %convert (more intuitive) mask values to defines to be passed on if using ROACH2
 switch s.hw_sys
