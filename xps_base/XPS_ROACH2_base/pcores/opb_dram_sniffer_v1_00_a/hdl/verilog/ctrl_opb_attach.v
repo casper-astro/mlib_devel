@@ -23,6 +23,7 @@ module ctrl_opb_attach #(
     output 	  cpu_override_sel,
     input [3:0]   mem_dram_state,
     input [3:0]   mem_opb_state,
+    input [7:0]   max_clks,
     input [3:0]   arbiter_state,
     input         arbiter_conflict,
     input 	  phy_ready
@@ -41,6 +42,7 @@ module ctrl_opb_attach #(
   localparam REG_OVERRIDE = 2;
   localparam REG_ARBSTATE = 3;
   localparam REG_MEMSTATE = 4;
+  
 
   /**************** Control Registers OPB Attachment ******************/
   
@@ -56,11 +58,17 @@ module ctrl_opb_attach #(
   reg [2:0] opb_data_sel;
   reg override_en_reg;
   reg override_sel_reg;
+  
+  /* Continuous Read Logic */
+  reg [0:31] Sl_DBus_reg;
+  
+  /* LV testing */
+  reg chip_select;
 
   always @(posedge OPB_Clk) begin
     Sl_errAck_reg  <= 1'b0;
     Sl_xferAck_reg <= 1'b0;
-
+    chip_select <=0;
     if (OPB_Rst) begin
       soft_addr_reg    <= 16'b0;
       override_en_reg  <= 1'b0;
@@ -68,68 +76,65 @@ module ctrl_opb_attach #(
     end else begin
       if (opb_sel && !Sl_xferAck_reg) begin
         opb_data_sel   <= opb_addr[4:2];
-        case (opb_data_sel)  /* convert byte to word addressing */
-          REG_SOFTADDR: begin
-            Sl_xferAck_reg <= 1'b1;
-            if (!OPB_RNW) begin
-              if (OPB_BE[3])
-                soft_addr_reg[7:0]  <= OPB_DBus[24:31];
-              if (OPB_BE[2])
-                soft_addr_reg[15:8] <= OPB_DBus[16:23];
-            end
-          end
-	  REG_PHYREADY: begin
-            Sl_xferAck_reg <= 1'b1;
-	  end
-	  REG_OVERRIDE: begin
-	    Sl_xferAck_reg   <= 1'b1;
-            if (!OPB_RNW) begin
-              if (OPB_BE[3]) begin
-		 override_en_reg  <= OPB_DBus[31];
-	         override_sel_reg <= OPB_DBus[24];
-	      end
-	    end
-	  end
-	  REG_ARBSTATE: begin
-	    Sl_xferAck_reg   <= 1'b1;
-	  end
-	  REG_MEMSTATE: begin
-	    Sl_xferAck_reg   <= 1'b1;
-	  end
-        endcase
+		  chip_select    <= 1;
+		  if (chip_select==1) begin
+           case (opb_data_sel)  /* convert byte to word addressing */
+             REG_SOFTADDR: begin
+               Sl_xferAck_reg <= 1'b1;
+               if (!OPB_RNW) begin
+                 if (OPB_BE[3])
+                   soft_addr_reg[7:0]  <= OPB_DBus[24:31];
+                 if (OPB_BE[2])
+                   soft_addr_reg[15:8] <= OPB_DBus[16:23];
+               end else begin
+                  Sl_DBus_reg <= {16'h0, soft_addr_reg};
+               end
+             end
+	          REG_PHYREADY: begin
+               Sl_xferAck_reg <= 1'b1;
+               if (!OPB_RNW) begin
+               end else begin
+                  Sl_DBus_reg <= {31'h0, phy_ready};
+               end
+	          end
+	          REG_OVERRIDE: begin
+   	          Sl_xferAck_reg   <= 1'b1;
+                if (!OPB_RNW) begin
+                   if (OPB_BE[3]) begin
+		      			override_en_reg  <= OPB_DBus[31];
+				      	override_sel_reg <= OPB_DBus[24];
+	                end
+	             end else begin
+                   Sl_DBus_reg <= {24'b0, override_en_reg, 6'b0, override_sel_reg};
+                end
+	          end
+	          REG_ARBSTATE: begin
+         	    Sl_xferAck_reg   <= 1'b1;
+	             if (!OPB_RNW) begin
+                end else begin
+                  Sl_DBus_reg <= {24'b0, arbiter_conflict, 3'b0, arbiter_state};
+                end
+             end
+         	 REG_MEMSTATE: begin
+	             Sl_xferAck_reg   <= 1'b1;
+         	    if (!OPB_RNW) begin
+                end else begin
+                   Sl_DBus_reg <= {16'b0,max_clks, mem_opb_state, mem_dram_state};
+                end
+             end
+             default: begin
+                if (!OPB_RNW) begin
+                end else begin
+                   Sl_DBus_reg <= 32'h0;
+                end
+             end
+           endcase
+			end // if chip select
       end
     end
   end
 
-  /* Continuous Read Logic */
-  reg [0:31] Sl_DBus_reg;
 
-  always @(*) begin
-    if (Sl_xferAck_reg) begin
-      case (opb_data_sel) 
-        REG_SOFTADDR: begin
-          Sl_DBus_reg <= {16'h0, soft_addr_reg};
-        end
-        REG_PHYREADY: begin
-          Sl_DBus_reg <= {31'h0, phy_ready};
-        end
-        REG_OVERRIDE: begin
-          Sl_DBus_reg <= {24'b0, override_en_reg, 6'b0, override_sel_reg};
-        end
-        REG_ARBSTATE: begin
-          Sl_DBus_reg <= {24'b0, arbiter_conflict, 3'b0, arbiter_state};
-        end
-        REG_MEMSTATE: begin
-          Sl_DBus_reg <= {24'b0, mem_opb_state, mem_dram_state};
-        end
-        default: begin
-          Sl_DBus_reg <= 32'h0;
-        end
-      endcase
-    end else begin
-      Sl_DBus_reg <= 32'b0;
-    end
-  end
 
   /* OPB output assignments */
   assign Sl_retry    = 1'b0;
