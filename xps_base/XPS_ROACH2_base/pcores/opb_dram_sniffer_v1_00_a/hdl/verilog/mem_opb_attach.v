@@ -34,15 +34,17 @@ module mem_opb_attach #(
 
     /* debug outputs */
     output [3:0]   dram_state,
-    output [3:0]   cpu_state
+    output [3:0]   cpu_state,
+    output [7:0]   max_clks
   );
 
    /* OPB states */
    localparam OPB_IDLE     = 4'h0;
-   localparam OPB_READ     = 4'h1;
-   localparam OPB_READ_X   = 4'h2;
-   localparam OPB_WRITE    = 4'h3;
-   localparam OPB_WRITE_X  = 4'h4;
+   localparam OPB_SELECT   = 4'h1;
+   localparam OPB_READ     = 4'h2;
+   localparam OPB_READ_X   = 4'h3;
+   localparam OPB_WRITE    = 4'h4;
+   localparam OPB_WRITE_X  = 4'h5;
 
    /* OPB signals */
    reg [3:0] 	   opb_state;
@@ -84,84 +86,102 @@ module mem_opb_attach #(
    reg 		   dram_wdf_mask_reg;
    reg 		   dram_wdf_wren_reg;
 
+   /* diagnostic LV*/
+   reg [7:0] num_clks;
+	reg [7:0] max_clks_reg;
+
    /* OPB state machine */
    always @ (posedge OPB_Clk) begin
 
       if (OPB_Rst) begin
 
-	 opb_ack         <= 1'b0;
-	 opb_error       <= 1'b0;
-	 opb_retry       <= 1'b0;
-	 opb_toutsup     <= 1'b0;
-	 opb_data_out    <= 32'b0;
-	 opb_state       <= OPB_IDLE;
+			opb_ack         <= 1'b0;
+			opb_error       <= 1'b0;
+			opb_retry       <= 1'b0;
+			opb_toutsup     <= 1'b0;
+			opb_data_out    <= 32'b0;
+			opb_state       <= OPB_IDLE;
 
-	 ddr3_read_en    <= 1'b0;
-	 ddr3_write_en   <= 1'b0;
-	 ddr3_write_data <= 32'b0;
-
+			ddr3_read_en    <= 1'b0;
+			ddr3_write_en   <= 1'b0;
+			ddr3_write_data <= 32'b0;
+			max_clks_reg <= 0;
       end else begin // if (OPB_Rst)
 	
-	 opb_ack         <= 1'b0;
-	 opb_error       <= 1'b0;
-	 opb_retry       <= 1'b0;
-	 opb_toutsup     <= 1'b0;
-	 opb_data_out    <= 32'b0;
-         
+			opb_ack         <= 1'b0;
+			opb_error       <= 1'b0;
+			opb_retry       <= 1'b0;
+			opb_toutsup     <= 1'b0;
+			opb_data_out    <= 32'b0;
+         num_clks <= num_clks+1;
+         if (num_clks >= max_clks_reg) begin
+            max_clks_reg <= num_clks+1;
+         end
 
 	 case (opb_state)
 
 	   OPB_IDLE: begin
 	      /* Default idle/wait state */
-
+              num_clks <= 0;
 	      if (OPB_select) begin
 
 		 /* We've been selected by master */
 
 		 if (OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR) begin
-
+                    
 		    /* Address is valid, move on */
-
+                     
 		    opb_addr     <= OPB_ABus - C_BASEADDR;
 
-		    if (OPB_RNW) begin
-
-		       /* We're reading, change states */
-
-		       opb_state <= OPB_READ;
-
-		    end else begin // if (OPB_RNW)
-
-		       /* We're writing, change states */
-
-		       opb_state <= OPB_WRITE;
-
-		    end // else: if (OPB_RNW)
-
+                    opb_state    <= OPB_SELECT;
+                    
 		 end // if (OPB_ABus >= C_BASEADDR && OPB_ABus <= C_HIGHADDR)
 
 	      end // if (OPB_select)
 
 	   end // case: OPB_IDLE
+           
+           OPB_SELECT: begin
+              if (OPB_select) begin
+	         if (OPB_RNW) begin
 
+                    /* We're reading, change states */
+
+                    opb_state <= OPB_READ;
+
+                 end else begin // if (OPB_RNW)
+
+                    /* We're writing, change states */
+
+                    opb_state <= OPB_WRITE;
+
+                 end // else: if (OPB_RNW)
+	      end else begin
+                 opb_state <= OPB_IDLE;
+              end
+           end 
+           
 	   OPB_READ: begin
+              if (OPB_select) begin
+	         /* Start the DDR3 read */
 
-	      /* Start the DDR3 read */
+	         opb_toutsup     <= 1'b1;
+	         ddr3_read_en    <= 1'b1;
 
-	      opb_toutsup     <= 1'b1;
-	      ddr3_read_en    <= 1'b1;
+	         if (ddr3_read_done) begin
+	         //if (ddr3_read_done && !ddr3_read_done_z) begin //read variable holding dram value
 
-	      if (ddr3_read_done) begin
-	      //if (ddr3_read_done && !ddr3_read_done_z) begin //read variable holding dram value
+		    /* Read is done, transfer data */
 
-		 /* Read is done, transfer data */
+		    ddr3_read_en <= 1'b0;
+		    opb_state    <= OPB_READ_X;
+   		    opb_data_out <= ddr3_read_data;
+		    opb_ack      <= 1'b1;
 
-		 ddr3_read_en <= 1'b0;
-		 opb_state    <= OPB_READ_X;
-		 opb_data_out <= ddr3_read_data;
-		 opb_ack      <= 1'b1;
-
-	      end
+	         end
+              end else begin   /* if it is hanging here and DDR3_idle*/
+                 opb_state <= OPB_IDLE;
+              end  
 	   end // case: OPB_READ
 	   
 	   OPB_READ_X: begin
@@ -169,25 +189,27 @@ module mem_opb_attach #(
            end
  
 	   OPB_WRITE: begin
+              if (OPB_select) begin
+	         /* Start the DDR3 write */
 
-	      /* Start the DDR3 write */
+	         opb_toutsup     <= 1'b1;
+	         ddr3_write_en   <= 1'b1;
+	         ddr3_write_data <= OPB_DBus;
 
-	      opb_toutsup     <= 1'b1;
-	      ddr3_write_en   <= 1'b1;
-	      ddr3_write_data <= OPB_DBus;
+	         if (ddr3_write_done) begin
 
-	      if (ddr3_write_done) begin
-
-		 /* Write is done, finish up */
+	   	    /* Write is done, finish up */
 		 
-		 ddr3_write_en <= 1'b0;
-		 opb_state     <= OPB_IDLE;
-		 opb_ack       <= 1'b1;
+		    ddr3_write_en <= 1'b0;
+		    opb_state     <= OPB_IDLE;
+		    opb_ack       <= 1'b1;
 
-	      end // if (ddr3_write_done)
+	         end // if (ddr3_write_done)
 
-	   end // case: OPB_READ
-	   
+	       end else begin
+                  opb_state <= OPB_IDLE;
+               end
+	    end
 	 endcase // case (opb_state)
 
       end // else: !if(OPB_Rst)
@@ -316,6 +338,7 @@ module mem_opb_attach #(
 
    end // always @ (posedge dram_clk)
 
+   assign max_clks      = max_clks_reg;
    assign dram_state    = ddr3_state;
    assign dram_addr     = dram_addr_reg;
    assign dram_cmd      = dram_cmd_reg;
@@ -324,5 +347,6 @@ module mem_opb_attach #(
    assign dram_wdf_end  = dram_wdf_end_reg;
    assign dram_wdf_mask = dram_wdf_mask_reg;
    assign dram_wdf_wren = dram_wdf_wren_reg;
+ 
 
 endmodule
