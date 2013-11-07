@@ -1,0 +1,749 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns="http://www.w3.org/TR/REC-html40"
+ xmlns:w="urn:schemas-microsoft-com:office:word"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta name="ProgId" content="Word.Document">
+  <meta name="Generator" content="Microsoft Word 11">
+  <meta name="Originator" content="Microsoft Word 11">
+  <link rel="File-List"
+ href="Changelog_for_proc_common_files/filelist.xml">
+  <link rel="Edit-Time-Data"
+ href="Changelog_for_proc_common_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+  <title>Change log for PLBv46_Slave_Single</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>TITAFKAA</o:Author>
+  <o:LastAuthor>TITAFKAA</o:LastAuthor>
+  <o:Revision>3</o:Revision>
+  <o:TotalTime>6</o:TotalTime>
+  <o:Created>2008-11-26T01:43:00Z</o:Created>
+  <o:LastSaved>2008-11-26T01:51:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>71</o:Words>
+  <o:Characters>410</o:Characters>
+  <o:Company>Xilinx</o:Company>
+  <o:Lines>3</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>480</o:CharactersWithSpaces>
+  <o:Version>11.9999</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>BestFit</w:Zoom>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+  <link rel="Stylesheet" type="text/css" media="all"
+ href="../../../../../../doc/usenglish/css/xilhtml.css">
+  <style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;
+	mso-font-alt:"Arial Unicode MS";
+	mso-font-charset:128;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 134676480 16 0 131072 0;}
+@font-face
+	{font-family:"Arial Unicode MS";
+	panose-1:2 11 6 4 2 2 2 2 2 4;
+	mso-font-charset:128;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-1 -369098753 63 0 4129279 0;}
+@font-face
+	{font-family:"\@Arial Unicode MS";
+	panose-1:2 11 6 4 2 2 2 2 2 4;
+	mso-font-charset:128;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-1 -369098753 63 0 4129279 0;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:128;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 134676480 16 0 131072 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"MS Mincho";}
+pre
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"MS Mincho";}
+p.level1heading, li.level1heading, div.level1heading
+	{mso-style-name:level1heading;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.5pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"MS Mincho";
+	color:black;
+	font-weight:bold;}
+p.level2heading, li.level2heading, div.level2heading
+	{mso-style-name:level2heading;
+	margin-top:24.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"MS Mincho";
+	font-weight:bold;}
+p.level3heading, li.level3heading, div.level3heading
+	{mso-style-name:level3heading;
+	margin-top:24.0pt;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"MS Mincho";
+	font-weight:bold;}
+p.greybackground, li.greybackground, div.greybackground
+	{mso-style-name:greybackground;
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	background:#CCCCCC;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"MS Mincho";}
+p.preformatfont, li.preformatfont, div.preformatfont
+	{mso-style-name:preformatfont;
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:11.5pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"MS Mincho";}
+p.copyright, li.copyright, div.copyright
+	{mso-style-name:copyright;
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"MS Mincho";}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:157353789;
+	mso-list-template-ids:-857557162;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level3
+	{mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l1
+	{mso-list-id:1319724817;
+	mso-list-template-ids:-1898421750;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l2
+	{mso-list-id:1484617940;
+	mso-list-template-ids:2014350562;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3
+	{mso-list-id:1861427341;
+	mso-list-template-ids:-390409660;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3:level3
+	{mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l3:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4
+	{mso-list-id:1993094874;
+	mso-list-template-ids:78662976;}
+@list l4:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l4:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level3
+	{mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level5
+	{mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level6
+	{mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level8
+	{mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level9
+	{mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l5
+	{mso-list-id:2087605412;
+	mso-list-template-ids:-1123756052;}
+@list l5:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+  </style><!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!-- saved from url=(0100)http://xinc/sites/epd/ipcd/hardware/hw_process/Shared%20Documents/change_log_handwritten_syntax.html --><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="3074"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+<body style="" lang="EN-US">
+<div class="Section1">
+<h3>Xilinx Processor IP Library</h3>
+<h1>Change log for <span class="SpellE">proc_common</span></h1>
+<div class="MsoNormal" style="text-align: center;" align="center">
+<hr width="100%" align="center" size="2"></div>
+<br>
+<table class="MsoNormalTable" style="width: 994px; height: 406px;"
+ border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+      </td>
+    </tr>
+<!-- BEGIN CHANGELOG FOR New core version --><!--spacer--> <tr style="">
+      <td
+ style="padding: 0.75pt; background: rgb(204, 204, 204) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+      <p class="level1heading">Changes in 3.00a introduced in 11.5</p>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="level2heading">11.5 - Changes in VHDL/<span
+ class="SpellE">Verilog/Netlist</span> sources (.<span class="SpellE">vhd</span>,
+.v,
+.<span class="SpellE">ngc</span>, .<span class="SpellE">edn</span>) </p>
+      <div class="MsoNormal" style="text-align: center;" align="center">
+      <hr width="100%" align="center" size="2"> </div>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <pre><span style="font-family: Arial;">New Features:</span></pre>
+      <ul type="disc">
+        <li class="MsoNormal" style="">Migrated to the new
+Xilinx FIFO Generator and Block Memory Generator Technology<br>
+        </li>
+        <ul>
+          <li class="MsoNormal" style=""><big><font size="-1"><big>Updated
+the
+            <span style="font-weight: bold;">coregen_comp_defs.vhd</span>
+file to add out the latest Xilinx Fifo
+Generator components (<span style="font-weight: bold;">fifo_generator_v5_3)</span>
+and
+the latest Xilinx Block MemGen component (<span
+ style="font-weight: bold;">blk_mem_gen_v3_3</span>) </big></font></big><big><font
+ size="-1"><big>.</big></font></big></li>
+          <li class="MsoNormal"><big><font size="-1"><big>Updated
+            <span style="font-weight: bold;">async_fifo_fg.vhd
+            </span>and <span style="font-weight: bold;">sync_fifo_fg.vhd</span>
+to call <span style="font-weight: bold;">fifo_generator_5_3</span>
+instead of
+fifo_generator_5_2 for S6 and V6 FPGA families.<br>
+            </big></font></big></li>
+          <li class="MsoNormal"><big><font size="-1"><big>Updated
+            <span style="font-weight: bold;">blk_mem_gen_wrapper.vhd</span>
+to call out <span style="font-weight: bold;">blk_mem_gen_3_3</span>
+instead of </big></font></big><big><font size="-1"><big>blk_mem_gen_3_2</big></font></big><big><font
+ size="-1"><big> for S6 and V6 FPGA families.</big></font></big></li>
+        </ul>
+        <li class="MsoNormal"><small><small>&nbsp;</small></small><br>
+          <small><small> </small></small></li>
+      </ul>
+      <br>
+      <pre><span style="font-family: Arial;">Resolved Issues:</span></pre>
+      <ul type="disc">
+        <big> </big>
+        <li class="MsoNormal" style=""><small><small><span
+ style="font-size: 10pt; font-family: &quot;Arial Unicode MS&quot;;"><br>
+          </span></small></small></li>
+        <big> </big>
+      </ul>
+      <p class="MsoNormal" style=""><o:p>&nbsp;</o:p></p>
+      <p class="MsoNormal"><span
+ style="font-size: 10pt; font-family: Arial;">Known Issues /
+Limitations:</span></p>
+      <span style="font-size: 12pt; font-family: Arial;">
+      <ul type="disc">
+        <li class="MsoNormal" style=""><span style="font-family: Arial;"><o:p>&nbsp;</o:p></span></li>
+      </ul>
+      </span></td>
+    </tr>
+  </tbody>
+</table>
+<table class="MsoNormalTable" style="width: 994px; height: 406px;"
+ border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+      </td>
+    </tr>
+<!-- BEGIN CHANGELOG FOR New core version --><!--spacer--> <tr style="">
+      <td
+ style="padding: 0.75pt; background: rgb(204, 204, 204) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+      <p class="level1heading">Changes in 3.00a introduced in 11.3</p>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="level2heading">11.3 - Changes in VHDL/<span
+ class="SpellE">Verilog/Netlist</span> sources (.<span class="SpellE">vhd</span>,
+.v,
+.<span class="SpellE">ngc</span>, .<span class="SpellE">edn</span>) </p>
+      <div class="MsoNormal" style="text-align: center;" align="center">
+      <hr width="100%" align="center" size="2"> </div>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <pre><span style="font-family: Arial;">New Features:</span></pre>
+      <ul type="disc">
+        <li class="MsoNormal">None<br>
+          <small><small>&nbsp; </small></small><br>
+          <small><small> </small></small></li>
+      </ul>
+      <br>
+      <pre><span style="font-family: Arial;">Resolved Issues:</span></pre>
+      <ul type="disc">
+        <big> </big>
+        <li class="MsoNormal" style=""><small><small><span
+ style="font-size: 10pt; font-family: &quot;Arial Unicode MS&quot;;">Corrected a
+redundant entry of the mux_onehot_f file name in the PAO file.&nbsp;
+This change is
+per CR528607.<br>
+          </span></small></small></li>
+        <big> </big>
+      </ul>
+      <p class="MsoNormal" style=""><o:p>&nbsp;</o:p></p>
+      <p class="MsoNormal"><span
+ style="font-size: 10pt; font-family: Arial;">Known Issues /
+Limitations:</span></p>
+      <span style="font-size: 12pt; font-family: Arial;">
+      <ul type="disc">
+        <li class="MsoNormal" style=""><span style="font-family: Arial;"><o:p>&nbsp;</o:p></span></li>
+      </ul>
+      </span></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<table class="MsoNormalTable" style="width: 994px; height: 406px;"
+ border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+      </td>
+    </tr>
+<!-- BEGIN CHANGELOG FOR New core version --><!--spacer--> <tr style="">
+      <td
+ style="padding: 0.75pt; background: rgb(204, 204, 204) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+      <p class="level1heading">Changes in 3.00a introduced in 11.2</p>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="level2heading">11.2 - Changes in VHDL/<span
+ class="SpellE">Verilog/Netlist</span> sources (.<span class="SpellE">vhd</span>,
+.v,
+.<span class="SpellE">ngc</span>, .<span class="SpellE">edn</span>) </p>
+      <div class="MsoNormal" style="text-align: center;" align="center">
+      <hr width="100%" align="center" size="2"> </div>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <pre><span style="font-family: Arial;">New Features:</span></pre>
+      <ul type="disc">
+        <li class="MsoNormal" style="">Migrated to the new
+Xilinx FIFO Generator and Block Memory Generator Technology<br>
+        </li>
+        <ul>
+          <li class="MsoNormal" style=""><big><font size="-1"><big>Updated
+the
+coregen_comp_defs.vhd file to add out the latest Xilinx Fifo
+Generator components (fifo_generator_v5_1 and fifo_generator_v5_2) and
+the latest Xilinx Block MemGen component (blk_mem_gen_v3_2) in
+place of the old CoreGen components declared in the previous version of
+the </big></font></big><big><font size="-1"><big>coregen_comp_defs.vhd
+            </big></font></big><big><font size="-1"><big>file.</big></font></big></li>
+          <li class="MsoNormal"><big><font size="-1"><big>Updated
+async_fifo_fg.vhd
+and sync_fifo_fg.vhd to call fifo_generator_5_2 instead of
+fifo_generator_5_1</big></font></big></li>
+          <li class="MsoNormal"><big><font size="-1"><big>Updated
+blk_mem_gen_wrapper.vhd to call out blk_mem_gen_3_2 instead of </big></font></big><big><font
+ size="-1"><big>blk_mem_gen_3_1</big></font></big><br>
+            <small><small>&nbsp; </small></small><br>
+            <small><small> </small></small></li>
+        </ul>
+      </ul>
+      <br>
+      <pre><span style="font-family: Arial;">Resolved Issues:</span></pre>
+      <ul type="disc">
+        <big> </big>
+        <li class="MsoNormal" style=""><small><small><span
+ style="font-size: 10pt; font-family: &quot;Arial Unicode MS&quot;;">Corrected a
+tool build issue with blk_mem_gen_3_1</span></small></small></li>
+        <li class="MsoNormal" style=""><small><small><span
+ style="font-size: 10pt; font-family: &quot;Arial Unicode MS&quot;;">Changed the
+log2 function in proc_common_pkg.vhd so that it will no longer generate
+XST Warnings regarding the assertion statement.&nbsp; This change is
+per CR520627.<br>
+          </span></small></small></li>
+        <big> </big>
+      </ul>
+      <p class="MsoNormal" style=""><o:p>&nbsp;</o:p></p>
+      <p class="MsoNormal"><span
+ style="font-size: 10pt; font-family: Arial;">Known Issues /
+Limitations:</span></p>
+      <span style="font-size: 12pt; font-family: Arial;">
+      <ul type="disc">
+        <li class="MsoNormal" style=""><span style="font-family: Arial;"><o:p>&nbsp;</o:p></span></li>
+      </ul>
+      </span></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<table class="MsoNormalTable" style="width: 994px; height: 406px;"
+ border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+      </td>
+    </tr>
+<!-- BEGIN CHANGELOG FOR New core version --><!--spacer--> <tr style="">
+      <td
+ style="padding: 0.75pt; background: rgb(204, 204, 204) none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+      <p class="level1heading">Changes in 3.00a introduced in 11.1</p>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <p class="level2heading">11.1 - Changes in VHDL/<span
+ class="SpellE">Verilog/Netlist</span> sources (.<span class="SpellE">vhd</span>,
+.v,
+.<span class="SpellE">ngc</span>, .<span class="SpellE">edn</span>) </p>
+      <div class="MsoNormal" style="text-align: center;" align="center">
+      <hr width="100%" align="center" size="2"> </div>
+      </td>
+    </tr>
+    <tr style="">
+      <td style="padding: 0.75pt;">
+      <pre><span style="font-family: Arial;">New Features:</span></pre>
+      <ul type="disc">
+        <li class="MsoNormal" style="">Migrated to the new
+Xilinx FIFO Generator and Block Memory Generator Technology<br>
+        </li>
+        <ul>
+          <li class="MsoNormal" style=""><big><font size="-1"><big>Revamped
+the
+coregen_comp_defs.vhd file to call out the latest Xilinx Fifo
+Generator components (fifo_generator_v4_2 and fifo_generator_v4_3) and
+the latest Xilinx Block MemGen component (blk_mem_gen_v2_7) in
+place of the old CoreGen components declared in the previous version of
+the </big></font></big><big><font size="-1"><big>coregen_comp_defs.vhd
+            </big></font></big><big><font size="-1"><big>file.</big></font></big></li>
+          <ul>
+            <li class="MsoNormal" style=""><big><font size="-1"><big>Removed
+support
+for: cam_v5_0, async_fifo_v4_0, async_fifo_v5_1,
+async_fifo_v6_0, async_fifo_v6_1, sync_fifo_v4_0, sync_fifo_v5_0<br>
+              </big></font></big></li>
+          </ul>
+        </ul>
+        <ul>
+          <li class="MsoNormal"><big><font size="-1"><big><o:p>Added
+new
+file blk_mem_gen_wrapper.vhd wrapper file to be used in conjunction
+with
+the </o:p>new coregen_comp_defs.vhd file <o:p>and the new Block
+Memory Generator utility for implementing BRAM based memory functions
+called from HDL.</o:p></big></font></big></li>
+        </ul>
+        <ul>
+          <li class="MsoNormal"><big><font size="-1"><big><o:p>Added
+new
+file async_fifo_fg.vhd wrapper file to be used in conjunction with the </o:p>new
+coregen_comp_defs.vhd
+file <o:p>and the new fifo generator utility for
+implementing async fifos compatible with the old CoreGen async fifo
+implementations called from HDL.<br>
+            </o:p></big></font></big></li>
+        </ul>
+        <ul>
+          <li class="MsoNormal" style=""><big><font size="-1"><big>Added
+new
+file sync_fifo_fg.vhd wrapper file to be used in conjunction with
+the new fifo generator utility for implementing sync fifos compatible
+with the old CoreGen sync fifo implementations called from HDL.</big></font></big><br>
+&nbsp; <br>
+          </li>
+        </ul>
+        <li class="MsoNormal" style=""><small><big>Updated/Changed FPGA
+Family support in the file family_support.vhd</big><br>
+          </small></li>
+        <ul>
+          <li class="MsoNormal" style=""><small>Added these families:
+aspartan3e, aspartan3a, aspartan3an, aspartan3adsp, </small><small>qvirtex4,
+qrvirtex4</small></li>
+          <li class="MsoNormal" style=""><small>Removed family:
+aspartan3an</small></li>
+          <li class="MsoNormal" style=""><small>The BSCAN primitive for
+spartan3e is now BSCAN_SPARTAN3 instead of BSCAN_SPARTAN3E<br>
+            </small></li>
+        </ul>
+      </ul>
+      <br>
+      <pre><span style="font-family: Arial;">Resolved Issues:</span></pre>
+      <ul type="disc">
+        <big> </big>
+        <li class="MsoNormal" style=""><small><small><span
+ class="SpellE"><span
+ style="font-size: 10pt; font-family: &quot;Arial Unicode MS&quot;;">Srl_fifo_rbu_f</span></span><span
+ style="font-size: 10pt; font-family: &quot;Arial Unicode MS&quot;;"> was changed
+in a minor, functionally equivalent way to allow the current XST to
+infer a better implementation of the <span class="SpellE">FIFO_Full</span>
+signal. CR&lt;496211&gt;</span></small></small></li>
+        <big> </big>
+      </ul>
+      <p class="MsoNormal" style=""><o:p>&nbsp;</o:p></p>
+      <p class="MsoNormal"><span
+ style="font-size: 10pt; font-family: Arial;">Known Issues /
+Limitations:</span></p>
+      <span style="font-size: 12pt; font-family: Arial;">
+      <ul type="disc">
+        <li class="MsoNormal" style=""><span style="font-family: Arial;"><o:p>&nbsp;</o:p></span></li>
+      </ul>
+      </span></td>
+    </tr>
+  </tbody>
+</table>
+<p class="MsoNormal" style="margin-bottom: 12pt;"><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br style="">
+<!--[if !supportLineBreakNewLine]--><br style="">
+<!--[endif]--></p>
+<p class="copyright"><o:p>&nbsp;</o:p></p>
+<p class="copyright" style="margin-bottom: 12pt;"><o:p>&nbsp;</o:p></p>
+<p class="copyright"><br>
+Copyright © 1995-2009 Xilinx, Inc. All rights reserved. </p>
+</div>
+</body>
+</html>
