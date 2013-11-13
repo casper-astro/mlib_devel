@@ -23,10 +23,10 @@ module ctrl_opb_attach #(
     output 	  cpu_override_sel,
     input [3:0]   mem_dram_state,
     input [3:0]   mem_opb_state,
-    input [7:0]   max_clks,
     input [3:0]   arbiter_state,
     input         arbiter_conflict,
-    input 	  phy_ready
+    input 	  phy_ready,
+    input [7:0]   max_clks
   );
 
 
@@ -68,7 +68,8 @@ module ctrl_opb_attach #(
   always @(posedge OPB_Clk) begin
     Sl_errAck_reg  <= 1'b0;
     Sl_xferAck_reg <= 1'b0;
-    chip_select <=0;
+    chip_select <= 0;
+	 Sl_DBus_reg <= 32'b0;
     if (OPB_Rst) begin
       soft_addr_reg    <= 16'b0;
       override_en_reg  <= 1'b0;
@@ -122,11 +123,8 @@ module ctrl_opb_attach #(
                    Sl_DBus_reg <= {16'b0,max_clks, mem_opb_state, mem_dram_state};
                 end
              end
-             default: begin
-                if (!OPB_RNW) begin
-                end else begin
-                   Sl_DBus_reg <= 32'h0;
-                end
+             default: begin           
+                Sl_DBus_reg <= 32'h0;
              end
            endcase
 			end // if chip select
