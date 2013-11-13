@@ -71,6 +71,7 @@ module opb_dram_sniffer #(
   wire [3:0]	   mem_opb_state;
   wire [3:0] 	   arbiter_state;
   wire 	           arbiter_conflict;
+  wire [7:0]       max_clks;
   
    
   ctrl_opb_attach #(
@@ -98,7 +99,9 @@ module opb_dram_sniffer #(
     .mem_opb_state         (mem_opb_state),
     .arbiter_state         (arbiter_state),
     .arbiter_conflict      (arbiter_conflict),
-    .phy_ready             (phy_ready)
+    .phy_ready             (phy_ready),
+
+    .max_clks              (max_clks)
   );
 
 generate if (ENABLE) begin : sniffer_enabled
@@ -151,7 +154,9 @@ generate if (ENABLE) begin : sniffer_enabled
     .dram_wdf_wren       (sniff_wdf_wren),
 
     .dram_state          (mem_dram_state),
-    .cpu_state           (mem_opb_state)
+    .cpu_state           (mem_opb_state),
+
+    .max_clks		 (max_clks)
   );
   
   wire [31:0] sniff_cmd_address = {software_address_bits[8:0], sniff_addr[20:0], 2'b0};
