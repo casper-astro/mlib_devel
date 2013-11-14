@@ -62,7 +62,7 @@ function bus_replicate_init(blk, varargin)
       end
 
       if stage_index == latency-1, rep_required = replication;
-      else, rep_required = prev_rep_required * rep;
+      else, rep_required = min(prev_rep_required * rep, replication);
       end
 
       clog([num2str(rep_required), ' replication required for stage ',num2str(stage_index)], log_group);
