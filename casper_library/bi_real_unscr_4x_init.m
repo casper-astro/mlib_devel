@@ -54,7 +54,7 @@ defaults = { ...
     'bram_map', 'off', ...
     'bram_delays', 'off', ...
     'dsp48_adders', 'off', ...
-    'async', 'on', ...
+    'async', 'off', ...
 };
 
 % Skip init script if mask state has not changed.
@@ -160,7 +160,7 @@ end
 % Add reorder blocks.
 %
 
-if strcmp(bram_map, 'on'), map_latency = bram_latency;
+if strcmp(bram_map, 'on'), map_latency = 3;
 else map_latency = 1;
 end
 
@@ -204,7 +204,7 @@ if strcmp(async,'on'),
 
   reuse_block(blk, 'l0', 'xbsIndex_r4/Logical', ...
     'logical_function', 'AND', 'inputs', '2', 'latency', '0', ...
-    'Position', [195 172 215 198]);
+    'Position', [195 54 215 81]);
   add_line(blk, 'reorder_even/1', 'l0/1'); 
   add_line(blk, 'reorder_even/2', 'l0/2'); 
 
@@ -218,8 +218,7 @@ end
 %
 
 reuse_block(blk, 'count', 'xbsIndex_r4/Counter', ...
-    'Position', [225 60 255 92], ...
-    'ShowName', 'off', ...
+    'Position', [235 61 265 94], ...
     'cnt_type', 'Free Running', ...
     'cnt_to', 'Inf', ...
     'operation', 'Up', ...
@@ -237,8 +236,7 @@ reuse_block(blk, 'count', 'xbsIndex_r4/Counter', ...
     'implementation', 'Fabric');...
 
 reuse_block(blk, 'c0', 'xbsIndex_r4/Constant', ...
-    'Position', [225 25 255 45], ...
-    'ShowName', 'off', ...
+    'Position', [235 25 265 45], ...
     'arith_type', 'Unsigned', ...
     'const', '2^(FFTSize-1)', ...
     'n_bits', 'FFTSize', ...
@@ -256,8 +254,7 @@ add_line(blk, 'c0/1', 'r0/1');
 add_line(blk, 'count/1', 'r0/2');
 
 reuse_block(blk, 'c1', 'xbsIndex_r4/Constant', ...
-    'Position', [225 110 255 130], ...
-    'ShowName', 'off', ...
+    'Position', [235 110 265 130], ...
     'arith_type', 'Unsigned', ...
     'const', '0', ...
     'n_bits', 'FFTSize', ...
@@ -301,10 +298,13 @@ end
 % Add mux blocks.
 %
 
+if strcmp(async, 'on'), latency = 'add_latency + conv_latency + 1 + 1';
+else, latency = 'add_latency + conv_latency + 1';
+end
+
 reuse_block(blk, 'd2', 'xbsIndex_r4/Delay', ...
-    'Position', [470 70 600 90], ...
-    'latency', 'add_latency + conv_latency + 1', ...
-    'reg_retiming', 'on');
+    'Position', [470 77 675 93], ...
+    'latency', latency, 'reg_retiming', 'on');
 add_line(blk, 'reorder_even/1', 'd2/1');
 
 reuse_block(blk, 'mux0', 'xbsIndex_r4/Mux', 'Position', [475 150 500 216]);
@@ -334,6 +334,7 @@ add_line(blk, 'd0/1', 'mux0/3');
 add_line(blk, 'd0/1', 'mux1/2');
 add_line(blk, 'd0/1', 'mux2/3');
 add_line(blk, 'd0/1', 'mux3/2');
+
 %
 % Add sync_delay block.
 %
@@ -351,13 +352,13 @@ if (eval(sync_delay) > 52),
   end
 
   reuse_block(blk, 'sync_delay', ['casper_library_delays/',sync_delay_src], ...
-        'Position', [650 75 700 95], ...
+        'Position', [705 53 740 117], ...
         'LinkStatus', 'inactive', ...
         'DelayLen', num2str(eval(sync_delay)));
 
 else %use register chain
   reuse_block(blk, 'sync_delay', 'casper_library_delays/delay_srl', ...
-      'Position', [650 75 700 95], ...
+      'Position', [705 53 740 117], ...
       'async', async, ...
       'DelayLen', num2str(eval(sync_delay)));
 end
@@ -388,15 +389,62 @@ add_line(blk, 'mux3/1', 'hilbert1/2');
 if strcmp(async, 'on'),
   reuse_block(blk, 'l1', 'xbsIndex_r4/Logical', ...
     'inputs', '2', 'logical_function', 'AND', 'latency', '0', ...
-    'Position', [740 79 760 106]);
+    'Position', [770 66 795 144]);
 
   add_line(blk, 'sync_delay/1', 'l1/1');
-  add_line(blk, 'hilbert0/3', 'l1/2');
 
   add_line(blk, 'd1/1', 'hilbert0/3');
   add_line(blk, 'd1/1', 'hilbert1/3');
-  add_line(blk, 'hilbert0/3', 'sync_delay/2');
 end
+
+%
+% Add fanout delays 
+%
+
+if strcmp(async, 'on'),
+  % en
+  reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'off', ...
+    'Position', [625 92 650 108]);
+  add_line(blk, 'hilbert0/3', 'den0/1');
+  add_line(blk, 'den0/1', 'sync_delay/2');
+  reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'off', ...
+    'Position', [650 117 675 133]);
+  add_line(blk, 'hilbert0/3', 'den1/1');
+  add_line(blk, 'den1/1', 'l1/2');
+  reuse_block(blk, 'den2', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'off', ...
+    'Position', [650 207 675 223]);
+  add_line(blk, 'hilbert0/3', 'den2/1');
+  reuse_block(blk, 'den3', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'off', ...
+    'Position', [650 267 675 283]);
+  add_line(blk, 'hilbert0/3', 'den3/1');
+  
+  reuse_block(blk, 'den4', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'off', ...
+    'Position', [650 402 675 418]);
+  add_line(blk, 'hilbert1/3', 'den4/1');
+  reuse_block(blk, 'den5', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'off', ...
+    'Position', [650 437 675 453]);
+  add_line(blk, 'hilbert1/3', 'den5/1');
+
+  % data
+  reuse_block(blk, 'dd0', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'on', ...
+    'Position', [650 177 675 193]);
+  add_line(blk, 'hilbert0/1', 'dd0/1');
+  reuse_block(blk, 'dd1', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'on', ...
+    'Position', [650 237 675 253]);
+  add_line(blk, 'hilbert0/2', 'dd1/1');
+  reuse_block(blk, 'dd2', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'on', ...
+    'Position', [650 332 675 348]);
+  add_line(blk, 'hilbert1/1', 'dd2/1');
+  reuse_block(blk, 'dd3', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'on', ...
+    'Position', [650 367 675 383]);
+  add_line(blk, 'hilbert1/2', 'dd3/1');
+  reuse_block(blk, 'dd4', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'on', ...
+    'Position', [650 512 675 528]);
+  add_line(blk, 'hilbert1/1', 'dd4/1');
+  reuse_block(blk, 'dd5', 'xbsIndex_r4/Delay', 'latency', '1', 'reg_retiming', 'on', ...
+    'Position', [650 537 675 553]);
+  add_line(blk, 'hilbert1/2', 'dd5/1');
+end %if
 
 %
 % Add delay blocks.
@@ -407,8 +455,8 @@ else delay_src = 'delay_srl';
 end
 
 reuse_block(blk, 'delay0', ['casper_library_delays/',delay_src], 'NamePlacement', 'alternate', ...
-  'Position', [650 205 700 225]);
-reuse_block(blk, 'delay1', ['casper_library_delays/',delay_src], 'Position', [650 230 700 250]);
+  'Position', [705 171 740 229]);
+reuse_block(blk, 'delay1', ['casper_library_delays/',delay_src], 'Position', [705 232 740 288]);
 
 for index = 0:1,
   params = {'DelayLen', num2str(2^(FFTSize-1)), 'async', async};
@@ -419,14 +467,17 @@ for index = 0:1,
   set_param([blk, '/delay', num2str(index)], params{:});
 end
 
-add_line(blk, 'hilbert0/1', 'delay0/1');
-add_line(blk, 'hilbert0/2', 'delay1/1');
-
 if strcmp(async, 'on'),
-  add_line(blk, 'hilbert0/3', 'delay0/2');
-  add_line(blk, 'hilbert0/3', 'delay1/2');
+  add_line(blk, 'dd0/1', 'delay0/1');
+  add_line(blk, 'dd1/1', 'delay1/1');
+  
+  add_line(blk, 'den2/1', 'delay0/2');
+  add_line(blk, 'den3/1', 'delay1/2');
   ms_position = [1050 10 1140 290];
 else
+  add_line(blk, 'hilbert0/1', 'delay0/1');
+  add_line(blk, 'hilbert0/2', 'delay1/1');
+
   ms_position = [1050 18 1155 241];
 end
 
@@ -439,15 +490,21 @@ reuse_block(blk, 'mirror_spectrum', 'casper_library_ffts_internal/mirror_spectru
     'Position', ms_position, ...
     'FFTSize', num2str(FFTSize), ...
     'input_bitwidth', num2str(n_bits), ...
-    'bram_latency', num2str(bram_latency + map_latency), ...
+    'bram_latency', num2str(bram_latency + map_latency + 2), ... 
     'async', async, ...
     'negate_mode', 'logic', ...
     'negate_latency', num2str(ms_negate_latency));
 
 add_line(blk, 'delay0/1', 'mirror_spectrum/2');
 add_line(blk, 'delay1/1', 'mirror_spectrum/4');
-add_line(blk, 'hilbert1/1', 'mirror_spectrum/6');
-add_line(blk, 'hilbert1/2', 'mirror_spectrum/8');
+
+if strcmp(async, 'on')
+  add_line(blk, 'dd2/1', 'mirror_spectrum/6');
+  add_line(blk, 'dd3/1', 'mirror_spectrum/8');
+else,
+  add_line(blk, 'hilbert1/1', 'mirror_spectrum/6');
+  add_line(blk, 'hilbert1/2', 'mirror_spectrum/8');
+end
 
 add_line(blk, 'mirror_spectrum/1', 'sync_out/1');
 add_line(blk, 'mirror_spectrum/2', 'pol1_out/1');
@@ -458,7 +515,7 @@ add_line(blk, 'mirror_spectrum/5', 'pol4_out/1');
 if strcmp(async, 'on'),
   add_line(blk, 'l1/1', 'mirror_spectrum/1');
 
-  add_line(blk, 'hilbert1/3', 'mirror_spectrum/10');
+  add_line(blk, 'den4/1', 'mirror_spectrum/10');
   add_line(blk, 'mirror_spectrum/6', 'dvalid/1');
 else,
   add_line(blk, 'sync_delay/1', 'mirror_spectrum/1');
@@ -480,12 +537,18 @@ reuse_block(blk, 'reorder_out', 'casper_library_reorder/reorder', ...
 
 add_line(blk, 'delay0/1', 'reorder_out/3');
 add_line(blk, 'delay1/1', 'reorder_out/4');
-add_line(blk, 'hilbert1/1', 'reorder_out/5');
-add_line(blk, 'hilbert1/2', 'reorder_out/6');
+
+if strcmp(async, 'on'),
+  add_line(blk, 'dd4/1', 'reorder_out/5');
+  add_line(blk, 'dd5/1', 'reorder_out/6');
+else,
+  add_line(blk, 'hilbert1/1', 'reorder_out/5');
+  add_line(blk, 'hilbert1/2', 'reorder_out/6');
+end
 
 if strcmp(async, 'on'),
   add_line(blk, 'l1/1', 'reorder_out/1');
-  add_line(blk, 'hilbert1/3', 'reorder_out/2');
+  add_line(blk, 'den5/1', 'reorder_out/2');
 else
   add_line(blk, 'sync_delay/1', 'reorder_out/1');
   reuse_block(blk, 'en_out', 'xbsIndex_r4/Constant', ...
