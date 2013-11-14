@@ -441,9 +441,13 @@ if strcmp(async, 'on'),
       'latency', num2str(biplex_direct_latency));
   add_line(blk, ['fft_biplex_real_4x/',num2str(n_streams*2^n_inputs+3)], 'out_del_en_4x/1');
   add_line(blk, 'out_del_en_4x/1', ['fft_direct/',num2str(n_streams*2^n_inputs+3)]);
-  add_line(blk, ['fft_direct/',num2str(n_streams*2^n_inputs+3)], ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)]);
-  
-  add_line(blk, ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)], ['dvalid/1']);
+
+  if strcmp(unscramble, 'on'), 
+    add_line(blk, ['fft_direct/',num2str(n_streams*2^n_inputs+3)], ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)]);
+    add_line(blk, ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)], ['dvalid/1']);
+  else, 
+    add_line(blk, ['fft_direct/', num2str((n_streams*(2^n_inputs))+3)], 'dvalid/1');
+  end
 end
 
 % Delete all unconnected blocks.
