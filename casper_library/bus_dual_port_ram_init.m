@@ -28,7 +28,8 @@ function bus_dual_port_ram_init(blk, varargin)
   defaults = { ...
     'n_bits', 37, 'bin_pts', 36, ...
     'init_vector', [[-1:1/(2^3):1-(1/(2^3))]',[-1:1/(2^3):1-(1/(2^3))]'], ...
-    'max_fanout', 3, 'mem_type', 'Distributed memory', ... 
+    'max_fanout', 3, 'mem_type', 'Distributed memory', ...
+    'bram_optimization', 'Area', ...              %'Speed' 'Area' 
     'async_a', 'on', 'async_b', 'off', 'misc', 'on', ...
     'bram_latency', 1, 'fan_latency', 1, ...
   };  
@@ -53,6 +54,7 @@ function bus_dual_port_ram_init(blk, varargin)
   init_vector               = get_var('init_vector', 'defaults', defaults, varargin{:});
   bram_latency              = get_var('bram_latency', 'defaults', defaults, varargin{:});
   mem_type                  = get_var('mem_type', 'defaults', defaults, varargin{:});
+  bram_optimization         = get_var('bram_optimization', 'defaults', defaults, varargin{:});
   misc                      = get_var('misc', 'defaults', defaults, varargin{:});
   async_a                   = get_var('async_a', 'defaults', defaults, varargin{:});
   async_b                   = get_var('async_b', 'defaults', defaults, varargin{:});
@@ -82,9 +84,30 @@ function bus_dual_port_ram_init(blk, varargin)
   % input ports %
   %%%%%%%%%%%%%%%
 
+  %The calculations below anticipate how BRAMs are to be configured by the Xilinx tools
+  %(as detailed in UG190), explicitly generates these, and attempts to control fanout into
+  %these
+ 
+  %if optimizing for Area, do the best we can minimising fanout while still using whole BRAMs
+  %fanout for very deep BRAMs will be large
+  %TODO this should depend on FPGA architecture
+  if strcmp(bram_optimization, 'Area'), 
+    if      (riv >= 2^12), max_word_size = 9;
+    elseif  (riv >= 2^11), max_word_size = 18;
+    else,                  max_word_size = 36;
+    end
+  %if optimising for Speed, keep splitting word size even if wasting BRAM resources
+  else, 
+    if      (riv >= 2^15), max_word_size = 1;
+    elseif  (riv >= 2^14), max_word_size = 2;
+    elseif  (riv >= 2^13), max_word_size = 4;
+    elseif  (riv >= 2^12), max_word_size = 9;
+    elseif  (riv >= 2^11), max_word_size = 18;
+    else,                  max_word_size = 36;
+    end
+  end
+  
   % translate initialisation matrix based on architecture 
-
-  max_word_size = 36; %hardcoded for the moment
   [translated_init_vecs, result] = doubles2unsigned(init_vector, n_bits, bin_pts, max_word_size);
   if result ~= 0,
     clog('error translating initialisation matrix', {'error', log_group});
@@ -387,13 +410,17 @@ function bus_dual_port_ram_init(blk, varargin)
     initVector = translated_init_vecs(:, bram_index)';
     UserData = struct('initVector', double(initVector));
 
+    if strcmp(bram_optimization, 'Speed'), optimize = 'Speed';
+    else, optimize = 'Area';
+    end
+
     ypos_tmp  = ypos_tmp + bram_d/2; 
     bram_name = ['bram', num2str(bram_index-1)];
     reuse_block(blk, bram_name, 'xbsIndex_r4/Dual Port RAM', ...
       'depth', num2str(rtiv), ...
       'initVector', ['zeros( 1, ',num2str(rtiv),')'], ...
       'write_mode_A', 'Read Before Write', 'write_mode_B', 'Read Before Write', ...
-      'en_a', async_a, 'en_b', async_b, 'optimize', 'Speed', ...
+      'en_a', async_a, 'en_b', async_b, 'optimize', optimize, ...
       'distributed_mem', mem_type, 'latency', num2str(bram_latency), ...
       'Position', [xpos-bram_w/2 ypos_tmp-bram_d/2 xpos+bram_w/2 ypos_tmp+bram_d/2]);
     ypos_tmp  = ypos_tmp + yinc + bram_d/2; 
@@ -402,7 +429,7 @@ function bus_dual_port_ram_init(blk, varargin)
     set_param([blk,'/',bram_name], 'initVector', 'getfield(get_param(gcb, ''UserData''), ''initVector'')');
 
     % bram connections to replication and debus blocks
-    rep_index = ceil(bram_index/max_fanout); %replicated index to use
+    rep_index = mod(bram_index-1, replication) + 1; %replicated index to use
     add_line(blk, ['debus_addra/', num2str(rep_index)], [bram_name, '/1']);
     add_line(blk, ['debus_dina/', num2str(bram_index)], [bram_name, '/2']);
     add_line(blk, ['debus_wea/', num2str(rep_index)], [bram_name, '/3']);
