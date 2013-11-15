@@ -71,7 +71,27 @@ module opb_dram_sniffer #(
   wire [3:0]	   mem_opb_state;
   wire [3:0] 	   arbiter_state;
   wire 	           arbiter_conflict;
-  wire [7:0]       max_clks;
+   wire [31:0]  ddr3_s0_ctr;
+   wire [31:0]  ddr3_s1_ctr;
+   wire [31:0]  ddr3_s2_ctr;
+   wire [31:0]  ddr3_s3_ctr;
+   wire [31:0]  ddr3_s4_ctr;
+   wire [31:0]  ddr3_s5_ctr;
+   wire [31:0]  ddr3_s6_ctr;
+   wire [31:0]  ddr3_s7_ctr;
+   wire [31:0]  ddr3_sx_ctr;
+   
+   /*OPB state counters*/
+   wire [31:0]  opb_s0_ctr;
+   wire [31:0]  opb_s1_ctr;
+   wire [31:0]  opb_s2_ctr;
+   wire [31:0]  opb_s3_ctr;
+   wire [31:0]  opb_s4_ctr;
+   wire [31:0]  opb_s5_ctr;
+   wire [31:0]  opb_sx_ctr;
+	
+   wire       opb_ctr_rst;
+   wire       ddr3_ctr_rst;
   
    
   ctrl_opb_attach #(
@@ -101,7 +121,24 @@ module opb_dram_sniffer #(
     .arbiter_conflict      (arbiter_conflict),
     .phy_ready             (phy_ready),
 
-    .max_clks              (max_clks)
+    .ddr3_s0_ctr (ddr3_s0_ctr),
+    .ddr3_s1_ctr (ddr3_s1_ctr),
+    .ddr3_s2_ctr (ddr3_s2_ctr),
+    .ddr3_s3_ctr (ddr3_s3_ctr),
+    .ddr3_s4_ctr (ddr3_s4_ctr),
+    .ddr3_s5_ctr (ddr3_s5_ctr),
+    .ddr3_s6_ctr (ddr3_s6_ctr),
+    .ddr3_s7_ctr (ddr3_s7_ctr),
+    .ddr3_sx_ctr (ddr3_sx_ctr),
+    .opb_s0_ctr  (opb_s0_ctr),
+    .opb_s1_ctr  (opb_s1_ctr),
+    .opb_s2_ctr  (opb_s2_ctr),
+    .opb_s3_ctr  (opb_s3_ctr),
+    .opb_s4_ctr  (opb_s4_ctr),
+    .opb_s5_ctr  (opb_s5_ctr),
+    .opb_sx_ctr  (opb_sx_ctr),
+    .opb_ctr_rst (opb_ctr_rst),
+    .ddr3_ctr_rst(ddr3_ctr_rst)
   );
 
 generate if (ENABLE) begin : sniffer_enabled
@@ -156,7 +193,24 @@ generate if (ENABLE) begin : sniffer_enabled
     .dram_state          (mem_dram_state),
     .cpu_state           (mem_opb_state),
 
-    .max_clks		 (max_clks)
+    .ddr3_s0_ctr (ddr3_s0_ctr),
+    .ddr3_s1_ctr (ddr3_s1_ctr),
+    .ddr3_s2_ctr (ddr3_s2_ctr),
+    .ddr3_s3_ctr (ddr3_s3_ctr),
+    .ddr3_s4_ctr (ddr3_s4_ctr),
+    .ddr3_s5_ctr (ddr3_s5_ctr),
+    .ddr3_s6_ctr (ddr3_s6_ctr),
+    .ddr3_s7_ctr (ddr3_s7_ctr),
+    .ddr3_sx_ctr (ddr3_sx_ctr),
+    .opb_s0_ctr  (opb_s0_ctr),
+    .opb_s1_ctr  (opb_s1_ctr),
+    .opb_s2_ctr  (opb_s2_ctr),
+    .opb_s3_ctr  (opb_s3_ctr),
+    .opb_s4_ctr  (opb_s4_ctr),
+    .opb_s5_ctr  (opb_s5_ctr),
+    .opb_sx_ctr  (opb_sx_ctr),
+    .opb_ctr_rst (opb_ctr_rst),
+    .ddr3_ctr_rst(ddr3_ctr_rst)
   );
   
   wire [31:0] sniff_cmd_address = {software_address_bits[8:0], sniff_addr[20:0], 2'b0};
