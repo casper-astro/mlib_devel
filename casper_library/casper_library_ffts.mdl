@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [713.0, 146.0, 870.0, 903.0]
+      Location		      [131.0, 110.0, 846.0, 709.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[830.0, 736.0]
+	Extents			[804.0, 551.0]
 	ZoomFactor		[1.0]
 	Offset			[0.0, 0.0]
       }
@@ -53,11 +53,11 @@ Library {
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "paulp"
+  LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Sep 20 14:31:27 2013"
-  RTWModifiedTimeStamp	  301588282
-  ModelVersionFormat	  "1.%<AutoIncrement:71>"
+  LastModifiedDate	  "Wed Oct 23 16:21:04 2013"
+  RTWModifiedTimeStamp	  304446059
+  ModelVersionFormat	  "1.%<AutoIncrement:72>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -701,7 +701,7 @@ Library {
   }
   System {
     Name		    "casper_library_ffts"
-    Location		    [713, 146, 1583, 1049]
+    Location		    [131, 110, 977, 819]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -3124,11 +3124,12 @@ Library {
 	$ClassName		"Simulink.Mask"
 	Type			"fft_unscrambler"
 	Initialization		"fft_unscrambler_init(gcb, ...\n    'n_streams', n_streams, ...\n    'FFTSize',FFTSize, ... \n    'n_"
-	"inputs', n_inputs, ...\n    'n_bits_in', n_bits_in, ...\n    'bram_latency', bram_latency, ....\n    'async', async);"
+	"inputs', n_inputs, ...\n    'n_bits_in', n_bits_in, ...\n    'bram_latency', bram_latency, ...\n    'coeffs_bit_limit"
+	"', coeffs_bit_limit, ...\n    'async', async);"
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  6
+	  Dimension		  7
 	  Object {
 	    $ObjectID		    229
 	    Type		    "edit"
@@ -3166,6 +3167,13 @@ Library {
 	  }
 	  Object {
 	    $ObjectID		    234
+	    Type		    "edit"
+	    Name		    "coeffs_bit_limit"
+	    Prompt		    "Number bits above which to store map coefficients in BRAM (2^? bits)"
+	    Value		    "0"
+	  }
+	  Object {
+	    $ObjectID		    235
 	    Type		    "checkbox"
 	    Name		    "async"
 	    Prompt		    "Asynchronous operation"
@@ -3212,7 +3220,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		235
+	$ObjectID		236
 	$ClassName		"Simulink.Mask"
 	Type			"fft_wideband_real"
 	Description		"A real-sampled wideband FFT."
@@ -3233,7 +3241,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  30
 	  Object {
-	    $ObjectID		    236
+	    $ObjectID		    237
 	    Type		    "edit"
 	    Name		    "n_streams"
 	    Prompt		    "Number simultaneous streams"
@@ -3241,7 +3249,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    237
+	    $ObjectID		    238
 	    Type		    "edit"
 	    Name		    "FFTSize"
 	    Prompt		    "Size of FFT: (2^? pts)"
@@ -3249,7 +3257,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    238
+	    $ObjectID		    239
 	    Type		    "edit"
 	    Name		    "n_inputs"
 	    Prompt		    "Number of Simultaneous Inputs: (2^?)"
@@ -3257,7 +3265,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    239
+	    $ObjectID		    240
 	    Type		    "edit"
 	    Name		    "input_bit_width"
 	    Prompt		    "Input Bit Width"
@@ -3265,7 +3273,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    240
+	    $ObjectID		    241
 	    Type		    "edit"
 	    Name		    "bin_pt_in"
 	    Prompt		    "Input binary point"
@@ -3273,7 +3281,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    241
+	    $ObjectID		    242
 	    Type		    "edit"
 	    Name		    "coeff_bit_width"
 	    Prompt		    "Coefficient Bit Width"
@@ -3281,7 +3289,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    242
+	    $ObjectID		    243
 	    Type		    "checkbox"
 	    Name		    "unscramble"
 	    Prompt		    "Unscramble output (ie, put channels in canonical order)"
@@ -3290,7 +3298,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    243
+	    $ObjectID		    244
 	    Type		    "checkbox"
 	    Name		    "async"
 	    Prompt		    "Asynchronous operation"
@@ -3299,7 +3307,7 @@ Library {
 	    TabName		    "Basic"
 	  }
 	  Object {
-	    $ObjectID		    244
+	    $ObjectID		    245
 	    Type		    "edit"
 	    Name		    "add_latency"
 	    Prompt		    "Add Latency"
@@ -3307,7 +3315,7 @@ Library {
 	    TabName		    "Latency"
 	  }
 	  Object {
-	    $ObjectID		    245
+	    $ObjectID		    246
 	    Type		    "edit"
 	    Name		    "mult_latency"
 	    Prompt		    "Mult Latency"
@@ -3315,7 +3323,7 @@ Library {
 	    TabName		    "Latency"
 	  }
 	  Object {
-	    $ObjectID		    246
+	    $ObjectID		    247
 	    Type		    "edit"
 	    Name		    "bram_latency"
 	    Prompt		    "BRAM Latency"
@@ -3323,7 +3331,7 @@ Library {
 	    TabName		    "Latency"
 	  }
 	  Object {
-	    $ObjectID		    247
+	    $ObjectID		    248
 	    Type		    "edit"
 	    Name		    "conv_latency"
 	    Prompt		    "Convert Latency"
@@ -3331,7 +3339,7 @@ Library {
 	    TabName		    "Latency"
 	  }
 	  Object {
-	    $ObjectID		    248
+	    $ObjectID		    249
 	    Type		    "edit"
 	    Name		    "input_latency"
 	    Prompt		    "Input Latency"
@@ -3339,7 +3347,7 @@ Library {
 	    TabName		    "Latency"
 	  }
 	  Object {
-	    $ObjectID		    249
+	    $ObjectID		    250
 	    Type		    "edit"
 	    Name		    "biplex_direct_latency"
 	    Prompt		    "Latency between biplexes and fft_direct"
@@ -3347,7 +3355,7 @@ Library {
 	    TabName		    "Latency"
 	  }
 	  Object {
-	    $ObjectID		    250
+	    $ObjectID		    251
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -3364,7 +3372,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    251
+	    $ObjectID		    252
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -3381,7 +3389,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    252
+	    $ObjectID		    253
 	    Type		    "edit"
 	    Name		    "delays_bit_limit"
 	    Prompt		    "Number bits above which to store stage's delays in BRAM (2^? bits)"
@@ -3389,7 +3397,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    253
+	    $ObjectID		    254
 	    Type		    "edit"
 	    Name		    "coeffs_bit_limit"
 	    Prompt		    "Number bits above which to store stage's coefficients in BRAM (2^? bits)"
@@ -3397,7 +3405,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    254
+	    $ObjectID		    255
 	    Type		    "checkbox"
 	    Name		    "coeff_sharing"
 	    Prompt		    "BRAM sharing in coeff storage"
@@ -3406,7 +3414,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    255
+	    $ObjectID		    256
 	    Type		    "checkbox"
 	    Name		    "coeff_decimation"
 	    Prompt		    "Store a fraction of coeff factors where useful"
@@ -3415,7 +3423,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    256
+	    $ObjectID		    257
 	    Type		    "checkbox"
 	    Name		    "coeff_generation"
 	    Prompt		    "Generate coeffs with multipliers where useful"
@@ -3424,7 +3432,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    257
+	    $ObjectID		    258
 	    Type		    "edit"
 	    Name		    "cal_bits"
 	    Prompt		    "Number calibration locations when generating coeffs (2^?)"
@@ -3432,7 +3440,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    258
+	    $ObjectID		    259
 	    Type		    "edit"
 	    Name		    "n_bits_rotation"
 	    Prompt		    "Feedback rotation vector resolution"
@@ -3440,7 +3448,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    259
+	    $ObjectID		    260
 	    Type		    "edit"
 	    Name		    "mult_spec"
 	    Prompt		    "Multiplier impl. (0=core, 1=embedded, 2=behavioural) (left=1st stage, or just one value)"
@@ -3448,7 +3456,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    260
+	    $ObjectID		    261
 	    Type		    "edit"
 	    Name		    "max_fanout"
 	    Prompt		    "Maximum fanout"
@@ -3456,7 +3464,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    261
+	    $ObjectID		    262
 	    Type		    "checkbox"
 	    Name		    "bitgrowth"
 	    Prompt		    "Bitgrowth instead of shifting"
@@ -3465,7 +3473,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    262
+	    $ObjectID		    263
 	    Type		    "edit"
 	    Name		    "max_bits"
 	    Prompt		    "Max bits to grow to"
@@ -3473,7 +3481,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    263
+	    $ObjectID		    264
 	    Type		    "checkbox"
 	    Name		    "hardcode_shifts"
 	    Prompt		    "Hardcode shift schedule"
@@ -3484,7 +3492,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    264
+	    $ObjectID		    265
 	    Type		    "edit"
 	    Name		    "shift_schedule"
 	    Prompt		    "Shift schedule"
@@ -3493,7 +3501,7 @@ Library {
 	    TabName		    "Implementation"
 	  }
 	  Object {
-	    $ObjectID		    265
+	    $ObjectID		    266
 	    Type		    "checkbox"
 	    Name		    "dsp48_adders"
 	    Prompt		    "DSP48 adders in butterfly"

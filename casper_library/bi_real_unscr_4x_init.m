@@ -160,8 +160,8 @@ end
 % Add reorder blocks.
 %
 
-if strcmp(bram_map, 'on'), map_latency = 1;
-else map_latency = 0;
+if strcmp(bram_map, 'on'), map_latency = bram_latency;
+else map_latency = 1;
 end
 
 reuse_block(blk, 'reorder_even', 'casper_library_reorder/reorder', ...

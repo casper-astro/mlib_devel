@@ -20,20 +20,22 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function bus_dual_port_ram_init(blk, varargin)
-  log_group = 'bus_dual_port_ram_init_debug';
+function bus_single_port_ram_init(blk, varargin)
+  log_group = 'bus_single_port_ram_init_debug';
 
-  clog('entering bus_dual_port_ram_init', {'trace', log_group});
+  clog('entering bus_single_port_ram_init', {'trace', log_group});
   
   defaults = { ...
     'n_bits', 37, 'bin_pts', 36, ...
     'init_vector', [[-1:1/(2^3):1-(1/(2^3))]',[-1:1/(2^3):1-(1/(2^3))]'], ...
     'max_fanout', 3, 'mem_type', 'Distributed memory', ... 
-    'async_a', 'on', 'async_b', 'off', 'misc', 'on', ...
+    'async', 'off', 'misc', 'off', ...
     'bram_latency', 1, 'fan_latency', 1, ...
+    'addr_register', 'on', 'din_register', 'on', ...
+    'we_register', 'on', 'en_register', 'on', ...
   };  
   
-  check_mask_type(blk, 'bus_dual_port_ram');
+  check_mask_type(blk, 'bus_single_port_ram');
 
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
   munge_block(blk, varargin{:});
@@ -54,10 +56,13 @@ function bus_dual_port_ram_init(blk, varargin)
   bram_latency              = get_var('bram_latency', 'defaults', defaults, varargin{:});
   mem_type                  = get_var('mem_type', 'defaults', defaults, varargin{:});
   misc                      = get_var('misc', 'defaults', defaults, varargin{:});
-  async_a                   = get_var('async_a', 'defaults', defaults, varargin{:});
-  async_b                   = get_var('async_b', 'defaults', defaults, varargin{:});
+  async                     = get_var('async', 'defaults', defaults, varargin{:});
   max_fanout                = get_var('max_fanout', 'defaults', defaults, varargin{:});
   fan_latency               = get_var('fan_latency', 'defaults', defaults, varargin{:});
+  addr_register             = get_var('addr_register', 'defaults', defaults, varargin{:});
+  din_register              = get_var('din_register', 'defaults', defaults, varargin{:});
+  we_register               = get_var('we_register', 'defaults', defaults, varargin{:});
+  en_register               = get_var('en_register', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
@@ -105,59 +110,30 @@ function bus_dual_port_ram_init(blk, varargin)
   ypos_tmp  = ypos;
   
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'addra', 'built-in/inport', ...
+  reuse_block(blk, 'addr', 'built-in/inport', ...
     'Port', '1', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
-  reuse_block(blk, 'dina', 'built-in/inport', ...
+  reuse_block(blk, 'din', 'built-in/inport', ...
     'Port', '2', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv/2;
  
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'wea', 'built-in/inport', ...
+  reuse_block(blk, 'we', 'built-in/inport', ...
     'Port', '3', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
-  ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'addrb', 'built-in/inport', ...
-    'Port', '4', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
-  ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-
-  port_index = 5;
-  %if we are using Block RAM, then need ports for dinb and web
-  if strcmp(mem_type, 'Block RAM'),
-    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
-    reuse_block(blk, 'dinb', 'built-in/inport', ...
-      'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*ctiv/2;
-    port_index = port_index + 1;    
-
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'web', 'built-in/inport', ...
-      'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-    port_index = port_index + 1;    
-  end
-
+  port_index = 4;
   % asynchronous A port
-  if strcmp(async_a, 'on'),
+  if strcmp(async, 'on'),
     ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'ena', 'built-in/inport', ...
+    reuse_block(blk, 'en', 'built-in/inport', ...
       'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
     ypos_tmp = ypos_tmp + yinc + bus_expand_d*replication/2;
     port_index = port_index + 1;
   end
 
-  % asynchronous B port
-  if strcmp(async_b, 'on'),
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'enb', 'built-in/inport', ...
-      'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
-    ypos_tmp = ypos_tmp + yinc + bus_expand_d*replication/2;
-    port_index = port_index + 1;
-  end
-  
   %misc port
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misci', 'built-in/inport', ...
@@ -174,75 +150,51 @@ function bus_dual_port_ram_init(blk, varargin)
 
   ypos_tmp  = ypos; %reset ypos
 
-  % replicate addra
+  % replicate addr
+  if strcmp(addr_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'rep_addra', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+  reuse_block(blk, 'rep_addr', 'casper_library_bus/bus_replicate', ...
+    'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
-  add_line(blk, 'addra/1', 'rep_addra/1');
+  add_line(blk, 'addr/1', 'rep_addr/1');
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
-  % delay dina
+  % delay din
+  if strcmp(din_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
-  reuse_block(blk, 'ddina', 'xbsIndex_r4/Delay', ...
-    'latency', num2str(fan_latency), 'reg_retiming', 'on', ...
+  reuse_block(blk, 'ddin', 'xbsIndex_r4/Delay', ...
+    'latency', num2str(latency), 'reg_retiming', 'on', ...
     'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
-  add_line(blk, ['dina/1'], 'ddina/1');
+  add_line(blk, ['din/1'], 'ddin/1');
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
 
-  % replicate wea
+  % replicate we
+  if strcmp(we_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'rep_wea', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+  reuse_block(blk, 'rep_we', 'casper_library_bus/bus_replicate', ...
+    'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
-  add_line(blk, 'wea/1', 'rep_wea/1'); 
+  add_line(blk, 'we/1', 'rep_we/1'); 
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
-  % replicate addrb
-  ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'rep_addrb', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
-    'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
-  add_line(blk, 'addrb/1', 'rep_addrb/1'); 
-  ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-
-  if strcmp(mem_type, 'Block RAM'),
-    % delay dinb
-    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
-    reuse_block(blk, 'ddinb', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(fan_latency), 'reg_retiming', 'on', ...
-      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
-    add_line(blk, ['dinb/1'], 'ddinb/1');
-    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
-  
-    % replicate web
+  if strcmp(async, 'on'),
+    if strcmp(en_register, 'on'), latency = fan_latency;
+    else, latency = 0;
+    end
+    % replicate en
     ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'rep_web', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+    reuse_block(blk, 'rep_en', 'casper_library_bus/bus_replicate', ...
+      'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
-    add_line(blk, 'web/1', 'rep_web/1'); 
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-  end %if
-
-  if strcmp(async_a, 'on'),
-    % replicate ena
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'rep_ena', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
-      'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
-    add_line(blk, 'ena/1', 'rep_ena/1'); 
+    add_line(blk, 'en/1', 'rep_en/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
   end
-
-  if strcmp(async_b, 'on'),
-    % replicate enb
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'rep_enb', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
-      'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
-    add_line(blk, 'enb/1', 'rep_enb/1'); 
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-  end 
 
   xpos = xpos + xinc + rep_w/2;
   
@@ -254,7 +206,7 @@ function bus_dual_port_ram_init(blk, varargin)
  
   % debus addra
   ypos_tmp  = ypos + bus_expand_d*replication/2;
-  reuse_block(blk, 'debus_addra', 'casper_library_flow_control/bus_expand', ...
+  reuse_block(blk, 'debus_addr', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
     'outputWidth', mat2str(repmat(ceil(log2(rtiv)), 1, replication)), ...
     'outputBinaryPt', mat2str(zeros(1, replication)), ...
@@ -262,9 +214,9 @@ function bus_dual_port_ram_init(blk, varargin)
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-  add_line(blk, 'rep_addra/1', 'debus_addra/1');
+  add_line(blk, 'rep_addr/1', 'debus_addr/1');
   
-  % debus dina
+  % debus din
   ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2;
   total_bits      = sum(n_bits);
   extra           = mod(total_bits, max_word_size);
@@ -274,18 +226,18 @@ function bus_dual_port_ram_init(blk, varargin)
     outputWidth = [extra, outputWidth];   
   end
 
-  reuse_block(blk, 'debus_dina', 'casper_library_flow_control/bus_expand', ...
+  reuse_block(blk, 'debus_din', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of arbitrary size', ...
     'outputWidth', mat2str(outputWidth), 'outputBinaryPt', mat2str(zeros(1, ctiv)), ...
     'outputArithmeticType', mat2str(zeros(1,ctiv)), 'show_format', 'on', 'outputToWorkspace', 'off', ...
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
-  add_line(blk, 'ddina/1', 'debus_dina/1');
+  add_line(blk, 'ddin/1', 'debus_din/1');
 
-  % debus wea
+  % debus we
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'debus_wea', 'casper_library_flow_control/bus_expand', ...
+  reuse_block(blk, 'debus_we', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
     'outputWidth', mat2str(ones(1, replication)), ...
     'outputBinaryPt', mat2str(zeros(1, replication)), ...
@@ -293,70 +245,21 @@ function bus_dual_port_ram_init(blk, varargin)
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-  add_line(blk, 'rep_wea/1', 'debus_wea/1');
+  add_line(blk, 'rep_we/1', 'debus_we/1');
 
-  % debus addrb
-  ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-  reuse_block(blk, 'debus_addrb', 'casper_library_flow_control/bus_expand', ...
-    'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
-    'outputWidth', mat2str(repmat(ceil(log2(rtiv)), 1, replication)), ...
-    'outputBinaryPt', mat2str(zeros(1, replication)), ...
-    'outputArithmeticType', mat2str(zeros(1,replication)), 'show_format', 'on', 'outputToWorkspace', 'off', ...
-    'variablePrefix', '', 'outputToModelAsWell', 'on', ...
-    'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-  ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-  add_line(blk, 'rep_addrb/1', 'debus_addrb/1');
-
-  if strcmp(mem_type, 'Block RAM'),
-    % debus dinb
-    ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2;
-    reuse_block(blk, 'debus_dinb', 'casper_library_flow_control/bus_expand', ...
-      'mode', 'divisions of arbitrary size', ...
-      'outputWidth', mat2str(outputWidth), 'outputBinaryPt', mat2str(zeros(1, ctiv)), ...
-      'outputArithmeticType', mat2str(zeros(1,ctiv)), 'show_format', 'on', 'outputToWorkspace', 'off', ...
-      'variablePrefix', '', 'outputToModelAsWell', 'on', ...
-      'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
-    add_line(blk, 'ddinb/1', 'debus_dinb/1');
-
-    % debus web
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'debus_web', 'casper_library_flow_control/bus_expand', ...
-      'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
-      'outputWidth', mat2str(ones(1, replication)), 'outputBinaryPt', mat2str(zeros(1, replication)), ...
-      'outputArithmeticType', mat2str(repmat(2,1,replication)), ...
-      'show_format', 'on', 'outputToWorkspace', 'off', 'variablePrefix', '', 'outputToModelAsWell', 'on', ...
-      'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-    add_line(blk, 'rep_web/1', 'debus_web/1');
-  end %if
-
-  if strcmp(async_a, 'on'),
+  if strcmp(async, 'on'),
     % debus ena 
     ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'debus_ena', 'casper_library_flow_control/bus_expand', ...
+    reuse_block(blk, 'debus_en', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
       'outputWidth', mat2str(ones(1, replication)), 'outputBinaryPt', mat2str(zeros(1, replication)), ...
       'outputArithmeticType', mat2str(repmat(2,1,replication)), ...
       'show_format', 'on', 'outputToWorkspace', 'off', 'variablePrefix', '', 'outputToModelAsWell', 'on', ...
       'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-    add_line(blk, 'rep_ena/1', 'debus_ena/1');
+    add_line(blk, 'rep_en/1', 'debus_en/1');
   end 
  
-  if strcmp(async_b, 'on'),
-    % debus enb 
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
-    reuse_block(blk, 'debus_enb', 'casper_library_flow_control/bus_expand', ...
-      'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
-      'outputWidth', mat2str(ones(1, replication)), 'outputBinaryPt', mat2str(zeros(1, replication)), ...
-      'outputArithmeticType', mat2str(repmat(2,1,replication)), ...
-      'show_format', 'on', 'outputToWorkspace', 'off', 'variablePrefix', '', 'outputToModelAsWell', 'on', ...
-      'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
-    add_line(blk, 'rep_enb/1', 'debus_enb/1');
-  end 
-
   if strcmp(misc, 'on'),
     % delay misc
     ypos_tmp = ypos_tmp + del_d/2;
@@ -389,63 +292,42 @@ function bus_dual_port_ram_init(blk, varargin)
 
     ypos_tmp  = ypos_tmp + bram_d/2; 
     bram_name = ['bram', num2str(bram_index-1)];
-    reuse_block(blk, bram_name, 'xbsIndex_r4/Dual Port RAM', ...
+    reuse_block(blk, bram_name, 'xbsIndex_r4/Single Port RAM', ...
       'depth', num2str(rtiv), ...
       'initVector', ['zeros( 1, ',num2str(rtiv),')'], ...
-      'write_mode_A', 'Read Before Write', 'write_mode_B', 'Read Before Write', ...
-      'en_a', async_a, 'en_b', async_b, ...
+      'initVector', 'getfield(get_param(gcb, ''UserData''), ''initVector'')', ...
+      'write_mode', 'Read Before Write', 'en', async, ...
       'distributed_mem', mem_type, 'latency', num2str(bram_latency), ...
       'Position', [xpos-bram_w/2 ypos_tmp-bram_d/2 xpos+bram_w/2 ypos_tmp+bram_d/2]);
-    ypos_tmp  = ypos_tmp + yinc + bram_d/2; 
-   
+    
     set_param([blk,'/',bram_name], 'UserData', UserData);
     set_param([blk,'/',bram_name], 'initVector', 'getfield(get_param(gcb, ''UserData''), ''initVector'')');
 
+    ypos_tmp  = ypos_tmp + yinc + bram_d/2; 
+   
     % bram connections to replication and debus blocks
     rep_index = ceil(bram_index/max_fanout); %replicated index to use
-    add_line(blk, ['debus_addra/', num2str(rep_index)], [bram_name, '/1']);
-    add_line(blk, ['debus_dina/', num2str(bram_index)], [bram_name, '/2']);
-    add_line(blk, ['debus_wea/', num2str(rep_index)], [bram_name, '/3']);
-    add_line(blk, ['debus_addrb/', num2str(rep_index)], [bram_name, '/4']);
+    add_line(blk, ['debus_addr/', num2str(rep_index)], [bram_name, '/1']);
+    add_line(blk, ['debus_din/', num2str(bram_index)], [bram_name, '/2']);
+    add_line(blk, ['debus_we/', num2str(rep_index)], [bram_name, '/3']);
 
-    port_index = 4;
-    if strcmp(mem_type, 'Block RAM'),
-      add_line(blk, ['debus_dinb/', num2str(bram_index)], [bram_name, '/5']);
-      add_line(blk, ['debus_web/', num2str(rep_index)], [bram_name, '/6']);
-      port_index = 6;
-    end %if
-  
-    if strcmp(async_a, 'on'), 
-      port_index = port_index+1;
-      add_line(blk, ['debus_ena/', num2str(rep_index)], [bram_name, '/', num2str(port_index)]);
+    if strcmp(async, 'on'), 
+      add_line(blk, ['debus_en/', num2str(rep_index)], [bram_name, '/4']);
     end %if 
 
-    if strcmp(async_b, 'on'), 
-      port_index = port_index+1;
-      add_line(blk, ['debus_enb/', num2str(rep_index)], [bram_name, '/', num2str(port_index)]);
-    end %if 
   end %for 
 
   % delay for enables and misc
 
-  if strcmp(async_a, 'on'),
+  if strcmp(async, 'on'),
     ypos_tmp = ypos_tmp + del_d/2;
-    reuse_block(blk, 'dena', 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, 'den', 'xbsIndex_r4/Delay', ...
       'latency', num2str(bram_latency), 'reg_retiming', 'on', ...
       'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     ypos_tmp = ypos_tmp + yinc + del_d/2;
-    add_line(blk, ['debus_ena/',num2str(replication)], 'dena/1');
+    add_line(blk, ['debus_en/',num2str(replication)], 'den/1');
   end;
   
-  if strcmp(async_b, 'on'),
-    ypos_tmp = ypos_tmp + del_d/2;
-    reuse_block(blk, 'denb', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(bram_latency), 'reg_retiming', 'on', ...
-      'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
-    ypos_tmp = ypos_tmp + yinc + del_d/2;
-    add_line(blk, ['debus_enb/1'], 'denb/1');
-  end %if
-
   if strcmp(misc, 'on'),
     ypos_tmp = ypos_tmp + del_d/2;
     reuse_block(blk, 'dmisc1', 'xbsIndex_r4/Delay', ...
@@ -465,20 +347,13 @@ function bus_dual_port_ram_init(blk, varargin)
   ypos_tmp  = ypos; 
  
   ypos_tmp = ypos_tmp + bus_create_d*ctiv/2; 
-  reuse_block(blk, 'A_bussify', 'casper_library_flow_control/bus_create', ...
+  reuse_block(blk, 'din_bussify', 'casper_library_flow_control/bus_create', ...
     'inputNum', num2str(ctiv), ...
     'Position', [xpos-bus_create_w/2 ypos_tmp-bus_create_d*ctiv/2 xpos+bus_create_w/2 ypos_tmp+bus_create_d*ctiv/2]);
   ypos_tmp = ypos_tmp + yinc + bus_create_d*ctiv/2; 
  
-  ypos_tmp = ypos_tmp + bus_create_d*ctiv/2; 
-  reuse_block(blk, 'B_bussify', 'casper_library_flow_control/bus_create', ...
-    'inputNum', num2str(ctiv), ...
-    'Position', [xpos-bus_create_w/2 ypos_tmp-bus_create_d*ctiv/2 xpos+bus_create_w/2 ypos_tmp+bus_create_d*ctiv/2]);
-  ypos_tmp = ypos_tmp + yinc + bus_create_d*ctiv/2; 
-  
   for index = 1:ctiv,
-    add_line(blk, ['bram',num2str(index-1),'/1'], ['A_bussify', '/', num2str(index)]); 
-    add_line(blk, ['bram',num2str(index-1),'/2'], ['B_bussify', '/', num2str(index)]); 
+    add_line(blk, ['bram',num2str(index-1),'/1'], ['din_bussify', '/', num2str(index)]); 
   end %for
 
   xpos = xpos + xinc + bus_create_w/2;
@@ -491,36 +366,21 @@ function bus_dual_port_ram_init(blk, varargin)
   ypos_tmp  = ypos; 
  
   ypos_tmp = ypos_tmp + bus_create_d*ctiv/2; 
-  reuse_block(blk, 'A', 'built-in/outport', ...
+  reuse_block(blk, 'dout', 'built-in/outport', ...
     'Port', '1', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
   ypos_tmp = ypos_tmp + yinc + bus_create_d*ctiv/2; 
-  add_line(blk, 'A_bussify/1', 'A/1');
+  add_line(blk, 'din_bussify/1', 'dout/1');
 
-  ypos_tmp = ypos_tmp + bus_create_d*ctiv/2; 
-  reuse_block(blk, 'B', 'built-in/outport', ...
-    'Port', '2', 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
-  ypos_tmp = ypos_tmp + yinc + bus_create_d*ctiv/2; 
-  add_line(blk, 'B_bussify/1', 'B/1');
-  
-  port_index = 3;
-  if strcmp(async_a, 'on'),
+  port_index = 2;
+  if strcmp(async, 'on'),
     ypos_tmp  = ypos_tmp + port_d/2;
-    reuse_block(blk, 'dvalida', 'built-in/outport', ...
+    reuse_block(blk, 'dvalid', 'built-in/outport', ...
       'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
     ypos_tmp = ypos_tmp + yinc + port_d/2;  
     port_index = port_index + 1;
-    add_line(blk, 'dena/1', 'dvalida/1');
+    add_line(blk, 'den/1', 'dvalid/1');
   end
   
-  if strcmp(async_b, 'on'),
-    ypos_tmp  = ypos_tmp + port_d/2;
-    reuse_block(blk, 'dvalidb', 'built-in/outport', ...
-      'Port', num2str(port_index), 'Position', [xpos-port_w/2 ypos_tmp-port_d/2 xpos+port_w/2 ypos_tmp+port_d/2]);
-    ypos_tmp = ypos_tmp + yinc + port_d/2;  
-    port_index = port_index + 1;
-    add_line(blk, 'denb/1', 'dvalidb/1');
-  end
-
   if strcmp(misc, 'on'),
     ypos_tmp  = ypos_tmp + port_d/2;
     reuse_block(blk, 'misco', 'built-in/outport', ...
@@ -536,6 +396,6 @@ function bus_dual_port_ram_init(blk, varargin)
 
   save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 
-  clog('exiting bus_dual_port_ram_init', {'trace', log_group});
+  clog('exiting bus_single_port_ram_init', {'trace', log_group});
 
-end %function bus_dual_port_ram_init
+end %function bus_single_port_ram_init
