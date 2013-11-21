@@ -89,6 +89,8 @@ module opb_dram_sniffer #(
    wire [31:0]  opb_s4_ctr;
    wire [31:0]  opb_s5_ctr;
    wire [31:0]  opb_sx_ctr;
+   wire [0:31]  ctrl_opb_addr_lil;
+   wire [31:0]  ctrl_opb_addr_big;
 	
    wire       opb_ctr_rst;
    wire       ddr3_ctr_rst;
@@ -137,6 +139,8 @@ module opb_dram_sniffer #(
     .opb_s4_ctr  (opb_s4_ctr),
     .opb_s5_ctr  (opb_s5_ctr),
     .opb_sx_ctr  (opb_sx_ctr),
+    .ctrl_opb_addr_lil(ctrl_opb_addr_lil),
+    .ctrl_opb_addr_big(ctrl_opb_addr_big),
     .opb_ctr_rst (opb_ctr_rst),
     .ddr3_ctr_rst(ddr3_ctr_rst)
   );
@@ -173,6 +177,8 @@ generate if (ENABLE) begin : sniffer_enabled
     .OPB_RNW     (mem_OPB_RNW),
     .OPB_select  (mem_OPB_select),
     .OPB_seqAddr (mem_OPB_seqAddr),
+	 
+	 .software_address_bits (software_address_bits),
 
     .dram_clk     (dram_clk),
     .dram_rst     (dram_rst),
@@ -209,6 +215,8 @@ generate if (ENABLE) begin : sniffer_enabled
     .opb_s4_ctr  (opb_s4_ctr),
     .opb_s5_ctr  (opb_s5_ctr),
     .opb_sx_ctr  (opb_sx_ctr),
+    .ctrl_opb_addr_lil(ctrl_opb_addr_lil),
+    .ctrl_opb_addr_big(ctrl_opb_addr_big),
     .opb_ctr_rst (opb_ctr_rst),
     .ddr3_ctr_rst(ddr3_ctr_rst)
   );

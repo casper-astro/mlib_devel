@@ -15,6 +15,8 @@ module mem_opb_attach #(
     input         OPB_RNW,
     input         OPB_select,
     input         OPB_seqAddr,
+	 
+	 input  [15:0] software_address_bits,
 
     input          dram_clk,
     input          dram_rst,
@@ -55,7 +57,10 @@ module mem_opb_attach #(
     output [31:0]  opb_s4_ctr,
     output [31:0]  opb_s5_ctr,
     output [31:0]  opb_sx_ctr,
-    
+   
+    output [31:0]  ctrl_opb_addr_big,
+    output [0:31]  ctrl_opb_addr_lil,
+ 
     /* counter resets */
     input       opb_ctr_rst,
     input       ddr3_ctr_rst
@@ -87,6 +92,27 @@ module mem_opb_attach #(
    localparam DDR3_WRITE_INIT = 4'h5;
    localparam DDR3_WRITE_WAIT = 4'h6;
    localparam DDR3_WRITE_RESP = 4'h7;
+	
+	//DDR3 WORD states (0-9)
+	localparam DDR3_W0 = 4'd0;
+	localparam DDR3_W1 = 4'd1;
+	localparam DDR3_W2 = 4'd2;
+	localparam DDR3_W3 = 4'd3;
+	localparam DDR3_W4 = 4'd4;
+	localparam DDR3_W5 = 4'd5;
+	localparam DDR3_W6 = 4'd6;
+	localparam DDR3_W7 = 4'd7; //skip word 8 here
+	localparam DDR3_W9 = 4'd8;	
+	localparam DDR3_W10 = 4'd9;	
+	localparam DDR3_W11 = 4'd10;	
+	localparam DDR3_W12 = 4'd11;	
+	localparam DDR3_W13 = 4'd12;	
+	localparam DDR3_W14 = 4'd13;	
+	localparam DDR3_W15 = 4'd14;	
+	localparam DDR3_W16 = 4'd15;	//skip word 17 here
+	wire [25:0] ddr3_addr;
+	wire [3:0] opb_word;
+	// initially, we will only use the first 8 words of 9
 
    /* DDR3-to-OPB signals */
    reg [3:0] 	   ddr3_state;
@@ -97,6 +123,8 @@ module mem_opb_attach #(
 //   reg		   ddr3_read_done_z;
 //   reg		   ddr3_write_done_z;
    reg [31:0]      ddr3_read_data;
+   reg [287:0]     dram_rd_data0;
+   reg [287:0]     dram_rd_data1;
    reg 		   ddr3_write_en;
    reg 		   ddr3_write_en_z;
    reg 		   ddr3_write_en_zz;
@@ -107,7 +135,7 @@ module mem_opb_attach #(
    reg [31:0] 	   dram_addr_reg;
    reg [2:0] 	   dram_cmd_reg;
    reg 		   dram_en_reg;
-   reg [287:0] 	   dram_wdf_data_reg;
+   reg [287:0] dram_wdf_data_reg;
    reg 		   dram_wdf_end_reg;
    reg 		   dram_wdf_mask_reg;
    reg 		   dram_wdf_wren_reg;
@@ -132,6 +160,14 @@ module mem_opb_attach #(
    reg [31:0]  opb_s4_ctr_reg;
    reg [31:0]  opb_s5_ctr_reg;
    reg [31:0]  opb_sx_ctr_reg;
+
+	
+	translate_opb_addr_8words translate_opb_addr_8words(
+	   .software_address_bits(software_address_bits),
+		.opb_addr(opb_addr), 
+		.ddr3_addr(ddr3_addr), 
+		.opb_word(opb_word)
+	);
     
    /* OPB state machine */
    always @ (posedge OPB_Clk) begin
@@ -243,7 +279,9 @@ module mem_opb_attach #(
       
          ddr3_read_done    <= 1'b1;
          ddr3_write_done   <= 1'b1;
-         ddr3_read_data    <= 32'b0;
+//         dram_rd_data0     <= 288'b0;
+//         dram_rd_data1     <= 288'b0;
+         ddr3_read_data    <= 288'b0;
          ddr3_state        <= DDR3_IDLE;
          
          dram_addr_reg     <= 32'b0;
@@ -264,8 +302,6 @@ module mem_opb_attach #(
          ddr3_write_en_z   <= ddr3_write_en;
          ddr3_write_en_zz  <= ddr3_write_en_z;
       
-//         ddr3_read_done_z  <= ddr3_read_done;   
-//         ddr3_write_done_z <= ddr3_write_done;
       
          case (ddr3_state)
          
@@ -284,6 +320,7 @@ module mem_opb_attach #(
             DDR3_READ_INIT: begin
                /* Issue DDR3 command then wait */
                ddr3_state    <= DDR3_READ_HOLD;
+               //dram_addr_reg <= {6'b0, ddr3_addr};
                dram_addr_reg <= opb_addr;
                dram_cmd_reg  <= 3'b001;
                dram_en_reg   <= 1'b1;
@@ -304,8 +341,11 @@ module mem_opb_attach #(
                if (dram_rd_data_end) begin
                   /* Second cycle, finish up */
                   ddr3_state     <= DDR3_READ_RESP;
+//                  dram_rd_data1  <= dram_rd_data;  //set second word of rd_data to data1
+                  //ddr3_read_data <= dram_rd_data[223:192];
                end else if (dram_rd_data_valid) begin // if (dram_rd_data_end)
                   /* First cylce read data is valid, grab it */
+//		  dram_rd_data0  <= dram_rd_data; //set first word of rd_data to data0
                   ddr3_read_data <= dram_rd_data[31:0];
                end // else: if (dram_rd_data_valid)	      
             end // case: DDR3_READ_WAIT
@@ -332,6 +372,85 @@ module mem_opb_attach #(
    assign dram_wdf_end  = dram_wdf_end_reg;
    assign dram_wdf_mask = dram_wdf_mask_reg;
    assign dram_wdf_wren = dram_wdf_wren_reg;
+
+
+//   always @ (posedge dram_clk) begin
+//      if (dram_rst) begin
+//         ddr3_read_data <= 32'b0;
+//      end else begin
+//         case (0) 
+//         
+//            DDR3_W0: begin
+//               ddr3_read_data <= dram_rd_data0[31:0];
+//            end
+//            
+//            DDR3_W1: begin
+//               ddr3_read_data <= dram_rd_data0[63:32];
+//            end
+//            
+//            DDR3_W2: begin
+//               ddr3_read_data <= dram_rd_data0[95:64];
+//            end
+//            
+//            DDR3_W3: begin
+//               ddr3_read_data <= dram_rd_data0[127:96];
+//            end
+//            
+//            DDR3_W4: begin
+//               ddr3_read_data <= dram_rd_data0[159:128];
+//            end
+//            
+//            DDR3_W5: begin
+//               ddr3_read_data <= dram_rd_data0[191:160];
+//            end
+//            
+//            DDR3_W6: begin
+//               ddr3_read_data <= dram_rd_data0[223:192];
+//            end
+//            
+//            DDR3_W7: begin
+//               ddr3_read_data <= dram_rd_data0[255:224];
+//            end
+//            
+//            DDR3_W9: begin 
+//               ddr3_read_data <= dram_rd_data1[31:0];
+//            end
+//            
+//            DDR3_W10: begin
+//               ddr3_read_data <= dram_rd_data1[63:32];
+//            end
+//            
+//            DDR3_W11: begin
+//               ddr3_read_data <= dram_rd_data1[95:64];
+//            end
+//            
+//            DDR3_W12: begin
+//               ddr3_read_data <= dram_rd_data1[127:96];
+//            end
+//            
+//            DDR3_W13: begin
+//               ddr3_read_data <= dram_rd_data1[159:128];
+//            end
+//            
+//            DDR3_W14: begin
+//               ddr3_read_data <= dram_rd_data1[191:160];
+//            end
+//            
+//            DDR3_W15: begin
+//               ddr3_read_data <= dram_rd_data1[223:192];
+//            end
+//            
+//            DDR3_W16: begin
+//               ddr3_read_data <= dram_rd_data1[255:224];
+//            end
+//            
+//            default: begin
+//               ddr3_read_data <= 32'b0;
+//            end
+//         								      
+//         endcase
+//      end
+//   end
 
 
 /* DDR3 diagnostic counter logic*/
@@ -452,5 +571,9 @@ module mem_opb_attach #(
    assign opb_s4_ctr =  opb_s4_ctr_reg;
    assign opb_s5_ctr =  opb_s5_ctr_reg;
    assign opb_sx_ctr =  opb_sx_ctr_reg;
+
+   assign ctrl_opb_addr_lil = opb_addr;
+   assign ctrl_opb_addr_big = opb_addr;
+
 
 endmodule

@@ -45,6 +45,9 @@ module ctrl_opb_attach #(
     input [31:0]  opb_s4_ctr,
     input [31:0]  opb_s5_ctr,
     input [31:0]  opb_sx_ctr,
+
+    input [0:31]  ctrl_opb_addr_lil,
+    input [31:0]  ctrl_opb_addr_big,
     
     /* counter resets */
     output       opb_ctr_rst,
@@ -85,6 +88,9 @@ module ctrl_opb_attach #(
 
   localparam REG_OPB_CTR_RST  = 21;
   localparam REG_DDR3_CTR_RST = 22;
+
+  localparam REG_OPB_ADDR_LIL = 23;
+  localparam REG_OPB_ADDR_BIG = 24;
 
   /**************** Control Registers OPB Attachment ******************/
   
@@ -324,6 +330,22 @@ module ctrl_opb_attach #(
 	             end
 	          end else begin
                      Sl_DBus_reg <= {31'b0, opb_ctr_rst_reg};
+                  end
+	      end
+	      
+              REG_OPB_ADDR_LIL: begin
+   	          Sl_xferAck_reg   <= 1'b1;
+                  if (!OPB_RNW) begin
+	          end else begin
+                     Sl_DBus_reg <= {ctrl_opb_addr_lil};
+                  end
+	      end
+	      
+              REG_OPB_ADDR_BIG: begin
+   	          Sl_xferAck_reg   <= 1'b1;
+                  if (!OPB_RNW) begin
+	          end else begin
+                     Sl_DBus_reg <= {ctrl_opb_addr_big};
                   end
 	      end
 	      
