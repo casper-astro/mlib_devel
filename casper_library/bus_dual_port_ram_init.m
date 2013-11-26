@@ -26,12 +26,20 @@ function bus_dual_port_ram_init(blk, varargin)
   clog('entering bus_dual_port_ram_init', {'trace', log_group});
   
   defaults = { ...
-    'n_bits', 37, 'bin_pts', 36, ...
-    'init_vector', [[-1:1/(2^3):1-(1/(2^3))]',[-1:1/(2^3):1-(1/(2^3))]'], ...
+    'n_bits', repmat(10, 1, 64), 'bin_pts', repmat(0, 1, 64), ...
+    'init_vector', repmat(zeros(8192, 1), 1, 64), ...
     'max_fanout', 3, 'mem_type', 'Distributed memory', ...
-    'bram_optimization', 'Area', ...              %'Speed' 'Area' 
-    'async_a', 'on', 'async_b', 'off', 'misc', 'on', ...
+    'bram_optimization', 'Speed', ...              %'Speed' 'Area' 
+    'async_a', 'off', 'async_b', 'off', 'misc', 'on', ...
     'bram_latency', 1, 'fan_latency', 1, ...
+    'addra_register', 'on', 'addra_implementation', 'behavioral', ...
+    'dina_register', 'on', 'dina_implementation', 'behavioral', ...
+    'wea_register', 'on', 'wea_implementation', 'behavioral', ...
+    'ena_register', 'on', 'ena_implementation', 'behavioral', ...
+    'addrb_register', 'on', 'addrb_implementation', 'behavioral', ...
+    'dinb_register', 'on', 'dinb_implementation', 'behavioral', ...
+    'web_register', 'on', 'web_implementation', 'behavioral', ...
+    'enb_register', 'on', 'enb_implementation', 'behavioral', ...
   };  
   
   check_mask_type(blk, 'bus_dual_port_ram');
@@ -40,14 +48,16 @@ function bus_dual_port_ram_init(blk, varargin)
   munge_block(blk, varargin{:});
 
   xpos = 50; xinc = 80;
-  ypos = 50; yinc = 80;
+  ypos = 50; yinc = 20;
 
   port_w = 30; port_d = 14;
   rep_w = 50; rep_d = 30;
-  bus_expand_w = 50; bus_expand_d = 30;
-  bus_create_w = 50; bus_create_d = 30;
-  bram_w = 50; bram_d = 80;
+  bus_expand_w = 50; bus_expand_d = 10;
+  bus_create_w = 50; bus_create_d = 10;
+  bram_w = 50; bram_d = 50;
   del_w = 30; del_d = 20;
+
+  maxy = 2^15; %Simulink limit
 
   n_bits                    = get_var('n_bits', 'defaults', defaults, varargin{:});
   bin_pts                   = get_var('bin_pts', 'defaults', defaults, varargin{:});
@@ -60,6 +70,22 @@ function bus_dual_port_ram_init(blk, varargin)
   async_b                   = get_var('async_b', 'defaults', defaults, varargin{:});
   max_fanout                = get_var('max_fanout', 'defaults', defaults, varargin{:});
   fan_latency               = get_var('fan_latency', 'defaults', defaults, varargin{:});
+  addra_register            = get_var('addra_register', 'defaults', defaults, varargin{:});
+  addra_implementation      = get_var('addra_implementation', 'defaults', defaults, varargin{:});
+  dina_register             = get_var('dina_register', 'defaults', defaults, varargin{:});
+  dina_implementation       = get_var('dina_implementation', 'defaults', defaults, varargin{:});
+  wea_register              = get_var('wea_register', 'defaults', defaults, varargin{:});
+  wea_implementation        = get_var('wea_implementation', 'defaults', defaults, varargin{:});
+  ena_register              = get_var('ena_register', 'defaults', defaults, varargin{:});
+  ena_implementation        = get_var('ena_implementation', 'defaults', defaults, varargin{:});
+  addrb_register            = get_var('addrb_register', 'defaults', defaults, varargin{:});
+  addrb_implementation      = get_var('addrb_implementation', 'defaults', defaults, varargin{:});
+  dinb_register             = get_var('dinb_register', 'defaults', defaults, varargin{:});
+  dinb_implementation       = get_var('dinb_implementation', 'defaults', defaults, varargin{:});
+  web_register              = get_var('web_register', 'defaults', defaults, varargin{:});
+  web_implementation        = get_var('web_implementation', 'defaults', defaults, varargin{:});
+  enb_register              = get_var('enb_register', 'defaults', defaults, varargin{:});
+  enb_implementation        = get_var('enb_implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
@@ -107,23 +133,40 @@ function bus_dual_port_ram_init(blk, varargin)
     end
   end
   
-  % translate initialisation matrix based on architecture 
-  [translated_init_vecs, result] = doubles2unsigned(init_vector, n_bits, bin_pts, max_word_size);
-  if result ~= 0,
-    clog('error translating initialisation matrix', {'error', log_group});
-    error('error translating initialisation matrix');
-  end
+  ctiv = 0;
+
+  while (ctiv == 0) || ((ctiv * bram_d) > maxy),
+
+    %if we are going to go beyond Xilinx bounds, double the word width
+    if (ctiv * bram_d) > maxy,
+      clog(['doubling word size from ', num2str(max_word_size), ' to make space'], log_group);
+      if      (max_word_size == 1), max_word_size = 2;
+      elseif  (max_word_size == 2), max_word_size = 4;
+      elseif  (max_word_size == 4), max_word_size = 9;
+      elseif  (max_word_size == 9), max_word_size = 18;
+      else,                         max_word_size = 36;
+      end %if
+    end %if
+  
+    % translate initialisation matrix based on architecture 
+    [translated_init_vecs, result] = doubles2unsigned(init_vector, n_bits, bin_pts, max_word_size);
+    if result ~= 0,
+      clog('error translating initialisation matrix', {'error', log_group});
+      error('error translating initialisation matrix');
+    end
+
+    [rtiv, ctiv] = size(translated_init_vecs);
+  end %while
+
+  clog([num2str(ctiv), ' brams required'], log_group);
+
+  replication = ceil(ctiv/max_fanout);
+  clog(['replication factor of ', num2str(replication), ' required'], log_group);
 
   if (cnb == 1),
     n_bits  = repmat(n_bits, 1, civ);
     bin_pts = repmat(bin_pts, 1, civ);
   end
-
-  [rtiv, ctiv] = size(translated_init_vecs);
-  clog([num2str(ctiv), ' brams required'], log_group);
-
-  replication = ceil(ctiv/max_fanout);
-  clog(['replication factor of ', num2str(replication), ' required'], log_group);
 
   ypos_tmp  = ypos;
   
@@ -198,50 +241,81 @@ function bus_dual_port_ram_init(blk, varargin)
   ypos_tmp  = ypos; %reset ypos
 
   % replicate addra
+  if strcmp(addra_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
   reuse_block(blk, 'rep_addra', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+    'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
+    'implementation', addra_implementation, ...
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'addra/1', 'rep_addra/1');
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
   % delay dina
+  if strcmp(dina_implementation, 'core'), reg_retiming = 'off';
+  else, reg_retiming = 'on';
+  end
+  
+  if strcmp(dina_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
   reuse_block(blk, 'ddina', 'xbsIndex_r4/Delay', ...
-    'latency', num2str(fan_latency), 'reg_retiming', 'on', ...
+    'latency', num2str(latency), 'reg_retiming', reg_retiming, ...
     'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
   add_line(blk, ['dina/1'], 'ddina/1');
   ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
 
   % replicate wea
+  if strcmp(wea_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
   reuse_block(blk, 'rep_wea', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+    'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
+    'implementation', wea_implementation, ...
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'wea/1', 'rep_wea/1'); 
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
   % replicate addrb
+  if strcmp(addrb_register, 'on'), latency = fan_latency;
+  else, latency = 0;
+  end
   ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
   reuse_block(blk, 'rep_addrb', 'casper_library_bus/bus_replicate', ...
-    'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+    'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
+    'implementation', addrb_implementation, ...
     'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
   add_line(blk, 'addrb/1', 'rep_addrb/1'); 
   ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
 
   if strcmp(mem_type, 'Block RAM'),
     % delay dinb
+    if strcmp(dinb_implementation, 'core'), reg_retiming = 'off';
+    else, reg_retiming = 'on';
+    end
+
+    if strcmp(dinb_register, 'on'), latency = fan_latency;
+    else, latency = 0;
+    end
+
     ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2;
     reuse_block(blk, 'ddinb', 'xbsIndex_r4/Delay', ...
-      'latency', num2str(fan_latency), 'reg_retiming', 'on', ...
+      'latency', num2str(latency), 'reg_retiming', reg_retiming, ...
       'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
     add_line(blk, ['dinb/1'], 'ddinb/1');
     ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
   
     % replicate web
+    if strcmp(web_register, 'on'), latency = fan_latency;
+    else, latency = 0;
+    end
     ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
     reuse_block(blk, 'rep_web', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+      'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
+      'implementation', web_implementation, ...
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
     add_line(blk, 'web/1', 'rep_web/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
@@ -249,9 +323,13 @@ function bus_dual_port_ram_init(blk, varargin)
 
   if strcmp(async_a, 'on'),
     % replicate ena
+    if strcmp(ena_register, 'on'), latency = fan_latency;
+    else, latency = 0;
+    end
     ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
     reuse_block(blk, 'rep_ena', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+      'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
+      'implementation', ena_implementation, ...
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
     add_line(blk, 'ena/1', 'rep_ena/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
@@ -259,9 +337,13 @@ function bus_dual_port_ram_init(blk, varargin)
 
   if strcmp(async_b, 'on'),
     % replicate enb
+    if strcmp(enb_register, 'on'), latency = fan_latency;
+    else, latency = 0;
+    end
     ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
     reuse_block(blk, 'rep_enb', 'casper_library_bus/bus_replicate', ...
-      'replication', num2str(replication), 'latency', num2str(fan_latency), 'misc', 'off', ... 
+      'replication', num2str(replication), 'latency', num2str(latency), 'misc', 'off', ... 
+      'implementation', enb_implementation, ...
       'Position', [xpos-rep_w/2 ypos_tmp-rep_d/2 xpos+rep_w/2 ypos_tmp+rep_d/2]);
     add_line(blk, 'enb/1', 'rep_enb/1'); 
     ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
@@ -276,7 +358,7 @@ function bus_dual_port_ram_init(blk, varargin)
   xpos = xpos + bus_expand_w/2;
  
   % debus addra
-  ypos_tmp  = ypos + bus_expand_d*replication/2;
+  ypos_tmp  = ypos + bus_expand_d*ctiv/2 + yinc;
   reuse_block(blk, 'debus_addra', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
     'outputWidth', mat2str(repmat(ceil(log2(rtiv)), 1, replication)), ...
@@ -288,7 +370,7 @@ function bus_dual_port_ram_init(blk, varargin)
   add_line(blk, 'rep_addra/1', 'debus_addra/1');
   
   % debus dina
-  ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2;
+  ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
   total_bits      = sum(n_bits);
   extra           = mod(total_bits, max_word_size);
   main            = repmat(max_word_size, 1, floor(total_bits/max_word_size));
@@ -307,7 +389,7 @@ function bus_dual_port_ram_init(blk, varargin)
   add_line(blk, 'ddina/1', 'debus_dina/1');
 
   % debus wea
-  ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
+  ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
   reuse_block(blk, 'debus_wea', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
     'outputWidth', mat2str(ones(1, replication)), ...
@@ -315,11 +397,11 @@ function bus_dual_port_ram_init(blk, varargin)
     'outputArithmeticType', mat2str(repmat(2,1,replication)), 'show_format', 'on', 'outputToWorkspace', 'off', ...
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-  ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
+  ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
   add_line(blk, 'rep_wea/1', 'debus_wea/1');
 
   % debus addrb
-  ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
+  ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
   reuse_block(blk, 'debus_addrb', 'casper_library_flow_control/bus_expand', ...
     'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
     'outputWidth', mat2str(repmat(ceil(log2(rtiv)), 1, replication)), ...
@@ -327,12 +409,12 @@ function bus_dual_port_ram_init(blk, varargin)
     'outputArithmeticType', mat2str(zeros(1,replication)), 'show_format', 'on', 'outputToWorkspace', 'off', ...
     'variablePrefix', '', 'outputToModelAsWell', 'on', ...
     'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-  ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
+  ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
   add_line(blk, 'rep_addrb/1', 'debus_addrb/1');
 
   if strcmp(mem_type, 'Block RAM'),
     % debus dinb
-    ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2;
+    ypos_tmp        = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
     reuse_block(blk, 'debus_dinb', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of arbitrary size', ...
       'outputWidth', mat2str(outputWidth), 'outputBinaryPt', mat2str(zeros(1, ctiv)), ...
@@ -343,40 +425,40 @@ function bus_dual_port_ram_init(blk, varargin)
     add_line(blk, 'ddinb/1', 'debus_dinb/1');
 
     % debus web
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
+    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
     reuse_block(blk, 'debus_web', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
       'outputWidth', mat2str(ones(1, replication)), 'outputBinaryPt', mat2str(zeros(1, replication)), ...
       'outputArithmeticType', mat2str(repmat(2,1,replication)), ...
       'show_format', 'on', 'outputToWorkspace', 'off', 'variablePrefix', '', 'outputToModelAsWell', 'on', ...
       'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
+    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
     add_line(blk, 'rep_web/1', 'debus_web/1');
   end %if
 
   if strcmp(async_a, 'on'),
     % debus ena 
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
+    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
     reuse_block(blk, 'debus_ena', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
       'outputWidth', mat2str(ones(1, replication)), 'outputBinaryPt', mat2str(zeros(1, replication)), ...
       'outputArithmeticType', mat2str(repmat(2,1,replication)), ...
       'show_format', 'on', 'outputToWorkspace', 'off', 'variablePrefix', '', 'outputToModelAsWell', 'on', ...
       'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
+    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
     add_line(blk, 'rep_ena/1', 'debus_ena/1');
   end 
  
   if strcmp(async_b, 'on'),
     % debus enb 
-    ypos_tmp  = ypos_tmp + bus_expand_d*replication/2;
+    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
     reuse_block(blk, 'debus_enb', 'casper_library_flow_control/bus_expand', ...
       'mode', 'divisions of equal size', 'outputNum', num2str(replication), ...
       'outputWidth', mat2str(ones(1, replication)), 'outputBinaryPt', mat2str(zeros(1, replication)), ...
       'outputArithmeticType', mat2str(repmat(2,1,replication)), ...
       'show_format', 'on', 'outputToWorkspace', 'off', 'variablePrefix', '', 'outputToModelAsWell', 'on', ...
       'Position', [xpos-bus_expand_w/2 ypos_tmp-bus_expand_d*ctiv/2 xpos+bus_expand_w/2 ypos_tmp+bus_expand_d*ctiv/2]);
-    ypos_tmp  = ypos_tmp + yinc + bus_expand_d*replication/2;
+    ypos_tmp  = ypos_tmp + bus_expand_d*ctiv/2 + yinc;
     add_line(blk, 'rep_enb/1', 'debus_enb/1');
   end 
 
