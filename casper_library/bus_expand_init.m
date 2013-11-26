@@ -67,7 +67,6 @@ show_format = get_var('show_format', 'defaults', defaults, varargin{:});
 
 if (strcmp(mode, 'divisions of arbitrary size') == 1 && ... 
   (length(outputWidth) ~= length(outputBinaryPt) || length(outputWidth) ~= length(outputArithmeticType))) ,
-  errordlg('Division width, binary point and arithmetic type vectors must be the same length when using arbitrary divisions');
   error('Division width, binary point and arithmetic type vectors must be the same length when using arbitrary divisions');
 end
 
@@ -75,7 +74,7 @@ if strcmp(mode, 'divisions of arbitrary size'),
   outputNum = length(outputWidth); 
 else
   if ((outputNum <= 0) || isnan(outputNum) || (~isnumeric(outputNum))),
-    errordlg('Need one or more outputs!'); error('Need one or more outputs!');
+    error('Need one or more outputs!');
   end
 end
 
@@ -84,13 +83,12 @@ else vals = outputNum;
 end
 for div = 1:vals,
   if ((outputWidth(div) <= 0) || isnan(outputWidth(div)) || (~isnumeric(outputWidth(div)))),
-    errordlg('Need non-zero output width!'); error('Need non-zero output width!'); end;
+    error('Need non-zero output width!'); end;
   if ((outputBinaryPt(div) > outputWidth(div)) || isnan(outputBinaryPt(div)) || (~isnumeric(outputBinaryPt(div)))),
-    errordlg('Binary point > output width makes no sense!'); error('Binary point > output width makes no sense!'); end;
+    error('Binary point > output width makes no sense!'); end;
   if (((outputArithmeticType(div) > 2) || outputArithmeticType(div) < 0) || isnan(outputArithmeticType(div)) || (~isnumeric(outputArithmeticType(div)))),
-    errordlg('Arithmetic type must be one of 0,1,2!'); error('Arithmetic type must be one of 0,1,2!'); end;
+    error('Arithmetic type must be one of 0,1,2!'); end;
   if (outputArithmeticType(div) == 2 && (outputWidth(div) ~= 1 || outputBinaryPt(div) ~= 0)),
-    errordlg('Division width must be 1 and binary point 0 for Boolean Arithmetic type');
     error('Division width must be 1 and binary point 0 for Boolean Arithmetic type');
   end 
 
@@ -98,7 +96,7 @@ end
 
 if strcmp(outputToWorkspace,'on') == 1,
   if (~isvarname(variablePrefix)),
-    errordlg('That is not a valid variable name!'); error('That is not a valid variable name!'); end;
+    error('That is not a valid variable name!'); end;
 end
 
 munge_block(blk, varargin{:});
