@@ -1,8 +1,32 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%   SKA Africa                                                                %
+%   http://www.kat.ac.za                                                      %
+%   Copyright (C) 2013 Andrew Martens (andrew@ska.ac.za)                      %
+%                                                                             %
+%   This program is free software; you can redistribute it and/or modify      %
+%   it under the terms of the GNU General Public License as published by      %
+%   the Free Software Foundation; either version 2 of the License, or         %
+%   (at your option) any later version.                                       %
+%                                                                             %
+%   This program is distributed in the hope that it will be useful,           %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             %
+%   GNU General Public License for more details.                              %
+%                                                                             %
+%   You should have received a copy of the GNU General Public License along   %
+%   with this program; if not, write to the Free Software Foundation, Inc.,   %
+%   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 function bus_replicate_init(blk, varargin)
   log_group = 'bus_replicate_init_debug';
   
   clog('entering bus_replicate_init', {log_group, 'trace'});
-  defaults = {'replication', 81, 'latency', 4, 'misc', 'on'};
+  defaults = { ...
+    'replication', 8, 'latency', 4, 'misc', 'on', ...
+    'implementation', 'core'}; %'core' 'behavioral'
   
   check_mask_type(blk, 'bus_replicate');
 
@@ -16,9 +40,10 @@ function bus_replicate_init(blk, varargin)
   del_w = 30; del_d = 20;
   bus_create_w = 50;
 
-  replication   = get_var('replication', 'defaults', defaults, varargin{:});
-  latency       = get_var('latency', 'defaults', defaults, varargin{:});
-  misc          = get_var('misc', 'defaults', defaults, varargin{:});
+  replication     = get_var('replication', 'defaults', defaults, varargin{:});
+  latency         = get_var('latency', 'defaults', defaults, varargin{:});
+  misc            = get_var('misc', 'defaults', defaults, varargin{:});
+  implementation  = get_var('implementation', 'defaults', defaults, varargin{:});
 
   delete_lines(blk);
 
@@ -49,6 +74,10 @@ function bus_replicate_init(blk, varargin)
   % delay layer if required %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+  if strcmp(implementation, 'behavioral'), reg_retiming_global = 'on';
+  else, reg_retiming_global = 'off';
+  end 
+
   xpos_tmp = xpos;
   rps = replication^(1/latency);
   if latency > 0,
@@ -61,6 +90,7 @@ function bus_replicate_init(blk, varargin)
       else, rep = ceil(rps);
       end
 
+      %force the final stage to have the full amount of replication
       if stage_index == latency-1, rep_required = replication;
       else, rep_required = min(prev_rep_required * rep, replication);
       end
@@ -69,8 +99,13 @@ function bus_replicate_init(blk, varargin)
 
       for rep_index = 0:rep_required-1,
         dname = ['din', num2str(stage_index), '_', num2str(rep_index)];
+        % implement with behavioral HDL if we have reached the replication amount required
+        % before the final delay stage to potentially save resources
+        if (rep_required == replication) && (stage_index ~= latency-1), reg_retiming = 'on';
+        else, reg_retiming = reg_retiming_global;
+        end
         reuse_block(blk, dname, 'xbsIndex_r4/Delay', ...
-          'reg_retiming', 'off', 'latency', '1', ...
+          'reg_retiming', reg_retiming, 'latency', '1', ...
           'Position', [xpos_tmp-del_w/2 ypos_tmp-del_d/2 xpos_tmp+del_w/2 ypos_tmp+del_d/2]);
 
         if stage_index == 0, add_line(blk, 'in/1', [dname,'/1']); 
@@ -87,7 +122,7 @@ function bus_replicate_init(blk, varargin)
     ypos_tmp = ypos + (replication+1)*yinc;
     if strcmp(misc, 'on'), 
       reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
-        'reg_retiming', 'on', 'latency', 'latency', ...
+        'reg_retiming', 'on', 'latency', num2str(latency), ...
         'Position', [xpos-del_w/2 ypos_tmp-del_d/2 xpos+del_w/2 ypos_tmp+del_d/2]);
       add_line(blk, 'misci/1', 'dmisc/1');    
     end %if strcmp
