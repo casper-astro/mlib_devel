@@ -50,6 +50,7 @@ s.fab_udp        = ['0x', dec2hex(eval(get_param(blk_name, 'fab_udp')))  ];
 s.fab_gate       = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
 s.fab_en         = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));
 s.large_packets  = num2str(strcmp(get_param(blk_name, 'large_frames'),'on'));
+s.ttl            = ['0x', dec2hex(eval(get_param(blk_name, 'ttl')))   ];
 
 %convert (more intuitive) mask values to defines to be passed on if using ROACH2
 switch s.hw_sys
@@ -125,6 +126,7 @@ parameters.LARGE_PACKETS  = s.large_packets;
 parameters.RX_DIST_RAM    = s.rx_dist_ram;
 parameters.CPU_RX_ENABLE  = s.cpu_rx_enable;
 parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;
+parameters.TTL            = s.ttl;
 
 switch s.hw_sys
   case {'ROACH2'}, 

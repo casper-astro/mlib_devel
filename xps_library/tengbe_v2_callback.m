@@ -35,6 +35,7 @@ check_mask_type(blk, 'ten_GbE_v2');
 %search for sysgen block and get target
 xps_xsg_blks    = find_system(bdroot,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
 
+
 if length(xps_xsg_blks) ~= 1,
   errordlg('ten_Gbe_v2 requires a single MSSGE (XSG core config) block to be instantiated at the top level');
   return;
@@ -97,6 +98,7 @@ if strcmp(show_param, 'on'),
     mask_visibilities{ismember(mask_names, 'swing_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'post_emph_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'rxeqmix_r2')} = 'on';
+    mask_visibilities{ismember(mask_names, 'ttl')} = 'on';
   else
     mask_visibilities{ismember(mask_names, 'pre_emph')} = 'on';
     mask_visibilities{ismember(mask_names, 'swing')} = 'on';
