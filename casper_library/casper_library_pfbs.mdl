@@ -14,9 +14,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Nov 14 11:32:41 2013"
-  RTWModifiedTimeStamp	  306325855
-  ModelVersionFormat	  "1.%<AutoIncrement:119>"
+  LastModifiedDate	  "Thu Nov 14 14:00:54 2013"
+  RTWModifiedTimeStamp	  306337687
+  ModelVersionFormat	  "1.%<AutoIncrement:121>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -584,7 +584,7 @@ Library {
   }
   System {
     Name		    "casper_library_pfbs"
-    Location		    [57, 45, 1007, 922]
+    Location		    [23, 45, 1021, 1070]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -642,7 +642,7 @@ Library {
       MaskValueString	      "6|8|4|8|hamming|1|1|2|1|off|on"
       System {
 	Name			"first_tap"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -904,7 +904,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [308, 45, 871, 1589]
+	    Location		    [274, 45, 885, 1824]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1286,7 +1286,7 @@ Library {
       MaskValueString	      "6|8|4|8|hamming|1|3|2|1|off|on"
       System {
 	Name			"first_tap_real"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1698,7 +1698,7 @@ Library {
       MaskValueString	      "4|8|18|8|1|2|Truncate|off|on"
       System {
 	Name			"last_tap"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1955,7 +1955,7 @@ Library {
 	  MaskValueString	  "4|8|18|8|1|Truncate"
 	  System {
 	    Name		    "pfb_add_tree"
-	    Location		    [12, 45, 1968, 2387]
+	    Location		    [12, 45, 2016, 2622]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2503,7 +2503,7 @@ Library {
 	      MaskValueString	      "4|1|Fabric|off"
 	      System {
 		Name			"adder_tree1"
-		Location		[541, 45, 1738, 2125]
+		Location		[507, 45, 1752, 2360]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -2810,7 +2810,7 @@ Library {
 	      MaskValueString	      "4|1|Fabric|off"
 	      System {
 		Name			"adder_tree2"
-		Location		[541, 45, 1738, 2125]
+		Location		[507, 45, 1752, 2360]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3481,7 +3481,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [308, 45, 871, 1589]
+	    Location		    [274, 45, 885, 1824]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -3784,7 +3784,7 @@ Library {
       MaskValueString	      "1|2|8|18|8|1|2|Truncate|on|off|on|off"
       System {
 	Name			"last_tap_async"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -4065,7 +4065,7 @@ Library {
 	  MaskValueString	  "1|2|8|18|8|1|Truncate|off"
 	  System {
 	    Name		    "pfb_add_tree_async"
-	    Location		    [12, 45, 2220, 2552]
+	    Location		    [12, 45, 2268, 2787]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -4386,7 +4386,7 @@ Library {
 	      MaskValueString	      "2|add_latency|Fabric|off"
 	      System {
 		Name			"adder_tree1"
-		Location		[541, 45, 1738, 2125]
+		Location		[507, 45, 1752, 2360]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4575,7 +4575,7 @@ Library {
 	      MaskValueString	      "2|add_latency|Fabric|off"
 	      System {
 		Name			"adder_tree2"
-		Location		[541, 45, 1738, 2125]
+		Location		[507, 45, 1752, 2360]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -5109,7 +5109,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [307, 45, 870, 1589]
+	    Location		    [273, 45, 884, 1824]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -5455,7 +5455,7 @@ Library {
       MaskValueString	      "8|8|2|on|off"
       System {
 	Name			"last_tap_real"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -5715,7 +5715,7 @@ Library {
       MaskValueString	      "2|8|4|off|hamming|2|0|0|1|off|1"
       System {
 	Name			"pfb_coeff_gen"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -6505,7 +6505,7 @@ Library {
       MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|Round  (unbiased: Even Values)|1|2|on"
       System {
 	Name			"pfb_fir"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -7198,7 +7198,7 @@ Library {
       MaskValueString	      "5|2|hamming|1|off|8|18|8|off|1|2|3|1|Truncate|1|2|off|on|off"
       System {
 	Name			"pfb_fir_async"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -7277,25 +7277,25 @@ Library {
 	  LinkData {
 	    BlockName		    "Delay"
 	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
 	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
 	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
 	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
 	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
 	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    BlockName		    "Delay1"
 	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
 	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
 	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
 	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
 	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
 	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    BlockName		    "ROM1"
 	    DialogParameters {
@@ -7616,25 +7616,25 @@ Library {
 	  LinkData {
 	    BlockName		    "Delay"
 	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
 	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
 	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
 	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
 	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
 	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    BlockName		    "Delay1"
 	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,d390c2d8,right,,[ ],[ ]"
+	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
 	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
 	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
 	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
 	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
 	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
 	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-4}','texmode','on');\nfprintf('','COMMENT: end icon text');"
+	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    BlockName		    "ROM1"
 	    DialogParameters {
@@ -7958,7 +7958,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "sync_generate"
-	    Location		    [12, 45, 2220, 2552]
+	    Location		    [12, 45, 2268, 2787]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -8528,7 +8528,7 @@ Library {
       BlockType		      SubSystem
       Name		      "pfb_fir_coeff_gen"
       Ports		      []
-      Position		      [520, 333, 590, 402]
+      Position		      [520, 332, 590, 406]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag33"
@@ -8541,31 +8541,31 @@ Library {
       MaskType		      "pfb_fir_coeff_gen"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Total Number of Taps:|Bitwidth of Coefficients:|Windowing Functi"
       "on: |Number of Simultaneous Inputs: (2^?)|Bin Width (normal=1)|Asynchronous operation|BRAM Latency|Fanout latenc"
-      "y|Add latency"
+      "y|Add latency|BRAM optimization"
       MaskStyleString	      "edit,edit,edit,popup(bartlett|barthannwin|blackman|blackmanharris|bohamwin|chebwin|flatto"
       "pwin|gausswin|hamming|hann|kaiser|nuttallwin|parzenwin|rectwin|tukeywin|triang|userwindow),edit,edit,checkbox,ed"
-      "it,edit,edit"
+      "it,edit,edit,popup(Area|Speed)"
       MaskVariables	      "pfb_size=@1;n_taps=@2;n_bits_coeff=@3;WindowType=&4;n_inputs=@5;fwidth=@6;async=&7;bram_lat"
-      "ency=@8;fan_latency=@9;add_latency=@10;"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||||"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on"
+      "ency=@8;fan_latency=@9;add_latency=@10;bram_optimization=&11;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
       MaskInitialization      "pfb_fir_coeff_gen_init(gcb, ...\n    'n_inputs', n_inputs, ...\n    'pfb_size', pfb_siz"
       "e, ...\n    'n_taps', n_taps, ...\n    'n_bits_coeff', n_bits_coeff, ...\n    'WindowType', WindowType, ...\n   "
       " 'fwidth', fwidth, ...\n    'async', async, ...\n    'bram_latency', bram_latency, ...\n    'fan_latency', fan_l"
-      "atency, ...\n    'add_latency', add_latency);"
+      "atency, ...\n    'add_latency', add_latency, ...\n    'bram_optimization', bram_optimization);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "5|0|12|hamming|0|1|off|2|1|1"
-      MaskTabNameString	      "basic,basic,basic,basic,basic,basic,basic,latency,latency,latency"
+      MaskValueString	      "5|0|12|hamming|0|1|off|2|1|1|Area"
+      MaskTabNameString	      "basic,basic,basic,basic,basic,basic,basic,latency,latency,latency,implementation"
       System {
 	Name			"pfb_fir_coeff_gen"
-	Location		[12, 45, 1729, 1866]
+	Location		[12, 45, 1777, 2101]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -8585,7 +8585,7 @@ Library {
       Name		      "pfb_fir_generic"
       Tag		      "casper:pfb_fir_generic"
       Ports		      []
-      Position		      [520, 454, 605, 546]
+      Position		      [516, 458, 601, 550]
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag34"
@@ -8599,42 +8599,43 @@ Library {
       MaskPromptString	      "Number input streams?|Size of PFB: (2^? pnts)|Total Number of Taps:|Windowing Function: "
       "|Number of Simultaneous Inputs: (2^?)|Input Bitwidth:|Output Bitwidth:|Coefficient Bitwidth:|Complex data inputs"
       "|Asynchronous operation|Add Latency|Mult Latency|BRAM Latency|Fanout Latency|Convert latency|Quantization Behavi"
-      "or|Bin Width Scaling (normal=1)"
+      "or|Bin Width Scaling (normal=1)|Coefficient BRAMs optimization|Delay BRAMs optimization"
       MaskStyleString	      "edit,edit,edit,popup(bartlett|barthannwin|blackman|blackmanharris|bohamwin|chebwin|flatto"
       "pwin|gausswin|hamming|hann|kaiser|nuttallwin|parzenwin|rectwin|tukeywin|triang|userwindow),edit,edit,edit,edit,c"
       "heckbox,checkbox,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased: Even Value"
-      "s)),edit"
+      "s)),edit,popup(Area|Speed),popup(Area|Speed)"
       MaskVariables	      "n_streams=@1;PFBSize=@2;TotalTaps=@3;WindowType=&4;n_inputs=@5;BitWidthIn=@6;BitWidthOut=@7"
       ";CoeffBitWidth=@8;complex=&9;async=&10;add_latency=@11;mult_latency=@12;bram_latency=@13;fan_latency=@14;conv_la"
-      "tency=@15;quantization=&16;fwidth=@17;"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      "tency=@15;quantization=&16;fwidth=@17;coeffs_bram_optimization=&18;delays_bram_optimization=&19;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskCallbackString      "||%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = eval(get_param(gcb, 'mult_"
       "spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <= num_taps), \n%   new_si"
       "ze = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n) = old_vec(n); end\n%set_"
       "param(gcb, 'mult_spec', mat2str(vec));||||||||||||||%num_taps = eval(get_param(gcb, 'TotalTaps'));\n%old_vec = e"
       "val(get_param(gcb, 'mult_spec'));\n\n%vec = 2.*ones(1,num_taps);\n%old_size = length(old_vec);\n\n%if(old_size <"
       "= num_taps), \n%    new_size = old_size;\n%else, \n%    new_size = num_taps;\n%end\n\n%for n = 1:new_size, vec(n"
-      ") = old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      ") = old_vec(n); end\n%set_param(gcb, 'mult_spec', mat2str(vec));||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskInitialization      "pfb_fir_generic_init(gcb, ...\n    'n_streams', n_streams, ...\n    'PFBSize', PFBSize,"
       " ...\n    'TotalTaps', TotalTaps, ...\n    'WindowType', WindowType, ...\n    'n_inputs', n_inputs, ...\n    'co"
       "mplex', complex, ...\n    'BitWidthIn', BitWidthIn, ...\n    'BitWidthOut', BitWidthOut, ...\n    'CoeffBitWidth"
       "', CoeffBitWidth, ...\n    'async', async, ...\n    'add_latency', add_latency, ...\n    'mult_latency', mult_la"
       "tency, ...\n    'bram_latency', bram_latency, ...\n    'fan_latency', fan_latency, ...\n    'conv_latency', conv"
-      "_latency, ...\n    'quantization', quantization, ...\n    'fwidth', fwidth);"
+      "_latency, ...\n    'quantization', quantization, ...\n    'fwidth', fwidth, ...\n    'coeffs_bram_optimization',"
+      " coeffs_bram_optimization, ...\n    'delays_bram_optimization', delays_bram_optimization);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "1|5|0|hamming|0|8|18|12|off|off|1|2|2|1|1|Round  (unbiased: Even Values)|1"
+      MaskValueString	      "1|5|0|hamming|0|8|18|12|off|off|1|2|2|1|1|Round  (unbiased: Even Values)|1|Area|Area"
       MaskTabNameString	      "basic,basic,basic,implementation,basic,basic,basic,basic,basic,basic,latency,latency,la"
-      "tency,latency,latency,implementation,implementation"
+      "tency,latency,latency,implementation,implementation,implementation,implementation"
       System {
 	Name			"pfb_fir_generic"
-	Location		[12, 45, 1673, 1814]
+	Location		[12, 45, 1721, 2049]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -8704,7 +8705,7 @@ Library {
       MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|1|Round  (unbiased: Even Values)|1|2|on|Fabric|off"
       System {
 	Name			"pfb_fir_real"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -9399,7 +9400,7 @@ Library {
       BlockType		      SubSystem
       Name		      "pfb_fir_taps"
       Ports		      []
-      Position		      [635, 332, 705, 403]
+      Position		      [618, 333, 688, 409]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag44"
@@ -9412,33 +9413,35 @@ Library {
       MaskType		      "pfb_fir_taps"
       MaskPromptString	      "Number simultaneous streams|Number simultaneous inputs per stream (2^?)|PFB size (2^? pn"
       "ts)|Number of taps|Data bit width in|Coefficient bit width|Coefficient binary point|Complex input data|Asynchron"
-      "ous operation|Multiplier latency|Adder latency|BRAM latency|Fanout latency|Multiplier implementation"
+      "ous operation|Multiplier latency|Adder latency|BRAM latency|Fanout latency|Multiplier implementation|BRAM optimi"
+      "zation"
       MaskStyleString	      "edit,edit,edit,edit,edit,edit,edit,checkbox,checkbox,edit,edit,edit,edit,popup(behavioral"
-      " HDL|standard core|embedded multiplier core)"
+      " HDL|standard core|embedded multiplier core),popup(Area|Speed)"
       MaskVariables	      "n_streams=@1;n_inputs=@2;pfb_size=@3;n_taps=@4;n_bits_data=@5;n_bits_coeff=@6;bin_pt_coeff="
       "@7;complex=&8;async=&9;mult_latency=@10;add_latency=@11;bram_latency=@12;fan_latency=@13;multiplier_implementati"
-      "on=&14;"
-      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskCallbackString      "|||||||||||||\n"
-      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on"
-      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      "on=&14;bram_optimization=&15;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||||||||||||\n|"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
       MaskInitialization      "pfb_fir_taps_init(gcb, ...\n    'n_streams', n_streams, ...\n    'n_inputs', n_inputs, "
       "...\n    'pfb_size', pfb_size, ...\n    'n_taps', n_taps, ...\n    'n_bits_data', n_bits_data, ...\n    'n_bits_"
       "coeff', n_bits_coeff, ...\n    'bin_pt_coeff', bin_pt_coeff, ...\n    'complex', complex, ...\n    'async', asyn"
       "c, ...\n    'mult_latency', mult_latency, ...\n    'add_latency', add_latency, ...\n    'bram_latency', bram_lat"
-      "ency, ...\n    'fan_latency', fan_latency, ...\n    'multiplier_implementation', multiplier_implementation);"
+      "ency, ...\n    'fan_latency', fan_latency, ...\n    'multiplier_implementation', multiplier_implementation, ...\n"
+      "    'bram_optimization', bram_optimization);"
       MaskSelfModifiable      on
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "1|0|5|0|8|12|11|off|off|2|1|1|1|behavioral HDL"
+      MaskValueString	      "1|0|5|0|8|12|11|off|off|2|1|1|1|behavioral HDL|Area"
       MaskTabNameString	      "basic,basic,basic,basic,basic,basic,basic,basic,basic,latency,latency,latency,latency,i"
-      "mplementation"
+      "mplementation,implementation"
       System {
 	Name			"pfb_fir_taps"
-	Location		[12, 45, 1731, 1881]
+	Location		[12, 45, 1779, 2116]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -9489,7 +9492,7 @@ Library {
       MaskValueString	      "2|12|3|4|8|1|off|on"
       System {
 	Name			"tap"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -9783,7 +9786,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [308, 45, 871, 1589]
+	    Location		    [274, 45, 885, 1824]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -10166,7 +10169,7 @@ Library {
       MaskValueString	      "1|5|8|2|8|2|3|1|1|on|off|on|off"
       System {
 	Name			"tap_async"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -10536,7 +10539,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
-	    Location		    [308, 45, 871, 1589]
+	    Location		    [274, 45, 885, 1824]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -10984,7 +10987,7 @@ Library {
       MaskValueString	      "2|12|3|4|8|1|on|off"
       System {
 	Name			"tap_real"
-	Location		[12, 45, 1369, 1540]
+	Location		[12, 45, 1417, 1775]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -11931,92 +11934,98 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag33
-    Data		    "  %)30     .    , H   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"$B;P(.    H D  "
-    " 8    (     @         %    \"     $    !     0         %  0 #0    $   \"/    9&5F875L=',      &Y?:6YP=71S      !P9"
-    "F)?<VEZ90      ;E]T87!S         &Y?8FET<U]C;V5F9@!7:6YD;W=4>7!E    9G=I9'1H         &%S>6YC          !B<F%M7VQA=&5"
-    "N8WD 9F%N7VQA=&5N8WD  &%D9%]L871E;F-Y    #@   %@&   &    \"     $         !0    @    !    &     $         #@   #@ "
-    "   &    \"     0         !0    @    !    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4 "
-    "   (     0    $    !          D    (             $ .    .     8    (    !          %    \"     $    (     0       "
-    "  0    \"    '!F8E]S:7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X "
-    "   X    !@    @    $          4    (     0    8    !         !     &    ;E]T87!S   .    .     8    (    !@        "
-    " %    \"     $    !     0         )    \"            !! #@   $     &    \"     0         !0    @    !    #     $  "
-    "       $     P   !N7V)I='-?8V]E9F8     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @  "
-    "          R0 X   !     !@    @    $          4    (     0    H    !         !     *    5VEN9&]W5'EP90        X    "
-    "X    !@    @    $          4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !          % "
-    "   \"     $    &     0         0    !@   &9W:61T:   #@   #@    &    \"     8         !0    @    !     0    $      "
-    "   \"0    @           #P/PX    X    !@    @    $          4    (     0    4    !         !     %    87-Y;F,    .  "
-    "  ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X   !     !@    @    $          4    (  "
-    "   0    P    !         !     ,    8G)A;5]L871E;F-Y      X    X    !@    @    &          4    (     0    $    !    "
-    "      D    (             $ .    0     8    (    !          %    \"     $    +     0         0    \"P   &9A;E]L871E"
-    ";F-Y       .    .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   $     &    "
-    "\"     0         !0    @    !    \"P    $         $     L   !A9&1?;&%T96YC>0      #@   #@    &    \"     8        "
-    " !0    @    !     0    $         \"0    @           #P/PX   !     !@    @    $          4    (     0    H    !    "
-    "     !     *    ;6%X7V9A;F]U=         X    X    !@    @    &          4    (     0    $    !          D    (      "
-    "      \\#\\.    2     8    (    !          %    \"     $    1     0         0    $0   &)R86U?;W!T:6UI>F%T:6]N     "
-    "     X    P    !@    @    $          4    (     0    0    !         !  ! !!<F5A#@   #@    &    \"     8         !0"
-    "    @    !     0    $         \"0    @               X    X    !@    @    &          4    (     0    $    !       "
-    "   D    (            %$ .    .     8    (    !@         %    \"     $    !     0         )    \"               #@ "
-    "  #@    &    \"     8         !0    @    !     0    $         \"0    @            H0 X    X    !@    @    $       "
-    "   4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !@         %    \"     $    !     0  "
-    "       )    \"            / _#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .   "
-    "  8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8         !0 "
-    "   @    !     0    $         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    !        "
-    "  D    (            \\#\\"
+    Data		    "  %)30     .    L H   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ! .H  .    ( H   "
+    "8    (     @         %    \"     $    !     0         %  0 $@    $   #8    9&5F875L=',             ;E]I;G!U=',    "
+    "         <&9B7W-I>F4             ;E]T87!S                ;E]B:71S7V-O969F        5VEN9&]W5'EP90          9G=I9'1H "
+    "               87-Y;F,                 8G)A;5]L871E;F-Y        9F%N7VQA=&5N8WD         861D7VQA=&5N8WD         8G)"
+    "A;5]O<'1I;6EZ871I;VX #@   %@&   &    \"     $         !0    @    !    &     $         #@   #@    &    \"     0    "
+    "     !0    @    !    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !"
+    "          D    (             $ .    .     8    (    !          %    \"     $    (     0         0    \"    '!F8E]S"
+    ":7IE#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X    X    !@    @    $"
+    "          4    (     0    8    !         !     &    ;E]T87!S   .    .     8    (    !@         %    \"     $    ! "
+    "    0         )    \"            !! #@   $     &    \"     0         !0    @    !    #     $         $     P   !N7"
+    "V)I='-?8V]E9F8     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            R0 X   !  "
+    "   !@    @    $          4    (     0    H    !         !     *    5VEN9&]W5'EP90        X    X    !@    @    $   "
+    "       4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !          %    \"     $    &    "
+    " 0         0    !@   &9W:61T:   #@   #@    &    \"     8         !0    @    !     0    $         \"0    @         "
+    "  #P/PX    X    !@    @    $          4    (     0    4    !         !     %    87-Y;F,    .    ,     8    (    ! "
+    "         %    \"     $    \"     0         0  ( ;VX   X   !     !@    @    $          4    (     0    P    !      "
+    "   !     ,    8G)A;5]L871E;F-Y      X    X    !@    @    &          4    (     0    $    !          D    (        "
+    "     $ .    0     8    (    !          %    \"     $    +     0         0    \"P   &9A;E]L871E;F-Y       .    .   "
+    "  8    (    !@         %    \"     $    !     0         )    \"             ! #@   $     &    \"     0         !0 "
+    "   @    !    \"P    $         $     L   !A9&1?;&%T96YC>0      #@   #@    &    \"     8         !0    @    !     0 "
+    "   $         \"0    @           #P/PX   !     !@    @    $          4    (     0    H    !         !     *    ;6%X"
+    "7V9A;F]U=         X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    2   "
+    "  8    (    !          %    \"     $    1     0         0    $0   &)R86U?;W!T:6UI>F%T:6]N          X    P    !@   "
+    " @    $          4    (     0    0    !         !  ! !!<F5A#@   #@    &    \"     8         !0    @    !     0    "
+    "$         \"0    @               X    X    !@    @    &          4    (     0    $    !          D    (           "
+    " %$ .    .     8    (    !@         %    \"     $    !     0         )    \"               #@   #@    &    \"     "
+    "8         !0    @    !     0    $         \"0    @            H0 X    X    !@    @    $          4    (     0    <"
+    "    !         !     '    :&%M;6EN9P .    .     8    (    !@         %    \"     $    !     0         )    \"      "
+    "      / _#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@      "
+    "   %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $"
+    "         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    !          D    (            "
+    "\\#\\.    ,     8    (    !          %    \"     $    $     0         0  0 07)E80"
   }
   DataRecord {
     Tag			    DataTag34
-    Data		    "  %)30     .    H!    8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ -M>9 8.    $!    "
-    "8    (     @         %    \"     $    !     0         %  0 #@    $   #\\    9&5F875L=',       !N7W-T<F5A;7,      %"
-    "!&0E-I>F4         5&]T86Q487!S      !7:6YD;W=4>7!E     &Y?:6YP=71S        8V]M<&QE>         !\":717:61T:$EN     $)"
-    "I=%=I9'1H3W5T    0V]E9F9\":717:61T: !A<WEN8P           &%D9%]L871E;F-Y    ;75L=%]L871E;F-Y  !B<F%M7VQA=&5N8WD  &9A"
-    ";E]L871E;F-Y    8V]N=E]L871E;F-Y  !Q=6%N=&EZ871I;VX  &9W:61T:                 X   \"(\"@  !@    @    !          4 "
-    "   (     0   \"@    !          X   !     !@    @    $          4    (     0    D    !         !     )    ;E]S=')E8"
-    "6US          X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8  "
-    "  (    !          %    \"     $    '     0         0    !P   %!&0E-I>F4 #@   #@    &    \"     8         !0    @  "
-    "  !     0    $         \"0    @            40 X   !     !@    @    $          4    (     0    D    !         !    "
-    " )    5&]T86Q487!S          X    X    !@    @    &          4    (     0    $    !          D    (            $$ ."
-    "    0     8    (    !          %    \"     $    *     0         0    \"@   %=I;F1O=U1Y<&4        .    .     8    ("
-    "    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@    &    \"     0         !0    @    !"
-    "    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    ( "
-    "              .    0     8    (    !          %    \"     $    *     0         0    \"@   $)I=%=I9'1H26X        . "
-    "   .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   $     &    \"     0    "
-    "     !0    @    !    \"P    $         $     L   !\":717:61T:$]U=       #@   #@    &    \"     8         !0    @   "
-    " !     0    $         \"0    @            R0 X   !     !@    @    $          4    (     0    T    !         !     "
-    "-    0V]E9F9\":717:61T:     X    X    !@    @    &          4    (     0    $    !          D    (            *$ ."
-    "    .     8    (    !          %    \"     $    '     0         0    !P   &-O;7!L97@ #@   #     &    \"     0     "
-    "    !0    @    !     @    $         $  \" &]N   .    .     8    (    !          %    \"     $    %     0         0"
-    "    !0   &%S>6YC    #@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    0     8    ("
-    "    !          %    \"     $    ,     0         0    #    &UU;'1?;&%T96YC>0     .    .     8    (    !@         % "
-    "   \"     $    !     0         )    \"             ! #@   $     &    \"     0         !0    @    !    \"P    $    "
-    "     $     L   !A9&1?;&%T96YC>0      #@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
-    "       #P/PX   !     !@    @    $          4    (     0    P    !         !     ,    8G)A;5]L871E;F-Y      X    X "
-    "   !@    @    &          4    (     0    $    !          D    (             $ .    0     8    (    !          %   "
-    " \"     $    +     0         0    \"P   &9A;E]L871E;F-Y       .    .     8    (    !@         %    \"     $    !  "
-    "   0         )    \"            / _#@   $     &    \"     0         !0    @    !    #     $         $     P   !C;V"
-    "YV7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX   !   "
-    "  !@    @    $          4    (     0    P    !         !     ,    <75A;G1I>F%T:6]N      X    X    !@    @    $    "
-    "      4    (     0    @    !         !     (    5')U;F-A=&4.    .     8    (    !          %    \"     $    &     "
-    "0         0    !@   &9W:61T:   #@   #@    &    \"     8         !0    @    !     0    $         \"0    @          "
-    " #P/PX    X    !@    @    $          4    (     0    8    !         !     &    9F%N;W5T   .    .     8    (    !@ "
-    "        %    \"     $    !     0         )    \"            !! #@   $@    &    \"     0         !0    @    !    & "
-    "    $         $    !@   !C;V5F9G-?8G)A;5]O<'1I;6EZ871I;VX.    ,     8    (    !          %    \"     $    $     0 "
-    "        0  0 07)E80X   !(    !@    @    $          4    (     0   !@    !         !     8    9&5L87ES7V)R86U?;W!T:"
-    "6UI>F%T:6]N#@   #     &    \"     0         !0    @    !    !     $         $  $ $%R96$.    .     8    (    !@    "
-    "     %    \"     $    !     0         )    \"            / _#@   #@    &    \"     8         !0    @    !     0   "
-    " $         \"0    @            40 X    X    !@    @    &          4    (     0    $    !          D    (          "
-    "     .    .     8    (    !          %    \"     $    '     0         0    !P   &AA;6UI;F< #@   #@    &    \"     "
-    "8         !0    @    !     0    $         \"0    @               X    P    !@    @    $          4    (     0    ,"
-    "    !         !   P!O9F8 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X"
-    "    X    !@    @    &          4    (     0    $    !          D    (            ,D .    .     8    (    !@       "
-    "  %    \"     $    !     0         )    \"            \"A #@   #     &    \"     0         !0    @    !     P    $"
-    "         $  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@"
-    "    &    \"     8         !0    @    !     0    $         \"0    @             0 X    X    !@    @    &          4"
-    "    (     0    $    !          D    (             $ .    .     8    (    !@         %    \"     $    !     0      "
-    "   )    \"            / _#@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX"
-    "   !0    !@    @    $          4    (     0   !X    !         !     >    4F]U;F0@(\"AU;F)I87-E9#H@179E;B!686QU97,I"
-    "   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _"
+    Data		    "  %)30     .    \"!(   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A"
+    "=&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +57' ,.    >!$  "
+    " 8    (     @         %    \"     $    !     0         %  0 &0    $   #T 0  9&5F875L=',                      &Y?<W"
+    "1R96%M<P                    !01D)3:7IE                        5&]T86Q487!S                     %=I;F1O=U1Y<&4     "
+    "              !N7VEN<'5T<P                      8V]M<&QE>                        $)I=%=I9'1H26X                   "
+    "!\":717:61T:$]U=                   0V]E9F9\":717:61T:                &%S>6YC                          !A9&1?;&%T96"
+    "YC>0                  ;75L=%]L871E;F-Y                 &)R86U?;&%T96YC>0                !F86Y?;&%T96YC>0          "
+    "        8V]N=E]L871E;F-Y                 '%U86YT:7IA=&EO;@                !F=VED=&@                         8V]E9F"
+    "9S7V)R86U?;W!T:6UI>F%T:6]N &1E;&%Y<U]B<F%M7V]P=&EM:7IA=&EO;@      #@   (@*   &    \"     $         !0    @    !   "
+    " *     $         #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !N7W-T<F5A;7,        "
+    " #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    $   "
+    "       4    (     0    <    !         !     '    4$9\"4VEZ90 .    .     8    (    !@         %    \"     $    !   "
+    "  0         )    \"            !1 #@   $     &    \"     0         !0    @    !    \"0    $         $     D   !4;W"
+    "1A;%1A<',         #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            00 X   !   "
+    "  !@    @    $          4    (     0    H    !         !     *    5VEN9&]W5'EP90        X    X    !@    @    $    "
+    "      4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !          %    \"     $    (     "
+    "0         0    \"    &Y?:6YP=71S#@   #@    &    \"     8         !0    @    !     0    $         \"0    @         "
+    "      X   !     !@    @    $          4    (     0    H    !         !     *    0FET5VED=&A);@        X    X    !@"
+    "    @    &          4    (     0    $    !          D    (            ($ .    0     8    (    !          %    \"  "
+    "   $    +     0         0    \"P   $)I=%=I9'1H3W5T       .    .     8    (    !@         %    \"     $    !     0 "
+    "        )    \"            #) #@   $     &    \"     0         !0    @    !    #0    $         $     T   !#;V5F9D)"
+    "I=%=I9'1H    #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            H0 X    X    !@ "
+    "   @    $          4    (     0    <    !         !     '    8V]M<&QE>  .    ,     8    (    !          %    \"   "
+    "  $    \"     0         0  ( ;VX   X    X    !@    @    $          4    (     0    4    !         !     %    87-Y;"
+    "F,    .    ,     8    (    !          %    \"     $    \"     0         0  ( ;VX   X   !     !@    @    $         "
+    " 4    (     0    P    !         !     ,    ;75L=%]L871E;F-Y      X    X    !@    @    &          4    (     0    $"
+    "    !          D    (             $ .    0     8    (    !          %    \"     $    +     0         0    \"P   &%"
+    "D9%]L871E;F-Y       .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $ "
+    "    &    \"     0         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8"
+    "         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4    (     0    L "
+    "   !         !     +    9F%N7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !          D   "
+    " (            \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    &-O;G9?;&%T96YC>0   "
+    "  .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0 "
+    "        !0    @    !    #     $         $     P   !Q=6%N=&EZ871I;VX     #@   #@    &    \"     0         !0    @  "
+    "  !    \"     $         $     @   !4<G5N8V%T90X    X    !@    @    $          4    (     0    8    !         !    "
+    " &    9G=I9'1H   .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@   "
+    " &    \"     0         !0    @    !    !@    $         $     8   !F86YO=70   X    X    !@    @    &          4    "
+    "(     0    $    !          D    (            $$ .    2     8    (    !          %    \"     $    8     0         0"
+    "    &    &-O969F<U]B<F%M7V]P=&EM:7IA=&EO;@X    P    !@    @    $          4    (     0    0    !         !  ! !!<F"
+    "5A#@   $@    &    \"     0         !0    @    !    &     $         $    !@   !D96QA>7-?8G)A;5]O<'1I;6EZ871I;VX.   "
+    " ,     8    (    !          %    \"     $    $     0         0  0 07)E80X    X    !@    @    &          4    (    "
+    " 0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )   "
+    " \"            !1 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    X  "
+    "  !@    @    $          4    (     0    <    !         !     '    :&%M;6EN9P .    .     8    (    !@         %    "
+    "\"     $    !     0         )    \"               #@   #     &    \"     0         !0    @    !     P    $        "
+    " $  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"            \"! #@   #@    &  "
+    "  \"     8         !0    @    !     0    $         \"0    @            R0 X    X    !@    @    &          4    (  "
+    "   0    $    !          D    (            *$ .    ,     8    (    !          %    \"     $    #     0         0  ,"
+    " ;V9F  X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8    (   "
+    " !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     8         !0    @    !  "
+    "   0    $         \"0    @             0 X    X    !@    @    &          4    (     0    $    !          D    (   "
+    "         \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   %     & "
+    "   \"     0         !0    @    !    '@    $         $    !X   !2;W5N9\" @*'5N8FEA<V5D.B!%=F5N(%9A;'5E<RD   X    X "
+    "   !@    @    &          4    (     0    $    !          D    (            \\#\\.    ,     8    (    !          % "
+    "   \"     $    $     0         0  0 07)E80X    P    !@    @    $          4    (     0    0    !         !  ! !!<F"
+    "5A"
   }
   DataRecord {
     Tag			    DataTag35
@@ -12201,49 +12210,50 @@ MatData {
   }
   DataRecord {
     Tag			    DataTag44
-    Data		    "  %)30     .    T T   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &J6@@0.    0 T   "
-    "8    (     @         %    \"     $    !     0         %  0 &@    $   \"& 0  9&5F875L=',                       !N7W"
+    Data		    "  %)30     .    ( X   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ .?-CP(.    D T   "
+    "8    (     @         %    \"     $    !     0         %  0 &@    $   \"@ 0  9&5F875L=',                       !N7W"
     "-T<F5A;7,                      &Y?:6YP=71S                        <&9B7W-I>F4                       !N7W1A<',     "
     "                     &Y?8FET<U]D871A                    ;E]B:71S7V-O969F                  !B:6Y?<'1?8V]E9F8       "
     "           &-O;7!L97@                         87-Y;F,                           !M=6QT7VQA=&5N8WD                 "
     " &%D9%]L871E;F-Y                    8G)A;5]L871E;F-Y                  !F86Y?;&%T96YC>0                   &UU;'1I<&"
-    "QI97)?:6UP;&5M96YT871I;VX    .      @   8    (     0         %    \"     $    >     0         .    0     8    (   "
-    " !          %    \"     $    )     0         0    \"0   &Y?<W1R96%M<P         .    .     8    (    !@         %   "
-    " \"     $    !     0         )    \"             ! #@   #@    &    \"     0         !0    @    !    \"     $      "
-    "   $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !          D    (               .   "
-    " .     8    (    !          %    \"     $    (     0         0    \"    '!F8E]S:7IE#@   #@    &    \"     8       "
-    "  !0    @    !     0    $         \"0    @            40 X    X    !@    @    $          4    (     0    8    !   "
-    "      !     &    ;E]T87!S   .    .     8    (    !@         %    \"     $    !     0         )    \"            !!"
-    " #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !N7V)I='-?9&%T80      #@   #@    &   "
-    " \"     8         !0    @    !     0    $         \"0    @            @0 X   !     !@    @    $          4    (   "
-    "  0    P    !         !     ,    ;E]B:71S7V-O969F      X    X    !@    @    &          4    (     0    $    !     "
-    "     D    (            *$ .    0     8    (    !          %    \"     $    ,     0         0    #    &)I;E]P=%]C;V"
-    "5F9@     .    .     8    (    !@         %    \"     $    !     0         )    \"            \"9 #@   #@    &    \""
-    "     0         !0    @    !    !P    $         $     <   !C;VUP;&5X  X    P    !@    @    $          4    (     0 "
-    "   (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    !    !0    $         $     4   !A<WEN8P  "
-    "  X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   $     &    \"     0         !0   "
-    " @    !    #     $         $     P   !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    "
-    "$         \"0    @             0 X   !     !@    @    $          4    (     0    L    !         !     +    861D7VQ"
-    "A=&5N8WD       X    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    0     8"
-    "    (    !          %    \"     $    +     0         0    \"P   &9A;E]L871E;F-Y       .    .     8    (    !@     "
-    "    %    \"     $    !     0         )    \"            !Q #@   $     &    \"     0         !0    @    !    #     "
-    "$         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    @    !     0    $         \"0    "
-    "@           #P/PX   !0    !@    @    $          4    (     0   !D    !         !     9    ;75L=&EP;&EE<E]I;7!L96UE"
-    ";G1A=&EO;@         .    0     8    (    !          %    \"     $    .     0         0    #@   &)E:&%V:6]R86P@2$1, "
-    "  .    2     8    (    !          %    \"     $    1     0         0    $0   &)R86U?;W!T:6UI>F%T:6]N          X   "
-    " P    !@    @    $          4    (     0    0    !         !  ! !!<F5A#@   #@    &    \"     8         !0    @    "
-    "!     0    $         \"0    @           #P/PX    X    !@    @    &          4    (     0    $    !          D    ("
-    "               .    .     8    (    !@         %    \"     $    !     0         )    \"            !1 #@   #@    &"
-    "    \"     8         !0    @    !     0    $         \"0    @               X    X    !@    @    &          4    ("
-    "     0    $    !          D    (            ($ .    .     8    (    !@         %    \"     $    !     0         ) "
-    "   \"            \"A #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            F0 X    "
-    "P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &    \"     0         !0    @    !"
-    "     P    $         $  # &]F9@ .    .     8    (    !@         %    \"     $    !     0         )    \"           "
-    "  ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    &"
-    "          4    (     0    $    !          D    (            \\#\\.    .     8    (    !@         %    \"     $    "
-    "!     0         )    \"            / _#@   $     &    \"     0         !0    @    !    #@    $         $     X   !"
-    "B96AA=FEO<F%L($A$3   "
+    "QI97)?:6UP;&5M96YT871I;VX 8G)A;5]O<'1I;6EZ871I;VX            .      @   8    (     0         %    \"     $    >   "
+    "  0         .    0     8    (    !          %    \"     $    )     0         0    \"0   &Y?<W1R96%M<P         .   "
+    " .     8    (    !@         %    \"     $    !     0         )    \"             ! #@   #@    &    \"     0       "
+    "  !0    @    !    \"     $         $     @   !N7VEN<'5T<PX    X    !@    @    &          4    (     0    $    !   "
+    "       D    (               .    .     8    (    !          %    \"     $    (     0         0    \"    '!F8E]S:7I"
+    "E#@   #@    &    \"     8         !0    @    !     0    $         \"0    @            40 X    X    !@    @    $   "
+    "       4    (     0    8    !         !     &    ;E]T87!S   .    .     8    (    !@         %    \"     $    !    "
+    " 0         )    \"            !! #@   $     &    \"     0         !0    @    !    \"P    $         $     L   !N7V)"
+    "I='-?9&%T80      #@   #@    &    \"     8         !0    @    !     0    $         \"0    @            @0 X   !    "
+    " !@    @    $          4    (     0    P    !         !     ,    ;E]B:71S7V-O969F      X    X    !@    @    &     "
+    "     4    (     0    $    !          D    (            *$ .    0     8    (    !          %    \"     $    ,     0"
+    "         0    #    &)I;E]P=%]C;V5F9@     .    .     8    (    !@         %    \"     $    !     0         )    \" "
+    "           \"9 #@   #@    &    \"     0         !0    @    !    !P    $         $     <   !C;VUP;&5X  X    P    !@"
+    "    @    $          4    (     0    (    !         !   @!O;@  #@   #@    &    \"     0         !0    @    !    !0 "
+    "   $         $     4   !A<WEN8P    X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   "
+    "$     &    \"     0         !0    @    !    #     $         $     P   !M=6QT7VQA=&5N8WD     #@   #@    &    \"    "
+    " 8         !0    @    !     0    $         \"0    @             0 X   !     !@    @    $          4    (     0    "
+    "L    !         !     +    861D7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !          D "
+    "   (            \\#\\.    0     8    (    !          %    \"     $    +     0         0    \"P   &9A;E]L871E;F-Y  "
+    "     .    .     8    (    !@         %    \"     $    !     0         )    \"            !Q #@   $     &    \"    "
+    " 0         !0    @    !    #     $         $     P   !B<F%M7VQA=&5N8WD     #@   #@    &    \"     8         !0    "
+    "@    !     0    $         \"0    @           #P/PX   !0    !@    @    $          4    (     0   !D    !         ! "
+    "    9    ;75L=&EP;&EE<E]I;7!L96UE;G1A=&EO;@         .    0     8    (    !          %    \"     $    .     0      "
+    "   0    #@   &)E:&%V:6]R86P@2$1,   .    2     8    (    !          %    \"     $    1     0         0    $0   &)R8"
+    "6U?;W!T:6UI>F%T:6]N          X    P    !@    @    $          4    (     0    0    !         !  ! !!<F5A#@   #@    "
+    "&    \"     8         !0    @    !     0    $         \"0    @           #P/PX    X    !@    @    &          4    "
+    "(     0    $    !          D    (               .    .     8    (    !@         %    \"     $    !     0         )"
+    "    \"            !1 #@   #@    &    \"     8         !0    @    !     0    $         \"0    @               X    "
+    "X    !@    @    &          4    (     0    $    !          D    (            ($ .    .     8    (    !@         % "
+    "   \"     $    !     0         )    \"            \"A #@   #@    &    \"     8         !0    @    !     0    $    "
+    "     \"0    @            F0 X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #     &"
+    "    \"     0         !0    @    !     P    $         $  # &]F9@ .    .     8    (    !@         %    \"     $    !"
+    "     0         )    \"             ! #@   #@    &    \"     8         !0    @    !     0    $         \"0    @    "
+    "       #P/PX    X    !@    @    &          4    (     0    $    !          D    (            \\#\\.    .     8    "
+    "(    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0         !0    @   "
+    " !    #@    $         $     X   !B96AA=FEO<F%L($A$3   #@   #     &    \"     0         !0    @    !    !     $    "
+    "     $  $ $%R96$"
   }
   DataRecord {
     Tag			    DataTag45
