@@ -1,18 +1,20 @@
 `timescale 1ns/1ps
 module opb_attach #(
-    parameter C_BASEADDR     = 32'h0,
-    parameter C_HIGHADDR     = 32'hffff,
-    parameter C_OPB_AWIDTH   = 32,
-    parameter C_OPB_DWIDTH   = 32,
-    parameter FABRIC_MAC     = 48'hffff_ffff_ffff,
-    parameter FABRIC_IP      = 32'hffff_ffff,
-    parameter FABRIC_PORT    = 16'hffff,
-    parameter FABRIC_GATEWAY = 8'd0,
-    parameter FABRIC_ENABLE  = 0,
-    parameter PREEMPHASIS    = 4'b0100,
-    parameter POSTEMPHASIS   = 5'b00000,
-    parameter DIFFCTRL       = 4'b1010,
-    parameter RXEQMIX        = 3'b111
+    parameter C_BASEADDR      = 32'h0,
+    parameter C_HIGHADDR      = 32'hffff,
+    parameter C_OPB_AWIDTH    = 32,
+    parameter C_OPB_DWIDTH    = 32,
+    parameter FABRIC_MAC      = 48'hffff_ffff_ffff,
+    parameter FABRIC_IP       = 32'hffff_ffff,
+    parameter FABRIC_PORT     = 16'hffff,
+    parameter FABRIC_GATEWAY  = 8'd0,
+    parameter FABRIC_ENABLE   = 0,
+    parameter MC_RECV_IP      = 32'h00000000,
+    parameter MC_RECV_IP_MASK = 32'h00000000,
+    parameter PREEMPHASIS     = 4'b0100,
+    parameter POSTEMPHASIS    = 5'b00000,
+    parameter DIFFCTRL        = 4'b1010,
+    parameter RXEQMIX         = 3'b111
   )(
     //OPB attachment
     input         OPB_Clk,
@@ -52,6 +54,8 @@ module opb_attach #(
     output [31:0] local_ip,
     output [15:0] local_port,
     output  [7:0] local_gateway,
+    output [31:0] local_mc_recv_ip,
+    output [31:0] local_mc_recv_ip_mask,
     output        soft_reset,
     input         soft_reset_ack,
     //xaui status
@@ -96,21 +100,25 @@ module opb_attach #(
 
   /************** Registers ****************/
   
-  localparam REG_LOCAL_MAC_1   = 4'd0;
-  localparam REG_LOCAL_MAC_0   = 4'd1;
-  localparam REG_LOCAL_GATEWAY = 4'd3;
-  localparam REG_LOCAL_IPADDR  = 4'd4;
-  localparam REG_BUFFER_SIZES  = 4'd6;
-  localparam REG_VALID_PORTS   = 4'd8;
-  localparam REG_XAUI_STATUS   = 4'd9;
-  localparam REG_PHY_CONFIG    = 4'd10;
-  localparam REG_XAUI_CONFIG   = 4'd11;
+  localparam REG_LOCAL_MAC_1     = 4'd0;
+  localparam REG_LOCAL_MAC_0     = 4'd1;
+  localparam REG_LOCAL_GATEWAY   = 4'd3;
+  localparam REG_LOCAL_IPADDR    = 4'd4;
+  localparam REG_BUFFER_SIZES    = 4'd6;
+  localparam REG_VALID_PORTS     = 4'd8;
+  localparam REG_XAUI_STATUS     = 4'd9;
+  localparam REG_PHY_CONFIG      = 4'd10;
+  localparam REG_XAUI_CONFIG     = 4'd11;
+  localparam REG_MC_RECV_IP      = 4'd12;
+  localparam REG_MC_RECV_IP_MASK = 4'd13;
 
   reg [47:0] local_mac_reg;
   reg [31:0] local_ip_reg;
   reg  [7:0] local_gateway_reg;
   reg [15:0] local_port_reg;
   reg        local_enable_reg;
+  reg [31:0] local_mc_recv_ip;
+  reg [31:0] local_mc_recv_ip_mask;
   reg  [2:0] mgt_rxeqmix_reg;
   reg  [3:0] mgt_txpreemphasis_reg;
   reg  [4:0] mgt_txpostemphasis_reg;
@@ -172,6 +180,8 @@ module opb_attach #(
       local_gateway_reg <= FABRIC_GATEWAY;
       local_port_reg    <= FABRIC_PORT;
       local_enable_reg  <= FABRIC_ENABLE;
+      local_mc_recv_ip      <= MC_RECV_IP;
+      local_mc_recv_ip_mask <= MC_RECV_IP_MASK;
 
       cpu_tx_size_reg   <= 8'd0;
 
@@ -302,6 +312,26 @@ module opb_attach #(
               if (OPB_BE[2])
                 xaui_rst_rx_link_status_reg <= OPB_DBus[16];
             end
+            REG_MC_RECV_IP: begin
+              if (OPB_BE[0])
+                local_mc_recv_ip[7:0]   <= OPB_DBus[7:0];
+              if (OPB_BE[1])
+                local_mc_recv_ip[15:8]  <= OPB_DBus[15:8];
+              if (OPB_BE[2])
+                local_mc_recv_ip[23:16] <= OPB_DBus[23:16];
+              if (OPB_BE[3])
+                local_mc_recv_ip[31:24] <= OPB_DBus[31:24];
+            end
+            REG_MC_RECV_IP_MASK: begin
+              if (OPB_BE[0])
+                local_mc_recv_ip_mask[7:0]   <= OPB_DBus[7:0];
+              if (OPB_BE[1])
+                local_mc_recv_ip_mask[15:8]  <= OPB_DBus[15:8];
+              if (OPB_BE[2])
+                local_mc_recv_ip_mask[23:16] <= OPB_DBus[23:16];
+              if (OPB_BE[3])
+                local_mc_recv_ip_mask[31:24] <= OPB_DBus[31:24];
+            end
             default: begin
             end
           endcase
@@ -377,6 +407,8 @@ module opb_attach #(
                                                                   4'b0, mgt_txpreemphasis_reg,
                                                                   3'b0, mgt_txpostemphasis_reg, 
                                                                   4'b0, 1'b0, mgt_rxeqmix_reg} :
+                             opb_data_src == REG_MC_RECV_IP      ? local_mc_recv_ip[31:0]      :
+                             opb_data_src == REG_MC_RECV_IP_MASK ? local_mc_recv_ip_mask[31:0] :
                                                                   32'd0;
   wire [31:0] Sl_DBus_int;
   assign Sl_DBus_int = use_arp_data ? arp_data_int :
