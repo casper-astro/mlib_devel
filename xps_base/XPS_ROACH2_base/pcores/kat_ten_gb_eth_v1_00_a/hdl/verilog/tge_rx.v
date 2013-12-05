@@ -8,6 +8,8 @@ module tge_rx #(
     input  [47:0] local_mac,
     input  [31:0] local_ip,
     input  [15:0] local_port,
+    input  [31:0] local_mc_recv_ip,
+    input  [31:0] local_mc_recv_ip_mask,
     // Application Interface
     input         app_clk,
     input         app_rst,
@@ -91,10 +93,13 @@ module tge_rx #(
   reg [47:0] rx_control_data;
 
   /* Eady reading assignments */
-  wire [47:0] destination_mac  = {mac_rx_data_z[ 7:0 ], mac_rx_data_z[15:8 ], mac_rx_data_z[23:16],
+  wire [47:0] destination_mac  = {mac_rx_data_z[ 7: 0], mac_rx_data_z[15: 8], mac_rx_data_z[23:16],
                                   mac_rx_data_z[31:24], mac_rx_data_z[39:32], mac_rx_data_z[47:40]};
   wire [15:0] destination_port = {mac_rx_data_z[39:32], mac_rx_data_z[47:40]};
-  wire [31:0] destination_ip   = {mac_rx_dataR[55:48], mac_rx_dataR[63:56], mac_rx_data_z[7:0], mac_rx_data_z[15:8]};
+  wire [31:0] destination_ip   = {mac_rx_dataR [55:48], mac_rx_dataR [63:56], mac_rx_data_z[ 7: 0],
+                                  mac_rx_data_z[15: 8]};
+  
+  wire mc_ip_match = ((ctrl_fifo_rd_data[31:0] & local_mc_recv_ip_mask) || (ctrl_fifo_rd_data[31:0] == local_ip));
 
   always @(posedge mac_clk) begin
     /* Delay Data + frame signals */
@@ -117,7 +122,7 @@ module tge_rx #(
             $display("tge_rx: got frame start ");
 `endif
           /* Check Dest MAC */
-            if (destination_mac != local_mac && destination_mac != {48{1'b1}}) begin
+            if ((destination_mac != local_mac && destination_mac != {48{1'b1}}) && destination_mac[47:24] != 24'h01005E)   begin
               /* dont send if mac mismatch */
               cpu_frame         <= 1'b0;
               application_frame <= 1'b0;
@@ -178,7 +183,7 @@ module tge_rx #(
             rx_state          <= RX_DATA;
           end
           /* Check destiniation IP */
-          if (destination_ip != local_ip) begin
+          if (destination_ip != local_ip && destination_ip != local_mc_recv_ip && !mc_ip_match) begin
 `ifdef DEBUG
             $display("tge_rx: ip mismatch - got %d.%d.%d.%d, local = %d.%d.%d.%d", destination_ip[31:24], destination_ip[23:16], destination_ip[15:8],destination_ip[7:0],
                                                                                    local_ip[31:24], local_ip[23:16], local_ip[15:8],local_ip[7:0] );
