@@ -112,6 +112,7 @@ module mem_opb_attach #(
 	localparam DDR3_W16 = 4'd15;	//skip word 17 here
 	wire [28:0] ddr3_addr;
 	wire [2:0] opb_word;
+	wire  ddr3_word;
 	// initially, we will only use the first 8 words of 9
 
    /* DDR3-to-OPB signals */
@@ -166,7 +167,8 @@ module mem_opb_attach #(
 	   .software_address_bits(software_address_bits),
 		.opb_addr(opb_addr), 
 		.ddr3_addr(ddr3_addr), 
-		.opb_word(opb_word)
+		.opb_word(opb_word),
+                .ddr3_word(ddr3_word)
 	);
     
    /* OPB state machine */
@@ -280,7 +282,7 @@ module mem_opb_attach #(
          ddr3_read_done    <= 1'b1;
          ddr3_write_done   <= 1'b1;
          dram_rd_data0     <= 288'b0;
-//         dram_rd_data1     <= 288'b0;
+         dram_rd_data1     <= 288'b0;
 //         ddr3_read_data    <= 288'b0;
          ddr3_state        <= DDR3_IDLE;
          
@@ -341,7 +343,7 @@ module mem_opb_attach #(
                if (dram_rd_data_end) begin
                   /* Second cycle, finish up */
                   ddr3_state     <= DDR3_READ_RESP;
-//                  dram_rd_data1  <= dram_rd_data;  //set second word of rd_data to data1
+                  dram_rd_data1  <= dram_rd_data;  //set second word of rd_data to data1
                   //ddr3_read_data <= dram_rd_data[223:192];
                end else if (dram_rd_data_valid) begin // if (dram_rd_data_end)
                   /* First cylce read data is valid, grab it */
@@ -382,35 +384,67 @@ module mem_opb_attach #(
         case (opb_word)
  
             DDR3_W0: begin
-               ddr3_read_data <= dram_rd_data0[31:0];
+               if (!ddr3_word) begin
+                  ddr3_read_data <= dram_rd_data0[31:0];
+               end else begin
+					   ddr3_read_data <= dram_rd_data1[31:0];
+					end 
             end
             
             DDR3_W1: begin
-               ddr3_read_data <= dram_rd_data0[63:32];
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[63:32];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[63:32];
+               end   
             end
             
             DDR3_W2: begin
-               ddr3_read_data <= dram_rd_data0[95:64];
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[95:64];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[95:64];
+               end   
             end
             
             DDR3_W3: begin
-               ddr3_read_data <= dram_rd_data0[127:96];
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[127:96];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[127:96];
+               end   
             end
             
             DDR3_W4: begin
-               ddr3_read_data <= dram_rd_data0[159:128];
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[159:128];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[159:128];
+               end   
             end
             
             DDR3_W5: begin
-               ddr3_read_data <= dram_rd_data0[191:160];
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[191:160];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[191:160];
+               end   
             end
             
             DDR3_W6: begin
-               ddr3_read_data <= dram_rd_data0[223:192];
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[223:192];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[223:192];
+               end   
             end
             
             DDR3_W7: begin
-               ddr3_read_data <= dram_rd_data0[255:224];
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[255:224];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[255:224];
+               end   
             end
 //            
 //            DDR3_W9: begin 
