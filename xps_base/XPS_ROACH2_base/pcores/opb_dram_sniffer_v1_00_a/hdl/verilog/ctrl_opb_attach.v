@@ -18,7 +18,7 @@ module ctrl_opb_attach #(
     input 	  OPB_select,
     input 	  OPB_seqAddr,
 
-    output [15:0] software_address_bits,
+    output [31:0] software_address_bits,
     output 	  cpu_override_en,
     output 	  cpu_override_sel,
     input [3:0]   mem_dram_state,
@@ -102,7 +102,7 @@ module ctrl_opb_attach #(
   /* OPB Registers */
   reg Sl_errAck_reg;
   reg Sl_xferAck_reg;
-  reg [15:0] soft_addr_reg;
+  reg [31:0] soft_addr_reg;
   reg [7:0] opb_data_sel;
   reg override_en_reg;
   reg override_sel_reg;
@@ -122,7 +122,7 @@ module ctrl_opb_attach #(
     chip_select <= 0;
 	 Sl_DBus_reg <= 32'b0;
     if (OPB_Rst) begin
-      soft_addr_reg    <= 16'b0;
+      soft_addr_reg    <= 31'b0;
       override_en_reg  <= 1'b0;
       override_sel_reg <= 1'b0;
     end else begin
@@ -138,8 +138,12 @@ module ctrl_opb_attach #(
                         soft_addr_reg[7:0]  <= OPB_DBus[24:31];
                      if (OPB_BE[2])
                         soft_addr_reg[15:8] <= OPB_DBus[16:23];
+                     if (OPB_BE[1])
+                        soft_addr_reg[23:16]  <= OPB_DBus[8:15];
+                     if (OPB_BE[0])
+                        soft_addr_reg[31:24] <= OPB_DBus[0:7];
                   end else begin
-                     Sl_DBus_reg <= {16'h0, soft_addr_reg};
+                     Sl_DBus_reg <= {soft_addr_reg};
                   end
               end
 	  

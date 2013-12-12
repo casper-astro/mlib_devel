@@ -16,7 +16,7 @@ module mem_opb_attach #(
     input         OPB_select,
     input         OPB_seqAddr,
 	 
-	 input  [15:0] software_address_bits,
+	 input  [31:0] software_address_bits,
 
     input          dram_clk,
     input          dram_rst,
@@ -102,16 +102,10 @@ module mem_opb_attach #(
 	localparam DDR3_W5 = 4'd5;
 	localparam DDR3_W6 = 4'd6;
 	localparam DDR3_W7 = 4'd7; //skip word 8 here
-	localparam DDR3_W9 = 4'd8;	
-	localparam DDR3_W10 = 4'd9;	
-	localparam DDR3_W11 = 4'd10;	
-	localparam DDR3_W12 = 4'd11;	
-	localparam DDR3_W13 = 4'd12;	
-	localparam DDR3_W14 = 4'd13;	
-	localparam DDR3_W15 = 4'd14;	
-	localparam DDR3_W16 = 4'd15;	//skip word 17 here
-	wire [28:0] ddr3_addr;
-	wire [2:0] opb_word;
+	localparam DDR3_W8 = 4'd8;	
+	
+	wire [31:0] ddr3_addr;
+	wire [3:0] opb_word;
 	wire  ddr3_word;
 	// initially, we will only use the first 8 words of 9
 
@@ -163,7 +157,7 @@ module mem_opb_attach #(
    reg [31:0]  opb_sx_ctr_reg;
 
 	
-	translate_opb_addr_8words translate_opb_addr_8words(
+	opbaddr_2_Dnum_O9num opbaddr_2_Dnum_O9num(
 	   .software_address_bits(software_address_bits),
 		.opb_addr(opb_addr), 
 		.ddr3_addr(ddr3_addr), 
@@ -322,7 +316,7 @@ module mem_opb_attach #(
             DDR3_READ_INIT: begin
                /* Issue DDR3 command then wait */
                ddr3_state    <= DDR3_READ_HOLD;
-               dram_addr_reg <= {2'b0, ddr3_addr};
+               dram_addr_reg <= ddr3_addr; //32
                //dram_addr_reg <= opb_addr;
                dram_cmd_reg  <= 3'b001;
                dram_en_reg   <= 1'b1;
@@ -446,39 +440,17 @@ module mem_opb_attach #(
                   ddr3_read_data <= dram_rd_data1[255:224];
                end   
             end
-//            
-//            DDR3_W9: begin 
-//               ddr3_read_data <= dram_rd_data1[31:0];
-//            end
-//            
-//            DDR3_W10: begin
-//               ddr3_read_data <= dram_rd_data1[63:32];
-//            end
-//            
-//            DDR3_W11: begin
-//               ddr3_read_data <= dram_rd_data1[95:64];
-//            end
-//            
-//            DDR3_W12: begin
-//               ddr3_read_data <= dram_rd_data1[127:96];
-//            end
-//            
-//            DDR3_W13: begin
-//               ddr3_read_data <= dram_rd_data1[159:128];
-//            end
-//            
-//            DDR3_W14: begin
-//               ddr3_read_data <= dram_rd_data1[191:160];
-//            end
-//            
-//            DDR3_W15: begin
-//               ddr3_read_data <= dram_rd_data1[223:192];
-//            end
-//            
-//            DDR3_W16: begin
-//               ddr3_read_data <= dram_rd_data1[255:224];
-//            end
-//            
+
+
+            DDR3_W8: begin
+               if (ddr3_word == 0) begin
+                  ddr3_read_data <= dram_rd_data0[287:256];
+               end else begin
+                  ddr3_read_data <= dram_rd_data1[287:256];
+               end   
+            end
+
+
             default: begin
                ddr3_read_data <= 32'b0;
             end
