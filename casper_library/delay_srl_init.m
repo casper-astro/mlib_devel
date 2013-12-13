@@ -81,7 +81,8 @@ function delay_srl_init(blk, varargin)
 
   if srl_delay > 0,
     reuse_block(blk, 'delay_sr', 'xbsIndex_r4/Delay', ...
-      'en', async, 'latency', num2str(srl_delay), 'Position', [150 22 195 68]);
+      'en', async, 'latency', num2str(srl_delay), 'reg_retiming', 'on', ...
+      'Position', [150 22 195 68]);
     add_line(blk, [prev_blk,'/1'], 'delay_sr/1');
     prev_blk = 'delay_sr';
     
