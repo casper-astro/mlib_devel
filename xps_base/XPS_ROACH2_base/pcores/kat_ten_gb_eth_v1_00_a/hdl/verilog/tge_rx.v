@@ -99,8 +99,6 @@ module tge_rx #(
   wire [31:0] destination_ip   = {mac_rx_dataR [55:48], mac_rx_dataR [63:56], mac_rx_data_z[ 7: 0],
                                   mac_rx_data_z[15: 8]};
   
-  wire mc_ip_match = ((ctrl_fifo_rd_data[31:0] & local_mc_recv_ip_mask) == (local_mc_recv_ip & local_mc_recv_ip_mask)) || (ctrl_fifo_rd_data[31:0] == local_ip);
-
   always @(posedge mac_clk) begin
     /* Delay Data + frame signals */
     mac_rx_dataR       <= mac_rx_data_z;
@@ -182,8 +180,8 @@ module tge_rx #(
             application_frame <= 1'b0;
             rx_state          <= RX_DATA;
           end
-          /* Check destiniation IP */
-          if (destination_ip != local_ip && !mc_ip_match) begin
+          /* Check destiniation IP, is it our IP or a multicast IP that we have subscribed to*/
+          if (destination_ip != local_ip && destination_ip[31:0] != local_mc_recv_ip && (destination_ip[31:0] & local_mc_recv_ip_mask) != (local_mc_recv_ip & local_mc_recv_ip_mask)) begin
 `ifdef DEBUG
             $display("tge_rx: ip mismatch - got %d.%d.%d.%d, local = %d.%d.%d.%d", destination_ip[31:24], destination_ip[23:16], destination_ip[15:8],destination_ip[7:0],
                                                                                    local_ip[31:24], local_ip[23:16], local_ip[15:8],local_ip[7:0] );
