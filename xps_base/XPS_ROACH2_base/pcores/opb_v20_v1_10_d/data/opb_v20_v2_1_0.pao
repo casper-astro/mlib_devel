@@ -1,0 +1,79 @@
+##############################################################################
+##
+## ***************************************************************************
+## **                                                                       **
+## ** Copyright (c) 1995-2004 Xilinx, Inc.  All rights reserved.            **
+## **                                                                       **
+## ** You may copy and modify these files for your own internal use solely  **
+## ** with Xilinx programmable logic devices and Xilinx EDK system or       **
+## ** create IP modules solely for Xilinx programmable logic devices and    **
+## ** Xilinx EDK system. No rights are granted to distribute any files      **
+## ** unless they are distributed in Xilinx programmable logic devices.     **
+## **                                                                       **
+## ***************************************************************************
+##
+##############################################################################
+## Filename:          C:\bsb\edk_build\pcores\opb_v20_v1_10_c\data\opb_v20_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              10/6/09
+##############################################################################
+lib opb_v20_v1_10_d opb_arb_pkg.vhd vhdl
+lib opb_v20_v1_10_d proc_common_pkg.vhd vhdl
+lib opb_v20_v1_10_d ipif_pkg.vhd vhdl
+lib opb_v20_v1_10_d counter_bit.vhd vhdl
+lib opb_v20_v1_10_d counter.vhd vhdl
+lib opb_v20_v1_10_d direct_path_cntr_ai.vhd vhdl
+lib opb_v20_v1_10_d down_counter.vhd vhdl
+lib opb_v20_v1_10_d family.vhd vhdl
+lib opb_v20_v1_10_d inferred_lut4.vhd vhdl
+lib opb_v20_v1_10_d ipif_steer.vhd vhdl
+lib opb_v20_v1_10_d ld_arith_reg.vhd vhdl
+lib opb_v20_v1_10_d pf_adder_bit.vhd vhdl
+lib opb_v20_v1_10_d pf_adder.vhd vhdl
+lib opb_v20_v1_10_d pf_counter_bit.vhd vhdl
+lib opb_v20_v1_10_d pf_counter.vhd vhdl
+lib opb_v20_v1_10_d pf_counter_top.vhd vhdl
+lib opb_v20_v1_10_d pf_dpram_select.vhd vhdl
+lib opb_v20_v1_10_d pf_occ_counter.vhd vhdl
+lib opb_v20_v1_10_d pf_occ_counter_top.vhd vhdl
+lib opb_v20_v1_10_d pselect.vhd vhdl
+lib opb_v20_v1_10_d srl16_fifo.vhd vhdl
+lib opb_v20_v1_10_d srl_fifo2.vhd vhdl
+lib opb_v20_v1_10_d valid_be.vhd vhdl
+lib opb_v20_v1_10_d or_muxcy.vhd vhdl
+lib opb_v20_v1_10_d or_bits.vhd vhdl
+lib opb_v20_v1_10_d or_gate.vhd vhdl
+lib opb_v20_v1_10_d interrupt_control.vhd vhdl
+lib opb_v20_v1_10_d pf_dly1_mux.vhd vhdl
+lib opb_v20_v1_10_d wrpfifo_dp_cntl.vhd vhdl
+lib opb_v20_v1_10_d ipif_control_wr.vhd vhdl
+lib opb_v20_v1_10_d wrpfifo_top.vhd vhdl
+lib opb_v20_v1_10_d rdpfifo_dp_cntl.vhd vhdl
+lib opb_v20_v1_10_d ipif_control_rd.vhd vhdl
+lib opb_v20_v1_10_d rdpfifo_top.vhd vhdl
+lib opb_v20_v1_10_d reset_mir.vhd vhdl
+lib opb_v20_v1_10_d brst_addr_cntr.vhd vhdl
+lib opb_v20_v1_10_d opb_flex_addr_cntr.vhd vhdl
+lib opb_v20_v1_10_d brst_addr_cntr_reg.vhd vhdl
+lib opb_v20_v1_10_d opb_be_gen.vhd vhdl
+lib opb_v20_v1_10_d srl_fifo3.vhd vhdl
+lib opb_v20_v1_10_d write_buffer.vhd vhdl
+lib opb_v20_v1_10_d opb_bam.vhd vhdl
+lib opb_v20_v1_10_d opb_ipif.vhd vhdl
+lib opb_v20_v1_10_d opb_arb_pkg.vhd vhdl
+lib opb_v20_v1_10_d or_muxcy.vhd vhdl
+lib opb_v20_v1_10_d mux_onehot.vhd vhdl
+lib opb_v20_v1_10_d or_bits.vhd vhdl
+lib opb_v20_v1_10_d or_gate.vhd vhdl
+lib opb_v20_v1_10_d priority_reg.vhd vhdl
+lib opb_v20_v1_10_d onehot2encoded.vhd vhdl
+lib opb_v20_v1_10_d arbitration_logic.vhd vhdl
+lib opb_v20_v1_10_d park_lock_logic.vhd vhdl
+lib opb_v20_v1_10_d watchdog_timer.vhd vhdl
+lib opb_v20_v1_10_d arb2bus_data_mux.vhd vhdl
+lib opb_v20_v1_10_d control_register_logic.vhd vhdl
+lib opb_v20_v1_10_d ipif_regonly_slave.vhd vhdl
+lib opb_v20_v1_10_d priority_register_logic.vhd vhdl
+lib opb_v20_v1_10_d opb_arbiter_core.vhd vhdl
+lib opb_v20_v1_10_d opb_arbiter.vhd vhdl
+lib opb_v20_v1_10_d opb_v20.vhd vhdl

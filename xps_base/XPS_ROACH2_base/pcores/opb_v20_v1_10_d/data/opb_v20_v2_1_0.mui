@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- add comment here -->
+
+<!DOCTYPE doc SYSTEM "../../ipdialog.dtd" [
+	<!ENTITY C_NUM_MASTERS '
+	<widget id="C_NUM_MASTERS">
+		<key>C_NUM_MASTERS</key>
+		<label>Number of Bus Masters </label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_NUM_SLAVES '
+	<widget id="C_NUM_SLAVES">
+		<key>C_NUM_SLAVES</key>
+		<label>Number of Bus Slaves </label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_USE_LUT_OR '
+	<widget id="C_USE_LUT_OR">
+		<key>C_USE_LUT_OR</key>
+		<label>Use Only LUTs for OR Structure</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_EXT_RESET_HIGH '
+	<widget id="C_EXT_RESET_HIGH">
+		<key>C_EXT_RESET_HIGH</key>
+		<label>External Reset High</label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DYNAM_PRIORITY '
+	<widget id="C_DYNAM_PRIORITY">
+		<key>C_DYNAM_PRIORITY</key>
+		<label>Use Dynamic Instead of Fixed Priority Bus Arbitration </label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_PARK '
+	<widget id="C_PARK">
+		<key>C_PARK</key>
+		<label>Support Bus Parking </label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_PROC_INTRFCE '
+	<widget id="C_PROC_INTRFCE">
+		<key>C_PROC_INTRFCE</key>
+		<label>Enable Access To OPB Arbiter Registers </label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_REG_GRANTS '
+	<widget id="C_REG_GRANTS">
+		<key>C_REG_GRANTS</key>
+		<label>Use Registered Instead of Combinational Grant Outputs </label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEV_BLK_ID '
+	<widget id="C_DEV_BLK_ID">
+		<key>C_DEV_BLK_ID</key>
+		<label>Device Block ID </label>
+		<tip></tip>
+	</widget>
+	'>
+	<!ENTITY C_DEV_MIR_ENABLE '
+	<widget id="C_DEV_MIR_ENABLE">
+		<key>C_DEV_MIR_ENABLE</key>
+		<label>Enable Module Identification Register (MIR) </label>
+		<tip></tip>
+	</widget>
+	'>
+]>
+
+<doc>
+	<view id="User">
+		<display>User</display>
+		<group id="Arbiter_Policy">
+			<display>Arbiter</display>
+			<item>&C_DYNAM_PRIORITY;</item>
+			<item>&C_REG_GRANTS;</item>
+			<item>&C_PARK;</item>
+			<item>&C_PROC_INTRFCE;</item>
+			<item>&C_DEV_BLK_ID;</item>
+			<item>&C_DEV_MIR_ENABLE;</item>
+			<item>&C_EXT_RESET_HIGH;</item>
+			<item>&C_USE_LUT_OR;</item>
+		</group>
+	</view>
+	<view id="System">
+		<display>System</display>
+		<group id="Addresses">
+			<display>Addresses</display>
+			<item>&C_BASEADDR;</item>
+			<item>&C_HIGHADDR;</item>
+		</group>
+		<group id="OPB">
+			<display>OPB</display>
+			<item>&C_OPB_AWIDTH;</item>
+			<item>&C_OPB_DWIDTH;</item>
+			<item>&C_NUM_MASTERS;</item>
+			<item>&C_NUM_SLAVES;</item>
+		</group>
+		<group id="Hidden">
+			<display>Hidden</display>
+		</group>
+	</view>
+</doc>
