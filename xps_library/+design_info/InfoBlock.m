@@ -55,7 +55,8 @@ classdef InfoBlock
             str = [str, design_info.strip_system_from_name(obj.parent_block), '\t'];
             str = [str, obj.parent_tag, '\t'];
             str = [str, regexprep(obj.block, '.*/', ''), '\t'];
-            str = [str, obj.info, '\n'];
+            replace_spaces = strrep(obj.info, ' ', '\\_');
+            str = [str, replace_spaces, '\n'];
         end
     end
     

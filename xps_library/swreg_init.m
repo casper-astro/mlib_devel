@@ -148,7 +148,8 @@ function draw_from()
         io_bin_pt = str2double(get_param(blk, sprintf('bin_pt%i', pindex)));
         io_bitwidth = str2double(get_param(blk, sprintf('bitwidth%i', pindex)));
         total_width = total_width - io_bitwidth;
-        in_name = sprintf('sim_%s', get_param(blk, sprintf('name%i', pindex)));
+        %in_name = sprintf('sim_%s', get_param(blk, sprintf('name%i', pindex)));
+        in_name = sprintf('sim_%i', pindex);
         convert_name1 = ['convert1_', num2str(pindex)];
         convert_name2 = ['convert2_', num2str(pindex)];
         gain_name = ['gain_', num2str(pindex)];
