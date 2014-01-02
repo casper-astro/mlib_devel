@@ -20,8 +20,8 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [time_total, time_struct] = gen_xps_files(sys,flow_vec)
-% Generate all necessary file and optionally run the Xilinx backed tools
+function [time_total, time_struct] = gen_xps_files(sys, flow_vec)
+% Generate all necessary file and optionally run the Xilinx backend tools
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialization
@@ -509,6 +509,33 @@ if run_edkgen,
     
     % add extra register and snapshot info from the design
     gen_xps_add_design_info(sys, mssge_paths, slash);
+    
+    % shanly and mark's new format - generated from core_info and design_info
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2'),
+        kcpip_fid = fopen([xps_path, slash, 'extended_info.kcpip'], 'w');
+        fprintf(kcpip_fid, '#!/usr/bin/kcpip\n');
+        fprintf(kcpip_fid, '?uploadbin\n');
+        % read coreinfo
+        fid = fopen([xps_path, slash, 'core_info.tab'], 'r');
+        while 1,
+            tline = fgetl(fid);
+            if ~ischar(tline), break, end
+            newline = ['?register ', tline];
+            fprintf(kcpip_fid, '%s\n', newline);
+        end
+        fclose(fid);
+        % read design meta info
+        fid = fopen([xps_path, slash, 'design_info.tab'], 'r');
+        while 1,
+            tline = fgetl(fid);
+            if ~ischar(tline), break, end
+            newline = ['?meta ', tline];
+            fprintf(kcpip_fid, '%s\n', newline);
+        end
+        fclose(fid);
+        fprintf(kcpip_fid, '?quit\n');
+        fclose(kcpip_fid);
+    end
 
 end % if run_edkgen
 time_edkgen = now - start_time;
@@ -558,22 +585,22 @@ if run_software,
         case 'none'
 
         otherwise
-            error(['Unsupported OS: ',sw_os]);
+            error(['Unsupported OS: ', sw_os]);
     end % switch sw_os
 
-    win_fid = fopen([xps_path, slash, 'gen_prog_files.bat'],'w');
-    unix_fid = fopen([xps_path, slash, 'gen_prog_files'],'w');
+    win_fid = fopen([xps_path, slash, 'gen_prog_files.bat'], 'w');
+    unix_fid = fopen([xps_path, slash, 'gen_prog_files'], 'w');
     fprintf(unix_fid, '#!/bin/bash\n');
     files_name = [design_name, '_', clear_name(datestr(now, 'yyyy-mmm-dd HHMM'))];
     
     switch sw_os
         case 'none'
-            fprintf(win_fid,['copy implementation\\system.bit ..\\bit_files\\',files_name,'.bit\n']);
-            fprintf(unix_fid,['cp implementation/system.bit ../bit_files/',files_name,'.bit\n']);
+            fprintf(win_fid, ['copy implementation\\system.bit ..\\bit_files\\',files_name,'.bit\n']);
+            fprintf(unix_fid, ['cp implementation/system.bit ../bit_files/',files_name,'.bit\n']);
         % end case 'none'
         otherwise
-            fprintf(win_fid,['copy implementation\\download.bit ..\\bit_files\\',files_name,'.bit\n']);
-            fprintf(unix_fid,['cp implementation/download.bit ../bit_files/',files_name,'.bit\n']);
+            fprintf(win_fid, ['copy implementation\\download.bit ..\\bit_files\\',files_name,'.bit\n']);
+            fprintf(unix_fid, ['cp implementation/download.bit ../bit_files/',files_name,'.bit\n']);
         % end otherwise
     end % switch sw_os
 
@@ -585,20 +612,26 @@ if run_software,
         else
            fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
         end
-        fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', files_name,'.bof\n']);
+        fprintf(win_fid, ['copy implementation\\system.bof', ' ..\\bit_files\\', files_name,'.bof\n']);
         if strcmp(hw_sys, 'ROACH'),
            fprintf(unix_fid,'chmod +x implementation/system.bof\n');
          end
-        fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', files_name,'.bof\n']);
-        if exist([xps_path,  slash, 'casper_design_info.xml'], 'file') == 2,
-            fprintf(win_fid,['copy casper_design_info.xml ..\\bit_files\\', files_name,'.xml\n']);
-            fprintf(unix_fid,['cp casper_design_info.xml ../bit_files/', files_name,'.xml\n']);
+        fprintf(unix_fid, ['cp implementation/system.bof ../bit_files/', files_name,'.bof\n']);
+        if exist([xps_path,  slash, 'design_info.tab'], 'file') == 2,
+            fprintf(win_fid, ['copy design_info.tab ..\\bit_files\\', files_name,'.info\n']);
+            fprintf(unix_fid, ['cp design_info.tab ../bit_files/', files_name,'.info\n']);
         end
         if strcmp(hw_sys, 'ROACH2'),
-            fprintf(unix_fid,['gzip -c ../bit_files/', files_name, '.bof  > ../bit_files/', files_name,'.bof.gz\n']);
+            fprintf(unix_fid, ['gzip -c ../bit_files/', files_name, '.bof  > ../bit_files/', files_name,'.bof.gz\n']);
+            if exist([xps_path, slash, 'extended_info.kcpip'], 'file') == 2,
+                % will have to change to cat gzipped file. Otherwise it's
+                % just too big!
+                fprintf(unix_fid, ['cat implementation/system.bin >> ', xps_path, slash, 'extended_info.kcpip\n']);
+                fprintf(unix_fid, ['cp extended_info.kcpip ../bit_files/', files_name,'.kcpip\n']);
+            end
         end % strcmp(hw_sys, 'ROACH2')
     end % strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
-
+    
     fclose(win_fid);
     fclose(unix_fid);
 
@@ -614,9 +647,7 @@ if run_edk,
     delete([xps_path, slash, 'implementation', slash, 'system.bit']);
     delete([xps_path, slash, 'implementation', slash, 'download.bit']);
     fid = fopen([xps_path, slash, 'run_xps.tcl'],'w');
-
     hw_sys   = get(xsg_obj,'hw_sys');
-
     switch hw_sys 
         case 'ROACH'
             fprintf(fid, 'run bits\n');
@@ -630,8 +661,7 @@ if run_edk,
     end % switch hw_sys 
     fprintf(fid, 'exit\n');
     fclose(fid);
-
-    eval(['cd ',xps_path]);
+    eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
         cd(simulink_path);
@@ -655,9 +685,7 @@ if run_edk,
             end % if unix('gen_prog_files.bat')
         end %if (strcmp(slash, '\'))
     end % if(dos(['xps -nw -scr run_xps.tcl system.xmp']))
-
     cd(simulink_path);
-
 end % if run_edk
 time_edk = now - start_time;
 
