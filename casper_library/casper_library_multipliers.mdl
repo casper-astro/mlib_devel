@@ -1,62 +1,21 @@
 Library {
   Name			  "casper_library_multipliers"
-  Version		  8.0
+  Version		  7.2
   MdlSubVersion		  0
-  SavedCharacterEncoding  "UTF-8"
+  SavedCharacterEncoding  "US-ASCII"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
   DisableAllScopes	  off
-  FPTRunName		  "Run 1"
-  MaxMDLFileLineLength	  120
-  Object {
-    $PropName		    "BdWindowsInfo"
-    $ObjectID		    1
-    $ClassName		    "Simulink.BDWindowsInfo"
-    Object {
-      $PropName		      "WindowsInfo"
-      $ObjectID		      2
-      $ClassName	      "Simulink.WindowInfo"
-      IsActive		      [1]
-      Location		      [31.0, 73.0, 649.0, 662.0]
-      Object {
-	$PropName		"ModelBrowserInfo"
-	$ObjectID		3
-	$ClassName		"Simulink.ModelBrowserInfo"
-	Visible			[0]
-	DockPosition		"Left"
-	Width			[50]
-	Height			[50]
-	Filter			[9]
-      }
-      Object {
-	$PropName		"ExplorerBarInfo"
-	$ObjectID		4
-	$ClassName		"Simulink.ExplorerBarInfo"
-	Visible			[1]
-      }
-      Object {
-	$PropName		"EditorsInfo"
-	$ObjectID		5
-	$ClassName		"Simulink.EditorInfo"
-	IsActive		[1]
-	ViewObjType		"SimulinkTopLevel"
-	LoadSaveID		"0"
-	Extents			[607.0, 504.0]
-	ZoomFactor		[1.0]
-	Offset			[-2.0, 0.0]
-      }
-    }
-  }
   Created		  "Thu Sep 02 12:37:19 2010"
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "andrew"
+  LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Oct 29 16:37:27 2013"
-  RTWModifiedTimeStamp	  304965444
+  LastModifiedDate	  "Mon Jan 06 15:38:35 2014"
+  RTWModifiedTimeStamp	  310923510
   ModelVersionFormat	  "1.%<AutoIncrement:16>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
@@ -65,7 +24,6 @@ Library {
   WideLines		  off
   ShowLineDimensions	  off
   ShowPortDataTypes	  off
-  ShowDesignRanges	  off
   ShowLoopsOnError	  on
   IgnoreBidirectionalLines off
   ShowStorageClass	  off
@@ -91,13 +49,11 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
-  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
-  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -125,14 +81,14 @@ Library {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      6
-      Version		      "1.12.1"
+      $ObjectID		      1
+      Version		      "1.5.1"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  7
-	  Version		  "1.12.1"
+	  $ObjectID		  2
+	  Version		  "1.5.1"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -150,11 +106,8 @@ Library {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  SolverMode		  "SingleTasking"
-	  EnableConcurrentExecution off
-	  ConcurrentTasks	  off
 	  Solver		  "ode45"
 	  SolverName		  "ode45"
-	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
 	  ZeroCrossAlgorithm	  "Nonadaptive"
@@ -166,8 +119,8 @@ Library {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  8
-	  Version		  "1.12.1"
+	  $ObjectID		  3
+	  Version		  "1.5.1"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -177,29 +130,23 @@ Library {
 	  LoadExternalInput	  off
 	  LoadInitialState	  off
 	  SaveFinalState	  off
-	  SaveCompleteFinalSimState off
 	  SaveFormat		  "Array"
-	  SignalLoggingSaveFormat "ModelDataLogs"
 	  SaveOutput		  on
 	  SaveState		  off
 	  SignalLogging		  on
-	  DSMLogging		  on
 	  InspectSignalLogs	  off
 	  SaveTime		  on
-	  ReturnWorkspaceOutputs  off
 	  StateSaveName		  "xout"
 	  TimeSaveName		  "tout"
 	  OutputSaveName	  "yout"
 	  SignalLoggingName	  "logsout"
-	  DSMLoggingName	  "dsmout"
 	  OutputOption		  "RefineOutputTimes"
 	  OutputTimes		  "[]"
-	  ReturnWorkspaceOutputsName "out"
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  9
-	  Version		  "1.12.1"
+	  $ObjectID		  4
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    7
@@ -216,20 +163,13 @@ Library {
 	  BooleanDataType	  off
 	  ConditionallyExecuteInputs on
 	  InlineParams		  off
-	  UseIntDivNetSlope	  off
-	  UseFloatMulNetSlope	  off
-	  UseSpecifiedMinMax	  off
 	  InlineInvariantSignals  off
 	  OptimizeBlockIOStorage  on
 	  BufferReuse		  on
 	  EnhancedBackFolding	  off
-	  StrengthReduction	  off
 	  ExpressionFolding	  on
-	  BooleansAsBitfields	  off
-	  BitfieldContainerType	  "uint_T"
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
-	  PassReuseOutputArgsAs	  "Structure reference"
 	  ExpressionDepthLimit	  2147483647
 	  FoldNonRolledExpr	  on
 	  LocalBlockOutputs	  on
@@ -246,15 +186,14 @@ Library {
 	  EfficientMapNaN2IntZero on
 	  OptimizeModelRefInitCode off
 	  LifeSpan		  "inf"
-	  MaxStackSize		  "Inherit from target"
 	  BufferReusableBoundary  on
 	  SimCompilerOptimization "Off"
 	  AccelVerboseBuild	  off
-	  ParallelExecutionInRapidAccelerator on
+  EnforceIntegerDowncast   on
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  10
-	  Version		  "1.12.1"
+	  $ObjectID		  5
+	  Version		  "1.5.1"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -277,8 +216,6 @@ Library {
 	  MinStepSizeMsg	  "warning"
 	  TimeAdjustmentMsg	  "none"
 	  MaxConsecutiveZCsMsg	  "error"
-	  MaskedZcDiagnostic	  "warning"
-	  IgnoredZcDiagnostic	  "warning"
 	  SolverPrmCheckMsg	  "none"
 	  InheritedTsInSrcMsg	  "warning"
 	  DiscreteInheritContinuousMsg "warning"
@@ -296,27 +233,22 @@ Library {
 	  ParameterUnderflowMsg	  "none"
 	  ParameterPrecisionLossMsg "warning"
 	  ParameterTunabilityLossMsg "warning"
-	  FixptConstUnderflowMsg  "none"
-	  FixptConstOverflowMsg	  "none"
-	  FixptConstPrecisionLossMsg "none"
 	  UnderSpecifiedDataTypeMsg "none"
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
 	  InvalidFcnCallConnMsg	  "error"
-	  FcnCallInpInsideContextMsg "UseLocalSettings"
+	  FcnCallInpInsideContextMsg "Enable All"
 	  SignalLabelMismatchMsg  "none"
 	  UnconnectedInputMsg	  "warning"
 	  UnconnectedOutputMsg	  "warning"
 	  UnconnectedLineMsg	  "warning"
 	  SFcnCompatibilityMsg	  "none"
-	  FrameProcessingCompatibilityMsg "warning"
 	  UniqueDataStoreMsg	  "none"
 	  BusObjectLabelMismatch  "warning"
 	  RootOutportRequireBusObject "warning"
 	  AssertControl		  "UseLocalSettings"
 	  EnableOverflowDetection off
 	  ModelReferenceIOMsg	  "none"
-	  ModelReferenceMultiInstanceNormalModeStructChecksumCheck "error"
 	  ModelReferenceVersionMismatchMessage "none"
 	  ModelReferenceIOMismatchMessage "none"
 	  ModelReferenceCSMismatchMessage "none"
@@ -325,35 +257,17 @@ Library {
 	  ModelReferenceSymbolNameMessage "warning"
 	  ModelReferenceExtraNoncontSigs "error"
 	  StateNameClashWarn	  "warning"
-	  SimStateInterfaceChecksumMismatchMsg "warning"
-	  SimStateOlderReleaseMsg "error"
-	  InitInArrayFormatMsg	  "warning"
 	  StrictBusMsg		  "Warning"
-	  BusNameAdapt		  "WarnAndRepair"
-	  NonBusSignalsTreatedAsBus "none"
 	  LoggingUnavailableSignals "error"
 	  BlockIODiagnostic	  "none"
-	  SFUnusedDataAndEventsDiag "warning"
-	  SFUnexpectedBacktrackingDiag "warning"
-	  SFInvalidInputDataAccessInChartInitDiag "warning"
-	  SFNoUnconditionalDefaultTransitionDiag "warning"
-	  SFTransitionOutsideNaturalParentDiag "warning"
-	  SFUnconditionalTransitionShadowingDiag "warning"
-	  SFUndirectedBroadcastEventsDiag "warning"
-	  SFTransitionActionBeforeConditionDiag	"warning"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  11
-	  Version		  "1.12.1"
+	  $ObjectID		  6
+	  Version		  "1.5.1"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
 	  ProdBitPerLong	  32
-	  ProdBitPerFloat	  32
-	  ProdBitPerDouble	  64
-	  ProdBitPerPointer	  32
-	  ProdLargestAtomicInteger "Char"
-	  ProdLargestAtomicFloat  "None"
 	  ProdIntDivRoundTo	  "Undefined"
 	  ProdEndianess		  "Unspecified"
 	  ProdWordSize		  32
@@ -363,11 +277,6 @@ Library {
 	  TargetBitPerShort	  16
 	  TargetBitPerInt	  32
 	  TargetBitPerLong	  32
-	  TargetBitPerFloat	  32
-	  TargetBitPerDouble	  64
-	  TargetBitPerPointer	  32
-	  TargetLargestAtomicInteger "Char"
-	  TargetLargestAtomicFloat "None"
 	  TargetShiftRightIntArith on
 	  TargetIntDivRoundTo	  "Undefined"
 	  TargetEndianess	  "Unspecified"
@@ -380,38 +289,27 @@ Library {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  12
-	  Version		  "1.12.1"
+	  $ObjectID		  7
+	  Version		  "1.5.1"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
-	  EnableParallelModelReferenceBuilds off
-	  ParallelModelReferenceErrorOnInvalidPool on
-	  ParallelModelReferenceMATLABWorkerInit "None"
 	  ModelReferenceNumInstancesAllowed "Multi"
-	  PropagateVarSize	  "Infer from blocks in model"
 	  ModelReferencePassRootInputsByReference on
 	  ModelReferenceMinAlgLoopOccurrences off
-	  PropagateSignalLabelsOutOfModel off
-	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  13
-	  Version		  "1.12.1"
+	  $ObjectID		  8
+	  Version		  "1.5.1"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
-	  SimBlas		  on
-	  SimCtrlC		  on
-	  SimExtrinsic		  on
-	  SimIntegrity		  on
 	  SimUseLocalCustomCode	  off
-	  SimParseCustomCode	  on
 	  SimBuildMode		  "sf_incremental_build"
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  14
-	  Version		  "1.12.1"
+	  $ObjectID		  9
+	  Version		  "1.5.1"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -427,7 +325,6 @@ Library {
 	  GenCodeOnly		  off
 	  MakeCommand		  "make_rtw"
 	  GenerateMakefile	  on
-	  PackageGeneratedCodeAndArtifacts off
 	  TemplateMakefile	  "grt_default_tmf"
 	  GenerateReport	  off
 	  SaveLog		  off
@@ -444,13 +341,6 @@ Library {
 	  RTWUseSimCustomCode	  off
 	  IncludeHyperlinkInReport off
 	  LaunchReport		  off
-	  PortableWordSizes	  off
-	  GenerateErtSFunction	  off
-	  CreateSILPILBlock	  "None"
-	  CodeExecutionProfiling  off
-	  CodeExecutionProfileVariable "executionProfile"
-	  CodeProfilingSaveOptions "SummaryOnly"
-	  CodeProfilingInstrumentation off
 	  TargetLang		  "C"
 	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
 	  IncludeERTFirstTime	  off
@@ -460,18 +350,13 @@ Library {
 	  GenerateTraceReportSf	  off
 	  GenerateTraceReportEml  off
 	  GenerateCodeInfo	  off
-	  GenerateWebview	  off
-	  GenerateCodeMetricsReport off
-	  GenerateCodeReplacementReport	off
 	  RTWCompilerOptimization "Off"
-	  CheckMdlBeforeBuild	  "Off"
-	  CustomRebuildMode	  "OnUpdate"
 	  Array {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      15
-	      Version		      "1.12.1"
+	      $ObjectID		      10
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		19
@@ -505,18 +390,15 @@ Library {
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
-	      OperatorAnnotations     off
 	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
-	      MATLABFcnDesc	      off
 	      IncDataTypeInIds	      off
 	      MangleLength	      1
 	      CustomSymbolStrGlobalVar "$R$N$M"
 	      CustomSymbolStrType     "$N$R$M"
 	      CustomSymbolStrField    "$N$M"
 	      CustomSymbolStrFcn      "$R$N$M$F"
-	      CustomSymbolStrFcnArg   "rt$I$N$M"
 	      CustomSymbolStrBlkIO    "rtb_$N$M"
 	      CustomSymbolStrTmpVar   "$N$M"
 	      CustomSymbolStrMacro    "$R$N$M"
@@ -524,19 +406,16 @@ Library {
 	      ParamNamingRule	      "None"
 	      SignalNamingRule	      "None"
 	      InsertBlockDesc	      off
-	      InsertPolySpaceComments off
 	      SimulinkBlockComments   on
-	      MATLABSourceComments    off
 	      EnableCustomComments    off
-	      InternalIdentifier      "Classic"
 	      InlinedPrmAccess	      "Literals"
 	      ReqsInCode	      off
 	      UseSimReservedNames     off
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      16
-	      Version		      "1.12.1"
+	      $ObjectID		      11
+	      Version		      "1.5.1"
 	      Array {
 		Type			"Cell"
 		Dimension		16
@@ -561,7 +440,7 @@ Library {
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
 	      TargetLibSuffix	      ""
 	      TargetPreCompLibLocation ""
-	      CodeReplacementLibrary  "ANSI_C"
+	      TargetFunctionLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
 	      ERTMultiwordLength      256
@@ -571,13 +450,9 @@ Library {
 	      GenerateTestInterfaces  off
 	      IsPILTarget	      off
 	      ModelReferenceCompliant on
-	      ParMdlRefBuildCompliant on
 	      CompOptLevelCompliant   on
-	      ConcurrentExecutionCompliant on
 	      IncludeMdlTerminateFcn  on
-	      GeneratePreprocessorConditionals "Disable all"
 	      CombineOutputUpdateFcns off
-	      CombineSignalStateStructs	off
 	      SuppressErrorStatus     off
 	      ERTFirstTimeCompliant   off
 	      IncludeFileDelimiter    "Auto"
@@ -591,13 +466,12 @@ Library {
 	      PurelyIntegerCode	      off
 	      SupportContinuousTime   on
 	      SupportNonInlinedSFcns  on
-	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
+	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
-	      GRTInterface	      on
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -609,7 +483,6 @@ Library {
 	      RTWCAPISignals	      off
 	      RTWCAPIParams	      off
 	      RTWCAPIStates	      off
-	      RTWCAPIRootIO	      off
 	      GenerateASAP2	      off
 	    }
 	    PropName		    "Components"
@@ -623,7 +496,6 @@ Library {
     }
     PropName		    "ConfigurationSets"
   }
-  ExplicitPartitioning	  off
   BlockDefaults {
     ForegroundColor	    "black"
     BackgroundColor	    "white"
@@ -634,8 +506,7 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
     ShowName		    on
-    BlockRotation	    0
-    BlockMirror		    off
+    Orientation		    "right"
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -655,43 +526,27 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
   }
-  MaskDefaults {
-    SelfModifiable	    "off"
-    IconFrame		    "on"
-    IconOpaque		    "on"
-    RunInitForIconRedraw    "off"
-    IconRotate		    "none"
-    PortRotate		    "default"
-    IconUnits		    "autoscale"
-  }
-  MaskParameterDefaults {
-    Evaluate		    "on"
-    Tunable		    "on"
-    NeverSave		    "off"
-    Internal		    "off"
-    ReadOnly		    "off"
-    Enabled		    "on"
-    Visible		    "on"
-    ToolTip		    "on"
-  }
   BlockParameterDefaults {
     Block {
       BlockType		      Inport
       Port		      "1"
-      OutputFunctionCall      off
       OutMin		      "[]"
       OutMax		      "[]"
       OutDataTypeStr	      "Inherit: auto"
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
       LatchByDelayingOutsideSignal off
-      LatchInputForFeedbackSignals off
+      LatchByCopyingInsideSignal off
       Interpolate	      on
+  DataType   "auto"
+  OutDataType   "fixdt(1,16,0)"
+  OutScaling   "[]"
+  UseBusObject   off
+  BusObject   "BusObject"
     }
     Block {
       BlockType		      Outport
@@ -702,13 +557,17 @@ Library {
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
-      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
       SourceOfInitialOutputValue "Dialog"
       OutputWhenDisabled      "held"
       InitialOutput	      "[]"
+  DataType   "auto"
+  OutDataType   "fixdt(1,16,0)"
+  OutScaling   "[]"
+  UseBusObject   off
+  BusObject   "BusObject"
     }
     Block {
       BlockType		      SubSystem
@@ -727,11 +586,7 @@ Library {
       RTWMemSecDataParameters "Inherit from model"
       SimViewingDevice	      off
       DataTypeOverride	      "UseLocalSettings"
-      DataTypeOverrideAppliesTo	"AllNumericTypes"
       MinMaxOverflowLogging   "UseLocalSettings"
-      SFBlockType	      "NONE"
-      Variant		      off
-      GeneratePreprocessorConditionals off
     }
     Block {
       BlockType		      Terminator
@@ -740,7 +595,7 @@ Library {
   System {
     Name		    "casper_library_multipliers"
     Location		    [31, 73, 680, 735]
-    Open		    on
+    Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -753,14 +608,11 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "138"
     Block {
       BlockType		      SubSystem
       Name		      "cmult"
-      SID		      "138"
       Ports		      []
       Position		      [324, 28, 364, 70]
-      ZOrder		      591
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       UserDataPersistent      on
       UserData		      "DataTag0"
@@ -769,185 +621,38 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		17
-	$ClassName		"Simulink.Mask"
-	Type			"cmult"
-	Description		"Multiplies two complex numbers using 4 multipliers and 2 adders.\nConjugation is optional."
-	Initialization		"cmult_init(gcb, ...\n    'n_bits_a',n_bits_a, ...\n    'bin_pt_a',bin_pt_a, ...\n    'n_bits_b',n_bi"
-	"ts_b, ...\n    'bin_pt_b',bin_pt_b, ...\n    'n_bits_ab',n_bits_ab, ...\n    'bin_pt_ab',bin_pt_ab, ...\n    'quantiz"
-	"ation',quantization, ...\n    'overflow', overflow, ...\n    'in_latency', in_latency, ...\n    'mult_latency', mult_"
-	"latency, ...\n    'add_latency', add_latency, ...\n    'conv_latency', conv_latency, ...\n    'conjugated', conjugate"
-	"d, ...\n    'multiplier_implementation', multiplier_implementation, ...\n    'async', async, ...\n    'pipelined_enab"
-	"le', pipelined_enable);"
-	SelfModifiable		"on"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  16
-	  Object {
-	    $ObjectID		    18
-	    Type		    "edit"
-	    Name		    "n_bits_a"
-	    Prompt		    "Number of Bits 'a'"
-	    Value		    "0"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    19
-	    Type		    "edit"
-	    Name		    "bin_pt_a"
-	    Prompt		    "Binary Point 'a'"
-	    Value		    "17"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    20
-	    Type		    "edit"
-	    Name		    "n_bits_b"
-	    Prompt		    "Number of Bits 'b'"
-	    Value		    "18"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    21
-	    Type		    "edit"
-	    Name		    "bin_pt_b"
-	    Prompt		    "Binary Point 'b'"
-	    Value		    "17"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    22
-	    Type		    "edit"
-	    Name		    "n_bits_ab"
-	    Prompt		    "Number of Bits 'ab'"
-	    Value		    "37"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    23
-	    Type		    "edit"
-	    Name		    "bin_pt_ab"
-	    Prompt		    "Binary Point 'ab'"
-	    Value		    "14"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    24
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      3
-	      Cell		      "Truncate"
-	      Cell		      "Round  (unbiased: +/- Inf)"
-	      Cell		      "Round  (unbiased: Even Values)"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "quantization"
-	    Prompt		    "Quantization"
-	    Value		    "Truncate"
-	    Evaluate		    "off"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    25
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      3
-	      Cell		      "Wrap"
-	      Cell		      "Saturate"
-	      Cell		      "Flag as error"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "overflow"
-	    Prompt		    "Overflow"
-	    Value		    "Wrap"
-	    Evaluate		    "off"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    26
-	    Type		    "edit"
-	    Name		    "in_latency"
-	    Prompt		    "Input latency"
-	    Value		    "0"
-	    TabName		    "latency"
-	  }
-	  Object {
-	    $ObjectID		    27
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Multiplier Latency"
-	    Value		    "3"
-	    TabName		    "latency"
-	  }
-	  Object {
-	    $ObjectID		    28
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Adder Latency"
-	    Value		    "1"
-	    TabName		    "latency"
-	  }
-	  Object {
-	    $ObjectID		    29
-	    Type		    "edit"
-	    Name		    "conv_latency"
-	    Prompt		    "Convert latency"
-	    Value		    "1"
-	    TabName		    "latency"
-	  }
-	  Object {
-	    $ObjectID		    30
-	    Type		    "checkbox"
-	    Name		    "conjugated"
-	    Prompt		    "Conjugate"
-	    Value		    "off"
-	    Evaluate		    "off"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    31
-	    Type		    "checkbox"
-	    Name		    "async"
-	    Prompt		    "asynchronous operation"
-	    Value		    "off"
-	    Evaluate		    "off"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    32
-	    Type		    "checkbox"
-	    Name		    "pipelined_enable"
-	    Prompt		    "enable pipeline"
-	    Value		    "on"
-	    Evaluate		    "off"
-	    TabName		    "basic"
-	  }
-	  Object {
-	    $ObjectID		    33
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      3
-	      Cell		      "behavioral HDL"
-	      Cell		      "standard core"
-	      Cell		      "embedded multiplier core"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "multiplier_implementation"
-	    Prompt		    "Multiplier implementation"
-	    Value		    "behavioral HDL"
-	    Evaluate		    "off"
-	    TabName		    "implementation"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult"
+      MaskDescription	      "Multiplies two complex numbers using 4 multipliers and 2 adders.\nConjugation is optional"
+      "."
+      MaskPromptString	      "Number of Bits 'a'|Binary Point 'a'|Number of Bits 'b'|Binary Point 'b'|Number of Bits '"
+      "ab'|Binary Point 'ab'|Quantization|Overflow|Input latency|Multiplier Latency|Adder Latency|Convert latency|Conju"
+      "gate|asynchronous operation|enable pipeline|Multiplier implementation"
+      MaskStyleString	      "edit,edit,edit,edit,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)|Round  (unbiased:"
+      " Even Values)),popup(Wrap|Saturate|Flag as error),edit,edit,edit,edit,checkbox,checkbox,checkbox,popup(behaviora"
+      "l HDL|standard core|embedded multiplier core)"
+      MaskVariables	      "n_bits_a=@1;bin_pt_a=@2;n_bits_b=@3;bin_pt_b=@4;n_bits_ab=@5;bin_pt_ab=@6;quantization=&7;o"
+      "verflow=&8;in_latency=@9;mult_latency=@10;add_latency=@11;conv_latency=@12;conjugated=&13;async=&14;pipelined_en"
+      "able=&15;multiplier_implementation=&16;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||||||||||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on,on,on,on,on,on"
+      MaskInitialization      "cmult_init(gcb, ...\n    'n_bits_a',n_bits_a, ...\n    'bin_pt_a',bin_pt_a, ...\n    'n"
+      "_bits_b',n_bits_b, ...\n    'bin_pt_b',bin_pt_b, ...\n    'n_bits_ab',n_bits_ab, ...\n    'bin_pt_ab',bin_pt_ab,"
+      " ...\n    'quantization',quantization, ...\n    'overflow', overflow, ...\n    'in_latency', in_latency, ...\n  "
+      "  'mult_latency', mult_latency, ...\n    'add_latency', add_latency, ...\n    'conv_latency', conv_latency, ...\n"
+      "    'conjugated', conjugated, ...\n    'multiplier_implementation', multiplier_implementation, ...\n    'async',"
+      " async, ...\n    'pipelined_enable', pipelined_enable);"
+      MaskSelfModifiable      on
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "0|17|18|17|37|14|Truncate|Wrap|0|3|1|1|off|off|on|behavioral HDL"
+      MaskTabNameString	      "basic,basic,basic,basic,basic,basic,basic,basic,latency,latency,latency,latency,basic,b"
+      "asic,basic,implementation"
       System {
 	Name			"cmult"
 	Location		[39, 45, 1537, 1099]
@@ -968,45 +673,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_br"
-      SID		      "2"
       Ports		      [4, 2]
       Position		      [210, 17, 250, 78]
-      ZOrder		      -2
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		34
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_br"
-	Description		"Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in Block RAM."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_br'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    35
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    36
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_br"
+      MaskDescription	      "Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in B"
+      "lock RAM."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_br'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_br"
 	Location		[12, 45, 945, 1873]
@@ -1025,45 +717,35 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "3"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "4"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "5"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "6"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
-	  SID			  "7"
 	  Ports			  [2, 1]
 	  Position		  [265, 26, 305, 79]
-	  ZOrder		  -5
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -1088,10 +770,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat1"
-	  SID			  "8"
 	  Ports			  [2, 1]
 	  Position		  [265, 111, 305, 164]
-	  ZOrder		  -6
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -1116,10 +796,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat2"
-	  SID			  "9"
 	  Ports			  [2, 1]
 	  Position		  [265, 196, 305, 249]
-	  ZOrder		  -7
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -1144,10 +822,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat3"
-	  SID			  "10"
 	  Ports			  [2, 1]
 	  Position		  [265, 281, 305, 334]
-	  ZOrder		  -8
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -1172,10 +848,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM"
-	  SID			  "11"
 	  Ports			  [1, 1]
 	  Position		  [320, 29, 370, 81]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -1213,10 +887,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM1"
-	  SID			  "12"
 	  Ports			  [1, 1]
 	  Position		  [320, 114, 370, 166]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -1254,10 +926,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM2"
-	  SID			  "13"
 	  Ports			  [1, 1]
 	  Position		  [320, 199, 370, 251]
-	  ZOrder		  -11
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -1295,10 +965,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM3"
-	  SID			  "14"
 	  Ports			  [1, 1]
 	  Position		  [320, 284, 370, 336]
-	  ZOrder		  -12
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -1336,10 +1004,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret1"
-	  SID			  "15"
 	  Ports			  [1, 1]
 	  Position		  [220, 58, 245, 72]
-	  ZOrder		  -13
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1368,10 +1034,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret2"
-	  SID			  "16"
 	  Ports			  [1, 1]
 	  Position		  [220, 118, 245, 132]
-	  ZOrder		  -14
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1400,10 +1064,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret3"
-	  SID			  "17"
 	  Ports			  [1, 1]
 	  Position		  [220, 33, 245, 47]
-	  ZOrder		  -15
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1432,10 +1094,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret4"
-	  SID			  "18"
 	  Ports			  [1, 1]
 	  Position		  [220, 143, 245, 157]
-	  ZOrder		  -16
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1464,10 +1124,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret5"
-	  SID			  "19"
 	  Ports			  [1, 1]
 	  Position		  [220, 203, 245, 217]
-	  ZOrder		  -17
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1496,10 +1154,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret6"
-	  SID			  "20"
 	  Ports			  [1, 1]
 	  Position		  [220, 228, 245, 242]
-	  ZOrder		  -18
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1528,10 +1184,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret7"
-	  SID			  "21"
 	  Ports			  [1, 1]
 	  Position		  [220, 288, 245, 302]
-	  ZOrder		  -19
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1560,10 +1214,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret8"
-	  SID			  "22"
 	  Ports			  [1, 1]
 	  Position		  [220, 313, 245, 327]
-	  ZOrder		  -20
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -1592,11 +1244,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Resource Estimator"
-	  SID			  "23"
 	  Tag			  "resEstTag"
 	  Ports			  []
 	  Position		  [553, 28, 606, 81]
-	  ZOrder		  -21
 	  ShowName		  off
 	  AttributesFormatString  "Resource\\nEstimator"
 	  SourceBlock		  "xbsIndex_r4/Resource Estimator"
@@ -1626,10 +1276,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "24"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -22
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -1667,10 +1315,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "25"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -23
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -1708,17 +1354,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "26"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -24
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "27"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -25
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -1898,46 +1540,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_br*"
-      SID		      "28"
       Ports		      [4, 2]
       Position		      [210, 102, 250, 163]
-      ZOrder		      -3
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		37
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_br*"
-	Description		"Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements the logic in Blo"
-	"ck RAM."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_br_'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    38
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    39
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_br*"
+      MaskDescription	      "Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements th"
+      "e logic in Block RAM."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_br_'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_br*"
 	Location		[12, 45, 935, 1868]
@@ -1956,45 +1584,35 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "29"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "30"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "31"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "32"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
-	  SID			  "33"
 	  Ports			  [2, 1]
 	  Position		  [265, 26, 305, 79]
-	  ZOrder		  -5
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -2019,10 +1637,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat1"
-	  SID			  "34"
 	  Ports			  [2, 1]
 	  Position		  [265, 111, 305, 164]
-	  ZOrder		  -6
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -2047,10 +1663,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat2"
-	  SID			  "35"
 	  Ports			  [2, 1]
 	  Position		  [265, 196, 305, 249]
-	  ZOrder		  -7
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -2075,10 +1689,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat3"
-	  SID			  "36"
 	  Ports			  [2, 1]
 	  Position		  [265, 281, 305, 334]
-	  ZOrder		  -8
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
@@ -2103,10 +1715,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM"
-	  SID			  "37"
 	  Ports			  [1, 1]
 	  Position		  [320, 29, 370, 81]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -2144,10 +1754,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM1"
-	  SID			  "38"
 	  Ports			  [1, 1]
 	  Position		  [320, 114, 370, 166]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -2185,10 +1793,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM2"
-	  SID			  "39"
 	  Ports			  [1, 1]
 	  Position		  [320, 199, 370, 251]
-	  ZOrder		  -11
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -2226,10 +1832,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM3"
-	  SID			  "40"
 	  Ports			  [1, 1]
 	  Position		  [320, 284, 370, 336]
-	  ZOrder		  -12
 	  SourceBlock		  "xbsIndex_r4/ROM"
 	  SourceType		  "Xilinx Single Port Read-Only Memory Block"
 	  depth			  "256"
@@ -2267,10 +1871,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret1"
-	  SID			  "41"
 	  Ports			  [1, 1]
 	  Position		  [220, 58, 245, 72]
-	  ZOrder		  -13
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2299,10 +1901,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret2"
-	  SID			  "42"
 	  Ports			  [1, 1]
 	  Position		  [220, 118, 245, 132]
-	  ZOrder		  -14
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2331,10 +1931,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret3"
-	  SID			  "43"
 	  Ports			  [1, 1]
 	  Position		  [220, 33, 245, 47]
-	  ZOrder		  -15
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2363,10 +1961,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret4"
-	  SID			  "44"
 	  Ports			  [1, 1]
 	  Position		  [220, 143, 245, 157]
-	  ZOrder		  -16
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2395,10 +1991,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret5"
-	  SID			  "45"
 	  Ports			  [1, 1]
 	  Position		  [220, 203, 245, 217]
-	  ZOrder		  -17
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2427,10 +2021,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret6"
-	  SID			  "46"
 	  Ports			  [1, 1]
 	  Position		  [220, 228, 245, 242]
-	  ZOrder		  -18
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2459,10 +2051,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret7"
-	  SID			  "47"
 	  Ports			  [1, 1]
 	  Position		  [220, 288, 245, 302]
-	  ZOrder		  -19
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2491,10 +2081,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret8"
-	  SID			  "48"
 	  Ports			  [1, 1]
 	  Position		  [220, 313, 245, 327]
-	  ZOrder		  -20
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -2523,11 +2111,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Resource Estimator"
-	  SID			  "49"
 	  Tag			  "resEstTag"
 	  Ports			  []
 	  Position		  [553, 28, 606, 81]
-	  ZOrder		  -21
 	  ShowName		  off
 	  AttributesFormatString  "Resource\\nEstimator"
 	  SourceBlock		  "xbsIndex_r4/Resource Estimator"
@@ -2557,10 +2143,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "50"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -22
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -2598,10 +2182,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "51"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -23
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -2639,17 +2221,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "52"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -24
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "53"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -25
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -2829,46 +2407,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_em"
-      SID		      "54"
       Ports		      [4, 2]
       Position		      [115, 17, 155, 78]
-      ZOrder		      -4
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		40
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_em"
-	Description		"Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in embedded multip"
-	"liers."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_em'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    41
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    42
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_em"
+      MaskDescription	      "Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in e"
+      "mbedded multipliers."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_em'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_em"
 	Location		[12, 45, 945, 1873]
@@ -2887,46 +2451,36 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "55"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "56"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "57"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "58"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Resource Estimator"
-	  SID			  "59"
 	  Tag			  "resEstTag"
 	  Ports			  []
 	  Position		  [553, 28, 606, 81]
-	  ZOrder		  -5
 	  ShowName		  off
 	  AttributesFormatString  "Resource\\nEstimator"
 	  SourceBlock		  "xbsIndex_r4/Resource Estimator"
@@ -2956,10 +2510,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ac"
-	  SID			  "60"
 	  Ports			  [2, 1]
 	  Position		  [235, 27, 285, 78]
-	  ZOrder		  -6
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3000,10 +2552,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ad"
-	  SID			  "61"
 	  Ports			  [2, 1]
 	  Position		  [235, 282, 285, 333]
-	  ZOrder		  -7
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3044,10 +2594,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bc"
-	  SID			  "62"
 	  Ports			  [2, 1]
 	  Position		  [235, 197, 285, 248]
-	  ZOrder		  -8
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3088,10 +2636,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bd"
-	  SID			  "63"
 	  Ports			  [2, 1]
 	  Position		  [235, 112, 285, 163]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3132,10 +2678,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "64"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -3173,10 +2717,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "65"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -11
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -3214,17 +2756,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "66"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -12
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "67"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -13
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -3331,46 +2869,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_em*"
-      SID		      "68"
       Ports		      [4, 2]
       Position		      [115, 102, 155, 163]
-      ZOrder		      -5
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		43
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_em*"
-	Description		"Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements the logic in ded"
-	"icated multipliers."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_em_'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    44
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    45
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_em*"
+      MaskDescription	      "Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements th"
+      "e logic in dedicated multipliers."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_em_'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_em*"
 	Location		[263, 45, 1436, 1993]
@@ -3389,46 +2913,36 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "69"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "70"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "71"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "72"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Resource Estimator"
-	  SID			  "73"
 	  Tag			  "resEstTag"
 	  Ports			  []
 	  Position		  [553, 28, 606, 81]
-	  ZOrder		  -5
 	  ShowName		  off
 	  AttributesFormatString  "Resource\\nEstimator"
 	  SourceBlock		  "xbsIndex_r4/Resource Estimator"
@@ -3458,10 +2972,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ac"
-	  SID			  "74"
 	  Ports			  [2, 1]
 	  Position		  [235, 27, 285, 78]
-	  ZOrder		  -6
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3502,10 +3014,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ad"
-	  SID			  "75"
 	  Ports			  [2, 1]
 	  Position		  [235, 282, 285, 333]
-	  ZOrder		  -7
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3546,10 +3056,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bc"
-	  SID			  "76"
 	  Ports			  [2, 1]
 	  Position		  [235, 197, 285, 248]
-	  ZOrder		  -8
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3590,10 +3098,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bd"
-	  SID			  "77"
 	  Ports			  [2, 1]
 	  Position		  [235, 112, 285, 163]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3634,10 +3140,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "78"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -3675,10 +3179,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "79"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -11
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -3716,17 +3218,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "80"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -12
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "81"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -13
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -3833,45 +3331,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_hdl"
-      SID		      "82"
       Ports		      [4, 2]
       Position		      [25, 187, 65, 248]
-      ZOrder		      -6
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		46
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_sl"
-	Description		"Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in Slices."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    47
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    48
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_sl"
+      MaskDescription	      "Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in S"
+      "lices."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_hdl"
 	Location		[12, 45, 945, 1873]
@@ -3890,45 +3375,35 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "83"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "84"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "85"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "86"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "ac"
-	  SID			  "87"
 	  Ports			  [2, 1]
 	  Position		  [235, 27, 285, 78]
-	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -3969,10 +3444,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ad"
-	  SID			  "88"
 	  Ports			  [2, 1]
 	  Position		  [235, 282, 285, 333]
-	  ZOrder		  -6
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4013,10 +3486,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bc"
-	  SID			  "89"
 	  Ports			  [2, 1]
 	  Position		  [235, 197, 285, 248]
-	  ZOrder		  -7
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4057,10 +3528,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bd"
-	  SID			  "90"
 	  Ports			  [2, 1]
 	  Position		  [235, 112, 285, 163]
-	  ZOrder		  -8
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4101,10 +3570,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "91"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -4142,10 +3609,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "92"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -4183,17 +3648,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "93"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -11
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "94"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -12
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -4300,46 +3761,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_hdl*"
-      SID		      "95"
       Ports		      [4, 2]
       Position		      [115, 187, 155, 248]
-      ZOrder		      -7
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		49
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_sl*"
-	Description		"Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements the logic in Sli"
-	"ces."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl_'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    50
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    51
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_sl*"
+      MaskDescription	      "Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements th"
+      "e logic in Slices."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl_'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_hdl*"
 	Location		[12, 45, 945, 1873]
@@ -4358,45 +3805,35 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "96"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "97"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "98"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "99"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "ac"
-	  SID			  "100"
 	  Ports			  [2, 1]
 	  Position		  [235, 27, 285, 78]
-	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4437,10 +3874,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ad"
-	  SID			  "101"
 	  Ports			  [2, 1]
 	  Position		  [235, 282, 285, 333]
-	  ZOrder		  -6
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4481,10 +3916,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bc"
-	  SID			  "102"
 	  Ports			  [2, 1]
 	  Position		  [235, 197, 285, 248]
-	  ZOrder		  -7
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4525,10 +3958,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bd"
-	  SID			  "103"
 	  Ports			  [2, 1]
 	  Position		  [235, 112, 285, 163]
-	  ZOrder		  -8
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4569,10 +4000,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "104"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -4610,10 +4039,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "105"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -4651,17 +4078,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "106"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -11
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "107"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -12
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -4768,45 +4191,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_sl"
-      SID		      "108"
       Ports		      [4, 2]
       Position		      [25, 17, 65, 78]
-      ZOrder		      -8
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		52
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_sl"
-	Description		"Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in Slices."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    53
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    54
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_sl"
+      MaskDescription	      "Perform a complex multiplication (a+bi)(c-di)=(ac-bd)+(ad+bc)i. Implements the logic in S"
+      "lices."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_sl"
 	Location		[12, 45, 945, 1873]
@@ -4825,45 +4235,35 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "109"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "110"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "111"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "112"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "ac"
-	  SID			  "113"
 	  Ports			  [2, 1]
 	  Position		  [235, 27, 285, 78]
-	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4904,10 +4304,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ad"
-	  SID			  "114"
 	  Ports			  [2, 1]
 	  Position		  [235, 282, 285, 333]
-	  ZOrder		  -6
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4948,10 +4346,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bc"
-	  SID			  "115"
 	  Ports			  [2, 1]
 	  Position		  [235, 197, 285, 248]
-	  ZOrder		  -7
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -4992,10 +4388,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bd"
-	  SID			  "116"
 	  Ports			  [2, 1]
 	  Position		  [235, 112, 285, 163]
-	  ZOrder		  -8
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -5036,10 +4430,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "117"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -5077,10 +4469,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "118"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -5118,17 +4508,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "119"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -11
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "120"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -12
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -5235,46 +4621,32 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_4bit_sl*"
-      SID		      "121"
       Ports		      [4, 2]
       Position		      [25, 102, 65, 163]
-      ZOrder		      -9
       BackgroundColor	      "gray"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		55
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_4bit_sl*"
-	Description		"Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements the logic in Sli"
-	"ces."
-	Help			"eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl_'')')"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  2
-	  Object {
-	    $ObjectID		    56
-	    Type		    "edit"
-	    Name		    "mult_latency"
-	    Prompt		    "Mult Latency"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    57
-	    Type		    "edit"
-	    Name		    "add_latency"
-	    Prompt		    "Add Latency"
-	    Value		    "0"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_4bit_sl*"
+      MaskDescription	      "Perform a conjugating complex multiplication (a+bi)(c-di)=(ac+bd)+(bc-ad)i. Implements th"
+      "e logic in Slices."
+      MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Cmult_4bit_sl_'')')"
+      MaskPromptString	      "Mult Latency|Add Latency"
+      MaskStyleString	      "edit,edit"
+      MaskVariables	      "mult_latency=@1;add_latency=@2;"
+      MaskTunableValueString  "on,on"
+      MaskCallbackString      "|"
+      MaskEnableString	      "on,on"
+      MaskVisibilityString    "on,on"
+      MaskToolTipString	      "on,on"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "1|0"
       System {
 	Name			"cmult_4bit_sl*"
 	Location		[12, 45, 945, 1873]
@@ -5293,45 +4665,35 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "a"
-	  SID			  "122"
 	  Position		  [110, 33, 140, 47]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b"
-	  SID			  "123"
 	  Position		  [115, 118, 145, 132]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "c"
-	  SID			  "124"
 	  Position		  [115, 193, 145, 207]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "d"
-	  SID			  "125"
 	  Position		  [115, 268, 145, 282]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "ac"
-	  SID			  "126"
 	  Ports			  [2, 1]
 	  Position		  [235, 27, 285, 78]
-	  ZOrder		  -5
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -5372,10 +4734,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ad"
-	  SID			  "127"
 	  Ports			  [2, 1]
 	  Position		  [235, 282, 285, 333]
-	  ZOrder		  -6
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -5416,10 +4776,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bc"
-	  SID			  "128"
 	  Ports			  [2, 1]
 	  Position		  [235, 197, 285, 248]
-	  ZOrder		  -7
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -5460,10 +4818,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "bd"
-	  SID			  "129"
 	  Ports			  [2, 1]
 	  Position		  [235, 112, 285, 163]
-	  ZOrder		  -8
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -5504,10 +4860,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "imag_sum"
-	  SID			  "130"
 	  Ports			  [2, 1]
 	  Position		  [395, 232, 445, 283]
-	  ZOrder		  -9
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Subtraction"
@@ -5545,10 +4899,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "real_sum"
-	  SID			  "131"
 	  Ports			  [2, 1]
 	  Position		  [395, 72, 445, 123]
-	  ZOrder		  -10
 	  SourceBlock		  "xbsIndex_r4/AddSub"
 	  SourceType		  "Xilinx Adder/Subtracter Block"
 	  mode			  "Addition"
@@ -5586,17 +4938,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "real"
-	  SID			  "132"
 	  Position		  [490, 93, 520, 107]
-	  ZOrder		  -11
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "imag"
-	  SID			  "133"
 	  Position		  [500, 253, 530, 267]
-	  ZOrder		  -12
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -5703,10 +5051,8 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "cmult_dsp48e"
-      SID		      "134"
       Ports		      [4, 2]
       Position		      [320, 101, 370, 164]
-      ZOrder		      -10
       BackgroundColor	      "[0.500000, 1.000000, 0.500000]"
       AttributesFormatString  "18_17 * 18_17 ==> 37_34\nLatency=4"
       UserDataPersistent      on
@@ -5716,144 +5062,37 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		58
-	$ClassName		"Simulink.Mask"
-	Type			"cmult_dsp48e"
-	Description		"Multiplies two complex numbers using 4 DSP48Es.\nConjugation is optional.\n\nRe{a} and Im{a} can be up "
-	"to 25 bits.\nRe{b} and Im{b} can be up to 18 bits."
-	Initialization		"cmult_dsp48e_init(gcb, ...\n    'n_bits_a', n_bits_a, ...\n    'bin_pt_a', bin_pt_a, ...\n    'n_bit"
-	"s_b', n_bits_b, ...\n    'bin_pt_b', bin_pt_b, ...\n    'conjugated', conjugated, ...\n    'full_precision', full_pre"
-	"cision, ...\n    'n_bits_c', n_bits_c, ...\n    'bin_pt_c', bin_pt_c, ...\n    'quantization', quantization, ...\n   "
-	" 'overflow', overflow, ...\n    'cast_latency', cast_latency);"
-	SelfModifiable		"on"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  11
-	  Object {
-	    $ObjectID		    59
-	    Type		    "edit"
-	    Name		    "n_bits_a"
-	    Prompt		    "Bit width 'a'"
-	    Value		    "18"
-	    TabName		    "Basic"
-	  }
-	  Object {
-	    $ObjectID		    60
-	    Type		    "edit"
-	    Name		    "bin_pt_a"
-	    Prompt		    "Binary point 'a'"
-	    Value		    "17"
-	    TabName		    "Basic"
-	  }
-	  Object {
-	    $ObjectID		    61
-	    Type		    "edit"
-	    Name		    "n_bits_b"
-	    Prompt		    "Bit width 'b'"
-	    Value		    "18"
-	    TabName		    "Basic"
-	  }
-	  Object {
-	    $ObjectID		    62
-	    Type		    "edit"
-	    Name		    "bin_pt_b"
-	    Prompt		    "Binary point 'b'"
-	    Value		    "17"
-	    TabName		    "Basic"
-	  }
-	  Object {
-	    $ObjectID		    63
-	    Type		    "checkbox"
-	    Name		    "conjugated"
-	    Prompt		    "Conjugate"
-	    Value		    "off"
-	    Evaluate		    "off"
-	    TabName		    "Basic"
-	  }
-	  Object {
-	    $ObjectID		    64
-	    Type		    "checkbox"
-	    Name		    "full_precision"
-	    Prompt		    "Full precision"
-	    Value		    "on"
-	    Evaluate		    "off"
-	    Callback		    "full_precision = get_param(gcb, 'full_precision');\n\nif strcmp(full_precision, 'on'),\n    not_fu"
-	    "ll_precision = 'off';\nelse\n    not_full_precision = 'on';\nend\n\nset_param_state(gcb, 'n_bits_c', not_full_pre"
-	    "cision);\nset_param_state(gcb, 'bin_pt_c', not_full_precision);\nset_param_state(gcb, 'quantization', not_full_pr"
-	    "ecision);\nset_param_state(gcb, 'overflow', not_full_precision);\nset_param_state(gcb, 'cast_latency', not_full_p"
-	    "recision);"
-	    TabName		    "Output Type"
-	  }
-	  Object {
-	    $ObjectID		    65
-	    Type		    "edit"
-	    Name		    "n_bits_c"
-	    Prompt		    "Bit width out"
-	    Value		    "37"
-	    Enabled		    "off"
-	    TabName		    "Output Type"
-	  }
-	  Object {
-	    $ObjectID		    66
-	    Type		    "edit"
-	    Name		    "bin_pt_c"
-	    Prompt		    "Binary point out"
-	    Value		    "34"
-	    Enabled		    "off"
-	    TabName		    "Output Type"
-	  }
-	  Object {
-	    $ObjectID		    67
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      3
-	      Cell		      "Truncate"
-	      Cell		      "Round  (unbiased: +/- Inf)"
-	      Cell		      "Round  (unbiased: Even Values)"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "quantization"
-	    Prompt		    "Quantization"
-	    Value		    "Truncate"
-	    Evaluate		    "off"
-	    Enabled		    "off"
-	    TabName		    "Output Type"
-	  }
-	  Object {
-	    $ObjectID		    68
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      3
-	      Cell		      "Wrap"
-	      Cell		      "Saturate"
-	      Cell		      "Flag as error"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "overflow"
-	    Prompt		    "Overflow"
-	    Value		    "Wrap"
-	    Evaluate		    "off"
-	    Enabled		    "off"
-	    TabName		    "Output Type"
-	  }
-	  Object {
-	    $ObjectID		    69
-	    Type		    "edit"
-	    Name		    "cast_latency"
-	    Prompt		    "Cast Latency"
-	    Value		    "0"
-	    Enabled		    "off"
-	    TabName		    "Output Type"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskType		      "cmult_dsp48e"
+      MaskDescription	      "Multiplies two complex numbers using 4 DSP48Es.\nConjugation is optional.\n\nRe{a} and Im"
+      "{a} can be up to 25 bits.\nRe{b} and Im{b} can be up to 18 bits."
+      MaskPromptString	      "Bit width 'a'|Binary point 'a'|Bit width 'b'|Binary point 'b'|Conjugate|Full precision|B"
+      "it width out|Binary point out|Quantization|Overflow|Cast Latency"
+      MaskStyleString	      "edit,edit,edit,edit,checkbox,checkbox,edit,edit,popup(Truncate|Round  (unbiased: +/- Inf)"
+      "|Round  (unbiased: Even Values)),popup(Wrap|Saturate|Flag as error),edit"
+      MaskVariables	      "n_bits_a=@1;bin_pt_a=@2;n_bits_b=@3;bin_pt_b=@4;conjugated=&5;full_precision=&6;n_bits_c=@7"
+      ";bin_pt_c=@8;quantization=&9;overflow=&10;cast_latency=@11;"
+      MaskTunableValueString  "on,on,on,on,on,on,on,on,on,on,on"
+      MaskCallbackString      "|||||full_precision = get_param(gcb, 'full_precision');\n\nif strcmp(full_precision, 'o"
+      "n'),\n    not_full_precision = 'off';\nelse\n    not_full_precision = 'on';\nend\n\nset_param_state(gcb, 'n_bits"
+      "_c', not_full_precision);\nset_param_state(gcb, 'bin_pt_c', not_full_precision);\nset_param_state(gcb, 'quantiza"
+      "tion', not_full_precision);\nset_param_state(gcb, 'overflow', not_full_precision);\nset_param_state(gcb, 'cast_l"
+      "atency', not_full_precision);|||||"
+      MaskEnableString	      "on,on,on,on,on,on,off,off,off,off,off"
+      MaskVisibilityString    "on,on,on,on,on,on,on,on,on,on,on"
+      MaskToolTipString	      "on,on,on,on,on,on,on,on,on,on,on"
+      MaskInitialization      "cmult_dsp48e_init(gcb, ...\n    'n_bits_a', n_bits_a, ...\n    'bin_pt_a', bin_pt_a, .."
+      ".\n    'n_bits_b', n_bits_b, ...\n    'bin_pt_b', bin_pt_b, ...\n    'conjugated', conjugated, ...\n    'full_pr"
+      "ecision', full_precision, ...\n    'n_bits_c', n_bits_c, ...\n    'bin_pt_c', bin_pt_c, ...\n    'quantization',"
+      " quantization, ...\n    'overflow', overflow, ...\n    'cast_latency', cast_latency);"
+      MaskSelfModifiable      on
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "18|17|18|17|off|on|37|34|Truncate|Wrap|0"
+      MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Output Type,Output Type,Output Type,Output Type,Output Ty"
+      "pe,Output Type"
       System {
 	Name			"cmult_dsp48e"
 	Location		[263, 45, 1372, 2034]
@@ -5869,49 +5108,38 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"48"
 	Block {
 	  BlockType		  Inport
 	  Name			  "a_re"
-	  SID			  "134:1"
 	  Position		  [15, 18, 45, 32]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "a_im"
-	  SID			  "134:2"
 	  Position		  [15, 58, 45, 72]
-	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b_re"
-	  SID			  "134:3"
 	  Position		  [15, 98, 45, 112]
-	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "b_im"
-	  SID			  "134:4"
 	  Position		  [15, 138, 45, 152]
-	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert"
-	  SID			  "134:5"
 	  Ports			  [1, 1]
 	  Position		  [345, 17, 395, 33]
-	  ZOrder		  -5
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -5947,10 +5175,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert1"
-	  SID			  "134:6"
 	  Ports			  [1, 1]
 	  Position		  [345, 302, 395, 318]
-	  ZOrder		  -6
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -5986,10 +5212,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert2"
-	  SID			  "134:7"
 	  Ports			  [1, 1]
 	  Position		  [345, 167, 395, 183]
-	  ZOrder		  -7
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -6025,10 +5249,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert3"
-	  SID			  "134:8"
 	  Ports			  [1, 1]
 	  Position		  [345, 32, 395, 48]
-	  ZOrder		  -8
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -6064,10 +5286,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert4"
-	  SID			  "134:9"
 	  Ports			  [1, 1]
 	  Position		  [345, 182, 395, 198]
-	  ZOrder		  -9
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -6103,10 +5323,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert5"
-	  SID			  "134:10"
 	  Ports			  [1, 1]
 	  Position		  [345, 452, 395, 468]
-	  ZOrder		  -10
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -6142,10 +5360,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert6"
-	  SID			  "134:11"
 	  Ports			  [1, 1]
 	  Position		  [345, 317, 395, 333]
-	  ZOrder		  -11
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -6181,10 +5397,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Convert7"
-	  SID			  "134:12"
 	  Ports			  [1, 1]
 	  Position		  [345, 467, 395, 483]
-	  ZOrder		  -12
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -6220,10 +5434,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "DSP48E_0"
-	  SID			  "134:13"
 	  Ports			  [6, 2]
 	  Position		  [445, 449, 545, 546]
-	  ZOrder		  -13
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
@@ -6305,10 +5517,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "DSP48E_1"
-	  SID			  "134:14"
 	  Ports			  [7, 1]
 	  Position		  [445, 299, 545, 411]
-	  ZOrder		  -14
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
@@ -6390,10 +5600,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "DSP48E_2"
-	  SID			  "134:15"
 	  Ports			  [6, 2]
 	  Position		  [445, 164, 545, 261]
-	  ZOrder		  -15
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
@@ -6475,10 +5683,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "DSP48E_3"
-	  SID			  "134:16"
 	  Ports			  [7, 1]
 	  Position		  [445, 14, 545, 126]
-	  ZOrder		  -16
 	  SourceBlock		  "xbsIndex_r4/DSP48E"
 	  SourceType		  "Xilinx DSP48E Block"
 	  use_a			  "Direct from A Port"
@@ -6560,28 +5766,21 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator"
-	  SID			  "134:17"
 	  Position		  [595, 180, 615, 200]
-	  ZOrder		  -17
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator1"
-	  SID			  "134:18"
 	  Position		  [595, 465, 615, 485]
-	  ZOrder		  -18
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "alumode0"
-	  SID			  "134:19"
 	  Ports			  [0, 1]
 	  Position		  [345, 497, 395, 513]
-	  ZOrder		  -19
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  const			  "0"
@@ -6618,10 +5817,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "alumode1"
-	  SID			  "134:20"
 	  Ports			  [0, 1]
 	  Position		  [345, 362, 395, 378]
-	  ZOrder		  -20
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6663,10 +5860,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "alumode2"
-	  SID			  "134:21"
 	  Ports			  [0, 1]
 	  Position		  [345, 212, 395, 228]
-	  ZOrder		  -21
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6704,12 +5899,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "alumode3"
-	  SID			  "134:22"
 	  Ports			  [0, 1]
 	  Position		  [345, 77, 395, 93]
-	  ZOrder		  -22
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
 	  const			  "3"
@@ -6746,10 +5938,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryin0"
-	  SID			  "134:23"
 	  Ports			  [0, 1]
 	  Position		  [345, 512, 395, 528]
-	  ZOrder		  -23
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6787,10 +5977,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryin1"
-	  SID			  "134:24"
 	  Ports			  [0, 1]
 	  Position		  [345, 377, 395, 393]
-	  ZOrder		  -24
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6828,10 +6016,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryin2"
-	  SID			  "134:25"
 	  Ports			  [0, 1]
 	  Position		  [345, 227, 395, 243]
-	  ZOrder		  -25
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6869,10 +6055,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryin3"
-	  SID			  "134:26"
 	  Ports			  [0, 1]
 	  Position		  [345, 92, 395, 108]
-	  ZOrder		  -26
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6910,10 +6094,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryinsel0"
-	  SID			  "134:27"
 	  Ports			  [0, 1]
 	  Position		  [345, 527, 395, 543]
-	  ZOrder		  -27
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6951,10 +6133,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryinsel1"
-	  SID			  "134:28"
 	  Ports			  [0, 1]
 	  Position		  [345, 392, 395, 408]
-	  ZOrder		  -28
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -6992,10 +6172,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryinsel2"
-	  SID			  "134:29"
 	  Ports			  [0, 1]
 	  Position		  [345, 242, 395, 258]
-	  ZOrder		  -29
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -7033,10 +6211,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "carryinsel3"
-	  SID			  "134:30"
 	  Ports			  [0, 1]
 	  Position		  [345, 107, 395, 123]
-	  ZOrder		  -30
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -7074,11 +6250,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_c_im"
-	  SID			  "134:31"
 	  Ports			  [1, 1]
 	  Position		  [670, 347, 720, 363]
-	  ZOrder		  -31
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -7113,11 +6286,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_c_re"
-	  SID			  "134:32"
 	  Ports			  [1, 1]
 	  Position		  [670, 62, 720, 78]
-	  ZOrder		  -32
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -7152,10 +6322,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "opmode0"
-	  SID			  "134:33"
 	  Ports			  [0, 1]
 	  Position		  [345, 482, 395, 498]
-	  ZOrder		  -33
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -7197,10 +6365,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "opmode1"
-	  SID			  "134:34"
 	  Ports			  [0, 1]
 	  Position		  [345, 347, 395, 363]
-	  ZOrder		  -34
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -7242,10 +6408,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "opmode2"
-	  SID			  "134:35"
 	  Ports			  [0, 1]
 	  Position		  [345, 197, 395, 213]
-	  ZOrder		  -35
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -7287,10 +6451,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "opmode3"
-	  SID			  "134:36"
 	  Ports			  [0, 1]
 	  Position		  [345, 62, 395, 78]
-	  ZOrder		  -36
 	  ShowName		  off
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -7332,11 +6494,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_a_im"
-	  SID			  "134:37"
 	  Ports			  [1, 1]
 	  Position		  [95, 57, 145, 73]
-	  ZOrder		  -37
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -7371,11 +6530,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_a_re"
-	  SID			  "134:38"
 	  Ports			  [1, 1]
 	  Position		  [95, 17, 145, 33]
-	  ZOrder		  -38
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -7410,11 +6566,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_b_im"
-	  SID			  "134:39"
 	  Ports			  [1, 1]
 	  Position		  [95, 137, 145, 153]
-	  ZOrder		  -39
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -7449,11 +6602,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "realign_b_re"
-	  SID			  "134:40"
 	  Ports			  [1, 1]
 	  Position		  [95, 97, 145, 113]
-	  ZOrder		  -40
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -7488,10 +6638,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_a_im"
-	  SID			  "134:41"
 	  Ports			  [1, 1]
 	  Position		  [170, 57, 220, 73]
-	  ZOrder		  -41
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -7519,10 +6667,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_a_re"
-	  SID			  "134:42"
 	  Ports			  [1, 1]
 	  Position		  [170, 17, 220, 33]
-	  ZOrder		  -42
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -7550,10 +6696,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_b_im"
-	  SID			  "134:43"
 	  Ports			  [1, 1]
 	  Position		  [170, 137, 220, 153]
-	  ZOrder		  -43
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -7581,10 +6725,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_b_re"
-	  SID			  "134:44"
 	  Ports			  [1, 1]
 	  Position		  [170, 97, 220, 113]
-	  ZOrder		  -44
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -7612,11 +6754,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_c_im"
-	  SID			  "134:45"
 	  Ports			  [1, 1]
 	  Position		  [595, 347, 645, 363]
-	  ZOrder		  -45
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -7644,11 +6783,8 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reinterp_c_re"
-	  SID			  "134:46"
 	  Ports			  [1, 1]
 	  Position		  [595, 62, 645, 78]
-	  ZOrder		  -46
-	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -7676,17 +6812,13 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "c_re"
-	  SID			  "134:47"
 	  Position		  [770, 63, 800, 77]
-	  ZOrder		  -47
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "c_im"
-	  SID			  "134:48"
 	  Position		  [770, 348, 800, 362]
-	  ZOrder		  -48
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
@@ -8007,10 +7139,8 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "complex_conj"
-      SID		      "135"
       Ports		      [1, 1]
       Position		      [430, 26, 475, 44]
-      ZOrder		      -11
       UserDataPersistent      on
       UserData		      "DataTag2"
       MinAlgLoopOccurrences   off
@@ -8018,56 +7148,22 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
-      RequestExecContextInheritance off
       MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		70
-	$ClassName		"Simulink.Mask"
-	Initialization		"config.source = str2func('complex_conj_init');\nconfig.toplevel = gcb;\nconfig.depend = {'complex_co"
-	"nj_init.m'};\nxBlock( config, {bitwidth, bin_pt, latency, mode});"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  4
-	  Object {
-	    $ObjectID		    71
-	    Type		    "edit"
-	    Name		    "bitwidth"
-	    Prompt		    "Bit Width"
-	    Value		    "18"
-	  }
-	  Object {
-	    $ObjectID		    72
-	    Type		    "edit"
-	    Name		    "bin_pt"
-	    Prompt		    "Binary Point"
-	    Value		    "17"
-	  }
-	  Object {
-	    $ObjectID		    73
-	    Type		    "edit"
-	    Name		    "latency"
-	    Prompt		    "latency"
-	    Value		    "3"
-	  }
-	  Object {
-	    $ObjectID		    74
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      2
-	      Cell		      "dsp48e"
-	      Cell		      "logic"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "mode"
-	    Prompt		    "Implementation Mode"
-	    Value		    "logic"
-	    Evaluate		    "off"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
+      MaskPromptString	      "Bit Width|Binary Point|latency|Implementation Mode"
+      MaskStyleString	      "edit,edit,edit,popup(dsp48e|logic)"
+      MaskVariables	      "bitwidth=@1;bin_pt=@2;latency=@3;mode=&4;"
+      MaskTunableValueString  "on,on,on,on"
+      MaskCallbackString      "|||"
+      MaskEnableString	      "on,on,on,on"
+      MaskVisibilityString    "on,on,on,on"
+      MaskToolTipString	      "on,on,on,on"
+      MaskInitialization      "config.source = str2func('complex_conj_init');\nconfig.toplevel = gcb;\nconfig.depend ="
+      " {'complex_conj_init.m'};\nxBlock( config, {bitwidth, bin_pt, latency, mode});"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "18|17|3|logic"
       System {
 	Name			"complex_conj"
 	Location		[12, 45, 1169, 1715]
@@ -8086,17 +7182,13 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "z_sgtemp"
-	  SID			  "136"
 	  Position		  [10, 90, 30, 110]
-	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "z*_sgtemp"
-	  SID			  "137"
 	  Position		  [290, 90, 310, 110]
-	  ZOrder		  -2
 	  IconDisplay		  "Port number"
 	}
       }
@@ -8106,51 +7198,10 @@ Library {
 MatData {
   NumRecords		  3
   DataRecord {
-    Tag			    DataTag0
-    Data		    "  %)30     .    8 X   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ (.#204.    T T   "
-    "8    (     @         %    \"     $    !     0         %  0 &@    $   \"Z 0  9&5F875L=',                       !N7V"
-    ")I='-?80                       &)I;E]P=%]A                        ;E]B:71S7V(                       !B:6Y?<'1?8@  "
-    "                     &Y?8FET<U]A8@                      8FEN7W!T7V%B                      !Q=6%N=&EZ871I;VX       "
-    "           &]V97)F;&]W                        :6Y?;&%T96YC>0                    !M=6QT7VQA=&5N8WD                 "
-    " &%D9%]L871E;F-Y                    8V]N=E]L871E;F-Y                  !C;VYJ=6=A=&5D                     &UU;'1I<&"
-    "QI97)?:6UP;&5M96YT871I;VX 87-Y;F,                           !P:7!E;&EN961?96YA8FQE                      X   #H!P  "
-    "!@    @    !          4    (     0   !X    !          X    X    !@    @    $          4    (     0    @    !      "
-    "   !     (    ;E]B:71S7V$.    .     8    (    !@         %    \"     $    !     0         )    \"            #) #@"
-    "   #@    &    \"     0         !0    @    !    \"     $         $     @   !B:6Y?<'1?80X    X    !@    @    &      "
-    "    4    (     0    $    !          D    (            ,4 .    .     8    (    !          %    \"     $    (     0 "
-    "        0    \"    &Y?8FET<U]B#@   #@    &    \"     8         !0    @    !     0    $         \"0    @           "
-    " R0 X    X    !@    @    $          4    (     0    @    !         !     (    8FEN7W!T7V(.    .     8    (    !@  "
-    "       %    \"     $    !     0         )    \"            #% #@   $     &    \"     0         !0    @    !    \"0"
-    "    $         $     D   !N7V)I='-?86(         #@   #@    &    \"     8         !0    @    !     0    $         \"0"
-    "    @          (!\"0 X   !     !@    @    $          4    (     0    D    !         !     )    8FEN7W!T7V%B       "
-    "   X    X    !@    @    &          4    (     0    $    !          D    (            +$ .    0     8    (    !    "
-    "      %    \"     $    ,     0         0    #    '%U86YT:7IA=&EO;@     .    .     8    (    !          %    \"    "
-    " $    (     0         0    \"    %1R=6YC871E#@   #@    &    \"     0         !0    @    !    \"     $         $   "
-    "  @   !O=F5R9FQO=PX    P    !@    @    $          4    (     0    0    !         !  ! !7<F%P#@   $     &    \"    "
-    " 0         !0    @    !    #     $         $     P   !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0    "
-    "@    !     0    $         \"0    @            (0 X   !     !@    @    $          4    (     0    L    !         ! "
-    "    +    861D7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !          D    (            \\"
-    "#\\.    0     8    (    !          %    \"     $    ,     0         0    #    &-O;G9?;&%T96YC>0     .    .     8  "
-    "  (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0         !0    @ "
-    "   !    \"@    $         $     H   !C;VYJ=6=A=&5D        #@   #     &    \"     0         !0    @    !     P    $ "
-    "        $  # &]F9@ .    .     8    (    !          %    \"     $    %     0         0    !0   &%S>6YC    #@   #   "
-    "  &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          %    \"     $  "
-    "  0     0         0    $    '!I<&5L:6YE9%]E;F%B;&4.    ,     8    (    !          %    \"     $    \"     0       "
-    "  0  ( ;VX   X   !0    !@    @    $          4    (     0   !D    !         !     9    ;75L=&EP;&EE<E]I;7!L96UE;G1"
-    "A=&EO;@         .    0     8    (    !          %    \"     $    .     0         0    #@   &)E:&%V:6]R86P@2$1,   ."
-    "    .     8    (    !@         %    \"     $    !     0         )    \"               #@   #@    &    \"     8    "
-    "     !0    @    !     0    $         \"0    @            Q0 X    X    !@    @    &          4    (     0    $    !"
-    "          D    (            ,D .    .     8    (    !@         %    \"     $    !     0         )    \"           "
-    " #% #@   #@    &    \"     8         !0    @    !     0    $         \"0    @          (!\"0 X    X    !@    @    "
-    "&          4    (     0    $    !          D    (            +$ .    .     8    (    !          %    \"     $    ("
-    "     0         0    \"    %1R=6YC871E#@   #     &    \"     0         !0    @    !    !     $         $  $ %=R87 ."
-    "    .     8    (    !@         %    \"     $    !     0         )    \"               #@   #@    &    \"     8    "
-    "     !0    @    !     0    $         \"0    @            (0 X    X    !@    @    &          4    (     0    $    !"
-    "          D    (            \\#\\.    .     8    (    !@         %    \"     $    !     0         )    \"         "
-    "   / _#@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    0     8    (    !          "
-    "%    \"     $    .     0         0    #@   &)E:&%V:6]R86P@2$1,   .    ,     8    (    !          %    \"     $    "
-    "#     0         0  , ;V9F  X    P    !@    @    $          4    (     0    (    !         !   @!O;@  "
+    Tag			    DataTag2
+    Data		    "  %)30     .    H     8    (     @         %    \"     $    !     0         %  0 \"@    $    *    :&%S:"
+    "%]C;V1E          X   !0    !@    @    $          4    (     0   \"     !         !     @    .30S-F0W.3=B8S,U,S9B-6"
+    "4Q.3-D-# Q9#9A8V,U,3 "
   }
   DataRecord {
     Tag			    DataTag1
@@ -8187,9 +7238,52 @@ MatData {
     "        )    \"               "
   }
   DataRecord {
-    Tag			    DataTag2
-    Data		    "  %)30     .    H     8    (     @         %    \"     $    !     0         %  0 \"@    $    *    :&%S:"
-    "%]C;V1E          X   !0    !@    @    $          4    (     0   \"     !         !     @    .30S-F0W.3=B8S,U,S9B-6"
-    "4Q.3-D-# Q9#9A8V,U,3 "
+    Tag			    DataTag0
+    Data		    "  %)30     .    Z X   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,.S\\ ,.    6 X  "
+    " 8    (     @         %    \"     $    !     0         %  0 &@    $   \"Z 0  9&5F875L=',                       !N7"
+    "V)I='-?80                       &)I;E]P=%]A                        ;E]B:71S7V(                       !B:6Y?<'1?8@ "
+    "                      &Y?8FET<U]A8@                      8FEN7W!T7V%B                      !Q=6%N=&EZ871I;VX      "
+    "            &]V97)F;&]W                        :6Y?;&%T96YC>0                    !M=6QT7VQA=&5N8WD                "
+    "  &%D9%]L871E;F-Y                    8V]N=E]L871E;F-Y                  !C;VYJ=6=A=&5D                     &UU;'1I<"
+    "&QI97)?:6UP;&5M96YT871I;VX 87-Y;F,                           !P:7!E;&EN961?96YA8FQE                      X   !P\" "
+    "  !@    @    !          4    (     0   \"     !          X    X    !@    @    $          4    (     0    @    !   "
+    "      !     (    ;E]B:71S7V$.    .     8    (    !@         %    \"     $    !     0         )    \"            #)"
+    " #@   #@    &    \"     0         !0    @    !    \"     $         $     @   !B:6Y?<'1?80X    X    !@    @    &   "
+    "       4    (     0    $    !          D    (            ,4 .    .     8    (    !          %    \"     $    (    "
+    " 0         0    \"    &Y?8FET<U]B#@   #@    &    \"     8         !0    @    !     0    $         \"0    @        "
+    "    R0 X    X    !@    @    $          4    (     0    @    !         !     (    8FEN7W!T7V(.    .     8    (    !"
+    "@         %    \"     $    !     0         )    \"            #% #@   $     &    \"     0         !0    @    !    "
+    "\"0    $         $     D   !N7V)I='-?86(         #@   #@    &    \"     8         !0    @    !     0    $         "
+    "\"0    @          (!\"0 X   !     !@    @    $          4    (     0    D    !         !     )    8FEN7W!T7V%B    "
+    "      X    X    !@    @    &          4    (     0    $    !          D    (            +$ .    0     8    (    ! "
+    "         %    \"     $    ,     0         0    #    '%U86YT:7IA=&EO;@     .    .     8    (    !          %    \" "
+    "    $    (     0         0    \"    %1R=6YC871E#@   #@    &    \"     0         !0    @    !    \"     $         $"
+    "     @   !O=F5R9FQO=PX    P    !@    @    $          4    (     0    0    !         !  ! !7<F%P#@   $     &    \" "
+    "    0         !0    @    !    #     $         $     P   !M=6QT7VQA=&5N8WD     #@   #@    &    \"     8         !0 "
+    "   @    !     0    $         \"0    @            (0 X   !     !@    @    $          4    (     0    L    !        "
+    " !     +    861D7VQA=&5N8WD       X    X    !@    @    &          4    (     0    $    !          D    (          "
+    "  \\#\\.    0     8    (    !          %    \"     $    ,     0         0    #    &-O;G9?;&%T96YC>0     .    .    "
+    " 8    (    !@         %    \"     $    !     0         )    \"            / _#@   $     &    \"     0         !0  "
+    "  @    !    \"@    $         $     H   !I;E]L871E;F-Y        #@   #@    &    \"     8         !0    @    !     0  "
+    "  $         \"0    @               X   !     !@    @    $          4    (     0    H    !         !     *    8V]N:"
+    "G5G871E9         X    P    !@    @    $          4    (     0    ,    !         !   P!O9F8 #@   #@    &    \"     "
+    "0         !0    @    !    !0    $         $     4   !A<WEN8P    X    P    !@    @    $          4    (     0    , "
+    "   !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    $     $         $    !    !P:7!E;&EN961?9"
+    "6YA8FQE#@   #     &    \"     0         !0    @    !     @    $         $  \" &]N   .    4     8    (    !        "
+    "  %    \"     $    9     0         0    &0   &UU;'1I<&QI97)?:6UP;&5M96YT871I;VX         #@   $     &    \"     0  "
+    "       !0    @    !    #@    $         $     X   !B96AA=FEO<F%L($A$3   #@   #@    &    \"     8         !0    @   "
+    " !     0    $         \"0    @               X    X    !@    @    &          4    (     0    $    !          D    "
+    "(            ,4 .    .     8    (    !@         %    \"     $    !     0         )    \"            #) #@   #@    "
+    "&    \"     8         !0    @    !     0    $         \"0    @            Q0 X    X    !@    @    &          4    "
+    "(     0    $    !          D    (          \" 0D .    .     8    (    !@         %    \"     $    !     0         "
+    ")    \"            \"Q #@   #@    &    \"     0         !0    @    !    \"     $         $     @   !4<G5N8V%T90X  "
+    "  P    !@    @    $          4    (     0    0    !         !  ! !7<F%P#@   #@    &    \"     8         !0    @   "
+    " !     0    $         \"0    @               X    X    !@    @    &          4    (     0    $    !          D    "
+    "(            \"$ .    .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   #@   "
+    " &    \"     8         !0    @    !     0    $         \"0    @           #P/PX    P    !@    @    $          4   "
+    " (     0    ,    !         !   P!O9F8 #@   $     &    \"     0         !0    @    !    #@    $         $     X   !"
+    "B96AA=FEO<F%L($A$3   #@   #     &    \"     0         !0    @    !     P    $         $  # &]F9@ .    ,     8    ("
+    "    !          %    \"     $    \"     0         0  ( ;VX   "
   }
 }
