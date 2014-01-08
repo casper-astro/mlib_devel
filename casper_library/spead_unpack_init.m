@@ -1,5 +1,7 @@
 function spead_unpack_init(block, hdrs)
 
+set_param(block, 'LinkStatus', 'inactive');
+
 current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
 header_ids = eval(hdrs);
 num_headers = length(header_ids);
