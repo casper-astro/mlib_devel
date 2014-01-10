@@ -4082,20 +4082,6 @@ Library {
 	  Name			  "pulse_ext"
 	  Ports			  [1, 1]
 	  Position		  [190, 51, 225, 69]
-	  LinkData {
-	    BlockName		    "Relational5"
-	    DialogParameters {
-	      sg_icon_stat	      "45,44,2,1,white,blue,0,850de6e7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 44 44 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 44 44 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[28."
-	      "66 28.66 34.66 28.66 34.66 34.66 34.66 28.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[22.66 22.66 2"
-	      "8.66 28.66 22.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[16.66 16.66 22.66 22.66 16.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[10.66 10.66 16.66 10.66 16.66 16.66 10.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor"
-	      "('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('out"
-	      "put',1,'\\bfa \\neq b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_misc/pulse_ext"
 	  SourceType		  "pulse_ext"
 	  pulse_len		  "sync_period"
@@ -7849,19 +7835,6 @@ Library {
 	  Position		  [415, 425, 450, 445]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
 	  AttributesFormatString  "rising edges\nactive high"
-	  LinkData {
-	    BlockName		    "Delay"
-	    DialogParameters {
-	      sg_icon_stat	      "45,16,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 16 16 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 16 16 0 ]);\npatch([17.55 20.44 22.44 24.44 26.44 22.44 19.55 17.55 ],[1"
-	      "0.22 10.22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([19.55 22.44 20.44 17.55 19.55 ],[8.22 8.22 "
-	      "10.22 10.22 8.22 ],[0.931 0.946 0.973 ]);\npatch([17.55 20.44 22.44 19.55 17.55 ],[6.22 6.22 8.22 8.22 6.22 ],["
-	      "1 1 1 ]);\npatch([19.55 26.44 24.44 22.44 20.44 17.55 19.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.94"
-	      "6 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('bla"
-	      "ck');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag17"
 	  SourceBlock		  "casper_library_misc/edge_detect"
@@ -7896,20 +7869,6 @@ Library {
 	  Name			  "pulse_ext1"
 	  Ports			  [1, 1]
 	  Position		  [210, 281, 245, 299]
-	  LinkData {
-	    BlockName		    "Relational5"
-	    DialogParameters {
-	      sg_icon_stat	      "45,44,2,1,white,blue,0,850de6e7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 44 44 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 44 44 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[28."
-	      "66 28.66 34.66 28.66 34.66 34.66 34.66 28.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[22.66 22.66 2"
-	      "8.66 28.66 22.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[16.66 16.66 22.66 22.66 16.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[10.66 10.66 16.66 10.66 16.66 16.66 10.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor"
-	      "('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('out"
-	      "put',1,'\\bfa \\neq b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_misc/pulse_ext"
 	  SourceType		  "pulse_ext"
 	  pulse_len		  "2^27"
@@ -7919,20 +7878,6 @@ Library {
 	  Name			  "pulse_ext2"
 	  Ports			  [1, 1]
 	  Position		  [210, 691, 245, 709]
-	  LinkData {
-	    BlockName		    "Relational5"
-	    DialogParameters {
-	      sg_icon_stat	      "45,44,2,1,white,blue,0,850de6e7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 44 44 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 44 44 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[28."
-	      "66 28.66 34.66 28.66 34.66 34.66 34.66 28.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[22.66 22.66 2"
-	      "8.66 28.66 22.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[16.66 16.66 22.66 22.66 16.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[10.66 10.66 16.66 10.66 16.66 16.66 10.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor"
-	      "('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('out"
-	      "put',1,'\\bfa \\neq b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_misc/pulse_ext"
 	  SourceType		  "pulse_ext"
 	  pulse_len		  "2^27"
@@ -7962,19 +7907,6 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [600, 49, 645, 81]
-	  LinkData {
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,350ae870,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'9');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "3+4+2"
@@ -20675,54 +20607,6 @@ Library {
 	  Name			  "Datatype_Conv_Cos1"
 	  Ports			  [1, 1]
 	  Position		  [795, 310, 835, 370]
-	  LinkData {
-	    BlockName		    "Constant28"
-	    DialogParameters {
-	      sg_icon_stat	      "30,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 24 24 0 ]);\npatch([8.325 12.66 15.66 18.66 21.66 15.66 11.325 8.325 ],["
-	      "15.33 15.33 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([11.325 15.66 12.66 8.325 11.325 ],[12.33 1"
-	      "2.33 15.33 15.33 12.33 ],[0.931 0.946 0.973 ]);\npatch([8.325 12.66 15.66 11.325 8.325 ],[9.33 9.33 12.33 12.33"
-	      " 9.33 ],[1 1 1 ]);\npatch([11.325 21.66 18.66 15.66 12.66 8.325 11.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],"
-	      "[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
-	      "or('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Delay7"
-	    DialogParameters {
-	      sg_icon_stat	      "20,24,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 20 20 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 20 20 0 0 ],[0 0 24 24 0 ]);\npatch([5.55 8.44 10.44 12.44 14.44 10.44 7.55 5.55 ],[14.22"
-	      " 14.22 16.22 14.22 16.22 16.22 16.22 14.22 ],[1 1 1 ]);\npatch([7.55 10.44 8.44 5.55 7.55 ],[12.22 12.22 14.22 "
-	      "14.22 12.22 ],[0.931 0.946 0.973 ]);\npatch([5.55 8.44 10.44 7.55 5.55 ],[10.22 10.22 12.22 12.22 10.22 ],[1 1 "
-	      "1 ]);\npatch([7.55 14.44 12.44 10.44 8.44 5.55 7.55 ],[8.22 8.22 10.22 8.22 10.22 10.22 8.22 ],[0.931 0.946 0.9"
-	      "73 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	      "disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational17"
-	    DialogParameters {
-	      sg_icon_stat	      "40,40,2,1,white,blue,0,9a1f8f13,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 40 40 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 40 40 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[25.55"
-	      " 25.55 30.55 25.55 30.55 30.55 30.55 25.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[20.55 20.55 25"
-	      ".55 25.55 20.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[15.55 15.55 20.55 20.55 15.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[10.55 10.55 15.55 10.55 15.55 15.55 10.55 ],[0."
-	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
-	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
-	      "ut',1,'\\bfa < b','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');dis"
-	      "p(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Slice38"
-	    DialogParameters {
-	      sg_icon_stat	      "35,20,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 20 20 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 20 20 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[1"
-	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[10.22 10.2"
-	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[8.22 8.22 10.22 10.22 8.2"
-	      "2 ],[1 1 1 ]);\npatch([14.55 21.44 19.44 17.44 15.44 12.55 14.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
-	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
-	      "black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Datatype_Conv_Cos"
 	  SourceType		  ""
 	  theta_binary_bits	  "17"
@@ -20733,54 +20617,6 @@ Library {
 	  Name			  "Datatype_Conv_Cos2"
 	  Ports			  [1, 1]
 	  Position		  [795, 765, 835, 825]
-	  LinkData {
-	    BlockName		    "Constant28"
-	    DialogParameters {
-	      sg_icon_stat	      "30,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 24 24 0 ]);\npatch([8.325 12.66 15.66 18.66 21.66 15.66 11.325 8.325 ],["
-	      "15.33 15.33 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([11.325 15.66 12.66 8.325 11.325 ],[12.33 1"
-	      "2.33 15.33 15.33 12.33 ],[0.931 0.946 0.973 ]);\npatch([8.325 12.66 15.66 11.325 8.325 ],[9.33 9.33 12.33 12.33"
-	      " 9.33 ],[1 1 1 ]);\npatch([11.325 21.66 18.66 15.66 12.66 8.325 11.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],"
-	      "[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
-	      "or('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Delay7"
-	    DialogParameters {
-	      sg_icon_stat	      "20,24,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 20 20 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 20 20 0 0 ],[0 0 24 24 0 ]);\npatch([5.55 8.44 10.44 12.44 14.44 10.44 7.55 5.55 ],[14.22"
-	      " 14.22 16.22 14.22 16.22 16.22 16.22 14.22 ],[1 1 1 ]);\npatch([7.55 10.44 8.44 5.55 7.55 ],[12.22 12.22 14.22 "
-	      "14.22 12.22 ],[0.931 0.946 0.973 ]);\npatch([5.55 8.44 10.44 7.55 5.55 ],[10.22 10.22 12.22 12.22 10.22 ],[1 1 "
-	      "1 ]);\npatch([7.55 14.44 12.44 10.44 8.44 5.55 7.55 ],[8.22 8.22 10.22 8.22 10.22 10.22 8.22 ],[0.931 0.946 0.9"
-	      "73 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	      "disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational17"
-	    DialogParameters {
-	      sg_icon_stat	      "40,40,2,1,white,blue,0,9a1f8f13,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 40 40 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 40 40 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[25.55"
-	      " 25.55 30.55 25.55 30.55 30.55 30.55 25.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[20.55 20.55 25"
-	      ".55 25.55 20.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[15.55 15.55 20.55 20.55 15.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[10.55 10.55 15.55 10.55 15.55 15.55 10.55 ],[0."
-	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
-	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
-	      "ut',1,'\\bfa < b','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');dis"
-	      "p(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Slice38"
-	    DialogParameters {
-	      sg_icon_stat	      "35,20,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 20 20 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 20 20 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[1"
-	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[10.22 10.2"
-	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[8.22 8.22 10.22 10.22 8.2"
-	      "2 ],[1 1 1 ]);\npatch([14.55 21.44 19.44 17.44 15.44 12.55 14.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
-	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
-	      "black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Datatype_Conv_Cos"
 	  SourceType		  ""
 	  theta_binary_bits	  "17"
@@ -20791,54 +20627,6 @@ Library {
 	  Name			  "Datatype_Conv_Sine1"
 	  Ports			  [1, 1]
 	  Position		  [795, 385, 835, 445]
-	  LinkData {
-	    BlockName		    "Constant28"
-	    DialogParameters {
-	      sg_icon_stat	      "30,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 24 24 0 ]);\npatch([8.325 12.66 15.66 18.66 21.66 15.66 11.325 8.325 ],["
-	      "15.33 15.33 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([11.325 15.66 12.66 8.325 11.325 ],[12.33 1"
-	      "2.33 15.33 15.33 12.33 ],[0.931 0.946 0.973 ]);\npatch([8.325 12.66 15.66 11.325 8.325 ],[9.33 9.33 12.33 12.33"
-	      " 9.33 ],[1 1 1 ]);\npatch([11.325 21.66 18.66 15.66 12.66 8.325 11.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],"
-	      "[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
-	      "or('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Delay7"
-	    DialogParameters {
-	      sg_icon_stat	      "20,24,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 20 20 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 20 20 0 0 ],[0 0 24 24 0 ]);\npatch([5.55 8.44 10.44 12.44 14.44 10.44 7.55 5.55 ],[14.22"
-	      " 14.22 16.22 14.22 16.22 16.22 16.22 14.22 ],[1 1 1 ]);\npatch([7.55 10.44 8.44 5.55 7.55 ],[12.22 12.22 14.22 "
-	      "14.22 12.22 ],[0.931 0.946 0.973 ]);\npatch([5.55 8.44 10.44 7.55 5.55 ],[10.22 10.22 12.22 12.22 10.22 ],[1 1 "
-	      "1 ]);\npatch([7.55 14.44 12.44 10.44 8.44 5.55 7.55 ],[8.22 8.22 10.22 8.22 10.22 10.22 8.22 ],[0.931 0.946 0.9"
-	      "73 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	      "disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational17"
-	    DialogParameters {
-	      sg_icon_stat	      "40,40,2,1,white,blue,0,9a1f8f13,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 40 40 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 40 40 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[25.55"
-	      " 25.55 30.55 25.55 30.55 30.55 30.55 25.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[20.55 20.55 25"
-	      ".55 25.55 20.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[15.55 15.55 20.55 20.55 15.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[10.55 10.55 15.55 10.55 15.55 15.55 10.55 ],[0."
-	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
-	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
-	      "ut',1,'\\bfa < b','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');dis"
-	      "p(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Slice38"
-	    DialogParameters {
-	      sg_icon_stat	      "35,20,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 20 20 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 20 20 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[1"
-	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[10.22 10.2"
-	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[8.22 8.22 10.22 10.22 8.2"
-	      "2 ],[1 1 1 ]);\npatch([14.55 21.44 19.44 17.44 15.44 12.55 14.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
-	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
-	      "black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Datatype_Conv_Sine"
 	  SourceType		  ""
 	  theta_binary_bits	  "17"
@@ -20849,54 +20637,6 @@ Library {
 	  Name			  "Datatype_Conv_Sine2"
 	  Ports			  [1, 1]
 	  Position		  [795, 855, 835, 915]
-	  LinkData {
-	    BlockName		    "Constant28"
-	    DialogParameters {
-	      sg_icon_stat	      "30,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 24 24 0 ]);\npatch([8.325 12.66 15.66 18.66 21.66 15.66 11.325 8.325 ],["
-	      "15.33 15.33 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([11.325 15.66 12.66 8.325 11.325 ],[12.33 1"
-	      "2.33 15.33 15.33 12.33 ],[0.931 0.946 0.973 ]);\npatch([8.325 12.66 15.66 11.325 8.325 ],[9.33 9.33 12.33 12.33"
-	      " 9.33 ],[1 1 1 ]);\npatch([11.325 21.66 18.66 15.66 12.66 8.325 11.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6.33 ],"
-	      "[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncol"
-	      "or('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Delay7"
-	    DialogParameters {
-	      sg_icon_stat	      "20,24,1,1,white,blue,0,07b98262,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 20 20 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 20 20 0 0 ],[0 0 24 24 0 ]);\npatch([5.55 8.44 10.44 12.44 14.44 10.44 7.55 5.55 ],[14.22"
-	      " 14.22 16.22 14.22 16.22 16.22 16.22 14.22 ],[1 1 1 ]);\npatch([7.55 10.44 8.44 5.55 7.55 ],[12.22 12.22 14.22 "
-	      "14.22 12.22 ],[0.931 0.946 0.973 ]);\npatch([5.55 8.44 10.44 7.55 5.55 ],[10.22 10.22 12.22 12.22 10.22 ],[1 1 "
-	      "1 ]);\npatch([7.55 14.44 12.44 10.44 8.44 5.55 7.55 ],[8.22 8.22 10.22 8.22 10.22 10.22 8.22 ],[0.931 0.946 0.9"
-	      "73 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');"
-	      "disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational17"
-	    DialogParameters {
-	      sg_icon_stat	      "40,40,2,1,white,blue,0,9a1f8f13,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 40 40 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 40 40 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[25.55"
-	      " 25.55 30.55 25.55 30.55 30.55 30.55 25.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[20.55 20.55 25"
-	      ".55 25.55 20.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[15.55 15.55 20.55 20.55 15.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[10.55 10.55 15.55 10.55 15.55 15.55 10.55 ],[0."
-	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
-	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
-	      "ut',1,'\\bfa < b','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');dis"
-	      "p(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Slice38"
-	    DialogParameters {
-	      sg_icon_stat	      "35,20,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 20 20 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 20 20 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[1"
-	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[10.22 10.2"
-	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[8.22 8.22 10.22 10.22 8.2"
-	      "2 ],[1 1 1 ]);\npatch([14.55 21.44 19.44 17.44 15.44 12.55 14.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
-	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
-	      "black');port_label('output',1,'[a:b]');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Datatype_Conv_Sine"
 	  SourceType		  ""
 	  theta_binary_bits	  "17"
@@ -20907,43 +20647,6 @@ Library {
 	  Name			  "Fine_del_sub_blk1"
 	  Ports			  [2, 1]
 	  Position		  [415, 204, 490, 331]
-	  LinkData {
-	    BlockName		    "Constant"
-	    DialogParameters {
-	      sg_icon_stat	      "20,18,0,1,white,blue,0,bf4ddd8b,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 20 20 0 0 ],[0 0 18 18 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 20 20 0 0 ],[0 0 18 18 0 ]);\npatch([5.55 8.44 10.44 12.44 14.44 10.44 7.55 5.55 ],[11.22"
-	      " 11.22 13.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([7.55 10.44 8.44 5.55 7.55 ],[9.22 9.22 11.22 11"
-	      ".22 9.22 ],[0.931 0.946 0.973 ]);\npatch([5.55 8.44 10.44 7.55 5.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\np"
-	      "atch([7.55 14.44 12.44 10.44 8.44 5.55 7.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfpr"
-	      "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('out"
-	      "put',1,'0');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Fract_Theta_Reg"
-	    DialogParameters {
-	      sg_icon_stat	      "40,35,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 35 35 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 35 35 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[22.55"
-	      " 22.55 27.55 22.55 27.55 27.55 27.55 22.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[17.55 17.55 22"
-	      ".55 22.55 17.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[12.55 12.55 17.55 17.55 12.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[7.55 7.55 12.55 7.55 12.55 12.55 7.55 ],[0.931 "
-	      "0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bla"
-	      "ck');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output'"
-	      ",1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational1"
-	    DialogParameters {
-	      sg_icon_stat	      "40,33,2,1,white,blue,0,6218dc92,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 33 33 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 33 33 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.4"
-	      "4 20.44 24.44 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.4"
-	      "4 20.44 16.44 ],[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1"
-	      " 1 1 ]);\npatch([15.1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946"
-	      " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-	      "port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\"
-	      "bfa \\geq b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Fine_del_sub_blk"
 	  SourceType		  ""
 	  fft_len		  "1024"
@@ -20955,43 +20658,6 @@ Library {
 	  Name			  "Fine_del_sub_blk2"
 	  Ports			  [2, 1]
 	  Position		  [415, 669, 490, 796]
-	  LinkData {
-	    BlockName		    "Constant"
-	    DialogParameters {
-	      sg_icon_stat	      "20,18,0,1,white,blue,0,bf4ddd8b,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 20 20 0 0 ],[0 0 18 18 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 20 20 0 0 ],[0 0 18 18 0 ]);\npatch([5.55 8.44 10.44 12.44 14.44 10.44 7.55 5.55 ],[11.22"
-	      " 11.22 13.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([7.55 10.44 8.44 5.55 7.55 ],[9.22 9.22 11.22 11"
-	      ".22 9.22 ],[0.931 0.946 0.973 ]);\npatch([5.55 8.44 10.44 7.55 5.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\np"
-	      "atch([7.55 14.44 12.44 10.44 8.44 5.55 7.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfpr"
-	      "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('out"
-	      "put',1,'0');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Fract_Theta_Reg"
-	    DialogParameters {
-	      sg_icon_stat	      "40,35,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 35 35 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 35 35 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[22.55"
-	      " 22.55 27.55 22.55 27.55 27.55 27.55 22.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[17.55 17.55 22"
-	      ".55 22.55 17.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[12.55 12.55 17.55 17.55 12.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[7.55 7.55 12.55 7.55 12.55 12.55 7.55 ],[0.931 "
-	      "0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bla"
-	      "ck');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output'"
-	      ",1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational1"
-	    DialogParameters {
-	      sg_icon_stat	      "40,33,2,1,white,blue,0,6218dc92,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 33 33 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 33 33 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.4"
-	      "4 20.44 24.44 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.4"
-	      "4 20.44 16.44 ],[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1"
-	      " 1 1 ]);\npatch([15.1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946"
-	      " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-	      "port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\"
-	      "bfa \\geq b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Fine_del_sub_blk"
 	  SourceType		  ""
 	  fft_len		  "1024"
@@ -21083,55 +20749,6 @@ Library {
 	  Name			  "Fringe_sub_blk1"
 	  Ports			  [4, 1]
 	  Position		  [415, 412, 490, 538]
-	  LinkData {
-	    BlockName		    "Fringe_Rate_Reg1"
-	    DialogParameters {
-	      sg_icon_stat	      "40,36,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 36 36 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 36 36 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[23.55"
-	      " 23.55 28.55 23.55 28.55 28.55 28.55 23.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[18.55 18.55 23"
-	      ".55 23.55 18.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[13.55 13.55 18.55 18.55 13.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[8.55 8.55 13.55 8.55 13.55 13.55 8.55 ],[0.931 "
-	      "0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bla"
-	      "ck');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output'"
-	      ",1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Logical1"
-	    DialogParameters {
-	      sg_icon_stat	      "35,20,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 20 20 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 20 20 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[1"
-	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[10.22 10.2"
-	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[8.22 8.22 10.22 10.22 8.2"
-	      "2 ],[1 1 1 ]);\npatch([14.55 21.44 19.44 17.44 15.44 12.55 14.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
-	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\ncol"
-	      "or('black');disp('or');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational1"
-	    DialogParameters {
-	      sg_icon_stat	      "35,35,2,1,white,blue,0,2a81ff49,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 35 35 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 35 35 0 ]);\npatch([5.875 13.1 18.1 23.1 28.1 18.1 10.875 5.875 ],[22.55"
-	      " 22.55 27.55 22.55 27.55 27.55 27.55 22.55 ],[1 1 1 ]);\npatch([10.875 18.1 13.1 5.875 10.875 ],[17.55 17.55 22"
-	      ".55 22.55 17.55 ],[0.931 0.946 0.973 ]);\npatch([5.875 13.1 18.1 10.875 5.875 ],[12.55 12.55 17.55 17.55 12.55 "
-	      "],[1 1 1 ]);\npatch([10.875 28.1 23.1 18.1 13.1 5.875 10.875 ],[7.55 7.55 12.55 7.55 12.55 12.55 7.55 ],[0.931 "
-	      "0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bla"
-	      "ck');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',"
-	      "1,'\\bfa = b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "pulse_ext/Relational5"
-	    DialogParameters {
-	      sg_icon_stat	      "45,44,2,1,white,blue,0,850de6e7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 44 44 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 44 44 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[28."
-	      "66 28.66 34.66 28.66 34.66 34.66 34.66 28.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[22.66 22.66 2"
-	      "8.66 28.66 22.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[16.66 16.66 22.66 22.66 16.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[10.66 10.66 16.66 10.66 16.66 16.66 10.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor"
-	      "('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('out"
-	      "put',1,'\\bfa \\neq b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Fringe_sub_blk"
 	  SourceType		  ""
 	  fft_len		  "1024"
@@ -21145,55 +20762,6 @@ Library {
 	  Name			  "Fringe_sub_blk2"
 	  Ports			  [4, 1]
 	  Position		  [415, 862, 490, 988]
-	  LinkData {
-	    BlockName		    "Fringe_Rate_Reg1"
-	    DialogParameters {
-	      sg_icon_stat	      "40,36,2,1,white,blue,0,6bd0930c,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 36 36 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 36 36 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[23.55"
-	      " 23.55 28.55 23.55 28.55 28.55 28.55 23.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[18.55 18.55 23"
-	      ".55 23.55 18.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[13.55 13.55 18.55 18.55 13.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[8.55 8.55 13.55 8.55 13.55 13.55 8.55 ],[0.931 "
-	      "0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bla"
-	      "ck');port_label('input',1,'d');\ncolor('black');port_label('input',2,'en');\ncolor('black');port_label('output'"
-	      ",1,'q');\ncolor('black');disp('z^{-1}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Logical1"
-	    DialogParameters {
-	      sg_icon_stat	      "35,20,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 20 20 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 20 20 0 ]);\npatch([12.55 15.44 17.44 19.44 21.44 17.44 14.55 12.55 ],[1"
-	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([14.55 17.44 15.44 12.55 14.55 ],[10.22 10.2"
-	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([12.55 15.44 17.44 14.55 12.55 ],[8.22 8.22 10.22 10.22 8.2"
-	      "2 ],[1 1 1 ]);\npatch([14.55 21.44 19.44 17.44 15.44 12.55 14.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
-	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\ncol"
-	      "or('black');disp('or');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Relational1"
-	    DialogParameters {
-	      sg_icon_stat	      "35,35,2,1,white,blue,0,2a81ff49,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 35 35 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 35 35 0 ]);\npatch([5.875 13.1 18.1 23.1 28.1 18.1 10.875 5.875 ],[22.55"
-	      " 22.55 27.55 22.55 27.55 27.55 27.55 22.55 ],[1 1 1 ]);\npatch([10.875 18.1 13.1 5.875 10.875 ],[17.55 17.55 22"
-	      ".55 22.55 17.55 ],[0.931 0.946 0.973 ]);\npatch([5.875 13.1 18.1 10.875 5.875 ],[12.55 12.55 17.55 17.55 12.55 "
-	      "],[1 1 1 ]);\npatch([10.875 28.1 23.1 18.1 13.1 5.875 10.875 ],[7.55 7.55 12.55 7.55 12.55 12.55 7.55 ],[0.931 "
-	      "0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('bla"
-	      "ck');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',"
-	      "1,'\\bfa = b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "pulse_ext/Relational5"
-	    DialogParameters {
-	      sg_icon_stat	      "45,44,2,1,white,blue,0,850de6e7,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 44 44 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 44 44 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[28."
-	      "66 28.66 34.66 28.66 34.66 34.66 34.66 28.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[22.66 22.66 2"
-	      "8.66 28.66 22.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[16.66 16.66 22.66 22.66 16.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[10.66 10.66 16.66 10.66 16.66 16.66 10.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor"
-	      "('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('out"
-	      "put',1,'\\bfa \\neq b','texmode','on');\ncolor('black');disp(' ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/Fringe_sub_blk"
 	  SourceType		  ""
 	  fft_len		  "1024"
@@ -21313,20 +20881,6 @@ Library {
 	  Name			  "ri_to_c1"
 	  Ports			  [2, 1]
 	  Position		  [1260, 343, 1295, 407]
-	  LinkData {
-	    BlockName		    "concat"
-	    DialogParameters {
-	      sg_icon_stat	      "50,55,2,1,white,blue,0,16398980,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 55 55 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 55 55 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "34.77 34.77 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[27.77 2"
-	      "7.77 34.77 34.77 27.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[20.77 20.77 27.77 27."
-	      "77 20.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[13.77 13.77 20.77 13.77 20.77 20.7"
-	      "7 13.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'hi');\ncolor('black');port_label('input',2,'lo');\n\ncolor('black')"
-	      ";disp('\\fontsize{20}\\}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag24"
 	  SourceBlock		  "casper_library_misc/ri_to_c"
@@ -21347,19 +20901,6 @@ Library {
 	  Name			  "sync_delay1"
 	  Ports			  [1, 1]
 	  Position		  [430, 50, 475, 80]
-	  LinkData {
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,2a6960a5,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'7');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "7"
@@ -21369,19 +20910,6 @@ Library {
 	  Name			  "sync_delay2"
 	  Ports			  [1, 1]
 	  Position		  [625, 50, 670, 80]
-	  LinkData {
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,fca86624,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'2');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "2"
@@ -21391,19 +20919,6 @@ Library {
 	  Name			  "sync_delay3"
 	  Ports			  [1, 1]
 	  Position		  [695, 50, 740, 80]
-	  LinkData {
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,9a294e94,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'12');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "12"
@@ -21413,19 +20928,6 @@ Library {
 	  Name			  "sync_delay4"
 	  Ports			  [1, 1]
 	  Position		  [795, 50, 840, 80]
-	  LinkData {
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "1"
@@ -21435,19 +20937,6 @@ Library {
 	  Name			  "sync_delay5"
 	  Ports			  [1, 1]
 	  Position		  [950, 50, 995, 80]
-	  LinkData {
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,fca86624,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'2');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "2"
@@ -24106,30 +23595,6 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [310, 49, 350, 91]
-	  LinkData {
-	    BlockName		    "Constant3"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Logical"
-	    DialogParameters {
-	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 31 31 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 31 31 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
-	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
-	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
-	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
-	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\ncolor('black');"
-	      "disp('or');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "delay-1"
@@ -24139,30 +23604,6 @@ Library {
 	  Name			  "sync_delay1"
 	  Ports			  [1, 1]
 	  Position		  [310, 144, 350, 186]
-	  LinkData {
-	    BlockName		    "Constant3"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Logical"
-	    DialogParameters {
-	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 31 31 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 31 31 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
-	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
-	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
-	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
-	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\ncolor('black');"
-	      "disp('or');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "delay-1"

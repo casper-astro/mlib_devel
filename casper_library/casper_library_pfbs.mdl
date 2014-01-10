@@ -870,19 +870,6 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [345, 15, 385, 55]
 	  BackgroundColor	  "gray"
-	  LinkData {
-	    BlockName		    "constant"
-	    DialogParameters {
-	      sg_icon_stat	      "35,24,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 35 35 0 0 ],[0 0 24 24 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 35 35 0 0 ],[0 0 24 24 0 ]);\npatch([10.325 14.66 17.66 20.66 23.66 17.66 13.325 10.325 ]"
-	      ",[15.33 15.33 18.33 15.33 18.33 18.33 18.33 15.33 ],[1 1 1 ]);\npatch([13.325 17.66 14.66 10.325 13.325 ],[12.3"
-	      "3 12.33 15.33 15.33 12.33 ],[0.931 0.946 0.973 ]);\npatch([10.325 14.66 17.66 13.325 10.325 ],[9.33 9.33 12.33 "
-	      "12.33 9.33 ],[1 1 1 ]);\npatch([13.325 23.66 20.66 17.66 14.66 10.325 13.325 ],[6.33 6.33 9.33 6.33 9.33 9.33 6"
-	      ".33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text')"
-	      ";\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag2"
 	  SourceBlock		  "casper_library_delays/delay_bram"
@@ -1059,30 +1046,6 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [345, 74, 385, 116]
-	  LinkData {
-	    BlockName		    "Constant"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "2^(PFBSize-n_inputs)"
@@ -1480,30 +1443,6 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [355, 74, 395, 116]
-	  LinkData {
-	    BlockName		    "Constant"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "2^(PFBSize-n_inputs)"
@@ -3143,20 +3082,6 @@ Library {
 	      Name		      "ri_to_c"
 	      Ports		      [2, 1]
 	      Position		      [550, 212, 580, 243]
-	      LinkData {
-		BlockName		"concat"
-		DialogParameters {
-		  sg_icon_stat		  "50,55,2,1,white,blue,0,16398980,right,,[ ],[ ]"
-		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 55 55 0 ],[0.77 0.82 0.9"
-		  "1 ]);\nplot([0 50 50 0 0 ],[0 0 55 55 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],[34.77 34.7"
-		  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[27.77 27.77 34.77 34"
-		  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1 "
-		  "1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0."
-		  "946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-		  "port_label('input',1,'hi');\ncolor('black');port_label('input',2,'lo');\n\ncolor('black');disp('\\fontsize{20}\\}'"
-		  ",'texmode','on');\nfprintf('','COMMENT: end icon text');"
-		}
-	      }
 	      UserDataPersistent      on
 	      UserData		      "DataTag10"
 	      SourceBlock	      "casper_library_misc/ri_to_c"
@@ -6522,45 +6447,6 @@ Library {
 	  Position		  [300, 52, 400, 83]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
-	  LinkData {
-	    BlockName		    "Mult"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
-	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
-	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
-	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
-	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
-	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Mult1"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
-	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
-	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
-	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
-	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
-	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "sync_delay/Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag21"
 	  SourceBlock		  "casper_library_pfbs/first_tap"
@@ -6584,19 +6470,6 @@ Library {
 	  Position		  [450, 52, 550, 83]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
-	  LinkData {
-	    BlockName		    "pfb_add_tree/ri_to_c/force_im"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 32 32 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.4"
-	      "4 20.44 24.44 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.4"
-	      "4 20.44 16.44 ],[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1"
-	      " 1 1 ]);\npatch([15.1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946"
-	      " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('blac"
-	      "k');disp('reinterpret');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag22"
 	  SourceBlock		  "casper_library_pfbs/last_tap"
@@ -6641,45 +6514,6 @@ Library {
 	  Position		  [300, 102, 400, 133]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
-	  LinkData {
-	    BlockName		    "Mult"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
-	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
-	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
-	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
-	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
-	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Mult1"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
-	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
-	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
-	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
-	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
-	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "sync_delay/Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag24"
 	  SourceBlock		  "casper_library_pfbs/first_tap"
@@ -6703,19 +6537,6 @@ Library {
 	  Position		  [450, 102, 550, 133]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
-	  LinkData {
-	    BlockName		    "pfb_add_tree/ri_to_c/force_im"
-	    DialogParameters {
-	      sg_icon_stat	      "40,32,1,1,white,blue,0,6b04d0b0,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 32 32 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.4"
-	      "4 20.44 24.44 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.4"
-	      "4 20.44 16.44 ],[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1"
-	      " 1 1 ]);\npatch([15.1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946"
-	      " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('blac"
-	      "k');disp('reinterpret');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag25"
 	  SourceBlock		  "casper_library_pfbs/last_tap"
@@ -7006,78 +6827,6 @@ Library {
 	  Position		  [150, 150, 250, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "PFBSize=5, n_inputs=1,\ntaps=2, input=0"
-	  LinkData {
-	    BlockName		    "Delay"
-	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
-	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
-	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Delay1"
-	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
-	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
-	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM1"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM2"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM3"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM4"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag27"
 	  SourceBlock		  "casper_library_pfbs/pfb_coeff_gen"
@@ -7101,32 +6850,6 @@ Library {
 	  Position		  [450, 150, 550, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "input(1), tap(2,2)"
-	  LinkData {
-	    BlockName		    "pfb_add_tree_async/adder_tree1/addr1"
-	    DialogParameters {
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,e85d8a90,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 60 60 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 60 60 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[35.55"
-	      " 35.55 40.55 35.55 40.55 40.55 40.55 35.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[30.55 30.55 35"
-	      ".55 35.55 30.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[25.55 25.55 30.55 30.55 25.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[20.55 20.55 25.55 20.55 25.55 25.55 20.55 ],[0."
-	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
-	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
-	      "ut',1,'\\bf{a + b}','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');d"
-	      "isp(' \\newline\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "pfb_add_tree_async/delay_dv"
-	    DialogParameters {
-	      sg_icon_stat	      "30,30,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 30 30 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 30 30 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
-	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
-	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
-	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
-	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');di"
-	      "sp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag28"
 	  SourceBlock		  "casper_library_pfbs/last_tap_async"
@@ -7151,19 +6874,6 @@ Library {
 	  Position		  [300, 150, 400, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "tap(1/2)"
-	  LinkData {
-	    BlockName		    "sync_delay/Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag29"
 	  SourceBlock		  "casper_library_pfbs/tap_async"
@@ -7189,78 +6899,6 @@ Library {
 	  Position		  [150, 300, 250, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "PFBSize=5, n_inputs=1,\ntaps=2, input=1"
-	  LinkData {
-	    BlockName		    "Delay"
-	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
-	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
-	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Delay1"
-	    DialogParameters {
-	      sg_icon_stat	      "45,46,1,1,white,blue,0,ec356abf,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29."
-	      "66 29.66 35.66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 2"
-	      "9.66 29.66 23.66 ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 "
-	      "],[1 1 1 ]);\npatch([14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0"
-	      ".931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\nc"
-	      "olor('black');disp('z^{-5}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM1"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM2"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM3"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	    BlockName		    "ROM4"
-	    DialogParameters {
-	      sg_icon_stat	      "50,52,1,1,white,blue,0,f667b64a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 52 52 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 52 52 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "33.77 33.77 40.77 33.77 40.77 40.77 40.77 33.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[26.77 2"
-	      "6.77 33.77 33.77 26.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[19.77 19.77 26.77 26."
-	      "77 19.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[12.77 12.77 19.77 12.77 19.77 19.7"
-	      "7 12.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'addr');\n\ncolor('black');disp('z^{-3}','texmode','on');\nfprintf('"
-	      "','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag30"
 	  SourceBlock		  "casper_library_pfbs/pfb_coeff_gen"
@@ -7284,32 +6922,6 @@ Library {
 	  Position		  [450, 300, 550, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "input(2), tap(2,2)"
-	  LinkData {
-	    BlockName		    "pfb_add_tree_async/adder_tree1/addr1"
-	    DialogParameters {
-	      sg_icon_stat	      "40,60,2,1,white,blue,0,e85d8a90,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 60 60 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 40 40 0 0 ],[0 0 60 60 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[35.55"
-	      " 35.55 40.55 35.55 40.55 40.55 40.55 35.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[30.55 30.55 35"
-	      ".55 35.55 30.55 ],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[25.55 25.55 30.55 30.55 25.55 "
-	      "],[1 1 1 ]);\npatch([13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[20.55 20.55 25.55 20.55 25.55 25.55 20.55 ],[0."
-	      "931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor("
-	      "'black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('outp"
-	      "ut',1,'\\bf{a + b}','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');d"
-	      "isp(' \\newline\\bf{}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "pfb_add_tree_async/delay_dv"
-	    DialogParameters {
-	      sg_icon_stat	      "30,30,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 30 30 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 30 30 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
-	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
-	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
-	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
-	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');di"
-	      "sp('z^{-2}','texmode','on');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag31"
 	  SourceBlock		  "casper_library_pfbs/last_tap_async"
@@ -7334,19 +6946,6 @@ Library {
 	  Position		  [300, 300, 400, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "tap(1/2)"
-	  LinkData {
-	    BlockName		    "sync_delay/Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag32"
 	  SourceBlock		  "casper_library_pfbs/tap_async"
@@ -8320,32 +7919,6 @@ Library {
 	  Position		  [300, 102, 400, 133]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
-	  LinkData {
-	    BlockName		    "Mult"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
-	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
-	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
-	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
-	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
-	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "sync_delay/Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag39"
 	  SourceBlock		  "casper_library_pfbs/first_tap_real"
@@ -8408,32 +7981,6 @@ Library {
 	  Position		  [300, 202, 400, 233]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
 	  AttributesFormatString  "taps=2"
-	  LinkData {
-	    BlockName		    "Mult"
-	    DialogParameters {
-	      sg_icon_stat	      "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],["
-	      "32.77 32.77 39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 2"
-	      "5.77 32.77 32.77 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25."
-	      "77 18.77 ],[1 1 1 ]);\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.7"
-	      "7 11.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon te"
-	      "xt');\ncolor('black');port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');por"
-	      "t_label('output',1,'\\bfa \\times b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\n"
-	      "color('black');disp(' \\n ');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "sync_delay/Constant2"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,eafdfd08,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'16');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  UserDataPersistent	  on
 	  UserData		  "DataTag42"
 	  SourceBlock		  "casper_library_pfbs/first_tap_real"
@@ -9247,19 +8794,6 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [190, 84, 230, 126]
-	  LinkData {
-	    BlockName		    "Constant"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "delay"
@@ -9999,30 +9533,6 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [345, 314, 385, 356]
-	  LinkData {
-	    BlockName		    "Constant3"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	    BlockName		    "Logical"
-	    DialogParameters {
-	      sg_icon_stat	      "30,31,2,1,white,blue,0,7ede7d88,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 31 31 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 31 31 0 ]);\npatch([6.1 11.88 15.88 19.88 23.88 15.88 10.1 6.1 ],[19.44 "
-	      "19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([10.1 15.88 11.88 6.1 10.1 ],[15.44 15.44 19.44 1"
-	      "9.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([6.1 11.88 15.88 10.1 6.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 "
-	      "]);\npatch([10.1 23.88 19.88 15.88 11.88 6.1 10.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973"
-	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\ncolor('black');"
-	      "disp('or');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "2^(pfb_bits - simul_bits)"
@@ -10487,19 +9997,6 @@ Library {
 	  Name			  "sync_delay"
 	  Ports			  [1, 1]
 	  Position		  [190, 84, 230, 126]
-	  LinkData {
-	    BlockName		    "Constant"
-	    DialogParameters {
-	      sg_icon_stat	      "45,26,0,1,white,blue,0,1c72b5be,right,,[ ],[ ]"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 26 26 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 26 26 0 ]);\npatch([15.325 19.66 22.66 25.66 28.66 22.66 18.325 15.325 ]"
-	      ",[16.33 16.33 19.33 16.33 19.33 19.33 19.33 16.33 ],[1 1 1 ]);\npatch([18.325 22.66 19.66 15.325 18.325 ],[13.3"
-	      "3 13.33 16.33 16.33 13.33 ],[0.931 0.946 0.973 ]);\npatch([15.325 19.66 22.66 18.325 15.325 ],[10.33 10.33 13.3"
-	      "3 13.33 10.33 ],[1 1 1 ]);\npatch([18.325 28.66 25.66 22.66 19.66 15.325 18.325 ],[7.33 7.33 10.33 7.33 10.33 1"
-	      "0.33 7.33 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon "
-	      "text');\ncolor('black');port_label('output',1,'1');\nfprintf('','COMMENT: end icon text');"
-	    }
-	  }
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "delay"
