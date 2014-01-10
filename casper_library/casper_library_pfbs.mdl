@@ -1,6 +1,6 @@
 Library {
   Name			  "casper_library_pfbs"
-  Version		  7.2
+  Version		  7.9
   MdlSubVersion		  0
   SavedCharacterEncoding  "US-ASCII"
   LibraryType		  "BlockLibrary"
@@ -8,15 +8,17 @@ Library {
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
   DisableAllScopes	  off
+  FPTRunName		  "Run 1"
+  MaxMDLFileLineLength	  120
   Created		  "Thu Sep 02 12:37:19 2010"
   Creator		  "mdexter"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "mdexter"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jan 09 15:22:16 2014"
-  RTWModifiedTimeStamp	  311181680
-  ModelVersionFormat	  "1.%<AutoIncrement:124>"
+  LastModifiedDate	  "Thu Jan 09 22:54:07 2014"
+  RTWModifiedTimeStamp	  311208826
+  ModelVersionFormat	  "1.%<AutoIncrement:125>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -24,6 +26,7 @@ Library {
   WideLines		  off
   ShowLineDimensions	  off
   ShowPortDataTypes	  off
+  ShowDesignRanges	  off
   ShowLoopsOnError	  on
   IgnoreBidirectionalLines off
   ShowStorageClass	  off
@@ -49,11 +52,13 @@ Library {
   CovMetricSettings	  "dw"
   CovNameIncrementing	  off
   CovHtmlReporting	  on
+  CovForceBlockReductionOff on
   covSaveCumulativeToWorkspaceVar on
   CovSaveSingleToWorkspaceVar on
   CovCumulativeReport	  off
   CovReportOnPause	  on
   CovModelRefEnable	  "Off"
+  CovExternalEMLEnable	  off
   ExtModeBatchMode	  off
   ExtModeEnableFloating	  on
   ExtModeTrigType	  "manual"
@@ -82,13 +87,13 @@ Library {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      1
-      Version		      "1.5.1"
+      Version		      "1.12.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
 	  $ObjectID		  2
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -106,8 +111,11 @@ Library {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  SolverMode		  "SingleTasking"
+	  EnableConcurrentExecution off
+	  ConcurrentTasks	  off
 	  Solver		  "ode45"
 	  SolverName		  "ode45"
+	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
 	  ZeroCrossAlgorithm	  "Nonadaptive"
@@ -120,7 +128,7 @@ Library {
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  3
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -130,23 +138,29 @@ Library {
 	  LoadExternalInput	  off
 	  LoadInitialState	  off
 	  SaveFinalState	  off
+	  SaveCompleteFinalSimState off
 	  SaveFormat		  "Array"
+	  SignalLoggingSaveFormat "ModelDataLogs"
 	  SaveOutput		  on
 	  SaveState		  off
 	  SignalLogging		  on
+	  DSMLogging		  on
 	  InspectSignalLogs	  off
 	  SaveTime		  on
+	  ReturnWorkspaceOutputs  off
 	  StateSaveName		  "xout"
 	  TimeSaveName		  "tout"
 	  OutputSaveName	  "yout"
 	  SignalLoggingName	  "logsout"
+	  DSMLoggingName	  "dsmout"
 	  OutputOption		  "RefineOutputTimes"
 	  OutputTimes		  "[]"
+	  ReturnWorkspaceOutputsName "out"
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  4
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -160,13 +174,20 @@ Library {
 	  BooleanDataType	  off
 	  ConditionallyExecuteInputs on
 	  InlineParams		  off
+	  UseIntDivNetSlope	  off
+	  UseFloatMulNetSlope	  off
+	  UseSpecifiedMinMax	  off
 	  InlineInvariantSignals  off
 	  OptimizeBlockIOStorage  on
 	  BufferReuse		  on
 	  EnhancedBackFolding	  off
+	  StrengthReduction	  off
 	  ExpressionFolding	  on
+	  BooleansAsBitfields	  off
+	  BitfieldContainerType	  "uint_T"
 	  EnableMemcpy		  on
 	  MemcpyThreshold	  64
+	  PassReuseOutputArgsAs	  "Structure reference"
 	  ExpressionDepthLimit	  2147483647
 	  FoldNonRolledExpr	  on
 	  LocalBlockOutputs	  on
@@ -183,14 +204,15 @@ Library {
 	  EfficientMapNaN2IntZero on
 	  OptimizeModelRefInitCode off
 	  LifeSpan		  "inf"
+	  MaxStackSize		  "Inherit from target"
 	  BufferReusableBoundary  on
 	  SimCompilerOptimization "Off"
 	  AccelVerboseBuild	  off
-  EnforceIntegerDowncast   on
+	  ParallelExecutionInRapidAccelerator on
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  5
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -213,6 +235,8 @@ Library {
 	  MinStepSizeMsg	  "warning"
 	  TimeAdjustmentMsg	  "none"
 	  MaxConsecutiveZCsMsg	  "error"
+	  MaskedZcDiagnostic	  "warning"
+	  IgnoredZcDiagnostic	  "warning"
 	  SolverPrmCheckMsg	  "none"
 	  InheritedTsInSrcMsg	  "warning"
 	  DiscreteInheritContinuousMsg "warning"
@@ -230,6 +254,9 @@ Library {
 	  ParameterUnderflowMsg	  "none"
 	  ParameterPrecisionLossMsg "warning"
 	  ParameterTunabilityLossMsg "warning"
+	  FixptConstUnderflowMsg  "none"
+	  FixptConstOverflowMsg	  "none"
+	  FixptConstPrecisionLossMsg "none"
 	  UnderSpecifiedDataTypeMsg "none"
 	  UnnecessaryDatatypeConvMsg "none"
 	  VectorMatrixConversionMsg "none"
@@ -240,12 +267,14 @@ Library {
 	  UnconnectedOutputMsg	  "warning"
 	  UnconnectedLineMsg	  "warning"
 	  SFcnCompatibilityMsg	  "none"
+	  FrameProcessingCompatibilityMsg "warning"
 	  UniqueDataStoreMsg	  "none"
 	  BusObjectLabelMismatch  "warning"
 	  RootOutportRequireBusObject "warning"
 	  AssertControl		  "UseLocalSettings"
 	  EnableOverflowDetection off
 	  ModelReferenceIOMsg	  "none"
+	  ModelReferenceMultiInstanceNormalModeStructChecksumCheck "error"
 	  ModelReferenceVersionMismatchMessage "none"
 	  ModelReferenceIOMismatchMessage "none"
 	  ModelReferenceCSMismatchMessage "none"
@@ -254,17 +283,33 @@ Library {
 	  ModelReferenceSymbolNameMessage "warning"
 	  ModelReferenceExtraNoncontSigs "error"
 	  StateNameClashWarn	  "warning"
+	  SimStateInterfaceChecksumMismatchMsg "warning"
+	  SimStateOlderReleaseMsg "error"
+	  InitInArrayFormatMsg	  "warning"
 	  StrictBusMsg		  "Warning"
+	  BusNameAdapt		  "WarnAndRepair"
+	  NonBusSignalsTreatedAsBus "none"
 	  LoggingUnavailableSignals "error"
 	  BlockIODiagnostic	  "none"
+	  SFUnusedDataAndEventsDiag "warning"
+	  SFUnexpectedBacktrackingDiag "warning"
+	  SFInvalidInputDataAccessInChartInitDiag "warning"
+	  SFNoUnconditionalDefaultTransitionDiag "warning"
+	  SFTransitionOutsideNaturalParentDiag "warning"
+	  SFUnconditionalTransitionShadowingDiag "warning"
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  6
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
 	  ProdBitPerLong	  32
+	  ProdBitPerFloat	  32
+	  ProdBitPerDouble	  64
+	  ProdBitPerPointer	  32
+	  ProdLargestAtomicInteger "Char"
+	  ProdLargestAtomicFloat  "None"
 	  ProdIntDivRoundTo	  "Undefined"
 	  ProdEndianess		  "Unspecified"
 	  ProdWordSize		  32
@@ -274,6 +319,11 @@ Library {
 	  TargetBitPerShort	  16
 	  TargetBitPerInt	  32
 	  TargetBitPerLong	  32
+	  TargetBitPerFloat	  32
+	  TargetBitPerDouble	  64
+	  TargetBitPerPointer	  32
+	  TargetLargestAtomicInteger "Char"
+	  TargetLargestAtomicFloat "None"
 	  TargetShiftRightIntArith on
 	  TargetIntDivRoundTo	  "Undefined"
 	  TargetEndianess	  "Unspecified"
@@ -287,26 +337,37 @@ Library {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  7
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
+	  EnableParallelModelReferenceBuilds off
+	  ParallelModelReferenceErrorOnInvalidPool on
+	  ParallelModelReferenceMATLABWorkerInit "None"
 	  ModelReferenceNumInstancesAllowed "Multi"
+	  PropagateVarSize	  "Infer from blocks in model"
 	  ModelReferencePassRootInputsByReference on
 	  ModelReferenceMinAlgLoopOccurrences off
+	  PropagateSignalLabelsOutOfModel off
+	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  8
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
+	  SimBlas		  on
+	  SimCtrlC		  on
+	  SimExtrinsic		  on
+	  SimIntegrity		  on
 	  SimUseLocalCustomCode	  off
+	  SimParseCustomCode	  on
 	  SimBuildMode		  "sf_incremental_build"
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  9
-	  Version		  "1.5.1"
+	  Version		  "1.12.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -347,13 +408,18 @@ Library {
 	  GenerateTraceReportSf	  off
 	  GenerateTraceReportEml  off
 	  GenerateCodeInfo	  off
+	  GenerateWebview	  off
+	  GenerateCodeMetricsReport off
+	  GenerateCodeReplacementReport	off
 	  RTWCompilerOptimization "Off"
+	  CheckMdlBeforeBuild	  "Off"
+	  CustomRebuildMode	  "OnUpdate"
 	  Array {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      10
-	      Version		      "1.5.1"
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -388,12 +454,14 @@ Library {
 	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
+	      MATLABFcnDesc	      off
 	      IncDataTypeInIds	      off
 	      MangleLength	      1
 	      CustomSymbolStrGlobalVar "$R$N$M"
 	      CustomSymbolStrType     "$N$R$M"
 	      CustomSymbolStrField    "$N$M"
 	      CustomSymbolStrFcn      "$R$N$M$F"
+	      CustomSymbolStrFcnArg   "rt$I$N$M"
 	      CustomSymbolStrBlkIO    "rtb_$N$M"
 	      CustomSymbolStrTmpVar   "$N$M"
 	      CustomSymbolStrMacro    "$R$N$M"
@@ -401,7 +469,9 @@ Library {
 	      ParamNamingRule	      "None"
 	      SignalNamingRule	      "None"
 	      InsertBlockDesc	      off
+	      InsertPolySpaceComments off
 	      SimulinkBlockComments   on
+	      MATLABSourceComments    off
 	      EnableCustomComments    off
 	      InlinedPrmAccess	      "Literals"
 	      ReqsInCode	      off
@@ -410,7 +480,7 @@ Library {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      11
-	      Version		      "1.5.1"
+	      Version		      "1.12.0"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -434,9 +504,10 @@ Library {
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
 	      TargetLibSuffix	      ""
 	      TargetPreCompLibLocation ""
-	      TargetFunctionLibrary  "ANSI_C"
+	      CodeReplacementLibrary  "ANSI_C"
 	      UtilityFuncGeneration   "Auto"
 	      ERTMultiwordTypeDef     "System defined"
+	      CodeExecutionProfiling  off
 	      ERTMultiwordLength      256
 	      MultiwordLength	      2048
 	      GenerateFullHeader      on
@@ -444,9 +515,13 @@ Library {
 	      GenerateTestInterfaces  off
 	      IsPILTarget	      off
 	      ModelReferenceCompliant on
+	      ParMdlRefBuildCompliant on
 	      CompOptLevelCompliant   on
+	      ConcurrentExecutionCompliant on
 	      IncludeMdlTerminateFcn  on
+	      GeneratePreprocessorConditionals "Disable all"
 	      CombineOutputUpdateFcns off
+	      CombineSignalStateStructs	off
 	      SuppressErrorStatus     off
 	      ERTFirstTimeCompliant   off
 	      IncludeFileDelimiter    "Auto"
@@ -460,12 +535,14 @@ Library {
 	      PurelyIntegerCode	      off
 	      SupportContinuousTime   on
 	      SupportNonInlinedSFcns  on
+	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
 	      PortableWordSizes	      off
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
+	      GRTInterface	      on
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -477,6 +554,7 @@ Library {
 	      RTWCAPISignals	      off
 	      RTWCAPIParams	      off
 	      RTWCAPIStates	      off
+	      RTWCAPIRootIO	      off
 	      GenerateASAP2	      off
 	    }
 	    PropName		    "Components"
@@ -490,6 +568,7 @@ Library {
     }
     PropName		    "ConfigurationSets"
   }
+  ExplicitPartitioning	  off
   BlockDefaults {
     ForegroundColor	    "black"
     BackgroundColor	    "white"
@@ -500,7 +579,8 @@ Library {
     FontWeight		    "normal"
     FontAngle		    "normal"
     ShowName		    on
-    Orientation		    "right"
+    BlockRotation	    0
+    BlockMirror		    off
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -524,23 +604,20 @@ Library {
     Block {
       BlockType		      Inport
       Port		      "1"
+      OutputFunctionCall      off
       OutMin		      "[]"
       OutMax		      "[]"
       OutDataTypeStr	      "Inherit: auto"
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
+      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
       LatchByDelayingOutsideSignal off
-      LatchByCopyingInsideSignal off
+      LatchInputForFeedbackSignals off
       Interpolate	      on
-  DataType   "auto"
-  OutDataType   "fixdt(1,16,0)"
-  OutScaling   "[]"
-  UseBusObject   off
-  BusObject   "BusObject"
     }
     Block {
       BlockType		      Outport
@@ -551,17 +628,13 @@ Library {
       LockScale		      off
       BusOutputAsStruct	      off
       PortDimensions	      "-1"
+      VarSizeSig	      "Inherit"
       SampleTime	      "-1"
       SignalType	      "auto"
       SamplingMode	      "auto"
       SourceOfInitialOutputValue "Dialog"
       OutputWhenDisabled      "held"
       InitialOutput	      "[]"
-  DataType   "auto"
-  OutDataType   "fixdt(1,16,0)"
-  OutScaling   "[]"
-  UseBusObject   off
-  BusObject   "BusObject"
     }
     Block {
       BlockType		      SubSystem
@@ -580,13 +653,17 @@ Library {
       RTWMemSecDataParameters "Inherit from model"
       SimViewingDevice	      off
       DataTypeOverride	      "UseLocalSettings"
+      DataTypeOverrideAppliesTo	"AllNumericTypes"
       MinMaxOverflowLogging   "UseLocalSettings"
+      SFBlockType	      "NONE"
+      Variant		      off
+      GeneratePreprocessorConditionals off
     }
   }
   System {
     Name		    "casper_library_pfbs"
-    Location		    [13, -3, 1011, 1022]
-    Open		    off
+    Location		    [296, 77, 1294, 1102]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -599,9 +676,11 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
+    SIDHighWatermark	    "39"
     Block {
       BlockType		      SubSystem
       Name		      "first_tap"
+      SID		      "1"
       Ports		      [3, 4]
       Position		      [55, 332, 160, 408]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -613,6 +692,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "first_tap"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of Taps:|Input Bitwidth:|"
@@ -639,11 +719,12 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "6|8|4|8|hamming|1|1|2|1|off|on"
       System {
 	Name			"first_tap"
-	Location		[2, 53, 1407, 846]
+	Location		[5, 77, 1410, 870]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -656,15 +737,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"22"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "1:1"
 	  Position		  [35, 28, 65, 42]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "1:2"
 	  Position		  [35, 88, 65, 102]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -672,6 +756,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeffs"
+	  SID			  "1:3"
 	  Position		  [35, 228, 65, 242]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -679,8 +764,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "1:4"
 	  Ports			  [2, 1]
 	  Position		  [345, 197, 395, 248]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -708,21 +795,23 @@ Library {
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,51,2,1,white,blue,0,82c891c1,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 55 55 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[34.77 34.7"
-	  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[27.77 27.77 34.77 34"
-	  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1"
-	  " 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0"
-	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-	  "port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa "
-	  "\\times b','texmode','on');\ncolor('black');disp('z^{-3}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');"
-	  "\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],[32.77 32.77 "
+	  "39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 25.77 32.77 32.77"
+	  " 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25.77 18.77 ],[1 1 1 ])"
+	  ";\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.77 11.77 ],[0.931 0.946 0"
+	  ".973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_l"
+	  "abel('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa \\time"
+	  "s b','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfpri"
+	  "ntf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult1"
+	  SID			  "1:5"
 	  Ports			  [2, 1]
 	  Position		  [345, 132, 395, 183]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -750,21 +839,23 @@ Library {
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,51,2,1,white,blue,0,82c891c1,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 55 55 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[34.77 34.7"
-	  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[27.77 27.77 34.77 34"
-	  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1"
-	  " 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0"
-	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-	  "port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa "
-	  "\\times b','texmode','on');\ncolor('black');disp('z^{-3}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');"
-	  "\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],[32.77 32.77 "
+	  "39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 25.77 32.77 32.77"
+	  " 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25.77 18.77 ],[1 1 1 ])"
+	  ";\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.77 11.77 ],[0.931 0.946 0"
+	  ".973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_l"
+	  "abel('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa \\time"
+	  "s b','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfpri"
+	  "ntf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
+	  SID			  "1:6"
 	  Ports			  [1, 1]
 	  Position		  [285, 219, 325, 251]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -781,19 +872,21 @@ Library {
 	  block_type		  "reinterpret"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\npatch([16.1 21.88 25.88 29.88 33.88 25.88 20.1 16.1 ],[20.44 20.44 24.4"
-	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([20.1 25.88 21.88 16.1 20.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([16.1 21.88 25.88 20.1 16.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([20."
-	  "1 33.88 29.88 25.88 21.88 16.1 20.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.44 20.44 24.4"
+	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([15."
+	  "1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('reinterpret');\nfp"
 	  "rintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
+	  SID			  "1:7"
 	  Ports			  [1, 1]
 	  Position		  [225, 221, 270, 249]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -812,19 +905,21 @@ Library {
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 30 30 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\npatch([21.1 26.88 30.88 34.88 38.88 30.88 25.1 21.1 ],[19.44 19.44 23.4"
-	  "4 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([25.1 30.88 26.88 21.1 25.1 ],[15.44 15.44 19.44 19.44 15.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([21.1 26.88 30.88 25.1 21.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 ]);\npatch([25."
-	  "1 38.88 34.88 30.88 26.88 21.1 25.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[18.44 18.44 22.4"
+	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([17."
+	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a:"
 	  "b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
+	  SID			  "1:8"
 	  Ports			  [1, 1]
 	  Position		  [225, 271, 270, 299]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -843,20 +938,22 @@ Library {
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 30 30 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\npatch([21.1 26.88 30.88 34.88 38.88 30.88 25.1 21.1 ],[19.44 19.44 23.4"
-	  "4 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([25.1 30.88 26.88 21.1 25.1 ],[15.44 15.44 19.44 19.44 15.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([21.1 26.88 30.88 25.1 21.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 ]);\npatch([25."
-	  "1 38.88 34.88 30.88 26.88 21.1 25.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[18.44 18.44 22.4"
+	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([17."
+	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a:"
 	  "b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "c_to_ri"
+	  SID			  "1:9"
 	  Ports			  [1, 2]
 	  Position		  [260, 144, 300, 186]
-	  AttributesFormatString  "_ r/i"
+	  AttributesFormatString  "8_7 r/i"
+	  LibraryVersion	  "1.42"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag1"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -867,9 +964,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_bram"
+	  SID			  "1:10"
 	  Ports			  [1, 1]
 	  Position		  [345, 15, 385, 55]
 	  BackgroundColor	  "gray"
+	  LibraryVersion	  "1.35"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag2"
 	  SourceBlock		  "casper_library_delays/delay_bram"
@@ -882,6 +981,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
+	  SID			  "1:11"
 	  Ports			  [2, 1]
 	  Position		  [425, 164, 465, 206]
 	  MinAlgLoopOccurrences	  off
@@ -889,6 +989,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
@@ -908,12 +1009,14 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
+	      SID		      "1:12"
 	      Position		      [25, 38, 55, 52]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
+	      SID		      "1:13"
 	      Position		      [25, 88, 55, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -921,6 +1024,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Concat"
+	      SID		      "1:14"
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      SourceBlock	      "xbsIndex_r4/Concat"
@@ -946,6 +1050,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret"
+	      SID		      "1:15"
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -975,6 +1080,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret1"
+	      SID		      "1:16"
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -1004,6 +1110,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
+	      SID		      "1:17"
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	    }
@@ -1042,23 +1149,16 @@ Library {
 	  }
 	}
 	Block {
-	  BlockType		  Reference
-	  Name			  "sync_delay"
-	  Ports			  [1, 1]
-	  Position		  [345, 74, 385, 116]
-	  SourceBlock		  "casper_library_delays/sync_delay"
-	  SourceType		  "sync_delay"
-	  DelayLen		  "2^(PFBSize-n_inputs)"
-	}
-	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "1:19"
 	  Position		  [485, 28, 515, 42]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "1:20"
 	  Position		  [485, 88, 515, 102]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1066,6 +1166,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff_out"
+	  SID			  "1:21"
 	  Position		  [485, 278, 515, 292]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -1073,6 +1174,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
+	  SID			  "1:22"
 	  Position		  [485, 178, 515, 192]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -1103,12 +1205,6 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "sync_delay"
-	  SrcPort		  1
-	  DstBlock		  "sync_out"
-	  DstPort		  1
-	}
-	Line {
 	  SrcBlock		  "delay_bram"
 	  SrcPort		  1
 	  DstBlock		  "dout"
@@ -1131,7 +1227,7 @@ Library {
 	Line {
 	  SrcBlock		  "sync"
 	  SrcPort		  1
-	  DstBlock		  "sync_delay"
+	  DstBlock		  "sync_out"
 	  DstPort		  1
 	}
 	Line {
@@ -1187,6 +1283,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "first_tap_real"
+      SID		      "2"
       Ports		      [3, 4]
       Position		      [55, 607, 160, 683]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -1198,6 +1295,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "first_tap_real"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of Taps:|Input Bitwidth:|"
@@ -1224,11 +1322,12 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "6|8|4|8|hamming|1|3|2|1|off|on"
       System {
 	Name			"first_tap_real"
-	Location		[2, -3, 1407, 1727]
+	Location		[92, 77, 1497, 1807]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1241,15 +1340,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"14"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "2:1"
 	  Position		  [35, 28, 65, 42]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "2:2"
 	  Position		  [35, 88, 65, 102]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1257,6 +1359,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeffs"
+	  SID			  "2:3"
 	  Position		  [35, 203, 65, 217]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -1264,8 +1367,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "2:4"
 	  Ports			  [2, 1]
 	  Position		  [365, 172, 415, 223]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -1293,21 +1398,23 @@ Library {
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,51,2,1,white,blue,0,82c891c1,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 55 55 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[34.77 34.7"
-	  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[27.77 27.77 34.77 34"
-	  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1"
-	  " 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0"
-	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-	  "port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa "
-	  "\\times b','texmode','on');\ncolor('black');disp('z^{-3}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');"
-	  "\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],[32.77 32.77 "
+	  "39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 25.77 32.77 32.77"
+	  " 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25.77 18.77 ],[1 1 1 ])"
+	  ";\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.77 11.77 ],[0.931 0.946 0"
+	  ".973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_l"
+	  "abel('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa \\time"
+	  "s b','texmode','on');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfpri"
+	  "ntf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
+	  SID			  "2:5"
 	  Ports			  [1, 1]
 	  Position		  [290, 194, 330, 226]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -1324,19 +1431,21 @@ Library {
 	  block_type		  "reinterpret"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\npatch([16.1 21.88 25.88 29.88 33.88 25.88 20.1 16.1 ],[20.44 20.44 24.4"
-	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([20.1 25.88 21.88 16.1 20.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([16.1 21.88 25.88 20.1 16.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([20."
-	  "1 33.88 29.88 25.88 21.88 16.1 20.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.44 20.44 24.4"
+	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([15."
+	  "1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('reinterpret');\nfp"
 	  "rintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret2"
+	  SID			  "2:6"
 	  Ports			  [1, 1]
 	  Position		  [290, 134, 330, 166]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -1353,19 +1462,21 @@ Library {
 	  block_type		  "reinterpret"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\npatch([16.1 21.88 25.88 29.88 33.88 25.88 20.1 16.1 ],[20.44 20.44 24.4"
-	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([20.1 25.88 21.88 16.1 20.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([16.1 21.88 25.88 20.1 16.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([20."
-	  "1 33.88 29.88 25.88 21.88 16.1 20.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.44 20.44 24.4"
+	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([15."
+	  "1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('reinterpret');\nfp"
 	  "rintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
+	  SID			  "2:7"
 	  Ports			  [1, 1]
 	  Position		  [230, 196, 275, 224]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -1384,19 +1495,21 @@ Library {
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 30 30 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\npatch([21.1 26.88 30.88 34.88 38.88 30.88 25.1 21.1 ],[19.44 19.44 23.4"
-	  "4 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([25.1 30.88 26.88 21.1 25.1 ],[15.44 15.44 19.44 19.44 15.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([21.1 26.88 30.88 25.1 21.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 ]);\npatch([25."
-	  "1 38.88 34.88 30.88 26.88 21.1 25.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[18.44 18.44 22.4"
+	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([17."
+	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a:"
 	  "b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
+	  SID			  "2:8"
 	  Ports			  [1, 1]
 	  Position		  [230, 246, 275, 274]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -1415,20 +1528,22 @@ Library {
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 30 30 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\npatch([21.1 26.88 30.88 34.88 38.88 30.88 25.1 21.1 ],[19.44 19.44 23.4"
-	  "4 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([25.1 30.88 26.88 21.1 25.1 ],[15.44 15.44 19.44 19.44 15.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([21.1 26.88 30.88 25.1 21.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 ]);\npatch([25."
-	  "1 38.88 34.88 30.88 26.88 21.1 25.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[18.44 18.44 22.4"
+	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([17."
+	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a:"
 	  "b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_bram"
+	  SID			  "2:9"
 	  Ports			  [1, 1]
 	  Position		  [355, 15, 395, 55]
 	  BackgroundColor	  "gray"
+	  LibraryVersion	  "1.35"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag4"
 	  SourceBlock		  "casper_library_delays/delay_bram"
@@ -1441,8 +1556,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
+	  SID			  "2:10"
 	  Ports			  [1, 1]
 	  Position		  [355, 74, 395, 116]
+	  LibraryVersion	  "1.35"
 	  SourceBlock		  "casper_library_delays/sync_delay"
 	  SourceType		  "sync_delay"
 	  DelayLen		  "2^(PFBSize-n_inputs)"
@@ -1450,12 +1567,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "2:11"
 	  Position		  [505, 28, 535, 42]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "2:12"
 	  Position		  [505, 88, 535, 102]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1463,6 +1582,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff_out"
+	  SID			  "2:13"
 	  Position		  [505, 253, 535, 267]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -1470,6 +1590,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
+	  SID			  "2:14"
 	  Position		  [505, 193, 535, 207]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -1556,6 +1677,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "last_tap"
+      SID		      "3"
       Ports		      [4, 2]
       Position		      [330, 332, 435, 408]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -1567,6 +1689,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "last_tap"
       MaskPromptString	      "Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add Latency|Mult "
@@ -1590,6 +1713,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "4|8|18|8|1|2|Truncate|off|on"
       System {
@@ -1607,15 +1731,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"20"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "3:1"
 	  Position		  [30, 148, 60, 162]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "3:2"
 	  Position		  [280, 243, 310, 257]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -1623,6 +1750,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeff"
+	  SID			  "3:3"
 	  Position		  [50, 228, 80, 242]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -1630,6 +1758,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "taps"
+	  SID			  "3:4"
 	  Position		  [255, 208, 285, 222]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -1637,8 +1766,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
+	  SID			  "3:5"
 	  Ports			  [2, 1]
 	  Position		  [315, 155, 365, 210]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
@@ -1662,8 +1793,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
+	  SID			  "3:6"
 	  Ports			  [1, 1]
 	  Position		  [325, 227, 370, 273]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
@@ -1680,19 +1813,21 @@ Library {
 	  block_type		  "delay"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,46,1,1,white,blue,0,85ce9542,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 56 56 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 60 60 0 0 ],[0 0 56 56 0 ]);\npatch([12.2 23.76 31.76 39.76 47.76 31.76 20.2 12.2 ],[36.88 36.88 44.8"
-	  "8 36.88 44.88 44.88 44.88 36.88 ],[1 1 1 ]);\npatch([20.2 31.76 23.76 12.2 20.2 ],[28.88 28.88 36.88 36.88 28.88 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([12.2 23.76 31.76 20.2 12.2 ],[20.88 20.88 28.88 28.88 20.88 ],[1 1 1 ]);\npatch([20."
-	  "2 47.76 39.76 31.76 23.76 12.2 20.2 ],[12.88 12.88 20.88 12.88 20.88 20.88 12.88 ],[0.931 0.946 0.973 ]);\nfprintf("
-	  "'','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}','texmo"
-	  "de','on');\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 46 46 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 46 46 0 ]);\npatch([8.65 17.32 23.32 29.32 35.32 23.32 14.65 8.65 ],[29.66 29.66 35."
+	  "66 29.66 35.66 35.66 35.66 29.66 ],[1 1 1 ]);\npatch([14.65 23.32 17.32 8.65 14.65 ],[23.66 23.66 29.66 29.66 23.66"
+	  " ],[0.931 0.946 0.973 ]);\npatch([8.65 17.32 23.32 14.65 8.65 ],[17.66 17.66 23.66 23.66 17.66 ],[1 1 1 ]);\npatch("
+	  "[14.65 35.32 29.32 23.32 17.32 8.65 14.65 ],[11.66 11.66 17.66 11.66 17.66 17.66 11.66 ],[0.931 0.946 0.973 ]);\nfp"
+	  "rintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-2}',"
+	  "'texmode','on');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "3:7"
 	  Ports			  [2, 1]
 	  Position		  [160, 197, 210, 248]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -1720,21 +1855,23 @@ Library {
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 55 55 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[34.77 34.7"
-	  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[27.77 27.77 34.77 34"
-	  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1"
-	  " 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0"
-	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-	  "port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa "
-	  "\\times b','texmode','on');\ncolor('black');disp('z^{-3}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');"
-	  "\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],[32.77 32.77 "
+	  "39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 25.77 32.77 32.77"
+	  " 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25.77 18.77 ],[1 1 1 ])"
+	  ";\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.77 11.77 ],[0.931 0.946 0"
+	  ".973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_l"
+	  "abel('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa \\time"
+	  "s b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfpri"
+	  "ntf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult1"
+	  SID			  "3:8"
 	  Ports			  [2, 1]
 	  Position		  [160, 132, 210, 183]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -1762,21 +1899,23 @@ Library {
 	  block_type		  "mult"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,51,2,1,white,blue,0,2fbe4d8a,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 55 55 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 55 55 0 0 ],[0 0 55 55 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[34.77 34.7"
-	  "7 41.77 34.77 41.77 41.77 41.77 34.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[27.77 27.77 34.77 34"
-	  ".77 27.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[20.77 20.77 27.77 27.77 20.77 ],[1 1"
-	  " 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[13.77 13.77 20.77 13.77 20.77 20.77 13.77 ],[0.931 0"
-	  ".946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');"
-	  "port_label('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa "
-	  "\\times b','texmode','on');\ncolor('black');disp('z^{-3}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');"
-	  "\nfprintf('','COMMENT: end icon text');"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 51 51 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 51 51 0 ]);\npatch([9.425 19.54 26.54 33.54 40.54 26.54 16.425 9.425 ],[32.77 32.77 "
+	  "39.77 32.77 39.77 39.77 39.77 32.77 ],[1 1 1 ]);\npatch([16.425 26.54 19.54 9.425 16.425 ],[25.77 25.77 32.77 32.77"
+	  " 25.77 ],[0.931 0.946 0.973 ]);\npatch([9.425 19.54 26.54 16.425 9.425 ],[18.77 18.77 25.77 25.77 18.77 ],[1 1 1 ])"
+	  ";\npatch([16.425 40.54 33.54 26.54 19.54 9.425 16.425 ],[11.77 11.77 18.77 11.77 18.77 18.77 11.77 ],[0.931 0.946 0"
+	  ".973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_l"
+	  "abel('input',1,'a');\ncolor('black');port_label('input',2,'b');\ncolor('black');port_label('output',1,'\\bfa \\time"
+	  "s b','texmode','on');\ncolor('black');disp('z^{-2}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfpri"
+	  "ntf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
+	  SID			  "3:9"
 	  Ports			  [1, 1]
 	  Position		  [95, 219, 135, 251]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -1793,20 +1932,22 @@ Library {
 	  block_type		  "reinterpret"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\npatch([16.1 21.88 25.88 29.88 33.88 25.88 20.1 16.1 ],[20.44 20.44 24.4"
-	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([20.1 25.88 21.88 16.1 20.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([16.1 21.88 25.88 20.1 16.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([20."
-	  "1 33.88 29.88 25.88 21.88 16.1 20.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.44 20.44 24.4"
+	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([15."
+	  "1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('reinterpret');\nfp"
 	  "rintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "c_to_ri"
+	  SID			  "3:10"
 	  Ports			  [1, 2]
 	  Position		  [85, 134, 125, 176]
-	  AttributesFormatString  "_ r/i"
+	  AttributesFormatString  "8_7 r/i"
+	  LibraryVersion	  "1.42"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag6"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -1817,6 +1958,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "pfb_add_tree"
+	  SID			  "3:11"
 	  Ports			  [2, 2]
 	  Position		  [390, 174, 485, 216]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -1828,6 +1970,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  MaskType		  "pfb_add_tree"
 	  MaskPromptString	  "Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add Latency|Quantization"
@@ -1847,6 +1990,7 @@ Library {
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
 	  MaskValueString	  "4|8|18|8|1|Truncate"
 	  System {
@@ -1864,15 +2008,18 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
+	    SIDHighWatermark	    "28"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
+	      SID		      "3:11:1"
 	      Position		      [15, 123, 45, 137]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "sync"
+	      SID		      "3:11:2"
 	      Position		      [15, 28, 45, 42]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -1880,6 +2027,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint0_1"
+	      SID		      "3:11:3"
 	      Ports		      [1, 1]
 	      Position		      [130, 139, 160, 151]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -1909,6 +2057,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint0_2"
+	      SID		      "3:11:4"
 	      Ports		      [1, 1]
 	      Position		      [130, 164, 160, 176]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -1938,6 +2087,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint1_1"
+	      SID		      "3:11:5"
 	      Ports		      [1, 1]
 	      Position		      [130, 189, 160, 201]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -1967,6 +2117,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint1_2"
+	      SID		      "3:11:6"
 	      Ports		      [1, 1]
 	      Position		      [130, 214, 160, 226]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -1996,6 +2147,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint2_1"
+	      SID		      "3:11:7"
 	      Ports		      [1, 1]
 	      Position		      [130, 239, 160, 251]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -2025,6 +2177,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint2_2"
+	      SID		      "3:11:8"
 	      Ports		      [1, 1]
 	      Position		      [130, 264, 160, 276]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -2054,6 +2207,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint3_1"
+	      SID		      "3:11:9"
 	      Ports		      [1, 1]
 	      Position		      [130, 289, 160, 301]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -2083,6 +2237,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint3_2"
+	      SID		      "3:11:10"
 	      Ports		      [1, 1]
 	      Position		      [130, 314, 160, 326]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -2112,6 +2267,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice0_1"
+	      SID		      "3:11:11"
 	      Ports		      [1, 1]
 	      Position		      [70, 139, 115, 151]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2143,6 +2299,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice0_2"
+	      SID		      "3:11:12"
 	      Ports		      [1, 1]
 	      Position		      [70, 164, 115, 176]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2174,6 +2331,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice1_1"
+	      SID		      "3:11:13"
 	      Ports		      [1, 1]
 	      Position		      [70, 189, 115, 201]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2205,6 +2363,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice1_2"
+	      SID		      "3:11:14"
 	      Ports		      [1, 1]
 	      Position		      [70, 214, 115, 226]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2236,6 +2395,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice2_1"
+	      SID		      "3:11:15"
 	      Ports		      [1, 1]
 	      Position		      [70, 239, 115, 251]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2267,6 +2427,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice2_2"
+	      SID		      "3:11:16"
 	      Ports		      [1, 1]
 	      Position		      [70, 264, 115, 276]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2298,6 +2459,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice3_1"
+	      SID		      "3:11:17"
 	      Ports		      [1, 1]
 	      Position		      [70, 289, 115, 301]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2329,6 +2491,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice3_2"
+	      SID		      "3:11:18"
 	      Ports		      [1, 1]
 	      Position		      [70, 314, 115, 326]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -2360,11 +2523,13 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "adder_tree1"
+	      SID		      "3:11:19"
 	      Ports		      [5, 2]
 	      Position		      [200, 115, 350, 315]
 	      BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
 	      AttributesFormatString  "latency 2"
 	      AncestorBlock	      "casper_library_misc/adder_tree"
+	      LibraryVersion	      "*"
 	      UserDataPersistent      on
 	      UserData		      "DataTag8"
 	      MinAlgLoopOccurrences   off
@@ -2372,6 +2537,7 @@ Library {
 	      RTWSystemCode	      "Auto"
 	      FunctionWithSeparateData off
 	      Opaque		      off
+	      RequestExecContextInheritance off
 	      MaskHideContents	      off
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
@@ -2395,6 +2561,7 @@ Library {
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
+	      MaskPortRotate	      "default"
 	      MaskIconUnits	      "autoscale"
 	      MaskValueString	      "4|1|Fabric|off"
 	      System {
@@ -2412,15 +2579,18 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
+		SIDHighWatermark	"11"
 		Block {
 		  BlockType		  Inport
 		  Name			  "sync"
+		  SID			  "3:11:19:1"
 		  Position		  [30, 12, 60, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Inport
 		  Name			  "din1"
+		  SID			  "3:11:19:2"
 		  Position		  [30, 62, 60, 78]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -2428,6 +2598,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din2"
+		  SID			  "3:11:19:3"
 		  Position		  [30, 102, 60, 118]
 		  Port			  "3"
 		  IconDisplay		  "Port number"
@@ -2435,6 +2606,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din3"
+		  SID			  "3:11:19:4"
 		  Position		  [30, 142, 60, 158]
 		  Port			  "4"
 		  IconDisplay		  "Port number"
@@ -2442,6 +2614,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din4"
+		  SID			  "3:11:19:5"
 		  Position		  [30, 182, 60, 198]
 		  Port			  "5"
 		  IconDisplay		  "Port number"
@@ -2449,6 +2622,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr1"
+		  SID			  "3:11:19:6"
 		  Ports			  [2, 1]
 		  Position		  [130, 40, 170, 100]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -2489,6 +2663,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr2"
+		  SID			  "3:11:19:7"
 		  Ports			  [2, 1]
 		  Position		  [130, 120, 170, 180]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -2529,6 +2704,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr3"
+		  SID			  "3:11:19:8"
 		  Ports			  [2, 1]
 		  Position		  [230, 40, 270, 100]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -2569,6 +2745,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "sync_delay"
+		  SID			  "3:11:19:9"
 		  Ports			  [1, 1]
 		  Position		  [80, 10, 110, 40]
 		  SourceBlock		  "xbsIndex_r4/Delay"
@@ -2598,12 +2775,14 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "sync_out"
+		  SID			  "3:11:19:10"
 		  Position		  [330, 12, 360, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
+		  SID			  "3:11:19:11"
 		  Position		  [330, 42, 360, 58]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -2667,11 +2846,13 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "adder_tree2"
+	      SID		      "3:11:20"
 	      Ports		      [5, 2]
 	      Position		      [200, 365, 350, 565]
 	      BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
 	      AttributesFormatString  "latency 2"
 	      AncestorBlock	      "casper_library_misc/adder_tree"
+	      LibraryVersion	      "*"
 	      UserDataPersistent      on
 	      UserData		      "DataTag9"
 	      MinAlgLoopOccurrences   off
@@ -2679,6 +2860,7 @@ Library {
 	      RTWSystemCode	      "Auto"
 	      FunctionWithSeparateData off
 	      Opaque		      off
+	      RequestExecContextInheritance off
 	      MaskHideContents	      off
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
@@ -2702,6 +2884,7 @@ Library {
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
+	      MaskPortRotate	      "default"
 	      MaskIconUnits	      "autoscale"
 	      MaskValueString	      "4|1|Fabric|off"
 	      System {
@@ -2719,15 +2902,18 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
+		SIDHighWatermark	"11"
 		Block {
 		  BlockType		  Inport
 		  Name			  "sync"
+		  SID			  "3:11:20:1"
 		  Position		  [30, 12, 60, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Inport
 		  Name			  "din1"
+		  SID			  "3:11:20:2"
 		  Position		  [30, 62, 60, 78]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -2735,6 +2921,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din2"
+		  SID			  "3:11:20:3"
 		  Position		  [30, 102, 60, 118]
 		  Port			  "3"
 		  IconDisplay		  "Port number"
@@ -2742,6 +2929,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din3"
+		  SID			  "3:11:20:4"
 		  Position		  [30, 142, 60, 158]
 		  Port			  "4"
 		  IconDisplay		  "Port number"
@@ -2749,6 +2937,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din4"
+		  SID			  "3:11:20:5"
 		  Position		  [30, 182, 60, 198]
 		  Port			  "5"
 		  IconDisplay		  "Port number"
@@ -2756,6 +2945,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr1"
+		  SID			  "3:11:20:6"
 		  Ports			  [2, 1]
 		  Position		  [130, 40, 170, 100]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -2796,6 +2986,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr2"
+		  SID			  "3:11:20:7"
 		  Ports			  [2, 1]
 		  Position		  [130, 120, 170, 180]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -2836,6 +3027,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr3"
+		  SID			  "3:11:20:8"
 		  Ports			  [2, 1]
 		  Position		  [230, 40, 270, 100]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -2876,6 +3068,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "sync_delay"
+		  SID			  "3:11:20:9"
 		  Ports			  [1, 1]
 		  Position		  [80, 10, 110, 40]
 		  SourceBlock		  "xbsIndex_r4/Delay"
@@ -2905,12 +3098,14 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "sync_out"
+		  SID			  "3:11:20:10"
 		  Position		  [330, 12, 360, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
+		  SID			  "3:11:20:11"
 		  Position		  [330, 42, 360, 58]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -2974,6 +3169,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "convert1"
+	      SID		      "3:11:21"
 	      Ports		      [1, 1]
 	      Position		      [500, 213, 530, 227]
 	      SourceBlock	      "xbsIndex_r4/Convert"
@@ -3012,6 +3208,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "convert2"
+	      SID		      "3:11:22"
 	      Ports		      [1, 1]
 	      Position		      [500, 258, 530, 272]
 	      SourceBlock	      "xbsIndex_r4/Convert"
@@ -3050,6 +3247,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "delay1"
+	      SID		      "3:11:23"
 	      Ports		      [1, 1]
 	      Position		      [400, 150, 430, 180]
 	      SourceBlock	      "xbsIndex_r4/Delay"
@@ -3080,6 +3278,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "ri_to_c"
+	      SID		      "3:11:24"
 	      Ports		      [2, 1]
 	      Position		      [550, 212, 580, 243]
 	      UserDataPersistent      on
@@ -3090,6 +3289,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "scale1"
+	      SID		      "3:11:25"
 	      Ports		      [1, 1]
 	      Position		      [400, 213, 430, 227]
 	      SourceBlock	      "xbsIndex_r4/Scale"
@@ -3114,6 +3314,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "scale2"
+	      SID		      "3:11:26"
 	      Ports		      [1, 1]
 	      Position		      [400, 258, 430, 272]
 	      SourceBlock	      "xbsIndex_r4/Scale"
@@ -3138,12 +3339,14 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "dout"
+	      SID		      "3:11:27"
 	      Position		      [600, 202, 630, 218]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
 	      Name		      "sync_out"
+	      SID		      "3:11:28"
 	      Position		      [600, 28, 630, 42]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -3353,6 +3556,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
+	  SID			  "3:12"
 	  Ports			  [2, 1]
 	  Position		  [235, 149, 275, 191]
 	  MinAlgLoopOccurrences	  off
@@ -3360,6 +3564,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
@@ -3379,12 +3584,14 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
+	      SID		      "3:13"
 	      Position		      [25, 38, 55, 52]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
+	      SID		      "3:14"
 	      Position		      [25, 88, 55, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -3392,6 +3599,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Concat"
+	      SID		      "3:15"
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      SourceBlock	      "xbsIndex_r4/Concat"
@@ -3417,6 +3625,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret"
+	      SID		      "3:16"
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -3446,6 +3655,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret1"
+	      SID		      "3:17"
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -3475,6 +3685,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
+	      SID		      "3:18"
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	    }
@@ -3515,12 +3726,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "3:19"
 	  Position		  [510, 168, 540, 182]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "3:20"
 	  Position		  [510, 198, 540, 212]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -3625,6 +3838,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "last_tap_async"
+      SID		      "4"
       Ports		      [5, 3]
       Position		      [330, 462, 435, 538]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -3636,6 +3850,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "last_tap_async"
       MaskPromptString	      "Input number:|Total Number of Taps:|Input Bitwidth:|Output Bitwidth:|Coeff Bitwidth:|Add"
@@ -3662,6 +3877,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1|2|8|18|8|1|2|Truncate|on|off|on|off"
       System {
@@ -3679,15 +3895,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"23"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "4:1"
 	  Position		  [25, 153, 55, 167]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "4:2"
 	  Position		  [280, 243, 310, 257]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -3695,6 +3914,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeff"
+	  SID			  "4:3"
 	  Position		  [25, 228, 55, 242]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -3702,6 +3922,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "dvin"
+	  SID			  "4:4"
 	  Position		  [25, 343, 55, 357]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -3709,6 +3930,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "taps_in"
+	  SID			  "4:5"
 	  Position		  [255, 208, 285, 222]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -3716,6 +3938,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
+	  SID			  "4:6"
 	  Ports			  [2, 1]
 	  Position		  [315, 155, 365, 210]
 	  SourceBlock		  "xbsIndex_r4/Concat"
@@ -3741,6 +3964,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
+	  SID			  "4:7"
 	  Ports			  [1, 1]
 	  Position		  [325, 227, 370, 273]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -3770,6 +3994,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay1"
+	  SID			  "4:8"
 	  Ports			  [1, 1]
 	  Position		  [325, 327, 370, 373]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -3799,6 +4024,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "4:9"
 	  Ports			  [2, 1]
 	  Position		  [160, 197, 210, 248]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -3841,6 +4067,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult1"
+	  SID			  "4:10"
 	  Ports			  [2, 1]
 	  Position		  [160, 132, 210, 183]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -3883,6 +4110,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "interpret_coeff"
+	  SID			  "4:11"
 	  Ports			  [1, 1]
 	  Position		  [95, 219, 135, 251]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -3912,6 +4140,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "pfb_add_tree_async"
+	  SID			  "4:12"
 	  Ports			  [3, 3]
 	  Position		  [485, 174, 580, 216]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -3923,6 +4152,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  MaskType		  "pfb_add_tree_async"
 	  MaskPromptString	  "Input number:|Total number of taps:|Input bitwidth:|Output bitwidth:|Coeff bitwidth:|Add latenc"
@@ -3943,6 +4173,7 @@ Library {
 	  MaskIconFrame		  on
 	  MaskIconOpaque	  on
 	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
 	  MaskIconUnits		  "autoscale"
 	  MaskValueString	  "1|2|8|18|8|1|Truncate|off"
 	  System {
@@ -3960,15 +4191,18 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
+	    SIDHighWatermark	    "23"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
+	      SID		      "4:12:1"
 	      Position		      [15, 123, 45, 137]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "sync"
+	      SID		      "4:12:2"
 	      Position		      [15, 28, 45, 42]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -3976,6 +4210,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "dv"
+	      SID		      "4:12:3"
 	      Position		      [30, 668, 60, 682]
 	      Port		      "3"
 	      IconDisplay	      "Port number"
@@ -3989,6 +4224,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint0_1"
+	      SID		      "4:12:4"
 	      Ports		      [1, 1]
 	      Position		      [130, 139, 160, 151]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -4018,6 +4254,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint0_2"
+	      SID		      "4:12:5"
 	      Ports		      [1, 1]
 	      Position		      [130, 164, 160, 176]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -4047,6 +4284,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint1_1"
+	      SID		      "4:12:6"
 	      Ports		      [1, 1]
 	      Position		      [130, 189, 160, 201]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -4076,6 +4314,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reint1_2"
+	      SID		      "4:12:7"
 	      Ports		      [1, 1]
 	      Position		      [130, 214, 160, 226]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -4105,6 +4344,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice0_1"
+	      SID		      "4:12:8"
 	      Ports		      [1, 1]
 	      Position		      [70, 139, 115, 151]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -4136,6 +4376,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice0_2"
+	      SID		      "4:12:9"
 	      Ports		      [1, 1]
 	      Position		      [70, 164, 115, 176]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -4167,6 +4408,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice1_1"
+	      SID		      "4:12:10"
 	      Ports		      [1, 1]
 	      Position		      [70, 189, 115, 201]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -4198,6 +4440,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Slice1_2"
+	      SID		      "4:12:11"
 	      Ports		      [1, 1]
 	      Position		      [70, 214, 115, 226]
 	      SourceBlock	      "xbsIndex_r4/Slice"
@@ -4229,11 +4472,13 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "adder_tree1"
+	      SID		      "4:12:12"
 	      Ports		      [3, 2]
 	      Position		      [200, 115, 350, 215]
 	      BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
 	      AttributesFormatString  "latency 1"
 	      AncestorBlock	      "casper_library_misc/adder_tree"
+	      LibraryVersion	      "*"
 	      UserDataPersistent      on
 	      UserData		      "DataTag13"
 	      MinAlgLoopOccurrences   off
@@ -4241,6 +4486,7 @@ Library {
 	      RTWSystemCode	      "Auto"
 	      FunctionWithSeparateData off
 	      Opaque		      off
+	      RequestExecContextInheritance off
 	      MaskHideContents	      off
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
@@ -4264,6 +4510,7 @@ Library {
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
+	      MaskPortRotate	      "default"
 	      MaskIconUnits	      "autoscale"
 	      MaskValueString	      "2|add_latency|Fabric|off"
 	      System {
@@ -4281,15 +4528,18 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
+		SIDHighWatermark	"7"
 		Block {
 		  BlockType		  Inport
 		  Name			  "sync"
+		  SID			  "4:12:12:1"
 		  Position		  [30, 12, 60, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Inport
 		  Name			  "din1"
+		  SID			  "4:12:12:2"
 		  Position		  [30, 62, 60, 78]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -4297,6 +4547,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din2"
+		  SID			  "4:12:12:3"
 		  Position		  [30, 102, 60, 118]
 		  Port			  "3"
 		  IconDisplay		  "Port number"
@@ -4304,6 +4555,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr1"
+		  SID			  "4:12:12:4"
 		  Ports			  [2, 1]
 		  Position		  [130, 40, 170, 100]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -4344,6 +4596,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "sync_delay"
+		  SID			  "4:12:12:5"
 		  Ports			  [1, 1]
 		  Position		  [80, 10, 110, 40]
 		  SourceBlock		  "xbsIndex_r4/Delay"
@@ -4373,12 +4626,14 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "sync_out"
+		  SID			  "4:12:12:6"
 		  Position		  [230, 12, 260, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
+		  SID			  "4:12:12:7"
 		  Position		  [230, 42, 260, 58]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -4418,11 +4673,13 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "adder_tree2"
+	      SID		      "4:12:13"
 	      Ports		      [3, 2]
 	      Position		      [200, 265, 350, 365]
 	      BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
 	      AttributesFormatString  "latency 1"
 	      AncestorBlock	      "casper_library_misc/adder_tree"
+	      LibraryVersion	      "*"
 	      UserDataPersistent      on
 	      UserData		      "DataTag14"
 	      MinAlgLoopOccurrences   off
@@ -4430,6 +4687,7 @@ Library {
 	      RTWSystemCode	      "Auto"
 	      FunctionWithSeparateData off
 	      Opaque		      off
+	      RequestExecContextInheritance off
 	      MaskHideContents	      off
 	      MaskType		      "adder_tree"
 	      MaskDescription	      "Sums all inputs using a tree of adds and delays.\n\nNumber of inputs: The number of inpu"
@@ -4453,6 +4711,7 @@ Library {
 	      MaskIconFrame	      on
 	      MaskIconOpaque	      on
 	      MaskIconRotate	      "none"
+	      MaskPortRotate	      "default"
 	      MaskIconUnits	      "autoscale"
 	      MaskValueString	      "2|add_latency|Fabric|off"
 	      System {
@@ -4470,15 +4729,18 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
+		SIDHighWatermark	"7"
 		Block {
 		  BlockType		  Inport
 		  Name			  "sync"
+		  SID			  "4:12:13:1"
 		  Position		  [30, 12, 60, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Inport
 		  Name			  "din1"
+		  SID			  "4:12:13:2"
 		  Position		  [30, 62, 60, 78]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -4486,6 +4748,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din2"
+		  SID			  "4:12:13:3"
 		  Position		  [30, 102, 60, 118]
 		  Port			  "3"
 		  IconDisplay		  "Port number"
@@ -4493,6 +4756,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "addr1"
+		  SID			  "4:12:13:4"
 		  Ports			  [2, 1]
 		  Position		  [130, 40, 170, 100]
 		  SourceBlock		  "xbsIndex_r4/AddSub"
@@ -4533,6 +4797,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "sync_delay"
+		  SID			  "4:12:13:5"
 		  Ports			  [1, 1]
 		  Position		  [80, 10, 110, 40]
 		  SourceBlock		  "xbsIndex_r4/Delay"
@@ -4562,12 +4827,14 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "sync_out"
+		  SID			  "4:12:13:6"
 		  Position		  [230, 12, 260, 28]
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
+		  SID			  "4:12:13:7"
 		  Position		  [230, 42, 260, 58]
 		  Port			  "2"
 		  IconDisplay		  "Port number"
@@ -4607,6 +4874,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "convert1"
+	      SID		      "4:12:14"
 	      Ports		      [1, 1]
 	      Position		      [500, 163, 530, 177]
 	      SourceBlock	      "xbsIndex_r4/Convert"
@@ -4644,6 +4912,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "convert2"
+	      SID		      "4:12:15"
 	      Ports		      [1, 1]
 	      Position		      [500, 203, 530, 217]
 	      SourceBlock	      "xbsIndex_r4/Convert"
@@ -4681,6 +4950,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "delay_convert"
+	      SID		      "4:12:16"
 	      Ports		      [1, 1]
 	      Position		      [400, 100, 430, 130]
 	      SourceBlock	      "xbsIndex_r4/Delay"
@@ -4711,6 +4981,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "delay_dv"
+	      SID		      "4:12:17"
 	      Ports		      [1, 1]
 	      Position		      [450, 660, 480, 690]
 	      SourceBlock	      "xbsIndex_r4/Delay"
@@ -4747,6 +5018,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "ri_to_c"
+	      SID		      "4:12:18"
 	      Ports		      [2, 1]
 	      Position		      [550, 162, 580, 193]
 	      UserDataPersistent      on
@@ -4757,6 +5029,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "scale1"
+	      SID		      "4:12:19"
 	      Ports		      [1, 1]
 	      Position		      [400, 163, 430, 177]
 	      SourceBlock	      "xbsIndex_r4/Scale"
@@ -4781,6 +5054,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "scale2"
+	      SID		      "4:12:20"
 	      Ports		      [1, 1]
 	      Position		      [400, 208, 430, 222]
 	      SourceBlock	      "xbsIndex_r4/Scale"
@@ -4805,12 +5079,14 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "dout"
+	      SID		      "4:12:21"
 	      Position		      [600, 152, 630, 168]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Outport
 	      Name		      "sync_out"
+	      SID		      "4:12:22"
 	      Position		      [600, 28, 630, 42]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -4818,6 +5094,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "dv_out"
+	      SID		      "4:12:23"
 	      Position		      [875, 668, 905, 682]
 	      Port		      "3"
 	      IconDisplay	      "Port number"
@@ -4979,6 +5256,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
+	  SID			  "4:13"
 	  Ports			  [2, 1]
 	  Position		  [235, 149, 275, 191]
 	  MinAlgLoopOccurrences	  off
@@ -4986,6 +5264,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
@@ -5005,12 +5284,14 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
+	      SID		      "4:14"
 	      Position		      [25, 38, 55, 52]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
+	      SID		      "4:15"
 	      Position		      [25, 88, 55, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -5018,6 +5299,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Concat"
+	      SID		      "4:16"
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      SourceBlock	      "xbsIndex_r4/Concat"
@@ -5043,6 +5325,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret"
+	      SID		      "4:17"
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -5072,6 +5355,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret1"
+	      SID		      "4:18"
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -5101,6 +5385,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
+	      SID		      "4:19"
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	    }
@@ -5141,6 +5426,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "split_data"
+	  SID			  "4:20"
 	  Ports			  [1, 2]
 	  Position		  [75, 132, 125, 183]
 	  BackgroundColor	  "[0.502000, 1.000000, 0.502000]"
@@ -5162,12 +5448,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "4:21"
 	  Position		  [695, 173, 725, 187]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "4:22"
 	  Position		  [695, 198, 725, 212]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -5175,6 +5463,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dv_out"
+	  SID			  "4:23"
 	  Position		  [700, 343, 730, 357]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -5301,6 +5590,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "last_tap_real"
+      SID		      "5"
       Ports		      [3, 2]
       Position		      [330, 606, 435, 684]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -5311,6 +5601,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "last_tap_real"
       MaskPromptString	      "Input Bitwidth:|Coeff Bitwidth:|Mult Latency|Use behavioral HDL for multlipliers|Use emb"
@@ -5331,6 +5622,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "8|8|2|on|off"
       System {
@@ -5348,15 +5640,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"9"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "5:1"
 	  Position		  [30, 133, 60, 147]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "5:2"
 	  Position		  [275, 243, 305, 257]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -5364,6 +5659,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeff"
+	  SID			  "5:3"
 	  Position		  [50, 188, 80, 202]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -5371,6 +5667,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
+	  SID			  "5:4"
 	  Ports			  [1, 1]
 	  Position		  [320, 227, 365, 273]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -5400,6 +5697,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "5:5"
 	  Ports			  [2, 1]
 	  Position		  [175, 142, 225, 193]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -5442,6 +5740,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
+	  SID			  "5:6"
 	  Ports			  [1, 1]
 	  Position		  [100, 179, 140, 211]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -5471,6 +5770,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret1"
+	  SID			  "5:7"
 	  Ports			  [1, 1]
 	  Position		  [100, 124, 140, 156]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -5500,12 +5800,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "tap_out"
+	  SID			  "5:8"
 	  Position		  [270, 163, 300, 177]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "5:9"
 	  Position		  [420, 243, 450, 257]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -5559,6 +5861,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pfb_coeff_gen"
+      SID		      "6"
       Ports		      [2, 3]
       Position		      [55, 462, 150, 538]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -5570,6 +5873,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_coeff_gen"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of Taps:|Implement Coeff "
@@ -5591,6 +5895,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "2|8|4|off|hamming|2|0|0|1|off|1"
       System {
@@ -5608,15 +5913,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"22"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "6:1"
 	  Position		  [235, 28, 265, 42]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "6:2"
 	  Position		  [15, 93, 45, 107]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -5624,6 +5932,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
+	  SID			  "6:3"
 	  Ports			  [4, 1]
 	  Position		  [360, 99, 415, 646]
 	  ShowName		  off
@@ -5650,6 +5959,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Counter"
+	  SID			  "6:4"
 	  Ports			  [1, 1]
 	  Position		  [65, 75, 115, 125]
 	  SourceBlock		  "xbsIndex_r4/Counter"
@@ -5691,6 +6001,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay"
+	  SID			  "6:5"
 	  Ports			  [1, 1]
 	  Position		  [65, 12, 110, 58]
 	  ShowName		  off
@@ -5721,6 +6032,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay1"
+	  SID			  "6:6"
 	  Ports			  [1, 1]
 	  Position		  [290, 12, 335, 58]
 	  ShowName		  off
@@ -5751,6 +6063,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM1"
+	  SID			  "6:7"
 	  Ports			  [1, 1]
 	  Position		  [200, 74, 250, 126]
 	  SourceBlock		  "xbsIndex_r4/ROM"
@@ -5790,6 +6103,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM2"
+	  SID			  "6:8"
 	  Ports			  [1, 1]
 	  Position		  [200, 139, 250, 191]
 	  SourceBlock		  "xbsIndex_r4/ROM"
@@ -5829,6 +6143,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM3"
+	  SID			  "6:9"
 	  Ports			  [1, 1]
 	  Position		  [200, 204, 250, 256]
 	  SourceBlock		  "xbsIndex_r4/ROM"
@@ -5868,6 +6183,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "ROM4"
+	  SID			  "6:10"
 	  Ports			  [1, 1]
 	  Position		  [200, 269, 250, 321]
 	  SourceBlock		  "xbsIndex_r4/ROM"
@@ -5907,6 +6223,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Register"
+	  SID			  "6:11"
 	  Ports			  [1, 1]
 	  Position		  [435, 325, 480, 375]
 	  ShowName		  off
@@ -5935,6 +6252,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret1"
+	  SID			  "6:12"
 	  Ports			  [1, 1]
 	  Position		  [270, 84, 310, 116]
 	  ShowName		  off
@@ -5965,6 +6283,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret2"
+	  SID			  "6:13"
 	  Ports			  [1, 1]
 	  Position		  [270, 149, 310, 181]
 	  ShowName		  off
@@ -5995,6 +6314,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret3"
+	  SID			  "6:14"
 	  Ports			  [1, 1]
 	  Position		  [270, 214, 310, 246]
 	  ShowName		  off
@@ -6025,6 +6345,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret4"
+	  SID			  "6:15"
 	  Ports			  [1, 1]
 	  Position		  [270, 279, 310, 311]
 	  ShowName		  off
@@ -6055,6 +6376,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "fan_delay1"
+	  SID			  "6:16"
 	  Ports			  [1, 1]
 	  Position		  [150, 74, 180, 126]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -6084,6 +6406,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "fan_delay2"
+	  SID			  "6:17"
 	  Ports			  [1, 1]
 	  Position		  [150, 139, 180, 191]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -6113,6 +6436,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "fan_delay3"
+	  SID			  "6:18"
 	  Ports			  [1, 1]
 	  Position		  [150, 204, 180, 256]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -6142,6 +6466,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "fan_delay4"
+	  SID			  "6:19"
 	  Ports			  [1, 1]
 	  Position		  [150, 269, 180, 321]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -6171,12 +6496,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "6:20"
 	  Position		  [360, 28, 390, 42]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "6:21"
 	  Position		  [130, 28, 160, 42]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -6184,6 +6511,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff"
+	  SID			  "6:22"
 	  Position		  [500, 343, 530, 357]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -6329,6 +6657,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pfb_fir"
+      SID		      "7"
       Tag		      "casper:pfb_fir"
       Ports		      [3, 3]
       Position		      [55, 54, 165, 176]
@@ -6341,6 +6670,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_fir"
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Pfb_fir'')')"
@@ -6380,6 +6710,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|Round  (unbiased: Even Values)|1|2|on"
       System {
@@ -6397,15 +6728,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"12"
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "7:1"
 	  Position		  [0, 52, 30, 68]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "pol1_in1"
+	  SID			  "7:2"
 	  Position		  [0, 102, 30, 118]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -6413,6 +6747,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "pol1_in2"
+	  SID			  "7:3"
 	  Position		  [0, 152, 30, 168]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -6420,6 +6755,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_coeffs"
+	  SID			  "7:4"
 	  Ports			  [2, 3]
 	  Position		  [150, 50, 250, 80]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6443,6 +6779,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_first_tap"
+	  SID			  "7:5"
 	  Ports			  [3, 4]
 	  Position		  [300, 52, 400, 83]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6466,6 +6803,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_last_tap"
+	  SID			  "7:6"
 	  Ports			  [4, 2]
 	  Position		  [450, 52, 550, 83]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6487,6 +6825,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_coeffs"
+	  SID			  "7:7"
 	  Ports			  [2, 3]
 	  Position		  [150, 100, 250, 130]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6510,6 +6849,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_first_tap"
+	  SID			  "7:8"
 	  Ports			  [3, 4]
 	  Position		  [300, 102, 400, 133]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6533,6 +6873,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_last_tap"
+	  SID			  "7:9"
 	  Ports			  [4, 2]
 	  Position		  [450, 102, 550, 133]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6554,12 +6895,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "7:10"
 	  Position		  [600, 52, 630, 68]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "pol1_out1"
+	  SID			  "7:11"
 	  Position		  [600, 102, 630, 118]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -6567,6 +6910,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "pol1_out2"
+	  SID			  "7:12"
 	  Position		  [600, 152, 630, 168]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -6704,6 +7048,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pfb_fir_async"
+      SID		      "8"
       Tag		      "casper:pfb_fir_async"
       Ports		      [4, 4]
       Position		      [340, 54, 450, 176]
@@ -6716,6 +7061,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_fir_async"
       MaskHelp		      "eval('xlWeb(''http://casper.berkeley.edu/wiki/Pfb_fir'')')"
@@ -6747,6 +7093,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "5|2|hamming|1|off|8|18|8|off|1|2|3|1|Truncate|1|2|off|on|off"
       System {
@@ -6764,15 +7111,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"26"
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "8:1"
 	  Position		  [0, 52, 30, 68]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "dv"
+	  SID			  "8:2"
 	  Position		  [0, 102, 30, 118]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -6780,6 +7130,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "pol1_in1"
+	  SID			  "8:3"
 	  Position		  [0, 452, 30, 468]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -6787,6 +7138,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "pol1_in2"
+	  SID			  "8:4"
 	  Position		  [0, 602, 30, 618]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -6794,6 +7146,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "dv_delay"
+	  SID			  "8:5"
 	  Ports			  [1, 1]
 	  Position		  [75, 102, 100, 118]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -6823,6 +7176,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_coeffs"
+	  SID			  "8:6"
 	  Ports			  [2, 3]
 	  Position		  [150, 150, 250, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6846,6 +7200,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_last_tap"
+	  SID			  "8:7"
 	  Ports			  [5, 3]
 	  Position		  [450, 150, 550, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6870,6 +7225,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_tap1"
+	  SID			  "8:8"
 	  Ports			  [4, 5]
 	  Position		  [300, 150, 400, 250]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6895,6 +7251,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_coeffs"
+	  SID			  "8:9"
 	  Ports			  [2, 3]
 	  Position		  [150, 300, 250, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6918,6 +7275,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_last_tap"
+	  SID			  "8:10"
 	  Ports			  [5, 3]
 	  Position		  [450, 300, 550, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6942,6 +7300,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_tap1"
+	  SID			  "8:11"
 	  Ports			  [4, 5]
 	  Position		  [300, 300, 400, 400]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -6967,6 +7326,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "sync_generate"
+	  SID			  "8:12"
 	  Ports			  [2, 1]
 	  Position		  [480, 45, 540, 105]
 	  MinAlgLoopOccurrences	  off
@@ -6974,6 +7334,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  System {
 	    Name		    "sync_generate"
@@ -6993,12 +7354,14 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "sync"
+	      SID		      "8:13"
 	      Position		      [15, 278, 45, 292]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "dv"
+	      SID		      "8:14"
 	      Position		      [15, 193, 45, 207]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -7006,6 +7369,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant"
+	      SID		      "8:15"
 	      Ports		      [0, 1]
 	      Position		      [130, 232, 185, 258]
 	      ShowName		      off
@@ -7049,6 +7413,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant1"
+	      SID		      "8:16"
 	      Ports		      [0, 1]
 	      Position		      [445, 317, 500, 343]
 	      ShowName		      off
@@ -7092,6 +7457,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Counter"
+	      SID		      "8:17"
 	      Ports		      [2, 1]
 	      Position		      [455, 205, 515, 265]
 	      ShowName		      off
@@ -7133,6 +7499,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Logical"
+	      SID		      "8:18"
 	      Ports		      [2, 1]
 	      Position		      [355, 220, 410, 280]
 	      ShowName		      off
@@ -7166,6 +7533,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Register"
+	      SID		      "8:19"
 	      Ports		      [3, 1]
 	      Position		      [230, 237, 290, 293]
 	      ShowName		      off
@@ -7195,6 +7563,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Relational"
+	      SID		      "8:20"
 	      Ports		      [2, 1]
 	      Position		      [590, 222, 645, 278]
 	      ShowName		      off
@@ -7232,6 +7601,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sync_delay"
+	      SID		      "8:21"
 	      Ports		      [1, 1]
 	      Position		      [755, 242, 780, 258]
 	      SourceBlock	      "xbsIndex_r4/Delay"
@@ -7262,6 +7632,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "sync_out"
+	      SID		      "8:22"
 	      Position		      [850, 242, 880, 258]
 	      IconDisplay	      "Port number"
 	    }
@@ -7344,12 +7715,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "8:23"
 	  Position		  [750, 52, 780, 68]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "dv_out"
+	  SID			  "8:24"
 	  Position		  [750, 102, 780, 118]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -7357,6 +7730,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "pol1_out1"
+	  SID			  "8:25"
 	  Position		  [750, 452, 780, 468]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -7364,6 +7738,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "pol1_out2"
+	  SID			  "8:26"
 	  Position		  [750, 602, 780, 618]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -7546,6 +7921,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pfb_fir_coeff_gen"
+      SID		      "9"
       Ports		      []
       Position		      [520, 332, 590, 406]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -7556,6 +7932,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_fir_coeff_gen"
       MaskPromptString	      "Size of PFB: (2^? pnts)|Total Number of Taps:|Bitwidth of Coefficients:|Windowing Functi"
@@ -7579,6 +7956,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "5|0|12|hamming|0|1|off|2|1|1|Area"
       MaskTabNameString	      "basic,basic,basic,basic,basic,basic,basic,latency,latency,latency,implementation"
@@ -7602,6 +7980,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pfb_fir_generic"
+      SID		      "10"
       Tag		      "casper:pfb_fir_generic"
       Ports		      []
       Position		      [516, 458, 601, 550]
@@ -7613,6 +7992,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_fir_generic"
       MaskPromptString	      "Number input streams?|Size of PFB: (2^? pnts)|Total Number of Taps:|Windowing Function: "
@@ -7648,6 +8028,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1|5|0|hamming|0|8|18|12|off|off|1|2|2|1|1|Round  (unbiased: Even Values)|1|Area|Area"
       MaskTabNameString	      "basic,basic,basic,implementation,basic,basic,basic,basic,basic,basic,latency,latency,la"
@@ -7672,6 +8053,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pfb_fir_real"
+      SID		      "11"
       Tag		      "casper:pfb_fir_real"
       Ports		      [3, 3]
       Position		      [195, 54, 305, 176]
@@ -7684,6 +8066,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_fir_real"
       MaskDescription	      "Fold adders into DSPs: Causes adders to be absorbed into DSP blocks (supported in Virtex5"
@@ -7720,6 +8103,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "5|2|hamming|1|off|8|18|18|off|1|2|2|1|1|Round  (unbiased: Even Values)|1|2|on|Fabric|off"
       System {
@@ -7737,15 +8121,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"19"
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "11:1"
 	  Position		  [0, 52, 30, 68]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "pol1_in1"
+	  SID			  "11:2"
 	  Position		  [0, 202, 30, 218]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -7753,6 +8140,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "pol1_in2"
+	  SID			  "11:3"
 	  Position		  [0, 302, 30, 318]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -7760,6 +8148,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "adder_1_1"
+	  SID			  "11:4"
 	  Ports			  [3, 2]
 	  Position		  [600, 100, 700, 180]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
@@ -7776,6 +8165,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "adder_1_2"
+	  SID			  "11:5"
 	  Ports			  [3, 2]
 	  Position		  [600, 200, 700, 280]
 	  BackgroundColor	  "[0.501961, 1.000000, 0.501961]"
@@ -7792,6 +8182,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_1_1"
+	  SID			  "11:6"
 	  Ports			  [1, 1]
 	  Position		  [810, 152, 840, 178]
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -7828,6 +8219,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_1_2"
+	  SID			  "11:7"
 	  Ports			  [1, 1]
 	  Position		  [810, 252, 840, 278]
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -7864,6 +8256,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay1"
+	  SID			  "11:8"
 	  Ports			  [1, 1]
 	  Position		  [810, 50, 840, 80]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -7892,6 +8285,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_coeffs"
+	  SID			  "11:9"
 	  Ports			  [2, 3]
 	  Position		  [150, 100, 250, 130]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -7915,6 +8309,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_first_tap"
+	  SID			  "11:10"
 	  Ports			  [3, 4]
 	  Position		  [300, 102, 400, 133]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -7938,6 +8333,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in1_last_tap"
+	  SID			  "11:11"
 	  Ports			  [3, 2]
 	  Position		  [450, 100, 550, 130]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -7954,6 +8350,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_coeffs"
+	  SID			  "11:12"
 	  Ports			  [2, 3]
 	  Position		  [150, 200, 250, 230]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -7977,6 +8374,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_first_tap"
+	  SID			  "11:13"
 	  Ports			  [3, 4]
 	  Position		  [300, 202, 400, 233]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -8000,6 +8398,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "pol1_in2_last_tap"
+	  SID			  "11:14"
 	  Ports			  [3, 2]
 	  Position		  [450, 200, 550, 230]
 	  BackgroundColor	  "[0.501961, 0.501961, 0.501961]"
@@ -8016,6 +8415,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "scale_1_1"
+	  SID			  "11:15"
 	  Ports			  [1, 1]
 	  Position		  [750, 152, 780, 178]
 	  SourceBlock		  "xbsIndex_r4/Scale"
@@ -8039,6 +8439,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "scale_1_2"
+	  SID			  "11:16"
 	  Ports			  [1, 1]
 	  Position		  [750, 252, 780, 278]
 	  SourceBlock		  "xbsIndex_r4/Scale"
@@ -8062,12 +8463,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "11:17"
 	  Position		  [1050, 102, 1080, 118]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "pol1_out1"
+	  SID			  "11:18"
 	  Position		  [1050, 202, 1080, 218]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -8075,6 +8478,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "pol1_out2"
+	  SID			  "11:19"
 	  Position		  [1050, 302, 1080, 318]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -8266,6 +8670,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "pfb_fir_taps"
+      SID		      "12"
       Ports		      []
       Position		      [618, 333, 688, 409]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -8276,6 +8681,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_fir_taps"
       MaskPromptString	      "Number simultaneous streams|Number simultaneous inputs per stream (2^?)|PFB size (2^? pn"
@@ -8302,6 +8708,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1|0|5|0|8|12|11|off|off|2|1|1|1|behavioral HDL|Area"
       MaskTabNameString	      "basic,basic,basic,basic,basic,basic,basic,basic,basic,latency,latency,latency,latency,i"
@@ -8326,6 +8733,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "tap"
+      SID		      "13"
       Ports		      [4, 4]
       Position		      [195, 332, 300, 408]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -8334,6 +8742,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "tap"
       MaskPromptString	      "Multiplier Latency|Coefficient Bit Width In|Coefficient Fractional Bits|Data/Sync Delay|"
@@ -8355,11 +8764,12 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "2|12|3|4|8|1|off|on"
       System {
 	Name			"tap"
-	Location		[92, -439, 1497, 1291]
+	Location		[87, 77, 1492, 1807]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -8375,12 +8785,14 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "14"
 	  Position		  [20, 33, 50, 47]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "15"
 	  Position		  [130, 98, 160, 112]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -8388,6 +8800,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeff"
+	  SID			  "16"
 	  Position		  [15, 243, 45, 257]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -8395,6 +8808,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "taps"
+	  SID			  "17"
 	  Position		  [290, 243, 320, 257]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -8402,8 +8816,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
+	  SID			  "18"
 	  Ports			  [2, 1]
 	  Position		  [360, 210, 410, 265]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
 	  SourceType		  "Xilinx Bus Concatenator Block"
 	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
@@ -8427,8 +8843,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "19"
 	  Ports			  [2, 1]
 	  Position		  [190, 212, 240, 263]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -8469,8 +8887,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult1"
+	  SID			  "20"
 	  Ports			  [2, 1]
 	  Position		  [190, 147, 240, 198]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mult"
 	  SourceType		  "Xilinx Multiplier Block"
 	  infoedit		  "Hardware notes: To use the internal pipeline stage of the dedicated multiplier you must select 'Pipeli"
@@ -8511,8 +8931,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
+	  SID			  "21"
 	  Ports			  [1, 1]
 	  Position		  [130, 234, 170, 266]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can changed the signal between s"
@@ -8529,19 +8951,21 @@ Library {
 	  block_type		  "reinterpret"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "40,32,1,1,white,blue,0,6b04d0b0,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 50 50 0 0 ],[0 0 32 32 0 ]);\npatch([16.1 21.88 25.88 29.88 33.88 25.88 20.1 16.1 ],[20.44 20.44 24.4"
-	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([20.1 25.88 21.88 16.1 20.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([16.1 21.88 25.88 20.1 16.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([20."
-	  "1 33.88 29.88 25.88 21.88 16.1 20.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 32 32 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 40 40 0 0 ],[0 0 32 32 0 ]);\npatch([11.1 16.88 20.88 24.88 28.88 20.88 15.1 11.1 ],[20.44 20.44 24.4"
+	  "4 20.44 24.44 24.44 24.44 20.44 ],[1 1 1 ]);\npatch([15.1 20.88 16.88 11.1 15.1 ],[16.44 16.44 20.44 20.44 16.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([11.1 16.88 20.88 15.1 11.1 ],[12.44 12.44 16.44 16.44 12.44 ],[1 1 1 ]);\npatch([15."
+	  "1 28.88 24.88 20.88 16.88 11.1 15.1 ],[8.44 8.44 12.44 8.44 12.44 12.44 8.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('reinterpret');\nfp"
 	  "rintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
+	  SID			  "22"
 	  Ports			  [1, 1]
 	  Position		  [70, 236, 115, 264]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -8560,19 +8984,21 @@ Library {
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 30 30 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\npatch([21.1 26.88 30.88 34.88 38.88 30.88 25.1 21.1 ],[19.44 19.44 23.4"
-	  "4 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([25.1 30.88 26.88 21.1 25.1 ],[15.44 15.44 19.44 19.44 15.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([21.1 26.88 30.88 25.1 21.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 ]);\npatch([25."
-	  "1 38.88 34.88 30.88 26.88 21.1 25.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[18.44 18.44 22.4"
+	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([17."
+	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a:"
 	  "b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
+	  SID			  "23"
 	  Ports			  [1, 1]
 	  Position		  [70, 281, 115, 309]
+	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
 	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
@@ -8591,20 +9017,22 @@ Library {
 	  block_type		  "slice"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "45,28,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 60 60 0 0 ],[0 0 30 30 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 60 60 0 0 ],[0 0 30 30 0 ]);\npatch([21.1 26.88 30.88 34.88 38.88 30.88 25.1 21.1 ],[19.44 19.44 23.4"
-	  "4 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([25.1 30.88 26.88 21.1 25.1 ],[15.44 15.44 19.44 19.44 15.44 ],"
-	  "[0.931 0.946 0.973 ]);\npatch([21.1 26.88 30.88 25.1 21.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1 1 1 ]);\npatch([25."
-	  "1 38.88 34.88 30.88 26.88 21.1 25.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 28 28 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 45 45 0 0 ],[0 0 28 28 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[18.44 18.44 22.4"
+	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([17."
+	  "1 30.88 26.88 22.88 18.88 13.1 17.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
 	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a:"
 	  "b]');\nfprintf('','COMMENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "c_to_ri"
+	  SID			  "24"
 	  Ports			  [1, 2]
 	  Position		  [110, 149, 150, 191]
-	  AttributesFormatString  "_ r/i"
+	  AttributesFormatString  "8_7 r/i"
+	  LibraryVersion	  "1.42"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag45"
 	  SourceBlock		  "casper_library_misc/c_to_ri"
@@ -8615,9 +9043,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_bram"
+	  SID			  "25"
 	  Ports			  [1, 1]
 	  Position		  [190, 20, 230, 60]
 	  BackgroundColor	  "gray"
+	  LibraryVersion	  "1.35"
 	  UserDataPersistent	  on
 	  UserData		  "DataTag46"
 	  SourceBlock		  "casper_library_delays/delay_bram"
@@ -8630,6 +9060,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
+	  SID			  "26"
 	  Ports			  [2, 1]
 	  Position		  [270, 184, 310, 226]
 	  MinAlgLoopOccurrences	  off
@@ -8637,6 +9068,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
@@ -8656,12 +9088,14 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
+	      SID		      "27"
 	      Position		      [25, 38, 55, 52]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
+	      SID		      "28"
 	      Position		      [25, 88, 55, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -8669,6 +9103,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Concat"
+	      SID		      "29"
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      SourceBlock	      "xbsIndex_r4/Concat"
@@ -8694,6 +9129,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret"
+	      SID		      "30"
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -8723,6 +9159,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret1"
+	      SID		      "31"
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -8752,6 +9189,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
+	      SID		      "32"
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	    }
@@ -8790,23 +9228,16 @@ Library {
 	  }
 	}
 	Block {
-	  BlockType		  Reference
-	  Name			  "sync_delay"
-	  Ports			  [1, 1]
-	  Position		  [190, 84, 230, 126]
-	  SourceBlock		  "casper_library_delays/sync_delay"
-	  SourceType		  "sync_delay"
-	  DelayLen		  "delay"
-	}
-	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "34"
 	  Position		  [255, 33, 285, 47]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "35"
 	  Position		  [255, 98, 285, 112]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -8814,6 +9245,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff_out"
+	  SID			  "36"
 	  Position		  [130, 288, 160, 302]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -8821,6 +9253,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
+	  SID			  "37"
 	  Position		  [425, 233, 455, 247]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -8876,16 +9309,9 @@ Library {
 	  DstPort		  2
 	}
 	Line {
-	  Labels		  [0, 0]
-	  SrcBlock		  "sync_delay"
-	  SrcPort		  1
-	  DstBlock		  "sync_out"
-	  DstPort		  1
-	}
-	Line {
 	  SrcBlock		  "sync"
 	  SrcPort		  1
-	  DstBlock		  "sync_delay"
+	  DstBlock		  "sync_out"
 	  DstPort		  1
 	}
 	Line {
@@ -8947,6 +9373,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "tap_async"
+      SID		      "38"
       Ports		      [4, 5]
       Position		      [195, 462, 300, 538]
       BackgroundColor	      "[0.501961, 0.501961, 0.501961]"
@@ -8958,6 +9385,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "tap_async"
       MaskPromptString	      "Tap number:|Size of PFB: (2^? pnts)|Bitwidth of Coefficients:|Total Number of Taps:|Inpu"
@@ -8984,6 +9412,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1|5|8|2|8|2|3|1|1|on|off|on|off"
       System {
@@ -9001,15 +9430,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"28"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "38:1"
 	  Position		  [35, 93, 65, 107]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "38:2"
 	  Position		  [35, 328, 65, 342]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -9017,6 +9449,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeffs"
+	  SID			  "38:3"
 	  Position		  [35, 503, 65, 517]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -9024,6 +9457,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "dvin"
+	  SID			  "38:4"
 	  Position		  [35, 168, 65, 182]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -9031,6 +9465,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay1"
+	  SID			  "38:5"
 	  Ports			  [1, 1]
 	  Position		  [570, 546, 610, 574]
 	  ShowName		  off
@@ -9061,6 +9496,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay2"
+	  SID			  "38:6"
 	  Ports			  [1, 1]
 	  Position		  [570, 161, 610, 189]
 	  ShowName		  off
@@ -9091,6 +9527,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "38:7"
 	  Ports			  [2, 1]
 	  Position		  [345, 472, 395, 523]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -9133,6 +9570,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult1"
+	  SID			  "38:8"
 	  Ports			  [2, 1]
 	  Position		  [345, 407, 395, 458]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -9175,6 +9613,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Single Port RAM"
+	  SID			  "38:9"
 	  Ports			  [3, 1]
 	  Position		  [295, 73, 360, 127]
 	  SourceBlock		  "xbsIndex_r4/Single Port RAM"
@@ -9208,6 +9647,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
+	  SID			  "38:10"
 	  Ports			  [1, 1]
 	  Position		  [225, 496, 270, 524]
 	  ShowName		  off
@@ -9240,6 +9680,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
+	  SID			  "38:11"
 	  Ports			  [1, 1]
 	  Position		  [225, 546, 270, 574]
 	  ShowName		  off
@@ -9272,6 +9713,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "addr_ctr"
+	  SID			  "38:12"
 	  Ports			  [0, 1]
 	  Position		  [210, 30, 250, 70]
 	  SourceBlock		  "xbsIndex_r4/Counter"
@@ -9319,6 +9761,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "interpret_coeff"
+	  SID			  "38:13"
 	  Ports			  [1, 1]
 	  Position		  [285, 494, 325, 526]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -9348,6 +9791,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ri_to_c"
+	  SID			  "38:14"
 	  Ports			  [2, 1]
 	  Position		  [425, 439, 465, 481]
 	  MinAlgLoopOccurrences	  off
@@ -9355,6 +9799,7 @@ Library {
 	  RTWSystemCode		  "Auto"
 	  FunctionWithSeparateData off
 	  Opaque		  off
+	  RequestExecContextInheritance	off
 	  MaskHideContents	  off
 	  System {
 	    Name		    "ri_to_c"
@@ -9374,12 +9819,14 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "re"
+	      SID		      "38:15"
 	      Position		      [25, 38, 55, 52]
 	      IconDisplay	      "Port number"
 	    }
 	    Block {
 	      BlockType		      Inport
 	      Name		      "im"
+	      SID		      "38:16"
 	      Position		      [25, 88, 55, 102]
 	      Port		      "2"
 	      IconDisplay	      "Port number"
@@ -9387,6 +9834,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Concat"
+	      SID		      "38:17"
 	      Ports		      [2, 1]
 	      Position		      [145, 40, 195, 95]
 	      SourceBlock	      "xbsIndex_r4/Concat"
@@ -9412,6 +9860,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret"
+	      SID		      "38:18"
 	      Ports		      [1, 1]
 	      Position		      [80, 29, 120, 61]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -9441,6 +9890,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Reinterpret1"
+	      SID		      "38:19"
 	      Ports		      [1, 1]
 	      Position		      [80, 79, 120, 111]
 	      SourceBlock	      "xbsIndex_r4/Reinterpret"
@@ -9470,6 +9920,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "c"
+	      SID		      "38:20"
 	      Position		      [220, 63, 250, 77]
 	      IconDisplay	      "Port number"
 	    }
@@ -9510,6 +9961,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "split_data"
+	  SID			  "38:21"
 	  Ports			  [1, 2]
 	  Position		  [260, 407, 310, 458]
 	  BackgroundColor	  "[0.502000, 1.000000, 0.502000]"
@@ -9531,6 +9983,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
+	  SID			  "38:22"
 	  Ports			  [1, 1]
 	  Position		  [345, 314, 385, 356]
 	  SourceBlock		  "casper_library_delays/sync_delay"
@@ -9540,6 +9993,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "tapout_delay"
+	  SID			  "38:23"
 	  Ports			  [1, 1]
 	  Position		  [765, 216, 805, 244]
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -9569,12 +10023,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "38:24"
 	  Position		  [865, 93, 895, 107]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "38:25"
 	  Position		  [865, 328, 895, 342]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -9582,6 +10038,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff_out"
+	  SID			  "38:26"
 	  Position		  [865, 553, 895, 567]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -9589,6 +10046,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dv_out"
+	  SID			  "38:27"
 	  Position		  [865, 168, 895, 182]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -9596,6 +10054,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
+	  SID			  "38:28"
 	  Position		  [865, 198, 895, 212]
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -9751,6 +10210,7 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "tap_real"
+      SID		      "39"
       Ports		      [3, 4]
       Position		      [195, 607, 300, 683]
       BackgroundColor	      "gray"
@@ -9759,6 +10219,7 @@ Library {
       RTWSystemCode	      "Auto"
       FunctionWithSeparateData off
       Opaque		      off
+      RequestExecContextInheritance off
       MaskHideContents	      off
       MaskType		      "pfb_tap_real"
       MaskPromptString	      "Multiplier Latency|Coefficient Bit Width In|Coefficient Fractional Bits|Data/Sync Delay|"
@@ -9778,6 +10239,7 @@ Library {
       MaskIconFrame	      on
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
+      MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "2|12|3|4|8|1|on|off"
       System {
@@ -9795,15 +10257,18 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
+	SIDHighWatermark	"14"
 	Block {
 	  BlockType		  Inport
 	  Name			  "din"
+	  SID			  "39:1"
 	  Position		  [20, 33, 50, 47]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "sync"
+	  SID			  "39:2"
 	  Position		  [130, 98, 160, 112]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -9811,6 +10276,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "coeff"
+	  SID			  "39:3"
 	  Position		  [15, 178, 45, 192]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -9818,6 +10284,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Mult"
+	  SID			  "39:4"
 	  Ports			  [2, 1]
 	  Position		  [190, 147, 240, 198]
 	  SourceBlock		  "xbsIndex_r4/Mult"
@@ -9860,6 +10327,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret"
+	  SID			  "39:5"
 	  Ports			  [1, 1]
 	  Position		  [130, 169, 170, 201]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -9889,6 +10357,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Reinterpret1"
+	  SID			  "39:6"
 	  Ports			  [1, 1]
 	  Position		  [70, 119, 110, 151]
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -9918,6 +10387,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice"
+	  SID			  "39:7"
 	  Ports			  [1, 1]
 	  Position		  [70, 171, 115, 199]
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -9949,6 +10419,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Slice1"
+	  SID			  "39:8"
 	  Ports			  [1, 1]
 	  Position		  [70, 216, 115, 244]
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -9980,6 +10451,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_bram"
+	  SID			  "39:9"
 	  Ports			  [1, 1]
 	  Position		  [190, 20, 230, 60]
 	  BackgroundColor	  "gray"
@@ -9995,6 +10467,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "sync_delay"
+	  SID			  "39:10"
 	  Ports			  [1, 1]
 	  Position		  [190, 84, 230, 126]
 	  SourceBlock		  "casper_library_delays/sync_delay"
@@ -10004,12 +10477,14 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "dout"
+	  SID			  "39:11"
 	  Position		  [255, 33, 285, 47]
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "sync_out"
+	  SID			  "39:12"
 	  Position		  [255, 98, 285, 112]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -10017,6 +10492,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "coeff_out"
+	  SID			  "39:13"
 	  Position		  [130, 223, 160, 237]
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -10024,6 +10500,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "taps_out"
+	  SID			  "39:14"
 	  Position		  [270, 168, 300, 182]
 	  Port			  "4"
 	  IconDisplay		  "Port number"
