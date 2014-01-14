@@ -1,39 +1,18 @@
-function swreg_init(blk)
+function swreg_init_LOCAL(blk)
 
-numios = str2double(get_param(blk, 'numios'));
-io_dir = get_param(blk, 'io_dir');
-
-% count the exising variable tabs
-done = false;
-existing_ios = 0;
-while ~done,
-    try
-        get_param(blk, sprintf('name%i', existing_ios+1));
-        existing_ios = existing_ios + 1;
-    catch ex
-        done = true;
-    end
-end
-
-% if the mask is still being rewritten then just return
-if existing_ios ~= numios,
-    return
-end
+clog('entering swreg_init','trace');
+check_mask_type(blk, 'swreg');
 
 try
     munge_block(blk);
     remove_all_blks(blk);
     delete_lines(blk);
 catch ex
-    % If remove_all_blks throws a CallbackDelete exception (more specifically a
-    % Simulink:Engine:CallbackDelete exception), then we're in a callback of some
-    % sort so we shouldn't be removing blocks or redrawing things anyway so just return.
-    if regexp(ex.identifier, 'CallbackDelete'),
-        return
-    end
-    % Otherwise it's perhaps a legitamite exception so dump and rethrow it.
     dump_and_rethrow(ex);
 end
+
+% perform a sanity check
+swreg_maskcheck(blk);
 
 % add the inputs, outputs and gateway out blocks, drawing lines between them
 x_size =    100;
@@ -42,22 +21,70 @@ x_start =   100;
 y_pos =     100;
 
 % the rest depends on whether it's an in or out reg
+mode = get_param(blk, 'mode');
+current_names = textscan(strtrim(strrep(strrep(get_param(blk, 'names'), ']', ''), '[', '')), '%s');
+current_names = current_names{1};
+numios = length(current_names);
+current_types = eval(get_param(blk, 'arith_types'));
+current_bins = eval(get_param(blk, 'bin_pts'));
+current_widths = eval(get_param(blk, 'bitwidths'));
+if strcmp(mode, 'fields of equal size'),
+    a = current_types;
+    b = current_bins;
+    c = current_widths;
+    current_types = zeros(numios, 1);
+    current_bins = zeros(numios, 1);
+    current_widths = zeros(numios, 1);
+    for ctr = 1 : numios,
+        current_types(ctr) = a(1);
+        current_bins(ctr) = b(1);
+        current_widths(ctr) = c(1);
+    end
+end
+io_dir = get_param(blk, 'io_dir');
 if strcmp(io_dir, 'To Processor'),
+    iodir = 'output';
     draw_to();
 else
+    iodir = 'input';
     draw_from();
 end
 
 total_width = 0;
 for count_width = 1 : numios,
-    total_width = total_width + str2double(get_param(blk, sprintf('bitwidth%i', count_width)));
+    total_width = total_width + current_widths(count_width);
 end
 if total_width > 32,
-    msgbox('WARNING: total bitwidth > 32, the top bits will be truncated.');
+    error('WARNING: total bitwidth > 32, the top bits will be truncated.');
 end
 
 % remove unconnected blocks
 clean_blocks(blk);
+
+% update format string so we know what's going on with this block
+show_format = get_param(blk, 'show_format');
+if numios == 1,
+    display_string = strcat('1', ' ', iodir);
+else
+    display_string = sprintf('%d %ss', numios, iodir);
+end
+if strcmp(show_format, 'on')
+    config_string = '';
+    for ctr = 1 : numios,
+        switch current_types(ctr),
+            case 1 
+                config_string = strcat(config_string, sprintf('f%i.%i,', current_widths(ctr), current_bins(ctr)));
+            case 2
+                config_string = strcat(config_string, 'b,');
+            otherwise 
+                config_string = strcat(config_string, sprintf('uf%i.%i,', current_widths(ctr), current_bins(ctr)));
+        end
+    end
+    display_string = strcat(display_string, ': ', config_string);
+end
+set_param(blk, 'AttributesFormatString', display_string);
+
+clog('exiting swreg_init','trace');
 
 function draw_to()
     y_pos_row = y_pos;
@@ -90,7 +117,7 @@ function draw_to()
     add_line(blk, [gwout_name, '/1'], 'sim_out/1', 'autorouting', 'on');
     % ports
     for pindex = 1 : numios,
-        in_name = sprintf('out_%s', get_param(blk, sprintf('name%i', pindex)));
+        in_name = sprintf('out_%s', current_names{pindex});
         reinterpret_name = sprintf('reint%i', pindex);
         reuse_block(blk, in_name, 'built-in/inport', ...
             'Port', num2str(pindex), ...
@@ -131,11 +158,11 @@ function draw_from()
     % ports
     total_width = 0;
     for pindex = 1 : numios,
-        total_width = total_width + str2double(get_param(blk, sprintf('bitwidth%i', pindex)));
+        total_width = total_width + current_widths(pindex);
     end
     for pindex = 1 : numios,
-        io_arith_type = get_param(blk, sprintf('arith_type%i', pindex));
-        if strcmp(io_arith_type, 'Boolean'),
+        io_arith_type = current_types(pindex);
+        if io_arith_type == 2,
             sliceboolean = 'on';
         else
             sliceboolean = 'off';
@@ -145,16 +172,15 @@ function draw_from()
         else
             shorttype = 'ufix';
         end
-        io_bin_pt = str2double(get_param(blk, sprintf('bin_pt%i', pindex)));
-        io_bitwidth = str2double(get_param(blk, sprintf('bitwidth%i', pindex)));
+        io_bin_pt = current_bins(pindex);
+        io_bitwidth = current_widths(pindex);
         total_width = total_width - io_bitwidth;
-        %in_name = sprintf('sim_%s', get_param(blk, sprintf('name%i', pindex)));
         in_name = sprintf('sim_%i', pindex);
         convert_name1 = ['convert1_', num2str(pindex)];
         convert_name2 = ['convert2_', num2str(pindex)];
         gain_name = ['gain_', num2str(pindex)];
-        out_name = sprintf('in_%s', get_param(blk, sprintf('name%i', pindex)));
-        slice_name = sprintf('slice_%s', get_param(blk, sprintf('name%i', pindex)));
+        out_name = sprintf('in_%s', current_names{pindex});
+        slice_name = sprintf('slice_%s', current_names{pindex});
         reinterpret_name = sprintf('reint%i', pindex);
         reuse_block(blk, in_name, 'built-in/inport', 'Port', num2str(pindex), ...
             'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
