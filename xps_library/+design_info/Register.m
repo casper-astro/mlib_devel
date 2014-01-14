@@ -44,7 +44,19 @@ classdef Register
                     old_reg = true;
                 end
                 if old_reg,
-                    obj = obj.load_from_sw_reg_old();
+                    % look for a mode flag to distinguish the latest swreg
+                    % from the oldest one - blergh - too much support
+                    super_old = false;
+                    try
+                        get_param(blockname, 'mode');
+                    catch
+                        super_old = true;
+                    end
+                    if super_old,
+                        obj = obj.load_from_sw_reg_old();
+                    else
+                        obj = obj.load_from_sw_reg_latest();
+                    end
                 else
                     obj = obj.load_from_sw_reg();
                 end
@@ -82,10 +94,29 @@ classdef Register
             %obj = obj.add_memory(mem);
             for f = numios : -1 : 1,
                 ioname = get_param(obj.block, sprintf('name%i', f));
-                wordname = strcat(obj.get_register_name(), '_', ioname);
+                %wordname = strcat(obj.get_register_name(), '_', ioname);
                 iobitwidth = str2double(get_param(obj.block, sprintf('bitwidth%i', f)));
                 ioarith_type = get_param(obj.block, sprintf('arith_type%i', f));
                 iobin_pt = str2double(get_param(obj.block, sprintf('bin_pt%i', f)));
+                mem = design_info.MemoryWord(obj.get_block_name(true), obj.width, ioname, -1, offset, iobitwidth, 1, 0, ioarith_type, iobin_pt, io_dir);
+                obj = obj.add_memory(mem);
+                offset = offset + iobitwidth;
+            end
+        end
+        
+        function obj = load_from_sw_reg_latest(obj)
+            % load the object details from the latest (last?) sw reg
+            io_dir = get_param(obj.block, 'io_dir');
+            current_names = textscan(strtrim(strrep(strrep(get_param(obj.block, 'names'), ']', ''), '[', '')), '%s');
+            current_names = current_names{1};
+            numios = length(current_names);
+            current_types = eval(get_param(obj.block, 'arith_types'));
+            current_bins = eval(get_param(obj.block, 'bin_pts'));
+            current_widths = eval(get_param(obj.block, 'bitwidths'));
+            for f = numios : -1 : 1,
+                iobitwidth = current_widths(f);
+                ioarith_type = current_types(f);
+                iobin_pt = current_bins(f);
                 mem = design_info.MemoryWord(obj.get_block_name(true), obj.width, ioname, -1, offset, iobitwidth, 1, 0, ioarith_type, iobin_pt, io_dir);
                 obj = obj.add_memory(mem);
                 offset = offset + iobitwidth;
