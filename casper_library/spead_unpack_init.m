@@ -43,13 +43,14 @@ set_param([block, '/error_or'], 'inputs', num2str(2 + length(header_ids)));
 % draw the blocks
 showname = 'off';
 for ctr = 1 : length(header_ids),
-    name_from = ['header_from', num2str(ctr)];
-    name_reg = ['header_reg', num2str(ctr)];
-    name_delay = ['header_delay', num2str(ctr)];
-    name_slice = ['header_slice', num2str(ctr)];
-    name_relational = ['header_rel', num2str(ctr)];
-    name_constant = ['header_const', num2str(ctr)];
-    name_out = ['hdr', num2str(ctr)];
+    this_ctr = num2str(ctr);
+    name_from = ['header_from', this_ctr];
+    name_reg = ['header_reg', this_ctr];
+    name_delay = ['header_delay', this_ctr];
+    name_slice = ['header_slice', this_ctr];
+    name_relational = ['header_rel', this_ctr];
+    name_constant = ['header_const', this_ctr];
+    name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
     row_y = 70 + (ctr * 75);
     row_x = 1500 - (ctr * 50);
     reuse_block(block, name_from, 'built-in/from', ...
@@ -82,13 +83,14 @@ end
 
 % connect them
 for ctr = 1 : length(header_ids),
-    name_from = ['header_from', num2str(ctr)];
-    name_reg = ['header_reg', num2str(ctr)];
-    name_delay = ['header_delay', num2str(ctr)];
-    name_slice = ['header_slice', num2str(ctr)];
-    name_relational = ['header_rel', num2str(ctr)];
-    name_constant = ['header_const', num2str(ctr)];
-    name_out = ['hdr', num2str(ctr)];
+    this_ctr = num2str(ctr);
+    name_from = ['header_from', this_ctr];
+    name_reg = ['header_reg', this_ctr];
+    name_delay = ['header_delay', this_ctr];
+    name_slice = ['header_slice', this_ctr];
+    name_relational = ['header_rel', this_ctr];
+    name_constant = ['header_const', this_ctr];
+    name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
     if ctr == length(header_ids),
         add_line(block, ['from_gbe_data',  '/1'], [name_reg, '/1'], 'autorouting', 'on');
     else
@@ -108,11 +110,11 @@ for ctr = 1 : length(header_ids),
     ph = get_param([block, '/', name_delay], 'PortHandles');
     set_param(ph.Outport(1), 'name', name_out);
     ph = get_param([block, '/', name_slice], 'PortHandles');
-    set_param(ph.Outport(1), 'name', ['spid', num2str(ctr)]);
+    set_param(ph.Outport(1), 'name', ['spid', this_ctr]);
     ph = get_param([block, '/', name_relational], 'PortHandles');
-    set_param(ph.Outport(1), 'name', ['err', num2str(ctr)]);
+    set_param(ph.Outport(1), 'name', ['err', this_ctr]);
     ph = get_param([block, '/', name_constant], 'PortHandles');
-    set_param(ph.Outport(1), 'name', ['exp', num2str(ctr)]);
+    set_param(ph.Outport(1), 'name', ['exp', this_ctr]);
 end
 
 
