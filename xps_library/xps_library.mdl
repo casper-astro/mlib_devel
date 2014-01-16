@@ -43,9 +43,9 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 855.0]
+	Extents			[1244.0, 861.0]
 	ZoomFactor		[1.0]
-	Offset			[-8.25, 0.0]
+	Offset			[160.75, 306.49843307758761]
       }
     }
   }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jan 14 16:32:52 2014"
-  RTWModifiedTimeStamp	  311617969
-  ModelVersionFormat	  "1.%<AutoIncrement:504>"
+  LastModifiedDate	  "Thu Jan 16 17:29:06 2014"
+  RTWModifiedTimeStamp	  311794144
+  ModelVersionFormat	  "1.%<AutoIncrement:505>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -58216,7 +58216,7 @@ Library {
       BlockType		      SubSystem
       Name		      "software register"
       SID		      "332"
-      Tag		      "xps:sw_reg2"
+      Tag		      "xps:sw_reg"
       Ports		      [1, 1]
       Position		      [920, 416, 1020, 444]
       ZOrder		      5229
@@ -58377,7 +58377,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6403"
+	SIDHighWatermark	"6407"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58389,10 +58389,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6401"
+	  SID			  "332:6405"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6353
+	  ZOrder		  6357
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58427,10 +58427,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6400"
+	  SID			  "332:6404"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6352
+	  ZOrder		  6356
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58458,10 +58458,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6403"
+	  SID			  "332:6407"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6355
+	  ZOrder		  6359
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58489,10 +58489,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6402"
+	  SID			  "332:6406"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6354
+	  ZOrder		  6358
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"

@@ -190,7 +190,7 @@ disp('#############################');
 end
 time_update = now - start_time;
 
-%access all XPS blocks
+% Access all XPS blocks
 disp('#############################');
 disp('## Block objects creation  ##');
 disp('#############################');
@@ -206,7 +206,7 @@ for n = 1:length(xps_blks),
             xsg_obj = xps_block(xps_blks{n},{});
             xsg_obj = xps_xsg(xsg_obj);
         catch ex
-            disp(['Problem with block: ',xps_blks{n}]);
+            disp(['Problem with XSG block: ',xps_blks{n}]);
             warning(ex.identifier, '%s', ex.getReport('basic'));
             error('Error found during Object creation.');
         end
@@ -218,16 +218,16 @@ end
 target_tags = {'xps_adc16' 'xps_adc5g' 'xps_adc083000x2' 'xps_adc' 'xps_katadc' 'xps_block'...
     'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite'...
     'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_probe'...
-    'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_sw_reg2' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'};
+    'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'};
 for n = 1 : length(xps_blks),
-    if ~(strcmp(get_param(xps_blks(n),'tag'), 'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'), 'xps:pcore')),
+    if ~(strcmp(get_param(xps_blks(n), 'tag'), 'xps:xsg') || strcmp(get_param(xps_blks(n), 'tag'), 'xps:pcore')),
         try
-            %get_param(xps_blks(n),'tag')
+            %tag = get_param(xps_blks(n), 'tag')
             blk_obj = xps_block(xps_blks{n}, xsg_obj);
-            %fprintf('Created block!\n')
-            assignin('base','last_blk_obj', blk_obj);
-            eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
-            %fprintf('Evaluated block!\n')
+            %fprintf('Created block! %s\n', tag);
+            assignin('base', 'last_blk_obj', blk_obj)
+            eval(['blk_obj = ', get(blk_obj, 'type'), '(blk_obj);']);
+            %fprintf('Evaluated block! %s\n', tag);
             xps_objs = [xps_objs, {blk_obj}];
             if isempty(find(strcmp(get(blk_obj, 'type'), target_tags), 1)),
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
@@ -237,12 +237,13 @@ for n = 1 : length(xps_blks),
                 end
             end
         catch ex
-            disp(['Problem with block: ', xps_blks{n}]);
+            disp(['Problem with XPS: tag block: ', xps_blks{n}]);
             dump_exception(ex);
             error('Error found during Object creation.');
         end
     end
 end
+
 % add the xsg_object to the list
 xps_objs = [{xsg_obj}, xps_objs];
 
