@@ -1,4 +1,4 @@
-function swreg_cb_LOCAL(blk)
+function swreg_cb(blk)
 %
 % Init script for swreg - software register for which arbitrary fields can be defined.
 %
@@ -13,8 +13,8 @@ mask_enables = get_param(blk, 'MaskEnables');
 mask_prompts = get_param(blk, 'MaskPrompts');
 current_names = textscan(strtrim(strrep(strrep(get_param(blk, 'names'), ']', ''), '[', '')), '%s');
 current_names = current_names{1};
-current_types = eval(get_param(blk, 'arith_types'));
-current_bins = eval(get_param(blk, 'bin_pts'));
+%current_types = eval(get_param(blk, 'arith_types'));
+%current_bins = eval(get_param(blk, 'bin_pts'));
 numios = length(current_names);
 
 % check the mode and set enables appropriately

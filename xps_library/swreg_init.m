@@ -1,4 +1,4 @@
-function swreg_init_LOCAL(blk)
+function swreg_init(blk)
 
 clog('entering swreg_init','trace');
 check_mask_type(blk, 'swreg');
@@ -29,16 +29,16 @@ current_types = eval(get_param(blk, 'arith_types'));
 current_bins = eval(get_param(blk, 'bin_pts'));
 current_widths = eval(get_param(blk, 'bitwidths'));
 if strcmp(mode, 'fields of equal size'),
-    a = current_types;
-    b = current_bins;
-    c = current_widths;
+    ctypes = current_types;
+    cbins = current_bins;
+    cwidths = current_widths;
     current_types = zeros(numios, 1);
     current_bins = zeros(numios, 1);
     current_widths = zeros(numios, 1);
     for ctr = 1 : numios,
-        current_types(ctr) = a(1);
-        current_bins(ctr) = b(1);
-        current_widths(ctr) = c(1);
+        current_types(ctr) = ctypes(1);
+        current_bins(ctr) = cbins(1);
+        current_widths(ctr) = cwidths(1);
     end
 end
 io_dir = get_param(blk, 'io_dir');

@@ -48,6 +48,7 @@ for ctr = 1 : length(header_ids),
     name_reg = ['header_reg', this_ctr];
     name_delay = ['header_delay', this_ctr];
     name_slice = ['header_slice', this_ctr];
+    name_slice2 = ['header_vslice', this_ctr];
     name_relational = ['header_rel', this_ctr];
     name_constant = ['header_const', this_ctr];
     name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
@@ -67,6 +68,11 @@ for ctr = 1 : length(header_ids),
     reuse_block(block, name_delay, 'xbsIndex_r4/Delay', ...
         'showname', showname, 'Latency', num2str(delay+1), ...
         'Position', [row_x + 210, row_y, row_x + 230, row_y + 20]);
+    reuse_block(block, name_slice2, 'xbsIndex_r4/Slice', ...
+        'showname', showname, 'nbits', 'spead_lsw', ...
+        'mode', 'Lower Bit Location + Width', ...
+        'bit0', '0', ...
+        'Position', [row_x + 150, row_y, row_x + 180, row_y + 20]);
     reuse_block(block, name_slice, 'xbsIndex_r4/Slice', ...
         'showname', showname, 'nbits', 'spead_msw - spead_lsw', ...
         'mode', 'Upper Bit Location + Width', ...
@@ -88,6 +94,7 @@ for ctr = 1 : length(header_ids),
     name_reg = ['header_reg', this_ctr];
     name_delay = ['header_delay', this_ctr];
     name_slice = ['header_slice', this_ctr];
+    name_slice2 = ['header_vslice', this_ctr];
     name_relational = ['header_rel', this_ctr];
     name_constant = ['header_const', this_ctr];
     name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
@@ -102,8 +109,9 @@ for ctr = 1 : length(header_ids),
     end
     add_line(block, [name_from,  '/1'], [name_reg, '/2'], 'autorouting', 'on');
     add_line(block, [name_reg, '/1'], [name_slice, '/1'], 'autorouting', 'on');
+    add_line(block, [name_reg, '/1'], [name_slice2, '/1'], 'autorouting', 'on');
     add_line(block, [name_slice, '/1'], [name_relational, '/1'], 'autorouting', 'on');
-    add_line(block, [name_slice, '/1'], [name_delay, '/1'], 'autorouting', 'on');
+    add_line(block, [name_slice2, '/1'], [name_delay, '/1'], 'autorouting', 'on');
     add_line(block, [name_constant, '/1'], [name_relational, '/2'], 'autorouting', 'on');
     add_line(block, [name_delay, '/1'], [name_out, '/1'], 'autorouting', 'on');
     add_line(block, [name_relational, '/1'], ['error_or/', num2str(ctr+2)], 'autorouting', 'on');
