@@ -87,6 +87,19 @@ xps_blks        = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',
 xps_xsg_blks    = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:xsg');
 xps_pcore_blks  = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:pcore');
 sysgen_blk      = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','SearchDepth', 1,   'Tag', 'genX');
+casper_blks     = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^casper:');
+
+% check for spaces in xps or casper block names
+for ctr = 1 : numel(xps_blks),
+    if numel(strfind(xps_blks{ctr}, ' ')) > 0,
+        error('Block names may not have spaces - %s', xps_blks{ctr});
+    end 
+end
+for ctr = 1 : numel(casper_blks),
+    if numel(strfind(casper_blks{ctr}, ' ')) > 0,
+        error('Block names may not have spaces - %s', casper_blks{ctr});
+    end 
+end
 
 % check if the system name is correct
 if upper(sys(1)) == sys(1),
