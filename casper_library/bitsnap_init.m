@@ -43,6 +43,7 @@ snap_circap =       get_param(blk, 'snap_circap');
 snap_offset =       get_param(blk, 'snap_offset');
 snap_value =        get_param(blk, 'snap_value');
 snap_use_dsp48 =    get_param(blk, 'snap_use_dsp48');
+snap_delay =        eval(get_param(blk, 'snap_delay'));
 io_names =          get_param(blk, 'io_names');
 io_widths =         eval(get_param(blk, 'io_widths'));
 io_bps =            eval(get_param(blk, 'io_bps'));
@@ -91,6 +92,11 @@ reuse_block(blk, 'buscreate', 'casper_library_flow_control/bus_create', ...
         'Position', [x_start + (x_size * 2), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 2) + x_size, y_pos + (y_size * (num_ios + 5.5))], ...
         'inputNum', num2str(num_ios));
 
+if snap_delay > 0,
+    reuse_block(blk, 'io_delay', 'xbsIndex_r4/Delay', 'latency', num2str(snap_delay), 'reg_retiming', 'on', ...
+            'Position', [x_start + (x_size * 3.5), y_pos - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + (y_size * 0.5)]);
+end
+    
 % the snapshot block
 reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
         'Position', [x_start + (x_size * 5), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 5) + x_size, y_pos + (y_size * 10)], ...
@@ -103,7 +109,12 @@ reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
         'circap', snap_circap, ...
         'value', snap_value, ...
         'use_dsp48', snap_use_dsp48);
-add_line(blk, 'buscreate/1', 'ss/1');
+if snap_delay > 0,
+    add_line(blk, 'buscreate/1', 'io_delay/1');
+    add_line(blk, 'io_delay/1', 'ss/1');
+else
+    add_line(blk, 'buscreate/1', 'ss/1');
+end
 
 function stype = type_to_string(arith_type)
     switch arith_type
@@ -154,14 +165,28 @@ y1 = 165;
 reuse_block(blk, 'we', 'built-in/inport', ...
     'Port', num2str(portnum), ...
     'Position', [485, y1, 535, y1+y_size]);
-add_line(blk, 'we/1', ['ss/', num2str(snapport)]);
+if snap_delay > 0,
+    reuse_block(blk, 'we_delay', 'xbsIndex_r4/Delay', 'latency', num2str(snap_delay), 'reg_retiming', 'on', ...
+        'Position', [545, y1, 595, y1+y_size]);
+    add_line(blk, 'we/1', 'we_delay/1');
+    add_line(blk, 'we_delay/1', ['ss/', num2str(snapport)]);
+else
+    add_line(blk, 'we/1', ['ss/', num2str(snapport)]);
+end
 
 % trigger
 portnum = portnum + 1; y1 = y1 + 50; snapport = snapport + 1;
 reuse_block(blk, 'trig', 'built-in/inport', ...
     'Port', num2str(portnum), ...
     'Position', [485, y1, 535, y1+y_size]);
-add_line(blk, 'trig/1', ['ss/', num2str(snapport)]);
+if snap_delay > 0,
+    reuse_block(blk, 'trig_delay', 'xbsIndex_r4/Delay', 'latency', num2str(snap_delay), 'reg_retiming', 'on', ...
+        'Position', [545, y1, 595, y1+y_size]);
+    add_line(blk, 'trig/1', 'trig_delay/1');
+    add_line(blk, 'trig_delay/1', ['ss/', num2str(snapport)]);
+else
+    add_line(blk, 'trig/1', ['ss/', num2str(snapport)]);
+end
 
 % stop
 if strcmp(snap_circap, 'on'),
@@ -169,7 +194,14 @@ if strcmp(snap_circap, 'on'),
     reuse_block(blk, 'stop', 'built-in/inport', ...
         'Port', num2str(portnum), ...
         'Position', [485, y1, 535, y1+y_size]);
-    add_line(blk, 'stop/1', ['ss/', num2str(snapport)]);
+    if snap_delay > 0,
+        reuse_block(blk, 'stop_delay', 'xbsIndex_r4/Delay', 'latency', num2str(snap_delay), 'reg_retiming', 'on', ...
+            'Position', [545, y1, 595, y1+y_size]);
+        add_line(blk, 'stop/1', 'stop_delay/1');
+        add_line(blk, 'stop_delay/1', ['ss/', num2str(snapport)]);
+    else
+        add_line(blk, 'stop/1', ['ss/', num2str(snapport)]);
+    end
 end
 
 % extra value
@@ -178,8 +210,17 @@ if strcmp(snap_value, 'on'),
     reuse_block(blk, 'extracreate', 'casper_library_flow_control/bus_create', ...
         'Position', [x_start + (x_size * 1), y_pos + 500 + (y_size * (num_extras - 0.5)), x_start + (x_size * 1) + x_size, y_pos + 500 + (y_size * (num_extras + 5.5))], ...
         'inputNum', num2str(num_extras));
+    if snap_delay > 0,
+        reuse_block(blk, 'extra_delay', 'xbsIndex_r4/Delay', 'latency', num2str(snap_delay), 'reg_retiming', 'on', ...
+                'Position', [x_start + (x_size * 3.5), y_pos + 500 - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + 500 + (y_size * 0.5)]);
+    end
     snapport = snapport + 1;
-    add_line(blk, 'extracreate/1', ['ss/', num2str(snapport)]);
+    if snap_delay > 0,
+        add_line(blk, 'extracreate/1', 'extra_delay/1');
+        add_line(blk, 'extra_delay/1', ['ss/', num2str(snapport)]);
+    else
+        add_line(blk, 'extracreate/1', ['ss/', num2str(snapport)]);
+    end
     % draw an input port for each field for the extra value
     for p = 1 : num_extras,
         x_start =   100;
