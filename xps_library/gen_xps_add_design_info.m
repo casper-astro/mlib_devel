@@ -39,7 +39,7 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
         fid = fopen(info_table_path, 'w');
         fprintf(fid, '');
     catch e
-        error(['Could not open ', coreinfo_path, '.']);
+        error(['Could not open ', info_table_path, '.']);
     end
     fclose(fid);
     

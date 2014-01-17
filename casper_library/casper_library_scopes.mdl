@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1919.0, 0.0, 1282.0, 1028.0]
+      Location		      [1920.0, 0.0, 1280.0, 1024.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 861.0]
+	Extents			[1242.0, 857.0]
 	ZoomFactor		[1.0]
 	Offset			[0.0, 0.0]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Jan 17 12:59:29 2014"
-  RTWModifiedTimeStamp	  311864367
-  ModelVersionFormat	  "1.%<AutoIncrement:85>"
+  LastModifiedDate	  "Fri Jan 17 14:30:56 2014"
+  RTWModifiedTimeStamp	  311869852
+  ModelVersionFormat	  "1.%<AutoIncrement:87>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -830,7 +830,7 @@ Library {
   }
   System {
     Name		    "casper_library_scopes"
-    Location		    [1919, 0, 3201, 1028]
+    Location		    [1920, 0, 3200, 1024]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -844,18 +844,16 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "589"
+    SIDHighWatermark	    "610"
     Block {
       BlockType		      SubSystem
-      Name		      "bitfield_snapshot"
+      Name		      "bitfield snapshot"
       SID		      "589"
       Tag		      "casper:bitsnap"
       Ports		      [4]
-      Position		      [250, 292, 335, 483]
+      Position		      [260, 347, 320, 463]
       ZOrder		      52
       BackgroundColor	      "[0.502000, 1.000000, 0.502000]"
-      AncestorBlock	      "casper_library_scopes/bitfield snapshot"
-      LibraryVersion	      "*1.84"
       UserDataPersistent      on
       UserData		      "DataTag0"
       MinAlgLoopOccurrences   off
@@ -872,13 +870,7 @@ Library {
 	Type			"bitsnap"
 	Description		"A wrapped snapshot block. Allows specification of inputs to a snapblock word so the toolflow can automa"
 	"tically set up the scope.\nSee documentation for snapshot for explanation of parameters."
-	Initialization		"bitsnap_init(gcb); %, ...\n%     'io_names', io_names, ...\n%     'io_widths', io_widths, ...\n%    "
-	" 'io_bps', io_bps, ...\n%     'io_types', io_types, ...\n%     'snap_storage', snap_storage, ...\n%     'snap_dram_di"
-	"mm', snap_dram_dimm, ...\n%     'snap_dram_clock', snap_dram_clock, ...\n%     'snap_nsamples', snap_nsamples, ...\n%"
-	"     'snap_data_width', snap_data_width, ...\n%     'snap_offset', snap_offset, ...\n%     'snap_circap', snap_circap"
-	", ...\n%     'snap_value', snap_value, ...\n%     'snap_use_dsp48', snap_use_dsp48, ...\n%     'extra_names', extra_n"
-	"ames, ...\n%     'extra_widths', extra_widths, ...\n%     'extra_bps', extra_bps, ...\n%     'extra_types', extra_typ"
-	"es);"
+	Initialization		"bitsnap_init(gcb);"
 	Array {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  17
@@ -886,8 +878,9 @@ Library {
 	    $ObjectID		    18
 	    Type		    "edit"
 	    Name		    "io_names"
-	    Prompt		    "Names {msb...lsb}"
-	    Value		    "{'b' 'a'}"
+	    Prompt		    "Names [msb...lsb]"
+	    Value		    "[a b]"
+	    Evaluate		    "off"
 	    TabName		    "Inputs"
 	  }
 	  Object {
@@ -1038,8 +1031,9 @@ Library {
 	    $ObjectID		    31
 	    Type		    "edit"
 	    Name		    "extra_names"
-	    Prompt		    "Names {msb...lsb}"
-	    Value		    "{'c' 'd'}"
+	    Prompt		    "Names [msb...lsb]"
+	    Value		    "[c d]"
+	    Evaluate		    "off"
 	    Enabled		    "off"
 	    TabName		    "Extra Value"
 	  }
@@ -1074,8 +1068,8 @@ Library {
 	}
       }
       System {
-	Name			"bitfield_snapshot"
-	Location		[1919, 0, 3201, 1028]
+	Name			"bitfield snapshot"
+	Location		[1920, 0, 3200, 1024]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1088,29 +1082,27 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"567"
-	SIDPrevWatermark	"553"
 	Block {
 	  BlockType		  Inport
-	  Name			  "in_b"
-	  SID			  "589:2"
-	  Position		  [100, 100, 150, 120]
-	  ZOrder		  -1
+	  Name			  "in_a"
+	  SID			  "591"
+	  Position		  [80, 100, 130, 120]
+	  ZOrder		  -2
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
-	  Name			  "in_a"
-	  SID			  "589:3"
-	  Position		  [100, 140, 150, 160]
-	  ZOrder		  -2
+	  Name			  "in_b"
+	  SID			  "590"
+	  Position		  [80, 140, 130, 160]
+	  ZOrder		  -1
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "we"
-	  SID			  "589:4"
+	  SID			  "592"
 	  Position		  [485, 165, 535, 185]
 	  ZOrder		  -3
 	  Port			  "3"
@@ -1119,18 +1111,94 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "trig"
-	  SID			  "589:5"
+	  SID			  "593"
 	  Position		  [485, 215, 535, 235]
 	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
 	}
 	Block {
+	  BlockType		  Reference
+	  Name			  "assert_a"
+	  SID			  "599"
+	  Ports			  [1, 1]
+	  Position		  [230, 100, 280, 120]
+	  ZOrder		  4
+	  ShowName		  off
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Assert"
+	  SourceType		  "Xilinx Assert Block"
+	  infoedit		  "Asserts a user-defined sample rate and/or type on a signal.<br><br>Hardware notes: In hardware this bl"
+	  "ock costs nothing."
+	  assert_type		  on
+	  type_source		  "Explicitly"
+	  gui_display_data_type	  "Fixed-point"
+	  arith_type		  "Unsigned"
+	  n_bits		  "16"
+	  bin_pt		  "14"
+	  preci_type		  "Single"
+	  exp_width		  "8"
+	  frac_width		  "24"
+	  assert_rate		  off
+	  rate_source		  "Explicitly"
+	  period		  "1"
+	  output_port		  on
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,25,337,674"
+	  block_type		  "assert"
+	  sg_icon_stat		  "50,20,1,1,white,blue,0,9657e937,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22 1"
+	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22 10"
+	  ".22 ],[0.931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
+	  "h([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nfprint"
+	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('Assert');\nf"
+	  "printf('','COMMENT: end icon text');"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "assert_b"
+	  SID			  "600"
+	  Ports			  [1, 1]
+	  Position		  [230, 140, 280, 160]
+	  ZOrder		  5
+	  ShowName		  off
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Assert"
+	  SourceType		  "Xilinx Assert Block"
+	  infoedit		  "Asserts a user-defined sample rate and/or type on a signal.<br><br>Hardware notes: In hardware this bl"
+	  "ock costs nothing."
+	  assert_type		  on
+	  type_source		  "Explicitly"
+	  gui_display_data_type	  "Boolean"
+	  arith_type		  "Boolean"
+	  n_bits		  "1"
+	  bin_pt		  "0"
+	  preci_type		  "Single"
+	  exp_width		  "8"
+	  frac_width		  "24"
+	  assert_rate		  off
+	  rate_source		  "Explicitly"
+	  period		  "1"
+	  output_port		  on
+	  has_advanced_control	  "0"
+	  sggui_pos		  "20,25,337,674"
+	  block_type		  "assert"
+	  sg_icon_stat		  "50,20,1,1,white,blue,0,9657e937,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22 1"
+	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22 10"
+	  ".22 ],[0.931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
+	  "h([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nfprint"
+	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('Assert');\nf"
+	  "printf('','COMMENT: end icon text');"
+	}
+	Block {
 	  BlockType		  SubSystem
 	  Name			  "buscreate"
-	  SID			  "589:7"
+	  SID			  "594"
 	  Ports			  [2, 1]
-	  Position		  [200, 130, 300, 250]
+	  Position		  [300, 130, 400, 250]
 	  ZOrder		  -6
 	  BackgroundColor	  "[0.502000, 1.000000, 0.502000]"
 	  AncestorBlock		  "casper_library_flow_control/bus_create"
@@ -1179,7 +1247,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "in1"
-	      SID		      "589:7:1"
+	      SID		      "594:1"
 	      Position		      [100, 100, 150, 120]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -1187,7 +1255,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "in2"
-	      SID		      "589:7:2"
+	      SID		      "594:2"
 	      Position		      [100, 140, 150, 160]
 	      ZOrder		      -2
 	      Port		      "2"
@@ -1196,7 +1264,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "concatenate"
-	      SID		      "589:7:3"
+	      SID		      "594:3"
 	      Ports		      [2, 1]
 	      Position		      [500, 100, 550, 160]
 	      ZOrder		      -3
@@ -1223,7 +1291,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterpret1"
-	      SID		      "589:7:4"
+	      SID		      "594:4"
 	      Ports		      [1, 1]
 	      Position		      [300, 100, 350, 120]
 	      ZOrder		      -4
@@ -1254,7 +1322,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "reinterpret2"
-	      SID		      "589:7:5"
+	      SID		      "594:5"
 	      Ports		      [1, 1]
 	      Position		      [300, 140, 350, 160]
 	      ZOrder		      -5
@@ -1285,7 +1353,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "bus_out"
-	      SID		      "589:7:6"
+	      SID		      "594:6"
 	      Position		      [700, 130, 750, 150]
 	      ZOrder		      -6
 	      IconDisplay	      "Port number"
@@ -1328,7 +1396,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "ss"
-	  SID			  "589:8"
+	  SID			  "595"
 	  Tag			  "casper:snapshot"
 	  Ports			  [3]
 	  Position		  [600, 130, 700, 300]
@@ -1491,11 +1559,11 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "57"
+	    SIDHighWatermark	    "66"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
-	      SID		      "589:8:1"
+	      SID		      "595:1"
 	      Position		      [180, 122, 210, 138]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -1503,7 +1571,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "we"
-	      SID		      "589:8:2"
+	      SID		      "595:2"
 	      Position		      [250, 162, 280, 178]
 	      ZOrder		      -2
 	      Port		      "2"
@@ -1512,7 +1580,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "trig"
-	      SID		      "589:8:3"
+	      SID		      "595:3"
 	      Position		      [250, 202, 280, 218]
 	      ZOrder		      -3
 	      Port		      "3"
@@ -1521,7 +1589,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "add_del"
-	      SID		      "589:8:5"
+	      SID		      "595:5"
 	      Ports		      [1, 1]
 	      Position		      [880, 145, 905, 165]
 	      ZOrder		      -5
@@ -1554,7 +1622,7 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "add_gen"
-	      SID		      "589:8:6"
+	      SID		      "595:6"
 	      Ports		      [6, 6]
 	      Position		      [770, 71, 830, 404]
 	      ZOrder		      -6
@@ -1634,7 +1702,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "vin"
-		  SID			  "589:8:6:1"
+		  SID			  "595:6:1"
 		  Position		  [20, 643, 50, 657]
 		  ZOrder		  -1
 		  IconDisplay		  "Port number"
@@ -1642,7 +1710,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din"
-		  SID			  "589:8:6:2"
+		  SID			  "595:6:2"
 		  Position		  [20, 708, 50, 722]
 		  ZOrder		  -2
 		  Port			  "2"
@@ -1651,7 +1719,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "we"
-		  SID			  "589:8:6:3"
+		  SID			  "595:6:3"
 		  Position		  [15, 428, 45, 442]
 		  ZOrder		  -3
 		  Port			  "3"
@@ -1660,7 +1728,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "go"
-		  SID			  "589:8:6:4"
+		  SID			  "595:6:4"
 		  Position		  [15, 458, 45, 472]
 		  ZOrder		  -4
 		  Port			  "4"
@@ -1669,7 +1737,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "cont"
-		  SID			  "589:8:6:5"
+		  SID			  "595:6:5"
 		  Position		  [20, 358, 50, 372]
 		  ZOrder		  -5
 		  Port			  "5"
@@ -1678,7 +1746,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "init"
-		  SID			  "589:8:6:6"
+		  SID			  "595:6:6"
 		  Position		  [20, 583, 50, 597]
 		  ZOrder		  -6
 		  Port			  "6"
@@ -1687,7 +1755,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Concat"
-		  SID			  "589:8:6:7"
+		  SID			  "595:6:7"
 		  Ports			  [3, 1]
 		  Position		  [875, 95, 900, 185]
 		  ZOrder		  -7
@@ -1716,7 +1784,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Convert"
-		  SID			  "589:8:6:8"
+		  SID			  "595:6:8"
 		  Ports			  [1, 1]
 		  Position		  [705, 101, 730, 119]
 		  ZOrder		  -8
@@ -1756,7 +1824,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay"
-		  SID			  "589:8:6:9"
+		  SID			  "595:6:9"
 		  Ports			  [1, 1]
 		  Position		  [160, 371, 180, 389]
 		  ZOrder		  -9
@@ -1789,7 +1857,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay1"
-		  SID			  "589:8:6:10"
+		  SID			  "595:6:10"
 		  Ports			  [1, 1]
 		  Position		  [785, 158, 830, 182]
 		  ZOrder		  -10
@@ -1822,7 +1890,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay2"
-		  SID			  "589:8:6:11"
+		  SID			  "595:6:11"
 		  Ports			  [1, 1]
 		  Position		  [790, 258, 835, 282]
 		  ZOrder		  -11
@@ -1855,7 +1923,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay3"
-		  SID			  "589:8:6:12"
+		  SID			  "595:6:12"
 		  Ports			  [1, 1]
 		  Position		  [85, 356, 105, 374]
 		  ZOrder		  -12
@@ -1888,7 +1956,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay4"
-		  SID			  "589:8:6:13"
+		  SID			  "595:6:13"
 		  Ports			  [1, 1]
 		  Position		  [85, 581, 105, 599]
 		  ZOrder		  -13
@@ -1921,7 +1989,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay5"
-		  SID			  "589:8:6:14"
+		  SID			  "595:6:14"
 		  Ports			  [1, 1]
 		  Position		  [85, 641, 105, 659]
 		  ZOrder		  -14
@@ -1954,7 +2022,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay6"
-		  SID			  "589:8:6:15"
+		  SID			  "595:6:15"
 		  Ports			  [1, 1]
 		  Position		  [85, 706, 105, 724]
 		  ZOrder		  -15
@@ -1987,7 +2055,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay7"
-		  SID			  "589:8:6:16"
+		  SID			  "595:6:16"
 		  Ports			  [1, 1]
 		  Position		  [615, 641, 640, 659]
 		  ZOrder		  -16
@@ -2020,7 +2088,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Inverter"
-		  SID			  "589:8:6:17"
+		  SID			  "595:6:17"
 		  Ports			  [1, 1]
 		  Position		  [790, 129, 825, 151]
 		  ZOrder		  -17
@@ -2050,7 +2118,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Inverter1"
-		  SID			  "589:8:6:18"
+		  SID			  "595:6:18"
 		  Ports			  [1, 1]
 		  Position		  [200, 411, 230, 429]
 		  ZOrder		  -18
@@ -2080,7 +2148,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Logical1"
-		  SID			  "589:8:6:19"
+		  SID			  "595:6:19"
 		  Ports			  [2, 1]
 		  Position		  [80, 418, 105, 482]
 		  ZOrder		  -19
@@ -2118,7 +2186,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Logical2"
-		  SID			  "589:8:6:20"
+		  SID			  "595:6:20"
 		  Ports			  [2, 1]
 		  Position		  [615, 558, 640, 622]
 		  ZOrder		  -20
@@ -2156,7 +2224,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Logical4"
-		  SID			  "589:8:6:21"
+		  SID			  "595:6:21"
 		  Ports			  [2, 1]
 		  Position		  [280, 396, 305, 429]
 		  ZOrder		  -21
@@ -2194,7 +2262,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Logical6"
-		  SID			  "589:8:6:22"
+		  SID			  "595:6:22"
 		  Ports			  [3, 1]
 		  Position		  [385, 358, 415, 472]
 		  ZOrder		  -22
@@ -2232,7 +2300,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Register3"
-		  SID			  "589:8:6:23"
+		  SID			  "595:6:23"
 		  Ports			  [3, 1]
 		  Position		  [520, 580, 565, 630]
 		  ZOrder		  -23
@@ -2264,7 +2332,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Register4"
-		  SID			  "589:8:6:24"
+		  SID			  "595:6:24"
 		  Ports			  [2, 1]
 		  Position		  [800, 637, 845, 688]
 		  ZOrder		  -24
@@ -2295,7 +2363,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Register5"
-		  SID			  "589:8:6:25"
+		  SID			  "595:6:25"
 		  Ports			  [3, 1]
 		  Position		  [210, 355, 255, 405]
 		  ZOrder		  -25
@@ -2327,7 +2395,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Shift"
-		  SID			  "589:8:6:26"
+		  SID			  "595:6:26"
 		  Ports			  [1, 1]
 		  Position		  [785, 100, 835, 120]
 		  ZOrder		  -26
@@ -2353,20 +2421,20 @@ Library {
 		  sggui_pos		  "595,360,419,444"
 		  block_type		  "shift"
 		  block_version		  "11.4"
-		  sg_icon_stat		  "50,20,1,1,white,blue,0,67b1c52a,right,,[ ],[ ]"
+		  sg_icon_stat		  "50,20,1,1,white,blue,0,48ace922,right,,[ ],[ ]"
 		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.9"
 		  "1 ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22"
 		  " 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22"
 		  " 10.22 ],[0.931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\n"
 		  "patch([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nf"
 		  "printf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1}"
-		  "\\newline ','texmode','on');\ncolor('black');disp(' \\newline\\bf{X << 17}','texmode','on');\nfprintf('','COMMENT:"
+		  "\\newline ','texmode','on');\ncolor('black');disp(' \\newline\\bf{X << 18}','texmode','on');\nfprintf('','COMMENT:"
 		  " end icon text');"
 		}
 		Block {
 		  BlockType		  Reference
 		  Name			  "add_gen"
-		  SID			  "589:8:6:27"
+		  SID			  "595:6:27"
 		  Ports			  [2, 1]
 		  Position		  [515, 370, 565, 430]
 		  ZOrder		  -27
@@ -2411,7 +2479,7 @@ Library {
 		Block {
 		  BlockType		  SubSystem
 		  Name			  "edge_detect"
-		  SID			  "589:8:6:28"
+		  SID			  "595:6:28"
 		  Ports			  [1, 1]
 		  Position		  [670, 355, 715, 375]
 		  ZOrder		  -28
@@ -2538,7 +2606,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "in"
-		    SID			    "589:8:6:28:1"
+		    SID			    "595:6:28:1"
 		    Position		    [50, 53, 80, 67]
 		    ZOrder		    -1
 		    IconDisplay		    "Port number"
@@ -2546,7 +2614,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Delay"
-		    SID			    "589:8:6:28:2"
+		    SID			    "595:6:28:2"
 		    Ports		    [1, 1]
 		    Position		    [180, 72, 225, 88]
 		    ZOrder		    -2
@@ -2579,7 +2647,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Inverter"
-		    SID			    "589:8:6:28:3"
+		    SID			    "595:6:28:3"
 		    Ports		    [1, 1]
 		    Position		    [180, 52, 225, 68]
 		    ZOrder		    -3
@@ -2609,7 +2677,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "edge_op"
-		    SID			    "589:8:6:28:4"
+		    SID			    "595:6:28:4"
 		    Ports		    [2, 1]
 		    Position		    [275, 48, 320, 92]
 		    ZOrder		    -4
@@ -2644,7 +2712,7 @@ Library {
 		    Block {
 		    BlockType		    Outport
 		    Name		    "out"
-		    SID			    "589:8:6:28:5"
+		    SID			    "595:6:28:5"
 		    Position		    [380, 63, 410, 77]
 		    ZOrder		    -5
 		    IconDisplay		    "Port number"
@@ -2687,7 +2755,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "slice1"
-		  SID			  "589:8:6:29"
+		  SID			  "595:6:29"
 		  Ports			  [1, 1]
 		  Position		  [610, 159, 635, 181]
 		  ZOrder		  -29
@@ -2722,7 +2790,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "slice2"
-		  SID			  "589:8:6:30"
+		  SID			  "595:6:30"
 		  Ports			  [1, 1]
 		  Position		  [610, 389, 635, 411]
 		  ZOrder		  -30
@@ -2757,7 +2825,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "slice3"
-		  SID			  "589:8:6:31"
+		  SID			  "595:6:31"
 		  Ports			  [1, 1]
 		  Position		  [610, 355, 635, 375]
 		  ZOrder		  -31
@@ -2792,7 +2860,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "vout"
-		  SID			  "589:8:6:32"
+		  SID			  "595:6:32"
 		  Position		  [965, 658, 995, 672]
 		  ZOrder		  -32
 		  IconDisplay		  "Port number"
@@ -2800,7 +2868,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "add"
-		  SID			  "589:8:6:33"
+		  SID			  "595:6:33"
 		  Position		  [960, 393, 990, 407]
 		  ZOrder		  -33
 		  Port			  "2"
@@ -2809,7 +2877,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
-		  SID			  "589:8:6:34"
+		  SID			  "595:6:34"
 		  Position		  [965, 708, 995, 722]
 		  ZOrder		  -34
 		  Port			  "3"
@@ -2818,7 +2886,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "we_o"
-		  SID			  "589:8:6:35"
+		  SID			  "595:6:35"
 		  Position		  [960, 483, 990, 497]
 		  ZOrder		  -35
 		  Port			  "4"
@@ -2827,7 +2895,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "status"
-		  SID			  "589:8:6:36"
+		  SID			  "595:6:36"
 		  Position		  [955, 133, 985, 147]
 		  ZOrder		  -36
 		  Port			  "5"
@@ -2836,7 +2904,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "en_cnt"
-		  SID			  "589:8:6:37"
+		  SID			  "595:6:37"
 		  Position		  [950, 263, 980, 277]
 		  ZOrder		  -37
 		  Port			  "6"
@@ -3131,32 +3199,32 @@ Library {
 		  DstPort		  1
 		}
 		Annotation {
-		  SID			  "589:8:6:38"
+		  SID			  "595:6:38"
 		  Name			  "To storage"
 		  Position		  [621, 424]
 		}
 		Annotation {
-		  SID			  "589:8:6:39"
+		  SID			  "595:6:39"
 		  Name			  "prevent one extra\nwrite to address 0"
 		  Position		  [247, 443]
 		}
 		Annotation {
-		  SID			  "589:8:6:40"
+		  SID			  "595:6:40"
 		  Name			  "Do one\ncapture by\ndefault"
 		  Position		  [230, 331]
 		}
 		Annotation {
-		  SID			  "589:8:6:41"
+		  SID			  "595:6:41"
 		  Name			  "Count of bytes in BRAM \nas well as done signal"
 		  Position		  [842, 205]
 		}
 		Annotation {
-		  SID			  "589:8:6:42"
+		  SID			  "595:6:42"
 		  Name			  "A total count of\nbytes written to\nBRAM since trig"
 		  Position		  [807, 314]
 		}
 		Annotation {
-		  SID			  "589:8:6:43"
+		  SID			  "595:6:43"
 		  Name			  "Force MSbit of count\nto be '1' by negating busy\nas counter bit may be '0' or '1'"
 		  Position		  [758, 65]
 		}
@@ -3165,7 +3233,7 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "basic_ctrl"
-	      SID		      "589:8:7"
+	      SID		      "595:7"
 	      Ports		      [6, 6]
 	      Position		      [395, 73, 455, 307]
 	      ZOrder		      -7
@@ -3223,7 +3291,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "vin"
-		  SID			  "589:8:7:1"
+		  SID			  "595:7:1"
 		  Position		  [35, 193, 65, 207]
 		  ZOrder		  -1
 		  IconDisplay		  "Port number"
@@ -3231,7 +3299,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "din"
-		  SID			  "589:8:7:2"
+		  SID			  "595:7:2"
 		  Position		  [35, 233, 65, 247]
 		  ZOrder		  -2
 		  Port			  "2"
@@ -3240,7 +3308,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "we"
-		  SID			  "589:8:7:3"
+		  SID			  "595:7:3"
 		  Position		  [220, 273, 250, 287]
 		  ZOrder		  -3
 		  Port			  "3"
@@ -3249,7 +3317,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "trig"
-		  SID			  "589:8:7:4"
+		  SID			  "595:7:4"
 		  Position		  [220, 358, 250, 372]
 		  ZOrder		  -4
 		  Port			  "4"
@@ -3258,7 +3326,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "ctrl"
-		  SID			  "589:8:7:5"
+		  SID			  "595:7:5"
 		  Position		  [25, 463, 55, 477]
 		  ZOrder		  -5
 		  Port			  "5"
@@ -3267,7 +3335,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "stopi"
-		  SID			  "589:8:7:6"
+		  SID			  "595:7:6"
 		  Position		  [25, 548, 55, 562]
 		  ZOrder		  -6
 		  Port			  "6"
@@ -3276,7 +3344,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Constant"
-		  SID			  "589:8:7:7"
+		  SID			  "595:7:7"
 		  Ports			  [0, 1]
 		  Position		  [430, 353, 445, 367]
 		  ZOrder		  -7
@@ -3322,7 +3390,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Constant1"
-		  SID			  "589:8:7:8"
+		  SID			  "595:7:8"
 		  Ports			  [0, 1]
 		  Position		  [255, 375, 275, 395]
 		  ZOrder		  -8
@@ -3364,7 +3432,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Constant2"
-		  SID			  "589:8:7:9"
+		  SID			  "595:7:9"
 		  Ports			  [0, 1]
 		  Position		  [255, 291, 275, 309]
 		  ZOrder		  -9
@@ -3406,7 +3474,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay1"
-		  SID			  "589:8:7:10"
+		  SID			  "595:7:10"
 		  Ports			  [1, 1]
 		  Position		  [225, 462, 250, 478]
 		  ZOrder		  -10
@@ -3439,7 +3507,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay2"
-		  SID			  "589:8:7:11"
+		  SID			  "595:7:11"
 		  Ports			  [1, 1]
 		  Position		  [225, 337, 250, 353]
 		  ZOrder		  -11
@@ -3472,7 +3540,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Delay3"
-		  SID			  "589:8:7:12"
+		  SID			  "595:7:12"
 		  Ports			  [1, 1]
 		  Position		  [225, 252, 250, 268]
 		  ZOrder		  -12
@@ -3505,7 +3573,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Inverter"
-		  SID			  "589:8:7:13"
+		  SID			  "595:7:13"
 		  Ports			  [1, 1]
 		  Position		  [355, 378, 375, 392]
 		  ZOrder		  -13
@@ -3535,7 +3603,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Logical"
-		  SID			  "589:8:7:14"
+		  SID			  "595:7:14"
 		  Ports			  [2, 1]
 		  Position		  [385, 356, 420, 394]
 		  ZOrder		  -14
@@ -3571,7 +3639,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Mux1"
-		  SID			  "589:8:7:15"
+		  SID			  "595:7:15"
 		  Ports			  [3, 1]
 		  Position		  [310, 246, 330, 314]
 		  ZOrder		  -15
@@ -3610,7 +3678,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Mux2"
-		  SID			  "589:8:7:16"
+		  SID			  "595:7:16"
 		  Ports			  [3, 1]
 		  Position		  [310, 332, 330, 398]
 		  ZOrder		  -16
@@ -3649,7 +3717,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Register1"
-		  SID			  "589:8:7:17"
+		  SID			  "595:7:17"
 		  Ports			  [3, 1]
 		  Position		  [470, 350, 515, 400]
 		  ZOrder		  -17
@@ -3681,7 +3749,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "Register6"
-		  SID			  "589:8:7:18"
+		  SID			  "595:7:18"
 		  Ports			  [3, 1]
 		  Position		  [555, 335, 600, 385]
 		  ZOrder		  -18
@@ -3713,7 +3781,7 @@ Library {
 		Block {
 		  BlockType		  SubSystem
 		  Name			  "dram_munge"
-		  SID			  "589:8:7:19"
+		  SID			  "595:7:19"
 		  Ports			  [4, 3]
 		  Position		  [625, 183, 690, 337]
 		  ZOrder		  -19
@@ -3771,7 +3839,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "vin"
-		    SID			    "589:8:7:20"
+		    SID			    "595:7:20"
 		    Position		    [20, 553, 50, 567]
 		    ZOrder		    -1
 		    IconDisplay		    "Port number"
@@ -3779,7 +3847,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "din"
-		    SID			    "589:8:7:21"
+		    SID			    "595:7:21"
 		    Position		    [15, 123, 45, 137]
 		    ZOrder		    -2
 		    Port		    "2"
@@ -3788,7 +3856,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "we"
-		    SID			    "589:8:7:22"
+		    SID			    "595:7:22"
 		    Position		    [15, 193, 45, 207]
 		    ZOrder		    -3
 		    Port		    "3"
@@ -3797,7 +3865,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "init"
-		    SID			    "589:8:7:23"
+		    SID			    "595:7:23"
 		    Position		    [15, 163, 45, 177]
 		    ZOrder		    -4
 		    Port		    "4"
@@ -3806,7 +3874,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Concat"
-		    SID			    "589:8:7:24"
+		    SID			    "595:7:24"
 		    Ports		    [4, 1]
 		    Position		    [430, 147, 455, 248]
 		    ZOrder		    -5
@@ -3835,7 +3903,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Concat1"
-		    SID			    "589:8:7:25"
+		    SID			    "595:7:25"
 		    Ports		    [4, 1]
 		    Position		    [430, 247, 455, 348]
 		    ZOrder		    -6
@@ -3864,7 +3932,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Constant"
-		    SID			    "589:8:7:26"
+		    SID			    "595:7:26"
 		    Ports		    [0, 1]
 		    Position		    [360, 150, 380, 170]
 		    ZOrder		    -7
@@ -3910,7 +3978,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Delay"
-		    SID			    "589:8:7:27"
+		    SID			    "595:7:27"
 		    Ports		    [1, 1]
 		    Position		    [360, 395, 390, 415]
 		    ZOrder		    -8
@@ -3943,7 +4011,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Delay1"
-		    SID			    "589:8:7:28"
+		    SID			    "595:7:28"
 		    Ports		    [1, 1]
 		    Position		    [535, 418, 575, 442]
 		    ZOrder		    -9
@@ -3976,7 +4044,7 @@ Library {
 		    Block {
 		    BlockType		    From
 		    Name		    "From"
-		    SID			    "589:8:7:29"
+		    SID			    "595:7:29"
 		    Position		    [375, 362, 405, 378]
 		    ZOrder		    -10
 		    ShowName		    off
@@ -3986,7 +4054,7 @@ Library {
 		    Block {
 		    BlockType		    From
 		    Name		    "From1"
-		    SID			    "589:8:7:30"
+		    SID			    "595:7:30"
 		    Position		    [625, 402, 655, 418]
 		    ZOrder		    -11
 		    ShowName		    off
@@ -3996,7 +4064,7 @@ Library {
 		    Block {
 		    BlockType		    From
 		    Name		    "From2"
-		    SID			    "589:8:7:31"
+		    SID			    "595:7:31"
 		    Position		    [630, 212, 660, 228]
 		    ZOrder		    -12
 		    ShowName		    off
@@ -4006,7 +4074,7 @@ Library {
 		    Block {
 		    BlockType		    From
 		    Name		    "From3"
-		    SID			    "589:8:7:32"
+		    SID			    "595:7:32"
 		    Position		    [125, 582, 155, 598]
 		    ZOrder		    -13
 		    ShowName		    off
@@ -4016,7 +4084,7 @@ Library {
 		    Block {
 		    BlockType		    From
 		    Name		    "From4"
-		    SID			    "589:8:7:33"
+		    SID			    "595:7:33"
 		    Position		    [125, 617, 155, 633]
 		    ZOrder		    -14
 		    ShowName		    off
@@ -4026,7 +4094,7 @@ Library {
 		    Block {
 		    BlockType		    From
 		    Name		    "From5"
-		    SID			    "589:8:7:34"
+		    SID			    "595:7:34"
 		    Position		    [630, 542, 660, 558]
 		    ZOrder		    -15
 		    ShowName		    off
@@ -4036,7 +4104,7 @@ Library {
 		    Block {
 		    BlockType		    Goto
 		    Name		    "Goto"
-		    SID			    "589:8:7:35"
+		    SID			    "595:7:35"
 		    Position		    [95, 137, 125, 153]
 		    ZOrder		    -16
 		    ShowName		    off
@@ -4045,7 +4113,7 @@ Library {
 		    Block {
 		    BlockType		    Goto
 		    Name		    "Goto1"
-		    SID			    "589:8:7:36"
+		    SID			    "595:7:36"
 		    Position		    [90, 237, 120, 253]
 		    ZOrder		    -17
 		    ShowName		    off
@@ -4054,7 +4122,7 @@ Library {
 		    Block {
 		    BlockType		    Goto
 		    Name		    "Goto2"
-		    SID			    "589:8:7:37"
+		    SID			    "595:7:37"
 		    Position		    [100, 107, 130, 123]
 		    ZOrder		    -18
 		    ShowName		    off
@@ -4063,7 +4131,7 @@ Library {
 		    Block {
 		    BlockType		    Goto
 		    Name		    "Goto3"
-		    SID			    "589:8:7:38"
+		    SID			    "595:7:38"
 		    Position		    [80, 532, 110, 548]
 		    ZOrder		    -19
 		    ShowName		    off
@@ -4072,7 +4140,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Logical"
-		    SID			    "589:8:7:39"
+		    SID			    "595:7:39"
 		    Ports		    [2, 1]
 		    Position		    [305, 378, 340, 427]
 		    ZOrder		    -20
@@ -4111,7 +4179,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Logical1"
-		    SID			    "589:8:7:40"
+		    SID			    "595:7:40"
 		    Ports		    [2, 1]
 		    Position		    [410, 375, 430, 415]
 		    ZOrder		    -21
@@ -4149,7 +4217,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Logical2"
-		    SID			    "589:8:7:41"
+		    SID			    "595:7:41"
 		    Ports		    [2, 1]
 		    Position		    [240, 588, 275, 637]
 		    ZOrder		    -22
@@ -4187,7 +4255,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Mux1"
-		    SID			    "589:8:7:42"
+		    SID			    "595:7:42"
 		    Ports		    [3, 1]
 		    Position		    [535, 153, 575, 327]
 		    ZOrder		    -23
@@ -4227,7 +4295,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Register"
-		    SID			    "589:8:7:43"
+		    SID			    "595:7:43"
 		    Ports		    [2, 1]
 		    Position		    [305, 167, 340, 203]
 		    ZOrder		    -24
@@ -4258,7 +4326,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Register1"
-		    SID			    "589:8:7:44"
+		    SID			    "595:7:44"
 		    Ports		    [2, 1]
 		    Position		    [305, 217, 340, 253]
 		    ZOrder		    -25
@@ -4289,7 +4357,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Register2"
-		    SID			    "589:8:7:45"
+		    SID			    "595:7:45"
 		    Ports		    [2, 1]
 		    Position		    [305, 267, 340, 303]
 		    ZOrder		    -26
@@ -4320,7 +4388,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Register3"
-		    SID			    "589:8:7:46"
+		    SID			    "595:7:46"
 		    Ports		    [2, 1]
 		    Position		    [305, 317, 340, 353]
 		    ZOrder		    -27
@@ -4351,7 +4419,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Register4"
-		    SID			    "589:8:7:47"
+		    SID			    "595:7:47"
 		    Ports		    [3, 1]
 		    Position		    [185, 582, 220, 618]
 		    ZOrder		    -28
@@ -4383,7 +4451,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Register5"
-		    SID			    "589:8:7:48"
+		    SID			    "595:7:48"
 		    Ports		    [2, 1]
 		    Position		    [305, 552, 340, 588]
 		    ZOrder		    -29
@@ -4414,7 +4482,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Relational"
-		    SID			    "589:8:7:49"
+		    SID			    "595:7:49"
 		    Ports		    [2, 1]
 		    Position		    [210, 173, 255, 217]
 		    ZOrder		    -30
@@ -4446,7 +4514,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Relational1"
-		    SID			    "589:8:7:50"
+		    SID			    "595:7:50"
 		    Ports		    [2, 1]
 		    Position		    [210, 223, 255, 267]
 		    ZOrder		    -31
@@ -4478,7 +4546,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Relational2"
-		    SID			    "589:8:7:51"
+		    SID			    "595:7:51"
 		    Ports		    [2, 1]
 		    Position		    [210, 273, 255, 317]
 		    ZOrder		    -32
@@ -4510,7 +4578,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Relational3"
-		    SID			    "589:8:7:52"
+		    SID			    "595:7:52"
 		    Ports		    [2, 1]
 		    Position		    [210, 323, 255, 367]
 		    ZOrder		    -33
@@ -4542,7 +4610,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "con0"
-		    SID			    "589:8:7:53"
+		    SID			    "595:7:53"
 		    Ports		    [0, 1]
 		    Position		    [170, 195, 190, 215]
 		    ZOrder		    -34
@@ -4588,7 +4656,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "con1"
-		    SID			    "589:8:7:54"
+		    SID			    "595:7:54"
 		    Ports		    [0, 1]
 		    Position		    [170, 245, 190, 265]
 		    ZOrder		    -35
@@ -4634,7 +4702,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "con2"
-		    SID			    "589:8:7:55"
+		    SID			    "595:7:55"
 		    Ports		    [0, 1]
 		    Position		    [170, 295, 190, 315]
 		    ZOrder		    -36
@@ -4680,7 +4748,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "con3"
-		    SID			    "589:8:7:56"
+		    SID			    "595:7:56"
 		    Ports		    [0, 1]
 		    Position		    [170, 345, 190, 365]
 		    ZOrder		    -37
@@ -4726,7 +4794,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "data_choice"
-		    SID			    "589:8:7:57"
+		    SID			    "595:7:57"
 		    Ports		    [3, 1]
 		    Position		    [690, 190, 715, 250]
 		    ZOrder		    -38
@@ -4765,7 +4833,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "dout_count"
-		    SID			    "589:8:7:58"
+		    SID			    "595:7:58"
 		    Ports		    [2, 1]
 		    Position		    [460, 358, 500, 407]
 		    ZOrder		    -39
@@ -4809,7 +4877,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "dram"
-		    SID			    "589:8:7:59"
+		    SID			    "595:7:59"
 		    Ports		    [0, 1]
 		    Position		    [640, 140, 660, 160]
 		    ZOrder		    -40
@@ -4854,7 +4922,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "input_count"
-		    SID			    "589:8:7:60"
+		    SID			    "595:7:60"
 		    Ports		    [2, 1]
 		    Position		    [90, 157, 140, 213]
 		    ZOrder		    -41
@@ -4898,7 +4966,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "vout_choice"
-		    SID			    "589:8:7:61"
+		    SID			    "595:7:61"
 		    Ports		    [3, 1]
 		    Position		    [690, 520, 715, 580]
 		    ZOrder		    -42
@@ -4935,7 +5003,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "we_choice"
-		    SID			    "589:8:7:62"
+		    SID			    "595:7:62"
 		    Ports		    [3, 1]
 		    Position		    [685, 380, 710, 440]
 		    ZOrder		    -43
@@ -4972,7 +5040,7 @@ Library {
 		    Block {
 		    BlockType		    Outport
 		    Name		    "vout"
-		    SID			    "589:8:7:63"
+		    SID			    "595:7:63"
 		    Position		    [740, 543, 770, 557]
 		    ZOrder		    -44
 		    IconDisplay		    "Port number"
@@ -4980,7 +5048,7 @@ Library {
 		    Block {
 		    BlockType		    Outport
 		    Name		    "dout"
-		    SID			    "589:8:7:64"
+		    SID			    "595:7:64"
 		    Position		    [740, 213, 770, 227]
 		    ZOrder		    -45
 		    Port		    "2"
@@ -4989,7 +5057,7 @@ Library {
 		    Block {
 		    BlockType		    Outport
 		    Name		    "we_o"
-		    SID			    "589:8:7:65"
+		    SID			    "595:7:65"
 		    Position		    [740, 403, 770, 417]
 		    ZOrder		    -46
 		    Port		    "3"
@@ -5393,18 +5461,18 @@ Library {
 		    DstPort		    4
 		    }
 		    Annotation {
-		    SID			    "589:8:7:66"
+		    SID			    "595:7:66"
 		    Name		    "Buffer 4 input words when using DRAM\nthen combine and output the first two,\nthen second. Ensures th"
 		    "at a full burst\ngoes through every time so that status \nregister records number of bytes fully in \nDRAM"
 		    Position		    [279, 77]
 		    }
 		    Annotation {
-		    SID			    "589:8:7:67"
+		    SID			    "595:7:67"
 		    Name		    "Choose DRAM data\nor standard. Constant input \nto muxes should ensure\nother path optimised\naway"
 		    Position		    [652, 92]
 		    }
 		    Annotation {
-		    SID			    "589:8:7:68"
+		    SID			    "595:7:68"
 		    Name		    "1st output same time\nas last input"
 		    Position		    [337, 458]
 		    }
@@ -5413,7 +5481,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "edge_detect"
-		  SID			  "589:8:7:69"
+		  SID			  "595:7:69"
 		  Ports			  [1, 1]
 		  Position		  [275, 460, 320, 480]
 		  ZOrder		  -20
@@ -5435,7 +5503,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "enable"
-		  SID			  "589:8:7:70"
+		  SID			  "595:7:70"
 		  Ports			  [1, 1]
 		  Position		  [150, 461, 175, 479]
 		  ZOrder		  -21
@@ -5469,7 +5537,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "trig_src"
-		  SID			  "589:8:7:71"
+		  SID			  "595:7:71"
 		  Ports			  [1, 1]
 		  Position		  [150, 335, 175, 355]
 		  ZOrder		  -22
@@ -5503,7 +5571,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "valid_src"
-		  SID			  "589:8:7:72"
+		  SID			  "595:7:72"
 		  Ports			  [1, 1]
 		  Position		  [150, 249, 175, 271]
 		  ZOrder		  -23
@@ -5537,7 +5605,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "vout"
-		  SID			  "589:8:7:73"
+		  SID			  "595:7:73"
 		  Position		  [745, 203, 775, 217]
 		  ZOrder		  -24
 		  IconDisplay		  "Port number"
@@ -5545,7 +5613,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "dout"
-		  SID			  "589:8:7:74"
+		  SID			  "595:7:74"
 		  Position		  [745, 253, 775, 267]
 		  ZOrder		  -25
 		  Port			  "2"
@@ -5554,7 +5622,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "we_o"
-		  SID			  "589:8:7:75"
+		  SID			  "595:7:75"
 		  Position		  [745, 303, 775, 317]
 		  ZOrder		  -26
 		  Port			  "3"
@@ -5563,7 +5631,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "go"
-		  SID			  "589:8:7:76"
+		  SID			  "595:7:76"
 		  Position		  [745, 353, 775, 367]
 		  ZOrder		  -27
 		  Port			  "4"
@@ -5572,7 +5640,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "stop"
-		  SID			  "589:8:7:77"
+		  SID			  "595:7:77"
 		  Position		  [750, 548, 780, 562]
 		  ZOrder		  -28
 		  Port			  "5"
@@ -5581,7 +5649,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "init"
-		  SID			  "589:8:7:78"
+		  SID			  "595:7:78"
 		  Position		  [750, 463, 780, 477]
 		  ZOrder		  -29
 		  Port			  "6"
@@ -5795,14 +5863,14 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "bram"
-	      SID		      "589:8:8"
+	      SID		      "595:8"
 	      Tag		      "xps:bram"
 	      Ports		      [3, 1]
 	      Position		      [930, 129, 1005, 291]
 	      ZOrder		      -8
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AncestorBlock	      "xps_library/Shared BRAM"
-	      LibraryVersion	      "1.505"
+	      LibraryVersion	      "*1.505"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
 	      RTWSystemCode	      "Auto"
@@ -5930,7 +5998,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "addr"
-		  SID			  "589:8:8:1"
+		  SID			  "595:8:1"
 		  Position		  [25, 193, 55, 207]
 		  ZOrder		  -1
 		  IconDisplay		  "Port number"
@@ -5938,7 +6006,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "data_in"
-		  SID			  "589:8:8:2"
+		  SID			  "595:8:2"
 		  Position		  [25, 238, 55, 252]
 		  ZOrder		  -2
 		  Port			  "2"
@@ -5947,7 +6015,7 @@ Library {
 		Block {
 		  BlockType		  Inport
 		  Name			  "we"
-		  SID			  "589:8:8:3"
+		  SID			  "595:8:3"
 		  Position		  [25, 283, 55, 297]
 		  ZOrder		  -3
 		  Port			  "3"
@@ -5956,7 +6024,7 @@ Library {
 		Block {
 		  BlockType		  SubSystem
 		  Name			  "calc_add"
-		  SID			  "589:8:8:4"
+		  SID			  "595:8:4"
 		  Ports			  [1, 1]
 		  Position		  [130, 190, 170, 210]
 		  ZOrder		  -4
@@ -6016,7 +6084,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "in"
-		    SID			    "589:8:8:5"
+		    SID			    "595:8:5"
 		    Position		    [15, 253, 45, 267]
 		    ZOrder		    -1
 		    IconDisplay		    "Port number"
@@ -6024,7 +6092,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "add_sub"
-		    SID			    "589:8:8:6"
+		    SID			    "595:8:6"
 		    Ports		    [2, 1]
 		    Position		    [250, 201, 285, 279]
 		    ZOrder		    -2
@@ -6065,7 +6133,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "concat"
-		    SID			    "589:8:8:7"
+		    SID			    "595:8:7"
 		    Ports		    [2, 1]
 		    Position		    [340, 150, 360, 270]
 		    ZOrder		    -3
@@ -6093,7 +6161,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "const"
-		    SID			    "589:8:8:8"
+		    SID			    "595:8:8"
 		    Ports		    [0, 1]
 		    Position		    [175, 211, 195, 229]
 		    ZOrder		    -4
@@ -6138,7 +6206,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "convert_addr"
-		    SID			    "589:8:8:9"
+		    SID			    "595:8:9"
 		    Ports		    [1, 1]
 		    Position		    [80, 248, 115, 272]
 		    ZOrder		    -5
@@ -6178,7 +6246,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "lsw"
-		    SID			    "589:8:8:10"
+		    SID			    "595:8:10"
 		    Ports		    [1, 1]
 		    Position		    [170, 249, 200, 271]
 		    ZOrder		    -6
@@ -6212,7 +6280,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "manipulate"
-		    SID			    "589:8:8:11"
+		    SID			    "595:8:11"
 		    Ports		    [0, 1]
 		    Position		    [350, 71, 370, 89]
 		    ZOrder		    -7
@@ -6257,7 +6325,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "msw"
-		    SID			    "589:8:8:12"
+		    SID			    "595:8:12"
 		    Ports		    [1, 1]
 		    Position		    [165, 169, 195, 191]
 		    ZOrder		    -8
@@ -6291,7 +6359,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "mux"
-		    SID			    "589:8:8:13"
+		    SID			    "595:8:13"
 		    Ports		    [3, 1]
 		    Position		    [420, 46, 445, 244]
 		    ZOrder		    -9
@@ -6328,7 +6396,7 @@ Library {
 		    Block {
 		    BlockType		    Outport
 		    Name		    "out"
-		    SID			    "589:8:8:14"
+		    SID			    "595:8:14"
 		    Position		    [505, 138, 535, 152]
 		    ZOrder		    -10
 		    IconDisplay		    "Port number"
@@ -6403,13 +6471,13 @@ Library {
 		    }
 		    }
 		    Annotation {
-		    SID			    "589:8:8:15"
+		    SID			    "595:8:15"
 		    Name		    "If reading/writing words\nsmaller than 32 bits,\nchange address so\nthat addressing is\nbig endian in"
 		    "stead of\nlittle, otherwise\npass through"
 		    Position		    [235, 77]
 		    }
 		    Annotation {
-		    SID			    "589:8:8:16"
+		    SID			    "595:8:16"
 		    Name		    "Use behavioural HDL\nso that gets optimised \nto minimum logic"
 		    Position		    [232, 322]
 		    }
@@ -6418,7 +6486,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "casper_library_scopes_bitfield_snapshot_ss_bram_addr"
-		  SID			  "589:8:8:50"
+		  SID			  "595:8:50"
 		  Ports			  [1, 1]
 		  Position		  [425, 189, 480, 211]
 		  ZOrder		  -11
@@ -6457,7 +6525,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "casper_library_scopes_bitfield_snapshot_ss_bram_data_in"
-		  SID			  "589:8:8:51"
+		  SID			  "595:8:51"
 		  Ports			  [1, 1]
 		  Position		  [425, 234, 480, 256]
 		  ZOrder		  -12
@@ -6496,7 +6564,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "casper_library_scopes_bitfield_snapshot_ss_bram_data_out"
-		  SID			  "589:8:8:52"
+		  SID			  "595:8:52"
 		  Ports			  [1, 1]
 		  Position		  [735, 235, 790, 255]
 		  ZOrder		  -13
@@ -6546,7 +6614,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "casper_library_scopes_bitfield_snapshot_ss_bram_we"
-		  SID			  "589:8:8:53"
+		  SID			  "595:8:53"
 		  Ports			  [1, 1]
 		  Position		  [425, 279, 480, 301]
 		  ZOrder		  -14
@@ -6585,7 +6653,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "convert_addr"
-		  SID			  "589:8:8:17"
+		  SID			  "595:8:17"
 		  Ports			  [1, 1]
 		  Position		  [255, 188, 290, 212]
 		  ZOrder		  -5
@@ -6624,7 +6692,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "convert_din1"
-		  SID			  "589:8:8:18"
+		  SID			  "595:8:18"
 		  Ports			  [1, 1]
 		  Position		  [255, 233, 290, 257]
 		  ZOrder		  -6
@@ -6663,7 +6731,7 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "convert_we"
-		  SID			  "589:8:8:19"
+		  SID			  "595:8:19"
 		  Ports			  [1, 1]
 		  Position		  [255, 278, 290, 302]
 		  ZOrder		  -7
@@ -6702,7 +6770,7 @@ Library {
 		Block {
 		  BlockType		  SubSystem
 		  Name			  "mem"
-		  SID			  "589:8:8:20"
+		  SID			  "595:8:20"
 		  Ports			  [3, 1]
 		  Position		  [565, 179, 640, 311]
 		  ZOrder		  -8
@@ -6731,7 +6799,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "In1"
-		    SID			    "589:8:8:21"
+		    SID			    "595:8:21"
 		    Position		    [45, 153, 75, 167]
 		    ZOrder		    -1
 		    IconDisplay		    "Port number"
@@ -6739,7 +6807,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "In2"
-		    SID			    "589:8:8:22"
+		    SID			    "595:8:22"
 		    Position		    [45, 193, 75, 207]
 		    ZOrder		    -2
 		    Port		    "2"
@@ -6748,7 +6816,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "In3"
-		    SID			    "589:8:8:23"
+		    SID			    "595:8:23"
 		    Position		    [45, 233, 75, 247]
 		    ZOrder		    -3
 		    Port		    "3"
@@ -6757,7 +6825,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "Disregard Subsystem"
-		    SID			    "589:8:8:24"
+		    SID			    "595:8:24"
 		    Tag			    "discardX"
 		    Ports		    []
 		    Position		    [44, 20, 95, 70]
@@ -6783,7 +6851,7 @@ Library {
 		    Block {
 		    BlockType		    SubSystem
 		    Name		    "calc_add"
-		    SID			    "589:8:8:25"
+		    SID			    "595:8:25"
 		    Ports		    [1, 1]
 		    Position		    [225, 150, 265, 170]
 		    ZOrder		    -5
@@ -6843,7 +6911,7 @@ Library {
 		    Block {
 		    BlockType		    Inport
 		    Name		    "in"
-		    SID			    "589:8:8:26"
+		    SID			    "595:8:26"
 		    Position		    [15, 253, 45, 267]
 		    ZOrder		    -1
 		    IconDisplay		    "Port number"
@@ -6851,7 +6919,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "add_sub"
-		    SID			    "589:8:8:27"
+		    SID			    "595:8:27"
 		    Ports		    [2, 1]
 		    Position		    [250, 201, 285, 279]
 		    ZOrder		    -2
@@ -6892,7 +6960,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "concat"
-		    SID			    "589:8:8:28"
+		    SID			    "595:8:28"
 		    Ports		    [2, 1]
 		    Position		    [340, 150, 360, 270]
 		    ZOrder		    -3
@@ -6920,7 +6988,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "const"
-		    SID			    "589:8:8:29"
+		    SID			    "595:8:29"
 		    Ports		    [0, 1]
 		    Position		    [175, 211, 195, 229]
 		    ZOrder		    -4
@@ -6965,7 +7033,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "convert_addr"
-		    SID			    "589:8:8:30"
+		    SID			    "595:8:30"
 		    Ports		    [1, 1]
 		    Position		    [80, 248, 115, 272]
 		    ZOrder		    -5
@@ -7005,7 +7073,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "lsw"
-		    SID			    "589:8:8:31"
+		    SID			    "595:8:31"
 		    Ports		    [1, 1]
 		    Position		    [170, 249, 200, 271]
 		    ZOrder		    -6
@@ -7039,7 +7107,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "manipulate"
-		    SID			    "589:8:8:32"
+		    SID			    "595:8:32"
 		    Ports		    [0, 1]
 		    Position		    [350, 71, 370, 89]
 		    ZOrder		    -7
@@ -7084,7 +7152,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "msw"
-		    SID			    "589:8:8:33"
+		    SID			    "595:8:33"
 		    Ports		    [1, 1]
 		    Position		    [165, 169, 195, 191]
 		    ZOrder		    -8
@@ -7118,7 +7186,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "mux"
-		    SID			    "589:8:8:34"
+		    SID			    "595:8:34"
 		    Ports		    [3, 1]
 		    Position		    [420, 46, 445, 244]
 		    ZOrder		    -9
@@ -7155,7 +7223,7 @@ Library {
 		    Block {
 		    BlockType		    Outport
 		    Name		    "out"
-		    SID			    "589:8:8:35"
+		    SID			    "595:8:35"
 		    Position		    [505, 138, 535, 152]
 		    ZOrder		    -10
 		    IconDisplay		    "Port number"
@@ -7230,13 +7298,13 @@ Library {
 		    }
 		    }
 		    Annotation {
-		    SID			    "589:8:8:36"
+		    SID			    "595:8:36"
 		    Name		    "If reading/writing words\nsmaller than 32 bits,\nchange address so\nthat addressing is\nbig endian in"
 		    "stead of\nlittle, otherwise\npass through"
 		    Position		    [235, 77]
 		    }
 		    Annotation {
-		    SID			    "589:8:8:37"
+		    SID			    "595:8:37"
 		    Name		    "Use behavioural HDL\nso that gets optimised \nto minimum logic"
 		    Position		    [232, 322]
 		    }
@@ -7245,7 +7313,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "ram"
-		    SID			    "589:8:8:38"
+		    SID			    "595:8:38"
 		    Ports		    [3, 1]
 		    Position		    [340, 143, 400, 257]
 		    ZOrder		    -6
@@ -7281,7 +7349,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "sim_addr"
-		    SID			    "589:8:8:39"
+		    SID			    "595:8:39"
 		    Ports		    [1, 1]
 		    Position		    [110, 150, 165, 170]
 		    ZOrder		    -7
@@ -7329,7 +7397,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "sim_data_in"
-		    SID			    "589:8:8:40"
+		    SID			    "595:8:40"
 		    Ports		    [1, 1]
 		    Position		    [110, 190, 165, 210]
 		    ZOrder		    -8
@@ -7378,7 +7446,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "sim_data_out"
-		    SID			    "589:8:8:41"
+		    SID			    "595:8:41"
 		    Ports		    [1, 1]
 		    Position		    [560, 189, 615, 211]
 		    ZOrder		    -9
@@ -7416,8 +7484,8 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "sim_munge_in"
-		    SID			    "589:8:8:42"
-		    Ports		    [1, 1]
+		    SID			    "595:8:42"
+		    Ports		    []
 		    Position		    [225, 186, 265, 214]
 		    ZOrder		    -10
 		    BackgroundColor	    "[0.494000, 1.000000, 0.494000]"
@@ -7436,8 +7504,8 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "sim_munge_out"
-		    SID			    "589:8:8:43"
-		    Ports		    [1, 1]
+		    SID			    "595:8:43"
+		    Ports		    []
 		    Position		    [460, 186, 500, 214]
 		    ZOrder		    -11
 		    BackgroundColor	    "[0.494000, 1.000000, 0.494000]"
@@ -7456,7 +7524,7 @@ Library {
 		    Block {
 		    BlockType		    Reference
 		    Name		    "sim_we"
-		    SID			    "589:8:8:44"
+		    SID			    "595:8:44"
 		    Ports		    [1, 1]
 		    Position		    [110, 230, 165, 250]
 		    ZOrder		    -12
@@ -7504,22 +7572,20 @@ Library {
 		    Block {
 		    BlockType		    Outport
 		    Name		    "Out1"
-		    SID			    "589:8:8:45"
+		    SID			    "595:8:45"
 		    Position		    [665, 193, 695, 207]
 		    ZOrder		    -13
 		    IconDisplay		    "Port number"
 		    }
 		    Line {
-		    SrcBlock		    "sim_munge_in"
-		    SrcPort		    1
+		    Points		    [270, 200]
 		    DstBlock		    "ram"
 		    DstPort		    2
 		    }
 		    Line {
 		    SrcBlock		    "ram"
 		    SrcPort		    1
-		    DstBlock		    "sim_munge_out"
-		    DstPort		    1
+		    Points		    [50, 0]
 		    }
 		    Line {
 		    SrcBlock		    "sim_we"
@@ -7530,8 +7596,7 @@ Library {
 		    Line {
 		    SrcBlock		    "sim_data_in"
 		    SrcPort		    1
-		    DstBlock		    "sim_munge_in"
-		    DstPort		    1
+		    Points		    [50, 0]
 		    }
 		    Line {
 		    SrcBlock		    "sim_addr"
@@ -7564,8 +7629,7 @@ Library {
 		    DstPort		    1
 		    }
 		    Line {
-		    SrcBlock		    "sim_munge_out"
-		    SrcPort		    1
+		    Points		    [505, 200]
 		    DstBlock		    "sim_data_out"
 		    DstPort		    1
 		    }
@@ -7576,12 +7640,12 @@ Library {
 		    DstPort		    1
 		    }
 		    Annotation {
-		    SID			    "589:8:8:46"
+		    SID			    "595:8:46"
 		    Name		    "Undo address \nmanipulation for\nsimulated data"
 		    Position		    [244, 114]
 		    }
 		    Annotation {
-		    SID			    "589:8:8:47"
+		    SID			    "595:8:47"
 		    Name		    "Undo data manipulation on way in and redo on way out for simulated data"
 		    Position		    [372, 308]
 		    }
@@ -7590,8 +7654,8 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "munge_in"
-		  SID			  "589:8:8:48"
-		  Ports			  [1, 1]
+		  SID			  "595:8:48"
+		  Ports			  []
 		  Position		  [130, 231, 170, 259]
 		  ZOrder		  -9
 		  BackgroundColor	  "[0.494000, 1.000000, 0.494000]"
@@ -7610,8 +7674,8 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "munge_out"
-		  SID			  "589:8:8:49"
-		  Ports			  [1, 1]
+		  SID			  "595:8:49"
+		  Ports			  []
 		  Position		  [890, 231, 930, 259]
 		  ZOrder		  -10
 		  BackgroundColor	  "[0.494000, 1.000000, 0.494000]"
@@ -7630,20 +7694,18 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "data_out"
-		  SID			  "589:8:8:54"
+		  SID			  "595:8:54"
 		  Position		  [980, 238, 1010, 252]
 		  ZOrder		  -15
 		  IconDisplay		  "Port number"
 		}
 		Line {
-		  SrcBlock		  "munge_in"
-		  SrcPort		  1
+		  Points		  [175, 245]
 		  DstBlock		  "convert_din1"
 		  DstPort		  1
 		}
 		Line {
-		  SrcBlock		  "munge_out"
-		  SrcPort		  1
+		  Points		  [935, 245]
 		  DstBlock		  "data_out"
 		  DstPort		  1
 		}
@@ -7668,8 +7730,7 @@ Library {
 		Line {
 		  SrcBlock		  "casper_library_scopes_bitfield_snapshot_ss_bram_data_out"
 		  SrcPort		  1
-		  DstBlock		  "munge_out"
-		  DstPort		  1
+		  Points		  [90, 0]
 		}
 		Line {
 		  SrcBlock		  "convert_we"
@@ -7704,8 +7765,7 @@ Library {
 		Line {
 		  SrcBlock		  "data_in"
 		  SrcPort		  1
-		  DstBlock		  "munge_in"
-		  DstPort		  1
+		  Points		  [65, 0]
 		}
 		Line {
 		  SrcBlock		  "convert_din1"
@@ -7724,7 +7784,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "cast"
-	      SID		      "589:8:9"
+	      SID		      "595:9"
 	      Ports		      [1, 1]
 	      Position		      [335, 122, 365, 138]
 	      ZOrder		      -9
@@ -7764,7 +7824,7 @@ Library {
 	    Block {
 	      BlockType		      Constant
 	      Name		      "const0"
-	      SID		      "589:8:10"
+	      SID		      "595:10"
 	      Position		      [180, 240, 200, 260]
 	      ZOrder		      -10
 	      Value		      "0"
@@ -7772,7 +7832,7 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "ctrl"
-	      SID		      "589:8:12"
+	      SID		      "595:12"
 	      Tag		      "xps:sw_reg"
 	      Ports		      [1, 1]
 	      Position		      [215, 235, 315, 265]
@@ -7780,7 +7840,7 @@ Library {
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AttributesFormatString  "1input"
 	      AncestorBlock	      "xps_library/software register"
-	      LibraryVersion	      "1.505"
+	      LibraryVersion	      "*1.505"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
 	      RTWSystemCode	      "Auto"
@@ -7936,22 +7996,22 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"6483"
+		SIDHighWatermark	"6525"
 		Block {
 		  BlockType		  Inport
 		  Name			  "sim_1"
-		  SID			  "589:8:12:6414"
+		  SID			  "595:12:6414"
 		  Position		  [100, 100, 150, 120]
 		  ZOrder		  6366
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Reference
-		  Name			  "casper_library_scopes_bitfield_snapshot_ss_ctrl_user_data_out"
-		  SID			  "589:8:12:6477"
+		  Name			  "casper_library_scopes_bitfield snapshot_ss_ctrl_user_data_out"
+		  SID			  "595:12:6519"
 		  Ports			  [1, 1]
 		  Position		  [900, 100, 950, 120]
-		  ZOrder		  6429
+		  ZOrder		  6471
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Gateway In"
 		  SourceType		  "Xilinx Gateway In Block"
@@ -7994,10 +8054,10 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "io_delay"
-		  SID			  "589:8:12:6478"
+		  SID			  "595:12:6520"
 		  Ports			  [1, 1]
 		  Position		  [1000, 100, 1050, 120]
-		  ZOrder		  6430
+		  ZOrder		  6472
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Delay"
 		  SourceType		  "Xilinx Delay Block"
@@ -8025,10 +8085,10 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "reint1"
-		  SID			  "589:8:12:6483"
+		  SID			  "595:12:6525"
 		  Ports			  [1, 1]
 		  Position		  [1300, 100, 1350, 120]
-		  ZOrder		  6435
+		  ZOrder		  6477
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Reinterpret"
 		  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -8056,10 +8116,10 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "slice_reg"
-		  SID			  "589:8:12:6482"
+		  SID			  "595:12:6524"
 		  Ports			  [1, 1]
 		  Position		  [1100, 100, 1150, 120]
-		  ZOrder		  6434
+		  ZOrder		  6476
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Slice"
 		  SourceType		  "Xilinx Bit Slice Extractor Block"
@@ -8089,13 +8149,13 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "in_reg"
-		  SID			  "589:8:12:6420"
+		  SID			  "595:12:6420"
 		  Position		  [1500, 100, 1550, 120]
 		  ZOrder		  6372
 		  IconDisplay		  "Port number"
 		}
 		Line {
-		  SrcBlock		  "casper_library_scopes_bitfield_snapshot_ss_ctrl_user_data_out"
+		  SrcBlock		  "casper_library_scopes_bitfield snapshot_ss_ctrl_user_data_out"
 		  SrcPort		  1
 		  DstBlock		  "io_delay"
 		  DstPort		  1
@@ -8104,7 +8164,7 @@ Library {
 		  SrcBlock		  "sim_1"
 		  SrcPort		  1
 		  Points		  [135, 0; 0, -15; 595, 0]
-		  DstBlock		  "casper_library_scopes_bitfield_snapshot_ss_ctrl_user_data_out"
+		  DstBlock		  "casper_library_scopes_bitfield snapshot_ss_ctrl_user_data_out"
 		  DstPort		  1
 		}
 		Line {
@@ -8130,7 +8190,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "dat_del"
-	      SID		      "589:8:13"
+	      SID		      "595:13"
 	      Ports		      [1, 1]
 	      Position		      [880, 200, 905, 220]
 	      ZOrder		      -13
@@ -8163,35 +8223,35 @@ Library {
 	    Block {
 	      BlockType		      Terminator
 	      Name		      "g_tr_en_cnt"
-	      SID		      "589:8:15"
+	      SID		      "595:15"
 	      Position		      [1030, 367, 1045, 383]
 	      ZOrder		      -15
 	    }
 	    Block {
 	      BlockType		      Terminator
 	      Name		      "gbram"
-	      SID		      "589:8:16"
+	      SID		      "595:16"
 	      Position		      [1030, 202, 1045, 218]
 	      ZOrder		      -16
 	    }
 	    Block {
 	      BlockType		      Terminator
 	      Name		      "gstatus"
-	      SID		      "589:8:17"
+	      SID		      "595:17"
 	      Position		      [1030, 312, 1045, 328]
 	      ZOrder		      -17
 	    }
 	    Block {
 	      BlockType		      Terminator
 	      Name		      "gval"
-	      SID		      "589:8:18"
+	      SID		      "595:18"
 	      Position		      [1030, 92, 1045, 108]
 	      ZOrder		      -18
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "never"
-	      SID		      "589:8:57"
+	      SID		      "595:57"
 	      Ports		      [0, 1]
 	      Position		      [250, 282, 280, 298]
 	      ZOrder		      5254
@@ -8231,7 +8291,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "ri"
-	      SID		      "589:8:19"
+	      SID		      "595:19"
 	      Ports		      [1, 1]
 	      Position		      [240, 122, 300, 138]
 	      ZOrder		      -19
@@ -8263,7 +8323,7 @@ Library {
 	    Block {
 	      BlockType		      SubSystem
 	      Name		      "status"
-	      SID		      "589:8:20"
+	      SID		      "595:20"
 	      Tag		      "xps:sw_reg"
 	      Ports		      [1, 1]
 	      Position		      [905, 305, 1005, 335]
@@ -8271,7 +8331,7 @@ Library {
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AttributesFormatString  "1output"
 	      AncestorBlock	      "xps_library/software register"
-	      LibraryVersion	      "1.505"
+	      LibraryVersion	      "*1.505"
 	      MinAlgLoopOccurrences   off
 	      PropExecContextOutsideSubsystem off
 	      RTWSystemCode	      "Auto"
@@ -8427,22 +8487,60 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"6451"
+		SIDHighWatermark	"6479"
 		Block {
 		  BlockType		  Inport
 		  Name			  "out_reg"
-		  SID			  "589:8:20:6386"
+		  SID			  "595:20:6386"
 		  Position		  [100, 100, 150, 120]
 		  ZOrder		  6338
 		  IconDisplay		  "Port number"
 		}
 		Block {
 		  BlockType		  Reference
-		  Name			  "casper_library_scopes_bitfield_snapshot_ss_status_user_data_in"
-		  SID			  "589:8:20:6450"
+		  Name			  "assert_reg"
+		  SID			  "595:20:6478"
+		  Ports			  [1, 1]
+		  Position		  [200, 100, 250, 120]
+		  ZOrder		  6430
+		  ShowName		  off
+		  LibraryVersion	  "1.2"
+		  SourceBlock		  "xbsIndex_r4/Assert"
+		  SourceType		  "Xilinx Assert Block"
+		  infoedit		  "Asserts a user-defined sample rate and/or type on a signal.<br><br>Hardware notes: In hardware this b"
+		  "lock costs nothing."
+		  assert_type		  on
+		  type_source		  "Explicitly"
+		  gui_display_data_type	  "Fixed-point"
+		  arith_type		  "Unsigned"
+		  n_bits		  "32"
+		  bin_pt		  "0"
+		  preci_type		  "Single"
+		  exp_width		  "8"
+		  frac_width		  "24"
+		  assert_rate		  off
+		  rate_source		  "Explicitly"
+		  period		  "1"
+		  output_port		  on
+		  has_advanced_control	  "0"
+		  sggui_pos		  "-1,-1,-1,-1"
+		  block_type		  "assert"
+		  sg_icon_stat		  "50,20,1,1,white,blue,0,9657e937,right,,[ ],[ ]"
+		  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.9"
+		  "1 ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22"
+		  " 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22"
+		  " 10.22 ],[0.931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\n"
+		  "patch([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nf"
+		  "printf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('Assert"
+		  "');\nfprintf('','COMMENT: end icon text');"
+		}
+		Block {
+		  BlockType		  Reference
+		  Name			  "casper_library_scopes_bitfield snapshot_ss_status_user_data_in"
+		  SID			  "595:20:6477"
 		  Ports			  [1, 1]
 		  Position		  [900, 100, 950, 120]
-		  ZOrder		  6402
+		  ZOrder		  6429
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Gateway Out"
 		  SourceType		  "Xilinx Gateway Out Block"
@@ -8474,10 +8572,10 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "cast_gw"
-		  SID			  "589:8:20:6449"
+		  SID			  "595:20:6476"
 		  Ports			  [1, 1]
 		  Position		  [700, 100, 750, 120]
-		  ZOrder		  6401
+		  ZOrder		  6428
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Convert"
 		  SourceType		  "Xilinx Type Converter Block"
@@ -8512,10 +8610,10 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "io_delay"
-		  SID			  "589:8:20:6448"
+		  SID			  "595:20:6475"
 		  Ports			  [1, 1]
 		  Position		  [600, 100, 650, 120]
-		  ZOrder		  6400
+		  ZOrder		  6427
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Delay"
 		  SourceType		  "Xilinx Delay Block"
@@ -8543,10 +8641,10 @@ Library {
 		Block {
 		  BlockType		  Reference
 		  Name			  "reint1"
-		  SID			  "589:8:20:6451"
+		  SID			  "595:20:6479"
 		  Ports			  [1, 1]
 		  Position		  [300, 100, 350, 120]
-		  ZOrder		  6403
+		  ZOrder		  6431
 		  LibraryVersion	  "1.2"
 		  SourceBlock		  "xbsIndex_r4/Reinterpret"
 		  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -8574,7 +8672,7 @@ Library {
 		Block {
 		  BlockType		  Outport
 		  Name			  "sim_out"
-		  SID			  "589:8:20:6270"
+		  SID			  "595:20:6270"
 		  Position		  [1300, 100, 1350, 120]
 		  ZOrder		  6222
 		  IconDisplay		  "Port number"
@@ -8588,17 +8686,23 @@ Library {
 		Line {
 		  SrcBlock		  "cast_gw"
 		  SrcPort		  1
-		  DstBlock		  "casper_library_scopes_bitfield_snapshot_ss_status_user_data_in"
+		  DstBlock		  "casper_library_scopes_bitfield snapshot_ss_status_user_data_in"
 		  DstPort		  1
 		}
 		Line {
-		  SrcBlock		  "casper_library_scopes_bitfield_snapshot_ss_status_user_data_in"
+		  SrcBlock		  "casper_library_scopes_bitfield snapshot_ss_status_user_data_in"
 		  SrcPort		  1
 		  DstBlock		  "sim_out"
 		  DstPort		  1
 		}
 		Line {
 		  SrcBlock		  "out_reg"
+		  SrcPort		  1
+		  DstBlock		  "assert_reg"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "assert_reg"
 		  SrcPort		  1
 		  DstBlock		  "reint1"
 		  DstPort		  1
@@ -8614,10 +8718,10 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "vin_const"
-	      SID		      "589:8:53"
+	      SID		      "595:66"
 	      Ports		      [0, 1]
 	      Position		      [250, 82, 280, 98]
-	      ZOrder		      5250
+	      ZOrder		      5263
 	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
@@ -8654,7 +8758,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "we_del"
-	      SID		      "589:8:25"
+	      SID		      "595:25"
 	      Ports		      [1, 1]
 	      Position		      [880, 255, 905, 275]
 	      ZOrder		      -25
@@ -8841,17 +8945,17 @@ Library {
 	      DstPort		      1
 	    }
 	    Annotation {
-	      SID		      "589:8:26"
+	      SID		      "595:26"
 	      Name		      "Generate stop\nwhen in circular\ncapture mode"
 	      Position		      [681, 32]
 	    }
 	    Annotation {
-	      SID		      "589:8:27"
+	      SID		      "595:27"
 	      Name		      "Delay start\nof capture"
 	      Position		      [566, 32]
 	    }
 	    Annotation {
-	      SID		      "589:8:28"
+	      SID		      "595:28"
 	      Name		      "ctrl:\nbit0: Put a posedge here \n        to enable a new capture.\nbit1: ignore external trigger "
 	      "\n        and trigger immediately.\nbit2: ignore external write \n        enable and capture on \n        every"
 	      " FPGA clock.\nbit3: continuously capture \n        data until we get an \n        external stop command."
@@ -8859,22 +8963,22 @@ Library {
 	      HorizontalAlignment     "left"
 	    }
 	    Annotation {
-	      SID		      "589:8:29"
+	      SID		      "595:29"
 	      Name		      "Offset in vector\nfrom first element \ncaptured, used \nduring circular capture"
 	      Position		      [958, 442]
 	    }
 	    Annotation {
-	      SID		      "589:8:30"
+	      SID		      "595:30"
 	      Name		      "Number of \nbytes in \nbuffer and \ndone bit"
 	      Position		      [867, 348]
 	    }
 	    Annotation {
-	      SID		      "589:8:31"
+	      SID		      "595:31"
 	      Name		      "Number of valid\ndata samples to\nskip after trigger\nbefore starting\ncapture"
 	      Position		      [259, 411]
 	    }
 	    Annotation {
-	      SID		      "589:8:32"
+	      SID		      "595:32"
 	      Name		      "Value on vin \naligned with \nfirst sample on\ndin captured"
 	      Position		      [956, 43]
 	    }
@@ -8887,13 +8991,25 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "in_b"
+	  SrcBlock		  "in_a"
+	  SrcPort		  1
+	  DstBlock		  "assert_a"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "assert_a"
 	  SrcPort		  1
 	  DstBlock		  "buscreate"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "in_a"
+	  SrcBlock		  "in_b"
+	  SrcPort		  1
+	  DstBlock		  "assert_b"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "assert_b"
 	  SrcPort		  1
 	  DstBlock		  "buscreate"
 	  DstPort		  2
@@ -27163,7 +27279,7 @@ MatData {
   DataRecord {
     Tag			    DataTag3
     Data		    "  %)30     .    J 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ +E+\"P,.    & 8  "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ \"NX:@4.    & 8  "
     " 8    (     @         %    \"     $    !     0         %  0 \"0    $    _    9&5F875L=', 961G90      <&]L87)I='D >"
     "%]I;@      >%]O=70     >5]I;@      >5]O=70       X   \"8 P  !@    @    !          4    (     0    P    !          "
     "X    P    !@    @    $          4    (     0    0    !         !  ! !E9&=E#@   #@    &    \"     0         !0    @"

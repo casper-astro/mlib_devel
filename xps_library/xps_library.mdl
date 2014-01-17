@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 861.0]
+	Extents			[1242.0, 857.0]
 	ZoomFactor		[1.0]
 	Offset			[160.75, 306.49843307758761]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jan 16 17:29:06 2014"
-  RTWModifiedTimeStamp	  311794144
-  ModelVersionFormat	  "1.%<AutoIncrement:505>"
+  LastModifiedDate	  "Fri Jan 17 14:27:25 2014"
+  RTWModifiedTimeStamp	  311869640
+  ModelVersionFormat	  "1.%<AutoIncrement:506>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -58218,10 +58218,10 @@ Library {
       SID		      "332"
       Tag		      "xps:sw_reg"
       Ports		      [1, 1]
-      Position		      [920, 416, 1020, 444]
+      Position		      [920, 434, 1020, 466]
       ZOrder		      5229
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-      AttributesFormatString  "1output"
+      AttributesFormatString  "1input"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -58269,7 +58269,7 @@ Library {
 	    }
 	    Name		    "io_dir"
 	    Prompt		    "I/O direction"
-	    Value		    "To Processor"
+	    Value		    "From Processor"
 	    Callback		    "mask_enables = get_param(gcb, 'MaskEnables');\nmask_names = get_param(gcb, 'MaskNames');\nif strcm"
 	    "p(get_param(gcb, 'io_dir'), 'To Processor'),\n    mask_enables{ismember(mask_names, 'sample_period')} = 'off';\ne"
 	    "lse\n    mask_enables{ismember(mask_names, 'sample_period')} = 'on';\nend\nset_param(gcb, 'MaskEnables', mask_ena"
@@ -58290,7 +58290,6 @@ Library {
 	    Name		    "sample_period"
 	    Prompt		    "Sample period"
 	    Value		    "1"
-	    Enabled		    "off"
 	    TabName		    "Setup"
 	  }
 	  Object {
@@ -58364,7 +58363,7 @@ Library {
       }
       System {
 	Name			"software register"
-	Location		[0, 25, 1920, 1080]
+	Location		[1920, 0, 3200, 1024]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -58377,60 +58376,22 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6407"
+	SIDHighWatermark	"6530"
 	Block {
 	  BlockType		  Inport
-	  Name			  "out_reg"
-	  SID			  "332:6386"
+	  Name			  "sim_1"
+	  SID			  "332:6524"
 	  Position		  [100, 100, 150, 120]
-	  ZOrder		  6338
+	  ZOrder		  6476
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "cast_gw"
-	  SID			  "332:6405"
-	  Ports			  [1, 1]
-	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6357
-	  LibraryVersion	  "1.2"
-	  SourceBlock		  "xbsIndex_r4/Convert"
-	  SourceType		  "Xilinx Type Converter Block"
-	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
-	  gui_display_data_type	  "Fixed-point"
-	  arith_type		  "Unsigned"
-	  n_bits		  "32"
-	  bin_pt		  "0"
-	  float_type		  "Single"
-	  exp_bits		  "8"
-	  fraction_bits		  "24"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  en			  off
-	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
-	  xl_area		  "[0,0,0,0,0,0,0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "convert"
-	  sg_icon_stat		  "50,20,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22 1"
-	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22 10"
-	  ".22 ],[0.931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
-	  "h([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nfprint"
-	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',"
-	  "1,'cast');\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6404"
+	  SID			  "332:6523"
 	  Ports			  [1, 1]
-	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6356
+	  Position		  [1000, 100, 1050, 120]
+	  ZOrder		  6475
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58458,10 +58419,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6407"
+	  SID			  "332:6529"
 	  Ports			  [1, 1]
-	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6359
+	  Position		  [1300, 100, 1350, 120]
+	  ZOrder		  6481
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58488,67 +58449,112 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6406"
+	  Name			  "slice_reg"
+	  SID			  "332:6528"
+	  Ports			  [1, 1]
+	  Position		  [1100, 100, 1150, 120]
+	  ZOrder		  6480
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Slice"
+	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
+	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
+	  "e notes: In hardware this block costs nothing."
+	  nbits			  "32"
+	  boolean_output	  off
+	  mode			  "Lower Bit Location + Width"
+	  bit1			  "0"
+	  base1			  "MSB of Input"
+	  bit0			  "0"
+	  base0			  "LSB of Input"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "slice"
+	  sg_icon_stat		  "50,20,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22 1"
+	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22 10"
+	  ".22 ],[0.931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
+	  "h([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nfprint"
+	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',"
+	  "1,'[a:b]');\nfprintf('','COMMENT: end icon text');"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "xps_library_software register_user_data_out"
+	  SID			  "332:6522"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6358
+	  ZOrder		  6474
 	  LibraryVersion	  "1.2"
-	  SourceBlock		  "xbsIndex_r4/Gateway Out"
-	  SourceType		  "Xilinx Gateway Out Block"
-	  infoedit		  "Gateway out block.  Converts Xilinx fixed-point or floating-point type inputs into ouputs of type Simu"
-	  "link integer, single, double, or fixed-point.<br><br>Hardware notes:  In hardware these blocks become top level out"
-	  "put ports or are discarded, depending on how they are configured."
-	  inherit_from_input	  off
-	  hdl_port		  on
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to  Xilinx"
+	  " fixed-point or floating-point data type.<br><br>Hardware notes:  In hardware these blocks become top level input p"
+	  "orts."
+	  gui_display_data_type	  "Fixed-point"
+	  arith_type		  "Unsigned"
+	  n_bits		  "32"
+	  bin_pt		  "0"
+	  preci_type		  "Single"
+	  exp_width		  "8"
+	  frac_width		  "24"
+	  quantization		  "Round  (unbiased: +/- Inf)"
+	  overflow		  "Saturate"
+	  period		  "1"
+	  dbl_ovrd		  off
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
 	  xl_use_area		  off
 	  xl_area		  "[0,0,0,0,0,0,0]"
+	  inherit_from_input	  off
+	  hdl_port		  "on"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayout"
-	  sg_icon_stat		  "50,20,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
+	  block_type		  "gatewayin"
+	  sg_icon_stat		  "50,20,1,1,white,yellow,1,00d3666e,right,,[ ],[ ]"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.95 0.93 0.65"
 	  " ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22 1"
 	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22 10"
 	  ".22 ],[0.985 0.979 0.895 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
 	  "h([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.985 0.979 0.895 ]);\nfprint"
 	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'"
-	  " ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end i"
-	  "con text');"
+	  "\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end ic"
+	  "on text');"
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "sim_out"
-	  SID			  "332:6270"
-	  Position		  [1300, 100, 1350, 120]
-	  ZOrder		  6222
+	  Name			  "in_reg"
+	  SID			  "332:6530"
+	  Position		  [1500, 100, 1550, 120]
+	  ZOrder		  6482
 	  IconDisplay		  "Port number"
+	}
+	Line {
+	  SrcBlock		  "xps_library_software register_user_data_out"
+	  SrcPort		  1
+	  DstBlock		  "io_delay"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "sim_1"
+	  SrcPort		  1
+	  Points		  [135, 0; 0, -15; 595, 0]
+	  DstBlock		  "xps_library_software register_user_data_out"
+	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "io_delay"
 	  SrcPort		  1
-	  DstBlock		  "cast_gw"
+	  DstBlock		  "slice_reg"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "cast_gw"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_software register_user_data_in"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_software register_user_data_in"
-	  SrcPort		  1
-	  DstBlock		  "sim_out"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "out_reg"
+	  SrcBlock		  "slice_reg"
 	  SrcPort		  1
 	  DstBlock		  "reint1"
 	  DstPort		  1
@@ -58556,7 +58562,7 @@ Library {
 	Line {
 	  SrcBlock		  "reint1"
 	  SrcPort		  1
-	  DstBlock		  "io_delay"
+	  DstBlock		  "in_reg"
 	  DstPort		  1
 	}
       }

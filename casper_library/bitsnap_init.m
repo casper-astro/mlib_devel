@@ -43,14 +43,19 @@ snap_circap =       get_param(blk, 'snap_circap');
 snap_offset =       get_param(blk, 'snap_offset');
 snap_value =        get_param(blk, 'snap_value');
 snap_use_dsp48 =    get_param(blk, 'snap_use_dsp48');
-io_names =          eval(get_param(blk, 'io_names'));
+io_names =          get_param(blk, 'io_names');
 io_widths =         eval(get_param(blk, 'io_widths'));
 io_bps =            eval(get_param(blk, 'io_bps'));
 io_types =          eval(get_param(blk, 'io_types'));
-extra_names =       eval(get_param(blk, 'extra_names'));
+extra_names =       get_param(blk, 'extra_names');
 extra_widths =      eval(get_param(blk, 'extra_widths'));
 extra_bps =         eval(get_param(blk, 'extra_bps'));
 extra_types =       eval(get_param(blk, 'extra_types'));
+
+io_names = textscan(strtrim(strrep(strrep(io_names, ']', ''), '[', '')), '%s');
+io_names = io_names{1};
+extra_names = textscan(strtrim(strrep(strrep(extra_names, ']', ''), '[', '')), '%s');
+extra_names = extra_names{1};
 
 % check lengths and whatnot
 if (numel(io_names) ~= numel(io_widths)) || (numel(io_names) ~= numel(io_bps)) || (numel(io_names) ~= numel(io_types)) || (numel(io_names) < 1),
@@ -83,7 +88,7 @@ y_pos =     100;
 
 % the bus create block
 reuse_block(blk, 'buscreate', 'casper_library_flow_control/bus_create', ...
-        'Position', [x_start + (x_size * 1), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 1) + x_size, y_pos + (y_size * (num_ios + 5.5))], ...
+        'Position', [x_start + (x_size * 2), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 2) + x_size, y_pos + (y_size * (num_ios + 5.5))], ...
         'inputNum', num2str(num_ios));
 
 % the snapshot block
@@ -100,15 +105,45 @@ reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
         'use_dsp48', snap_use_dsp48);
 add_line(blk, 'buscreate/1', 'ss/1');
 
-% io ports
+function stype = type_to_string(arith_type)
+    switch arith_type
+        case 0
+            stype = 'Unsigned';
+            return
+        case 1
+            stype = 'Signed  (2''s comp)';
+            return
+        case 2
+            stype = 'Boolean';
+            return
+        otherwise
+            error('Unknown type %i', arith_type);
+    end
+end
+
+% io ports and assert blocks
 y_pos_row = y_pos;
 for p = 1 : num_ios,
-    idx = p;
-    in_name = sprintf('in_%s', char(io_names(idx)));
+    x_start =   80;
+    in_name = sprintf('in_%s', char(io_names(p)));
+    assert_name = sprintf('assert_%s', char(io_names(p)));
+    if io_types(p) == 2
+        gddtype = 'Boolean';
+    else
+        gddtype = 'Fixed-point';
+    end
     reuse_block(blk, in_name, 'built-in/inport', ...
         'Port', num2str(p), ...
         'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
-    add_line(blk, [in_name, '/1'], ['buscreate/', num2str(p)]);
+    x_start = x_start + (x_size*1.5);
+    reuse_block(blk, assert_name, 'xbsIndex_r4/Assert', ...
+            'showname', 'off', 'assert_type', 'on', ...
+            'type_source', 'Explicitly', 'arith_type', type_to_string(io_types(p)), ...
+            'bin_pt', num2str(io_bps(p)), 'gui_display_data_type', gddtype, ...
+            'n_bits', num2str(io_widths(p)), ...
+            'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
+    add_line(blk, [in_name, '/1'], [assert_name, '/1']);
+    add_line(blk, [assert_name, '/1'], ['buscreate/', num2str(p)]);
     y_pos_row = y_pos_row + (y_size * 2);
 end
 
@@ -147,12 +182,26 @@ if strcmp(snap_value, 'on'),
     add_line(blk, 'extracreate/1', ['ss/', num2str(snapport)]);
     % draw an input port for each field for the extra value
     for p = 1 : num_extras,
-        idx = p;
-        in_name = sprintf('extra_%s', char(extra_names(idx)));
+        x_start =   100;
+        in_name = sprintf('extra_%s', char(extra_names(p)));
+        assert_name = sprintf('assextra_%s', char(extra_names(p)));
+        if extra_types(p) == 2
+            gddtype = 'Boolean';
+        else
+            gddtype = 'Fixed-point';
+        end
         reuse_block(blk, in_name, 'built-in/inport', ...
             'Port', num2str(p + portnum), ...
             'Position', [x_start, y_pos_row + 500, x_start + (x_size/2), y_pos_row + 500 + y_size]);
-        add_line(blk, [in_name, '/1'], ['extracreate/', num2str(p)]);
+        x_start = x_start + (x_size*1.5);
+        reuse_block(blk, assert_name, 'xbsIndex_r4/Assert', ...
+            'showname', 'off', 'assert_type', 'on', ...
+            'type_source', 'Explicitly', 'arith_type', type_to_string(extra_types(p)), ...
+            'bin_pt', num2str(extra_bps(p)), 'gui_display_data_type', gddtype, ...
+            'n_bits', num2str(extra_widths(p)), ...
+            'Position', [x_start, y_pos_row + 500, x_start + (x_size/2), y_pos_row + 500 + y_size]);
+        add_line(blk, [in_name, '/1'], [assert_name, '/1']);
+        add_line(blk, [assert_name, '/1'], ['extracreate/', num2str(p)]);
         y_pos_row = y_pos_row + (y_size*2.5);
     end
     
@@ -164,3 +213,6 @@ clean_blocks(blk);
 %save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 
 clog('exiting bitsnap_init','trace');
+
+% end of main function
+end

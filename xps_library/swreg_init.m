@@ -86,6 +86,22 @@ set_param(blk, 'AttributesFormatString', display_string);
 
 clog('exiting swreg_init','trace');
 
+function stype = type_to_string(arith_type)
+    switch arith_type
+        case 0
+            stype = 'Unsigned';
+            return
+        case 1
+            stype = 'Signed  (2''s comp)';
+            return
+        case 2
+            stype = 'Boolean';
+            return
+        otherwise
+            error('Unknown type %i', arith_type);
+    end
+end
+
 function draw_to()
     y_pos_row = y_pos;
     if numios > 1,
@@ -118,15 +134,28 @@ function draw_to()
     % ports
     for pindex = 1 : numios,
         in_name = sprintf('out_%s', current_names{pindex});
+        assert_name = sprintf('assert_%s', current_names{pindex});
         reinterpret_name = sprintf('reint%i', pindex);
+        if current_types(pindex) == 2
+            gddtype = 'Boolean';
+        else
+            gddtype = 'Fixed-point';
+        end
         reuse_block(blk, in_name, 'built-in/inport', ...
             'Port', num2str(pindex), ...
             'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
+        reuse_block(blk, assert_name, 'xbsIndex_r4/Assert', ...
+            'showname', 'off', 'assert_type', 'on', ...
+            'type_source', 'Explicitly', 'arith_type', type_to_string(current_types(pindex)), ...
+            'bin_pt', num2str(current_bins(pindex)), 'gui_display_data_type', gddtype, ...
+            'n_bits', num2str(current_widths(pindex)), ...
+            'Position', [x_start + (x_size * 1 * 1), y_pos_row, x_start + (x_size * 1 * 1) + (x_size/2), y_pos_row + y_size]);
         reuse_block(blk, reinterpret_name, 'xbsIndex_r4/Reinterpret', ...
             'Position', [x_start + (x_size * 1 * 2), y_pos_row, x_start + (x_size * 1 * 2) + (x_size/2), y_pos_row + y_size], ...
             'force_arith_type', 'on', 'arith_type', 'Unsigned', ...
             'force_bin_pt', 'on', 'bin_pt', '0');
-        add_line(blk, [in_name, '/1'], [reinterpret_name, '/1'], 'autorouting', 'on');
+        add_line(blk, [in_name, '/1'], [assert_name, '/1'], 'autorouting', 'on');
+        add_line(blk, [assert_name, '/1'], [reinterpret_name, '/1'], 'autorouting', 'on');
         if numios > 1,
             add_line(blk, [reinterpret_name, '/1'], ['concatenate/', num2str(pindex)], 'autorouting', 'on');
         else

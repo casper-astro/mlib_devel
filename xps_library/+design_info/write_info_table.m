@@ -1,4 +1,10 @@
 function write_info_table(filename, sysname, blks)
+    %
+    % Given a list of tagged blocks and a filename, write a file
+    % containing all the information about those blocks, populated from
+    % their masks.
+    %
+
     % the virtual info blocks we're populating
     info_blocks = {};
 
