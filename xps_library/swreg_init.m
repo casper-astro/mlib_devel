@@ -22,7 +22,7 @@ y_pos =     100;
 
 % the rest depends on whether it's an in or out reg
 mode = get_param(blk, 'mode');
-current_names = textscan(strtrim(strrep(strrep(get_param(blk, 'names'), ']', ''), '[', '')), '%s');
+current_names = textscan(strtrim(strrep(strrep(strrep(strrep(get_param(blk, 'names'), ']', ''), '[', ''), ',', ' '), '  ', ' ')), '%s');
 current_names = current_names{1};
 numios = length(current_names);
 current_types = eval(get_param(blk, 'arith_types'));
