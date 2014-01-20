@@ -53,9 +53,9 @@ extra_widths =      eval(get_param(blk, 'extra_widths'));
 extra_bps =         eval(get_param(blk, 'extra_bps'));
 extra_types =       eval(get_param(blk, 'extra_types'));
 
-io_names = textscan(strtrim(strrep(strrep(io_names, ']', ''), '[', '')), '%s');
+io_names = textscan(strtrim(strrep(strrep(strrep(strrep(io_names, ']', ''), '[', ''), ',', ' '), '  ', ' ')), '%s');
 io_names = io_names{1};
-extra_names = textscan(strtrim(strrep(strrep(extra_names, ']', ''), '[', '')), '%s');
+extra_names = textscan(strtrim(strrep(strrep(strrep(strrep(extra_names, ']', ''), '[', ''), ',', ' '), '  ', ' ')), '%s');
 extra_names = extra_names{1};
 
 % check lengths and whatnot
@@ -64,8 +64,8 @@ if (numel(io_names) ~= numel(io_widths)) || (numel(io_names) ~= numel(io_bps)) |
 end
 num_ios = numel(io_names);
 % check that the widths of the inputs are not greater than the snap width
-if sum(io_widths) > str2double(snap_data_width),
-    error('%i-bit wide snapshot chosen, but %i bit inputs specified.', str2double(snap_data_width), sum(io_widths));
+if sum(io_widths) > snap_data_width,
+    error('%i-bit wide snapshot chosen, but %i bit inputs specified.', snap_data_width, sum(io_widths));
 end
 % extra vars
 if (numel(extra_names) ~= numel(extra_widths)) || (numel(extra_names) ~= numel(extra_bps)) || (numel(extra_names) ~= numel(extra_types)) || (numel(extra_names) < 1),
@@ -98,8 +98,8 @@ if snap_delay > 0,
 end
     
 % the snapshot block
+%'Position', [x_start + (x_size * 5), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 5) + x_size, y_pos + (y_size * 10)], ...
 reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
-        'Position', [x_start + (x_size * 5), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 5) + x_size, y_pos + (y_size * 10)], ...
         'storage', snap_storage, ...
         'dram_dimm', num2str(snap_dram_dimm), ...
         'dram_clock', num2str(snap_dram_clock), ...
