@@ -29,17 +29,17 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     
     % check that we can write the file before we do anything
     info_table_filename = 'design_info.tab';
-    info_xml_filename = 'newinfo.xml';
-    design_xml_filename = 'design_info.xml';
+    %info_xml_filename = 'newinfo.xml';
+    %design_xml_filename = 'design_info.xml';
     % paths
     info_table_path = [mssge_paths.xps_path, slash, info_table_filename];
-    info_xml_path = [mssge_paths.xps_path, slash, info_xml_filename];
-    design_xml_path = [mssge_paths.xps_path, slash, design_xml_filename];
+    %info_xml_path = [mssge_paths.xps_path, slash, info_xml_filename];
+    %design_xml_path = [mssge_paths.xps_path, slash, design_xml_filename];
     try
         fid = fopen(info_table_path, 'w');
         fprintf(fid, '');
     catch e
-        error(['Could not open ', coreinfo_path, '.']);
+        error(['Could not open ', info_table_path, '.']);
     end
     fclose(fid);
     
@@ -56,68 +56,68 @@ function gen_xps_add_design_info(sysname, mssge_paths, slash)
     % write the coreinfo table file
     design_info.write_info_table(info_table_path, sysname, tagged_objects)
     
-    return
-    
-    % info blocks
-    info_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:info');
-    if numel(info_blks) > 0,
-        infoBlocks(1, numel(info_blks)) = design_info.InfoBlock;
-        for n = 1 : numel(info_blks),
-            infoBlocks(n) = design_info.InfoBlock(info_blks(n));
-        end
-    else
-        infoBlocks = [];
-    end
-    clear info_blks;
-    
-    % process registers
-    register_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:sw_reg');
-    register_names = '';
-    if numel(register_blks) > 0,
-        registers(1, numel(register_blks)) = design_info.Register;
-        for n = 1 : numel(register_blks),
-            registers(n) = design_info.Register(register_blks{n});
-            register_names = strcat(register_names, ', ', registers(n).get_block_name(true));
-        end
-        register_names = register_names(2:end);
-    else
-        registers = [];
-    end
-    clear register_blks;
-    
-    % and now bitsnaps and snap blocks
-    snapshot_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:snapshot');
-    snapshot_names = '';
-    if numel(snapshot_blks) > 0,
-        snapshots(1, numel(snapshot_blks)) = design_info.Snapshot;
-        for n = 1 : numel(snapshot_blks),
-            snap_block = design_info.Snapshot(snapshot_blks{n});
-            snapshot_names = strcat(snapshot_names, ', ', snap_block.get_block_name(true));
-            % remove info blocks that are in the snapshot as well
-            for o = 1 : numel(snap_block.infos),
-                s_info = snap_block.infos(o);
-                for p = 1 : numel(infoBlocks),
-                    o_info = infoBlocks(p);
-                    if (strcmp(char(s_info.parent_block), char(o_info.parent_block))) && ...
-                            (strcmp(char(s_info.block), char(o_info.block))),
-                        infoBlocks(p) = [];
-                        break;
-                    end % /if
-                end % /for
-            end % /for
-            snapshots(n) = snap_block;
-        end
-        snapshot_names = snapshot_names(2:end);
-    else
-        snapshots = [];
-    end
-    clear snapshot_blks;
-    
-    % write the coreinfo XML file
-    design_info.write_info_xml(info_xml_path, sysname, tag_list)
-    
-    % write the XML for the system design xml file
-    design_info.write_xml(design_xml_path, sysname, tag_list)
+%     return
+%     
+%     % info blocks
+%     info_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:info');
+%     if numel(info_blks) > 0,
+%         infoBlocks(1, numel(info_blks)) = design_info.InfoBlock;
+%         for n = 1 : numel(info_blks),
+%             infoBlocks(n) = design_info.InfoBlock(info_blks(n));
+%         end
+%     else
+%         infoBlocks = [];
+%     end
+%     clear info_blks;
+%     
+%     % process registers
+%     register_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:sw_reg');
+%     register_names = '';
+%     if numel(register_blks) > 0,
+%         registers(1, numel(register_blks)) = design_info.Register;
+%         for n = 1 : numel(register_blks),
+%             registers(n) = design_info.Register(register_blks{n});
+%             register_names = strcat(register_names, ', ', registers(n).get_block_name(true));
+%         end
+%         register_names = register_names(2:end);
+%     else
+%         registers = [];
+%     end
+%     clear register_blks;
+%     
+%     % and now bitsnaps and snap blocks
+%     snapshot_blks = find_system(sysname, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'casper:snapshot');
+%     snapshot_names = '';
+%     if numel(snapshot_blks) > 0,
+%         snapshots(1, numel(snapshot_blks)) = design_info.Snapshot;
+%         for n = 1 : numel(snapshot_blks),
+%             snap_block = design_info.Snapshot(snapshot_blks{n});
+%             snapshot_names = strcat(snapshot_names, ', ', snap_block.get_block_name(true));
+%             % remove info blocks that are in the snapshot as well
+%             for o = 1 : numel(snap_block.infos),
+%                 s_info = snap_block.infos(o);
+%                 for p = 1 : numel(infoBlocks),
+%                     o_info = infoBlocks(p);
+%                     if (strcmp(char(s_info.parent_block), char(o_info.parent_block))) && ...
+%                             (strcmp(char(s_info.block), char(o_info.block))),
+%                         infoBlocks(p) = [];
+%                         break;
+%                     end % /if
+%                 end % /for
+%             end % /for
+%             snapshots(n) = snap_block;
+%         end
+%         snapshot_names = snapshot_names(2:end);
+%     else
+%         snapshots = [];
+%     end
+%     clear snapshot_blks;
+%     
+%     % write the coreinfo XML file
+%     design_info.write_info_xml(info_xml_path, sysname, tag_list)
+%     
+%     % write the XML for the system design xml file
+%     design_info.write_xml(design_xml_path, sysname, tag_list)
 
     clog('exiting gen_xps_add_design_info','trace');
 end % end function gen_xps_add_design_info

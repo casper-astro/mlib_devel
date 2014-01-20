@@ -35,7 +35,7 @@ classdef Snapshot
             if strcmp(tag, 'casper:snapshot'),
                 obj = obj.load_from_snapshot(block);
             else
-                error('Only defined for xps:snapshot.');
+                error('Only defined for casper:snapshot.');
             end
         end
         
@@ -45,7 +45,6 @@ classdef Snapshot
             %
             % block
             obj.block = block;
-            
             % data
             mem_name = [strrep(obj.get_block_name(true), '/', '_'), '_data'];
             mem_address = -1;
@@ -146,6 +145,7 @@ classdef Snapshot
             % Returns a row of the info table
             %
             % data words
+            error('Not working.')
             for d = numel(obj.datawords) : -1 : 1,
                 dword = obj.datawords(d);
                 node = dword.to_xml_node(xml_dom);

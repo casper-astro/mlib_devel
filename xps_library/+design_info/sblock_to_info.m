@@ -1,4 +1,7 @@
 function infoblocks = sblock_to_info(block)
+    %
+    % Populate an InfoBlock from a tagged Simulink block.
+    %
     clog('entering sblock_to_info','trace');
     tag = get_param(block, 'Tag');
     if numel(tag) == 0,

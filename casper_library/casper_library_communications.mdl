@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1920.0, 0.0, 1282.0, 1050.0]
+      Location		      [1920.0, 0.0, 1280.0, 1024.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,9 +43,9 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 883.0]
+	Extents			[1244.0, 855.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
+	Offset			[-12.0, -298.0]
       }
     }
   }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jan 08 15:18:11 2014"
-  RTWModifiedTimeStamp	  311095083
-  ModelVersionFormat	  "1.%<AutoIncrement:6>"
+  LastModifiedDate	  "Tue Jan 14 09:34:48 2014"
+  RTWModifiedTimeStamp	  311592864
+  ModelVersionFormat	  "1.%<AutoIncrement:7>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -769,7 +769,7 @@ Library {
   }
   System {
     Name		    "casper_library_communications"
-    Location		    [1920, 0, 3202, 1050]
+    Location		    [1920, 0, 3200, 1024]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -783,7 +783,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "610"
+    SIDHighWatermark	    "659"
     Block {
       BlockType		      SubSystem
       Name		      "gbe_mux"
@@ -14080,7 +14080,7 @@ Library {
       Name		      "spead_unpack"
       SID		      "381"
       Ports		      [3, 8]
-      Position		      [355, 34, 470, 301]
+      Position		      [355, 32, 470, 313]
       ZOrder		      977
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       MinAlgLoopOccurrences   off
@@ -14143,7 +14143,7 @@ Library {
       }
       System {
 	Name			"spead_unpack"
-	Location		[0, 25, 1920, 1080]
+	Location		[1920, 0, 3200, 1024]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -16216,7 +16216,7 @@ Library {
 	  Name			  "error_or"
 	  SID			  "431"
 	  Ports			  [5, 1]
-	  Position		  [1665, 1023, 1720, 1297]
+	  Position		  [1665, 1027, 1720, 1303]
 	  ZOrder		  962
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Logical"
@@ -16236,13 +16236,13 @@ Library {
 	  has_advanced_control	  "0"
 	  sggui_pos		  "20,25,402,299"
 	  block_type		  "logical"
-	  sg_icon_stat		  "55,274,5,1,white,blue,0,d9ddc810,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 274 274 0 ],[0.77 0.82 0."
-	  "91 ]);\nplot([0 55 55 0 0 ],[0 0 274 274 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[144.77"
-	  " 144.77 151.77 144.77 151.77 151.77 151.77 144.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[137.77 1"
-	  "37.77 144.77 144.77 137.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[130.77 130.77 137.7"
-	  "7 137.77 130.77 ],[1 1 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[123.77 123.77 130.77 123.77 13"
-	  "0.77 130.77 123.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin "
+	  sg_icon_stat		  "55,276,5,1,white,blue,0,d9ddc810,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 276 276 0 ],[0.77 0.82 0."
+	  "91 ]);\nplot([0 55 55 0 0 ],[0 0 276 276 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18.425 11.425 ],[145.77"
+	  " 145.77 152.77 145.77 152.77 152.77 152.77 145.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.425 18.425 ],[138.77 1"
+	  "38.77 145.77 145.77 138.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],[131.77 131.77 138.7"
+	  "7 138.77 131.77 ],[1 1 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[124.77 124.77 131.77 124.77 13"
+	  "1.77 131.77 124.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin "
 	  "icon text');\n\n\n\n\n\n\ncolor('black');disp('or');\nfprintf('','COMMENT: end icon text');"
 	  Port {
 	    PortNumber		    1
@@ -16320,10 +16320,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const1"
-	  SID			  "435"
+	  SID			  "640"
 	  Ports			  [0, 1]
 	  Position		  [1500, 195, 1550, 205]
-	  ZOrder		  3697
+	  ZOrder		  3746
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -16367,10 +16367,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const2"
-	  SID			  "436"
+	  SID			  "647"
 	  Ports			  [0, 1]
 	  Position		  [1450, 270, 1500, 280]
-	  ZOrder		  3704
+	  ZOrder		  3753
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -16414,10 +16414,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const3"
-	  SID			  "437"
+	  SID			  "654"
 	  Ports			  [0, 1]
 	  Position		  [1400, 345, 1450, 355]
-	  ZOrder		  3711
+	  ZOrder		  3760
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -16461,10 +16461,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_delay1"
-	  SID			  "438"
+	  SID			  "642"
 	  Ports			  [1, 1]
 	  Position		  [1660, 145, 1680, 165]
-	  ZOrder		  3699
+	  ZOrder		  3748
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -16491,7 +16491,7 @@ Library {
 	  "rintf('','COMMENT: end icon text');"
 	  Port {
 	    PortNumber		    1
-	    Name		    "hdr1"
+	    Name		    "hdr1_0x00de"
 	    RTWStorageClass	    "Auto"
 	    DataLoggingNameMode	    "SignalName"
 	  }
@@ -16499,10 +16499,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_delay2"
-	  SID			  "439"
+	  SID			  "649"
 	  Ports			  [1, 1]
 	  Position		  [1610, 220, 1630, 240]
-	  ZOrder		  3706
+	  ZOrder		  3755
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -16529,7 +16529,7 @@ Library {
 	  "rintf('','COMMENT: end icon text');"
 	  Port {
 	    PortNumber		    1
-	    Name		    "hdr2"
+	    Name		    "hdr2_0x014d"
 	    RTWStorageClass	    "Auto"
 	    DataLoggingNameMode	    "SignalName"
 	  }
@@ -16537,10 +16537,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_delay3"
-	  SID			  "440"
+	  SID			  "656"
 	  Ports			  [1, 1]
 	  Position		  [1560, 295, 1580, 315]
-	  ZOrder		  3713
+	  ZOrder		  3762
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
@@ -16567,7 +16567,7 @@ Library {
 	  "rintf('','COMMENT: end icon text');"
 	  Port {
 	    PortNumber		    1
-	    Name		    "hdr3"
+	    Name		    "hdr3_0x01bc"
 	    RTWStorageClass	    "Auto"
 	    DataLoggingNameMode	    "SignalName"
 	  }
@@ -16575,27 +16575,27 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "header_from1"
-	  SID			  "441"
+	  SID			  "639"
 	  Position		  [1450, 168, 1460, 182]
-	  ZOrder		  3696
+	  ZOrder		  3745
 	  ShowName		  off
 	  GotoTag		  "hdr_word_change"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from2"
-	  SID			  "442"
+	  SID			  "646"
 	  Position		  [1400, 243, 1410, 257]
-	  ZOrder		  3703
+	  ZOrder		  3752
 	  ShowName		  off
 	  GotoTag		  "hdr_word_change"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from3"
-	  SID			  "443"
+	  SID			  "653"
 	  Position		  [1350, 318, 1360, 332]
-	  ZOrder		  3710
+	  ZOrder		  3759
 	  ShowName		  off
 	  GotoTag		  "hdr_word_change"
 	}
@@ -16636,10 +16636,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_reg1"
-	  SID			  "445"
+	  SID			  "641"
 	  Ports			  [2, 1]
 	  Position		  [1500, 145, 1550, 185]
-	  ZOrder		  3698
+	  ZOrder		  3747
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Register"
@@ -16666,10 +16666,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_reg2"
-	  SID			  "446"
+	  SID			  "648"
 	  Ports			  [2, 1]
 	  Position		  [1450, 220, 1500, 260]
-	  ZOrder		  3705
+	  ZOrder		  3754
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Register"
@@ -16696,10 +16696,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_reg3"
-	  SID			  "447"
+	  SID			  "655"
 	  Ports			  [2, 1]
 	  Position		  [1400, 295, 1450, 335]
-	  ZOrder		  3712
+	  ZOrder		  3761
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Register"
@@ -16726,10 +16726,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_rel1"
-	  SID			  "448"
+	  SID			  "644"
 	  Ports			  [2, 1]
 	  Position		  [1660, 175, 1680, 195]
-	  ZOrder		  3701
+	  ZOrder		  3750
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Relational"
@@ -16762,10 +16762,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_rel2"
-	  SID			  "449"
+	  SID			  "651"
 	  Ports			  [2, 1]
 	  Position		  [1610, 250, 1630, 270]
-	  ZOrder		  3708
+	  ZOrder		  3757
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Relational"
@@ -16798,10 +16798,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_rel3"
-	  SID			  "450"
+	  SID			  "658"
 	  Ports			  [2, 1]
 	  Position		  [1560, 325, 1580, 345]
-	  ZOrder		  3715
+	  ZOrder		  3764
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Relational"
@@ -16834,10 +16834,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_slice1"
-	  SID			  "451"
+	  SID			  "643"
 	  Ports			  [1, 1]
 	  Position		  [1600, 170, 1630, 190]
-	  ZOrder		  3700
+	  ZOrder		  3749
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -16874,10 +16874,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_slice2"
-	  SID			  "452"
+	  SID			  "650"
 	  Ports			  [1, 1]
 	  Position		  [1550, 245, 1580, 265]
-	  ZOrder		  3707
+	  ZOrder		  3756
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -16914,10 +16914,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_slice3"
-	  SID			  "453"
+	  SID			  "657"
 	  Ports			  [1, 1]
 	  Position		  [1500, 320, 1530, 340]
-	  ZOrder		  3714
+	  ZOrder		  3763
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
@@ -17232,28 +17232,28 @@ Library {
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "hdr1"
-	  SID			  "465"
+	  Name			  "hdr1_0x00de"
+	  SID			  "645"
 	  Position		  [1755, 148, 1785, 162]
-	  ZOrder		  3702
+	  ZOrder		  3751
 	  Port			  "6"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "hdr2"
-	  SID			  "466"
+	  Name			  "hdr2_0x014d"
+	  SID			  "652"
 	  Position		  [1755, 223, 1785, 237]
-	  ZOrder		  3709
+	  ZOrder		  3758
 	  Port			  "7"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "hdr3"
-	  SID			  "467"
+	  Name			  "hdr3_0x01bc"
+	  SID			  "659"
 	  Position		  [1755, 298, 1785, 312]
-	  ZOrder		  3716
+	  ZOrder		  3765
 	  Port			  "8"
 	  IconDisplay		  "Port number"
 	}
@@ -17438,13 +17438,13 @@ Library {
 	Line {
 	  SrcBlock		  "from_gbe_data"
 	  SrcPort		  1
-	  Points		  [0, 0]
+	  Points		  [15, 0]
 	  Branch {
 	    DstBlock		    "delay"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [15, 0; 0, -135; 805, 0]
+	    Points		    [0, -135; 805, 0]
 	    DstBlock		    "header_reg3"
 	    DstPort		    1
 	  }
@@ -17581,7 +17581,7 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "error_or"
 	  SrcPort		  1
-	  Points		  [0, -10]
+	  Points		  [0, -15]
 	  DstBlock		  "pkt_bad"
 	  DstPort		  1
 	}
@@ -17656,7 +17656,7 @@ Library {
 	  Labels		  [1, 1]
 	  SrcBlock		  "rel2"
 	  SrcPort		  1
-	  Points		  [110, 0; 0, 1211; -159, 0; 0, -206]
+	  Points		  [110, 0; 0, 1211; -159, 0; 0, -201]
 	  DstBlock		  "error_or"
 	  DstPort		  2
 	}
@@ -17722,13 +17722,13 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_slice1"
 	  SrcPort		  1
-	  Points		  [0, 0]
+	  Points		  [5, 0]
 	  Branch {
 	    DstBlock		    "header_rel1"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [5, 0; 0, -25]
+	    Points		    [0, -25]
 	    DstBlock		    "header_delay1"
 	    DstPort		    1
 	  }
@@ -17743,11 +17743,11 @@ Library {
 	  DstPort		  2
 	}
 	Line {
-	  Name			  "hdr1"
+	  Name			  "hdr1_0x00de"
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_delay1"
 	  SrcPort		  1
-	  DstBlock		  "hdr1"
+	  DstBlock		  "hdr1_0x00de"
 	  DstPort		  1
 	}
 	Line {
@@ -17755,7 +17755,7 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_rel1"
 	  SrcPort		  1
-	  Points		  [0, 835; -40, 0; 0, 140]
+	  Points		  [0, 835; -40, 0; 0, 145]
 	  DstBlock		  "error_or"
 	  DstPort		  3
 	}
@@ -17785,13 +17785,13 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_slice2"
 	  SrcPort		  1
-	  Points		  [0, 0]
+	  Points		  [5, 0]
 	  Branch {
 	    DstBlock		    "header_rel2"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [5, 0; 0, -25]
+	    Points		    [0, -25]
 	    DstBlock		    "header_delay2"
 	    DstPort		    1
 	  }
@@ -17806,11 +17806,11 @@ Library {
 	  DstPort		  2
 	}
 	Line {
-	  Name			  "hdr2"
+	  Name			  "hdr2_0x014d"
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_delay2"
 	  SrcPort		  1
-	  DstBlock		  "hdr2"
+	  DstBlock		  "hdr2_0x014d"
 	  DstPort		  1
 	}
 	Line {
@@ -17818,7 +17818,7 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_rel2"
 	  SrcPort		  1
-	  Points		  [10, 0; 0, 955]
+	  Points		  [10, 0; 0, 960]
 	  DstBlock		  "error_or"
 	  DstPort		  4
 	}
@@ -17833,13 +17833,13 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_slice3"
 	  SrcPort		  1
-	  Points		  [0, 0]
+	  Points		  [5, 0]
 	  Branch {
 	    DstBlock		    "header_rel3"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [5, 0; 0, -25]
+	    Points		    [0, -25]
 	    DstBlock		    "header_delay3"
 	    DstPort		    1
 	  }
@@ -17854,11 +17854,11 @@ Library {
 	  DstPort		  2
 	}
 	Line {
-	  Name			  "hdr3"
+	  Name			  "hdr3_0x01bc"
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_delay3"
 	  SrcPort		  1
-	  DstBlock		  "hdr3"
+	  DstBlock		  "hdr3_0x01bc"
 	  DstPort		  1
 	}
 	Line {
@@ -17866,7 +17866,7 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "header_rel3"
 	  SrcPort		  1
-	  Points		  [60, 0; 0, 935]
+	  Points		  [60, 0; 0, 940]
 	  DstBlock		  "error_or"
 	  DstPort		  5
 	}

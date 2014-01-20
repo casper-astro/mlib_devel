@@ -43,7 +43,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function munge_block(blk,varargin)
+function munge_block(blk, varargin)
 
 try
 
@@ -51,27 +51,27 @@ try
   if is_library_block(blk), return, end
   
   % Disable link
-  set_param(blk,'LinkStatus','inactive');
+  set_param(blk,'LinkStatus', 'inactive');
   
   % Take appropriate munge action
   switch get_var('munge', varargin{:})
       case 'dumbdown'
         % Nuke any mask initialization code
-        set_param(blk,'MaskInitialization','');
+        set_param(blk, 'MaskInitialization','');
         % Make mask params disabled
-        mes=get_param(blk,'MaskEnableString');
-        mes=strrep(mes,'on','off');
-        set_param(blk,'MaskEnableString',mes);
+        mes=get_param(blk, 'MaskEnableString');
+        mes=strrep(mes, 'on','off');
+        set_param(blk, 'MaskEnableString',mes);
         % Make mask params non-tunable
-        mtvs=get_param(blk,'MaskTunableValueString');
-        mtvs=strrep(mtvs,'on','off');
-        set_param(blk,'MaskTunableValueString',mtvs);
+        mtvs=get_param(blk, 'MaskTunableValueString');
+        mtvs=strrep(mtvs, 'on', 'off');
+        set_param(blk, 'MaskTunableValueString', mtvs);
         % Make mask params literal (non-evaluated)
-        mv=get_param(blk,'MaskVariables');
-        mv=strrep(mv,'@','&');
-        set_param(blk,'MaskVariables',mv);
+        mv=get_param(blk, 'MaskVariables');
+        mv=strrep(mv, '@', '&');
+        set_param(blk, 'MaskVariables', mv);
       case 'unmask'
-        set_param(blk,'Mask','off');
+        set_param(blk, 'Mask', 'off');
   end
 catch ex
   dump_and_rethrow(ex);
