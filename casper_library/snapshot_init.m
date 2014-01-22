@@ -35,7 +35,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function snapshot_init(blk,varargin)
+function snapshot_init(blk, varargin)
 
 clog('entering snapshot_init', 'trace');
 check_mask_type(blk, 'snapshot');
