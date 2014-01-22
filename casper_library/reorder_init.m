@@ -73,6 +73,15 @@ mux_latency     = 1;
 
 yinc = 20;
 
+delete_lines(blk);
+if isempty(map),
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  clog('exiting reorder_init', {log_group, 'trace'});
+  return;
+end %if
+
 map_length = length(map);
 map_bits = ceil(log2(map_length));
 if double_buffer == 1, order = 2;
@@ -114,15 +123,6 @@ if double_buffer == 0,
   end
 else, pre_delay = map_latency;
 end
-
-delete_lines(blk);
-if n_inputs < 1,
-  clean_blocks(blk);
-  set_param(blk, 'AttributesFormatString', '');
-  save_state(blk, 'defaults', defaults, varargin{:});
-  clog('exiting reorder_init', {log_group, 'trace'});
-  return;
-end %if
 
 reuse_block(blk, 'en', 'built-in/inport', 'Position', [25   43    55   57], 'Port', '2');
 reuse_block(blk, 'delay_we0', 'xbsIndex_r4/Delay', ...
