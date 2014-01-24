@@ -493,7 +493,7 @@ end endgenerate
       udp_length <= {packet_ctrl_size[12:0], 3'b0} + 16'd8;
       // compute the ip checksum (1's complement logic)
       ip_checksum_0 <= {2'b00, 16'h4500              }+ // Ver, IHL, DSCP, ECN
-                       {2'b00, 16'h041C              }+ // Total Len
+                       {2'b00, ip_length             }+ // Total Len
                        {2'b00, 16'h0000              }+ // ID
                        {2'b00, 16'h4000              }+ // Frag Offset
                        {2'b00, tx_ip_ttl, 8'h11      }+ // TTL, Protocol

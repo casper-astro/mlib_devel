@@ -20,8 +20,8 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [time_total, time_struct] = gen_xps_files(sys,flow_vec)
-% Generate all necessary file and optionally run the Xilinx backed tools
+function [time_total, time_struct] = gen_xps_files(sys, flow_vec)
+% Generate all necessary file and optionally run the Xilinx backend tools
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialization
@@ -87,6 +87,19 @@ xps_blks        = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',
 xps_xsg_blks    = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:xsg');
 xps_pcore_blks  = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:pcore');
 sysgen_blk      = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','SearchDepth', 1,   'Tag', 'genX');
+casper_blks     = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^casper:');
+
+% check for spaces in xps or casper block names
+for ctr = 1 : numel(xps_blks),
+    if numel(strfind(xps_blks{ctr}, ' ')) > 0,
+        error('Block names may not have spaces - %s', xps_blks{ctr});
+    end 
+end
+for ctr = 1 : numel(casper_blks),
+    if numel(strfind(casper_blks{ctr}, ' ')) > 0,
+        error('Block names may not have spaces - %s', casper_blks{ctr});
+    end 
+end
 
 % check if the system name is correct
 if upper(sys(1)) == sys(1),
@@ -190,7 +203,7 @@ disp('#############################');
 end
 time_update = now - start_time;
 
-%access all XPS blocks
+% Access all XPS blocks
 disp('#############################');
 disp('## Block objects creation  ##');
 disp('#############################');
@@ -206,8 +219,8 @@ for n = 1:length(xps_blks),
             xsg_obj = xps_block(xps_blks{n},{});
             xsg_obj = xps_xsg(xsg_obj);
         catch ex
-            disp(['Problem with block: ',xps_blks{n}]);
-            warning(ex.identifier, '%s', ex.getReport('basic')); 
+            disp(['Problem with XSG block: ',xps_blks{n}]);
+            warning(ex.identifier, '%s', ex.getReport('basic'));
             error('Error found during Object creation.');
         end
     end
@@ -218,16 +231,16 @@ end
 target_tags = {'xps_adc16' 'xps_adc5g' 'xps_adc083000x2' 'xps_adc' 'xps_katadc' 'xps_block'...
     'xps_bram' 'xps_corr_adc' 'xps_corr_dac' 'xps_corr_mxfe' 'xps_corr_rf' 'xps_dram' 'xps_ethlite'...
     'xps_framebuffer' 'xps_fifo' 'xps_gpio' 'xps_interchip' 'xps_lwip' 'xps_opb2opb' 'xps_probe'...
-    'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_sw_reg2' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'};
+    'xps_quadc' 'xps_sram' 'xps_sw_reg' 'xps_tengbe' 'xps_vsi' 'xps_xaui' 'xps_xsg'};
 for n = 1 : length(xps_blks),
-    if ~(strcmp(get_param(xps_blks(n),'tag'), 'xps:xsg') || strcmp(get_param(xps_blks(n),'tag'), 'xps:pcore')),
+    if ~(strcmp(get_param(xps_blks(n), 'tag'), 'xps:xsg') || strcmp(get_param(xps_blks(n), 'tag'), 'xps:pcore')),
         try
-            %get_param(xps_blks(n),'tag')
+            %tag = get_param(xps_blks(n), 'tag')
             blk_obj = xps_block(xps_blks{n}, xsg_obj);
-            %fprintf('Created block!\n')
-            assignin('base','last_blk_obj', blk_obj);
-            eval(['blk_obj = ',get(blk_obj,'type'),'(blk_obj);']);
-            %fprintf('Evaluated block!\n')
+            %fprintf('Created block! %s\n', tag);
+            assignin('base', 'last_blk_obj', blk_obj)
+            eval(['blk_obj = ', get(blk_obj, 'type'), '(blk_obj);']);
+            %fprintf('Evaluated block! %s\n', tag);
             xps_objs = [xps_objs, {blk_obj}];
             if isempty(find(strcmp(get(blk_obj, 'type'), target_tags), 1)),
                 custom_xps_objs = [custom_xps_objs, {blk_obj}];
@@ -237,12 +250,13 @@ for n = 1 : length(xps_blks),
                 end
             end
         catch ex
-            disp(['Problem with block: ', xps_blks{n}]);
+            disp(['Problem with XPS: tag block: ', xps_blks{n}]);
             dump_exception(ex);
             error('Error found during Object creation.');
         end
     end
 end
+
 % add the xsg_object to the list
 xps_objs = [{xsg_obj}, xps_objs];
 
@@ -326,20 +340,20 @@ if run_copy,
 
 %%%%%   PCORE SETUP
 %%%%     pcores_used = {};
-%%%% 
+%%%%
 %%%%     for n = 1 : length(xps_objs)
-%%%% 
+%%%%
 %%%%         curr_obj = xps_objs{n};
-%%%% 
+%%%%
 %%%%         obj_ip_name = get(curr_obj, 'ip_name');
 %%%%         obj_ip_ver  = get(curr_obj, 'ip_version');
 %%%%         obj_supp_ip_names = get(curr_obj, 'supp_ip_names');
 %%%%         obj_supp_ip_vers  = get(curr_obj, 'supp_ip_versions');
-%%%% 
+%%%%
 %%%%         if isempty(obj_ip_ver)
 %%%%             obj_ip_ver = '1.00.a';
 %%%%         end
-%%%% 
+%%%%
 %%%%         if isempty(obj_supp_ip_names)
 %%%%             try
 %%%%                 pcore_used = clear_name([obj_ip_name, ' v', obj_ip_ver]);
@@ -352,7 +366,7 @@ if run_copy,
 %%%%                     pcores_used = [pcores_used, {pcore_used}];
 %%%%                 end
 %%%%             end
-%%%% 
+%%%%
 %%%%             % supp_ip_names{1} used to override ip_name; also include ip_name if {1} is empty
 %%%%             if isempty(obj_supp_ip_names{1})
 %%%%                 try
@@ -366,9 +380,9 @@ if run_copy,
 %%%%                 end
 %%%%             end
 %%%%         end
-%%%% 
+%%%%
 %%%%     end % for n = 1:length(xps_objs)
-%%%% 
+%%%%
 %%%%     pcores_used = unique(pcores_used);
 %%%%%   /PCORE SETUP
 
@@ -497,7 +511,7 @@ if run_edkgen,
             disp(copymessage);
         end % if ~copystatus
     end % if ~exist([xps_path, slash, xmpfile, '.bac'],'file')
-    
+
     % modifying MHS file
     gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash);
 
@@ -506,9 +520,39 @@ if run_edkgen,
 
     % modifying UCF file
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
-    
+
     % add extra register and snapshot info from the design
     gen_xps_add_design_info(sys, mssge_paths, slash);
+
+    % shanly and mark's new format - generated from core_info and design_info
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2'),
+        kcpfpg_fid = fopen([xps_path, slash, 'extended_info.kcpfpg'], 'w');
+        fprintf(kcpfpg_fid, '#!/bin/kcpfpg\n');
+        fprintf(kcpfpg_fid, '?uploadbin\n');
+        % read coreinfo
+        fid = fopen([xps_path, slash, 'core_info.tab'], 'r');
+        while 1,
+            tline = fgetl(fid);
+            if ~ischar(tline), break, end
+            linevals = textscan(tline, '%s %s %s %s');
+            newline = ['?register ', sprintf('%s %s %s', linevals{1}{1}, linevals{3}{1}, linevals{4}{1})];
+            fprintf(kcpfpg_fid, '%s\n', newline);
+            clear linevals newline tline;
+        end
+        fclose(fid);
+        % read design meta info
+        fid = fopen([xps_path, slash, 'design_info.tab'], 'r');
+        while 1,
+            tline = fgetl(fid);
+            if ~ischar(tline), break, end
+            newline = ['?meta ', tline];
+            fprintf(kcpfpg_fid, '%s\n', newline);
+        end
+        clear newline tline;
+        fclose(fid);
+        fprintf(kcpfpg_fid, '?quit\n');
+        fclose(kcpfpg_fid);
+    end
 
 end % if run_edkgen
 time_edkgen = now - start_time;
@@ -523,7 +567,7 @@ if run_elab,
             xps_objs{n} = elaborate(xps_objs{n});
         catch ex
             display(xps_objs{n});
-            warning(ex.identifier, '%s', ex.getReport('basic')); 
+            warning(ex.identifier, '%s', ex.getReport('basic'));
             error('Elaboration of object failed.');
         end
     end
@@ -558,22 +602,22 @@ if run_software,
         case 'none'
 
         otherwise
-            error(['Unsupported OS: ',sw_os]);
+            error(['Unsupported OS: ', sw_os]);
     end % switch sw_os
 
-    win_fid = fopen([xps_path, slash, 'gen_prog_files.bat'],'w');
-    unix_fid = fopen([xps_path, slash, 'gen_prog_files'],'w');
+    win_fid = fopen([xps_path, slash, 'gen_prog_files.bat'], 'w');
+    unix_fid = fopen([xps_path, slash, 'gen_prog_files'], 'w');
     fprintf(unix_fid, '#!/bin/bash\n');
     files_name = [design_name, '_', clear_name(datestr(now, 'yyyy-mmm-dd HHMM'))];
-    
+
     switch sw_os
         case 'none'
-            fprintf(win_fid,['copy implementation\\system.bit ..\\bit_files\\',files_name,'.bit\n']);
-            fprintf(unix_fid,['cp implementation/system.bit ../bit_files/',files_name,'.bit\n']);
+            fprintf(win_fid, ['copy implementation\\system.bit ..\\bit_files\\',files_name,'.bit\n']);
+            fprintf(unix_fid, ['cp implementation/system.bit ../bit_files/',files_name,'.bit\n']);
         % end case 'none'
         otherwise
-            fprintf(win_fid,['copy implementation\\download.bit ..\\bit_files\\',files_name,'.bit\n']);
-            fprintf(unix_fid,['cp implementation/download.bit ../bit_files/',files_name,'.bit\n']);
+            fprintf(win_fid, ['copy implementation\\download.bit ..\\bit_files\\',files_name,'.bit\n']);
+            fprintf(unix_fid, ['cp implementation/download.bit ../bit_files/',files_name,'.bit\n']);
         % end otherwise
     end % switch sw_os
 
@@ -585,17 +629,22 @@ if run_software,
         else
            fprintf(unix_fid, ['./mkbof -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
         end
-        fprintf(win_fid,['copy implementation\\system.bof', ' ..\\bit_files\\', files_name,'.bof\n']);
+        fprintf(win_fid, ['copy implementation\\system.bof', ' ..\\bit_files\\', files_name,'.bof\n']);
         if strcmp(hw_sys, 'ROACH'),
            fprintf(unix_fid,'chmod +x implementation/system.bof\n');
          end
-        fprintf(unix_fid,['cp implementation/system.bof ../bit_files/', files_name,'.bof\n']);
-        if exist([xps_path,  slash, 'casper_design_info.xml'], 'file') == 2,
-            fprintf(win_fid,['copy casper_design_info.xml ..\\bit_files\\', files_name,'.xml\n']);
-            fprintf(unix_fid,['cp casper_design_info.xml ../bit_files/', files_name,'.xml\n']);
+        fprintf(unix_fid, ['cp implementation/system.bof ../bit_files/', files_name,'.bof\n']);
+        if exist([xps_path,  slash, 'design_info.tab'], 'file') == 2,
+            fprintf(win_fid, ['copy design_info.tab ..\\bit_files\\', files_name,'.info\n']);
+            fprintf(unix_fid, ['cp design_info.tab ../bit_files/', files_name,'.info\n']);
         end
         if strcmp(hw_sys, 'ROACH2'),
-            fprintf(unix_fid,['gzip -c ../bit_files/', files_name, '.bof  > ../bit_files/', files_name,'.bof.gz\n']);
+            fprintf(unix_fid, ['gzip -c ../bit_files/', files_name, '.bof  > ../bit_files/', files_name,'.bof.gz\n']);
+            if exist([xps_path, slash, 'extended_info.kcpfpg'], 'file') == 2,
+                fprintf(unix_fid, ['gzip -c implementation/system.bin > implementation/system.bin.gz\n']);
+                fprintf(unix_fid, ['cat implementation/system.bin.gz >> ', xps_path, slash, 'extended_info.kcpfpg\n']);
+                fprintf(unix_fid, ['cp extended_info.kcpfpg ../bit_files/', files_name,'.fpg\n']);
+            end
         end % strcmp(hw_sys, 'ROACH2')
     end % strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
 
@@ -614,10 +663,8 @@ if run_edk,
     delete([xps_path, slash, 'implementation', slash, 'system.bit']);
     delete([xps_path, slash, 'implementation', slash, 'download.bit']);
     fid = fopen([xps_path, slash, 'run_xps.tcl'],'w');
-
     hw_sys   = get(xsg_obj,'hw_sys');
-
-    switch hw_sys 
+    switch hw_sys
         case 'ROACH'
             fprintf(fid, 'run bits\n');
         % end case 'powerpc440_ext'
@@ -627,11 +674,10 @@ if run_edk,
         otherwise
             fprintf(fid, 'run init_bram\n');
         % end otherwise
-    end % switch hw_sys 
+    end % switch hw_sys
     fprintf(fid, 'exit\n');
     fclose(fid);
-
-    eval(['cd ',xps_path]);
+    eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
         cd(simulink_path);
@@ -655,9 +701,7 @@ if run_edk,
             end % if unix('gen_prog_files.bat')
         end %if (strcmp(slash, '\'))
     end % if(dos(['xps -nw -scr run_xps.tcl system.xmp']))
-
     cd(simulink_path);
-
 end % if run_edk
 time_edk = now - start_time;
 
