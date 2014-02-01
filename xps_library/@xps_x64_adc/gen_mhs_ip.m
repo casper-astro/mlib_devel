@@ -4,6 +4,7 @@ plb_addr_end = plb_addr_start;
 
 blk_name  = get(blk_obj, 'simulink_name');
 inst_name = clear_name(blk_name);
+hw_sys    = get(blk_obj,'hw_sys');
 xsg_obj   = get(blk_obj,'xsg_obj');
 use_spi   = get(blk_obj, 'use_spi')
 clk_rate  = get(blk_obj,'adc_clk_rate')*6  % in MHz
@@ -116,43 +117,46 @@ str = [str, 'END',                                                      '\n'];
 str = [str, 'PORT ', inst_name, '_rst_gpio_ext = ', inst_name, '_rst_gpio_ext, DIR = O, VEC = [0:0]', '\n'];
 str = [str, '',                                                         '\n'];
 
-%%% Control pin GPIO output enable (active low)
-str = [str, '# SPI/Reset pin output enable (active low)',               '\n'];
-str = [str, 'BEGIN gpio_simulink2ext',                                  '\n'];
-str = [str, ' PARAMETER INSTANCE  = ', inst_name, '_ctrl_out_en_inst',  '\n'];
-str = [str, ' PARAMETER HW_VER    = 1.00.a',                            '\n'];
-str = [str, ' PARAMETER DDR       = 0',                                 '\n'];
-str = [str, ' PARAMETER WIDTH     = 1',                                 '\n'];
-str = [str, ' PARAMETER CLK_PHASE = 0',                                 '\n'];
-str = [str, ' PARAMETER REG_IOB   = true',                              '\n'];
-str = [str, ' PORT gateway        = 0b0',                               '\n'];
-str = [str, ' PORT io_pad         = ', inst_name, '_ctrl_out_en',       '\n'];
-str = [str, ' PORT clk            = adc0_clk',                          '\n'];
-str = [str, ' PORT clk90          = adc0_clk90',                        '\n'];
-str = [str, 'END',                                                      '\n'];
-str = [str, 'PORT ', inst_name, '_ctrl_out_en = ', inst_name, '_ctrl_out_en, DIR = O, VEC = [0:0]', '\n'];
-str = [str, '',                                                         '\n'];
+if strcmp(hw_sys,'ROACH')
+    %%% Control pin GPIO output enable (active low)
+    str = [str, '# SPI/Reset pin output enable (active low)',               '\n'];
+    str = [str, 'BEGIN gpio_simulink2ext',                                  '\n'];
+    str = [str, ' PARAMETER INSTANCE  = ', inst_name, '_ctrl_out_en_inst',  '\n'];
+    str = [str, ' PARAMETER HW_VER    = 1.00.a',                            '\n'];
+    str = [str, ' PARAMETER DDR       = 0',                                 '\n'];
+    str = [str, ' PARAMETER WIDTH     = 1',                                 '\n'];
+    str = [str, ' PARAMETER CLK_PHASE = 0',                                 '\n'];
+    str = [str, ' PARAMETER REG_IOB   = true',                              '\n'];
+    str = [str, ' PORT gateway        = 0b0',                               '\n'];
+    str = [str, ' PORT io_pad         = ', inst_name, '_ctrl_out_en',       '\n'];
+    str = [str, ' PORT clk            = adc0_clk',                          '\n'];
+    str = [str, ' PORT clk90          = adc0_clk90',                        '\n'];
+    str = [str, 'END',                                                      '\n'];
+    str = [str, 'PORT ', inst_name, '_ctrl_out_en = ', inst_name, '_ctrl_out_en, DIR = O, VEC = [0:0]', '\n'];
+    str = [str, '',                                                         '\n'];
 
-str = [str, 'BEGIN dcm_module',                                                        '\n'];
-str = [str, ' PARAMETER INSTANCE                = ', inst_name, '_fab_phase_gen',      '\n'];
-str = [str, ' PARAMETER HW_VER                  = 1.00.d',                             '\n'];
-str = [str, ' PARAMETER C_EXT_RESET_HIGH        = 0',                                  '\n'];
-str = [str, ' PARAMETER C_CLK0_BUF              = TRUE',                               '\n'];
-str = [str, ' PARAMETER C_CLK90_BUF             = TRUE',                               '\n'];
-str = [str, ' PARAMETER C_CLK180_BUF            = TRUE',                               '\n'];
-str = [str, ' PARAMETER C_CLK270_BUF            = TRUE',                               '\n'];
-str = [str, ' PARAMETER C_CLKIN_PERIOD          = ', num2str(fabric_clk_period, '%f'), '\n'];
-str = [str, ' PARAMETER C_DFS_FREQUENCY_MODE    = HIGH',                               '\n'];
-str = [str, ' PARAMETER C_DLL_FREQUENCY_MODE    = HIGH',                               '\n'];
-str = [str, ' PORT RST                          = dcm_locked',                         '\n'];
-str = [str, ' PORT CLKIN                        = adc_clk_4x_6d',                      '\n'];
-str = [str, ' PORT CLKFB                        = adc0_clk',                           '\n'];
-str = [str, ' PORT CLK0                         = adc0_clk',                           '\n'];
-str = [str, ' PORT CLK90                        = adc0_clk90',                         '\n'];
-str = [str, ' PORT CLK180                       = adc0_clk180',                        '\n'];
-str = [str, ' PORT CLK270                       = adc0_clk270',                        '\n'];
-str = [str, 'END',                                                                     '\n'];
-str = [str, '\n'];
+    %%% On ROACH2 this DCM has been absorbed into x64_adc_infrastructure
+    str = [str, 'BEGIN dcm_module',                                                        '\n'];
+    str = [str, ' PARAMETER INSTANCE                = ', inst_name, '_fab_phase_gen',      '\n'];
+    str = [str, ' PARAMETER HW_VER                  = 1.00.d',                             '\n'];
+    str = [str, ' PARAMETER C_EXT_RESET_HIGH        = 0',                                  '\n'];
+    str = [str, ' PARAMETER C_CLK0_BUF              = TRUE',                               '\n'];
+    str = [str, ' PARAMETER C_CLK90_BUF             = TRUE',                               '\n'];
+    str = [str, ' PARAMETER C_CLK180_BUF            = TRUE',                               '\n'];
+    str = [str, ' PARAMETER C_CLK270_BUF            = TRUE',                               '\n'];
+    str = [str, ' PARAMETER C_CLKIN_PERIOD          = ', num2str(fabric_clk_period, '%f'), '\n'];
+    str = [str, ' PARAMETER C_DFS_FREQUENCY_MODE    = HIGH',                               '\n'];
+    str = [str, ' PARAMETER C_DLL_FREQUENCY_MODE    = HIGH',                               '\n'];
+    str = [str, ' PORT RST                          = dcm_locked',                         '\n'];
+    str = [str, ' PORT CLKIN                        = adc_clk_4x_6d',                      '\n'];
+    str = [str, ' PORT CLKFB                        = adc0_clk',                           '\n'];
+    str = [str, ' PORT CLK0                         = adc0_clk',                           '\n'];
+    str = [str, ' PORT CLK90                        = adc0_clk90',                         '\n'];
+    str = [str, ' PORT CLK180                       = adc0_clk180',                        '\n'];
+    str = [str, ' PORT CLK270                       = adc0_clk270',                        '\n'];
+    str = [str, 'END',                                                                     '\n'];
+    str = [str, '\n'];
+end
 
 
 
@@ -196,11 +200,23 @@ str = [str, ' PORT in_7_n                    = in_7_n',                         
 str = [str, ' PORT in_7_p                    = in_7_p',                         '\n'];
 str = [str, ' PORT fc_7_n                    = fc_7_n',                         '\n'];
 str = [str, ' PORT fc_7_p                    = fc_7_p',                         '\n'];
-str = [str, ' PORT adc_clk0                  = adc_bit_clk0',                   '\n'];
-str = [str, ' PORT adc_clk90                 = adc_bit_clk90',                  '\n'];
-str = [str, ' PORT adc_clk180                = adc_bit_clk180',                 '\n'];
-str = [str, ' PORT adc_clk270                = adc_bit_clk270',                 '\n'];
-str = [str, ' PORT fab_clk                   = adc_clk_4x_6d',                  '\n'];
+switch hw_sys
+    %The out of phase adc clocks don't actually get used, so for ROACH 2 they have been removed.
+    %Instead, the four fabric clock phases come straight out of the pcore, rather than using the external dcm module
+    case 'ROACH'
+        str = [str, ' PORT adc_clk0                  = adc_bit_clk0',                   '\n'];
+        str = [str, ' PORT adc_clk90                 = adc_bit_clk90',                  '\n'];
+        str = [str, ' PORT adc_clk180                = adc_bit_clk180',                 '\n'];
+        str = [str, ' PORT adc_clk270                = adc_bit_clk270',                 '\n'];
+        str = [str, ' PORT fab_clk                   = adc_clk_4x_6d',                  '\n'];
+    case 'ROACH2'
+        str = [str, ' PORT adc_clk0                  = adc_bit_clk0',                   '\n'];
+        str = [str, ' PORT fab_clk                   = adc0_clk',                       '\n'];
+        str = [str, ' PORT fab_clk90                 = adc0_clk90',                     '\n'];
+        str = [str, ' PORT fab_clk180                = adc0_clk180',                    '\n'];
+        str = [str, ' PORT fab_clk270                = adc0_clk270',                    '\n'];
+end
+
 str = [str, '',                                                                 '\n'];
 str = [str, ' PORT adc_data0                 = ', inst_name, '_user_data0',     '\n'];
 str = [str, ' PORT adc_data1                 = ', inst_name, '_user_data1',     '\n'];

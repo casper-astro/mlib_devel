@@ -38,19 +38,24 @@ s.adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
 s.use_spi      = eval_param(blk_name,'spi');
 s.ctrl_gpio    = get_param(blk_name,'ctrl_gpio');
 
-if strcmp(s.ctrl_gpio, 'GPIO_A')
-    s.ctrl_gpio = 'gpioa';
-elseif strcmp(s.ctrl_gpio, 'GPIO_B')
-    s.ctrl_gpio = 'gpiob';
-else
-    error('X64_ADC block ctrl interface is neither GPIO_A or GPIO_B');
-end
 
 switch s.hw_sys
     case 'ROACH'
         ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/(s.adc_clk_rate*6)),' ns']);
         ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
         ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
+        if strcmp(s.ctrl_gpio, 'GPIO_A')
+            s.ctrl_gpio = 'gpioa';
+        elseif strcmp(s.ctrl_gpio, 'GPIO_B')
+            s.ctrl_gpio = 'gpiob';
+        else
+            error('X64_ADC block ctrl interface is neither GPIO_A or GPIO_B');
+        end
+    case 'ROACH2'
+        ucf_constraints_clock  = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE', 'PERIOD', [num2str(1000/(s.adc_clk_rate*6)),' ns']);
+        ucf_constraints_term   = struct('IOSTANDARD', 'LVDS_25', 'DIFF_TERM', 'TRUE');
+        ucf_constraints_noterm = struct('IOSTANDARD', 'LVDS_25');
+        s.ctrl_gpio = 'gpio'; %ROACH2 only has one gpio bank
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end
@@ -85,12 +90,17 @@ b = set(b, 'supp_ip_versions', supp_ip_versions);
 % external ports
 mhs_constraints = struct('SIGIS','CLK', 'CLK_FREQ',num2str(s.adc_clk_rate*1e6));
 ctrl_iobname = [s.hw_sys, '.', s.ctrl_gpio];
-ctrl_out_en_iobname = [s.hw_sys, '.', s.ctrl_gpio, '_oe_n'];
-gpio_oe_n_constraints = struct('IOSTANDARD', 'LVCMOS33');
-if strcmp(s.ctrl_gpio, 'gpioa')
-    gpio_constraints = struct('IOSTANDARD', 'LVCMOS25');
-else
-    gpio_constraints = struct('IOSTANDARD', 'LVCMOS15');
+switch s.hw_sys
+    case 'ROACH'
+        ctrl_out_en_iobname = [s.hw_sys, '.', s.ctrl_gpio, '_oe_n'];
+        gpio_oe_n_constraints = struct('IOSTANDARD', 'LVCMOS33');
+        if strcmp(s.ctrl_gpio, 'gpioa')
+            gpio_constraints = struct('IOSTANDARD', 'LVCMOS25');
+        else
+            gpio_constraints = struct('IOSTANDARD', 'LVCMOS15');
+        end
+    case 'ROACH2'
+        gpio_constraints = struct('IOSTANDARD', 'LVCMOS15');
 end
     
 
@@ -138,7 +148,11 @@ ext_ports.adc_clk_p   = {1 'in'  'adc_clk_p' ['{',adcport0,'_p{[39]+1,:}}'] 'vec
 ext_ports.adc_clk_n   = {1 'in'  'adc_clk_n' ['{',adcport0,'_n{[39]+1,:}}'] 'vector=false' struct() ucf_constraints_clock};
 
 ext_ports.adc_rst     = {1 'out' [inst_name, '_rst_gpio_ext'] [ctrl_iobname, '  ([','0',']+1)'] 'vector=true' struct() gpio_constraints };
-ext_ports.ctrl_out_en = {1 'out' [inst_name, '_ctrl_out_en' ] [ctrl_out_en_iobname, '  ([','0',']+1)'] 'vector=true' struct() gpio_oe_n_constraints };
+
+if strcmp(s.hw_sys,'ROACH')
+    % ROACH 1 needs an external port to drive the GPIO buffers
+    ext_ports.ctrl_out_en = {1 'out' [inst_name, '_ctrl_out_en' ] [ctrl_out_en_iobname, '  ([','0',']+1)'] 'vector=true' struct() gpio_oe_n_constraints };
+end
 if strcmp(s.use_spi,'on')
     ext_ports.spi_data = {1 'out' [inst_name, '_spi_data_gpio_ext'] [ctrl_iobname, '  ([','1',']+1)'] 'vector=true' struct() gpio_constraints};
     ext_ports.spi_sclk = {1 'out' [inst_name, '_spi_sclk_gpio_ext'] [ctrl_iobname, '  ([','2',']+1)'] 'vector=true' struct() gpio_constraints };
