@@ -535,7 +535,7 @@ if run_edkgen,
             tline = fgetl(fid);
             if ~ischar(tline), break, end
             linevals = textscan(tline, '%s %s %s %s');
-            newline = ['?register ', sprintf('%s %s %s', linevals{1}{1}, linevals{3}{1}, linevals{4}{1})];
+            newline = ['?register ', sprintf('%s 0x%s 0x%s', linevals{1}{1}, linevals{3}{1}, linevals{4}{1})];
             fprintf(kcpfpg_fid, '%s\n', newline);
             clear linevals newline tline;
         end
@@ -640,12 +640,12 @@ if run_software,
         end
         if strcmp(hw_sys, 'ROACH2'),
             fprintf(unix_fid, ['gzip -c ../bit_files/', files_name, '.bof  > ../bit_files/', files_name,'.bof.gz\n']);
-            if exist([xps_path, slash, 'extended_info.kcpfpg'], 'file') == 2,
-                fprintf(unix_fid, ['gzip -c implementation/system.bin > implementation/system.bin.gz\n']);
-                fprintf(unix_fid, ['cat implementation/system.bin.gz >> ', xps_path, slash, 'extended_info.kcpfpg\n']);
-                fprintf(unix_fid, ['cp extended_info.kcpfpg ../bit_files/', files_name,'.fpg\n']);
-            end
-        end % strcmp(hw_sys, 'ROACH2')
+        end
+        if exist([xps_path, slash, 'extended_info.kcpfpg'], 'file') == 2,
+            fprintf(unix_fid, 'gzip -c implementation/system.bin > implementation/system.bin.gz\n');
+            fprintf(unix_fid, ['cat implementation/system.bin.gz >> ', xps_path, slash, 'extended_info.kcpfpg\n']);
+            fprintf(unix_fid, ['cp extended_info.kcpfpg ../bit_files/', files_name,'.fpg\n']);
+        end
     end % strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2')
 
     fclose(win_fid);
