@@ -1,23 +1,35 @@
-function spead_unpack_init(block, hdrs)
+function spead_unpack_init(block)
 
 set_param(block, 'LinkStatus', 'inactive');
 
+combine_errors = strcmp(get_param(block, 'combine_errors'), 'on');
 current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
+hdrs = get_param(block, 'header_ids');
 header_ids = eval(hdrs);
 num_headers = length(header_ids);
 if length(current_consts) == num_headers,
-    all_match = true;
+    headers_match = true;
     for ctr = 1 : num_headers,
         val = eval(get_param(current_consts{ctr}, 'const'));
         val2 = header_ids(ctr);
         if val ~= val2,
-            all_match = false;
+            headers_match = false;
         end
     end
-    if all_match == true,
-        % still all the same
-        return
-    end
+else
+    headers_match = false;
+end
+
+% has the error option changed?
+error_or_blk = find_system(block, 'LookUnderMasks', 'all', 'name', 'error_or');
+error_change = false;
+if (~isempty(error_or_blk) && (combine_errors == 0)) || (isempty(error_or_blk) && (combine_errors == 1)),
+    error_change = true;
+end
+
+% everything still the same?
+if (headers_match == true) && (error_change == false),
+    return
 end
 
 if num_headers < 1,
@@ -25,9 +37,11 @@ if num_headers < 1,
 end
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers+1))));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers+1))));
+set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers))+1));
+set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers))+1));
 delay = 1;
+
+showname = 'off';
 
 % remove existing header blocks and their lines
 header_blks = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*(hdr|header_).*[0-9]');
@@ -37,11 +51,41 @@ for b = 1 : length(header_blks),
     delete_block(blk);
 end
 
+% delete some lines that will be remade, possibly from other blocks
+err_blks = find_system(block, 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', 'err.*');
+for b = 1 : length(err_blks),
+    blk = err_blks{b};
+    delete_block_lines(blk);
+end
+
 % set the size of the error or block
-set_param([block, '/error_or'], 'inputs', num2str(2 + length(header_ids)));
+if combine_errors == 1,
+    try delete_block([block, '/err_hdr']); catch eid, end
+    try delete_block([block, '/err_pktlen']); catch eid, end
+    reuse_block(block, 'error_or', 'xbsIndex_r4/Logical', ...
+        'showname', showname, 'logical_function', 'OR', ...
+        'inputs', num2str(2 + length(header_ids)), ...
+        'Position', [1665, 150 + ((num_headers+1) * 75), 1720, 150 + ((num_headers+1) * 75) + ((num_headers+1) * 10)]);
+    reuse_block(block, 'error', 'built-in/outport', ...
+        'showname', 'on', 'Port', '5', ...
+        'Position', [1755, 1143, 1785, 1157]);
+    add_line(block, 'badpktand/1', 'error_or/1', 'autorouting', 'on');
+    add_line(block, 'hdr_chk/1', 'error_or/2', 'autorouting', 'on');
+    add_line(block, 'error_or/1', 'error/1', 'autorouting', 'on');
+else
+    try delete_block([block, '/error_or']); catch eid, end
+    try delete_block([block, '/error']); catch eid, end
+    reuse_block(block, 'err_pktlen', 'built-in/outport', ...
+        'showname', 'on', 'Port', '6', ...
+        'Position', [1755, 1143, 1785, 1157]);
+    reuse_block(block, 'err_hdr', 'built-in/outport', ...
+        'showname', 'on', 'Port', '5', ...
+        'Position', [1755, 1103, 1785, 1123]);
+    add_line(block, 'badpktand/1', 'err_pktlen/1', 'autorouting', 'on');
+    add_line(block, 'hdr_chk/1', 'err_hdr/1', 'autorouting', 'on');
+end
 
 % draw the blocks
-showname = 'off';
 for ctr = 1 : length(header_ids),
     this_ctr = num2str(ctr);
     name_from = ['header_from', this_ctr];
@@ -50,6 +94,7 @@ for ctr = 1 : length(header_ids),
     name_slice = ['header_slice', this_ctr];
     name_slice2 = ['header_vslice', this_ctr];
     name_relational = ['header_rel', this_ctr];
+    name_error = ['err_hdr', this_ctr];
     name_constant = ['header_const', this_ctr];
     name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
     row_y = 70 + (ctr * 75);
@@ -82,8 +127,17 @@ for ctr = 1 : length(header_ids),
         'showname', showname, 'Latency', num2str(delay), ...
         'mode', 'a!=b', ...
         'Position', [row_x + 210, row_y + 28, row_x + 230, row_y + 48]);
+    if combine_errors == 1,
+        try delete_block([block, '/', name_error]); catch eid, end
+        outportnum = 5 + ctr;
+    else
+        reuse_block(block, name_error, 'built-in/outport', ...
+            'showname', 'on', 'Port', num2str(6 + (ctr*2)), ...
+            'Position', [1755, row_y+33, 1785, row_y + 47]);
+        outportnum = 6 + (ctr*2) - 1;
+    end
     reuse_block(block, name_out, 'built-in/outport', ...
-        'showname', 'on', 'Port', num2str(5 + ctr), ...
+        'showname', 'on', 'Port', num2str(outportnum), ...
         'Position', [1755, row_y+3, 1785, row_y + 17]);
 end
 
@@ -96,6 +150,7 @@ for ctr = 1 : length(header_ids),
     name_slice = ['header_slice', this_ctr];
     name_slice2 = ['header_vslice', this_ctr];
     name_relational = ['header_rel', this_ctr];
+    name_error = ['err_hdr', this_ctr];
     name_constant = ['header_const', this_ctr];
     name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
     if ctr == length(header_ids),
@@ -114,7 +169,11 @@ for ctr = 1 : length(header_ids),
     add_line(block, [name_slice2, '/1'], [name_delay, '/1'], 'autorouting', 'on');
     add_line(block, [name_constant, '/1'], [name_relational, '/2'], 'autorouting', 'on');
     add_line(block, [name_delay, '/1'], [name_out, '/1'], 'autorouting', 'on');
-    add_line(block, [name_relational, '/1'], ['error_or/', num2str(ctr+2)], 'autorouting', 'on');
+    if combine_errors == 1,
+        add_line(block, [name_relational, '/1'], ['error_or/', num2str(ctr+2)], 'autorouting', 'on');
+    else
+        add_line(block, [name_relational, '/1'], [name_error, '/1'], 'autorouting', 'on');
+    end
     ph = get_param([block, '/', name_delay], 'PortHandles');
     set_param(ph.Outport(1), 'name', name_out);
     ph = get_param([block, '/', name_slice], 'PortHandles');
@@ -125,5 +184,6 @@ for ctr = 1 : length(header_ids),
     set_param(ph.Outport(1), 'name', ['exp', this_ctr]);
 end
 
+clean_blocks(block);
 
 end

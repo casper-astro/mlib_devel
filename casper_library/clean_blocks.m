@@ -42,7 +42,7 @@ for i=1:length(blocks),
                      'clean_blocks_debug');
                 flag = 0;
                 break
-            elseif ~flag && (length(ports(j).SrcBlock) ~= 0 || length(ports(j).DstBlock) ~= 0),
+            elseif ~flag && (~isempty(ports(j).SrcBlock) || ~isempty(ports(j).DstBlock)),
                 flag = 1;
             end
         end
