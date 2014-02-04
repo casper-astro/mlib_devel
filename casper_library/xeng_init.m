@@ -29,7 +29,6 @@ mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 demux_factor = eval(get_var('demux_factor', 'defaults', defaults, varargin{:}));
 
-
 fix_pnt_pos = (n_bits-1)*2;
 xeng_delay = add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1;
 bit_growth = ceil(log2(acc_len));
@@ -37,6 +36,13 @@ ant_bits = ceil(log2(n_ants));
 n_bits_xeng_out = (2*n_bits + 1 + bit_growth);
 n_bits_scaled_out = 2^(ceil(log2(n_bits_xeng_out)));
 
+if n_ants == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  return;
+end
 
 if n_ants < 4,
     warndlg('X engine is not designed to work with less than 4 antennas. Defaulting to 4.');
@@ -103,8 +109,7 @@ end
 reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', 'Position', [15,89,85,121],...
             'const','0',...
             'arith_type','Unsigned',...
-            'n_bits',sprintf('%d',8 * n_bits_xeng_out),...
-            'LinkStatus','inactive');
+            'n_bits',sprintf('%d',8 * n_bits_xeng_out));
 
 reuse_block(blk, 'sample_and_hold1', 'casper_library_misc/sample_and_hold', 'Position', [140,255,180,315],...
             'period',sprintf('%d',n_ants * acc_len),...
