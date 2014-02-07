@@ -14,6 +14,15 @@ end
 % perform a sanity check
 swreg_maskcheck(blk);
 
+% should we make a sim in/out?
+simport = true;
+try
+    if strcmp(get_param(blk, 'sim_port'), 'off'),
+        simport = false;
+    end
+catch
+end
+
 % add the inputs, outputs and gateway out blocks, drawing lines between them
 x_size =    100;
 y_size =    20;
@@ -68,7 +77,7 @@ if numios == 1,
 else
     display_string = sprintf('%d %ss', numios, iodir);
 end
-if strcmp(show_format, 'on')
+if strcmp(show_format, 'on'),
     config_string = '';
     for ctr = 1 : numios,
         switch current_types(ctr),
@@ -123,8 +132,13 @@ function draw_to()
     reuse_block(blk, gwout_name, 'xbsIndex_r4/Gateway Out', ...
             'Position', [x_start + (x_size * 4 * 2), y_pos_row, x_start + (x_size * 4 * 2) + (x_size/2), y_pos_row + y_size], ...
             'hdl_port', 'on');
-    reuse_block(blk, 'sim_out', 'built-in/outport', 'Port', '1', ...
+    if simport,
+        reuse_block(blk, 'sim_out', 'built-in/outport', 'Port', '1', ...
             'Position', [x_start + (x_size * 6 * 2), y_pos_row, x_start + (x_size * 6 * 2) + (x_size/2), y_pos_row + y_size]);
+    else
+        reuse_block(blk, 'sim_out', 'built-in/terminator', ...
+            'Position', [x_start + (x_size * 6 * 2), y_pos_row, x_start + (x_size * 6 * 2) + (x_size/2), y_pos_row + y_size]);
+    end
     if numios > 1,
         add_line(blk, 'concatenate/1', 'io_delay/1', 'autorouting', 'on');
     end
@@ -211,8 +225,13 @@ function draw_from()
         out_name = sprintf('in_%s', current_names{pindex});
         slice_name = sprintf('slice_%s', current_names{pindex});
         reinterpret_name = sprintf('reint%i', pindex);
-        reuse_block(blk, in_name, 'built-in/inport', 'Port', num2str(pindex), ...
-            'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
+        if simport,
+            reuse_block(blk, in_name, 'built-in/inport', 'Port', num2str(pindex), ...
+                'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
+        else
+            reuse_block(blk, in_name, 'built-in/constant', 'Value', '0', ...
+                'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
+        end
         reuse_block(blk, convert_name1, 'simulink/Commonly Used Blocks/Data Type Conversion', 'OutDataTypeStr', sprintf('fixdt(''%s%i_En%i'')', shorttype, io_bitwidth, io_bin_pt), ...
             'LockScale', 'on', 'ConvertRealWorld', 'Real World Value (RWV)', ...
             'Position', [x_start + (x_size * 1 * 2), y_pos_row, x_start + (x_size * 1 * 2) + (x_size/2), y_pos_row + y_size]);
