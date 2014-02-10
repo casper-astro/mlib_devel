@@ -29,7 +29,7 @@ end
 
 % everything still the same?
 if (headers_match == true) && (error_change == false),
-    return
+    %return
 end
 
 if num_headers < 1,
@@ -66,15 +66,25 @@ if combine_errors == 1,
         'showname', showname, 'logical_function', 'OR', ...
         'inputs', num2str(2 + length(header_ids)), ...
         'Position', [1665, 150 + ((num_headers+1) * 75), 1720, 150 + ((num_headers+1) * 75) + ((num_headers+1) * 10)]);
+    reuse_block(block, 'eof_out_from', 'built-in/from', ...
+        'GotoTag', 'eof_out', 'showname', showname, ...
+        'Position', [1665, 220 + ((num_headers+1) * 75), 1720, 234 + ((num_headers+1) * 75)]);
+    reuse_block(block, 'error_gate', 'xbsIndex_r4/Logical', ...
+        'showname', showname, 'logical_function', 'AND', ...
+        'inputs', '2', ...
+        'Position', [1760, 150 + ((num_headers+1) * 75), 1800, 190 + ((num_headers+1) * 75)]);
     reuse_block(block, 'error', 'built-in/outport', ...
         'showname', 'on', 'Port', '5', ...
-        'Position', [1755, 1143, 1785, 1157]);
+        'Position', [1840, 1143, 1880, 1157]);
     add_line(block, 'badpktand/1', 'error_or/1', 'autorouting', 'on');
     add_line(block, 'hdr_chk/1', 'error_or/2', 'autorouting', 'on');
-    add_line(block, 'error_or/1', 'error/1', 'autorouting', 'on');
+    add_line(block, 'error_or/1', 'error_gate/1', 'autorouting', 'on');
+    add_line(block, 'eof_out_from/1', 'error_gate/2', 'autorouting', 'on');
+    add_line(block, 'error_gate/1', 'error/1', 'autorouting', 'on');
 else
     try delete_block([block, '/error_or']); catch eid, end
     try delete_block([block, '/error']); catch eid, end
+    try delete_block([block, '/error_gate']); catch eid, end
     reuse_block(block, 'err_pktlen', 'built-in/outport', ...
         'showname', 'on', 'Port', '6', ...
         'Position', [1755, 1143, 1785, 1157]);

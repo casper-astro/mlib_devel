@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 861.0]
+	Extents			[1244.0, 860.0]
 	ZoomFactor		[1.0]
 	Offset			[-12.0, -298.0]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Feb 04 11:35:57 2014"
-  RTWModifiedTimeStamp	  313414548
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  LastModifiedDate	  "Mon Feb 10 15:43:10 2014"
+  RTWModifiedTimeStamp	  313947787
+  ModelVersionFormat	  "1.%<AutoIncrement:15>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -783,7 +783,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "1652"
+    SIDHighWatermark	    "1727"
     Block {
       BlockType		      SubSystem
       Name		      "gbe_mux"
@@ -11506,8 +11506,9 @@ Library {
       BlockType		      SubSystem
       Name		      "spead_pack"
       SID		      "476"
+      Tag		      "casper:spead_pack"
       Ports		      [6, 4]
-      Position		      [375, 35, 515, 310]
+      Position		      [360, 35, 500, 310]
       ZOrder		      978
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       MinAlgLoopOccurrences   off
@@ -14282,8 +14283,9 @@ Library {
       BlockType		      SubSystem
       Name		      "spead_unpack"
       SID		      "381"
+      Tag		      "casper:spead_unpack"
       Ports		      [3, 8]
-      Position		      [615, 35, 755, 310]
+      Position		      [570, 38, 710, 327]
       ZOrder		      977
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       MinAlgLoopOccurrences   off
@@ -14347,6 +14349,7 @@ Library {
 	    Name		    "combine_errors"
 	    Prompt		    "Combine error flags"
 	    Value		    "on"
+	    Visible		    "off"
 	  }
 	  PropName		  "Parameters"
 	}
@@ -15033,6 +15036,15 @@ Library {
 	  ZOrder		  691
 	  ShowName		  off
 	  GotoTag		  "hdr_word_change"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto6"
+	  SID			  "1703"
+	  Position		  [695, 693, 765, 707]
+	  ZOrder		  4735
+	  ShowName		  off
+	  GotoTag		  "eof_out"
 	}
 	Block {
 	  BlockType		  Goto
@@ -16415,12 +16427,57 @@ Library {
 	  }
 	}
 	Block {
+	  BlockType		  From
+	  Name			  "eof_out_from"
+	  SID			  "1653"
+	  Position		  [1665, 518, 1720, 532]
+	  ZOrder		  4677
+	  ShowName		  off
+	  GotoTag		  "eof_out"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "error_gate"
+	  SID			  "1654"
+	  Ports			  [2, 1]
+	  Position		  [1760, 450, 1800, 490]
+	  ZOrder		  4678
+	  ShowName		  off
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Logical"
+	  SourceType		  "Xilinx Logical Block Block"
+	  logical_function	  "AND"
+	  inputs		  "2"
+	  en			  off
+	  latency		  "0"
+	  precision		  "Full"
+	  arith_type		  "Unsigned"
+	  n_bits		  "16"
+	  bin_pt		  "0"
+	  align_bp		  on
+	  dbl_ovrd		  off
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "logical"
+	  sg_icon_stat		  "40,40,2,1,white,blue,0,83a4b621,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 40 40 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 40 40 0 0 ],[0 0 40 40 0 ]);\npatch([8.875 16.1 21.1 26.1 31.1 21.1 13.875 8.875 ],[25.55 25.55 30.55"
+	  " 25.55 30.55 30.55 30.55 25.55 ],[1 1 1 ]);\npatch([13.875 21.1 16.1 8.875 13.875 ],[20.55 20.55 25.55 25.55 20.55 "
+	  "],[0.931 0.946 0.973 ]);\npatch([8.875 16.1 21.1 13.875 8.875 ],[15.55 15.55 20.55 20.55 15.55 ],[1 1 1 ]);\npatch("
+	  "[13.875 31.1 26.1 21.1 16.1 8.875 13.875 ],[10.55 10.55 15.55 10.55 15.55 15.55 10.55 ],[0.931 0.946 0.973 ]);\nfpr"
+	  "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\n\ncolor('black');disp('and');\n"
+	  "fprintf('','COMMENT: end icon text');"
+	}
+	Block {
 	  BlockType		  Reference
 	  Name			  "error_or"
 	  SID			  "1603"
 	  Ports			  [5, 1]
 	  Position		  [1665, 450, 1720, 490]
 	  ZOrder		  4627
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Logical"
 	  SourceType		  "Xilinx Logical Block Block"
@@ -16546,10 +16603,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const1"
-	  SID			  "1630"
+	  SID			  "1705"
 	  Ports			  [0, 1]
 	  Position		  [1500, 195, 1550, 205]
-	  ZOrder		  4654
+	  ZOrder		  4737
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -16592,10 +16650,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const2"
-	  SID			  "1638"
+	  SID			  "1713"
 	  Ports			  [0, 1]
 	  Position		  [1450, 270, 1500, 280]
-	  ZOrder		  4662
+	  ZOrder		  4745
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -16638,10 +16697,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const3"
-	  SID			  "1646"
+	  SID			  "1721"
 	  Ports			  [0, 1]
 	  Position		  [1400, 345, 1450, 355]
-	  ZOrder		  4670
+	  ZOrder		  4753
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
 	  SourceType		  "Xilinx Constant Block Block"
@@ -16684,10 +16744,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_delay1"
-	  SID			  "1632"
+	  SID			  "1707"
 	  Ports			  [1, 1]
 	  Position		  [1660, 145, 1680, 165]
-	  ZOrder		  4656
+	  ZOrder		  4739
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -16721,10 +16782,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_delay2"
-	  SID			  "1640"
+	  SID			  "1715"
 	  Ports			  [1, 1]
 	  Position		  [1610, 220, 1630, 240]
-	  ZOrder		  4664
+	  ZOrder		  4747
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -16758,10 +16820,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_delay3"
-	  SID			  "1648"
+	  SID			  "1723"
 	  Ports			  [1, 1]
 	  Position		  [1560, 295, 1580, 315]
-	  ZOrder		  4672
+	  ZOrder		  4755
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -16795,25 +16858,28 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "header_from1"
-	  SID			  "1629"
+	  SID			  "1704"
 	  Position		  [1450, 168, 1460, 182]
-	  ZOrder		  4653
+	  ZOrder		  4736
+	  ShowName		  off
 	  GotoTag		  "hdr_word_change"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from2"
-	  SID			  "1637"
+	  SID			  "1712"
 	  Position		  [1400, 243, 1410, 257]
-	  ZOrder		  4661
+	  ZOrder		  4744
+	  ShowName		  off
 	  GotoTag		  "hdr_word_change"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from3"
-	  SID			  "1645"
+	  SID			  "1720"
 	  Position		  [1350, 318, 1360, 332]
-	  ZOrder		  4669
+	  ZOrder		  4752
+	  ShowName		  off
 	  GotoTag		  "hdr_word_change"
 	}
 	Block {
@@ -16853,10 +16919,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_reg1"
-	  SID			  "1631"
+	  SID			  "1706"
 	  Ports			  [2, 1]
 	  Position		  [1500, 145, 1550, 185]
-	  ZOrder		  4655
+	  ZOrder		  4738
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
@@ -16882,10 +16949,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_reg2"
-	  SID			  "1639"
+	  SID			  "1714"
 	  Ports			  [2, 1]
 	  Position		  [1450, 220, 1500, 260]
-	  ZOrder		  4663
+	  ZOrder		  4746
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
@@ -16911,10 +16979,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_reg3"
-	  SID			  "1647"
+	  SID			  "1722"
 	  Ports			  [2, 1]
 	  Position		  [1400, 295, 1450, 335]
-	  ZOrder		  4671
+	  ZOrder		  4754
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Register"
 	  SourceType		  "Xilinx Register Block"
@@ -16940,10 +17009,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_rel1"
-	  SID			  "1635"
+	  SID			  "1710"
 	  Ports			  [2, 1]
 	  Position		  [1660, 175, 1680, 195]
-	  ZOrder		  4659
+	  ZOrder		  4742
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
@@ -16975,10 +17045,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_rel2"
-	  SID			  "1643"
+	  SID			  "1718"
 	  Ports			  [2, 1]
 	  Position		  [1610, 250, 1630, 270]
-	  ZOrder		  4667
+	  ZOrder		  4750
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
@@ -17010,10 +17081,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_rel3"
-	  SID			  "1651"
+	  SID			  "1726"
 	  Ports			  [2, 1]
 	  Position		  [1560, 325, 1580, 345]
-	  ZOrder		  4675
+	  ZOrder		  4758
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Relational"
 	  SourceType		  "Xilinx Arithmetic Relational Operator Block"
@@ -17045,10 +17117,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_slice1"
-	  SID			  "1634"
+	  SID			  "1709"
 	  Ports			  [1, 1]
 	  Position		  [1600, 170, 1630, 190]
-	  ZOrder		  4658
+	  ZOrder		  4741
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
@@ -17084,10 +17157,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_slice2"
-	  SID			  "1642"
+	  SID			  "1717"
 	  Ports			  [1, 1]
 	  Position		  [1550, 245, 1580, 265]
-	  ZOrder		  4666
+	  ZOrder		  4749
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
@@ -17123,10 +17197,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_slice3"
-	  SID			  "1650"
+	  SID			  "1725"
 	  Ports			  [1, 1]
 	  Position		  [1500, 320, 1530, 340]
-	  ZOrder		  4674
+	  ZOrder		  4757
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
@@ -17162,10 +17237,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_vslice1"
-	  SID			  "1633"
+	  SID			  "1708"
 	  Ports			  [1, 1]
 	  Position		  [1600, 145, 1630, 165]
-	  ZOrder		  4657
+	  ZOrder		  4740
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
@@ -17195,10 +17271,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_vslice2"
-	  SID			  "1641"
+	  SID			  "1716"
 	  Ports			  [1, 1]
 	  Position		  [1550, 220, 1580, 240]
-	  ZOrder		  4665
+	  ZOrder		  4748
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
@@ -17228,10 +17305,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_vslice3"
-	  SID			  "1649"
+	  SID			  "1724"
 	  Ports			  [1, 1]
 	  Position		  [1500, 295, 1530, 315]
-	  ZOrder		  4673
+	  ZOrder		  4756
+	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Slice"
 	  SourceType		  "Xilinx Bit Slice Extractor Block"
@@ -17497,7 +17575,7 @@ Library {
 	  BlockType		  Outport
 	  Name			  "error"
 	  SID			  "1604"
-	  Position		  [1755, 1143, 1785, 1157]
+	  Position		  [1840, 1143, 1880, 1157]
 	  ZOrder		  4628
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -17505,27 +17583,27 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "hdr1_0x00de"
-	  SID			  "1636"
+	  SID			  "1711"
 	  Position		  [1755, 148, 1785, 162]
-	  ZOrder		  4660
+	  ZOrder		  4743
 	  Port			  "6"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "hdr2_0x014d"
-	  SID			  "1644"
+	  SID			  "1719"
 	  Position		  [1755, 223, 1785, 237]
-	  ZOrder		  4668
+	  ZOrder		  4751
 	  Port			  "7"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "hdr3_0x01bc"
-	  SID			  "1652"
+	  SID			  "1727"
 	  Position		  [1755, 298, 1785, 312]
-	  ZOrder		  4676
+	  ZOrder		  4759
 	  Port			  "8"
 	  IconDisplay		  "Port number"
 	}
@@ -17549,8 +17627,16 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "delay5"
 	  SrcPort		  1
-	  DstBlock		  "eof64"
-	  DstPort		  1
+	  Points		  [26, 0]
+	  Branch {
+	    Points		    [0, 60]
+	    DstBlock		    "Goto6"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "eof64"
+	    DstPort		    1
+	  }
 	}
 	Line {
 	  Name			  "v64"
@@ -17942,7 +18028,21 @@ Library {
 	Line {
 	  SrcBlock		  "error_or"
 	  SrcPort		  1
-	  Points		  [5, 0; 0, 680]
+	  Points		  [10, 0; 0, -10]
+	  DstBlock		  "error_gate"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "eof_out_from"
+	  SrcPort		  1
+	  Points		  [10, 0; 0, -45]
+	  DstBlock		  "error_gate"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "error_gate"
+	  SrcPort		  1
+	  Points		  [10, 0; 0, 680]
 	  DstBlock		  "error"
 	  DstPort		  1
 	}
