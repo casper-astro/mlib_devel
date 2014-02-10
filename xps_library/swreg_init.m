@@ -8,6 +8,9 @@ try
     remove_all_blks(blk);
     delete_lines(blk);
 catch ex
+    if regexp(ex.identifier, 'CallbackDelete')
+        return
+    end
     dump_and_rethrow(ex);
 end
 
