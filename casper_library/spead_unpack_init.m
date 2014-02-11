@@ -29,7 +29,7 @@ end
 
 % everything still the same?
 if (headers_match == true) && (error_change == false),
-    %return
+    return
 end
 
 if num_headers < 1,
