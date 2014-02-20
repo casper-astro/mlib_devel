@@ -30,7 +30,7 @@ check_mask_type(blk, 'bus_expand');
 
 outputToWorkspace = get_param(blk, 'outputToWorkspace');
 mode = get_param(blk, 'mode');
-outputWidth = str2num(get_param(blk, 'outputWidth'));
+outputWidth = str2double(get_param(blk, 'outputWidth'));
 
 mask_names = get_param(blk, 'MaskNames');
 mask_enables = get_param(blk, 'MaskEnables');
