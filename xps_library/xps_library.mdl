@@ -24015,7 +24015,6 @@ Library {
 	      latency		      "1"
 	      dbl_ovrd		      off
 	      optimize		      "Area"
-	      use_rpm		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -39936,7 +39935,6 @@ Library {
 		  latency		  "1"
 		  dbl_ovrd		  off
 		  optimize		  "Area"
-		  use_rpm		  on
 		  xl_use_area		  off
 		  xl_area		  "[0,0,0,0,0,0,0]"
 		  has_advanced_control	  "0"
@@ -51454,7 +51452,6 @@ Library {
 	      write_mode_B	      "Read After Write"
 	      dbl_ovrd		      off
 	      optimize		      "Area"
-	      use_rpm		      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
