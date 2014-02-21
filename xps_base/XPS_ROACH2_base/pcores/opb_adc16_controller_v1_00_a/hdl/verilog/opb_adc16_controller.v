@@ -39,6 +39,7 @@ module opb_adc16_controller(
     output        [0:63] adc16_delay_rst,
     output        [0:4] adc16_delay_tap,
     output        adc16_snap_req,
+    output        [0:1] adc16_demux_mode,
     input   [1:0] adc16_locked,
     input   [1:0] adc16_roach2_rev,
     input   [1:0] adc16_zdok_rev,
@@ -133,27 +134,48 @@ module opb_adc16_controller(
   /* ======================================= */
   /* ADC0 Control Register (word 1)          */
   /* ======================================= */
-  /* R = Reset                               */
-  /* S = Snap Request                        */
-  /* H = ISERDES Bit Slip Chip H             */
-  /* G = ISERDES Bit Slip Chip G             */
-  /* F = ISERDES Bit Slip Chip F             */
-  /* E = ISERDES Bit Slip Chip E             */
-  /* D = ISERDES Bit Slip Chip D             */
-  /* C = ISERDES Bit Slip Chip C             */
-  /* B = ISERDES Bit Slip Chip B             */
-  /* A = ISERDES Bit Slip Chip A             */
-  /* T = Delay Tap                           */
+  /* W  = Deux write-enable                  */
+  /* MM = Demux mode                         */ 
+  /* R  = Reset                              */
+  /* S  = Snap Request                       */
+  /* H  = ISERDES Bit Slip Chip H            */
+  /* G  = ISERDES Bit Slip Chip G            */
+  /* F  = ISERDES Bit Slip Chip F            */
+  /* E  = ISERDES Bit Slip Chip E            */
+  /* D  = ISERDES Bit Slip Chip D            */
+  /* C  = ISERDES Bit Slip Chip C            */
+  /* B  = ISERDES Bit Slip Chip B            */
+  /* A  = ISERDES Bit Slip Chip A            */
+  /* T  = Delay Tap                          */
   /* ======================================= */
   /* |<-- MSb                       LSb -->| */
   /* 0000 0000 0011 1111 1111 2222 2222 2233 */
   /* 0123 4567 8901 2345 6789 0123 4567 8901 */
+  /* ---- -WMM ---- ---- ---- ---- ---- ---- */
   /* ---- ---- ---R ---- ---- ---- ---- ---- */
   /* ---- ---- ---- ---S ---- ---- ---- ---- */
   /* ---- ---- ---- ---- HGFE DCBA ---- ---- */
   /* ---- ---- ---- ---- ---- ---- ---T TTTT */
   /* ======================================= */
+  /* NOTE: W enables writing the MM bits.    */
+  /*       Some of the other bits in this    */
+  /*       register are one-hot.  Using      */
+  /*       W ensures that the MM bits will   */
+  /*       only be written to when desired.  */
+  /*       00: demux by 1 (single channel)   */
+  /* ======================================= */
+  /* NOTE: MM selects the demux mode.        */
+  /*       00: demux by 1 (single channel)   */
+  /*       01: demux by 2 (dual channel)     */
+  /*       10: demux by 4 (quad channel)     */
+  /*       11: undefined                     */
+  /*       ADC board.  A '1' bit means       */
+  /*       locked (good!).  Bit 5 is always  */
+  /*       used, but bit 6 is only used when */
+  /*       NNNN is 4 (or less).              */
+  /* ======================================= */
 
+  assign adc16_demux_mode      = adc16_ctrl_wire[ 6: 7];
   assign adc16_reset           = adc16_ctrl_wire[11   ];
   assign adc16_snap_req        = adc16_ctrl_wire[15   ];
   assign adc16_iserdes_bitslip = adc16_ctrl_wire[16:23];
@@ -225,7 +247,12 @@ module opb_adc16_controller(
            1:  begin
                 opb_ack <= 1'b1;
                 if (OPB_BE[0]) begin
-                    adc16_ctrl_reg[0:7] <= OPB_DBus[0:7];
+                    /* All but the W and MM bits */
+                    adc16_ctrl_reg[0:4] <= OPB_DBus[0:4];
+                    /* Write to MM bits if W bit is set */
+                    if(OPB_DBus[5]) begin
+                        adc16_ctrl_reg[6:7] <= OPB_DBus[6:7];
+                    end
                 end
                 if (OPB_BE[1]) begin
                     adc16_ctrl_reg[8:15] <= OPB_DBus[8:15];
