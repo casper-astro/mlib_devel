@@ -15,11 +15,14 @@ module x64_adc_retime (
 
   
   //bring the reset into the write clock domain
-  reg rst_z;
-  reg rst_retimed;
+  // synthesis attribute MAX_FANOUT of rst_retimed_z is 6
+  (* SHREG_EXTRACT = "NO" *) reg rst_z;
+  (* SHREG_EXTRACT = "NO" *) reg rst_retimed;
+  (* SHREG_EXTRACT = "NO" *) reg rst_retimed_z;
   always @(posedge wr_clk) begin
       rst_z <= rst;
       rst_retimed <= rst_z;
+      rst_retimed_z <= rst_retimed;
   end
 
 
@@ -30,7 +33,7 @@ module x64_adc_retime (
 
   x64_adc_mux_adc_streams x64_adc_mux_adc_streams_inst (
     .clk        (wr_clk),
-    .rst        (rst_retimed),
+    .rst        (rst_retimed_z),
     .din        (din),
     .dinvld     (dvld),
     .dout       (mux_dout),
@@ -71,7 +74,7 @@ module x64_adc_retime (
     .din        ({dout_sync_pl_int, dout_pl_int}),
     .rd_clk     (rd_clk),
     .rd_en      (rd_en_reg),
-    .rst        (rst_retimed),
+    .rst        (rst_retimed_z),
     .wr_clk     (wr_clk),
     .wr_en      (doutvld_pl_int),
     .dout       (dout_int),
