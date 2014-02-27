@@ -122,7 +122,7 @@ sys_file = get_param(sys,'FileName');
 cd(sys_dir);
 
 % comb for gateway in blocks that aren't part of a yellow block
-gateways_blk = find_system(sys, 'FollowLinks','on','LookUnderMasks','all','masktype','Xilinx Gateway In Block');
+gateways_blk = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'masktype', 'Xilinx Gateway In Block');
 for i = 1:length(gateways_blk),
     found_xps_tag = 0;
     parent = get_param(gateways_blk(i), 'parent');
