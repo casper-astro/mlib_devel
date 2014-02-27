@@ -11,8 +11,8 @@
 % outputBinaryPt = Binary point of each output
 % outputArithmeticType = Numerical type of each output
 % outputToWorkspace = Optionally output each output to the Workspace
-% variablePrefix = 
-% outputToModeAsWell = 
+% variablePrefix =
+% outputToModeAsWell =
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -65,13 +65,13 @@ variablePrefix = get_var('variablePrefix', 'defaults', defaults, varargin{:});
 outputToModelAsWell = get_var('outputToModelAsWell', 'defaults', defaults, varargin{:});
 show_format = get_var('show_format', 'defaults', defaults, varargin{:});
 
-if (strcmp(mode, 'divisions of arbitrary size') == 1 && ... 
+if (strcmp(mode, 'divisions of arbitrary size') == 1 && ...
   (length(outputWidth) ~= length(outputBinaryPt) || length(outputWidth) ~= length(outputArithmeticType))) ,
   error('Division width, binary point and arithmetic type vectors must be the same length when using arbitrary divisions');
 end
 
 if strcmp(mode, 'divisions of arbitrary size'),
-  outputNum = length(outputWidth); 
+  outputNum = length(outputWidth);
 else
   if ((outputNum <= 0) || isnan(outputNum) || (~isnumeric(outputNum))),
     error('Need one or more outputs!');
@@ -98,7 +98,7 @@ for div = 1:vals,
   end
   if (outputArithmeticType(div) == 2 && (outputWidth(div) ~= 1 || outputBinaryPt(div) ~= 0)),
     error('Division width must be 1 and binary point 0 for Boolean Arithmetic type');
-  end 
+  end
 
 end
 
@@ -135,7 +135,7 @@ for p = 1 : outputNum,
     width = outputWidth(index);
     bin_pt = outputBinaryPt(index);
     switch outputArithmeticType(index),
-        case 1 
+        case 1
             arithmeticType = 'Signed  (2''s comp)';
             config_string = [config_string, sprintf('f%i.%i,', width, bin_pt)];
         case 2
@@ -144,7 +144,7 @@ for p = 1 : outputNum,
         case 9
             discard = true;
             config_string = [config_string, 'X,'];
-        otherwise 
+        otherwise
             arithmeticType = 'Unsigned';
             config_string = [config_string, sprintf('uf%i.%i,', width, bin_pt)];
     end
@@ -209,13 +209,12 @@ for p = 1 : outputNum,
                 add_line(blk, [reinterpretName, '/1'], [outName, '/1']);
             else
                 add_line(blk, [sliceName, '/1'], [outName, '/1']);
-            end  
+            end
             yPos = yPos + (ySize * 2);
         end
-
-        acc_bits = acc_bits + width;
         portnum = portnum + 1;
     end % /discard
+    acc_bits = acc_bits + width;
 end
 
 % remove unconnected blocks
@@ -235,3 +234,6 @@ set_param(blk, 'AttributesFormatString', displayString);
 save_state(blk, 'defaults', defaults, varargin{:});  % save and back-populate mask parameter values
 
 clog('exiting bus_expand_init','trace');
+
+% end
+
