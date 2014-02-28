@@ -2,6 +2,7 @@ module qdrc_rd(
     clk,
     reset,
     phy_rdy,
+    rn_dly,
 
     usr_strb,
     usr_data,
@@ -14,6 +15,7 @@ module qdrc_rd(
 
   input  clk, reset, phy_rdy;
 
+  input  [4:0]rn_dly;
   input  usr_strb;
   output [2*DATA_WIDTH - 1:0] usr_data;
   output usr_dvld;
@@ -38,6 +40,13 @@ module qdrc_rd(
   assign phy_strb = usr_strb;
   assign usr_data = phy_data;
 
+  rt_var_delay read_delay (
+     .clk   (clk),
+     .delay (rn_dly),
+     .in    (phy_strb),
+     .out   (usr_dvld)
+  );
+  
   localparam READ_LATENCY = 9;
   /* This is the default latency which includes:
    * 1 cycle due to sync interface
@@ -50,7 +59,7 @@ module qdrc_rd(
    * and 1 unaccounted for
    *
    */
-
+/*
   reg [READ_LATENCY - 1:0] usr_strb_shift_reg;
   assign usr_dvld = usr_strb_shift_reg[READ_LATENCY - 1];
 
@@ -61,5 +70,5 @@ module qdrc_rd(
       usr_strb_shift_reg <= {usr_strb_shift_reg[READ_LATENCY - 2:0], phy_strb};
     end
   end
-
+*/
 endmodule

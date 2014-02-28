@@ -7,6 +7,15 @@ TIMESPEC TS_sys_clk_n = PERIOD sys_clk_n 100 MHz;
 Net epb_clk_in TNM_NET = epb_clk_in;
 TIMESPEC TS_epb_clk_in = PERIOD epb_clk_in 67 MHz;
 
+NET "*sys_clk" TNM_NET = "TNM_sys_clk";
+TIMESPEC "TS_sys_clk" = PERIOD "TNM_sys_clk" 100 MHz;
+
+NET "*sys_clk2x" TNM_NET = "TNM_sys_clk2x";
+TIMESPEC "TS_sys_clk2x" = PERIOD "TNM_sys_clk2x" 200 MHz;
+
+TIMESPEC TS_sys_clk2x_TIG = FROM "TNM_sys_clk2x" TO "TNM_sys_clk"   TIG;
+TIMESPEC TS_sys_clk_TIG   = FROM "TNM_sys_clk"   TO "TNM_sys_clk2x" TIG;
+
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))## GbE Timing Constraints
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#Net clk_125 TNM_NET = clk_125;

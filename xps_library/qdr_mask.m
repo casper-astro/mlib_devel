@@ -42,18 +42,14 @@ switch hw_sys
     case 'ROACH'
         data_width = 36;
         be_width = 4;
-        qdr_latency = 10;
         n_qdr = 2;
     % end case 'ROACH'
     case 'ROACH2'
         data_width = 72;
         be_width = 8;
-        qdr_latency = 10;
         n_qdr = 4;
         %%data_width = 72;
         %be_width = 8;
-        %%qdr_latency = 14;
-        %qdr_latency = 10;
         %n_qdr = 4;
     % end case 'ROACH2'
 end % end switch hw_sys
@@ -66,10 +62,6 @@ if (qdr_num > (n_qdr-1))
     warning(['Block configured for QDR ', num2str(qdr_num), '. ', hw_sys, ' only has ', num2str(n_qdr), ' QDR chips. Defaulting to QDR 0']);
     set_param(myname, 'which_qdr', 'qdr0');
 end
-
-
-%Set qdr latency to correctly align data valid out signal
-set_param([myname, '/qdr_latency'], 'Latency', num2str(qdr_latency));
 
 
 %construct bit remapping to move parity bits
@@ -134,6 +126,9 @@ for i =1:length(gateway_ins)
         toks = regexp(get_param(gw,'Name'),'(data_out)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
         set_param(gw,'n_bits',num2str(data_width));
+    elseif regexp(get_param(gw,'Name'),'(data_valid)$')
+        toks = regexp(get_param(gw,'Name'),'(data_valid)$','tokens');
+        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
     elseif regexp(get_param(gw,'Name'),'(phy_ready)$')
         toks = regexp(get_param(gw,'Name'),'(phy_ready)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
