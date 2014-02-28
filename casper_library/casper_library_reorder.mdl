@@ -4933,7 +4933,7 @@ Library {
       Opaque		      off
       MaskHideContents	      off
       MaskPromptString	      "Input blocksize (2^n)|Output blocksize (2^n)|QDR Chip"
-      MaskStyleString	      "edit,edit,popup(qdr0|qdr1)"
+      MaskStyleString	      "edit,edit,popup(qdr0|qdr1|qdr2|qdr3)"
       MaskVariables	      "idepth=@1;odepth=@2;which_qdr=&3;"
       MaskTunableValueString  "on,on,on"
       MaskCallbackString      "||"

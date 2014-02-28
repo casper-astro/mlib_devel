@@ -1,6 +1,11 @@
 function feedback_osc_init(blk, varargin)
 
   check_mask_type(blk, 'feedback_osc');
+
+  % Set default vararg values.
+  % reg_retiming is not an actual parameter of this block, but it is included
+  % in defaults so that same_state will return false for blocks drawn prior to
+  % adding reg_retiming='on' to some of the underlying Delay blocks.
   defaults = { ...
     'n_bits', 18, ...           %reference and output resolution
     'n_bits_rotation', 25, ...  %rotation vector resolution DSP48Es can do 25x18 multiplies
@@ -15,6 +20,7 @@ function feedback_osc_init(blk, varargin)
     'bram', 'Distributed memory', ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'overflow', 'Saturate', ...
+    'reg_retiming', 'on', ...
   };
 
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end
@@ -216,19 +222,32 @@ function feedback_osc_init(blk, varargin)
   
   %en input
 
-  reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', 'latency', 'bram_latency', 'Position', [285 769 345 791]);
+  reuse_block(blk, 'den0', 'xbsIndex_r4/Delay', ...
+          'latency', 'bram_latency', ...
+          'reg_retiming', 'on', ...
+          'Position', [285 769 345 791]);
   add_line(blk, 'en/1', 'den0/1');
   add_line(blk, 'den0/1', 'cmult/3');
   add_line(blk, 'den0/1', 'amux/4');
-  reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', 'latency', '2', 'Position', [895 769 955 791]);
+
+  reuse_block(blk, 'den1', 'xbsIndex_r4/Delay', ...
+          'latency', '2', ...
+          'reg_retiming', 'on', ...
+          'Position', [895 769 955 791]);
   add_line(blk, 'den0/1', 'den1/1');
 
   %sync
-  reuse_block(blk, 'dsync', 'xbsIndex_r4/Delay', 'latency', 'bram_latency+2', 'Position', [550 859 610 881]);
+  reuse_block(blk, 'dsync', 'xbsIndex_r4/Delay', ...
+          'latency', 'bram_latency+2', ...
+          'reg_retiming', 'on', ...
+          'Position', [550 859 610 881]);
   add_line(blk, 'sync/1', 'dsync/1');
 
   %misc
-  reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', 'latency', 'bram_latency+2', 'Position', [550 809 610 831]);
+  reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
+          'latency', 'bram_latency+2', ...
+          'reg_retiming', 'on', ...
+          'Position', [550 809 610 831]);
   add_line(blk, 'misci/1', 'dmisc/1');
 
   %output ports

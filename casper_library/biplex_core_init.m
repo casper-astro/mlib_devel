@@ -143,9 +143,12 @@ function biplex_core_init(blk, varargin)
   % create/delete stages
   for stage = 1:FFTSize,
 
-      % if delays occupy larger space than specified for this stage then implement in BRAM
-      if ((2^(FFTSize - stage) * input_bit_width * 2) >= (2^delays_bit_limit)), delays_bram = 'on';
-      else delays_bram = 'off';
+      % If delays are longer than BRAM threshold and  longer than bram_latency,
+      % then implement in BRAM
+      if FFTSize - stage  > delays_bit_limit && 2^(FFTSize - stage) > num2str(bram_latency)
+        delays_bram = 'on';
+      else
+        delays_bram = 'off';
       end
 
       if (strcmp(hardcode_shifts, 'on') && (shift_schedule(stage) == 1)), downshift = 'on';
