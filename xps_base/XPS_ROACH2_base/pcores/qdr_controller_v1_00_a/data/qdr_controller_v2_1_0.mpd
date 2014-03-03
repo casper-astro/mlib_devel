@@ -29,7 +29,6 @@ BEGIN qdr_controller
   PORT qdr_k_n       = qdr_k_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_k         = qdr_k,         DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_d         = qdr_d,         DIR = O, VEC = [DATA_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
-  PORT qdr_bw_n      = qdr_bw_n,      DIR = O, VEC = [  BW_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_sa        = qdr_sa,        DIR = O, VEC = [ADDR_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_w_n       = qdr_w_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_r_n       = qdr_r_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE

@@ -172,7 +172,6 @@ switch hw_sys
         str = [str, ' PORT qdr_k_n       = ', hw_qdr, '_k_n',       '\n'];
         str = [str, ' PORT qdr_k         = ', hw_qdr, '_k',         '\n'];
         str = [str, ' PORT qdr_d         = ', hw_qdr, '_d',         '\n'];
-        str = [str, ' PORT qdr_bw_n      = ', hw_qdr, '_bw_n',      '\n'];
         str = [str, ' PORT qdr_sa        = ', hw_qdr, '_sa',        '\n'];
         str = [str, ' PORT qdr_w_n       = ', hw_qdr, '_w_n',       '\n'];
         str = [str, ' PORT qdr_r_n       = ', hw_qdr, '_r_n',       '\n'];
@@ -201,7 +200,6 @@ switch hw_sys
         str = [str, 'PORT ', hw_qdr, '_k_n       = ', hw_qdr,'_k_n       , DIR = O',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_k         = ', hw_qdr,'_k         , DIR = O',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_d         = ', hw_qdr,'_d         , DIR = O, VEC=', data_vec,   '\n'];
-        str = [str, 'PORT ', hw_qdr, '_bw_n      = ', hw_qdr,'_bw_n      , DIR = O, VEC=', bw_vec,     '\n'];
         str = [str, 'PORT ', hw_qdr, '_sa        = ', hw_qdr,'_sa        , DIR = O, VEC=', addr_vec,   '\n'];
         str = [str, 'PORT ', hw_qdr, '_w_n       = ', hw_qdr,'_w_n       , DIR = O',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_r_n       = ', hw_qdr,'_r_n       , DIR = O',                   '\n'];
