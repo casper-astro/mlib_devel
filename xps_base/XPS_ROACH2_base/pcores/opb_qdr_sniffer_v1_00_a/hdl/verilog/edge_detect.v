@@ -35,12 +35,13 @@ module edge_detect #(
    );
 
    reg [DATA_WIDTH-1:0] delay_reg;
-   reg [DATA_WIDTH-1:0] delay_reg1;
+   reg [DATA_WIDTH-1:0] pulse_out_reg;
 
    always@(posedge clk) begin
-      delay_reg  <= in;
+      delay_reg     <= in;
+      pulse_out_reg <= in & ~delay_reg;
    end
 
-   assign pulse_out = in & ~delay_reg;
+   assign pulse_out = pulse_out_reg;
 
 endmodule
