@@ -16,6 +16,7 @@ module roach_infrastructure #(
     output epb_clk,
     input  idelay_rst, 
     output idelay_rdy,
+    output idelay100_rdy,
     input  aux_clk_n,  aux_clk_p,
     output aux_clk,    aux_clk90,   aux_clk180,   aux_clk270,
     output aux_clk2x,  aux_clk2x90, aux_clk2x180, aux_clk2x270,
@@ -259,22 +260,23 @@ module roach_infrastructure #(
     .I(dly_clk_int),
     .O(dly_clk)
   );*/
+
   generate if (IDCTRL_100) begin
 
-  IDELAYCTRL idelayctrl_inst(
+  (* IODELAY_GROUP = "IODELAY_100" *)
+  IDELAYCTRL idelayctrl100_inst(
     .REFCLK (clk_100),
     .RST    (idelay_rst),
-    .RDY    (idelay_rdy)
+    .RDY    (idelay100_rdy)
   );
 
-  end else begin
+  end endgenerate
 
+  (* IODELAY_GROUP = "IODELAY_200" *)
   IDELAYCTRL idelayctrl_inst(
     .REFCLK (clk_200),
     .RST    (idelay_rst),
     .RDY    (idelay_rdy)
   );
-
-  end endgenerate
 
 endmodule

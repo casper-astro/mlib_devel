@@ -471,6 +471,7 @@ BEGIN roach_infrastructure
  PORT epb_clk = epb_clk
  PORT idelay_rst = power_on_rst
  PORT idelay_rdy = idelay_rdy
+#IF# getenv('IDCTRL_100') # [' PORT idelay100_rdy = idelay100_rdy\n']
  PORT op_power_on_rst  = power_on_rst
  PORT clk_100 = clk_100
 END

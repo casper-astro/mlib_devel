@@ -163,11 +163,23 @@ switch hw_sys
         str = [str, ' PARAMETER ADDR_WIDTH = ', addr_width,            '\n'];
         str = [str, ' PARAMETER BW_WIDTH   = ', bw_width,              '\n'];
         
+	if getenv('IDCTRL_100')
+	  % Terrible hack to get QDR to work at certain freq. 
+	  str = [str, ' PARAMETER IODELAY_GRP = "IODELAY_100"',        '\n'];
+	end
+
         str = [str, ' PORT clk0    = ', clk_src,              '\n'];
         str = [str, ' PORT clk180  = ', clk_src, '180',       '\n'];
         str = [str, ' PORT clk270  = ', clk_src, '270',       '\n'];
         str = [str, ' PORT div_clk = sys_clk2x',              '\n'];
-        str = [str, ' PORT idelay_rdy = idelay_rdy',          '\n'];
+
+	if getenv('IDCTRL_100')
+	  % Terrible hack to get QDR to work at certain freq. 
+	  str = [str, ' PORT idelay_rdy = idelay100_rdy',       '\n'];
+	else
+	  str = [str, ' PORT idelay_rdy = idelay_rdy',          '\n'];
+	end
+
         str = [str, ' PORT reset   = ', inst_name, '_reset',  '\n'];
         
         str = [str, ' PORT qdr_k_n       = ', hw_qdr, '_k_n',       '\n'];

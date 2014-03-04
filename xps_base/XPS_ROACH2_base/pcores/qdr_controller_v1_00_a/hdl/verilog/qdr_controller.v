@@ -42,6 +42,7 @@ module qdr_controller (
   parameter ADDR_WIDTH   = 22;
   parameter BURST_LENGTH = 4;
   parameter CLK_FREQ     = 200;
+  parameter IODELAY_GRP  = "IODELAY_200";
 
   input clk0, clk180, clk270, div_clk;
   input reset;
@@ -100,6 +101,7 @@ module qdr_controller (
     .BW_WIDTH     (BW_WIDTH    ),
     .ADDR_WIDTH   (ADDR_WIDTH  ),
     .BURST_LENGTH (BURST_LENGTH),
+    .IODELAY_GRP  (IODELAY_GRP),
     .CLK_FREQ     (CLK_FREQ    )
   ) qdrc_top_inst (
     .clk0    (clk0),
