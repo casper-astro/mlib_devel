@@ -266,6 +266,7 @@ module sfp_mdio_controller #(
       end else begin
          start_detectR <= 1'b0;
       end
+      
 
     end 
   end
