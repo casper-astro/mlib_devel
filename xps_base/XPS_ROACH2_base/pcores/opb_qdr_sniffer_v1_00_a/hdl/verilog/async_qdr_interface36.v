@@ -78,7 +78,8 @@ module async_qdr_interface36 #(
   reg [143:0] write_buffer;
   reg qdr_inputs_valid;
   /* Insert parity bits to pad to 36 bits */
-  wire [35:0] host_data_parity_ext = {1'b0, host_datai_reg[31:24], 1'b0, host_datai_reg[23:16], 1'b0, host_datai_reg[15:8], 1'b0, host_datai_reg[7:0]};
+  //wire [35:0] host_data_parity_ext = {1'b0, host_datai_reg[31:24], 1'b0, host_datai_reg[23:16], 1'b0, host_datai_reg[15:8], 1'b0, host_datai_reg[7:0]};
+  wire [35:0] host_data_parity_ext = {4'b0000, host_datai_reg[31:0]};
   always @(posedge qdr_clk) begin
     if (qdr_rst) begin
       write_buffer <= 144'b0;
@@ -244,10 +245,12 @@ module async_qdr_interface36 #(
             if (!word_id[1]) begin
               resp_state <= IDLE;
               if(!word_id[0]) begin
-                  host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+                  //host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+                  host_datao_reg <= {qdr_q[31:0]};
                   sniffer_latch  <= 1'b1;
               end else begin
-                  host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
+                  //host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
+                  host_datao_reg <= {qdr_q[67:36]};
                   sniffer_latch  <= 1'b1;
               end
               qdr_resp_ready <= 1'b1;
@@ -259,10 +262,12 @@ module async_qdr_interface36 #(
         FINAL: begin
           qdr_resp_ready <= 1'b1;
           if(!word_id[0]) begin
-              host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+              //host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
+              host_datao_reg <= {qdr_q[31:0]};
               sniffer_latch  <= 1'b1;
           end else begin
-              host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
+              //host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
+              host_datao_reg <= {qdr_q[67:36]};
               sniffer_latch  <= 1'b1;
           end
           resp_state <= IDLE;

@@ -137,6 +137,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
 
   wire [0:31] Sl_DBus_int;
   assign Sl_DBus = Sl_xferAck ? Sl_DBus_int : 32'b0;
+  //assign Sl_DBus = Sl_DBus_int;
 
   
   /* Inner generate. Select appropriate QDR interface based on QDR data width */
@@ -166,7 +167,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
       .qdr_q    (backdoor_q),
       .sniffer_latch_out (sniffer_latch)
     );
-       //===========================================================================
+   //===========================================================================
    // Chipscope modules used to debug the controller
    //===========================================================================
    /*wire [35:0] ctrl0;
@@ -210,15 +211,15 @@ generate if (ENABLE == 1) begin: qdr_enabled
    // 64 -> 95
    assign trig2  = {master_rd_data};
    // 96 -> 127
-   assign trig3  = {slave_wr_data};
+   assign trig3  = {};
    // 128 -> 
-   assign trig4  = {master_wr_data};
+   assign trig4  = {slave_addr};
    // 160
-   assign trig5  = {slave_addr};
+   assign trig5  = {master_addr};
    // 192
-   assign trig6  = {master_addr};
+   assign trig6  = {dly_en_i[31:0]};
    // 224
-   assign trig7  = {dly_en_i[31:0]};
+   assign trig7  = {dly_en_i[36:32], dly_en_o[36:32]};
    // 256
    assign trig8  = {dly_en_o[31:0]};
    // 288
@@ -234,8 +235,8 @@ generate if (ENABLE == 1) begin: qdr_enabled
    // 448
    assign trig14 = {master_wr_data_hi};
    // 480
-   assign trig15 = {master_wr_data_lo};*/
-
+   assign trig15 = {master_wr_data_lo};
+*/
   end else begin
     async_qdr_interface #(
       .QDR_LATENCY(QDR_LATENCY)

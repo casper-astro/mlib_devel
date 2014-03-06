@@ -170,9 +170,9 @@ module qdrc_infrastructure(
    *
    */
 
-  reg [ADDR_WIDTH - 1:0] qdr_sa_reg;
-  reg qdr_w_n_reg;
-  reg qdr_r_n_reg;
+  reg [ADDR_WIDTH - 1:0] qdr_sa_reg,qdr_sa_regR;
+  reg qdr_w_n_reg,qdr_w_n_regR;
+  reg qdr_r_n_reg,qdr_r_n_regR;
   wire qdr_r_n_delayed;
 
   /* This signals are all sliced so use the register in the slice */
@@ -182,9 +182,12 @@ module qdrc_infrastructure(
   reg qdr_r_n_reg0;
 
   always @(posedge clk0) begin 
-    qdr_sa_reg        <= qdr_sa_buf;
-    qdr_w_n_reg       <= qdr_w_n_buf;
-    qdr_r_n_reg       <= qdr_r_n_buf;
+    qdr_sa_regR        <= qdr_sa_buf;
+    qdr_w_n_regR       <= qdr_w_n_buf;
+    qdr_r_n_regR       <= qdr_r_n_buf;
+    qdr_sa_reg        <= qdr_sa_regR;
+    qdr_w_n_reg       <= qdr_w_n_regR;
+    qdr_r_n_reg       <= qdr_r_n_regR;
     qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
     qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
   end
@@ -243,16 +246,18 @@ module qdrc_infrastructure(
    *
    */
 
-  reg [DATA_WIDTH - 1:0] qdr_d_rise_reg0;
-  reg [DATA_WIDTH - 1:0] qdr_d_fall_reg0;
+  reg [DATA_WIDTH - 1:0] qdr_d_rise_reg0,qdr_d_rise_reg0R;
+  reg [DATA_WIDTH - 1:0] qdr_d_fall_reg0,qdr_d_fall_reg0R;
   reg   [BW_WIDTH - 1:0] qdr_bw_n_rise_reg0;
   reg   [BW_WIDTH - 1:0] qdr_bw_n_fall_reg0;
 
   always @(posedge clk0) begin
   /* Delay the write data by one cycle (qdr protocol,
    * requires datat to lag control*/
-    qdr_d_rise_reg0     <= qdr_d_rise;
-    qdr_d_fall_reg0     <= qdr_d_fall;
+    qdr_d_rise_reg0R    <= qdr_d_rise;
+    qdr_d_fall_reg0R    <= qdr_d_fall;
+    qdr_d_rise_reg0     <= qdr_d_rise_reg0R;
+    qdr_d_fall_reg0     <= qdr_d_fall_reg0R;
     qdr_bw_n_rise_reg0  <= qdr_bw_n_rise;
     qdr_bw_n_fall_reg0  <= qdr_bw_n_fall;
   end
@@ -261,6 +266,13 @@ module qdrc_infrastructure(
   reg [DATA_WIDTH - 1:0] qdr_d_fall_reg1;
   reg   [BW_WIDTH - 1:0] qdr_bw_n_rise_reg1;
   reg   [BW_WIDTH - 1:0] qdr_bw_n_fall_reg1;
+
+  // Stop XST to chuck all this pipelining into a single shift register!
+  //synthesis attribute SHREG_EXTRACT of qdr_d_rise_reg* is no
+  //synthesis attribute SHREG_EXTRACT of qdr_d_fall_reg* is no
+  //synthesis attribute SHREG_EXTRACT of qdr_sa_reg* is no
+  //synthesis attribute SHREG_EXTRACT of qdr_r_n_reg* is no
+  //synthesis attribute SHREG_EXTRACT of qdr_w_n_reg* is no
 
   always @(posedge clk0) begin
   /* Delay to match the extra cycle on control lines 
@@ -403,25 +415,35 @@ module qdrc_infrastructure(
     .Q2 (qdr_q_fall_int)
   );
 
-  reg [DATA_WIDTH - 1:0] qdr_q_rise_intR,qdr_q_rise_intRR,qdr_q_rise_intRRR,qdr_q_rise_intRRRR;
-  reg [DATA_WIDTH - 1:0] qdr_q_fall_intR,qdr_q_fall_intRR,qdr_q_fall_intRRR,qdr_q_fall_intRRRR;
+  reg [17:0] qdr_q_rise_intR_low , qdr_q_rise_intRR_low , qdr_q_rise_intRRR_low , qdr_q_rise_intRRRR_low ;
+  reg [17:0] qdr_q_rise_intR_high, qdr_q_rise_intRR_high, qdr_q_rise_intRRR_high, qdr_q_rise_intRRRR_high;
+  reg [17:0] qdr_q_fall_intR_low , qdr_q_fall_intRR_low , qdr_q_fall_intRRR_low , qdr_q_fall_intRRRR_low ;
+  reg [17:0] qdr_q_fall_intR_high, qdr_q_fall_intRR_high, qdr_q_fall_intRRR_high, qdr_q_fall_intRRRR_high;
 
   always @(posedge clk180) begin
-    qdr_q_rise_intR     <= qdr_q_rise_int;
-    qdr_q_fall_intR     <= qdr_q_fall_int;
-    qdr_q_rise_intRR     <= qdr_q_rise_intR;
-    qdr_q_fall_intRR     <= qdr_q_fall_intR;
+    qdr_q_rise_intR_high   <= qdr_q_rise_int [35:18];
+    qdr_q_fall_intR_high   <= qdr_q_fall_int [35:18];
+    qdr_q_rise_intRR_high  <= qdr_q_rise_intR_high;
+    qdr_q_fall_intRR_high  <= qdr_q_fall_intR_high;
+    qdr_q_rise_intRRR_high <= qdr_q_rise_intRR_high;
+    qdr_q_fall_intRRR_high <= qdr_q_fall_intRR_high;
+    qdr_q_rise_intR_low    <= qdr_q_rise_int  [17:0];
+    qdr_q_fall_intR_low    <= qdr_q_fall_int  [17:0];
+    qdr_q_rise_intRR_low   <= qdr_q_rise_intR_low;
+    qdr_q_fall_intRR_low   <= qdr_q_fall_intR_low;
+    qdr_q_rise_intRRR_low  <= qdr_q_rise_intRR_low;
+    qdr_q_fall_intRRR_low  <= qdr_q_fall_intRR_low;
   end
 
   always @(posedge clk0) begin
-    qdr_q_rise_intRRR     <= qdr_q_rise_intRR;
-    qdr_q_fall_intRRR     <= qdr_q_fall_intRR;
-    qdr_q_rise_intRRRR     <= qdr_q_rise_intRRR;
-    qdr_q_fall_intRRRR     <= qdr_q_fall_intRRR;
+    qdr_q_rise_intRRRR_high <= qdr_q_rise_intRRR_high;
+    qdr_q_fall_intRRRR_high <= qdr_q_fall_intRRR_high;
+    qdr_q_rise_intRRRR_low  <= qdr_q_rise_intRRR_low;
+    qdr_q_fall_intRRRR_low  <= qdr_q_fall_intRRR_low;
   end
 
-  assign qdr_q_rise = qdr_q_rise_intRRRR;
-  assign qdr_q_fall = qdr_q_fall_intRRRR;
+  assign qdr_q_rise = {qdr_q_rise_intRRRR_high, qdr_q_rise_intRRRR_low};
+  assign qdr_q_fall = {qdr_q_fall_intRRRR_high, qdr_q_fall_intRRRR_low};
   
   
   //===========================================================================

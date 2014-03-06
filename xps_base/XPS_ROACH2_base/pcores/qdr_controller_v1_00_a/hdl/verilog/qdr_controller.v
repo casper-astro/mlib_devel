@@ -12,7 +12,7 @@ module qdr_controller (
     qdr_w_n,
     qdr_r_n,
     qdr_dll_off_n,
-    qdr_bw_n,
+    //qdr_bw_n,
     //qdr_cq,
     //qdr_cq_n,
     qdr_k,
@@ -57,7 +57,7 @@ module qdr_controller (
   output qdr_w_n;
   output qdr_r_n;
   output qdr_dll_off_n;
-  output   [BW_WIDTH - 1:0] qdr_bw_n;
+  //output   [BW_WIDTH - 1:0] qdr_bw_n;
   //input  qdr_cq;
   //input  qdr_cq_n;
   output qdr_k;
@@ -130,7 +130,7 @@ module qdr_controller (
     .qdr_w_n       (qdr_w_n),
     .qdr_r_n       (qdr_r_n),
     .qdr_dll_off_n (qdr_dll_off_n),
-    .qdr_bw_n      (qdr_bw_n),
+    .qdr_bw_n      (),
     .qdr_k         (qdr_k),
     .qdr_k_n       (qdr_k_n),
     /* phy->external signals */

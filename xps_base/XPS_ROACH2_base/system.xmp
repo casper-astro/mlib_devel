@@ -17,3 +17,4 @@ SimModel: BEHAVIORAL
 UcfFile: data/system.ucf
 EnableParTimingError: 1
 ShowLicenseDialog: 1
+ShiftReg : No
