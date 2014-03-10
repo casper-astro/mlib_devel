@@ -42,18 +42,14 @@ switch hw_sys
     case 'ROACH'
         data_width = 36;
         be_width = 4;
-        qdr_latency = 10;
         n_qdr = 2;
     % end case 'ROACH'
     case 'ROACH2'
         data_width = 72;
         be_width = 8;
-        qdr_latency = 10;
         n_qdr = 4;
         %%data_width = 72;
         %be_width = 8;
-        %%qdr_latency = 14;
-        %qdr_latency = 10;
         %n_qdr = 4;
     % end case 'ROACH2'
 end % end switch hw_sys
@@ -68,29 +64,31 @@ if (qdr_num > (n_qdr-1))
 end
 
 
-%Set qdr latency to correctly align data valid out signal
-set_param([myname, '/qdr_latency'], 'Latency', num2str(qdr_latency));
-
-
 %construct bit remapping to move parity bits
-input_parity_map  = 'b = {';
-output_parity_map = 'b = {';
-output_parity_map_top = '';
-output_parity_map_bottom = '';
+%input_parity_map  = 'b = {';
+%output_parity_map = 'b = {';
+%output_parity_map_top = '';
+%output_parity_map_bottom = '';
 
-for i=[be_width-1:-1:0]
-   input_parity_map = [input_parity_map, 'a[', num2str(data_width-(be_width-i)), '],a[', num2str((i+1)*8-1), ':', num2str(i*8), ']'];
-   output_parity_map_top = [output_parity_map_top, 'a[', num2str(9*(i+1) - 1), ']'];
-   output_parity_map_bottom = [output_parity_map_bottom, 'a[', num2str(9*(i+1)-1 - 1), ':', num2str(9*(i+1)-1 - 8), ']'];
-   if i==0
-       input_parity_map = [input_parity_map, '}'];
-       output_parity_map = [output_parity_map, output_parity_map_top, ',', output_parity_map_bottom, '}'];
-   else
-       input_parity_map = [input_parity_map, ','];
-       output_parity_map_top = [output_parity_map_top, ','];
-       output_parity_map_bottom = [output_parity_map_bottom, ','];
-   end
-end
+input_parity_map  = 'b = {a[71:0]}';
+output_parity_map = 'b = {a[71:0]}';
+output_parity_map_top = 'b = {a[71:0]}';
+output_parity_map_bottom = 'b = {a[71:0]}';
+
+%for i=[be_width-1:-1:0]
+%   %input_parity_map = [input_parity_map, 'a[', num2str(data_width-(be_width-i)), '],a[', num2str((i+1)*8-1), ':', num2str(i*8), ']'];
+%   input_parity_map = [input_parity_map, 'a[71:0]'];
+%   output_parity_map_top = [output_parity_map_top, 'a[71:0]'];
+%   output_parity_map_bottom = [output_parity_map_bottom, 'a[71:0]'];
+%   if i==0
+%       input_parity_map = [input_parity_map, '}'];
+%       output_parity_map = [output_parity_map, output_parity_map_top, ',', output_parity_map_bottom, '}'];
+%   else
+%       input_parity_map = [input_parity_map, ','];
+%       output_parity_map_top = [output_parity_map_top, ','];
+%       output_parity_map_bottom = [output_parity_map_bottom, ','];
+%   end
+%end
 
 %update expressions in bitbasher blocks
 extract_parity_blk = [myname, '/extract_parity'];
@@ -134,6 +132,9 @@ for i =1:length(gateway_ins)
         toks = regexp(get_param(gw,'Name'),'(data_out)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
         set_param(gw,'n_bits',num2str(data_width));
+    elseif regexp(get_param(gw,'Name'),'(data_valid)$')
+        toks = regexp(get_param(gw,'Name'),'(data_valid)$','tokens');
+        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
     elseif regexp(get_param(gw,'Name'),'(phy_ready)$')
         toks = regexp(get_param(gw,'Name'),'(phy_ready)$','tokens');
         set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));

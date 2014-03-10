@@ -45,14 +45,11 @@ switch s.hw_sys
         s.addr_width = '22';
         s.data_width = '18';
         s.bw_width = '2';
-        s.qdr_latency = '10';
     % end case 'ROACH'
     case 'ROACH2'
         s.addr_width = '21';
         s.data_width = '36';
         s.bw_width = '4';
-        %s.qdr_latency = '14';
-        s.qdr_latency = '10';
     % end case 'ROACH2'
     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);

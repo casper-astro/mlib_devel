@@ -7,6 +7,15 @@ TIMESPEC TS_sys_clk_n = PERIOD sys_clk_n 100 MHz;
 Net epb_clk_in TNM_NET = epb_clk_in;
 TIMESPEC TS_epb_clk_in = PERIOD epb_clk_in 67 MHz;
 
+NET "*sys_clk" TNM_NET = "TNM_sys_clk";
+TIMESPEC "TS_sys_clk" = PERIOD "TNM_sys_clk" 100 MHz;
+
+NET "*sys_clk2x" TNM_NET = "TNM_sys_clk2x";
+TIMESPEC "TS_sys_clk2x" = PERIOD "TNM_sys_clk2x" 200 MHz;
+
+TIMESPEC TS_sys_clk2x_TIG = FROM "TNM_sys_clk2x" TO "TNM_sys_clk"   TIG;
+TIMESPEC TS_sys_clk_TIG   = FROM "TNM_sys_clk"   TO "TNM_sys_clk2x" TIG;
+
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))## GbE Timing Constraints
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#Net clk_125 TNM_NET = clk_125;
@@ -303,6 +312,35 @@ NET "epb_data<31>"      LOC = AJ33;
 #
 
 # QDR0
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k"         IOSTANDARD = HSTL_I | LOC = D17;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k"         IOSTANDARD = HSTL_I | LOC = D17;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#INST */qdr0_controller/qdrc_infrastructure_inst/*high* AREA_GROUP = "QDR0_AREA_HIGH";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#AREA_GROUP "QDR0_AREA_HIGH" RANGE = SLICE_X76Y319:SLICE_X77Y280;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#INST */qdr0_controller/qdrc_infrastructure_inst/*low*  AREA_GROUP = "QDR0_AREA_LOW";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#AREA_GROUP "QDR0_AREA_LOW" RANGE = SLICE_X76Y239:SLICE_X77Y200;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#INST */qdr1_controller/qdrc_infrastructure_inst/*high* AREA_GROUP = "QDR1_AREA_HIGH";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#AREA_GROUP "QDR1_AREA_HIGH" RANGE = SLICE_X88Y325:SLICE_X89Y285;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#INST */qdr1_controller/qdrc_infrastructure_inst/*low*  AREA_GROUP = "QDR1_AREA_LOW";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#AREA_GROUP "QDR1_AREA_LOW" RANGE = SLICE_X116Y359:SLICE_X117Y320;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#INST */qdr2_controller/qdrc_infrastructure_inst/*high* AREA_GROUP = "QDR2_AREA_HIGH";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#AREA_GROUP "QDR2_AREA_HIGH" RANGE = SLICE_X88Y200:SLICE_X89Y276;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#INST */qdr2_controller/qdrc_infrastructure_inst/*low*  AREA_GROUP = "QDR2_AREA_LOW";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr2')#AREA_GROUP "QDR2_AREA_LOW" RANGE = SLICE_X88Y200:SLICE_X89Y276;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#INST */qdr3_controller/qdrc_infrastructure_inst/*high* AREA_GROUP = "QDR3_AREA_HIGH";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#AREA_GROUP "QDR3_AREA_HIGH" RANGE = SLICE_X88Y79:SLICE_X89Y40;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#INST */qdr3_controller/qdrc_infrastructure_inst/*low*  AREA_GROUP = "QDR3_AREA_LOW";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr3')#AREA_GROUP "QDR3_AREA_LOW" RANGE = SLICE_X116Y159:SLICE_X117Y120;
 
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k"         IOSTANDARD = HSTL_I | LOC = D17;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k_n"       IOSTANDARD = HSTL_I | LOC = E17;
