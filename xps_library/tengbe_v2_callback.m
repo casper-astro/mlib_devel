@@ -24,7 +24,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function ten_gbe_v2_callback()
+function tengbe_v2_callback()
 
 clog('entering ten_gbe_v2_callback', 'trace');
 
@@ -61,6 +61,21 @@ end
 mask_visibilities{ismember(mask_names, 'rx_dist_ram')} = 'on';
 mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
+
+% debug counter checkboxes
+mask_visibilities{ismember(mask_names, 'txctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txerrctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txofctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txfullctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txvldctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txsnaplen')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxerrctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxofctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxbadctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxvldctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxeofctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxsnaplen')} = 'on';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %these are visible always depending on architecture
@@ -105,7 +120,7 @@ if strcmp(show_param, 'on'),
   end
 end
 
-%enable and make visible relevant parameters
+% enable and make visible relevant parameters
 set_param(blk, 'MaskVisibilities', mask_visibilities);
 
 clog('exiting ten_gbe_v2_callback', 'trace');
