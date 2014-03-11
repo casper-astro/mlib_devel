@@ -25,10 +25,10 @@ mask_prompts{ismember(mask_names, 'arith_types')} = 'Type (ufix=0, fix=1, bool=2
 mask_prompts{ismember(mask_names, 'bin_pts')} = 'Binary pt:';
 if strcmp(mode, 'one value'),
     set_param(blk, 'names', current_names{1});
-    set_param(blk, 'bitwidths', '32');
+    %set_param(blk, 'bitwidths', '32');
     %set_param(blk, 'arith_types', num2str(current_types(1)));
     %set_param(blk, 'bin_pts', num2str(current_bins(1)));
-    mask_enables{ismember(mask_names, 'bitwidths')} = 'off';
+    %mask_enables{ismember(mask_names, 'bitwidths')} = 'off';
 else
     mask_enables{ismember(mask_names, 'bitwidths')} = 'on';
     mask_prompts{ismember(mask_names, 'names')} = 'Names [msb ... lsb]:';

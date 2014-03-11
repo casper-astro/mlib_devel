@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1921.0, 27.0, 1280.0, 1024.0]
+      Location		      [0.0, 25.0, 1920.0, 1055.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -41,11 +41,11 @@ Library {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"321"
-	Extents			[1244.0, 893.0]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[1884.0, 892.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
+	Offset			[-71.125, -1.6887035812152362]
       }
     }
   }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "wnew"
+  LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Feb 26 20:14:43 2014"
-  RTWModifiedTimeStamp	  315346480
-  ModelVersionFormat	  "1.%<AutoIncrement:510>"
+  LastModifiedDate	  "Mon Mar 10 14:52:47 2014"
+  RTWModifiedTimeStamp	  316363928
+  ModelVersionFormat	  "1.%<AutoIncrement:511>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,8 +802,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [1921, 27, 3201, 1051]
-    Open		    off
+    Location		    [0, 25, 1920, 1080]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -816,14 +816,14 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "332"
+    SIDHighWatermark	    "333"
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
       SID		      "1"
       Tag		      "xps:block_name"
       Ports		      []
-      Position		      [20, 862, 80, 911]
+      Position		      [20, 882, 80, 931]
       ZOrder		      -1
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -855,7 +855,7 @@ Library {
       Name		      "ADCs"
       SID		      "2"
       Ports		      []
-      Position		      [20, 698, 79, 746]
+      Position		      [20, 718, 79, 766]
       ZOrder		      -2
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -15288,7 +15288,7 @@ Library {
       Name		      "DACs"
       SID		      "109"
       Ports		      []
-      Position		      [20, 778, 79, 826]
+      Position		      [20, 798, 79, 846]
       ZOrder		      -3
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -24035,7 +24035,7 @@ Library {
       SID		      "112"
       Tag		      "xps:bram"
       Ports		      [3, 1]
-      Position		      [220, 321, 300, 379]
+      Position		      [220, 341, 300, 399]
       ZOrder		      -4
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -26448,7 +26448,7 @@ Library {
       SID		      "113"
       Tag		      "xps:fifo"
       Ports		      [4, 2]
-      Position		      [205, 417, 310, 533]
+      Position		      [205, 437, 310, 553]
       ZOrder		      -5
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -27074,7 +27074,7 @@ Library {
       SID		      "114"
       Tag		      "xps:xaui"
       Ports		      [5, 7]
-      Position		      [725, 346, 865, 514]
+      Position		      [725, 366, 865, 534]
       ZOrder		      -6
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -28245,7 +28245,7 @@ Library {
       SID		      "115"
       Tag		      "xps:xsg"
       Ports		      []
-      Position		      [25, 324, 71, 367]
+      Position		      [25, 344, 71, 387]
       ZOrder		      -7
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -28400,7 +28400,7 @@ Library {
       SID		      "116"
       Tag		      "xps:adc"
       Ports		      [3, 17]
-      Position		      [335, 709, 480, 971]
+      Position		      [335, 729, 480, 991]
       ZOrder		      -8
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -32616,7 +32616,7 @@ Library {
       SID		      "117"
       Tag		      "xps:adc083000x2"
       Ports		      [5, 22]
-      Position		      [685, 713, 850, 1102]
+      Position		      [685, 733, 850, 1122]
       ZOrder		      -9
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -35705,7 +35705,7 @@ Library {
       SID		      "118"
       Tag		      "xps:mkadc"
       Ports		      [4, 18]
-      Position		      [1105, 711, 1285, 1069]
+      Position		      [1105, 731, 1285, 1089]
       ZOrder		      -10
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -39996,7 +39996,7 @@ Library {
       SID		      "119"
       Tag		      "xps:dram"
       Ports		      [8, 5]
-      Position		      [535, 344, 675, 596]
+      Position		      [535, 364, 675, 616]
       ZOrder		      -11
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -46476,7 +46476,7 @@ Library {
       Name		      "generic_adc"
       SID		      "120"
       Ports		      [2, 8]
-      Position		      [195, 704, 285, 901]
+      Position		      [195, 724, 285, 921]
       ZOrder		      -12
       UserDataPersistent      on
       UserData		      "DataTag15"
@@ -48204,7 +48204,7 @@ Library {
       SID		      "177"
       Tag		      "xps:gpio"
       Ports		      [1, 1]
-      Position		      [25, 545, 125, 575]
+      Position		      [25, 565, 125, 595]
       ZOrder		      -13
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -48478,7 +48478,7 @@ Library {
       SID		      "178"
       Tag		      "xps:katadc"
       Ports		      [8, 15]
-      Position		      [910, 712, 1040, 1018]
+      Position		      [910, 732, 1040, 1038]
       ZOrder		      -14
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       UserDataPersistent      on
@@ -52677,7 +52677,7 @@ Library {
       SID		      "318"
       Tag		      "xps:onegbe"
       Ports		      [8, 11]
-      Position		      [535, 34, 670, 296]
+      Position		      [535, 54, 670, 316]
       ZOrder		      -15
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -54422,7 +54422,7 @@ Library {
       SID		      "319"
       Tag		      "xps:pcore"
       Ports		      []
-      Position		      [25, 399, 71, 442]
+      Position		      [25, 419, 71, 462]
       ZOrder		      -16
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -54474,7 +54474,7 @@ Library {
       SID		      "320"
       Tag		      "xps:probe"
       Ports		      [1]
-      Position		      [25, 616, 60, 644]
+      Position		      [25, 636, 60, 664]
       ZOrder		      -17
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -54736,7 +54736,7 @@ Library {
       SID		      "321"
       Tag		      "xps:qdr"
       Ports		      [5, 5]
-      Position		      [370, 413, 485, 597]
+      Position		      [370, 433, 485, 617]
       ZOrder		      -18
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -54793,8 +54793,8 @@ Library {
       }
       System {
 	Name			"qdr"
-	Location		[1921, 27, 3201, 1051]
-	Open			on
+	Location		[0, 25, 1920, 1080]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -55286,7 +55286,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/BitBasher"
 	  SourceType		  "Xilinx BitBasher Block"
 	  infoedit		  "Allows extraction, concatenation and augmentation of bits"
-	  bitexpr		  "b = {a[35],a[26],a[17],a[8],a[34:27],a[25:18],a[16:9],a[7:0]}"
+	  bitexpr		  "b = {a[71:0]}"
 	  display_expr		  off
 	  sr_1			  "1"
 	  arith_type1		  "Unsigned"
@@ -55491,7 +55491,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/BitBasher"
 	  SourceType		  "Xilinx BitBasher Block"
 	  infoedit		  "Allows extraction, concatenation and augmentation of bits"
-	  bitexpr		  "b = {a[35],a[31:24],a[34],a[23:16],a[33],a[15:8],a[32],a[7:0]}"
+	  bitexpr		  "b = {a[71:0]}"
 	  display_expr		  off
 	  sr_1			  "1"
 	  arith_type1		  "Unsigned"
@@ -57642,7 +57642,7 @@ Library {
       SID		      "322"
       Tag		      "xps:quadc"
       Ports		      [6, 6]
-      Position		      [535, 711, 625, 889]
+      Position		      [535, 731, 625, 909]
       ZOrder		      -19
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -58151,7 +58151,7 @@ Library {
       SID		      "332"
       Tag		      "xps:sw_reg"
       Ports		      [1, 1]
-      Position		      [920, 407, 1020, 433]
+      Position		      [920, 427, 1020, 453]
       ZOrder		      5229
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       AttributesFormatString  "1output"
@@ -58319,7 +58319,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6755"
+	SIDHighWatermark	"6765"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58331,10 +58331,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6754"
+	  SID			  "332:6764"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6706
+	  ZOrder		  6716
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58369,10 +58369,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6752"
+	  SID			  "332:6762"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6704
+	  ZOrder		  6714
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58407,10 +58407,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6751"
+	  SID			  "332:6761"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6703
+	  ZOrder		  6713
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58438,10 +58438,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6755"
+	  SID			  "332:6765"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6707
+	  ZOrder		  6717
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58469,10 +58469,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6753"
+	  SID			  "332:6763"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6705
+	  ZOrder		  6715
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
@@ -58553,7 +58553,7 @@ Library {
       SID		      "324"
       Tag		      "xps:sw_reg_old"
       Ports		      [1, 1]
-      Position		      [920, 350, 1020, 380]
+      Position		      [920, 370, 1020, 400]
       ZOrder		      -21
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -58761,7 +58761,7 @@ Library {
       SID		      "325"
       Tag		      "xps:tengbe"
       Ports		      [8, 10]
-      Position		      [725, 31, 865, 294]
+      Position		      [725, 51, 865, 314]
       ZOrder		      -22
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -60518,11 +60518,11 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "ten_Gbe_v2"
-      SID		      "326"
+      SID		      "333"
       Tag		      "xps:tengbe_v2"
-      Ports		      [8, 12]
-      Position		      [920, 34, 1065, 296]
-      ZOrder		      -23
+      Ports		      [9, 12]
+      Position		      [910, 18, 1055, 317]
+      ZOrder		      5232
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -60539,11 +60539,11 @@ Library {
 	Description		"This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-dete"
 	"rmined frame breaks. The data stream is wrapped in a UDP frame for transmission. Incoming UDP packets are unwrapped a"
 	"nd the data presented as a 64 bit wide stream."
-	Initialization		"tengbe_v2_mask;"
+	Initialization		"tengbe_v2_mask(gcb)"
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  22
+	  Dimension		  37
 	  Object {
 	    $ObjectID		    294
 	    Type		    "popup"
@@ -60560,6 +60560,7 @@ Library {
 	    Evaluate		    "off"
 	    Visible		    "off"
 	    Callback		    "tengbe_v2_callback"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    295
@@ -60575,6 +60576,7 @@ Library {
 	    Prompt		    "Card slot"
 	    Value		    "1"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    296
@@ -60591,6 +60593,7 @@ Library {
 	    Name		    "port_r1"
 	    Prompt		    "Port"
 	    Value		    "0"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    297
@@ -60607,6 +60610,7 @@ Library {
 	    Prompt		    "Port"
 	    Value		    "0"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    298
@@ -60624,6 +60628,7 @@ Library {
 	    Prompt		    "Port"
 	    Value		    "0"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    299
@@ -60631,6 +60636,7 @@ Library {
 	    Name		    "rx_dist_ram"
 	    Prompt		    "Shallow RX Fifo (Beware overruns!)"
 	    Value		    "on"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    300
@@ -60638,6 +60644,7 @@ Library {
 	    Name		    "large_frames"
 	    Prompt		    "Enable Large TX Frames (8k+512)"
 	    Value		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    301
@@ -60649,6 +60656,7 @@ Library {
 	    Evaluate		    "off"
 	    Tunable		    "off"
 	    Callback		    "tengbe_v2_callback"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    302
@@ -60679,6 +60687,7 @@ Library {
 	    Value		    "0.74"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    303
@@ -60697,6 +60706,7 @@ Library {
 	    Value		    "3"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    304
@@ -60736,6 +60746,7 @@ Library {
 	    Value		    "0.18"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    305
@@ -60758,6 +60769,7 @@ Library {
 	    Value		    "7"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    306
@@ -60788,6 +60800,7 @@ Library {
 	    Value		    "940"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    307
@@ -60807,6 +60820,7 @@ Library {
 	    Value		    "800"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    308
@@ -60816,6 +60830,7 @@ Library {
 	    Value		    "on"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    309
@@ -60824,6 +60839,7 @@ Library {
 	    Prompt		    "Fabric MAC Address"
 	    Value		    "hex2dec('123456780000')"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    310
@@ -60832,6 +60848,7 @@ Library {
 	    Prompt		    "Fabric IP Address"
 	    Value		    "192*(2^24) + 168*(2^16) + 5*(2^8) + 20*(2^0)"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    311
@@ -60840,6 +60857,7 @@ Library {
 	    Prompt		    "Fabric UDP Port"
 	    Value		    "10000"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    312
@@ -60848,6 +60866,7 @@ Library {
 	    Prompt		    "Fabric Gateway"
 	    Value		    "1"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    313
@@ -60857,6 +60876,7 @@ Library {
 	    Value		    "on"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    314
@@ -60866,6 +60886,7 @@ Library {
 	    Value		    "on"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
 	  }
 	  Object {
 	    $ObjectID		    315
@@ -60875,30 +60896,199 @@ Library {
 	    Value		    "hex2dec('FF')"
 	    Evaluate		    "off"
 	    Visible		    "off"
+	    TabName		    "Core"
+	  }
+	  Object {
+	    $ObjectID		    316
+	    Type		    "checkbox"
+	    Name		    "txctr"
+	    Prompt		    "TX - core_txctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    317
+	    Type		    "checkbox"
+	    Name		    "txerrctr"
+	    Prompt		    "TX packet length error - core_txerrctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    Callback		    "blk = gcb;\nmask_visibilities = get_param(blk, 'MaskVisibilities');\nmask_names = get_param(blk, '"
+	    "MaskNames');\nif strcmp(get_param(blk, 'txerrctr'), 'on')\n    mask_visibilities{ismember(mask_names, 'txerrctr_l"
+	    "en')} = 'on';\nelse\n    mask_visibilities{ismember(mask_names, 'txerrctr_len')} = 'off';\nend\nset_param(blk, 'M"
+	    "askVisibilities', mask_visibilities);"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    318
+	    Type		    "edit"
+	    Name		    "txerrctr_len"
+	    Prompt		    "    -- expected TX packet length"
+	    Value		    "100"
+	    Visible		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    319
+	    Type		    "checkbox"
+	    Name		    "txofctr"
+	    Prompt		    "TX overflow - core_txofctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    320
+	    Type		    "checkbox"
+	    Name		    "txfullctr"
+	    Prompt		    "TX full - core_txfullctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    321
+	    Type		    "checkbox"
+	    Name		    "txvldctr"
+	    Prompt		    "TX valid cycle - core_txvldctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    322
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      8
+	      Cell		      "0 - no snap"
+	      Cell		      "256"
+	      Cell		      "512"
+	      Cell		      "1024"
+	      Cell		      "2048"
+	      Cell		      "4096"
+	      Cell		      "8192"
+	      Cell		      "16384"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "txsnaplen"
+	    Prompt		    "TX snapshot length"
+	    Value		    "0 - no snap"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    323
+	    Type		    "checkbox"
+	    Name		    "rxctr"
+	    Prompt		    "RX - core_rxctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    324
+	    Type		    "checkbox"
+	    Name		    "rxerrctr"
+	    Prompt		    "RX packet length error - core_rxerrctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    Callback		    "blk = gcb;\nmask_visibilities = get_param(blk, 'MaskVisibilities');\nmask_names = get_param(blk, '"
+	    "MaskNames');\nif strcmp(get_param(blk, 'rxerrctr'), 'on')\n    mask_visibilities{ismember(mask_names, 'rxerrctr_l"
+	    "en')} = 'on';\nelse\n    mask_visibilities{ismember(mask_names, 'rxerrctr_len')} = 'off';\nend\nset_param(blk, 'M"
+	    "askVisibilities', mask_visibilities);"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    325
+	    Type		    "edit"
+	    Name		    "rxerrctr_len"
+	    Prompt		    "    -- expected RX packet length"
+	    Value		    "100"
+	    Visible		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    326
+	    Type		    "checkbox"
+	    Name		    "rxofctr"
+	    Prompt		    "RX overflow - core_rxofctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    327
+	    Type		    "checkbox"
+	    Name		    "rxbadctr"
+	    Prompt		    "RX bad - core_rxbadctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    328
+	    Type		    "checkbox"
+	    Name		    "rxvldctr"
+	    Prompt		    "RX valid cycle - core_rxvldctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    329
+	    Type		    "checkbox"
+	    Name		    "rxeofctr"
+	    Prompt		    "RX eof - core_rxeofctr"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    330
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      8
+	      Cell		      "0 - no snap"
+	      Cell		      "256"
+	      Cell		      "512"
+	      Cell		      "1024"
+	      Cell		      "2048"
+	      Cell		      "4096"
+	      Cell		      "8192"
+	      Cell		      "16384"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "rxsnaplen"
+	    Prompt		    "RX snapshot length"
+	    Value		    "0 - no snap"
+	    TabName		    "Debug counters"
 	  }
 	  PropName		  "Parameters"
 	}
       }
       System {
 	Name			"ten_Gbe_v2"
-	Location		[12, 45, 1510, 2063]
+	Location		[0, 25, 1920, 1080]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
-	SIDHighWatermark	"68"
+	ZoomFactor		"119"
+	SIDHighWatermark	"561"
+	SIDPrevWatermark	"561"
 	Block {
 	  BlockType		  Inport
 	  Name			  "rst"
-	  SID			  "326:1"
+	  SID			  "333:1"
 	  Position		  [120, 82, 150, 98]
 	  ZOrder		  -1
 	  IconDisplay		  "Port number"
@@ -60906,7 +61096,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_data"
-	  SID			  "326:2"
+	  SID			  "333:2"
 	  Position		  [120, 267, 150, 283]
 	  ZOrder		  -2
 	  Port			  "2"
@@ -60915,7 +61105,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_valid"
-	  SID			  "326:3"
+	  SID			  "333:3"
 	  Position		  [120, 227, 150, 243]
 	  ZOrder		  -3
 	  Port			  "3"
@@ -60924,7 +61114,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_dest_ip"
-	  SID			  "326:4"
+	  SID			  "333:4"
 	  Position		  [120, 307, 150, 323]
 	  ZOrder		  -4
 	  Port			  "4"
@@ -60933,7 +61123,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_dest_port"
-	  SID			  "326:5"
+	  SID			  "333:5"
 	  Position		  [120, 347, 150, 363]
 	  ZOrder		  -5
 	  Port			  "5"
@@ -60942,7 +61132,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_end_of_frame"
-	  SID			  "326:6"
+	  SID			  "333:6"
 	  Position		  [120, 387, 150, 403]
 	  ZOrder		  -6
 	  Port			  "6"
@@ -60951,7 +61141,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "rx_ack"
-	  SID			  "326:7"
+	  SID			  "333:7"
 	  Position		  [120, 567, 150, 583]
 	  ZOrder		  -7
 	  Port			  "7"
@@ -60960,16 +61150,25 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "rx_overrun_ack"
-	  SID			  "326:8"
+	  SID			  "333:8"
 	  Position		  [120, 607, 150, 623]
 	  ZOrder		  -8
 	  Port			  "8"
 	  IconDisplay		  "Port number"
 	}
 	Block {
+	  BlockType		  Inport
+	  Name			  "debug_rst"
+	  SID			  "333:297"
+	  Position		  [120, 137, 150, 153]
+	  ZOrder		  5446
+	  Port			  "9"
+	  IconDisplay		  "Port number"
+	}
+	Block {
 	  BlockType		  Constant
 	  Name			  "Constant1"
-	  SID			  "326:9"
+	  SID			  "333:9"
 	  Position		  [610, 645, 635, 665]
 	  ZOrder		  -9
 	  ShowName		  off
@@ -60978,7 +61177,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant10"
-	  SID			  "326:10"
+	  SID			  "333:10"
 	  Position		  [610, 500, 635, 520]
 	  ZOrder		  -10
 	  ShowName		  off
@@ -60987,7 +61186,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant11"
-	  SID			  "326:11"
+	  SID			  "333:11"
 	  Position		  [610, 570, 635, 590]
 	  ZOrder		  -11
 	  ShowName		  off
@@ -60996,7 +61195,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant12"
-	  SID			  "326:12"
+	  SID			  "333:12"
 	  Position		  [610, 265, 635, 285]
 	  ZOrder		  -12
 	  ShowName		  off
@@ -61005,7 +61204,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant2"
-	  SID			  "326:13"
+	  SID			  "333:13"
 	  Position		  [610, 225, 635, 245]
 	  ZOrder		  -13
 	  ShowName		  off
@@ -61014,7 +61213,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant3"
-	  SID			  "326:14"
+	  SID			  "333:14"
 	  Position		  [610, 690, 635, 710]
 	  ZOrder		  -14
 	  ShowName		  off
@@ -61023,7 +61222,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant4"
-	  SID			  "326:15"
+	  SID			  "333:15"
 	  Position		  [610, 735, 635, 755]
 	  ZOrder		  -15
 	  ShowName		  off
@@ -61032,7 +61231,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant5"
-	  SID			  "326:16"
+	  SID			  "333:16"
 	  Position		  [610, 535, 635, 555]
 	  ZOrder		  -16
 	  ShowName		  off
@@ -61041,7 +61240,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant6"
-	  SID			  "326:17"
+	  SID			  "333:17"
 	  Position		  [610, 320, 635, 340]
 	  ZOrder		  -17
 	  ShowName		  off
@@ -61050,7 +61249,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant7"
-	  SID			  "326:18"
+	  SID			  "333:18"
 	  Position		  [610, 365, 635, 385]
 	  ZOrder		  -18
 	  ShowName		  off
@@ -61059,7 +61258,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant8"
-	  SID			  "326:19"
+	  SID			  "333:19"
 	  Position		  [610, 410, 635, 430]
 	  ZOrder		  -19
 	  ShowName		  off
@@ -61068,7 +61267,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant9"
-	  SID			  "326:20"
+	  SID			  "333:20"
 	  Position		  [610, 455, 635, 475]
 	  ZOrder		  -20
 	  ShowName		  off
@@ -61077,7 +61276,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator"
-	  SID			  "326:21"
+	  SID			  "333:21"
 	  Position		  [495, 265, 515, 285]
 	  ZOrder		  -21
 	  ShowName		  off
@@ -61085,7 +61284,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator1"
-	  SID			  "326:22"
+	  SID			  "333:22"
 	  Position		  [495, 305, 515, 325]
 	  ZOrder		  -22
 	  ShowName		  off
@@ -61093,7 +61292,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator2"
-	  SID			  "326:23"
+	  SID			  "333:23"
 	  Position		  [495, 225, 515, 245]
 	  ZOrder		  -23
 	  ShowName		  off
@@ -61101,7 +61300,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator3"
-	  SID			  "326:24"
+	  SID			  "333:24"
 	  Position		  [495, 565, 515, 585]
 	  ZOrder		  -24
 	  ShowName		  off
@@ -61109,7 +61308,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator5"
-	  SID			  "326:25"
+	  SID			  "333:25"
 	  Position		  [495, 80, 515, 100]
 	  ZOrder		  -25
 	  ShowName		  off
@@ -61117,7 +61316,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator6"
-	  SID			  "326:26"
+	  SID			  "333:26"
 	  Position		  [495, 605, 515, 625]
 	  ZOrder		  -26
 	  ShowName		  off
@@ -61125,7 +61324,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator7"
-	  SID			  "326:27"
+	  SID			  "333:27"
 	  Position		  [495, 345, 515, 365]
 	  ZOrder		  -27
 	  ShowName		  off
@@ -61133,7 +61332,7 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator8"
-	  SID			  "326:28"
+	  SID			  "333:28"
 	  Position		  [495, 385, 515, 405]
 	  ZOrder		  -28
 	  ShowName		  off
@@ -61141,7 +61340,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_rst"
-	  SID			  "326:29"
+	  SID			  "333:29"
 	  Ports			  [1, 1]
 	  Position		  [235, 82, 285, 98]
 	  ZOrder		  -29
@@ -61180,7 +61379,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_rx_ack"
-	  SID			  "326:30"
+	  SID			  "333:30"
 	  Ports			  [1, 1]
 	  Position		  [235, 567, 285, 583]
 	  ZOrder		  -30
@@ -61219,7 +61418,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_rx_overrun_ack"
-	  SID			  "326:31"
+	  SID			  "333:31"
 	  Ports			  [1, 1]
 	  Position		  [235, 607, 285, 623]
 	  ZOrder		  -31
@@ -61258,7 +61457,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_data"
-	  SID			  "326:32"
+	  SID			  "333:32"
 	  Ports			  [1, 1]
 	  Position		  [235, 267, 285, 283]
 	  ZOrder		  -32
@@ -61297,7 +61496,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_dest_ip"
-	  SID			  "326:33"
+	  SID			  "333:33"
 	  Ports			  [1, 1]
 	  Position		  [235, 307, 285, 323]
 	  ZOrder		  -33
@@ -61336,7 +61535,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_end_of_frame"
-	  SID			  "326:34"
+	  SID			  "333:34"
 	  Ports			  [1, 1]
 	  Position		  [235, 387, 285, 403]
 	  ZOrder		  -34
@@ -61375,7 +61574,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_port"
-	  SID			  "326:35"
+	  SID			  "333:35"
 	  Ports			  [1, 1]
 	  Position		  [235, 347, 285, 363]
 	  ZOrder		  -35
@@ -61414,7 +61613,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_valid"
-	  SID			  "326:36"
+	  SID			  "333:36"
 	  Ports			  [1, 1]
 	  Position		  [235, 227, 285, 243]
 	  ZOrder		  -36
@@ -61451,9 +61650,16 @@ Library {
 	  "st');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
+	  BlockType		  Terminator
+	  Name			  "term1"
+	  SID			  "333:70"
+	  Position		  [200, 135, 220, 155]
+	  ZOrder		  2
+	}
+	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_led_rx"
-	  SID			  "326:37"
+	  SID			  "333:37"
 	  Ports			  [1, 1]
 	  Position		  [665, 692, 765, 708]
 	  ZOrder		  -37
@@ -61499,7 +61705,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_led_tx"
-	  SID			  "326:38"
+	  SID			  "333:38"
 	  Ports			  [1, 1]
 	  Position		  [665, 737, 765, 753]
 	  ZOrder		  -38
@@ -61545,7 +61751,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_led_up"
-	  SID			  "326:39"
+	  SID			  "333:39"
 	  Ports			  [1, 1]
 	  Position		  [665, 647, 765, 663]
 	  ZOrder		  -39
@@ -61591,7 +61797,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rst"
-	  SID			  "326:40"
+	  SID			  "333:40"
 	  Ports			  [1, 1]
 	  Position		  [405, 82, 455, 98]
 	  ZOrder		  -40
@@ -61627,7 +61833,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_ack"
-	  SID			  "326:41"
+	  SID			  "333:41"
 	  Ports			  [1, 1]
 	  Position		  [405, 567, 455, 583]
 	  ZOrder		  -41
@@ -61663,7 +61869,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_bad_frame"
-	  SID			  "326:42"
+	  SID			  "333:42"
 	  Ports			  [1, 1]
 	  Position		  [665, 537, 765, 553]
 	  ZOrder		  -42
@@ -61709,7 +61915,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_data"
-	  SID			  "326:43"
+	  SID			  "333:43"
 	  Ports			  [1, 1]
 	  Position		  [665, 322, 765, 338]
 	  ZOrder		  -43
@@ -61755,7 +61961,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_end_of_frame"
-	  SID			  "326:44"
+	  SID			  "333:44"
 	  Ports			  [1, 1]
 	  Position		  [665, 502, 765, 518]
 	  ZOrder		  -44
@@ -61801,7 +62007,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_overrun"
-	  SID			  "326:45"
+	  SID			  "333:45"
 	  Ports			  [1, 1]
 	  Position		  [665, 572, 765, 588]
 	  ZOrder		  -45
@@ -61847,7 +62053,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_overrun_ack"
-	  SID			  "326:46"
+	  SID			  "333:46"
 	  Ports			  [1, 1]
 	  Position		  [405, 607, 455, 623]
 	  ZOrder		  -46
@@ -61883,7 +62089,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_source_ip"
-	  SID			  "326:47"
+	  SID			  "333:47"
 	  Ports			  [1, 1]
 	  Position		  [665, 412, 765, 428]
 	  ZOrder		  -47
@@ -61929,7 +62135,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_source_port"
-	  SID			  "326:48"
+	  SID			  "333:48"
 	  Ports			  [1, 1]
 	  Position		  [665, 457, 765, 473]
 	  ZOrder		  -48
@@ -61975,9 +62181,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_valid"
-	  SID			  "326:49"
+	  SID			  "333:49"
 	  Ports			  [1, 1]
-	  Position		  [665, 367, 765, 383]
+	  Position		  [665, 362, 765, 378]
 	  ZOrder		  -49
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62021,7 +62227,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_afull"
-	  SID			  "326:50"
+	  SID			  "333:50"
 	  Ports			  [1, 1]
 	  Position		  [665, 227, 765, 243]
 	  ZOrder		  -50
@@ -62067,7 +62273,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_data"
-	  SID			  "326:51"
+	  SID			  "333:51"
 	  Ports			  [1, 1]
 	  Position		  [405, 267, 455, 283]
 	  ZOrder		  -51
@@ -62103,7 +62309,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_dest_ip"
-	  SID			  "326:52"
+	  SID			  "333:52"
 	  Ports			  [1, 1]
 	  Position		  [405, 307, 455, 323]
 	  ZOrder		  -52
@@ -62139,7 +62345,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_dest_port"
-	  SID			  "326:53"
+	  SID			  "333:53"
 	  Ports			  [1, 1]
 	  Position		  [405, 347, 455, 363]
 	  ZOrder		  -53
@@ -62175,7 +62381,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_end_of_frame"
-	  SID			  "326:54"
+	  SID			  "333:54"
 	  Ports			  [1, 1]
 	  Position		  [405, 387, 455, 403]
 	  ZOrder		  -54
@@ -62211,7 +62417,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_overflow"
-	  SID			  "326:55"
+	  SID			  "333:55"
 	  Ports			  [1, 1]
 	  Position		  [665, 267, 765, 283]
 	  ZOrder		  -55
@@ -62257,7 +62463,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_valid"
-	  SID			  "326:56"
+	  SID			  "333:56"
 	  Ports			  [1, 1]
 	  Position		  [405, 227, 455, 243]
 	  ZOrder		  -56
@@ -62293,7 +62499,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "led_up"
-	  SID			  "326:57"
+	  SID			  "333:57"
 	  Position		  [865, 647, 895, 663]
 	  ZOrder		  -57
 	  IconDisplay		  "Port number"
@@ -62301,7 +62507,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "led_rx"
-	  SID			  "326:58"
+	  SID			  "333:58"
 	  Position		  [865, 692, 895, 708]
 	  ZOrder		  -58
 	  Port			  "2"
@@ -62310,7 +62516,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "led_tx"
-	  SID			  "326:59"
+	  SID			  "333:59"
 	  Position		  [865, 737, 895, 753]
 	  ZOrder		  -59
 	  Port			  "3"
@@ -62319,7 +62525,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "tx_afull"
-	  SID			  "326:60"
+	  SID			  "333:60"
 	  Position		  [865, 227, 895, 243]
 	  ZOrder		  -60
 	  Port			  "4"
@@ -62328,7 +62534,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "tx_overflow"
-	  SID			  "326:61"
+	  SID			  "333:61"
 	  Position		  [865, 267, 895, 283]
 	  ZOrder		  -61
 	  Port			  "5"
@@ -62337,7 +62543,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_data"
-	  SID			  "326:62"
+	  SID			  "333:62"
 	  Position		  [865, 322, 895, 338]
 	  ZOrder		  -62
 	  Port			  "6"
@@ -62346,7 +62552,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_valid"
-	  SID			  "326:63"
+	  SID			  "333:63"
 	  Position		  [865, 367, 895, 383]
 	  ZOrder		  -63
 	  Port			  "7"
@@ -62355,7 +62561,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_source_ip"
-	  SID			  "326:64"
+	  SID			  "333:64"
 	  Position		  [865, 412, 895, 428]
 	  ZOrder		  -64
 	  Port			  "8"
@@ -62364,7 +62570,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_source_port"
-	  SID			  "326:65"
+	  SID			  "333:65"
 	  Position		  [865, 457, 895, 473]
 	  ZOrder		  -65
 	  Port			  "9"
@@ -62373,7 +62579,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_end_of_frame"
-	  SID			  "326:66"
+	  SID			  "333:66"
 	  Position		  [865, 502, 895, 518]
 	  ZOrder		  -66
 	  Port			  "10"
@@ -62382,7 +62588,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_bad_frame"
-	  SID			  "326:67"
+	  SID			  "333:67"
 	  Position		  [865, 537, 895, 553]
 	  ZOrder		  -67
 	  Port			  "11"
@@ -62391,11 +62597,17 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_overrun"
-	  SID			  "326:68"
+	  SID			  "333:68"
 	  Position		  [865, 572, 895, 588]
 	  ZOrder		  -68
 	  Port			  "12"
 	  IconDisplay		  "Port number"
+	}
+	Line {
+	  SrcBlock		  "debug_rst"
+	  SrcPort		  1
+	  DstBlock		  "term1"
+	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "xps_library_ten_Gbe_v2_led_tx"
@@ -62478,14 +62690,12 @@ Library {
 	Line {
 	  SrcBlock		  "convert_tx_end_of_frame"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "tx_end_of_frame"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "convert_tx_end_of_frame"
 	  DstPort		  1
 	}
@@ -62498,14 +62708,12 @@ Library {
 	Line {
 	  SrcBlock		  "convert_tx_port"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "tx_dest_port"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "convert_tx_port"
 	  DstPort		  1
 	}
@@ -62530,12 +62738,14 @@ Library {
 	Line {
 	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_valid"
 	  SrcPort		  1
+	  Points		  [45, 0; 0, 5]
 	  DstBlock		  "rx_valid"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "Constant7"
 	  SrcPort		  1
+	  Points		  [10, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_rx_valid"
 	  DstPort		  1
 	}
@@ -62554,7 +62764,6 @@ Library {
 	Line {
 	  SrcBlock		  "Constant2"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_tx_afull"
 	  DstPort		  1
 	}
@@ -62579,49 +62788,42 @@ Library {
 	Line {
 	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_afull"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "tx_afull"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "convert_tx_valid"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_tx_valid"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "tx_valid"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "convert_tx_valid"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "convert_tx_dest_ip"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "tx_dest_ip"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "convert_tx_dest_ip"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "convert_tx_data"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_tx_data"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "tx_data"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "convert_tx_data"
 	  DstPort		  1
 	}
@@ -62634,14 +62836,12 @@ Library {
 	Line {
 	  SrcBlock		  "convert_rx_ack"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "xps_library_ten_Gbe_v2_rx_ack"
 	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "rx_ack"
 	  SrcPort		  1
-	  Points		  [0, 0]
 	  DstBlock		  "convert_rx_ack"
 	  DstPort		  1
 	}
@@ -62719,14 +62919,14 @@ Library {
       "n, Inc.,   %\n%   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %\n%                "
       "                                                             %\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
       "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-      Position		      [15, 172]
+      Position		      [15, 192]
       HorizontalAlignment     "left"
       FontName		      "Lucida Console"
       FontSize		      9
     }
     Annotation {
       SID		      "328"
-      Position		      [972, 727]
+      Position		      [972, 747]
     }
   }
 }

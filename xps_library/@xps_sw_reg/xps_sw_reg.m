@@ -53,11 +53,9 @@ end
 % bus clock
 switch get(xsg_obj,'hw_sys')
     case {'ROACH', 'ROACH2'}
-        b = set(b,'opb_clk','epb_clk');
-    case 'ROACH2'
-        b = set(b,'opb_clk','epb_clk');
+        b = set(b, 'opb_clk','epb_clk');
     otherwise
-        b = set(b,'opb_clk','sys_clk');
+        b = set(b, 'opb_clk','sys_clk');
 end % switch get(xsg_obj,'hw_sys')
 
 % bus offset

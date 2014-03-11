@@ -1,8 +1,7 @@
 function swreg_init(blk)
 
-clog('entering swreg_init','trace');
+clog('entering swreg_init', 'trace');
 check_mask_type(blk, 'swreg');
-
 try
     munge_block(blk);
     remove_all_blks(blk);
