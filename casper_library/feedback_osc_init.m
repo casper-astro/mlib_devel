@@ -56,8 +56,17 @@ function feedback_osc_init(blk, varargin)
   %pointless using this block if generating the same size sinusoid as lookup, will give error when trying to 
   %slice 0 bits
   if (wcl_bits + ref_values_bits) >= phase_steps_bits,
-    clog('The number of calibration values requested is the same or larger than the number of output values requested',{log_group, 'error'});
-    error('feedback_osc_init: The number of calibration values requested is the same or larger than the number of output values requested');
+    %decrease various latencies 
+    mux_latency = 1; working_vals_latency = 1; add_latency = 1;
+    
+    wcl = 1 + working_vals_latency + (1+mult_latency)+add_latency+conv_latency+mux_latency;
+    %round up to nearest power of 2
+    wcl_bits = ceil(log2(wcl));
+    
+    if (wcl_bits + ref_values_bits) >= phase_steps_bits,
+      clog('The number of calibration values requested is the same or larger than the number of output values requested',{log_group, 'error'});
+      error('feedback_osc_init: The number of calibration values requested is the same or larger than the number of output values requested');
+    end
   end
 
   %default state in library
