@@ -529,7 +529,7 @@ if run_edkgen,
         kcpfpg_fid = fopen([xps_path, slash, 'extended_info.kcpfpg'], 'w');
         fprintf(kcpfpg_fid, '#!/bin/kcpfpg\n');
         fprintf(kcpfpg_fid, '?uploadbin\n');
-        % read coreinfo
+        % read coreinfo.tab into the fpg file
         fid = fopen([xps_path, slash, 'core_info.tab'], 'r');
         while 1,
             tline = fgetl(fid);
@@ -540,7 +540,7 @@ if run_edkgen,
             clear linevals newline tline;
         end
         fclose(fid);
-        % read design meta info
+        % read design meta info into the fpg file
         fid = fopen([xps_path, slash, 'design_info.tab'], 'r');
         while 1,
             tline = fgetl(fid);
