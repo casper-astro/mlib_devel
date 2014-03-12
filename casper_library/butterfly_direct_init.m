@@ -372,7 +372,7 @@ function butterfly_direct_init(blk, varargin)
   % Add scale 
   %
 
-  fan_latency = max(1, log2(ceil((n_inputs*2*2)/max_fanout)));
+  fan_latency = max(1, ceil(log2((n_inputs*2*2)/max_fanout)));
 
   if strcmp(bitgrowth, 'off') && strcmp(hardcode_shifts, 'off'),
     reuse_block(blk, 'shift_replicate', 'casper_library_bus/bus_replicate', ...
