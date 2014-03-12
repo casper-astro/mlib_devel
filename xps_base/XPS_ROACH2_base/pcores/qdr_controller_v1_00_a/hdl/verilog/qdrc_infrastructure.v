@@ -420,10 +420,10 @@ module qdrc_infrastructure(
     .Q2 (qdr_q_fall_int)
   );
 
-  reg [17:0] qdr_q_rise_intR_low , qdr_q_rise_intRR_low , qdr_q_rise_intRRR_low , qdr_q_rise_intRRRR_low ;
-  reg [17:0] qdr_q_rise_intR_high, qdr_q_rise_intRR_high, qdr_q_rise_intRRR_high, qdr_q_rise_intRRRR_high;
-  reg [17:0] qdr_q_fall_intR_low , qdr_q_fall_intRR_low , qdr_q_fall_intRRR_low , qdr_q_fall_intRRRR_low ;
-  reg [17:0] qdr_q_fall_intR_high, qdr_q_fall_intRR_high, qdr_q_fall_intRRR_high, qdr_q_fall_intRRRR_high;
+  reg [17:0] qdr_q_rise_intR_low , qdr_q_rise_intRR_low , qdr_q_rise_intRRR_low ;
+  reg [17:0] qdr_q_rise_intR_high, qdr_q_rise_intRR_high, qdr_q_rise_intRRR_high;
+  reg [17:0] qdr_q_fall_intR_low , qdr_q_fall_intRR_low , qdr_q_fall_intRRR_low ;
+  reg [17:0] qdr_q_fall_intR_high, qdr_q_fall_intRR_high, qdr_q_fall_intRRR_high;
 
   always @(posedge clk180) begin
     qdr_q_rise_intR_high   <= qdr_q_rise_int [35:18];
@@ -440,16 +440,9 @@ module qdrc_infrastructure(
     qdr_q_fall_intRRR_low  <= qdr_q_fall_intRR_low;
   end
 
-  always @(posedge clk0) begin
-    qdr_q_rise_intRRRR_high <= qdr_q_rise_intRRR_high;
-    qdr_q_fall_intRRRR_high <= qdr_q_fall_intRRR_high;
-    qdr_q_rise_intRRRR_low  <= qdr_q_rise_intRRR_low;
-    qdr_q_fall_intRRRR_low  <= qdr_q_fall_intRRR_low;
-  end
+  assign qdr_q_rise = {qdr_q_rise_intRRR_high, qdr_q_rise_intRRR_low};
+  assign qdr_q_fall = {qdr_q_fall_intRRR_high, qdr_q_fall_intRRR_low};
 
-  assign qdr_q_rise = {qdr_q_rise_intRRRR_high, qdr_q_rise_intRRRR_low};
-  assign qdr_q_fall = {qdr_q_fall_intRRRR_high, qdr_q_fall_intRRRR_low};
-  
   // Stop XST to chuck all this pipelining into a single shift register!
   //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intR_low     is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intR_low     is no
@@ -457,21 +450,17 @@ module qdrc_infrastructure(
   //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intRR_low    is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intRRR_low   is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intRRR_low   is no
-  //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intRRRR_low  is no
-  //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intRRRR_low  is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intR_high    is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intR_high    is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intRR_high   is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intRR_high   is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intRRR_high  is no
   //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intRRR_high  is no
-  //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intRRRR_high is no
-  //synthesis attribute SHREG_EXTRACT of qdr_q_fall_intRRRR_high is no
 
-  //synthesis attribute IOB of qdr_q_rise_intR_low  is "TRUE"
-  //synthesis attribute IOB of qdr_q_fall_intR_low  is "TRUE"
-  //synthesis attribute IOB of qdr_q_rise_intR_high is "TRUE"
-  //synthesis attribute IOB of qdr_q_fall_intR_high is "TRUE"
+  //synthesis attribute IOB of qdr_q_rise_int is "TRUE"
+  //synthesis attribute IOB of qdr_q_fall_int is "TRUE"
+
+
   
   //===========================================================================
   // Chipscope modules used to debug the controller
