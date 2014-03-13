@@ -10,11 +10,6 @@ TIMESPEC TS_epb_clk_in = PERIOD epb_clk_in 67 MHz;
 NET "*sys_clk" TNM_NET = "TNM_sys_clk";
 TIMESPEC "TS_sys_clk" = PERIOD "TNM_sys_clk" 100 MHz;
 
-NET "*sys_clk2x" TNM_NET = "TNM_sys_clk2x";
-TIMESPEC "TS_sys_clk2x" = PERIOD "TNM_sys_clk2x" 200 MHz;
-
-TIMESPEC TS_sys_clk2x_TIG = FROM "TNM_sys_clk2x" TO "TNM_sys_clk"   TIG;
-TIMESPEC TS_sys_clk_TIG   = FROM "TNM_sys_clk"   TO "TNM_sys_clk2x" TIG;
 
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))## GbE Timing Constraints
 #IF# (strcmp(get(b,'type'),'xps_onegbe'))#
@@ -312,6 +307,13 @@ NET "epb_data<31>"      LOC = AJ33;
 #
 
 # QDR0
+
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strfind(get(b,'hw_qdr'),'qdr')#NET "*sys_clk2x" TNM_NET = "TNM_sys_clk2x";
+#IF# strcmp(get(b,'type'),'xps_qdr') && strfind(get(b,'hw_qdr'),'qdr')#TIMESPEC "TS_sys_clk2x" = PERIOD "TNM_sys_clk2x" 200 MHz;
+
+#IF# strcmp(get(b,'type'),'xps_qdr') && strfind(get(b,'hw_qdr'),'qdr')#TIMESPEC TS_sys_clk2x_TIG = FROM "TNM_sys_clk2x" TO "TNM_sys_clk"   TIG;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strfind(get(b,'hw_qdr'),'qdr')#TIMESPEC TS_sys_clk_TIG   = FROM "TNM_sys_clk"   TO "TNM_sys_clk2x" TIG;
 
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#INST */qdr0_controller/qdrc_infrastructure_inst/*intR_high* AREA_GROUP = "QDR0_AREA_HIGH";
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#AREA_GROUP "QDR0_AREA_HIGH" RANGE = SLICE_X76Y319:SLICE_X77Y280;
