@@ -65,9 +65,17 @@ variablePrefix = get_var('variablePrefix', 'defaults', defaults, varargin{:});
 outputToModelAsWell = get_var('outputToModelAsWell', 'defaults', defaults, varargin{:});
 show_format = get_var('show_format', 'defaults', defaults, varargin{:});
 
-if (strcmp(mode, 'divisions of arbitrary size') == 1 && ...
-  (length(outputWidth) ~= length(outputBinaryPt) || length(outputWidth) ~= length(outputArithmeticType))) ,
-  error('Division width, binary point and arithmetic type vectors must be the same length when using arbitrary divisions');
+if (strcmp(mode, 'divisions of arbitrary size') == 1),
+    if (((length(outputWidth) ~= length(outputBinaryPt)) && (length(outputBinaryPt) ~= 1)) || ...
+            ((length(outputWidth) ~= length(outputArithmeticType)) && (length(outputArithmeticType) ~= 1))),
+        error('Division width, binary point and arithmetic type vectors must be the same length when using arbitrary divisions');
+    end
+    if length(outputArithmeticType) == 1,
+        outputArithmeticType = ones(1, length(outputWidth)) * outputArithmeticType;
+    end
+    if length(outputBinaryPt) == 1,
+        outputBinaryPt = ones(1, length(outputWidth)) * outputBinaryPt;
+    end
 end
 
 if strcmp(mode, 'divisions of arbitrary size'),
@@ -78,14 +86,18 @@ else
   end
 end
 
-if strcmp(mode, 'divisions of equal size'), vals = 1;
-else vals = outputNum;
+if strcmp(mode, 'divisions of equal size'),
+    vals = 1;
+else
+    vals = outputNum;
 end
 for div = 1:vals,
   if ((outputWidth(div) <= 0) || isnan(outputWidth(div)) || (~isnumeric(outputWidth(div)))),
-    error('Need non-zero output width!'); end;
+    error('Need non-zero output width!');
+  end
   if ((outputBinaryPt(div) > outputWidth(div)) || isnan(outputBinaryPt(div)) || (~isnumeric(outputBinaryPt(div)))),
-    error('Binary point > output width makes no sense!'); end;
+    error('Binary point > output width makes no sense!');
+  end
   if ( ...
       ((outputArithmeticType(div) ~= 9) && ...
       (outputArithmeticType(div) ~= 2) && ...
