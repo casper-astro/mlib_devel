@@ -23,15 +23,8 @@ module qdr_config #(
     output [35:0] dly_en_i,
     output [36:0] dly_en_o,
     output        dly_inc_dec,
-	 output  [4:0] rn_dly,
-	 
-    input [5*(37+36)-1:0] dly_cntrs,
 
-    /* State debug probes */
-    //input [3:0] bit_align_state_prb,
-    //input [3:0] bit_train_state_prb,
-    //input [3:0] bit_train_error_prb,
-    //input [3:0] phy_state_prb,
+    input [5*(37+36)-1:0] dly_cntrs,
 
     /* Misc signals */
     output qdr_reset,
@@ -44,21 +37,17 @@ module qdr_config #(
 
   localparam REG_RESET          = 0;
   localparam REG_STATUS         = 1;
-  localparam REG_SM_PRB         = 2;
-  localparam REG_SM_ERR         = 3;
   localparam REG_DLY_EN_0       = 4;
   localparam REG_DLY_EN_1       = 5;
   localparam REG_DLY_EN_2       = 6;
   localparam REG_DLY_INC_DEC    = 7;
   localparam REG_DLY_CNTRS0     = 8;
-  localparam RN_DLY             = 9;
 
   /**************** Control Registers OPB Attachment ******************/
   
   reg [35:0] dly_en_i_reg;
   reg [36:0] dly_en_o_reg;
   reg        dly_inc_dec_reg;
-  reg  [4:0] rn_dly_reg;
 
   /* OPB Address Decoding */
   wire [31:0] opb_addr = OPB_ABus - C_BASEADDR;
@@ -109,17 +98,11 @@ module qdr_config #(
               dly_inc_dec_reg <= OPB_DBus[31];
             end
           end
-			 RN_DLY: begin
-            if (!OPB_RNW) begin
-              rn_dly_reg <= OPB_DBus[27:31];
-            end
-          end
         endcase
  	  end
     end
   end
 
-  assign rn_dly = rn_dly_reg;
 
   /* Continuous Read Logic */
   reg [0:31] Sl_DBus_reg;
@@ -130,12 +113,6 @@ module qdr_config #(
         REG_STATUS: begin
           Sl_DBus_reg <= {16'b0, 7'b0, cal_fail, 7'b0, phy_rdy};
         end
-        //REG_SM_PRB: begin
-        //  Sl_DBus_reg <= {1'b1, 7'b0, 8'b0, 4'b0, phy_state_prb, bit_align_state_prb, bit_train_state_prb};
-        //end
-        //REG_SM_ERR: begin
-        //  Sl_DBus_reg <= {1'b1, 7'b0, 8'b0, 8'b0, 4'b0, bit_train_error_prb};
-        //end
         REG_DLY_CNTRS0: begin
           Sl_DBus_reg <= dly_cntrs[31:0];
         end
@@ -149,7 +126,6 @@ module qdr_config #(
   end
 
   /* OPB output assignments */
-
   assign Sl_errAck   = 1'b0;
   assign Sl_retry    = 1'b0;
   assign Sl_toutSup  = 1'b0;

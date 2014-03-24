@@ -15,65 +15,58 @@ module opb_qdr_sniffer #(
     parameter QDR_LATENCY    = 10,
     parameter ENABLE         = 0
   )(
-    input  OPB_Clk,
-    input  OPB_Rst,
+    input         OPB_Clk,
+    input         OPB_Rst,
     output [0:31] Sl_DBus,
-    output Sl_errAck,
-    output Sl_retry,
-    output Sl_toutSup,
-    output Sl_xferAck,
+    output        Sl_errAck,
+    output        Sl_retry,
+    output        Sl_toutSup,
+    output        Sl_xferAck,
     input  [0:31] OPB_ABus,
     input  [0:3]  OPB_BE,
     input  [0:31] OPB_DBus,
-    input  OPB_RNW,
-    input  OPB_select,
-    input  OPB_seqAddr,
+    input         OPB_RNW,
+    input         OPB_select,
+    input         OPB_seqAddr,
 
-    input  OPB_Clk_config,
-    input  OPB_Rst_config,
+    input         OPB_Clk_config,
+    input         OPB_Rst_config,
     output [0:31] Sl_DBus_config,
-    output Sl_errAck_config,
-    output Sl_retry_config,
-    output Sl_toutSup_config,
-    output Sl_xferAck_config,
+    output        Sl_errAck_config,
+    output        Sl_retry_config,
+    output        Sl_toutSup_config,
+    output        Sl_xferAck_config,
     input  [0:31] OPB_ABus_config,
     input  [0:3]  OPB_BE_config,
     input  [0:31] OPB_DBus_config,
-    input  OPB_RNW_config,
-    input  OPB_select_config,
-    input  OPB_seqAddr_config,
+    input         OPB_RNW_config,
+    input         OPB_select_config,
+    input         OPB_seqAddr_config,
 
     input  qdr_clk,
     /* Master interface to QDR controller */
     output   [QDR_ADDR_WIDTH - 1:0] master_addr,
-    output master_wr_strb,
+    output                          master_wr_strb,
     output [2*QDR_DATA_WIDTH - 1:0] master_wr_data,
     output   [2*QDR_BW_WIDTH - 1:0] master_wr_be,
-    output master_rd_strb,
+    output                          master_rd_strb,
     input  [2*QDR_DATA_WIDTH - 1:0] master_rd_data,
-    input  master_rd_dvld,
+    input                           master_rd_dvld,
 
     /* Slave interface to fabric */
-    input  [31:0] slave_addr,
-    input  slave_wr_strb,
+    input                    [31:0] slave_addr,
+    input                           slave_wr_strb,
     input  [2*QDR_DATA_WIDTH - 1:0] slave_wr_data,
     input    [2*QDR_BW_WIDTH - 1:0] slave_wr_be,
-    input  slave_rd_strb,
-    output [2*QDR_DATA_WIDTH-1:0] slave_rd_data,
-    output slave_rd_dvld,
-    output slave_ack,
-
-    /* State debug probes */
-    //input [3:0] bit_align_state_prb,
-    //input [3:0] bit_train_state_prb,
-    //input [3:0] bit_train_error_prb,
-    //input [3:0] phy_state_prb,
+    input                           slave_rd_strb,
+    output   [2*QDR_DATA_WIDTH-1:0] slave_rd_data,
+    output                          slave_rd_dvld,
+    output                          slave_ack,
 
     input         dly_clk,
     output [35:0] dly_en_i,
     output [36:0] dly_en_o,
     output        dly_inc_dec,
-	 output  [4:0] rn_dly,
 	 
     input [5*(37+36)-1 : 0] dly_cntrs,
 
@@ -337,18 +330,10 @@ end else begin : qdr_disabled
   assign slave_ack      = 1'b1;
 end endgenerate
 
-  //reg [3:0] bit_align_state_prbR;
-  //reg [3:0] bit_train_state_prbR;
-  //reg [3:0] bit_train_error_prbR;
-  //reg [3:0] phy_state_prbR;
   reg phy_rdyR;
   reg cal_failR;
 
   always @(posedge OPB_Clk_config) begin
-    //bit_align_state_prbR <= bit_align_state_prb;
-    //bit_train_state_prbR <= bit_train_state_prb;
-    //bit_train_error_prbR <= bit_train_error_prb;
-    //phy_state_prbR <= phy_state_prb;
     phy_rdyR <= phy_rdy;
     cal_failR <= cal_fail;
   end
@@ -373,17 +358,12 @@ end endgenerate
     .OPB_RNW     (OPB_RNW_config),
     .OPB_select  (OPB_select_config),
     .OPB_seqAddr (OPB_seqAddr_config),
-    //.bit_align_state_prb (bit_align_state_prbR),
-    //.bit_train_state_prb (bit_train_state_prbR),
-    //.bit_train_error_prb (bit_train_error_prbR),
-    //.phy_state_prb       (phy_state_prbR),
 
     .dly_clk       (dly_clk),
     .dly_en_i      (dly_en_i),
     .dly_en_o      (dly_en_o),
     .dly_inc_dec   (dly_inc_dec),
     .dly_cntrs     (dly_cntrs),
-	 .rn_dly        (rn_dly),
 
     .qdr_reset     (qdr_reset),
     .cal_fail      (cal_failR),

@@ -46,7 +46,6 @@ BEGIN qdr_controller
   PORT dly_en_i    = dly_en_i,    DIR = I, VEC = [35:0]
   PORT dly_en_o    = dly_en_o,    DIR = I, VEC = [36:0]
   PORT dly_inc_dec = dly_inc_dec, DIR = I
-  PORT rn_dly      = rn_dly,      DIR = I, VEC = [4:0]
   PORT dly_cntrs   = dly_cntrs,   DIR = O, VEC = [364:0]
 
 

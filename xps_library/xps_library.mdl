@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1920.0, 0.0, 1280.0, 1024.0]
+      Location		      [1921.0, 27.0, 1280.0, 1024.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 861.0]
+	Extents			[1244.0, 893.0]
 	ZoomFactor		[1.0]
 	Offset			[-71.125, -1.6887035812152362]
       }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "paulp"
+  LastModifiedBy	  "wnew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Mar 23 14:54:26 2014"
-  RTWModifiedTimeStamp	  317487251
-  ModelVersionFormat	  "1.%<AutoIncrement:512>"
+  LastModifiedDate	  "Mon Mar 24 15:52:56 2014"
+  RTWModifiedTimeStamp	  317577173
+  ModelVersionFormat	  "1.%<AutoIncrement:513>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,7 +802,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [1920, 0, 3200, 1024]
+    Location		    [1921, 27, 3201, 1051]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -816,7 +816,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "333"
+    SIDHighWatermark	    "334"
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -54733,12 +54733,14 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "qdr"
-      SID		      "321"
+      SID		      "334"
       Tag		      "xps:qdr"
       Ports		      [5, 5]
-      Position		      [370, 433, 485, 617]
-      ZOrder		      -18
+      Position		      [365, 423, 480, 607]
+      ZOrder		      5233
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
+      AncestorBlock	      "xps_library_bu/qdr"
+      LibraryVersion	      "1.513"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -54793,24 +54795,25 @@ Library {
       }
       System {
 	Name			"qdr"
-	Location		[0, 25, 1920, 1080]
+	Location		[1921, 27, 3601, 1050]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
 	PaperOrientation	"landscape"
 	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	PaperType		"A4"
+	PaperUnits		"centimeters"
+	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"98"
+	SIDHighWatermark	"101"
+	SIDPrevWatermark	"101"
 	Block {
 	  BlockType		  Inport
 	  Name			  "rd_en"
-	  SID			  "321:1"
+	  SID			  "334:1"
 	  Position		  [30, 252, 60, 268]
 	  ZOrder		  -1
 	  IconDisplay		  "Port number"
@@ -54818,7 +54821,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "wr_en"
-	  SID			  "321:2"
+	  SID			  "334:2"
 	  Position		  [30, 297, 60, 313]
 	  ZOrder		  -2
 	  Port			  "2"
@@ -54827,7 +54830,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "be"
-	  SID			  "321:3"
+	  SID			  "334:3"
 	  Position		  [30, 342, 60, 358]
 	  ZOrder		  -3
 	  Port			  "3"
@@ -54836,7 +54839,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "address"
-	  SID			  "321:4"
+	  SID			  "334:4"
 	  Position		  [30, 387, 60, 403]
 	  ZOrder		  -4
 	  Port			  "4"
@@ -54845,7 +54848,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "data_in"
-	  SID			  "321:5"
+	  SID			  "334:5"
 	  Position		  [30, 572, 60, 588]
 	  ZOrder		  -5
 	  Port			  "5"
@@ -54853,16 +54856,8 @@ Library {
 	}
 	Block {
 	  BlockType		  Constant
-	  Name			  "Constant1"
-	  SID			  "321:95"
-	  Position		  [790, 585, 820, 615]
-	  ZOrder		  4
-	  ShowName		  off
-	}
-	Block {
-	  BlockType		  Constant
 	  Name			  "Constant2"
-	  SID			  "321:6"
+	  SID			  "334:6"
 	  Position		  [790, 780, 820, 810]
 	  ZOrder		  -6
 	  ShowName		  off
@@ -54871,7 +54866,7 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant3"
-	  SID			  "321:7"
+	  SID			  "334:7"
 	  Position		  [790, 670, 820, 700]
 	  ZOrder		  -7
 	  ShowName		  off
@@ -54879,7 +54874,7 @@ Library {
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto"
-	  SID			  "321:10"
+	  SID			  "334:10"
 	  Position		  [1095, 636, 1150, 654]
 	  ZOrder		  -10
 	  ShowName		  off
@@ -54888,7 +54883,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_ack"
-	  SID			  "321:14"
+	  SID			  "334:14"
 	  Ports			  [1, 1]
 	  Position		  [1035, 675, 1065, 695]
 	  ZOrder		  -14
@@ -54927,7 +54922,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_address"
-	  SID			  "321:15"
+	  SID			  "334:15"
 	  Ports			  [1, 1]
 	  Position		  [155, 385, 185, 405]
 	  ZOrder		  -15
@@ -54966,7 +54961,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_be"
-	  SID			  "321:16"
+	  SID			  "334:16"
 	  Ports			  [1, 1]
 	  Position		  [155, 340, 185, 360]
 	  ZOrder		  -16
@@ -55005,7 +55000,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_cal_fail"
-	  SID			  "321:17"
+	  SID			  "334:17"
 	  Ports			  [1, 1]
 	  Position		  [1035, 785, 1065, 805]
 	  ZOrder		  -17
@@ -55044,7 +55039,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_data_in"
-	  SID			  "321:18"
+	  SID			  "334:18"
 	  Ports			  [1, 1]
 	  Position		  [320, 570, 350, 590]
 	  ZOrder		  -18
@@ -55083,7 +55078,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_data_in1"
-	  SID			  "321:19"
+	  SID			  "334:19"
 	  Ports			  [1, 1]
 	  Position		  [95, 570, 125, 590]
 	  ZOrder		  -19
@@ -55122,9 +55117,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_data_valid"
-	  SID			  "321:96"
+	  SID			  "334:96"
 	  Ports			  [1, 1]
-	  Position		  [1035, 590, 1065, 610]
+	  Position		  [1010, 400, 1040, 420]
 	  ZOrder		  3
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -55161,7 +55156,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_rd_en"
-	  SID			  "321:20"
+	  SID			  "334:20"
 	  Ports			  [1, 1]
 	  Position		  [155, 250, 185, 270]
 	  ZOrder		  -20
@@ -55200,7 +55195,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_ready"
-	  SID			  "321:21"
+	  SID			  "334:21"
 	  Ports			  [1, 1]
 	  Position		  [1035, 730, 1065, 750]
 	  ZOrder		  -21
@@ -55239,7 +55234,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_wr_en"
-	  SID			  "321:22"
+	  SID			  "334:22"
 	  Ports			  [1, 1]
 	  Position		  [155, 295, 185, 315]
 	  ZOrder		  -22
@@ -55278,9 +55273,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "extract_parity"
-	  SID			  "321:23"
+	  SID			  "334:23"
 	  Ports			  [1, 1]
-	  Position		  [965, 337, 1030, 363]
+	  Position		  [975, 277, 1040, 303]
 	  ZOrder		  -23
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/BitBasher"
@@ -55321,7 +55316,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_ack"
-	  SID			  "321:24"
+	  SID			  "334:24"
 	  Ports			  [1, 1]
 	  Position		  [955, 669, 995, 701]
 	  ZOrder		  -24
@@ -55353,7 +55348,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_cal_fail"
-	  SID			  "321:25"
+	  SID			  "334:25"
 	  Ports			  [1, 1]
 	  Position		  [955, 779, 995, 811]
 	  ZOrder		  -25
@@ -55385,9 +55380,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_data_out"
-	  SID			  "321:26"
+	  SID			  "334:26"
 	  Ports			  [1, 1]
-	  Position		  [890, 339, 945, 361]
+	  Position		  [900, 279, 955, 301]
 	  ZOrder		  -26
 	  NamePlacement		  "alternate"
 	  ShowName		  off
@@ -55419,9 +55414,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_data_valid"
-	  SID			  "321:97"
+	  SID			  "334:97"
 	  Ports			  [1, 1]
-	  Position		  [955, 584, 995, 616]
+	  Position		  [930, 394, 970, 426]
 	  ZOrder		  2
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
@@ -55451,7 +55446,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "force_phy_ready"
-	  SID			  "321:27"
+	  SID			  "334:27"
 	  Ports			  [1, 1]
 	  Position		  [955, 724, 995, 756]
 	  ZOrder		  -27
@@ -55483,7 +55478,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "insert_parity"
-	  SID			  "321:28"
+	  SID			  "334:28"
 	  Ports			  [1, 1]
 	  Position		  [180, 567, 245, 593]
 	  ZOrder		  -28
@@ -55526,8 +55521,8 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "qdr_sim_model"
-	  SID			  "321:31"
-	  Ports			  [5, 1]
+	  SID			  "334:31"
+	  Ports			  [5, 2]
 	  Position		  [535, 232, 655, 468]
 	  ZOrder		  -31
 	  MinAlgLoopOccurrences	  off
@@ -55539,23 +55534,23 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "qdr_sim_model"
-	    Location		    [12, 45, 1442, 1941]
+	    Location		    [1921, 27, 3601, 1050]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
 	    ScreenColor		    "white"
 	    PaperOrientation	    "landscape"
 	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+	    PaperType		    "A4"
+	    PaperUnits		    "centimeters"
+	    TiledPaperMargins	    [1.270000, 1.270000, 1.270000, 1.270000]
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "rd_en"
-	      SID		      "321:32"
+	      SID		      "334:32"
 	      Position		      [50, 408, 80, 422]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -55563,7 +55558,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "wr_en"
-	      SID		      "321:33"
+	      SID		      "334:33"
 	      Position		      [45, 273, 75, 287]
 	      ZOrder		      -2
 	      Port		      "2"
@@ -55572,7 +55567,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "be"
-	      SID		      "321:34"
+	      SID		      "334:34"
 	      Position		      [55, 498, 85, 512]
 	      ZOrder		      -3
 	      Port		      "3"
@@ -55581,7 +55576,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "addr"
-	      SID		      "321:35"
+	      SID		      "334:35"
 	      Position		      [50, 63, 80, 77]
 	      ZOrder		      -4
 	      Port		      "4"
@@ -55590,7 +55585,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "data_in"
-	      SID		      "321:36"
+	      SID		      "334:36"
 	      Position		      [45, 188, 75, 202]
 	      ZOrder		      -5
 	      Port		      "5"
@@ -55599,11 +55594,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "AddSub"
-	      SID		      "321:37"
+	      SID		      "334:37"
 	      Ports		      [2, 1]
 	      Position		      [360, 79, 390, 141]
 	      ZOrder		      -6
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/AddSub"
 	      SourceType	      "Xilinx Adder/Subtracter Block"
 	      mode		      "Addition"
@@ -55641,11 +55637,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Concat"
-	      SID		      "321:38"
+	      SID		      "334:38"
 	      Ports		      [2, 1]
 	      Position		      [210, 47, 230, 138]
 	      ZOrder		      -7
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Concat"
 	      SourceType	      "Xilinx Bus Concatenator Block"
 	      infoedit		      "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary poi"
@@ -55669,11 +55666,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant1"
-	      SID		      "321:39"
+	      SID		      "334:39"
 	      Ports		      [0, 1]
 	      Position		      [155, 103, 175, 127]
 	      ZOrder		      -8
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
 	      const		      "0"
@@ -55710,11 +55708,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Constant2"
-	      SID		      "321:40"
+	      SID		      "334:40"
 	      Ports		      [0, 1]
 	      Position		      [295, 113, 315, 137]
 	      ZOrder		      -9
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Constant"
 	      SourceType	      "Xilinx Constant Block Block"
 	      const		      "1"
@@ -55751,11 +55750,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay"
-	      SID		      "321:41"
+	      SID		      "334:41"
 	      Ports		      [1, 1]
 	      Position		      [960, 169, 995, 201]
 	      ZOrder		      -10
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
@@ -55784,11 +55784,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay1"
-	      SID		      "321:42"
+	      SID		      "334:42"
 	      Ports		      [1, 1]
 	      Position		      [545, 294, 580, 326]
 	      ZOrder		      -11
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
@@ -55817,11 +55818,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay2"
-	      SID		      "321:43"
+	      SID		      "334:43"
 	      Ports		      [1, 1]
 	      Position		      [280, 79, 315, 111]
 	      ZOrder		      -12
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
@@ -55850,11 +55852,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay3"
-	      SID		      "321:44"
+	      SID		      "334:44"
 	      Ports		      [1, 1]
 	      Position		      [830, 134, 865, 166]
 	      ZOrder		      -13
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Delay"
 	      SourceType	      "Xilinx Delay Block"
 	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
@@ -55882,14 +55885,49 @@ Library {
 	    }
 	    Block {
 	      BlockType		      Reference
+	      Name		      "Delay4"
+	      SID		      "334:101"
+	      Ports		      [1, 1]
+	      Position		      [960, 496, 980, 514]
+	      ZOrder		      3
+	      ShowName		      off
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Delay"
+	      SourceType	      "Xilinx Delay Block"
+	      infoedit		      "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flo"
+	      "p."
+	      rst		      off
+	      infoeditControl	      "Selection of Reset will increase slice count due to use of real FFs and instead of SRLs"
+	      en		      off
+	      latency		      "10"
+	      dbl_ovrd		      off
+	      reg_retiming	      off
+	      xl_use_area	      off
+	      xl_area		      "[0,0,0,0,0,0,0]"
+	      has_advanced_control    "0"
+	      sggui_pos		      "21,51,416,361"
+	      block_type	      "delay"
+	      block_version	      "10.1.3"
+	      sg_icon_stat	      "20,18,1,1,white,blue,0,8c471295,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 20 20 0 0 ],[0 0 18 18 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 20 20 0 0 ],[0 0 18 18 0 ]);\npatch([5.55 8.44 10.44 12.44 14.44 10.44 7.55 5.55 ],[11.22"
+	      " 11.22 13.22 11.22 13.22 13.22 13.22 11.22 ],[1 1 1 ]);\npatch([7.55 10.44 8.44 5.55 7.55 ],[9.22 9.22 11.22 11"
+	      ".22 9.22 ],[0.931 0.946 0.973 ]);\npatch([5.55 8.44 10.44 7.55 5.55 ],[7.22 7.22 9.22 9.22 7.22 ],[1 1 1 ]);\np"
+	      "atch([7.55 14.44 12.44 10.44 8.44 5.55 7.55 ],[5.22 5.22 7.22 5.22 7.22 7.22 5.22 ],[0.931 0.946 0.973 ]);\nfpr"
+	      "intf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\n\ncolor('black');disp('z^{-1"
+	      "0}','texmode','on');\nfprintf('','COMMENT: end icon text');\n"
+	    }
+	    Block {
+	      BlockType		      Reference
 	      Name		      "Disregard Subsystem"
-	      SID		      "321:45"
+	      SID		      "334:45"
 	      Tag		      "discardX"
 	      Ports		      []
 	      Position		      [799, 15, 850, 65]
 	      ZOrder		      -14
 	      ShowName		      off
 	      AttributesFormatString  "Disregard Subsystem\\nFor Generation"
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Disregard Subsystem"
 	      SourceType	      "Xilinx Disregard Subsystem For Generation Block"
 	      infoedit		      "Place this block into a subsystem to have System Generator ignore the subsystem during code ge"
@@ -55908,10 +55946,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Dual Port RAM"
-	      SID		      "321:46"
+	      SID		      "334:46"
 	      Ports		      [6, 2]
 	      Position		      [600, 32, 715, 338]
 	      ZOrder		      -15
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Dual Port RAM"
 	      SourceType	      "Xilinx Dual Port Random Access Memory Block"
 	      depth		      "2^qdr_awidth"
@@ -55934,22 +55973,22 @@ Library {
 	      sggui_pos		      "20,20,384,398"
 	      block_type	      "dpram"
 	      block_version	      "10.1.3"
-	      sg_icon_stat	      "115,306,6,2,white,blue,0,28af736d,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 75 75 0 0 ],[0 0 165 165 0 ],[0.77"
-	      " 0.82 0.91 ]);\nplot([0 75 75 0 0 ],[0 0 165 165 0 ]);\npatch([14.75 29.2 39.2 49.2 59.2 39.2 24.75 14.75 ],[93"
-	      ".1 93.1 103.1 93.1 103.1 103.1 103.1 93.1 ],[1 1 1 ]);\npatch([24.75 39.2 29.2 14.75 24.75 ],[83.1 83.1 93.1 93"
-	      ".1 83.1 ],[0.931 0.946 0.973 ]);\npatch([14.75 29.2 39.2 24.75 14.75 ],[73.1 73.1 83.1 83.1 73.1 ],[1 1 1 ]);\n"
-	      "patch([24.75 59.2 49.2 39.2 29.2 14.75 24.75 ],[63.1 63.1 73.1 63.1 73.1 73.1 63.1 ],[0.931 0.946 0.973 ]);\nfp"
-	      "rintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('in"
-	      "put',1,'addra');\ncolor('black');port_label('input',2,'dina');\ncolor('black');port_label('input',3,'wea');\nco"
-	      "lor('black');port_label('input',4,'addrb');\ncolor('black');port_label('input',5,'dinb');\ncolor('black');port_"
-	      "label('input',6,'web');\ncolor('black');port_label('output',1,'A');\ncolor('black');port_label('output',2,'B');"
-	      "\nfprintf('','COMMENT: end icon text');"
+	      sg_icon_stat	      "115,306,6,2,white,blue,0,28af736d,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 115 115 0 0 ],[0 0 306 306 0 ],[0."
+	      "77 0.82 0.91 ]);\nplot([0 115 115 0 0 ],[0 0 306 306 0 ]);\npatch([21.4 44.52 60.52 76.52 92.52 60.52 37.4 21.4"
+	      " ],[170.76 170.76 186.76 170.76 186.76 186.76 186.76 170.76 ],[1 1 1 ]);\npatch([37.4 60.52 44.52 21.4 37.4 ],["
+	      "154.76 154.76 170.76 170.76 154.76 ],[0.931 0.946 0.973 ]);\npatch([21.4 44.52 60.52 37.4 21.4 ],[138.76 138.76"
+	      " 154.76 154.76 138.76 ],[1 1 1 ]);\npatch([37.4 92.52 76.52 60.52 44.52 21.4 37.4 ],[122.76 122.76 138.76 122.7"
+	      "6 138.76 138.76 122.76 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT"
+	      ": begin icon text');\ncolor('black');port_label('input',1,'addra');\ncolor('black');port_label('input',2,'dina'"
+	      ");\ncolor('black');port_label('input',3,'wea');\ncolor('black');port_label('input',4,'addrb');\ncolor('black');"
+	      "port_label('input',5,'dinb');\ncolor('black');port_label('input',6,'web');\ncolor('black');port_label('output',"
+	      "1,'A');\ncolor('black');port_label('output',2,'B');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Block {
 	      BlockType		      From
 	      Name		      "From"
-	      SID		      "321:47"
+	      SID		      "334:47"
 	      Position		      [500, 199, 530, 221]
 	      ZOrder		      -16
 	      ShowName		      off
@@ -55959,7 +55998,7 @@ Library {
 	    Block {
 	      BlockType		      From
 	      Name		      "From1"
-	      SID		      "321:48"
+	      SID		      "334:48"
 	      Position		      [100, 324, 130, 346]
 	      ZOrder		      -17
 	      ShowName		      off
@@ -55969,7 +56008,7 @@ Library {
 	    Block {
 	      BlockType		      From
 	      Name		      "From2"
-	      SID		      "321:49"
+	      SID		      "334:49"
 	      Position		      [500, 149, 530, 171]
 	      ZOrder		      -18
 	      ShowName		      off
@@ -55979,7 +56018,7 @@ Library {
 	    Block {
 	      BlockType		      From
 	      Name		      "From3"
-	      SID		      "321:50"
+	      SID		      "334:50"
 	      Position		      [550, 99, 580, 121]
 	      ZOrder		      -19
 	      ShowName		      off
@@ -55989,7 +56028,7 @@ Library {
 	    Block {
 	      BlockType		      From
 	      Name		      "From4"
-	      SID		      "321:51"
+	      SID		      "334:51"
 	      Position		      [535, 249, 565, 271]
 	      ZOrder		      -20
 	      ShowName		      off
@@ -55999,7 +56038,7 @@ Library {
 	    Block {
 	      BlockType		      From
 	      Name		      "From5"
-	      SID		      "321:52"
+	      SID		      "334:52"
 	      Position		      [495, 49, 525, 71]
 	      ZOrder		      -21
 	      ShowName		      off
@@ -56008,7 +56047,7 @@ Library {
 	    Block {
 	      BlockType		      From
 	      Name		      "From6"
-	      SID		      "321:53"
+	      SID		      "334:53"
 	      Position		      [495, 299, 525, 321]
 	      ZOrder		      -22
 	      ShowName		      off
@@ -56018,7 +56057,7 @@ Library {
 	    Block {
 	      BlockType		      From
 	      Name		      "From7"
-	      SID		      "321:54"
+	      SID		      "334:54"
 	      Position		      [780, 139, 810, 161]
 	      ZOrder		      -23
 	      ShowName		      off
@@ -56028,7 +56067,7 @@ Library {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto"
-	      SID		      "321:55"
+	      SID		      "334:55"
 	      Position		      [425, 99, 455, 121]
 	      ZOrder		      -24
 	      ShowName		      off
@@ -56037,7 +56076,7 @@ Library {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto1"
-	      SID		      "321:56"
+	      SID		      "334:56"
 	      Position		      [425, 49, 455, 71]
 	      ZOrder		      -25
 	      ShowName		      off
@@ -56046,8 +56085,8 @@ Library {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto2"
-	      SID		      "321:57"
-	      Position		      [370, 429, 400, 451]
+	      SID		      "334:57"
+	      Position		      [435, 429, 465, 451]
 	      ZOrder		      -26
 	      ShowName		      off
 	      GotoTag		      "R"
@@ -56055,7 +56094,7 @@ Library {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto3"
-	      SID		      "321:58"
+	      SID		      "334:58"
 	      Position		      [430, 299, 460, 321]
 	      ZOrder		      -27
 	      ShowName		      off
@@ -56064,7 +56103,7 @@ Library {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto4"
-	      SID		      "321:59"
+	      SID		      "334:59"
 	      Position		      [205, 184, 235, 206]
 	      ZOrder		      -28
 	      ShowName		      off
@@ -56073,11 +56112,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter1"
-	      SID		      "321:60"
+	      SID		      "334:60"
 	      Ports		      [1, 1]
 	      Position		      [145, 323, 175, 347]
 	      ZOrder		      -29
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
@@ -56102,11 +56142,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter2"
-	      SID		      "321:61"
+	      SID		      "334:61"
 	      Ports		      [1, 1]
-	      Position		      [260, 433, 290, 457]
+	      Position		      [325, 433, 355, 457]
 	      ZOrder		      -30
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
@@ -56131,11 +56172,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter3"
-	      SID		      "321:62"
+	      SID		      "334:62"
 	      Ports		      [1, 1]
 	      Position		      [305, 313, 335, 337]
 	      ZOrder		      -31
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Inverter"
 	      SourceType	      "Xilinx Inverter Block"
 	      infoedit		      "Bitwise logical negation (one's complement) operator."
@@ -56160,11 +56202,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Logical"
-	      SID		      "321:63"
+	      SID		      "334:63"
 	      Ports		      [2, 1]
-	      Position		      [310, 399, 335, 461]
+	      Position		      [375, 399, 400, 461]
 	      ZOrder		      -32
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
 	      logical_function	      "AND"
@@ -56195,11 +56238,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Logical1"
-	      SID		      "321:64"
+	      SID		      "334:64"
 	      Ports		      [2, 1]
 	      Position		      [200, 264, 225, 326]
 	      ZOrder		      -33
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
 	      logical_function	      "AND"
@@ -56230,11 +56274,12 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Logical2"
-	      SID		      "321:65"
+	      SID		      "334:65"
 	      Ports		      [2, 1]
 	      Position		      [355, 279, 380, 341]
 	      ZOrder		      -34
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Logical"
 	      SourceType	      "Xilinx Logical Block Block"
 	      logical_function	      "AND"
@@ -56265,12 +56310,13 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Mux"
-	      SID		      "321:66"
+	      SID		      "334:66"
 	      Ports		      [3, 1]
 	      Position		      [890, 133, 935, 237]
 	      ZOrder		      -35
 	      NamePlacement	      "alternate"
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Mux"
 	      SourceType	      "Xilinx Bus Multiplexer Block"
 	      inputs		      "2"
@@ -56303,7 +56349,7 @@ Library {
 	    Block {
 	      BlockType		      Terminator
 	      Name		      "Terminator"
-	      SID		      "321:67"
+	      SID		      "334:67"
 	      Position		      [110, 495, 130, 515]
 	      ZOrder		      -36
 	      NamePlacement	      "alternate"
@@ -56312,12 +56358,13 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "convert_address"
-	      SID		      "321:68"
+	      SID		      "334:68"
 	      Ports		      [1, 1]
 	      Position		      [550, 50, 580, 70]
 	      ZOrder		      -37
 	      NamePlacement	      "alternate"
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
@@ -56341,23 +56388,24 @@ Library {
 	      sggui_pos		      "20,20,461,375"
 	      block_type	      "convert"
 	      block_version	      "9.1.01"
-	      sg_icon_stat	      "30,20,1,1,white,blue,0,edca21da,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 30 30 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[19.4"
-	      "4 19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[15.44 15.44 19.4"
-	      "4 19.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1"
-	      " 1 1 ]);\npatch([17.1 30.88 26.88 22.88 18.88 13.1 17.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946"
-	      " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black'"
-	      ");port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');"
+	      sg_icon_stat	      "30,20,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 20 20 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 30 30 0 0 ],[0 0 20 20 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[1"
+	      "2.22 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[10.22 10.2"
+	      "2 12.22 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[8.22 8.22 10.22 10.22 8.2"
+	      "2 ],[1 1 1 ]);\npatch([12.55 19.44 17.44 15.44 13.44 10.55 12.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931"
+	      " 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('"
+	      "black');port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "convert_address1"
-	      SID		      "321:69"
+	      SID		      "334:69"
 	      Ports		      [1, 1]
 	      Position		      [555, 200, 580, 220]
 	      ZOrder		      -38
 	      ShowName		      off
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
@@ -56381,22 +56429,23 @@ Library {
 	      sggui_pos		      "20,20,461,375"
 	      block_type	      "convert"
 	      block_version	      "9.1.01"
-	      sg_icon_stat	      "25,20,1,1,white,blue,0,edca21da,right,"
-	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 45 45 0 0 ],[0 0 30 30 0 ],[0.77 0"
-	      ".82 0.91 ]);\nplot([0 45 45 0 0 ],[0 0 30 30 0 ]);\npatch([13.1 18.88 22.88 26.88 30.88 22.88 17.1 13.1 ],[19.4"
-	      "4 19.44 23.44 19.44 23.44 23.44 23.44 19.44 ],[1 1 1 ]);\npatch([17.1 22.88 18.88 13.1 17.1 ],[15.44 15.44 19.4"
-	      "4 19.44 15.44 ],[0.931 0.946 0.973 ]);\npatch([13.1 18.88 22.88 17.1 13.1 ],[11.44 11.44 15.44 15.44 11.44 ],[1"
-	      " 1 1 ]);\npatch([17.1 30.88 26.88 22.88 18.88 13.1 17.1 ],[7.44 7.44 11.44 7.44 11.44 11.44 7.44 ],[0.931 0.946"
-	      " 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black'"
-	      ");port_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');"
+	      sg_icon_stat	      "25,20,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 25 25 0 0 ],[0 0 20 20 0 ],[0.77 0"
+	      ".82 0.91 ]);\nplot([0 25 25 0 0 ],[0 0 20 20 0 ]);\npatch([7.55 10.44 12.44 14.44 16.44 12.44 9.55 7.55 ],[12.2"
+	      "2 12.22 14.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([9.55 12.44 10.44 7.55 9.55 ],[10.22 10.22 12.2"
+	      "2 12.22 10.22 ],[0.931 0.946 0.973 ]);\npatch([7.55 10.44 12.44 9.55 7.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 "
+	      "1 ]);\npatch([9.55 16.44 14.44 12.44 10.44 7.55 9.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973"
+	      " ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port"
+	      "_label('output',1,'cast');\nfprintf('','COMMENT: end icon text');"
 	    }
 	    Block {
 	      BlockType		      Reference
 	      Name		      "prev_rd"
-	      SID		      "321:70"
+	      SID		      "334:70"
 	      Ports		      [1, 1]
-	      Position		      [195, 430, 235, 460]
+	      Position		      [260, 430, 300, 460]
 	      ZOrder		      -39
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Register"
 	      SourceType	      "Xilinx Register Block"
 	      init		      "0"
@@ -56422,10 +56471,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "prev_w"
-	      SID		      "321:71"
+	      SID		      "334:71"
 	      Ports		      [1, 1]
 	      Position		      [245, 310, 285, 340]
 	      ZOrder		      -40
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Register"
 	      SourceType	      "Xilinx Register Block"
 	      init		      "0"
@@ -56451,10 +56501,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sim_addr"
-	      SID		      "321:72"
+	      SID		      "334:72"
 	      Ports		      [1, 1]
 	      Position		      [120, 60, 175, 80]
 	      ZOrder		      -41
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -56473,8 +56524,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}},'Xilinx'=>{'jtaghwcosim'=>"
 	      "{'non_memory_mapped_port'=>'sim_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}}}"
@@ -56495,10 +56549,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sim_data_in"
-	      SID		      "321:73"
+	      SID		      "334:73"
 	      Ports		      [1, 1]
 	      Position		      [120, 185, 175, 205]
 	      ZOrder		      -42
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -56517,8 +56572,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}},'Xilinx'=>{'jtaghwcosim'=>"
 	      "{'non_memory_mapped_port'=>'sim_addr'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_addr'}}}"
@@ -56539,19 +56597,61 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sim_data_out"
-	      SID		      "321:74"
+	      SID		      "334:74"
 	      Ports		      [1, 1]
 	      Position		      [1015, 174, 1070, 196]
 	      ZOrder		      -43
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
 	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
 	      "arded, depending on how they are configured."
+	      inherit_from_input      off
 	      hdl_port		      on
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
+	      UseAsDAC		      off
+	      DACChannel	      "'1'"
+	      xl_use_area	      off
+	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_out'}},'Xilinx'=>{'jtaghwcosi"
+	      "m'=>{'non_memory_mapped_port'=>'sim_data_out'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_out'}}}"
+	      has_advanced_control    "0"
+	      sggui_pos		      "20,20,336,386"
+	      block_type	      "gatewayout"
+	      block_version	      "9.1.01"
+	      sg_icon_stat	      "55,22,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
+	      sg_mask_display	      "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 0 22 22 0 ],[0.95 0"
+	      ".93 0.65 ]);\nplot([0 55 55 0 0 ],[0 0 22 22 0 ]);\npatch([20.325 24.66 27.66 30.66 33.66 27.66 23.325 20.325 ]"
+	      ",[14.33 14.33 17.33 14.33 17.33 17.33 17.33 14.33 ],[1 1 1 ]);\npatch([23.325 27.66 24.66 20.325 23.325 ],[11.3"
+	      "3 11.33 14.33 14.33 11.33 ],[0.985 0.979 0.895 ]);\npatch([20.325 24.66 27.66 23.325 20.325 ],[8.33 8.33 11.33 "
+	      "11.33 8.33 ],[1 1 1 ]);\npatch([23.325 33.66 30.66 27.66 24.66 20.325 23.325 ],[5.33 5.33 8.33 5.33 8.33 8.33 5"
+	      ".33 ],[0.985 0.979 0.895 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text')"
+	      ";\ncolor('black');port_label('input',1,' ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ',"
+	      "'texmode','on');\nfprintf('','COMMENT: end icon text');"
+	    }
+	    Block {
+	      BlockType		      Reference
+	      Name		      "sim_data_vld"
+	      SID		      "334:99"
+	      Ports		      [1, 1]
+	      Position		      [1000, 494, 1055, 516]
+	      ZOrder		      2
+	      LibraryVersion	      "1.2"
+	      SourceBlock	      "xbsIndex_r4/Gateway Out"
+	      SourceType	      "Xilinx Gateway Out Block"
+	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
+	      "ouble, or fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are disc"
+	      "arded, depending on how they are configured."
+	      inherit_from_input      off
+	      hdl_port		      on
+	      timing_constraint	      "None"
+	      locs_specified	      off
+	      LOCs		      "{'B21','B22','A22','B23','B19','C19','A20','A21','A23','B24','A24','A25','E18','D18','C18','B18'}"
+	      UseAsDAC		      off
+	      DACChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_out'}},'Xilinx'=>{'jtaghwcosi"
@@ -56573,10 +56673,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sim_rd_en"
-	      SID		      "321:75"
+	      SID		      "334:75"
 	      Ports		      [1, 1]
 	      Position		      [125, 405, 180, 425]
 	      ZOrder		      -44
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -56595,8 +56696,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
 	      "'=>{'non_memory_mapped_port'=>'sim_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}}}"
@@ -56617,10 +56721,11 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "sim_wr_en"
-	      SID		      "321:76"
+	      SID		      "334:76"
 	      Ports		      [1, 1]
 	      Position		      [120, 270, 175, 290]
 	      ZOrder		      -45
+	      LibraryVersion	      "1.2"
 	      SourceBlock	      "xbsIndex_r4/Gateway In"
 	      SourceType	      "Xilinx Gateway In Block"
 	      infoedit		      "Gateway in block.  Converts inputs of type Simulink integer, double and fixed point to  Xilinx"
@@ -56639,8 +56744,11 @@ Library {
 	      timing_constraint	      "None"
 	      locs_specified	      off
 	      LOCs		      "{}"
+	      UseAsADC		      off
+	      ADCChannel	      "'1'"
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
+	      inherit_from_input      off
 	      hdl_port		      "on"
 	      sginterface	      "{'Nallatech'=>{'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}},'Xilinx'=>{'jtaghwcosim"
 	      "'=>{'non_memory_mapped_port'=>'sim_data_in'},'xdspkit'=>{'non_memory_mapped_port'=>'sim_data_in'}}}"
@@ -56661,9 +56769,18 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "data_out"
-	      SID		      "321:77"
+	      SID		      "334:77"
 	      Position		      [1095, 178, 1125, 192]
 	      ZOrder		      -46
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "data_valid"
+	      SID		      "334:100"
+	      Position		      [1080, 498, 1110, 512]
+	      ZOrder		      1
+	      Port		      "2"
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
@@ -56814,8 +56931,16 @@ Library {
 	    Line {
 	      SrcBlock		      "sim_rd_en"
 	      SrcPort		      1
-	      DstBlock		      "Logical"
-	      DstPort		      1
+	      Points		      [27, 0]
+	      Branch {
+		Points			[0, 90]
+		DstBlock		"Delay4"
+		DstPort			1
+	      }
+	      Branch {
+		DstBlock		"Logical"
+		DstPort			1
+	      }
 	    }
 	    Line {
 	      SrcBlock		      "AddSub"
@@ -56927,12 +57052,24 @@ Library {
 	      DstBlock		      "sim_rd_en"
 	      DstPort		      1
 	    }
+	    Line {
+	      SrcBlock		      "sim_data_vld"
+	      SrcPort		      1
+	      DstBlock		      "data_valid"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Delay4"
+	      SrcPort		      1
+	      DstBlock		      "sim_data_vld"
+	      DstPort		      1
+	    }
 	  }
 	}
 	Block {
 	  BlockType		  Constant
 	  Name			  "ready_constant"
-	  SID			  "321:78"
+	  SID			  "334:78"
 	  Position		  [790, 725, 820, 755]
 	  ZOrder		  -32
 	  ShowName		  off
@@ -56940,7 +57077,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_ack"
-	  SID			  "321:79"
+	  SID			  "334:79"
 	  Ports			  [1, 1]
 	  Position		  [845, 674, 900, 696]
 	  ZOrder		  -33
@@ -56986,7 +57123,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_address"
-	  SID			  "321:80"
+	  SID			  "334:80"
 	  Ports			  [1, 1]
 	  Position		  [415, 385, 455, 405]
 	  ZOrder		  -34
@@ -57022,7 +57159,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_be"
-	  SID			  "321:81"
+	  SID			  "334:81"
 	  Ports			  [1, 1]
 	  Position		  [415, 340, 455, 360]
 	  ZOrder		  -35
@@ -57058,7 +57195,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_cal_fail"
-	  SID			  "321:82"
+	  SID			  "334:82"
 	  Ports			  [1, 1]
 	  Position		  [845, 784, 900, 806]
 	  ZOrder		  -36
@@ -57104,7 +57241,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_data_in"
-	  SID			  "321:83"
+	  SID			  "334:83"
 	  Ports			  [1, 1]
 	  Position		  [415, 570, 455, 590]
 	  ZOrder		  -37
@@ -57140,9 +57277,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_data_out"
-	  SID			  "321:84"
+	  SID			  "334:84"
 	  Ports			  [1, 1]
-	  Position		  [810, 339, 865, 361]
+	  Position		  [820, 279, 875, 301]
 	  ZOrder		  -38
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -57186,9 +57323,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_data_valid"
-	  SID			  "321:98"
+	  SID			  "334:98"
 	  Ports			  [1, 1]
-	  Position		  [845, 589, 900, 611]
+	  Position		  [820, 399, 875, 421]
 	  ZOrder		  1
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -57232,7 +57369,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_phy_ready"
-	  SID			  "321:85"
+	  SID			  "334:85"
 	  Ports			  [1, 1]
 	  Position		  [845, 729, 900, 751]
 	  ZOrder		  -39
@@ -57278,7 +57415,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_rd_en"
-	  SID			  "321:86"
+	  SID			  "334:86"
 	  Ports			  [1, 1]
 	  Position		  [415, 250, 455, 270]
 	  ZOrder		  -40
@@ -57314,7 +57451,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_qdr_wr_en"
-	  SID			  "321:87"
+	  SID			  "334:87"
 	  Ports			  [1, 1]
 	  Position		  [415, 295, 455, 315]
 	  ZOrder		  -41
@@ -57350,16 +57487,16 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "data_out"
-	  SID			  "321:88"
-	  Position		  [1120, 343, 1150, 357]
+	  SID			  "334:88"
+	  Position		  [1070, 283, 1100, 297]
 	  ZOrder		  -42
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "data_valid"
-	  SID			  "321:89"
-	  Position		  [1095, 593, 1125, 607]
+	  SID			  "334:89"
+	  Position		  [1070, 403, 1100, 417]
 	  ZOrder		  -43
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -57367,7 +57504,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "ack"
-	  SID			  "321:90"
+	  SID			  "334:90"
 	  Position		  [1095, 678, 1125, 692]
 	  ZOrder		  -44
 	  Port			  "3"
@@ -57376,7 +57513,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "phy_ready"
-	  SID			  "321:91"
+	  SID			  "334:91"
 	  Position		  [1095, 733, 1125, 747]
 	  ZOrder		  -45
 	  Port			  "4"
@@ -57385,7 +57522,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "cal_fail"
-	  SID			  "321:92"
+	  SID			  "334:92"
 	  Position		  [1095, 788, 1125, 802]
 	  ZOrder		  -46
 	  Port			  "5"
@@ -57611,8 +57748,8 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Constant1"
-	  SrcPort		  1
+	  SrcBlock		  "qdr_sim_model"
+	  SrcPort		  2
 	  DstBlock		  "xps_library_qdr_data_valid"
 	  DstPort		  1
 	}
@@ -57623,16 +57760,16 @@ Library {
 	  DstPort		  1
 	}
 	Annotation {
-	  SID			  "321:93"
+	  SID			  "334:93"
 	  Name			  "Position of the parity bits is irrelevant when using the QDR memory space\nfrom the FPGA. However, the PP"
 	  "C will not see parity bits, so for convenience\nbits are remapped so that the MSBs are unread (rather than every 9t"
 	  "h bit)"
 	  Position		  [238, 660]
 	}
 	Annotation {
-	  SID			  "321:94"
+	  SID			  "334:94"
 	  Name			  "Put the MSBs back where they belong"
-	  Position		  [982, 409]
+	  Position		  [957, 334]
 	}
       }
     }
@@ -58321,7 +58458,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6780"
+	SIDHighWatermark	"6785"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58333,10 +58470,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6779"
+	  SID			  "332:6784"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6731
+	  ZOrder		  6736
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58371,10 +58508,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6777"
+	  SID			  "332:6782"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6729
+	  ZOrder		  6734
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58409,10 +58546,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6776"
+	  SID			  "332:6781"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6728
+	  ZOrder		  6733
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58440,10 +58577,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6780"
+	  SID			  "332:6785"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6732
+	  ZOrder		  6737
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58471,10 +58608,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6778"
+	  SID			  "332:6783"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6730
+	  ZOrder		  6735
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
