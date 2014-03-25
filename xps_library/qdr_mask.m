@@ -48,9 +48,6 @@ switch hw_sys
         data_width = 72;
         be_width = 8;
         n_qdr = 4;
-        %%data_width = 72;
-        %be_width = 8;
-        %n_qdr = 4;
     % end case 'ROACH2'
 end % end switch hw_sys
 
@@ -63,32 +60,38 @@ if (qdr_num > (n_qdr-1))
     set_param(myname, 'which_qdr', 'qdr0');
 end
 
+switch hw_sys
+    case 'ROACH'
+        construct bit remapping to move parity bits
+        input_parity_map  = 'b = {';
+        output_parity_map = 'b = {';
+        output_parity_map_top = '';
+        output_parity_map_bottom = '';
+        
+        for i=[be_width-1:-1:0]
+           %input_parity_map = [input_parity_map, 'a[', num2str(data_width-(be_width-i)), '],a[', num2str((i+1)*8-1), ':', num2str(i*8), ']'];
+           input_parity_map = [input_parity_map, 'a[71:0]'];
+           output_parity_map_top = [output_parity_map_top, 'a[71:0]'];
+           output_parity_map_bottom = [output_parity_map_bottom, 'a[71:0]'];
+           if i==0
+               input_parity_map = [input_parity_map, '}'];
+               output_parity_map = [output_parity_map, output_parity_map_top, ',', output_parity_map_bottom, '}'];
+           else
+               input_parity_map = [input_parity_map, ','];
+               output_parity_map_top = [output_parity_map_top, ','];
+               output_parity_map_bottom = [output_parity_map_bottom, ','];
+           end
+        end
+    % end case 'ROACH'
+    case 'ROACH2'
+        input_parity_map  = 'b = {a[71:0]}';
+        output_parity_map = 'b = {a[71:0]}';
+        output_parity_map_top = 'b = {a[71:0]}';
+        output_parity_map_bottom = 'b = {a[71:0]}';
+    % end case 'ROACH2'
+end % end switch hw_sys
 
-%construct bit remapping to move parity bits
-%input_parity_map  = 'b = {';
-%output_parity_map = 'b = {';
-%output_parity_map_top = '';
-%output_parity_map_bottom = '';
 
-input_parity_map  = 'b = {a[71:0]}';
-output_parity_map = 'b = {a[71:0]}';
-output_parity_map_top = 'b = {a[71:0]}';
-output_parity_map_bottom = 'b = {a[71:0]}';
-
-%for i=[be_width-1:-1:0]
-%   %input_parity_map = [input_parity_map, 'a[', num2str(data_width-(be_width-i)), '],a[', num2str((i+1)*8-1), ':', num2str(i*8), ']'];
-%   input_parity_map = [input_parity_map, 'a[71:0]'];
-%   output_parity_map_top = [output_parity_map_top, 'a[71:0]'];
-%   output_parity_map_bottom = [output_parity_map_bottom, 'a[71:0]'];
-%   if i==0
-%       input_parity_map = [input_parity_map, '}'];
-%       output_parity_map = [output_parity_map, output_parity_map_top, ',', output_parity_map_bottom, '}'];
-%   else
-%       input_parity_map = [input_parity_map, ','];
-%       output_parity_map_top = [output_parity_map_top, ','];
-%       output_parity_map_bottom = [output_parity_map_bottom, ','];
-%   end
-%end
 
 %update expressions in bitbasher blocks
 extract_parity_blk = [myname, '/extract_parity'];

@@ -13,8 +13,8 @@ catch ex
     dump_and_rethrow(ex);
 end
 
-% perform a sanity check
-swreg_maskcheck(blk);
+% perform a sanity check on the mask values
+[numios, current_names, current_widths, current_bins, current_types] = swreg_maskcheck(blk);
 
 % should we make a sim in/out?
 simport = true;
@@ -22,7 +22,7 @@ try
     if strcmp(get_param(blk, 'sim_port'), 'off'),
         simport = false;
     end
-catch
+catch ex
 end
 
 % add the inputs, outputs and gateway out blocks, drawing lines between them
@@ -32,26 +32,26 @@ x_start =   100;
 y_pos =     100;
 
 % the rest depends on whether it's an in or out reg
-mode = get_param(blk, 'mode');
-current_names = textscan(strtrim(strrep(strrep(strrep(strrep(get_param(blk, 'names'), ']', ''), '[', ''), ',', ' '), '  ', ' ')), '%s');
-current_names = current_names{1};
-numios = length(current_names);
-current_types = eval(get_param(blk, 'arith_types'));
-current_bins = eval(get_param(blk, 'bin_pts'));
-current_widths = eval(get_param(blk, 'bitwidths'));
-if strcmp(mode, 'fields of equal size'),
-    ctypes = current_types;
-    cbins = current_bins;
-    cwidths = current_widths;
-    current_types = zeros(numios, 1);
-    current_bins = zeros(numios, 1);
-    current_widths = zeros(numios, 1);
-    for ctr = 1 : numios,
-        current_types(ctr) = ctypes(1);
-        current_bins(ctr) = cbins(1);
-        current_widths(ctr) = cwidths(1);
-    end
-end
+% mode = get_param(blk, 'mode');
+% current_names = textscan(strtrim(strrep(strrep(strrep(strrep(get_param(blk, 'names'), ']', ''), '[', ''), ',', ' '), '  ', ' ')), '%s');
+% current_names = current_names{1};
+% numios = length(current_names);
+% current_types = eval(get_param(blk, 'arith_types'));
+% current_bins = eval(get_param(blk, 'bin_pts'));
+% current_widths = eval(get_param(blk, 'bitwidths'));
+% if strcmp(mode, 'fields of equal size'),
+%     ctypes = current_types;
+%     cbins = current_bins;
+%     cwidths = current_widths;
+%     current_types = zeros(numios, 1);
+%     current_bins = zeros(numios, 1);
+%     current_widths = zeros(numios, 1);
+%     for ctr = 1 : numios,
+%         current_types(ctr) = ctypes(1);
+%         current_bins(ctr) = cbins(1);
+%         current_widths(ctr) = cwidths(1);
+%     end
+% end
 io_dir = get_param(blk, 'io_dir');
 if strcmp(io_dir, 'To Processor'),
     iodir = 'output';
@@ -59,14 +59,6 @@ if strcmp(io_dir, 'To Processor'),
 else
     iodir = 'input';
     draw_from();
-end
-
-total_width = 0;
-for count_width = 1 : numios,
-    total_width = total_width + current_widths(count_width);
-end
-if total_width > 32,
-    error('WARNING: total bitwidth > 32, the top bits will be truncated.');
 end
 
 % remove unconnected blocks
@@ -201,10 +193,7 @@ function draw_from()
         add_line(blk, 'sim_add/1', [gwin_name, '/1'], 'autorouting', 'on');
     end
     % ports
-    total_width = 0;
-    for pindex = 1 : numios,
-        total_width = total_width + current_widths(pindex);
-    end
+    total_width = sum(current_widths);
     for pindex = 1 : numios,
         io_arith_type = current_types(pindex);
         if io_arith_type == 2,

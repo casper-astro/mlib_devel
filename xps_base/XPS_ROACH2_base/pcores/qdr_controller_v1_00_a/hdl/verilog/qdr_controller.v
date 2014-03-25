@@ -36,7 +36,6 @@ module qdr_controller (
     dly_en_i,
     dly_en_o,
     dly_inc_dec,
-	 rn_dly,
     
     dly_cntrs
   );
@@ -80,7 +79,6 @@ module qdr_controller (
   input  [DATA_WIDTH - 1:0] dly_en_i;
   input  [DATA_WIDTH    :0] dly_en_o;
   input                     dly_inc_dec;
-  input               [4:0] rn_dly;
   
   output [5*(36+35)-1:0] dly_cntrs;
 
@@ -201,7 +199,6 @@ module qdr_controller (
     .reset (reset0),
 
     .phy_rdy (phy_rdy),
-    .rn_dly  (rn_dly),
 
     .usr_strb (usr_rd_strb),
     .usr_data (usr_rd_data),

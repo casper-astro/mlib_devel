@@ -94,7 +94,6 @@ BEGIN opb_qdr_sniffer
   PORT dly_en_i      = dly_en_i,    DIR = O, VEC = [35:0]
   PORT dly_en_o      = dly_en_o,    DIR = O, VEC = [36:0] 
   PORT dly_inc_dec   = dly_inc_dec, DIR = O
-  PORT rn_dly        = rn_dly,      DIR = O, VEC = [4:0]
   PORT dly_cntrs     = dly_cntrs,   DIR = I, VEC = [364:0]
 
 ## Misc. ports

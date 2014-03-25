@@ -189,7 +189,6 @@ switch hw_sys
         str = [str, ' PORT dly_en_i     = ', inst_name, '_dly_en_i',   '\n'];
         str = [str, ' PORT dly_inc_dec  = ', inst_name, '_dly_inc_dec','\n'];
         str = [str, ' PORT dly_cntrs    = ', inst_name, '_dly_cntrs',  '\n'];
-        str = [str, ' PORT rn_dly       = ', inst_name, '_rn_dly',  '\n'];
         
         str = [str, ' BUS_INTERFACE MQDR = ', inst_name,           '\n'];
         
@@ -251,7 +250,6 @@ switch hw_sys
         str = [str, ' PORT dly_en_i      = ', inst_name, '_dly_en_i',   '\n'];
         str = [str, ' PORT dly_inc_dec   = ', inst_name, '_dly_inc_dec','\n'];
         str = [str, ' PORT dly_cntrs     = ', inst_name, '_dly_cntrs',  '\n'];
-        str = [str, ' PORT rn_dly        = ', inst_name, '_rn_dly',  '\n'];
         
         str = [str, ' PORT phy_rdy       = ', inst_name, '_phy_ready', '\n'];
         str = [str, ' PORT cal_fail      = ', inst_name, '_cal_fail',  '\n'];
