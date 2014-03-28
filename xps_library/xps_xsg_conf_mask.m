@@ -69,6 +69,18 @@ switch hw_sys
         end % switch hw_subsys
     % end case 'ROACH2'
     
+    case 'MKDIG'
+        switch hw_subsys
+            case 'sx475t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Kintex7',...
+                    'part', 'xc6vsx475t',...
+                    'speed', '-1',...
+                    'testbench', 'off',...
+                    'package', 'ff1759');
+            % end case 'lx110t'
+        end % switch hw_subsys
+    % end case 'MKDIG'
+    
     otherwise
         errordlg(['Unsupported hardware system: ',hw_sys]);
     % end 'otherwise'
@@ -105,6 +117,10 @@ switch clk_src
         end
     case {'adc0_clk' 'adc1_clk' 'dac0_clk' 'dac1_clk'}
         if isempty(find(strcmp(hw_sys,{'ROACH', 'ROACH2'})))
+            errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
+        end
+    case {'adc_clk'}
+        if isempty(find(strcmp(hw_sys,{'MKDIG'})))
             errordlg(['Invalid clock source ',clk_src,' for hardware platform: ',hw_sys]);
         end
     otherwise

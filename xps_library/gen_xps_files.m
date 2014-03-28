@@ -525,7 +525,7 @@ if run_edkgen,
     gen_xps_add_design_info(sys, mssge_paths, slash);
 
     % shanly and mark's new format - generated from core_info and design_info
-    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2'),
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'MKDIG'),
         kcpfpg_fid = fopen([xps_path, slash, 'extended_info.kcpfpg'], 'w');
         fprintf(kcpfpg_fid, '#!/bin/kcpfpg\n');
         fprintf(kcpfpg_fid, '?uploadbin\n');
@@ -622,7 +622,7 @@ if run_software,
     end % switch sw_os
 
     [~, w] = system('uname -m');
-    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2'),
+    if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'MKDIG'),
         fprintf(win_fid, ['mkbof.exe -o implementation\\system.bof', ' -s core_info.tab -t 3 implementation\\system.bin\n']);
         if strcmp(w(1:6), 'x86_64'),
            fprintf(unix_fid, ['./mkbof_64 -o implementation/system.bof', ' -s core_info.tab -t 3 implementation/system.bin\n']);
@@ -638,7 +638,7 @@ if run_software,
             fprintf(win_fid, ['copy design_info.tab ..\\bit_files\\', files_name,'.info\n']);
             fprintf(unix_fid, ['cp design_info.tab ../bit_files/', files_name,'.info\n']);
         end
-        if strcmp(hw_sys, 'ROACH2'),
+        if strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'ROACH2'),
             fprintf(unix_fid, ['gzip -c ../bit_files/', files_name, '.bof  > ../bit_files/', files_name,'.bof.gz\n']);
         end
         if exist([xps_path, slash, 'extended_info.kcpfpg'], 'file') == 2,
@@ -668,7 +668,7 @@ if run_edk,
         case 'ROACH'
             fprintf(fid, 'run bits\n');
         % end case 'powerpc440_ext'
-        case 'ROACH2'
+        case {'ROACH2', 'MKDIG'}
             fprintf(fid, 'run bits\n');
         % end case 'powerpc440_ext'
         otherwise

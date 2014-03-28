@@ -30,7 +30,7 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     switch hw_sys
-        case {'ROACH', 'ROACH2'}
+        case {'ROACH', 'ROACH2', 'MKDIG'}
             opb_slaves_init = 2;  % The system block
             opb_slaves = opb_slaves_init;             
             max_opb_per_bridge = 32; 
@@ -38,7 +38,7 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
             opb_addr        = opb_addr_init;
             opb_bridge_size = hex2dec('00080000');
             %opb_addr_max    = hex2dec('01FFFFFF'); %upper limit of address space allocated
-        % end case {'ROACH', 'ROACH2'}
+        % end case {'ROACH', 'ROACH2', 'MKDIG'}
         otherwise
             opb_slaves = 3; % the UART, the selectmap fifo and the serial switch reader
             %max_opb = 16;
@@ -117,7 +117,7 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
     fprintf(mhs_fid, '\n');
 
     switch hw_sys
-    case {'ROACH', 'ROACH2'}
+    case {'ROACH', 'ROACH2', 'MKDIG'}
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       %calculate number of fixed opb0 devices
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -210,7 +210,7 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
         %clog(['0x', dec2hex(opb_addr_start, 8), '-0x', dec2hex(opb_offset_tmp-1, 8), ' ', get(blk_obj, 'simulink_name')], 'gen_xps_mod_mhs_desperate_debug');
 
         switch hw_sys
-            case {'ROACH', 'ROACH2'}
+            case {'ROACH', 'ROACH2', 'MKDIG'}
 
                 opb_slaves = opb_slaves + opb_cores;
                 bridge_start = opb_addr_init + ((opb_bus_inst+1) * opb_bridge_size);
@@ -267,7 +267,7 @@ function gen_xps_mod_mhs(xps_objs, mssge_proj, mssge_paths, slash)
         fprintf(nfo_fid, '\n');
 
         try
-            if strcmp(hw_sys, 'ROACH') ||  strcmp(hw_sys, 'ROACH2')
+            if strcmp(hw_sys, 'ROACH') ||  strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'MKDIG')
               str = gen_borf_info(n, blk_obj, this_opb_addr_start);
             else
               str = gen_borf_info(n-1, blk_obj, {});

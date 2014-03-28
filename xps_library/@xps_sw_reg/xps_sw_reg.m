@@ -52,7 +52,7 @@ end
 
 % bus clock
 switch get(xsg_obj,'hw_sys')
-    case {'ROACH', 'ROACH2'}
+    case {'ROACH', 'ROACH2', 'MKDIG'}
         b = set(b, 'opb_clk','epb_clk');
     otherwise
         b = set(b, 'opb_clk','sys_clk');

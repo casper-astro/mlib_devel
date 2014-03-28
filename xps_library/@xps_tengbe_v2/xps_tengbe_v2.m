@@ -57,7 +57,7 @@ switch s.hw_sys
   case {'ROACH'},
     s.port = get_param(blk_name, 'port_r1');
 
-  case {'ROACH2'}, 
+  case {'ROACH2','MKDIG'}, 
     %get the port from the appropriate parameter, roach2 mezzanine slot 0 has 4-7, roach2 mezzanine slot 1 has 0-3, so barrel shift
     if(strcmp(s.flavour,'cx4')),
       s.port = num2str(str2num(get_param(blk_name, 'port_r2_cx4')) + 4*(mod(s.slot+1,2)));
@@ -100,7 +100,7 @@ b = class(s,'xps_tengbe_v2',blk_obj);
 b = set(b,'ip_name','kat_ten_gb_eth');
 
 switch s.hw_sys
-  case {'ROACH','ROACH2'},
+  case {'ROACH','ROACH2','MKDIG'},
     b = set(b,'ip_version','1.00.a');
   otherwise
     error(['10GbE not supported for platform ', s.hw_sys]);
@@ -110,7 +110,7 @@ end
 
 % ROACH/ROACH2 have OPB Ten Gig Eth interfaces
 switch s.hw_sys
-    case {'ROACH','ROACH2'},
+    case {'ROACH','ROACH2','MKDIG'},
         b = set(b,'opb_clk','epb_clk');
         b = set(b,'opb_address_offset',16384);
         b = set(b,'opb_address_align', hex2dec('4000'));
@@ -129,7 +129,7 @@ parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;
 parameters.TTL            = s.ttl;
 
 switch s.hw_sys
-  case {'ROACH2'}, 
+  case {'ROACH2','MKDIG'}, 
     parameters.PREEMPHASIS    = s.preemph_r2; 
     parameters.POSTEMPHASIS   = s.postemph_r2;
     parameters.DIFFCTRL       = s.swing_r2;
@@ -149,7 +149,7 @@ switch s.hw_sys
         interfaces.XGMII     = ['xgmii',s.port];
         b = set(b,'interfaces',interfaces);
     % end case 'ROACH'
-    case {'ROACH2'},
+    case {'ROACH2','MKDIG'},
         interfaces.PHY_CONF = ['phy_conf',s.port];
         interfaces.XAUI_CONF = ['xaui_conf',s.port];
         interfaces.XGMII     = ['xgmii',s.port];
@@ -170,7 +170,7 @@ switch s.hw_sys
         else
             misc_ports.xaui_clk = {1 'in'  'mgt_clk_1'};
         end
-    case {'ROACH2'},
+    case {'ROACH2','MKDIG'},
         misc_ports.xaui_clk = {1 'in' 'xaui_clk'};
         misc_ports.xaui_reset = {1 'in' 'sys_reset'};
     
@@ -181,7 +181,7 @@ b = set(b,'ext_ports',ext_ports);
 
 % borf parameters
 switch s.hw_sys
-    case {'ROACH','ROACH2'},
+    case {'ROACH','ROACH2','MKDIG'},
         borph_info.size = hex2dec('4000');
         borph_info.mode = 3;
         b = set(b,'borph_info',borph_info);
