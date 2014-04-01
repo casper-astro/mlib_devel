@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1921.0, 27.0, 1280.0, 1024.0]
+      Location		      [1920.0, 0.0, 1282.0, 1050.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 893.0]
+	Extents			[1244.0, 883.0]
 	ZoomFactor		[1.0]
 	Offset			[-71.125, -1.6887035812152362]
       }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "wnew"
+  LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Mar 28 11:19:26 2014"
-  RTWModifiedTimeStamp	  317906364
-  ModelVersionFormat	  "1.%<AutoIncrement:514>"
+  LastModifiedDate	  "Tue Apr 01 11:02:00 2014"
+  RTWModifiedTimeStamp	  318250917
+  ModelVersionFormat	  "1.%<AutoIncrement:515>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,7 +802,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [1921, 27, 3201, 1051]
+    Location		    [1920, 0, 3202, 1050]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -58392,7 +58392,6 @@ Library {
 	    Name		    "bitwidths"
 	    Prompt		    "Bitwidth:"
 	    Value		    "32"
-	    Enabled		    "off"
 	    Callback		    "swreg_maskcheck(gcb);\n% blk = gcb;\n% mode = get_param(blk, 'mode');\n% current_widths = eval(get"
 	    "_param(blk, 'bitwidths'));\n% if (strcmp(mode, 'one value') || strcmp(mode, 'fields of equal size')) && (length(c"
 	    "urrent_widths) > 1),\n%     error('Only one width may be specified for this mode.');\n% elseif strcmp(mode, 'fiel"
@@ -58472,7 +58471,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6785"
+	SIDHighWatermark	"6795"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58484,10 +58483,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6784"
+	  SID			  "332:6794"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6736
+	  ZOrder		  6746
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58522,10 +58521,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6782"
+	  SID			  "332:6792"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6734
+	  ZOrder		  6744
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58560,10 +58559,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6781"
+	  SID			  "332:6791"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6733
+	  ZOrder		  6743
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58591,10 +58590,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6785"
+	  SID			  "332:6795"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6737
+	  ZOrder		  6747
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58622,10 +58621,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6783"
+	  SID			  "332:6793"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6735
+	  ZOrder		  6745
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
