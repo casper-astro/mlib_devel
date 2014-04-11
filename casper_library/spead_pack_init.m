@@ -4,6 +4,7 @@ set_param(block, 'LinkStatus', 'inactive');
 
 current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
 header_ids = eval(hdrs);
+header_ids = [1,2,3,4,header_ids];
 num_headers = length(header_ids);
 if length(current_consts) == num_headers,
     all_match = true;
@@ -18,8 +19,8 @@ else
     all_match = false;
 end
 
-if num_headers < 1,
-    error('Must have at least one header!');
+if num_headers < 4,
+    error('Must have at least compulsory headers!');
 end
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
@@ -50,11 +51,25 @@ if line > -1,
     delete_line(line);
 end
 
+function rvname = get_port_name(counter)
+    if counter == 1,
+        rvname = 'hdr_heap_id';
+    elseif counter == 2,
+        rvname = 'hdr_heap_size';
+    elseif counter == 3,
+        rvname = 'hdr_heap_offset';
+    elseif counter == 4,
+        rvname = 'hdr_pkt_len';
+    else
+        rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x', header_ids(counter))];
+    end
+end
+
 % draw the blocks
 showname = 'off';
-for ctr = 1 : length(header_ids),
+for ctr = 1 : num_headers,
     this_ctr = num2str(ctr);
-    name_in = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
+    name_in = get_port_name(ctr);
     name_assert_in = ['hdra_', this_ctr];
     name_delay_in = ['hdrd_', this_ctr];
     name_to = ['header_to', this_ctr];
@@ -62,7 +77,7 @@ for ctr = 1 : length(header_ids),
     name_from = ['header_from', this_ctr];
     name_concat = ['header_cat', this_ctr];
     name_assert_id = ['header_assert', this_ctr];
-    row_y = 110 + (ctr * 30);
+    row_y = 150 + (ctr * 30);
     row_x = 20;
     reuse_block(block, name_in, 'built-in/inport', ...
         'showname', 'on', 'Port', num2str(3 + ctr), ...
@@ -82,7 +97,7 @@ for ctr = 1 : length(header_ids),
     reuse_block(block, name_to, 'built-in/goto', ...
         'GotoTag', ['hdr_', this_ctr], 'showname', showname, ...
         'Position', [row_x + 140, row_y, row_x + 160, row_y + 14]);
-    row_y = 110 + (ctr * 75);
+    row_y = 150 + (ctr * 75);
     row_x = 1340;
     reuse_block(block, name_constant, 'xbsIndex_r4/Constant', ...
         'showname', showname, 'const', num2str(header_ids(ctr)), ...
@@ -104,9 +119,9 @@ for ctr = 1 : length(header_ids),
 end
 
 % connect them
-for ctr = 1 : length(header_ids),
+for ctr = 1 : num_headers,
     this_ctr = num2str(ctr);
-    name_in = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
+    name_in = get_port_name(ctr);
     name_assert_in = ['hdra_', this_ctr];
     name_delay_in = ['hdrd_', this_ctr];
     name_to = ['header_to', this_ctr];
