@@ -270,13 +270,21 @@ module roach_infrastructure #(
     .RDY    (idelay100_rdy)
   );
 
-  end endgenerate
-
   (* IODELAY_GROUP = "IODELAY_200" *)
+  IDELAYCTRL idelayctrl200_inst(
+    .REFCLK (clk_200),
+    .RST    (idelay_rst),
+    .RDY    (idelay_rdy)
+  );
+
+  end else begin
+
   IDELAYCTRL idelayctrl_inst(
     .REFCLK (clk_200),
     .RST    (idelay_rst),
     .RDY    (idelay_rdy)
   );
+
+  end endgenerate
 
 endmodule
