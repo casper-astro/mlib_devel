@@ -418,7 +418,19 @@ begin
   CBUF2f:  BUFG     port map (i=> mmcm_clkout4,  o=> ctrl_clk270_out);
 
   ctrl_dcm_locked <= mmcm_locked;
-  sync <= adc_sync;
+
+  -- purpose: Capture sync input
+  -- type   : sequential
+  -- inputs : isd_clkdiv, isd_rst, adc_sync
+  -- outputs: sync
+  SYNCCAP: process (isd_clkdiv, isd_rst)
+  begin  -- process SYNCCAP
+    if isd_rst = '1' then               -- asynchronous reset (active high)
+      sync <= '0';
+    elsif isd_clkdiv'event and isd_clkdiv = '1' then  -- rising clock edge
+      sync <= adc_sync;
+    end if;
+  end process SYNCCAP;
 
   ctrl_clk_out <= isd_clkdiv;
   isd_clkn <= not isd_clk;
