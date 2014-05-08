@@ -62,7 +62,7 @@ end
 
 switch hw_sys
     case 'ROACH'
-        construct bit remapping to move parity bits
+        %construct bit remapping to move parity bits
         input_parity_map  = 'b = {';
         output_parity_map = 'b = {';
         output_parity_map_top = '';
@@ -70,9 +70,9 @@ switch hw_sys
         
         for i=[be_width-1:-1:0]
            %input_parity_map = [input_parity_map, 'a[', num2str(data_width-(be_width-i)), '],a[', num2str((i+1)*8-1), ':', num2str(i*8), ']'];
-           input_parity_map = [input_parity_map, 'a[71:0]'];
-           output_parity_map_top = [output_parity_map_top, 'a[71:0]'];
-           output_parity_map_bottom = [output_parity_map_bottom, 'a[71:0]'];
+           input_parity_map = [input_parity_map, 'a[35:0]'];
+           output_parity_map_top = [output_parity_map_top, 'a[35:0]'];
+           output_parity_map_bottom = [output_parity_map_bottom, 'a[35:0]'];
            if i==0
                input_parity_map = [input_parity_map, '}'];
                output_parity_map = [output_parity_map, output_parity_map_top, ',', output_parity_map_bottom, '}'];
