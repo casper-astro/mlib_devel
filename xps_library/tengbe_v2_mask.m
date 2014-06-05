@@ -87,8 +87,13 @@ for i = 1 : length(gateway_outs),
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% do debug counters and supporting logic
+% Do debug counters and supporting logic, but only if requested
+% via non-empty CASPER_TENGBE_V2_DEBUG environment variable.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if isempty(getenv('CASPER_TENGBE_V2_DEBUG'))
+  return;
+end
 
 % make sure the terminator and port are there
 reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', '9', 'Position', [120   137   150   153]);
