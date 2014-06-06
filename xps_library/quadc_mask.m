@@ -45,6 +45,6 @@ for i =1:length(gateway_ins)
         toks = regexp(get_param(gw,'Name'),'(sync)$','tokens');
         set_param(gw,'Name',clear_name([gcb,'_',toks{1}{1}]));
     else
-        error(['Unkown gateway name: ',gw]);
+        error(['Unknown gateway name: ',gw]);
     end
 end
