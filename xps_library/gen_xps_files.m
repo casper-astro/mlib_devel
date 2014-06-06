@@ -67,18 +67,18 @@ if s ~= 0
   if s ~= 0,
     disp(sprint('Could not detect OS, assuming Windows'));
   elseif ~isempty(regexp(w,'Windows', 'ONCE')),
-    fprintf('Detected Windows OS');
+    fprintf('Detected Windows OS\n');
   else
-    fprintf('Detected Unknown Windows-like OS');
+    fprintf('Detected Unknown Windows-like OS\n');
   end
   system_os = 'windows';
 elseif ~isempty(regexp(w, 'Linux', 'ONCE')),
   slash = '/';
-  fprintf('Detected Linux OS');
+  fprintf('Detected Linux OS\n');
   system_os = 'linux';
 else
   slash = '/';
-  fprintf('Detected Unknown Unix-like OS');
+  fprintf('Detected Unknown Unix-like OS\n');
   system_os = 'linux';
 end
 
