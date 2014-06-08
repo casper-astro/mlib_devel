@@ -8,6 +8,7 @@ casper_library/Tests/xldsp48e_isim.log
 casper_library/casper_library_bus.*
 casper_library/casper_library_downconverter.*
 tags
+
 # Ignore Xilinx OPB pcores
 xps_base/*/pcores/bram_if_cntlr_v1_00_a/
 xps_base/*/pcores/bram_if_cntlr_v1_00_b/
@@ -18,3 +19,6 @@ xps_base/*/pcores/opb_ipif_v3_00_a/
 xps_base/*/pcores/opb_opb_lite_v1_00_a/
 xps_base/*/pcores/opb_v20_v1_10_c/
 xps_base/*/pcores/proc_common_v1_00_a/
+
+# Ignore all files that start with "startsg." (e.g. startsg.local)
+startsg.*

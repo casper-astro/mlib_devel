@@ -1,12 +1,80 @@
 #!/bin/bash
-####### User to edit these accordingly ######
-export MATLAB_PATH=/opt/MATLAB/R2012b
-PLATFORM=lin64
-export XILINX_PATH=/opt/Xilinx/14.7/ISE_DS
-export MLIB_DEVEL_PATH=/opt/casper_library/mlib_devel
-#############################################
-source $XILINX_PATH/settings64.sh
-export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}
-export XPS_BASE_PATH=$MLIB_DEVEL_PATH/xps_base
-export MATLAB=$MATLAB_PATH
-$MATLAB/bin/matlab
+
+##########################################################################
+#                                                                        #
+# This is the "startsg" script used to start the CASPER XSG toolflow.    #
+#                                                                        #
+# Put local definitions in "startsg.local" in the same directory as this #
+# file.  The "startsg.local" file should define MATLAB_PATH and          #
+# XILINX_PATH environment variables that point to the base directory of  #
+# the respective installation directories.  You should define the        #
+# XILINX_PLATFORM variable in that file as well.                         #
+#                                                                        #
+# DO NOT PUT LOCAL CONFIGURATION INFORMATION IN THIS FILE!               #
+#                                                                        #
+##########################################################################
+
+# Get local definitions, if present
+LOCALDEFS="${1:-${0}.local}"
+if [ -f "${LOCALDEFS}" ]
+then
+  source "${LOCALDEFS}"
+else
+  echo "WARNING: Local environment file '${LOCALDEFS}' not present."
+fi
+
+# Verify that MATLAB_PATH and XILINX_PATH are reasonable
+if ! [ -n "${MATLAB_PATH}" ]
+then
+  echo "ERROR: MATLAB_PATH is not defined in the current environment."
+  exit 1
+elif ! [ -d "${MATLAB_PATH}" -a -r "${MATLAB_PATH}" ]
+then
+  echo "ERROR: MATLAB_PATH '${MATLAB_PATH}' is not a readable directory."
+  exit 1
+fi
+
+if ! [ -n "${XILINX_PATH}" ]
+then
+  echo "ERROR: XILINX_PATH is not defined in the current environment."
+  exit 1
+elif ! [ -d "${XILINX_PATH}" -a -r "${XILINX_PATH}" ]
+then
+  echo "ERROR: XILINX_PATH '${XILINX_PATH}' is not a readable directory."
+  exit 1
+fi
+
+if ! [ -n "${XILINX_PLATFORM}" ]
+then
+  echo "WARNING: XILINX_PLATFORM is not defined in the current environment, assuming 'lin64'."
+  export XILINX_PLATFORM=lin64
+fi
+
+# If not yet defined, set MLIB_DEVEL_PATH based on location of current file
+if ! [ -n "${MLIB_DEVEL_PATH}" ]
+then
+  export MLIB_DEVEL_PATH="$(cd `dirname "$0"`; pwd -P)"
+fi
+
+# Check that casper_library directory is writable
+# (required by downconverter and bus libraries).
+if ! [ -w "${MLIB_DEVEL_PATH}/casper_library" ]
+then
+  echo "ERROR: Directory ${MLIB_DEVEL_PATH}/casper_library is not writable by you."
+  exit 1
+fi
+
+# Show environment
+echo "Using MATLAB_PATH=${MATLAB_PATH}"
+echo "Using XILINX_PATH=${XILINX_PATH}"
+echo "Using XILINX_PLATFORM=${XILINX_PLATFORM}"
+echo "Using MLIB_DEVEL_PATH=${MLIB_DEVEL_PATH}"
+
+# Finish environment setup
+source "${XILINX_PATH}/settings64.sh" > /dev/null
+export PATH="${PATH}:${XILINX}/ISE/bin/${XILINX_PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${XILINX_PLATFORM}"
+export XPS_BASE_PATH="${MLIB_DEVEL_PATH}/xps_base"
+export MATLAB="${MATLAB_PATH}"
+
+# Start MATLAB
+"${MATLAB}/bin/matlab"
