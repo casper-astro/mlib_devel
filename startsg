@@ -76,5 +76,9 @@ export PATH="${PATH}:${XILINX}/ISE/bin/${XILINX_PLATFORM}:${XILINX_PATH}/ISE/sys
 export XPS_BASE_PATH="${MLIB_DEVEL_PATH}/xps_base"
 export MATLAB="${MATLAB_PATH}"
 
+# Change into the MLIB_DEVEL_PATH directory
+# (so MATLAB will find our startup.m file).
+cd "${MLIB_DEVEL_PATH}"
+
 # Start MATLAB
 "${MATLAB}/bin/matlab"
