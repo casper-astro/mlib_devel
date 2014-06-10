@@ -90,10 +90,21 @@ end
 % do debug counters and supporting logic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% make sure the terminator and port are there
-reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', '9', 'Position', [120   137   150   153]);
-reuse_block(cursys, 'term1', 'built-in/Terminator', 'Position', [200   135   220   155]);
-try add_line(cursys, 'debug_rst/1', 'term1/1'); catch e, end
+% are any of the checkboxes actually checked?
+if strcmp(get_param(blk, 'txctr'), 'on') || strcmp(get_param(blk, 'txerrctr'), 'on') || ...
+        strcmp(get_param(blk, 'txofctr'), 'on') || strcmp(get_param(blk, 'txfullctr'), 'on') || ...
+        strcmp(get_param(blk, 'txvldctr'), 'on') || strcmp(get_param(blk, 'rxctr'), 'on') || ...
+        strcmp(get_param(blk, 'rxerrctr'), 'on') || strcmp(get_param(blk, 'rxofctr'), 'on') || ...
+        strcmp(get_param(blk, 'rxbadctr'), 'on') || strcmp(get_param(blk, 'rxvldctr'), 'on') || ...
+        strcmp(get_param(blk, 'rxeofctr'), 'on'),
+	% make sure the terminator and port are there
+    reuse_block(cursys, 'debug_rst', 'built-in/inport', 'Port', '9', 'Position', [120   137   150   153]);
+    reuse_block(cursys, 'term1', 'built-in/Terminator', 'Position', [200   135   220   155]);
+    try add_line(cursys, 'debug_rst/1', 'term1/1'); catch e, end
+else
+    try delete_block_lines([blk, '/', 'debug_rst']); catch e, end
+    try delete_block_lines([blk, '/', 'term1']); catch e, end
+end
 
 function draw_counter(sys, ypos, targetname, sourcename)
     ctr_name = [targetname, '_ctr'];
