@@ -152,7 +152,7 @@
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_0 = 1
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_1 = 1
 #IF# ( strcmp(get(b,'type'),'xps_adc'))# BUS_INTERFACE SOPB = opb0
-#IF# ( strcmp(get(b,'type'),'xps_adc'))# PORT OPB_Clk = sys_clk
+#IF# ( strcmp(get(b,'type'),'xps_adc'))# PORT OPB_Clk = epb_clk
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_data = adc0_adc3wire_data
 #IF# ( strcmp(get(b,'type'),'xps_adc')) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe
@@ -187,7 +187,7 @@
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_0 = 1
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'adc_interleave'),'on')# PARAMETER INTERLEAVED_1 = 1
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))# BUS_INTERFACE SOPB = opb0
-#IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))# PORT OPB_Clk = sys_clk
+#IF# ( strcmp(get(b,'type'),'xps_adc10d1000'))# PORT OPB_Clk = epb_clk
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc_syns_sclk_o = adc0_adc3wire_clk
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc_syns_mosi_o = adc0_adc3wire_data
 #IF# ( strcmp(get(b,'type'),'xps_adc10d1000')) && strcmp(get(b,'hw_adc'),'adc0')# PORT adc_syns_le_o = adc0_adc3wire_strobe
@@ -258,7 +258,7 @@
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # PARAMETER C_BASEADDR   = 0x00020000
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # PARAMETER C_HIGHADDR   = 0x0002ffff
 #IF# strcmp(get(b,'type'),'xps_katadc')                                  # BUS_INTERFACE SOPB = opb0
-#IF# strcmp(get(b,'type'),'xps_katadc')                                  # PORT OPB_Clk = sys_clk
+#IF# strcmp(get(b,'type'),'xps_katadc')                                  # PORT OPB_Clk = epb_clk
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_clk = adc0_adc3wire_clk
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_data = adc0_adc3wire_data
 #IF# strcmp(get(b,'type'),'xps_katadc') && strcmp(get(b,'hw_adc'),'adc0')# PORT adc0_adc3wire_strobe = adc0_adc3wire_strobe

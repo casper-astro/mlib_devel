@@ -156,6 +156,7 @@ function butterfly_direct_init(blk, varargin)
   else mux_latency = 2;
   end
 
+  %TODO
   if use_dsp48_adders,
       set_param(blk, 'add_latency', '2');
       add_latency = 2;
@@ -299,7 +300,7 @@ function butterfly_direct_init(blk, varargin)
   %
   
   if strcmp(dsp48_adders, 'on'), add_implementation = 'DSP48 core';
-  else add_implementation = 'fabric core';
+  else add_implementation = 'behavioral HDL';
   end
 
   reuse_block(blk, 'bus_add', 'casper_library_bus/bus_addsub', ...
@@ -371,12 +372,13 @@ function butterfly_direct_init(blk, varargin)
   % Add scale 
   %
 
+  fan_latency = max(1, ceil(log2((n_inputs*2*2)/max_fanout)));
+
   if strcmp(bitgrowth, 'off') && strcmp(hardcode_shifts, 'off'),
-      reuse_block(blk, 'delay2', 'xbsIndex_r4/Delay', ...
-          'Position', [430 59 460 81], ...
-          'latency', 'add_latency', ...
-          'reg_retiming', 'on');
-      add_line(blk, 'shift/1', 'delay2/1');
+    reuse_block(blk, 'shift_replicate', 'casper_library_bus/bus_replicate', ...
+      'replication', num2str(n_inputs*2*2), 'latency', num2str(fan_latency), 'misc', 'off', 'Position', [455 59 485 81]);
+
+      add_line(blk, 'shift/1', 'shift_replicate/1');
       
       %required to add padding to match bit width of other stream (from bus_scale)
       reuse_block(blk, 'bus_norm0', 'casper_library_bus/bus_convert', ...
@@ -411,15 +413,14 @@ function butterfly_direct_init(blk, varargin)
               'Position', [500 127 545 153]);
       add_line(blk, 'bus_scale/1', 'bus_norm1/1');     
 
-      reuse_block(blk, 'Mux', 'xbsIndex_r4/Mux', ...
-              'inputs', '2', ...
-              'Precision', 'Full', ...
-              'latency', num2str(mux_latency), ...
+      reuse_block(blk, 'mux', 'casper_library_bus/bus_mux', ...
+              'n_inputs', '2', 'n_bits', mat2str(repmat(convert_in_bitwidth, 1, n_inputs*2*2)), ...
+              'cmplx', 'off', 'misc', 'off', 'mux_latency', num2str(mux_latency), ...
               'Position', [580 53 610 157]);
-      add_line(blk, 'delay2/1', 'Mux/1');
-      add_line(blk, 'bus_norm0/1', 'Mux/2');
-      add_line(blk, 'bus_norm1/1', 'Mux/3');
-      add_line(blk, 'Mux/1', 'bus_convert/1');
+      add_line(blk, 'shift_replicate/1', 'mux/1');
+      add_line(blk, 'bus_norm0/1', 'mux/2');
+      add_line(blk, 'bus_norm1/1', 'mux/3');
+      add_line(blk, 'mux/1', 'bus_convert/1');
  
   else
       reuse_block(blk, 'Terminator', 'built-in/terminator', 'Position', [430 59 460 81], 'ShowName', 'off');

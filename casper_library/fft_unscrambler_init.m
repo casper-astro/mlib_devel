@@ -69,11 +69,12 @@ end
 
 % Set default vararg values.
 defaults = { ...
-    'n_streams', 1, ...
-    'FFTSize', 6, ...
-    'n_inputs', 3, ...
+    'n_streams', 2, ...
+    'FFTSize', 15, ...
+    'n_inputs', 2, ...
     'n_bits_in', 18, ...
     'bram_latency', 2, ...
+    'coeffs_bit_limit', 8, ...
     'async', 'on', ...
 };
 
@@ -82,12 +83,13 @@ check_mask_type(blk, 'fft_unscrambler');
 munge_block(blk, varargin{:});
 
 % Retrieve values from mask fields.
-n_streams     = get_var('n_streams', 'defaults', defaults, varargin{:});
-FFTSize       = get_var('FFTSize', 'defaults', defaults, varargin{:});
-n_inputs      = get_var('n_inputs', 'defaults', defaults, varargin{:});
-n_bits_in     = get_var('n_bits_in', 'defaults', defaults, varargin{:});
-bram_latency  = get_var('bram_latency', 'defaults', defaults, varargin{:});
-async         = get_var('async', 'defaults', defaults, varargin{:});
+n_streams           = get_var('n_streams', 'defaults', defaults, varargin{:});
+FFTSize             = get_var('FFTSize', 'defaults', defaults, varargin{:});
+n_inputs            = get_var('n_inputs', 'defaults', defaults, varargin{:});
+n_bits_in           = get_var('n_bits_in', 'defaults', defaults, varargin{:});
+bram_latency        = get_var('bram_latency', 'defaults', defaults, varargin{:});
+coeffs_bit_limit    = get_var('coeffs_bit_limit', 'defaults', defaults, varargin{:});
+async               = get_var('async', 'defaults', defaults, varargin{:});
 
 ytick = 40;
 
@@ -95,6 +97,18 @@ ytick = 40;
 
 if (n_inputs >= FFTSize - 2),
     error('FFT Unscrambler: 2^n_inputs must be < 2^(FFT size-2).');
+end
+
+if (2^(FFTSize-1) * (FFTSize-1) >= 2^coeffs_bit_limit) && (2^(FFTSize-1) >= bram_latency),
+    % if we are addressing more than one BRAM in reorder, add extra latency for mux on output of mapping core
+    if (FFTSize - 1) > 11, map_latency = 3;
+    else, map_latency = 2;
+    end
+%    map_latency = 2;
+    bram_map = 'on';
+else
+    map_latency = 1;
+    bram_map = 'off';
 end
 
 part_mat = [0:2^(FFTSize-2*n_inputs)-1]*2^(n_inputs);
@@ -159,7 +173,6 @@ for s=0:n_streams-1,
   end %for n
 end %for s
 
-
 if strcmp(async, 'on'), n_ctrl = 2;
 else n_ctrl = 1;
 end
@@ -170,12 +183,19 @@ reuse_block(blk, 'square_transposer', 'casper_library_reorder/square_transposer'
   'n_inputs', num2str(n_inputs), 'async', async);
 add_line(blk, 'sync/1', 'square_transposer/1');
 
+% if we have a 'large' buffer, add appropriate input delay
+% based on a rough approximation of the number of BRAMs required from bit width and buffer depth
+fanout_latency = max(0, (FFTSize-n_inputs) + ceil(log2(n_bits_in * n_inputs * 2)) - 15);
+
 reuse_block(blk, 'reorder', 'casper_library_reorder/reorder', ...
   'Position', [365 30 460 ((2^n_inputs+2)*ytick)+30], ...
-  'map', map_str, ...
+  'map', map_str, ... 
+  'n_bits', num2str(n_bits_in * n_streams * 2), ...
   'n_inputs', num2str(2^n_inputs), ...
   'bram_latency', num2str(bram_latency), ...
-  'map_latency', '1', 'double_buffer', '0');
+  'fanout_latency', num2str(fanout_latency), ...
+  'bram_map', bram_map, 'map_latency', num2str(map_latency), ...
+  'double_buffer', '0');
 add_line(blk, 'square_transposer/1', 'reorder/1');
 
 if strcmp(async, 'on'),

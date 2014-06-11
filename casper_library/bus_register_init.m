@@ -1,7 +1,35 @@
-function bus_register_init(blk, varargin)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%   SKA Africa                                                                %
+%   http://www.kat.ac.za                                                      %
+%   Copyright (C) 2013 Andrew Martens                                         %
+%                                                                             %
+%   This program is free software; you can redistribute it and/or modify      %
+%   it under the terms of the GNU General Public License as published by      %
+%   the Free Software Foundation; either version 2 of the License, or         %
+%   (at your option) any later version.                                       %
+%                                                                             %
+%   This program is distributed in the hope that it will be useful,           %
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of            %
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             %
+%   GNU General Public License for more details.                              %
+%                                                                             %
+%   You should have received a copy of the GNU General Public License along   %
+%   with this program; if not, write to the Free Software Foundation, Inc.,   %
+%   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  clog('entering bus_register_init', 'trace');
-  defaults = {'n_bits', [8], 'reset', 'on', 'cmplx', 'on', 'enable', 'on', 'misc', 'on'};
+function bus_register_init(blk, varargin)
+  log_group = 'bus_register_init_debug';
+
+  clog('entering bus_register_init', {log_group, 'trace'});
+  defaults = { ...
+    'n_bits', [8], ...
+    'reset', 'on', ...
+    'cmplx', 'on', ...
+    'enable', 'on', ...
+    'misc', 'on'};
   
   check_mask_type(blk, 'bus_register');
 
@@ -30,7 +58,7 @@ function bus_register_init(blk, varargin)
   if isempty(n_bits),
     clean_blocks(blk);
     save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
-    clog('exiting bus_register_init','trace');
+    clog('exiting bus_register_init', {log_group, 'trace'});
     return;
   end
 
@@ -128,7 +156,7 @@ function bus_register_init(blk, varargin)
  
   if strcmp(misc, 'on'),
     reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
-      'latency', '1', ...
+      'latency', '1', 'reg_retiming', 'on', ...
       'Position', [xpos-del_w/2 ypos+(((port_no-1)+1/2)*reg_d*len)-del_d/2+(port_no-1)*yinc xpos+del_w/2 ypos+(((port_no-1)+1/2)*reg_d*len)+(port_no-1)*yinc+del_d/2]);
     add_line(blk, 'misci/1', 'dmisc/1');
     ypos_tmp = ypos_tmp + reg_d;
@@ -167,8 +195,8 @@ function bus_register_init(blk, varargin)
 
   save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 
-  clog('exiting bus_register_init','trace');
+  clog('exiting bus_register_init', {log_group, 'trace'});
 
-end %function bus_register
+end %function bus_register_init
 
 

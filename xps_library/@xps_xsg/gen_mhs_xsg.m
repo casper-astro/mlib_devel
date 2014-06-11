@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [str,opb_addr_end] = gen_mhs_xsg(blk_obj,opb_addr_start,opb_name)
+function [str,opb_addr_end] = gen_mhs_xsg(blk_obj, opb_addr_start, opb_name)
 str = '';
 opb_addr_end = opb_addr_start;
 

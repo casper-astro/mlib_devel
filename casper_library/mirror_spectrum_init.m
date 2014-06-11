@@ -68,37 +68,37 @@ function mirror_spectrum_init(blk, varargin)
   % sync and counter
   %
 
-  reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [10 177 40 193]);
+  reuse_block(blk, 'sync', 'built-in/Inport', 'Port', '1', 'Position', [10 42 40 58]);
 
   reuse_block(blk, 'sync_delay0', 'xbsIndex_r4/Delay', ...
-    'latency', '1 + bram_latency + negate_latency', 'reg_retiming', 'on', ...
-    'Position', [105 174 140 196]);
+    'latency', '1 + bram_latency + negate_latency - ceil(log2(n_inputs))', 'reg_retiming', 'on', ...
+    'Position', [105 39 140 61]);
   add_line(blk, 'sync/1', 'sync_delay0/1');
 
   reuse_block(blk, 'counter', 'xbsIndex_r4/Counter', ...
           'cnt_type', 'Free Running', 'operation', 'Up', 'start_count', '0', 'cnt_by_val', '1', ...
           'arith_type', 'Unsigned', 'n_bits', 'FFTSize', 'bin_pt', '0', ...
           'rst', 'on', 'en', async, ...
-          'explicit_period', 'off', 'use_rpm', 'on', ...
-          'Position', [195 74 255 106]);
+          'use_behavioral_HDL', 'off', 'implementation', 'Fabric', ...
+          'Position', [185 156 245 189]);
   add_line(blk, 'sync_delay0/1', 'counter/1');
 
   reuse_block(blk, 'constant', 'xbsIndex_r4/Constant', ...
           'const', num2str(2^(FFTSize-1)), ...
           'arith_type', 'Unsigned', 'n_bits', num2str(FFTSize), 'bin_pt', '0', ...
           'explicit_period', 'on', 'period', '1', ...
-          'Position', [195 122 255 148]);
+          'Position', [185 207 245 233]);
 
-  reuse_block(blk, 'relational', 'xbsIndex_r4/Relational', 'latency', '0', 'mode', 'a>b', 'Position', [315 69 355 156]);
+  reuse_block(blk, 'relational', 'xbsIndex_r4/Relational', 'latency', '0', 'mode', 'a>b', 'Position', [300 154 340 241]);
   add_line(blk, 'counter/1', 'relational/1');
   add_line(blk, 'constant/1', 'relational/2');
 
   reuse_block(blk, 'sync_delay1', 'xbsIndex_r4/Delay', ...
-    'reg_retiming', 'on', 'latency', '1', ...
-    'Position', [410 172 450 198]);
+    'reg_retiming', 'on', 'latency', '1 + ceil(log2(n_inputs))', ...
+    'Position', [375 39 495 61]);
   add_line(blk, 'sync_delay0/1', 'sync_delay1/1');
 
-  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [480 177 510 193]);
+  reuse_block(blk, 'sync_out', 'built-in/Outport', 'Port', '1', 'Position', [550 42 580 58]);
   add_line(blk, 'sync_delay1/1', 'sync_out/1');
 
   %
@@ -127,32 +127,39 @@ function mirror_spectrum_init(blk, varargin)
       'Position', [105 343+(125*index) 140 363+(125*index)]);
     add_line(blk, ['reo_in',num2str(index),'/1'], ['complex_conj',num2str(index),'/1']);
 
-    reuse_block(blk, ['mux',num2str(index)], 'xbsIndex_r4/Mux', ...
-      'precision', 'Full', 'latency', '1', 'Position', [410 266+(125*index) 445 370+(125*index)]);
-    add_line(blk, 'relational/1', ['mux',num2str(index),'/1']);
-    add_line(blk, ['delay',num2str(index),'/1'], ['mux',num2str(index),'/2']);
-    add_line(blk, ['complex_conj',num2str(index),'/1'], ['mux',num2str(index),'/3']);
+    reuse_block(blk, ['sel_replicate',num2str(index)], 'casper_library_bus/bus_replicate', ...
+      'replication', 'n_inputs', 'latency', 'ceil(log2(n_inputs))', 'misc', 'off', 'implementation', 'core', ...
+      'Position', [375 274+(125*index) 415 296+(125*index)]);
+    add_line(blk, 'relational/1', ['sel_replicate',num2str(index),'/1']);
+
+    reuse_block(blk, ['dmux',num2str(index)], 'casper_library_bus/bus_mux', ...
+      'n_inputs', '2', 'n_bits', mat2str(repmat(input_bitwidth, 1, n_inputs)), 'mux_latency', '1', ...
+      'cmplx', 'on', 'misc', 'off', ...
+      'Position', [460 268+(125*index) 495 372+(125*index)]);
+    add_line(blk, ['sel_replicate',num2str(index),'/1'], ['dmux',num2str(index),'/1']);
+    add_line(blk, ['delay',num2str(index),'/1'], ['dmux',num2str(index),'/2']);
+    add_line(blk, ['complex_conj',num2str(index),'/1'], ['dmux',num2str(index),'/3']);
 
     reuse_block(blk, ['dout',num2str(index)], 'built-in/Outport', ...
-      'Port', num2str(index+2), 'Position', [500 310+(125*index) 530 325+(125*index)]);
-    add_line(blk, ['mux',num2str(index),'/1'], ['dout',num2str(index),'/1']);
+      'Port', num2str(index+2), 'Position', [550 312+(125*index) 580 325+(125*index)]);
+    add_line(blk, ['dmux',num2str(index),'/1'], ['dout',num2str(index),'/1']);
   end
 
   if strcmp(async, 'on'),
-    reuse_block(blk, 'en', 'built-in/Inport', 'Port', '10', 'Position', [10 222 40 238]);
+    reuse_block(blk, 'en', 'built-in/Inport', 'Port', '10', 'Position', [10 87 40 103]);
 
     reuse_block(blk, 'en_delay0', 'xbsIndex_r4/Delay', ...
-      'latency', '1 + bram_latency + negate_latency', 'reg_retiming', 'on', ...
-      'Position', [105 219 140 241]);
+      'latency', '1 + bram_latency + negate_latency - ceil(log2(n_inputs))', 'reg_retiming', 'on', ...
+      'Position', [105 84 140 106]);
     add_line(blk, 'en/1', 'en_delay0/1');
     add_line(blk, 'en_delay0/1', 'counter/2');
 
     reuse_block(blk, 'en_delay1', 'xbsIndex_r4/Delay', ...
-      'latency', '1', 'reg_retiming', 'on', ...
-      'Position', [410 217 450 243]);
+      'latency', '1 + ceil(log2(n_inputs))', 'reg_retiming', 'on', ...
+      'Position', [375 84 495 106]);
     add_line(blk, 'en_delay0/1', 'en_delay1/1');
    
-    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '6', 'Position', [480 222 510 238]);
+    reuse_block(blk, 'dvalid', 'built-in/Outport', 'Port', '6', 'Position', [550 87 580 103]);
     add_line(blk, 'en_delay1/1', 'dvalid/1');  
   end
 

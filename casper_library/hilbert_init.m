@@ -206,7 +206,7 @@ function hilbert_init(blk, varargin)
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misci', 'built-in/Inport', 'Port', '3', 'Position', [25 348 55 362]);
 
-    reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', ...
+    reuse_block(blk, 'dmisc', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', ...
       'latency', 'add_latency+conv_latency', 'Position', [380 344 420 366]);
     add_line(blk,'misci/1', 'dmisc/1');
     

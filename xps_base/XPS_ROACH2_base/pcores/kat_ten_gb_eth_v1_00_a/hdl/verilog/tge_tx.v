@@ -1,7 +1,8 @@
 `timescale 1ns/1ps
 module tge_tx #(
     parameter CPU_ENABLE = 1'b1,
-    parameter LARGE_PACKETS = 0
+    parameter LARGE_PACKETS = 0,
+    parameter TTL = 8'h01
   ) (
     // Local Parameters
     input         local_enable,
@@ -323,17 +324,18 @@ end endgenerate
   /************** Primary transmit State Machine ***************/
 
   reg [3:0] tx_state;
-  localparam TX_IDLE       = 4'd0;
-  localparam TX_SEND_HDR_1 = 4'd1;
-  localparam TX_SEND_HDR_2 = 4'd2;
-  localparam TX_SEND_HDR_3 = 4'd3;
-  localparam TX_SEND_HDR_4 = 4'd4;
-  localparam TX_SEND_HDR_5 = 4'd5;
-  localparam TX_SEND_HDR_6 = 4'd6;
-  localparam TX_SEND_DATA  = 4'd7;
-  localparam TX_SEND_LAST  = 4'd8;
-  localparam TX_CPU_WAIT   = 4'd9;
-  localparam TX_SEND_CPU   = 4'd10;
+  localparam TX_IDLE                 = 4'd0;
+  localparam TX_SEND_HDR_1           = 4'd1;
+  localparam TX_SEND_HDR_1_MULTICAST = 4'd2;
+  localparam TX_SEND_HDR_2           = 4'd3;
+  localparam TX_SEND_HDR_3           = 4'd4;
+  localparam TX_SEND_HDR_4           = 4'd5;
+  localparam TX_SEND_HDR_5           = 4'd6;
+  localparam TX_SEND_HDR_6           = 4'd7;
+  localparam TX_SEND_DATA            = 4'd8;
+  localparam TX_SEND_LAST            = 4'd9;
+  localparam TX_CPU_WAIT             = 4'd10;
+  localparam TX_SEND_CPU             = 4'd11;
 
   /* Outside interface registers */
   reg  packet_rd_reg;
@@ -346,14 +348,12 @@ end endgenerate
   reg [15:0] ip_length;
   reg [15:0] udp_length;
 
-  reg [17:0] ip_checksum_0;
-  reg [16:0] ip_checksum_1;
-  reg [15:0] ip_checksum;
-  wire [17:0] ip_checksum_fixed_0;
-  wire [16:0] ip_checksum_fixed_1;
-  wire [15:0] ip_checksum_fixed;
+  reg  [17:0] ip_checksum_0;
+  reg  [16:0] ip_checksum_1;
+  reg  [15:0] ip_checksum;
 
   reg [15:0] tx_size;
+  reg [ 7:0] tx_ip_ttl;
 
   /* Due to wrapper format, we always need to wait one cycle to send the last 16 bits */
   reg [15:0] data_leftovers;
@@ -370,13 +370,14 @@ end endgenerate
 
     if (mac_rst) begin
       tx_state          <= TX_IDLE;
-      mac_data_valid    <= 8'b0;
+      mac_data_valid    <=  8'b0;
       ip_length         <= 16'b0;
       ip_checksum_0     <= 18'b0;
       ip_checksum_1     <= 17'b0;
       ip_checksum       <= 16'b0;
-      mac_cpu_ack_reg   <= 1'b0;
-      mac_cpu_addr_reg  <= 8'd0;
+      mac_cpu_ack_reg   <=  1'b0;
+      mac_cpu_addr_reg  <=  8'd0;
+      tx_ip_ttl         <= TTL;
     end else begin
       if (!mac_cpu_pending) begin
         mac_cpu_ack_reg <= 1'b0;
@@ -389,7 +390,12 @@ end endgenerate
           if (!packet_ctrl_empty && local_enable_retimed && !app_overflow_retimed) begin
             mac_data_valid <= {8{1'b1}};
             tx_size        <= packet_ctrl_size - 16'h1;
-            tx_state       <= TX_SEND_HDR_1;
+            tx_ip_ttl      <= TTL;
+            if (packet_ctrl_ip[31:28] == 4'b1110) begin
+              tx_state       <= TX_SEND_HDR_1_MULTICAST;
+            end else begin
+              tx_state       <= TX_SEND_HDR_1;
+            end
           end
 
           /* CPU Access take preference */
@@ -405,6 +411,11 @@ end endgenerate
 `ifdef DEBUG
             $display("tge_tx: sending cpu frame, size = %d", mac_cpu_size);
 `endif
+          end
+        end
+        TX_SEND_HDR_1_MULTICAST: begin
+          if (mac_tx_ack) begin
+            tx_state      <= TX_SEND_HDR_2;
           end
         end
         TX_SEND_HDR_1:    begin
@@ -481,21 +492,21 @@ end endgenerate
       // compute the udp length
       udp_length <= {packet_ctrl_size[12:0], 3'b0} + 16'd8;
       // compute the ip checksum (1's complement logic)
-      ip_checksum_0 <= {2'b00, ip_checksum_fixed     }+
-                       {2'b00, ip_length             }+
-                       {2'b00, packet_ctrl_ip[31:16] }+
-                       {2'b00, packet_ctrl_ip[15:0 ] };
-      ip_checksum_1 <= {1'b0 , ip_checksum_0[15:0 ]  }+
-                       {15'b0, ip_checksum_0[17:16]  };
+      ip_checksum_0 <= {2'b00, 16'h4500              }+ // Ver, IHL, DSCP, ECN
+                       {2'b00, ip_length             }+ // Total Len
+                       {2'b00, 16'h0000              }+ // ID
+                       {2'b00, 16'h4000              }+ // Frag Offset
+                       {2'b00, tx_ip_ttl, 8'h11      }+ // TTL, Protocol
+                       {2'b00, local_ip      [15: 0] }+ // Source IP 1
+                       {2'b00, local_ip      [31:16] }+ // Source IP 2
+                       {2'b00, packet_ctrl_ip[15: 0] }+ // Dest IP 1
+                       {2'b00, packet_ctrl_ip[31:16] }; // Dest IP 2 
+      ip_checksum_1 <= {1'b0 , ip_checksum_0 [15: 0] }+
+                       {15'b0, ip_checksum_0 [17:16] };
       ip_checksum   <= ~(ip_checksum_1[15:0] + {15'b0, ip_checksum_1[16]});
 
     end
   end
-
-  /* checkdsum assignments */
-  assign ip_checksum_fixed_0 = {8'h00, 16'h8412} + {8'h00, local_ip[31:16]} + {8'h00, local_ip[15:0]};
-  assign ip_checksum_fixed_1 = {1'b0, ip_checksum_fixed_0[15:0]} + {15'b0, ip_checksum_fixed_0[17:16]};
-  assign ip_checksum_fixed   = {ip_checksum_fixed_1[15:0]} + {15'b0, ip_checksum_fixed_1[16]};
 
   /* Cpu address assignment */
   assign mac_cpu_addr = tx_state == TX_CPU_WAIT && !mac_tx_ack ? 8'd0 : mac_cpu_addr_reg;
@@ -517,6 +528,11 @@ end endgenerate
         mac_data <= {local_mac[39:32], local_mac[47:40], dest_mac[ 7:0 ], dest_mac[15:8 ],
                       dest_mac[23:16],  dest_mac[31:24], dest_mac[39:32], dest_mac[47:40]};
       end
+      TX_SEND_HDR_1_MULTICAST:    begin
+        /* {src_mac[4], src_mac[5], dest_mac[0], dest_mac[1] dest_mac[2], dest_mac[3], dest_mac[4], dest_mac[5]} */
+        mac_data <= {local_mac[39:32], local_mac[47:40], packet_ctrl_ip[ 7:0 ], packet_ctrl_ip[15:8 ],
+                     1'b0,packet_ctrl_ip[22:16], 8'b01011110, 8'b00000000, 8'b00000001};
+      end
       TX_SEND_HDR_2:    begin
         /* {IP Type, IP version, Ethetype[0], Ethertype[1], src_mac[0], src_mac[1], src_mac[2], src_mac[3]} */
         mac_data <= {         8'h00,           8'h45,            8'h00,           8'h08,
@@ -524,7 +540,7 @@ end endgenerate
       end
       TX_SEND_HDR_3:    begin
         /* {protocol(UDP), TTL, frag_offset[0], flags, ID[0], ID[1], ipsize[0], ipsize[1]} */ 
-        mac_data <= {8'h11, 8'hff, 8'h00, 8'h40, 8'h00, 8'h00, ip_length[7:0], ip_length[15:8]};
+        mac_data <= {8'h11, tx_ip_ttl, 8'h00, 8'h40, 8'h00, 8'h00, ip_length[7:0], ip_length[15:8]};
       end
       TX_SEND_HDR_4:    begin
         mac_data <= {packet_ctrl_ip[23:16], packet_ctrl_ip[31:24], local_ip[7:0], local_ip[15:8], local_ip[23:16], local_ip[31:24], ip_checksum[7:0], ip_checksum[15:8]};

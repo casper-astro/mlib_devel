@@ -32,7 +32,7 @@ blk_name = get(blk_obj,'simulink_name');
 adc_clk_rate = eval_param(blk_name,'adc_clk_rate');
 disp('meerKAT ADC trying specific ucf generation')
 switch hw_sys
-    case 'ROACH2'
+    case 'ROACH2', 'MKDIG'
 
         switch adc_str
             case 'adc0'

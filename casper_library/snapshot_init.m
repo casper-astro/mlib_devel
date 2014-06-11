@@ -35,7 +35,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function snapshot_init(blk,varargin)
+function snapshot_init(blk, varargin)
 
 clog('entering snapshot_init', 'trace');
 check_mask_type(blk, 'snapshot');
@@ -73,16 +73,16 @@ if strcmp(value,'on'), val = 1; else val = 0; end
 
 delete_lines(blk);
 
-% do the info blocks first
-reuse_block(blk, 'storage',             'casper_library_misc/info_block', 'info', storage,                  'Position', [0,0,50,30]);
-reuse_block(blk, 'dram_dimm',           'casper_library_misc/info_block', 'info', num2str(dram_dimm),       'Position', [0,0,50,30]);
-reuse_block(blk, 'dram_clock',          'casper_library_misc/info_block', 'info', num2str(dram_clock),      'Position', [0,0,50,30]);
-reuse_block(blk, 'length',              'casper_library_misc/info_block', 'info', num2str(pow2(nsamples)),  'Position', [0,0,50,30]);
-reuse_block(blk, 'data_width',          'casper_library_misc/info_block', 'info', num2str(data_width),      'Position', [0,0,50,30]);
-reuse_block(blk, 'start_offset',        'casper_library_misc/info_block', 'info', offset,                   'Position', [0,0,50,30]);
-reuse_block(blk, 'circular_capture',    'casper_library_misc/info_block', 'info', circap,                   'Position', [0,0,50,30]);
-reuse_block(blk, 'extra_value',         'casper_library_misc/info_block', 'info', value,                    'Position', [0,0,50,30]);
-reuse_block(blk, 'use_dsp48',           'casper_library_misc/info_block', 'info', use_dsp48,                'Position', [0,0,50,30]);
+% % do the info blocks first
+% reuse_block(blk, 'storage',             'casper_library_misc/info_block', 'info', storage,                  'Position', [0,0,50,30]);
+% reuse_block(blk, 'dram_dimm',           'casper_library_misc/info_block', 'info', num2str(dram_dimm),       'Position', [0,0,50,30]);
+% reuse_block(blk, 'dram_clock',          'casper_library_misc/info_block', 'info', num2str(dram_clock),      'Position', [0,0,50,30]);
+% reuse_block(blk, 'length',              'casper_library_misc/info_block', 'info', num2str(pow2(nsamples)),  'Position', [0,0,50,30]);
+% reuse_block(blk, 'data_width',          'casper_library_misc/info_block', 'info', num2str(data_width),      'Position', [0,0,50,30]);
+% reuse_block(blk, 'start_offset',        'casper_library_misc/info_block', 'info', offset,                   'Position', [0,0,50,30]);
+% reuse_block(blk, 'circular_capture',    'casper_library_misc/info_block', 'info', circap,                   'Position', [0,0,50,30]);
+% reuse_block(blk, 'extra_value',         'casper_library_misc/info_block', 'info', value,                    'Position', [0,0,50,30]);
+% reuse_block(blk, 'use_dsp48',           'casper_library_misc/info_block', 'info', use_dsp48,                'Position', [0,0,50,30]);
 
 % basic input ports
 reuse_block(blk, 'din', 'built-in/inport', 'Position', [180 122 210 138], 'Port', '1');
@@ -131,7 +131,7 @@ end
 % ctrl reg
 reuse_block(blk, 'const0', 'built-in/Constant', 'Value', '0', 'Position', [180 240 200 260]);
 reuse_block(blk, 'ctrl', 'xps_library/software register', ...
-  'io_dir', 'From Processor', 'arith_type1', 'Unsigned', ...
+  'io_dir', 'From Processor', 'arith_types', '0', ...
   'Position', [215 235 315 265]);
 add_line(blk, 'const0/1', 'ctrl/1');
 add_line(blk, 'ctrl/1', 'basic_ctrl/5');
@@ -143,7 +143,7 @@ if off == 1,
   % offset register
   reuse_block(blk, 'const1', 'built-in/Constant', 'Value', '10', 'Position', [180 320 200 340]);
   reuse_block(blk, 'trig_offset', 'xps_library/software register', ...
-    'io_dir', 'From Processor', 'arith_type1', 'Unsigned', ...
+    'io_dir', 'From Processor', 'arith_types', '0', ...
     'Position', [215 314 315 346]);
   add_line(blk, 'const1/1', 'trig_offset/1');
 
@@ -188,7 +188,7 @@ if circ == 1,
 
   %tr_en_cnt register 
   reuse_block(blk, 'tr_en_cnt', 'xps_library/software register', ...
-    'io_dir', 'To Processor', 'arith_type1', 'Unsigned', ...
+    'io_dir', 'To Processor', 'arith_types', '0', ...
     'Position', [905 360 1005 390]);
 
   add_line(blk, 'tr_en_cnt/1', 'g_tr_en_cnt/1');
@@ -229,16 +229,16 @@ else
   src = 'basic_ctrl';
 end
 
-add_line(blk, [src,'/1'], 'add_gen/1'); %vin 
-add_line(blk, [src,'/2'], 'add_gen/2'); %din 
-add_line(blk, [src,'/3'], 'add_gen/3'); %we 
-add_line(blk, [src,'/4'], 'add_gen/4'); %go  
-add_line(blk, [src,'/5'], 'add_gen/5'); %cont 
-add_line(blk, [src,'/6'], 'add_gen/6'); %init 
+add_line(blk, [src,'/1'], 'add_gen/1'); % vin 
+add_line(blk, [src,'/2'], 'add_gen/2'); % din 
+add_line(blk, [src,'/3'], 'add_gen/3'); % we 
+add_line(blk, [src,'/4'], 'add_gen/4'); % go  
+add_line(blk, [src,'/5'], 'add_gen/5'); % cont 
+add_line(blk, [src,'/6'], 'add_gen/6'); % init 
 
 % status registers
 reuse_block(blk, 'status', 'xps_library/software register', ...
-  'io_dir', 'To Processor', 'arith_type1', 'Unsigned', ...
+  'io_dir', 'To Processor', 'arith_types', '0', ...
   'Position', [905 305 1005 335]);
 add_line(blk, 'add_gen/5', 'status/1');
 reuse_block(blk, 'gstatus', 'built-in/Terminator', ...
@@ -255,7 +255,7 @@ if val == 1,
 
   % register
   reuse_block(blk, 'val', 'xps_library/software register', ...
-    'io_dir', 'To Processor', 'arith_type1', 'Unsigned', ...
+    'io_dir', 'To Processor', 'arith_types', '0', ...
     'Position', [905 85 1005 115]);
 
   add_line(blk, 'add_gen/1', 'val/1');

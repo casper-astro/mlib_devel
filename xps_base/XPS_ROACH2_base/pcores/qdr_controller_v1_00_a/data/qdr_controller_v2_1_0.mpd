@@ -5,6 +5,7 @@ BEGIN qdr_controller
 ## Peripheral Options
   OPTION IPTYPE      = IP
   OPTION IMP_NETLIST = TRUE
+  OPTION STYLE       = MIX
   OPTION HDL         = VERILOG
   OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
 ## Bus Interfaces
@@ -20,7 +21,7 @@ BEGIN qdr_controller
   PORT clk0    = clk0,    DIR = I
   PORT clk180  = clk180,  DIR = I
   PORT clk270  = clk270,  DIR = I
-  PORT div_clk = div_clk, DIR = I
+  PORT dly_clk = dly_clk, DIR = I
   PORT reset   = reset,   DIR = I
   PORT idelay_rdy   = idelay_rdy,   DIR = I
 
@@ -28,25 +29,25 @@ BEGIN qdr_controller
   PORT qdr_k_n       = qdr_k_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_k         = qdr_k,         DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_d         = qdr_d,         DIR = O, VEC = [DATA_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
-  PORT qdr_bw_n      = qdr_bw_n,      DIR = O, VEC = [  BW_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
+  #PORT qdr_bw_n      = qdr_bw_n,      DIR = O, VEC = [  BW_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_sa        = qdr_sa,        DIR = O, VEC = [ADDR_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_w_n       = qdr_w_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_r_n       = qdr_r_n,       DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_q         = qdr_q,         DIR = I, VEC = [DATA_WIDTH - 1:0], IOB_STATE = BUF, THREE_STATE = FALSE
-  PORT qdr_cq_n      = qdr_cq_n,      DIR = I,                           IOB_STATE = BUF, THREE_STATE = FALSE
-  PORT qdr_cq        = qdr_cq,        DIR = I,                           IOB_STATE = BUF, THREE_STATE = FALSE
-  PORT qdr_qvld      = qdr_qvld,      DIR = I,                           IOB_STATE = BUF, THREE_STATE = FALSE
+  #PORT qdr_cq_n      = qdr_cq_n,      DIR = I,                           IOB_STATE = BUF, THREE_STATE = FALSE
+  #PORT qdr_cq        = qdr_cq,        DIR = I,                           IOB_STATE = BUF, THREE_STATE = FALSE
+  #PORT qdr_qvld      = qdr_qvld,      DIR = I,                           IOB_STATE = BUF, THREE_STATE = FALSE
   PORT qdr_dll_off_n = qdr_dll_off_n, DIR = O,                           IOB_STATE = BUF, THREE_STATE = FALSE
 
 ## PHY status signals  
   PORT phy_rdy  = phy_rdy,  DIR = O
   PORT cal_fail = cal_fail, DIR = O
 
-## State debug probes
-  PORT bit_align_state_prb = bit_align_state_prb,  DIR = O, VEC = [3:0]
-  PORT bit_train_state_prb = bit_train_state_prb,  DIR = O, VEC = [3:0]
-  PORT bit_train_error_prb = bit_train_error_prb,  DIR = O, VEC = [3:0]
-  PORT phy_state_prb       = phy_state_prb,        DIR = O, VEC = [3:0]
+  PORT dly_en_i    = dly_en_i,    DIR = I, VEC = [35:0]
+  PORT dly_en_o    = dly_en_o,    DIR = I, VEC = [36:0]
+  PORT dly_inc_dec = dly_inc_dec, DIR = I
+  PORT dly_cntrs   = dly_cntrs,   DIR = O, VEC = [364:0]
+
 
 ## QDR user interface
   PORT usr_addr    = qdr_addr,    BUS = MQDR, DIR = I, VEC = [  ADDR_WIDTH - 1:0]

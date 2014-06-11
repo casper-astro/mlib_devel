@@ -1,23 +1,26 @@
 `timescale 1ns/1ps
 module kat_ten_gb_eth #(
-    parameter C_BASEADDR     = 32'h0,
-    parameter C_HIGHADDR     = 32'hffff,
-    parameter C_OPB_AWIDTH   = 32,
-    parameter C_OPB_DWIDTH   = 32,
-    parameter FABRIC_MAC     = 48'hffff_ffff_ffff,
-    parameter FABRIC_IP      = 32'hffff_ffff,
-    parameter FABRIC_PORT    = 16'hffff,
-    parameter FABRIC_GATEWAY = 8'd0,
-    parameter FABRIC_ENABLE  = 0,
-//    parameter SWING          = 1,
-    parameter PREEMPHASIS    = 4'b0100,
-    parameter POSTEMPHASIS   = 5'b00000,
-    parameter DIFFCTRL       = 4'b1010,
-    parameter RXEQMIX        = 3'b111,
-    parameter CPU_TX_ENABLE  = 1,
-    parameter CPU_RX_ENABLE  = 1,
-    parameter RX_DIST_RAM    = 0,
-    parameter LARGE_PACKETS  = 0
+    parameter C_BASEADDR        = 32'h0,
+    parameter C_HIGHADDR        = 32'hffff,
+    parameter C_OPB_AWIDTH      = 32,
+    parameter C_OPB_DWIDTH      = 32,
+    parameter FABRIC_MAC        = 48'hffff_ffff_ffff,
+    parameter FABRIC_IP         = 32'hffff_ffff,
+    parameter FABRIC_PORT       = 16'hffff,
+    parameter FABRIC_GATEWAY    = 8'd0,
+    parameter FABRIC_ENABLE     = 0,
+    parameter FABRIC_MC_RECV_IP      = 32'hffff_ffff,
+    parameter FABRIC_MC_RECV_IP_MASK = 32'hffff_ffff,
+    //parameter SWING             = 1,
+    parameter PREEMPHASIS       = 4'b0100,
+    parameter POSTEMPHASIS      = 5'b00000,
+    parameter DIFFCTRL          = 4'b1010,
+    parameter RXEQMIX           = 3'b111,
+    parameter CPU_TX_ENABLE     = 1,
+    parameter CPU_RX_ENABLE     = 1,
+    parameter RX_DIST_RAM       = 0,
+    parameter LARGE_PACKETS     = 0,
+    parameter TTL               = 1
   ) (
     input         clk,
     input         rst,
@@ -138,6 +141,8 @@ module kat_ten_gb_eth #(
   wire [47:0] local_mac;
   wire [31:0] local_ip;
   wire [15:0] local_port;
+  wire [31:0] local_mc_recv_ip;
+  wire [31:0] local_mc_recv_ip_mask;
   wire  [7:0] local_gateway;
 
   // CPU Arp Cache signals;
@@ -164,19 +169,21 @@ module kat_ten_gb_eth #(
   /* CPU Module */
 
   opb_attach #(
-    .C_BASEADDR     (C_BASEADDR    ),
-    .C_HIGHADDR     (C_HIGHADDR    ),
-    .C_OPB_AWIDTH   (C_OPB_AWIDTH  ),
-    .C_OPB_DWIDTH   (C_OPB_DWIDTH  ),
-    .FABRIC_MAC     (FABRIC_MAC    ),
-    .FABRIC_IP      (FABRIC_IP     ),
-    .FABRIC_PORT    (FABRIC_PORT   ),
-    .FABRIC_GATEWAY (FABRIC_GATEWAY),
-    .FABRIC_ENABLE  (FABRIC_ENABLE ),
-    .PREEMPHASIS    (PREEMPHASIS   ),
-    .POSTEMPHASIS   (POSTEMPHASIS   ),
-    .DIFFCTRL       (DIFFCTRL   ),
-    .RXEQMIX        (RXEQMIX   )
+    .C_BASEADDR      (C_BASEADDR),
+    .C_HIGHADDR      (C_HIGHADDR),
+    .C_OPB_AWIDTH    (C_OPB_AWIDTH),
+    .C_OPB_DWIDTH    (C_OPB_DWIDTH),
+    .FABRIC_MAC      (FABRIC_MAC),
+    .FABRIC_IP       (FABRIC_IP),
+    .FABRIC_PORT     (FABRIC_PORT),
+    .FABRIC_GATEWAY  (FABRIC_GATEWAY),
+    .FABRIC_ENABLE   (FABRIC_ENABLE),
+    .MC_RECV_IP      (FABRIC_MC_RECV_IP),
+    .MC_RECV_IP_MASK (FABRIC_MC_RECV_IP_MASK),
+    .PREEMPHASIS     (PREEMPHASIS),
+    .POSTEMPHASIS    (POSTEMPHASIS),
+    .DIFFCTRL        (DIFFCTRL),
+    .RXEQMIX         (RXEQMIX)
   ) opb_attach_inst (
     //OPB attachment
     .OPB_Clk     (OPB_Clk),
@@ -206,28 +213,28 @@ module kat_ten_gb_eth #(
     .cpu_rx_size           (cpu_rx_size),
     .cpu_rx_ack            (cpu_rx_ack),
     //ARP Cache
-    .arp_cache_addr    (arp_cache_addr),
-    .arp_cache_rd_data (arp_cache_rd_data),
-    .arp_cache_wr_data (arp_cache_wr_data),
-    .arp_cache_wr_en   (arp_cache_wr_en),
+    .arp_cache_addr        (arp_cache_addr),
+    .arp_cache_rd_data     (arp_cache_rd_data),
+    .arp_cache_wr_data     (arp_cache_wr_data),
+    .arp_cache_wr_en       (arp_cache_wr_en),
     //local registers
-    .local_enable  (local_enable),
-    .local_mac     (local_mac),
-    .local_ip      (local_ip),
-    .local_port    (local_port),
-    .local_gateway (local_gateway),
+    .local_enable          (local_enable),
+    .local_mac             (local_mac),
+    .local_ip              (local_ip),
+    .local_port            (local_port),
+    .local_gateway         (local_gateway),
+    .local_mc_recv_ip      (local_mc_recv_ip),
+    .local_mc_recv_ip_mask (local_mc_recv_ip_mask),
     //software tge reset (app_reset only)
-    .soft_reset     (soft_reset_cpu),
-    .soft_reset_ack (soft_reset_ack_cpu),
+    .soft_reset            (soft_reset_cpu),
+    .soft_reset_ack        (soft_reset_ack_cpu),
     //xaui status
-    .xaui_status       (xaui_status),
-    //xaui config 
-    //phy status
+    .xaui_status           (xaui_status),
     //MGT/GTP PMA Config
-    .mgt_rxeqmix       (mgt_rxeqmix),
-    .mgt_txpreemphasis (mgt_txpreemphasis),
-    .mgt_txpostemphasis (mgt_txpostemphasis),
-    .mgt_txdiffctrl    (mgt_txdiffctrl)
+    .mgt_rxeqmix           (mgt_rxeqmix),
+    .mgt_txpreemphasis     (mgt_txpreemphasis),
+    .mgt_txpostemphasis    (mgt_txpostemphasis),
+    .mgt_txdiffctrl        (mgt_txdiffctrl)
   );
 
   /**************************** TGE transmit logic ******************************/
@@ -239,7 +246,8 @@ module kat_ten_gb_eth #(
 
   tge_tx #(
     .CPU_ENABLE          (CPU_TX_ENABLE),
-    .LARGE_PACKETS       (LARGE_PACKETS)
+    .LARGE_PACKETS       (LARGE_PACKETS),
+    .TTL                 (TTL)
   ) tge_tx_inst (
     // Local parameters
     .local_enable        (local_enable),
@@ -288,10 +296,12 @@ module kat_ten_gb_eth #(
     .USE_DISTRIBUTED_RAM (RX_DIST_RAM)
   ) tge_rx_inst (
     // Local Parameters
-    .local_enable (local_enable),
-    .local_mac    (local_mac),
-    .local_ip     (local_ip),
-    .local_port   (local_port),
+    .local_enable          (local_enable),
+    .local_mac             (local_mac),
+    .local_ip              (local_ip),
+    .local_port            (local_port),
+    .local_mc_recv_ip      (local_mc_recv_ip),
+    .local_mc_recv_ip_mask (local_mc_recv_ip_mask),
     // Application Interface
     .app_clk             (clk),
     .app_rst             (app_rst),

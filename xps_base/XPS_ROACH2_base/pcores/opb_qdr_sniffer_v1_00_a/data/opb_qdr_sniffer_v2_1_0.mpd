@@ -6,6 +6,7 @@ BEGIN opb_qdr_sniffer
   OPTION IPTYPE      = IP
   OPTION IMP_NETLIST = TRUE
   OPTION HDL         = VERILOG
+  OPTION STYLE       = MIX
   OPTION ARCH_SUPPORT_MAP = (VIRTEX2P=PREFERRED, VIRTEX5=DEVELOPMENT, VIRTEX6=DEVELOPMENT)
 
 ## Bus Interfaces
@@ -84,10 +85,16 @@ BEGIN opb_qdr_sniffer
   PORT slave_ack     = slave_ack,     DIR = O
 
 ## State debug probes from the controller
-  PORT bit_align_state_prb = bit_align_state_prb,  DIR = I, VEC = [3:0]
-  PORT bit_train_state_prb = bit_train_state_prb,  DIR = I, VEC = [3:0]
-  PORT bit_train_error_prb = bit_train_error_prb,  DIR = I, VEC = [3:0]
-  PORT phy_state_prb       = phy_state_prb,        DIR = I, VEC = [3:0]
+  #PORT bit_align_state_prb = bit_align_state_prb,  DIR = I, VEC = [3:0]
+  #PORT bit_train_state_prb = bit_train_state_prb,  DIR = I, VEC = [3:0]
+  #PORT bit_train_error_prb = bit_train_error_prb,  DIR = I, VEC = [3:0]
+  #PORT phy_state_prb       = phy_state_prb,        DIR = I, VEC = [3:0]
+
+  PORT dly_clk       = dly_clk,     DIR = I
+  PORT dly_en_i      = dly_en_i,    DIR = O, VEC = [35:0]
+  PORT dly_en_o      = dly_en_o,    DIR = O, VEC = [36:0] 
+  PORT dly_inc_dec   = dly_inc_dec, DIR = O
+  PORT dly_cntrs     = dly_cntrs,   DIR = I, VEC = [364:0]
 
 ## Misc. ports
   PORT phy_rdy       = "",     DIR = I

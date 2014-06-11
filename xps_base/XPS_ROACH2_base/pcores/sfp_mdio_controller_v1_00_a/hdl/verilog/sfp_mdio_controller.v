@@ -250,32 +250,36 @@ module sfp_mdio_controller #(
   // 10 GbE MDIO start = "00"
    
   // bit counter of outgoing MDIO serial data 
-  reg mdio_do_iR;
-  reg [7:0] bit_cnt;
-  reg start_detect;
-  always @(negedge mdio_clk) begin
+  reg [31:0] mdio_do_iR;
+  reg start_detect,start_detectR;
+  always @(posedge mdio_clk) begin
     if (wb_rst_i == 1'b1) begin
-       mdio_do_iR <= 1'b1;
-       bit_cnt <= 7'h0;
-       start_detect <= 1'b0;
+       mdio_do_iR <= {32{1'b1}};
+       start_detectR <= 1'b0;
     end else begin
            
-      mdio_do_iR <= mdio_do_i;
+      mdio_do_iR[0] <= mdio_do_i;
+      mdio_do_iR[31:1] <= mdio_do_iR[30:0];
 
-      if (mdio_do_iR == 1'b1 && mdio_do_i == 1'b0) begin
-         bit_cnt <= 7'b1;
-         start_detect <= 1'b1; 
+      if (mdio_do_iR == {32{1'b1}} && mdio_do_i == 1'b0) begin
+         start_detectR <= 1'b1; 
+      end else begin
+         start_detectR <= 1'b0;
       end
-      if (start_detect == 1'b1)
-         bit_cnt <= bit_cnt + 1'b1;
-      if (bit_cnt == 7'd32) begin
-         bit_cnt <= 7'h0;
-         start_detect <= 1'b0;
-      end
+      
+
     end 
   end
 
-  assign mdio_do = (bit_cnt == 7'd1) ? 1'b0 : mdio_do_i; // force bit 7 (2nd start bit) to '0'
+  always @(negedge mdio_clk) begin
+    if (wb_rst_i == 1'b1) begin
+       start_detect <= 1'b0;
+    end else begin
+      start_detect <= start_detectR;
+    end 
+  end
+
+  assign mdio_do = (start_detect == 1'b1) ? 1'b0 : mdio_do_i; // force 2nd start bit to '0'
  
   assign mdio_di       =  mdio_sel ? mgt_gpio_in[10] : mgt_gpio_in[4];
   assign sfp_mdc_0     = !mdio_sel ? mdio_clk : 1'b1;

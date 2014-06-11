@@ -48,6 +48,10 @@ switch s.hw_sys
 	case 'ROACH2'
 	    s.sw_os = 'none';
     % end case 'ROACH2'
+	
+   case 'MKDIG'
+	    s.sw_os = 'none';
+    % end case 'MKDIG'
 
   otherwise
   		error(['Unsupported Platform: ',s.hw_sys]);

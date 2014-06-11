@@ -3,8 +3,16 @@ function xeng_init(blk, varargin)
 %
 
 % Declare any default values for arguments you might like.
-defaults = {'n_ants',8,'n_bits',4,'use_ded_mult', 1, 'use_bram_delay', 1, 'demux_factor', '1', 'n_bits', 4, ...
-    'add_latency', 1, 'mult_latency', 1, 'bram_latency', 2, 'acc_len',128};
+defaults = {'n_ants',8,...
+            'n_bits',4,...
+            'mult_type', 1,...
+            'use_bram_delay', 1,...
+            'demux_factor', '1',...
+            'n_bits', 4, ...
+            'add_latency', 1,...
+            'mult_latency', 1,...   
+            'bram_latency', 2,...   
+            'acc_len',128};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'xeng');
 munge_block(blk, varargin{:});
@@ -13,14 +21,13 @@ munge_block(blk, varargin{:});
 
 n_ants = get_var('n_ants', 'defaults', defaults, varargin{:});
 acc_len = get_var('acc_len', 'defaults', defaults, varargin{:});
-use_ded_mult = get_var('use_ded_mult', 'defaults', defaults, varargin{:});
+mult_type = get_var('mult_type', 'defaults', defaults, varargin{:});
 use_bram_delay = get_var('use_bram_delay', 'defaults', defaults, varargin{:});
 n_bits = get_var('n_bits', 'defaults', defaults, varargin{:});
 add_latency = get_var('add_latency', 'defaults', defaults, varargin{:});
 mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 bram_latency = get_var('bram_latency', 'defaults', defaults, varargin{:});
 demux_factor = eval(get_var('demux_factor', 'defaults', defaults, varargin{:}));
-
 
 fix_pnt_pos = (n_bits-1)*2;
 xeng_delay = add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1;
@@ -29,6 +36,13 @@ ant_bits = ceil(log2(n_ants));
 n_bits_xeng_out = (2*n_bits + 1 + bit_growth);
 n_bits_scaled_out = 2^(ceil(log2(n_bits_xeng_out)));
 
+if n_ants == 0,
+  delete_lines(blk);
+  clean_blocks(blk);
+  set_param(blk, 'AttributesFormatString', '');
+  save_state(blk, 'defaults', defaults, varargin{:});
+  return;
+end
 
 if n_ants < 4,
     warndlg('X engine is not designed to work with less than 4 antennas. Defaulting to 4.');
@@ -45,11 +59,11 @@ if floor(n_ants/2 + 1) >= acc_len,
     acc_len = floor(n_ants/2 + 1);
 end
 
-if length(use_ded_mult) ~= floor(n_ants/2)+1 && length(use_ded_mult) ~= 1,
+if length(mult_type) ~= floor(n_ants/2)+1 && length(mult_type) ~= 1,
     errordlg(sprintf('X engine ERR: Number of multiplier types must be 1 or floor(n_ants/2)+1 = %i',floor(n_ants/2 + 1)));
     error(sprintf('X engine ERR: Number of multiplier types must be 1 or floor(n_ants/2)+1 = %i',floor(n_ants/2 + 1)));
-    set_param(blk,'use_ded_mult','1');
-    use_ded_mult=1;
+    set_param(blk,'mult_type','1');
+    mult_type=1;
 end    
 
 if (mod(n_ants,2) ~= 0)
@@ -61,7 +75,7 @@ end
 
 % Begin redrawing
 %================
-
+set_param(blk,'LinkStatus','inactive'); 
 delete_lines(blk);
 
 % Add taps
@@ -96,15 +110,18 @@ reuse_block(blk, 'Constant', 'xbsIndex_r4/Constant', 'Position', [15,89,85,121],
             'const','0',...
             'arith_type','Unsigned',...
             'n_bits',sprintf('%d',8 * n_bits_xeng_out));
-        
+
 reuse_block(blk, 'sample_and_hold1', 'casper_library_misc/sample_and_hold', 'Position', [140,255,180,315],...
-            'period',sprintf('%d',n_ants * acc_len));
+            'period',sprintf('%d',n_ants * acc_len),...
+            'LinkStatus','inactive');
 
 reuse_block(blk, 'sample_and_hold2', 'casper_library_misc/sample_and_hold', 'Position', [x + 100,190,x+140,250],...
-            'period',sprintf('%d',n_ants * acc_len));
+            'period',sprintf('%d',n_ants * acc_len),...
+            'LinkStatus','inactive');
 
 reuse_block(blk, 'sample_and_hold3', 'casper_library_misc/sample_and_hold', 'Position', [x + 250,190,x+290,250],...
-            'period',sprintf('%d',n_ants * acc_len));
+            'period',sprintf('%d',n_ants * acc_len),...
+            'LinkStatus','inactive');
 
 reuse_block(blk, 'delay', 'xbsIndex_r4/Delay','Position', [x + 350, 220, x + 380, 230],...
             'reg_retiming','on',...
@@ -146,6 +163,7 @@ if (n_ants == 4)
         'Position', [x + 100, 105, x + 200, 163], ...
         'n_bits', sprintf('%d',n_bits), ...
         'demux_factor', sprintf('%d',demux_factor),...
+        'LinkStatus','inactive',...
         'acc_len', sprintf('%d',acc_len));
     
     add_line(blk, [last_baseline_tap, '/4'], 'xeng_descramble_4ant/1','autorouting', 'on');
@@ -166,6 +184,7 @@ elseif (n_ants >=6)
         'num_ants', sprintf('%d',n_ants), ...
         'n_bits', sprintf('%d',n_bits), ...
         'demux_factor', sprintf('%d',demux_factor),...
+        'LinkStatus','inactive',...
         'acc_len', sprintf('%d',acc_len));
     add_line(blk, 'xeng_descramble/1', 'acc/1', 'autorouting', 'on');
     add_line(blk, 'xeng_descramble/2', 'valid/1', 'autorouting', 'on');
@@ -223,23 +242,23 @@ add_line(blk, [last_baseline_tap, '/6'], 'Term3/1', 'autorouting', 'on');
 add_line(blk, [last_baseline_tap, '/7'], 'sample_and_hold2/1', 'autorouting', 'on');
 
 % SETUP multipliers
-if length(use_ded_mult)==1
-    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult));
+if length(mult_type)==1
+    set_param([blk, '/auto_tap'], 'mult_type', num2str(mult_type));
     for i=1:floor(n_ants/2),
         name = ['/baseline_tap', num2str(i)];
-        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult));    
+        set_param([blk, name], 'mult_type', num2str(mult_type));    
     end
-elseif length(use_ded_mult)==floor(n_ants/2)+1
-    set_param([blk, '/auto_tap'], 'use_ded_mult', num2str(use_ded_mult(1)));
+elseif length(mult_type)==floor(n_ants/2)+1
+    set_param([blk, '/auto_tap'], 'mult_type', num2str(mult_type(1)));
     for i=1:floor(n_ants/2),
         name = ['/baseline_tap', num2str(i)];
-        set_param([blk, name], 'use_ded_mult', num2str(use_ded_mult(i+1)));
+        set_param([blk, name], 'mult_type', num2str(mult_type(i+1)));
     end
 end
 
 
 clean_blocks(blk);
 
-fmtstr = sprintf('n_ant=%d, bits=%d, mult=%s, bram=%d', n_ants, n_bits, num2str(use_ded_mult), use_bram_delay);
+fmtstr = sprintf('n_ant=%d, bits=%d, mult_typ=%s, bram_typ=%d', n_ants, n_bits, num2str(mult_type), use_bram_delay);
 set_param(blk, 'AttributesFormatString', fmtstr);
 save_state(blk, 'defaults', defaults, varargin{:});

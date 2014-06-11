@@ -46,7 +46,15 @@ for i=1:length(xps_objs)
     their_flavour = get(xps_objs{i},'flavour');      
     our_slot = get(blk_obj,'slot');    
     their_slot = get(xps_objs{i},'slot');    
-    if strcmp(our_hw, 'ROACH2'),                %roach2      
+    if strcmp(our_hw, 'ROACH2'),                %roach2
+      if strcmp(our_slot, their_slot),          % and card in the same slot
+        if ~strcmp(our_flavour, their_flavour), % and not the same mezzanine flavour
+          msg = ['10Ge ports ''', our_name,''' and ''', their_name,''' are both located in mezzanine slot ',our_slot,', but have different mezzanine flavours.'];
+          result = 1;
+        end
+      end
+    end
+    if strcmp(our_hw, 'MKDIG'),                 %mkdig
       if strcmp(our_slot, their_slot),          % and card in the same slot
         if ~strcmp(our_flavour, their_flavour), % and not the same mezzanine flavour
           msg = ['10Ge ports ''', our_name,''' and ''', their_name,''' are both located in mezzanine slot ',our_slot,', but have different mezzanine flavours.'];

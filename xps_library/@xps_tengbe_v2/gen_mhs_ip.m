@@ -43,7 +43,7 @@ switch hw_sys
         str = [str, '  PORT mgt_clk = mgt_clk_', mgt_clk_num,           '\n'];
         str = [str, 'END',                                              '\n'];
     % end case {'ROACH'}
-    case {'ROACH2'}
+    case {'ROACH2','MKDIG'}
         str = [str, 'BEGIN xaui_phy',                                   '\n'];
         str = [str, '  PARAMETER INSTANCE = xaui_phy_', xaui_port,      '\n'];
         str = [str, '  PARAMETER HW_VER = 1.00.a',                      '\n'];

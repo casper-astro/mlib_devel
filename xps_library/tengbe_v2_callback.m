@@ -24,7 +24,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function ten_gbe_v2_callback()
+function tengbe_v2_callback()
 
 clog('entering ten_gbe_v2_callback', 'trace');
 
@@ -34,6 +34,7 @@ check_mask_type(blk, 'ten_GbE_v2');
 
 %search for sysgen block and get target
 xps_xsg_blks    = find_system(bdroot,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
+
 
 if length(xps_xsg_blks) ~= 1,
   errordlg('ten_Gbe_v2 requires a single MSSGE (XSG core config) block to be instantiated at the top level');
@@ -60,6 +61,21 @@ end
 mask_visibilities{ismember(mask_names, 'rx_dist_ram')} = 'on';
 mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
+
+% debug counter checkboxes
+mask_visibilities{ismember(mask_names, 'txctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txerrctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txofctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txfullctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txvldctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'txsnaplen')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxerrctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxofctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxbadctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxvldctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxeofctr')} = 'on';
+mask_visibilities{ismember(mask_names, 'rxsnaplen')} = 'on';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %these are visible always depending on architecture
@@ -97,13 +113,14 @@ if strcmp(show_param, 'on'),
     mask_visibilities{ismember(mask_names, 'swing_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'post_emph_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'rxeqmix_r2')} = 'on';
+    mask_visibilities{ismember(mask_names, 'ttl')} = 'on';
   else
     mask_visibilities{ismember(mask_names, 'pre_emph')} = 'on';
     mask_visibilities{ismember(mask_names, 'swing')} = 'on';
   end
 end
 
-%enable and make visible relevant parameters
+% enable and make visible relevant parameters
 set_param(blk, 'MaskVisibilities', mask_visibilities);
 
 clog('exiting ten_gbe_v2_callback', 'trace');

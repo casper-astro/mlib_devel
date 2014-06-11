@@ -194,6 +194,15 @@ if strcmp(hardcode_shifts, 'on'),
     shifts_direct = shift_schedule(FFTSize-n_inputs+1:FFTSize);
 end
 
+% % info blocks
+% reuse_block(blk, 'n_streams',           'casper_library_misc/info_block', 'info', num2str(n_streams),           'Position', [0,0,50,30]);
+% reuse_block(blk, 'fftsize',             'casper_library_misc/info_block', 'info', num2str(FFTSize),             'Position', [0,0,50,30]);
+% reuse_block(blk, 'n_inputs',            'casper_library_misc/info_block', 'info', num2str(n_inputs),            'Position', [0,0,50,30]);
+% reuse_block(blk, 'unscramble',          'casper_library_misc/info_block', 'info', unscramble,                   'Position', [0,0,50,30]);
+% reuse_block(blk, 'input_bit_width',     'casper_library_misc/info_block', 'info', num2str(input_bit_width),     'Position', [0,0,50,30]);
+% reuse_block(blk, 'bin_pt_in',           'casper_library_misc/info_block', 'info', num2str(bin_pt_in),           'Position', [0,0,50,30]);
+% reuse_block(blk, 'coeff_bit_width',     'casper_library_misc/info_block', 'info', num2str(coeff_bit_width),     'Position', [0,0,50,30]);
+
 %%%%%%%%%%%%%%%%
 % Draw blocks. %
 %%%%%%%%%%%%%%%%
@@ -349,6 +358,7 @@ if strcmp(unscramble, 'on'),
     'n_inputs', num2str(n_inputs-1), ...
     'n_streams', num2str(n_streams), ...
     'n_bits_in', num2str(n_bits_final), ...
+    'coeffs_bit_limit', num2str(coeffs_bit_limit), ...
     'async', async, ...
     'bram_latency', num2str(bram_latency));
   add_line(blk, 'fft_direct/1', 'fft_unscrambler/1');
@@ -431,9 +441,13 @@ if strcmp(async, 'on'),
       'latency', num2str(biplex_direct_latency));
   add_line(blk, ['fft_biplex_real_4x/',num2str(n_streams*2^n_inputs+3)], 'out_del_en_4x/1');
   add_line(blk, 'out_del_en_4x/1', ['fft_direct/',num2str(n_streams*2^n_inputs+3)]);
-  add_line(blk, ['fft_direct/',num2str(n_streams*2^n_inputs+3)], ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)]);
-  
-  add_line(blk, ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)], ['dvalid/1']);
+
+  if strcmp(unscramble, 'on'), 
+    add_line(blk, ['fft_direct/',num2str(n_streams*2^n_inputs+3)], ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)]);
+    add_line(blk, ['fft_unscrambler/',num2str(n_streams*2^(n_inputs-1)+2)], ['dvalid/1']);
+  else, 
+    add_line(blk, ['fft_direct/', num2str((n_streams*(2^n_inputs))+3)], 'dvalid/1');
+  end
 end
 
 % Delete all unconnected blocks.

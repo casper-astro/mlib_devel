@@ -68,6 +68,12 @@ if nargin == 0  % LAUNCH GUI
             set(handles.xsg_version,'String','14.3');
         case {'14.4'}
             set(handles.xsg_version,'String','14.4');
+        case {'14.5'}
+            set(handles.xsg_version,'String','14.5');
+        case {'14.6'}
+            set(handles.xsg_version,'String','14.6');
+        case {'14.7'}
+            set(handles.xsg_version,'String','14.7');
         otherwise
             errordlg(['Unsupported Xilinx System Generator version: ',xsg]);
             return;
@@ -81,8 +87,8 @@ elseif ischar(varargin{1}) % INVOKE NAMED SUBFUNCTION OR CALLBACK
         else
             feval(varargin{:}); % FEVAL switchyard
         end
-    catch
-        disp(lasterr);
+    catch ex
+        disp(ex.message);
     end
 
 end

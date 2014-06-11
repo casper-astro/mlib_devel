@@ -13,7 +13,6 @@ use_sniffer = get(blk_obj,'use_sniffer');
 data_width = get(blk_obj,'data_width');
 addr_width= get(blk_obj,'addr_width');
 bw_width= get(blk_obj,'bw_width');
-qdr_latency = get(blk_obj, 'qdr_latency');
 
 %some strings (like '[17:0]
 data_vec = ['[',num2str(str2num(data_width)-1),':0]'];
@@ -123,7 +122,6 @@ switch hw_sys
         str = [str, ' PARAMETER QDR_DATA_WIDTH = ', data_width,         '\n'];
         str = [str, ' PARAMETER QDR_ADDR_WIDTH = ', addr_width,         '\n'];
         str = [str, ' PARAMETER QDR_BW_WIDTH   = ', bw_width,           '\n'];
-        str = [str, ' PARAMETER QDR_LATENCY    = ', qdr_latency,        '\n'];
         str = [str, ' PARAMETER C_CONFIG_BASEADDR = ', sniff_base_addr, '\n'];
         str = [str, ' PARAMETER C_CONFIG_HIGHADDR = ', sniff_high_addr, '\n'];
         str = [str, ' PARAMETER C_BASEADDR = ', ram_base_addr,          '\n'];
@@ -143,6 +141,7 @@ switch hw_sys
         str = [str, ' PORT slave_wr_be   = ', inst_name, '_be',        '\n'];
         str = [str, ' PORT slave_rd_strb = ', inst_name, '_rd_en',     '\n'];
         str = [str, ' PORT slave_rd_data = ', inst_name, '_data_out',  '\n'];
+        str = [str, ' PORT slave_rd_dvld = ', inst_name, '_data_valid','\n'];
         str = [str, ' PORT slave_ack     = ', inst_name, '_ack',       '\n'];
         
         str = [str, ' PORT phy_rdy       = ', inst_name, '_phy_ready', '\n'];
@@ -166,30 +165,30 @@ switch hw_sys
         str = [str, ' PORT clk0    = ', clk_src,              '\n'];
         str = [str, ' PORT clk180  = ', clk_src, '180',       '\n'];
         str = [str, ' PORT clk270  = ', clk_src, '270',       '\n'];
-        str = [str, ' PORT div_clk = sys_clk2x',              '\n'];
+        str = [str, ' PORT dly_clk = sys_clk2x',              '\n'];
         str = [str, ' PORT idelay_rdy = idelay_rdy',          '\n'];
         str = [str, ' PORT reset   = ', inst_name, '_reset',  '\n'];
         
         str = [str, ' PORT qdr_k_n       = ', hw_qdr, '_k_n',       '\n'];
         str = [str, ' PORT qdr_k         = ', hw_qdr, '_k',         '\n'];
         str = [str, ' PORT qdr_d         = ', hw_qdr, '_d',         '\n'];
-        str = [str, ' PORT qdr_bw_n      = ', hw_qdr, '_bw_n',      '\n'];
+        %str = [str, ' PORT qdr_bw_n      = ', hw_qdr, '_bw_n',      '\n'];
         str = [str, ' PORT qdr_sa        = ', hw_qdr, '_sa',        '\n'];
         str = [str, ' PORT qdr_w_n       = ', hw_qdr, '_w_n',       '\n'];
         str = [str, ' PORT qdr_r_n       = ', hw_qdr, '_r_n',       '\n'];
         str = [str, ' PORT qdr_q         = ', hw_qdr, '_q',         '\n'];
-        str = [str, ' PORT qdr_cq_n      = ', hw_qdr, '_cq_n',      '\n'];
-        str = [str, ' PORT qdr_cq        = ', hw_qdr, '_cq',        '\n'];
-        str = [str, ' PORT qdr_qvld      = ', hw_qdr, '_qvld',      '\n'];
+        %str = [str, ' PORT qdr_cq_n      = ', hw_qdr, '_cq_n',      '\n'];
+        %str = [str, ' PORT qdr_cq        = ', hw_qdr, '_cq',        '\n'];
+        %str = [str, ' PORT qdr_qvld      = ', hw_qdr, '_qvld',      '\n'];
         str = [str, ' PORT qdr_dll_off_n = ', hw_qdr, '_dll_off_n', '\n'];
         
-        str = [str, ' PORT bit_align_state_prb  = ', hw_qdr, '_bit_align_state_prb ', '\n'];
-        str = [str, ' PORT bit_train_state_prb  = ', hw_qdr, '_bit_train_state_prb ', '\n'];
-        str = [str, ' PORT bit_train_error_prb  = ', hw_qdr, '_bit_train_error_prb ', '\n'];
-        str = [str, ' PORT phy_state_prb  = ',       hw_qdr, '_phy_state_prb ',       '\n'];
-
-        str = [str, ' PORT phy_rdy  = ', inst_name, '_phy_ready ', '\n'];
-        str = [str, ' PORT cal_fail = ', inst_name, '_cal_fail',   '\n'];
+        str = [str, ' PORT phy_rdy  = ', inst_name, '_phy_ready', '\n'];
+        str = [str, ' PORT cal_fail = ', inst_name, '_cal_fail',  '\n'];
+        
+        str = [str, ' PORT dly_en_o     = ', inst_name, '_dly_en_o',   '\n'];
+        str = [str, ' PORT dly_en_i     = ', inst_name, '_dly_en_i',   '\n'];
+        str = [str, ' PORT dly_inc_dec  = ', inst_name, '_dly_inc_dec','\n'];
+        str = [str, ' PORT dly_cntrs    = ', inst_name, '_dly_cntrs',  '\n'];
         
         str = [str, ' BUS_INTERFACE MQDR = ', inst_name,           '\n'];
         
@@ -201,14 +200,14 @@ switch hw_sys
         str = [str, 'PORT ', hw_qdr, '_k_n       = ', hw_qdr,'_k_n       , DIR = O',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_k         = ', hw_qdr,'_k         , DIR = O',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_d         = ', hw_qdr,'_d         , DIR = O, VEC=', data_vec,   '\n'];
-        str = [str, 'PORT ', hw_qdr, '_bw_n      = ', hw_qdr,'_bw_n      , DIR = O, VEC=', bw_vec,     '\n'];
+        %str = [str, 'PORT ', hw_qdr, '_bw_n      = ', hw_qdr,'_bw_n      , DIR = O, VEC=', bw_vec,     '\n'];
         str = [str, 'PORT ', hw_qdr, '_sa        = ', hw_qdr,'_sa        , DIR = O, VEC=', addr_vec,   '\n'];
         str = [str, 'PORT ', hw_qdr, '_w_n       = ', hw_qdr,'_w_n       , DIR = O',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_r_n       = ', hw_qdr,'_r_n       , DIR = O',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_q         = ', hw_qdr,'_q         , DIR = I, VEC=', data_vec,   '\n'];
-        str = [str, 'PORT ', hw_qdr, '_cq_n      = ', hw_qdr,'_cq_n      , DIR = I',                   '\n'];
-        str = [str, 'PORT ', hw_qdr, '_cq        = ', hw_qdr,'_cq        , DIR = I',                   '\n'];
-        str = [str, 'PORT ', hw_qdr, '_qvld      = ', hw_qdr,'_qvld      , DIR = I',                   '\n'];
+        %str = [str, 'PORT ', hw_qdr, '_cq_n      = ', hw_qdr,'_cq_n      , DIR = I',                   '\n'];
+        %str = [str, 'PORT ', hw_qdr, '_cq        = ', hw_qdr,'_cq        , DIR = I',                   '\n'];
+        %str = [str, 'PORT ', hw_qdr, '_qvld      = ', hw_qdr,'_qvld      , DIR = I',                   '\n'];
         str = [str, 'PORT ', hw_qdr, '_dll_off_n = ', hw_qdr,'_dll_off_n , DIR = O',                   '\n'];
 
         %%%%% QDR Sniffer Entry %%%%%
@@ -224,7 +223,6 @@ switch hw_sys
         str = [str, ' PARAMETER QDR_DATA_WIDTH = ', data_width,         '\n'];
         str = [str, ' PARAMETER QDR_ADDR_WIDTH = ', addr_width,         '\n'];
         str = [str, ' PARAMETER QDR_BW_WIDTH   = ', bw_width,           '\n'];
-        str = [str, ' PARAMETER QDR_LATENCY    = ', qdr_latency,        '\n'];
         str = [str, ' PARAMETER C_CONFIG_BASEADDR = ', sniff_base_addr, '\n'];
         str = [str, ' PARAMETER C_CONFIG_HIGHADDR = ', sniff_high_addr, '\n'];
         str = [str, ' PARAMETER C_BASEADDR = ', ram_base_addr,          '\n'];
@@ -244,13 +242,15 @@ switch hw_sys
         str = [str, ' PORT slave_wr_be   = ', inst_name, '_be',        '\n'];
         str = [str, ' PORT slave_rd_strb = ', inst_name, '_rd_en',     '\n'];
         str = [str, ' PORT slave_rd_data = ', inst_name, '_data_out',  '\n'];
+        str = [str, ' PORT slave_rd_dvld = ', inst_name, '_data_valid','\n'];
         str = [str, ' PORT slave_ack     = ', inst_name, '_ack',       '\n'];
+       
+        str = [str, ' PORT dly_clk = sys_clk2x',              '\n'];
+        str = [str, ' PORT dly_en_o      = ', inst_name, '_dly_en_o',   '\n'];
+        str = [str, ' PORT dly_en_i      = ', inst_name, '_dly_en_i',   '\n'];
+        str = [str, ' PORT dly_inc_dec   = ', inst_name, '_dly_inc_dec','\n'];
+        str = [str, ' PORT dly_cntrs     = ', inst_name, '_dly_cntrs',  '\n'];
         
-        str = [str, ' PORT bit_align_state_prb  = ', hw_qdr, '_bit_align_state_prb ', '\n'];
-        str = [str, ' PORT bit_train_state_prb  = ', hw_qdr, '_bit_train_state_prb ', '\n'];
-        str = [str, ' PORT bit_train_error_prb  = ', hw_qdr, '_bit_train_error_prb ', '\n'];
-        str = [str, ' PORT phy_state_prb  = ',       hw_qdr, '_phy_state_prb ',       '\n'];
-
         str = [str, ' PORT phy_rdy       = ', inst_name, '_phy_ready', '\n'];
         str = [str, ' PORT cal_fail      = ', inst_name, '_cal_fail',  '\n'];
         str = [str, ' PORT qdr_reset     = ', inst_name, '_reset',     '\n'];
