@@ -38,7 +38,6 @@ PORT aux_clk2x      = "", DIR = OUT, SIGIS = CLK#, CLK_INPORT = aux_clk_p, CLK_F
 PORT aux_clk2x90    = "", DIR = OUT, SIGIS = CLK#, CLK_INPORT = aux_clk_p, CLK_FACTOR = 2
 PORT aux_clk2x180   = "", DIR = OUT, SIGIS = CLK#, CLK_INPORT = aux_clk_p, CLK_FACTOR = 2
 PORT aux_clk2x270   = "", DIR = OUT, SIGIS = CLK#, CLK_INPORT = aux_clk_p, CLK_FACTOR = 2
-PORT aux_clk_lock   = "", DIR = OUT
 PORT epb_clk        = "", DIR = OUT
 
 PORT idelay_rst     = "", DIR = IN

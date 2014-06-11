@@ -18,7 +18,6 @@ module roach_infrastructure #(
     input  aux_clk_n,  aux_clk_p,
     output aux_clk,    aux_clk90,   aux_clk180,   aux_clk270,
     output aux_clk2x,  aux_clk2x90, aux_clk2x180, aux_clk2x270,
-    output aux_clk_lock,
     output clk_100, clk_200
   );
 
@@ -243,7 +242,6 @@ module roach_infrastructure #(
   assign op_power_on_rst = ~sys_clk_mmcm_locked;
   assign mmcm_reset = 1'b0;
   assign sys_clk_lock = sys_clk_mmcm_locked;
-  assign aux_clk_lock = aux_clk_mmcm_locked;
 
 
   /* Delay Clock */

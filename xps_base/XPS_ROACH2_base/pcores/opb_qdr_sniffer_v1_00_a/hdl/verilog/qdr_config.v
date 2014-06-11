@@ -25,10 +25,6 @@ module qdr_config #(
     input [3:0] bit_train_error_prb,
     input [3:0] phy_state_prb,
 
-    /* MMCM lock status */
-    input  fab_clk_lock,
-    input  sys_clk_lock,
-
     /* Misc signals */
     output qdr_reset,
     input  cal_fail,
@@ -85,9 +81,6 @@ module qdr_config #(
   always @(*) begin
     if (Sl_xferAck_reg) begin
       case (opb_data_sel) 
-        REG_RESET: begin
-	  Sl_DBus_reg <= {8'b0, 7'b0, sys_clk_lock, 7'b0, fab_clk_lock, 7'b0, qdr_reset};
-        end
         REG_STATUS: begin
           Sl_DBus_reg <= {16'b0, 7'b0, cal_fail, 7'b0, phy_rdy};
         end
@@ -121,6 +114,6 @@ module qdr_config #(
     qdr_reset_R  <= |qdr_reset_shifter;
     qdr_reset_RR <= qdr_reset_R;
   end
-  assign qdr_reset = (qdr_reset_RR || !(fab_clk_lock && sys_clk_lock));
+  assign qdr_reset = qdr_reset_RR;
 
 endmodule

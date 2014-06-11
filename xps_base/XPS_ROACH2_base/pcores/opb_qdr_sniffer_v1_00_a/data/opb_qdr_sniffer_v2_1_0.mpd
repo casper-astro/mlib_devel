@@ -89,10 +89,6 @@ BEGIN opb_qdr_sniffer
   PORT bit_train_error_prb = bit_train_error_prb,  DIR = I, VEC = [3:0]
   PORT phy_state_prb       = phy_state_prb,        DIR = I, VEC = [3:0]
 
-## MMCM status
-  PORT fab_clk_lock  = "",     DIR = I
-  PORT sys_clk_lock  = "",     DIR = I
-
 ## Misc. ports
   PORT phy_rdy       = "",     DIR = I
   PORT cal_fail      = "",     DIR = I
