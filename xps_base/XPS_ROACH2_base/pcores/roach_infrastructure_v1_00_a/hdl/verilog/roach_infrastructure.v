@@ -1,7 +1,6 @@
 module roach_infrastructure #(
     parameter CLK_FREQ     = 100, 
     parameter CLK_HIGH_LOW = "low", // high >= 135, low < 135
-    parameter IDCTRL_100   = 0,
     parameter MULTIPLY     = 6,
     parameter DIVIDE       = 6,
     parameter DIVCLK       = 1
@@ -73,7 +72,7 @@ module roach_infrastructure #(
  /* 200MHz clock for idelayctrl */
   wire clk_200_mmcm;
  /* 100MHz clock for ddr3 clk */
-  wire clk_100_mmcm;
+ //wire clk_100_mmcm;
 
   // sys_clk diff buffer
   IBUFGDS #(
@@ -140,7 +139,7 @@ module roach_infrastructure #(
     .CLKOUT3   (sys_clk180_mmcm),
     .CLKOUT4   (sys_clk270_mmcm),
     .CLKOUT5   (),//(sys_clk2x_mmcm),
-    .CLKOUT6   (clk_100_mmcm),//(ddr3_clk),
+    .CLKOUT6   (clk_100),//(ddr3_clk),
     .LOCKED    (sys_clk_mmcm_locked),
     
     .PWRDWN    (1'b0),
@@ -163,10 +162,10 @@ module roach_infrastructure #(
 //    .O({sys_clk2x,      sys_clk2x90     , sys_clk2x180     , sys_clk2x270})
 //  );
   
- BUFG bufg_clk_100(
-   .I(clk_100_mmcm),
-   .O(clk_100)
- );
+//  BUFG bufg_clk_100(
+//    .I(clk_100_mmcm),
+//    .O(clk_100)
+//  );
 
  BUFG bufg_clk_200(
     .I(clk_200_mmcm),
@@ -259,22 +258,11 @@ module roach_infrastructure #(
     .I(dly_clk_int),
     .O(dly_clk)
   );*/
-  generate if (IDCTRL_100) begin
-
-  IDELAYCTRL idelayctrl_inst(
-    .REFCLK (clk_100),
-    .RST    (idelay_rst),
-    .RDY    (idelay_rdy)
-  );
-
-  end else begin
-
+ 
   IDELAYCTRL idelayctrl_inst(
     .REFCLK (clk_200),
     .RST    (idelay_rst),
     .RDY    (idelay_rdy)
   );
-
-  end endgenerate
 
 endmodule
