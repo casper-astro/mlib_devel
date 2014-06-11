@@ -41,7 +41,6 @@ module qdrc_top (
   parameter ADDR_WIDTH   = 21;
   parameter BURST_LENGTH = 4;
   parameter CLK_FREQ     = 200;
-  parameter IODELAY_GRP  = "IODELAY_200";
 
   input clk0, clk180, clk270, div_clk;
   input reset;
@@ -105,7 +104,6 @@ module qdrc_top (
     .DATA_WIDTH (DATA_WIDTH),
     .BW_WIDTH   (BW_WIDTH),
     .ADDR_WIDTH (ADDR_WIDTH),
-    .IODELAY_GRP(IODELAY_GRP),
     .CLK_FREQ   (CLK_FREQ)
   ) qdrc_infrastructure_inst(
     /* general signals */

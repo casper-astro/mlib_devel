@@ -43,7 +43,6 @@ module qdrc_infrastructure(
   parameter BW_WIDTH       = 4;
   parameter ADDR_WIDTH     = 21;
   parameter CLK_FREQ       = 200;
-  parameter IODELAY_GRP    = "IODELAY_200";
 
   input clk0,   clk180,   clk270;
   input reset0, reset180, reset270;
@@ -296,7 +295,6 @@ module qdrc_infrastructure(
     .O (qdr_q_ibuf)
   );
 
-  (* IODELAY_GROUP = IODELAY_GRP *)
   IODELAY #(
     .DELAY_SRC        ("I"),
     .IDELAY_TYPE      ("VARIABLE"),
