@@ -54,7 +54,6 @@ module qdr_config #(
   reg Sl_xferAck_reg;
   reg [3:0] opb_data_sel;
 
-  reg qdr_hard_reset;
   reg [4:0] qdr_reset_shifter;
 
   always @(posedge OPB_Clk) begin
@@ -73,8 +72,6 @@ module qdr_config #(
             if (!OPB_RNW) begin
               if (OPB_BE[3])
                 qdr_reset_shifter[0] <= OPB_DBus[31];
-              if (OPB_BE[2])
-                qdr_hard_reset       <= OPB_DBus[23];
             end
           end
         endcase
@@ -124,6 +121,6 @@ module qdr_config #(
     qdr_reset_R  <= |qdr_reset_shifter;
     qdr_reset_RR <= qdr_reset_R;
   end
-  assign qdr_reset = (qdr_reset_RR || qdr_hard_reset || !(fab_clk_lock && sys_clk_lock));
+  assign qdr_reset = (qdr_reset_RR || !(fab_clk_lock && sys_clk_lock));
 
 endmodule
