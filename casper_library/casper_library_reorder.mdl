@@ -1551,9 +1551,11 @@ Library {
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
-	      Dimension		      2
+	      Dimension		      4
 	      Cell		      "qdr0"
 	      Cell		      "qdr1"
+	      Cell		      "qdr2"
+	      Cell		      "qdr3"
 	      PropName		      "TypeOptions"
 	    }
 	    Name		    "which_qdr"
@@ -7073,9 +7075,11 @@ Library {
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
-	      Dimension		      2
+	      Dimension		      4
 	      Cell		      "qdr0"
 	      Cell		      "qdr1"
+	      Cell		      "qdr2"
+	      Cell		      "qdr3"
 	      PropName		      "TypeOptions"
 	    }
 	    Name		    "which_qdr"
