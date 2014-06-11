@@ -45,15 +45,6 @@ switch hw_sys
     case 'ROACH'
         % pass
     case 'ROACH2'
-
-        % If IDCTRL_100 is set make sure we are using IDELAY_200
-        % for our IODELAYS (otherwise we get some nasty errors
-        % about missing IDELAYCTRLs
-	if getenv('IDCTRL_100')
-            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-                '/datadly?[?].iodly?" IODELAY_GROUP = "IODELAY_200" ;\n'];
-        end
-
         if blk_obj.use_adc0
 	    switch demux
 	        % Create an area group to place the FD close to the IOPAD
