@@ -46,6 +46,9 @@ switch hw_sys
         % pass
     case 'ROACH2'
         if blk_obj.use_adc0
+            % Manually place the BUFR components
+            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+               '/DIVBUF"     LOC            = BUFR_X1Y11 ;\n'];
 	    switch demux
 	        % Create an area group to place the FD close to the IOPAD
 		% which for some reason was traced to the other side of the
@@ -90,6 +93,10 @@ switch hw_sys
                     % pass
             end
 	elseif blk_obj.use_adc1
+            % Manually place the BUFR components
+            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+               '/DIVBUF"     LOC            = BUFR_X1Y9 ;\n'];
+
 	     % This is for ZDOK1, we need to place the first buffers
 	     % close to the I/O pads to help timing
 	     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
