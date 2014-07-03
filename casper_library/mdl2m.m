@@ -281,6 +281,7 @@ function add_blocks(blks, fp, reuse)
     anc_block   = get_param(blk, 'AncestorBlock');    %AncestorBlock (for disabled library links)
 
     position    = get_param(blk, 'Position');         %once added, we put the block in the correct place
+    tag         = get_param(blk, 'Tag');
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % block not from any library (i.e built-in), %
@@ -365,7 +366,7 @@ function add_blocks(blks, fp, reuse)
     required_params = determine_dialog_params(blk, src, dialog_param_strategy);
     clog(['setting up required dialog parameters for ',name], {'add_blocks_debug', 'mdl2m_debug'});
     params = get_params(blk, required_params); 
-    set_params(fp, ['[blk,''/',name,''']'], {params{:}, 'Position', position}, 'all'); %appending Position guarantees at least one param
+    set_params(fp, ['[blk,''/',name,''']'], {params{:}, 'Position', position, 'Tag', tag}, 'all'); %appending Position guarantees at least one param
     fprintf(fp,'\n');
 
   end %for index
@@ -702,6 +703,7 @@ function mask_gen(blk, file)
         'MaskValueString', ...      %values attached to parameters
 	'BackgroundColor', ...      %background colour of block
         'MaskDisplay', ...          %appearance of block
+	'Tag', ...		    %the block tag
         };
 
     params = get_params(blk, mask_params);
