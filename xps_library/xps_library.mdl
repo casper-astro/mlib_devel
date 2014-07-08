@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [517.0, 24.0, 1298.0, 1086.0]
+      Location		      [301.0, -14.0, 1358.0, 1196.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -41,11 +41,11 @@ Library {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"334:31"
-	Extents			[1246.0, 909.0]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[1302.0, 1017.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
+	Offset			[-8.125, 0.0]
       }
     }
   }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "wnew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Apr 09 16:44:18 2014"
-  RTWModifiedTimeStamp	  318962651
-  ModelVersionFormat	  "1.%<AutoIncrement:516>"
+  LastModifiedDate	  "Tue Jul 08 10:43:11 2014"
+  RTWModifiedTimeStamp	  326716982
+  ModelVersionFormat	  "1.%<AutoIncrement:519>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,8 +802,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [389, 24, 1687, 1110]
-    Open		    off
+    Location		    [301, -14, 1659, 1182]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -816,7 +816,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "335"
+    SIDHighWatermark	    "336"
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -28284,7 +28284,7 @@ Library {
 	    }
 	    Name		    "hw_sys"
 	    Prompt		    "Hardware Platform"
-	    Value		    "MKDIG"
+	    Value		    "ROACH2:sx475t"
 	    Tunable		    "off"
 	    Callback		    "xps_xsg_conf_callback;"
 	  }
@@ -28339,8 +28339,7 @@ Library {
 	    }
 	    Name		    "ROACH2_clk_src"
 	    Prompt		    "User IP Clock Source"
-	    Value		    "adc0_clk"
-	    Visible		    "off"
+	    Value		    "sys_clk"
 	    Callback		    "xps_xsg_conf_callback;"
 	  }
 	  Object {
@@ -28356,6 +28355,7 @@ Library {
 	    Name		    "MKDIG_clk_src"
 	    Prompt		    "User IP Clock Source"
 	    Value		    "sys_clk"
+	    Visible		    "off"
 	    Callback		    "xps_xsg_conf_callback;"
 	  }
 	  Object {
@@ -55295,7 +55295,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/BitBasher"
 	  SourceType		  "Xilinx BitBasher Block"
 	  infoedit		  "Allows extraction, concatenation and augmentation of bits"
-	  bitexpr		  "b = {a[71:0]}"
+	  bitexpr		  "b = {a[35:0],a[35:0],a[35:0],a[35:0],a[35:0],a[35:0],a[35:0],a[35:0]}"
 	  display_expr		  off
 	  sr_1			  "1"
 	  arith_type1		  "Unsigned"
@@ -55500,7 +55500,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/BitBasher"
 	  SourceType		  "Xilinx BitBasher Block"
 	  infoedit		  "Allows extraction, concatenation and augmentation of bits"
-	  bitexpr		  "b = {a[71:0]}"
+	  bitexpr		  "b = {a[35:0],a[35:0],a[35:0],a[35:0]}"
 	  display_expr		  off
 	  sr_1			  "1"
 	  arith_type1		  "Unsigned"
@@ -55548,8 +55548,8 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "qdr_sim_model"
-	    Location		    [517, 24, 1815, 1110]
-	    Open		    on
+	    Location		    [507, 14, 1825, 1148]
+	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
 	    ScreenColor		    "white"
@@ -58559,7 +58559,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6800"
+	SIDHighWatermark	"6815"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58571,10 +58571,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6799"
+	  SID			  "332:6814"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6751
+	  ZOrder		  6766
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58609,10 +58609,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6797"
+	  SID			  "332:6812"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6749
+	  ZOrder		  6764
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58647,10 +58647,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6796"
+	  SID			  "332:6811"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6748
+	  ZOrder		  6763
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58678,10 +58678,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6800"
+	  SID			  "332:6815"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6752
+	  ZOrder		  6767
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58709,10 +58709,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6798"
+	  SID			  "332:6813"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6750
+	  ZOrder		  6765
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
@@ -60760,7 +60760,7 @@ Library {
       Name		      "ten_Gbe_v2"
       SID		      "333"
       Tag		      "xps:tengbe_v2"
-      Ports		      [9, 12]
+      Ports		      [8, 12]
       Position		      [910, 18, 1055, 317]
       ZOrder		      5232
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
@@ -60783,7 +60783,7 @@ Library {
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  37
+	  Dimension		  38
 	  Object {
 	    $ObjectID		    295
 	    Type		    "popup"
@@ -60796,9 +60796,8 @@ Library {
 	    }
 	    Name		    "flavour"
 	    Prompt		    "Mezzanine card flavour"
-	    Value		    "cx4"
+	    Value		    "sfp+"
 	    Evaluate		    "off"
-	    Visible		    "off"
 	    Callback		    "tengbe_v2_callback"
 	    TabName		    "Core"
 	  }
@@ -60815,7 +60814,6 @@ Library {
 	    Name		    "slot"
 	    Prompt		    "Card slot"
 	    Value		    "1"
-	    Visible		    "off"
 	    TabName		    "Core"
 	  }
 	  Object {
@@ -60833,6 +60831,7 @@ Library {
 	    Name		    "port_r1"
 	    Prompt		    "Port"
 	    Value		    "0"
+	    Visible		    "off"
 	    TabName		    "Core"
 	  }
 	  Object {
@@ -60867,7 +60866,6 @@ Library {
 	    Name		    "port_r2_sfpp"
 	    Prompt		    "Port"
 	    Value		    "0"
-	    Visible		    "off"
 	    TabName		    "Core"
 	  }
 	  Object {
@@ -60924,7 +60922,7 @@ Library {
 	    }
 	    Name		    "pre_emph_r2"
 	    Prompt		    "Pre-emphasis (dB)"
-	    Value		    "0.74"
+	    Value		    "1.07"
 	    Evaluate		    "off"
 	    Visible		    "off"
 	    TabName		    "Core"
@@ -61141,6 +61139,16 @@ Library {
 	  Object {
 	    $ObjectID		    317
 	    Type		    "checkbox"
+	    Name		    "promisc_mode"
+	    Prompt		    "Promiscuous mode"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    Visible		    "off"
+	    TabName		    "Core"
+	  }
+	  Object {
+	    $ObjectID		    318
+	    Type		    "checkbox"
 	    Name		    "txctr"
 	    Prompt		    "TX - core_txctr"
 	    Value		    "off"
@@ -61148,7 +61156,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    318
+	    $ObjectID		    319
 	    Type		    "checkbox"
 	    Name		    "txerrctr"
 	    Prompt		    "TX packet length error - core_txerrctr"
@@ -61161,7 +61169,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    319
+	    $ObjectID		    320
 	    Type		    "edit"
 	    Name		    "txerrctr_len"
 	    Prompt		    "    -- expected TX packet length"
@@ -61170,7 +61178,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    320
+	    $ObjectID		    321
 	    Type		    "checkbox"
 	    Name		    "txofctr"
 	    Prompt		    "TX overflow - core_txofctr"
@@ -61179,7 +61187,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    321
+	    $ObjectID		    322
 	    Type		    "checkbox"
 	    Name		    "txfullctr"
 	    Prompt		    "TX full - core_txfullctr"
@@ -61188,7 +61196,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    322
+	    $ObjectID		    323
 	    Type		    "checkbox"
 	    Name		    "txvldctr"
 	    Prompt		    "TX valid cycle - core_txvldctr"
@@ -61197,7 +61205,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    323
+	    $ObjectID		    324
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61218,7 +61226,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    324
+	    $ObjectID		    325
 	    Type		    "checkbox"
 	    Name		    "rxctr"
 	    Prompt		    "RX - core_rxctr"
@@ -61227,7 +61235,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    325
+	    $ObjectID		    326
 	    Type		    "checkbox"
 	    Name		    "rxerrctr"
 	    Prompt		    "RX packet length error - core_rxerrctr"
@@ -61240,7 +61248,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    326
+	    $ObjectID		    327
 	    Type		    "edit"
 	    Name		    "rxerrctr_len"
 	    Prompt		    "    -- expected RX packet length"
@@ -61249,7 +61257,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    327
+	    $ObjectID		    328
 	    Type		    "checkbox"
 	    Name		    "rxofctr"
 	    Prompt		    "RX overflow - core_rxofctr"
@@ -61258,7 +61266,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    328
+	    $ObjectID		    329
 	    Type		    "checkbox"
 	    Name		    "rxbadctr"
 	    Prompt		    "RX bad - core_rxbadctr"
@@ -61267,7 +61275,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    329
+	    $ObjectID		    330
 	    Type		    "checkbox"
 	    Name		    "rxvldctr"
 	    Prompt		    "RX valid cycle - core_rxvldctr"
@@ -61276,7 +61284,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    330
+	    $ObjectID		    331
 	    Type		    "checkbox"
 	    Name		    "rxeofctr"
 	    Prompt		    "RX eof - core_rxeofctr"
@@ -61285,7 +61293,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    331
+	    $ObjectID		    332
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61394,15 +61402,6 @@ Library {
 	  Position		  [120, 607, 150, 623]
 	  ZOrder		  -8
 	  Port			  "8"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Inport
-	  Name			  "debug_rst"
-	  SID			  "333:297"
-	  Position		  [120, 137, 150, 153]
-	  ZOrder		  5446
-	  Port			  "9"
 	  IconDisplay		  "Port number"
 	}
 	Block {
@@ -61888,13 +61887,6 @@ Library {
 	  ".55 29.44 27.44 25.44 23.44 20.55 22.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
 	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'ca"
 	  "st');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Terminator
-	  Name			  "term1"
-	  SID			  "333:70"
-	  Position		  [200, 135, 220, 155]
-	  ZOrder		  2
 	}
 	Block {
 	  BlockType		  Reference
@@ -62842,12 +62834,6 @@ Library {
 	  ZOrder		  -68
 	  Port			  "12"
 	  IconDisplay		  "Port number"
-	}
-	Line {
-	  SrcBlock		  "debug_rst"
-	  SrcPort		  1
-	  DstBlock		  "term1"
-	  DstPort		  1
 	}
 	Line {
 	  SrcBlock		  "xps_library_ten_Gbe_v2_led_tx"
