@@ -1,0 +1,3 @@
+test_models/*
+.Xil
+!test_models/*.slx
