@@ -28,10 +28,8 @@ else
 end
 
 [hw_sys, hw_subsys] = xps_get_hw_plat(get_param(gcb,'hw_sys'));
-clk_src = get_param(gcb, [hw_sys, '_clk_src']);
+clk_src = get_param(gcb, 'clk_src');
 syn_tool = get_param(gcb, 'synthesis_tool');
-
-set_param(gcb, 'clk_src', clk_src);
 
 ngc_config.include_clockwrapper = 1;
 ngc_config.include_cf = 0;
@@ -80,6 +78,30 @@ switch hw_sys
             % end case 'lx110t'
         end % switch hw_subsys
     % end case 'MKDIG'
+
+    case 'SNAP'
+        switch hw_subsys
+            case 'xc7k160t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Kintex7',...
+                    'part', 'xc7k160t',...
+                    'speed', '-2',...
+                    'testbench', 'off',...
+                    'package', 'ffg676');
+            % end case 'lx110t'
+        end % switch hw_subsys
+    % end case 'MKDIG'
+
+    case 'KC705'
+        switch hw_subsys
+            case 'xc7k325t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Kintex7',...
+                    'part', 'xc7k325t',...
+                    'speed', '-2',...
+                    'testbench', 'off',...
+                    'package', 'ffg900');
+            % end case 'lx110t'
+        end % switch hw_subsys
+    % end case 'MKDIG'
     
     otherwise
         errordlg(['Unsupported hardware system: ',hw_sys]);
@@ -87,10 +109,7 @@ switch hw_sys
 end % switch hw_sys
 
 xlsetparam(xsg_blk,...
-    'directory', ['./',clear_name(get_param(gcb,'parent')),'/sysgen'],...
     'sysclk_period', num2str(1000/clk_rate),...
-    'compilation', 'NGC Netlist',...
-    'ngc_config',ngc_config,...
     'synthesis_language', 'VHDL');
 
 if strcmp(syn_tool, 'Leonardo Spectrum')
