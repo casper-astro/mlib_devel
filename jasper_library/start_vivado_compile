@@ -1,0 +1,10 @@
+#!/bin/bash
+export MATLAB_PATH=/tools/MATLAB/R2013a
+export XILINX_PATH=/media/overflow/Xilinx/Vivado/2013.4
+export MLIB_DEVEL_PATH=/tools/mlib_devel
+export MATLAB=$MATLAB_PATH
+export CASPER_BASE_PATH=/tools/mlib_devel
+source $XILINX_PATH/settings64.sh
+#export MLIB_DEVEL_PATH=/home/jack/github/mlib_devel
+
+vivado -source /home/jack/temp/toolflow_test/vivado_snap_base/gogogo.tcl

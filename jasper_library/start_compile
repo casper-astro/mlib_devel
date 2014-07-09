@@ -1,0 +1,12 @@
+#!/bin/bash
+export USE_VIVADO_RUNTIME_FOR_MATLAB=1 #see Xilinx answer record 59236
+export MATLAB_PATH=/tools/MATLAB/R2013a
+export XILINX_PATH=/media/overflow/Xilinx/Vivado/2014.1
+export MLIB_DEVEL_PATH=/tools/mlib_devel
+export MATLAB=$MATLAB_PATH
+export CASPER_BASE_PATH=/tools/mlib_devel
+export HDL_ROOT=$CASPER_BASE_PATH/jasper_library/hdl_sources
+source $XILINX_PATH/settings64.sh
+#export MLIB_DEVEL_PATH=/home/jack/github/mlib_devel
+
+python exec_flow.py
