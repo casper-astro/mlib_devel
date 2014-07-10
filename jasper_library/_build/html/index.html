@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Jasper’s documentation! &mdash; Jasper 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Jasper 0.1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Jasper 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-jasper-s-documentation">
+<h1>Welcome to Jasper&#8217;s documentation!<a class="headerlink" href="#welcome-to-jasper-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+<div class="section" id="toolflow-main-package">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">toolflow</span></tt> &#8211; Main package<a class="headerlink" href="#toolflow-main-package" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="toolflow.Toolflow">
+<em class="property">class </em><tt class="descclassname">toolflow.</tt><tt class="descname">Toolflow</tt><big>(</big><em>frontend='simulink'</em>, <em>backend='vivado'</em>, <em>compile_dir='/tmp'</em>, <em>frontend_target='/tmp/test.slx'</em><big>)</big><a class="headerlink" href="#toolflow.Toolflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class embodying the main functionality of the toolflow.
+This class is responsible for generating a complete
+top-level verilog description of a project from a &#8216;peripherals file&#8217;
+which encodes information about which IP a user wants instantiated.</p>
+<p>The toolflow class can parse such a file, and use it to generate verilog,
+a list of source files, and a list of constraints.
+These can be passed off to a toolflow backend to be turned into some
+vendor-specific platform and compiled. At least, that&#8217;s the plan...</p>
+<dl class="attribute">
+<dt id="toolflow.Toolflow.__dict__">
+<tt class="descname">__dict__</tt><em class="property"> = &lt;dictproxy object at 0x3aa1638&gt;</em><a class="headerlink" href="#toolflow.Toolflow.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>frontend='simulink'</em>, <em>backend='vivado'</em>, <em>compile_dir='/tmp'</em>, <em>frontend_target='/tmp/test.slx'</em><big>)</big><a class="headerlink" href="#toolflow.Toolflow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the toolflow.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>frontend</strong> (<em>str</em>) &#8211; Name of the toolflow frontend to use. Currently only &#8216;simulink&#8217; is supported</li>
+<li><strong>backend</strong> (<em>str</em>) &#8211; Name of the toolflow backend to use. Currently only &#8216;vivado&#8217; is supported</li>
+<li><strong>compile_dir</strong> &#8211; Compile directory where build files and logs should go.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="toolflow.Toolflow.__module__">
+<tt class="descname">__module__</tt><em class="property"> = 'toolflow'</em><a class="headerlink" href="#toolflow.Toolflow.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="toolflow.Toolflow.__weakref__">
+<tt class="descname">__weakref__</tt><a class="headerlink" href="#toolflow.Toolflow.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.add_sources_to_be">
+<tt class="descname">add_sources_to_be</tt><big>(</big><big>)</big><a class="headerlink" href="#toolflow.Toolflow.add_sources_to_be" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add all sources in the current toolflow list
+to the backend, after de-duplicating.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.build_top">
+<tt class="descname">build_top</tt><big>(</big><big>)</big><a class="headerlink" href="#toolflow.Toolflow.build_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the base top-level verilog file (which is platform
+dependent) to the compile directory.
+Constructs an associated VerilogModule instance ready to be
+modified.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.check_attr_exists">
+<tt class="descname">check_attr_exists</tt><big>(</big><em>thing</em>, <em>generator</em><big>)</big><a class="headerlink" href="#toolflow.Toolflow.check_attr_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lots of methods in this class require that certain attributes
+have been set by other methods before proceeding. This is probably
+a symptom of the code being terribly structured. This method
+checks if an attribute exists and throws an error message if not.
+In principle it could automatically run the necessary missing steps,
+but that seems pretty suspect.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>thing</strong> (<em>str</em>) &#8211; Attribute to check.</li>
+<li><strong>generator</strong> (<em>str</em>) &#8211; Method which can be used to set thing (used for error message only)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.exec_flow">
+<tt class="descname">exec_flow</tt><big>(</big><em>gen_per=True</em>, <em>frontend_compile=True</em>, <em>backend_compile=True</em><big>)</big><a class="headerlink" href="#toolflow.Toolflow.exec_flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a compile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>gen_per</strong> (<em>bool</em>) &#8211; Have the toolflow frontend generate a fresh peripherals file</li>
+<li><strong>frontend_compile</strong> (<em>bool</em>) &#8211; Run the frontend compiler (eg. System Generator)</li>
+<li><strong>backend_compile</strong> (<em>bool</em>) &#8211; Run the backend compiler (eg. Vivado)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.gen_periph_objs">
+<tt class="descname">gen_periph_objs</tt><big>(</big><big>)</big><a class="headerlink" href="#toolflow.Toolflow.gen_periph_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a list of yellow blocks from the current peripheral file.
+Internally, calls:
+_parse_periph_file - parses .per file
+_extract_plat_info - instantiates platform instance
+Then calls each yellow block&#8217;s constructor.
+Runs a system-wide drc before returning.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.generate_consts">
+<tt class="descname">generate_consts</tt><big>(</big><big>)</big><a class="headerlink" href="#toolflow.Toolflow.generate_consts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compose a list of constraints from each yellow block.
+Use platform information to generate the appropriate
+physical realisation of each constraint.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.generate_hdl">
+<tt class="descname">generate_hdl</tt><big>(</big><big>)</big><a class="headerlink" href="#toolflow.Toolflow.generate_hdl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a top file for the target platform
+based on the peripherals file.
+Internally, calls:
+instantiate_periphs &#8211; call each yellow block&#8217;s mod_top method
+instantiate_user_ip &#8211; add ports to top module based on port entries in peripheral file
+regenerate_top &#8211; rewrite top.v</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="toolflow.Toolflow.regenerate_top">
+<tt class="descname">regenerate_top</tt><big>(</big><big>)</big><a class="headerlink" href="#toolflow.Toolflow.regenerate_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the verilog for the modified top
+module. This involves computing the wishbone
+interconnect / addressing and generating new
+code for yellow block instances.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="platform-platform">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">platform</span></tt> &#8211; Platform<a class="headerlink" href="#platform-platform" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="platform.Platform">
+<em class="property">class </em><tt class="descclassname">platform.</tt><tt class="descname">Platform</tt><a class="headerlink" href="#platform.Platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class encapsulating information about an FPGA platform.</p>
+<dl class="method">
+<dt id="platform.Platform.add_pin">
+<tt class="descname">add_pin</tt><big>(</big><em>name</em>, <em>iostd</em>, <em>locs</em><big>)</big><a class="headerlink" href="#platform.Platform.add_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a pin to the platform. Generally for use in constructors
+of Platform subclasses.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Abstract pin name. Eg., &#8216;zdok0&#8217;</li>
+<li><strong>iostd</strong> (<em>str</em>) &#8211; IO Standard of the pin. Eg., &#8216;LVDS&#8217;. Assumes all pins added have the same iostd.</li>
+<li><strong>locs</strong> (<em>str, list of str</em>) &#8211; Physical location of the pin. Eg., &#8216;AC12&#8217;. Can be a string or a list, if the name refers to a bank of pins</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="platform.Platform.consts">
+<tt class="descname">consts</tt><em class="property"> = None</em><a class="headerlink" href="#platform.Platform.consts" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of constraint files/directories required to compile
+the template top.v (does NOT include top.v itself)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="platform.Platform.fpga">
+<tt class="descname">fpga</tt><em class="property"> = None</em><a class="headerlink" href="#platform.Platform.fpga" title="Permalink to this definition">¶</a></dt>
+<dd><p>FPGA model. Should be the full version ready to pass to the
+vendor tools. Eg., xc7k325tffg900-2</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="platform.Platform.get_loader">
+<em class="property">static </em><tt class="descname">get_loader</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#platform.Platform.get_loader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="platform.Platform.get_pin">
+<tt class="descname">get_pin</tt><big>(</big><em>name</em>, <em>index=None</em><big>)</big><a class="headerlink" href="#platform.Platform.get_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of pin objects if index is a list
+or vector. Otherwise return a single pin object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Abstract pin name, eg. zdok0</li>
+<li><strong>index</strong> (<em>None,int,list</em>) &#8211; Index of the pin, if the name refers to a bank. Can be None (single pin), integer, or list of pin indices.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="platform.Platform.manufacturer">
+<tt class="descname">manufacturer</tt><em class="property"> = None</em><a class="headerlink" href="#platform.Platform.manufacturer" title="Permalink to this definition">¶</a></dt>
+<dd><p>FPGA manufacturer</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="platform.Platform.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#platform.Platform.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Platform name. Eg, ROACH, SNAP, etc.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="platform.Platform.provides">
+<tt class="descname">provides</tt><em class="property"> = None</em><a class="headerlink" href="#platform.Platform.provides" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of resources present on a platform to facilitate
+simple drc checking. Eg. [&#8216;qdr0&#8217;, &#8216;sysclk2x&#8217;]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="platform.Platform.sources">
+<tt class="descname">sources</tt><em class="property"> = None</em><a class="headerlink" href="#platform.Platform.sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of source files/directories required to compile
+the template top.v (does NOT include top.v itself)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="platform.Pin">
+<em class="property">class </em><tt class="descclassname">platform.</tt><tt class="descname">Pin</tt><big>(</big><em>iostd</em>, <em>loc</em><big>)</big><a class="headerlink" href="#platform.Pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple class to hold the IO standard and LOCs
+of FPGA pins.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="constraints-constraints">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">constraints</span></tt> &#8211; Constraints<a class="headerlink" href="#constraints-constraints" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="constraints.PortConstraint">
+<em class="property">class </em><tt class="descclassname">constraints.</tt><tt class="descname">PortConstraint</tt><big>(</big><em>portname=None</em>, <em>iogroup=None</em>, <em>index=None</em>, <em>loc=None</em>, <em>iostd=None</em><big>)</big><a class="headerlink" href="#constraints.PortConstraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to facilitate constructing abstracted port constraints.
+Eg, adc_data[7:0] &lt;=&gt; zdok0[7:0]
+which can later be translated into physical constraints by providing
+information about a target platform.</p>
+<dl class="method">
+<dt id="constraints.PortConstraint.gen_physical_const">
+<tt class="descname">gen_physical_const</tt><big>(</big><em>platform</em><big>)</big><a class="headerlink" href="#constraints.PortConstraint.gen_physical_const" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the loc and iostds of an abstract constraint for a given platform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>platform</strong> (<em>Platform</em>) &#8211; The platform instance against which to evaluate the constraint(s).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Jasper&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
+<li><a class="reference internal" href="#toolflow-main-package"><tt class="docutils literal"><span class="pre">toolflow</span></tt> &#8211; Main package</a></li>
+<li><a class="reference internal" href="#platform-platform"><tt class="docutils literal"><span class="pre">platform</span></tt> &#8211; Platform</a></li>
+<li><a class="reference internal" href="#constraints-constraints"><tt class="docutils literal"><span class="pre">constraints</span></tt> &#8211; Constraints</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Jasper 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Jack.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
