@@ -1,3 +1,10 @@
+"""
+A python-based toolflow to build a vivado
+project from a simulink design, using the
+CASPER xps library.
+
+A work in progress.
+"""
 import logging
 import os
 import platform
@@ -5,18 +12,31 @@ import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint
 import helpers
+import yaml
 
 class Toolflow(object):
-    def __init__(self, frontend='simulink', backend='vivado', compile_dir='/tmp'):
+    '''
+    A class embodying the main functionality of the toolflow.
+    This class is responsible for generating a complete
+    top-level verilog description of a project from a 'peripherals file'
+    which encodes information about which IP a user wants instantiated.
+
+    The toolflow class can parse such a file, and use it to generate verilog,
+    a list of source files, and a list of constraints.
+    These can be passed off to a toolflow backend to be turned into some
+    vendor-specific platform and compiled. At least, that's the plan...
+    '''
+    
+    def __init__(self, frontend='simulink', backend='vivado', compile_dir='/tmp', frontend_target='/tmp/test.slx'):
         '''
         Initialize the toolflow.
-        
-        Args:
-        frontend: Name of the toolflow frontend to use. Currently
-                  only 'simulink' is supported
-        backend : Name of the toolflow backend to use. Currently
-                  only 'vivado' is supported
-        compile_dir : compile directory
+         
+        :param frontend: Name of the toolflow frontend to use. Currently only 'simulink' is supported
+        :type frontend: str
+        :param backend: Name of the toolflow backend to use. Currently only 'vivado' is supported
+        :type backend: str
+        :param compile_dir: Compile directory where build files and logs should go.
+        :type backend: str
         '''
         # Set up a logger (the logger named 'jasper' should already
         # have been configured beforehand
@@ -26,12 +46,12 @@ class Toolflow(object):
         self.logger.info('Frontend is %s'%frontend)
         self.logger.info('Backend is %s'%backend)
 
-        self.logger.info("Setting compile directory: %s"%compile_dir)
-        os.system('mkdir -p %s'%compile_dir)
-        self.compile_dir = compile_dir
+        self.compile_dir = compile_dir.rstrip('/')
+        self.logger.info("Setting compile directory: %s"%self.compile_dir)
+        os.system('mkdir -p %s'%self.compile_dir)
 
         if frontend == 'simulink':
-            self.frontend = SimulinkFrontend(compile_dir=self.compile_dir)
+            self.frontend = SimulinkFrontend(compile_dir=self.compile_dir, target=frontend_target)
         else:
             self.logger.error("Unsupported toolflow frontent: %s"%frontend)
             raise Exception("Unsupported toolflow frontend: %s"%frontend)
@@ -42,7 +62,80 @@ class Toolflow(object):
             self.logger.error("Unsupported toolflow backent: %s"%backend)
             raise Exception("Unsupported toolflow backend: %s"%backend)
 
+        # compile parameters which can be set straight away
+        self.periph_file = self.compile_dir + '/jasper.per'
+        self.sources= []
+
+    def exec_flow(self, gen_per=True, frontend_compile=True, backend_compile=True):
+        '''
+        Execute a compile.
+        
+        :param gen_per: Have the toolflow frontend generate a fresh peripherals file
+        :type gen_per: bool
+        :param frontend_compile: Run the frontend compiler (eg. System Generator)
+        :type frontend_compile: bool
+        :param backend_compile: Run the backend compiler (eg. Vivado)
+        :type backend_compile: bool
+        '''
+
+        if gen_per:
+            self.frontend.gen_periph_file(fname=self.periph_file)
+
+        # Have the toolflow parse the information from the
+        # frontend and generate the YellowBlock objects
+        print 'generating peripheral objects'
+        self.gen_periph_objs()
+
+        # Copy the platforms top-level hdl file
+        # and begin modifying it based on the yellow
+        # block objects.
+        print 'Generating HDL'
+        self.build_top()
+        self.generate_hdl()
+        # Generate constraints (not yet xilinx standard)
+        self.generate_consts()
+        # Generate the tcl file which will start a new
+        # vivado project, and add appropriate
+        # hdl/constraint sources
+        print 'Initializing backend project'
+        self.backend.initialize(self.plat)
+        
+        if frontend_compile:
+            # Run system generator (maybe flow-wise
+            # it would make sense to run this sooner,
+            # but since it's the longest single step
+            # it's nice to run it at the end, so there's
+            # an opportunity to catch toolflow errors
+            # before waiting for it
+            print 'Running frontend compile'
+            # skip this step if you don't want to wait for sysgen in testing
+            self.frontend.compile_user_ip(update=True)
+            print 'frontend complete'
+        
+        
+        # Backend compile
+        # Generate a vivado spec constraints file from the
+        # constraints extracted from yellow blocks
+        self.add_sources_to_be()
+        self.backend.gen_constraint_file(self.constraints)
+        if backend_compile:
+            # launch vivado via the generated .tcl file
+            self.backend.compile()
+
     def check_attr_exists(self, thing, generator):
+        """
+        Lots of methods in this class require that certain attributes
+        have been set by other methods before proceeding. This is probably
+        a symptom of the code being terribly structured. This method
+        checks if an attribute exists and throws an error message if not.
+        In principle it could automatically run the necessary missing steps,
+        but that seems pretty suspect.
+
+        :param thing: Attribute to check.
+        :type thing: str
+        :param generator: Method which can be used to set thing (used for error message only)
+        :type generator: str
+        """
         try:
             if self.__getattribute__(thing) == None:
                 self.logger.error("%s is not defined. Have you run %s yet?"%(thing,generator))
@@ -52,54 +145,44 @@ class Toolflow(object):
             raise AttributeError("%s is not defined. Have you run %s yet?"%(thing,generator))
 
     def generate_hdl(self):
-        self.logger.info('setting user ip name')
-        self.user_ip_name = (self.frontend.module)
+        """
+        Generates a top file for the target platform
+        based on the peripherals file.
+        Internally, calls:
+        instantiate_periphs -- call each yellow block's mod_top method
+        instantiate_user_ip -- add ports to top module based on port entries in peripheral file
+        regenerate_top -- rewrite top.v
+        """
         self.logger.info('instantiating user peripherals')
-        self.instantiate_periphs()
+        self._instantiate_periphs()
         self.logger.info('instantiating user_ip')
-        self.instantiate_user_ip()
+        self._instantiate_user_ip()
         self.logger.info('regenerating top')
         self.regenerate_top()
 
-    def parse_periph_file(self):
-        self.check_attr_exists('periph_file', 'gen_periph_file()')
+    def _parse_periph_file(self):
+        '''
+        Open the peripherals file and parse it's
+        contents using the pyaml package.
+        Write the resulting yellow_blocks
+        and user_modules dictionaries to
+        attributes
+        '''
+        if not os.path.exists(self.periph_file):
+            self.logger.error("Peripherals file doesn't exist!")
+            raise Exception("Peripherals file doesn't exist!")
+        with open(self.periph_file, 'r') as fh:
+            yaml_dict = yaml.load(fh)
+        self.peripherals = yaml_dict['yellow_blocks']
+        self.user_modules = yaml_dict['user_modules']
 
-        self.logger.info("Parsing peripherals file: %s"%self.periph_file)
-        fh = open(self.periph_file,'r')
-        self.peripherals = {}
-        self.user_ip_ports = {}
-        self.user_sources  = {} 
-        self.user_ip_parameters = {}
-        while(True):
-            # Catch end of file and stop, otherwise strip newline characters and parse
-            line = fh.readline()
-            if len(line)==0:
-                break
-            elif line == '\n':
-                continue
-            elif line.startswith('BEGIN'):
-                self.logger.debug("Found start of new entry: %s"%line)
-                this_entry = {}
-            elif line.startswith('ENDBLOCK'):
-                self.logger.debug("Found end of entry: %s"%line)
-                self.peripherals[this_entry['name']]= this_entry
-            elif line.startswith('ENDPORT'):
-                self.logger.debug("Found port: %s"%line)
-                self.user_ip_ports[this_entry['name']]= this_entry
-            elif line.startswith('ENDSOURCEFILE'):
-                self.logger.debug("Found sourcefile entry: %s"%line)
-                self.user_sources[this_entry['name']]= this_entry
-            elif line.startswith('ENDPARAMETER'):
-                self.logger.debug("Found end of parameter: %s"%line)
-                self.user_ip_parameters[this_entry['name']]= this_entry
-            else:
-                param,val = line.rstrip('\n').split('=')
-                self.logger.debug("Added peripheral entry %s with value %s"%(param.lower(),val))
-                this_entry[param.lower()] = val
-        fh.close()
-
-    def extract_plat_info(self):
-        self.check_attr_exists('peripherals', 'parse_periph_file()')
+    def _extract_plat_info(self):
+        '''
+        Extract platform information from the
+        yellow_block attributes.
+        Use this to instantiate the appropriate
+        device from the Platform class.
+        '''
         for key in self.peripherals.keys():
             if self.peripherals[key]['tag'] == 'xps:xsg':
                 self.plat = platform.Platform.get_loader(self.peripherals[key]['hw_sys'])
@@ -109,92 +192,137 @@ class Toolflow(object):
                 return
         raise Exception("self.peripherals does not contain anything tagged xps:xsg")
 
-    def drc(self):
-        self.get_provisions()
-        self.check_attr_exists('periph_objs', 'gen_periph_objs()')
-        self.check_attr_exists('provisions', 'gen_provisions()')
-        ## check drcs for each block
-        #for obj in self.periph_objs:
-        #    obj.drc(self.plat)
-
-        # check all requirements are provided
+    def _drc(self):
+        '''
+        Get the provisions of the active platform and yellow blocks
+        and compare with the current requirements of blocks in the design.
+        '''
+        provisions = self._get_provisions()
+        # check all requirements and exclusive reqs are provided
         for obj in self.periph_objs:
             for req in obj.requires:
-                if req not in self.provisions:
+                self.logger.debug("%s requires %s"%(obj.name, req))
+                if req not in provisions:
+                    self.logger.error("NOT SATISFIED: %s requires %s"%(obj.name, req))
+                    raise Exception("DRC FAIL! %s (required by %s) not " \
+                                    "provided by platform or any peripheral"%(req,obj.name))
+            for req in obj.exc_requires:
+                self.logger.debug("%s requires %s"%(obj.name, req))
+                if req not in provisions:
+                    self.logger.error("NOT SATISFIED: %s requires %s"%(obj.name, req))
                     raise Exception("DRC FAIL! %s (required by %s) not " \
                                     "provided by platform or any peripheral"%(req,obj.name))
 
         # check for overallocation of resources
-        prov = self.provisions[:]
+        used = []
         for obj in self.periph_objs:
             for req in obj.exc_requires:
-                try:
-                    prov.remove(req)
-                except ValueError:
+                self.logger.debug("%s requires %s exclusively"%(obj.name, req))
+                if req in used:
                     raise Exception("DRC FAIL! %s requires %s, but it has \
                                      already been used by another block."%(obj.name,req))
+                else:
+                    used.append(req)
 
-
-    def get_provisions(self):
-        self.check_attr_exists('periph_objs', 'gen_periph_objs()')
-        self.provisions = []
+    def _get_provisions(self):
+        '''
+        Get and return all the provisions of the active platform and
+        yellow blocks.
+        '''
+        provisions = []
         for obj in self.periph_objs:
-            self.provisions += obj.provides
-        self.provisions += self.plat.provides
+            provisions += obj.provides
+        provisions += self.plat.provides
+        return provisions
 
-    def copy_top(self):
+    def build_top(self):
+        """
+        Copies the base top-level verilog file (which is platform
+        dependent) to the compile directory.
+        Constructs an associated VerilogModule instance ready to be
+        modified.
+        """
         basetopfile = os.getenv('HDL_ROOT') + '/%s/top.v'%self.plat.name
         self.topfile = self.compile_dir+'/top.v'
         os.system('cp %s %s'%(basetopfile,self.topfile))
+        self.sources.append(self.topfile)
+        self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
 
 
     def gen_periph_objs(self):
-        self.parse_periph_file()
-        self.extract_plat_info()
+        """
+        Generate a list of yellow blocks from the current peripheral file.
+        Internally, calls:
+        _parse_periph_file - parses .per file
+        _extract_plat_info - instantiates platform instance
+        Then calls each yellow block's constructor.
+        Runs a system-wide drc before returning.
+        """
+        self._parse_periph_file()
+        self._extract_plat_info()
         self.periph_objs = []
         for pk in self.peripherals.keys():
             self.logger.debug('Generating Yellow Block: %s'%pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(self.peripherals[pk], self.plat))
-        self.drc()
+        self._drc()
 
-    def instantiate_periphs(self):
-        self.check_attr_exists('periph_objs', 'gen_periph_objs()')
-        #self.topfile = self.backend.proj_root_dir + '/' + self.backend.top_module
-        self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
+    def _instantiate_periphs(self):
+        """
+        Calls each yellow block's modify_top method against the class'
+        top VerilogModule instance
+        """
         print 'top:',self.topfile
         for obj in self.periph_objs:
             self.logger.debug('modifying top for obj %s'%obj.name)
             obj.modify_top(self.top)
+            self.sources += obj.sources
     
-    def instantiate_user_ip(self):
-        inst = verilog.VerilogInstance(entity=self.user_ip_name,name='user_ip_inst')
-        for port in self.user_ip_ports:
-            if port == 'clk':
-                inst.add_port(name=port,signal='user_clk')
-            else:
-                inst.add_port(name=port,signal=port)
-        for param in self.user_ip_parameters:
-            inst.add_param(name=param['name'],value=param['value'])
-        self.top.add_instance(inst)
-
-    def frontend_compile(self,update=True, skip=False):
-        module, source = self.frontend.compile_user_ip(update=update, skip=skip)
-        self.backend.add_source(source)
+    def _instantiate_user_ip(self):
+        """
+        Adds VerilogInstance and ports associated with user-ip to the class' top
+        VerilogModule instance.
+        """
+        for name,module in self.user_modules.items():
+            inst = verilog.VerilogInstance(entity=name,name='%s_inst'%name)
+            for port in module['ports']:
+                if port == 'clk':
+                    inst.add_port(name=port,signal='user_clk')
+                else:
+                    inst.add_port(name=port,signal=port)
+            self.top.add_instance(inst)
+            self.sources += module['sources']
 
     def regenerate_top(self):
+        '''
+        Generate the verilog for the modified top
+        module. This involves computing the wishbone
+        interconnect / addressing and generating new
+        code for yellow block instances.
+        '''
         self.top.wb_compute()
         self.top.gen_module_file()
 
-    def add_sources(self):
+    def add_sources_to_be(self):
+        '''
+        Add all sources in the current toolflow list
+        to the backend, after de-duplicating.
+        '''
         existing_sources = []
-        for obj in self.periph_objs:
-            for source in obj.sources:
-                if source not in existing_sources:
-                    existing_sources.append(source)
-                    self.backend.add_source(source)
+        for source in self.sources:
+            if source not in existing_sources:
+                existing_sources.append(source)
+                if not os.path.exists(source):
+                    self.logger.error("sourcefile %s doesn't exist!"%source)
+                    raise Exception("sourcefile %s doesn't exist!"%source)
+                self.backend.add_source(source)
             
 
     def generate_consts(self):
+        '''
+        Compose a list of constraints from each yellow block.
+        Use platform information to generate the appropriate
+        physical realisation of each constraint.
+        '''
         self.logger.info('Extracting constraints from peripherals')
         self.check_attr_exists('periph_objs', 'gen_periph_objs()')
         self.constraints = []
@@ -211,10 +339,14 @@ class Toolflow(object):
 
 
 class ToolflowFrontend(object):
-    def __init__(self, compile_dir='/tmp'):
+    def __init__(self, compile_dir='/tmp', target='/tmp/test.slx'):
         self.logger = logging.getLogger('jasper.toolflow.frontend')
         self.compile_dir = compile_dir
-    def gen_periph_file(self,skip=False):
+        if not os.path.exists(target):
+            self.logger.error('Target path %s does not exist!'%target)
+            raise Exception('Target path %s does not exist!'%target)
+        self.target=target
+    def gen_periph_file(self,fname='jasper.per'):
         '''
         Call upon the frontend to generate a
         jasper-standard file defining peripherals
@@ -254,59 +386,59 @@ class ToolflowBackend(object):
         raise NotImplementedError()
 
 class SimulinkFrontend(ToolflowFrontend):
-    def configure(self,modelpath):
-        if not os.path.exists(modelpath):
-            logger.error('Model path %s does not exist!'%modelpath)
-            raise Exception('Model path %s does not exist!'%modelpath)
-        self.modelpath = modelpath
-        self.modelname = modelpath.split('/')[-1][:-4] #strip off extension
-        self.module = self.modelname
-    def gen_periph_file(self,skip=False):
+    def __init__(self,compile_dir='/tmp',target='/tmp/test.slx'):
+        ToolflowFrontend.__init__(self, compile_dir=compile_dir, target=target)
+        if target[-4:] not in ['.slx','.mdl']:
+            self.logger.warning('Frontend target %s does not look like a simulink file!'%target)
+        self.modelpath = target
+        self.modelname = target.split('/')[-1][:-4] #strip off extension
+    def gen_periph_file(self,fname='jasper.per'):
         '''
         generate the peripheral file. I.e., the list of yellow blocks
-        and their parameters. Return the full path to this file.
-        Use skip to just return the path without regenerating. This
-        assumes the file has been gerated on a previous toolflow run.
-        '''
-        fname = self.compile_dir.rstrip('/') + '/' \
-                + self.modelpath.split('/')[-1].rstrip('.mdl') + '.per'
-        self.logger.info('Generating yellow block description file : %s'%fname)
-        if not skip:
-            # The command to start matlab with appropriate libraries
-            matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
-            # The matlab script responsible for generating the peripheral file
-            script = 'gen_block_file'
-            # The matlab syntax to call this script with appropriate args
-            ml_cmd = "%s('%s','%s');"%(script, fname, self.modelpath)
-            # Complete command to run on terminal
-            term_cmd = matlab_start_cmd + ' -nodisplay -nosplash -nosplash -r "%s"'%ml_cmd
-            self.logger.info('Running terminal command: %s'%term_cmd)
-            os.system(term_cmd)
-        # return the full path and name of the peripherals file
-        return fname
+        and their parameters.
 
-    def compile_user_ip(self,update=False, skip=False):
-        if not skip:
-            self.logger.info('Compiling user IP to module: %s'%self.modelname)
-            # The command to start matlab with appropriate libraries
-            matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
-            # The matlab syntax to start a compile with appropriate args
-            ml_cmd = "start_sysgen_compile('%s','%s',%d);"%(self.modelpath,self.compile_dir,int(update))
-            term_cmd = matlab_start_cmd + ' -nosplash -r "%s"'%ml_cmd
-            self.logger.info('Running terminal command: %s'%term_cmd)
-            os.system(term_cmd)
-            # return the name of the top module of the user ip
-        ip_loc = self.compile_dir + '/sysgen/hdl_netlist/%s.srcs/sources_1/imports/sysgen'%self.modelname
-        return self.modelname, ip_loc
+        :param fname: The full path and name to give the peripheral file.
+        :type fname: str
+        '''
+        self.logger.info('Generating yellow block description file : %s'%fname)
+        # The command to start matlab with appropriate libraries
+        matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
+        # The matlab script responsible for generating the peripheral file
+        script = 'gen_block_file'
+        # The matlab syntax to call this script with appropriate args
+        ml_cmd = "%s('%s','%s','%s');"%(script, self.compile_dir, fname, self.modelpath)
+        # Complete command to run on terminal
+        term_cmd = matlab_start_cmd + ' -nodisplay -nosplash -r "%s"'%ml_cmd
+        self.logger.info('Running terminal command: %s'%term_cmd)
+        os.system(term_cmd)
+
+    def compile_user_ip(self,update=False):
+        '''
+        Compile the users simulink design. The resulting netlist should
+        end up in the location already specified in the periphrals file.
+
+        :param update: Update the simulink model before running system generator.
+        :type update: bool
+        '''
+        self.logger.info('Compiling user IP to module: %s'%self.modelname)
+        # The command to start matlab with appropriate libraries
+        matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
+        # The matlab syntax to start a compile with appropriate args
+        ml_cmd = "start_sysgen_compile('%s','%s',%d);"%(self.modelpath,self.compile_dir,int(update))
+        term_cmd = matlab_start_cmd + ' -nosplash -r "%s"'%ml_cmd
+        self.logger.info('Running terminal command: %s'%term_cmd)
+        os.system(term_cmd)
+        # return the name of the top module of the user ip
 
 
 class VivadoBackend(ToolflowBackend):
     def initialize(self,plat):
+        self.plat = plat
         self.name = 'vivado'
         self.manufacturer = 'xilinx'
         self.tcl_cmd = ''
         if plat.manufacturer != self.manufacturer:
-            logger.error('Trying to compile a %s FPGA using %s %s'
+            self.logger.error('Trying to compile a %s FPGA using %s %s'
                   %(plat.manufacturer,self.manufacturer,self.name))
 
         self.add_tcl_cmd('puts "Starting tcl script"')
@@ -321,14 +453,14 @@ class VivadoBackend(ToolflowBackend):
 
     def add_source(self, source):
         '''
-        Add a sourcefile to the project.
+        Add a sourcefile to the project. Via a tcl incantation.
         '''
         self.logger.debug('Adding source file: %s'%source)
         self.add_tcl_cmd('import_files -force %s'%(source))
 
     def add_const_file(self, constfile):
         '''
-        Add a constrant file to the project.
+        Add a constrant file to the project. via a tcl incantation.
         '''
         self.logger.debug('Adding constraint file: %s'%constfile)
         self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
@@ -361,7 +493,7 @@ class VivadoBackend(ToolflowBackend):
 
     def get_tcl_const(self,const):
         '''
-        Pass a single toolflow-standard constraint,
+        Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
         to a vivado project.
         '''
@@ -395,10 +527,10 @@ class VivadoBackend(ToolflowBackend):
             return 'set_property %s %s [get_ports {%s[%d]}]\n'%(attribute,val,port,index)
         
     
-    def gen_constraint_file(self, constraints, platform):
+    def gen_constraint_file(self, constraints):
         """
         Pass this method a toolflow-standard list of constraints
-        and a platform (which allows mapping net names to pins),
+        which have already had their physical parameters calculated
         and it will generate a contstraint file and add it to the
         current project.
         """

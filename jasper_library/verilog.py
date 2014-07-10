@@ -1,6 +1,14 @@
+'''
+Lots of code in this file could be shared between methods
+and the VerilogInstance/Module classes. Maybe distill
+at some point.
+'''
+
+
 import os
 import re
 from math import ceil, floor
+import logging
 
 class VerilogInstance(object):
     def __init__(self, entity='', name='', comment=None):
@@ -101,34 +109,112 @@ class VerilogInstance(object):
 class VerilogModule(object):
     def __init__(self, name='', topfile=None):
         """
-        Construct a new module, named 'name'
+        Construct a new module, named 'name'.
+        You can either start with an empty module
+        and add ports/signals/instances to it,
+        or you can specify an existing top-level file
+        topfile, which will be modified.
+        If doing the latter, the construction of
+        wishbone interconnect demands that the
+        topfile has a localparam N_WB_SLAVES,
+        which specifies the number of wishbone
+        slaves in the un-modified topfile. And 
+        SLAVE_BASE and SLAVE_HIGH localparams
+        definiting the slave addresses.
+
+        Eg:
+
+        localparam N_WB_SLAVES = 2;
+
+        localparam SLAVE_BASE = {
+          32'h00010000, // slave_1
+          32'h00000000  // slave_0
+        };
+      
+        localparam SLAVE_HIGH = {
+          32'h00010003, // slave_1
+          32'hFFFFFFFF  // slave_0
+        };
+
+        This module will only tolerate
+        i/o declarations like:
+        
+        module top (
+            input sysclk_n,
+            input sysclk_p,
+            ...
+            );
+
+        I.e, NOT
+
+        module top(
+            sysclk_n,
+            sysclk_p,
+            ...
+            );
+            input sysclk_n;
+            input sysclk_p;
+            ...
+
+        YMMV if your topfile doesn't use linebreaks as
+        shown above. I.e., for best chance of success don't do
+
+        module top( sysclk_n,
+           sysclk_p);
+
+        localparam SLAVE_BASE = {32'h00000000};
+
         """
         if len(name) != 0:
             self.name = name
         else:
             raise ValueError("'name' must be a string of non-zero length")
         
+        self.logger = logging.getLogger('jasper.verilog')
         self.topfile = topfile
-        self.ports = []
-        self.parameters = []
-        self.localparams = []
-        self.signals = []
-        self.instances = []
-        self.assignments = []
-        self.raw_str = ''
-        self.wb_slaves = 0
+        self.ports = []         # top-level ports
+        self.parameters = []    # top-level parameters
+        self.localparams = []   # top-level localparams
+        self.signals = []       # top-level wires
+        self.instances = []     # top-level instances
+        self.assignments = []   # top-level assign statements
+        self.raw_str = ''       # the verilog text describing this module
+
+        # wishbone stuff
+        # number of wishbone slaves in the model. It will be overwritten
+        # based on the N_WB_SLAVES localparam of a provided topfile,
+        # and incremented when adding wishbone-enabled instances
+        self.wb_slaves = 0 #wb slaves added to this module programmatically
+        if self.topfile is not None:
+            self.get_base_wb_slaves()
+        else:
+            self.base_wb_slaves = 0 #wb slaves in the topfile
         self.wb_base = []
         self.wb_high = []
         self.wb_name = []
-        self.get_base_wb_slaves()
+        # sourcefiles required by the module (this is currently NOT
+        # how the jasper toolflow implements source management)
         self.sourcefiles = []
 
     def wb_compute(self, base_addr=0x10000, alignment=4):
-        # base_addr: the lowest address allowed for user IP is reserved+1
-        # alignment: start addresses must be a multiple of alignment
+        '''
+        Compute the appropriate wishbone address limits,
+        based on the current wishbone-using instances
+        instantiated in the module.
+
+        Will NOT take into account wishbone memory space
+        used by the template verilog file (but see base_addr, below)
+
+        :param base_addr: The address from which indexing of instance wishbone
+        interfaces will begin. Any memory space required by the template
+        verilog file should be below this address.
+        :type base_addr: int
+        :param alignment: Alignment required by all memory start addresses.
+        :type alignment: int
+        '''
         for inst in self.instances:
             for n in range(inst.wb_interfaces):
-                print "Found new WB slave!"
+                self.logger.debug("Found new WB slave for instance %s"%inst.name)
                 self.wb_base += [base_addr]
                 self.wb_high += [base_addr + (alignment*int(ceil(inst.wb_bytes[n]/float(alignment)))) - 1]
                 self.wb_name += [inst.wb_names[n]]
@@ -137,17 +223,31 @@ class VerilogModule(object):
                 self.wb_slaves += 1
 
     def get_base_wb_slaves(self):
+        '''
+        Look for the pattern 'localparam N_WB_SLAVES'
+        in this modules topfile, and use it to extract the
+        number of wishbone slaves in the module.
+        Update the base_wb_slaves attribute accordingly.
+        Also extract the addresses. Names are auto-generated
+        '''
         fh = open('%s'%self.topfile, 'r')
         while(True):
             line = fh.readline()
             if len(line) == 0:
                 break
             elif line.lstrip(' ').startswith('localparam N_WB_SLAVES'):
-                print 'Found N_WB_SLAVES declaration'
+                self.logger.debug('Found N_WB_SLAVES declaration: %s'%line)
                 declaration = line.split('//')[0]
                 self.base_wb_slaves = int(re.search('\d+',declaration).group(0))
+                self.logger.debug('base_wb_slaves is now %d'%self.base_wb_slaves)
                 fh.close()
-                break
+                return
+
+        # if we get to here something has gone wrong
+        fh.close()
+        self.logger.error('No N_WB_SLAVES localparam found in topfile %s!'%self.topfile)
+        raise Exception('No N_WB_SLAVES localparam found in topfile %s!'%self.topfile)
+
 
     def add_port(self, name, dir, width=None, comment=None, **kwargs):
         """
@@ -227,24 +327,14 @@ class VerilogModule(object):
         else:
             self.rewrite_module_file()
 
-    #def wb_compute(self):
-    #    '''
-    #    Count the number of wishbone slaves in the system, and set their
-    #    base and high addresses
-    #    '''
-    #    base_addr = 0
-    #    for inst in self.instances:
-    #        if inst.wb_interfaces > 0:
-    #            for n in range(inst.wb_interfaces):
-    #                self.wb_base.append(base_addr)
-    #                self.wb_high.append(base_addr + inst.wb_bytes[n] - 1)
-    #                base_addr += inst.wb_bytes[n]
-    #                wb_name = 'wb_'+ inst.name + '%s'%n
-    #                self.wb_name.append(wb_name)
-    #                self.add_parameter(name=wb_name, value=self.wb_interfaces)
-    #                self.wb_interfaces += 1
-
     def rewrite_module_file(self):
+        '''
+        Rewrite the intially supplied verilog file to
+        include instance, signals, ports, assignments and
+        wishbone interfaces added programmatically.
+        The initial verilog file is backed up with a '.base'
+        extension.
+        '''
         os.system('mv %s %s.base'%(self.topfile,self.topfile))
         fh_base = open('%s.base'%self.topfile,'r')
         fh_new = open('%s'%self.topfile, 'w')
@@ -254,24 +344,22 @@ class VerilogModule(object):
             if len(line) == 0:
                 break
             elif line.lstrip(' ').startswith('module'):
-                print 'Found module declaration'
+                self.logger.debug('Found module declaration')
                 fh_new.write(line)
                 fh_new.write(self.gen_port_list())
             elif line.lstrip(' ').startswith('localparam N_WB_SLAVES'):
-                print 'Found N_WB_SLAVES declaration'
+                self.logger.debug('Found N_WB_SLAVES declaration: %s'%line)
                 declaration = line.split('//')[0]
-                base_package_slaves = int(re.search('\d+',declaration).group(0))
-                print 'base_packages slaves?',base_package_slaves
-                s = re.sub('\d+','%s'%(self.wb_slaves+base_package_slaves),declaration)
-                print s
+                s = re.sub('\d+','%s'%(self.wb_slaves+self.base_wb_slaves),declaration)
+                self.logger.debug('Replacing declaration with: %s'%s)
                 fh_new.write(s)
             elif line.lstrip(' ').startswith('localparam SLAVE_BASE = {'):
-                print 'Found slave_base dec'
+                self.logger.debug('Found slave_base dec %s'%line)
                 fh_new.write(line)
                 for slave in range(self.wb_slaves)[::-1]:
                     fh_new.write("    32'h%08x, // %s\n"%(self.wb_base[slave], self.wb_name[slave]))
             elif line.lstrip(' ').startswith('localparam SLAVE_HIGH = {'):
-                print 'Found slave_high dec'
+                self.logger.debug('Found slave_high dec: %s'%line)
                 fh_new.write(line)
                 for slave in range(self.wb_slaves)[::-1]:
                     fh_new.write("    32'h%08x, // %s\n"%(self.wb_high[slave], self.wb_name[slave]))
@@ -284,9 +372,18 @@ class VerilogModule(object):
         fh_base.close()
 
     def write_new_module_file(self):
+        '''
+        Write a verilog file from scratch, based on the
+        programmatic additions of instances / signals / etc.
+        to the VerilogModule instance.
+
+        The jasper toolflow has been using rewrite_module_file()
+        rather than this method, so it may or may not still
+        work correctly. It used to, at least...
+        '''
         mod_dec        = self.gen_mod_dec_str()
         # declare inputs/outputs with the module dec
-        #port_dec       = self.gen_ports_dec_str()
+        port_dec       = ''#self.gen_ports_dec_str()
         param_dec      = self.gen_params_dec_str()
         localparam_dec = self.gen_localparams_dec_str()
         sig_dec        = self.gen_signals_dec_str()
@@ -318,8 +415,11 @@ class VerilogModule(object):
 
     def gen_top_mod(self):
         """
-        Generate the code that needs to go in a top level verilog file
-        to incorporate this module
+        Return the code that needs to go in a top level verilog file
+        to incorporate this module. I.e., everything except the module
+        port declaration headers and endmodule lines.
+
+        TODO: This is almost identical to write_new_module_file(). Combine?
         """        
         # don't need this if we declare ports with the module declaration
         port_dec         = ''#self.gen_ports_dec_str()
@@ -368,7 +468,7 @@ class VerilogModule(object):
     def gen_params_dec_str(self):
         """
         Generate the verilog code required to
-        declare ports
+        declare parameters
         """
         s = ''
         for pn,parameter in enumerate(self.parameters):
@@ -381,7 +481,7 @@ class VerilogModule(object):
     def gen_localparams_dec_str(self):
         """
         Generate the verilog code required to
-        declare ports
+        declare localparams
         """
         s = ''
         for pn,parameter in enumerate(self.localparams):
@@ -392,6 +492,10 @@ class VerilogModule(object):
         return s
 
     def gen_port_list(self):
+        """
+        Generate the verilog code required to
+        declare ports
+        """
         s = ''
         kwm = {'in':'input','out':'output','inout':'inout'}
         for pn,port in enumerate(self.ports):
@@ -407,7 +511,7 @@ class VerilogModule(object):
     def gen_ports_dec_str(self):
         """
         Generate the verilog code required to
-        declare parameters
+        declare ports with special attributes, eg LOCS, etc.
         """
         # keyword map
         kwm = {'in':'input','out':'output','inout':'inout'}

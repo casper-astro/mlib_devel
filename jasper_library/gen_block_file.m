@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [] = gen_block_file(output_fname,sys)
+function [] = gen_block_file(compile_dir,output_fname,sys)
 % Output the parameters of all xps-tagged blocks to the text file "peripherals.txt"
 % so that they can be parsed by the reset of the toolflow
 
@@ -32,11 +32,6 @@ if nargin > 1
 end
 
 this_sys = gcs;
-
-%% add xps_library path -- this is necessary in order to properly get parameters
-%% from MSSGE block, which rely on various callbacks
-%addpath([getenv('MLIB_DEVEL_PATH'), '/xps_library']);
-%addpath([getenv('MLIB_DEVEL_PATH'), '/jasper_library']);
 
 % search for blocks in the system
 xps_blks        = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^xps:');
@@ -105,50 +100,47 @@ end
 disp(sprintf('Opening output file: %s',output_fname));
 fid = fopen(output_fname,'w');
 
+fprintf(fid,'yellow_blocks:\n');
 for n = 1:length(xps_blks)
     % Save all the user specified parameters ('DialogParameters')
     % as well as the tag name, which identifies the block to the rest
     % of the toolflow
     block_params = get_param(xps_blks{n},'DialogParameters');
     fields = fieldnames(block_params);
-    fprintf(fid,'BEGINBLOCK %s\n',xps_blks{n});
-    fprintf(fid,'%s=%s\n','Name',get_param(xps_blks{n},'Name'));
-    fprintf(fid,'%s=%s\n','FullPath',xps_blks{n});
-    fprintf(fid,'%s=%s\n','Tag',get_param(xps_blks{n},'Tag'));
+    fprintf(fid,'  %s:\n',xps_blks{n});
+    fprintf(fid,'    %s: %s\n','name',get_param(xps_blks{n},'Name'));
+    fprintf(fid,'    %s: %s\n','fullpath', xps_blks{n});
+    fprintf(fid,'    %s: %s\n','tag',get_param(xps_blks{n},'Tag'));
     for m = 1:length(fields)
-        fprintf(fid,'%s=%s\n',fields{m},get_param(xps_blks{n},fields{m}));
+        fprintf(fid,'    %s: %s\n',fields{m},get_param(xps_blks{n},fields{m}));
     end
-    fprintf(fid,'ENDBLOCK %s\n\n',xps_blks{n});
 end 
 
 % Write the names of all ports
 % Maybe in future also include data types, but these are not trivially available
 % from the gateway out block parameters, which inherit type.
 
+fprintf(fid,'\nuser_modules:\n');
+fprintf(fid,'  %s:\n',bdroot);
 %explicitly add a clock port, to allow the downstream tools to correctly
 %infer it's presence
-fprintf(fid,'BEGINPORT simulink_clock\n');
-fprintf(fid,'name=clk\n');
-fprintf(fid,'ENDPORT\n\n');
+fprintf(fid,'    ports:\n');
+fprintf(fid,'      - clk\n');
     
 for n = 1:length(gateway_ins)
-    fprintf(fid,'BEGINPORT %s\n',gateway_ins{n});
-    fprintf(fid,'name=%s\n',get_param(gateway_ins{n},'Name'));
-    fprintf(fid,'ENDPORT\n\n');
+    fprintf(fid,'      - %s\n',get_param(gateway_ins{n},'Name'));
 end 
 for n = 1:length(gateway_outs)
-    fprintf(fid,'BEGINPORT %s\n',gateway_outs{n});
-    fprintf(fid,'name=%s\n',get_param(gateway_outs{n},'Name'));
-    fprintf(fid,'ENDPORT\n\n');
+    fprintf(fid,'      - %s\n',get_param(gateway_outs{n},'Name'));
 end 
 
 % Write the paths of any custom IP that needs to be added to the project before the final compile.
 % Expand relative paths for easy location of the files later
+fprintf(fid,'    sources:\n');
+path_to_netlist = [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']
+fprintf(fid,'      - %s\n', path_to_netlist);
 for n = 1:length(xps_pcore_blks)
-    fprintf(fid,'BEGINSOURCEFILE %s\n',xps_pcore_blks{n});
-    fprintf(fid,'name=%s\n',get_param(xps_pcore_blks{n},'Name'));
-    fprintf(fid,'path=%s\n',GetFullPath(get_param(xps_pcore_blks{n},'pcore_path')));
-    fprintf(fid,'ENDSOURCEFILE\n\n');
+    fprintf(fid,'      - %s%s\n',compile_dir,path_to_netlist);
 end 
 
 

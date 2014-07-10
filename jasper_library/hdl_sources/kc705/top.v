@@ -95,11 +95,11 @@ module top (
 
 
   localparam SLAVE_BASE = {
-    32'h0000
+    32'h00000000
   };
 
   localparam SLAVE_HIGH = {
-    32'hFFFF
+    32'h0000FFFF
   };
 
   wire    [N_WB_SLAVES - 1:0] wbs_cyc_o;

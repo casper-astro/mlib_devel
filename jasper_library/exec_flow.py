@@ -1,28 +1,52 @@
+#! /usr/bin/env python
+
 import os
 import logging
 import toolflow
-import os
+import time
 
-##############################################################
-##############################################################
-##############################################################
-# The simulink model to compile
-MODELNAME = '/tools/mlib_devel/jasper_library/test_models/test.slx'
-# The build directory
-CD = '/home/jack/temp/toolflow_test'
-os.system('mkdir -p %s'%CD)
+# A straight lift from StackOverflow...
+def shell_source(script):
+    """Sometime you want to emulate the action of "source" in bash,
+    settings some environment variables. Here is a way to do it."""
+    import subprocess, os
+    pipe = subprocess.Popen(". %s; env" % script, stdout=subprocess.PIPE, shell=True)
+    output = pipe.communicate()[0]
+    env = dict((line.split("=", 1) for line in output.splitlines()))
+    os.environ.update(env)
 
-SKIP_PER = False #skip generating the peripherals file
-SKIP_COMPILE = False #skip running sysgen
-##############################################################
-##############################################################
-##############################################################
+os.environ['USE_VIVADO_RUNTIME_FOR_MATLAB'] = '1' #see Xilinx answer record 59236
+os.environ['MATLAB_PATH'] = '/tools/MATLAB/R2013a'
+os.environ['XILINX_PATH'] = '/media/overflow/Xilinx/Vivado/2014.1'
+os.environ['MLIB_DEVEL_PATH'] = '/tools/mlib_devel'
+os.environ['MATLAB'] = os.environ['MATLAB_PATH']
+os.environ['CASPER_BASE_PATH'] = '/tools/mlib_devel'
+os.environ['HDL_ROOT'] = os.environ['CASPER_BASE_PATH']+'/jasper_library/hdl_sources'
+shell_source(os.environ['XILINX_PATH']+'/settings64.sh')
+
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option("-y", "--gen_yb", dest="gen_yb", action='store_false', default='True',
+                  help="skip yellow block peripheral file generation")
+parser.add_option("-f", "--fe", dest="fe", action='store_false', default='True',
+                  help="skip frontend compilation")
+parser.add_option("-b", "--be", dest="be", action='store_false', default='True',
+                  help="skip backend compilation")
+parser.add_option("-m", "--model", dest="model", type='string',
+                  default='/tools/mlib_devel/jasper_library/test_models/test.slx',
+                  help="model to compile")
+parser.add_option("-c", "--builddir", dest="builddir", type='string',
+                  default='/home/jack/temp/toolflow_test',
+                  help="build directory")
+
+(opts, args) = parser.parse_args()
 
 # logging stuff...
+os.system('mkdir -p %s'%opts.builddir)
 logger = logging.getLogger('jasper')
 logger.setLevel(logging.DEBUG)
 
-handler = logging.FileHandler('%s/jasper.log'%CD, mode='w')
+handler = logging.FileHandler('%s/jasper.log'%opts.builddir, mode='w')
 handler.setLevel(logging.DEBUG)
 format = logging.Formatter('%(levelname)s - %(asctime)s - %(name)s - %(message)s')
 handler.setFormatter(format)
@@ -36,55 +60,6 @@ logger.info('Starting compile')
 
 
 # initialise the toolflow
-toolflow = toolflow.Toolflow(frontend='simulink', backend='vivado', compile_dir=CD)
+toolflow = toolflow.Toolflow(frontend='simulink', backend='vivado', compile_dir=opts.builddir, frontend_target=opts.model)
 
-#toolflow.set_compile_dir(CD)
-
-print 'configuring frontend'
-toolflow.frontend.configure(MODELNAME)
-
-print 'generating frontend peripheral file'
-# Skip this if you already have an up to date peripheral file (saves some time for testing)
-toolflow.periph_file = toolflow.frontend.gen_periph_file(skip=SKIP_PER)
-
-# Have the toolflow parse the information from the
-# frontend and generate the YellowBlock objects
-print 'generating peripheral objects'
-toolflow.gen_periph_objs()
-
-# Copy the platforms top-level hdl file
-# and begin modifying it based on the yellow
-# block objects.
-print 'Generating HDL'
-toolflow.copy_top()
-toolflow.generate_hdl()
-# Generate constraints (not yet xilinx standard)
-toolflow.generate_consts()
-
-# Generate the tcl file which will start a new
-# vivado project, and add appropriate
-# hdl/constraint sources
-print 'Initializing backend project'
-toolflow.backend.initialize(toolflow.plat)
-toolflow.add_sources()
-
-# Run system generator (maybe flow-wise
-# it would make sense to run this sooner,
-# but since it's the longest single step
-# it's nice to run it at the end, so there's
-# an opportunity to catch toolflow errors
-# before waiting for it
-print 'Running frontend compile'
-# skip this step if you don't want to wait for sysgen in testing
-toolflow.frontend_compile(update=True,skip=SKIP_COMPILE)
-print 'frontend complete'
-
-
-# Backend compile
-# Generate a vivado spec constraints file from the
-# constraints extracted from yellow blocks
-toolflow.backend.gen_constraint_file(toolflow.constraints, toolflow.plat)
-# launch vivado via the generated .tcl file
-toolflow.backend.compile()
-
-exit()
+toolflow.exec_flow(gen_per=opts.gen_yb, frontend_compile=opts.fe, backend_compile=opts.be)

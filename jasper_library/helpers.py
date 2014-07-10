@@ -1,9 +1,10 @@
-def to_int_list(str):
+def to_int_list(s):
     '''
     take a string like '[0,1,2,3]'
     and return a list of integers
     '''
-    return map(int,str.rstrip(']').lstrip('[').split(','))
+    s = str(s)
+    return map(int,s.rstrip(']').lstrip('[').split(','))
 
 def write_file(fn,str):
     '''

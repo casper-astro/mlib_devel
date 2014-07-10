@@ -13,9 +13,9 @@ class gpio(YellowBlock):
             self.bitwidth = int(self.bitwidth)
 
         # If we're DDRing, we only need half the number of pins...
-        if self.use_ddr == 'on':
+        if self.use_ddr:
             self.pad_bitwidth = self.bitwidth / 2
-        elif self.use_ddr == 'off':
+        else:
             self.pad_bitwidth = self.bitwidth
 
         self.io_group = self.io_group.split(':')[-1] #iogroups have the form PLATFORM:GROUP (now would be a good time to change this!)
