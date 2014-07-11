@@ -5,44 +5,59 @@ class PortConstraint(object):
      which can later be translated into physical constraints by providing
      information about a target platform.
      '''
-     def __init__(self, portname=None, iogroup=None, index=None, loc=None, iostd=None):
+     def __init__(self, portname, iogroup, port_index=0, iogroup_index=0, loc=None, iostd=None):
          '''
          Construct a PortConstraint instance.
 
          :param portname: The name (in verilog) of the port
          :type portname: str
+         :param port_index: Specify an offset of the port index to attach to iogroup[index]. This feature was added so that
+         we can do (eg.) myport[3:0] <=> gpioA[3:0], myport[7:4] <=> gpioB[3:0]
+         :type port_index: int
          :param iogroup: The abstract name of the ports physical connection (eg. zdok0, zdok1, gpioa)
          :type iogroup: str
-         :param index: The index of the abstract name to which the HDL port should connect
-         :type index: int or list
+         :param iogroup_index: The index of the abstract name to which the HDL port should connect
+         :type iogroup_index: int or list
          :param loc: Specify a loc to construct a physical constraint, forgoing the abstract names. Experimental.
          :type loc: list
          :param iostd: Specify an iostd to construct a physical constraint, forgoing the abstract names. Experimental.
          :type loc: list
          '''
          self.portname = portname
+         self.port_index = port_index
          self.iogroup = iogroup 
-         self.index = index
+         self.iogroup_index = iogroup_index
          self.loc = loc
          self.iostd = iostd
+
+         if not type(port_index) == type(iogroup_index):
+             raise TypeError('port_index (%s) / iogroup_index (%s) type mismatch!'%(type(port_index), type(iogroup_index)))
+         else:
+             if isinstance(port_index,list):
+                 self.is_vector = True
+                 self.width = len(port_index)
+                 if len(port_index) != len(iogroup_index):
+                     raise ValueError("Tried to constrain a multidimensional signal with iogroup  with different dimensions!")
+             else:
+                 self.is_vector = False
+                 self.width = 1
+
+
          if loc is not None:
-             if isinstance(index, list):
-                 if not isinstance(loc,list):
-                     raise ValueError("Tried to constrain a multidimensional signal with a single LOC!")
-                 elif len(loc) != len(index):
-                     raise ValueError("Tried to constrain a multidimensional signal with a list of LOCs with different dimensions!")
+             if self.is_vector:
+                 try:
+                     if len(loc) != len(port_index):
+                         raise ValueError("Tried to constrain a multidimensional signal with a list of LOCs with different dimensions!")
+                 except TypeError:
+                     raise TypeError("Tried to constrain a mulidimensional signal with LOCs of type %s"%type(loc))
+
 
          if iostd is not None:
-             if isinstance(index, list):
+             if self.is_vector:
                  if not isinstance(iostd,list):
-                     self.iostd = [iostd]*len(index)
-                 elif len(iostd) != len(index):
+                     self.iostd = [iostd]*len(port_index)
+                 elif len(iostd) != len(port_index):
                      raise ValueError("Tried to constrain a multidimensional signal with a list of IOSTDs with different dimensions!")
-
-         if index is None:
-             self.width = 1
-         else:
-             self.width = len(index)
 
      def gen_physical_const(self,platform):
          '''
@@ -51,7 +66,7 @@ class PortConstraint(object):
          :param platform: The platform instance against which to evaluate the constraint(s).
          :type platform: Platform
          '''
-         pins = platform.get_pin(self.iogroup, index=self.index)
+         pins = platform.get_pin(self.iogroup, index=self.iogroup_index)
          if type(pins) is list:
              #if self.loc is None:
                  self.loc = [pin.loc for pin in pins]

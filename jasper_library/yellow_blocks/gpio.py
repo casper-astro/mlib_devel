@@ -53,4 +53,4 @@ class gpio(YellowBlock):
         top.add_signal('%s_gateway'%self.fullname, width=self.bitwidth, comment='%s hookup'%self.fullname)
 
     def gen_constraints(self):
-        return [PortConstraint(self.fullname+'_ext', iogroup=self.io_group, index=to_int_list(self.bit_index))]
+        return [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]

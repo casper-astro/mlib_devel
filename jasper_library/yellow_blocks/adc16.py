@@ -3,34 +3,27 @@ from verilog import VerilogInstance
 from constraints import PortConstraint
 
 class adc16(YellowBlock):
-    def initialize(self)
-        self.num_units = 4*int(self.board_count)
-        if self.zdok_rev == '1':
-            self.num_clocks = int(self.board_count)
+    def initialize(self):
+        # num_units is the number of ADC chips
+        # board_count is the number of boards
+        self.num_units = 4*self.board_count
+        if self.zdok_rev == 2:
+            self.num_clocks = self.board_count
         else:
-            self.num_clocks = self.num_units
-        # The zdok revision 0 case is not completely implemented (it should be ok up till
-        # physical constraint generation) so barf here.
-        if self.zdok_rev == '1':
-            raise NotImplementedError("adc16 not yet supported for zdok revisions other that '1'")
+            raise NotImplementedError("adc16 not yet supported for zdok revisions other that 1")
+            # The zdok revision 1 case is not completely implemented (it should be ok up till
+            # physical constraint generation) so barf here.
+
         self.add_source('adc16_interface')
 
         self.provides = ['adc0_clk','adc0_clk90', 'adc0_clk180', 'adc0_clk270']
         self.requires = ['user_clk']
-        if self.num_units > 4:
+        if self.board_count == 2:
             self.exc_requires = ['zdok0', 'zdok1']
-        else:
+        elif self.board_count == 1:
             self.exc_requires = ['zdok0']
-
-    #def set_dependencies(self):
-    #    self.add_resource('adc0_clk')
-    #    self.add_resource('adc0_clk90')
-    #    self.add_resource('adc0_clk180')
-    #    self.add_resource('adc0_clk270')
-    #    self.add_requirement('user_clk')
-    #    self.add_exc_requirement('zdok0')
-    #    if self.num_units > 4:
-    #        self.add_exc_requirement('zdok1')
+        else:
+            raise NotImplementedError("ADC16 not supported for board counts other than 1 or 2")
 
     def modify_top(self,top):
         module = 'adc16_interface'
@@ -108,29 +101,29 @@ class adc16(YellowBlock):
         # ports which go to the wb controller. Any ports which don't go to top level need
         # corresponding signals to be added to top.v
         inst.add_port('fabric_clk', 'adc0_clk')
-        top.add_signal('adc0_clk')
         inst.add_port('fabric_clk_90', 'adc0_clk90')
-        top.add_signal('adc0_clk_90')
         inst.add_port('fabric_clk_180', 'adc0_clk180')
-        top.add_signal('adc0_clk_180')
         inst.add_port('fabric_clk_270', 'adc0_clk270')
+        top.add_signal('adc0_clk')
+        top.add_signal('adc0_clk_90')
+        top.add_signal('adc0_clk_180')
         top.add_signal('adc0_clk_270')
 
         inst.add_port('reset', 'adc16_reset')
-        top.add_signal('adc16_reset', width=1)
         inst.add_port('iserdes_bitslip', 'adc16_iserdes_bitslip')
+        top.add_signal('adc16_reset')
         top.add_signal('adc16_iserdes_bitslip', width=8)
 
         inst.add_port('delay_rst', 'adc16_delay_rst')
-        top.add_signal('adc16_delay_rst', width=64)
         inst.add_port('delay_tap', 'adc16_delay_tap')
+        top.add_signal('adc16_delay_rst', width=64)
         top.add_signal('adc16_delay_tap', width=5)
 
         inst.add_port('snap_req', 'adc16_snap_req')
-        top.add_signal('adc16_snap_req', width=1)
         inst.add_port('snap_we', 'adc16_snap_we')
-        top.add_signal('adc16_snap_we', width=1)
         inst.add_port('snap_addr', 'adc16_snap_addr')
+        top.add_signal('adc16_snap_req', width=1)
+        top.add_signal('adc16_snap_we', width=1)
         top.add_signal('adc16_snap_addr', width=10)
 
         inst.add_port('locked', 'adc16_locked')
@@ -148,17 +141,17 @@ class adc16(YellowBlock):
             top.add_port('clk_frame_n', 'in', width=int(self.num_units))
 
         inst.add_port('clk_line_p', 'adc16_clk_line_p')
-        top.add_port('adc16_clk_line_p', 'in', width=int(self.num_clocks))
         inst.add_port('clk_line_n', 'adc16_clk_line_n')
-        top.add_port('adc16_clk_line_n', 'in', width=int(self.num_clocks))
         inst.add_port('ser_a_p', 'adc16_ser_a_p')
-        top.add_port('adc16_ser_a_p', 'in', width=4*int(self.num_units))
         inst.add_port('ser_a_n', 'adc16_ser_a_n')
-        top.add_port('adc16_ser_a_n', 'in', width=4*int(self.num_units))
         inst.add_port('ser_b_p', 'adc16_ser_b_p')
-        top.add_port('adc16_ser_b_p', 'in', width=4*int(self.num_units))
         inst.add_port('ser_b_n', 'adc16_ser_b_n')
-        top.add_port('adc16_ser_b_n', 'in', width=4*int(self.num_units))
+        top.add_port('adc16_clk_line_p', 'in', width=self.num_clocks)
+        top.add_port('adc16_clk_line_n', 'in', width=self.num_clocks)
+        top.add_port('adc16_ser_a_p', 'in', width=4*self.num_units)
+        top.add_port('adc16_ser_a_n', 'in', width=4*self.num_units)
+        top.add_port('adc16_ser_b_p', 'in', width=4*self.num_units)
+        top.add_port('adc16_ser_b_n', 'in', width=4*self.num_units)
 
 
         top.add_instance(inst)
@@ -236,23 +229,23 @@ class adc16(YellowBlock):
     def gen_constraints(self):
         cons = []
         # ADC SPI interface
-        cons.append(PortConstraint('adc0_adc3wire_csn1',  iogroup='zdok0', index=21))
-        cons.append(PortConstraint('adc0_adc3wire_csn2',  iogroup='zdok0', index=20))
-        cons.append(PortConstraint('adc0_adc3wire_csn3',  iogroup='zdok0', index=4))
-        cons.append(PortConstraint('adc0_adc3wire_csn4',  iogroup='zdok0', index=40))
-        cons.append(PortConstraint('adc0_adc3wire_sdata', iogroup='zdok0', index=41))
-        cons.append(PortConstraint('adc0_adc3wire_sclk',  iogroup='zdok0', index=3))
+        cons.append(PortConstraint('adc0_adc3wire_csn1',  'zdok0', iogroup_index=21))
+        cons.append(PortConstraint('adc0_adc3wire_csn2',  'zdok0', iogroup_index=20))
+        cons.append(PortConstraint('adc0_adc3wire_csn3',  'zdok0', iogroup_index=4))
+        cons.append(PortConstraint('adc0_adc3wire_csn4',  'zdok0', iogroup_index=40))
+        cons.append(PortConstraint('adc0_adc3wire_sdata', 'zdok0', iogroup_index=41))
+        cons.append(PortConstraint('adc0_adc3wire_sclk',  'zdok0', iogroup_index=3))
         # SPI interface for the second zdok, if we're using it...
         if self.num_units > 4:
-            cons.append(PortConstraint('adc1_adc3wire_csn1',  iogroup='zdok1', index=21))
-            cons.append(PortConstraint('adc1_adc3wire_csn2',  iogroup='zdok1', index=20))
-            cons.append(PortConstraint('adc1_adc3wire_csn3',  iogroup='zdok1', index=4))
-            cons.append(PortConstraint('adc1_adc3wire_csn4',  iogroup='zdok1', index=40))
-            cons.append(PortConstraint('adc1_adc3wire_sdata', iogroup='zdok1', index=41))
-            cons.append(PortConstraint('adc1_adc3wire_sclk',  iogroup='zdok1', index=3))
+            cons.append(PortConstraint('adc1_adc3wire_csn1',  'zdok1', iogroup_index=21))
+            cons.append(PortConstraint('adc1_adc3wire_csn2',  'zdok1', iogroup_index=20))
+            cons.append(PortConstraint('adc1_adc3wire_csn3',  'zdok1', iogroup_index=4))
+            cons.append(PortConstraint('adc1_adc3wire_csn4',  'zdok1', iogroup_index=40))
+            cons.append(PortConstraint('adc1_adc3wire_sdata', 'zdok1', iogroup_index=41))
+            cons.append(PortConstraint('adc1_adc3wire_sclk',  'zdok1', iogroup_index=3))
 
-        cons.append(PortConstraint('adc16_clk_line_p',  iogroup='zdok0_p', index=39))
-        cons.append(PortConstraint('adc16_clk_line_n',  iogroup='zdok0_n', index=39))
+        cons.append(PortConstraint('adc16_clk_line_p',  'zdok0_p', iogroup_index=39))
+        cons.append(PortConstraint('adc16_clk_line_n',  'zdok0_n', iogroup_index=39))
         # older zdok revisions need a frame clock...
         
         #ZDOK pins. ZDOK differential index
@@ -330,11 +323,15 @@ class adc16(YellowBlock):
         17,
         ]
 
-        cons.append(PortConstraint('adc16_ser_a_p', iogroup='zdok0_p', index=a_group))
-        cons.append(PortConstraint('adc16_ser_a_n', iogroup='zdok0_n', index=a_group))
-
-        cons.append(PortConstraint('adc16_ser_b_p', iogroup='zdok0_p', index=b_group))
-        cons.append(PortConstraint('adc16_ser_b_n', iogroup='zdok0_n', index=b_group))
+        cons.append(PortConstraint('adc16_ser_a_p', 'zdok0_p', port_index=range(16), iogroup_index=a_group))
+        cons.append(PortConstraint('adc16_ser_a_n', 'zdok0_n', port_index=range(16), iogroup_index=a_group))
+        cons.append(PortConstraint('adc16_ser_b_p', 'zdok0_p', port_index=range(16), iogroup_index=b_group))
+        cons.append(PortConstraint('adc16_ser_b_n', 'zdok0_n', port_index=range(16), iogroup_index=b_group))
+        if self.num_units > 4:
+            cons.append(PortConstraint('adc16_ser_a_p', 'zdok1_p', port_index=range(16,32), iogroup_index=a_group))
+            cons.append(PortConstraint('adc16_ser_a_n', 'zdok1_n', port_index=range(16,32), iogroup_index=a_group))
+            cons.append(PortConstraint('adc16_ser_b_p', 'zdok1_p', port_index=range(16,32), iogroup_index=b_group))
+            cons.append(PortConstraint('adc16_ser_b_n', 'zdok1_n', port_index=range(16,32), iogroup_index=b_group))
 
         return cons
 

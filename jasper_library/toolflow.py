@@ -501,19 +501,20 @@ class VivadoBackend(ToolflowBackend):
         if isinstance(const, PortConstraint):
             self.logger.debug('New constraint instance found')
             if const.loc is not None:
-                if const.index is None:
+                if const.is_vector:
+                    #A constraint with an index, eg. gpio_0
+                    for i in const.port_index:
+                        user_const += self.format_const('package_pin', const.loc[i], const.portname, index=i)
+                else:
                     #A constraint with no index, eg. sys_clk
                     user_const += self.format_const('package_pin', const.loc, const.portname)
-                else:
-                    #A constraint with an index, eg. gpio_0
-                    for i in range(const.width):
-                        user_const += self.format_const('package_pin', const.loc[i], const.portname, index=i)
+
             if const.iostd is not None:
-                if const.index is None:
-                    user_const += self.format_const('iostandard', const.iostd, const.portname)
-                else:
-                    for i in range(const.width):
+                if const.is_vector:
+                    for i in const.port_index:
                         user_const += self.format_const('iostandard', const.iostd[i], const.portname, index=i)
+                else:
+                    user_const += self.format_const('iostandard', const.iostd, const.portname)
         return user_const
 
     def format_const(self, attribute, val, port, index=None):
