@@ -1,17 +1,19 @@
 #!/bin/bash
 ####### User to edit these accordingly ######
 echo "Setting up tunnel to license server"
-ssh -L 27000:lics.ra.phy.cam.ac.uk:27000 -L 27001:lics.ra.phy.cam.ac.uk:27001 -L 54737:lics.ra.phy.cam.ac.uk:54737 -N jack@appcm.ra.phy.cam.ac.uk &
+ssh -L 27001:lics.ra.phy.cam.ac.uk:27001 -L 54737:lics.ra.phy.cam.ac.uk:54737 -N jack@appcm.ra.phy.cam.ac.uk &
 sleep 5
 export MATLAB_PATH=/tools/MATLAB/R2013a
 PLATFORM=lin64
-export XILINX_PATH=/media/overflow/Xilinx/Vivado/2014.1
+export XILINX_PATH=/media/overflow/Xilinx/Vivado/2014.2
 export MLIB_DEVEL_PATH=/tools/mlib_devel
+export USE_VIVADO_RUNTIME_FOR_MATLAB=1
 ##############################################
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
 source $XILINX_PATH/settings64.sh
-export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}:${MATLAB_PATH}/bin
+#export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}:${MATLAB_PATH}/bin
+export PATH=${PATH}:${MATLAB_PATH}/bin
 export XPS_BASE_PATH=$MLIB_DEVEL_PATH/xps_base
 export MATLAB=$MATLAB_PATH
 #$MATLAB/bin/matlab
