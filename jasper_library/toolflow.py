@@ -243,6 +243,9 @@ class Toolflow(object):
         modified.
         """
         basetopfile = os.getenv('HDL_ROOT') + '/%s/top.v'%self.plat.name
+        if not os.path.isfile(basetopfile):
+            logger.error("Template top.v file %s doesn't exist!"%basetopfile)
+            raise Exception("Template top.v file %s doesn't exist!"%basetopfile)
         self.topfile = self.compile_dir+'/top.v'
         os.system('cp %s %s'%(basetopfile,self.topfile))
         self.sources.append(self.topfile)
