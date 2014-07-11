@@ -17,7 +17,7 @@ def shell_source(script):
 
 os.environ['USE_VIVADO_RUNTIME_FOR_MATLAB'] = '1' #see Xilinx answer record 59236
 os.environ['MATLAB_PATH'] = '/tools/MATLAB/R2013a'
-os.environ['XILINX_PATH'] = '/media/overflow/Xilinx/Vivado/2014.1'
+os.environ['XILINX_PATH'] = '/media/overflow/Xilinx/Vivado/2014.2'
 os.environ['MLIB_DEVEL_PATH'] = '/tools/mlib_devel'
 os.environ['MATLAB'] = os.environ['MATLAB_PATH']
 os.environ['CASPER_BASE_PATH'] = '/tools/mlib_devel'
