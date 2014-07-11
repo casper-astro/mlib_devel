@@ -15,6 +15,8 @@ class adc16(YellowBlock):
             # physical constraint generation) so barf here.
 
         self.add_source('adc16_interface')
+        self.add_source('wb_adc16_controller')
+        self.add_source('wb_bram')
 
         self.provides = ['adc0_clk','adc0_clk90', 'adc0_clk180', 'adc0_clk270']
         self.requires = ['user_clk']
