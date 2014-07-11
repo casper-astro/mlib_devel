@@ -1300,7 +1300,7 @@ Library {
       "ut\ndetermined by 'Output column order' parameter."
       MaskPromptString	      "Input vector length (2^?)|Output vector length (2^?)|QDR SRAM chip|Swap input halves?|Ou"
       "tput column order|Interleave step (2^?)|Custom map"
-      MaskStyleString	      "edit,edit,popup(qdr0|qdr1),popup(no|yes),popup(in order|interleaved|custom),edit,edit"
+      MaskStyleString	      "edit,edit,popup(qdr0|qdr1|qdr2|qdr3),popup(no|yes),popup(in order|interleaved|custom),edit,edit"
       MaskVariables	      "idepth=@1;odepth=@2;which_qdr=&3;swap_input=&4;output_order=&5;step_bits=@6;custom_map=@7;"
       MaskTunableValueString  "on,on,on,on,on,on,on"
       MaskCallbackString      "||||||"
@@ -5912,7 +5912,7 @@ Library {
       Opaque		      off
       MaskHideContents	      off
       MaskPromptString	      "Input blocksize (2^n)|Output blocksize (2^n)|QDR Chip"
-      MaskStyleString	      "edit,edit,popup(qdr0|qdr1)"
+      MaskStyleString	      "edit,edit,popup(qdr0|qdr1|qdr2|qdr3)"
       MaskVariables	      "idepth=@1;odepth=@2;which_qdr=&3;"
       MaskTunableValueString  "on,on,on"
       MaskCallbackString      "||"
