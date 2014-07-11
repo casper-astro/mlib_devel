@@ -35,9 +35,13 @@ function barrel_switcher_init(blk, varargin)
   clog('entering barrel_switcher_init', {'trace', 'barrel_switcher_init_debug'});
 
   % Declare any default values for arguments you might like.
+  % reg_retiming is not an actual parameter of this block, but it is included
+  % in defaults so that same_state will return false for blocks drawn prior to
+  % adding reg_retiming='on' to some of the underlying Delay blocks.
   defaults = { ...
     'n_inputs', 1, ...
     'async', 'off', ...
+    'reg_retiming', 'on', ...
   };
 
   if same_state(blk, 'defaults', defaults, varargin{:}), return, end

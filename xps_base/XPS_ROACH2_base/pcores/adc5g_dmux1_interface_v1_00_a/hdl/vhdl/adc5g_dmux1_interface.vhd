@@ -104,6 +104,7 @@ architecture behavioral of adc5g_dmux1_interface is
   signal adc_clk       : std_logic;
   signal adc_clk_div   : std_logic;
   signal adc_sync      : std_logic;
+  signal fifo_sync     : std_logic;
   signal refclk        : std_logic;
 
   -- MMCM signals
@@ -321,8 +322,8 @@ begin
   -- Resets
   adc_reset_o <= '0';
   isd_rst     <= ctrl_reset;
-  mmcm_rst    <= ctrl_reset;
-  fifo_rst    <= not mmcm_locked;
+  mmcm_rst    <= dcm_reset;
+  fifo_rst    <= (not mmcm_locked) or ctrl_reset;
 
   CBUF0:   IBUFDS
     generic map(
@@ -418,7 +419,19 @@ begin
   CBUF2f:  BUFG     port map (i=> mmcm_clkout4,  o=> ctrl_clk270_out);
 
   ctrl_dcm_locked <= mmcm_locked;
-  sync <= adc_sync;
+
+  -- purpose: Capture sync input
+  -- type   : sequential
+  -- inputs : isd_clkdiv, isd_rst, adc_sync
+  -- outputs: sync
+  SYNCCAP: process (isd_clkdiv, isd_rst)
+  begin  -- process SYNCCAP
+    if isd_rst = '1' then               -- asynchronous reset (active high)
+      fifo_sync <= '0';
+    elsif isd_clkdiv'event and isd_clkdiv = '1' then  -- rising clock edge
+      fifo_sync <= adc_sync;
+    end if;
+  end process SYNCCAP;
 
   ctrl_clk_out <= isd_clkdiv;
   isd_clkn <= not isd_clk;
@@ -839,7 +852,8 @@ begin
       else
         fifo_wr_en <= '1';
         fifo_rd_en <= not fifo_empty;
-        fifo_din(143 downto adc_bit_width*16) <= (others => '0');
+        fifo_din(143 downto adc_bit_width*16+1) <= (others => '0');
+        fifo_din(adc_bit_width*16) <= fifo_sync;
         fifo_din(adc_bit_width*16-1 downto 0) <=
           data0d_prebuf3 & data0c_prebuf3 & data0b_prebuf3 & data0a_prebuf3 &
           data1d_prebuf3 & data1c_prebuf3 & data1b_prebuf3 & data1a_prebuf3 &
@@ -885,6 +899,7 @@ begin
 
   fifo_wr_clk <= isd_clkdiv;
   fifo_rd_clk <= ctrl_clk_in;
+  sync   <= fifo_dout(adc_bit_width*16);
   data0d <= fifo_dout(adc_bit_width*16-1 downto adc_bit_width*15); 
   data0c <= fifo_dout(adc_bit_width*15-1 downto adc_bit_width*14);
   data0b <= fifo_dout(adc_bit_width*14-1 downto adc_bit_width*13);

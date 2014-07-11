@@ -89,24 +89,24 @@ switch s.hw_sys
         f_pfdmin = 19; % MHz
         f_vcomax = 1000; % MHz
         f_vcomin = 400; % MHz
+        r_allowed = 1:1;
         m_allowed = 1:64;
         d_allowed = 1:52;
-        o0_allowed = 1:128;
-        o1_allowed = 1:128;
-        r_allowed = 1:1;
         o0_prec = 1;
+        o0_allowed = 1:o0_prec:128;
+        o1_allowed = 1:128;
     case 'ROACH2'
         f_pfdmax = 450; % MHz, for bandwidth set to HIGH
         f_pfdmin = 135; % MHz, for bandwidth set to HIGH
         f_vcomax = 1200; % MHz
         f_vcomin = 600; % MHz
+        r_allowed = 1:8;
         m_allowed = 5:64;
         d_allowed = 1:80;
-        o0_allowed = 2:128;
-        o1_allowed = 1:128;
-        r_allowed = 1:8;
         o0_prec = 0.125;
-    otherwise
+        o0_allowed = [1 2:o0_prec:128];
+        o1_allowed = 1:128;
+     otherwise
         error(['Unsupported hardware system: ',s.hw_sys]);
 end
 
@@ -127,43 +127,41 @@ for r=r_allowed
         vco_freq = pfd_freq*m;
         o0 = vco_freq/s.adc_clk_rate;
         o1 = vco_freq/s.sysclk_rate;
-        %disp(sprintf('%d %d %d %f %f %f %f', r, d, m, pfd_freq, vco_freq, o0, o1));
-	if (mod(o0, o0_prec)==0) && (mod(o1, 1)==0) 
-	  if (m<m_allowed(1)) || (m>m_allowed(end))
-	    %disp('m outside range');
-	    continue
-	  elseif (d<d_allowed(1)) || (d>d_allowed(end))
-	    %disp('d outside range');
-	    continue
-	  elseif (o0<o0_allowed(1)) || (o0>o0_allowed(end))
-	    %disp('o0 outside range');
-	    continue
-	  elseif (o1<o1_allowed(1)) || (o1>o1_allowed(end))
-	    %disp('o1 outside range');
-	    continue
-	  elseif (pfd_freq<f_pfdmin) || (pfd_freq>f_pfdmax)
-	    %disp('pfd freq outside range');
-	    continue
-	  elseif (vco_freq<f_vcomin) || (vco_freq>f_vcomax)
-	    %disp('vco freq outside range');
-	    continue
-	  elseif (strcmp(s.hw_sys, 'ROACH2') && s.adc_clk_rate>315.0 && (d==3 || d==4))
-	    % Special case here for ROACH2
-	    %disp('adc_clk>315 and d is either 3 or 4');
-	    continue
-	  else
-	    % Finally, we've found it!
-	    pll_m = m;
-	    pll_d = d;
-	    pll_o0 = o0;
-	    pll_o1 = o1;
-	    bufr_div = r;
-	    vco_final = vco_freq;
-	    pfd_final = pfd_freq;
-	    pll_final = pll_freq;
-	    optimum_found = 1;
-	    break
-	  end
+        % disp(sprintf('%d %d %d %f %f %f %f', r, d, m, pfd_freq, vco_freq, o0, o1));
+        if ~ismember(m, m_allowed)
+            %disp('m outside range');
+            continue
+        elseif ~ismember(d, d_allowed)
+            %disp('d outside range');
+            continue
+        elseif ~ismember(o0, o0_allowed)
+            %disp('o0 outside range');
+            continue
+        elseif ~ismember(o1, o1_allowed)
+            %disp('o1 outside range');
+            continue
+        elseif (pfd_freq<f_pfdmin) || (pfd_freq>f_pfdmax)
+            %disp('pfd freq outside range');
+            continue
+        elseif (vco_freq<f_vcomin) || (vco_freq>f_vcomax)
+            %disp('vco freq outside range');
+            continue
+        elseif (strcmp(s.hw_sys, 'ROACH2') && s.adc_clk_rate>315.0 && (d==3 || d==4))
+            % Special case here for ROACH2
+            %disp('adc_clk>315 and d is either 3 or 4');
+            continue
+        else
+            % Finally, we've found it!
+            pll_m = m;
+            pll_d = d;
+            pll_o0 = o0;
+            pll_o1 = o1;
+            bufr_div = r;
+            vco_final = vco_freq;
+            pfd_final = pfd_freq;
+            pll_final = pll_freq;
+            optimum_found = 1;
+            break
         end
     end
     if optimum_found
@@ -193,9 +191,10 @@ end
 disp(['ADC5G: requested sys_clk rate of ', num2str(s.sysclk_rate, '%.4f')]);
 disp(['ADC5G:   with an adc_clk rate of ', num2str(s.adc_clk_rate, '%.4f')]);
 disp(['ADC5G:     with an CLKIN rate of ', num2str(pll_final, '%.4f')]);
+disp(['ADC5G: ', s.adc_str, ': Chosen R = ', num2str(bufr_div, '%d')]);
 disp(['ADC5G: ', s.adc_str, ': Chosen M = ', num2str(pll_m, '%d')]);
 disp(['ADC5G: ', s.adc_str, ': Chosen D = ', num2str(pll_d, '%d')]);
-disp(['ADC5G: ', s.adc_str, ': Chosen D0 = ', num2str(pll_o0, '%d')]);
+disp(['ADC5G: ', s.adc_str, ': Chosen D0 = ', num2str(pll_o0, '%.3f')]);
 disp(['ADC5G: ', s.adc_str, ': Chosen D1 = ', num2str(pll_o1, '%d')]);
 disp(['ADC5G: ', s.adc_str, ': VCO Freq. = ', num2str(vco_final, '%.4f')]);
 disp(['ADC5G: ', s.adc_str, ': PFD Freq. = ', num2str(pfd_final, '%.4f')]);
@@ -253,13 +252,13 @@ b = set(b, 'supp_ip_names', supp_ip_names);
 b = set(b, 'supp_ip_versions', supp_ip_versions);
 
 % Add ports not explicitly provided in the yellow block
-misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_dcm_reset']};
+misc_ports.ctrl_reset      = {1 'in'  [s.adc_str,'_reset']};
 misc_ports.ctrl_clk_in     = {1 'in'  get(xsg_obj,'clk_src')};
 misc_ports.ctrl_clk_out    = {1 'out' [s.adc_str,'_clk']};
 misc_ports.ctrl_clk90_out  = {1 'out' [s.adc_str,'_clk90']};
 misc_ports.ctrl_clk180_out = {1 'out' [s.adc_str,'_clk180']};
 misc_ports.ctrl_clk270_out = {1 'out' [s.adc_str,'_clk270']};
-misc_ports.ctrl_dcm_locked = {1 'out' [s.adc_str,'_dcm_locked']};
+misc_ports.ctrl_dcm_locked = {1 'out' [s.adc_str,'_clk_lock']};
 misc_ports.dcm_reset       = {1 'in'  [s.adc_str,'_dcm_reset']};
 misc_ports.dcm_psdone      = {1 'out' [s.adc_str,'_psdone']};
 misc_ports.dcm_psclk       = {1 'in'  [s.adc_str,'_psclk']};

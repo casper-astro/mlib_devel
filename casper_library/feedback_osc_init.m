@@ -2,6 +2,11 @@ function feedback_osc_init(blk, varargin)
   log_group = 'feedback_osc_init_debug';
 
   check_mask_type(blk, 'feedback_osc');
+
+  % Set default vararg values.
+  % reg_retiming is not an actual parameter of this block, but it is included
+  % in defaults so that same_state will return false for blocks drawn prior to
+  % adding reg_retiming='on' to some of the underlying Delay blocks.
   defaults = { ...
     'n_bits', 18, ...           %reference and output resolution
     'n_bits_rotation', 25, ...  %rotation vector resolution DSP48Es can do 25x18 multiplies
