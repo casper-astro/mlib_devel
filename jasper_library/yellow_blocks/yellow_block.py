@@ -1,4 +1,5 @@
 import os
+import logging
 
 class YellowBlock(object):
     """
@@ -68,6 +69,8 @@ class YellowBlock(object):
                   for block instantiation. If None, defaults to the 
                   HDL_ROOT environment variable.
         """
+        self.logger = logging.getLogger('jasper.yellowblock')
+
         # Get the hdl_root path from env variable if possible
         if hdl_root is None:
             self.hdl_root = os.getenv('HDL_ROOT').rstrip('/')
@@ -192,7 +195,7 @@ class YellowBlock(object):
         else:
             fullpath = self.hdl_root + '/' + path
         if not os.path.exists(fullpath):
-            self.throw_error("path %s does not exist")
+            self.throw_error("path %s does not exist"%path)
         self.sources.append(fullpath)
 
     def throw_error(self,message):
@@ -202,5 +205,5 @@ class YellowBlock(object):
         name.
         """
         err = "Exception from %s: %s"%(self,message)
-        logger.error(err)
+        self.logger.error(err)
         raise Exception(err)
