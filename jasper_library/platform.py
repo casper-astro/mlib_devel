@@ -44,7 +44,7 @@ class Platform(object):
         :type locs: str, list of str
         '''
         if isinstance(locs,list):
-            for ln,loc in enumerate(locs_list):
+            for ln,loc in enumerate(locs):
                 self._pins['%s%d'%(name,ln)] = Pin(iostd, loc)
         else:
             self._pins[name] = Pin(iostd, locs)
