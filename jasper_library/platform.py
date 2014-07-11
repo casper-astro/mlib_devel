@@ -95,9 +95,12 @@ class SnapPlatform(Platform):
     def __init__(self):
         Platform.__init__(self)
         self.manufacturer = 'Xilinx'
-        self.fpga= 'XC7K160TFFG676C-2'
+        self.fpga= 'xc7k160tffg676-2'
         self.name = 'snap'
         self.provides = ['sys_clk', 'sys_clk90', 'sys_clk180', 'sys_clk270', 'wb_clk', 'zdok0']
+        self.consts   = ['snap.xdc']
+        self.sources  = ['infrastructure', 'spi_wb_bridge',
+                        'wbs_arbiter', 'sys_block']
         # pin constraints
         # You only need to include things here
         # which aren't defined by the base package
