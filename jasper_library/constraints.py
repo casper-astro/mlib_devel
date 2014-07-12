@@ -58,6 +58,11 @@ class PortConstraint(object):
                      self.iostd = [iostd]*len(port_index)
                  elif len(iostd) != len(port_index):
                      raise ValueError("Tried to constrain a multidimensional signal with a list of IOSTDs with different dimensions!")
+     def __str__(self):
+         '''
+         A user friendly string representation
+         '''
+         return self.portname
 
      def gen_physical_const(self,platform):
          '''
@@ -78,6 +83,19 @@ class PortConstraint(object):
              #if self.iostd is None:
                  self.iostd = pins.iostd
          
-        
+class ClockConstraint(object):
+    '''
+    A clock constraint -- simply holds the name of the clock
+    signal and the corresponding clock freq and period.
+    '''
+    def __init__(self, clocksig, name=None, freq=None, period=None):
+        self.signal = clocksig
+        self.name = name or clocksig
+        if not (bool(freq) ^ bool(period)):
+            raise ValueError('Enter one of either freq or period')
+
+        self.freq = float(freq or 1000./period)
+        self.period = float(period or 1000./freq)
+
 
 
