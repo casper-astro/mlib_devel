@@ -34,13 +34,20 @@ end
 this_sys = gcs;
 
 % search for blocks in the system
-xps_blks        = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^xps:');
-xps_xsg_blks    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:xsg');
-xps_pcore_blks  = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:pcore');
+xps_blks        = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^xps:')
+xps_xsg_blks    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:xsg')
+xps_pcore_blks  = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:pcore')
 sysgen_blk      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','SearchDepth', 1,   'Tag', 'genX');
 casper_blks     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^casper:');
 gateway_ins     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',     'MaskType', 'Xilinx Gateway In Block')
 gateway_outs    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',     'MaskType', 'Xilinx Gateway Out Block')
+disregards      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'discardX');
+
+% parents of disregard blocks -- i.e., blocks we should ignore
+dummy_parents = {};
+for ctr = 1 : numel(disregards),
+    dummy_parents{ctr} = get_param(disregards{ctr},'Parent')
+end
 
 
 % check for spaces in xps or casper block names
@@ -112,7 +119,7 @@ for n = 1:length(xps_blks)
     fprintf(fid,'    %s: %s\n','fullpath', xps_blks{n});
     fprintf(fid,'    %s: %s\n','tag',get_param(xps_blks{n},'Tag'));
     for m = 1:length(fields)
-        fprintf(fid,'    %s: %s\n',fields{m},get_param(xps_blks{n},fields{m}));
+        fprintf(fid,'    %s: %s\n',fields{m},yaml_sanitize(get_param(xps_blks{n},fields{m})));
     end
 end 
 
@@ -128,10 +135,15 @@ fprintf(fid,'    ports:\n');
 fprintf(fid,'      - clk\n');
     
 for n = 1:length(gateway_ins)
-    fprintf(fid,'      - %s\n',get_param(gateway_ins{n},'Name'));
+    if ~any(strcmp(dummy_parents, get_param(gateway_ins{n},'Parent')))
+        get_param(gateway_ins{n},'Name');
+        fprintf(fid,'      - %s\n',get_param(gateway_ins{n},'Name'));
+    end
 end 
 for n = 1:length(gateway_outs)
-    fprintf(fid,'      - %s\n',get_param(gateway_outs{n},'Name'));
+    if ~any(strcmp(dummy_parents, get_param(gateway_outs{n},'Parent')))
+        fprintf(fid,'      - %s\n',get_param(gateway_outs{n},'Name'));
+    end
 end 
 
 % Write the paths of any custom IP that needs to be added to the project before the final compile.
@@ -140,13 +152,13 @@ fprintf(fid,'    sources:\n');
 path_to_netlist = [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']
 fprintf(fid,'      - %s\n', path_to_netlist);
 for n = 1:length(xps_pcore_blks)
-    fprintf(fid,'      - %s%s\n',compile_dir,path_to_netlist);
+    fprintf(fid,'      - %s\n',GetFullPath(get_param(xps_pcore_blks{n},'pcore_path')));
 end 
 
 
 disp(sprintf('Closing output file: %s',output_fname));
 fclose(fid);
 
-exit();
+%exit();
 
 
