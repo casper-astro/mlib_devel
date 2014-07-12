@@ -43,11 +43,6 @@ module wb_adc16_controller#(
     output        adc16_snap_req,
     input   [1:0] adc16_locked
   );
-  parameter C_BASEADDR    = 32'h00000000;
-  parameter C_HIGHADDR    = 32'h0000FFFF;
-  parameter C_OPB_AWIDTH  = 32;
-  parameter C_OPB_DWIDTH  = 32;
-  parameter C_FAMILY      = "";
 
   /********* Global Signals *************/
 
@@ -57,8 +52,7 @@ module wb_adc16_controller#(
 
   /************ OPB Logic ***************/
 
-  wire addr_match = wb_adr_i >= C_BASEADDR && wb_adr_i <= C_HIGHADDR;
-  wire [31:0] opb_addr = wb_adr_i - C_BASEADDR;
+  wire [31:0] opb_addr = wb_adr_i;
 
   reg wb_ack;
 
