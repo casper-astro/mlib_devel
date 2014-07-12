@@ -23,7 +23,7 @@
 module wb_bram  #(
     parameter LOG_USER_WIDTH = 5,
     parameter USER_ADDR_BITS = 10,
-    parameter REGISTER_OUTPUT = "True"
+    parameter N_REGISTERS = 1
     )(
     // wishbone interface
     input         wb_clk_i,
@@ -54,7 +54,7 @@ module wb_bram  #(
     localparam WB_ADDR_BITS = USER_ADDR_BITS - LOG_WB_WIDTH + LOG_USER_WIDTH;
     localparam WB_DEPTH = 1 << WB_ADDR_BITS;
     
-    reg [2:0] wb_ack_sr; // a shift register to track the wb ack
+    reg [1+N_REGISTERS-1:0] wb_ack_sr; // a shift register to track the wb ack 
     wire [WB_ADDR_BITS-1:0] wb_ram_addr = wb_adr_i[WB_ADDR_BITS-1:0];
     wire [WB_WIDTH-1:0] wb_ram_din = wb_dat_i;
     wire [WB_WIDTH-1:0] wb_ram_dout;
@@ -69,7 +69,7 @@ module wb_bram  #(
     .SIZEB(WB_DEPTH),
     .ADDRWIDTHB(WB_ADDR_BITS),
     .WIDTHB(WB_WIDTH),
-    .REGISTER_OUTPUT(REGISTER_OUTPUT)
+    .N_REGISTERS(N_REGISTERS)
     ) bram_inst (
     .clkA(user_clk),
     .weA(user_we),
@@ -88,20 +88,23 @@ module wb_bram  #(
     // wb command processing
         
     
+    integer i;
     always @(posedge wb_clk_i) begin
         //single cycle signals
         wb_ack_sr[0] <= 1'b0;
         // delayed ack, to compensate for ram latency
-        wb_ack_sr[2:1] <= wb_ack_sr[1:0];
+        for (i=1; i<N_REGISTERS+1; i=i+1) begin
+          wb_ack_sr[i] <= wb_ack_sr[i-1];
+        end
         
         if (wb_rst_i) begin
-          wb_ack_sr <= 3'b0;
+          wb_ack_sr <= {(N_REGISTERS+1){1'b0}};
         end else if (wb_stb_i && wb_cyc_i && (wb_ack_sr==3'b0)) begin
           wb_ack_sr[0] <= 1'b1; // we could ack the writes immediately, but let's treat them the same as reads
         end
       end
     
-      wire ram_dout_vld = (REGISTER_OUTPUT == "True") ? wb_ack_sr[2] : wb_ack_sr[1];
+      wire ram_dout_vld = wb_ack_sr[N_REGISTERS];
       assign wb_dat_o = ram_dout_vld ? wb_ram_dout : 32'b0;
       assign wb_ack_o = ram_dout_vld;
       assign wb_err_o = 1'b0;
