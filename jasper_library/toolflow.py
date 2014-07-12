@@ -10,7 +10,7 @@ import os
 import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
-from constraints import PortConstraint
+from constraints import PortConstraint, ClockConstraint
 import helpers
 import yaml
 
@@ -337,7 +337,17 @@ class Toolflow(object):
 
         self.logger.info('Generating physical constraints')
         for constraint in self.constraints:
-            constraint.gen_physical_const(self.plat)
+            try:
+                constraint.gen_physical_const(self.plat)
+            except AttributeError:
+                pass #some constraints don't have this method
+
+        ## check for any funny business
+        #used_pins = []
+        #for constraint in self.constraints:
+            
+
+
         
 
 
@@ -507,18 +517,24 @@ class VivadoBackend(ToolflowBackend):
                 if const.is_vector:
                     #A constraint with an index, eg. gpio_0
                     for i in const.port_index:
-                        user_const += self.format_const('package_pin', const.loc[i], const.portname, index=i)
+                        user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname, index=i)
                 else:
                     #A constraint with no index, eg. sys_clk
-                    user_const += self.format_const('package_pin', const.loc, const.portname)
+                    user_const += self.format_const('PACKAGE_PIN', const.loc, const.portname)
 
             if const.iostd is not None:
                 if const.is_vector:
                     for i in const.port_index:
-                        user_const += self.format_const('iostandard', const.iostd[i], const.portname, index=i)
+                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=i)
                 else:
-                    user_const += self.format_const('iostandard', const.iostd, const.portname)
+                    user_const += self.format_const('IOSTANDARD', const.iostd, const.portname)
+        if isinstance(const, ClockConstraint):
+            self.logger.debug('New Clock constraint found')
+            user_const += self.format_clock_const(const)
         return user_const
+
+    def format_clock_const(self, c):
+        return 'create_clock -period %f -name %s [get ports {%s}]\n'%(c.period, c.name, c.signal)
 
     def format_const(self, attribute, val, port, index=None):
         '''
@@ -526,9 +542,9 @@ class VivadoBackend(ToolflowBackend):
         (with indexing if required)
         '''
         if index is None:
-            return 'set_property %s %s [get_ports {%s}]\n'%(attribute,val,port)
+            return 'set_property %s %s [get_ports %s]\n'%(attribute,val,port)
         else:
-            return 'set_property %s %s [get_ports {%s[%d]}]\n'%(attribute,val,port,index)
+            return 'set_property %s %s [get_ports %s[%d]]\n'%(attribute,val,port,index)
         
     
     def gen_constraint_file(self, constraints):
