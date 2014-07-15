@@ -20,7 +20,8 @@ module kat_ten_gb_eth #(
     parameter CPU_RX_ENABLE     = 1,
     parameter RX_DIST_RAM       = 0,
     parameter LARGE_PACKETS     = 0,
-    parameter TTL               = 1
+    parameter TTL               = 1,
+    parameter PROMISC_MODE      = 0
   ) (
     input         clk,
     input         rst,
