@@ -25763,7 +25763,7 @@ Library {
       MaskCallbackString      "xps_xsg_conf_callback;||xps_xsg_conf_callback;|xps_xsg_conf_callback;|xps_xsg_conf_call"
       "back;|||"
       MaskEnableString	      "on,on,on,on,on,on,on,on"
-      MaskVisibilityString    "on,off,off,off,on,on,on,on"
+      MaskVisibilityString    "on,off,off,on,off,on,on,on"
       MaskToolTipString	      "on,on,on,on,on,on,on,on"
       MaskInitialization      "xps_xsg_conf_mask;"
       MaskSelfModifiable      on
@@ -25772,7 +25772,7 @@ Library {
       MaskIconOpaque	      on
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
-      MaskValueString	      "MKDIG|sys_clk|sys_clk|adc0_clk|sys_clk|100|1|XST"
+      MaskValueString	      "ROACH2:sx475t|sys_clk|sys_clk|sys_clk|sys_clk|100|1|XST"
       System {
 	Name			"XSG core config"
 	Location		[12, 45, 1980, 1405]
