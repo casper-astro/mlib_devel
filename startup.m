@@ -23,3 +23,8 @@ else
   load_system('casper_library');
   load_system('xps_library');
 end
+
+casper_startup_dir = getenv('CASPER_STARTUP_DIR');
+if ~isempty(casper_startup_dir)
+  cd(casper_startup_dir);
+end

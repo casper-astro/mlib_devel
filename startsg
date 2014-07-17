@@ -79,6 +79,9 @@ export MATLAB="${MATLAB_PATH}"
 # Set umask to allow group writes
 umask 002
 
+# Save start-up directory (if defined, startup.m will cd there)
+export CASPER_STARTUP_DIR=`pwd`
+
 # Change into the MLIB_DEVEL_PATH directory
 # (so MATLAB will find our startup.m file).
 cd "${MLIB_DEVEL_PATH}"
