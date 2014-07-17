@@ -1,5 +1,9 @@
 function delete_block_lines(block)
 try
+    % Bail out if block does not exist
+    if ~block_exists(block)
+        return;
+    end
     ph = get_param(block, 'PortHandles');
     for op = 1 : length(ph.Outport),
         line = get_param(ph.Outport(op), 'Line');
