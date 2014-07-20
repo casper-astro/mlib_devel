@@ -20,15 +20,18 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [] = gen_block_file(compile_dir,output_fname,sys)
+function [] = gen_block_file(compile_dir,output_fname,sys,exit_after)
 % Output the parameters of all xps-tagged blocks to the text file "peripherals.txt"
 % so that they can be parsed by the reset of the toolflow
 
 %if no system name is supplied, use gcs
-if nargin > 1
+if nargin > 2
     % load model file
     disp(sprintf('Loading model: %s',sys));
     load_system(sys);
+end
+if nargin < 4
+    exit_after = 0;
 end
 
 this_sys = gcs;
@@ -119,7 +122,11 @@ for n = 1:length(xps_blks)
     fprintf(fid,'    %s: %s\n','fullpath', xps_blks{n});
     fprintf(fid,'    %s: %s\n','tag',get_param(xps_blks{n},'Tag'));
     for m = 1:length(fields)
-        fprintf(fid,'    %s: %s\n',fields{m},yaml_sanitize(get_param(xps_blks{n},fields{m})));
+        val = eval_param(xps_blks{n},fields{m});
+        try
+            val = num2str(val);
+        end
+        fprintf(fid,'    %s: %s\n',fields{m},yaml_sanitize(val));
     end
 end 
 
@@ -159,6 +166,6 @@ end
 disp(sprintf('Closing output file: %s',output_fname));
 fclose(fid);
 
-%exit();
-
-
+if exit_after == 1
+    exit();
+end

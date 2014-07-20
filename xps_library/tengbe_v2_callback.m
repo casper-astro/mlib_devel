@@ -81,18 +81,19 @@ mask_visibilities{ismember(mask_names, 'rxsnaplen')} = 'on';
 %these are visible always depending on architecture
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if strcmp(hw_sys,'ROACH2:sx475t'),
+%if strcmp(hw_sys,'ROACH2:sx475t'),
   mask_visibilities{ismember(mask_names, 'flavour')} = 'on';
   mask_visibilities{ismember(mask_names, 'slot')} = 'on';
+  mask_visibilities{ismember(mask_names, 'port')} = 'on';
 
-  if strcmp(flavour,'cx4'), %CX4 mezzanine card for ROACH2 has only 3 (external) ports
-    mask_visibilities{ismember(mask_names, 'port_r2_cx4')} = 'on';
-  elseif strcmp(flavour, 'sfp+'), %SFP+ mezzanine card 4 external ports 
-    mask_visibilities{ismember(mask_names, 'port_r2_sfpp')} = 'on';
-  end
-else
-  mask_visibilities{ismember(mask_names, 'port_r1')} = 'on';
-end
+%  if strcmp(flavour,'cx4'), %CX4 mezzanine card for ROACH2 has only 3 (external) ports
+%    mask_visibilities{ismember(mask_names, 'port_r2_cx4')} = 'on';
+%  elseif strcmp(flavour, 'sfp+'), %SFP+ mezzanine card 4 external ports 
+%    mask_visibilities{ismember(mask_names, 'port_r2_sfpp')} = 'on';
+%  end
+%else
+%  mask_visibilities{ismember(mask_names, 'port_r1')} = 'on';
+%end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %these are visible if low level parameters enabled
