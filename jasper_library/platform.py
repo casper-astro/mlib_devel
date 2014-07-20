@@ -21,7 +21,7 @@ class Platform(object):
         #: the template top.v (does NOT include top.v itself)
         self.sources = []
         #: A list of constraint files/directories required to compile
-        #: the template top.v (does NOT include top.v itself)
+        #: the template top.v 
         self.consts = []
         #: FPGA manufacturer
         self.manufacturer = 'xilinx'
@@ -31,7 +31,7 @@ class Platform(object):
         #: vendor tools. Eg., xc7k325tffg900-2
         self.fpga = 'xc7k325tffg900-2'
 
-    def add_pin(self, name, iostd, locs):
+    def add_pins(self, name, iostd, loc):
         '''
         Add a pin to the platform. Generally for use in constructors
         of Platform subclasses.
@@ -43,38 +43,32 @@ class Platform(object):
         :param locs: Physical location of the pin. Eg., 'AC12'. Can be a string or a list, if the name refers to a bank of pins
         :type locs: str, list of str
         '''
-        if isinstance(locs,list):
-            for ln,loc in enumerate(locs):
-                self._pins['%s%d'%(name,ln)] = Pin(iostd, loc)
-        else:
-            self._pins[name] = Pin(iostd, locs)
+        if not self._pins.has_key('name'):
+            self._pins[name] = []
 
-    def get_pin(self, name, index=None):
+        if not isinstance(loc,list):
+            loc = [loc]
+        
+        self._pins[name] += [Pin(iostd, l) for l in loc]
+
+    def get_pins(self, name, index=[0]):
         '''
-        Return a list of pin objects if index is a list
-        or vector. Otherwise return a single pin object.
+        Return a list of pin objects based on index input.
+        If index is integer, return single element
 
         :param name: Abstract pin name, eg. zdok0
         :type name: str
         :param index: Index of the pin, if the name refers to a bank. Can be None (single pin), integer, or list of pin indices.
-        :type index: None,int,list
+        :type index: int,list
         '''
-        if index is None:
-            try:
-                return self._pins[name]
-            except KeyError:
-                print "No pin named %s"%name
-        elif type(index) is int:
-            try:
-                return self._pins['%s%d'%(name,index)]
-            except KeyError:
-                print "No pin named %s%d"%(name,index)
-        else:
-            try:
-                return [self._pins['%s%d'%(name,i)] for i in index]
-            except KeyError:
-                print "No pin named %s with index %s"%(name, index.__repr__())
 
+        if type(index) is not list: index = [index]
+        try:
+            return [self._pins[name][i] for i in index]
+        except KeyError:
+            raise KeyError("No pin named %s"%name)
+        except IndexError:
+            raise IndexError("Pin named %s does not have indices %s"%(name, index))
 
 
 class Pin(object):
@@ -98,18 +92,18 @@ class SnapPlatform(Platform):
         self.fpga= 'xc7k160tffg676-2'
         self.name = 'snap'
         self.provides = ['sys_clk', 'sys_clk90', 'sys_clk180', 'sys_clk270', 'wb_clk', 'zdok0']
-        self.consts   = ['snap.xdc']
+        self.consts   = ['snap.xdc', 'snap.ucf']
         self.sources  = ['infrastructure', 'spi_wb_bridge',
                         'wbs_arbiter', 'sys_block']
         # pin constraints
         # You only need to include things here
         # which aren't defined by the base package
-        self.add_pin('miso', 'LVCMOS25', 'AA27')
-        self.add_pin('mosi', 'LVCMOS25', 'AB28')
-        self.add_pin('sclk', 'LVCMOS25', 'AA25')
-        self.add_pin('cs_n', 'LVCMOS25', 'AB25')
-        self.add_pin('gpio_led4', 'LVCMOS25', 'F13')
-        self.add_pin('led0', 'LVCMOS25', 'D13')
+        self.add_pins('miso', 'LVCMOS25', 'AA27')
+        self.add_pins('mosi', 'LVCMOS25', 'AB28')
+        self.add_pins('sclk', 'LVCMOS25', 'AA25')
+        self.add_pins('cs_n', 'LVCMOS25', 'AB25')
+        self.add_pins('gpio_led4', 'LVCMOS25', 'F13')
+        self.add_pins('led0', 'LVCMOS25', 'D13')
         zdok_pins = [
         'AA23',
         'AB24',
@@ -193,7 +187,7 @@ class SnapPlatform(Platform):
         'E23',
         ]
  
-        self.add_pin('zdok0', 'LVCMOS25', zdok_pins)
+        self.add_pins('zdok0', 'LVCMOS25', zdok_pins)
  
         zdok_pins_p = [
         'AA23',
@@ -281,8 +275,15 @@ class SnapPlatform(Platform):
         'E23',
         ]
  
-        self.add_pin('zdok0_p', 'LVDS_25', zdok_pins_p)
-        self.add_pin('zdok0_n', 'LVDS_25', zdok_pins_n)
+        self.add_pins('zdok0_p', 'LVDS_25', zdok_pins_p)
+        self.add_pins('zdok0_n', 'LVDS_25', zdok_pins_n)
+        self.add_pins('eth_clk_p', None, 'K6')
+        self.add_pins('eth_clk_n', None, 'K5')
+        self.add_pins('mgt_tx_p0', None, 'P2')
+        self.add_pins('mgt_tx_n0', None, 'P1')
+        self.add_pins('mgt_rx_p0', None, 'R4')
+        self.add_pins('mgt_rx_n0', None, 'R3')
+
        
 class KC705Platform(Platform):
     def __init__(self):
@@ -291,15 +292,15 @@ class KC705Platform(Platform):
         self.fpga= 'xc7k325tffg900-2'
         self.name = 'kc705'
         self.provides = ['sys_clk', 'sys_clk90', 'sys_clk180', 'sys_clk270', 'wb_clk']
-        self.consts   = ['kc705.xdc']
+        self.consts   = ['kc705.xdc', 'kc705.ucf']
         self.sources  = ['infrastructure', 'spi_wb_bridge',
                         'wbs_arbiter', 'sys_block']
         # pin constraints
         # You only need to include things here
         # which aren't defined by the base package
-        self.add_pin('miso', 'LVCMOS25', 'AA27')
-        self.add_pin('mosi', 'LVCMOS25', 'AB28')
-        self.add_pin('sclk', 'LVCMOS25', 'AA25')
-        self.add_pin('cs_n', 'LVCMOS25', 'AB25')
-        self.add_pin('gpio_led4', 'LVCMOS25', 'AE26')
-        self.add_pin('led0', 'LVCMOS25', 'E18')
+        self.add_pins('miso', 'LVCMOS25', 'AA27')
+        self.add_pins('mosi', 'LVCMOS25', 'AB28')
+        self.add_pins('sclk', 'LVCMOS25', 'AA25')
+        self.add_pins('cs_n', 'LVCMOS25', 'AB25')
+        self.add_pins('gpio_led4', 'LVCMOS25', 'AE26')
+        self.add_pins('led', 'LVCMOS25', 'E18')

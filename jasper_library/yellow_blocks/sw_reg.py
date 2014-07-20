@@ -21,15 +21,13 @@ class sw_reg(YellowBlock):
             inst = VerilogInstance(entity=module, name=self.fullname, comment=self.fullname)
             inst.add_wb_interface(nbytes=4)
             inst.add_port('user_clk','user_clk')
-            inst.add_port('user_data_in','%s_user_data_in'%self.fullname)
+            inst.add_port('user_data_in','%s_user_data_in'%self.fullname, width=32)
             top.add_instance(inst)
-            top.add_signal('%s_user_data_in'%self.fullname, width=32, comment='sw_reg_hookup')
         elif self.blk['io_dir'] == 'From Processor':
             module = 'wb_register_ppc2simulink'
             inst = VerilogInstance(entity=module, name=self.fullname, comment=self.fullname)
             inst.add_wb_interface(nbytes=4)
             inst.add_port('user_clk','user_clk')
-            inst.add_port('user_data_out','%s_user_data_out'%self.fullname)
+            inst.add_port('user_data_out','%s_user_data_out'%self.fullname, width=32)
             top.add_instance(inst)
-            top.add_signal('%s_user_data_out'%self.fullname, width=32, comment='sw_reg_hookup')
         

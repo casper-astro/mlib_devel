@@ -37,20 +37,20 @@ class gpio(YellowBlock):
 
     def modify_top(self,top):
         external_port_name = self.fullname + '_ext'
-        top.add_port(external_port_name, self.io_dir, width=self.pad_bitwidth) 
+        #top.add_port(external_port_name, self.io_dir, width=self.pad_bitwidth) 
 
         inst = VerilogInstance(entity=self.module, name=self.fullname, comment=self.fullname)
         inst.add_port('clk','user_clk')
         inst.add_port('clk90','user_clk90')
-        inst.add_port('gateway','%s_gateway'%self.fullname)
-        inst.add_port('io_pad', external_port_name)
+        inst.add_port('gateway','%s_gateway'%self.fullname, width=self.bitwidth)
+        inst.add_port('io_pad', external_port_name, extdir=self.io_dir, width=self.pad_bitwidth)
         inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
         inst.add_parameter('WIDTH', str(self.bitwidth))
         inst.add_parameter('DDR', '1' if self.use_ddr == 'on' else '0')
         inst.add_parameter('REG_IOB', '"true"' if self.reg_iob == 'on' else '"false"')
 
         top.add_instance(inst)
-        top.add_signal('%s_gateway'%self.fullname, width=self.bitwidth, comment='%s hookup'%self.fullname)
+        #top.add_signal('%s_gateway'%self.fullname, width=self.bitwidth, comment='%s hookup'%self.fullname)
 
     def gen_constraints(self):
         return [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
