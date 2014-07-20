@@ -70,8 +70,7 @@ module top (
   assign wb_rst_i = wb_rstRR;
 
   wire new_spi_cmd;
-  spi_wb_bridge #(
-  ) spi_wb_bridge_inst (
+  spi_wb_bridge spi_wb_bridge_inst (
     .wb_clk_i (wb_clk_i),
     .wb_rst_i (wb_rst_i),
     .wbm_cyc_o(wbm_cyc_o),
