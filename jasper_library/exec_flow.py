@@ -10,7 +10,7 @@ def shell_source(script):
     """Sometime you want to emulate the action of "source" in bash,
     settings some environment variables. Here is a way to do it."""
     import subprocess, os
-    pipe = subprocess.Popen(". %s; env" % script, stdout=subprocess.PIPE, shell=True)
+    pipe = subprocess.Popen(". %s > /dev/null; env" % script, stdout=subprocess.PIPE, shell=True)
     output = pipe.communicate()[0]
     env = dict((line.split("=", 1) for line in output.splitlines()))
     os.environ.update(env)
@@ -18,6 +18,7 @@ def shell_source(script):
 os.environ['USE_VIVADO_RUNTIME_FOR_MATLAB'] = '1' #see Xilinx answer record 59236
 os.environ['MATLAB_PATH'] = '/tools/MATLAB/R2013a'
 os.environ['XILINX_PATH'] = '/media/overflow/Xilinx/Vivado/2014.2'
+#os.environ['XILINX_PATH'] = '/tools/ISE/14.6/ISE_DS'
 os.environ['MLIB_DEVEL_PATH'] = '/tools/mlib_devel'
 os.environ['MATLAB'] = os.environ['MATLAB_PATH']
 os.environ['CASPER_BASE_PATH'] = '/tools/mlib_devel'
@@ -26,12 +27,14 @@ shell_source(os.environ['XILINX_PATH']+'/settings64.sh')
 
 from optparse import OptionParser
 parser = OptionParser()
-parser.add_option("-y", "--gen_yb", dest="gen_yb", action='store_false', default='True',
+parser.add_option("--skipyb", dest="skipyb", action='store_false', default='True',
                   help="skip yellow block peripheral file generation")
-parser.add_option("-f", "--fe", dest="fe", action='store_false', default='True',
+parser.add_option("--skipfe", dest="skipfe", action='store_false', default='True',
                   help="skip frontend compilation")
-parser.add_option("-b", "--be", dest="be", action='store_false', default='True',
+parser.add_option("--skipbe", dest="skipbe", action='store_false', default='True',
                   help="skip backend compilation")
+parser.add_option("--be", dest="be", type='string', default='vivado',
+                  help="Backend to use. Default: vivado")
 parser.add_option("-m", "--model", dest="model", type='string',
                   default='/tools/mlib_devel/jasper_library/test_models/test.slx',
                   help="model to compile")
@@ -60,6 +63,6 @@ logger.info('Starting compile')
 
 
 # initialise the toolflow
-toolflow = toolflow.Toolflow(frontend='simulink', backend='vivado', compile_dir=opts.builddir, frontend_target=opts.model)
+toolflow = toolflow.Toolflow(frontend='simulink', backend=opts.be, compile_dir=opts.builddir, frontend_target=opts.model)
 
-toolflow.exec_flow(gen_per=opts.gen_yb, frontend_compile=opts.fe, backend_compile=opts.be)
+toolflow.exec_flow(gen_per=opts.skipyb, frontend_compile=opts.skipfe, backend_compile=opts.skipbe)
