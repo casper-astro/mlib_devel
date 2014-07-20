@@ -10,6 +10,20 @@ import re
 from math import ceil, floor
 import logging
 
+class Port(object):
+    """
+    A simple class to hold port attributes.
+    """
+    def __init__(self, name, signal='', extdir=None, internal=True, width=0):
+        name   = name.rstrip(' ')
+        signal = signal.rstrip(' ')
+        self.name = name
+        self.signal = signal or name #default to signal name same as port
+        self.extdir = extdir
+        self.internal = internal and not extdir
+        self.width = width
+
+
 class VerilogInstance(object):
     def __init__(self, entity='', name='', comment=None):
         """
@@ -28,8 +42,9 @@ class VerilogInstance(object):
             self.name = name
         else:
             raise ValueError("'entity' must be a string of non-zero length")
-        self.ports = []
-        self.parameters = []
+        self.ports = {}
+        self.parameters = {}
+        self.n_params = 0
         self.comment = comment
         self.wb_interfaces = 0
         self.wb_bytes = []
@@ -40,13 +55,18 @@ class VerilogInstance(object):
     def add_sourcefile(self, file):
         self.sourcefiles.append(file)
 
-    def add_port(self, name=None, signal=None):
+    def add_port(self, name=None, signal=None, extdir=None, internal=True, width=0):
         """
         Add a port to the instance, with name 'name', connected to signal
         'signal'. 'signal' can be a string, and might include bit indexing,
         e.g. 'my_signal[15:8]'
         """
-        self.ports.append({'name':name, 'signal':signal})
+        if name not in self.ports.keys():
+            self.ports[name] = Port(name, signal=signal, extdir=extdir, internal=internal, width=width)
+        elif signal != self.ports[name].signal:
+            raise Exception ('tried to redefine a port connection %s from signal %s to %s'
+                             %(name, self.ports[name].signal, signal))
+            
     
     def add_wb_interface(self,nbytes=4,name=None):
         """
@@ -64,45 +84,58 @@ class VerilogInstance(object):
             wb_id = name.upper() + '_WBID%d'%(self.wb_interfaces-1)
             self.wb_names += [name]
         self.wb_ids += [wb_id]
-        self.add_port('wb_clk_i','wb_clk_i')
-        self.add_port('wb_rst_i','wb_rst_i')
-        self.add_port('wb_cyc_i','wbs_cyc_o[%s]'%wb_id)
-        self.add_port('wb_stb_i','wbs_stb_o[%s]'%wb_id)
-        self.add_port('wb_we_i','wbs_we_o')
-        self.add_port('wb_sel_i','wbs_sel_o')
-        self.add_port('wb_adr_i','wbs_adr_o')
-        self.add_port('wb_dat_i','wbs_dat_o')
-        self.add_port('wb_dat_o','wbs_dat_i[(%s+1)*32-1:(%s)*32]'%(wb_id,wb_id))
-        self.add_port('wb_ack_o','wbs_ack_i[%s]'%wb_id)
-        self.add_port('wb_err_o','wbs_err_i[%s]'%wb_id)
+        self.add_port('wb_clk_i','wb_clk_i', internal=False)
+        self.add_port('wb_rst_i','wb_rst_i', internal=False)
+        self.add_port('wb_cyc_i','wbs_cyc_o[%s]'%wb_id, internal=False)
+        self.add_port('wb_stb_i','wbs_stb_o[%s]'%wb_id, internal=False)
+        self.add_port('wb_we_i','wbs_we_o', internal=False)
+        self.add_port('wb_sel_i','wbs_sel_o', width=4, internal=False)
+        self.add_port('wb_adr_i','wbs_adr_o', width=32, internal=False)
+        self.add_port('wb_dat_i','wbs_dat_o', width=32, internal=False)
+        self.add_port('wb_dat_o','wbs_dat_i[(%s+1)*32-1:(%s)*32]'%(wb_id,wb_id), width=32, internal=False)
+        self.add_port('wb_ack_o','wbs_ack_i[%s]'%wb_id, internal=False)
+        self.add_port('wb_err_o','wbs_err_i[%s]'%wb_id, internal=False)
 
     def add_parameter(self, name=None, value=None):
         """
         Add a parameter to the instance, with name 'name' and value
         'value'
         """
-        self.parameters.append({'name':name, 'value':value})
+        self.parameters[name] = {'value':value}
+        self.n_params += 1
+        if name not in self.parameters.keys():
+            self.ports[name] = {'value':value}
+        elif value != self.parameters[name]['value']:
+            raise Exception ('tried to redefine a parameter %s from value %s to %s'
+                             %(name, self.parameters[name]['value'], value))
     
     def gen_instance_verilog(self):
         s = ''
         if self.comment is not None:
             s += '  // %s\n'%self.comment
-        s += '  %s #(\n' %self.entity
-        n_params = len(self.parameters)
-        for pn,parameter in enumerate(self.parameters):
-            s += '    .%s(%s)'%(parameter['name'],parameter['value'])
-            if pn != (n_params - 1):
-                s += ',\n'
-            else:
-                s += '\n'
-        s += '  ) %s (\n'%self.name
+        if self.n_params > 0:
+            s += '  %s #(\n' %self.entity
+            n_params = len(self.parameters)
+            n = 0
+            for paramname, parameter in self.parameters.items():
+                s += '    .%s(%s)'%(paramname, parameter['value'])
+                if n != (n_params - 1):
+                    s += ',\n'
+                else:
+                    s += '\n'
+                n += 1
+            s += '  ) %s (\n'%self.name
+        else:
+            s += '  %s  %s (\n'%(self.entity, self.name)
         n_ports = len(self.ports)
-        for pn,port in enumerate(self.ports):
-            s += '    .%s(%s)'%(port['name'],port['signal'])
-            if pn != (n_ports - 1):
+        n = 0
+        for portname, port in self.ports.items():
+            s += '    .%s(%s)'%(port.name, port.signal)
+            if n != (n_ports - 1):
                 s += ',\n'
             else:
                 s += '\n'
+            n += 1
         s += '  );\n'
         return s
 
@@ -175,8 +208,8 @@ class VerilogModule(object):
         self.ports = []         # top-level ports
         self.parameters = []    # top-level parameters
         self.localparams = []   # top-level localparams
-        self.signals = []       # top-level wires
-        self.instances = []     # top-level instances
+        self.signals = {}       # top-level wires
+        self.instances = {}     # top-level instances
         self.assignments = []   # top-level assign statements
         self.raw_str = ''       # the verilog text describing this module
 
@@ -212,7 +245,8 @@ class VerilogModule(object):
         :param alignment: Alignment required by all memory start addresses.
         :type alignment: int
         '''
-        for inst in self.instances:
+        for instname, inst in self.instances.items():
+            self.logger.debug("Looking for WB slaves for instance %s"%inst.name)
             for n in range(inst.wb_interfaces):
                 self.logger.debug("Found new WB slave for instance %s"%inst.name)
                 self.wb_base += [base_addr]
@@ -249,7 +283,7 @@ class VerilogModule(object):
         raise Exception('No N_WB_SLAVES localparam found in topfile %s!'%self.topfile)
 
 
-    def add_port(self, name, dir, width=None, comment=None, **kwargs):
+    def add_port(self, name, dir, width=0, comment=None, **kwargs):
         """
         Add a port to the module, with a given name, width and dir.
         Any width other than None implies a vector port. I.e., width=1
@@ -277,13 +311,18 @@ class VerilogModule(object):
         """
         self.localparams.append({'name':name, 'value':value, 'comment':comment})
 
-    def add_signal(self, signal, width=None, comment=None):
+    def add_signal(self, signal, width=0, comment=None):
         """
         Add an internal signal to the entity, with name 'signal'
         and width 'width'.
         You may add a comment that will end up in the generated verilog.
         """
-        self.signals.append({'name':signal, 'width':width, 'comment': comment})
+        if signal not in self.signals.keys():
+            self.logger.debug('Adding signal %s'%(signal))
+            self.signals[signal] = {'width':width, 'comment': comment}
+        elif width != self.signals[signal]['width']:
+            raise Exception ('tried to redefine a signal %s from width %d to width %d'
+                             %(signal, int(self.signals[signal]['width']), int(width)))
 
     def assign_signal(self, lhs, rhs, comment=None):
         """
@@ -296,14 +335,16 @@ class VerilogModule(object):
         """
         self.assignments.append({'lhs':lhs, 'rhs':rhs, 'comment':comment})
 
-    def add_new_instance(self, entity, name, comment=None):
+    def get_instance(self, entity, name, comment=None):
         """
         Instantiate and return a new instance of entity 'entity', with instance name 'name'.
         You may add a comment that will end up in the generated verilog.
         """
         new_inst = VerilogInstance(entity=entity, name=name, comment=comment)
-        self.instances.append(new_inst)
-        return new_inst
+        if name not in self.instances.keys():
+            return new_inst
+        else:
+            return self.instances[name]
 
     def add_sourcefile(self,file):
         self.sourcefiles.append(file)
@@ -313,8 +354,18 @@ class VerilogModule(object):
         Add an existing instance to the list of instances in the module.
         """
         if isinstance(inst,VerilogInstance):
-            self.instances.append(inst)
-            self.sourcefiles += inst.sourcefiles
+            if inst.name not in self.instances.keys():
+                self.logger.debug('Adding instance %s to top'%inst.name)
+                for pname, port in inst.ports.items():
+                    self.logger.debug('  Adding instance port %s to top'%port.name)
+                    if port.internal:
+                        self.add_signal(port.signal, width=port.width)
+                    if port.extdir is not None:
+                        self.add_port(port.signal, dir=port.extdir, width=port.width)
+                self.instances[inst.name] = inst
+                self.sourcefiles += inst.sourcefiles
+            else:
+                self.logger.warning('Tried to add another instance called %s'%inst.name)
         else:
             raise ValueError('inst is not a VerilogInstance instance!')
 
@@ -453,7 +504,7 @@ class VerilogModule(object):
         s = 'module %s (\n'%self.name
         n_ports = len(self.ports)
         for pn,port in enumerate(self.ports):
-            if port['width'] is None:
+            if port['width'] == 0:
                 s += '    %s %s'%(kwm[port['dir']],port['name'])
             else:
                 s += '    %s [%d:0] %s'%(kwm[port['dir']], (port['width']-1), port['name'])
@@ -499,7 +550,7 @@ class VerilogModule(object):
         s = ''
         kwm = {'in':'input','out':'output','inout':'inout'}
         for pn,port in enumerate(self.ports):
-            if port['width'] is None:
+            if port['width'] == 0:
                 s += '    %s %s,'%(kwm[port['dir']],port['name'])
             else:
                 s += '    %s [%d:0] %s,'%(kwm[port['dir']], (port['width']-1), port['name'])
@@ -530,7 +581,7 @@ class VerilogModule(object):
                         s += '%s = "%s"'%(key,port['attr'][key])
                 s += ' *)'
             # declare port
-            if port['width'] is None:
+            if port['width'] == 0:
                 s += '%s %s;'%(kwm[port['dir']], port['name'])
             else:
                 s += '%s [%d:0] %s;'%(kwm[port['dir']], (port['width']-1), port['name'])
@@ -545,11 +596,12 @@ class VerilogModule(object):
         declare signals
         """
         s = ''
-        for sn,sig in enumerate(self.signals):
-            if sig['width'] is None:
-                s += '  wire %s;'%(sig['name'])
+        for name, sig in self.signals.items():
+            self.logger.debug('Writing verilog for signal %s'%name)
+            if sig['width'] == 0:
+                s += '  wire %s;'%(name)
             else:
-                s += '  wire [%d:0] %s;'%((sig['width']-1), sig['name'])
+                s += '  wire [%d:0] %s;'%((sig['width']-1), name)
             if sig['comment'] is not None:
                 s += ' // %s'%sig['comment']
             s += '\n'
@@ -563,10 +615,12 @@ class VerilogModule(object):
         """
         n_inst = len(self.instances)
         s = ''
-        for n,instance in enumerate(self.instances):
+        n = 0
+        for instname, instance in self.instances.items():
             s += instance.gen_instance_verilog()
             if n != (n_inst - 1):
                 s += '\n'
+            n += 1
         return s
     
     def gen_assignments_str(self):
