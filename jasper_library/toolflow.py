@@ -58,8 +58,10 @@ class Toolflow(object):
 
         if backend == 'vivado':
             self.backend = VivadoBackend(compile_dir=self.compile_dir)
+        elif backend == 'ise':
+            self.backend = ISEBackend(compile_dir=self.compile_dir)
         else:
-            self.logger.error("Unsupported toolflow backent: %s"%backend)
+            self.logger.error("Unsupported toolflow backend: %s"%backend)
             raise Exception("Unsupported toolflow backend: %s"%backend)
 
         # compile parameters which can be set straight away
@@ -288,10 +290,14 @@ class Toolflow(object):
         for name,module in self.user_modules.items():
             inst = verilog.VerilogInstance(entity=name,name='%s_inst'%name)
             for port in module['ports']:
+                # internal=False --> we assume that other yellow
+                # blocks have set up appropriate signals in top.v
+                # (we can't add them here anyway, because we don't
+                # know the port widths)
                 if port == 'clk':
-                    inst.add_port(name=port,signal='user_clk')
+                    inst.add_port(name=port,signal='user_clk', internal=False)
                 else:
-                    inst.add_port(name=port,signal=port)
+                    inst.add_port(name=port,signal=port, internal=False)
             self.top.add_instance(inst)
             self.sources += module['sources']
 
@@ -419,7 +425,7 @@ class SimulinkFrontend(ToolflowFrontend):
         # The matlab script responsible for generating the peripheral file
         script = 'gen_block_file'
         # The matlab syntax to call this script with appropriate args
-        ml_cmd = "%s('%s','%s','%s');"%(script, self.compile_dir, fname, self.modelpath)
+        ml_cmd = "%s('%s','%s','%s',1);"%(script, self.compile_dir, fname, self.modelpath)
         # Complete command to run on terminal
         term_cmd = matlab_start_cmd + ' -nodisplay -nosplash -r "%s"'%ml_cmd
         self.logger.info('Running terminal command: %s'%term_cmd)
@@ -445,6 +451,12 @@ class SimulinkFrontend(ToolflowFrontend):
 
 
 class VivadoBackend(ToolflowBackend):
+    def __init__(self,compile_dir='/tmp'):
+        ToolflowBackend.__init__(self, compile_dir=compile_dir)
+        self.logger = logging.getLogger('jasper.toolflow.backend')
+        self.compile_dir = compile_dir
+        self.const_file_ext = 'xdc'
+
     def initialize(self,plat):
         self.plat = plat
         self.name = 'vivado'
@@ -475,8 +487,11 @@ class VivadoBackend(ToolflowBackend):
         '''
         Add a constrant file to the project. via a tcl incantation.
         '''
-        self.logger.debug('Adding constraint file: %s'%constfile)
-        self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
+        if constfile.split('.')[-1] == self.const_file_ext:
+            self.logger.debug('Adding constraint file: %s'%constfile)
+            self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
+        else:
+            self.logger.debug('Ignore constraint file: %s, with wrong file extension'%constfile)
 
     def add_tcl_cmd(self,cmd):
         '''
@@ -487,7 +502,7 @@ class VivadoBackend(ToolflowBackend):
         self.tcl_cmd += cmd
         self.tcl_cmd += '\n'
 
-    def compile(self):
+    def add_compile_cmds(self):
         '''
         add the tcl commands for compiling the design, and then launch
         vivado in batch mode
@@ -498,10 +513,11 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
         self.add_tcl_cmd('wait_on_run impl_1')
 
+    def compile(self):
+        self.add_compile_cmds()
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file,self.tcl_cmd)
-        #os.system('vivado -mode batch -source %s'%(tcl_file))
         os.system('vivado -jou %s/vivado.jou -log %s/vivado.log -mode batch -source %s'%(self.compile_dir,self.compile_dir,tcl_file))
 
     def get_tcl_const(self,const):
@@ -512,22 +528,23 @@ class VivadoBackend(ToolflowBackend):
         '''
         user_const = ''
         if isinstance(const, PortConstraint):
-            self.logger.debug('New constraint instance found')
-            if const.loc is not None:
-                if const.is_vector:
-                    #A constraint with an index, eg. gpio_0
-                    for i in const.port_index:
+            self.logger.debug('New PortConstraint instance found')
+            for i in const.port_index:
+                if const.loc[i] is not None:
+                    self.logger.debug('LOC constraint found')
+                    if const.is_vector:
                         user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname, index=i)
-                else:
-                    #A constraint with no index, eg. sys_clk
-                    user_const += self.format_const('PACKAGE_PIN', const.loc, const.portname)
+                    else:
+                        user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname)
 
-            if const.iostd is not None:
-                if const.is_vector:
-                    for i in const.port_index:
+            for i in const.port_index:
+                if const.iostd[i] is not None:
+                    self.logger.debug('IOSTD constraint found')
+                    if const.is_vector:
                         user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=i)
-                else:
-                    user_const += self.format_const('IOSTANDARD', const.iostd, const.portname)
+                    else:
+                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname)
+
         if isinstance(const, ClockConstraint):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
@@ -564,3 +581,89 @@ class VivadoBackend(ToolflowBackend):
         print 'writen constraint file', constfile
         self.add_const_file(constfile)
         
+class ISEBackend(VivadoBackend):
+    def __init__(self,compile_dir='/tmp'):
+        ToolflowBackend.__init__(self, compile_dir=compile_dir)
+        self.logger = logging.getLogger('jasper.toolflow.backend')
+        self.compile_dir = compile_dir
+        self.const_file_ext = 'ucf'
+
+    def add_compile_cmds(self):
+        '''
+        add the tcl commands for compiling the design, and then launch
+        vivado in batch mode
+        '''
+        self.add_tcl_cmd('reset_run synth_1')
+        self.add_tcl_cmd('launch_runs synth_1')
+        self.add_tcl_cmd('wait_on_run synth_1')
+        self.add_tcl_cmd('launch_runs impl_1 -to_step BitGen')
+        self.add_tcl_cmd('wait_on_run impl_1')
+
+    def compile(self):
+        self.add_compile_cmds()
+        # write tcl command to file
+        tcl_file = self.compile_dir+'/gogogo.tcl'
+        helpers.write_file(tcl_file,self.tcl_cmd)
+        #os.system('vivado -mode batch -source %s'%(tcl_file))
+        os.system('planAhead -jou %s/planahead.jou -log %s/planahead.log -mode tcl -source %s'%(self.compile_dir, self.compile_dir, tcl_file))
+
+    def format_const(self, attribute, val, port, index=None):
+        '''
+        Generate a tcl syntax command from an attribute, value and port
+        (with indexing if required)
+        '''
+        if index is None:
+            return 'NET "%s" %s = "%s";\n'%(port,attribute,val)
+        else:
+            return 'NET %s<%d> %s = "%s";\n'%(port,index,attribute,val)
+
+    def gen_constraint_file(self, constraints):
+        """
+        Pass this method a toolflow-standard list of constraints
+        which have already had their physical parameters calculated
+        and it will generate a contstraint file and add it to the
+        current project.
+        """
+        constfile = '%s/user_const.ucf'%self.compile_dir
+        user_const = ''
+        for constraint in constraints:
+            print 'parsing constraint', constraint
+            user_const += self.get_ucf_const(constraint)
+        print user_const
+        helpers.write_file(constfile,user_const)
+        print 'writen constraint file', constfile
+        self.add_const_file(constfile)
+
+    def get_ucf_const(self,const):
+        '''
+        Pass a single toolflow-standard PortConstraint,
+        and get back a tcl command to add the constraint
+        to a vivado project.
+        '''
+        user_const = ''
+        if isinstance(const, PortConstraint):
+            self.logger.debug('New PortConstraint instance found')
+            for i in const.port_index:
+                if const.loc[i] is not None:
+                    self.logger.debug('LOC constraint found')
+                    if const.is_vector:
+                        user_const += self.format_const('LOC', const.loc[i], const.portname, index=i)
+                    else:
+                        user_const += self.format_const('LOC', const.loc[i], const.portname)
+
+            for i in const.port_index:
+                if const.iostd[i] is not None:
+                    self.logger.debug('IOSTD constraint found')
+                    if const.is_vector:
+                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=i)
+                    else:
+                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname)
+
+        if isinstance(const, ClockConstraint):
+            self.logger.debug('New Clock constraint found')
+            user_const += self.format_clock_const(const)
+        return user_const
+
+    def format_clock_const(self, c):
+        return 'NET %s TNM_NET = %s;\nTIMESPEC TS_%s = PERIOD %s %f MHz;\n'%(
+               c.signal, c.signal, c.name, c.signal, c.freq) 
