@@ -1,7 +1,7 @@
 #!/bin/bash
 ####### User to edit these accordingly ######
 echo "Setting up tunnel to license server"
-ssh -L 27001:lics.ra.phy.cam.ac.uk:27001 -L 54737:lics.ra.phy.cam.ac.uk:54737 -N jack@appcm.ra.phy.cam.ac.uk &
+ssh -L 27001:lics.ra.phy.cam.ac.uk:27001 -L 48600:lics.ra.phy.cam.ac.uk:48600 -N jack@appcm.ra.phy.cam.ac.uk &
 sleep 5
 export MATLAB_PATH=/tools/MATLAB/R2013a
 PLATFORM=lin64
