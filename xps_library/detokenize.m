@@ -21,7 +21,7 @@ if strcmp(hw_sys, 'ROACH2')
       [multiply divide divclk] = clk_factors(app_clk_rate, app_clk_rate);
       fprintf(strcat('Running off aux_clk @ ', int2str(app_clk_rate), 'MHz', '\n'))
    else
-      [multiply divide divclk] = clk_factors(app_clk_rate, app_clk_rate);
+      [multiply divide divclk] = clk_factors(100, 100);
       fprintf(strcat('Running off adc_clk @ ', int2str(app_clk_rate), 'MHz','\n')) 
    end
    if roach_sys_clk_rate < 135

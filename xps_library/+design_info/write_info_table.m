@@ -30,14 +30,15 @@ function write_info_table(filename, sysname, blks)
     % write the file
     try
         fid = fopen(filename, 'w');
-        for b = 1 : numel(info_blocks),
-            blk = info_blocks(b);
-            fprintf(fid, blk.to_table_row());
-        end
-        fprintf(fid, '');
     catch e
         e.stack
         error(['Could not open ', filename, '.']);
     end
+    for b = 1 : numel(info_blocks),
+        blk = info_blocks(b);
+        blkstr = blk.to_table_row();
+        fprintf(fid, blkstr);
+    end
+    fprintf(fid, '');
     fclose(fid);
 end

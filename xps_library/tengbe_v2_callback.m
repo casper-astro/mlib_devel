@@ -114,6 +114,7 @@ if strcmp(show_param, 'on'),
     mask_visibilities{ismember(mask_names, 'post_emph_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'rxeqmix_r2')} = 'on';
     mask_visibilities{ismember(mask_names, 'ttl')} = 'on';
+    mask_visibilities{ismember(mask_names, 'promisc_mode')} = 'on';
   else
     mask_visibilities{ismember(mask_names, 'pre_emph')} = 'on';
     mask_visibilities{ismember(mask_names, 'swing')} = 'on';
