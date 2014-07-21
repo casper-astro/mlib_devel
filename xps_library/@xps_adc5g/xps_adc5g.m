@@ -134,7 +134,7 @@ for r=r_allowed
         elseif ~ismember(d, d_allowed)
             %disp('d outside range');
             continue
-        elseif ~ismember(o0, o0_allowed)
+        elseif (strcmp(s.hw_sys, 'ROACH') && ~ismember(o0, o0_allowed))
             %disp('o0 outside range');
             continue
         elseif ~ismember(o1, o1_allowed)
@@ -301,7 +301,6 @@ switch s.hw_sys
     case 'ROACH2'
         parameters.MMCM_M = num2str(pll_m, '%.4f');
         parameters.MMCM_D = num2str(pll_d, '%d');
-        parameters.MMCM_O0 = num2str(pll_o0, '%.4f');
         parameters.MMCM_O1 = num2str(pll_o1, '%d');
 	parameters.BUFR_DIV = num2str(bufr_div, '%d');
 	parameters.BUFR_DIV_STR = num2str(bufr_div, '"%d"');

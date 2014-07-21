@@ -24,7 +24,6 @@ PARAMETER adc_bit_width = 8, DT = INTEGER
 PARAMETER clkin_period = 2.0, DT = REAL
 PARAMETER mmcm_m = 1.0, DT = REAL
 PARAMETER mmcm_d = 1, DT = INTEGER
-PARAMETER mmcm_o0 = 1, DT = INTEGER
 PARAMETER mmcm_o1 = 2, DT = INTEGER
 PARAMETER mode = 0, DT = INTEGER
 PARAMETER use_adc0   = 1, DT = INTEGER

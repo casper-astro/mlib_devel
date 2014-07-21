@@ -34,7 +34,6 @@ entity adc5g_dmux2_interface is
     mode            : integer :=0;    -- 1-channel mode
     mmcm_m          : real    :=2.0;  -- MMCM multiplier value
     mmcm_d          : integer :=1;    -- MMCM divide value
-    mmcm_o0         : integer :=2;    -- MMCM first clock divide
     mmcm_o1         : integer :=2     -- MMCM second clock divide
     );
   port (
