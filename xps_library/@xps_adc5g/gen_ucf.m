@@ -32,6 +32,9 @@ str = gen_ucf(blk_obj.xps_block);
 adc_str = blk_obj.adc_str;
 demux = blk_obj.demux;
 
+% Load the routes file
+load_hw_routes();
+
 % Set the ADC clock setup/hold constraints
 %str = [str, 'NET "', adc_str, 'clk_p" TNM_NET = "', adc_str, '_clk";\n'];
 %str = [str, 'TIMESPEC "TS_', adc_str, '_clk" = PERIOD "', ...
@@ -49,6 +52,7 @@ switch hw_sys
             % Manually place the BUFR components
             str = [str, 'INST "', simulink_name, '/', simulink_name, ...
                '/DIVBUF"     LOC            = BUFR_X1Y11 ;\n'];
+	    if exist('routes_vers')
 	    switch demux
 	        % Create an area group to place the FD close to the IOPAD
 		% which for some reason was traced to the other side of the
@@ -92,6 +96,12 @@ switch hw_sys
                 otherwise
                     % pass
             end
+	    else
+	      str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+		  '/data_buf[?].D??_1"     AREA_GROUP     = ZDOK_0_ALL ;\n'];
+	      str = [str, 'AREA_GROUP "ZDOK_0_ALL"     RANGE    = ', ...
+		  'SLICE_X76Y220:SLICE_X87Y259 ;\n'];
+	    end
 	elseif blk_obj.use_adc1
             % Manually place the BUFR components
             str = [str, 'INST "', simulink_name, '/', simulink_name, ...
