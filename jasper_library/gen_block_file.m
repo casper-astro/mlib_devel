@@ -20,7 +20,7 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [] = gen_block_file(compile_dir,output_fname,sys,exit_after)
+function [] = gen_block_file(compile_dir,output_fname,sys)
 % Output the parameters of all xps-tagged blocks to the text file "peripherals.txt"
 % so that they can be parsed by the reset of the toolflow
 
@@ -30,11 +30,14 @@ if nargin > 2
     disp(sprintf('Loading model: %s',sys));
     load_system(sys);
 end
-if nargin < 4
-    exit_after = 0;
-end
 
 this_sys = gcs;
+
+% get system generator version. There are some small differences in the
+% netlists generated depending on version
+
+xlver = str2num(xilinx.environment.getversion('sysgen'));
+
 
 % search for blocks in the system
 xps_blks        = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^xps:')
@@ -136,10 +139,15 @@ end
 
 fprintf(fid,'\nuser_modules:\n');
 fprintf(fid,'  %s:\n',bdroot);
-%explicitly add a clock port, to allow the downstream tools to correctly
-%infer it's presence
+% explicitly add clock and clock enable ports, and give their names so that
+% the rest of the toolflow handles them properly.
+if xlver > 14.7
+    fprintf(fid,'    clock: clk\n');
+else
+    fprintf(fid,'    clock: clk_1\n');
+    fprintf(fid,'    clock_enable: ce_1\n');
+end
 fprintf(fid,'    ports:\n');
-fprintf(fid,'      - clk\n');
     
 for n = 1:length(gateway_ins)
     if ~any(strcmp(dummy_parents, get_param(gateway_ins{n},'Parent')))
@@ -154,9 +162,18 @@ for n = 1:length(gateway_outs)
 end 
 
 % Write the paths of any custom IP that needs to be added to the project before the final compile.
-% Expand relative paths for easy location of the files later
-fprintf(fid,'    sources:\n');
-path_to_netlist = [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']
+% Expand relative paths for easy location of the files later.
+% Vivado puts the compiled vhd netlist in a different place than earlier
+% sysgen versions, so accommodate for that here.
+xlver = str2num(xilinx.environment.getversion('sysgen'));
+if xlver > 14.7
+    path_to_netlist = [compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen'];
+else
+    path_to_netlist = [compile_dir '/sysgen/' bdroot '.vhd'];
+end
+
+    
+fprintf(fid,'    sources:\n');    
 fprintf(fid,'      - %s\n', path_to_netlist);
 for n = 1:length(xps_pcore_blks)
     fprintf(fid,'      - %s\n',GetFullPath(get_param(xps_pcore_blks{n},'pcore_path')));
@@ -166,6 +183,3 @@ end
 disp(sprintf('Closing output file: %s',output_fname));
 fclose(fid);
 
-if exit_after == 1
-    exit();
-end
