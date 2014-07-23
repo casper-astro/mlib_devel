@@ -67,6 +67,7 @@ class Toolflow(object):
         # compile parameters which can be set straight away
         self.periph_file = self.compile_dir + '/jasper.per'
         self.sources= []
+        self.const_files = []
 
     def exec_flow(self, gen_per=True, frontend_compile=True, backend_compile=True):
         '''
@@ -118,9 +119,9 @@ class Toolflow(object):
         # Backend compile
         # Generate a vivado spec constraints file from the
         # constraints extracted from yellow blocks
-        self.add_sources_to_be()
-        self.backend.gen_constraint_file(self.constraints)
         if backend_compile:
+            self.add_sources_to_be()
+            self.backend.gen_constraint_file(self.constraints)
             # launch vivado via the generated .tcl file
             self.backend.compile()
 
@@ -245,12 +246,14 @@ class Toolflow(object):
         modified.
         """
         basetopfile = os.getenv('HDL_ROOT') + '/%s/top.v'%self.plat.name
+        baseconstfile = os.getenv('HDL_ROOT') + '/%s/top.%s'%(self.plat.name,self.backend.const_file_ext)
         if not os.path.isfile(basetopfile):
             logger.error("Template top.v file %s doesn't exist!"%basetopfile)
             raise Exception("Template top.v file %s doesn't exist!"%basetopfile)
         self.topfile = self.compile_dir+'/top.v'
         os.system('cp %s %s'%(basetopfile,self.topfile))
         self.sources.append(self.topfile)
+        self.const_files.append(baseconstfile)
         self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
 
 
@@ -289,15 +292,16 @@ class Toolflow(object):
         """
         for name,module in self.user_modules.items():
             inst = verilog.VerilogInstance(entity=name,name='%s_inst'%name)
+            # internal=False --> we assume that other yellow
+            # blocks have set up appropriate signals in top.v
+            # (we can't add them here anyway, because we don't
+            # know the port widths)
+            if 'clock' in module.keys():
+                inst.add_port(name=module['clock'], signal='user_clk', internal=False)
+            if 'clock_enable' in module.keys():
+                inst.add_port(name=module['clock_enable'], signal="1'b1", internal=False)
             for port in module['ports']:
-                # internal=False --> we assume that other yellow
-                # blocks have set up appropriate signals in top.v
-                # (we can't add them here anyway, because we don't
-                # know the port widths)
-                if port == 'clk':
-                    inst.add_port(name=port,signal='user_clk', internal=False)
-                else:
-                    inst.add_port(name=port,signal=port, internal=False)
+                inst.add_port(name=port,signal=port, internal=False)
             self.top.add_instance(inst)
             self.sources += module['sources']
 
@@ -324,6 +328,14 @@ class Toolflow(object):
                     self.logger.error("sourcefile %s doesn't exist!"%source)
                     raise Exception("sourcefile %s doesn't exist!"%source)
                 self.backend.add_source(source)
+        existing_sources = []
+        for source in self.const_files:
+            if source not in existing_sources:
+                existing_sources.append(source)
+                if not os.path.exists(source):
+                    self.logger.error("sourcefile %s doesn't exist!"%source)
+                    raise Exception("sourcefile %s doesn't exist!"%source)
+                self.backend.add_const_file(source)
             
 
     def generate_consts(self):
@@ -421,7 +433,7 @@ class SimulinkFrontend(ToolflowFrontend):
         '''
         self.logger.info('Generating yellow block description file : %s'%fname)
         # The command to start matlab with appropriate libraries
-        matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
+        matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
         # The matlab script responsible for generating the peripheral file
         script = 'gen_block_file'
         # The matlab syntax to call this script with appropriate args
@@ -441,7 +453,8 @@ class SimulinkFrontend(ToolflowFrontend):
         '''
         self.logger.info('Compiling user IP to module: %s'%self.modelname)
         # The command to start matlab with appropriate libraries
-        matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
+        #matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
+        matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
         # The matlab syntax to start a compile with appropriate args
         ml_cmd = "start_sysgen_compile('%s','%s',%d);"%(self.modelpath,self.compile_dir,int(update))
         term_cmd = matlab_start_cmd + ' -nosplash -r "%s"'%ml_cmd
