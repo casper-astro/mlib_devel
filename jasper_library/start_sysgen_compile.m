@@ -54,7 +54,6 @@ xsg_result = xlGenerateButton(xsg_blk);
 
 if xsg_result == 0
         disp('XSG generation complete.');
-        exit;
     else
         error(['XSG generation failed: ',xsg_result]);
         help xlGenerateButton;
