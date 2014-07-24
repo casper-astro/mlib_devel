@@ -2,12 +2,12 @@ module wb_register_simulink2ppc
   (
     input         wb_clk_i,
     input         wb_rst_i,
-    output [0:31] wb_dat_o,
+    output [31:0] wb_dat_o,
     output        wb_err_o,
     output        wb_ack_o,
-    input  [0:31] wb_adr_i,
-    input  [0:3]  wb_sel_i,
-    input  [0:31] wb_dat_i,
+    input  [31:0] wb_adr_i,
+    input  [3:0]  wb_sel_i,
+    input  [31:0] wb_dat_i,
     input         wb_we_i,
     input         wb_cyc_i,
     input         wb_stb_i,
@@ -61,14 +61,14 @@ module wb_register_simulink2ppc
     end
   end
 
-  reg [0:31] wb_dat_o_reg;
+  reg [31:0] wb_dat_o_reg;
   assign wb_dat_o = wb_dat_o_reg;
 
   always @(*) begin
     if (!wb_ack_o_reg) begin
       wb_dat_o_reg <= 32'b0;
     end else begin
-      wb_dat_o_reg[0:31] <= register_buffer;
+      wb_dat_o_reg[31:0] <= register_buffer;
     end
   end
 
