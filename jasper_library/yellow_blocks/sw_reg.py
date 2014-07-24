@@ -1,5 +1,4 @@
 from yellow_block import YellowBlock
-from verilog import VerilogInstance
 
 class sw_reg(YellowBlock):
     def initialize(self):
@@ -18,16 +17,15 @@ class sw_reg(YellowBlock):
     def modify_top(self,top):
         if self.blk['io_dir'] == 'To Processor':
             module = 'wb_register_simulink2ppc'
-            inst = VerilogInstance(entity=module, name=self.fullname, comment=self.fullname)
-            inst.add_wb_interface(nbytes=4)
-            inst.add_port('user_clk','user_clk')
-            inst.add_port('user_data_in','%s_user_data_in'%self.fullname, width=32)
-            top.add_instance(inst)
+            inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+            inst.add_wb_interface(regname=self.name, mode='rw', nbytes=4)
+            inst.add_port('user_clk', signal='user_clk')
+            inst.add_port('user_data_in', signal='%s_user_data_in'%self.fullname, width=32)
         elif self.blk['io_dir'] == 'From Processor':
             module = 'wb_register_ppc2simulink'
-            inst = VerilogInstance(entity=module, name=self.fullname, comment=self.fullname)
-            inst.add_wb_interface(nbytes=4)
-            inst.add_port('user_clk','user_clk')
-            inst.add_port('user_data_out','%s_user_data_out'%self.fullname, width=32)
-            top.add_instance(inst)
+            inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
+            #inst.add_wb_interface(nbytes=4)
+            inst.add_wb_interface(regname=self.name, mode='r', nbytes=4)
+            inst.add_port('user_clk', signal='user_clk')
+            inst.add_port('user_data_out', signal='%s_user_data_out'%self.fullname, width=32)
         

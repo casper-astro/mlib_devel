@@ -13,6 +13,7 @@ import verilog
 from constraints import PortConstraint, ClockConstraint
 import helpers
 import yaml
+import glob
 
 class Toolflow(object):
     '''
@@ -97,9 +98,8 @@ class Toolflow(object):
         self.generate_hdl()
         # Generate constraints (not yet xilinx standard)
         self.generate_consts()
-        # Generate the tcl file which will start a new
-        # vivado project, and add appropriate
-        # hdl/constraint sources
+        # Generate software cores file
+        self.write_core_info()
         print 'Initializing backend project'
         self.backend.initialize(self.plat)
         
@@ -124,6 +124,11 @@ class Toolflow(object):
             self.backend.gen_constraint_file(self.constraints)
             # launch vivado via the generated .tcl file
             self.backend.compile()
+
+        binary = self.backend.binary_loc
+        os.system('cp %s %s/top.bin'%(binary, self.compile_dir))
+        os.system('%s/jasper_library/mkbof_64 -o %s/top.bof -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), self.compile_dir, self.compile_dir, self.compile_dir))
+        print('%s/jasper_library/mkbof_64 -o %s/top.bof -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), self.compile_dir, self.compile_dir, self.compile_dir))
 
     def check_attr_exists(self, thing, generator):
         """
@@ -291,19 +296,36 @@ class Toolflow(object):
         VerilogModule instance.
         """
         for name,module in self.user_modules.items():
-            inst = verilog.VerilogInstance(entity=name,name='%s_inst'%name)
+            inst = self.top.get_instance(entity=name,name='%s_inst'%name)
             # internal=False --> we assume that other yellow
             # blocks have set up appropriate signals in top.v
             # (we can't add them here anyway, because we don't
             # know the port widths)
             if 'clock' in module.keys():
-                inst.add_port(name=module['clock'], signal='user_clk', internal=False)
+                inst.add_port(name=module['clock'], signal='user_clk', parent_sig=False)
             if 'clock_enable' in module.keys():
-                inst.add_port(name=module['clock_enable'], signal="1'b1", internal=False)
+                inst.add_port(name=module['clock_enable'], signal="1'b1", parent_sig=False)
             for port in module['ports']:
-                inst.add_port(name=port,signal=port, internal=False)
-            self.top.add_instance(inst)
-            self.sources += module['sources']
+                inst.add_port(name=port, signal=port, parent_sig=False)
+            for source in module['sources']:
+                self.sources += glob.glob(source)
+
+    def write_core_info(self):
+        self.cores = self.top.wb_devices
+        basefile = '%s/%s/core_info.tab'%(os.getenv('HDL_ROOT'), self.plat.name)
+        newfile = '%s/core_info.tab'%self.compile_dir
+        self.logger.debug('Opening %s'%basefile)
+        with open(basefile, 'r') as fh:
+            s = fh.read()
+        s += '\n'
+        modemap = {'rw':3, 'r':1, 'w':2}
+        for core in self.cores:
+            self.logger.debug('Adding core_info.tab entry for %s'%core.regname)
+            s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+        self.logger.debug('Opening %s'%basefile)
+        with open(newfile, 'w') as fh:
+            fh.write(s)
+
 
     def regenerate_top(self):
         '''
@@ -472,6 +494,7 @@ class VivadoBackend(ToolflowBackend):
 
     def initialize(self,plat):
         self.plat = plat
+        self.binary_loc = '%s/%s/%s.runs/impl_1/toplevel.bin'%(self.compile_dir,self.plat.name,self.plat.name)
         self.name = 'vivado'
         self.manufacturer = 'xilinx'
         self.tcl_cmd = ''
@@ -606,6 +629,7 @@ class ISEBackend(VivadoBackend):
         add the tcl commands for compiling the design, and then launch
         vivado in batch mode
         '''
+        self.add_tcl_cmd('set_property -name {steps.bitgen.args.More Options} -value {-g Binary:Yes} -objects [get_runs impl_1]')
         self.add_tcl_cmd('reset_run synth_1')
         self.add_tcl_cmd('launch_runs synth_1')
         self.add_tcl_cmd('wait_on_run synth_1')

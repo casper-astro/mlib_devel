@@ -1,5 +1,4 @@
 from yellow_block import YellowBlock
-from verilog import VerilogInstance
 from constraints import PortConstraint
 from helpers import to_int_list
 
@@ -39,18 +38,15 @@ class gpio(YellowBlock):
         external_port_name = self.fullname + '_ext'
         #top.add_port(external_port_name, self.io_dir, width=self.pad_bitwidth) 
 
-        inst = VerilogInstance(entity=self.module, name=self.fullname, comment=self.fullname)
-        inst.add_port('clk','user_clk')
-        inst.add_port('clk90','user_clk90')
-        inst.add_port('gateway','%s_gateway'%self.fullname, width=self.bitwidth)
-        inst.add_port('io_pad', external_port_name, extdir=self.io_dir, width=self.pad_bitwidth)
+        inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
+        inst.add_port('clk', signal='user_clk')
+        inst.add_port('clk90', signal='user_clk90')
+        inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
+        inst.add_port('io_pad', signal=external_port_name, dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
         inst.add_parameter('CLK_PHASE', self.reg_clk_phase)
         inst.add_parameter('WIDTH', str(self.bitwidth))
         inst.add_parameter('DDR', '1' if self.use_ddr == 'on' else '0')
         inst.add_parameter('REG_IOB', '"true"' if self.reg_iob == 'on' else '"false"')
-
-        top.add_instance(inst)
-        #top.add_signal('%s_gateway'%self.fullname, width=self.bitwidth, comment='%s hookup'%self.fullname)
 
     def gen_constraints(self):
         return [PortConstraint(self.fullname+'_ext', self.io_group, port_index=range(self.bitwidth), iogroup_index=to_int_list(self.bit_index))]
