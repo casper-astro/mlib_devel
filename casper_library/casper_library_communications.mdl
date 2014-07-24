@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1920.0, 0.0, 1280.0, 1024.0]
+      Location		      [0.0, 25.0, 1920.0, 1055.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 860.0]
+	Extents			[1884.0, 892.0]
 	ZoomFactor		[1.0]
 	Offset			[-49.246878842126762, -8.4164424104407658]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Apr 11 16:21:38 2014"
-  RTWModifiedTimeStamp	  319134050
-  ModelVersionFormat	  "1.%<AutoIncrement:21>"
+  LastModifiedDate	  "Wed Jul 23 15:55:40 2014"
+  RTWModifiedTimeStamp	  328031722
+  ModelVersionFormat	  "1.%<AutoIncrement:22>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -769,7 +769,7 @@ Library {
   }
   System {
     Name		    "casper_library_communications"
-    Location		    [1920, 0, 3200, 1024]
+    Location		    [0, 25, 1920, 1080]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -8838,7 +8838,7 @@ Library {
 	      ShowName		      off
 	      LibraryVersion	      "1.213"
 	      SourceBlock	      "xbsReplacements_r4/Warning"
-	      SourceType	      ""
+	      SourceType	      "Unknown"
 	      period		      "1"
 	    }
 	    Block {
@@ -8851,7 +8851,7 @@ Library {
 	      ShowName		      off
 	      LibraryVersion	      "1.213"
 	      SourceBlock	      "xbsReplacements_r4/Warning"
-	      SourceType	      ""
+	      SourceType	      "Unknown"
 	      period		      "1"
 	    }
 	    Block {
@@ -8864,7 +8864,7 @@ Library {
 	      ShowName		      off
 	      LibraryVersion	      "1.213"
 	      SourceBlock	      "xbsReplacements_r4/Warning"
-	      SourceType	      ""
+	      SourceType	      "Unknown"
 	      period		      "1"
 	    }
 	    Block {
@@ -10964,7 +10964,7 @@ Library {
 	      ShowName		      off
 	      LibraryVersion	      "1.213"
 	      SourceBlock	      "xbsReplacements_r4/Warning"
-	      SourceType	      ""
+	      SourceType	      "Unknown"
 	      period		      "1"
 	    }
 	    Block {
@@ -10977,7 +10977,7 @@ Library {
 	      ShowName		      off
 	      LibraryVersion	      "1.213"
 	      SourceBlock	      "xbsReplacements_r4/Warning"
-	      SourceType	      ""
+	      SourceType	      "Unknown"
 	      period		      "1"
 	    }
 	    Block {
@@ -11407,7 +11407,7 @@ Library {
 	  ShowName		  off
 	  LibraryVersion	  "1.213"
 	  SourceBlock		  "xbsReplacements_r4/Warning"
-	  SourceType		  ""
+	  SourceType		  "Unknown"
 	  period		  "1"
 	}
 	Block {
@@ -12208,8 +12208,8 @@ Library {
 	$ClassName		"Simulink.Mask"
 	Type			"pkt_pack_mask"
 	Description		"This block generates SPEAD-compliant packets from a datastream. \n\nPackets are created with a fixed he"
-	"ader followed by a number of 64-bit items.\n\nRequires a 64-bit data stream.\n\nSee the documentation for further det"
-	"ails."
+	"ader followed by a number of 64-bit items.\n\nRequires a 64-bit data stream.\n\nThe data_ready signal is one cycle BE"
+	"FORE valid data! Does not have to be with a valid signal either."
 	Initialization		"spead_pack_init(gcb, header_ids)"
 	Array {
 	  Type			  "Simulink.MaskParameter"

@@ -24,8 +24,8 @@ if num_headers < 4,
 end
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers))+1));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers))+1));
+set_param([block, '/num_headers'], 'n_bits', num2str(nextpow2(num_headers+1)));
+set_param([block, '/hdr_ctr'], 'n_bits', num2str(nextpow2(num_headers+1)));
 set_param([block, '/hdr_ctr'], 'cnt_to', num2str(num_headers+1));
 set_param([block, '/delay_data'], 'latency', num2str(num_headers+1));
 set_param([block, '/delay_valid'], 'latency', num2str(num_headers+1));
