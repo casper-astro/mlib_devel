@@ -1,4 +1,3 @@
-`include <parameters.v>
 # ROACH 2 REV 0
 # FPGA constraints file
 
@@ -6,7 +5,7 @@ Net sys_clk_n TNM_NET = sys_clk_n;
 TIMESPEC TS_sys_clk_n = PERIOD sys_clk_n 100 MHz;
 
 Net ppc_perclk TNM_NET = ppc_perclk;
-TIMESPEC TS_ppc_perclk = PERIOD ppc_perclk 84 MHz;
+TIMESPEC TS_ppc_perclk = PERIOD ppc_perclk 67 MHz;
 
 ## Global signals
 
