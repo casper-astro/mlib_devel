@@ -317,7 +317,6 @@ class Toolflow(object):
         self.logger.debug('Opening %s'%basefile)
         with open(basefile, 'r') as fh:
             s = fh.read()
-        s += '\n'
         modemap = {'rw':3, 'r':1, 'w':2}
         for core in self.cores:
             self.logger.debug('Adding core_info.tab entry for %s'%core.regname)
@@ -494,7 +493,7 @@ class VivadoBackend(ToolflowBackend):
 
     def initialize(self,plat):
         self.plat = plat
-        self.binary_loc = '%s/%s/%s.runs/impl_1/toplevel.bin'%(self.compile_dir,self.plat.name,self.plat.name)
+        self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin'%(self.compile_dir,self.plat.name,self.plat.name)
         self.name = 'vivado'
         self.manufacturer = 'xilinx'
         self.tcl_cmd = ''
@@ -635,6 +634,7 @@ class ISEBackend(VivadoBackend):
         self.add_tcl_cmd('wait_on_run synth_1')
         self.add_tcl_cmd('launch_runs impl_1 -to_step BitGen')
         self.add_tcl_cmd('wait_on_run impl_1')
+        self.add_tcl_cmd('exit')
 
     def compile(self):
         self.add_compile_cmds()
