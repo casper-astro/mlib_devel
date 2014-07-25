@@ -42,6 +42,23 @@ xlver = str2num(xilinx.environment.getversion('sysgen'));
 % search for blocks in the system
 xps_blks        = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^xps:')
 xps_xsg_blks    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:xsg')
+
+% % before we progress any further, force all the yellow block init scripts to
+% % run, so that port names are correct. If the user has already run "update
+% % diagram" they will already be right. If they haven't any changes to block
+% % names may not have propagated to the underlying gateways. Rather than
+% % forcing an update of the whole model, we just read and set a value of the
+% % block to force the re-init.
+% % TODO: To save time, only run this on blocks with bad gateway names
+% disp 'Forcing yellow block intialization scripts'
+% for n = 1:length(xps_blks)
+%     block_params = get_param(xps_blks{n},'DialogParameters');
+%     fields = fieldnames(block_params);
+%     val = get_param(xps_blks{n},fields{1});
+%     set_param(xps_blks{n}, fields{1}, val)
+% end 
+
+
 xps_pcore_blks  = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:pcore')
 sysgen_blk      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','SearchDepth', 1,   'Tag', 'genX');
 casper_blks     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^casper:');
