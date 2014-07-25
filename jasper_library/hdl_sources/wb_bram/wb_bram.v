@@ -55,14 +55,14 @@ module wb_bram  #(
     localparam WB_DEPTH = 1 << WB_ADDR_BITS;
     
     reg [1+N_REGISTERS-1:0] wb_ack_sr; // a shift register to track the wb ack 
-    wire [WB_ADDR_BITS-1:0] wb_ram_addr = wb_adr_i[WB_ADDR_BITS-1:0];
+    wire [WB_ADDR_BITS-1:0] wb_ram_addr = wb_adr_i[WB_ADDR_BITS+2-1:2]; //wb address is in bytes, but ram words are 4 bytes
     wire [WB_WIDTH-1:0] wb_ram_din = wb_dat_i;
     wire [WB_WIDTH-1:0] wb_ram_dout;
     wire wb_ram_we = wb_stb_i && wb_cyc_i && (wb_ack_sr==3'b0) && wb_we_i;
     
     //Instantiate the RAM. 
     
-    asym_ram_tdp #(
+    tdp_ram_wrapper #(
     .SIZEA(USER_DEPTH),
     .ADDRWIDTHA(USER_ADDR_BITS),
     .WIDTHA(USER_WIDTH),
