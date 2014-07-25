@@ -1,4 +1,4 @@
-module toplevel(
+module top(
     input          sys_clk_n,
     input          sys_clk_p,
 
