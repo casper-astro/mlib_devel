@@ -318,9 +318,12 @@ class Toolflow(object):
         with open(basefile, 'r') as fh:
             s = fh.read()
         modemap = {'rw':3, 'r':1, 'w':2}
+        longest_name = max([len(core.regname) for core in self.cores])
+        format_str = '{0:%d} {1:1} {2:<16x} {3:<16x}\n'%longest_name
         for core in self.cores:
             self.logger.debug('Adding core_info.tab entry for %s'%core.regname)
-            s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+            s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+            #s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
         self.logger.debug('Opening %s'%basefile)
         with open(newfile, 'w') as fh:
             fh.write(s)
@@ -563,7 +566,7 @@ class VivadoBackend(ToolflowBackend):
         '''
         user_const = ''
         if isinstance(const, PortConstraint):
-            self.logger.debug('New PortConstraint instance found')
+            self.logger.debug('New PortConstraint instance found: %s -> %s'%(const.portname, const.iogroup))
             for i in const.port_index:
                 if const.loc[i] is not None:
                     self.logger.debug('LOC constraint found')
@@ -679,20 +682,20 @@ class ISEBackend(VivadoBackend):
         '''
         user_const = ''
         if isinstance(const, PortConstraint):
-            self.logger.debug('New PortConstraint instance found')
-            for i in const.port_index:
+            self.logger.debug('New PortConstraint instance found %s -> %s'%(const.portname, const.iogroup))
+            for i in range(const.width):
                 if const.loc[i] is not None:
                     self.logger.debug('LOC constraint found')
                     if const.is_vector:
-                        user_const += self.format_const('LOC', const.loc[i], const.portname, index=i)
+                        user_const += self.format_const('LOC', const.loc[i], const.portname, index=const.port_index[i])
                     else:
                         user_const += self.format_const('LOC', const.loc[i], const.portname)
 
-            for i in const.port_index:
+            for i in range(const.width):
                 if const.iostd[i] is not None:
                     self.logger.debug('IOSTD constraint found')
                     if const.is_vector:
-                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=i)
+                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=const.port_index[i])
                     else:
                         user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname)
 
