@@ -19,7 +19,7 @@ class bram(YellowBlock):
     def modify_top(self,top):
         module = 'wb_bram'
         inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
-        inst.add_wb_interface(regname=self.name, mode='rw', nbytes=self.depth*self.data_width/8) #width is in bits
+        inst.add_wb_interface(regname=self.unique_name, mode='rw', nbytes=self.depth*self.data_width/8) #width is in bits
         inst.add_port('user_clk',  signal='user_clk')
         inst.add_port('user_addr', signal='%s_addr'%self.fullname, width=self.addr_width)
         inst.add_port('user_din',  signal='%s_data_in'%self.fullname, width=self.data_width)

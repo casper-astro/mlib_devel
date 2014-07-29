@@ -41,7 +41,13 @@ class YellowBlock(object):
             clsfile = __import__(__package__+'.'+blk['tag'][4:])
             cls = clsfile.__getattribute__(blk['tag'][4:])
             cls = cls.__getattribute__(blk['tag'][4:]) # don't understand
-            return cls(blk,platform,hdl_root=hdl_root)
+            # If the class has a factory method, call that. This should return some
+            # (possibly platform dependent) yellow block instance
+            # Else just return an instance of the class.
+            if callable(getattr(cls, 'factory', None)):
+                return cls.factory(blk, platform, hdl_root=hdl_root)
+            else:
+                return cls(blk,platform,hdl_root=hdl_root)
         else:
             # Don't do anything for non-xps blocks.
             pass
@@ -92,6 +98,7 @@ class YellowBlock(object):
         self.platform = platform
         self.copy_attrs()
         self.fullname = self.fullpath.replace('/','_')
+        self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
         self.initialize()
         self.check_support()
 
