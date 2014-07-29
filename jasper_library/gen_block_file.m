@@ -69,7 +69,7 @@ disregards      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', '
 % parents of disregard blocks -- i.e., blocks we should ignore
 dummy_parents = {};
 for ctr = 1 : numel(disregards),
-    dummy_parents{ctr} = get_param(disregards{ctr},'Parent')
+    dummy_parents{ctr} = get_param(disregards{ctr},'Parent');
 end
 
 

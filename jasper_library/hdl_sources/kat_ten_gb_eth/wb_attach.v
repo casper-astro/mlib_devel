@@ -155,12 +155,16 @@ module wb_attach #(
   assign cpu_rx_ack   = cpu_rx_ack_reg;
 
   reg opb_wait;
+  reg write_arp;
+  reg tx_write;
   always @(posedge wb_clk_i) begin
     //strobes
     opb_ack          <= 1'b0;
     use_arp_data     <= 1'b0;
     use_tx_data      <= 1'b0;
     use_rx_data      <= 1'b0;
+    write_arp        <= 1'b0;
+    tx_write         <= 1'b0;
 
     /* When the 10ge wrapper has sent the packet we tell the user by clearing 
        the size register */
@@ -217,6 +221,7 @@ module wb_attach #(
         if (wb_we_i) begin
           opb_ack  <= 1'b0;
           opb_wait <= 1'b1;
+          write_arp <= 1'b1;
         end else begin
           use_arp_data <= 1'b1;
         end
@@ -235,6 +240,7 @@ module wb_attach #(
         if (wb_we_i) begin
           opb_ack  <= 1'b0;
           opb_wait <= 1'b1;
+          tx_write <= 1'b1;
         end else begin
           use_tx_data <= 1'b1;
         end
@@ -357,17 +363,17 @@ module wb_attach #(
     end else begin
       //populate write_data according to wishbone transaction info & contents
       //of memory
-      if (arp_sel && opb_wait) begin
+      if (write_arp) begin
         arp_cache_we <= 1'b1;
 
-        write_data[ 7: 0] <= arp_addr[2] == 1'b1 & wb_sel_i[0] ? wb_dat_i[ 7: 0] : arp_cache_rd_data[ 7: 0]; 
-        write_data[15: 8] <= arp_addr[2] == 1'b1 & wb_sel_i[1] ? wb_dat_i[15: 8] : arp_cache_rd_data[15: 8]; 
-        write_data[23:16] <= arp_addr[2] == 1'b1 & wb_sel_i[2] ? wb_dat_i[23:16] : arp_cache_rd_data[23:16]; 
-        write_data[31:24] <= arp_addr[2] == 1'b1 & wb_sel_i[3] ? wb_dat_i[31:24] : arp_cache_rd_data[31:24]; 
-        write_data[39:32] <= arp_addr[2] == 1'b0 & wb_sel_i[0] ? wb_dat_i[ 7: 0] : arp_cache_rd_data[39:32]; 
-        write_data[47:40] <= arp_addr[2] == 1'b0 & wb_sel_i[1] ? wb_dat_i[15: 8] : arp_cache_rd_data[47:40]; 
+        write_data[ 7: 0] <= arp_addr[2] == 1'b1 ? wb_dat_i[ 7: 0] : arp_cache_rd_data[ 7: 0]; 
+        write_data[15: 8] <= arp_addr[2] == 1'b1 ? wb_dat_i[15: 8] : arp_cache_rd_data[15: 8]; 
+        write_data[23:16] <= arp_addr[2] == 1'b1 ? wb_dat_i[23:16] : arp_cache_rd_data[23:16]; 
+        write_data[31:24] <= arp_addr[2] == 1'b1 ? wb_dat_i[31:24] : arp_cache_rd_data[31:24]; 
+        write_data[39:32] <= arp_addr[2] == 1'b0 ? wb_dat_i[ 7: 0] : arp_cache_rd_data[39:32]; 
+        write_data[47:40] <= arp_addr[2] == 1'b0 ? wb_dat_i[15: 8] : arp_cache_rd_data[47:40]; 
       end
-      if (txbuf_sel && opb_wait) begin
+      if (tx_write) begin
         tx_buffer_we <= 1'b1;
 
         write_data[7:0]   <= txbuf_addr[2] == 1'b1 & wb_sel_i[0] ? wb_dat_i[ 7: 0] : cpu_tx_buffer_rd_data[ 7: 0];
@@ -400,7 +406,7 @@ module wb_attach #(
 
   wire [31:0] opb_data_int = opb_data_src == REG_LOCAL_MAC_1   ? {16'b0, local_mac_reg[47:32]} :
                              opb_data_src == REG_LOCAL_MAC_0   ? local_mac_reg[31:0] :
-                             opb_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway_reg} :
+                             opb_data_src == REG_LOCAL_GATEWAY ? {write_data[23:0], local_gateway_reg} :
                              opb_data_src == REG_LOCAL_IPADDR  ? local_ip_reg[31:0] :
                              opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
                              opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset_reg, 7'b0, local_enable_reg, local_port_reg} :

@@ -17,7 +17,7 @@ module top(
   
   wire clk_200;
 
-  wire rst_100;
+  wire sys_reset;
 
   wire sys_clk;
   wire sys_clk270;
@@ -33,7 +33,7 @@ module top(
     .sys_clk180     (sys_clk180),
     .sys_clk270     (sys_clk270),
     .clk_200        (clk_200),
-    .sys_rst        (rst_100),
+    .sys_rst        (sys_reset),
     .idelay_rdy     (idelay_rdy)
   );
 
@@ -73,7 +73,7 @@ module top(
   reg epb_rstRR;
 
   always @(posedge epb_clk) begin
-    epb_rstR  <= rst_100;
+    epb_rstR  <= sys_reset;
     epb_rstRR <= epb_rstR;
   end
 
