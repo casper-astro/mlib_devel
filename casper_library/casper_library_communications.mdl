@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [0.0, 25.0, 1920.0, 1055.0]
+      Location		      [1920.0, 0.0, 1280.0, 1024.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1884.0, 892.0]
+	Extents			[1244.0, 861.0]
 	ZoomFactor		[1.0]
 	Offset			[-49.246878842126762, -8.4164424104407658]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Jul 23 15:55:40 2014"
-  RTWModifiedTimeStamp	  328031722
-  ModelVersionFormat	  "1.%<AutoIncrement:22>"
+  LastModifiedDate	  "Mon Jul 28 17:14:32 2014"
+  RTWModifiedTimeStamp	  328468470
+  ModelVersionFormat	  "1.%<AutoIncrement:23>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -769,7 +769,7 @@ Library {
   }
   System {
     Name		    "casper_library_communications"
-    Location		    [0, 25, 1920, 1080]
+    Location		    [1920, 0, 3200, 1024]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -783,7 +783,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "2488"
+    SIDHighWatermark	    "2708"
     Block {
       BlockType		      SubSystem
       Name		      "frame_len_checker"
@@ -12189,11 +12189,11 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "spead_pack"
-      SID		      "1815"
+      SID		      "2489"
       Tag		      "casper:spead_pack"
       Ports		      [9, 4]
-      Position		      [430, 47, 570, 343]
-      ZOrder		      1005
+      Position		      [420, 50, 560, 350]
+      ZOrder		      1007
       BackgroundColor	      "[0.501961, 1.000000, 0.501961]"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -12210,10 +12210,11 @@ Library {
 	Description		"This block generates SPEAD-compliant packets from a datastream. \n\nPackets are created with a fixed he"
 	"ader followed by a number of 64-bit items.\n\nRequires a 64-bit data stream.\n\nThe data_ready signal is one cycle BE"
 	"FORE valid data! Does not have to be with a valid signal either."
-	Initialization		"spead_pack_init(gcb, header_ids)"
+	Initialization		"if floor(log2(bytes_per_word)) ~= log2(bytes_per_word)\n    error('Bytes per word should be a power "
+	"of two.');\nend\n\nspead_pack_init(gcb, header_ids)"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  5
+	  Dimension		  6
 	  Object {
 	    $ObjectID		    29
 	    Type		    "edit"
@@ -12250,12 +12251,19 @@ Library {
 	    Prompt		    "SPEAD version"
 	    Value		    "4"
 	  }
+	  Object {
+	    $ObjectID		    34
+	    Type		    "edit"
+	    Name		    "bytes_per_word"
+	    Prompt		    "Word size, in bytes"
+	    Value		    "8"
+	  }
 	  PropName		  "Parameters"
 	}
       }
       System {
 	Name			"spead_pack"
-	Location		[1920, 0, 3200, 1024]
+	Location		[-1, 25, 1921, 1084]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -12267,11 +12275,11 @@ Library {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"200"
+	ZoomFactor		"90"
 	Block {
 	  BlockType		  Inport
 	  Name			  "data64_ready"
-	  SID			  "1816"
+	  SID			  "2490"
 	  Position		  [20, 68, 50, 82]
 	  ZOrder		  -1
 	  IconDisplay		  "Port number"
@@ -12279,7 +12287,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "data64_valid"
-	  SID			  "1817"
+	  SID			  "2491"
 	  Position		  [20, 108, 50, 122]
 	  ZOrder		  284
 	  Port			  "2"
@@ -12288,7 +12296,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "data64"
-	  SID			  "1818"
+	  SID			  "2492"
 	  Position		  [20, 28, 50, 42]
 	  ZOrder		  -7
 	  Port			  "3"
@@ -12297,7 +12305,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "hdr_heap_id"
-	  SID			  "1963"
+	  SID			  "2493"
 	  Position		  [20, 178, 50, 192]
 	  ZOrder		  1486
 	  Port			  "4"
@@ -12306,7 +12314,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "hdr_heap_size"
-	  SID			  "1971"
+	  SID			  "2494"
 	  Position		  [20, 208, 50, 222]
 	  ZOrder		  1494
 	  Port			  "5"
@@ -12315,7 +12323,7 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "hdr_heap_offset"
-	  SID			  "1979"
+	  SID			  "2495"
 	  Position		  [20, 238, 50, 252]
 	  ZOrder		  1502
 	  Port			  "6"
@@ -12323,8 +12331,8 @@ Library {
 	}
 	Block {
 	  BlockType		  Inport
-	  Name			  "hdr_pkt_len"
-	  SID			  "1987"
+	  Name			  "hdr_pkt_len_words"
+	  SID			  "2496"
 	  Position		  [20, 268, 50, 282]
 	  ZOrder		  1510
 	  Port			  "7"
@@ -12333,25 +12341,25 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "hdr5_0x006f"
-	  SID			  "2198"
+	  SID			  "2693"
 	  Position		  [20, 298, 50, 312]
-	  ZOrder		  1673
+	  ZOrder		  4719
 	  Port			  "8"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
 	  Name			  "hdr6_0x00de"
-	  SID			  "2206"
+	  SID			  "2701"
 	  Position		  [20, 328, 50, 342]
-	  ZOrder		  1681
+	  ZOrder		  4727
 	  Port			  "9"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "AddSub"
-	  SID			  "2055"
+	  SID			  "2499"
 	  Ports			  [2, 1]
 	  Position		  [525, 648, 575, 697]
 	  ZOrder		  1578
@@ -12392,7 +12400,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Assert17"
-	  SID			  "1822"
+	  SID			  "2500"
 	  Ports			  [1, 1]
 	  Position		  [1435, 135, 1480, 155]
 	  ZOrder		  655
@@ -12430,7 +12438,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Assert18"
-	  SID			  "1823"
+	  SID			  "2501"
 	  Ports			  [1, 1]
 	  Position		  [1705, 435, 1750, 455]
 	  ZOrder		  656
@@ -12468,7 +12476,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Assert5"
-	  SID			  "1824"
+	  SID			  "2502"
 	  Ports			  [1, 1]
 	  Position		  [80, 65, 115, 85]
 	  ZOrder		  -13
@@ -12513,7 +12521,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Assert6"
-	  SID			  "1825"
+	  SID			  "2503"
 	  Ports			  [1, 1]
 	  Position		  [80, 25, 115, 45]
 	  ZOrder		  -14
@@ -12558,7 +12566,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Assert7"
-	  SID			  "1826"
+	  SID			  "2504"
 	  Ports			  [1, 1]
 	  Position		  [80, 105, 115, 125]
 	  ZOrder		  285
@@ -12603,7 +12611,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Concat"
-	  SID			  "1827"
+	  SID			  "2505"
 	  Ports			  [6, 1]
 	  Position		  [1095, 55, 1160, 235]
 	  ZOrder		  281
@@ -12638,7 +12646,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant3"
-	  SID			  "1828"
+	  SID			  "2506"
 	  Ports			  [0, 1]
 	  Position		  [1050, 63, 1070, 77]
 	  ZOrder		  280
@@ -12684,7 +12692,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant4"
-	  SID			  "1829"
+	  SID			  "2507"
 	  Ports			  [0, 1]
 	  Position		  [1050, 93, 1070, 107]
 	  ZOrder		  279
@@ -12726,7 +12734,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Constant7"
-	  SID			  "1830"
+	  SID			  "2508"
 	  Ports			  [0, 1]
 	  Position		  [1050, 183, 1070, 197]
 	  ZOrder		  276
@@ -12772,7 +12780,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay1"
-	  SID			  "1831"
+	  SID			  "2509"
 	  Ports			  [1, 1]
 	  Position		  [790, 507, 820, 533]
 	  ZOrder		  572
@@ -12811,7 +12819,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Delay3"
-	  SID			  "1832"
+	  SID			  "2510"
 	  Ports			  [1, 1]
 	  Position		  [790, 597, 820, 623]
 	  ZOrder		  1424
@@ -12850,7 +12858,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From1"
-	  SID			  "1833"
+	  SID			  "2511"
 	  Position		  [420, 603, 490, 617]
 	  ZOrder		  1420
 	  ShowName		  off
@@ -12860,7 +12868,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From2"
-	  SID			  "1834"
+	  SID			  "2512"
 	  Position		  [420, 578, 490, 592]
 	  ZOrder		  1421
 	  ShowName		  off
@@ -12870,7 +12878,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From20"
-	  SID			  "1835"
+	  SID			  "2513"
 	  Position		  [475, 298, 545, 312]
 	  ZOrder		  -51
 	  ShowName		  off
@@ -12880,7 +12888,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From21"
-	  SID			  "1836"
+	  SID			  "2514"
 	  Position		  [420, 503, 500, 517]
 	  ZOrder		  -52
 	  ShowName		  off
@@ -12890,7 +12898,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From29"
-	  SID			  "1837"
+	  SID			  "2515"
 	  Position		  [420, 523, 490, 537]
 	  ZOrder		  -58
 	  ShowName		  off
@@ -12900,7 +12908,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From3"
-	  SID			  "2056"
+	  SID			  "2516"
 	  Position		  [420, 653, 490, 667]
 	  ZOrder		  1579
 	  ShowName		  off
@@ -12910,7 +12918,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From31"
-	  SID			  "1838"
+	  SID			  "2517"
 	  Position		  [1435, 63, 1505, 77]
 	  ZOrder		  -60
 	  ShowName		  off
@@ -12920,7 +12928,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From4"
-	  SID			  "1839"
+	  SID			  "2518"
 	  Position		  [1205, 803, 1275, 817]
 	  ZOrder		  -61
 	  ShowName		  off
@@ -12930,7 +12938,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From6"
-	  SID			  "1840"
+	  SID			  "2519"
 	  Position		  [645, 708, 715, 722]
 	  ZOrder		  1437
 	  ShowName		  off
@@ -12940,7 +12948,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From7"
-	  SID			  "1841"
+	  SID			  "2520"
 	  Position		  [475, 418, 545, 432]
 	  ZOrder		  601
 	  ShowName		  off
@@ -12950,7 +12958,7 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "From8"
-	  SID			  "1842"
+	  SID			  "2521"
 	  Position		  [475, 323, 555, 337]
 	  ZOrder		  -65
 	  ShowName		  off
@@ -12960,7 +12968,7 @@ Library {
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto1"
-	  SID			  "1843"
+	  SID			  "2522"
 	  Position		  [870, 313, 940, 327]
 	  ZOrder		  -75
 	  ShowName		  off
@@ -12969,7 +12977,7 @@ Library {
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto11"
-	  SID			  "1844"
+	  SID			  "2523"
 	  Position		  [855, 368, 940, 382]
 	  ZOrder		  -77
 	  ShowName		  off
@@ -12978,7 +12986,7 @@ Library {
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto13"
-	  SID			  "1845"
+	  SID			  "2524"
 	  Position		  [325, 108, 395, 122]
 	  ZOrder		  306
 	  ShowName		  off
@@ -12987,7 +12995,7 @@ Library {
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto2"
-	  SID			  "1846"
+	  SID			  "2525"
 	  Position		  [325, 28, 395, 42]
 	  ZOrder		  -81
 	  ShowName		  off
@@ -12996,7 +13004,7 @@ Library {
 	Block {
 	  BlockType		  Goto
 	  Name			  "Goto3"
-	  SID			  "1847"
+	  SID			  "2526"
 	  Position		  [625, 98, 695, 112]
 	  ZOrder		  1432
 	  ShowName		  off
@@ -13005,7 +13013,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical1"
-	  SID			  "1848"
+	  SID			  "2527"
 	  Ports			  [2, 1]
 	  Position		  [770, 355, 810, 395]
 	  ZOrder		  603
@@ -13047,7 +13055,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical2"
-	  SID			  "1849"
+	  SID			  "2528"
 	  Ports			  [2, 1]
 	  Position		  [560, 85, 600, 125]
 	  ZOrder		  1431
@@ -13089,7 +13097,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical3"
-	  SID			  "1850"
+	  SID			  "2529"
 	  Ports			  [2, 1]
 	  Position		  [585, 498, 625, 542]
 	  ZOrder		  -93
@@ -13131,7 +13139,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Logical4"
-	  SID			  "1851"
+	  SID			  "2530"
 	  Ports			  [2, 1]
 	  Position		  [745, 685, 785, 725]
 	  ZOrder		  1436
@@ -13173,7 +13181,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Register1"
-	  SID			  "1852"
+	  SID			  "2531"
 	  Ports			  [3, 1]
 	  Position		  [485, 67, 535, 123]
 	  ZOrder		  1427
@@ -13210,7 +13218,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Register3"
-	  SID			  "1853"
+	  SID			  "2532"
 	  Ports			  [3, 1]
 	  Position		  [585, 417, 635, 473]
 	  ZOrder		  598
@@ -13247,7 +13255,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Relational1"
-	  SID			  "1854"
+	  SID			  "2533"
 	  Ports			  [2, 1]
 	  Position		  [630, 588, 675, 632]
 	  ZOrder		  1423
@@ -13284,7 +13292,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "Relational2"
-	  SID			  "1855"
+	  SID			  "2534"
 	  Ports			  [2, 1]
 	  Position		  [685, 343, 730, 387]
 	  ZOrder		  -96
@@ -13321,7 +13329,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_data"
-	  SID			  "1856"
+	  SID			  "2535"
 	  Ports			  [1, 1]
 	  Position		  [1315, 800, 1360, 820]
 	  ZOrder		  654
@@ -13364,7 +13372,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "data_ctr"
-	  SID			  "1857"
+	  SID			  "2536"
 	  Ports			  [2, 1]
 	  Position		  [525, 573, 575, 622]
 	  ZOrder		  1419
@@ -13415,7 +13423,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_data"
-	  SID			  "1858"
+	  SID			  "2537"
 	  Ports			  [1, 1]
 	  Position		  [225, 22, 255, 48]
 	  ZOrder		  1335
@@ -13453,7 +13461,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_data1"
-	  SID			  "1859"
+	  SID			  "2538"
 	  Ports			  [1, 1]
 	  Position		  [175, 24, 195, 46]
 	  ZOrder		  1433
@@ -13486,7 +13494,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_data2"
-	  SID			  "1860"
+	  SID			  "2539"
 	  Ports			  [1, 1]
 	  Position		  [175, 104, 195, 126]
 	  ZOrder		  1434
@@ -13519,7 +13527,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "delay_valid"
-	  SID			  "1861"
+	  SID			  "2540"
 	  Ports			  [1, 1]
 	  Position		  [225, 102, 255, 128]
 	  ZOrder		  1336
@@ -13557,7 +13565,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "edge_detect1"
-	  SID			  "1862"
+	  SID			  "2541"
 	  Ports			  [1, 1]
 	  Position		  [325, 135, 370, 155]
 	  ZOrder		  1418
@@ -13577,7 +13585,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    34
+	    $ObjectID		    35
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "edge_detect"
 	    Description		    "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or b"
@@ -13596,7 +13604,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      6
 	      Object {
-		$ObjectID		35
+		$ObjectID		36
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -13612,7 +13620,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		36
+		$ObjectID		37
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -13627,7 +13635,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		37
+		$ObjectID		38
 		Type			"edit"
 		Name			"x_in"
 		Prompt			"Input X Positions"
@@ -13636,7 +13644,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		38
+		$ObjectID		39
 		Type			"edit"
 		Name			"y_in"
 		Prompt			"Input Y Positions"
@@ -13645,7 +13653,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		39
+		$ObjectID		40
 		Type			"edit"
 		Name			"x_out"
 		Prompt			"Output X Positions"
@@ -13654,7 +13662,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		40
+		$ObjectID		41
 		Type			"edit"
 		Name			"y_out"
 		Prompt			"Output Y Positions"
@@ -13690,7 +13698,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "in"
-	      SID		      "1862:1"
+	      SID		      "2541:1"
 	      Position		      [50, 53, 80, 67]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -13698,7 +13706,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay"
-	      SID		      "1862:2"
+	      SID		      "2541:2"
 	      Ports		      [1, 1]
 	      Position		      [180, 72, 225, 88]
 	      ZOrder		      -2
@@ -13732,7 +13740,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter"
-	      SID		      "1862:3"
+	      SID		      "2541:3"
 	      Ports		      [1, 1]
 	      Position		      [180, 52, 225, 68]
 	      ZOrder		      -3
@@ -13762,7 +13770,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "edge_op"
-	      SID		      "1862:4"
+	      SID		      "2541:4"
 	      Ports		      [2, 1]
 	      Position		      [275, 48, 320, 92]
 	      ZOrder		      -4
@@ -13797,7 +13805,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "out"
-	      SID		      "1862:5"
+	      SID		      "2541:5"
 	      Position		      [380, 63, 410, 77]
 	      ZOrder		      -5
 	      IconDisplay	      "Port number"
@@ -13839,7 +13847,7 @@ Library {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "edge_detect2"
-	  SID			  "1863"
+	  SID			  "2542"
 	  Ports			  [1, 1]
 	  Position		  [400, 85, 445, 105]
 	  ZOrder		  1429
@@ -13859,7 +13867,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    41
+	    $ObjectID		    42
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "edge_detect"
 	    Description		    "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or b"
@@ -13878,7 +13886,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      6
 	      Object {
-		$ObjectID		42
+		$ObjectID		43
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -13894,7 +13902,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		43
+		$ObjectID		44
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -13909,7 +13917,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		44
+		$ObjectID		45
 		Type			"edit"
 		Name			"x_in"
 		Prompt			"Input X Positions"
@@ -13918,7 +13926,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		45
+		$ObjectID		46
 		Type			"edit"
 		Name			"y_in"
 		Prompt			"Input Y Positions"
@@ -13927,7 +13935,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		46
+		$ObjectID		47
 		Type			"edit"
 		Name			"x_out"
 		Prompt			"Output X Positions"
@@ -13936,7 +13944,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		47
+		$ObjectID		48
 		Type			"edit"
 		Name			"y_out"
 		Prompt			"Output Y Positions"
@@ -13966,7 +13974,7 @@ Library {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "in"
-	      SID		      "1863:1"
+	      SID		      "2542:1"
 	      Position		      [50, 53, 80, 67]
 	      ZOrder		      -1
 	      IconDisplay	      "Port number"
@@ -13974,7 +13982,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Delay"
-	      SID		      "1863:2"
+	      SID		      "2542:2"
 	      Ports		      [1, 1]
 	      Position		      [180, 72, 225, 88]
 	      ZOrder		      -2
@@ -14008,7 +14016,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "Inverter"
-	      SID		      "1863:3"
+	      SID		      "2542:3"
 	      Ports		      [1, 1]
 	      Position		      [180, 52, 225, 68]
 	      ZOrder		      -3
@@ -14038,7 +14046,7 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "edge_op"
-	      SID		      "1863:4"
+	      SID		      "2542:4"
 	      Ports		      [2, 1]
 	      Position		      [275, 48, 320, 92]
 	      ZOrder		      -4
@@ -14073,7 +14081,7 @@ Library {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "out"
-	      SID		      "1863:5"
+	      SID		      "2542:5"
 	      Position		      [380, 63, 410, 77]
 	      ZOrder		      -5
 	      IconDisplay	      "Port number"
@@ -14115,7 +14123,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdr_ctr"
-	  SID			  "1864"
+	  SID			  "2543"
 	  Ports			  [2, 1]
 	  Position		  [595, 293, 645, 342]
 	  ZOrder		  -36
@@ -14166,10 +14174,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdra_1"
-	  SID			  "2170"
+	  SID			  "2662"
 	  Ports			  [1, 1]
 	  Position		  [70, 178, 100, 192]
-	  ZOrder		  1645
+	  ZOrder		  4688
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14210,10 +14218,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdra_2"
-	  SID			  "2177"
+	  SID			  "2669"
 	  Ports			  [1, 1]
 	  Position		  [70, 208, 100, 222]
-	  ZOrder		  1652
+	  ZOrder		  4695
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14254,10 +14262,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdra_3"
-	  SID			  "2184"
+	  SID			  "2676"
 	  Ports			  [1, 1]
 	  Position		  [70, 238, 100, 252]
-	  ZOrder		  1659
+	  ZOrder		  4702
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14298,10 +14306,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdra_4"
-	  SID			  "2191"
+	  SID			  "2683"
 	  Ports			  [1, 1]
 	  Position		  [70, 268, 100, 282]
-	  ZOrder		  1666
+	  ZOrder		  4709
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14334,7 +14342,7 @@ Library {
 	  "COMMENT: end icon text');"
 	  Port {
 	    PortNumber		    1
-	    Name		    "hdr_pkt_len"
+	    Name		    "hdr_pkt_len_words"
 	    RTWStorageClass	    "Auto"
 	    DataLoggingNameMode	    "SignalName"
 	  }
@@ -14342,10 +14350,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdra_5"
-	  SID			  "2199"
+	  SID			  "2694"
 	  Ports			  [1, 1]
 	  Position		  [70, 298, 100, 312]
-	  ZOrder		  1674
+	  ZOrder		  4720
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14386,10 +14394,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdra_6"
-	  SID			  "2207"
+	  SID			  "2702"
 	  Ports			  [1, 1]
 	  Position		  [70, 328, 100, 342]
-	  ZOrder		  1682
+	  ZOrder		  4728
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14430,10 +14438,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdrd_1"
-	  SID			  "2171"
+	  SID			  "2663"
 	  Ports			  [1, 1]
 	  Position		  [120, 178, 140, 192]
-	  ZOrder		  1646
+	  ZOrder		  4689
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -14461,10 +14469,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdrd_2"
-	  SID			  "2178"
+	  SID			  "2670"
 	  Ports			  [1, 1]
 	  Position		  [120, 208, 140, 222]
-	  ZOrder		  1653
+	  ZOrder		  4696
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -14492,10 +14500,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdrd_3"
-	  SID			  "2185"
+	  SID			  "2677"
 	  Ports			  [1, 1]
 	  Position		  [120, 238, 140, 252]
-	  ZOrder		  1660
+	  ZOrder		  4703
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -14523,10 +14531,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdrd_4"
-	  SID			  "2192"
+	  SID			  "2684"
 	  Ports			  [1, 1]
 	  Position		  [120, 268, 140, 282]
-	  ZOrder		  1667
+	  ZOrder		  4710
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -14554,10 +14562,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdrd_5"
-	  SID			  "2200"
+	  SID			  "2695"
 	  Ports			  [1, 1]
 	  Position		  [120, 298, 140, 312]
-	  ZOrder		  1675
+	  ZOrder		  4721
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -14585,10 +14593,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "hdrd_6"
-	  SID			  "2208"
+	  SID			  "2703"
 	  Ports			  [1, 1]
 	  Position		  [120, 328, 140, 342]
-	  ZOrder		  1683
+	  ZOrder		  4729
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -14615,11 +14623,119 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
+	  Name			  "header_4cast4"
+	  SID			  "2688"
+	  Ports			  [1, 1]
+	  Position		  [1265, 473, 1315, 487]
+	  ZOrder		  4714
+	  ShowName		  off
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Convert"
+	  SourceType		  "Xilinx Type Converter Block"
+	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
+	  gui_display_data_type	  "Fixed-point"
+	  arith_type		  "Unsigned"
+	  n_bits		  "spead_lsw - 3"
+	  bin_pt		  "0"
+	  float_type		  "Single"
+	  exp_bits		  "8"
+	  fraction_bits		  "24"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  en			  off
+	  latency		  "0"
+	  dbl_ovrd		  off
+	  pipeline		  on
+	  xl_use_area		  off
+	  xl_area		  "[0,0,0,0,0,0,0]"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "convert"
+	  sg_icon_stat		  "50,14,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 14 14 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 14 14 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[9.22 9.22 11."
+	  "22 9.22 11.22 11.22 11.22 9.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[7.22 7.22 9.22 9.22 7.22 ],[0."
+	  "931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[5.22 5.22 7.22 7.22 5.22 ],[1 1 1 ]);\npatch([22.55 29"
+	  ".44 27.44 25.44 23.44 20.55 22.55 ],[3.22 3.22 5.22 3.22 5.22 5.22 3.22 ],[0.931 0.946 0.973 ]);\nfprintf('','COMME"
+	  "NT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'cast');\n"
+	  "fprintf('','COMMENT: end icon text');"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "header_4cat4"
+	  SID			  "2690"
+	  Ports			  [2, 1]
+	  Position		  [1340, 473, 1390, 502]
+	  ZOrder		  4716
+	  ShowName		  off
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Concat"
+	  SourceType		  "Xilinx Bus Concatenator Block"
+	  infoedit		  "Concatenates two or more inputs.  Output will be cast to an unsigned value with the binary point at ze"
+	  "ro."
+	  num_inputs		  "2"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "concat"
+	  sg_icon_stat		  "50,29,2,1,white,blue,0,16398980,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 29 29 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 29 29 0 ]);\npatch([16.1 21.88 25.88 29.88 33.88 25.88 20.1 16.1 ],[18.44 18.44 22.4"
+	  "4 18.44 22.44 22.44 22.44 18.44 ],[1 1 1 ]);\npatch([20.1 25.88 21.88 16.1 20.1 ],[14.44 14.44 18.44 18.44 14.44 ],"
+	  "[0.931 0.946 0.973 ]);\npatch([16.1 21.88 25.88 20.1 16.1 ],[10.44 10.44 14.44 14.44 10.44 ],[1 1 1 ]);\npatch([20."
+	  "1 33.88 29.88 25.88 21.88 16.1 20.1 ],[6.44 6.44 10.44 6.44 10.44 10.44 6.44 ],[0.931 0.946 0.973 ]);\nfprintf('','"
+	  "COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'hi');\n"
+	  "color('black');port_label('input',2,'lo');\n\ncolor('black');disp('\\fontsize{20}\\}','texmode','on');\nfprintf('',"
+	  "'COMMENT: end icon text');"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "header_4const4"
+	  SID			  "2689"
+	  Ports			  [0, 1]
+	  Position		  [1265, 493, 1315, 507]
+	  ZOrder		  4715
+	  ShowName		  off
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Constant"
+	  SourceType		  "Xilinx Constant Block Block"
+	  const			  "0"
+	  gui_display_data_type	  "Fixed-point"
+	  arith_type		  "Unsigned"
+	  n_bits		  "3"
+	  bin_pt		  "0"
+	  preci_type		  "Single"
+	  exp_width		  "8"
+	  frac_width		  "24"
+	  explicit_period	  off
+	  period		  "1"
+	  dsp48_infoedit	  "The use of this block for DSP48 instructions is deprecated.  Please use the Opmode block."
+	  equ			  "P=C"
+	  opselect		  "C"
+	  inp2			  "PCIN>>17"
+	  opr			  "+"
+	  inp1			  "P"
+	  carry			  "CIN"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "constant"
+	  sg_icon_stat		  "50,14,0,1,white,blue,0,bf4ddd8b,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 14 14 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 50 50 0 0 ],[0 0 14 14 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[9.22 9.22 11."
+	  "22 9.22 11.22 11.22 11.22 9.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[7.22 7.22 9.22 9.22 7.22 ],[0."
+	  "931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[5.22 5.22 7.22 7.22 5.22 ],[1 1 1 ]);\npatch([22.55 29"
+	  ".44 27.44 25.44 23.44 20.55 22.55 ],[3.22 3.22 5.22 3.22 5.22 5.22 3.22 ],[0.931 0.946 0.973 ]);\nfprintf('','COMME"
+	  "NT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('output',1,'0');\nfpri"
+	  "ntf('','COMMENT: end icon text');"
+	}
+	Block {
+	  BlockType		  Reference
 	  Name			  "header_assert1"
-	  SID			  "2176"
+	  SID			  "2668"
 	  Ports			  [1, 1]
 	  Position		  [1470, 223, 1500, 237]
-	  ZOrder		  1651
+	  ZOrder		  4694
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14654,10 +14770,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_assert2"
-	  SID			  "2183"
+	  SID			  "2675"
 	  Ports			  [1, 1]
 	  Position		  [1470, 298, 1500, 312]
-	  ZOrder		  1658
+	  ZOrder		  4701
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14692,10 +14808,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_assert3"
-	  SID			  "2190"
+	  SID			  "2682"
 	  Ports			  [1, 1]
 	  Position		  [1470, 373, 1500, 387]
-	  ZOrder		  1665
+	  ZOrder		  4708
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14730,10 +14846,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_assert4"
-	  SID			  "2197"
+	  SID			  "2692"
 	  Ports			  [1, 1]
 	  Position		  [1470, 448, 1500, 462]
-	  ZOrder		  1672
+	  ZOrder		  4718
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14768,10 +14884,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_assert5"
-	  SID			  "2205"
+	  SID			  "2700"
 	  Ports			  [1, 1]
 	  Position		  [1470, 523, 1500, 537]
-	  ZOrder		  1680
+	  ZOrder		  4726
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14806,10 +14922,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_assert6"
-	  SID			  "2213"
+	  SID			  "2708"
 	  Ports			  [1, 1]
 	  Position		  [1470, 598, 1500, 612]
-	  ZOrder		  1688
+	  ZOrder		  4734
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -14844,10 +14960,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_cat1"
-	  SID			  "2175"
+	  SID			  "2667"
 	  Ports			  [2, 1]
 	  Position		  [1415, 225, 1455, 265]
-	  ZOrder		  1650
+	  ZOrder		  4693
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
@@ -14872,10 +14988,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_cat2"
-	  SID			  "2182"
+	  SID			  "2674"
 	  Ports			  [2, 1]
 	  Position		  [1415, 300, 1455, 340]
-	  ZOrder		  1657
+	  ZOrder		  4700
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
@@ -14900,10 +15016,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_cat3"
-	  SID			  "2189"
+	  SID			  "2681"
 	  Ports			  [2, 1]
 	  Position		  [1415, 375, 1455, 415]
-	  ZOrder		  1664
+	  ZOrder		  4707
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
@@ -14928,10 +15044,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_cat4"
-	  SID			  "2196"
+	  SID			  "2691"
 	  Ports			  [2, 1]
 	  Position		  [1415, 450, 1455, 490]
-	  ZOrder		  1671
+	  ZOrder		  4717
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
@@ -14956,10 +15072,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_cat5"
-	  SID			  "2204"
+	  SID			  "2699"
 	  Ports			  [2, 1]
 	  Position		  [1415, 525, 1455, 565]
-	  ZOrder		  1679
+	  ZOrder		  4725
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
@@ -14984,10 +15100,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_cat6"
-	  SID			  "2212"
+	  SID			  "2707"
 	  Ports			  [2, 1]
 	  Position		  [1415, 600, 1455, 640]
-	  ZOrder		  1687
+	  ZOrder		  4733
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Concat"
@@ -15012,10 +15128,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const1"
-	  SID			  "2173"
+	  SID			  "2665"
 	  Ports			  [0, 1]
 	  Position		  [1340, 223, 1390, 237]
-	  ZOrder		  1648
+	  ZOrder		  4691
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -15059,10 +15175,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const2"
-	  SID			  "2180"
+	  SID			  "2672"
 	  Ports			  [0, 1]
 	  Position		  [1340, 298, 1390, 312]
-	  ZOrder		  1655
+	  ZOrder		  4698
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -15106,10 +15222,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const3"
-	  SID			  "2187"
+	  SID			  "2679"
 	  Ports			  [0, 1]
 	  Position		  [1340, 373, 1390, 387]
-	  ZOrder		  1662
+	  ZOrder		  4705
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -15153,10 +15269,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const4"
-	  SID			  "2194"
+	  SID			  "2686"
 	  Ports			  [0, 1]
 	  Position		  [1340, 448, 1390, 462]
-	  ZOrder		  1669
+	  ZOrder		  4712
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -15200,10 +15316,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const5"
-	  SID			  "2202"
+	  SID			  "2697"
 	  Ports			  [0, 1]
 	  Position		  [1340, 523, 1390, 537]
-	  ZOrder		  1677
+	  ZOrder		  4723
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -15247,10 +15363,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "header_const6"
-	  SID			  "2210"
+	  SID			  "2705"
 	  Ports			  [0, 1]
 	  Position		  [1340, 598, 1390, 612]
-	  ZOrder		  1685
+	  ZOrder		  4731
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Constant"
@@ -15294,115 +15410,115 @@ Library {
 	Block {
 	  BlockType		  From
 	  Name			  "header_from1"
-	  SID			  "2174"
+	  SID			  "2666"
 	  Position		  [1340, 248, 1390, 262]
-	  ZOrder		  1649
+	  ZOrder		  4692
 	  ShowName		  off
 	  GotoTag		  "hdr_1"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from2"
-	  SID			  "2181"
+	  SID			  "2673"
 	  Position		  [1340, 323, 1390, 337]
-	  ZOrder		  1656
+	  ZOrder		  4699
 	  ShowName		  off
 	  GotoTag		  "hdr_2"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from3"
-	  SID			  "2188"
+	  SID			  "2680"
 	  Position		  [1340, 398, 1390, 412]
-	  ZOrder		  1663
+	  ZOrder		  4706
 	  ShowName		  off
 	  GotoTag		  "hdr_3"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from4"
-	  SID			  "2195"
-	  Position		  [1340, 473, 1390, 487]
-	  ZOrder		  1670
+	  SID			  "2687"
+	  Position		  [1195, 473, 1245, 487]
+	  ZOrder		  4713
 	  ShowName		  off
 	  GotoTag		  "hdr_4"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from5"
-	  SID			  "2203"
+	  SID			  "2698"
 	  Position		  [1340, 548, 1390, 562]
-	  ZOrder		  1678
+	  ZOrder		  4724
 	  ShowName		  off
 	  GotoTag		  "hdr_5"
 	}
 	Block {
 	  BlockType		  From
 	  Name			  "header_from6"
-	  SID			  "2211"
+	  SID			  "2706"
 	  Position		  [1340, 623, 1390, 637]
-	  ZOrder		  1686
+	  ZOrder		  4732
 	  ShowName		  off
 	  GotoTag		  "hdr_6"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "header_to1"
-	  SID			  "2172"
+	  SID			  "2664"
 	  Position		  [160, 178, 180, 192]
-	  ZOrder		  1647
+	  ZOrder		  4690
 	  ShowName		  off
 	  GotoTag		  "hdr_1"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "header_to2"
-	  SID			  "2179"
+	  SID			  "2671"
 	  Position		  [160, 208, 180, 222]
-	  ZOrder		  1654
+	  ZOrder		  4697
 	  ShowName		  off
 	  GotoTag		  "hdr_2"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "header_to3"
-	  SID			  "2186"
+	  SID			  "2678"
 	  Position		  [160, 238, 180, 252]
-	  ZOrder		  1661
+	  ZOrder		  4704
 	  ShowName		  off
 	  GotoTag		  "hdr_3"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "header_to4"
-	  SID			  "2193"
+	  SID			  "2685"
 	  Position		  [160, 268, 180, 282]
-	  ZOrder		  1668
+	  ZOrder		  4711
 	  ShowName		  off
 	  GotoTag		  "hdr_4"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "header_to5"
-	  SID			  "2201"
+	  SID			  "2696"
 	  Position		  [160, 298, 180, 312]
-	  ZOrder		  1676
+	  ZOrder		  4722
 	  ShowName		  off
 	  GotoTag		  "hdr_5"
 	}
 	Block {
 	  BlockType		  Goto
 	  Name			  "header_to6"
-	  SID			  "2209"
+	  SID			  "2704"
 	  Position		  [160, 328, 180, 342]
-	  ZOrder		  1684
+	  ZOrder		  4730
 	  ShowName		  off
 	  GotoTag		  "hdr_6"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "heap_addr_width"
-	  SID			  "1886"
+	  SID			  "2589"
 	  Ports			  [0, 1]
 	  Position		  [1050, 153, 1070, 167]
 	  ZOrder		  277
@@ -15443,7 +15559,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "item_id_width"
-	  SID			  "1887"
+	  SID			  "2590"
 	  Ports			  [0, 1]
 	  Position		  [1050, 123, 1070, 137]
 	  ZOrder		  278
@@ -15484,9 +15600,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "mainmux"
-	  SID			  "1888"
+	  SID			  "2591"
 	  Ports			  [9, 1]
-	  Position		  [1585, 34, 1640, 866]
+	  Position		  [1585, 122, 1640, 998]
 	  ZOrder		  -94
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Mux"
@@ -15507,13 +15623,13 @@ Library {
 	  sggui_pos		  "20,25,402,369"
 	  block_type		  "mux"
 	  block_version		  "10.1.3"
-	  sg_icon_stat		  "55,832,9,1,white,blue,3,f1dfe151,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 118.857 713.143 832 0 ],[0."
-	  "77 0.82 0.91 ]);\nplot([0 55 55 0 0 ],[0 118.857 713.143 832 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18."
-	  "425 11.425 ],[423.77 423.77 430.77 423.77 430.77 430.77 430.77 423.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.42"
-	  "5 18.425 ],[416.77 416.77 423.77 423.77 416.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],"
-	  "[409.77 409.77 416.77 416.77 409.77 ],[1 1 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[402.77 402"
-	  ".77 409.77 402.77 409.77 409.77 402.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf"
+	  sg_icon_stat		  "55,876,9,1,white,blue,3,f1dfe151,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 55 55 0 0 ],[0 125.143 750.857 876 0 ],[0."
+	  "77 0.82 0.91 ]);\nplot([0 55 55 0 0 ],[0 125.143 750.857 876 0 ]);\npatch([11.425 21.54 28.54 35.54 42.54 28.54 18."
+	  "425 11.425 ],[445.77 445.77 452.77 445.77 452.77 452.77 452.77 445.77 ],[1 1 1 ]);\npatch([18.425 28.54 21.54 11.42"
+	  "5 18.425 ],[438.77 438.77 445.77 445.77 438.77 ],[0.931 0.946 0.973 ]);\npatch([11.425 21.54 28.54 18.425 11.425 ],"
+	  "[431.77 431.77 438.77 438.77 431.77 ],[1 1 1 ]);\npatch([18.425 42.54 35.54 28.54 21.54 11.425 18.425 ],[424.77 424"
+	  ".77 431.77 424.77 431.77 431.77 424.77 ],[0.931 0.946 0.973 ]);\nfprintf('','COMMENT: end icon graphics');\nfprintf"
 	  "('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'sel');\ncolor('black');port_label('input',2,"
 	  "'d0');\ncolor('black');port_label('input',3,'d1');\ncolor('black');port_label('input',4,'d2');\ncolor('black');port"
 	  "_label('input',5,'d3');\ncolor('black');port_label('input',6,'d4');\ncolor('black');port_label('input',7,'d5');\nco"
@@ -15529,7 +15645,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "num_headers"
-	  SID			  "1889"
+	  SID			  "2592"
 	  Ports			  [0, 1]
 	  Position		  [615, 368, 635, 382]
 	  ZOrder		  -21
@@ -15570,7 +15686,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "num_item_pts"
-	  SID			  "1890"
+	  SID			  "2593"
 	  Ports			  [0, 1]
 	  Position		  [1050, 213, 1070, 227]
 	  ZOrder		  275
@@ -15611,7 +15727,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "only_one"
-	  SID			  "2057"
+	  SID			  "2594"
 	  Ports			  [0, 1]
 	  Position		  [420, 678, 460, 692]
 	  ZOrder		  1580
@@ -15652,7 +15768,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "data_out"
-	  SID			  "1892"
+	  SID			  "2595"
 	  Position		  [1785, 438, 1815, 452]
 	  ZOrder		  -103
 	  IconDisplay		  "Port number"
@@ -15660,7 +15776,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "valid_out"
-	  SID			  "1893"
+	  SID			  "2596"
 	  Position		  [880, 513, 910, 527]
 	  ZOrder		  -104
 	  Port			  "2"
@@ -15669,7 +15785,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "eof"
-	  SID			  "1894"
+	  SID			  "2597"
 	  Position		  [880, 603, 910, 617]
 	  ZOrder		  -105
 	  Port			  "3"
@@ -15678,7 +15794,7 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "data_overflow"
-	  SID			  "1895"
+	  SID			  "2598"
 	  Position		  [880, 698, 910, 712]
 	  ZOrder		  301
 	  Port			  "4"
@@ -15994,7 +16110,7 @@ Library {
 	  Labels		  [2, 1]
 	  SrcBlock		  "mainmux"
 	  SrcPort		  1
-	  Points		  [0, -5]
+	  Points		  [0, -115]
 	  DstBlock		  "Assert18"
 	  DstPort		  1
 	}
@@ -16117,7 +16233,7 @@ Library {
 	Line {
 	  SrcBlock		  "header_assert1"
 	  SrcPort		  1
-	  Points		  [30, 0; 0, 40]
+	  Points		  [30, 0; 0, 140]
 	  DstBlock		  "mainmux"
 	  DstPort		  3
 	}
@@ -16166,7 +16282,7 @@ Library {
 	Line {
 	  SrcBlock		  "header_assert2"
 	  SrcPort		  1
-	  Points		  [30, 0; 0, 55]
+	  Points		  [20, 0; 0, 160]
 	  DstBlock		  "mainmux"
 	  DstPort		  4
 	}
@@ -16215,18 +16331,18 @@ Library {
 	Line {
 	  SrcBlock		  "header_assert3"
 	  SrcPort		  1
-	  Points		  [30, 0; 0, 70]
+	  Points		  [10, 0; 0, 180]
 	  DstBlock		  "mainmux"
 	  DstPort		  5
 	}
 	Line {
-	  SrcBlock		  "hdr_pkt_len"
+	  SrcBlock		  "hdr_pkt_len_words"
 	  SrcPort		  1
 	  DstBlock		  "hdra_4"
 	  DstPort		  1
 	}
 	Line {
-	  Name			  "hdr_pkt_len"
+	  Name			  "hdr_pkt_len_words"
 	  Labels		  [0, 0]
 	  SrcBlock		  "hdra_4"
 	  SrcPort		  1
@@ -16251,6 +16367,26 @@ Library {
 	Line {
 	  SrcBlock		  "header_from4"
 	  SrcPort		  1
+	  DstBlock		  "header_4cast4"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "header_4cast4"
+	  SrcPort		  1
+	  DstBlock		  "header_4cat4"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "header_4const4"
+	  SrcPort		  1
+	  Points		  [0, -5]
+	  DstBlock		  "header_4cat4"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "header_4cat4"
+	  SrcPort		  1
+	  Points		  [0, -10]
 	  DstBlock		  "header_cat4"
 	  DstPort		  2
 	}
@@ -16264,7 +16400,7 @@ Library {
 	Line {
 	  SrcBlock		  "header_assert4"
 	  SrcPort		  1
-	  Points		  [20, 0; 0, 85]
+	  Points		  [5, 0; 0, 95; -5, 0; 0, 50; 65, 0]
 	  DstBlock		  "mainmux"
 	  DstPort		  6
 	}
@@ -16313,7 +16449,7 @@ Library {
 	Line {
 	  SrcBlock		  "header_assert5"
 	  SrcPort		  1
-	  Points		  [10, 0; 0, 100]
+	  Points		  [60, 0; 0, 220]
 	  DstBlock		  "mainmux"
 	  DstPort		  7
 	}
@@ -16362,7 +16498,7 @@ Library {
 	Line {
 	  SrcBlock		  "header_assert6"
 	  SrcPort		  1
-	  Points		  [0, 115]
+	  Points		  [30, 0; 0, 240]
 	  DstBlock		  "mainmux"
 	  DstPort		  8
 	}
@@ -16371,58 +16507,59 @@ Library {
 	  Labels		  [0, 0]
 	  SrcBlock		  "assert_data"
 	  SrcPort		  1
+	  Points		  [100, 0; 0, 130]
 	  DstBlock		  "mainmux"
 	  DstPort		  9
 	}
 	Annotation {
-	  SID			  "1903"
+	  SID			  "2606"
 	  Name			  "eof ON the last valid data."
 	  Position		  [852, 650]
 	  DropShadow		  on
 	}
 	Annotation {
-	  SID			  "1902"
+	  SID			  "2605"
 	  Name			  "SPEAD header"
 	  Position		  [1057, 31]
 	  DropShadow		  on
 	}
 	Annotation {
-	  SID			  "1901"
+	  SID			  "2604"
 	  Name			  "magic number - 0x53"
 	  Position		  [924, 68]
 	  HorizontalAlignment	  "left"
 	  DropShadow		  on
 	}
 	Annotation {
-	  SID			  "1900"
+	  SID			  "2603"
 	  Name			  "spead version"
 	  Position		  [924, 98]
 	  HorizontalAlignment	  "left"
 	  DropShadow		  on
 	}
 	Annotation {
-	  SID			  "1899"
+	  SID			  "2602"
 	  Name			  "item id width in bytes"
 	  Position		  [924, 128]
 	  HorizontalAlignment	  "left"
 	  DropShadow		  on
 	}
 	Annotation {
-	  SID			  "1898"
+	  SID			  "2601"
 	  Name			  "heap addr width in bytes"
 	  Position		  [924, 158]
 	  HorizontalAlignment	  "left"
 	  DropShadow		  on
 	}
 	Annotation {
-	  SID			  "1897"
+	  SID			  "2600"
 	  Name			  "<reserved>"
 	  Position		  [924, 188]
 	  HorizontalAlignment	  "left"
 	  DropShadow		  on
 	}
 	Annotation {
-	  SID			  "1896"
+	  SID			  "2599"
 	  Name			  "num item pointers -\nafter this header"
 	  Position		  [924, 218]
 	  HorizontalAlignment	  "left"
@@ -16448,7 +16585,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		48
+	$ObjectID		49
 	$ClassName		"Simulink.Mask"
 	Type			"spead_unpack_mask"
 	Description		"This block receives a 64-bit-word stream that contains a SPEAD stream. It checks the SPEAD headers are "
@@ -16459,14 +16596,14 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  6
 	  Object {
-	    $ObjectID		    49
+	    $ObjectID		    50
 	    Type		    "edit"
 	    Name		    "max_pkt_len_bits"
 	    Prompt		    "Max pkt length, 2^? 64-bit words"
 	    Value		    "10"
 	  }
 	  Object {
-	    $ObjectID		    50
+	    $ObjectID		    51
 	    Type		    "edit"
 	    Name		    "header_ids"
 	    Prompt		    "SPEAD header IDs (decimal)"
@@ -16474,28 +16611,28 @@ Library {
 	    Evaluate		    "off"
 	  }
 	  Object {
-	    $ObjectID		    51
+	    $ObjectID		    52
 	    Type		    "edit"
 	    Name		    "spead_msw"
 	    Prompt		    "SPEAD Flavour (MSw)"
 	    Value		    "64"
 	  }
 	  Object {
-	    $ObjectID		    52
+	    $ObjectID		    53
 	    Type		    "edit"
 	    Name		    "spead_lsw"
 	    Prompt		    "SPEAD Flavour (LSw)"
 	    Value		    "48"
 	  }
 	  Object {
-	    $ObjectID		    53
+	    $ObjectID		    54
 	    Type		    "edit"
 	    Name		    "spead_version"
 	    Prompt		    "SPEAD version"
 	    Value		    "4"
 	  }
 	  Object {
-	    $ObjectID		    54
+	    $ObjectID		    55
 	    Type		    "checkbox"
 	    Name		    "combine_errors"
 	    Prompt		    "Combine error flags"
@@ -17711,7 +17848,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    55
+	    $ObjectID		    56
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "edge_detect"
 	    Description		    "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or b"
@@ -17730,7 +17867,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      6
 	      Object {
-		$ObjectID		56
+		$ObjectID		57
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -17746,7 +17883,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		57
+		$ObjectID		58
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -17761,7 +17898,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		58
+		$ObjectID		59
 		Type			"edit"
 		Name			"x_in"
 		Prompt			"Input X Positions"
@@ -17770,7 +17907,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		59
+		$ObjectID		60
 		Type			"edit"
 		Name			"y_in"
 		Prompt			"Input Y Positions"
@@ -17779,7 +17916,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		60
+		$ObjectID		61
 		Type			"edit"
 		Name			"x_out"
 		Prompt			"Output X Positions"
@@ -17788,7 +17925,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		61
+		$ObjectID		62
 		Type			"edit"
 		Name			"y_out"
 		Prompt			"Output Y Positions"
@@ -17993,7 +18130,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    62
+	    $ObjectID		    63
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "edge_detect"
 	    Description		    "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or b"
@@ -18012,7 +18149,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      6
 	      Object {
-		$ObjectID		63
+		$ObjectID		64
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -18028,7 +18165,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		64
+		$ObjectID		65
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -18043,7 +18180,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		65
+		$ObjectID		66
 		Type			"edit"
 		Name			"x_in"
 		Prompt			"Input X Positions"
@@ -18052,7 +18189,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		66
+		$ObjectID		67
 		Type			"edit"
 		Name			"y_in"
 		Prompt			"Input Y Positions"
@@ -18061,7 +18198,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		67
+		$ObjectID		68
 		Type			"edit"
 		Name			"x_out"
 		Prompt			"Output X Positions"
@@ -18070,7 +18207,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		68
+		$ObjectID		69
 		Type			"edit"
 		Name			"y_out"
 		Prompt			"Output Y Positions"
@@ -18275,7 +18412,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    69
+	    $ObjectID		    70
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "edge_detect"
 	    Description		    "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or b"
@@ -18294,7 +18431,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      6
 	      Object {
-		$ObjectID		70
+		$ObjectID		71
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -18310,7 +18447,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		71
+		$ObjectID		72
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -18325,7 +18462,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		72
+		$ObjectID		73
 		Type			"edit"
 		Name			"x_in"
 		Prompt			"Input X Positions"
@@ -18334,7 +18471,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		73
+		$ObjectID		74
 		Type			"edit"
 		Name			"y_in"
 		Prompt			"Input Y Positions"
@@ -18343,7 +18480,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		74
+		$ObjectID		75
 		Type			"edit"
 		Name			"x_out"
 		Prompt			"Output X Positions"
@@ -18352,7 +18489,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		75
+		$ObjectID		76
 		Type			"edit"
 		Name			"y_out"
 		Prompt			"Output Y Positions"

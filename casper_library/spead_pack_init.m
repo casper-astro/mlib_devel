@@ -24,11 +24,19 @@ if num_headers < 4,
 end
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(nextpow2(num_headers+1)));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(nextpow2(num_headers+1)));
+set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers+1))));
+set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers+1))));
 set_param([block, '/hdr_ctr'], 'cnt_to', num2str(num_headers+1));
 set_param([block, '/delay_data'], 'latency', num2str(num_headers+1));
 set_param([block, '/delay_valid'], 'latency', num2str(num_headers+1));
+
+% has the number of bytes per word changed?
+padbits_new = log2(str2double(get_param(block, 'bytes_per_word')));
+padbits_old = str2double(get_param([block, '/header_4const4'], 'n_bits'));
+if padbits_new ~= padbits_old,
+    all_match = false;
+    %error(sprintf('fack %d %d', padbits_new, padbits_old))
+end
 
 % return if the headers were the same, nothing more to do
 if all_match == true
@@ -59,7 +67,7 @@ function rvname = get_port_name(counter)
     elseif counter == 3,
         rvname = 'hdr_heap_offset';
     elseif counter == 4,
-        rvname = 'hdr_pkt_len';
+        rvname = 'hdr_pkt_len_words';
     else
         rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x', header_ids(counter))];
     end
@@ -104,12 +112,36 @@ for ctr = 1 : num_headers,
         'arith_type', 'Unsigned', 'bin_pt', '0', ...
         'n_bits', 'spead_msw - spead_lsw', ...
         'Position', [row_x, row_y, row_x + 50, row_y + 14]);
-    reuse_block(block, name_from, 'built-in/from', ...
-        'GotoTag', ['hdr_', this_ctr], 'showname', showname, ...
-        'Position', [row_x, row_y + 25, row_x + 50, row_y + 39]);
+    % the pkt len is a special case, we need to convert it to bytes
+    if ctr == 4,
+        name_cast = ['header_4cast', this_ctr];
+        name_concat2 = ['header_4cat', this_ctr];
+        name_const2 = ['header_4const', this_ctr];
+        padbits = log2(str2double(get_param(block, 'bytes_per_word')));
+        reuse_block(block, name_from, 'built-in/from', ...
+            'GotoTag', ['hdr_', this_ctr], 'showname', showname, ...
+            'Position', [row_x - 145, row_y + 25, row_x - 95, row_y + 39]);
+        reuse_block(block, name_cast, 'xbsIndex_r4/Convert', ...
+            'showname', showname, 'arith_type', 'Unsigned', ...
+            'n_bits', ['spead_lsw - ', num2str(padbits)], ...
+            'bin_pt', '0', 'pipeline', 'on', ...
+            'Position', [row_x - 75, row_y + 25, row_x - 25, row_y + 39]);
+        reuse_block(block, name_const2, 'xbsIndex_r4/Constant', ...
+            'showname', showname, 'const', '0', ...
+            'arith_type', 'Unsigned', 'bin_pt', '0', ...
+            'n_bits', num2str(padbits), ...
+            'Position', [row_x - 75, row_y + 25 + 14 + 5, row_x - 25, row_y + 25 + 14 + 5 + 14]);
+        reuse_block(block, name_concat2, 'xbsIndex_r4/Concat', ...
+            'showname', showname, ...
+            'Position', [row_x, row_y + 25, row_x + 50, row_y + 39 + 14]);
+    else
+        reuse_block(block, name_from, 'built-in/from', ...
+            'GotoTag', ['hdr_', this_ctr], 'showname', showname, ...
+            'Position', [row_x, row_y + 25, row_x + 50, row_y + 39]);
+    end
     reuse_block(block, name_concat, 'xbsIndex_r4/Concat', ...
-        'showname', showname, ...
-        'Position', [row_x + 75, row_y, row_x + 115, row_y + 40]);
+            'showname', showname, ...
+            'Position', [row_x + 75, row_y, row_x + 115, row_y + 40]);
     reuse_block(block, name_assert_id, 'xbsIndex_r4/Assert', ...
         'showname', showname, 'assert_type', 'on', ...
         'type_source', 'Explicitly', 'arith_type', 'Unsigned', ...
@@ -133,7 +165,17 @@ for ctr = 1 : num_headers,
     add_line(block, [name_assert_in,  '/1'], [name_delay_in, '/1'], 'autorouting', 'on');
     add_line(block, [name_delay_in,  '/1'], [name_to, '/1'], 'autorouting', 'on');
     add_line(block, [name_constant,  '/1'], [name_concat, '/1'], 'autorouting', 'on');
-    add_line(block, [name_from,  '/1'], [name_concat, '/2'], 'autorouting', 'on');
+    if ctr == 4,
+        name_cast = ['header_4cast', this_ctr];
+        name_concat2 = ['header_4cat', this_ctr];
+        name_const2 = ['header_4const', this_ctr];
+        add_line(block, [name_from,  '/1'], [name_cast, '/1'], 'autorouting', 'on');
+        add_line(block, [name_cast,  '/1'], [name_concat2, '/1'], 'autorouting', 'on');
+        add_line(block, [name_const2,  '/1'], [name_concat2, '/2'], 'autorouting', 'on');
+        add_line(block, [name_concat2,  '/1'], [name_concat, '/2'], 'autorouting', 'on');
+    else
+        add_line(block, [name_from,  '/1'], [name_concat, '/2'], 'autorouting', 'on');
+    end
     add_line(block, [name_concat,  '/1'], [name_assert_id, '/1'], 'autorouting', 'on');
     add_line(block, [name_assert_id,  '/1'], ['mainmux/', num2str(ctr+2)], 'autorouting', 'on');
     ph = get_param([block, '/', name_assert_in], 'PortHandles');
