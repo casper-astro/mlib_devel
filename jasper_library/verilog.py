@@ -22,45 +22,54 @@ class ImmutableWithComments(object):
     try to set it, the comment string is appended to the
     existing comment attribute.
     '''
+    def __init__(self):
+        self.name = 'default_name'
     def __setattr__(self, x, y):
         if not hasattr(self, x):
+            object.__setattr__(self, x, y)
+        elif self.__getattribute__(x) is None:
             object.__setattr__(self, x, y)
         elif x == 'comment':
             object.__setattr__(self, x, self.__getattribute__(x) + ' | ', + y)
         elif self.__getattribute__(x) == y:
             pass
         else:
-            logger.error('Tried to change attribute %s from %s to %s'%(x, self.__getattribute__(x), y))
-            raise Exception('Tried to change attribute %s from %s to %s'%(x, self.__getattribute__(x), y))
+            logger.error('Tried to change attribute %s of %s from %s to %s'%(x, self.name, self.__getattribute__(x), y))
+            raise Exception('Tried to change attribute %s of %s from %s to %s'%(x, self.name, self.__getattribute__(x), y))
         
 class WbDevice(object):
-    def __init__(self, regname, nbytes, mode):
+    def __init__(self, regname, nbytes, mode, hdl_suffix='', hdl_candr_suffix=''):
         self.regname = regname
         self.nbytes = nbytes
         self.mode=mode
         self.base_addr = None
         self.high_addr = None
+        self.hdl_suffix = hdl_suffix
+        self.hdl_candr_suffix = hdl_candr_suffix
 
 class Port(ImmutableWithComments):
     """
     A simple class to hold port attributes.
     """
-    def __init__(self, name, parent_port=False, parent_sig=True, **kwargs):
-        self.update_attrs(name, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
+    def __init__(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
+        self.update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
 
-    def update_attrs(self, name, parent_port=False, parent_sig=True, **kwargs):
-        self.name = name
+    def update_attrs(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
+        self.name = name.rstrip(' ')
         self.parent_sig = parent_sig and not parent_port
         self.parent_port = parent_port
+        if type(signal) is str:
+            signal.rstrip(' ')
+        self.signal = signal
         for kw, val in kwargs.items():
             self.__setattr__(kw, val)
 
 class Signal(ImmutableWithComments):
-    def __init__(self, name, width=0, **kwargs):
+    def __init__(self, name, signal='', width=0, **kwargs):
         self.update_attrs(name, width=width, **kwargs)
 
     def update_attrs(self, name, width=0, **kwargs):
-        self.name  = name
+        self.name  = name.rstrip(' ')
         self.width = width
         for kw, val in kwargs.items():
             self.__setattr__(kw, val)
@@ -182,10 +191,11 @@ class VerilogModule(object):
         # Now we have an instance name, we can assign the wb ports to
         # real signals
         for instname, inst in self.instances.items():
-            for n, wb_dev in enumerate(inst.wb_devices):
-                inst.assign_wb_interface(instname)
-
             logger.debug("Looking for WB slaves for instance %s"%inst.name)
+            for n, wb_dev in enumerate(inst.wb_devices):
+                logger.debug("Assigning interface %d (%s)"%(n, wb_dev.regname))
+                inst.assign_wb_interface(instname, id=n, suffix=wb_dev.hdl_suffix, candr_suffix=wb_dev.hdl_candr_suffix)
+
             for n, wb_dev in enumerate(inst.wb_devices):
                 logger.debug("Found new WB slave for instance %s"%inst.name)
                 wb_dev.base_addr = base_addr
@@ -222,7 +232,7 @@ class VerilogModule(object):
         logger.error('No N_WB_SLAVES localparam found in topfile %s!'%self.topfile)
         raise Exception('No N_WB_SLAVES localparam found in topfile %s!'%self.topfile)
 
-    def add_port(self, name, parent_port=False, parent_sig=True, **kwargs):
+    def add_port(self, name, signal=None, parent_port=False, parent_sig=True, **kwargs):
         """
         Add a port to the module. Only the parameter 'name' is compulsory. Others may be required when instantiating
         this module in another. E.g., an instance of this module needs all ports to have a defined 'signal' value.
@@ -238,10 +248,14 @@ class VerilogModule(object):
         param 'parent_sig': When instantiating this module, add a signal named 'signal' to the parent
         param 'comment': Use this to add a comment string which will end up in the generated verilog
         """
+        name = name.rstrip(' ')
+        logger.debug('Attempting to add port "%s"'%name)
         if name not in self.ports.keys():
-            self.ports[name] = Port(name, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
+            logger.debug('  Port %s is new'%name)
+            self.ports[name] = Port(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
         else:
-            self.ports[name].update_attrs(name, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
+            logger.debug('  Port %s already exists'%name)
+            self.ports[name].update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
 
     def add_parameter(self, name, value, comment=None):
         """
@@ -266,6 +280,7 @@ class VerilogModule(object):
         and width 'width'.
         You may add a comment that will end up in the generated verilog.
         """
+        name = name.rstrip(' ')
         if name not in self.signals.keys():
             self.signals[name] = Signal(name, width=width, **kwargs)
         else:
@@ -305,7 +320,7 @@ class VerilogModule(object):
             logger.debug('Instantiating child ports for %s'%instname)
             for pname, port in inst.ports.items():
                 if port.parent_sig:
-                    logger.debug('  Adding instance port signal %s to top'%port.name)
+                    logger.debug('  Adding instance port %s as signal %s to top'%(port.name, port.signal))
                     if not hasattr(port, 'width'):
                         port.width = 0 #default to non-vector signal
                     self.add_signal(port.signal, width=port.width)
@@ -628,28 +643,31 @@ class VerilogModule(object):
         s += '  );\n'
         return s
 
-    def add_wb_interface(self, regname, mode, nbytes=4):
+    def add_wb_interface(self, regname, mode, nbytes=4, suffix='', candr_suffix=''):
         """
         Add the ports necessary for a wishbone slave interface.
         Wishbone ports that depend on the slave index are identified by a parameter
         that matches the instance name. This parameter must be given a value in a higher level
         of the verilog code!
         """
-        self.wb_devices += [WbDevice(regname, nbytes=nbytes, mode=mode)]
-        self.n_wb_interfaces += 1
-        self.add_port('wb_clk_i', parent_sig=False)
-        self.add_port('wb_rst_i', parent_sig=False)
-        self.add_port('wb_cyc_i', parent_sig=False)
-        self.add_port('wb_stb_i', parent_sig=False)
-        self.add_port('wb_we_i',  width=1, parent_sig=False)
-        self.add_port('wb_sel_i', width=4, parent_sig=False)
-        self.add_port('wb_adr_i', width=32, parent_sig=False)
-        self.add_port('wb_dat_i', width=32, parent_sig=False)
-        self.add_port('wb_dat_o', width=32, parent_sig=False)
-        self.add_port('wb_ack_o', parent_sig=False)
-        self.add_port('wb_err_o', parent_sig=False)
+        if regname in [wb_dev.regname for wb_dev in self.wb_devices]:
+            return
+        else:
+            self.wb_devices += [WbDevice(regname, nbytes=nbytes, mode=mode, hdl_suffix=suffix, hdl_candr_suffix=candr_suffix)]
+            self.n_wb_interfaces += 1
+            self.add_port('wb_clk_i'+candr_suffix, parent_sig=False)
+            self.add_port('wb_rst_i'+candr_suffix, parent_sig=False)
+            self.add_port('wb_cyc_i'+suffix, parent_sig=False)
+            self.add_port('wb_stb_i'+suffix, parent_sig=False)
+            self.add_port('wb_we_i'+suffix,  width=1, parent_sig=False)
+            self.add_port('wb_sel_i'+suffix, width=4, parent_sig=False)
+            self.add_port('wb_adr_i'+suffix, width=32, parent_sig=False)
+            self.add_port('wb_dat_i'+suffix, width=32, parent_sig=False)
+            self.add_port('wb_dat_o'+suffix, width=32, parent_sig=False)
+            self.add_port('wb_ack_o'+suffix, parent_sig=False)
+            self.add_port('wb_err_o'+suffix, parent_sig=False)
 
-    def assign_wb_interface(self,name,id=0):
+    def assign_wb_interface(self,name,id=0,suffix='',candr_suffix=''):
         """
         Add the ports necessary for a wishbone slave interface.
         Wishbone ports that depend on the slave index are identified by a parameter
@@ -659,14 +677,14 @@ class VerilogModule(object):
         wb_id = name.upper() + '_WBID%d'%(id)
         #self.wb_names += [self.name]
         self.wb_ids += [wb_id]
-        self.add_port('wb_clk_i', signal='wb_clk_i', parent_sig=False)
-        self.add_port('wb_rst_i', signal='wb_rst_i', parent_sig=False)
-        self.add_port('wb_cyc_i', signal='wbs_cyc_o[%s]'%wb_id, parent_sig=False)
-        self.add_port('wb_stb_i', signal='wbs_stb_o[%s]'%wb_id, parent_sig=False)
-        self.add_port('wb_we_i',  signal='wbs_we_o', parent_sig=False)
-        self.add_port('wb_sel_i', signal='wbs_sel_o', width=4, parent_sig=False)
-        self.add_port('wb_adr_i', signal='wbs_adr_o', width=32, parent_sig=False)
-        self.add_port('wb_dat_i', signal='wbs_dat_o', width=32, parent_sig=False)
-        self.add_port('wb_dat_o', signal='wbs_dat_i[(%s+1)*32-1:(%s)*32]'%(wb_id,wb_id), width=32, parent_sig=False)
-        self.add_port('wb_ack_o', signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
-        self.add_port('wb_err_o', signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
+        self.add_port('wb_clk_i'+candr_suffix, signal='wb_clk_i', parent_sig=False)
+        self.add_port('wb_rst_i'+candr_suffix, signal='wb_rst_i', parent_sig=False)
+        self.add_port('wb_cyc_i'+suffix, signal='wbs_cyc_o[%s]'%wb_id, parent_sig=False)
+        self.add_port('wb_stb_i'+suffix, signal='wbs_stb_o[%s]'%wb_id, parent_sig=False)
+        self.add_port('wb_we_i'+suffix,  signal='wbs_we_o', parent_sig=False)
+        self.add_port('wb_sel_i'+suffix, signal='wbs_sel_o', width=4, parent_sig=False)
+        self.add_port('wb_adr_i'+suffix, signal='wbs_adr_o', width=32, parent_sig=False)
+        self.add_port('wb_dat_i'+suffix, signal='wbs_dat_o', width=32, parent_sig=False)
+        self.add_port('wb_dat_o'+suffix, signal='wbs_dat_i[(%s+1)*32-1:(%s)*32]'%(wb_id,wb_id), width=32, parent_sig=False)
+        self.add_port('wb_ack_o'+suffix, signal='wbs_ack_i[%s]'%wb_id,parent_sig=False)
+        self.add_port('wb_err_o'+suffix, signal='wbs_err_i[%s]'%wb_id,parent_sig=False)
