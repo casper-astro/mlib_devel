@@ -6,17 +6,16 @@ end
 
 modelpath = get_param(gcs, 'filename');
 [modeldir, modelname, modelext] = fileparts(modelpath);
+builddir = [modeldir '/' modelname];
 
 disp(sprintf('Starting jasper for model: %s',modelname));
+disp(sprintf('Build directory: %s',builddir));
 
 mkdir(modeldir, modelname);
 
-builddir = [modeldir '/' modelname];
-
-
+disp('Generating peripherals file');
 gen_block_file(builddir, [builddir '/jasper.per'])
 
-disp('Generating peripherals file');
 jasper_python = [getenv('MLIB_DEVEL_PATH') '/jasper_library/exec_flow.py'];
 
 % run the jasper flow but skip
