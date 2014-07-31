@@ -16,11 +16,27 @@ end
 
 set_param(block, 'LinkStatus', 'inactive');
 
-combine_errors = strcmp(get_param(block, 'combine_errors'), 'on');
-current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
 hdrs = get_param(block, 'header_ids');
+hdrs_ind = get_param(block, 'header_ind_ids');
+spead_msw = eval(get_param(block, 'spead_msw'));
+spead_lsw = eval(get_param(block, 'spead_lsw'));
+header_width_bits = spead_msw - spead_lsw;
+
+% add a ONE on the MSb for the directly addressed headers
 header_ids = eval(hdrs);
 header_ids = [1,2,3,4,header_ids];
+for ctr = 1 : length(header_ids),
+    thisval = header_ids(ctr);
+    newval = thisval + pow2(header_width_bits-1);
+    %fprintf('%i - %i -> %i\n', ctr, header_ids(ctr), newval);
+    header_ids(ctr) = newval;
+end
+% add the indirect ones
+header_ind_ids = eval(hdrs_ind);
+header_ids = [header_ids, header_ind_ids];
+
+combine_errors = strcmp(get_param(block, 'combine_errors'), 'on');
+current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
 num_headers = length(header_ids);
 if length(current_consts) == num_headers,
     headers_match = true;
