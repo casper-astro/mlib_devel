@@ -24,10 +24,10 @@ function qdr_mask(blk)
 
 myname = blk;
 
-%get hardware platform from XSG block
+% get hardware platform from XSG block
 try
-    xsg_blk = find_system(bdroot(blk), 'SearchDepth', 1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
-    hw_sys = xps_get_hw_plat(get_param(xsg_blk{1},'hw_sys'));
+    xsg_blk = find_system(bdroot(blk), 'SearchDepth', 1, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'Tag', 'xps:xsg');
+    hw_sys = xps_get_hw_plat(get_param(xsg_blk{1}, 'hw_sys'));
 catch
     if ~regexp(bdroot(blk), '(casper|xps)_library')
       warndlg('Could not find hardware platform for QDR configuration - is there an XSG block in this model? Defaulting platform to ROACH.');
@@ -100,55 +100,57 @@ set_param(insert_parity_blk, 'bitexpr', input_parity_map);
 set_param(extract_parity_blk, 'bitexpr', output_parity_map);
 
 
-set_param([myname,'/qdr_sim_model/sim_data_in'],'n_bits', num2str(data_width));
-set_param([myname,'/convert_data_in'],'n_bits',num2str(data_width));
-set_param([myname,'/convert_data_in1'],'n_bits',num2str(data_width));
-set_param([myname,'/convert_be'],'n_bits',num2str(be_width));
+set_param([myname, '/qdr_sim_model/sim_data_in'], 'n_bits', num2str(data_width));
+set_param([myname, '/convert_data_in'], 'n_bits', num2str(data_width));
+set_param([myname, '/convert_data_in1'], 'n_bits', num2str(data_width));
+set_param([myname, '/convert_be'], 'n_bits', num2str(be_width));
 
-gateway_outs = find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Xilinx Gateway Out Block');
+gateway_outs = find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway Out Block');
 for i =1:length(gateway_outs)
     gw = gateway_outs{i};
-    if regexp(get_param(gw,'Name'),'(wr_en)$')
-        toks = regexp(get_param(gw,'Name'),'(wr_en)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(rd_en)$')
-        toks = regexp(get_param(gw,'Name'),'(rd_en)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(be)$')
-        toks = regexp(get_param(gw,'Name'),'(be)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(address)$')
-        toks = regexp(get_param(gw,'Name'),'(address)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(data_in)$')
-        toks = regexp(get_param(gw,'Name'),'(data_in)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
+    if regexp(get_param(gw, 'Name'), '(wr_en)$')
+        toks = regexp(get_param(gw, 'Name'), '(wr_en)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(rd_en)$')
+        toks = regexp(get_param(gw, 'Name'), '(rd_en)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(be)$')
+        toks = regexp(get_param(gw, 'Name'), '(be)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(address)$')
+        toks = regexp(get_param(gw, 'Name'), '(address)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(data_in)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_in)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     else
-        error(['Unknown gateway name: ',gw]);
+        error(['Unknown gateway name: ', gw]);
     end
 end
 
-gateway_ins =find_system(myname,'searchdepth',1,'FollowLinks', 'on','lookundermasks','all','masktype','Xilinx Gateway In Block');
+gateway_ins =find_system(myname, 'searchdepth', 1, 'FollowLinks', 'on', 'lookundermasks', 'all', 'masktype', 'Xilinx Gateway In Block');
 for i =1:length(gateway_ins)
     gw = gateway_ins{i};
-    if regexp(get_param(gw,'Name'),'(data_out)$')
-        toks = regexp(get_param(gw,'Name'),'(data_out)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-        set_param(gw,'n_bits',num2str(data_width));
-    elseif regexp(get_param(gw,'Name'),'(data_valid)$')
-        toks = regexp(get_param(gw,'Name'),'(data_valid)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(phy_ready)$')
-        toks = regexp(get_param(gw,'Name'),'(phy_ready)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(cal_fail)$')
-        toks = regexp(get_param(gw,'Name'),'(cal_fail)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
-    elseif regexp(get_param(gw,'Name'),'(ack)$')
-        toks = regexp(get_param(gw,'Name'),'(ack)$','tokens');
-        set_param(gw,'Name',clear_name([myname,'_',toks{1}{1}]));
+    if regexp(get_param(gw, 'Name'), '(data_out)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_out)$', 'tokens');
+        new_gw_name = clear_name([myname, '_', toks{1}{1}]);
+        set_param(gw, 'n_bits', num2str(data_width));
+        set_param(gw, 'Name', new_gw_name);
+        gw = new_gw_name;
+    elseif regexp(get_param(gw, 'Name'), '(data_valid)$')
+        toks = regexp(get_param(gw, 'Name'), '(data_valid)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(phy_ready)$')
+        toks = regexp(get_param(gw, 'Name'), '(phy_ready)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(cal_fail)$')
+        toks = regexp(get_param(gw, 'Name'), '(cal_fail)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
+    elseif regexp(get_param(gw, 'Name'), '(ack)$')
+        toks = regexp(get_param(gw, 'Name'), '(ack)$', 'tokens');
+        set_param(gw, 'Name', clear_name([myname, '_', toks{1}{1}]));
     else
-        error(['Unknown gateway name: ',gw]);
+        error(['Unknown gateway name: ', gw]);
     end
 end
 
