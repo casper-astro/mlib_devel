@@ -1,5 +1,23 @@
 function spead_pack_init(block)
 
+function rvname = get_port_name(counter)
+    if counter == 1,
+        rvname = 'hdr_heap_id';
+    elseif counter == 2,
+        rvname = 'hdr_heap_size';
+    elseif counter == 3,
+        rvname = 'hdr_heap_offset';
+    elseif counter == 4,
+        rvname = 'hdr_pkt_len_words';
+    else
+        if bitand(header_direct_mask, header_ids(counter)) == 0,
+            rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x', header_ids(counter))];
+        else
+            rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x_DIR', bitand(header_ids(counter), header_direct_mask-1))];
+        end
+    end
+end
+
 set_param(block, 'LinkStatus', 'inactive');
 
 hdrs = get_param(block, 'header_ids');
@@ -7,19 +25,21 @@ hdrs_ind = get_param(block, 'header_ind_ids');
 spead_msw = eval(get_param(block, 'spead_msw'));
 spead_lsw = eval(get_param(block, 'spead_lsw'));
 header_width_bits = spead_msw - spead_lsw;
+header_direct_mask = pow2(header_width_bits-1);
 
 % add a ONE on the MSb for the directly addressed headers
-header_ids = eval(hdrs);
+header_ids = spead_process_header_string(hdrs);
 header_ids = [1,2,3,4,header_ids];
 for ctr = 1 : length(header_ids),
     thisval = header_ids(ctr);
-    newval = thisval + pow2(header_width_bits-1);
+    newval = thisval + header_direct_mask;
     %fprintf('%i - %i -> %i\n', ctr, header_ids(ctr), newval);
     header_ids(ctr) = newval;
 end
 % add the indirect ones
-header_ind_ids = eval(hdrs_ind);
+header_ind_ids = spead_process_header_string(hdrs_ind);
 header_ids = [header_ids, header_ind_ids];
+
 
 current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
 num_headers = length(header_ids);
@@ -41,9 +61,9 @@ if num_headers < 4,
 end
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers+1))));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers+1))));
+set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
 set_param([block, '/hdr_ctr'], 'cnt_to', num2str(num_headers+1));
+set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
 set_param([block, '/delay_data'], 'latency', num2str(num_headers+1));
 set_param([block, '/delay_valid'], 'latency', num2str(num_headers+1));
 
@@ -74,20 +94,6 @@ ph = get_param([block, '/', 'assert_data'], 'PortHandles');
 line = get_param(ph.Outport(1), 'Line');
 if line > -1,
     delete_line(line);
-end
-
-function rvname = get_port_name(counter)
-    if counter == 1,
-        rvname = 'hdr_heap_id';
-    elseif counter == 2,
-        rvname = 'hdr_heap_size';
-    elseif counter == 3,
-        rvname = 'hdr_heap_offset';
-    elseif counter == 4,
-        rvname = 'hdr_pkt_len_words';
-    else
-        rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x', header_ids(counter))];
-    end
 end
 
 % draw the blocks

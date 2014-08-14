@@ -10,7 +10,11 @@ function rvname = get_port_name(counter)
     elseif counter == 4,
         rvname = 'hdr_pkt_len';
     else
-        rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x', header_ids(counter))];
+        if bitand(header_direct_mask, header_ids(counter)) == 0,
+            rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x', header_ids(counter))];
+        else
+            rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x_DIR', bitand(header_ids(counter), header_direct_mask-1))];
+        end
     end
 end
 
@@ -21,18 +25,19 @@ hdrs_ind = get_param(block, 'header_ind_ids');
 spead_msw = eval(get_param(block, 'spead_msw'));
 spead_lsw = eval(get_param(block, 'spead_lsw'));
 header_width_bits = spead_msw - spead_lsw;
+header_direct_mask = pow2(header_width_bits-1);
 
 % add a ONE on the MSb for the directly addressed headers
-header_ids = eval(hdrs);
+header_ids = spead_process_header_string(hdrs);
 header_ids = [1,2,3,4,header_ids];
 for ctr = 1 : length(header_ids),
     thisval = header_ids(ctr);
-    newval = thisval + pow2(header_width_bits-1);
+    newval = thisval + header_direct_mask;
     %fprintf('%i - %i -> %i\n', ctr, header_ids(ctr), newval);
     header_ids(ctr) = newval;
 end
 % add the indirect ones
-header_ind_ids = eval(hdrs_ind);
+header_ind_ids = spead_process_header_string(hdrs_ind);
 header_ids = [header_ids, header_ind_ids];
 
 combine_errors = strcmp(get_param(block, 'combine_errors'), 'on');
@@ -68,8 +73,8 @@ if num_headers < 4,
 end
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers))+1));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers))+1));
+set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
+set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
 delay = 1;
 
 showname = 'off';
