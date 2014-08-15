@@ -253,11 +253,13 @@ class Toolflow(object):
         basetopfile = os.getenv('HDL_ROOT') + '/%s/top.v'%self.plat.name
         baseconstfile = os.getenv('HDL_ROOT') + '/%s/top.%s'%(self.plat.name,self.backend.const_file_ext)
         if not os.path.isfile(basetopfile):
-            logger.error("Template top.v file %s doesn't exist!"%basetopfile)
+            self.logger.error("Template top.v file %s doesn't exist!"%basetopfile)
             raise Exception("Template top.v file %s doesn't exist!"%basetopfile)
         self.topfile = self.compile_dir+'/top.v'
         os.system('cp %s %s'%(basetopfile,self.topfile))
         self.sources.append(self.topfile)
+        for source in self.plat.sources:
+            self.sources.append(os.getenv('HDL_ROOT')+'/'+source)
         self.const_files.append(baseconstfile)
         self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
 
@@ -506,13 +508,9 @@ class VivadoBackend(ToolflowBackend):
 
         self.add_tcl_cmd('puts "Starting tcl script"')
         self.add_tcl_cmd('create_project -f %s %s/%s -part %s'%(plat.name, self.compile_dir, plat.name, plat.fpga))
-        for source in plat.sources:
-            self.add_source(os.getenv('HDL_ROOT')+'/'+source)
-        self.add_source(self.compile_dir+'/top.v')
-        for const in plat.consts:
-            self.add_const_file(os.getenv('HDL_ROOT')+'/'+const)
-        self.add_tcl_cmd('set_property top top [current_fileset]')
-        self.add_tcl_cmd('update_compile_order -fileset sources_1')
+        #for source in plat.sources:
+        #    self.add_source(os.getenv('HDL_ROOT')+'/'+source)
+        #self.add_source(self.compile_dir+'/top.v')
 
     def add_source(self, source):
         '''
@@ -545,6 +543,9 @@ class VivadoBackend(ToolflowBackend):
         add the tcl commands for compiling the design, and then launch
         vivado in batch mode
         '''
+        self.add_tcl_cmd('set_property top top [current_fileset]')
+        self.add_tcl_cmd('update_compile_order -fileset sources_1')
+        self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
         self.add_tcl_cmd('reset_run synth_1')
         self.add_tcl_cmd('launch_runs synth_1')
         self.add_tcl_cmd('wait_on_run synth_1')
@@ -618,7 +619,7 @@ class VivadoBackend(ToolflowBackend):
         helpers.write_file(constfile,user_const)
         print 'writen constraint file', constfile
         self.add_const_file(constfile)
-        
+
 class ISEBackend(VivadoBackend):
     def __init__(self,compile_dir='/tmp'):
         ToolflowBackend.__init__(self, compile_dir=compile_dir)
