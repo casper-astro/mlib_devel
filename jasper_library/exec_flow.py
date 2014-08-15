@@ -15,16 +15,6 @@ def shell_source(script):
     env = dict((line.split("=", 1) for line in output.splitlines()))
     os.environ.update(env)
 
-os.environ['USE_VIVADO_RUNTIME_FOR_MATLAB'] = '1' #see Xilinx answer record 59236
-os.environ['MATLAB_PATH'] = '/tools/MATLAB/R2013a'
-#os.environ['XILINX_PATH'] = '/media/overflow/Xilinx/Vivado/2014.2'
-os.environ['XILINX_PATH'] = '/tools/ISE/14.6/ISE_DS'
-os.environ['MLIB_DEVEL_PATH'] = '/tools/mlib_devel'
-os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg'
-os.environ['MATLAB'] = os.environ['MATLAB_PATH']
-os.environ['CASPER_BASE_PATH'] = '/tools/mlib_devel'
-os.environ['HDL_ROOT'] = os.environ['CASPER_BASE_PATH']+'/jasper_library/hdl_sources'
-shell_source(os.environ['XILINX_PATH']+'/settings64.sh')
 
 from optparse import OptionParser
 parser = OptionParser()
@@ -44,6 +34,21 @@ parser.add_option("-c", "--builddir", dest="builddir", type='string',
                   help="build directory. Default: Use directory with same name as model")
 
 (opts, args) = parser.parse_args()
+
+# set up environment
+
+os.environ['MATLAB_PATH'] = '/tools/MATLAB/R2013a'
+if opts.be == 'vivado':
+    os.environ['XILINX_PATH'] = '/media/overflow/Xilinx/Vivado/2014.2'
+    os.environ['USE_VIVADO_RUNTIME_FOR_MATLAB'] = '1' #see Xilinx answer record 59236
+else:
+    os.environ['XILINX_PATH'] = '/tools/ISE/14.6/ISE_DS'
+os.environ['MLIB_DEVEL_PATH'] = '/tools/mlib_devel'
+os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg'
+os.environ['MATLAB'] = os.environ['MATLAB_PATH']
+os.environ['CASPER_BASE_PATH'] = '/tools/mlib_devel'
+os.environ['HDL_ROOT'] = os.environ['CASPER_BASE_PATH']+'/jasper_library/hdl_sources'
+shell_source(os.environ['XILINX_PATH']+'/settings64.sh')
 
 # get build directory
 # use user defined directory else use a directory with same name as model
