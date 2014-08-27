@@ -56,16 +56,18 @@ else
     all_match = false;
 end
 
-if num_headers < 4,
-    error('Must have at least compulsory headers!');
+if num_headers < 5,
+    error('Must have at least compulsory headers and data!');
 end
+num_total_hdrs = num2str(num_headers+1);
+total_hdrs_bits = num2str(ceil(log2(num_headers+2)));
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
-set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
-set_param([block, '/hdr_ctr'], 'cnt_to', num2str(num_headers+1));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
-set_param([block, '/delay_data'], 'latency', num2str(num_headers+1));
-set_param([block, '/delay_valid'], 'latency', num2str(num_headers+1));
+set_param([block, '/num_headers'], 'const', num_total_hdrs);
+set_param([block, '/num_headers'], 'n_bits', total_hdrs_bits);
+set_param([block, '/hdr_ctr'], 'cnt_to', num_total_hdrs);
+set_param([block, '/hdr_ctr'], 'n_bits', total_hdrs_bits);
+set_param([block, '/delay_data'], 'latency', num_total_hdrs);
+set_param([block, '/delay_valid'], 'latency', num_total_hdrs);
 
 % has the number of bytes per word changed?
 padbits_new = log2(str2double(get_param(block, 'bytes_per_word')));

@@ -68,13 +68,15 @@ if (headers_match == true) && (error_change == false),
     return
 end
 
-if num_headers < 4,
-    error('Must have at least compulsory headers!');
+if num_headers < 5,
+    error('Must have at least compulsory headers and data!');
 end
+num_total_hdrs = num2str(num_headers+1);
+total_hdrs_bits = num2str(ceil(log2(num_headers+2)));
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
-set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers)+1)));
+set_param([block, '/num_headers'], 'const', num_total_hdrs);
+set_param([block, '/num_headers'], 'n_bits', total_hdrs_bits);
+set_param([block, '/hdr_ctr'], 'n_bits', total_hdrs_bits);
 delay = 1;
 
 showname = 'off';
