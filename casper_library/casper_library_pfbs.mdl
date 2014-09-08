@@ -5654,7 +5654,7 @@ Library {
 	  explicit_period	  "on"
 	  period		  "1"
 	  dbl_ovrd		  off
-	  use_behavioral_HDL	  off
+	  use_behavioral_HDL	  on
 	  implementation	  "Fabric"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
@@ -7097,7 +7097,7 @@ Library {
 	      explicit_period	      "on"
 	      period		      "1"
 	      dbl_ovrd		      off
-	      use_behavioral_HDL      off
+	      use_behavioral_HDL      on
 	      implementation	      "Fabric"
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
@@ -9260,7 +9260,7 @@ Library {
 	  explicit_period	  "on"
 	  period		  "1"
 	  dbl_ovrd		  off
-	  use_behavioral_HDL	  off
+	  use_behavioral_HDL	  on
 	  implementation	  "Fabric"
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
