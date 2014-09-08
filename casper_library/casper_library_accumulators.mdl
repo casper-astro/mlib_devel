@@ -1386,7 +1386,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -2214,7 +2214,7 @@ Library {
 	      en		      on
 	      latency		      "3"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
@@ -5783,7 +5783,7 @@ Library {
 		    en			    off
 		    latency		    "1"
 		    dbl_ovrd		    off
-		    reg_retiming	    off
+		    reg_retiming	    on
 		    xl_use_area		    off
 		    xl_area		    "[0, 0, 0, 0, 0, 0, 0]"
 		    has_advanced_control    "0"
@@ -5943,7 +5943,7 @@ Library {
 		    en			    off
 		    latency		    "1"
 		    dbl_ovrd		    off
-		    reg_retiming	    off
+		    reg_retiming	    on
 		    xl_use_area		    off
 		    xl_area		    "[0, 0, 0, 0, 0, 0, 0]"
 		    has_advanced_control    "0"
@@ -6103,7 +6103,7 @@ Library {
 		    en			    off
 		    latency		    "1"
 		    dbl_ovrd		    off
-		    reg_retiming	    off
+		    reg_retiming	    on
 		    xl_use_area		    off
 		    xl_area		    "[0, 0, 0, 0, 0, 0, 0]"
 		    has_advanced_control    "0"
@@ -6263,7 +6263,7 @@ Library {
 		    en			    off
 		    latency		    "1"
 		    dbl_ovrd		    off
-		    reg_retiming	    off
+		    reg_retiming	    on
 		    xl_use_area		    off
 		    xl_area		    "[0, 0, 0, 0, 0, 0, 0]"
 		    has_advanced_control    "0"
@@ -6423,7 +6423,7 @@ Library {
 		    en			    off
 		    latency		    "1"
 		    dbl_ovrd		    off
-		    reg_retiming	    off
+		    reg_retiming	    on
 		    xl_use_area		    off
 		    xl_area		    "[0, 0, 0, 0, 0, 0, 0]"
 		    has_advanced_control    "0"
@@ -6583,7 +6583,7 @@ Library {
 		    en			    off
 		    latency		    "1"
 		    dbl_ovrd		    off
-		    reg_retiming	    off
+		    reg_retiming	    on
 		    xl_use_area		    off
 		    xl_area		    "[0, 0, 0, 0, 0, 0, 0]"
 		    has_advanced_control    "0"
@@ -8817,7 +8817,7 @@ Library {
 	  en			  on
 	  latency		  "1"
 	  dbl_ovrd		  off
-	  reg_retiming		  off
+	  reg_retiming		  on
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -8846,7 +8846,7 @@ Library {
 	  en			  on
 	  latency		  "1"
 	  dbl_ovrd		  off
-	  reg_retiming		  off
+	  reg_retiming		  on
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
@@ -10255,7 +10255,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -11535,7 +11535,7 @@ Library {
 	      en		      off
 	      latency		      "2"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
@@ -11571,7 +11571,7 @@ Library {
 	      en		      off
 	      latency		      "1"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
@@ -14045,7 +14045,7 @@ Library {
 		  en			  on
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -14074,7 +14074,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -14103,7 +14103,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -14132,7 +14132,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -16148,7 +16148,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -19087,7 +19087,7 @@ Library {
 	      en		      off
 	      latency		      "1"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
@@ -19117,7 +19117,7 @@ Library {
 	      en		      off
 	      latency		      "1"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0, 0, 0, 0, 0, 0, 0]"
 	      has_advanced_control    "0"
@@ -19385,7 +19385,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -21417,7 +21417,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
@@ -27500,7 +27500,7 @@ Library {
 	      en		      off
 	      latency		      "delay_adder"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27676,7 +27676,7 @@ Library {
 	      en		      off
 	      latency		      "delay_qdr"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27704,7 +27704,7 @@ Library {
 	      en		      off
 	      latency		      "delay_qdr-delay_in_fifo"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27732,7 +27732,7 @@ Library {
 	      en		      off
 	      latency		      "delay_qdr"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27760,7 +27760,7 @@ Library {
 	      en		      off
 	      latency		      "delay_adder"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27788,7 +27788,7 @@ Library {
 	      en		      off
 	      latency		      "delay_qdr"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27816,7 +27816,7 @@ Library {
 	      en		      off
 	      latency		      "delay_qdr"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27844,7 +27844,7 @@ Library {
 	      en		      off
 	      latency		      "delay_qdr"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -27872,7 +27872,7 @@ Library {
 	      en		      off
 	      latency		      "delay_qdr"
 	      dbl_ovrd		      off
-	      reg_retiming	      off
+	      reg_retiming	      on
 	      xl_use_area	      off
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
@@ -33602,7 +33602,7 @@ Library {
 		  en			  off
 		  latency		  "1"
 		  dbl_ovrd		  off
-		  reg_retiming		  off
+		  reg_retiming		  on
 		  xl_use_area		  off
 		  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 		  has_advanced_control	  "0"
