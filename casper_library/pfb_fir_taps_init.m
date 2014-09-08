@@ -92,11 +92,11 @@ function pfb_fir_taps_init(blk, varargin)
   
   % delays to reduce fanout and help timing
   
-  reuse_block(blk, 'ddin0', 'xbsIndex_r4/Delay', 'reg_retiming', 'off', 'latency', num2str(fan_latency), ...
+  reuse_block(blk, 'ddin0', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', 'latency', num2str(fan_latency), ...
     'Position', [160 170 195 190]);
   add_line(blk, 'din/1', 'ddin0/1');
   
-  reuse_block(blk, 'ddin1', 'xbsIndex_r4/Delay', 'reg_retiming', 'off', 'latency', num2str(fan_latency), ...
+  reuse_block(blk, 'ddin1', 'xbsIndex_r4/Delay', 'reg_retiming', 'on', 'latency', num2str(fan_latency), ...
     'Position', [160 320 195 340]);
   add_line(blk, 'din/1', 'ddin1/1');
 
