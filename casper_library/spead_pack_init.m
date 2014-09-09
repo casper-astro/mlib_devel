@@ -64,8 +64,7 @@ total_hdrs_bits = num2str(ceil(log2(num_headers+2)));
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
 set_param([block, '/num_headers'], 'const', num_total_hdrs);
 set_param([block, '/num_headers'], 'n_bits', total_hdrs_bits);
-set_param([block, '/hdr_ctr'], 'cnt_to', num_total_hdrs);
-set_param([block, '/hdr_ctr'], 'n_bits', total_hdrs_bits);
+set_param([block, '/hdr_ctr'], 'cnt_to', num_total_hdrs, 'n_bits', total_hdrs_bits);
 set_param([block, '/delay_data'], 'latency', num_total_hdrs);
 set_param([block, '/delay_valid'], 'latency', num_total_hdrs);
 
