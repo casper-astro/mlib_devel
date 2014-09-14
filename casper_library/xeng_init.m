@@ -144,9 +144,9 @@ reuse_block(blk, 'Term2', 'built-in/Terminator', 'Position', [x, 65, x + 20, 85]
 reuse_block(blk, 'Term3', 'built-in/Terminator', 'Position', [x, 130, x + 20, 150]);
      
 % Set output port positions
+reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 400, 160, x + 430, 174]);
 reuse_block(blk, 'acc', 'built-in/outport','Position', [x + 400, 100, x + 430, 114]);
 reuse_block(blk, 'valid', 'built-in/outport','Position', [x + 400, 130, x + 430, 144]);
-reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 400, 160, x + 430, 174]);
 reuse_block(blk, 'mcnt_out', 'built-in/outport','Position', [x + 400, 190, x + 430, 204]);
 
 % Set input port positions
