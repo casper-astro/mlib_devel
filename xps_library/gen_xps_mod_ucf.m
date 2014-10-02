@@ -96,6 +96,12 @@ function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     user_ucf_path = getenv('USER_UCF_PATH');
+    strict = true;
+
+    if isempty(user_ucf_path)
+      user_ucf_path = fullfile(mssge_paths.work_path, 'ucf');
+      strict = false;
+    end
     
     if(user_ucf_path)
         
@@ -114,7 +120,7 @@ function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
                 fprintf(ucf_fid, '\n\n### END %s\n\n', file_path);
             end
             
-        else
+        elseif strict
             error(['No *.ucf files  found in: USER_UCF_PATH=', user_ucf_path]);
         end
     
