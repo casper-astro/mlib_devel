@@ -28,3 +28,4 @@ casper_startup_dir = getenv('CASPER_STARTUP_DIR');
 if ~isempty(casper_startup_dir)
   cd(casper_startup_dir);
 end
+clear casper_startup_dir;
