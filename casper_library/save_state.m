@@ -36,8 +36,14 @@ function save_state(blk,varargin)
 %check varargin contains even number of variables
 if( mod(length(varargin),2) ~= 0 ) disp('save_state.m: Non-even parameter list'); return; end;
 	
-struct.state = hashcell(varargin);
+struct.state = [];
 struct.parameters = [];
+
+% Only save the state if blk is NOT a library block
+if ~is_library_block(blk)
+  struct.state = hashcell(varargin);
+end
+
 % Construct struct of parameter values
 for j = 1:length(varargin)/2,
 	struct.parameters = setfield( struct.parameters, varargin{j*2-1}, varargin{j*2} );
