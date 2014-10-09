@@ -144,9 +144,6 @@ module sys_block(
         4: begin
           Sl_DBus <= fab_clk_counter_latched;
         end
-        5: begin
-          Sl_DBus <= fab_clk_counter;
-        end
         default: begin
           Sl_DBus <= 32'd0;
         end
