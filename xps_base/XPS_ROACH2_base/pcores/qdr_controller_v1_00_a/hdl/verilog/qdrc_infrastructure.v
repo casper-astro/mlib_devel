@@ -411,13 +411,13 @@ module qdrc_infrastructure(
     .INIT_Q2 (1'b0),
     .SRTYPE ("SYNC")
   ) IDDR_qdr_q [DATA_WIDTH - 1:0] (
-    .C  (clk180),
+    .C  (clk0),
     .CE (1'b1),
     .D  (qdr_q_iodelay),
     .R  (1'b0),
     .S  (1'b0),
-    .Q1 (qdr_q_rise_int),
-    .Q2 (qdr_q_fall_int)
+    .Q1 (qdr_q_fall_int),
+    .Q2 (qdr_q_rise_int)
   );
 
   reg [17:0] qdr_q_rise_intR_low , qdr_q_rise_intRR_low , qdr_q_rise_intRRR_low ;
@@ -425,7 +425,7 @@ module qdrc_infrastructure(
   reg [17:0] qdr_q_fall_intR_low , qdr_q_fall_intRR_low , qdr_q_fall_intRRR_low ;
   reg [17:0] qdr_q_fall_intR_high, qdr_q_fall_intRR_high, qdr_q_fall_intRRR_high;
 
-  always @(posedge clk180) begin
+  always @(posedge clk0) begin
     qdr_q_rise_intR_high   <= qdr_q_rise_int [35:18];
     qdr_q_fall_intR_high   <= qdr_q_fall_int [35:18];
     qdr_q_rise_intRR_high  <= qdr_q_rise_intR_high;
