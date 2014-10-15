@@ -16,7 +16,7 @@ function schema = userFunctions(~)
 	% Make a submenu label    
 	schema = sl_container_schema;
 	schema.label = 'CASPER helpers';     
-	schema.childrenFcns = {@userGetBlockSize, @userSetBlockSize, @userGotoPlusPlus, @userDannyFunc, @userGoto2From};
+	schema.childrenFcns = {@userGetBlockSize, @userSetBlockSize, @userGotoPlusPlus, @userDannyFunc, @userGoto2From, @userGotoFromGlobal, @userGotoFromLocal, @userGotoFromScoped};
 end
 
 function schema = userGetBlockSize(~)
@@ -48,6 +48,27 @@ function schema = userGoto2From(~)
 	schema = sl_action_schema;
 	schema.label = 'Goto -> From';
 	schema.callback = @helper_scripts.casper_sl_goto2from; 
+end
+
+function schema = userGotoFromGlobal(~)
+	schema = sl_action_schema;
+	schema.label = 'Goto/From scope -> Global';
+    schema.userdata = 'global';
+	schema.callback = @helper_scripts.casper_sl_tagscope; 
+end
+
+function schema = userGotoFromLocal(~)
+	schema = sl_action_schema;
+	schema.label = 'Goto/From scope -> Local';
+    schema.userdata = 'local';
+	schema.callback = @helper_scripts.casper_sl_tagscope; 
+end
+
+function schema = userGotoFromScoped(~)
+	schema = sl_action_schema;
+	schema.label = 'Goto/From scope -> Scoped';
+    schema.userdata = 'scoped';
+	schema.callback = @helper_scripts.casper_sl_tagscope; 
 end
 
 % if you'd like to add more user functions duplicate 'userFunction1'
