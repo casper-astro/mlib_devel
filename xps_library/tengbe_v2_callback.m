@@ -33,9 +33,7 @@ blk = gcb;
 check_mask_type(blk, 'ten_GbE_v2');
 
 %search for sysgen block and get target
-xps_xsg_blks    = find_system(bdroot,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
-
-
+xps_xsg_blks = find_system(bdroot,'SearchDepth',1,'FollowLinks','on','LookUnderMasks','all','Tag','xps:xsg');
 if length(xps_xsg_blks) ~= 1,
   errordlg('ten_Gbe_v2 requires a single MSSGE (XSG core config) block to be instantiated at the top level');
   return;
@@ -63,6 +61,7 @@ mask_visibilities{ismember(mask_names, 'large_frames')} = 'on';
 mask_visibilities{ismember(mask_names, 'show_param')} = 'on';
 
 % debug counter checkboxes
+mask_visibilities{ismember(mask_names, 'debug_ctr_width')} = 'on';
 mask_visibilities{ismember(mask_names, 'txctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'txerrctr')} = 'on';
 mask_visibilities{ismember(mask_names, 'txofctr')} = 'on';
