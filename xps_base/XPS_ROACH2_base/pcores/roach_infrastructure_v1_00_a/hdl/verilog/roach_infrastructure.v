@@ -99,7 +99,7 @@ module roach_infrastructure #(
     .CLKFBOUT_MULT_F    (MULTIPLY), // Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
     .CLKFBOUT_PHASE     (0.0),
     .CLKIN1_PERIOD      (1000.0/100),
-    .CLKOUT0_DIVIDE_F   (MULTIPLY/DIVCLK/2.0), // Divide amount for CLKOUT0 (1.000-128.000).
+    .CLKOUT0_DIVIDE_F   ((1.0*MULTIPLY)/DIVCLK/2.0), // Divide amount for CLKOUT0 (1.000-128.000).
     .CLKOUT0_DUTY_CYCLE (0.5),
     .CLKOUT1_DUTY_CYCLE (0.5),
     .CLKOUT2_DUTY_CYCLE (0.5),

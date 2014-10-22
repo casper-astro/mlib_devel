@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [517.0, 24.0, 1298.0, 1086.0]
+      Location		      [0.0, 25.0, 1920.0, 1055.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -41,11 +41,11 @@ Library {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"334:31"
-	Extents			[1246.0, 909.0]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[1884.0, 892.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
+	Offset			[-8.125, 0.0]
       }
     }
   }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "wnew"
+  LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Apr 09 16:44:18 2014"
-  RTWModifiedTimeStamp	  318962651
-  ModelVersionFormat	  "1.%<AutoIncrement:516>"
+  LastModifiedDate	  "Wed Oct 15 11:03:02 2014"
+  RTWModifiedTimeStamp	  335271777
+  ModelVersionFormat	  "1.%<AutoIncrement:521>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,8 +802,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [389, 24, 1687, 1110]
-    Open		    off
+    Location		    [0, 25, 1920, 1080]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -816,7 +816,7 @@ Library {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "335"
+    SIDHighWatermark	    "354"
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -24161,7 +24161,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"54"
+	SIDHighWatermark	"102"
 	Block {
 	  BlockType		  Inport
 	  Name			  "addr"
@@ -25541,7 +25541,7 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"3"
+		SIDHighWatermark	"6"
 		Block {
 		  BlockType		  Inport
 		  Name			  "din"
@@ -25696,7 +25696,7 @@ Library {
 		TiledPageScale		1
 		ShowPageBoundaries	off
 		ZoomFactor		"100"
-		SIDHighWatermark	"3"
+		SIDHighWatermark	"6"
 		Block {
 		  BlockType		  Inport
 		  Name			  "din"
@@ -25981,7 +25981,7 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "3"
+	    SIDHighWatermark	    "6"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
@@ -26136,7 +26136,7 @@ Library {
 	    TiledPageScale	    1
 	    ShowPageBoundaries	    off
 	    ZoomFactor		    "100"
-	    SIDHighWatermark	    "3"
+	    SIDHighWatermark	    "6"
 	    Block {
 	      BlockType		      Inport
 	      Name		      "din"
@@ -28284,7 +28284,7 @@ Library {
 	    }
 	    Name		    "hw_sys"
 	    Prompt		    "Hardware Platform"
-	    Value		    "MKDIG"
+	    Value		    "ROACH2:sx475t"
 	    Tunable		    "off"
 	    Callback		    "xps_xsg_conf_callback;"
 	  }
@@ -28339,8 +28339,7 @@ Library {
 	    }
 	    Name		    "ROACH2_clk_src"
 	    Prompt		    "User IP Clock Source"
-	    Value		    "adc0_clk"
-	    Visible		    "off"
+	    Value		    "sys_clk"
 	    Callback		    "xps_xsg_conf_callback;"
 	  }
 	  Object {
@@ -28356,6 +28355,7 @@ Library {
 	    Name		    "MKDIG_clk_src"
 	    Prompt		    "User IP Clock Source"
 	    Value		    "sys_clk"
+	    Visible		    "off"
 	    Callback		    "xps_xsg_conf_callback;"
 	  }
 	  Object {
@@ -54822,7 +54822,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"103"
+	SIDHighWatermark	"196"
 	SIDPrevWatermark	"101"
 	Block {
 	  BlockType		  Inport
@@ -55295,7 +55295,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/BitBasher"
 	  SourceType		  "Xilinx BitBasher Block"
 	  infoedit		  "Allows extraction, concatenation and augmentation of bits"
-	  bitexpr		  "b = {a[71:0]}"
+	  bitexpr		  "b = {a[35:0],a[35:0],a[35:0],a[35:0],a[35:0],a[35:0],a[35:0],a[35:0]}"
 	  display_expr		  off
 	  sr_1			  "1"
 	  arith_type1		  "Unsigned"
@@ -55500,7 +55500,7 @@ Library {
 	  SourceBlock		  "xbsIndex_r4/BitBasher"
 	  SourceType		  "Xilinx BitBasher Block"
 	  infoedit		  "Allows extraction, concatenation and augmentation of bits"
-	  bitexpr		  "b = {a[71:0]}"
+	  bitexpr		  "b = {a[35:0],a[35:0],a[35:0],a[35:0]}"
 	  display_expr		  off
 	  sr_1			  "1"
 	  arith_type1		  "Unsigned"
@@ -55548,8 +55548,8 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "qdr_sim_model"
-	    Location		    [517, 24, 1815, 1110]
-	    Open		    on
+	    Location		    [507, 14, 1825, 1148]
+	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
 	    ScreenColor		    "white"
@@ -58559,7 +58559,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6800"
+	SIDHighWatermark	"6832"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58571,10 +58571,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6799"
+	  SID			  "332:6831"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6751
+	  ZOrder		  6776
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58609,10 +58609,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6797"
+	  SID			  "332:6829"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6749
+	  ZOrder		  6774
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58647,10 +58647,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6796"
+	  SID			  "332:6828"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6748
+	  ZOrder		  6773
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58678,10 +58678,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6800"
+	  SID			  "332:6832"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6752
+	  ZOrder		  6777
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58709,10 +58709,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6798"
+	  SID			  "332:6830"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6750
+	  ZOrder		  6775
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
@@ -60758,11 +60758,11 @@ Library {
     Block {
       BlockType		      SubSystem
       Name		      "ten_Gbe_v2"
-      SID		      "333"
+      SID		      "337"
       Tag		      "xps:tengbe_v2"
-      Ports		      [9, 12]
-      Position		      [910, 18, 1055, 317]
-      ZOrder		      5232
+      Ports		      [8, 12]
+      Position		      [920, 38, 1065, 337]
+      ZOrder		      5235
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -60779,11 +60779,12 @@ Library {
 	Description		"This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-dete"
 	"rmined frame breaks. The data stream is wrapped in a UDP frame for transmission. Incoming UDP packets are unwrapped a"
 	"nd the data presented as a 64 bit wide stream."
-	Initialization		"tengbe_v2_mask(gcb)"
+	Initialization		"temp = eval(get_param(gcb, 'debug_ctr_width'));\nif temp <= 0,\n    error('Debug counters cannot be "
+	"ltoet zero.');\nend\ntengbe_v2_mask(gcb)"
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  37
+	  Dimension		  39
 	  Object {
 	    $ObjectID		    295
 	    Type		    "popup"
@@ -60796,9 +60797,8 @@ Library {
 	    }
 	    Name		    "flavour"
 	    Prompt		    "Mezzanine card flavour"
-	    Value		    "cx4"
+	    Value		    "sfp+"
 	    Evaluate		    "off"
-	    Visible		    "off"
 	    Callback		    "tengbe_v2_callback"
 	    TabName		    "Core"
 	  }
@@ -60814,8 +60814,7 @@ Library {
 	    }
 	    Name		    "slot"
 	    Prompt		    "Card slot"
-	    Value		    "1"
-	    Visible		    "off"
+	    Value		    "0"
 	    TabName		    "Core"
 	  }
 	  Object {
@@ -60833,6 +60832,7 @@ Library {
 	    Name		    "port_r1"
 	    Prompt		    "Port"
 	    Value		    "0"
+	    Visible		    "off"
 	    TabName		    "Core"
 	  }
 	  Object {
@@ -60867,7 +60867,6 @@ Library {
 	    Name		    "port_r2_sfpp"
 	    Prompt		    "Port"
 	    Value		    "0"
-	    Visible		    "off"
 	    TabName		    "Core"
 	  }
 	  Object {
@@ -60875,7 +60874,7 @@ Library {
 	    Type		    "checkbox"
 	    Name		    "rx_dist_ram"
 	    Prompt		    "Shallow RX Fifo (Beware overruns!)"
-	    Value		    "on"
+	    Value		    "off"
 	    TabName		    "Core"
 	  }
 	  Object {
@@ -60924,7 +60923,7 @@ Library {
 	    }
 	    Name		    "pre_emph_r2"
 	    Prompt		    "Pre-emphasis (dB)"
-	    Value		    "0.74"
+	    Value		    "1.07"
 	    Evaluate		    "off"
 	    Visible		    "off"
 	    TabName		    "Core"
@@ -61141,6 +61140,24 @@ Library {
 	  Object {
 	    $ObjectID		    317
 	    Type		    "checkbox"
+	    Name		    "promisc_mode"
+	    Prompt		    "Promiscuous mode"
+	    Value		    "off"
+	    Evaluate		    "off"
+	    Visible		    "off"
+	    TabName		    "Core"
+	  }
+	  Object {
+	    $ObjectID		    318
+	    Type		    "edit"
+	    Name		    "debug_ctr_width"
+	    Prompt		    "Debug counter width"
+	    Value		    "16"
+	    TabName		    "Debug counters"
+	  }
+	  Object {
+	    $ObjectID		    319
+	    Type		    "checkbox"
 	    Name		    "txctr"
 	    Prompt		    "TX - core_txctr"
 	    Value		    "off"
@@ -61148,7 +61165,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    318
+	    $ObjectID		    320
 	    Type		    "checkbox"
 	    Name		    "txerrctr"
 	    Prompt		    "TX packet length error - core_txerrctr"
@@ -61161,7 +61178,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    319
+	    $ObjectID		    321
 	    Type		    "edit"
 	    Name		    "txerrctr_len"
 	    Prompt		    "    -- expected TX packet length"
@@ -61170,7 +61187,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    320
+	    $ObjectID		    322
 	    Type		    "checkbox"
 	    Name		    "txofctr"
 	    Prompt		    "TX overflow - core_txofctr"
@@ -61179,7 +61196,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    321
+	    $ObjectID		    323
 	    Type		    "checkbox"
 	    Name		    "txfullctr"
 	    Prompt		    "TX full - core_txfullctr"
@@ -61188,7 +61205,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    322
+	    $ObjectID		    324
 	    Type		    "checkbox"
 	    Name		    "txvldctr"
 	    Prompt		    "TX valid cycle - core_txvldctr"
@@ -61197,7 +61214,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    323
+	    $ObjectID		    325
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61218,7 +61235,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    324
+	    $ObjectID		    326
 	    Type		    "checkbox"
 	    Name		    "rxctr"
 	    Prompt		    "RX - core_rxctr"
@@ -61227,7 +61244,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    325
+	    $ObjectID		    327
 	    Type		    "checkbox"
 	    Name		    "rxerrctr"
 	    Prompt		    "RX packet length error - core_rxerrctr"
@@ -61240,7 +61257,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    326
+	    $ObjectID		    328
 	    Type		    "edit"
 	    Name		    "rxerrctr_len"
 	    Prompt		    "    -- expected RX packet length"
@@ -61249,7 +61266,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    327
+	    $ObjectID		    329
 	    Type		    "checkbox"
 	    Name		    "rxofctr"
 	    Prompt		    "RX overflow - core_rxofctr"
@@ -61258,7 +61275,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    328
+	    $ObjectID		    330
 	    Type		    "checkbox"
 	    Name		    "rxbadctr"
 	    Prompt		    "RX bad - core_rxbadctr"
@@ -61267,7 +61284,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    329
+	    $ObjectID		    331
 	    Type		    "checkbox"
 	    Name		    "rxvldctr"
 	    Prompt		    "RX valid cycle - core_rxvldctr"
@@ -61276,7 +61293,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    330
+	    $ObjectID		    332
 	    Type		    "checkbox"
 	    Name		    "rxeofctr"
 	    Prompt		    "RX eof - core_rxeofctr"
@@ -61285,7 +61302,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    331
+	    $ObjectID		    333
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61322,13 +61339,13 @@ Library {
 	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"119"
-	SIDHighWatermark	"561"
-	SIDPrevWatermark	"561"
+	ZoomFactor		"52"
+	SIDHighWatermark	"1252"
+	SIDPrevWatermark	"565"
 	Block {
 	  BlockType		  Inport
 	  Name			  "rst"
-	  SID			  "333:1"
+	  SID			  "337:1"
 	  Position		  [120, 82, 150, 98]
 	  ZOrder		  -1
 	  IconDisplay		  "Port number"
@@ -61336,8 +61353,8 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_data"
-	  SID			  "333:2"
-	  Position		  [120, 267, 150, 283]
+	  SID			  "337:2"
+	  Position		  [60, 267, 90, 283]
 	  ZOrder		  -2
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -61345,8 +61362,8 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_valid"
-	  SID			  "333:3"
-	  Position		  [120, 227, 150, 243]
+	  SID			  "337:3"
+	  Position		  [60, 227, 90, 243]
 	  ZOrder		  -3
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -61354,8 +61371,8 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_dest_ip"
-	  SID			  "333:4"
-	  Position		  [120, 307, 150, 323]
+	  SID			  "337:4"
+	  Position		  [60, 307, 90, 323]
 	  ZOrder		  -4
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -61363,8 +61380,8 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_dest_port"
-	  SID			  "333:5"
-	  Position		  [120, 347, 150, 363]
+	  SID			  "337:5"
+	  Position		  [60, 347, 90, 363]
 	  ZOrder		  -5
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -61372,8 +61389,8 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "tx_end_of_frame"
-	  SID			  "333:6"
-	  Position		  [120, 387, 150, 403]
+	  SID			  "337:6"
+	  Position		  [60, 387, 90, 403]
 	  ZOrder		  -6
 	  Port			  "6"
 	  IconDisplay		  "Port number"
@@ -61381,8 +61398,8 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "rx_ack"
-	  SID			  "333:7"
-	  Position		  [120, 567, 150, 583]
+	  SID			  "337:7"
+	  Position		  [60, 567, 90, 583]
 	  ZOrder		  -7
 	  Port			  "7"
 	  IconDisplay		  "Port number"
@@ -61390,26 +61407,17 @@ Library {
 	Block {
 	  BlockType		  Inport
 	  Name			  "rx_overrun_ack"
-	  SID			  "333:8"
-	  Position		  [120, 607, 150, 623]
+	  SID			  "337:8"
+	  Position		  [60, 607, 90, 623]
 	  ZOrder		  -8
 	  Port			  "8"
 	  IconDisplay		  "Port number"
 	}
 	Block {
-	  BlockType		  Inport
-	  Name			  "debug_rst"
-	  SID			  "333:297"
-	  Position		  [120, 137, 150, 153]
-	  ZOrder		  5446
-	  Port			  "9"
-	  IconDisplay		  "Port number"
-	}
-	Block {
 	  BlockType		  Constant
 	  Name			  "Constant1"
-	  SID			  "333:9"
-	  Position		  [610, 645, 635, 665]
+	  SID			  "337:9"
+	  Position		  [700, 630, 725, 650]
 	  ZOrder		  -9
 	  ShowName		  off
 	  Value			  "0"
@@ -61417,8 +61425,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant10"
-	  SID			  "333:10"
-	  Position		  [610, 500, 635, 520]
+	  SID			  "337:10"
+	  Position		  [700, 495, 725, 515]
 	  ZOrder		  -10
 	  ShowName		  off
 	  Value			  "0"
@@ -61426,8 +61434,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant11"
-	  SID			  "333:11"
-	  Position		  [610, 570, 635, 590]
+	  SID			  "337:11"
+	  Position		  [700, 585, 725, 605]
 	  ZOrder		  -11
 	  ShowName		  off
 	  Value			  "0"
@@ -61435,8 +61443,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant12"
-	  SID			  "333:12"
-	  Position		  [610, 265, 635, 285]
+	  SID			  "337:12"
+	  Position		  [700, 270, 725, 290]
 	  ZOrder		  -12
 	  ShowName		  off
 	  Value			  "0"
@@ -61444,8 +61452,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant2"
-	  SID			  "333:13"
-	  Position		  [610, 225, 635, 245]
+	  SID			  "337:13"
+	  Position		  [700, 225, 725, 245]
 	  ZOrder		  -13
 	  ShowName		  off
 	  Value			  "0"
@@ -61453,8 +61461,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant3"
-	  SID			  "333:14"
-	  Position		  [610, 690, 635, 710]
+	  SID			  "337:14"
+	  Position		  [700, 675, 725, 695]
 	  ZOrder		  -14
 	  ShowName		  off
 	  Value			  "0"
@@ -61462,8 +61470,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant4"
-	  SID			  "333:15"
-	  Position		  [610, 735, 635, 755]
+	  SID			  "337:15"
+	  Position		  [700, 715, 725, 735]
 	  ZOrder		  -15
 	  ShowName		  off
 	  Value			  "0"
@@ -61471,8 +61479,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant5"
-	  SID			  "333:16"
-	  Position		  [610, 535, 635, 555]
+	  SID			  "337:16"
+	  Position		  [700, 540, 725, 560]
 	  ZOrder		  -16
 	  ShowName		  off
 	  Value			  "0"
@@ -61480,8 +61488,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant6"
-	  SID			  "333:17"
-	  Position		  [610, 320, 635, 340]
+	  SID			  "337:17"
+	  Position		  [700, 315, 725, 335]
 	  ZOrder		  -17
 	  ShowName		  off
 	  Value			  "0"
@@ -61489,8 +61497,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant7"
-	  SID			  "333:18"
-	  Position		  [610, 365, 635, 385]
+	  SID			  "337:18"
+	  Position		  [700, 360, 725, 380]
 	  ZOrder		  -18
 	  ShowName		  off
 	  Value			  "0"
@@ -61498,8 +61506,8 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant8"
-	  SID			  "333:19"
-	  Position		  [610, 410, 635, 430]
+	  SID			  "337:19"
+	  Position		  [700, 405, 725, 425]
 	  ZOrder		  -19
 	  ShowName		  off
 	  Value			  "0"
@@ -61507,48 +61515,219 @@ Library {
 	Block {
 	  BlockType		  Constant
 	  Name			  "Constant9"
-	  SID			  "333:20"
-	  Position		  [610, 455, 635, 475]
+	  SID			  "337:20"
+	  Position		  [700, 450, 725, 470]
 	  ZOrder		  -20
 	  ShowName		  off
 	  Value			  "0"
 	}
 	Block {
+	  BlockType		  Goto
+	  Name			  "Goto"
+	  SID			  "337:609"
+	  Position		  [135, 214, 215, 226]
+	  ZOrder		  5274
+	  ShowName		  off
+	  GotoTag		  "gtx_valid"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto1"
+	  SID			  "337:610"
+	  Position		  [135, 254, 215, 266]
+	  ZOrder		  5275
+	  ShowName		  off
+	  GotoTag		  "gtx_data"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto10"
+	  SID			  "337:619"
+	  Position		  [915, 349, 995, 361]
+	  ZOrder		  5284
+	  ShowName		  off
+	  GotoTag		  "grx_valid"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto11"
+	  SID			  "337:620"
+	  Position		  [915, 394, 995, 406]
+	  ZOrder		  5285
+	  ShowName		  off
+	  GotoTag		  "grx_src_ip"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto12"
+	  SID			  "337:621"
+	  Position		  [915, 439, 995, 451]
+	  ZOrder		  5286
+	  ShowName		  off
+	  GotoTag		  "grx_src_port"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto13"
+	  SID			  "337:622"
+	  Position		  [915, 484, 995, 496]
+	  ZOrder		  5287
+	  ShowName		  off
+	  GotoTag		  "grx_eof"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto14"
+	  SID			  "337:623"
+	  Position		  [915, 529, 995, 541]
+	  ZOrder		  5288
+	  ShowName		  off
+	  GotoTag		  "grx_badframe"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto15"
+	  SID			  "337:624"
+	  Position		  [915, 574, 995, 586]
+	  ZOrder		  5289
+	  ShowName		  off
+	  GotoTag		  "grx_overrun"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto16"
+	  SID			  "337:625"
+	  Position		  [915, 619, 995, 631]
+	  ZOrder		  5290
+	  ShowName		  off
+	  GotoTag		  "grx_led_up"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto17"
+	  SID			  "337:626"
+	  Position		  [915, 664, 995, 676]
+	  ZOrder		  5291
+	  ShowName		  off
+	  GotoTag		  "grx_led_rx"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto18"
+	  SID			  "337:627"
+	  Position		  [915, 704, 995, 716]
+	  ZOrder		  5292
+	  ShowName		  off
+	  GotoTag		  "grx_led_tx"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto2"
+	  SID			  "337:611"
+	  Position		  [135, 294, 215, 306]
+	  ZOrder		  5276
+	  ShowName		  off
+	  GotoTag		  "gtx_dest_ip"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto3"
+	  SID			  "337:612"
+	  Position		  [135, 334, 215, 346]
+	  ZOrder		  5277
+	  ShowName		  off
+	  GotoTag		  "gtx_dest_port"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto4"
+	  SID			  "337:613"
+	  Position		  [135, 374, 215, 386]
+	  ZOrder		  5278
+	  ShowName		  off
+	  GotoTag		  "gtx_eof"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto5"
+	  SID			  "337:614"
+	  Position		  [135, 554, 215, 566]
+	  ZOrder		  5279
+	  ShowName		  off
+	  GotoTag		  "grx_ack"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto6"
+	  SID			  "337:615"
+	  Position		  [135, 594, 225, 606]
+	  ZOrder		  5280
+	  ShowName		  off
+	  GotoTag		  "grx_overrun_ack"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto7"
+	  SID			  "337:616"
+	  Position		  [915, 214, 995, 226]
+	  ZOrder		  5281
+	  ShowName		  off
+	  GotoTag		  "gtx_afull"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto8"
+	  SID			  "337:617"
+	  Position		  [915, 259, 995, 271]
+	  ZOrder		  5282
+	  ShowName		  off
+	  GotoTag		  "gtx_overflow"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto9"
+	  SID			  "337:618"
+	  Position		  [915, 304, 995, 316]
+	  ZOrder		  5283
+	  ShowName		  off
+	  GotoTag		  "grx_data"
+	}
+	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator"
-	  SID			  "333:21"
-	  Position		  [495, 265, 515, 285]
+	  SID			  "337:21"
+	  Position		  [550, 265, 570, 285]
 	  ZOrder		  -21
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator1"
-	  SID			  "333:22"
-	  Position		  [495, 305, 515, 325]
+	  SID			  "337:22"
+	  Position		  [550, 305, 570, 325]
 	  ZOrder		  -22
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator2"
-	  SID			  "333:23"
-	  Position		  [495, 225, 515, 245]
+	  SID			  "337:23"
+	  Position		  [550, 225, 570, 245]
 	  ZOrder		  -23
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator3"
-	  SID			  "333:24"
-	  Position		  [495, 565, 515, 585]
+	  SID			  "337:24"
+	  Position		  [550, 565, 570, 585]
 	  ZOrder		  -24
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator5"
-	  SID			  "333:25"
+	  SID			  "337:25"
 	  Position		  [495, 80, 515, 100]
 	  ZOrder		  -25
 	  ShowName		  off
@@ -61556,31 +61735,31 @@ Library {
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator6"
-	  SID			  "333:26"
-	  Position		  [495, 605, 515, 625]
+	  SID			  "337:26"
+	  Position		  [550, 605, 570, 625]
 	  ZOrder		  -26
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator7"
-	  SID			  "333:27"
-	  Position		  [495, 345, 515, 365]
+	  SID			  "337:27"
+	  Position		  [550, 345, 570, 365]
 	  ZOrder		  -27
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Terminator
 	  Name			  "Terminator8"
-	  SID			  "333:28"
-	  Position		  [495, 385, 515, 405]
+	  SID			  "337:28"
+	  Position		  [550, 385, 570, 405]
 	  ZOrder		  -28
 	  ShowName		  off
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_rst"
-	  SID			  "333:29"
+	  SID			  "337:29"
 	  Ports			  [1, 1]
 	  Position		  [235, 82, 285, 98]
 	  ZOrder		  -29
@@ -61619,9 +61798,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_rx_ack"
-	  SID			  "333:30"
+	  SID			  "337:30"
 	  Ports			  [1, 1]
-	  Position		  [235, 567, 285, 583]
+	  Position		  [250, 567, 300, 583]
 	  ZOrder		  -30
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -61658,9 +61837,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_rx_overrun_ack"
-	  SID			  "333:31"
+	  SID			  "337:31"
 	  Ports			  [1, 1]
-	  Position		  [235, 607, 285, 623]
+	  Position		  [250, 607, 300, 623]
 	  ZOrder		  -31
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -61697,9 +61876,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_data"
-	  SID			  "333:32"
+	  SID			  "337:32"
 	  Ports			  [1, 1]
-	  Position		  [235, 267, 285, 283]
+	  Position		  [250, 267, 300, 283]
 	  ZOrder		  -32
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -61736,9 +61915,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_dest_ip"
-	  SID			  "333:33"
+	  SID			  "337:33"
 	  Ports			  [1, 1]
-	  Position		  [235, 307, 285, 323]
+	  Position		  [250, 307, 300, 323]
 	  ZOrder		  -33
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -61775,9 +61954,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_end_of_frame"
-	  SID			  "333:34"
+	  SID			  "337:34"
 	  Ports			  [1, 1]
-	  Position		  [235, 387, 285, 403]
+	  Position		  [250, 387, 300, 403]
 	  ZOrder		  -34
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -61814,9 +61993,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_port"
-	  SID			  "333:35"
+	  SID			  "337:35"
 	  Ports			  [1, 1]
-	  Position		  [235, 347, 285, 363]
+	  Position		  [250, 347, 300, 363]
 	  ZOrder		  -35
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -61853,9 +62032,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "convert_tx_valid"
-	  SID			  "333:36"
+	  SID			  "337:36"
 	  Ports			  [1, 1]
-	  Position		  [235, 227, 285, 243]
+	  Position		  [250, 227, 300, 243]
 	  ZOrder		  -36
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
@@ -61890,18 +62069,11 @@ Library {
 	  "st');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
-	  BlockType		  Terminator
-	  Name			  "term1"
-	  SID			  "333:70"
-	  Position		  [200, 135, 220, 155]
-	  ZOrder		  2
-	}
-	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_led_rx"
-	  SID			  "333:37"
+	  SID			  "337:37"
 	  Ports			  [1, 1]
-	  Position		  [665, 692, 765, 708]
+	  Position		  [755, 677, 855, 693]
 	  ZOrder		  -37
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -61945,9 +62117,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_led_tx"
-	  SID			  "333:38"
+	  SID			  "337:38"
 	  Ports			  [1, 1]
-	  Position		  [665, 737, 765, 753]
+	  Position		  [755, 717, 855, 733]
 	  ZOrder		  -38
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -61991,9 +62163,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_led_up"
-	  SID			  "333:39"
+	  SID			  "337:39"
 	  Ports			  [1, 1]
-	  Position		  [665, 647, 765, 663]
+	  Position		  [755, 632, 855, 648]
 	  ZOrder		  -39
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62037,7 +62209,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rst"
-	  SID			  "333:40"
+	  SID			  "337:40"
 	  Ports			  [1, 1]
 	  Position		  [405, 82, 455, 98]
 	  ZOrder		  -40
@@ -62073,7 +62245,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_ack"
-	  SID			  "333:41"
+	  SID			  "337:41"
 	  Ports			  [1, 1]
 	  Position		  [405, 567, 455, 583]
 	  ZOrder		  -41
@@ -62093,7 +62265,7 @@ Library {
 	  xl_use_area		  off
 	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
+	  sggui_pos		  "20,25,400,629"
 	  block_type		  "gatewayout"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "50,16,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
@@ -62109,9 +62281,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_bad_frame"
-	  SID			  "333:42"
+	  SID			  "337:42"
 	  Ports			  [1, 1]
-	  Position		  [665, 537, 765, 553]
+	  Position		  [755, 542, 855, 558]
 	  ZOrder		  -42
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62155,9 +62327,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_data"
-	  SID			  "333:43"
+	  SID			  "337:43"
 	  Ports			  [1, 1]
-	  Position		  [665, 322, 765, 338]
+	  Position		  [755, 317, 855, 333]
 	  ZOrder		  -43
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62201,9 +62373,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_end_of_frame"
-	  SID			  "333:44"
+	  SID			  "337:44"
 	  Ports			  [1, 1]
-	  Position		  [665, 502, 765, 518]
+	  Position		  [755, 497, 855, 513]
 	  ZOrder		  -44
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62247,9 +62419,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_overrun"
-	  SID			  "333:45"
+	  SID			  "337:45"
 	  Ports			  [1, 1]
-	  Position		  [665, 572, 765, 588]
+	  Position		  [755, 587, 855, 603]
 	  ZOrder		  -45
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62293,7 +62465,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_overrun_ack"
-	  SID			  "333:46"
+	  SID			  "337:46"
 	  Ports			  [1, 1]
 	  Position		  [405, 607, 455, 623]
 	  ZOrder		  -46
@@ -62329,9 +62501,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_source_ip"
-	  SID			  "333:47"
+	  SID			  "337:47"
 	  Ports			  [1, 1]
-	  Position		  [665, 412, 765, 428]
+	  Position		  [755, 407, 855, 423]
 	  ZOrder		  -47
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62375,9 +62547,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_source_port"
-	  SID			  "333:48"
+	  SID			  "337:48"
 	  Ports			  [1, 1]
-	  Position		  [665, 457, 765, 473]
+	  Position		  [755, 452, 855, 468]
 	  ZOrder		  -48
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62421,9 +62593,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_valid"
-	  SID			  "333:49"
+	  SID			  "337:49"
 	  Ports			  [1, 1]
-	  Position		  [665, 362, 765, 378]
+	  Position		  [755, 362, 855, 378]
 	  ZOrder		  -49
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62467,9 +62639,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_afull"
-	  SID			  "333:50"
+	  SID			  "337:50"
 	  Ports			  [1, 1]
-	  Position		  [665, 227, 765, 243]
+	  Position		  [755, 227, 855, 243]
 	  ZOrder		  -50
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62513,7 +62685,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_data"
-	  SID			  "333:51"
+	  SID			  "337:51"
 	  Ports			  [1, 1]
 	  Position		  [405, 267, 455, 283]
 	  ZOrder		  -51
@@ -62549,7 +62721,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_dest_ip"
-	  SID			  "333:52"
+	  SID			  "337:52"
 	  Ports			  [1, 1]
 	  Position		  [405, 307, 455, 323]
 	  ZOrder		  -52
@@ -62585,7 +62757,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_dest_port"
-	  SID			  "333:53"
+	  SID			  "337:53"
 	  Ports			  [1, 1]
 	  Position		  [405, 347, 455, 363]
 	  ZOrder		  -53
@@ -62621,7 +62793,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_end_of_frame"
-	  SID			  "333:54"
+	  SID			  "337:54"
 	  Ports			  [1, 1]
 	  Position		  [405, 387, 455, 403]
 	  ZOrder		  -54
@@ -62657,9 +62829,9 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_overflow"
-	  SID			  "333:55"
+	  SID			  "337:55"
 	  Ports			  [1, 1]
-	  Position		  [665, 267, 765, 283]
+	  Position		  [755, 272, 855, 288]
 	  ZOrder		  -55
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62703,7 +62875,7 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_tx_valid"
-	  SID			  "333:56"
+	  SID			  "337:56"
 	  Ports			  [1, 1]
 	  Position		  [405, 227, 455, 243]
 	  ZOrder		  -56
@@ -62739,16 +62911,16 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "led_up"
-	  SID			  "333:57"
-	  Position		  [865, 647, 895, 663]
+	  SID			  "337:57"
+	  Position		  [1025, 632, 1055, 648]
 	  ZOrder		  -57
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Outport
 	  Name			  "led_rx"
-	  SID			  "333:58"
-	  Position		  [865, 692, 895, 708]
+	  SID			  "337:58"
+	  Position		  [1025, 677, 1055, 693]
 	  ZOrder		  -58
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -62756,8 +62928,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "led_tx"
-	  SID			  "333:59"
-	  Position		  [865, 737, 895, 753]
+	  SID			  "337:59"
+	  Position		  [1025, 717, 1055, 733]
 	  ZOrder		  -59
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -62765,8 +62937,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "tx_afull"
-	  SID			  "333:60"
-	  Position		  [865, 227, 895, 243]
+	  SID			  "337:60"
+	  Position		  [1025, 227, 1055, 243]
 	  ZOrder		  -60
 	  Port			  "4"
 	  IconDisplay		  "Port number"
@@ -62774,8 +62946,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "tx_overflow"
-	  SID			  "333:61"
-	  Position		  [865, 267, 895, 283]
+	  SID			  "337:61"
+	  Position		  [1025, 272, 1055, 288]
 	  ZOrder		  -61
 	  Port			  "5"
 	  IconDisplay		  "Port number"
@@ -62783,8 +62955,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_data"
-	  SID			  "333:62"
-	  Position		  [865, 322, 895, 338]
+	  SID			  "337:62"
+	  Position		  [1025, 317, 1055, 333]
 	  ZOrder		  -62
 	  Port			  "6"
 	  IconDisplay		  "Port number"
@@ -62792,8 +62964,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_valid"
-	  SID			  "333:63"
-	  Position		  [865, 367, 895, 383]
+	  SID			  "337:63"
+	  Position		  [1025, 362, 1055, 378]
 	  ZOrder		  -63
 	  Port			  "7"
 	  IconDisplay		  "Port number"
@@ -62801,8 +62973,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_source_ip"
-	  SID			  "333:64"
-	  Position		  [865, 412, 895, 428]
+	  SID			  "337:64"
+	  Position		  [1025, 407, 1055, 423]
 	  ZOrder		  -64
 	  Port			  "8"
 	  IconDisplay		  "Port number"
@@ -62810,8 +62982,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_source_port"
-	  SID			  "333:65"
-	  Position		  [865, 457, 895, 473]
+	  SID			  "337:65"
+	  Position		  [1025, 452, 1055, 468]
 	  ZOrder		  -65
 	  Port			  "9"
 	  IconDisplay		  "Port number"
@@ -62819,8 +62991,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_end_of_frame"
-	  SID			  "333:66"
-	  Position		  [865, 502, 895, 518]
+	  SID			  "337:66"
+	  Position		  [1025, 497, 1055, 513]
 	  ZOrder		  -66
 	  Port			  "10"
 	  IconDisplay		  "Port number"
@@ -62828,8 +63000,8 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_bad_frame"
-	  SID			  "333:67"
-	  Position		  [865, 537, 895, 553]
+	  SID			  "337:67"
+	  Position		  [1025, 542, 1055, 558]
 	  ZOrder		  -67
 	  Port			  "11"
 	  IconDisplay		  "Port number"
@@ -62837,276 +63009,50 @@ Library {
 	Block {
 	  BlockType		  Outport
 	  Name			  "rx_overrun"
-	  SID			  "333:68"
-	  Position		  [865, 572, 895, 588]
+	  SID			  "337:68"
+	  Position		  [1025, 587, 1055, 603]
 	  ZOrder		  -68
 	  Port			  "12"
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  SrcBlock		  "debug_rst"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
 	  SrcPort		  1
-	  DstBlock		  "term1"
+	  Points		  [34, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto8"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "tx_overflow"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant12"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_led_tx"
+	  SrcBlock		  "rx_overrun_ack"
 	  SrcPort		  1
-	  DstBlock		  "led_tx"
-	  DstPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto6"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "convert_rx_overrun_ack"
+	    DstPort		    1
+	  }
 	}
 	Line {
-	  SrcBlock		  "Constant4"
+	  SrcBlock		  "convert_rx_overrun_ack"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_led_tx"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_led_rx"
-	  SrcPort		  1
-	  DstBlock		  "led_rx"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant3"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_led_rx"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_led_up"
-	  SrcPort		  1
-	  DstBlock		  "led_up"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant1"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_led_up"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
-	  SrcPort		  1
-	  DstBlock		  "rx_end_of_frame"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant10"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
-	  SrcPort		  1
-	  DstBlock		  "rx_source_port"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant9"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant8"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
-	  SrcPort		  1
-	  DstBlock		  "rx_source_ip"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
-	  SrcPort		  1
-	  DstBlock		  "Terminator8"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_tx_end_of_frame"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "tx_end_of_frame"
-	  SrcPort		  1
-	  DstBlock		  "convert_tx_end_of_frame"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
-	  SrcPort		  1
-	  DstBlock		  "Terminator7"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_tx_port"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "tx_dest_port"
-	  SrcPort		  1
-	  DstBlock		  "convert_tx_port"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rst"
-	  SrcPort		  1
-	  DstBlock		  "Terminator5"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_rst"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rst"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "rst"
-	  SrcPort		  1
-	  DstBlock		  "convert_rst"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_valid"
-	  SrcPort		  1
-	  Points		  [45, 0; 0, 5]
-	  DstBlock		  "rx_valid"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant7"
-	  SrcPort		  1
-	  Points		  [10, 0]
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_valid"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_ack"
-	  SrcPort		  1
-	  DstBlock		  "Terminator3"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant6"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_data"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant2"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_afull"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_valid"
-	  SrcPort		  1
-	  DstBlock		  "Terminator2"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
-	  SrcPort		  1
-	  DstBlock		  "Terminator1"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_data"
-	  SrcPort		  1
-	  DstBlock		  "Terminator"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_afull"
-	  SrcPort		  1
-	  DstBlock		  "tx_afull"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_tx_valid"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_valid"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "tx_valid"
-	  SrcPort		  1
-	  DstBlock		  "convert_tx_valid"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_tx_dest_ip"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "tx_dest_ip"
-	  SrcPort		  1
-	  DstBlock		  "convert_tx_dest_ip"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_tx_data"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_data"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "tx_data"
-	  SrcPort		  1
-	  DstBlock		  "convert_tx_data"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_data"
-	  SrcPort		  1
-	  DstBlock		  "rx_data"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert_rx_ack"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_ack"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "rx_ack"
-	  SrcPort		  1
-	  DstBlock		  "convert_rx_ack"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
-	  SrcPort		  1
-	  DstBlock		  "rx_bad_frame"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant5"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
-	  SrcPort		  1
-	  DstBlock		  "rx_overrun"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Constant11"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun_ack"
 	  DstPort		  1
 	}
 	Line {
@@ -63116,28 +63062,397 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "convert_rx_overrun_ack"
+	  SrcBlock		  "Constant11"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun_ack"
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "rx_overrun_ack"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_overrun"
 	  SrcPort		  1
-	  DstBlock		  "convert_rx_overrun_ack"
+	  Points		  [34, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto15"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "rx_overrun"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant5"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Constant12"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_bad_frame"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
+	  Points		  [34, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto14"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "rx_bad_frame"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "rx_ack"
+	  SrcPort		  1
+	  Points		  [16, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto5"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "convert_rx_ack"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "convert_rx_ack"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_ack"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_overflow"
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_data"
 	  SrcPort		  1
-	  DstBlock		  "tx_overflow"
+	  Points		  [35, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto9"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "rx_data"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "tx_data"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "convert_tx_data"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "convert_tx_data"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_data"
 	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "tx_dest_ip"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto2"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "convert_tx_dest_ip"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "convert_tx_dest_ip"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "tx_valid"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "convert_tx_valid"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "convert_tx_valid"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_valid"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_afull"
+	  SrcPort		  1
+	  Points		  [33, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto7"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "tx_afull"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_data"
+	  SrcPort		  1
+	  DstBlock		  "Terminator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_ip"
+	  SrcPort		  1
+	  DstBlock		  "Terminator1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_valid"
+	  SrcPort		  1
+	  DstBlock		  "Terminator2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant2"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_afull"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant6"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_data"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_ack"
+	  SrcPort		  1
+	  DstBlock		  "Terminator3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant7"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_valid"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_valid"
+	  SrcPort		  1
+	  Points		  [33, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto10"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "rx_valid"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "rst"
+	  SrcPort		  1
+	  DstBlock		  "convert_rst"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "convert_rst"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rst"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rst"
+	  SrcPort		  1
+	  DstBlock		  "Terminator5"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "tx_dest_port"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto3"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "convert_tx_port"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "convert_tx_port"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_dest_port"
+	  SrcPort		  1
+	  DstBlock		  "Terminator7"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "tx_end_of_frame"
+	  SrcPort		  1
+	  Points		  [16, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto4"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "convert_tx_end_of_frame"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "convert_tx_end_of_frame"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_tx_end_of_frame"
+	  SrcPort		  1
+	  DstBlock		  "Terminator8"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
+	  SrcPort		  1
+	  Points		  [35, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto11"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "rx_source_ip"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant8"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_ip"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant9"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_source_port"
+	  SrcPort		  1
+	  Points		  [40, 0]
+	  Branch {
+	    DstBlock		    "Goto12"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "rx_source_port"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant10"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_end_of_frame"
+	  SrcPort		  1
+	  Points		  [35, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto13"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "rx_end_of_frame"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant1"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_led_up"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_led_up"
+	  SrcPort		  1
+	  Points		  [38, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto16"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "led_up"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant3"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_led_rx"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_led_rx"
+	  SrcPort		  1
+	  Points		  [31, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto17"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "led_rx"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant4"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_led_tx"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_led_tx"
+	  SrcPort		  1
+	  Points		  [34, 0]
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto18"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "led_tx"
+	    DstPort		    1
+	  }
 	}
       }
     }

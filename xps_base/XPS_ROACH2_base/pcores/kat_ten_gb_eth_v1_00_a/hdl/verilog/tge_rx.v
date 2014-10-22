@@ -1,7 +1,8 @@
 `timescale 1ns/1ps
 module tge_rx #(
     parameter CPU_ENABLE          = 1,
-    parameter USE_DISTRIBUTED_RAM = 0
+    parameter USE_DISTRIBUTED_RAM = 0,
+    parameter PROMISC_MODE        = 0
   ) (
     // Local Parameters
     input         local_enable,
@@ -93,12 +94,27 @@ module tge_rx #(
   reg [47:0] rx_control_data;
 
   /* Eady reading assignments */
-  wire [47:0] destination_mac  = {mac_rx_data_z[ 7: 0], mac_rx_data_z[15: 8], mac_rx_data_z[23:16],
-                                  mac_rx_data_z[31:24], mac_rx_data_z[39:32], mac_rx_data_z[47:40]};
+  wire [47:0] destination_mac  = {mac_rx_data_z[ 7: 0], mac_rx_data_z[15: 8], 
+                                  mac_rx_data_z[23:16], mac_rx_data_z[31:24], 
+                                  mac_rx_data_z[39:32], mac_rx_data_z[47:40]};
   wire [15:0] destination_port = {mac_rx_data_z[39:32], mac_rx_data_z[47:40]};
-  wire [31:0] destination_ip   = {mac_rx_dataR [55:48], mac_rx_dataR [63:56], mac_rx_data_z[ 7: 0],
-                                  mac_rx_data_z[15: 8]};
-  
+  wire [31:0] destination_ip   = {mac_rx_dataR [55:48], mac_rx_dataR [63:56], 
+                                  mac_rx_data_z[ 7: 0], mac_rx_data_z[15: 8]};
+
+  wire mac_match;
+  wire ip_match; 
+
+
+// Promisc mode only filters on the cpu port all other traffic will get through to
+// fabric 
+generate if (PROMISC_MODE) begin : promisc_mode
+  assign mac_match = 0; 
+  assign ip_match  = 0;
+end else 
+  assign mac_match = ({mac_rx_data_z[39:32], mac_rx_data_z[47:40]} != 16'h0800 || mac_rx_data_z[55:48] != 8'h45);
+  assign ip_match  = (destination_ip != local_ip && destination_ip[31:0] != local_mc_recv_ip && (destination_ip[31:0] & local_mc_recv_ip_mask) != (local_mc_recv_ip & local_mc_recv_ip_mask));
+endgenerate
+
   always @(posedge mac_clk) begin
     /* Delay Data + frame signals */
     mac_rx_dataR       <= mac_rx_data_z;
@@ -133,7 +149,7 @@ module tge_rx #(
         end
         RX_HDR_WORD_2: begin
          /* Check IPV4 info */
-          if ({mac_rx_data_z[39:32], mac_rx_data_z[47:40]} != 16'h0800 || mac_rx_data_z[55:48] != 8'h45) begin
+          if (mac_match) begin
             /* If not IPv4 frame, with no options or padding no good for application */
             application_frame <= 1'b0;
             rx_state          <= RX_DATA;
@@ -181,7 +197,7 @@ module tge_rx #(
             rx_state          <= RX_DATA;
           end
           /* Check destiniation IP, is it our IP or a multicast IP that we have subscribed to*/
-          if (destination_ip != local_ip && destination_ip[31:0] != local_mc_recv_ip && (destination_ip[31:0] & local_mc_recv_ip_mask) != (local_mc_recv_ip & local_mc_recv_ip_mask)) begin
+          if (ip_match) begin
 `ifdef DEBUG
             $display("tge_rx: ip mismatch - got %d.%d.%d.%d, local = %d.%d.%d.%d", destination_ip[31:24], destination_ip[23:16], destination_ip[15:8],destination_ip[7:0],
                                                                                    local_ip[31:24], local_ip[23:16], local_ip[15:8],local_ip[7:0] );
