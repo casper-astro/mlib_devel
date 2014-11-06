@@ -191,9 +191,11 @@ module qdrc_infrastructure(
     qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
     qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
   end
+  //synthesis attribute SHREG_EXTRACT of qdr_sa_regR is no
+  //synthesis attribute SHREG_EXTRACT of qdr_sa_reg is no
 
   always @(posedge clk180) begin 
-  /* Add delay to ease timing */
+  /* Add delay to ease timing */ //JH: this is a clock domain cross, it doesn't help timing(?)
     qdr_sa_reg0  <= qdr_sa_reg;
     qdr_w_n_reg0 <= qdr_w_n_reg;
     qdr_r_n_reg0 <= qdr_r_n_reg;
