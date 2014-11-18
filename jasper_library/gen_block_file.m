@@ -193,8 +193,12 @@ end
 
 for n = 1:length(xps_pcore_blks)
     fprintf(fid,'      - %s\n',GetFullPath(get_param(xps_pcore_blks{n},'pcore_path')));
-end 
+end
 
+fprintf(fid,'    tcl_sources:\n'); 
+if xlver > 14.7
+    fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/sysgen/vivado_ip.tcl']));
+end
 
 disp(sprintf('Closing output file: %s',output_fname));
 fclose(fid);
