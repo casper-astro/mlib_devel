@@ -1,3 +1,6 @@
+import yaml
+import os
+
 class Platform(object):
     '''
     A class encapsulating information about an FPGA platform.
@@ -15,25 +18,40 @@ class Platform(object):
         else:
             raise Exception('Unsupported hardware platform!')
 
-    def __init__(self):
+    def __init__(self, name):
+        '''
+        Constructor. This method will build the platform called <name>,
+        scraping details from a yaml configuration file called
+        <MLIB_DEVEL_PATH>/jasper_library/platforms/name.yaml
+        '''
+        platdir = os.environ['MLIB_DEVEL_PATH'] + '/jasper_library/platforms'
+        conffile = platdir + '/%s.yaml'%name.lower()
+        if not os.path.isfile(conffile):
+            raise RuntimeError("Couldn't find platform configuration file %s"%conffile)
+
+        with open(conffile, 'r') as fh:
+            conf = yaml.load(fh.read())
+
         #: A dictionary of pin names associated with the platform.
         self._pins = {}
+        for pinname, val in conf['pins'].iteritems():
+            self.add_pins(pinname, val.get('iostd', None), val['loc'])
         #: A list of resources present on a platform to facilitate
         #: simple drc checking. Eg. ['qdr0', 'sysclk2x']
-        self.provides = []
+        self.provides = conf.get('provides', [])
         #: A list of source files/directories required to compile
         #: the template top.v (does NOT include top.v itself)
-        self.sources = []
+        self.sources = conf.get('sources', [])
         #: A list of constraint files/directories required to compile
         #: the template top.v 
-        self.consts = []
+        self.consts = conf.get('constraints', [])
         #: FPGA manufacturer
-        self.manufacturer = 'xilinx'
+        self.manufacturer = conf.get('manufacturer', [])
         #: Platform name. Eg, ROACH, SNAP, etc.
-        self.name = 'generic'
+        self.name = conf['name']
         #: FPGA model. Should be the full version ready to pass to the
         #: vendor tools. Eg., xc7k325tffg900-2
-        self.fpga = 'xc7k325tffg900-2'
+        self.fpga = conf['fpga']
 
     def add_pins(self, name, iostd, loc):
         '''
