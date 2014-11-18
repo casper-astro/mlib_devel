@@ -1,16 +1,22 @@
 name: snap
-manufacturer: xilinx
+manufacturer: Xilinx
 fpga: xc7k160tffg676-2
 sources:
-  - wb_something
-  - or_other
-consts:
+  - infrastructure
+  - spi_wb_bridge
+  - wbs_arbiter
+  - sys_block
+constraints:
   - snap.xdc
+  - snap.ucf
 provides:
   - sfp0
   - sfp1
   - zdok0
   - sys_clk
+  - HAD1511_0
+  - HAD1511_1
+  - HAD1511_2
 pins:
   miso:
     loc: AA27
@@ -18,13 +24,44 @@ pins:
   miso:
     loc: AB28
     iostd: LVCMOS25
-  miso:
+  sclk:
     loc: AA25
     iostd: LVCMOS25
-  miso:
-    loc: AB24
+  cs_n:
+    loc: AB25
     iostd: LVCMOS25
-  zdok:
+  led:
+    iostd: LVCMOS25
+    loc:
+      - D13
+      - D14
+      - E12
+      - E13
+      - C13
+      - C14
+  eth_clk_p:
+    loc:
+      - K6
+  eth_clk_n:
+    loc: 
+      - K5
+  mgt_tx_p:
+    loc: 
+      - P2
+      - K2
+  mgt_tx_n:
+    loc:
+      - P1
+      - K1
+  mgt_rx_p:
+    loc:
+      - R4
+      - L4
+  mgt_rx_n:
+    loc:
+      - R3
+      - L3
+  zdok0:
     iostd: LVCMOS25
     loc:
       - AA23
@@ -107,4 +144,176 @@ pins:
       - D25
       - F22
       - E23
+  zdok0_p:
+    iostd: LVDS_25
+    loc:
+      - AA23
+      - Y25
+      - U24
+      - U19
+      - T24
+      - M21
+      - M24
+      - L22
+      - J24
+      - G25
+      - Y22
+      - Y23
+      - V23
+      - R22
+      - R21
+      - P23
+      - K25
+      - K23
+      - H21
+      - G22
+      - E23
+      - AC23
+      - W23
+      - T22
+      - R18
+      - N18
+      - N19
+      - J21
+      - G24
+      - D23
+      - AE22
+      - AB26
+      - V21
+      - U17
+      - R16
+      - P19
+      - P16
+      - J26
+      - E25
+      - F22
+  zdok0_n:
+    iostd: LVDS_25
+    loc:
+      - AB24
+      - Y26
+      - U25
+      - U20
+      - T25
+      - M22
+      - L24
+      - K22
+      - J25
+      - G26
+      - AA22
+      - AA24
+      - V24
+      - R23
+      - P21
+      - N23
+      - K26
+      - J23
+      - G21
+      - F23
+      - AF23
+      - AC24
+      - W24
+      - T23
+      - P18
+      - M19
+      - M20
+      - D16
+      - F24
+      - D24
+      - AF22
+      - AC26
+      - W21
+      - T17
+      - R17
+      - P20
+      - N17
+      - H26
+      - D25
+      - E23
+  adc_csn:
+    iostd: LVCMOS18
+    loc:
+      - AF3
+      - AF10
+      - V14
+  adc_sdata:
+    iostd: LVCMOS18
+    loc:
+      - AF2
+      - AF9
+      - W14
+  adc_sclk:
+    iostd: LVCMOS33
+    loc:
+      - M17
+      - L18
+      - K16
+  adc_lclkp:
+    iostd: LVDS
+    loc:
+      - AA3
+  adc_lclkn:
+    iostd: LVDS
+    loc:
+      - AA2
+  # ADC data pins, named as per schematic.
+  # Even pins are _p, odd are _n.
+  adc0_out:
+    iostd: LVDS
+    loc:
+      - V2
+      - V1
+      - U2
+      - U1
+      - W6
+      - W5
+      - U7
+      - V6
+      - V3
+      - W3
+      - Y3
+      - Y2
+      - AD6
+      - AD5
+      - AD4
+      - AD3
+  adc1_out:
+    iostd: LVDS
+    loc:
+      - V8
+      - V7
+      - W10
+      - W9
+      - Y8
+      - Y7
+      - Y11
+      - Y10
+      - AB12
+      - AC12
+      - AA13
+      - AA12
+      - AA8
+      - AA7
+      - AC8
+      - AD8
+  adc2_out:
+    iostd: LVDS
+    loc:
+      - AF14
+      - AF15
+      - AD15
+      - AE15
+      - AE18
+      - AF18
+      - AF19
+      - AF20
+      - AA14
+      - AA15
+      - AC14
+      - AD14
+      - AB19
+      - AB20
+      - AA19
+      - AA20
+
 
