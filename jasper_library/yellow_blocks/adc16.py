@@ -1,5 +1,5 @@
 from yellow_block import YellowBlock
-from verilog import VerilogInstance
+from verilog import VerilogModule
 from constraints import PortConstraint, ClockConstraint
 
 class adc16(YellowBlock):
@@ -31,7 +31,7 @@ class adc16(YellowBlock):
 
     def modify_top(self,top):
         module = 'adc16_interface'
-        inst = VerilogInstance(entity=module, name=self.fullname, comment=self.fullname)
+        inst = VerilogModule(entity=module, name=self.fullname, comment=self.fullname)
         inst.add_parameter('G_NUM_CLOCKS', int(self.num_clocks))
         inst.add_parameter('G_ZDOK_REV', int(self.zdok_rev))
         inst.add_parameter('G_NUM_UNITS', int(self.num_units))
@@ -162,7 +162,7 @@ class adc16(YellowBlock):
 
         # wb controller
 
-        wbctrl = VerilogInstance(entity='wb_adc16_controller', name='wb_adc16_controller')
+        wbctrl = VerilogModule(entity='wb_adc16_controller', name='wb_adc16_controller')
         wbctrl.add_parameter('G_ROACH2_REV', int(self.roach2_rev))
         wbctrl.add_parameter('G_ZDOK_REV', int(self.zdok_rev))
         wbctrl.add_parameter('G_NUM_UNITS', int(self.num_units))
@@ -218,7 +218,7 @@ class adc16(YellowBlock):
         for k in range(self.num_units):
             # Embedded wb-RAM
             din = self.fullname+'_%s'%snap_chan[k]
-            wbram = VerilogInstance(entity='wb_bram', name='adc16_wb_ram%d'%k, comment='Embedded ADC16 bram')
+            wbram = VerilogModule(entity='wb_bram', name='adc16_wb_ram%d'%k, comment='Embedded ADC16 bram')
             wbram.add_parameter('LOG_USER_WIDTH','5')
             wbram.add_parameter('USER_ADDR_BITS','10')
             wbram.add_parameter('N_REGISTERS','2')

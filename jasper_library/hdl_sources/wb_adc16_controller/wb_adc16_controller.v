@@ -7,7 +7,9 @@
 module wb_adc16_controller#(
     parameter G_ROACH2_REV = 2,
     parameter G_ZDOK_REV   = 2,
-    parameter G_NUM_UNITS  = 1
+    parameter G_NUM_UNITS  = 1,
+    parameter G_NUM_SDATA_LINES = 1,
+    parameter G_NUM_SCLK_LINES = 1
     )(
     input         wb_clk_i,
     input         wb_rst_i,
@@ -25,15 +27,15 @@ module wb_adc16_controller#(
     output        adc0_adc3wire_csn2,
     output        adc0_adc3wire_csn3,
     output        adc0_adc3wire_csn4,
-    output        adc0_adc3wire_sdata,
-    output        adc0_adc3wire_sclk,
+    output        [G_NUM_SDATA_LINES - 1 : 0] adc0_adc3wire_sdata,
+    output        [G_NUM_SCLK_LINES - 1 : 0] adc0_adc3wire_sclk,
 
     output        adc1_adc3wire_csn1,
     output        adc1_adc3wire_csn2,
     output        adc1_adc3wire_csn3,
     output        adc1_adc3wire_csn4,
-    output        adc1_adc3wire_sdata,
-    output        adc1_adc3wire_sclk,
+    output        [G_NUM_SDATA_LINES - 1 : 0] adc1_adc3wire_sdata,
+    output        [G_NUM_SCLK_LINES - 1 : 0] adc1_adc3wire_sclk,
 
     output        adc16_reset,
     output        [0:7] adc16_iserdes_bitslip,
@@ -105,10 +107,21 @@ module wb_adc16_controller#(
   /*       use at runtime.                   */
   /* ======================================= */
 
-  assign adc1_adc3wire_sclk  =  adc16_adc3wire_wire[22];
-  assign adc0_adc3wire_sclk  =  adc16_adc3wire_wire[22];
-  assign adc1_adc3wire_sdata =  adc16_adc3wire_wire[23];
-  assign adc0_adc3wire_sdata =  adc16_adc3wire_wire[23];
+  genvar i;
+  generate
+  for (i=0; i<G_NUM_SCLK_LINES; i=i+1) begin : gen_sclk
+    assign adc1_adc3wire_sclk[i]  =  adc16_adc3wire_wire[22];
+    assign adc0_adc3wire_sclk[i]  =  adc16_adc3wire_wire[22];
+  end
+  endgenerate;
+
+  generate
+  for (i=0; i<G_NUM_SDATA_LINES; i=i+1) begin : gen_sdata
+    assign adc1_adc3wire_sdata[i] =  adc16_adc3wire_wire[23];
+    assign adc0_adc3wire_sdata[i] =  adc16_adc3wire_wire[23];
+  end
+  endgenerate;
+
   /* Invert chip select bits on output. */
   assign adc1_adc3wire_csn4  = ~adc16_adc3wire_wire[24];
   assign adc1_adc3wire_csn3  = ~adc16_adc3wire_wire[25];

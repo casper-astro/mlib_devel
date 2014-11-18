@@ -287,41 +287,64 @@ architecture adc16_interface_arc of adc16_interface is
      fabric_clk_270 <= bufg_o(5);
 
      -- Parallel data outputs
-     a1 <= s_p_data(0)(31 downto 24);
-     a2 <= s_p_data(0)(23 downto 16);
-     a3 <= s_p_data(0)(15 downto  8);
-     a4 <= s_p_data(0)( 7 downto  0);
-     b1 <= s_p_data(1)(31 downto 24);
-     b2 <= s_p_data(1)(23 downto 16);
-     b3 <= s_p_data(1)(15 downto  8);
-     b4 <= s_p_data(1)( 7 downto  0);
-     c1 <= s_p_data(2)(31 downto 24);
-     c2 <= s_p_data(2)(23 downto 16);
-     c3 <= s_p_data(2)(15 downto  8);
-     c4 <= s_p_data(2)( 7 downto  0);
-     d1 <= s_p_data(3)(31 downto 24);
-     d2 <= s_p_data(3)(23 downto 16);
-     d3 <= s_p_data(3)(15 downto  8);
-     d4 <= s_p_data(3)( 7 downto  0);
+     DOUT0: if G_NUM_UNITS >= 1 generate
+       a1 <= s_p_data(0)(31 downto 24);
+       a2 <= s_p_data(0)(23 downto 16);
+       a3 <= s_p_data(0)(15 downto  8);
+       a4 <= s_p_data(0)( 7 downto  0);
+     end generate;
 
-     adc1_board: if G_NUM_UNITS = 8 generate
+     dummy_DOUT0: if G_NUM_UNITS < 1 generate
+       a1 <= "00000000";
+       a2 <= "00000000"; 
+       a3 <= "00000000"; 
+       a4 <= "00000000"; 
+     end generate;
+
+     DOUT1: if G_NUM_UNITS >= 2 generate
+       b1 <= s_p_data(1)(31 downto 24);
+       b2 <= s_p_data(1)(23 downto 16);
+       b3 <= s_p_data(1)(15 downto  8);
+       b4 <= s_p_data(1)( 7 downto  0);
+     end generate;
+     dummy_DOUT1: if G_NUM_UNITS < 2 generate
+       b1 <= "00000000"; 
+       b2 <= "00000000"; 
+       b3 <= "00000000"; 
+       b4 <= "00000000"; 
+     end generate;
+
+     DOUT2: if G_NUM_UNITS >= 3 generate
+       c1 <= s_p_data(2)(31 downto 24);
+       c2 <= s_p_data(2)(23 downto 16);
+       c3 <= s_p_data(2)(15 downto  8);
+       c4 <= s_p_data(2)( 7 downto  0);
+     end generate;
+     dummy_DOUT2: if G_NUM_UNITS < 3 generate
+       c1 <= "00000000";
+       c2 <= "00000000"; 
+       c3 <= "00000000"; 
+       c4 <= "00000000"; 
+     end generate;
+
+     DOUT3: if G_NUM_UNITS >= 4 generate
+       d1 <= s_p_data(3)(31 downto 24);
+       d2 <= s_p_data(3)(23 downto 16);
+       d3 <= s_p_data(3)(15 downto  8);
+       d4 <= s_p_data(3)( 7 downto  0);
+     end generate;
+     dummy_DOUT3: if G_NUM_UNITS < 4 generate
+       d1 <= "00000000";
+       d2 <= "00000000";
+       d3 <= "00000000";
+       d4 <= "00000000";
+     end generate;
+
+     DOUT4: if G_NUM_UNITS >= 5 generate
        e1 <= s_p_data(4)(31 downto 24);
        e2 <= s_p_data(4)(23 downto 16);
        e3 <= s_p_data(4)(15 downto  8);
        e4 <= s_p_data(4)( 7 downto  0);
-       f1 <= s_p_data(5)(31 downto 24);
-       f2 <= s_p_data(5)(23 downto 16);
-       f3 <= s_p_data(5)(15 downto  8);
-       f4 <= s_p_data(5)( 7 downto  0);
-       g1 <= s_p_data(6)(31 downto 24);
-       g2 <= s_p_data(6)(23 downto 16);
-       g3 <= s_p_data(6)(15 downto  8);
-       g4 <= s_p_data(6)( 7 downto  0);
-       h1 <= s_p_data(7)(31 downto 24);
-       h2 <= s_p_data(7)(23 downto 16);
-       h3 <= s_p_data(7)(15 downto  8);
-       h4 <= s_p_data(7)( 7 downto  0);
-
        adc_mmcm_1 : ADC_MMCM
        PORT MAP (
          reset        => reset,
@@ -336,27 +359,51 @@ architecture adc16_interface_arc of adc16_interface is
          clkout2_180  => open,
          clkout2_270  => open
        );
-
+     end generate;
+     dummy_DOUT4: if G_NUM_UNITS < 5 generate
+       e1 <= "00000000"; 
+       e2 <= "00000000"; 
+       e3 <= "00000000"; 
+       e4 <= "00000000"; 
      end generate;
 
-     adc1_dummy: if G_NUM_UNITS /= 8 generate
-       e1 <= "00000000";
-       e2 <= "00000000";
-       e3 <= "00000000";
-       e4 <= "00000000";
-       f1 <= "00000000";
-       f2 <= "00000000";
-       f3 <= "00000000";
-       f4 <= "00000000";
-       g1 <= "00000000";
-       g2 <= "00000000";
-       g3 <= "00000000";
-       g4 <= "00000000";
+     DOUT5: if G_NUM_UNITS >= 6 generate
+       f1 <= s_p_data(5)(31 downto 24);
+       f2 <= s_p_data(5)(23 downto 16);
+       f3 <= s_p_data(5)(15 downto  8);
+       f4 <= s_p_data(5)( 7 downto  0);
+     end generate;
+     dummy_DOUT5: if G_NUM_UNITS < 6 generate
+       f1 <= "00000000"; 
+       f2 <= "00000000"; 
+       f3 <= "00000000"; 
+       f4 <= "00000000"; 
+     end generate;
+
+     DOUT6: if G_NUM_UNITS >= 7 generate
+       g1 <= s_p_data(6)(31 downto 24);
+       g2 <= s_p_data(6)(23 downto 16);
+       g3 <= s_p_data(6)(15 downto  8);
+       g4 <= s_p_data(6)( 7 downto  0);
+     end generate;
+     dummy_DOUT6: if G_NUM_UNITS < 7 generate
+       g1 <= "00000000"; 
+       g2 <= "00000000"; 
+       g3 <= "00000000"; 
+       g4 <= "00000000"; 
+     end generate;
+
+     DOUT7: if G_NUM_UNITS >= 8 generate
+       h1 <= s_p_data(7)(31 downto 24);
+       h2 <= s_p_data(7)(23 downto 16);
+       h3 <= s_p_data(7)(15 downto  8);
+       h4 <= s_p_data(7)( 7 downto  0);
+     end generate;
+     dummy_DOUT7: if G_NUM_UNITS < 8 generate
        h1 <= "00000000";
        h2 <= "00000000";
        h3 <= "00000000";
        h4 <= "00000000";
-       locked(1) <= '0';
      end generate;
 
      -- Generate adc_unit modules and associated wiring
