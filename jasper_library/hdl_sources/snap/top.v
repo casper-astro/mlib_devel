@@ -24,7 +24,10 @@ module top (
 
   wire idelay_rdy;
 
-  infrastructure infrastructure_inst (
+  // Even though the oscillator is 200 MHz
+  // sysclk is 100 MHz.
+  // clk_200 is 200 MHz.
+  snap_infrastructure infrastructure_inst (
     .sys_clk_buf_n  (sysclk_n),
     .sys_clk_buf_p  (sysclk_p),
     .sys_clk0       (sys_clk),

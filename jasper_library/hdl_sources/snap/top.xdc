@@ -1,5 +1,5 @@
 # System clock, 100MHz
-create_clock -period 5.000 -name sysclk [get_ports sysclk_p]
+create_clock -period 5.000 -name sysclk200 [get_ports sysclk_p]
 
 set_property PACKAGE_PIN K20 [get_ports miso]
 set_property IOSTANDARD LVCMOS33 [get_ports miso]
