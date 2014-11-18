@@ -249,12 +249,15 @@ class VerilogModule(object):
         param 'comment': Use this to add a comment string which will end up in the generated verilog
         """
         name = name.rstrip(' ')
-        logger.debug('Attempting to add port "%s"'%name)
+        if signal == '':
+            parent_port = False
+            parent_sig = False
+        logger.debug('Attempting to add port "%s" (parent sig: %s, parent port: %s)'%(name,parent_sig,parent_port))
         if name not in self.ports.keys():
-            logger.debug('  Port %s is new'%name)
+            logger.debug('  Port "%s" is new'%name)
             self.ports[name] = Port(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
         else:
-            logger.debug('  Port %s already exists'%name)
+            logger.debug('  Port "%s" already exists'%name)
             self.ports[name].update_attrs(name, signal=signal, parent_port=parent_port, parent_sig=parent_sig, **kwargs)
 
     def add_parameter(self, name, value, comment=None):
