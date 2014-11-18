@@ -68,6 +68,7 @@ class Toolflow(object):
         # compile parameters which can be set straight away
         self.periph_file = self.compile_dir + '/jasper.per'
         self.sources= []
+        self.tcl_sources= []
         self.const_files = []
 
     def exec_flow(self, gen_per=True, frontend_compile=True, backend_compile=True):
@@ -122,6 +123,7 @@ class Toolflow(object):
         if backend_compile:
             self.add_sources_to_be()
             self.backend.gen_constraint_file(self.constraints)
+            self._add_external_tcl()
             # launch vivado via the generated .tcl file
             self.backend.compile()
 
@@ -151,6 +153,14 @@ class Toolflow(object):
         except AttributeError:
             self.logger.error("%s is not defined. Have you run %s yet?"%(thing,generator))
             raise AttributeError("%s is not defined. Have you run %s yet?"%(thing,generator))
+
+    def _add_external_tcl(self):
+        """
+        Add tcl commands from the frontend
+        """
+        for fname in self.tcl_sources:
+            with open(fname, 'r') as fh:
+                self.backend.add_tcl_cmd(fh.read())
 
     def generate_hdl(self):
         """
@@ -193,7 +203,8 @@ class Toolflow(object):
         '''
         for key in self.peripherals.keys():
             if self.peripherals[key]['tag'] == 'xps:xsg':
-                self.plat = platform.Platform.get_loader(self.peripherals[key]['hw_sys'])
+                #self.plat = platform.Platform.get_loader(self.peripherals[key]['hw_sys'])
+                self.plat = platform.Platform(self.peripherals[key]['hw_sys'].split(':')[0])
                 self.backend.set_plat(self.plat)
                 self.clk_src = self.peripherals[key]['clk_src']
                 self.clk_rate = float(self.peripherals[key]['clk_rate']) #in MHz
@@ -311,6 +322,8 @@ class Toolflow(object):
                 inst.add_port(name=port, signal=port, parent_sig=False)
             for source in module['sources']:
                 self.sources += glob.glob(source)
+            for source in module['tcl_sources']:
+                self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
         self.cores = self.top.wb_devices
@@ -568,19 +581,21 @@ class VivadoBackend(ToolflowBackend):
         user_const = ''
         if isinstance(const, PortConstraint):
             self.logger.debug('New PortConstraint instance found: %s -> %s'%(const.portname, const.iogroup))
-            for i in const.port_index:
+            for i,p in enumerate(const.port_index):
+                self.logger.debug('Getting loc for port index %d'%i)
                 if const.loc[i] is not None:
-                    self.logger.debug('LOC constraint found')
+                    self.logger.debug('LOC constraint found at %s'%const.loc[i])
                     if const.is_vector:
-                        user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname, index=i)
+                        user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname, index=p)
                     else:
                         user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname)
 
-            for i in const.port_index:
+            for i,p in enumerate(const.port_index):
+                self.logger.debug('Getting iostd for port index %d'%i)
                 if const.iostd[i] is not None:
-                    self.logger.debug('IOSTD constraint found')
+                    self.logger.debug('IOSTD constraint found: %s'%const.iostd[i])
                     if const.is_vector:
-                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=i)
+                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=p)
                     else:
                         user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname)
 
@@ -590,7 +605,7 @@ class VivadoBackend(ToolflowBackend):
         return user_const
 
     def format_clock_const(self, c):
-        return 'create_clock -period %f -name %s [get ports {%s}]\n'%(c.period, c.name, c.signal)
+        return 'create_clock -period %f -name %s [get_ports {%s}]\n'%(c.period, c.name, c.signal)
 
     def format_const(self, attribute, val, port, index=None):
         '''
