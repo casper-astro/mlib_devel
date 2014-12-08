@@ -182,12 +182,15 @@ module qdrc_infrastructure(
   reg qdr_r_n_reg0;
 
   always @(posedge clk0) begin 
-    qdr_sa_regR        <= qdr_sa_buf;
-    qdr_w_n_regR       <= qdr_w_n_buf;
-    qdr_r_n_regR       <= qdr_r_n_buf;
-    qdr_sa_reg        <= qdr_sa_regR;
-    qdr_w_n_reg       <= qdr_w_n_regR;
-    qdr_r_n_reg       <= qdr_r_n_regR;
+    //qdr_sa_regR        <= qdr_sa_buf;
+    //qdr_w_n_regR       <= qdr_w_n_buf;
+    //qdr_r_n_regR       <= qdr_r_n_buf;
+    //qdr_sa_reg        <= qdr_sa_regR;
+    //qdr_w_n_reg       <= qdr_w_n_regR;
+    //qdr_r_n_reg       <= qdr_r_n_regR;
+    qdr_sa_reg        <= qdr_sa_buf;  //jack
+    qdr_w_n_reg       <= qdr_w_n_buf; //jack
+    qdr_r_n_reg       <= qdr_r_n_buf; //jack
     qdr_dll_off_n_reg <= qdr_dll_off_n_buf;
     qdr_dll_off_n_iob <= qdr_dll_off_n_reg;
   end
@@ -256,10 +259,12 @@ module qdrc_infrastructure(
   always @(posedge clk0) begin
   /* Delay the write data by one cycle (qdr protocol,
    * requires datat to lag control*/
-    qdr_d_rise_reg0R    <= qdr_d_rise;
-    qdr_d_fall_reg0R    <= qdr_d_fall;
-    qdr_d_rise_reg0     <= qdr_d_rise_reg0R;
-    qdr_d_fall_reg0     <= qdr_d_fall_reg0R;
+    //qdr_d_rise_reg0R    <= qdr_d_rise;
+    //qdr_d_fall_reg0R    <= qdr_d_fall;
+    //qdr_d_rise_reg0     <= qdr_d_rise_reg0R;
+    //qdr_d_fall_reg0     <= qdr_d_fall_reg0R;
+    qdr_d_rise_reg0    <= qdr_d_rise; //jack
+    qdr_d_fall_reg0    <= qdr_d_fall; //jack
     qdr_bw_n_rise_reg0  <= qdr_bw_n_rise;
     qdr_bw_n_fall_reg0  <= qdr_bw_n_fall;
   end
@@ -418,8 +423,8 @@ module qdrc_infrastructure(
     .D  (qdr_q_iodelay),
     .R  (1'b0),
     .S  (1'b0),
-    .Q1 (qdr_q_fall_int),
-    .Q2 (qdr_q_rise_int)
+    .Q1 (qdr_q_rise_int),
+    .Q2 (qdr_q_fall_int)
   );
 
   reg [17:0] qdr_q_rise_intR_low , qdr_q_rise_intRR_low , qdr_q_rise_intRRR_low ;
