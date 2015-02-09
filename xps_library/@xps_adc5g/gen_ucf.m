@@ -35,7 +35,14 @@ demux = blk_obj.demux;
 % place the BUFRs, which don't get placed right in 14.7
 % (actually it looks like they don't get placed right in 14.6 either,
 % but 14.6 doesn't seem to care.
-str = [str, 'INST "*' simulink_name '/DIVBUF" LOC=BUFR_X0Y10;\n'];
+switch adc_str
+    case 'adc0'
+        str = [str, 'INST "*' simulink_name '/DIVBUF" LOC=BUFR_X0Y10;\n'];
+    case 'adc1'
+        str = [str, 'INST "*' simulink_name '/DIVBUF" LOC=BUFR_X0Y8;\n'];
+    otherwise
+        %pass
+end
 
 % Set the ADC clock setup/hold constraints
 %str = [str, 'NET "', adc_str, 'clk_p" TNM_NET = "', adc_str, '_clk";\n'];
