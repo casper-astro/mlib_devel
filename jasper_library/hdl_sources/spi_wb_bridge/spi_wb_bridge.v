@@ -207,8 +207,10 @@ module spi_wb_bridge #(
     always @(posedge wb_clk_i) begin
         if (cs_n_cur) begin
             spi_dout_reg <= 40'b0;
-        end else if (spi_ctr == 72-1) begin
-            spi_dout_reg <= {wb_din_end_fix, wb_ack_reg, wb_err_reg, 2'b0, cmd_be};
+        end else if (spi_ctr == 72) begin
+            if (sclk_negedge) begin
+                spi_dout_reg <= {wb_din_end_fix, wb_ack_reg, wb_err_reg, 2'b0, cmd_be};
+            end
         end else if (sclk_negedge) begin
             spi_dout_reg <= {spi_dout_reg[38:0],1'b0};
         end
