@@ -36,26 +36,32 @@ function fir_tap_async_init(blk)
 %     mult_latency         = get_var('mult_latency','defaults', defaults, varargin{:});
     coeff_bit_width = get_var('coeff_bit_width','defaults', defaults, varargin{:});
 %     coeff_bin_pt    = get_var('coeff_bin_pt','defaults', defaults, varargin{:});
-    async           = get_var('async','defaults', defaults, varargin{:});
-    async_ops = strcmp(async, 'on');
+    async_ops = strcmp('on', get_var('async','defaults', defaults, varargin{:}));
+    double_blk = strcmp('on', get_var('dbl','defaults', defaults, varargin{:}));
+    
+    % hand off to the double script if this is a doubled-up FIR
+    if double_blk,
+        fir_dbl_tap_async_init(blk);
+        return;
+    end
 
     delete_lines(blk);
 
     % default state in library
-    if eval(coeff_bit_width) == 0,
+    if coeff_bit_width == 0,
+        clog('fir_tap_async_init saving library state', 'trace');
         clean_blocks(blk);
         save_state(blk, 'defaults', defaults, varargin{:});  
         return; 
     end
 
+    % inputs
     reuse_block(blk, 'a', 'built-in/Inport', 'Port', '1', ...
         'Position', '[205 68 235 82]');
-
     reuse_block(blk, 'b', 'built-in/Inport', 'Port', '2', ...
         'Position', '[205 158 235 172]');
-
     if async_ops,
-        reuse_block(blk, 'dv_ab', 'built-in/Inport', 'Port', '3', ...
+        reuse_block(blk, 'dv_in', 'built-in/Inport', 'Port', '3', ...
             'Position', '[205 0 235 14]');
     end
     
@@ -115,8 +121,8 @@ function fir_tap_async_init(blk)
         'Position', '[355 148 385 162]');
 
     if async_ops,
-        add_line(blk, 'dv_ab/1', 'Register0/2', 'autorouting', 'on');
-        add_line(blk, 'dv_ab/1', 'Register1/2', 'autorouting', 'on');
+        add_line(blk, 'dv_in/1', 'Register0/2', 'autorouting', 'on');
+        add_line(blk, 'dv_in/1', 'Register1/2', 'autorouting', 'on');
     end
     add_line(blk,'b/1','Mult1/2', 'autorouting', 'on');
     add_line(blk,'b/1','Register1/1', 'autorouting', 'on');
