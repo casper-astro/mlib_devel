@@ -36,9 +36,7 @@
 function dec_fir_async_init(blk)
 clog('entering dec_fir_async_init', 'trace');
 
-debug_fullscale_output = true;
-showname = 'on';
-sizex_goto = 50; sizey_goto = 15;
+debug_fullscale_output = false;
 
 varargin = make_varargin(blk);
 
@@ -48,6 +46,7 @@ defaults = {'n_inputs', 1, 'output_width', 8, 'output_bp', 7, ...
     'coeff', 0.1, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'add_latency', 1, 'mult_latency', 2, 'conv_latency', 2, ...
+    'lshift', 1, ...
     'coeff_bit_width', 25, 'coeff_bin_pt', 24, ...
     'absorb_adders', 'on', 'adder_imp', 'DSP48', ...
     'async', 'off', 'bus_input', 'off', 'input_width', 16, ...
@@ -71,6 +70,7 @@ mult_latency = get_var('mult_latency', 'defaults', defaults, varargin{:});
 conv_latency = get_var('conv_latency', 'defaults', defaults, varargin{:});
 coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 coeff_bin_pt = get_var('coeff_bin_pt', 'defaults', defaults, varargin{:}); 
+lshift = get_var('lshift', 'defaults', defaults, varargin{:}); 
 absorb_adders = get_var('absorb_adders', 'defaults', defaults, varargin{:});
 adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
 async_ops = strcmp('on', get_var('async','defaults', defaults, varargin{:}));
@@ -111,8 +111,6 @@ fir_col_type = 'fir_col_async';
 if mod(length(coeff),2) == 0 && mod(num_fir_col, 2)==0 
   if coeff_round(1:length(coeff)/2) == coeff_round(length(coeff):-1:length(coeff)/2+1),
     num_fir_col = num_fir_col / 2;
-    fir_col_type = 'fir_dbl_col_async';
-    fir_col_type = 'fir_col_async';
     coeff_sym = true;
   end
 end
@@ -120,24 +118,24 @@ end
 delete_lines(blk);
 
 % sync in
+sync_latency = mult_latency + (ceil(log2(n_inputs))*add_latency) + conv_latency;
 if coeff_sym,
     % y(n) = sum(aix(n-i)) for i=0:N. sync is thus related to x(0)
-    sync_latency = add_latency + mult_latency + ceil(log2(n_inputs))*add_latency + conv_latency;
-else
-    sync_latency = mult_latency + (ceil(log2(n_inputs))*add_latency) + conv_latency;
-    sync_latency = mult_latency + (ceil(log2(n_inputs))*add_latency);
+    sync_latency = add_latency + sync_latency;
 end
 % if delay is greater than 17*3 then might as well use logic as using more than 3 SRL16s and sync_delay uses approx 3 (2 comparators, one counter) 
 if sync_latency > 17*3,
-  sync_delay_block = 'casper_library_delays/sync_delay';
+    sync_delay_block = 'casper_library_delays/sync_delay';
+    parm_name = 'DelayLen';
 else 
-  sync_delay_block = 'xbsIndex_r4/Delay';
+    sync_delay_block = 'xbsIndex_r4/Delay';
+    parm_name = 'latency';
 end
 reuse_block(blk, 'sync_in', 'built-in/inport', ...
     'Position', [0 20 30 36], 'Port', '1');
 reuse_block(blk, 'sync_delay', sync_delay_block, ...
     'Position', [60 8 100 48], ...
-    'latency', num2str(sync_latency));
+    parm_name, num2str(sync_latency));
 % reuse_block(blk, 'sync_goto', 'built-in/goto', ...
 %         'GotoTag', 'sync_in', 'showname', showname, ...
 %         'Position', [130, 20, 130+sizex_goto, 20+sizey_goto]);
@@ -145,19 +143,7 @@ add_line(blk, 'sync_in/1', 'sync_delay/1');
 % add_line(blk, 'sync_delay/1', 'sync_goto/1');
 
 % dv in
-if coeff_sym,
-    % y(n) = sum(aix(n-i)) for i=0:N. sync is thus related to x(0)
-    dv_latency = add_latency + mult_latency + ceil(log2(n_inputs))*add_latency + conv_latency;
-else
-    dv_latency = mult_latency + (ceil(log2(n_inputs))*add_latency) + (ceil(log2(num_fir_col))*add_latency) + conv_latency;
-    dv_latency = mult_latency + (ceil(log2(n_inputs))*add_latency) + (ceil(log2(num_fir_col))*add_latency);
-end
-% if delay is greater than 17*3 then might as well use logic as using more than 3 SRL16s and sync_delay uses approx 3 (2 comparators, one counter) 
-if dv_latency > 17*3,
-  dv_delay_block = 'casper_library_delays/sync_delay';
-else 
-  dv_delay_block = 'xbsIndex_r4/Delay';
-end
+dv_latency = sync_latency + (ceil(log2(num_fir_col))*add_latency);
 data_port_start = 2;
 if async_ops,
     if bus_input,
@@ -168,7 +154,7 @@ if async_ops,
     data_port_start = 3;
     reuse_block(blk, 'dv_in', 'built-in/inport', ...
         'Position', [0 ypos 30 ypos+16], 'Port', '2');
-    reuse_block(blk, 'dv_delay', dv_delay_block, ...
+    reuse_block(blk, 'dv_delay', 'xbsIndex_r4/Delay', ...
         'Position', [60 ypos-8 100 ypos+32], ...
         'latency', num2str(dv_latency));
     reuse_block(blk, 'dv_out', 'built-in/outport', ...
@@ -291,10 +277,10 @@ for ctr = 1:num_fir_col,
 end
 
 reuse_block(blk, 'shift1', 'xbsIndex_r4/Shift', ...
-    'shift_dir', 'Left', 'shift_bits', '1', ...
+    'shift_dir', 'Left', 'shift_bits', num2str(lshift), ...
     'Position', [200*num_fir_col+500 300 200*num_fir_col+530 315]);
 reuse_block(blk, 'shift2', 'xbsIndex_r4/Shift', ...
-    'shift_dir', 'Left', 'shift_bits', '1', ...
+    'shift_dir', 'Left', 'shift_bits', num2str(lshift), ...
     'Position', [200*num_fir_col+500 500 200*num_fir_col+530 515]);
 reuse_block(blk, 'convert1', 'xbsIndex_r4/Convert', ...
     'Position', [200*num_fir_col+560 300 200*num_fir_col+590 315], ...
