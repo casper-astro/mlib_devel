@@ -13,12 +13,12 @@ module wb_adc16_controller#(
     )(
     input         wb_clk_i,
     input         wb_rst_i,
-    output [0:31] wb_dat_o,
+    output [31:0] wb_dat_o,
     output        wb_err_o,
     output        wb_ack_o,
-    input  [0:31] wb_adr_i,
-    input  [0:3]  wb_sel_i,
-    input  [0:31] wb_dat_i,
+    input  [31:0] wb_adr_i,
+    input  [3:0]  wb_sel_i,
+    input  [31:0] wb_dat_i,
     input         wb_we_i,
     input         wb_cyc_i,
     input         wb_stb_i,
@@ -38,19 +38,19 @@ module wb_adc16_controller#(
     output        [G_NUM_SCLK_LINES - 1 : 0] adc1_adc3wire_sclk,
 
     output        adc16_reset,
-    output        [0:7] adc16_iserdes_bitslip,
+    output        [7:0] adc16_iserdes_bitslip,
 
-    output        [0:63] adc16_delay_rst,
-    output        [0:4] adc16_delay_tap,
+    output        [63:0] adc16_delay_rst,
+    output        [4:0] adc16_delay_tap,
     output        adc16_snap_req,
     input   [1:0] adc16_locked
   );
 
   /********* Global Signals *************/
 
-  wire [0:31] adc16_adc3wire_wire;
-  wire [0:31] adc16_ctrl_wire;
-  wire [0:63] adc16_delay_strobe_wire;
+  wire [31:0] adc16_adc3wire_wire;
+  wire [31:0] adc16_ctrl_wire;
+  wire [63:0] adc16_delay_strobe_wire;
 
   /************ OPB Logic ***************/
 
@@ -61,7 +61,7 @@ module wb_adc16_controller#(
   /*** Registers ****/
 
   /* ADC0 3-Wire Register */
-  reg [0:31] adc16_adc3wire_reg;
+  reg [31:0] adc16_adc3wire_reg;
   assign adc16_adc3wire_wire = adc16_adc3wire_reg;
 
   /* ======================================= */
@@ -110,30 +110,30 @@ module wb_adc16_controller#(
   genvar i;
   generate
   for (i=0; i<G_NUM_SCLK_LINES; i=i+1) begin : gen_sclk
-    assign adc1_adc3wire_sclk[i]  =  adc16_adc3wire_wire[22];
-    assign adc0_adc3wire_sclk[i]  =  adc16_adc3wire_wire[22];
+    assign adc1_adc3wire_sclk[i]  =  adc16_adc3wire_wire[9];
+    assign adc0_adc3wire_sclk[i]  =  adc16_adc3wire_wire[9];
   end
   endgenerate;
 
   generate
   for (i=0; i<G_NUM_SDATA_LINES; i=i+1) begin : gen_sdata
-    assign adc1_adc3wire_sdata[i] =  adc16_adc3wire_wire[23];
-    assign adc0_adc3wire_sdata[i] =  adc16_adc3wire_wire[23];
+    assign adc1_adc3wire_sdata[i] =  adc16_adc3wire_wire[8];
+    assign adc0_adc3wire_sdata[i] =  adc16_adc3wire_wire[8];
   end
   endgenerate;
 
   /* Invert chip select bits on output. */
-  assign adc1_adc3wire_csn4  = ~adc16_adc3wire_wire[24];
-  assign adc1_adc3wire_csn3  = ~adc16_adc3wire_wire[25];
-  assign adc1_adc3wire_csn2  = ~adc16_adc3wire_wire[26];
-  assign adc1_adc3wire_csn1  = ~adc16_adc3wire_wire[27];
-  assign adc0_adc3wire_csn4  = ~adc16_adc3wire_wire[28];
-  assign adc0_adc3wire_csn3  = ~adc16_adc3wire_wire[29];
-  assign adc0_adc3wire_csn2  = ~adc16_adc3wire_wire[30];
-  assign adc0_adc3wire_csn1  = ~adc16_adc3wire_wire[31];
+  assign adc1_adc3wire_csn4  = ~adc16_adc3wire_wire[7];
+  assign adc1_adc3wire_csn3  = ~adc16_adc3wire_wire[6];
+  assign adc1_adc3wire_csn2  = ~adc16_adc3wire_wire[5];
+  assign adc1_adc3wire_csn1  = ~adc16_adc3wire_wire[4];
+  assign adc0_adc3wire_csn4  = ~adc16_adc3wire_wire[3];
+  assign adc0_adc3wire_csn3  = ~adc16_adc3wire_wire[2];
+  assign adc0_adc3wire_csn2  = ~adc16_adc3wire_wire[1];
+  assign adc0_adc3wire_csn1  = ~adc16_adc3wire_wire[0];
 
   /* ADC0 Control Register */
-  reg [0:31] adc16_ctrl_reg;
+  reg [31:0] adc16_ctrl_reg;
   assign adc16_ctrl_wire = adc16_ctrl_reg;
 
   /* ======================================= */
@@ -160,13 +160,13 @@ module wb_adc16_controller#(
   /* ---- ---- ---- ---- ---- ---- ---T TTTT */
   /* ======================================= */
 
-  assign adc16_reset           = adc16_ctrl_wire[11   ];
-  assign adc16_snap_req        = adc16_ctrl_wire[15   ];
-  assign adc16_iserdes_bitslip = adc16_ctrl_wire[16:23];
-  assign adc16_delay_tap       = adc16_ctrl_wire[27:31];
+  assign adc16_reset           = adc16_ctrl_wire[20  ];
+  assign adc16_snap_req        = adc16_ctrl_wire[16  ];
+  assign adc16_iserdes_bitslip = adc16_ctrl_wire[15:8];
+  assign adc16_delay_tap       = adc16_ctrl_wire[4:0 ];
 
   /* ADC0 Delay Strobe Register */
-  reg [0:63] adc16_delay_strobe_reg;
+  reg [63:0] adc16_delay_strobe_reg;
   assign adc16_delay_strobe_wire = adc16_delay_strobe_reg;
 
   /* =============================================== */
@@ -216,61 +216,61 @@ module wb_adc16_controller#(
            0:  begin
                 wb_ack <= 1'b1;
                 if (wb_sel_i[0]) begin
-                    adc16_adc3wire_reg[0:7] <= wb_dat_i[0:7];
+                    adc16_adc3wire_reg[7:0] <= wb_dat_i[7:0];
                 end
                 if (wb_sel_i[1]) begin
-                    adc16_adc3wire_reg[8:15] <= wb_dat_i[8:15];
+                    adc16_adc3wire_reg[15:8] <= wb_dat_i[15:8];
                 end
                 if (wb_sel_i[2]) begin
-                    adc16_adc3wire_reg[16:23] <= wb_dat_i[16:23];
+                    adc16_adc3wire_reg[23:16] <= wb_dat_i[23:16];
                 end
                 if (wb_sel_i[3]) begin
-                    adc16_adc3wire_reg[24:31] <= wb_dat_i[24:31];
+                    adc16_adc3wire_reg[31:24] <= wb_dat_i[31:24];
                 end
            end
            1:  begin
                 wb_ack <= 1'b1;
                 if (wb_sel_i[0]) begin
-                    adc16_ctrl_reg[0:7] <= wb_dat_i[0:7];
+                    adc16_ctrl_reg[7:0] <= wb_dat_i[7:0];
                 end
                 if (wb_sel_i[1]) begin
-                    adc16_ctrl_reg[8:15] <= wb_dat_i[8:15];
+                    adc16_ctrl_reg[15:8] <= wb_dat_i[15:8];
                 end
                 if (wb_sel_i[2]) begin
-                    adc16_ctrl_reg[16:23] <= wb_dat_i[16:23];
+                    adc16_ctrl_reg[23:16] <= wb_dat_i[23:16];
                 end
                 if (wb_sel_i[3]) begin
-                    adc16_ctrl_reg[24:31] <= wb_dat_i[24:31];
-                end
-           end
-           2:  begin
-                wb_ack <= 1'b1;
-                if (wb_sel_i[0]) begin
-                    adc16_delay_strobe_reg[32:39] <= wb_dat_i[0:7];
-                end
-                if (wb_sel_i[1]) begin
-                    adc16_delay_strobe_reg[40:47] <= wb_dat_i[8:15];
-                end
-                if (wb_sel_i[2]) begin
-                    adc16_delay_strobe_reg[48:55] <= wb_dat_i[16:23];
-                end
-                if (wb_sel_i[3]) begin
-                    adc16_delay_strobe_reg[56:63] <= wb_dat_i[24:31]; // LSB
+                    adc16_ctrl_reg[31:24] <= wb_dat_i[31:24];
                 end
            end
            3:  begin
                 wb_ack <= 1'b1;
                 if (wb_sel_i[0]) begin
-                    adc16_delay_strobe_reg[0:7] <= wb_dat_i[0:7]; // MSB
+                    adc16_delay_strobe_reg[39:32] <= wb_dat_i[7:0];
                 end
                 if (wb_sel_i[1]) begin
-                    adc16_delay_strobe_reg[8:15] <= wb_dat_i[8:15];
+                    adc16_delay_strobe_reg[47:40] <= wb_dat_i[15:8];
                 end
                 if (wb_sel_i[2]) begin
-                    adc16_delay_strobe_reg[16:23] <= wb_dat_i[16:23];
+                    adc16_delay_strobe_reg[55:48] <= wb_dat_i[23:16];
                 end
                 if (wb_sel_i[3]) begin
-                    adc16_delay_strobe_reg[24:31] <= wb_dat_i[24:31];
+                    adc16_delay_strobe_reg[63:56] <= wb_dat_i[31:24];
+                end
+           end
+           2:  begin
+                wb_ack <= 1'b1;
+                if (wb_sel_i[0]) begin
+                    adc16_delay_strobe_reg[7:0] <= wb_dat_i[7:0];
+                end
+                if (wb_sel_i[1]) begin
+                    adc16_delay_strobe_reg[15:8] <= wb_dat_i[15:8];
+                end
+                if (wb_sel_i[2]) begin
+                    adc16_delay_strobe_reg[23:16] <= wb_dat_i[23:16];
+                end
+                if (wb_sel_i[3]) begin
+                    adc16_delay_strobe_reg[31:24] <= wb_dat_i[31:24];
                 end
            end
           endcase
@@ -285,19 +285,19 @@ module wb_adc16_controller#(
                    wb_data_out_reg[23:20] <= G_NUM_UNITS;
                    wb_data_out_reg[19:18] <= 2'b00;
                    wb_data_out_reg[17:16] <= G_ROACH2_REV;
-                   wb_data_out_reg[15:0 ] <= adc16_adc3wire_reg[16:31];
+                   wb_data_out_reg[15:0 ] <= adc16_adc3wire_reg[15:0];
                end
            1:  begin
                    wb_ack <= 1'b1;
                    wb_data_out_reg <= adc16_ctrl_reg;
                end
-           2:  begin
-                   wb_ack <= 1'b1;
-                   wb_data_out_reg <= adc16_delay_strobe_reg[32:63]; // Lower half
-               end
            3:  begin
                    wb_ack <= 1'b1;
-                   wb_data_out_reg <= adc16_delay_strobe_reg[0:31]; // Upper half
+                   wb_data_out_reg <= adc16_delay_strobe_reg[63:32];
+               end
+           2:  begin
+                   wb_ack <= 1'b1;
+                   wb_data_out_reg <= adc16_delay_strobe_reg[31:0];
                end
           endcase
         end
@@ -312,3 +312,5 @@ module wb_adc16_controller#(
   assign wb_ack_o  = wb_ack;
 
 endmodule
+
+

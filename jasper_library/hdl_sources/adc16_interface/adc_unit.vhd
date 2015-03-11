@@ -7,6 +7,9 @@ use IEEE.numeric_std.all;
 
 -- entity declaraction
 entity  adc_unit  is
+    generic (
+               G_SERIES     : string  := "7SERIES"
+    );
     port (
                -- System
                fabric_clk    :  in std_logic;
@@ -62,9 +65,24 @@ architecture adc_unit_arc of adc_unit is
          CLKIN                  : in  std_logic;
          CINVCTRL               : in  std_logic
          );
-      end component;
+     end component;
 
-     component ADC_ISERDES   port (
+     component ADC_ISERDES_6series   port (
+               -- System
+               reset        :  in  std_logic;
+               bitslip      :  in  std_logic;
+
+               -- Clock inputs
+               clkin        :  in  std_logic; -- line
+               clkdiv       :  in  std_logic; -- frame/system
+
+               -- Data (serial in, parallel out)
+               s_data       :  in  std_logic;
+               p_data       :  out std_logic_vector(7 downto 0)
+      );
+     end component;
+
+     component ADC_ISERDES_7series   port (
                -- System
                reset        :  in  std_logic;
                bitslip      :  in  std_logic;
@@ -135,25 +153,49 @@ architecture adc_unit_arc of adc_unit is
      -- ISERDES block
      ISERDES_GEN : for i in 0 to 3 generate
      begin
-     adc_iserdes_a_inst : ADC_ISERDES
-     PORT MAP (
-               reset      => reset,
-               bitslip    => iserdes_bitslip,
-               clkin      => line_clk,
-               clkdiv     => frame_clk,
-               s_data     => delay_a_out(i),
-               p_data     => adc_iserdes_data_a(8*(3-i)+7 downto 8*(3-i))
-      );
+       ADC_ISERDES_7_GEN : if G_SERIES = "7SERIES" generate
+         adc_iserdes_a_inst : ADC_ISERDES_7series
+         PORT MAP (
+                   reset      => reset,
+                   bitslip    => iserdes_bitslip,
+                   clkin      => line_clk,
+                   clkdiv     => frame_clk,
+                   s_data     => delay_a_out(i),
+                   p_data     => adc_iserdes_data_a(8*(3-i)+7 downto 8*(3-i))
+          );
 
-     adc_iserdes_b_inst : ADC_ISERDES
-     PORT MAP (
-               reset      => reset,
-               bitslip    => iserdes_bitslip,
-               clkin      => line_clk,
-               clkdiv     => frame_clk,
-               s_data     => delay_b_out(i),
-               p_data     => adc_iserdes_data_b(8*(3-i)+7 downto 8*(3-i))
-      );
+         adc_iserdes_b_inst : ADC_ISERDES_7series
+         PORT MAP (
+                   reset      => reset,
+                   bitslip    => iserdes_bitslip,
+                   clkin      => line_clk,
+                   clkdiv     => frame_clk,
+                   s_data     => delay_b_out(i),
+                   p_data     => adc_iserdes_data_b(8*(3-i)+7 downto 8*(3-i))
+          );
+       end generate ADC_ISERDES_7_GEN;
+
+       ADC_ISERDES_6_GEN : if G_SERIES = "6SERIES" generate
+         adc_iserdes_a_inst : ADC_ISERDES_6series
+         PORT MAP (
+                   reset      => reset,
+                   bitslip    => iserdes_bitslip,
+                   clkin      => line_clk,
+                   clkdiv     => frame_clk,
+                   s_data     => delay_a_out(i),
+                   p_data     => adc_iserdes_data_a(8*(3-i)+7 downto 8*(3-i))
+          );
+
+         adc_iserdes_b_inst : ADC_ISERDES_6series
+         PORT MAP (
+                   reset      => reset,
+                   bitslip    => iserdes_bitslip,
+                   clkin      => line_clk,
+                   clkdiv     => frame_clk,
+                   s_data     => delay_b_out(i),
+                   p_data     => adc_iserdes_data_b(8*(3-i)+7 downto 8*(3-i))
+          );
+       end generate ADC_ISERDES_6_GEN;
 
      ibufds_ser_a_inst : IBUFDS
      generic map (

@@ -71,6 +71,20 @@ class snap_adc(YellowBlock):
         inst.add_port('ser_b_p', 'adc16_ser_b_p', parent_port=True, dir='in', width=4*self.num_units)
         inst.add_port('ser_b_n', 'adc16_ser_b_n', parent_port=True, dir='in', width=4*self.num_units)
 
+        # Clock switch. For now these are hardcoded to use SAMP_CLK SMA input, rather than
+        # the onboard synthesizer
+        top.add_port('clk_sel_a', dir='out', width=1)
+        top.add_port('clk_sel_b', dir='out', width=1)
+        top.assign_signal('clk_sel_a[0]', "1'b0") #use external clock
+        top.assign_signal('clk_sel_b[0]', "1'b1") #use external clock
+
+        # ADC Power down and reset signals are wired to the FPGA, but hardwire them to match the adc16 card
+        top.add_port('adc_rst_n', dir='out', width=3)
+        top.add_port('adc_pd', dir='out', width=3)
+        top.assign_signal('adc_rst_n', "3'b111")
+        top.assign_signal('adc_pd', "3'b000")
+
+
 
         # wb controller
 
@@ -147,6 +161,12 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc16_ser_a_n', 'adc2_out', port_index=range(8,12), iogroup_index=range(1,16,4)))
         cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=range(8,12), iogroup_index=range(2,16,4)))
         cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=range(8,12), iogroup_index=range(3,16,4)))
+
+        cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=range(1), iogroup_index=range(1)))
+        cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=range(1), iogroup_index=range(1)))
+
+        cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=range(3), iogroup_index=range(3)))
+        cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
         
         # clock constraint with variable period
         cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq))

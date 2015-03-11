@@ -10,7 +10,8 @@ entity  adc16_interface  is
     generic (
                G_ZDOK_REV   : integer := 1;
                G_NUM_CLOCKS : integer := 4;
-               G_NUM_UNITS  : integer := 4 -- Typically 4 or 8
+               G_NUM_UNITS  : integer := 4; -- Typically 4 or 8
+               G_SERIES     : string  := "7SERIES"
     );
     port (
                -- System
@@ -85,7 +86,10 @@ architecture adc16_interface_arc of adc16_interface is
 
      -- Components
 
-     component adc_unit port (
+     component adc_unit generic (
+               G_SERIES      : string
+     );
+     port (
                -- System
                fabric_clk    :  in std_logic;
                line_clk      :  in std_logic;
@@ -423,7 +427,9 @@ architecture adc16_interface_arc of adc16_interface is
        s_delay_rst_b(i) <= delay_rst_edge(4*i+3+32 downto 4*i+32);
 
        adc_unit_inst: adc_unit
-       port map (
+       generic map (
+                   G_SERIES => G_SERIES
+       ) port map (
                    fabric_clk => fabric_clk_0,
                    line_clk   => line_clk,
                    frame_clk  => frame_clk,

@@ -1,6 +1,8 @@
 name: snap
 manufacturer: Xilinx
 fpga: xc7k160tffg676-2
+config_voltage: 2.5
+cfgbvs: VCCO
 sources:
   - infrastructure
   - spi_wb_bridge
@@ -236,6 +238,18 @@ pins:
       - AF3
       - AF10
       - V14
+  adc_rst_n:
+    iostd: LVCMOS18
+    loc:
+      - AE5
+      - AF13
+      - V19
+  adc_pd:
+    iostd: LVCMOS18
+    loc:
+      - AE3
+      - AE8
+      - W15
   adc_sdata:
     iostd: LVCMOS18
     loc:
@@ -315,5 +329,13 @@ pins:
       - AB20
       - AA19
       - AA20
+  clk_sel_a:
+    iostd: LVCMOS33
+    loc:
+      - A18
+  clk_sel_b:
+    iostd: LVCMOS33
+    loc:
+      - A19
 
 
