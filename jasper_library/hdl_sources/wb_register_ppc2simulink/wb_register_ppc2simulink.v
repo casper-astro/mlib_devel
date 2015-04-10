@@ -2,12 +2,12 @@ module wb_register_ppc2simulink
   (
     input         wb_clk_i,
     input         wb_rst_i,
-    output [0:31] wb_dat_o,
+    output [31:0] wb_dat_o,
     output        wb_err_o,
     output        wb_ack_o,
-    input  [0:31] wb_adr_i,
-    input  [0:3]  wb_sel_i,
-    input  [0:31] wb_dat_i,
+    input  [31:0] wb_adr_i,
+    input  [3:0]  wb_sel_i,
+    input  [31:0] wb_dat_i,
     input         wb_we_i,
     input         wb_cyc_i,
     input         wb_stb_i,
@@ -43,10 +43,7 @@ module wb_register_ppc2simulink
     end else if (wb_stb_i && wb_cyc_i && !wb_ack_reg) begin
       wb_ack_reg <= 1'b1;
       if (wb_we_i) begin
-        reg_buffer[31:24] <= wb_dat_i[0:7]; 
-        reg_buffer[23:16] <= wb_dat_i[8:15]; 
-        reg_buffer[15:8] <= wb_dat_i[16:23]; 
-        reg_buffer[7:0] <= wb_dat_i[24:31]; 
+        reg_buffer <= wb_dat_i; 
 
         register_ready <= 1'b1;
       end
@@ -63,7 +60,7 @@ module wb_register_ppc2simulink
     if (!wb_ack_reg) begin
       wb_dat_reg <= 32'b0;
     end else begin
-      wb_dat_reg[0:31] <= reg_buffer;
+      wb_dat_reg <= reg_buffer;
     end
   end
 
