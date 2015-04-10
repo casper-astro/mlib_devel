@@ -169,7 +169,7 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
         
         # clock constraint with variable period
-        cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq))
+        cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq*2))
 
         return cons
 
