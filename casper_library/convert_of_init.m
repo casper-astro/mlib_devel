@@ -158,7 +158,7 @@ else
 		add_line(blk, ['slice',num2str(i),'/1'], ['all_1s','/',num2str(i)]);
 
 		reuse_block(blk, ['invert',num2str(i)], 'xbsIndex_r4/Inverter', ...
-		'Position', [200 134+i*50 235 156+i*50]);
+		'Position', [200 134+i*50 235 156+i*50], 'Latency', '0');
         
         add_line(blk, ['slice',num2str(i),'/1'], ['invert',num2str(i),'/1']);
         add_line(blk, ['invert',num2str(i),'/1'], ['all_0s','/',num2str(i)]);
