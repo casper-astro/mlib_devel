@@ -192,11 +192,12 @@ class tengbe_v2_xilinx_k7(tengbe_v2):
         # options, rather than turn on and off parameter visibilities
         # for a bunch of parameters describing the same thing...
 
-        #roach2 mezzanine slot 0 has 4-7, roach2 mezzanine slot 1 has 0-3, so barrel shift
-        if self.flavour == 'cx4':
-            self.port = self.port_r2_cx4 + 4*((self.slot+1)%2) 
-        elif self.flavour == 'sfp':
-            self.port = self.port_r2_sfpp + 4*((self.slot+1)%2)
+        ##roach2 mezzanine slot 0 has 4-7, roach2 mezzanine slot 1 has 0-3, so barrel shift
+        #if self.flavour == 'cx4':
+        #    self.port = self.port_r2_cx4 + 4*((self.slot+1)%2) 
+        #elif self.flavour == 'sfp':
+        #    self.port = self.port_r2_sfpp + 4*((self.slot+1)%2)
+        self.port = self.port_r1
 
         # Copied from the MATLAB xps code.
 
@@ -229,15 +230,15 @@ class tengbe_v2_xilinx_k7(tengbe_v2):
         # XAUI infrastructure block
         # Use top.add_new_instance, as this will return an existing instance if one exists.
         xaui = top.get_instance('xaui_infrastructure', 'xaui_infrastructure_inst')
-        xaui.add_port('mgt_ref_clk_n', 'mgt_ref_clk_n', extdir='in')
-        xaui.add_port('mgt_ref_clk_p', 'mgt_ref_clk_p', extdir='in')
+        xaui.add_port('mgt_ref_clk_n', 'mgt_ref_clk_n', parent_port=True, dir='in')
+        xaui.add_port('mgt_ref_clk_p', 'mgt_ref_clk_p', parent_port=True, dir='in')
         xaui.add_port('reset', 'sys_reset', parent_sig=False)
         xaui.add_port('xaui_clk', 'xaui_clk')
         xaui.add_port('stat', 'stat', width=8)
-        xaui.add_port('mgt_rx_p%d          '%self.port, 'mgt_rx_p%d          '%self.port, extdir='in')
-        xaui.add_port('mgt_rx_n%d          '%self.port, 'mgt_rx_n%d          '%self.port, extdir='in')
-        xaui.add_port('mgt_tx_p%d          '%self.port, 'mgt_tx_p%d          '%self.port, extdir='out')
-        xaui.add_port('mgt_tx_n%d          '%self.port, 'mgt_tx_n%d          '%self.port, extdir='out')
+        xaui.add_port('mgt_rx_p%d          '%self.port, 'mgt_rx_p%d          '%self.port, parent_port=True, dir='in')
+        xaui.add_port('mgt_rx_n%d          '%self.port, 'mgt_rx_n%d          '%self.port, parent_port=True, dir='in')
+        xaui.add_port('mgt_tx_p%d          '%self.port, 'mgt_tx_p%d          '%self.port, parent_port=True, dir='out')
+        xaui.add_port('mgt_tx_n%d          '%self.port, 'mgt_tx_n%d          '%self.port, parent_port=True, dir='out')
         xaui.add_port('loss_of_signal_sfp%d'%self.port, 'loss_of_signal_sfp%d'%self.port)
         xaui.add_port('tx_fault_sfp%d      '%self.port, 'tx_fault_sfp%d      '%self.port)
         xaui.add_port('tx_disable_sfp%d    '%self.port, 'tx_disable_sfp%d    '%self.port)
@@ -295,11 +296,11 @@ class tengbe_v2_xilinx_k7(tengbe_v2):
         cons = []
         cons.append(PortConstraint('mgt_ref_clk_p', 'eth_clk_p'))
         cons.append(PortConstraint('mgt_ref_clk_n', 'eth_clk_n'))
-        cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p%d'%self.port))
-        cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n%d'%self.port))
-        cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p%d'%self.port))
-        cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n%d'%self.port))
+        cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p', iogroup_index=self.port))
+        cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n', iogroup_index=self.port))
 
-        cons.append(ClockConstraint('mgt_reg_clk_p', name='ethclk', freq=156.25))
+        cons.append(ClockConstraint('mgt_ref_clk_p', name='ethclk', freq=156.25))
         return cons
         
