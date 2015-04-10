@@ -95,14 +95,15 @@ architecture ADC_ISERDES_arc of ADC_ISERDES_7series is
      -- routing on ADC16 board, and is in straight offset binary.  Leave MSb
      -- inverted to convert to 2's complement, but invert/restore polarity of
      -- remaining bits and bit-reverse since ADC sends LSb first.
-     p_data <=     iserdes_q(0) &
-               not iserdes_q(1) &
-               not iserdes_q(2) &
-               not iserdes_q(3) &
-               not iserdes_q(4) &
-               not iserdes_q(5) &
-               not iserdes_q(6) &
-               not iserdes_q(7);
+     -- SNAP: reverse the bit inversion described above, since the snap doesn't flip differential pairs
+     p_data <= not iserdes_q(0) &
+                   iserdes_q(1) &
+                   iserdes_q(2) &
+                   iserdes_q(3) &
+                   iserdes_q(4) &
+                   iserdes_q(5) &
+                   iserdes_q(6) &
+                   iserdes_q(7);
 
      process (clkdiv)
      begin
