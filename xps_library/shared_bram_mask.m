@@ -52,7 +52,7 @@ switch fpga_arch
       errordlg('Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards');
     end
   otherwise
-    if addr_width < 11 
+    if addr_width < 10 
       errordlg('Shared BRAM address width cannot be less than 11 on unknown board');
     end
 end
