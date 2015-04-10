@@ -320,10 +320,13 @@ class Toolflow(object):
                 inst.add_port(name=module['clock_enable'], signal="1'b1", parent_sig=False)
             for port in module['ports']:
                 inst.add_port(name=port, signal=port, parent_sig=False)
-            for source in module['sources']:
-                self.sources += glob.glob(source)
-            for source in module['tcl_sources']:
-                self.tcl_sources += glob.glob(source)
+
+            if module['sources'] is not None:
+                for source in module['sources']:
+                    self.sources += glob.glob(source)
+            if module['tcl_sources'] is not None:
+                for source in module['tcl_sources']:
+                    self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
         self.cores = self.top.wb_devices
@@ -562,6 +565,11 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('reset_run synth_1')
         self.add_tcl_cmd('launch_runs synth_1')
         self.add_tcl_cmd('wait_on_run synth_1')
+        self.add_tcl_cmd('launch_runs impl_1')
+        self.add_tcl_cmd('wait_on_run impl_1')
+        self.add_tcl_cmd('open_run impl_1') 
+        self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [get_designs impl_1]'%self.plat.conf['config_voltage'])
+        self.add_tcl_cmd('set_property CFGBVS %s [get_designs impl_1]'%self.plat.conf['cfgbvs'])
         self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
         self.add_tcl_cmd('wait_on_run impl_1')
 
