@@ -186,6 +186,8 @@ fprintf(fid,'    sources:\n');
 xlver = str2num(xilinx.environment.getversion('sysgen'));
 if xlver > 14.7
     fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/imports/sysgen']));
+    fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*.coe']));
+    fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/hdl_netlist/' bdroot '.srcs/sources_1/ip/*/*.xci']));
 else
     fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/' bdroot '.vhd']));
     fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/*.ngc']));
@@ -197,7 +199,7 @@ end
 
 fprintf(fid,'    tcl_sources:\n'); 
 if xlver > 14.7
-    fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/sysgen/vivado_ip.tcl']));
+    %fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/sysgen/vivado_ip.tcl']));
 end
 
 disp(sprintf('Closing output file: %s',output_fname));
