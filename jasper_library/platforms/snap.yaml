@@ -16,6 +16,9 @@ provides:
   - sfp1
   - zdok0
   - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
   - HAD1511_0
   - HAD1511_1
   - HAD1511_2
