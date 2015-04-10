@@ -30,28 +30,28 @@ class Platform(object):
             raise RuntimeError("Couldn't find platform configuration file %s"%conffile)
 
         with open(conffile, 'r') as fh:
-            conf = yaml.load(fh.read())
+            self.conf = yaml.load(fh.read())
 
         #: A dictionary of pin names associated with the platform.
         self._pins = {}
-        for pinname, val in conf['pins'].iteritems():
+        for pinname, val in self.conf['pins'].iteritems():
             self.add_pins(pinname, val.get('iostd', None), val['loc'])
         #: A list of resources present on a platform to facilitate
         #: simple drc checking. Eg. ['qdr0', 'sysclk2x']
-        self.provides = conf.get('provides', [])
+        self.provides = self.conf.get('provides', [])
         #: A list of source files/directories required to compile
         #: the template top.v (does NOT include top.v itself)
-        self.sources = conf.get('sources', [])
+        self.sources = self.conf.get('sources', [])
         #: A list of constraint files/directories required to compile
         #: the template top.v 
-        self.consts = conf.get('constraints', [])
+        self.consts = self.conf.get('constraints', [])
         #: FPGA manufacturer
-        self.manufacturer = conf.get('manufacturer', [])
+        self.manufacturer = self.conf.get('manufacturer', [])
         #: Platform name. Eg, ROACH, SNAP, etc.
-        self.name = conf['name']
+        self.name = self.conf['name']
         #: FPGA model. Should be the full version ready to pass to the
         #: vendor tools. Eg., xc7k325tffg900-2
-        self.fpga = conf['fpga']
+        self.fpga = self.conf['fpga']
 
     def add_pins(self, name, iostd, loc):
         '''
