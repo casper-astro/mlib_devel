@@ -35,20 +35,20 @@ parser.add_option("-c", "--builddir", dest="builddir", type='string',
 
 (opts, args) = parser.parse_args()
 
-# set up environment
-
-os.environ['MATLAB_PATH'] = '/tools/MATLAB/R2013a'
-if opts.be == 'vivado':
-    os.environ['XILINX_PATH'] = '/opt/Xilinx/Vivado/2014.4'
-    os.environ['USE_VIVADO_RUNTIME_FOR_MATLAB'] = '1' #see Xilinx answer record 59236
-else:
-    os.environ['XILINX_PATH'] = '/tools/ISE/14.6/ISE_DS'
-os.environ['MLIB_DEVEL_PATH'] = '/home/jack/github/jack-h/jasper/mlib_devel'
-os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg'
-os.environ['MATLAB'] = os.environ['MATLAB_PATH']
-os.environ['CASPER_BASE_PATH'] = os.environ['MLIB_DEVEL_PATH']
-os.environ['HDL_ROOT'] = os.environ['CASPER_BASE_PATH']+'/jasper_library/hdl_sources'
-shell_source(os.environ['XILINX_PATH']+'/settings64.sh')
+## set up environment
+#
+#os.environ['MATLAB_PATH'] = '/tools/MATLAB/R2013a'
+#if opts.be == 'vivado':
+#    os.environ['XILINX_PATH'] = '/opt/Xilinx/Vivado/2014.4'
+#    os.environ['USE_VIVADO_RUNTIME_FOR_MATLAB'] = '1' #see Xilinx answer record 59236
+#else:
+#    os.environ['XILINX_PATH'] = '/tools/ISE/14.6/ISE_DS'
+#os.environ['MLIB_DEVEL_PATH'] = '/home/jack/github/jack-h/jasper/mlib_devel'
+#os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg'
+#os.environ['MATLAB'] = os.environ['MATLAB_PATH']
+#os.environ['CASPER_BASE_PATH'] = os.environ['MLIB_DEVEL_PATH']
+#os.environ['HDL_ROOT'] = os.environ['CASPER_BASE_PATH']+'/jasper_library/hdl_sources'
+#shell_source(os.environ['XILINX_PATH']+'/settings64.sh')
 
 # get build directory
 # use user defined directory else use a directory with same name as model
