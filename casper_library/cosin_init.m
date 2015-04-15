@@ -39,6 +39,7 @@ function cosin_init(blk,varargin)
   defaults = { ...
     'output0',      'cos', ...     
     'output1',      '-sin', ...  
+    'indep_theta', 'off', ...
     'phase',        0, ...
     'fraction',     3, ... 
     'store',        3, ...   
@@ -59,6 +60,7 @@ function cosin_init(blk,varargin)
 
   output0       = get_var('output0', 'defaults', defaults, varargin{:});
   output1       = get_var('output1', 'defaults', defaults, varargin{:});
+  indep_theta   = get_var('indep_theta', 'defaults', defaults, varargin{:});
   phase         = get_var('phase', 'defaults', defaults, varargin{:});
   fraction      = get_var('fraction', 'defaults', defaults, varargin{:});
   store         = get_var('store', 'defaults', defaults, varargin{:});
@@ -88,8 +90,9 @@ function cosin_init(blk,varargin)
   %%%%%%%%%%%%%%%
   % input ports %
   %%%%%%%%%%%%%%%
+  port_n=1;
 
-  reuse_block(blk, 'theta', 'built-in/Inport', 'Port', '1', 'Position', [10 88 40 102]);
+  reuse_block(blk, 'theta', 'built-in/Inport', 'Port', int2str(port_n), 'Position', [10 88 40 102]);
 
   reuse_block(blk, 'assert', 'xbsIndex_r4/Assert', ...
           'assert_type', 'on', ...
@@ -98,15 +101,31 @@ function cosin_init(blk,varargin)
           'n_bits', num2str(table_bits), 'bin_pt', '0', ...
           'Position', [70 85 115 105]);
   add_line(blk, 'theta/1', 'assert/1');
+  port_n =port_n +1;
+
+  if strcmp(indep_theta, 'on'),
+  reuse_block(blk, 'theta2', 'built-in/Inport', 'Port', int2str(port_n), 'Position', [10 188 40 202]);
+
+  reuse_block(blk, 'assert2', 'xbsIndex_r4/Assert', ...
+          'assert_type', 'on', ...
+          'type_source', 'Explicitly', ...
+          'arith_type', 'Unsigned', ...
+          'n_bits', num2str(table_bits), 'bin_pt', '0', ...
+          'Position', [70 185 115 205]);
+  add_line(blk, 'theta2/1', 'assert2/1');
+  port_n =port_n +1;
+  end
 
   if strcmp(misc, 'on'),
-    reuse_block(blk, 'misci', 'built-in/Inport', 'Port', '2', 'Position', [10 238 40 252]);
+    reuse_block(blk, 'misci', 'built-in/Inport', 'Port', int2str(port_n), 'Position', [10 238 40 252]);
   else
     reuse_block(blk, 'misci', 'xbsIndex_r4/Constant', ...
             'const', '0', 'n_bits', '1', 'arith_type', 'Unsigned', ...
             'bin_pt', '0', 'explicit_period', 'on', 'period', '1', ...
             'Position', [10 238 40 252]);
+  port_n =port_n +1;
   end
+
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % address manipulation logic %
@@ -163,6 +182,14 @@ function cosin_init(blk,varargin)
 
   address_bits = table_bits;
   draw_basic_partial_cycle(blk, full_cycle_bits, address_bits, lookup_bits, output0, output1, lookup0, lookup1);
+
+  add_line(blk,'misci/1','add_convert1/2');
+
+  if strcmp(indep_theta, 'on'),
+    add_line(blk,'assert2/1','add_convert1/1');
+  else,
+    add_line(blk,'assert/1','add_convert1/1');
+  end
 
   %%%%%%%%%%%%%
   % ROM setup %
@@ -332,7 +359,21 @@ function cosin_init(blk,varargin)
   %%%%%%%%%%%%%%%%  
   % output ports %
   %%%%%%%%%%%%%%%%  
+
   
+if strcmp(output0,output1),
+  reuse_block(blk, strcat(output0,'0'), 'built-in/Outport', ...
+          'Port', '1', ...
+          'Position', [875 88 905 102]);
+
+  reuse_block(blk, strcat(output1,'1'), 'built-in/Outport', ...
+          'Port', '2', ...
+          'Position', [875 168 905 182]);
+
+  add_line(blk,'invert0/1',[strcat(output0,'0'),'/1']);
+  add_line(blk,'invert1/1',[strcat(output1,'1'),'/1']);
+
+else,
   reuse_block(blk, output0, 'built-in/Outport', ...
           'Port', '1', ...
           'Position', [875 88 905 102]);
@@ -340,6 +381,10 @@ function cosin_init(blk,varargin)
   reuse_block(blk, output1, 'built-in/Outport', ...
           'Port', '2', ...
           'Position', [875 168 905 182]);
+  add_line(blk,'invert0/1',[output0,'/1']);
+  add_line(blk,'invert1/1',[output1,'/1']);
+end
+
 
   if strcmp(misc, 'on'),
     reuse_block(blk, 'misco', 'built-in/Outport', ...
@@ -348,10 +393,8 @@ function cosin_init(blk,varargin)
   else,
     reuse_block(blk, 'misco', 'built-in/Terminator', 'Position', [875 198 905 212]);
   end
-
-  add_line(blk,'invert0/1',[output0,'/1']);
   add_line(blk,'invert1/2','misco/1');
-  add_line(blk,'invert1/1',[output1,'/1']);
+
 
   %%%%%%%%%%%%%%%%%%%%%  
   % final cleaning up %
@@ -405,8 +448,7 @@ function draw_basic_partial_cycle(blk, full_cycle_bits, address_bits, lookup_bit
     reuse_block(blk, 'add_convert1', 'built-in/SubSystem', 'Position', [195 200 265 260]);
     add_convert_init([blk,'/add_convert1'], full_cycle_bits, address_bits, lookup_bits, lookup_function1, output1);
     
-    add_line(blk,'misci/1','add_convert1/2');
-    add_line(blk,'assert/1','add_convert1/1');
+
 
 end %draw_basic_partial_cycle
 
