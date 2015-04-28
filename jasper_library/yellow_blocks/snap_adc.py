@@ -9,6 +9,7 @@ class snap_adc(YellowBlock):
         self.num_units = 3
         self.num_clocks = 1
         self.zdok_rev = 2 # no frame clocks (see adc16)
+        self.n_inputs = self.snap_inputs / 3 #number of inputs per chip
 
         self.clock_freq = self.sample_rate
 
@@ -41,7 +42,7 @@ class snap_adc(YellowBlock):
         inst.add_port('c4', self.fullname+'_c4', width=8)
 
         # ports which go to the wb controller. Any ports which don't go to top level need
-        # corresponding signals to be added to top.v
+        # corresponding signals to be added to top.v. **Not anymore, this is now default behaviour!**
         inst.add_port('fabric_clk', 'adc0_clk')
         inst.add_port('fabric_clk_90', 'adc0_clk90')
         inst.add_port('fabric_clk_180', 'adc0_clk180')
@@ -58,6 +59,7 @@ class snap_adc(YellowBlock):
         inst.add_port('snap_addr', 'adc16_snap_addr', width=10)
 
         inst.add_port('locked', 'adc16_locked', width=2)
+        inst.add_port('demux_mode', 'adc16_demux_mode', width=2)
 
         # Now the external ports, which need corresponding ports adding to top.v
 
@@ -117,6 +119,7 @@ class snap_adc(YellowBlock):
         wbctrl.add_port('adc16_delay_tap', 'adc16_delay_tap', width=5)
         wbctrl.add_port('adc16_snap_req',  'adc16_snap_req')
         wbctrl.add_port('adc16_locked',    'adc16_locked', width=2)
+        wbctrl.add_port('adc16_demux_mode', 'adc16_demux_mode', width=2)
         # and finally the wb interface
         wbctrl.add_wb_interface(nbytes=2**8, regname='adc16_controller', mode='rw')
 
@@ -147,20 +150,46 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc16_clk_line_p',  'adc_lclkp', iogroup_index=0))
         cons.append(PortConstraint('adc16_clk_line_n',  'adc_lclkn', iogroup_index=0))
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc0_out', port_index=range(4), iogroup_index=range(0,16,4)))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc0_out', port_index=range(4), iogroup_index=range(1,16,4)))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc0_out', port_index=range(4), iogroup_index=range(2,16,4)))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc0_out', port_index=range(4), iogroup_index=range(3,16,4)))
+        # in 4 channel mode, the adc controller demuxes each a-b pair to make a stream
+        # in 2 channel mode, the demux order should be a[2*n],a[2*n+1],b[2*n],b[2*n+1] for n in range(2)
+        # in 1 channel mode, the demux order should be a[0],a[2],b[0],b[2],a[1],a[3],b[1],b[3]
+        # In the board description file, adcX_out is a 16 element vector with a_p[0], a_n[0], b_p[0], b_n[0], a_p[1], ... b_n[15]
+        # This is now configured dynamically in the gateware
+        #if self.n_inputs == 4:
+        #    ap_index = [0, 4, 8, 12]
+        #    an_index = [1, 5, 9, 13]
+        #    bp_index = [2, 6, 10, 14]
+        #    bn_index = [3, 7, 11, 15]
+        #elif self.n_inputs == 2:
+        #    ap_index = [0, 2, 8, 10]
+        #    an_index = [1, 3, 9, 11]
+        #    bp_index = [4, 6, 12, 14]
+        #    bn_index = [5, 7, 13, 15]
+        #elif self.n_inputs == 1:
+        #    ap_index = [0, 2, 4, 6] 
+        #    an_index = [1, 3, 5, 7] 
+        #    bp_index = [8, 10, 12, 14] 
+        #    bn_index = [9, 11, 13, 15] 
+        #    
+        ap_index = [0, 4, 8, 12]
+        an_index = [1, 5, 9, 13]
+        bp_index = [2, 6, 10, 14]
+        bn_index = [3, 7, 11, 15]
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc1_out', port_index=range(4,8), iogroup_index=range(0,16,4)))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc1_out', port_index=range(4,8), iogroup_index=range(1,16,4)))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc1_out', port_index=range(4,8), iogroup_index=range(2,16,4)))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc1_out', port_index=range(4,8), iogroup_index=range(3,16,4)))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc0_out', port_index=range(4), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc0_out', port_index=range(4), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc0_out', port_index=range(4), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc0_out', port_index=range(4), iogroup_index=bn_index))
 
-        cons.append(PortConstraint('adc16_ser_a_p', 'adc2_out', port_index=range(8,12), iogroup_index=range(0,16,4)))
-        cons.append(PortConstraint('adc16_ser_a_n', 'adc2_out', port_index=range(8,12), iogroup_index=range(1,16,4)))
-        cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=range(8,12), iogroup_index=range(2,16,4)))
-        cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=range(8,12), iogroup_index=range(3,16,4)))
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc1_out', port_index=range(4,8), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc1_out', port_index=range(4,8), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc1_out', port_index=range(4,8), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc1_out', port_index=range(4,8), iogroup_index=bn_index))
+
+        cons.append(PortConstraint('adc16_ser_a_p', 'adc2_out', port_index=range(8,12), iogroup_index=ap_index))
+        cons.append(PortConstraint('adc16_ser_a_n', 'adc2_out', port_index=range(8,12), iogroup_index=an_index))
+        cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=range(8,12), iogroup_index=bp_index))
+        cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=range(8,12), iogroup_index=bn_index))
 
         cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=range(1), iogroup_index=range(1)))
         cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=range(1), iogroup_index=range(1)))
@@ -169,7 +198,7 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
         
         # clock constraint with variable period
-        cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq*2))
+        cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq*self.n_inputs/2.))
 
         return cons
 

@@ -27,6 +27,7 @@ entity  adc_unit  is
                iserdes_bitslip  :  in  std_logic;
                p_data           :  out std_logic_vector(31 downto 0);
                absel            :  in std_logic;
+               demux_mode       :  in  std_logic_vector(1 downto 0);
 
                -- IODELAY Controller
                delay_rst_a      :  in  std_logic_vector(3 downto 0);
@@ -136,9 +137,33 @@ architecture adc_unit_arc of adc_unit is
      begin
        -- Mux pipelined data based on absel signal
        if absel = '0' then
-         adc_iserdes_data <= adc_iserdes_data_a_pipelined;
+         case demux_mode is
+           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(31 downto 24)
+                                          & adc_iserdes_data_b_pipelined(31 downto 24)
+                                          & adc_iserdes_data_a_pipelined(15 downto  8)
+                                          & adc_iserdes_data_b_pipelined(15 downto  8);
+
+           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(31 downto 24)
+                                          & adc_iserdes_data_b_pipelined(31 downto 24)
+                                          & adc_iserdes_data_a_pipelined(23 downto 16)
+                                          & adc_iserdes_data_b_pipelined(23 downto 16);
+
+           when others => adc_iserdes_data <= adc_iserdes_data_a_pipelined;
+         end case;
        else
-         adc_iserdes_data <= adc_iserdes_data_b_pipelined;
+         case demux_mode is
+           when "01" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(23 downto 16)
+                                          & adc_iserdes_data_b_pipelined(23 downto 16)
+                                          & adc_iserdes_data_a_pipelined( 7 downto  0)
+                                          & adc_iserdes_data_b_pipelined( 7 downto  0);
+
+           when "10" => adc_iserdes_data <= adc_iserdes_data_a_pipelined(15 downto  8)
+                                          & adc_iserdes_data_b_pipelined(15 downto  8)
+                                          & adc_iserdes_data_a_pipelined( 7 downto  0)
+                                          & adc_iserdes_data_b_pipelined( 7 downto  0);
+
+           when others => adc_iserdes_data <= adc_iserdes_data_a_pipelined;
+         end case;
        end if;
      end process;
 

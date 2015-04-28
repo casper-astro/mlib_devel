@@ -73,6 +73,9 @@ entity  adc16_interface  is
                delay_rst        :  in  std_logic_vector(63 downto 0);
                delay_tap        :  in  std_logic_vector(4 downto 0);
 
+               -- Demux mode bits
+               demux_mode       :  in  std_logic_vector(1 downto 0);
+
                -- Snap Controller
                snap_req         :  in  std_logic;
                snap_we          :  out std_logic;
@@ -106,6 +109,7 @@ architecture adc16_interface_arc of adc16_interface is
                iserdes_bitslip  :  in  std_logic;
                p_data           :  out std_logic_vector(31 downto 0);
                absel            :  in std_logic;
+               demux_mode       :  in  std_logic_vector(1 downto 0);
 
                -- Delay Controller
                delay_rst_a      :  in  std_logic_vector(3 downto 0);
@@ -443,6 +447,7 @@ architecture adc16_interface_arc of adc16_interface is
                    iserdes_bitslip => s_iserdes_bitslip(i),
                    p_data => s_p_data0(i),
                    absel => absel,
+                   demux_mode => demux_mode,
 
                    delay_rst_a => s_delay_rst_a(i),
                    delay_rst_b => s_delay_rst_b(i),
