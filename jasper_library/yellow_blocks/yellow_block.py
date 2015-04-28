@@ -19,6 +19,12 @@ class YellowBlock(object):
     to add bus / memory space requirements and define what resources the block uses and
     provisions.
     """
+    
+    _count = 0
+    @classmethod
+    def _get_id(cls):
+        cls._count += 1
+        return cls._count
 
     @staticmethod
     def make_block(blk, platform, hdl_root=None):
@@ -86,6 +92,7 @@ class YellowBlock(object):
             if not os.path.isdir(self.hdl_root):
                 raise Exception('Specified hdl root path %s does not exist!'%self.hdl_root)
 
+        self.inst_id = self._get_id() # an incrementing id counting instances of each subclass
         self.n_wb_slaves = 0
         self.mem_alloc = []
         self.provides = []
