@@ -4,7 +4,9 @@ if nargin > 0
     load_system(model);
 end
 
-modelpath = get_param(gcs, 'filename');
+sys = gcs;
+modelpath = get_param(sys, 'filename');
+
 [modeldir, modelname, modelext] = fileparts(modelpath);
 builddir = [modeldir '/' modelname];
 
@@ -13,6 +15,8 @@ disp(sprintf('Build directory: %s',builddir));
 
 mkdir(modeldir, modelname);
 
+disp('Updating diagram'); 
+set_param(sys,'SimulationCommand','update');
 disp('Generating peripherals file');
 gen_block_file(builddir, [builddir '/jasper.per'])
 
@@ -33,7 +37,7 @@ if rv ~= 0
 end
 
 disp('Launching System Generator compile')
-update_model = 1;
+update_model = 0;
 start_sysgen_compile(modelpath, builddir, update_model);
 
 disp('Complete');
