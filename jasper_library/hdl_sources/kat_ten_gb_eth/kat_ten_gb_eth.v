@@ -317,7 +317,7 @@ module kat_ten_gb_eth #(
     .mac_rx_good_frame (mac_rx_good_frame),
     .mac_rx_bad_frame  (mac_rx_bad_frame),
     // PHY status
-    .phy_rx_up (xaui_status[6:2] == 5'b11111)
+    .phy_rx_up (xaui_status[0] == 1'b1)
   );
 
   /*********************** Software Reset Logic **************************/
@@ -400,7 +400,7 @@ module kat_ten_gb_eth #(
   reg tx_trig;
 
   always @(posedge mac_clk) begin
-    down_trig <= xaui_status[6:2] != 5'b11111;
+    down_trig <= xaui_status[0] != 1'b1;
     rx_trig   <= mac_rx_good_frame;
     tx_trig   <= mac_tx_start;
     if (mac_rst) begin

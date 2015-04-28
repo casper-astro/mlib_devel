@@ -65,7 +65,6 @@ module wb_attach #(
     //xaui config
 
     //MGT/GTP PMA Config
-    input  [15:0] mgt_status,
     output  [2:0] mgt_rxeqmix,
     output  [3:0] mgt_txpreemphasis,
     output  [4:0] mgt_txpostemphasis,
@@ -119,8 +118,8 @@ module wb_attach #(
   reg  [7:0] local_gateway_reg;
   reg [15:0] local_port_reg;
   reg        local_enable_reg;
-  reg [31:0] local_mc_recv_ip;
-  reg [31:0] local_mc_recv_ip_mask;
+  reg [31:0] local_mc_recv_ip_reg;
+  reg [31:0] local_mc_recv_ip_mask_reg;
   reg  [2:0] mgt_rxeqmix_reg;
   reg  [3:0] mgt_txpreemphasis_reg;
   reg  [4:0] mgt_txpostemphasis_reg;
@@ -140,6 +139,11 @@ module wb_attach #(
   assign mgt_txpostemphasis = mgt_txpostemphasis_reg;
   assign mgt_txdiffctrl    = mgt_txdiffctrl_reg;
   assign soft_reset        = soft_reset_reg;
+  assign local_mc_recv_ip  = local_mc_recv_ip_reg;
+  assign local_mc_recv_ip_mask  = local_mc_recv_ip_mask_reg;
+  
+  assign wb_err_o = 1'b0;
+
 
   reg use_arp_data, use_tx_data, use_rx_data;
 
@@ -186,8 +190,8 @@ module wb_attach #(
       local_gateway_reg <= FABRIC_GATEWAY;
       local_port_reg    <= FABRIC_PORT;
       local_enable_reg  <= FABRIC_ENABLE;
-      local_mc_recv_ip      <= MC_RECV_IP;
-      local_mc_recv_ip_mask <= MC_RECV_IP_MASK;
+      local_mc_recv_ip_reg      <= MC_RECV_IP;
+      local_mc_recv_ip_mask_reg <= MC_RECV_IP_MASK;
 
       cpu_tx_size_reg   <= 8'd0;
 
@@ -322,23 +326,23 @@ module wb_attach #(
             end
             REG_MC_RECV_IP: begin
               if (wb_sel_i[0])
-                local_mc_recv_ip[7:0]   <= wb_dat_i[7:0];
+                local_mc_recv_ip_reg[7:0]   <= wb_dat_i[7:0];
               if (wb_sel_i[1])
-                local_mc_recv_ip[15:8]  <= wb_dat_i[15:8];
+                local_mc_recv_ip_reg[15:8]  <= wb_dat_i[15:8];
               if (wb_sel_i[2])
-                local_mc_recv_ip[23:16] <= wb_dat_i[23:16];
+                local_mc_recv_ip_reg[23:16] <= wb_dat_i[23:16];
               if (wb_sel_i[3])
-                local_mc_recv_ip[31:24] <= wb_dat_i[31:24];
+                local_mc_recv_ip_reg[31:24] <= wb_dat_i[31:24];
             end
             REG_MC_RECV_IP_MASK: begin
               if (wb_sel_i[0])
-                local_mc_recv_ip_mask[7:0]   <= wb_dat_i[7:0];
+                local_mc_recv_ip_mask_reg[7:0]   <= wb_dat_i[7:0];
               if (wb_sel_i[1])
-                local_mc_recv_ip_mask[15:8]  <= wb_dat_i[15:8];
+                local_mc_recv_ip_mask_reg[15:8]  <= wb_dat_i[15:8];
               if (wb_sel_i[2])
-                local_mc_recv_ip_mask[23:16] <= wb_dat_i[23:16];
+                local_mc_recv_ip_mask_reg[23:16] <= wb_dat_i[23:16];
               if (wb_sel_i[3])
-                local_mc_recv_ip_mask[31:24] <= wb_dat_i[31:24];
+                local_mc_recv_ip_mask_reg[31:24] <= wb_dat_i[31:24];
             end
             default: begin
             end
@@ -415,8 +419,8 @@ module wb_attach #(
                                                                   4'b0, mgt_txpreemphasis_reg,
                                                                   3'b0, mgt_txpostemphasis_reg, 
                                                                   4'b0, 1'b0, mgt_rxeqmix_reg} :
-                             opb_data_src == REG_MC_RECV_IP      ? local_mc_recv_ip[31:0]      :
-                             opb_data_src == REG_MC_RECV_IP_MASK ? local_mc_recv_ip_mask[31:0] :
+                             opb_data_src == REG_MC_RECV_IP      ? local_mc_recv_ip_reg[31:0]      :
+                             opb_data_src == REG_MC_RECV_IP_MASK ? local_mc_recv_ip_mask_reg[31:0] :
                                                                   32'd0;
   wire [31:0] wb_dat_o_int;
   assign wb_dat_o_int = use_arp_data ? arp_data_int :
@@ -427,5 +431,6 @@ module wb_attach #(
   assign wb_dat_o = wb_ack_o ? wb_dat_o_int : 32'b0;
 
   assign wb_ack_o = opb_ack;
+  assign wb_err_o = 1'b0;
 
 endmodule

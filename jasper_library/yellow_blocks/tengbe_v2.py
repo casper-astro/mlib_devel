@@ -1,15 +1,16 @@
 from yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint
+from constraints import PortConstraint, ClockConstraint, RawConstraint
+from itertools import count
 
 class tengbe_v2(YellowBlock):
     @staticmethod
     def factory(blk, plat, hdl_root=None):
         if plat.fpga.startswith('xc7k'):
-            return tengbe_v2_xilinx_k7(blk, plat, hdl_root)
+            return tengbaser_xilinx_k7(blk, plat, hdl_root)
         else:
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
-    def instantiate_ktge(self, top):
+    def instantiate_ktge(self, top, num=None):
         ktge = top.get_instance(name=self.fullname, entity='kat_ten_gb_eth', comment=self.fullname)
         ktge.add_parameter('FABRIC_MAC', "48'h%x"%self.fab_mac)
         ktge.add_parameter('FABRIC_IP', "32'h%x"%self.fab_ip)
@@ -29,7 +30,10 @@ class tengbe_v2(YellowBlock):
         ktge.add_port('mgt_rxeqmix', 'mgt_rxeqmix%d'%(self.port), width=3)
 
         # XGMII interface
-        ktge.add_port('xaui_clk', 'xaui_clk')
+        if num is None:
+            ktge.add_port('xaui_clk', 'xaui_clk')
+        else:
+            ktge.add_port('xaui_clk', 'core_clk_156_%d'%num)
         ktge.add_port('xaui_reset', 'sys_reset', parent_sig=False)
         ktge.add_port('xgmii_txd', 'xgmii_txd%d'%self.port, width=64)
         ktge.add_port('xgmii_txc', 'xgmii_txc%d'%self.port, width=8)
@@ -70,6 +74,7 @@ class tengbe_v2(YellowBlock):
         # Wishbone memory for status registers / ARP table
         ktge.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000) # as in matlab code
 
+
 class tengbe_v2_xilinx_v6(tengbe_v2):
     def initialize(self):
         self.add_source('kat_ten_gb_eth')
@@ -84,6 +89,7 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
             self.port = self.port_r2_sfpp + 4*((self.slot+1)%2)
 
         self.exc_requirements = ['tge%d'%self.port]
+
 
     def modify_top(self,top):
         
@@ -158,9 +164,6 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
         # XAUI CONF interface
         xp.add_port('xaui_status', 'xaui_status%d'%self.port, width=8)
 
-
-
-
     def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('xaui_refclk_p', 'xaui_refclk_p', port_index=range(3), iogroup_index=range(3)))
@@ -179,12 +182,14 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
         cons.append(ClockConstraint('xaui_infrastructure_inst/xaui_infrastructure_inst/xaui_infrastructure_low_inst/gtx_refclk_bufr<*>', name='xaui_infra_clk', freq=156.25))
         return cons
 
-class tengbe_v2_xilinx_k7(tengbe_v2):
+class tengbaser_xilinx_k7(tengbe_v2):
     def initialize(self):
         self.exc_requirements = ['tge%d'%self.slot]
         self.add_source('kat_ten_gb_eth')
-        self.add_source('xaui_phy_k7')
-        self.add_source('xaui_infrastructure_k7')
+        self.add_source('tengbaser_phy/tengbaser_phy.v')
+        self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xci')
+        self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xdc')
+        self.add_source('tengbaser_infrastructure')
 
         # the use of multiple platform dependent parameters to
         # describe the port in the simulink block is a bit grim.
@@ -198,109 +203,104 @@ class tengbe_v2_xilinx_k7(tengbe_v2):
         #elif self.flavour == 'sfp':
         #    self.port = self.port_r2_sfpp + 4*((self.slot+1)%2)
         self.port = self.port_r1
-
-        # Copied from the MATLAB xps code.
-
-        #%values below taken from ug366 transceiver user guide (should match with tengbe_v2_loadfcn)
-
-        post_emph_lookup = [0.18, 0.19, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.19, 0.2, 0.39, 0.63, 0.82, 1.07, 1.32, 1.6, 1.65, 1.94, 2.21, 2.52, 2.76, 3.08, 3.41, 3.77, 3.97, 4.36, 4.73, 5.16, 5.47, 5.93, 6.38, 6.89] 
-        try:
-            index = post_emph_lookup.index(self.post_emph_r2)
-        except:
-            raise Exception('xps_tengbe_v2: %.3f not found in postemph_lookup'%self.post_emph_r2);
-        self.post_emph_r2 = index-1
-
-        pre_emph_lookup = [0.15, 0.3, 0.45, 0.61, 0.74, 0.91, 1.07, 1.25, 1.36, 1.55, 1.74, 1.94, 2.11, 2.32, 2.54, 2.77]
-        try:
-            index = pre_emph_lookup.index(self.pre_emph_r2)
-        except:
-            raise Exception('xps_tengbe_v2: %.3f not found in preemph_lookup'%self.pre_emph_r2);
-        self.preemph_r2 = index-1;
-
-        swing_lookup = [110, 210, 310, 400, 480, 570, 660, 740, 810, 880, 940, 990, 1040, 1080, 1110, 1130]
-        try:
-            index = swing_lookup.index(self.swing_r2)
-        except:
-            raise Exception('xps_tengbe_v2: %.3f not found in swing_lookup'%self.swing_r2);
-        self.swing_r2 = index-1;
+        self.infrastructure_id = self.port // 4
 
     def modify_top(self,top):
-        self.instantiate_ktge(top)
+        # An infrastructure instance is good for 4 SFPs. Assuming the ports are numbered
+        # so that instance0 serves ports 0-3, instance1 serves ports 4-7, etc. decide
+        # whether to instantiate a new infrastrucure block
+        if top.has_instance('tengbaser_infra%d_inst'%self.infrastructure_id):
+            pass
+        else:
+            self.instantiate_infra(top, self.infrastructure_id)
+            
+        self.instantiate_phy(top, self.infrastructure_id)
+        self.instantiate_ktge(top, self.infrastructure_id)
 
-        # XAUI infrastructure block
-        # Use top.add_new_instance, as this will return an existing instance if one exists.
-        xaui = top.get_instance('xaui_infrastructure', 'xaui_infrastructure_inst')
-        xaui.add_port('mgt_ref_clk_n', 'mgt_ref_clk_n', parent_port=True, dir='in')
-        xaui.add_port('mgt_ref_clk_p', 'mgt_ref_clk_p', parent_port=True, dir='in')
-        xaui.add_port('reset', 'sys_reset', parent_sig=False)
-        xaui.add_port('xaui_clk', 'xaui_clk')
-        xaui.add_port('stat', 'stat', width=8)
-        xaui.add_port('mgt_rx_p%d          '%self.port, 'mgt_rx_p%d          '%self.port, parent_port=True, dir='in')
-        xaui.add_port('mgt_rx_n%d          '%self.port, 'mgt_rx_n%d          '%self.port, parent_port=True, dir='in')
-        xaui.add_port('mgt_tx_p%d          '%self.port, 'mgt_tx_p%d          '%self.port, parent_port=True, dir='out')
-        xaui.add_port('mgt_tx_n%d          '%self.port, 'mgt_tx_n%d          '%self.port, parent_port=True, dir='out')
-        xaui.add_port('loss_of_signal_sfp%d'%self.port, 'loss_of_signal_sfp%d'%self.port)
-        xaui.add_port('tx_fault_sfp%d      '%self.port, 'tx_fault_sfp%d      '%self.port)
-        xaui.add_port('tx_disable_sfp%d    '%self.port, 'tx_disable_sfp%d    '%self.port)
-        xaui.add_port('REF_CLK_IN%d        '%self.port, 'REF_CLK_IN%d        '%self.port)
-        xaui.add_port('REF_CLK_IN_BUFH%d   '%self.port, 'REF_CLK_IN_BUFH%d   '%self.port)
-        xaui.add_port('GT0_QPLLLOCK%d      '%self.port, 'GT0_QPLLLOCK%d      '%self.port)
-        xaui.add_port('GT0_QPLLOUTCLK%d    '%self.port, 'GT0_QPLLOUTCLK%d    '%self.port)
-        xaui.add_port('GT0_QPLLOUTREFCLK%d '%self.port, 'GT0_QPLLOUTREFCLK%d '%self.port)
-        xaui.add_port('clk156_%d           '%self.port, 'clk156_%d           '%self.port)
-        xaui.add_port('dclk%d              '%self.port, 'dclk%d              '%self.port)
-        xaui.add_port('mmcm_locked%d       '%self.port, 'mmcm_locked%d       '%self.port)
-        xaui.add_port('txp%d               '%self.port, 'txp%d               '%self.port)
-        xaui.add_port('txn%d               '%self.port, 'txn%d               '%self.port)
-        xaui.add_port('rxp%d               '%self.port, 'rxp%d               '%self.port)
-        xaui.add_port('rxn%d               '%self.port, 'rxn%d               '%self.port)
-        xaui.add_port('signal_detect%d     '%self.port, 'signal_detect%d     '%self.port)
-        xaui.add_port('tx_fault%d          '%self.port, 'tx_fault%d          '%self.port)
-        xaui.add_port('tx_disable%d        '%self.port, 'tx_disable%d        '%self.port)
-        xaui.add_port('xaui_clk_out%d      '%self.port, 'xaui_clk_out%d      '%self.port)
-        xaui.add_port('phy_stat%d          '%self.port, 'phy_stat%d          '%self.port, width=8)
-        xaui.add_port('mgt_txpostemphasis%d'%(self.port+4), 'mgt_txpostemphasis%d'%(self.port+1), width=5)
-        xaui.add_port('mgt_txpreemphasis%d '%(self.port+4), 'mgt_txpreemphasis%d '%(self.port+1), width=4)
-        xaui.add_port('mgt_txdiffctrl%d    '%(self.port+4), 'mgt_txdiffctrl%d    '%(self.port+4), width=4)
-        xaui.add_port('mgt_rxeqmix%d       '%(self.port+4), 'mgt_rxeqmix%d       '%(self.port+4), width=3)
+    def instantiate_infra(self, top, num):
+        infra = top.get_instance('tengbaser_infrastructure', 'tengbaser_infra%d_inst'%num)
+        infra.add_port('refclk_n', 'ref_clk_n%d'%num, parent_port=True, dir='in')
+        infra.add_port('refclk_p', 'ref_clk_p%d'%num, parent_port=True, dir='in')
+        infra.add_port('reset', 'sys_reset', parent_sig=False) #no parent sig -- the wire is declared in top.v
 
-        xaui_phy = top.get_instance('xaui_phy', 'xaui_phy%d'%self.port)
-        xaui_phy.add_port('REF_CLK_IN         ', 'REF_CLK_IN%d        '%self.port)
-        xaui_phy.add_port('REF_CLK_IN_BUFH    ', 'REF_CLK_IN_BUFH%d   '%self.port)
-        xaui_phy.add_port('GT0_QPLLLOCK       ', 'GT0_QPLLLOCK%d      '%self.port)
-        xaui_phy.add_port('GT0_QPLLOUTCLK     ', 'GT0_QPLLOUTCLK%d    '%self.port)
-        xaui_phy.add_port('GT0_QPLLOUTREFCLK  ', 'GT0_QPLLOUTREFCLK%d '%self.port)
-        xaui_phy.add_port('clk156             ', 'clk156_%d           '%self.port)
-        xaui_phy.add_port('dclk               ', 'dclk%d              '%self.port)
-        xaui_phy.add_port('mmcm_locked        ', 'mmcm_locked%d       '%self.port)
-        xaui_phy.add_port('txp                ', 'txp%d               '%self.port)
-        xaui_phy.add_port('txn                ', 'txn%d               '%self.port)
-        xaui_phy.add_port('rxp                ', 'rxp%d               '%self.port)
-        xaui_phy.add_port('rxn                ', 'rxn%d               '%self.port)
-        xaui_phy.add_port('signal_detect      ', 'signal_detect%d     '%self.port)
-        xaui_phy.add_port('tx_fault           ', 'tx_fault%d          '%self.port)
-        xaui_phy.add_port('tx_disable         ', 'tx_disable%d        '%self.port)
-        xaui_phy.add_port('xaui_clk_out       ', 'xaui_clk_out%d      '%self.port)
-        xaui_phy.add_port('phy_stat           ', 'phy_stat%d          '%self.port, width=8)
+        infra.add_port('dclk', 'dclk%d'%num)
+        infra.add_port('core_clk156_out', 'core_clk_156_%d'%num)
+        infra.add_port('xgmii_rx_clk', 'xgmii_rx_clk%d'%num)
 
-        xaui_phy.add_port('xgmii_txd', 'xgmii_txd%d'%self.port, width=64)
-        xaui_phy.add_port('xgmii_txc', 'xgmii_txc%d'%self.port, width=8)
-        xaui_phy.add_port('xgmii_rxd', 'xgmii_rxd%d'%self.port, width=64)
-        xaui_phy.add_port('xgmii_rxc', 'xgmii_rxc%d'%self.port, width=8)
+        infra.add_port('qplloutclk_out        ', 'qplloutclk_out%d        '%num)
+        infra.add_port('qplloutrefclk_out     ', 'qplloutrefclk_out%d     '%num)
+        infra.add_port('qplllock_out          ', 'qplllock_out%d          '%num)
+        infra.add_port('areset_clk156_out     ', 'areset_clk156_out%d     '%num)
+        infra.add_port('txusrclk_out          ', 'txusrclk_out%d          '%num)
+        infra.add_port('txusrclk2_out         ', 'txusrclk2_out%d         '%num)
+        infra.add_port('gttxreset_out         ', 'gttxreset_out%d         '%num)
+        infra.add_port('gtrxreset_out         ', 'gtrxreset_out%d         '%num)
+        infra.add_port('txuserrdy_out         ', 'txuserrdy_out%d         '%num)
+        infra.add_port('reset_counter_done_out', 'reset_counter_done_out%d'%num)
+        infra.add_port('txclk322', 'txclk322_%d'%self.port)
 
-        xaui_phy.add_port('xaui_status', 'xaui_status%d'%self.port, width=8)
-        xaui_phy.add_port('reset', 'sys_reset', parent_sig=False)
-        xaui_phy.add_port('xaui_clk', 'xaui_clk')
+    def instantiate_phy(self, top, num):
+
+        phy = top.get_instance('tengbaser_phy', 'tengbaser_phy%d'%self.port)
+
+        phy.add_port('areset', 'sys_reset')
+
+        # sigs from infrastructure
+        phy.add_port('dclk', 'dclk%d'%num)
+        phy.add_port('clk156', 'core_clk_156_%d'%num)
+        phy.add_port('qplloutclk', 'qplloutclk_out%d'%num)
+        phy.add_port('qplloutrefclk', 'qplloutrefclk_out%d'%num)
+        phy.add_port('qplllock', 'qplllock_out%d'%num)
+        phy.add_port('areset_clk156', 'areset_clk156_out%d'%num)
+        phy.add_port('txusrclk', 'txusrclk_out%d'%num)
+        phy.add_port('txusrclk2', 'txusrclk2_out%d'%num)
+        phy.add_port('gttxreset', 'gttxreset_out%d'%num)
+        phy.add_port('gtrxreset', 'gtrxreset_out%d'%num)
+        phy.add_port('txuserrdy', 'txuserrdy_out%d'%num)
+        phy.add_port('reset_counter_done', 'reset_counter_done_out%d'%num)
+        phy.add_port('txclk322', 'txclk322_%d'%self.port)
+
+        # top level ports
+        phy.add_port('txp', 'mgt_tx_p%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('txn', 'mgt_tx_n%d'%self.port, parent_port=True, dir='out')
+        phy.add_port('rxp', 'mgt_rx_p%d'%self.port, parent_port=True, dir='in')
+        phy.add_port('rxn', 'mgt_rx_n%d'%self.port, parent_port=True, dir='in')
+        phy.add_port('signal_detect', 'signal_detect%d'%self.port)
+        top.assign_signal('signal_detect%d'%self.port, "1'b1") #snap doesn't wire this to SFP(?)
+        phy.add_port('tx_fault', 'tx_fault%d'%self.port)
+        top.assign_signal('tx_fault%d'%self.port, "1'b0") #snap doesn't wire this to SFP(?)
+        phy.add_port('tx_disable', 'tx_disable%d'%self.port, parent_port=True, dir='out')
+
+        phy.add_port('resetdone', 'resetdone%d'%self.port)
+        phy.add_port('status_vector', '', parent_sig=False)
+        # pma_pmd_type: 111=10g-base-SR, 110=-LR 101=-ER
+        phy.add_port('pma_pmd_type', "3'b111", parent_sig=False)
+        phy.add_port('configuration_vector', "536'b0", parent_sig=False)
+
+        # XGMII signals to MAC
+        phy.add_port('xgmii_txd', 'xgmii_txd%d'%self.port, width=64)
+        phy.add_port('xgmii_txc', 'xgmii_txc%d'%self.port, width=8)
+        phy.add_port('xgmii_rxd', 'xgmii_rxd%d'%self.port, width=64)
+        phy.add_port('xgmii_rxc', 'xgmii_rxc%d'%self.port, width=8)
+        phy.add_port('core_status', 'xaui_status%d'%self.port, width=8) #called xaui status for compatibility with kat-tge block
 
     def gen_constraints(self):
+        num = self.infrastructure_id
         cons = []
-        cons.append(PortConstraint('mgt_ref_clk_p', 'eth_clk_p'))
-        cons.append(PortConstraint('mgt_ref_clk_n', 'eth_clk_n'))
+        cons.append(PortConstraint('ref_clk_p%d'%num, 'eth_clk_p'))
+        cons.append(PortConstraint('ref_clk_n%d'%num, 'eth_clk_n'))
         cons.append(PortConstraint('mgt_tx_p%d'%self.port, 'mgt_tx_p', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_tx_n%d'%self.port, 'mgt_tx_n', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_rx_p%d'%self.port, 'mgt_rx_p', iogroup_index=self.port))
         cons.append(PortConstraint('mgt_rx_n%d'%self.port, 'mgt_rx_n', iogroup_index=self.port))
 
-        cons.append(ClockConstraint('mgt_ref_clk_p', name='ethclk', freq=156.25))
+        cons.append(PortConstraint('tx_disable%d'%self.port, 'sfp_disable', iogroup_index=self.port))
+
+        cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
+
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sysclk200] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
+        cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] 3'%(num,num)))
+        cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] -hold 2'%(num,num)))
+
         return cons
         

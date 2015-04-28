@@ -66,6 +66,11 @@ pins:
     loc:
       - R3
       - L3
+  sfp_disable:
+    iostd: LVCMOS25
+    loc:
+      - U21
+      - N16
   zdok0:
     iostd: LVCMOS25
     loc:

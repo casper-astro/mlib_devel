@@ -9,10 +9,10 @@ Updated for CASPER 2013 workshop. This tut needs a rework to use new snap blocks
 import corr, time, struct, sys, logging, socket
 
 #Decide where we're going to send the data, and from which addresses:
-dest_ip  =192*(2**24) + 168*(2**16) + 5*(2**8) + 21
+dest_ip  = 192*(2**24) + 168*(2**16) + 5*(2**8) + 21
 fabric_port=10000         
 source_ip= 192*(2**24) + 168*(2**16) + 5*(2**8) + 20
-mac_base=0x123456780000
+mac_base= 0x123456780000
 
 pkt_period = 1024#how often to send another packet in FPGA clocks (200MHz)
 payload_len = 128   #how big to make each packet in 64bit words
@@ -101,29 +101,25 @@ try:
     sys.stdout.flush()
     gbe0_link=bool(fpga.read_int('gbe0_linkup'))
     print gbe0_link
-    if not gbe0_link:
-        print 'There is no cable plugged into port0. Please plug a cable between ports 0 and 3 to continue demo. Exiting.'
-        exit_clean()
     print 'Port 3 linkup: ',
     sys.stdout.flush()
     gbe3_link=bool(fpga.read_int('gbe3_linkup'))
     print gbe3_link
-    if not gbe0_link:
-        print 'There is no cable plugged into port3. Please plug a cable between ports 0 and 3 to continue demo. Exiting.'
-        exit_clean()
 
     print '---------------------------'
     print 'Configuring receiver core...',
     sys.stdout.flush()
     #fpga.tap_start('tap0',rx_core_name,mac_base+dest_ip,dest_ip,fabric_port)
     for i in range(256):
-        fpga.write(rx_core_name, struct.pack('>Q', mac_base + i), offset=(0x3000 + 8*i))
+        j = i
+        fpga.write(rx_core_name, struct.pack('>Q', mac_base + j), offset=(0x3000 + 8*i))
     print 'done'
     print 'Configuring transmitter core...',
     sys.stdout.flush()
     #fpga.tap_start('tap3',tx_core_name,mac_base+source_ip,source_ip,fabric_port)
     for i in range(256):
-        fpga.write(tx_core_name, struct.pack('>Q', mac_base + i), offset=(0x3000 + 8*i))
+        j = i
+        fpga.write(tx_core_name, struct.pack('>Q', mac_base + j), offset=(0x3000 + 8*i))
     print 'done'
 
     print '---------------------------'
