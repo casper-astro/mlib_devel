@@ -26,6 +26,8 @@ parser.add_option("--skipbe", dest="skipbe", action='store_false', default='True
                   help="skip backend compilation")
 parser.add_option("--be", dest="be", type='string', default='vivado',
                   help="Backend to use. Default: vivado")
+parser.add_option("--jobs", dest="jobs", type='int', default=1,
+                  help="Number of cores to run compiles with. Default=1")
 parser.add_option("-m", "--model", dest="model", type='string',
                   default='/tools/mlib_devel/jasper_library/test_models/test.slx',
                   help="model to compile")
@@ -77,6 +79,6 @@ if opts.be == 'ise':
     os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg_ise'
 
 # initialise the toolflow
-toolflow = toolflow.Toolflow(frontend='simulink', backend=opts.be, compile_dir=builddir, frontend_target=opts.model)
+toolflow = toolflow.Toolflow(frontend='simulink', backend=opts.be, compile_dir=builddir, frontend_target=opts.model, jobs=opts.jobs)
 
 toolflow.exec_flow(gen_per=opts.skipyb, frontend_compile=opts.skipfe, backend_compile=opts.skipbe)

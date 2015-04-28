@@ -10,7 +10,7 @@ import os
 import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
-from constraints import PortConstraint, ClockConstraint
+from constraints import PortConstraint, ClockConstraint, RawConstraint
 import helpers
 import yaml
 import glob
@@ -28,7 +28,7 @@ class Toolflow(object):
     vendor-specific platform and compiled. At least, that's the plan...
     '''
     
-    def __init__(self, frontend='simulink', backend='vivado', compile_dir='/tmp', frontend_target='/tmp/test.slx'):
+    def __init__(self, frontend='simulink', backend='vivado', compile_dir='/tmp', frontend_target='/tmp/test.slx', jobs=8):
         '''
         Initialize the toolflow.
          
@@ -42,6 +42,7 @@ class Toolflow(object):
         # Set up a logger (the logger named 'jasper' should already
         # have been configured beforehand
         self.logger = logging.getLogger('jasper.toolflow')
+        self.jobs = jobs
 
         self.logger.info('Starting Toolflow!')
         self.logger.info('Frontend is %s'%frontend)
@@ -125,7 +126,7 @@ class Toolflow(object):
             self.backend.gen_constraint_file(self.constraints)
             self._add_external_tcl()
             # launch vivado via the generated .tcl file
-            self.backend.compile()
+            self.backend.compile(cores=self.jobs)
 
         binary = self.backend.binary_loc
         os.system('cp %s %s/top.bin'%(binary, self.compile_dir))
@@ -554,7 +555,7 @@ class VivadoBackend(ToolflowBackend):
         self.tcl_cmd += cmd
         self.tcl_cmd += '\n'
 
-    def add_compile_cmds(self):
+    def add_compile_cmds(self, cores=8):
         '''
         add the tcl commands for compiling the design, and then launch
         vivado in batch mode
@@ -563,9 +564,9 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('update_compile_order -fileset sources_1')
         self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
         self.add_tcl_cmd('reset_run synth_1')
-        self.add_tcl_cmd('launch_runs synth_1')
+        self.add_tcl_cmd('launch_runs synth_1 -jobs %d'%cores)
         self.add_tcl_cmd('wait_on_run synth_1')
-        self.add_tcl_cmd('launch_runs impl_1')
+        self.add_tcl_cmd('launch_runs impl_1 -jobs %d'%cores)
         self.add_tcl_cmd('wait_on_run impl_1')
         self.add_tcl_cmd('open_run impl_1') 
         self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [get_designs impl_1]'%self.plat.conf['config_voltage'])
@@ -573,8 +574,8 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
         self.add_tcl_cmd('wait_on_run impl_1')
 
-    def compile(self):
-        self.add_compile_cmds()
+    def compile(self, cores):
+        self.add_compile_cmds(cores=cores)
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file,self.tcl_cmd)
@@ -610,6 +611,11 @@ class VivadoBackend(ToolflowBackend):
         if isinstance(const, ClockConstraint):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
+
+        if isinstance(const, RawConstraint):
+            self.logger.debug('New Raw constraint found')
+            user_const += const.raw
+
         return user_const
 
     def format_clock_const(self, c):
@@ -726,6 +732,10 @@ class ISEBackend(VivadoBackend):
         if isinstance(const, ClockConstraint):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
+
+        if isinstance(const, RawConstraint):
+            user_const += const.raw
+
         return user_const
 
     def format_clock_const(self, c):
