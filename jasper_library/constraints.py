@@ -108,5 +108,16 @@ class ClockConstraint(object):
         self.freq = float(freq or 1000./period)
         self.period = float(period or 1000./freq)
 
+class RawConstraint(object):
+    '''
+    A class for raw constraints -- strings to be dumper unadulterated into a
+    constraint file
+    '''
+    def __init__(self, const):
+       if const.endswith('\n'):
+           self.raw = const
+       else:
+           self.raw = const + '\n'
+
 
 
