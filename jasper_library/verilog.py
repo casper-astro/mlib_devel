@@ -171,6 +171,12 @@ class VerilogModule(object):
         # sourcefiles required by the module (this is currently NOT
         # how the jasper toolflow implements source management)
         self.sourcefiles = []
+    
+    def has_instance(self, name):
+        """
+        Check if this module has an instance called <name>. If so return True
+        """
+        return name in self.instances.keys()
 
     def wb_compute(self, base_addr=0x10000, alignment=4):
         '''
