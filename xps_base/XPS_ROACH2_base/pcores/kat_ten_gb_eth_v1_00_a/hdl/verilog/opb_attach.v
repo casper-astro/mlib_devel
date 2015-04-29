@@ -8,6 +8,7 @@ module opb_attach #(
     parameter FABRIC_IP       = 32'hffff_ffff,
     parameter FABRIC_PORT     = 16'hffff,
     parameter FABRIC_GATEWAY  = 8'd0,
+    parameter FABRIC_NETMASK  = 32'hFFFFFF00,
     parameter FABRIC_ENABLE   = 0,
     parameter MC_RECV_IP      = 32'h00000000,
     parameter MC_RECV_IP_MASK = 32'h00000000,
@@ -54,6 +55,7 @@ module opb_attach #(
     output [31:0] local_ip,
     output [15:0] local_port,
     output  [7:0] local_gateway,
+    output [31:0] local_netmask,
     output [31:0] local_mc_recv_ip,
     output [31:0] local_mc_recv_ip_mask,
     output        soft_reset,
@@ -103,6 +105,7 @@ module opb_attach #(
   localparam REG_LOCAL_MAC_1     = 4'd0;
   localparam REG_LOCAL_MAC_0     = 4'd1;
   localparam REG_LOCAL_GATEWAY   = 4'd3;
+  localparam REG_LOCAL_NETMASK   = 4'd14;
   localparam REG_LOCAL_IPADDR    = 4'd4;
   localparam REG_BUFFER_SIZES    = 4'd6;
   localparam REG_VALID_PORTS     = 4'd8;
@@ -115,6 +118,7 @@ module opb_attach #(
   reg [47:0] local_mac_reg;
   reg [31:0] local_ip_reg;
   reg  [7:0] local_gateway_reg;
+  reg [31:0] local_netmask_reg;
   reg [15:0] local_port_reg;
   reg        local_enable_reg;
   reg [31:0] local_mc_recv_ip;
@@ -131,6 +135,7 @@ module opb_attach #(
   assign local_mac         = local_mac_reg;
   assign local_ip          = local_ip_reg;
   assign local_gateway     = local_gateway_reg;
+  assign local_netmask     = local_netmask_reg;
   assign local_port        = local_port_reg;
   assign local_enable      = local_enable_reg;
   assign mgt_rxeqmix       = mgt_rxeqmix_reg;
@@ -178,6 +183,7 @@ module opb_attach #(
       local_mac_reg     <= FABRIC_MAC;
       local_ip_reg      <= FABRIC_IP;
       local_gateway_reg <= FABRIC_GATEWAY;
+      local_netmask_reg <= FABRIC_NETMASK;
       local_port_reg    <= FABRIC_PORT;
       local_enable_reg  <= FABRIC_ENABLE;
       local_mc_recv_ip      <= MC_RECV_IP;
@@ -332,6 +338,10 @@ module opb_attach #(
               if (OPB_BE[3])
                 local_mc_recv_ip_mask[31:24] <= OPB_DBus[31:24];
             end
+            REG_LOCAL_NETMASK: begin
+              if (OPB_BE[0])
+                local_netmask_reg[31:0] <= OPB_DBus[31:0];
+            end
             default: begin
             end
           endcase
@@ -399,6 +409,7 @@ module opb_attach #(
   wire [31:0] opb_data_int = opb_data_src == REG_LOCAL_MAC_1   ? {16'b0, local_mac_reg[47:32]} :
                              opb_data_src == REG_LOCAL_MAC_0   ? local_mac_reg[31:0] :
                              opb_data_src == REG_LOCAL_GATEWAY ? {24'b0, local_gateway_reg} :
+                             opb_data_src == REG_LOCAL_NETMASK ? {local_netmask_reg} :
                              opb_data_src == REG_LOCAL_IPADDR  ? local_ip_reg[31:0] :
                              opb_data_src == REG_BUFFER_SIZES  ? {8'b0, cpu_tx_size_reg, 8'b0, cpu_rx_ack_reg ? 8'b0 : cpu_rx_size} :
                              opb_data_src == REG_VALID_PORTS   ? {7'b0, soft_reset_reg, 7'b0, local_enable_reg, local_port_reg} :
