@@ -291,7 +291,36 @@ class Toolflow(object):
         for pk in self.peripherals.keys():
             self.logger.debug('Generating Yellow Block: %s'%pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(self.peripherals[pk], self.plat))
+
+        self._expand_children(self.periph_objs)
+
         self._drc()
+
+    def _expand_children(self, population, parents=None, recursive=True):
+        """
+        population: a list of yellow blocks to which children will be added
+        parents: a list of yellow blocks which will be invited to procreate.
+                 If parents=None, the population will be used as the initial
+                 parents argument
+        recursive: if True, this method is called recursively, with children
+                   passed as the new parents argument. The population list
+                   will continue to grow until no child yellow blocks wish
+                   to procreate any further.
+        """
+        parents = parents or population
+        children = []
+        for parent in parents:
+            self.logger.debug('Inviting block %r to procreate'%parent)
+            children += parent.gen_children()
+        if children == []:
+            return
+        else:
+            population += children
+            if not recursive:
+                return
+            else:
+                self._expand_children(population, children)
+                return
 
     def _instantiate_periphs(self):
         """

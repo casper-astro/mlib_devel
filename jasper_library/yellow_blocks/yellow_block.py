@@ -20,7 +20,7 @@ class YellowBlock(object):
     provisions.
     """
     
-    _count = 0
+    _count = -1
     @classmethod
     def _get_id(cls):
         cls._count += 1
@@ -93,6 +93,7 @@ class YellowBlock(object):
                 raise Exception('Specified hdl root path %s does not exist!'%self.hdl_root)
 
         self.inst_id = self._get_id() # an incrementing id counting instances of each subclass
+        self.i_am_the_first = self.inst_id == 0
         self.n_wb_slaves = 0
         self.mem_alloc = []
         self.provides = []
@@ -104,8 +105,11 @@ class YellowBlock(object):
         self.blk = blk
         self.platform = platform
         self.copy_attrs()
-        self.fullname = self.fullpath.replace('/','_')
-        self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
+        try:
+            self.fullname = self.fullpath.replace('/','_')
+            self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
+        except AttributeError:
+            self.logger.warning("%r doesn't have an attribute 'fullname'"%self)
         self.initialize()
         self.check_support()
 
@@ -120,6 +124,15 @@ class YellowBlock(object):
         """
         for key in self.blk.keys():
             self.__setattr__(key,self.blk[key])
+
+    def gen_children(self):
+        """
+        The toolflow will try to allow blocks to instantiate
+        blocks themselves, by calling this method.
+        Override it in your subclass if you need to use this
+        functionality.
+        """
+        return []
     
     def check_support(self):
         """
