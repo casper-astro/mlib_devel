@@ -20,6 +20,17 @@ class snap_adc(YellowBlock):
         self.provides = ['adc0_clk','adc0_clk90', 'adc0_clk180', 'adc0_clk270']
         self.requires = ['HAD1511_0', 'HAD1511_1', 'HAD1511_2']
 
+    def gen_children(self):
+        """
+        The first instance of this adc adds the required clock controller
+        module
+        """
+        if self.i_am_the_first:
+            return [YellowBlock.make_block({'tag':'xps:lmx2581', 'fullname':'lmx2581_from_%s'%self.name, 'name':'lmx2581'}, self.platform)]
+        else:
+            return []
+
+
     def modify_top(self,top):
         module = 'adc16_interface'
         inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)

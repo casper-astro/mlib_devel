@@ -22,6 +22,7 @@ provides:
   - HAD1511_0
   - HAD1511_1
   - HAD1511_2
+  - lmx2581
 pins:
   miso:
     loc: AA27
@@ -345,5 +346,23 @@ pins:
     iostd: LVCMOS33
     loc:
       - A19
+  lmx2581_clk:
+    iostd: LVCMOS33
+    loc: H16
+  lmx2581_data:
+    iostd: LVCMOS33
+    loc: J15
+  lmx2581_muxout:
+    iostd: LVCMOS33
+    loc: G16
+  lmx2581_le:
+    iostd: LVCMOS33
+    loc: J16
+  lmx2581_ce:
+    iostd: LVCMOS33
+    loc: G15
+  lmx2581_be:
+    iostd: LVCMOS33
+    loc: F15
 
 
