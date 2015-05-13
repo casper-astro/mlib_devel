@@ -92,7 +92,7 @@ module lmx2581_controller #(
   always @(posedge wb_clk_i) begin
     if (wb_rst_i) begin
       state <= IDLE;
-    end else if (wb_ack) begin
+    end else if (wb_ack && wb_we_i) begin //trigger SPI transaction on a wb write
       state <= START;
     end else begin
       case (state)
