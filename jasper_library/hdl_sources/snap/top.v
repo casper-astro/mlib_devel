@@ -6,7 +6,7 @@ module top (
     input   cs_n,
     input   sclk,
     input   mosi,
-    output  miso,
+    output  miso
   );
   
   wire clk_200;
