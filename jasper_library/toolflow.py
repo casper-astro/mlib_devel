@@ -14,6 +14,7 @@ from constraints import PortConstraint, ClockConstraint, RawConstraint
 import helpers
 import yaml
 import glob
+import time
 
 class Toolflow(object):
     '''
@@ -49,8 +50,19 @@ class Toolflow(object):
         self.logger.info('Backend is %s'%backend)
 
         self.compile_dir = compile_dir.rstrip('/')
+        self.output_dir = self.compile_dir + '/outputs'
+
         self.logger.info("Setting compile directory: %s"%self.compile_dir)
         os.system('mkdir -p %s'%self.compile_dir)
+        os.system('mkdir -p %s'%self.output_dir)
+
+        # compile parameters which can be set straight away
+        self.start_time = time.gmtime()
+        self.periph_file = self.compile_dir + '/jasper.per'
+        self.frontend_target = frontend_target
+        self.frontend_target_base = os.path.basename(frontend_target)
+        self.output = self.frontend_target_base + '_%d-%d-%d_%d-%d-%d.bof'%(self.start_time.tm_year, self.start_time.tm_mon, self.start_time.tm_mday,
+            self.start_time.tm_hour, self.start_time.tm_min, self.start_time.tm_sec)
 
         if frontend == 'simulink':
             self.frontend = SimulinkFrontend(compile_dir=self.compile_dir, target=frontend_target)
@@ -66,8 +78,6 @@ class Toolflow(object):
             self.logger.error("Unsupported toolflow backend: %s"%backend)
             raise Exception("Unsupported toolflow backend: %s"%backend)
 
-        # compile parameters which can be set straight away
-        self.periph_file = self.compile_dir + '/jasper.per'
         self.sources= []
         self.tcl_sources= []
         self.const_files = []
@@ -130,8 +140,9 @@ class Toolflow(object):
 
         binary = self.backend.binary_loc
         os.system('cp %s %s/top.bin'%(binary, self.compile_dir))
-        os.system('%s/jasper_library/mkbof_64 -o %s/top.bof -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), self.compile_dir, self.compile_dir, self.compile_dir))
-        print('%s/jasper_library/mkbof_64 -o %s/top.bof -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), self.compile_dir, self.compile_dir, self.compile_dir))
+        mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), self.output_dir, self.output, self.compile_dir, self.compile_dir)
+        os.system(mkbof_cmd)
+        self.logger.info(mkbof_cmd)
 
     def check_attr_exists(self, thing, generator):
         """
@@ -366,8 +377,9 @@ class Toolflow(object):
         with open(basefile, 'r') as fh:
             s = fh.read()
         modemap = {'rw':3, 'r':1, 'w':2}
-        longest_name = max([len(core.regname) for core in self.cores])
-        format_str = '{0:%d} {1:1} {2:<16x} {3:<16x}\n'%longest_name
+        if len(self.cores) != 0:
+            longest_name = max([len(core.regname) for core in self.cores])
+            format_str = '{0:%d} {1:1} {2:<16x} {3:<16x}\n'%longest_name
         for core in self.cores:
             self.logger.debug('Adding core_info.tab entry for %s'%core.regname)
             s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
