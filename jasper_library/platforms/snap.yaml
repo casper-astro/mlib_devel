@@ -36,6 +36,19 @@ pins:
   cs_n:
     loc: AB25
     iostd: LVCMOS25
+  gpio:
+    iostd: LVCMOS25
+    loc:
+      - B21
+      - C21
+      - B20
+      - A20
+      - H24
+      - H23
+      - B26
+      - R25
+      - L17
+      - K18
   led:
     iostd: LVCMOS25
     loc:
