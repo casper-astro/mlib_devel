@@ -8,7 +8,7 @@ module kat_ten_gb_eth #(
     parameter FABRIC_IP         = 32'hffff_ffff,
     parameter FABRIC_PORT       = 16'hffff,
     parameter FABRIC_GATEWAY    = 8'd0,
-    parameter FABRIC_NETMASK    = 32'd0,
+    parameter FABRIC_NETMASK    = 32'hFFFF_FF00,
     parameter FABRIC_ENABLE     = 0,
     parameter FABRIC_MC_RECV_IP      = 32'hffff_ffff,
     parameter FABRIC_MC_RECV_IP_MASK = 32'hffff_ffff,
