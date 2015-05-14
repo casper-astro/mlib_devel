@@ -7,10 +7,6 @@ module top (
     input   sclk,
     input   mosi,
     output  miso,
-    
-    /* Debugging LED */
-    output GPIO_LED_5_LS
-    
   );
   
   wire clk_200;
@@ -171,12 +167,4 @@ module top (
     .wb_err_o (wbs_err_i[SYSBLOCK_WBID])
   );
 
-  reg led_reg = 0;
-  always @(posedge sys_clk) begin
-      if (new_spi_cmd) begin
-          led_reg <= ~led_reg;
-      end
-  end
-  assign GPIO_LED_5_LS = led_reg;
- 
 endmodule
