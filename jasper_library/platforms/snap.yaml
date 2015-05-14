@@ -49,6 +49,18 @@ pins:
       - R25
       - L17
       - K18
+  usb_tx:
+    iostd: LVCMOS25
+    loc: J8
+  usb_cts:
+    iostd: LVCMOS25
+    loc: F10
+  usb_rts:
+    iostd: LVCMOS25
+    loc: J13
+  usb_rx:
+    iostd: LVCMOS25
+    loc: H13
   led:
     iostd: LVCMOS25
     loc:
