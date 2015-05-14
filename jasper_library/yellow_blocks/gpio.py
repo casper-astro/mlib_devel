@@ -39,8 +39,8 @@ class gpio(YellowBlock):
         #top.add_port(external_port_name, self.io_dir, width=self.pad_bitwidth) 
 
         inst = top.get_instance(entity=self.module, name=self.fullname, comment=self.fullname)
-        inst.add_port('clk', signal='user_clk')
-        inst.add_port('clk90', signal='user_clk90')
+        inst.add_port('clk', signal='user_clk', parent_sig=False)
+        inst.add_port('clk90', signal='user_clk90', parent_sig=False)
         inst.add_port('gateway', signal='%s_gateway'%self.fullname, width=self.bitwidth)
         inst.add_port('io_pad', signal=external_port_name, dir=self.io_dir, width=self.pad_bitwidth, parent_port=True)
         inst.add_parameter('CLK_PHASE', self.reg_clk_phase)

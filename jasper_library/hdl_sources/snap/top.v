@@ -9,7 +9,6 @@ module top (
     output  miso,
     
     /* Debugging LED */
-    output GPIO_LED_4_LS,
     output GPIO_LED_5_LS
     
   );
@@ -148,12 +147,17 @@ module top (
   localparam SYSBLOCK_WBID  =  0;
 
   wire [31:0] debug_out;
+  wire user_clk;
+  wire user_clk90;
+  wire user_clk180;
+  wire user_clk270;
   sys_block #(
     .BOARD_ID (12),
     .REV_MAJ  (1),
     .REV_MIN  (0),
     .REV_RCS  (32'b0)
   ) sys_block_inst (
+    .user_clk (user_clk),
     .wb_clk_i (wb_clk_i),
     .wb_rst_i (wb_rst_i),
     .wb_cyc_i (wbs_cyc_o[SYSBLOCK_WBID]),
@@ -164,9 +168,7 @@ module top (
     .wb_dat_i (wbs_dat_o),
     .wb_dat_o (wbs_dat_i[(SYSBLOCK_WBID+1)*32-1:(SYSBLOCK_WBID)*32]),
     .wb_ack_o (wbs_ack_i[SYSBLOCK_WBID]),
-    .wb_err_o (wbs_err_i[SYSBLOCK_WBID]),
-    .debug_out(debug_out)
-
+    .wb_err_o (wbs_err_i[SYSBLOCK_WBID])
   );
 
   reg led_reg = 0;
@@ -175,7 +177,6 @@ module top (
           led_reg <= ~led_reg;
       end
   end
-  assign GPIO_LED_4_LS = debug_out[0];
   assign GPIO_LED_5_LS = led_reg;
  
 endmodule

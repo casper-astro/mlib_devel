@@ -223,7 +223,7 @@ class adc16(YellowBlock):
             wbram.add_parameter('USER_ADDR_BITS','10')
             wbram.add_parameter('N_REGISTERS','2')
             wbram.add_wb_interface(nbytes=4*2**10)
-            wbram.add_port('user_clk','user_clk')
+            wbram.add_port('user_clk','user_clk', parent_sig=False)
             wbram.add_port('user_addr','adc16_snap_addr')
             wbram.add_port('user_din','{%s1, %s2, %s3, %s4}'%(din,din,din,din))
             wbram.add_port('user_we','adc16_snap_we')

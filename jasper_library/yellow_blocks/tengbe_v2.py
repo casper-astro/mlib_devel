@@ -43,7 +43,7 @@ class tengbe_v2(YellowBlock):
         # XAUI CONF interface
         ktge.add_port('xaui_status', 'xaui_status%d'%self.port, width=8)
 
-        ktge.add_port('clk', 'user_clk')
+        ktge.add_port('clk', 'user_clk', parent_sig=False)
 
         # Simulink ports
         ktge.add_port('rst', '%s_rst'%self.fullname)

@@ -1,1 +1,5 @@
-sys 3 0 ffff
+sys_board_id   3 0 4
+sys_rev        3 4 4
+sys_rev_rcs    3 c 4
+sys_scratchpad 3 10 4
+sys_clkcounter 3 14 4

@@ -10,8 +10,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports sclk]
 set_property PACKAGE_PIN G19 [get_ports cs_n]
 set_property IOSTANDARD LVCMOS33 [get_ports cs_n]
 
-set_property PACKAGE_PIN C13 [get_ports GPIO_LED_4_LS]
-set_property IOSTANDARD LVCMOS25 [get_ports GPIO_LED_4_LS]
 set_property PACKAGE_PIN C14 [get_ports GPIO_LED_5_LS]
 set_property IOSTANDARD LVCMOS25 [get_ports GPIO_LED_5_LS]
 #LED0 D13
