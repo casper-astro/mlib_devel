@@ -244,7 +244,7 @@ function [result, revision, dirty] = get_revision_info(system_os, rev_sys, dir, 
 
         % determine if dirty. If file, must not appear as being modified, if whole repository, must be clean
         if isempty(file),
-	  search = 'grep "nothing to commit (working directory clean)"';
+	  search = 'grep "nothing to commit, working directory clean"';
 	  clog(['cd ',dir,'; git status | ', search], 'rcs_init_debug');
           [s, r] = system(['cd ',dir,'; git status |', search]);
           clog([num2str(s),' : ',r], 'rcs_init_debug');
