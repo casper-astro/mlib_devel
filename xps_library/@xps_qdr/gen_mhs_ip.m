@@ -185,6 +185,7 @@ switch hw_sys
         str = [str, ' PORT phy_rdy  = ', inst_name, '_phy_ready', '\n'];
         str = [str, ' PORT cal_fail = ', inst_name, '_cal_fail',  '\n'];
         
+        str = [str, ' PORT dly_extra_clk = ', inst_name, '_dly_extra_clk',   '\n'];
         str = [str, ' PORT dly_en_o     = ', inst_name, '_dly_en_o',   '\n'];
         str = [str, ' PORT dly_en_i     = ', inst_name, '_dly_en_i',   '\n'];
         str = [str, ' PORT dly_inc_dec  = ', inst_name, '_dly_inc_dec','\n'];
@@ -246,6 +247,7 @@ switch hw_sys
         str = [str, ' PORT slave_ack     = ', inst_name, '_ack',       '\n'];
        
         str = [str, ' PORT dly_clk = sys_clk2x',              '\n'];
+        str = [str, ' PORT dly_extra_clk = ', inst_name, '_dly_extra_clk',   '\n'];
         str = [str, ' PORT dly_en_o      = ', inst_name, '_dly_en_o',   '\n'];
         str = [str, ' PORT dly_en_i      = ', inst_name, '_dly_en_i',   '\n'];
         str = [str, ' PORT dly_inc_dec   = ', inst_name, '_dly_inc_dec','\n'];

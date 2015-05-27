@@ -32,6 +32,7 @@ module qdr_controller (
     usr_wr_be, /* 'byte' enable */
     
     /* phy training signals */
+    dly_extra_clk,
     dly_clk,
     dly_en_i,
     dly_en_o,
@@ -76,6 +77,7 @@ module qdr_controller (
   input  [2*DATA_WIDTH - 1:0] usr_wr_data;
   input    [2*BW_WIDTH - 1:0] usr_wr_be;
   
+  input dly_extra_clk;
   input  [DATA_WIDTH - 1:0] dly_en_i;
   input  [DATA_WIDTH    :0] dly_en_o;
   input                     dly_inc_dec;
@@ -143,8 +145,9 @@ module qdr_controller (
     .qdr_r_n_buf       (qdr_r_n_buf),
     .qdr_dll_off_n_buf (qdr_dll_off_n_buf),
     /* phy training signals */
+    .dly_extra_clk   (dly_extra_clk),
     .dly_clk         (dly_clk),
-	 .dly_rst         (reset),
+	.dly_rst         (reset),
     .dly_en_i        (dly_en_i),
     .dly_en_o        (dly_en_o),
     .dly_inc_dec     (dly_inc_dec),

@@ -23,6 +23,7 @@ module qdr_config #(
     output [35:0] dly_en_i,
     output [36:0] dly_en_o,
     output        dly_inc_dec,
+    output        dly_extra_clk,
 
     input [5*(37+36)-1:0] dly_cntrs,
 
@@ -42,12 +43,14 @@ module qdr_config #(
   localparam REG_DLY_EN_2       = 6;
   localparam REG_DLY_INC_DEC    = 7;
   localparam REG_DLY_CNTRS0     = 8;
+  localparam REG_EXTRA_CLK      = 9;
 
   /**************** Control Registers OPB Attachment ******************/
   
   reg [35:0] dly_en_i_reg;
   reg [36:0] dly_en_o_reg;
   reg        dly_inc_dec_reg;
+  reg        dly_extra_clk_reg;
 
   /* OPB Address Decoding */
   wire [31:0] opb_addr = OPB_ABus - C_BASEADDR;
@@ -98,6 +101,11 @@ module qdr_config #(
               dly_inc_dec_reg <= OPB_DBus[31];
             end
           end
+          REG_EXTRA_CLK: begin
+            if (!OPB_RNW) begin
+              dly_extra_clk_reg <= OPB_DBus[31];
+            end
+          end
         endcase
  	  end
     end
@@ -115,6 +123,9 @@ module qdr_config #(
         end
         REG_DLY_CNTRS0: begin
           Sl_DBus_reg <= dly_cntrs[31:0];
+        end
+        REG_EXTRA_CLK: begin
+          Sl_DBus_reg[31] <= dly_extra_clk_reg;
         end
         default: begin
           Sl_DBus_reg <= 32'h0;
@@ -144,25 +155,37 @@ module qdr_config #(
   wire [35:0] dly_en_i_clk_crossed;
   wire [36:0] dly_en_o_clk_crossed;
   wire        dly_inc_dec_clk_crossed;
+  wire dly_extra_clk_crossed;
 
   assign dly_inc_dec = dly_inc_dec_clk_crossed;
+  assign dly_extra_clk = dly_extra_clk_crossed;
  
   /*** cross the clock domains ***/  
   clk_domain_crosser #(
-    .DATA_WIDTH (74)
-  ) clk_domain_crosser (
+    .DATA_WIDTH (1)
+  ) clk_domain_crosser [73:0](
     .in_clk   (OPB_Clk),
     .out_clk  (dly_clk),
     .rst      (OPB_Rst),
     .data_in  ({dly_en_i_reg,         dly_en_o_reg,         dly_inc_dec_reg        }),
     .data_out ({dly_en_i_clk_crossed, dly_en_o_clk_crossed, dly_inc_dec_clk_crossed})
   );
+
+  clk_domain_crosser #(
+    .DATA_WIDTH (1)
+  ) clk_domain_crosser_ec (
+    .in_clk   (OPB_Clk),
+    .out_clk  (qdr_clk),
+    .rst      (OPB_Rst),
+    .data_in  (dly_extra_clk_reg),
+    .data_out (dly_extra_clk_crossed)
+  );
   
   /*** edge detect ***/
   edge_detect #(
-    .DATA_WIDTH (73),
+    .DATA_WIDTH (1),
     .EDGE_TYPE ("RISE")
-  ) dly_en_edge_detect (
+  ) dly_en_edge_detect [72:0](
     .clk       (dly_clk),
     .en        (1'b1),
     .in        ({dly_en_i_clk_crossed[35:0], dly_en_o_clk_crossed[36:0]}),

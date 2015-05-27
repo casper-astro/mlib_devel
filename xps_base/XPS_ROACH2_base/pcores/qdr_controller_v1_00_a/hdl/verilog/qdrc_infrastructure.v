@@ -35,6 +35,7 @@ module qdrc_infrastructure(
     //qdr_qvld_buf,
 
     /* phy training signals */
+    dly_extra_clk,
     dly_clk,
     dly_rst,
     dly_en_i,
@@ -78,6 +79,7 @@ module qdrc_infrastructure(
   //output qdr_cq_buf, qdr_cq_n_buf;
   //output qdr_qvld_buf;
 
+  input         dly_extra_clk;
   input         dly_clk;
   input         dly_rst;
   input  [35:0] dly_en_i;
@@ -468,7 +470,7 @@ module qdrc_infrastructure(
     .RST         (dly_rst),
     .T           (1'b0),
     .DATAOUT     (qdr_q_iodelay[DATA_WIDTH - 1:0]),
-	 .CNTVALUEOUT ()
+	.CNTVALUEOUT ()
   );
 
   wire [DATA_WIDTH - 1:0] qdr_q_rise_int;
@@ -491,24 +493,35 @@ module qdrc_infrastructure(
     .Q2 (qdr_q_fall_int)
   );
 
-  reg [17:0] qdr_q_rise_intR_low , qdr_q_rise_intRR_low ;
-  reg [17:0] qdr_q_rise_intR_high, qdr_q_rise_intRR_high;
-  reg [17:0] qdr_q_fall_intR_low , qdr_q_fall_intRR_low ;
-  reg [17:0] qdr_q_fall_intR_high, qdr_q_fall_intRR_high;
+  /* The registers are split high and low here to match ucf LOCs */
+  reg [17:0] qdr_q_rise_intR_high, qdr_q_rise_intRR_high, qdr_q_rise_intRRR_high;
+  reg [17:0] qdr_q_fall_intR_high, qdr_q_fall_intRR_high, qdr_q_fall_intRRR_high, qdr_q_fall_intRRRR_high;
+  reg [17:0] qdr_q_rise_intR_low, qdr_q_rise_intRR_low, qdr_q_rise_intRRR_low;
+  reg [17:0] qdr_q_fall_intR_low, qdr_q_fall_intRR_low, qdr_q_fall_intRRR_low, qdr_q_fall_intRRRR_low;
 
   always @(posedge clk0) begin
-    qdr_q_rise_intR_high   <= qdr_q_rise_int [35:18];
-    qdr_q_fall_intR_high   <= qdr_q_fall_int [35:18];
+    qdr_q_rise_intR_high   <= qdr_q_rise_int[35:18];
+    qdr_q_fall_intR_high   <= qdr_q_fall_int[35:18];
     qdr_q_rise_intRR_high  <= qdr_q_rise_intR_high;
     qdr_q_fall_intRR_high  <= qdr_q_fall_intR_high;
-    qdr_q_rise_intR_low    <= qdr_q_rise_int  [17:0];
-    qdr_q_fall_intR_low    <= qdr_q_fall_int  [17:0];
-    qdr_q_rise_intRR_low   <= qdr_q_rise_intR_low;
-    qdr_q_fall_intRR_low   <= qdr_q_fall_intR_low;
+    qdr_q_rise_intRRR_high  <= qdr_q_rise_intRR_high;
+    qdr_q_fall_intRRR_high  <= qdr_q_fall_intRR_high;
+    qdr_q_fall_intRRRR_high  <= qdr_q_fall_intRRR_high;
+
+    qdr_q_rise_intR_low   <= qdr_q_rise_int[17:0];
+    qdr_q_fall_intR_low   <= qdr_q_fall_int[17:0];
+    qdr_q_rise_intRR_low  <= qdr_q_rise_intR_low;
+    qdr_q_fall_intRR_low  <= qdr_q_fall_intR_low;
+    qdr_q_rise_intRRR_low  <= qdr_q_rise_intRR_low;
+    qdr_q_fall_intRRR_low  <= qdr_q_fall_intRR_low;
+    qdr_q_fall_intRRRR_low  <= qdr_q_fall_intRRR_low;
   end
 
-  assign qdr_q_rise = {qdr_q_rise_intRR_high, qdr_q_rise_intRR_low};
-  assign qdr_q_fall = {qdr_q_fall_intRR_high, qdr_q_fall_intRR_low};
+  assign qdr_q_rise = dly_extra_clk ? {qdr_q_fall_intRRRR_high, qdr_q_fall_intRRRR_low} : {qdr_q_fall_intRRR_high, qdr_q_fall_intRRR_low};
+  assign qdr_q_fall = dly_extra_clk ? {qdr_q_rise_intRRR_high, qdr_q_rise_intRRR_low} : {qdr_q_rise_intRR_high, qdr_q_rise_intRR_low};
+
+  //assign qdr_q_rise = dly_extra_clk ? qdr_q_fall_intRRRR_high : qdr_q_fall_intRRR_high;
+  //assign qdr_q_fall = dly_extra_clk ? qdr_q_rise_intRRR_high : qdr_q_rise_intRR_high;
 
   // Stop XST to chuck all this pipelining into a single shift register!
   //synthesis attribute SHREG_EXTRACT of qdr_q_rise_intR_low     is no
