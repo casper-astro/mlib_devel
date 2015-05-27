@@ -2,7 +2,7 @@ Library {
   Name			  "xps_library"
   Version		  7.2
   MdlSubVersion		  0
-  SavedCharacterEncoding  "US-ASCII"
+  SavedCharacterEncoding  "UTF-8"
   LibraryType		  "BlockLibrary"
   SaveDefaultBlockParams  on
   ScopeRefreshTime	  0.035000
@@ -12,11 +12,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "davidm"
+  LastModifiedBy	  "jackh"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Jun 05 16:17:27 2014"
-  RTWModifiedTimeStamp	  323885344
-  ModelVersionFormat	  "1.%<AutoIncrement:519>"
+  LastModifiedDate	  "Tue May 26 14:36:12 2015"
+  RTWModifiedTimeStamp	  354551280
+  ModelVersionFormat	  "1.%<AutoIncrement:521>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -689,7 +689,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [233, 23, 1579, 1051]
+    Location		    [199, 45, 1593, 1308]
     Open		    off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -718,7 +718,7 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"1new_yellow_block"
-	Location		[316, 45, 1153, 1636]
+	Location		[282, 45, 1167, 1871]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -746,7 +746,7 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[2102, 45, 3690, 1358]
+	Location		[2068, 45, 3704, 1593]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -780,7 +780,7 @@ Library {
 	  MaskIconUnits		  "autoscale"
 	  System {
 	    Name		    "adc083000_ctrl"
-	    Location		    [12, 45, 866, 1690]
+	    Location		    [12, 45, 914, 1925]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -1077,7 +1077,7 @@ Library {
 	  MaskValueString	  "1|2|2"
 	  System {
 	    Name		    "adc16x250-8"
-	    Location		    [12, 45, 1018, 2032]
+	    Location		    [12, 45, 1066, 2267]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2354,7 +2354,7 @@ Library {
 	  MaskValueString	  "0|400"
 	  System {
 	    Name		    "adc2x14_400"
-	    Location		    [40, 45, 1317, 1987]
+	    Location		    [12, 45, 1337, 2222]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -2601,7 +2601,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv"
-		Location		[13, 45, 1060, 1727]
+		Location		[12, 45, 1107, 1962]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -2834,7 +2834,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv1"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3067,7 +3067,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv2"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3300,7 +3300,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv3"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3636,7 +3636,7 @@ Library {
 	  MaskValueString	  "1|400"
 	  System {
 	    Name		    "adc2x14_400_4x"
-	    Location		    [12, 45, 1644, 2096]
+	    Location		    [12, 45, 1692, 2331]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -3668,7 +3668,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -3901,7 +3901,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv1"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4134,7 +4134,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv2"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4367,7 +4367,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv3"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4600,7 +4600,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv4"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -4833,7 +4833,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv5"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -5066,7 +5066,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv6"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -5299,7 +5299,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv7"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -6098,7 +6098,7 @@ Library {
 	  MaskValueString	  "1|512"
 	  System {
 	    Name		    "adc_mkid"
-	    Location		    [40, 45, 1317, 1987]
+	    Location		    [12, 45, 1337, 2222]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -6130,7 +6130,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -6363,7 +6363,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv1"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -6596,7 +6596,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv2"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -6829,7 +6829,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv3"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -7380,7 +7380,7 @@ Library {
 	  MaskValueString	  "1|540"
 	  System {
 	    Name		    "adc_mkid_4x"
-	    Location		    [12, 45, 1644, 2096]
+	    Location		    [12, 45, 1692, 2331]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -7412,7 +7412,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -7645,7 +7645,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv1"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -7878,7 +7878,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv2"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -8111,7 +8111,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv3"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -8344,7 +8344,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv4"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -8577,7 +8577,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv5"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -8810,7 +8810,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv6"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -9043,7 +9043,7 @@ Library {
 	      MaskIconUnits	      "autoscale"
 	      System {
 		Name			"conv7"
-		Location		[13, 45, 776, 1593]
+		Location		[12, 45, 823, 1828]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -9843,7 +9843,7 @@ Library {
 	  MaskValueString	  "8|8"
 	  System {
 	    Name		    "adc_sim"
-	    Location		    [12, 45, 1210, 1982]
+	    Location		    [12, 45, 1258, 2217]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -10268,7 +10268,7 @@ Library {
 	  MaskValueString	  "One-channel -- A|ZDOK 0|1:2|4|2500|on|off"
 	  System {
 	    Name		    "asiaa_adc5g"
-	    Location		    [2103, 45, 3777, 2448]
+	    Location		    [2069, 45, 3791, 2683]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -11950,7 +11950,7 @@ Library {
 	  MaskValueString	  "8"
 	  System {
 	    Name		    "conv"
-	    Location		    [479, 45, 1279, 1619]
+	    Location		    [445, 45, 1293, 1854]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -12192,7 +12192,7 @@ Library {
 	  MaskValueString	  "0|8"
 	  System {
 	    Name		    "of1"
-	    Location		    [12, 45, 741, 1809]
+	    Location		    [12, 45, 789, 2044]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -12396,7 +12396,7 @@ Library {
 	  MaskValueString	  "8|8"
 	  System {
 	    Name		    "of_detect_bus"
-	    Location		    [380, 45, 1025, 1876]
+	    Location		    [346, 45, 1039, 2111]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -12636,7 +12636,7 @@ Library {
 	  MaskValueString	  "12|off|GPIO_A"
 	  System {
 	    Name		    "x64_adc"
-	    Location		    [122, 45, 1266, 1112]
+	    Location		    [88, 45, 1280, 1347]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -13950,7 +13950,7 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"DACs"
-	Location		[228, 45, 1312, 2148]
+	Location		[194, 45, 1326, 2383]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -13995,7 +13995,7 @@ Library {
 	  MaskValueString	  "0|512|1"
 	  System {
 	    Name		    "dac_mkid"
-	    Location		    [12, 45, 1711, 2096]
+	    Location		    [12, 45, 1759, 2331]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -14257,7 +14257,7 @@ Library {
 	      MaskHideContents	      off
 	      System {
 		Name			"Subsystem"
-		Location		[214, 45, 1256, 1903]
+		Location		[180, 45, 1270, 2138]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -14646,7 +14646,7 @@ Library {
 		  MaskValueString	  "17|1"
 		  System {
 		    Name		    "parallel_to_serial_converter"
-		    Location		    [12, 45, 1576, 2074]
+		    Location		    [12, 45, 1624, 2309]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -15546,7 +15546,7 @@ Library {
 		  MaskValueString	  "17|1"
 		  System {
 		    Name		    "parallel_to_serial_converter1"
-		    Location		    [12, 45, 1576, 2074]
+		    Location		    [12, 45, 1624, 2309]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -16443,7 +16443,7 @@ Library {
 		  MaskIconUnits		  "autoscale"
 		  System {
 		    Name		    "posedge1"
-		    Location		    [12, 45, 1312, 2105]
+		    Location		    [12, 45, 1360, 2340]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -16612,7 +16612,7 @@ Library {
 		  MaskIconUnits		  "autoscale"
 		  System {
 		    Name		    "posedge2"
-		    Location		    [12, 45, 1312, 2105]
+		    Location		    [12, 45, 1360, 2340]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -16781,7 +16781,7 @@ Library {
 		  MaskIconUnits		  "autoscale"
 		  System {
 		    Name		    "posedge3"
-		    Location		    [12, 45, 1312, 2105]
+		    Location		    [12, 45, 1360, 2340]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -17900,7 +17900,7 @@ Library {
 	  MaskValueString	  "0|540|1"
 	  System {
 	    Name		    "dac_mkid_4x"
-	    Location		    [12, 45, 1699, 2096]
+	    Location		    [12, 45, 1747, 2331]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -18338,7 +18338,7 @@ Library {
 	      MaskHideContents	      off
 	      System {
 		Name			"Subsystem"
-		Location		[338, 45, 1380, 1903]
+		Location		[304, 45, 1394, 2138]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -18727,7 +18727,7 @@ Library {
 		  MaskValueString	  "17|1"
 		  System {
 		    Name		    "parallel_to_serial_converter"
-		    Location		    [12, 45, 1576, 2074]
+		    Location		    [12, 45, 1624, 2309]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -19641,7 +19641,7 @@ Library {
 		  MaskValueString	  "17|1"
 		  System {
 		    Name		    "parallel_to_serial_converter1"
-		    Location		    [12, 45, 1576, 2074]
+		    Location		    [12, 45, 1624, 2309]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -20538,7 +20538,7 @@ Library {
 		  MaskIconUnits		  "autoscale"
 		  System {
 		    Name		    "posedge1"
-		    Location		    [12, 45, 1312, 2105]
+		    Location		    [12, 45, 1360, 2340]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -20707,7 +20707,7 @@ Library {
 		  MaskIconUnits		  "autoscale"
 		  System {
 		    Name		    "posedge2"
-		    Location		    [12, 45, 1312, 2105]
+		    Location		    [12, 45, 1360, 2340]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -20876,7 +20876,7 @@ Library {
 		  MaskIconUnits		  "autoscale"
 		  System {
 		    Name		    "posedge3"
-		    Location		    [12, 45, 1312, 2105]
+		    Location		    [12, 45, 1360, 2340]
 		    Open		    off
 		    ModelBrowserVisibility  off
 		    ModelBrowserWidth	    200
@@ -22151,7 +22151,7 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "Shared BRAM"
+      Name		      "Shared_BRAM"
       Tag		      "xps:bram"
       Ports		      [3, 1]
       Position		      [220, 341, 300, 399]
@@ -22181,8 +22181,8 @@ Library {
       MaskIconUnits	      "pixels"
       MaskValueString	      "Unsigned|10|32|off|off|Minimum_Area|0|[0:2^10-1]|1"
       System {
-	Name			"Shared BRAM"
-	Location		[12, 45, 1594, 1566]
+	Name			"Shared_BRAM"
+	Location		[12, 45, 1642, 1801]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -22241,7 +22241,7 @@ Library {
 	  MaskValueString	  "32|10|sample_rate"
 	  System {
 	    Name		    "calc_add"
-	    Location		    [502, 45, 1682, 1968]
+	    Location		    [468, 45, 1696, 2203]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -22747,7 +22747,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "mem"
-	    Location		    [12, 45, 1590, 1540]
+	    Location		    [12, 45, 1638, 1775]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -22829,7 +22829,7 @@ Library {
 	      MaskValueString	      "32|10|sample_rate"
 	      System {
 		Name			"calc_add"
-		Location		[502, 45, 1682, 1968]
+		Location		[468, 45, 1696, 2203]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -23409,7 +23409,7 @@ Library {
 	      MaskValueString	      "1|32|[0]|Unsigned|0"
 	      System {
 		Name			"sim_munge_in"
-		Location		[322, 45, 1547, 1882]
+		Location		[288, 45, 1561, 2117]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -23513,7 +23513,7 @@ Library {
 	      MaskValueString	      "1|32|[0]|Unsigned|0"
 	      System {
 		Name			"sim_munge_out"
-		Location		[322, 45, 1547, 1882]
+		Location		[288, 45, 1561, 2117]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -23744,7 +23744,7 @@ Library {
 	  MaskValueString	  "1|32|[0]|Unsigned|0"
 	  System {
 	    Name		    "munge_in"
-	    Location		    [322, 45, 1547, 1882]
+	    Location		    [288, 45, 1561, 2117]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -23848,7 +23848,7 @@ Library {
 	  MaskValueString	  "1|32|[0]|Unsigned|0"
 	  System {
 	    Name		    "munge_out"
-	    Location		    [322, 45, 1547, 1882]
+	    Location		    [288, 45, 1561, 2117]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -24164,7 +24164,7 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "Shared FIFO"
+      Name		      "Shared_FIFO"
       Tag		      "xps:fifo"
       Ports		      [4, 2]
       Position		      [205, 437, 310, 553]
@@ -24192,8 +24192,8 @@ Library {
       MaskIconUnits	      "autoscale"
       MaskValueString	      "To Processor|Unsigned|32|0|512"
       System {
-	Name			"Shared FIFO"
-	Location		[359, 45, 1311, 1823]
+	Name			"Shared_FIFO"
+	Location		[325, 45, 1325, 2058]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -24732,7 +24732,7 @@ Library {
       MaskValueString	      "1|ROACH:0|on|off|3|800"
       System {
 	Name			"XAUI"
-	Location		[12, 45, 1312, 2105]
+	Location		[12, 45, 1360, 2340]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -25734,7 +25734,7 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "XSG core config"
+      Name		      "XSG_core_config"
       Tag		      "xps:xsg"
       Ports		      []
       Position		      [25, 344, 71, 387]
@@ -25774,8 +25774,8 @@ Library {
       MaskIconUnits	      "autoscale"
       MaskValueString	      "MKDIG|sys_clk|sys_clk|adc0_clk|sys_clk|100|1|XST"
       System {
-	Name			"XSG core config"
-	Location		[12, 45, 1980, 1405]
+	Name			"XSG_core_config"
+	Location		[12, 45, 2028, 1640]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -25825,7 +25825,7 @@ Library {
       MaskValueString	      "adc0|800|on|1"
       System {
 	Name			"adc"
-	Location		[12, 45, 1560, 2085]
+	Location		[12, 45, 1608, 2320]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -26304,7 +26304,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -26531,7 +26531,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv1"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -26758,7 +26758,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv2"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -26985,7 +26985,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv3"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -27212,7 +27212,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv4"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -27439,7 +27439,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv5"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -27666,7 +27666,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv6"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -27893,7 +27893,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv7"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -29761,7 +29761,7 @@ Library {
       MaskValueString	      "on|on|off|on|off|on|1000|1|8"
       System {
 	Name			"adc083000x2"
-	Location		[12, 45, 1825, 2351]
+	Location		[12, 45, 1873, 2586]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -29841,7 +29841,7 @@ Library {
 	  MaskValueString	  "16|8"
 	  System {
 	    Name		    "adc_sim"
-	    Location		    [12, 45, 1210, 1982]
+	    Location		    [12, 45, 1258, 2217]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -29880,8 +29880,8 @@ Library {
 	    Block {
 	      BlockType		      Reference
 	      Name		      "overflow_detector"
-	      Ports		      [16, 1]
-	      Position		      [740, 993, 850, 1187]
+	      Ports		      [8, 1]
+	      Position		      [740, 995, 850, 1190]
 	      UserDataPersistent      on
 	      UserData		      "DataTag14"
 	      SourceBlock	      "xps_library/ADCs/of_detect_bus"
@@ -30427,8 +30427,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			9
+		Points			[55, 585]
 	      }
 	      Branch {
 		DstBlock		"s8"
@@ -30440,8 +30439,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			10
+		Points			[55, 545]
 	      }
 	      Branch {
 		DstBlock		"s9"
@@ -30453,8 +30451,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			11
+		Points			[55, 505]
 	      }
 	      Branch {
 		DstBlock		"s10"
@@ -30466,8 +30463,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			12
+		Points			[55, 465]
 	      }
 	      Branch {
 		DstBlock		"s11"
@@ -30479,8 +30475,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			13
+		Points			[55, 425]
 	      }
 	      Branch {
 		DstBlock		"s12"
@@ -30492,8 +30487,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			14
+		Points			[55, 385]
 	      }
 	      Branch {
 		DstBlock		"s13"
@@ -30505,8 +30499,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			15
+		Points			[55, 345]
 	      }
 	      Branch {
 		DstBlock		"s14"
@@ -30518,8 +30511,7 @@ Library {
 	      SrcPort		      1
 	      Points		      [0, 0]
 	      Branch {
-		DstBlock		"overflow_detector"
-		DstPort			16
+		Points			[55, 305]
 	      }
 	      Branch {
 		DstBlock		"s15"
@@ -32174,7 +32166,7 @@ Library {
       MaskValueString	      "adc0|1800|1|on"
       System {
 	Name			"adc1x1800-10"
-	Location		[12, 45, 2172, 2292]
+	Location		[12, 45, 2220, 2527]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -32665,7 +32657,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv"
-	    Location		    [12, 45, 775, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -32892,7 +32884,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv1"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -33119,7 +33111,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv2"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -33346,7 +33338,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv3"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -33573,7 +33565,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv4"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -33800,7 +33792,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv5"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -34027,7 +34019,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv6"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -34254,7 +34246,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "conv7"
-	    Location		    [13, 45, 776, 1593]
+	    Location		    [12, 45, 823, 1828]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -36190,7 +36182,7 @@ Library {
       MaskValueString	      "1|Unsigned|0|200|1|on|on|18|off|off|off|on"
       System {
 	Name			"dram"
-	Location		[27, 45, 2207, 2292]
+	Location		[12, 45, 2240, 2527]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -37008,7 +37000,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "dram_sim"
-	    Location		    [1601, 45, 3527, 2296]
+	    Location		    [1567, 45, 3541, 2531]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -38817,7 +38809,7 @@ Library {
 	      MaskHideContents	      off
 	      System {
 		Name			"memory"
-		Location		[1601, 45, 3527, 2296]
+		Location		[1567, 45, 3541, 2531]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -39307,7 +39299,7 @@ Library {
 	      MaskHideContents	      off
 	      System {
 		Name			"rd_sm"
-		Location		[12, 45, 1508, 2348]
+		Location		[12, 45, 1556, 2583]
 		Open			off
 		ModelBrowserVisibility	off
 		ModelBrowserWidth	200
@@ -42136,7 +42128,7 @@ Library {
       MaskValueString	      "1|4|8|off|off|on|off"
       System {
 	Name			"generic_adc"
-	Location		[12, 45, 1768, 2445]
+	Location		[12, 45, 1816, 2680]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -42269,39 +42261,48 @@ Library {
 	  "ENT: end icon text');"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "d0_del0"
 	  Ports			  [1, 1]
 	  Position		  [580, 230, 620, 250]
-	  InputPortMap		  "u0"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "2"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "d0_del1"
 	  Ports			  [1, 1]
 	  Position		  [580, 390, 620, 410]
-	  InputPortMap		  "u0"
-	  DelayLength		  "1"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "1"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "d0_del2"
 	  Ports			  [1, 1]
 	  Position		  [580, 550, 620, 570]
-	  InputPortMap		  "u0"
-	  DelayLength		  "1"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "1"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "d0_del3"
 	  Ports			  [1, 1]
 	  Position		  [580, 710, 620, 730]
-	  InputPortMap		  "u0"
-	  DelayLength		  "1"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "1"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
 	  BlockType		  Reference
@@ -42313,8 +42314,8 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
 	}
 	Block {
@@ -42327,8 +42328,8 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "1"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
 	}
 	Block {
@@ -42341,8 +42342,8 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "2"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
 	}
 	Block {
@@ -42355,8 +42356,8 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "3"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
 	}
 	Block {
@@ -42710,39 +42711,48 @@ Library {
 	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "sync_del0"
 	  Ports			  [1, 1]
 	  Position		  [580, 30, 620, 50]
-	  InputPortMap		  "u0"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "2"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "sync_del1"
 	  Ports			  [1, 1]
 	  Position		  [580, 70, 620, 90]
-	  InputPortMap		  "u0"
-	  DelayLength		  "1"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "1"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "sync_del2"
 	  Ports			  [1, 1]
 	  Position		  [580, 110, 620, 130]
-	  InputPortMap		  "u0"
-	  DelayLength		  "1"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "1"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
-	  BlockType		  Delay
+	  BlockType		  Reference
 	  Name			  "sync_del3"
 	  Ports			  [1, 1]
 	  Position		  [580, 150, 620, 170]
-	  InputPortMap		  "u0"
-	  DelayLength		  "1"
-	  InputProcessing	  "Inherited"
+	  SourceBlock		  "simulink/Discrete/Integer Delay"
+	  SourceType		  "Integer Delay"
+	  NumDelays		  "1"
+	  vinit			  "0.0"
+	  samptime		  "-1"
 	}
 	Block {
 	  BlockType		  Reference
@@ -42754,8 +42764,8 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "0"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
 	}
 	Block {
@@ -42768,8 +42778,8 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "1"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
 	}
 	Block {
@@ -42782,8 +42792,8 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "2"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
 	}
 	Block {
@@ -42796,9 +42806,133 @@ Library {
 	  SourceType		  "Downsample"
 	  N			  "4"
 	  phase			  "3"
-	  smode			  "Allow multirate"
-	  fmode			  "Maintain input frame size"
+	  smode			  "Force single rate"
+	  fmode			  "Maintain input frame rate"
 	  ic			  "0"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "val0_0"
+	  Ports			  [1, 1]
+	  Position		  [1065, 272, 1095, 288]
+	  SourceBlock		  "xbsIndex_r4/Slice"
+	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
+	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
+	  "e notes: In hardware this block costs nothing."
+	  nbits			  "7"
+	  boolean_output	  off
+	  mode			  "Lower Bit Location + Width"
+	  bit1			  "0"
+	  base1			  "LSB of Input"
+	  bit0			  "0"
+	  base0			  "LSB of Input"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "slice"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
+	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
+	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "val0_1"
+	  Ports			  [1, 1]
+	  Position		  [1065, 432, 1095, 448]
+	  SourceBlock		  "xbsIndex_r4/Slice"
+	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
+	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
+	  "e notes: In hardware this block costs nothing."
+	  nbits			  "7"
+	  boolean_output	  off
+	  mode			  "Lower Bit Location + Width"
+	  bit1			  "0"
+	  base1			  "LSB of Input"
+	  bit0			  "0"
+	  base0			  "LSB of Input"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "slice"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
+	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
+	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "val0_2"
+	  Ports			  [1, 1]
+	  Position		  [1065, 592, 1095, 608]
+	  SourceBlock		  "xbsIndex_r4/Slice"
+	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
+	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
+	  "e notes: In hardware this block costs nothing."
+	  nbits			  "7"
+	  boolean_output	  off
+	  mode			  "Lower Bit Location + Width"
+	  bit1			  "0"
+	  base1			  "LSB of Input"
+	  bit0			  "0"
+	  base0			  "LSB of Input"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "slice"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
+	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
+	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "val0_3"
+	  Ports			  [1, 1]
+	  Position		  [1065, 752, 1095, 768]
+	  SourceBlock		  "xbsIndex_r4/Slice"
+	  SourceType		  "Xilinx Bit Slice Extractor Block"
+	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
+	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
+	  "e notes: In hardware this block costs nothing."
+	  nbits			  "7"
+	  boolean_output	  off
+	  mode			  "Lower Bit Location + Width"
+	  bit1			  "0"
+	  base1			  "LSB of Input"
+	  bit0			  "0"
+	  base0			  "LSB of Input"
+	  dbl_ovrd		  off
+	  has_advanced_control	  "0"
+	  sggui_pos		  "-1,-1,-1,-1"
+	  block_type		  "slice"
+	  block_version		  "11.4"
+	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
+	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
+	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
+	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
+	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
+	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
+	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Reference
@@ -43143,130 +43277,6 @@ Library {
 	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'"
 	  "\\fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end ic"
 	  "on text');"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "val0_0"
-	  Ports			  [1, 1]
-	  Position		  [1065, 272, 1095, 288]
-	  SourceBlock		  "xbsIndex_r4/Slice"
-	  SourceType		  "Xilinx Bit Slice Extractor Block"
-	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
-	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
-	  "e notes: In hardware this block costs nothing."
-	  nbits			  "7"
-	  boolean_output	  off
-	  mode			  "Lower Bit Location + Width"
-	  bit1			  "0"
-	  base1			  "LSB of Input"
-	  bit0			  "0"
-	  base0			  "LSB of Input"
-	  dbl_ovrd		  off
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "slice"
-	  block_version		  "11.4"
-	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
-	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
-	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
-	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "val0_1"
-	  Ports			  [1, 1]
-	  Position		  [1065, 432, 1095, 448]
-	  SourceBlock		  "xbsIndex_r4/Slice"
-	  SourceType		  "Xilinx Bit Slice Extractor Block"
-	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
-	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
-	  "e notes: In hardware this block costs nothing."
-	  nbits			  "7"
-	  boolean_output	  off
-	  mode			  "Lower Bit Location + Width"
-	  bit1			  "0"
-	  base1			  "LSB of Input"
-	  bit0			  "0"
-	  base0			  "LSB of Input"
-	  dbl_ovrd		  off
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "slice"
-	  block_version		  "11.4"
-	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
-	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
-	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
-	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "val0_2"
-	  Ports			  [1, 1]
-	  Position		  [1065, 592, 1095, 608]
-	  SourceBlock		  "xbsIndex_r4/Slice"
-	  SourceType		  "Xilinx Bit Slice Extractor Block"
-	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
-	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
-	  "e notes: In hardware this block costs nothing."
-	  nbits			  "7"
-	  boolean_output	  off
-	  mode			  "Lower Bit Location + Width"
-	  bit1			  "0"
-	  base1			  "LSB of Input"
-	  bit0			  "0"
-	  base0			  "LSB of Input"
-	  dbl_ovrd		  off
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "slice"
-	  block_version		  "11.4"
-	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
-	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
-	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
-	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "val0_3"
-	  Ports			  [1, 1]
-	  Position		  [1065, 752, 1095, 768]
-	  SourceBlock		  "xbsIndex_r4/Slice"
-	  SourceType		  "Xilinx Bit Slice Extractor Block"
-	  infoedit		  "Extracts a given range of bits from each input sample and presents it at the output.  The output type "
-	  "is ordinarily unsigned with binary point at zero, but can be Boolean when the slice is one bit wide.<br><br>Hardwar"
-	  "e notes: In hardware this block costs nothing."
-	  nbits			  "7"
-	  boolean_output	  off
-	  mode			  "Lower Bit Location + Width"
-	  bit1			  "0"
-	  base1			  "LSB of Input"
-	  bit0			  "0"
-	  base0			  "LSB of Input"
-	  dbl_ovrd		  off
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "slice"
-	  block_version		  "11.4"
-	  sg_icon_stat		  "30,16,1,1,white,blue,0,1fd851a7,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 16 16 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 30 30 0 0 ],[0 0 16 16 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[10.22 10.22 1"
-	  "2.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[8.22 8.22 10.22 10.22 8.22"
-	  " ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch([12"
-	  ".55 19.44 17.44 15.44 13.44 10.55 12.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.931 0.946 0.973 ]);\nfprintf('',"
-	  "'COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',1,'[a"
-	  ":b]');\nfprintf('','COMMENT: end icon text');\n"
 	}
 	Block {
 	  BlockType		  Outport
@@ -43717,7 +43727,7 @@ Library {
       MaskValueString	      "ROACH:aux0_clk|out|Boolean|1|0|0|1|off|off|on|0|None"
       System {
 	Name			"gpio"
-	Location		[527, 45, 1226, 1491]
+	Location		[493, 45, 1240, 1726]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -43827,7 +43837,7 @@ Library {
       MaskValueString	      "adc0|off|off|on|800|1"
       System {
 	Name			"katadc"
-	Location		[136, 45, 1797, 2107]
+	Location		[102, 45, 1811, 2342]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -47722,7 +47732,7 @@ Library {
       MaskValueString	      "on|off|off|on|hex2dec('123456789abc')|hex2dec('c0a8290a')|4321|1"
       System {
 	Name			"one_GbE"
-	Location		[12, 45, 2220, 2484]
+	Location		[12, 45, 2268, 2719]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -49325,7 +49335,7 @@ Library {
       MaskValueString	      "customlib/pcores"
       System {
 	Name			"pcore"
-	Location		[20, 45, 806, 1755]
+	Location		[12, 45, 846, 1990]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -49374,7 +49384,7 @@ Library {
       MaskValueString	      "0|basic|8|512|Boolean|1|0"
       System {
 	Name			"probe"
-	Location		[321, 45, 1158, 1636]
+	Location		[287, 45, 1172, 1871]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -49518,7 +49528,7 @@ Library {
       MaskValueString	      "qdr0|12|on"
       System {
 	Name			"qdr"
-	Location		[355, 45, 1701, 1366]
+	Location		[321, 45, 1715, 1601]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -50185,7 +50195,7 @@ Library {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "qdr_sim_model"
-	    Location		    [483, 45, 1829, 1308]
+	    Location		    [449, 45, 1843, 1543]
 	    Open		    off
 	    ModelBrowserVisibility  off
 	    ModelBrowserWidth	    200
@@ -52367,7 +52377,7 @@ Library {
       MaskValueString	      "0|200"
       System {
 	Name			"quadc"
-	Location		[344, 45, 957, 1855]
+	Location		[310, 45, 971, 2090]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -52842,7 +52852,7 @@ Library {
       MaskTabNameString	      "Setup,Setup,Setup,Setup,Setup,Setup,Setup,Setup,Setup,Setup"
       System {
 	Name			"software register"
-	Location		[1886, 45, 3214, 1304]
+	Location		[1852, 45, 3228, 1539]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -53093,7 +53103,7 @@ Library {
       MaskValueString	      "To Processor|Unsigned|32|0|1|xps_library_software_register_user_data_in"
       System {
 	Name			"software_register_OLD"
-	Location		[256, 45, 1093, 1636]
+	Location		[222, 45, 1107, 1871]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -53249,7 +53259,7 @@ Library {
       MaskValueString	      "ROACH:0|off|off|off|3|800|off|0|0|0|0"
       System {
 	Name			"ten_GbE"
-	Location		[12, 45, 1552, 2257]
+	Location		[12, 45, 1600, 2492]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -54845,7 +54855,7 @@ Library {
       "counters,Debug counters"
       System {
 	Name			"ten_Gbe_v2"
-	Location		[233, 23, 1579, 1051]
+	Location		[199, 45, 1593, 1308]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -56552,11 +56562,11 @@ MatData {
   DataRecord {
     Tag			    DataTag3
     Data		    "  %)30     .    0 <   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ &&6V08.    L 8   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ ,(8+@$.    L 8   "
     "8    (     @         %    \"     $    !     0         %  0 #@    $   !^    9V-B              !D969A=6QT<P       &E"
     "N<'5T7VUO9&4     9&5M=7@           !A9&-?8VQK7W)A=&4  &%D8U]B:71?=VED=&@ 861C7V)R9         !U<VEN9U]C=')L     '1E<"
-    "W1?<F%M<          .    <     8    (    !          %    \"     $    ^     0         0    /@   '1P9#0Q-C R9C%?,#)F-U"
-    "\\T-C@Y7S@W-C=?,38S-#%D,V,Q8C(T7W-A=F5A<R]!1$-S+V%S:6%A7V%D8S5G   .    R ,   8    (     0         %    \"     $   "
+    "W1?<F%M<          .    <     8    (    !          %    \"     $    ^     0         0    /@   '1P,C@S9&0V93=?-&)B8E"
+    "\\T834W7V$Y93-?-39F-SEA96)B-64T7W-A=F5A<R]!1$-S+V%S:6%A7V%D8S5G   .    R ,   8    (     0         %    \"     $   "
     " .     0         .    0     8    (    !          %    \"     $    *     0         0    \"@   &EN<'5T7VUO9&4       "
     " .    2     8    (    !          %    \"     $    2     0         0    $@   %1W;RUC:&%N;F5L(\"TM($$F0P        X   "
     " X    !@    @    $          4    (     0    4    !         !     %    9&5M=7@    .    ,     8    (    !          %"
@@ -56744,7 +56754,7 @@ MatData {
   DataRecord {
     Tag			    DataTag16
     Data		    "  %)30     .    0 8   8    (     @         %    \"     $    !     0         %  0 \"P    $    6    <W1A="
-    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ !R$*@,.    L 4   "
+    "&4       !P87)A;65T97)S    #@   #     &    \"     T         !0    @    !     0    $         !@ $ %M@RP<.    L 4   "
     "8    (     @         %    \"     $    !     0         %  0 #P    $   !X    9&5F875L=',         ;F%M90             "
     " 861C7V)R9           861C7VEN=&5R;&5A=F4 8GEP87-S7V%U=&\\     96Y?9V%I;@          861C7V-L:U]R871E    <V%M<&QE7W!E"
     "<FEO9   #@   \"@#   &    \"     $         !0    @    !    #     $         #@   #@    &    \"     0         !0    @"
@@ -56757,11 +56767,11 @@ MatData {
     "         !     ,    861C7V-L:U]R871E      X    X    !@    @    &          4    (     0    $    !          D    (  "
     "          B4 .    0     8    (    !          %    \"     $    -     0         0    #0   '-A;7!L95]P97)I;V0    .   "
     " .     8    (    !@         %    \"     $    !     0         )    \"            / _#@   &@    &    \"     0       "
-    "  !0    @    !    -     $         $    #0   !T<&0T,38P,F8Q7S R9C=?-#8X.5\\X-S8W7S$V,S0Q9#-C,6(R-%]S879E87,O:V%T861"
-    "C      X    P    !@    @    $          4    (     0    0    !         !  ! !A9&,P#@   #     &    \"     0         "
-    "!0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $    #     0         0  , ;"
-    "V9F  X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #@    &    \"     8         !0"
-    "    @    !     0    $         \"0    @           \")0 X    X    !@    @    &          4    (     0    $    !      "
-    "    D    (            \\#\\"
+    "  !0    @    !    -     $         $    #0   !T<#(X,V1D-F4W7S1B8F)?-&$U-U]A.64S7S4V9C<Y865B8C5E-%]S879E87,O:V%T861C"
+    "      X    P    !@    @    $          4    (     0    0    !         !  ! !A9&,P#@   #     &    \"     0         !"
+    "0    @    !     P    $         $  # &]F9@ .    ,     8    (    !          %    \"     $    #     0         0  , ;V"
+    "9F  X    P    !@    @    $          4    (     0    (    !         !   @!O;@  #@   #@    &    \"     8         !0 "
+    "   @    !     0    $         \"0    @           \")0 X    X    !@    @    &          4    (     0    $    !       "
+    "   D    (            \\#\\"
   }
 }
