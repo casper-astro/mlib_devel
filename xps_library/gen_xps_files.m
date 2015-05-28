@@ -67,18 +67,18 @@ if s ~= 0
   if s ~= 0,
     disp(sprint('Could not detect OS, assuming Windows'));
   elseif ~isempty(regexp(w,'Windows', 'ONCE')),
-    fprintf('Detected Windows OS');
+    fprintf('Detected Windows OS\n');
   else
-    fprintf('Detected Unknown Windows-like OS');
+    fprintf('Detected Unknown Windows-like OS\n');
   end
   system_os = 'windows';
 elseif ~isempty(regexp(w, 'Linux', 'ONCE')),
   slash = '/';
-  fprintf('Detected Linux OS');
+  fprintf('Detected Linux OS\n');
   system_os = 'linux';
 else
   slash = '/';
-  fprintf('Detected Unknown Unix-like OS');
+  fprintf('Detected Unknown Unix-like OS\n');
   system_os = 'linux';
 end
 
@@ -91,7 +91,8 @@ casper_blks     = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',
 
 % check for spaces in xps or casper block names
 for ctr = 1 : numel(xps_blks),
-    if numel(strfind(xps_blks{ctr}, ' ')) > 0,
+    % Allow 'XSG core config' block to have spaces
+    if numel(strfind(xps_blks{ctr}, ' ')) > 0 && ~regexpi(xps_blks{ctr}, 'XSG core config$'),
         error('Block names may not have spaces - %s', xps_blks{ctr});
     end 
 end

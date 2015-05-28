@@ -420,6 +420,7 @@
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # # Control signals to/from adc16_interface
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_reset            = adc16_reset
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_iserdes_bitslip  = adc16_iserdes_bitslip
+#IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_demux_mode       = adc16_demux_mode
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_delay_rst        = adc16_delay_rst
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_delay_tap        = adc16_delay_tap
 #IF# (strcmp(get(b,'type'),'xps_adc16')) # PORT adc16_snap_req         = adc16_snap_req

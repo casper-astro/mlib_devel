@@ -316,10 +316,10 @@ NET "epb_data<31>"      LOC = AJ33;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strfind(get(b,'hw_qdr'),'qdr')#TIMESPEC TS_sys_clk_TIG   = FROM "TNM_sys_clk"   TO "TNM_sys_clk2x" TIG;
 
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#INST */qdr0_controller/qdrc_infrastructure_inst/*intR_high* AREA_GROUP = "QDR0_AREA_HIGH";
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#AREA_GROUP "QDR0_AREA_HIGH" RANGE = SLICE_X76Y319:SLICE_X77Y280;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#AREA_GROUP "QDR0_AREA_HIGH" RANGE = SLICE_X112Y264:SLICE_X113Y319;
 
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#INST */qdr0_controller/qdrc_infrastructure_inst/*intR_low*  AREA_GROUP = "QDR0_AREA_LOW";
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#AREA_GROUP "QDR0_AREA_LOW" RANGE = SLICE_X76Y239:SLICE_X77Y200;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#AREA_GROUP "QDR0_AREA_LOW" RANGE = SLICE_X112Y239:SLICE_X113Y200;
 
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k"         IOSTANDARD = HSTL_I | LOC = D17;
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr0')#NET "qdr0_k_n"       IOSTANDARD = HSTL_I | LOC = E17;
@@ -423,7 +423,7 @@ NET "epb_data<31>"      LOC = AJ33;
 # QDR 1
 
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#INST */qdr1_controller/qdrc_infrastructure_inst/*intR_high* AREA_GROUP = "QDR1_AREA_HIGH";
-#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#AREA_GROUP "QDR1_AREA_HIGH" RANGE = SLICE_X88Y325:SLICE_X89Y285;
+#IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#AREA_GROUP "QDR1_AREA_HIGH" RANGE = SLICE_X88Y345:SLICE_X89Y305;
 
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#INST */qdr1_controller/qdrc_infrastructure_inst/*intR_low*  AREA_GROUP = "QDR1_AREA_LOW";
 #IF# strcmp(get(b,'type'),'xps_qdr') && strcmp(get(b,'hw_qdr'),'qdr1')#AREA_GROUP "QDR1_AREA_LOW" RANGE = SLICE_X116Y359:SLICE_X117Y320;

@@ -64,6 +64,7 @@ module opb_qdr_sniffer #(
     output                          slave_ack,
 
     input         dly_clk,
+    output        dly_extra_clk,
     output [35:0] dly_en_i,
     output [36:0] dly_en_o,
     output        dly_inc_dec,
@@ -359,6 +360,7 @@ end endgenerate
     .OPB_select  (OPB_select_config),
     .OPB_seqAddr (OPB_seqAddr_config),
 
+    .dly_extra_clk (dly_extra_clk),
     .dly_clk       (dly_clk),
     .dly_en_i      (dly_en_i),
     .dly_en_o      (dly_en_o),

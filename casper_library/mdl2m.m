@@ -1,6 +1,6 @@
 %generate script to draw system specified
 % 
-%usage: function mld2m(mdl, varargin)
+%usage: function mdl2m(mdl, varargin)
 %mdl 		- model to convert
 %varargin	- 'name', value pairs where name can be;
 %  script_name	  - name of initialization script ([.../casper_library/<model_name>_init.m])
@@ -118,6 +118,7 @@ function mdl2m(mdl, varargin)
 
     if strcmp(library, 'on'), sys_type = 'Library'; else, sys_type = 'Model'; end
     fprintf(fp,'\twarning off Simulink:Engine:MdlFileShadowing;\n');        
+    fprintf(fp,'\tclose_system(''%s'', 0);\n', name);  % close system if it's open
     fprintf(fp,'\tmdl = new_system(''%s'', ''%s'');\n', name, sys_type);  %create a new system    
     fprintf(fp,'\tblk = get(mdl,''Name'');\n');                           %get the name for future use
     fprintf(fp,'\twarning on Simulink:Engine:MdlFileShadowing;\n');        
@@ -183,7 +184,11 @@ function mdl2m(mdl, varargin)
 
   %if a library, must be saved somewhere before can be used
   if strcmp(library, 'on'),
-      fprintf(fp, '\tsave_system(mdl,[%s]);\n', mdl_name);
+      fprintf(fp, '\tfilename = save_system(mdl,[%s]);\n', mdl_name);
+      % Make sure other's can overwrite so we can share mlib_devel working copy
+      % between users.
+      fprintf(fp, '\tif iscell(filename), filename = filename{1}; end;\n');
+      fprintf(fp, '\tfileattrib(filename, ''+w'');\n');
   end
   
   fprintf(fp,'end %% %s\n\n',f_name);
@@ -198,6 +203,9 @@ function mdl2m(mdl, varargin)
   if ntc == 1, 
     result = fclose(fp); 
     if result ~= 0, clog(['error closing file ',script_name],{'mdl2m_debug', 'error'}); end
+    % Make sure other's can overwrite so we can share mlib_devel working copy
+    % between users.
+    fileattrib([script_name,'.m'], '+w');
   end 
 end %mdl2m
 
@@ -654,6 +662,9 @@ function blk2m(blk, varargin)
     if ntc == 1,
         result = fclose(fp);
         if result ~= 0, clog(['error closing file ',fn],{'blk2m_debug', 'mdl2m_debug', 'error'}); end 
+        % Make sure other's can overwrite so we can share mlib_devel working
+        % copy between users.
+        fileattrib([fn,'.m'], '+w');
     end %if
 end %blk2m
 

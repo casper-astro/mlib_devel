@@ -1,6 +1,7 @@
 function casper_library_bus_init()
 
 	warning off Simulink:Engine:MdlFileShadowing;
+	close_system('casper_library_bus', 0);
 	mdl = new_system('casper_library_bus', 'Library');
 	blk = get(mdl,'Name');
 	warning on Simulink:Engine:MdlFileShadowing;
@@ -297,7 +298,9 @@ function casper_library_bus_init()
 		'SolverMode', sprintf('Auto'), ...
 		'StartTime', sprintf('0.0'), ...
 		'StopTime', sprintf('10.0'));
-	save_system(mdl,[getenv('MLIB_DEVEL_PATH'), '/casper_library/', 'casper_library_bus']);
+	filename = save_system(mdl,[getenv('MLIB_DEVEL_PATH'), '/casper_library/', 'casper_library_bus']);
+	if iscell(filename), filename = filename{1}; end;
+	fileattrib(filename, '+w');
 end % casper_library_bus_init
 
 function bus_addsub_gen(blk)
