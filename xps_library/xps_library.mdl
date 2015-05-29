@@ -1,6 +1,6 @@
 Library {
   Name			  "xps_library"
-  Version		  8.0
+  Version		  8.1
   MdlSubVersion		  0
   SavedCharacterEncoding  "UTF-8"
   LibraryType		  "BlockLibrary"
@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [0.0, 25.0, 1920.0, 1055.0]
+      Location		      [-1.0, 2.0, 1922.0, 1082.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1884.0, 892.0]
+	Extents			[1884.0, 909.0]
 	ZoomFactor		[1.0]
 	Offset			[-8.125, 0.0]
       }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "paulp"
+  LastModifiedBy	  "jackh"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Oct 15 11:03:02 2014"
-  RTWModifiedTimeStamp	  335271777
-  ModelVersionFormat	  "1.%<AutoIncrement:521>"
+  LastModifiedDate	  "Fri May 29 14:20:32 2015"
+  RTWModifiedTimeStamp	  354809963
+  ModelVersionFormat	  "1.%<AutoIncrement:522>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -126,13 +126,13 @@ Library {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      6
-      Version		      "1.12.1"
+      Version		      "1.13.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
 	  $ObjectID		  7
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  StartTime		  "0.0"
 	  StopTime		  "10.0"
 	  AbsTol		  "auto"
@@ -167,7 +167,7 @@ Library {
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  8
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
 	  FinalStateName	  "xFinal"
@@ -199,7 +199,7 @@ Library {
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  9
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    4
@@ -251,7 +251,7 @@ Library {
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  10
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
@@ -341,11 +341,12 @@ Library {
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  11
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
 	  ProdBitPerInt		  32
 	  ProdBitPerLong	  32
+	  ProdBitPerLongLong	  64
 	  ProdBitPerFloat	  32
 	  ProdBitPerDouble	  64
 	  ProdBitPerPointer	  32
@@ -355,17 +356,20 @@ Library {
 	  ProdEndianess		  "Unspecified"
 	  ProdWordSize		  32
 	  ProdShiftRightIntArith  on
+	  ProdLongLongMode	  off
 	  ProdHWDeviceType	  "32-bit Generic"
 	  TargetBitPerChar	  8
 	  TargetBitPerShort	  16
 	  TargetBitPerInt	  32
 	  TargetBitPerLong	  32
+	  TargetBitPerLongLong	  64
 	  TargetBitPerFloat	  32
 	  TargetBitPerDouble	  64
 	  TargetBitPerPointer	  32
 	  TargetLargestAtomicInteger "Char"
 	  TargetLargestAtomicFloat "None"
 	  TargetShiftRightIntArith on
+	  TargetLongLongMode	  off
 	  TargetIntDivRoundTo	  "Undefined"
 	  TargetEndianess	  "Unspecified"
 	  TargetWordSize	  32
@@ -378,7 +382,7 @@ Library {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  12
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
 	  EnableParallelModelReferenceBuilds off
@@ -393,7 +397,7 @@ Library {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  13
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  SFSimEnableDebug	  on
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -408,7 +412,7 @@ Library {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  14
-	  Version		  "1.12.1"
+	  Version		  "1.13.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    6
@@ -448,6 +452,7 @@ Library {
 	  CodeExecutionProfileVariable "executionProfile"
 	  CodeProfilingSaveOptions "SummaryOnly"
 	  CodeProfilingInstrumentation off
+	  SILDebugging		  off
 	  TargetLang		  "C"
 	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
 	  IncludeERTFirstTime	  off
@@ -468,7 +473,7 @@ Library {
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      15
-	      Version		      "1.12.1"
+	      Version		      "1.13.0"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -508,7 +513,7 @@ Library {
 	      IncDataTypeInIds	      off
 	      MangleLength	      1
 	      CustomSymbolStrGlobalVar "$R$N$M"
-	      CustomSymbolStrType     "$N$R$M"
+	      CustomSymbolStrType     "$N$R$M_T"
 	      CustomSymbolStrField    "$N$M"
 	      CustomSymbolStrFcn      "$R$N$M$F"
 	      CustomSymbolStrFcnArg   "rt$I$N$M"
@@ -523,7 +528,7 @@ Library {
 	      SimulinkBlockComments   on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
-	      InternalIdentifier      "Classic"
+	      InternalIdentifier      "Shortened"
 	      InlinedPrmAccess	      "Literals"
 	      ReqsInCode	      off
 	      UseSimReservedNames     off
@@ -531,7 +536,7 @@ Library {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      16
-	      Version		      "1.12.1"
+	      Version		      "1.13.0"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -543,13 +548,13 @@ Library {
 		Cell			"GenerateTestInterfaces"
 		Cell			"ModelStepFunctionPrototypeControlCompliant"
 		Cell			"CPPClassGenCompliant"
-		Cell			"MultiInstanceERTCode"
+		Cell			"SupportNonInlinedSFcns"
 		Cell			"PurelyIntegerCode"
 		Cell			"PortableWordSizes"
 		Cell			"SupportComplex"
 		Cell			"SupportAbsoluteTime"
 		Cell			"SupportContinuousTime"
-		Cell			"SupportNonInlinedSFcns"
+		Cell			"GenerateAllocFcn"
 		PropName		"DisabledProps"
 	      }
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
@@ -588,10 +593,12 @@ Library {
 	      SupportVariableSizeSignals off
 	      EnableShiftOperators    on
 	      ParenthesesLevel	      "Nominal"
+	      MATLABClassNameForMDSCustomization "Simulink.SoftwareTarget.GRTCustomization"
 	      ModelStepFunctionPrototypeControlCompliant off
 	      CPPClassGenCompliant    off
 	      AutosarCompliant	      off
 	      GRTInterface	      on
+	      GenerateAllocFcn	      off
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -710,6 +717,7 @@ Library {
     }
     Block {
       BlockType		      Goto
+      GotoTag		      "A"
       IconDisplay	      "Tag"
       TagVisibility	      "local"
     }
@@ -767,6 +775,7 @@ Library {
       SystemSampleTime	      "-1"
       RTWFcnNameOpts	      "Auto"
       RTWFileNameOpts	      "Auto"
+      FunctionInterfaceSpec   "void_void"
       RTWMemSecFuncInitTerm   "Inherit from model"
       RTWMemSecFuncExecute    "Inherit from model"
       RTWMemSecDataConstants  "Inherit from model"
@@ -802,7 +811,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [0, 25, 1920, 1080]
+    Location		    [-1, 2, 1921, 1084]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -17000,6 +17009,7 @@ Library {
 		    Annotation {
 		    SID			    "110:52"
 		    Position		    [747, 444]
+		    ZOrder		    -1
 		    }
 		  }
 		}
@@ -17975,6 +17985,7 @@ Library {
 		    Annotation {
 		    SID			    "110:77"
 		    Position		    [747, 444]
+		    ZOrder		    -1
 		    }
 		  }
 		}
@@ -21372,6 +21383,7 @@ Library {
 		    Annotation {
 		    SID			    "111:60"
 		    Position		    [747, 444]
+		    ZOrder		    -1
 		    }
 		  }
 		}
@@ -22347,6 +22359,7 @@ Library {
 		    Annotation {
 		    SID			    "111:85"
 		    Position		    [747, 444]
+		    ZOrder		    -1
 		    }
 		  }
 		}
@@ -24031,7 +24044,7 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "Shared BRAM"
+      Name		      "Shared_BRAM"
       SID		      "112"
       Tag		      "xps:bram"
       Ports		      [3, 1]
@@ -24147,7 +24160,7 @@ Library {
 	}
       }
       System {
-	Name			"Shared BRAM"
+	Name			"Shared_BRAM"
 	Location		[12, 45, 1546, 1331]
 	Open			off
 	ModelBrowserVisibility	off
@@ -24634,11 +24647,13 @@ Library {
 	      Name		      "If reading/writing words\nsmaller than 32 bits,\nchange address so\nthat addressing is\nbig endian"
 	      " instead of\nlittle, otherwise\npass through"
 	      Position		      [235, 77]
+	      ZOrder		      -1
 	    }
 	    Annotation {
 	      SID		      "112:16"
 	      Name		      "Use behavioural HDL\nso that gets optimised \nto minimum logic"
 	      Position		      [232, 322]
+	      ZOrder		      -2
 	    }
 	  }
 	}
@@ -25280,11 +25295,13 @@ Library {
 		  Name			  "If reading/writing words\nsmaller than 32 bits,\nchange address so\nthat addressing is\nbig endian inste"
 		  "ad of\nlittle, otherwise\npass through"
 		  Position		  [235, 77]
+		  ZOrder		  -1
 		}
 		Annotation {
 		  SID			  "112:37"
 		  Name			  "Use behavioural HDL\nso that gets optimised \nto minimum logic"
 		  Position		  [232, 322]
+		  ZOrder		  -2
 		}
 	      }
 	    }
@@ -25879,11 +25896,13 @@ Library {
 	      SID		      "112:46"
 	      Name		      "Undo address \nmanipulation for\nsimulated data"
 	      Position		      [244, 114]
+	      ZOrder		      -1
 	    }
 	    Annotation {
 	      SID		      "112:47"
 	      Name		      "Undo data manipulation on way in and redo on way out for simulated data"
 	      Position		      [372, 308]
+	      ZOrder		      -2
 	    }
 	  }
 	}
@@ -26444,7 +26463,7 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "Shared FIFO"
+      Name		      "Shared_FIFO"
       SID		      "113"
       Tag		      "xps:fifo"
       Ports		      [4, 2]
@@ -26547,7 +26566,7 @@ Library {
 	}
       }
       System {
-	Name			"Shared FIFO"
+	Name			"Shared_FIFO"
 	Location		[393, 45, 1297, 1588]
 	Open			off
 	ModelBrowserVisibility	off
@@ -28241,7 +28260,7 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "XSG core config"
+      Name		      "XSG_core_config"
       SID		      "335"
       Tag		      "xps:xsg"
       Ports		      []
@@ -28394,7 +28413,7 @@ Library {
 	}
       }
       System {
-	Name			"XSG core config"
+	Name			"XSG_core_config"
 	Location		[0, 51, 1920, 1176]
 	Open			off
 	ModelBrowserVisibility	off
@@ -56128,7 +56147,6 @@ Library {
 	      Position		      [425, 49, 455, 71]
 	      ZOrder		      -25
 	      ShowName		      off
-	      GotoTag		      "A"
 	    }
 	    Block {
 	      BlockType		      Goto
@@ -57867,11 +57885,13 @@ Library {
 	  "C will not see parity bits, so for convenience\nbits are remapped so that the MSBs are unread (rather than every 9t"
 	  "h bit)"
 	  Position		  [238, 660]
+	  ZOrder		  -1
 	}
 	Annotation {
 	  SID			  "334:94"
 	  Name			  "Put the MSBs back where they belong"
 	  Position		  [957, 334]
+	  ZOrder		  -2
 	}
       }
     }
@@ -58386,7 +58406,7 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "software register"
+      Name		      "software_register"
       SID		      "332"
       Tag		      "xps:sw_reg"
       Ports		      [1, 1]
@@ -58545,7 +58565,7 @@ Library {
 	}
       }
       System {
-	Name			"software register"
+	Name			"software_register"
 	Location		[1920, 0, 3200, 1024]
 	Open			off
 	ModelBrowserVisibility	off
@@ -58559,7 +58579,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6832"
+	SIDHighWatermark	"6847"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58571,10 +58591,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6831"
+	  SID			  "332:6846"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6776
+	  ZOrder		  6791
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58609,10 +58629,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6829"
+	  SID			  "332:6844"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6774
+	  ZOrder		  6789
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58647,10 +58667,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6828"
+	  SID			  "332:6843"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6773
+	  ZOrder		  6788
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58678,10 +58698,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6832"
+	  SID			  "332:6847"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6777
+	  ZOrder		  6792
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58708,11 +58728,11 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
-	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6830"
+	  Name			  "xps_library_software_register_user_data_in"
+	  SID			  "332:6845"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6775
+	  ZOrder		  6790
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
@@ -58758,11 +58778,11 @@ Library {
 	Line {
 	  SrcBlock		  "cast_gw"
 	  SrcPort		  1
-	  DstBlock		  "xps_library_software register_user_data_in"
+	  DstBlock		  "xps_library_software_register_user_data_in"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "xps_library_software register_user_data_in"
+	  SrcBlock		  "xps_library_software_register_user_data_in"
 	  SrcPort		  1
 	  DstBlock		  "sim_out"
 	  DstPort		  1
@@ -58789,214 +58809,6 @@ Library {
     }
     Block {
       BlockType		      SubSystem
-      Name		      "software_register_OLD"
-      SID		      "324"
-      Tag		      "xps:sw_reg_old"
-      Ports		      [1, 1]
-      Position		      [920, 370, 1020, 400]
-      ZOrder		      -21
-      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-      MinAlgLoopOccurrences   off
-      PropExecContextOutsideSubsystem off
-      RTWSystemCode	      "Auto"
-      FunctionWithSeparateData off
-      Opaque		      off
-      RequestExecContextInheritance off
-      MaskHideContents	      off
-      Object {
-	$PropName		"MaskObject"
-	$ObjectID		275
-	$ClassName		"Simulink.Mask"
-	Initialization		"register_mask;"
-	SelfModifiable		"on"
-	Array {
-	  Type			  "Simulink.MaskParameter"
-	  Dimension		  6
-	  Object {
-	    $ObjectID		    276
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      2
-	      Cell		      "From Processor"
-	      Cell		      "To Processor"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "io_dir"
-	    Prompt		    "I/O direction"
-	    Value		    "To Processor"
-	  }
-	  Object {
-	    $ObjectID		    277
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      2
-	      Cell		      "Unsigned"
-	      Cell		      "Signed  (2's comp)"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "arith_type"
-	    Prompt		    "Data Type"
-	    Value		    "Unsigned"
-	  }
-	  Object {
-	    $ObjectID		    278
-	    Type		    "edit"
-	    Name		    "bitwidth"
-	    Prompt		    "Data bitwidth"
-	    Value		    "32"
-	    Enabled		    "off"
-	  }
-	  Object {
-	    $ObjectID		    279
-	    Type		    "edit"
-	    Name		    "bin_pt"
-	    Prompt		    "Data binary point"
-	    Value		    "0"
-	  }
-	  Object {
-	    $ObjectID		    280
-	    Type		    "edit"
-	    Name		    "sample_period"
-	    Prompt		    "Sample period"
-	    Value		    "1"
-	  }
-	  Object {
-	    $ObjectID		    281
-	    Type		    "edit"
-	    Name		    "gw_name"
-	    Prompt		    "Mask Parameter 6:"
-	    Value		    "xps_library_software_register_user_data_in"
-	    Visible		    "off"
-	  }
-	  PropName		  "Parameters"
-	}
-      }
-      System {
-	Name			"software_register_OLD"
-	Location		[290, 45, 1079, 1401]
-	Open			off
-	ModelBrowserVisibility	off
-	ModelBrowserWidth	200
-	ScreenColor		"white"
-	PaperOrientation	"landscape"
-	PaperPositionMode	"auto"
-	PaperType		"usletter"
-	PaperUnits		"inches"
-	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
-	TiledPageScale		1
-	ShowPageBoundaries	off
-	ZoomFactor		"100"
-	SIDHighWatermark	"4"
-	Block {
-	  BlockType		  Inport
-	  Name			  "reg_out"
-	  SID			  "324:1"
-	  Position		  [20, 52, 50, 68]
-	  ZOrder		  -1
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "convert"
-	  SID			  "324:2"
-	  Ports			  [1, 1]
-	  Position		  [80, 50, 110, 70]
-	  ZOrder		  -2
-	  SourceBlock		  "xbsIndex_r4/Convert"
-	  SourceType		  "Xilinx Type Converter Block"
-	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
-	  gui_display_data_type	  "Fixed-point"
-	  arith_type		  "Unsigned"
-	  n_bits		  "32"
-	  bin_pt		  "0"
-	  float_type		  "Single"
-	  exp_bits		  "8"
-	  fraction_bits		  "24"
-	  quantization		  "Truncate"
-	  overflow		  "Wrap"
-	  en			  off
-	  latency		  "0"
-	  dbl_ovrd		  off
-	  pipeline		  off
-	  xl_use_area		  off
-	  xl_area		  "[0,0,0,0,0,0,0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "20,20,374,375"
-	  block_type		  "convert"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "30,20,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 30 30 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.91"
-	  " ]);\nplot([0 30 30 0 0 ],[0 0 20 20 0 ]);\npatch([10.55 13.44 15.44 17.44 19.44 15.44 12.55 10.55 ],[12.22 12.22 1"
-	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([12.55 15.44 13.44 10.55 12.55 ],[10.22 10.22 12.22 12.22 10"
-	  ".22 ],[0.931 0.946 0.973 ]);\npatch([10.55 13.44 15.44 12.55 10.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
-	  "h([12.55 19.44 17.44 15.44 13.44 10.55 12.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nfprint"
-	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',"
-	  "1,'cast');\nfprintf('','COMMENT: end icon text');"
-	}
-	Block {
-	  BlockType		  Reference
-	  Name			  "xps_library_software_register_user_data_in"
-	  SID			  "324:3"
-	  Ports			  [1, 1]
-	  Position		  [150, 50, 190, 70]
-	  ZOrder		  -3
-	  SourceBlock		  "xbsIndex_r4/Gateway Out"
-	  SourceType		  "Xilinx Gateway Out Block"
-	  infoedit		  "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, double, o"
-	  "r fixed point.<P><P>Hardware notes:  In hardware these blocks become top level output ports or are discarded, depen"
-	  "ding on how they are configured."
-	  hdl_port		  on
-	  timing_constraint	  "None"
-	  locs_specified	  off
-	  LOCs			  "{}"
-	  xl_use_area		  off
-	  xl_area		  "[0,0,0,0,0,0,0]"
-	  has_advanced_control	  "0"
-	  sggui_pos		  "-1,-1,-1,-1"
-	  block_type		  "gatewayout"
-	  block_version		  "8.2.02"
-	  sg_icon_stat		  "40,20,1,1,white,yellow,1,cc31b7ac,right,,[ ],[ ]"
-	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 40 40 0 0 ],[0 0 20 20 0 ],[0.95 0.93 0.65"
-	  " ]);\nplot([0 40 40 0 0 ],[0 0 20 20 0 ]);\npatch([15.55 18.44 20.44 22.44 24.44 20.44 17.55 15.55 ],[12.22 12.22 1"
-	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([17.55 20.44 18.44 15.55 17.55 ],[10.22 10.22 12.22 12.22 10"
-	  ".22 ],[0.985 0.979 0.895 ]);\npatch([15.55 18.44 20.44 17.55 15.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
-	  "h([17.55 24.44 22.44 20.44 18.44 15.55 17.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.985 0.979 0.895 ]);\nfprint"
-	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'"
-	  " ');\ncolor('black');port_label('output',1,'\\fontsize{11pt}\\bf Out ','texmode','on');\nfprintf('','COMMENT: end i"
-	  "con text');"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "sim_out"
-	  SID			  "324:4"
-	  Position		  [350, 52, 380, 68]
-	  ZOrder		  -4
-	  IconDisplay		  "Port number"
-	}
-	Line {
-	  SrcBlock		  "reg_out"
-	  SrcPort		  1
-	  DstBlock		  "convert"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "convert"
-	  SrcPort		  1
-	  DstBlock		  "xps_library_software_register_user_data_in"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "xps_library_software_register_user_data_in"
-	  SrcPort		  1
-	  DstBlock		  "sim_out"
-	  DstPort		  1
-	}
-      }
-    }
-    Block {
-      BlockType		      SubSystem
       Name		      "ten_GbE"
       SID		      "325"
       Tag		      "xps:tengbe"
@@ -59013,7 +58825,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		282
+	$ObjectID		275
 	$ClassName		"Simulink.Mask"
 	Type			"ten_GbE"
 	Description		"This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-dete"
@@ -59026,7 +58838,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  11
 	  Object {
-	    $ObjectID		    283
+	    $ObjectID		    276
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -59043,7 +58855,7 @@ Library {
 	    Tunable		    "off"
 	  }
 	  Object {
-	    $ObjectID		    284
+	    $ObjectID		    277
 	    Type		    "checkbox"
 	    Name		    "mac_lite"
 	    Prompt		    "Use light-weight MAC: Warning --> it DOES NOT check any CRC on receive"
@@ -59051,14 +58863,14 @@ Library {
 	    Tunable		    "off"
 	  }
 	  Object {
-	    $ObjectID		    285
+	    $ObjectID		    278
 	    Type		    "checkbox"
 	    Name		    "open_phy"
 	    Prompt		    "Use KAT open XAUI PHY"
 	    Value		    "off"
 	  }
 	  Object {
-	    $ObjectID		    286
+	    $ObjectID		    279
 	    Type		    "checkbox"
 	    Name		    "show_param"
 	    Prompt		    "---------------------- Show Implementation Parameters ----------------------------------------------"
@@ -59071,7 +58883,7 @@ Library {
 	    "es', {'on','on','on','on','off','off','off','off','off','off','off'});\nend"
 	  }
 	  Object {
-	    $ObjectID		    287
+	    $ObjectID		    280
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -59089,7 +58901,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    288
+	    $ObjectID		    281
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -59108,7 +58920,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    289
+	    $ObjectID		    282
 	    Type		    "checkbox"
 	    Name		    "fab_en"
 	    Prompt		    "Enable fabric on startup"
@@ -59117,7 +58929,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    290
+	    $ObjectID		    283
 	    Type		    "edit"
 	    Name		    "fab_mac"
 	    Prompt		    "Fabric MAC Address"
@@ -59126,7 +58938,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    291
+	    $ObjectID		    284
 	    Type		    "edit"
 	    Name		    "fab_ip"
 	    Prompt		    "Fabric IP Address"
@@ -59135,7 +58947,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    292
+	    $ObjectID		    285
 	    Type		    "edit"
 	    Name		    "fab_udp"
 	    Prompt		    "Fabric UDP Port"
@@ -59144,7 +58956,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    293
+	    $ObjectID		    286
 	    Type		    "edit"
 	    Name		    "fab_gate"
 	    Prompt		    "Fabric Gateway"
@@ -60773,7 +60585,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		294
+	$ObjectID		287
 	$ClassName		"Simulink.Mask"
 	Type			"ten_GbE_v2"
 	Description		"This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-dete"
@@ -60786,7 +60598,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  39
 	  Object {
-	    $ObjectID		    295
+	    $ObjectID		    288
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60803,7 +60615,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    296
+	    $ObjectID		    289
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60818,7 +60630,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    297
+	    $ObjectID		    290
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60836,7 +60648,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    298
+	    $ObjectID		    291
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60853,7 +60665,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    299
+	    $ObjectID		    292
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60870,7 +60682,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    300
+	    $ObjectID		    293
 	    Type		    "checkbox"
 	    Name		    "rx_dist_ram"
 	    Prompt		    "Shallow RX Fifo (Beware overruns!)"
@@ -60878,7 +60690,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    301
+	    $ObjectID		    294
 	    Type		    "checkbox"
 	    Name		    "large_frames"
 	    Prompt		    "Enable Large TX Frames (8k+512)"
@@ -60886,7 +60698,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    302
+	    $ObjectID		    295
 	    Type		    "checkbox"
 	    Name		    "show_param"
 	    Prompt		    "---------------------- Show Implementation Parameters ----------------------------------------------"
@@ -60898,7 +60710,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    303
+	    $ObjectID		    296
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60929,7 +60741,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    304
+	    $ObjectID		    297
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60948,7 +60760,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    305
+	    $ObjectID		    298
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60988,7 +60800,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    306
+	    $ObjectID		    299
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61011,7 +60823,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    307
+	    $ObjectID		    300
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61042,7 +60854,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    308
+	    $ObjectID		    301
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61062,7 +60874,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    309
+	    $ObjectID		    302
 	    Type		    "checkbox"
 	    Name		    "fab_en"
 	    Prompt		    "Enable fabric on startup"
@@ -61072,7 +60884,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    310
+	    $ObjectID		    303
 	    Type		    "edit"
 	    Name		    "fab_mac"
 	    Prompt		    "Fabric MAC Address"
@@ -61081,7 +60893,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    311
+	    $ObjectID		    304
 	    Type		    "edit"
 	    Name		    "fab_ip"
 	    Prompt		    "Fabric IP Address"
@@ -61090,7 +60902,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    312
+	    $ObjectID		    305
 	    Type		    "edit"
 	    Name		    "fab_udp"
 	    Prompt		    "Fabric UDP Port"
@@ -61099,7 +60911,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    313
+	    $ObjectID		    306
 	    Type		    "edit"
 	    Name		    "fab_gate"
 	    Prompt		    "Fabric Gateway"
@@ -61108,7 +60920,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    314
+	    $ObjectID		    307
 	    Type		    "checkbox"
 	    Name		    "cpu_rx_en"
 	    Prompt		    "Enable CPU RX"
@@ -61118,7 +60930,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    315
+	    $ObjectID		    308
 	    Type		    "checkbox"
 	    Name		    "cpu_tx_en"
 	    Prompt		    "Enable CPU TX"
@@ -61128,7 +60940,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    316
+	    $ObjectID		    309
 	    Type		    "edit"
 	    Name		    "ttl"
 	    Prompt		    "TTL"
@@ -61138,7 +60950,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    317
+	    $ObjectID		    310
 	    Type		    "checkbox"
 	    Name		    "promisc_mode"
 	    Prompt		    "Promiscuous mode"
@@ -61148,7 +60960,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    318
+	    $ObjectID		    311
 	    Type		    "edit"
 	    Name		    "debug_ctr_width"
 	    Prompt		    "Debug counter width"
@@ -61156,7 +60968,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    319
+	    $ObjectID		    312
 	    Type		    "checkbox"
 	    Name		    "txctr"
 	    Prompt		    "TX - core_txctr"
@@ -61165,7 +60977,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    320
+	    $ObjectID		    313
 	    Type		    "checkbox"
 	    Name		    "txerrctr"
 	    Prompt		    "TX packet length error - core_txerrctr"
@@ -61178,7 +60990,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    321
+	    $ObjectID		    314
 	    Type		    "edit"
 	    Name		    "txerrctr_len"
 	    Prompt		    "    -- expected TX packet length"
@@ -61187,7 +60999,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    322
+	    $ObjectID		    315
 	    Type		    "checkbox"
 	    Name		    "txofctr"
 	    Prompt		    "TX overflow - core_txofctr"
@@ -61196,7 +61008,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    323
+	    $ObjectID		    316
 	    Type		    "checkbox"
 	    Name		    "txfullctr"
 	    Prompt		    "TX full - core_txfullctr"
@@ -61205,7 +61017,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    324
+	    $ObjectID		    317
 	    Type		    "checkbox"
 	    Name		    "txvldctr"
 	    Prompt		    "TX valid cycle - core_txvldctr"
@@ -61214,7 +61026,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    325
+	    $ObjectID		    318
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61235,7 +61047,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    326
+	    $ObjectID		    319
 	    Type		    "checkbox"
 	    Name		    "rxctr"
 	    Prompt		    "RX - core_rxctr"
@@ -61244,7 +61056,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    327
+	    $ObjectID		    320
 	    Type		    "checkbox"
 	    Name		    "rxerrctr"
 	    Prompt		    "RX packet length error - core_rxerrctr"
@@ -61257,7 +61069,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    328
+	    $ObjectID		    321
 	    Type		    "edit"
 	    Name		    "rxerrctr_len"
 	    Prompt		    "    -- expected RX packet length"
@@ -61266,7 +61078,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    329
+	    $ObjectID		    322
 	    Type		    "checkbox"
 	    Name		    "rxofctr"
 	    Prompt		    "RX overflow - core_rxofctr"
@@ -61275,7 +61087,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    330
+	    $ObjectID		    323
 	    Type		    "checkbox"
 	    Name		    "rxbadctr"
 	    Prompt		    "RX bad - core_rxbadctr"
@@ -61284,7 +61096,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    331
+	    $ObjectID		    324
 	    Type		    "checkbox"
 	    Name		    "rxvldctr"
 	    Prompt		    "RX valid cycle - core_rxvldctr"
@@ -61293,7 +61105,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    332
+	    $ObjectID		    325
 	    Type		    "checkbox"
 	    Name		    "rxeofctr"
 	    Prompt		    "RX eof - core_rxeofctr"
@@ -61302,7 +61114,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    333
+	    $ObjectID		    326
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -63476,12 +63288,14 @@ Library {
       "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
       Position		      [15, 192]
       HorizontalAlignment     "left"
+      ZOrder		      -1
       FontName		      "Lucida Console"
       FontSize		      9
     }
     Annotation {
       SID		      "328"
       Position		      [972, 747]
+      ZOrder		      -2
     }
   }
 }
