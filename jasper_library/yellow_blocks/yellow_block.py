@@ -109,7 +109,7 @@ class YellowBlock(object):
             self.fullname = self.fullpath.replace('/','_')
             self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
         except AttributeError:
-            self.logger.warning("%r doesn't have an attribute 'fullname'"%self)
+            self.logger.warning("%r doesn't have an attribute 'fullpath'"%self)
         self.initialize()
         self.check_support()
 
