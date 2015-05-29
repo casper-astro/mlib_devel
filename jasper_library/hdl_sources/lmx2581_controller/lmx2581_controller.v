@@ -142,6 +142,7 @@ module lmx2581_controller #(
   assign lmx_le   = le_reg;
   assign lmx_data = spi_bitout_reg[31];
   assign lmx_clk  = spi_clk && enable_clk;
-  assign lmx_ce   = ce_reg;
+  assign lmx_ce   = 1'b1;
+  assign lmx_be   = 1'b1;
 
 endmodule
