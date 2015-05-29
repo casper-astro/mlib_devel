@@ -44,8 +44,8 @@ Library {
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
 	Extents			[1884.0, 909.0]
-	ZoomFactor		[1.0]
-	Offset			[-8.125, 0.0]
+	ZoomFactor		[0.8]
+	Offset			[-822.131767515921, 283.53861464968168]
       }
     }
   }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jackh"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri May 29 14:20:32 2015"
-  RTWModifiedTimeStamp	  354809963
-  ModelVersionFormat	  "1.%<AutoIncrement:522>"
+  LastModifiedDate	  "Fri May 29 14:42:57 2015"
+  RTWModifiedTimeStamp	  354811373
+  ModelVersionFormat	  "1.%<AutoIncrement:523>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -823,9 +823,9 @@ Library {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "100"
+    ZoomFactor		    "80"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "354"
+    SIDHighWatermark	    "355"
     Block {
       BlockType		      SubSystem
       Name		      "1new_yellow_block"
@@ -63266,6 +63266,58 @@ Library {
 	    DstPort		    1
 	  }
 	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "ucf"
+      SID		      "355"
+      Tag		      "xps:ucf"
+      Ports		      []
+      Position		      [22, 492, 68, 535]
+      ZOrder		      5236
+      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		327
+	$ClassName		"Simulink.Mask"
+	Type			"ucf"
+	Description		"Allows insertion of custom constraints into a compile. "
+	SelfModifiable		"on"
+	Display			"fprintf('UCF');"
+	Object {
+	  $PropName		  "Parameters"
+	  $ObjectID		  328
+	  $ClassName		  "Simulink.MaskParameter"
+	  Type			  "edit"
+	  Name			  "ucf_file"
+	  Prompt		  "Path to file containing constraints. (This should adhere to .ucf syntax)"
+	  Value			  "/tmp/testucf.ucf"
+	  Evaluate		  "off"
+	}
+      }
+      System {
+	Name			"ucf"
+	Location		[2092, 303, 3648, 1417]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
       }
     }
     Annotation {
