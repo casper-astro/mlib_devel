@@ -54,7 +54,18 @@ function update_casper_blocks(sys, varargin)
   else
     error('%s is not a block diagram or a block', sys);
   end
-
+  
+  % First, deal with the special case of the XSG block. Commit a67f4bf
+  % removed the spaces from the XSG block name, but as a result, the XSG
+  % block has a broken link and isn't found by this script.
+  % Look for blocks pointing to 'XSG core config'; if found, point them to
+  % the correct block ('XSG_core_config') which will allow them to be
+  % updated.
+  xsg = find_system(sys, 'SourceBlock', 'xps_library/XSG core config')
+  if all(size(xsg) == [1 1])
+    set_param(xsg{1}, 'SourceBlock', 'xps_library/XSG_core_config');
+  end
+  
   fprintf('searching for CASPER blocks to update in %s...', sys);
 
   ref_blks = find_system(sys, ...
