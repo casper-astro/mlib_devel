@@ -57,12 +57,12 @@ class Toolflow(object):
         os.system('mkdir -p %s'%self.output_dir)
 
         # compile parameters which can be set straight away
-        self.start_time = time.gmtime()
+        self.start_time = time.localtime()
         self.periph_file = self.compile_dir + '/jasper.per'
         self.frontend_target = frontend_target
         self.frontend_target_base = os.path.basename(frontend_target)
-        self.output = self.frontend_target_base + '_%d-%d-%d_%d-%d-%d.bof'%(self.start_time.tm_year, self.start_time.tm_mon, self.start_time.tm_mday,
-            self.start_time.tm_hour, self.start_time.tm_min, self.start_time.tm_sec)
+        self.output = self.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof'%(self.start_time.tm_year, self.start_time.tm_mon, self.start_time.tm_mday,
+            self.start_time.tm_hour, self.start_time.tm_min)
 
         if frontend == 'simulink':
             self.frontend = SimulinkFrontend(compile_dir=self.compile_dir, target=frontend_target)
