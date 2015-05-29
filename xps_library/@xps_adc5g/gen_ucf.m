@@ -32,17 +32,8 @@ str = gen_ucf(blk_obj.xps_block);
 adc_str = blk_obj.adc_str;
 demux = blk_obj.demux;
 
-% place the BUFRs, which don't get placed right in 14.7
-% (actually it looks like they don't get placed right in 14.6 either,
-% but 14.6 doesn't seem to care.
-switch adc_str
-    case 'adc0'
-        str = [str, 'INST "*' simulink_name '/DIVBUF" LOC=BUFR_X0Y10;\n'];
-    case 'adc1'
-        str = [str, 'INST "*' simulink_name '/DIVBUF" LOC=BUFR_X0Y8;\n'];
-    otherwise
-        %pass
-end
+% Load the routes file
+load_hw_routes();
 
 % Set the ADC clock setup/hold constraints
 %str = [str, 'NET "', adc_str, 'clk_p" TNM_NET = "', adc_str, '_clk";\n'];
@@ -53,62 +44,76 @@ end
 %str = [str, 'OFFSET = IN 400 ps VALID ', num2str(adc_per/2), ...
 %   ' ps BEFORE "', adc_str, 'clk_p" FALLING;\n'];
 
-%switch hw_sys
-%    case 'ROACH'
-%        % pass
-%    case 'ROACH2'
-%        if blk_obj.use_adc0
-%	    switch demux
-%	        % Create an area group to place the FD close to the IOPAD
-%		% which for some reason was traced to the other side of the
-%	        % chip on ROACH2
-%                case '1:2'
-%		    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                       '/fifo_din_33"     AREA_GROUP     = IDDR_1 ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                       '/fifo_din_41"     AREA_GROUP     = IDDR_1 ;\n'];
-%                    str = [str, 'AREA_GROUP "IDDR_1"     RANGE    = ', ...
-%                       'SLICE_X0Y279:SLICE_X23Y321 ;\n'];
-%                case '1:1'
-%		    % First the trouble-some bunch...
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[1].D1?_1"    AREA_GROUP     = ZDOK_0_1_1 ;\n'];
-%                    str = [str, 'AREA_GROUP "ZDOK_0_1_1"     RANGE    = ', ...
-%                        'SLICE_X0Y300:SLICE_X27Y320 ;\n'];
-%		    % And then the rest...
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[0].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[1].D0?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[1].D2?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[1].D3?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[2].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[3].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[4].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[5].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[6].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                        '/data_buf[7].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
-%                    str = [str, 'AREA_GROUP "ZDOK_0_REST"     RANGE    = ', ...
-%			   'SLICE_X76Y220:SLICE_X87Y259 ;\n'];
-%                otherwise
-%                    % pass
-%            end
-%	elseif blk_obj.use_adc1
-%	     % This is for ZDOK1, we need to place the first buffers
-%	     % close to the I/O pads to help timing
-%	     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
-%                 '/data_buf[?].D??_1"     AREA_GROUP     = ZDOK_1_ALL ;\n'];
-%	     str = [str, 'AREA_GROUP "ZDOK_1_ALL"     RANGE    = ', ...
-%                 'SLICE_X0Y270:SLICE_X11Y309 ;\n'];	
-%        end
-%    otherwise 
-%        % pass
-%end
+switch hw_sys
+    case 'ROACH'
+        % pass
+    case 'ROACH2'
+        if blk_obj.use_adc0
+            % Manually place the BUFR components
+            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+               '/DIVBUF"     LOC            = BUFR_X1Y11 ;\n'];
+	    if exist('routes_vers')
+	    switch demux
+	        % Create an area group to place the FD close to the IOPAD
+		% which for some reason was traced to the other side of the
+	        % chip on ROACH2
+                case '1:2'
+		    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                       '/fifo_din_33"     AREA_GROUP     = IDDR_1 ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                       '/fifo_din_41"     AREA_GROUP     = IDDR_1 ;\n'];
+                    str = [str, 'AREA_GROUP "IDDR_1"     RANGE    = ', ...
+                       'SLICE_X0Y279:SLICE_X23Y321 ;\n'];
+                case '1:1'
+		    % First the trouble-some bunch...
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[1].D1?_1"    AREA_GROUP     = ZDOK_0_1_1 ;\n'];
+                    str = [str, 'AREA_GROUP "ZDOK_0_1_1"     RANGE    = ', ...
+                        'SLICE_X0Y300:SLICE_X27Y320 ;\n'];
+		    % And then the rest...
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[0].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[1].D0?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[1].D2?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[1].D3?_1"    AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[2].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[3].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[4].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[5].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[6].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                        '/data_buf[7].D*_1"     AREA_GROUP     = ZDOK_0_REST ;\n'];
+                    str = [str, 'AREA_GROUP "ZDOK_0_REST"     RANGE    = ', ...
+			   'SLICE_X76Y220:SLICE_X87Y259 ;\n'];
+                otherwise
+                    % pass
+            end
+	    else
+	      str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+		  '/data_buf[?].D??_1"     AREA_GROUP     = ZDOK_0_ALL ;\n'];
+	      str = [str, 'AREA_GROUP "ZDOK_0_ALL"     RANGE    = ', ...
+		  'SLICE_X76Y220:SLICE_X87Y259 ;\n'];
+	    end
+	elseif blk_obj.use_adc1
+            % Manually place the BUFR components
+            str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+               '/DIVBUF"     LOC            = BUFR_X1Y9 ;\n'];
+
+	     % This is for ZDOK1, we need to place the first buffers
+	     % close to the I/O pads to help timing
+	     str = [str, 'INST "', simulink_name, '/', simulink_name, ...
+                 '/data_buf[?].D??_1"     AREA_GROUP     = ZDOK_1_ALL ;\n'];
+	     str = [str, 'AREA_GROUP "ZDOK_1_ALL"     RANGE    = ', ...
+                 'SLICE_X0Y270:SLICE_X11Y309 ;\n'];	
+        end
+    otherwise 
+        % pass
+end

@@ -35,7 +35,6 @@ entity adc5g_dmux1_interface is
     mode            : integer :=0;    -- 1-channel mode
     mmcm_m          : real    :=2.0;  -- MMCM multiplier value
     mmcm_d          : integer :=1;    -- MMCM divide value
-    mmcm_o0         : real    :=2.0;  -- MMCM first clock divide
     mmcm_o1         : integer :=2;    -- MMCM second clock divide
     bufr_div        : integer :=4;
     bufr_div_str    : string  :="4"
@@ -104,6 +103,7 @@ architecture behavioral of adc5g_dmux1_interface is
   signal adc_clk       : std_logic;
   signal adc_clk_div   : std_logic;
   signal adc_sync      : std_logic;
+  signal fifo_sync     : std_logic;
   signal refclk        : std_logic;
 
   -- MMCM signals
@@ -119,21 +119,9 @@ architecture behavioral of adc5g_dmux1_interface is
 
   -- ISERDES signals
   signal isd_clk       : std_logic;
-  signal isd_clkn      : std_logic;
-  signal isd_clkdiv    : std_logic;
+  signal isd_clkb      : std_logic;
+  signal isd_oclk      : std_logic;
   signal isd_rst       : std_logic;
-  signal isd0_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd1_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd2_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd3_rst0     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd0_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd1_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd2_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd3_rst1     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd0_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd1_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd2_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
-  signal isd3_rst2     : std_logic_vector(adc_bit_width-1 downto 0);
 
   -- FIFO signals
   signal fifo_rst      : std_logic;
@@ -321,8 +309,8 @@ begin
   -- Resets
   adc_reset_o <= '0';
   isd_rst     <= ctrl_reset;
-  mmcm_rst    <= ctrl_reset;
-  fifo_rst    <= not mmcm_locked;
+  mmcm_rst    <= dcm_reset;
+  fifo_rst    <= (not mmcm_locked) or ctrl_reset;
 
   CBUF0:   IBUFDS
     generic map(
@@ -365,17 +353,14 @@ begin
       CLKFBOUT_PHASE       => 0.0,
       CLKFBOUT_USE_FINE_PS => TRUE,
       CLKIN1_PERIOD        => clkin_period * real(bufr_div),
-      CLKOUT0_DIVIDE_F     => mmcm_o0,
       CLKOUT1_DIVIDE       => mmcm_o1,
       CLKOUT2_DIVIDE       => mmcm_o1,
       CLKOUT3_DIVIDE       => mmcm_o1,
       CLKOUT4_DIVIDE       => mmcm_o1,
-      CLKOUT0_DUTY_CYCLE   => 0.50,
       CLKOUT1_DUTY_CYCLE   => 0.50,
       CLKOUT2_DUTY_CYCLE   => 0.50,
       CLKOUT3_DUTY_CYCLE   => 0.50,
       CLKOUT4_DUTY_CYCLE   => 0.50,
-      CLKOUT0_PHASE        => 0.0,
       CLKOUT1_PHASE        => 0.0,
       CLKOUT2_PHASE        => 90.0,
       CLKOUT3_PHASE        => 180.0,
@@ -387,7 +372,6 @@ begin
       CLKINSEL  => '1',
       CLKIN1    => adc_clk_div,
       CLKIN2    => '0',
-      CLKOUT0   => mmcm_clkout0,
       CLKOUT1   => mmcm_clkout1,
       CLKOUT2   => mmcm_clkout2,
       CLKOUT3   => mmcm_clkout3,
@@ -411,25 +395,37 @@ begin
 
   --CBUF2a:  BUFG     port map (i=> mmcm_clkfbout, o=> mmcm_clkfbin);
   mmcm_clkfbin <= mmcm_clkfbout;
-  CBUF2b:  BUFG     port map (i=> mmcm_clkout0,  o=> isd_clk);
-  CBUF2c:  BUFG     port map (i=> mmcm_clkout1,  o=> isd_clkdiv);
-  CBUF2d:  BUFG     port map (i=> mmcm_clkout2,  o=> ctrl_clk90_out);
+  CBUF2c:  BUFG     port map (i=> mmcm_clkout1,  o=> isd_clk);
+  CBUF2d:  BUFG     port map (i=> mmcm_clkout2,  o=> isd_oclk);
   CBUF2e:  BUFG     port map (i=> mmcm_clkout3,  o=> ctrl_clk180_out);
   CBUF2f:  BUFG     port map (i=> mmcm_clkout4,  o=> ctrl_clk270_out);
 
+  ctrl_clk90_out <= isd_oclk;
   ctrl_dcm_locked <= mmcm_locked;
-  sync <= adc_sync;
 
-  ctrl_clk_out <= isd_clkdiv;
-  isd_clkn <= not isd_clk;
+  -- purpose: Capture sync input
+  -- type   : sequential
+  -- inputs : isd_clk, isd_rst, adc_sync
+  -- outputs: sync
+  SYNCCAP: process (isd_clk, isd_rst)
+  begin  -- process SYNCCAP
+    if isd_rst = '1' then               -- asynchronous reset (active high)
+      fifo_sync <= '0';
+    elsif isd_clk'event and isd_clk = '1' then  -- rising clock edge
+      fifo_sync <= adc_sync;
+    end if;
+  end process SYNCCAP;
+
+  ctrl_clk_out <= isd_clk;
+  isd_clkb <= not isd_clk;
 
   -- purpose: Decode the datain pin and tap value
   -- type   : sequential
-  -- inputs : isd_clkdiv, tap_rst, datain_pin, datain_tap
+  -- inputs : isd_clk, tap_rst, datain_pin, datain_tap
   -- outputs: datain_tapN
-  DECTAPS: process (isd_clkdiv, tap_rst)
+  DECTAPS: process (isd_clk, tap_rst)
   begin  -- process DECTAPS
-    if isd_clkdiv'event and isd_clkdiv = '1' then  -- rising clock edge
+    if isd_clk'event and isd_clk = '1' then  -- rising clock edge
 
       tap_rst0 <= (others => '0');
       tap_rst1 <= (others => '0');
@@ -484,7 +480,7 @@ begin
       port map (
         DATAOUT                => data0_delay(i),
         DATAIN                 => '0',     
-        C                      => isd_clkdiv,
+        C                      => isd_clk,
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data0(i),
@@ -522,7 +518,7 @@ begin
       port map (
         DATAOUT                => data1_delay(i),
         DATAIN                 => '0',     
-        C                      => isd_clkdiv,
+        C                      => isd_clk,
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data1(i),
@@ -560,7 +556,7 @@ begin
       port map (
         DATAOUT                => data2_delay(i),
         DATAIN                 => '0',     
-        C                      => isd_clkdiv,
+        C                      => isd_clk,
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data2(i),
@@ -598,7 +594,7 @@ begin
       port map (
         DATAOUT                => data3_delay(i),
         DATAIN                 => '0',     
-        C                      => isd_clkdiv,
+        C                      => isd_clk,
         CE                     => '0',
         INC                    => '0',
         IDATAIN                => data3(i),
@@ -614,19 +610,18 @@ begin
 
   iserdesx : for i in adc_bit_width-1 downto 0 generate
 
-    iserdes0  : ISERDES_NODELAY
+    iserdes0  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
-        SERDES_MODE   => "MASTER",
-        NUM_CE        =>  2
+        IOBDELAY      => "IFD",
+        INTERFACE_TYPE=> "OVERSAMPLE"
         )
       port map  (
-        Q1 => data0d_pre(i),
+        Q1 => data0a_pre(i),
         Q2 => data0c_pre(i),
         Q3 => data0b_pre(i),
-        Q4 => data0a_pre(i),
+        Q4 => data0d_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -635,28 +630,31 @@ begin
         CE1       => '1',
         CE2       => '1',
         CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data0_delay(i),
-        OCLK      => '0',
+        CLKB      => isd_clkb,
+        OCLK      => isd_oclk,
+        CLKDIV    => '0',
+        D         => '0',
+        DDLY      => data0_delay(i),
         RST       => isd_rst,
+        OFB       => '0',
+        DYNCLKDIVSEL=> '0',
+        DYNCLKSEL => '0',
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
-    iserdes1  : ISERDES_NODELAY
+    iserdes1  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
-        SERDES_MODE   => "MASTER",
-        NUM_CE        =>  2
+        IOBDELAY      => "IFD",
+        INTERFACE_TYPE=> "OVERSAMPLE"
         )
       port map  (
-        Q1 => data1d_pre(i),
+        Q1 => data1a_pre(i),
         Q2 => data1c_pre(i),
         Q3 => data1b_pre(i),
-        Q4 => data1a_pre(i),
+        Q4 => data1d_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -665,28 +663,31 @@ begin
         CE1       => '1',
         CE2       => '1',
         CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data1_delay(i),
-        OCLK      => '0',
+        CLKB      => isd_clkb,
+        OCLK      => isd_oclk,
+        CLKDIV    => '0',
+        D         => '0',
+        DDLY      => data1_delay(i),
         RST       => isd_rst,
+        OFB       => '0',
+        DYNCLKDIVSEL=> '0',
+        DYNCLKSEL => '0',
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
-    iserdes2  : ISERDES_NODELAY
+    iserdes2  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
-        SERDES_MODE   => "MASTER",
-        NUM_CE        =>  2
+        IOBDELAY      => "IFD",
+        INTERFACE_TYPE=> "OVERSAMPLE"
         )
       port map  (
-        Q1 => data2d_pre(i),
+        Q1 => data2a_pre(i),
         Q2 => data2c_pre(i),
         Q3 => data2b_pre(i),
-        Q4 => data2a_pre(i),
+        Q4 => data2d_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -695,28 +696,31 @@ begin
         CE1       => '1',
         CE2       => '1',
         CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data2_delay(i),
-        OCLK      => '0',
+        CLKB      => isd_clkb,
+        OCLK      => isd_oclk,
+        CLKDIV    => '0',
+        D         => '0',
+        DDLY      => data2_delay(i),
         RST       => isd_rst,
+        OFB       => '0',
+        DYNCLKDIVSEL=> '0',
+        DYNCLKSEL => '0',
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
 
-    iserdes3  : ISERDES_NODELAY
+    iserdes3  : ISERDESE1
       generic map (
         DATA_RATE     => "DDR",
         DATA_WIDTH    =>  4,
-        INTERFACE_TYPE=> "NETWORKING",
-        SERDES_MODE   => "MASTER",
-        NUM_CE        =>  2
+        IOBDELAY      => "IFD",
+        INTERFACE_TYPE=> "OVERSAMPLE"
         )
       port map  (
-        Q1 => data3d_pre(i),
+        Q1 => data3a_pre(i),
         Q2 => data3c_pre(i),
         Q3 => data3b_pre(i),
-        Q4 => data3a_pre(i),
+        Q4 => data3d_pre(i),
         Q5 => open,
         Q6 => open,
         SHIFTOUT1 => open,
@@ -725,11 +729,15 @@ begin
         CE1       => '1',
         CE2       => '1',
         CLK       => isd_clk,
-        CLKB      => isd_clkn,
-        CLKDIV    => isd_clkdiv,
-        D         => data3_delay(i),
-        OCLK      => '0',
+        CLKB      => isd_clkb,
+        OCLK      => isd_oclk,
+        CLKDIV    => '0',
+        D         => '0',
+        DDLY      => data3_delay(i),
         RST       => isd_rst,
+        OFB       => '0',
+        DYNCLKDIVSEL=> '0',
+        DYNCLKSEL => '0',
         SHIFTIN1  => '0',
         SHIFTIN2  => '0'
         );
@@ -756,56 +764,56 @@ begin
   -- Buffer up samples (to help with timing on ROACH2 rev-1)
   data_buf : for i in adc_bit_width-1 downto 0 generate
     -- first stage of buffers
-    D0A_1: FD port map (C => isd_clkdiv, D => data0a_pre(i), Q => data0a_prebuf0(i));
-    D0B_1: FD port map (C => isd_clkdiv, D => data0b_pre(i), Q => data0b_prebuf0(i));
-    D0C_1: FD port map (C => isd_clkdiv, D => data0c_pre(i), Q => data0c_prebuf0(i));
-    D0D_1: FD port map (C => isd_clkdiv, D => data0d_pre(i), Q => data0d_prebuf0(i));
-    D1A_1: FD port map (C => isd_clkdiv, D => data1a_pre(i), Q => data1a_prebuf0(i));
-    D1B_1: FD port map (C => isd_clkdiv, D => data1b_pre(i), Q => data1b_prebuf0(i));
-    D1C_1: FD port map (C => isd_clkdiv, D => data1c_pre(i), Q => data1c_prebuf0(i));
-    D1D_1: FD port map (C => isd_clkdiv, D => data1d_pre(i), Q => data1d_prebuf0(i));
-    D2A_1: FD port map (C => isd_clkdiv, D => data2a_pre(i), Q => data2a_prebuf0(i));
-    D2B_1: FD port map (C => isd_clkdiv, D => data2b_pre(i), Q => data2b_prebuf0(i));
-    D2C_1: FD port map (C => isd_clkdiv, D => data2c_pre(i), Q => data2c_prebuf0(i));
-    D2D_1: FD port map (C => isd_clkdiv, D => data2d_pre(i), Q => data2d_prebuf0(i));
-    D3A_1: FD port map (C => isd_clkdiv, D => data3a_pre(i), Q => data3a_prebuf0(i));
-    D3B_1: FD port map (C => isd_clkdiv, D => data3b_pre(i), Q => data3b_prebuf0(i));
-    D3C_1: FD port map (C => isd_clkdiv, D => data3c_pre(i), Q => data3c_prebuf0(i));
-    D3D_1: FD port map (C => isd_clkdiv, D => data3d_pre(i), Q => data3d_prebuf0(i));
+    D0A_1: FD port map (C => isd_clk, D => data0a_pre(i), Q => data0a_prebuf0(i));
+    D0B_1: FD port map (C => isd_clk, D => data0b_pre(i), Q => data0b_prebuf0(i));
+    D0C_1: FD port map (C => isd_clk, D => data0c_pre(i), Q => data0c_prebuf0(i));
+    D0D_1: FD port map (C => isd_clk, D => data0d_pre(i), Q => data0d_prebuf0(i));
+    D1A_1: FD port map (C => isd_clk, D => data1a_pre(i), Q => data1a_prebuf0(i));
+    D1B_1: FD port map (C => isd_clk, D => data1b_pre(i), Q => data1b_prebuf0(i));
+    D1C_1: FD port map (C => isd_clk, D => data1c_pre(i), Q => data1c_prebuf0(i));
+    D1D_1: FD port map (C => isd_clk, D => data1d_pre(i), Q => data1d_prebuf0(i));
+    D2A_1: FD port map (C => isd_clk, D => data2a_pre(i), Q => data2a_prebuf0(i));
+    D2B_1: FD port map (C => isd_clk, D => data2b_pre(i), Q => data2b_prebuf0(i));
+    D2C_1: FD port map (C => isd_clk, D => data2c_pre(i), Q => data2c_prebuf0(i));
+    D2D_1: FD port map (C => isd_clk, D => data2d_pre(i), Q => data2d_prebuf0(i));
+    D3A_1: FD port map (C => isd_clk, D => data3a_pre(i), Q => data3a_prebuf0(i));
+    D3B_1: FD port map (C => isd_clk, D => data3b_pre(i), Q => data3b_prebuf0(i));
+    D3C_1: FD port map (C => isd_clk, D => data3c_pre(i), Q => data3c_prebuf0(i));
+    D3D_1: FD port map (C => isd_clk, D => data3d_pre(i), Q => data3d_prebuf0(i));
     -- second stage of buffers
-    D0A_2: FD port map (C => isd_clkdiv, D => data0a_prebuf1(i), Q => data0a_prebuf2(i));
-    D0B_2: FD port map (C => isd_clkdiv, D => data0b_prebuf1(i), Q => data0b_prebuf2(i));
-    D0C_2: FD port map (C => isd_clkdiv, D => data0c_prebuf1(i), Q => data0c_prebuf2(i));
-    D0D_2: FD port map (C => isd_clkdiv, D => data0d_prebuf1(i), Q => data0d_prebuf2(i));
-    D1A_2: FD port map (C => isd_clkdiv, D => data1a_prebuf1(i), Q => data1a_prebuf2(i));
-    D1B_2: FD port map (C => isd_clkdiv, D => data1b_prebuf1(i), Q => data1b_prebuf2(i));
-    D1C_2: FD port map (C => isd_clkdiv, D => data1c_prebuf1(i), Q => data1c_prebuf2(i));
-    D1D_2: FD port map (C => isd_clkdiv, D => data1d_prebuf1(i), Q => data1d_prebuf2(i));
-    D2A_2: FD port map (C => isd_clkdiv, D => data2a_prebuf1(i), Q => data2a_prebuf2(i));
-    D2B_2: FD port map (C => isd_clkdiv, D => data2b_prebuf1(i), Q => data2b_prebuf2(i));
-    D2C_2: FD port map (C => isd_clkdiv, D => data2c_prebuf1(i), Q => data2c_prebuf2(i));
-    D2D_2: FD port map (C => isd_clkdiv, D => data2d_prebuf1(i), Q => data2d_prebuf2(i));
-    D3A_2: FD port map (C => isd_clkdiv, D => data3a_prebuf1(i), Q => data3a_prebuf2(i));
-    D3B_2: FD port map (C => isd_clkdiv, D => data3b_prebuf1(i), Q => data3b_prebuf2(i));
-    D3C_2: FD port map (C => isd_clkdiv, D => data3c_prebuf1(i), Q => data3c_prebuf2(i));
-    D3D_2: FD port map (C => isd_clkdiv, D => data3d_prebuf1(i), Q => data3d_prebuf2(i));
+    D0A_2: FD port map (C => isd_clk, D => data0a_prebuf1(i), Q => data0a_prebuf2(i));
+    D0B_2: FD port map (C => isd_clk, D => data0b_prebuf1(i), Q => data0b_prebuf2(i));
+    D0C_2: FD port map (C => isd_clk, D => data0c_prebuf1(i), Q => data0c_prebuf2(i));
+    D0D_2: FD port map (C => isd_clk, D => data0d_prebuf1(i), Q => data0d_prebuf2(i));
+    D1A_2: FD port map (C => isd_clk, D => data1a_prebuf1(i), Q => data1a_prebuf2(i));
+    D1B_2: FD port map (C => isd_clk, D => data1b_prebuf1(i), Q => data1b_prebuf2(i));
+    D1C_2: FD port map (C => isd_clk, D => data1c_prebuf1(i), Q => data1c_prebuf2(i));
+    D1D_2: FD port map (C => isd_clk, D => data1d_prebuf1(i), Q => data1d_prebuf2(i));
+    D2A_2: FD port map (C => isd_clk, D => data2a_prebuf1(i), Q => data2a_prebuf2(i));
+    D2B_2: FD port map (C => isd_clk, D => data2b_prebuf1(i), Q => data2b_prebuf2(i));
+    D2C_2: FD port map (C => isd_clk, D => data2c_prebuf1(i), Q => data2c_prebuf2(i));
+    D2D_2: FD port map (C => isd_clk, D => data2d_prebuf1(i), Q => data2d_prebuf2(i));
+    D3A_2: FD port map (C => isd_clk, D => data3a_prebuf1(i), Q => data3a_prebuf2(i));
+    D3B_2: FD port map (C => isd_clk, D => data3b_prebuf1(i), Q => data3b_prebuf2(i));
+    D3C_2: FD port map (C => isd_clk, D => data3c_prebuf1(i), Q => data3c_prebuf2(i));
+    D3D_2: FD port map (C => isd_clk, D => data3d_prebuf1(i), Q => data3d_prebuf2(i));
     -- third stage of buffers
-    D0A_3: FD port map (C => isd_clkdiv, D => data0a_prebuf2(i), Q => data0a_prebuf3(i));
-    D0B_3: FD port map (C => isd_clkdiv, D => data0b_prebuf2(i), Q => data0b_prebuf3(i));
-    D0C_3: FD port map (C => isd_clkdiv, D => data0c_prebuf2(i), Q => data0c_prebuf3(i));
-    D0D_3: FD port map (C => isd_clkdiv, D => data0d_prebuf2(i), Q => data0d_prebuf3(i));
-    D1A_3: FD port map (C => isd_clkdiv, D => data1a_prebuf2(i), Q => data1a_prebuf3(i));
-    D1B_3: FD port map (C => isd_clkdiv, D => data1b_prebuf2(i), Q => data1b_prebuf3(i));
-    D1C_3: FD port map (C => isd_clkdiv, D => data1c_prebuf2(i), Q => data1c_prebuf3(i));
-    D1D_3: FD port map (C => isd_clkdiv, D => data1d_prebuf2(i), Q => data1d_prebuf3(i));
-    D2A_3: FD port map (C => isd_clkdiv, D => data2a_prebuf2(i), Q => data2a_prebuf3(i));
-    D2B_3: FD port map (C => isd_clkdiv, D => data2b_prebuf2(i), Q => data2b_prebuf3(i));
-    D2C_3: FD port map (C => isd_clkdiv, D => data2c_prebuf2(i), Q => data2c_prebuf3(i));
-    D2D_3: FD port map (C => isd_clkdiv, D => data2d_prebuf2(i), Q => data2d_prebuf3(i));
-    D3A_3: FD port map (C => isd_clkdiv, D => data3a_prebuf2(i), Q => data3a_prebuf3(i));
-    D3B_3: FD port map (C => isd_clkdiv, D => data3b_prebuf2(i), Q => data3b_prebuf3(i));
-    D3C_3: FD port map (C => isd_clkdiv, D => data3c_prebuf2(i), Q => data3c_prebuf3(i));
-    D3D_3: FD port map (C => isd_clkdiv, D => data3d_prebuf2(i), Q => data3d_prebuf3(i));
+    D0A_3: FD port map (C => isd_clk, D => data0a_prebuf2(i), Q => data0a_prebuf3(i));
+    D0B_3: FD port map (C => isd_clk, D => data0b_prebuf2(i), Q => data0b_prebuf3(i));
+    D0C_3: FD port map (C => isd_clk, D => data0c_prebuf2(i), Q => data0c_prebuf3(i));
+    D0D_3: FD port map (C => isd_clk, D => data0d_prebuf2(i), Q => data0d_prebuf3(i));
+    D1A_3: FD port map (C => isd_clk, D => data1a_prebuf2(i), Q => data1a_prebuf3(i));
+    D1B_3: FD port map (C => isd_clk, D => data1b_prebuf2(i), Q => data1b_prebuf3(i));
+    D1C_3: FD port map (C => isd_clk, D => data1c_prebuf2(i), Q => data1c_prebuf3(i));
+    D1D_3: FD port map (C => isd_clk, D => data1d_prebuf2(i), Q => data1d_prebuf3(i));
+    D2A_3: FD port map (C => isd_clk, D => data2a_prebuf2(i), Q => data2a_prebuf3(i));
+    D2B_3: FD port map (C => isd_clk, D => data2b_prebuf2(i), Q => data2b_prebuf3(i));
+    D2C_3: FD port map (C => isd_clk, D => data2c_prebuf2(i), Q => data2c_prebuf3(i));
+    D2D_3: FD port map (C => isd_clk, D => data2d_prebuf2(i), Q => data2d_prebuf3(i));
+    D3A_3: FD port map (C => isd_clk, D => data3a_prebuf2(i), Q => data3a_prebuf3(i));
+    D3B_3: FD port map (C => isd_clk, D => data3b_prebuf2(i), Q => data3b_prebuf3(i));
+    D3C_3: FD port map (C => isd_clk, D => data3c_prebuf2(i), Q => data3c_prebuf3(i));
+    D3D_3: FD port map (C => isd_clk, D => data3d_prebuf2(i), Q => data3d_prebuf3(i));
   end generate data_buf;
   
   -- Use FIFO to cross clock domains
@@ -839,7 +847,8 @@ begin
       else
         fifo_wr_en <= '1';
         fifo_rd_en <= not fifo_empty;
-        fifo_din(143 downto adc_bit_width*16) <= (others => '0');
+        fifo_din(143 downto adc_bit_width*16+1) <= (others => '0');
+        fifo_din(adc_bit_width*16) <= fifo_sync;
         fifo_din(adc_bit_width*16-1 downto 0) <=
           data0d_prebuf3 & data0c_prebuf3 & data0b_prebuf3 & data0a_prebuf3 &
           data1d_prebuf3 & data1c_prebuf3 & data1b_prebuf3 & data1a_prebuf3 &
@@ -883,8 +892,9 @@ begin
   end process;
   fifo_empty_cnt <= fifo_empty_ci;
 
-  fifo_wr_clk <= isd_clkdiv;
+  fifo_wr_clk <= isd_clk;
   fifo_rd_clk <= ctrl_clk_in;
+  sync   <= fifo_dout(adc_bit_width*16);
   data0d <= fifo_dout(adc_bit_width*16-1 downto adc_bit_width*15); 
   data0c <= fifo_dout(adc_bit_width*15-1 downto adc_bit_width*14);
   data0b <= fifo_dout(adc_bit_width*14-1 downto adc_bit_width*13);

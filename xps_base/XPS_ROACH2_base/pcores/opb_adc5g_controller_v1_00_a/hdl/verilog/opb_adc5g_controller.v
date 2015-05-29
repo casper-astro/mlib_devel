@@ -137,6 +137,10 @@ module opb_adc5g_controller(
   assign adc1_config_addr  = adc1_config_addr_reg;
   assign adc1_config_start = adc1_config_start_reg;
 
+   /**** SPI read time control signals ****/
+   reg [4:0] adc0_spi_read_time_reg = 5'h0d;
+   reg [4:0] adc1_spi_read_time_reg = 5'h0d;
+
    /**** IODELAY control signals for ADC 0 ****/
    reg 	     adc0_tap_rst_reg;
    reg [4:0] adc0_datain_pin_reg;
@@ -175,7 +179,7 @@ module opb_adc5g_controller(
       if (addr_match && OPB_select && !opb_ack) begin
         //opb_ack <= 1'b1;
         if (!OPB_RNW) begin
-          case (opb_addr[4:2])
+          case (opb_addr[5:2])
             0:  begin
 	       opb_ack <= 1'b1;
                if (OPB_BE[3]) begin
@@ -249,9 +253,22 @@ module opb_adc5g_controller(
 		  adc1_datain_tap_reg <= OPB_DBus[3:7];
 	       end
             end
+	    6: begin
+	    end
+	    7: begin
+	    end
+	    8: begin
+	       opb_ack <= 1'b1;
+	       if (OPB_BE[1]) begin
+		  adc0_spi_read_time_reg <= OPB_DBus[11:15];
+	       end
+	       if (OPB_BE[0]) begin
+		  adc1_spi_read_time_reg <= OPB_DBus[3:7];
+	       end
+	    end
           endcase
         end else begin // if (!OPB_RNW)
-	  case (opb_addr[4:2])
+	  case (opb_addr[5:2])
 	    0: begin
 	       opb_ack <= 1'b1;
 	       opb_data_out <= {2'b0, adc1_psdone, adc0_psdone, 4'b0, 
@@ -300,6 +317,12 @@ module opb_adc5g_controller(
 				3'b0, adc1_datain_pin_reg,
 				8'b0, 
 				adc1_tap_rst_reg, 7'b0};
+	    end
+	    8: begin
+	       opb_ack <= 1'b1;
+	       opb_data_out <= {16'b0,
+				3'b0, adc0_spi_read_time_reg,
+				3'b0, adc1_spi_read_time_reg};
 	    end
 	  endcase
 	end
@@ -409,7 +432,7 @@ module opb_adc5g_controller(
 
   wire clk0_falling;
   wire clk0_midhigh;
-  wire clk0_prerise;
+  wire clk0_rd_time;
   wire clk0_en;
 
   reg [3:0] adc0_state;
@@ -492,7 +515,7 @@ module opb_adc5g_controller(
           end
         end
         CONFIG_DATA_READ: begin
-          if (clk0_prerise) begin
+          if (clk0_rd_time) begin
 	    adc0_config_progress <= adc0_config_progress + 1;
             if (adc0_config_progress == 16) begin
 	      adc0_state <= CONFIG_READWAIT;
@@ -507,7 +530,7 @@ module opb_adc5g_controller(
           end
         end
         CONFIG_ALMOST_DONE: begin
-          if (clk0_prerise) begin
+          if (clk0_rd_time) begin
             adc0_state <= CONFIG_FINISH;
           end
 	  if (adc0_startup) begin
@@ -543,7 +566,7 @@ module opb_adc5g_controller(
   end
   assign clk0_falling = clk0_counter == 5'b00000;
   assign clk0_midhigh = clk0_counter == 5'b11000;
-  assign clk0_prerise = clk0_counter == 5'b01111;
+  assign clk0_rd_time = clk0_counter == adc0_spi_read_time_reg;
   assign clk0_en   = adc0_state != CONFIG_IDLE;
 
   assign adc0_modepin         = !((adc0_state == CONFIG_DATA_ADDR) || (adc0_state == CONFIG_DATA_WRITE) || 
@@ -556,7 +579,7 @@ module opb_adc5g_controller(
 
   wire clk1_falling;
   wire clk1_midhigh;
-  wire clk1_prerise;
+  wire clk1_rd_time;
   wire clk1_en;
 
   reg [3:0] adc1_state;
@@ -638,7 +661,7 @@ module opb_adc5g_controller(
           end
         end
         CONFIG_DATA_READ: begin
-          if (clk1_prerise) begin
+          if (clk1_rd_time) begin
 	    adc1_config_progress <= adc1_config_progress + 1;
             if (adc1_config_progress == 16) begin
 	      adc1_state <= CONFIG_READWAIT;
@@ -653,7 +676,7 @@ module opb_adc5g_controller(
           end
         end
         CONFIG_ALMOST_DONE: begin
-          if (clk1_prerise) begin
+          if (clk1_rd_time) begin
             adc1_state <= CONFIG_FINISH;
           end
 	  if (adc1_startup) begin
@@ -689,7 +712,7 @@ module opb_adc5g_controller(
   end
   assign clk1_falling = clk1_counter == 5'b00000;
   assign clk1_midhigh = clk1_counter == 5'b11000;
-  assign clk1_prerise = clk1_counter == 5'b01111;
+  assign clk1_rd_time = clk1_counter == adc1_spi_read_time_reg;
   assign clk1_en   = adc1_state != CONFIG_IDLE;
 
   assign adc1_modepin         = !((adc1_state == CONFIG_DATA_ADDR) || (adc1_state == CONFIG_DATA_WRITE) || 

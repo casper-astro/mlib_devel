@@ -1,0 +1,16 @@
+lib proc_common_v1_00_a family
+lib proc_common_v1_00_a common_types_pkg
+lib proc_common_v1_00_a proc_common_pkg
+lib proc_common_v1_00_a pselect
+lib proc_common_v1_00_a counter_bit
+lib proc_common_v1_00_a counter
+lib proc_common_v1_00_a down_counter
+lib proc_common_v1_00_a inferred_lut4
+lib proc_common_v1_00_a ld_arith_reg
+lib proc_common_v1_00_a mux_encode_sel
+lib proc_common_v1_00_a mux_onehot
+lib proc_common_v1_00_a or_bits
+lib proc_common_v1_00_a or_muxcy
+lib proc_common_v1_00_a or_gate
+lib proc_common_v1_00_a srl_fifo
+lib proc_common_v1_00_a valid_be

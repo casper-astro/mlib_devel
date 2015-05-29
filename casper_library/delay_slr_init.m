@@ -1,9 +1,16 @@
 function delay_slr_init(blk, varargin)
 
   clog('entering delay_slr_init', {'trace', 'delay_slr_init_debug'});
+
+  % Set default vararg values.
+  % reg_retiming is not an actual parameter of this block, but it is included
+  % in defaults so that same_state will return false for blocks drawn prior to
+  % adding reg_retiming='on' to some of the underlying Delay blocks.
   defaults = { ...
     'DelayLen', 9, ...
-    'async', 'on'};
+    'async', 'on', ...
+    'reg_retiming', 'on', ...
+  };
   
   check_mask_type(blk, 'delay_slr');
 
