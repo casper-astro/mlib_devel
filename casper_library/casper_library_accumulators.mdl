@@ -28816,7 +28816,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [720, 450, 820, 480]
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-	      SourceBlock	      "xps_library/software register"
+	      SourceBlock	      "xps_library/software_register"
 	      SourceType	      ""
 	      ShowPortLabels	      "FromPortIcon"
 	      SystemSampleTime	      "-1"
@@ -31517,7 +31517,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [1290, 670, 1390, 700]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
@@ -35731,7 +35731,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [60, 425, 160, 455]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
@@ -36135,7 +36135,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [990, 210, 1090, 240]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
@@ -36159,7 +36159,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [990, 250, 1090, 280]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
@@ -37187,7 +37187,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [60, 370, 160, 400]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
@@ -37211,7 +37211,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [60, 320, 160, 350]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"
@@ -37261,7 +37261,7 @@ Library {
 	  Ports			  [1, 1]
 	  Position		  [315, 145, 415, 175]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  ""
 	  ShowPortLabels	  "FromPortIcon"
 	  SystemSampleTime	  "-1"

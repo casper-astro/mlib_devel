@@ -28,7 +28,7 @@
 % %                                                                             %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Wrap a software register and specify bit slices to and from the 32-bit
+% Wrap a software_register and specify bit slices to and from the 32-bit
 % register. These will automatically be processed by the toolflow.
 % 
 function bitsnap_init(blk)

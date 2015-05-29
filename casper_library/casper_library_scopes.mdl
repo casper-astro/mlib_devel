@@ -7324,7 +7324,7 @@ Library {
 	      Position		      [215, 235, 315, 265]
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AttributesFormatString  "1input"
-	      SourceBlock	      "xps_library/software register"
+	      SourceBlock	      "xps_library/software_register"
 	      SourceType	      "swreg"
 	      mode		      "one value"
 	      io_dir		      "From Processor"
@@ -8236,7 +8236,7 @@ Library {
 	      Position		      [905, 305, 1005, 335]
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AttributesFormatString  "1output"
-	      SourceBlock	      "xps_library/software register"
+	      SourceBlock	      "xps_library/software_register"
 	      SourceType	      "swreg"
 	      mode		      "one value"
 	      io_dir		      "To Processor"
@@ -8265,7 +8265,7 @@ Library {
 	      Position		      [905, 360, 1005, 390]
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AttributesFormatString  "1output"
-	      SourceBlock	      "xps_library/software register"
+	      SourceBlock	      "xps_library/software_register"
 	      SourceType	      "swreg"
 	      mode		      "one value"
 	      io_dir		      "To Processor"
@@ -8286,7 +8286,7 @@ Library {
 	      Position		      [215, 314, 315, 346]
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AttributesFormatString  "1input"
-	      SourceBlock	      "xps_library/software register"
+	      SourceBlock	      "xps_library/software_register"
 	      SourceType	      "swreg"
 	      mode		      "one value"
 	      io_dir		      "From Processor"
@@ -8307,7 +8307,7 @@ Library {
 	      Position		      [905, 85, 1005, 115]
 	      BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
 	      AttributesFormatString  "1output"
-	      SourceBlock	      "xps_library/software register"
+	      SourceBlock	      "xps_library/software_register"
 	      SourceType	      "swreg"
 	      mode		      "one value"
 	      io_dir		      "To Processor"
@@ -11934,7 +11934,7 @@ Library {
 	  Position		  [715, 265, 815, 295]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -13971,7 +13971,7 @@ Library {
 	  Position		  [85, 265, 185, 295]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -14739,7 +14739,7 @@ Library {
 	  Position		  [685, 295, 785, 325]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -18792,7 +18792,7 @@ Library {
 	  Position		  [60, 295, 160, 325]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -20426,7 +20426,7 @@ Library {
 	  Position		  [870, 425, 970, 455]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -26495,7 +26495,7 @@ Library {
 	  Position		  [245, 425, 345, 455]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -28050,7 +28050,7 @@ Library {
 	  Position		  [830, 390, 930, 420]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -34119,7 +34119,7 @@ Library {
 	  Position		  [205, 390, 305, 420]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -34818,7 +34818,7 @@ Library {
 	  Position		  [65, 19, 165, 51]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -37752,7 +37752,7 @@ Library {
 	  Position		  [1425, 585, 1525, 615]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -39820,7 +39820,7 @@ Library {
 	  Position		  [120, 640, 220, 670]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -39982,7 +39982,7 @@ Library {
 	  Position		  [1425, 655, 1525, 685]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -40034,7 +40034,7 @@ Library {
 	  Position		  [660, 560, 760, 590]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -47021,7 +47021,7 @@ Library {
 	  Position		  [215, 235, 315, 265]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -47944,7 +47944,7 @@ Library {
 	  Position		  [905, 305, 1005, 335]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -48638,7 +48638,7 @@ Library {
 	  Position		  [905, 360, 1005, 390]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
@@ -48659,7 +48659,7 @@ Library {
 	  Position		  [215, 314, 315, 346]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1input"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "From Processor"
@@ -48680,7 +48680,7 @@ Library {
 	  Position		  [905, 85, 1005, 115]
 	  BackgroundColor	  "[1.000000, 1.000000, 0.000000]"
 	  AttributesFormatString  "1output"
-	  SourceBlock		  "xps_library/software register"
+	  SourceBlock		  "xps_library/software_register"
 	  SourceType		  "swreg"
 	  mode			  "one value"
 	  io_dir		  "To Processor"
