@@ -1,6 +1,6 @@
 from yellow_block import YellowBlock
 from verilog import VerilogModule
-from constraints import PortConstraint, ClockConstraint
+from constraints import PortConstraint, ClockConstraint, RawConstraint
 
 class snap_adc(YellowBlock):
     def initialize(self):
@@ -26,7 +26,9 @@ class snap_adc(YellowBlock):
         module
         """
         if self.i_am_the_first:
-            return [YellowBlock.make_block({'tag':'xps:lmx2581', 'fullname':'lmx2581_from_%s'%self.name, 'name':'lmx2581'}, self.platform)]
+            lmx = YellowBlock.make_block({'tag':'xps:lmx2581', 'fullpath':'%s/lmx2581_from'%self.name, 'name':'lmx2581'}, self.platform)
+            swreg = YellowBlock.make_block({'tag':'xps:sw_reg', 'fullpath':'%s/adc16_use_synth'%self.name, 'io_dir':'From Processor', 'name':'adc16_use_synth'}, self.platform)
+            return [lmx, swreg]
         else:
             return []
 
@@ -84,12 +86,12 @@ class snap_adc(YellowBlock):
         inst.add_port('ser_b_p', 'adc16_ser_b_p', parent_port=True, dir='in', width=4*self.num_units)
         inst.add_port('ser_b_n', 'adc16_ser_b_n', parent_port=True, dir='in', width=4*self.num_units)
 
-        # Clock switch. For now these are hardcoded to use SAMP_CLK SMA input, rather than
-        # the onboard synthesizer
-        top.add_port('clk_sel_a', dir='out', width=1)
-        top.add_port('clk_sel_b', dir='out', width=1)
-        top.assign_signal('clk_sel_a[0]', "1'b0") #use external clock
-        top.assign_signal('clk_sel_b[0]', "1'b1") #use external clock
+        # Clock switch.
+        if self.i_am_the_first:
+            top.add_port('clk_sel_a', dir='out', width=1)
+            top.add_port('clk_sel_b', dir='out', width=1)
+            top.assign_signal('clk_sel_a[0]', "%s_adc16_use_synth_user_data_out[0]"%self.name)
+            top.assign_signal('clk_sel_b[0]', "~%s_adc16_use_synth_user_data_out[0]"%self.name)
 
         # ADC Power down and reset signals are wired to the FPGA, but hardwire them to match the adc16 card
         top.add_port('adc_rst_n', dir='out', width=3)
@@ -202,14 +204,19 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc16_ser_b_p', 'adc2_out', port_index=range(8,12), iogroup_index=bp_index))
         cons.append(PortConstraint('adc16_ser_b_n', 'adc2_out', port_index=range(8,12), iogroup_index=bn_index))
 
-        cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=range(1), iogroup_index=range(1)))
-        cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=range(1), iogroup_index=range(1)))
+        if self.i_am_the_first:
+            cons.append(PortConstraint('clk_sel_a', 'clk_sel_a', port_index=range(1), iogroup_index=range(1)))
+            cons.append(PortConstraint('clk_sel_b', 'clk_sel_b', port_index=range(1), iogroup_index=range(1)))
 
         cons.append(PortConstraint('adc_rst_n', 'adc_rst_n', port_index=range(3), iogroup_index=range(3)))
         cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
         
         # clock constraint with variable period
         cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq*self.n_inputs/2.))
+
+        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks adc_clk] -group [get_clocks -include_generated_clocks sys_clk0_dcm]'))
+        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks adc_clk] -to [get_clocks -include_generated_clocks sys_clk0_dcm] 3'))
+        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks adc_clk] -to [get_clocks -include_generated_clocks sys_clk0_dcm] -hold 2'))
 
         return cons
 
