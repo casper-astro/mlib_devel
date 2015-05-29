@@ -175,15 +175,8 @@ begin
 	-------------------------------------------------------------------
 
     
-	BUFR_inst : BUFR
-        generic map (
-            SIM_DEVICE => "VIRTEX5")
-	port map (
-		O => smpl_clk,
-		CE => '1',
-		CLR => '0',
-		I => dac_smpl_clk
-	);
+	BUFG_inst : BUFG
+	port map (O => smpl_clk,I => dac_smpl_clk);
 
 	OBUFDS_inst_smpl_clk_i : OBUFDS
 	generic map (
