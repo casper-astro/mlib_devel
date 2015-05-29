@@ -11,6 +11,12 @@ function infoblocks = sblock_to_info(block)
     for ctr = numel(maskparms) : -1 : 1,
         parm = maskparms{ctr};
         value = get_param(block, parm);
+        if isempty(strtrim(parm)) == 1,
+            error('Empty parm?');
+        end
+        if isempty(strtrim(value)) == 1,
+            error('Empty value?');
+        end
         if isnumeric(value),
             value = num2str(value);
         end
