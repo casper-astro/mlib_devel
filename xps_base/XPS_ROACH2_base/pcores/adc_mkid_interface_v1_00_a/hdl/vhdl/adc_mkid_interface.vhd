@@ -1,11 +1,7 @@
 ----------------------------------------------------------------------------------
 -- adc_mkid_interface : ADC board with two ADS54RF63 for I and Q signals
 ----------------------------------------------------------------------------------
-
--- Authors:             Sean McHugh, Bruno Serfass, Ran Duan     
 -- Create Date: 	10/05/09
-
-
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -21,7 +17,14 @@ use UNISIM.vcomponents.all;
 
 entity adc_mkid_interface is
   generic (
-    OUTPUT_CLK   : INTEGER := 0
+    OUTPUT_CLK   : INTEGER := 1
+  --  clkin_period    : real    :=10.0;  -- clock in period (ns)
+  --  mode            : integer :=0;    -- 1-channel mode
+  --  mmcm_m          : real    :=16.0;  -- MMCM multiplier value
+  --  mmcm_d          : integer :=12;    -- MMCM divide value
+  --  mmcm_o0         : real    :=8.0;  -- MMCM first clock divide
+  --  mmcm_o1         : integer :=2   -- MMCM second clock divide
+	 
     );   
   Port (
       
@@ -103,7 +106,7 @@ architecture Structural of adc_mkid_interface is
   signal dcm_clk90     	:	STD_LOGIC;
   signal dcm_clk180     :	STD_LOGIC;
   signal dcm_clk270     :	STD_LOGIC;
-  signal clk            :	STD_LOGIC;
+  signal clk,clk_fb,clk1           :	STD_LOGIC;
   signal clk90          :	STD_LOGIC;
   signal clk180         :	STD_LOGIC;
   signal clk270         :	STD_LOGIC;
@@ -119,6 +122,35 @@ architecture Structural of adc_mkid_interface is
   signal fifo_full_i   : STD_LOGIC;
   signal fifo_full_q   : STD_LOGIC;
 
+----------------------------------------------------------------------------------
+----------------------MMCM
+
+  signal clkin1      : std_logic;
+  -- Output clock buffering / unused connectors
+  signal clkfbout         : std_logic;
+  signal clkfboutb_unused : std_logic;
+  signal clkout0          : std_logic;
+  signal clkout0b_unused  : std_logic;
+  signal clkout1          : std_logic;
+  signal clkout1b_unused  : std_logic;
+  signal clkout2          : std_logic;
+  signal clkout2b_unused  : std_logic;
+  signal clkout3          : std_logic;
+  signal clkout3b_unused  : std_logic;
+  signal clkout4_unused   : std_logic;
+  signal clkout5_unused   : std_logic;
+  signal clkout6_unused   : std_logic;
+  -- Dynamic programming unused signals
+  signal do_unused        : std_logic_vector(15 downto 0);
+  signal drdy_unused      : std_logic;
+  -- Unused status signals
+  signal clkfbstopped_unused : std_logic;
+  signal clkinstopped_unused : std_logic;
+  signal clkfb_in_buf_out : std_logic;
+  signal clkfb_bufg_out   : std_logic;
+  signal clkfb_oddr_out   : std_logic;
+
+-----------------------------------------------------------------
   
   ----------------------------------------
   -- Asynchronous FIFO
@@ -136,7 +168,66 @@ architecture Structural of adc_mkid_interface is
       full: OUT std_logic);
   end component;
 
-       
+
+    component MMCM_BASE
+        generic (
+            BANDWIDTH          : string  := "OPTIMIZED"; -- Jitter programming ("HIGH","LOW","OPTIMIZED")
+            CLKFBOUT_MULT_F    : integer := 8;           -- Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+            CLKFBOUT_PHASE     : real    := 0.0;
+            CLKIN1_PERIOD      : real    := 5.0;
+            CLKOUT0_DIVIDE_F   : integer := 4;           -- Divide amount for CLKOUT0 (1.000-128.000).
+            CLKOUT0_DUTY_CYCLE : real    := 0.5; 
+            CLKOUT1_DUTY_CYCLE : real    := 0.5;
+            CLKOUT2_DUTY_CYCLE : real    := 0.5;
+            CLKOUT3_DUTY_CYCLE : real    := 0.5;
+            CLKOUT4_DUTY_CYCLE : real    := 0.5;
+            CLKOUT5_DUTY_CYCLE : real    := 0.5;
+            CLKOUT6_DUTY_CYCLE : real    := 0.5;
+            CLKOUT0_PHASE      : real    := 0.0;
+            CLKOUT1_PHASE      : integer := 90;
+            CLKOUT2_PHASE      : integer := 180;
+            CLKOUT3_PHASE      : integer := 270;
+            CLKOUT4_PHASE      : real    := 0.0;
+            CLKOUT5_PHASE      : real    := 0.0;
+            CLKOUT6_PHASE      : real    := 0.0;
+            CLKOUT1_DIVIDE     : integer := 4;            -- THIS IS THE DIVISOR
+            CLKOUT2_DIVIDE     : integer := 4;
+            CLKOUT3_DIVIDE     : integer := 4;
+            CLKOUT4_DIVIDE     : integer := 1;
+            CLKOUT5_DIVIDE     : integer := 1;
+            CLKOUT6_DIVIDE     : integer := 1;
+            CLKOUT4_CASCADE    : string  := "FALSE";
+            CLOCK_HOLD         : string  := "FALSE";
+            DIVCLK_DIVIDE      : integer := 1;            -- Master division value (1-80)
+            REF_JITTER1        : real    := 0.0;
+            STARTUP_WAIT       : string  := "FALSE"
+        );
+        port (
+            CLKIN1    : in  std_logic;
+            CLKFBIN   : in  std_logic;
+            
+            CLKFBOUT  : out std_logic;
+            CLKFBOUTB : out std_logic;
+            
+            CLKOUT0   : out std_logic;
+            CLKOUT0B  : out std_logic;
+            CLKOUT1   : out std_logic;
+            CLKOUT1B  : out std_logic;
+            CLKOUT2   : out std_logic;
+            CLKOUT2B  : out std_logic;
+            CLKOUT3   : out std_logic;
+            CLKOUT3B  : out std_logic;
+            CLKOUT4   : out std_logic;
+            CLKOUT5   : out std_logic;
+            CLKOUT6   : out std_logic;
+            LOCKED    : out std_logic;
+            
+            PWRDWN    : in  std_logic;
+            RST       : in  std_logic
+        );
+    end component;
+
+
 
 
 begin
@@ -159,8 +250,6 @@ begin
         IB => DI_n(j)
         );
   end generate;
-
-
     
   IDDR_inst_generate_data_i : for j in 0 to 11 generate
     IDDR_inst_data_i : IDDR
@@ -177,8 +266,6 @@ begin
         S => '0'
         );
   end generate;
-
-    
   -- ADC input Q --
 
   IBUFDS_inst_generate_data_q : for j in 0 to 11 generate
@@ -319,7 +406,6 @@ begin
       IB => DRDY_I_n
       );
 
-
   -- BUFG
  
   BUFG_data_clk : BUFG
@@ -327,6 +413,9 @@ begin
        
   BUFG_clk : BUFG
     port map (I => dcm_clk, O => clk);
+
+  BUFG_clk_fb : BUFG
+    port map (I => clkfbout, O => clk_fb);
   
   BUFG_clk90 : BUFG
     port map (I => dcm_clk90, O => clk90);
@@ -347,47 +436,60 @@ begin
     adc_clk270_out <= clk270;
   end generate;
 
-  -- DCM 
-  CLK_DCM : DCM
-    generic map(
-      CLK_FEEDBACK          => "1X",
-      CLKDV_DIVIDE          => 2.000000,
-      CLKFX_DIVIDE          => 1,
-      CLKFX_MULTIPLY        => 4,
-      CLKIN_DIVIDE_BY_2     => FALSE,
-      CLKIN_PERIOD          => 0.000000,
-      CLKOUT_PHASE_SHIFT    => "NONE",
-      DESKEW_ADJUST         => "SYSTEM_SYNCHRONOUS",
-      DFS_FREQUENCY_MODE    => "HIGH",
-      DLL_FREQUENCY_MODE    => "HIGH",
-      DUTY_CYCLE_CORRECTION => TRUE,
-      FACTORY_JF            => x"F0F0",
-      PHASE_SHIFT           => 0,
-      STARTUP_WAIT          => FALSE)
-    port map (
-      CLKFB                 => clk,
-      CLKIN                 => data_clk,
-      DSSEN                 => '0',
-      PSCLK                 => '0',
-      PSEN                  => '0',
-      PSINCDEC              => '0',
-      RST                   => '0',
-      CLKDV                 => open,
-      CLKFX                 => open,
-      CLKFX180              => open,
-      CLK0                  => dcm_clk,
-      CLK2X                 => open,
-      CLK2X180              => open,
-      CLK90                 => dcm_clk90,
-      CLK180                => dcm_clk180,
-      CLK270                => dcm_clk270,
-      LOCKED                => adc_dcm_locked,
-      PSDONE                => open,
-      STATUS                => open
-      );
 
-  
+		MMCM_adc : MMCM_BASE
+    		generic map(
+        		BANDWIDTH          => "OPTIMIZED", -- Jitter programming ("HIGH","LOW","OPTIMIZED")
+        		CLKFBOUT_MULT_F    => 5,           -- Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+        		CLKFBOUT_PHASE     => 0.0,
+        		CLKIN1_PERIOD      => 1.9536,
+        		CLKOUT0_DIVIDE_F   => 5,           -- Divide amount for CLKOUT0 (1.000-128.000).
+        		CLKOUT0_DUTY_CYCLE => 0.5,
+        		CLKOUT1_DUTY_CYCLE => 0.5,
+        		CLKOUT2_DUTY_CYCLE => 0.5,
+        		CLKOUT3_DUTY_CYCLE => 0.5,
+        		CLKOUT4_DUTY_CYCLE => 0.5,
+        		CLKOUT5_DUTY_CYCLE => 0.5,
+        		CLKOUT6_DUTY_CYCLE => 0.5,
+        		CLKOUT0_PHASE      => 0.0,
+        		CLKOUT1_PHASE      => 90,
+        		CLKOUT2_PHASE      => 180,
+        		CLKOUT3_PHASE      => 270,
+        		CLKOUT4_PHASE      => 0.0,
+        		CLKOUT5_PHASE      => 0.0,
+        		CLKOUT6_PHASE      => 0.0,
+        		CLKOUT1_DIVIDE     => 5,            -- THIS IS THE DIVISOR
+        		CLKOUT2_DIVIDE     => 5,
+        		CLKOUT3_DIVIDE     => 5,
+        		CLKOUT4_DIVIDE     => 1,
+        		CLKOUT5_DIVIDE     => 1,
+        		CLKOUT6_DIVIDE     => 1,
+        		CLKOUT4_CASCADE    => "FALSE",
+        		CLOCK_HOLD         => "FALSE",
+        		DIVCLK_DIVIDE      => 1,            -- Master division value (1-80)
+        		REF_JITTER1        => 0.0,
+        		STARTUP_WAIT       => "FALSE")
+    		port map(
+        		CLKIN1    => data_clk,
+        		CLKFBIN   => clk_fb  ,
+        		CLKFBOUT  => clkfbout,
+        		CLKFBOUTB => open,
+        		CLKOUT0   => dcm_clk,
+        		CLKOUT0B  => open,
+        		CLKOUT1   => dcm_clk90,
+        		CLKOUT1B  => open,
+        		CLKOUT2   => dcm_clk180,
+        		CLKOUT2B  => open,
+        		CLKOUT3   => dcm_clk270,
+        		CLKOUT3B  => open,
+        		CLKOUT4   => open,
+        		CLKOUT5   => open,
+        		CLKOUT6   => open,
+        		LOCKED    => adc_dcm_locked,   
+       	 		PWRDWN    => '0',
+        		RST       => '0'
+		    	);
 
 
-  
+				
 end Structural;
