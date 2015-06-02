@@ -22,7 +22,7 @@ end
 delete_lines(blk);
 
 % Update Static Blocks
-%set_param([blk, '/DinDelay'], 'reg_retiming', 'off');
+%set_param([blk, '/DinDelay'], 'reg_retiming', 'on');
 
 add_line(blk, 'ld/1', 'Logical/1');
 add_line(blk, 'shift/1', 'Logical/2');

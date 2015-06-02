@@ -59,15 +59,19 @@ else,
     set_param([blk,'/dual_pol_cmac'],'multiplier_implementation','behavioral HDL');
 end
 
+delay_len = (acc_len - 1)*ceil(n_ants/2) + ceil(n_ants/2)-floor(n_ants/2);
 if use_bram_delay,
     replace_block(blk,'Name','delay','casper_library_delays/delay_bram','noprompt');
-    set_param([blk,'/delay'],'LinkStatus','inactive');    
+    set_param([blk,'/delay'],'LinkStatus','inactive');
+    % Setting bram_latency before DelayLen can cause
+    % errors when bram_latency-1 == delay_bram's default DelayLen
+    set_param([blk,'/delay'],'DelayLen',num2str(delay_len));
     set_param([blk,'/delay'],'bram_latency',num2str(bram_latency));
 else,
     replace_block(blk,'Name','delay','casper_library_delays/delay_slr','noprompt');
-    set_param([blk,'/delay'],'LinkStatus','inactive');     
+    set_param([blk,'/delay'],'LinkStatus','inactive');
+    set_param([blk,'/delay'],'DelayLen',num2str(delay_len));
 end
-set_param([blk,'/delay'],'DelayLen',num2str((acc_len - 1)*ceil(n_ants/2) + ceil(n_ants/2)-floor(n_ants/2)));   
 set_param([blk,'/sync_delay'],'DelayLen',num2str(add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1));   
 
 %set_param([blk,'/Counter'],'cnt_type','Count Limited');    

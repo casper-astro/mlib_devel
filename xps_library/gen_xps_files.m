@@ -92,13 +92,13 @@ casper_blks     = find_system(sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',
 % check for spaces in xps or casper block names
 for ctr = 1 : numel(xps_blks),
     % Allow 'XSG core config' block to have spaces
-    if numel(strfind(xps_blks{ctr}, ' ')) > 0 && ~regexpi(xps_blks{ctr}, 'XSG core config$'),
-        error('Block names may not have spaces - %s', xps_blks{ctr});
+    if any(strfind(xps_blks{ctr}, ' ')) && ~any(regexpi(xps_blks{ctr}, 'XSG core config$')),
+        error('casper:space_in_xps_block', 'Block names may not have spaces - %s', xps_blks{ctr});
     end 
 end
 for ctr = 1 : numel(casper_blks),
-    if numel(strfind(casper_blks{ctr}, ' ')) > 0,
-        error('Block names may not have spaces - %s', casper_blks{ctr});
+    if any(strfind(casper_blks{ctr}, ' '))
+        error('casper:space_in_casper_block', 'Block names may not have spaces - %s', casper_blks{ctr});
     end 
 end
 

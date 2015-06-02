@@ -9,6 +9,7 @@ function edge_detect_init(blk,varargin)
 %                1 = 'Active High'
 %                2 = 'Active Low'
 
+clog(sprintf('entering edge_detect_init.m for %s', blk), {'trace', 'edge_detect_init_debug'});
 check_mask_type(blk,'edge_detect');
 
 defaults = {'edge', 'Rising',...
@@ -19,6 +20,7 @@ defaults = {'edge', 'Rising',...
             'y_out','[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]'};
 
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
+clog('edge_detect_init.m post same_state', {'edge_detect_init_debug'});
 
 munge_block(blk, varargin{:});
 edge=get_var('edge', 'defaults', defaults, varargin{:});
@@ -64,6 +66,7 @@ end
 
 % Setup edge_op
 set_param([blk,'/edge_op'],'logical_function', edge_op);
+clog(sprintf('edge_detect_init set %s.logical_function to %s', [blk, '/edge_op'], edge_op), {'edge_detect_init_debug'});
 
 varargin{10} = ['[',num2str(y_in),']'];
 varargin{12} = ['[',num2str(y_out),']'];
@@ -73,4 +76,4 @@ annotation=sprintf('%s edges\n%s', lower(edge), lower(polarity));
 set_param(blk,'AttributesFormatString',annotation);
 
 save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
-
+clog(sprintf('exiting edge_detect_init.m for %s', blk), {'trace', 'edge_detect_init_debug'});

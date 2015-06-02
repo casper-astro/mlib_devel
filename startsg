@@ -14,13 +14,40 @@
 #                                                                        #
 ##########################################################################
 
-# Get local definitions, if present
-LOCALDEFS="${1:-${0}.local}"
-if [ -f "${LOCALDEFS}" ]
+# Find canonical ("real") directory of this script
+SCRIPT_DIR=$(dirname `readlink -e "$0"`)
+
+# Find basename of this script
+SCRIPT_BASE=$(basename "$0")
+
+# If local environment file is given, use it, otherwise search for
+# a local environment file.  Search order (only when not given!) is
+# "./${SCRIPT_BASE}.local" then "${SCRIPT_DIR}/${SCRIPT_BASE}.local".
+# Only the first found file is used.
+if [ -n "${1}" ]
 then
+  if ! [ -f "${1}" ]
+  then
+    echo "Error: local environment file '${1}' not found"
+    exit 1
+  fi
+  LOCALDEFS="${1}"
+
+elif [ -f "./${SCRIPT_BASE}.local" ]
+then
+  LOCALDEFS="./${SCRIPT_BASE}.local"
+
+elif [ -f "${SCRIPT_DIR}/${SCRIPT_BASE}.local" ]
+then
+  LOCALDEFS="${SCRIPT_DIR}/${SCRIPT_BASE}.local"
+fi
+
+if [ -n "${LOCALDEFS}" ]
+then
+  echo "Reading local definitions from '${LOCALDEFS}'"
   source "${LOCALDEFS}"
 else
-  echo "WARNING: Local environment file '${LOCALDEFS}' not present."
+  echo "WARNING: Local environment file not found"
 fi
 
 # Verify that MATLAB_PATH and XILINX_PATH are reasonable
@@ -50,10 +77,11 @@ then
   export XILINX_PLATFORM=lin64
 fi
 
-# If not yet defined, set MLIB_DEVEL_PATH based on location of current file
+# If not yet defined, set MLIB_DEVEL_PATH based on canonicalized directory of
+# this script.
 if ! [ -n "${MLIB_DEVEL_PATH}" ]
 then
-  export MLIB_DEVEL_PATH="$(cd `dirname "$0"`; pwd -P)"
+  export MLIB_DEVEL_PATH="${SCRIPT_DIR}"
 fi
 
 # Check that casper_library directory is writable
@@ -78,6 +106,9 @@ export MATLAB="${MATLAB_PATH}"
 
 # Set umask to allow group writes
 umask 002
+
+# Save start-up directory (if defined, startup.m will cd there)
+export CASPER_STARTUP_DIR=`pwd`
 
 # Change into the MLIB_DEVEL_PATH directory
 # (so MATLAB will find our startup.m file).
