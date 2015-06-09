@@ -35,7 +35,7 @@ class Platform(object):
         #: A dictionary of pin names associated with the platform.
         self._pins = {}
         for pinname, val in self.conf['pins'].iteritems():
-            self.add_pins(pinname, val.get('iostd', None), val['loc'])
+            self.add_pins(pinname, val.get('iostd', None), val.get('loc', None))
         #: A list of resources present on a platform to facilitate
         #: simple drc checking. Eg. ['qdr0', 'sysclk2x']
         self.provides = self.conf.get('provides', [])
