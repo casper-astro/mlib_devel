@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [513.0, 98.0, 1540.0, 1078.0]
+      Location		      [921.0, 200.0, 1542.0, 1105.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -41,11 +41,11 @@ Library {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"2"
-	Extents			[1502.0, 905.0]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[1504.0, 932.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
+	Offset			[-8.0546875, 0.0]
       }
     }
   }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "jackh"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri May 08 15:47:25 2015"
-  RTWModifiedTimeStamp	  353000840
-  ModelVersionFormat	  "1.%<AutoIncrement:522>"
+  LastModifiedDate	  "Wed Jun 03 18:13:26 2015"
+  RTWModifiedTimeStamp	  355255982
+  ModelVersionFormat	  "1.%<AutoIncrement:523>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -811,8 +811,8 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [626, 26, 1924, 992]
-    Open		    off
+    Location		    [921, 200, 2463, 1305]
+    Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -836,7 +836,7 @@ Library {
       ZOrder		      5236
       ShowName		      off
       AttributesFormatString  "System\\nGenerator"
-      LibraryVersion	      "1.2"
+      LibraryVersion	      "1.4"
       UserDataPersistent      on
       UserData		      "DataTag0"
       SourceBlock	      "xbsIndex_r4/ System Generator"
@@ -924,8 +924,8 @@ Library {
       MaskHideContents	      off
       System {
 	Name			"ADCs"
-	Location		[513, 98, 2053, 1176]
-	Open			on
+	Location		[512, 75, 2054, 1180]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -936,7 +936,7 @@ Library {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"100"
+	ZoomFactor		"50"
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "adc083000_ctrl"
@@ -1000,7 +1000,7 @@ Library {
 	      Position		      [230, 45, 285, 65]
 	      ZOrder		      -3
 	      ShowName		      off
-	      LibraryVersion	      "1.14"
+	      LibraryVersion	      "1.4"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
@@ -1017,9 +1017,9 @@ Library {
 	      en		      off
 	      latency		      "2"
 	      pipeline		      off
-	      xl_use_area	      off
-	      xl_area		      "[0,0,0,0,0,0,0]"
 	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "20,20,636,521"
 	      block_type	      "convert"
@@ -1042,7 +1042,7 @@ Library {
 	      Position		      [230, 120, 285, 140]
 	      ZOrder		      -4
 	      ShowName		      off
-	      LibraryVersion	      "1.14"
+	      LibraryVersion	      "1.4"
 	      SourceBlock	      "xbsIndex_r4/Convert"
 	      SourceType	      "Xilinx Type Converter Block"
 	      infoedit		      "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do"
@@ -1059,9 +1059,9 @@ Library {
 	      en		      off
 	      latency		      "2"
 	      pipeline		      off
-	      xl_use_area	      off
-	      xl_area		      "[0,0,0,0,0,0,0]"
 	      dbl_ovrd		      "off"
+	      xl_use_area	      "off"
+	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "0,0,636,521"
 	      block_type	      "convert"
@@ -1084,7 +1084,7 @@ Library {
 	      Position		      [120, 45, 180, 65]
 	      ZOrder		      -5
 	      ShowName		      off
-	      LibraryVersion	      "1.14"
+	      LibraryVersion	      "1.4"
 	      SourceBlock	      "xbsIndex_r4/Slice"
 	      SourceType	      "Xilinx Bit Slice Extractor Block"
 	      infoedit		      "Extracts a given range of bits from each input sample and presents it at the output.  The outp"
@@ -1134,7 +1134,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [360, 45, 420, 65]
 	      ZOrder		      -8
-	      LibraryVersion	      "1.14"
+	      LibraryVersion	      "1.4"
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
@@ -1154,7 +1154,7 @@ Library {
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      io_standard	      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -1177,7 +1177,7 @@ Library {
 	      Ports		      [1, 1]
 	      Position		      [360, 120, 420, 140]
 	      ZOrder		      -9
-	      LibraryVersion	      "1.14"
+	      LibraryVersion	      "1.4"
 	      SourceBlock	      "xbsIndex_r4/Gateway Out"
 	      SourceType	      "Xilinx Gateway Out Block"
 	      infoedit		      "Gateway out block.  Converts Xilinx fixed point inputs into ouputs of type Simulink integer, d"
@@ -1197,7 +1197,7 @@ Library {
 	      locs_specified	      off
 	      LOCs		      "{}"
 	      io_standard	      "{}"
-	      xl_use_area	      off
+	      xl_use_area	      "off"
 	      xl_area		      "[0,0,0,0,0,0,0]"
 	      has_advanced_control    "0"
 	      sggui_pos		      "-1,-1,-1,-1"
@@ -29104,13 +29104,14 @@ Library {
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
-	      Dimension		      6
+	      Dimension		      7
 	      Cell		      "ROACH:sx95t"
 	      Cell		      "ROACH:lx110t"
 	      Cell		      "ROACH2:sx475t"
 	      Cell		      "MKDIG"
 	      Cell		      "SNAP:xc7k160t"
 	      Cell		      "KC705:xc7k325t"
+	      Cell		      "MX175:xc7vx690t"
 	      PropName		      "TypeOptions"
 	    }
 	    Name		    "hw_sys"
@@ -59256,7 +59257,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6815"
+	SIDHighWatermark	"6820"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -59268,12 +59269,12 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6814"
+	  SID			  "332:6819"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6766
+	  ZOrder		  6771
 	  ShowName		  off
-	  LibraryVersion	  "1.2"
+	  LibraryVersion	  "1.4"
 	  SourceBlock		  "xbsIndex_r4/Assert"
 	  SourceType		  "Xilinx Assert Block"
 	  infoedit		  "Asserts a user-defined sample rate and/or type on a signal.<br><br>Hardware notes: In hardware this bl"
@@ -59306,11 +59307,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6812"
+	  SID			  "332:6817"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6764
-	  LibraryVersion	  "1.2"
+	  ZOrder		  6769
+	  LibraryVersion	  "1.4"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
 	  infoedit		  "Hardware notes: rounding and saturating require hardware resources; truncating and wrapping do not."
@@ -59324,31 +59325,32 @@ Library {
 	  quantization		  "Truncate"
 	  overflow		  "Wrap"
 	  en			  off
-	  latency		  "0"
-	  dbl_ovrd		  off
+	  latency		  "1"
 	  pipeline		  off
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
 	  block_type		  "convert"
-	  sg_icon_stat		  "50,20,1,1,white,blue,0,edca21da,right,,[ ],[ ]"
+	  sg_icon_stat		  "50,20,1,1,white,blue,0,0c6bad53,right,,[ ],[ ]"
 	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 50 50 0 0 ],[0 0 20 20 0 ],[0.77 0.82 0.91"
 	  " ]);\nplot([0 50 50 0 0 ],[0 0 20 20 0 ]);\npatch([20.55 23.44 25.44 27.44 29.44 25.44 22.55 20.55 ],[12.22 12.22 1"
 	  "4.22 12.22 14.22 14.22 14.22 12.22 ],[1 1 1 ]);\npatch([22.55 25.44 23.44 20.55 22.55 ],[10.22 10.22 12.22 12.22 10"
 	  ".22 ],[0.931 0.946 0.973 ]);\npatch([20.55 23.44 25.44 22.55 20.55 ],[8.22 8.22 10.22 10.22 8.22 ],[1 1 1 ]);\npatc"
 	  "h([22.55 29.44 27.44 25.44 23.44 20.55 22.55 ],[6.22 6.22 8.22 6.22 8.22 8.22 6.22 ],[0.931 0.946 0.973 ]);\nfprint"
 	  "f('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\n\ncolor('black');port_label('output',"
-	  "1,'cast');\nfprintf('','COMMENT: end icon text');"
+	  "1,'cast');\ncolor('black');disp('z^{-1}\\newline ','texmode','on');\ncolor('black');disp(' \\n ');\nfprintf('','COM"
+	  "MENT: end icon text');"
 	}
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6811"
+	  SID			  "332:6816"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6763
-	  LibraryVersion	  "1.2"
+	  ZOrder		  6768
+	  LibraryVersion	  "1.4"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
 	  infoedit		  "Hardware notes: A delay line is a chain, each link of which is an SRL16 followed by a flip-flop."
@@ -59356,9 +59358,9 @@ Library {
 	  infoeditControl	  "Selection of Reset will increase slice count due to use of real FFs and instead of SRLs"
 	  en			  off
 	  latency		  "0"
-	  dbl_ovrd		  off
 	  reg_retiming		  on
-	  xl_use_area		  off
+	  dbl_ovrd		  "off"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"
@@ -59375,11 +59377,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6815"
+	  SID			  "332:6820"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6767
-	  LibraryVersion	  "1.2"
+	  ZOrder		  6772
+	  LibraryVersion	  "1.4"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
 	  infoedit		  "Changes signal type without altering the binary representation.   You can change the signal between si"
@@ -59406,11 +59408,11 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6813"
+	  SID			  "332:6818"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6765
-	  LibraryVersion	  "1.2"
+	  ZOrder		  6770
+	  LibraryVersion	  "1.4"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
 	  infoedit		  "Gateway out block.  Converts Xilinx fixed-point or floating-point type inputs into ouputs of type Simu"
@@ -59418,12 +59420,19 @@ Library {
 	  "put ports or are discarded, depending on how they are configured."
 	  inherit_from_input	  off
 	  hdl_port		  on
+	  rows			  "1"
+	  columns		  "1"
+	  UseAsDAC		  off
+	  DACChannel		  "'1'"
+	  interface		  "None"
+	  automatic_assignment	  on
+	  address_offset	  "hex2dec('00')"
+	  intf_description	  "''"
 	  timing_constraint	  "None"
 	  locs_specified	  off
 	  LOCs			  "{}"
-	  UseAsDAC		  off
-	  DACChannel		  "'1'"
-	  xl_use_area		  off
+	  io_standard		  "{}"
+	  xl_use_area		  "off"
 	  xl_area		  "[0,0,0,0,0,0,0]"
 	  has_advanced_control	  "0"
 	  sggui_pos		  "-1,-1,-1,-1"

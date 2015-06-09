@@ -103,6 +103,17 @@ switch hw_sys
         end % switch hw_subsys
     % end case 'MKDIG'
     
+    case 'MX175'
+        switch hw_subsys
+            case 'xc7vx690t'
+                xlsetparam(xsg_blk,'xilinxfamily', 'Virtex7',...
+                    'part', 'xc7vx690t',...
+                    'speed', '-2',...
+                    'testbench', 'off',...
+                    'package', 'ffg1930');
+            %
+        end % switch hw_subsys
+    % end case 'MX175'
     otherwise
         errordlg(['Unsupported hardware system: ',hw_sys]);
     % end 'otherwise'
@@ -118,7 +129,8 @@ else
     xlsetparam(xsg_blk, 'synthesis_tool', syn_tool)
 end
 
-xlsetparam(xsg_blk,'clock_loc','d7hack')
+xlsetparam(xsg_blk, 'clock_loc', 'd7hack')
+xlsetparam(xsg_blk, 'directory', ['./' bdroot])
 
 switch clk_src
     case {'sys_clk' 'sys_clk2x'}
