@@ -1,0 +1,143 @@
+name: mx175
+manufacturer: Xilinx
+fpga: xc7vx690tffg1930-2
+config_voltage: 2.5
+cfgbvs: VCCO
+sources:
+  - infrastructure
+  - spi_wb_bridge
+  - wbs_arbiter
+  - sys_block
+constraints:
+  - mx175.xdc
+  - mx175.ucf
+provides:
+  - sfp0
+  - sfp1
+  - sfp2
+  - sfp3
+  - hmc5831_0
+  - hmc5831_1
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+pins:  
+  Q8_CLK1_GTREFCLK_PAD_P_IN:
+    loc: AF8
+  diff_clock_rtl_clk_p:
+    iostd: LVDS
+    loc: AR21
+  clk_200mhz_p:
+    iostd: LVDS
+    loc: AR21
+  TRACK_DATA_OUT:
+    iostd: LVCMOS18
+    loc: T26
+  reset_rtl:
+    iostd: LVCMOS18
+    loc: T28
+  TXP_OUT:
+    loc:
+      - AE2
+      - AL2
+      - AF4
+      - AJ2
+      - AC2
+      - AG2
+      - AK4
+      - AN2
+  FLASH1:
+    iostd: LVCMOS18
+    loc: C29
+  FLASH2:
+    iostd: LVCMOS18
+    loc: C30
+  uart_rxd:
+    iostd: LVCMOS18
+    loc: AV40
+  TENGB_TXN:
+    loc: BA1
+  iic_scl_io:
+    iostd: LVCMOS18
+    loc: AW39
+  RXP_IN:
+    loc:
+      - AE6
+      - AL6
+      - AH4
+      - AJ6
+      - AC6
+      - AG6
+      - AM4
+      - AN6
+  si5324_out_p:
+    iostd: LVDS
+    loc: AR38
+  si5324_out_n:
+    iostd: LVDS
+  TX_DISABLE:
+    iostd: LVCMOS18
+    loc: AP12
+  TXN_OUT:
+    loc:
+      - AE1
+      - AL1
+      - AF3
+      - AJ1
+      - AC1
+      - AG1
+      - AK3
+      - AN1
+  diff_clock_rtl_clk_n:
+    iostd: LVDS
+  TENGB_TXP:
+    loc: BA2
+  led:
+    iostd: LVCMOS18
+    loc:
+      - D29
+      - D30
+      - A28
+      - A29
+      - C27
+      - C28
+  user_clock_n:
+    iostd: LVDS
+  TENGB_RXP:
+    loc: BA6
+  gpio_adc_control_tri_o:
+    iostd: LVCMOS18
+    loc:
+      - E2
+      - E3
+      - F3
+      - F4
+      - D4
+      - E4
+  TENGB_RXN:
+    loc: BA5
+  RXN_IN:
+    loc:
+      - AE5
+      - AL5
+      - AH3
+      - AJ5
+      - AC5
+      - AG5
+      - AM3
+      - AN5
+  user_clock_p:
+    iostd: LVDS
+    loc: AP21
+  uart_txd:
+    iostd: LVCMOS18
+    loc: AW40
+  TX_FAULT:
+    iostd: LVCMOS18
+    loc: AM10
+  TENGREFCLK_P:
+    loc: AY8
+  iic_sda_io:
+    iostd: LVCMOS18
+    loc: AV39
