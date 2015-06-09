@@ -61,6 +61,12 @@ pins:
   usb_rx:
     iostd: LVCMOS25
     loc: H13
+  sync_in_p:
+    iostd: LVDS_25
+    loc: AD25
+  sync_in_n:
+    iostd: LVDS_25
+    loc: AE25
   led:
     iostd: LVCMOS25
     loc:
