@@ -95,11 +95,18 @@ class Qdr(object):
         self.ctrl_reg.write_int(1, blindwrite=True)
         self.ctrl_reg.write_int(0, blindwrite=True)
 
+    def disable_fabric(self):
+        self.parent.write_int(self.control_mem, 1, blindwrite=True, offset=2)
+
+    def enable_fabric(self):
+        self.parent.write_int(self.control_mem, 0, blindwrite=True, offset=2)
+
     def qdr_reset(self):
         "Resets the QDR and the IO delays (sets all taps=0)."
         self.parent.write_int(self.control_mem, 1, blindwrite=True,offset=0)
         self.parent.write_int(self.control_mem, 0, blindwrite=True,offset=0)
         self.parent.write_int(self.control_mem, 0, blindwrite=True,offset=9) #extra latency ctrl
+        self.parent.write_int(self.control_mem, 0, blindwrite=True,offset=2) #enable fabric interface
 
     def add_extra_latency(self, extra_lat):
         """
@@ -310,6 +317,7 @@ class Qdr(object):
         n_taps = 32
         # reset all delays and set extra latency to zero.
         self.qdr_reset()
+        self.disable_fabric() #disable the simulink write interface
 
         # Step through the possible output delays. When any of the
         # bits are OK, use this as the start point for the
@@ -365,8 +373,10 @@ class Qdr(object):
         cal = self.qdr_cal_check(verbosity)
 
         if self.qdr_cal_check(verbosity):
+            self.enable_fabric() #reenable the simulink write interface
             return True
         else:
+            self.enable_fabric() #reenable the simulink write interface
             if fail_hard:
                 raise RuntimeError('QDR %s calibration failed.' % self.name)
             else:

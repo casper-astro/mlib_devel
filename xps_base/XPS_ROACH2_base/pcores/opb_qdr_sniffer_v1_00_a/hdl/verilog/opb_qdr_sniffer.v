@@ -82,6 +82,9 @@ module opb_qdr_sniffer #(
   localparam BACKDOOR       = 4'h4;
   localparam BACKDOOR_WAIT  = 4'h8;
 
+  wire disable_fabric; //when high, mask out write enables from the fabric
+  wire slave_wr_strb_masked = slave_wr_strb && (!disable_fabric);
+
 generate if (ENABLE == 1) begin: qdr_enabled
 
   /* qdr_rst gen */
@@ -199,7 +202,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
   wire [31:0] master_wr_data_lo = {master_wr_data[34:27], master_wr_data[25:18], master_wr_data[16:9],  master_wr_data[7:0]};
 
    // 1 -> 31
-   assign trig0  = {27'h0, sniffer_latch, slave_ack, master_wr_strb, slave_wr_strb, master_rd_strb, slave_rd_strb, master_rd_dvld, slave_rd_dvld};
+   assign trig0  = {27'h0, sniffer_latch, slave_ack, master_wr_strb, slave_wr_strb_masked, master_rd_strb, slave_rd_strb, master_rd_dvld, slave_rd_dvld};
    // 32 -> 63
    assign trig1  = {slave_rd_data};
    // 64 -> 95
@@ -270,13 +273,13 @@ generate if (ENABLE == 1) begin: qdr_enabled
     end else begin
       case (arb_sel)
         SLAVE: begin
-          if (backdoor_req && !(slave_wr_strb || slave_rd_strb)) begin
+          if (backdoor_req && !(slave_wr_strb_masked || slave_rd_strb)) begin
               arb_sel <= BACKDOOR;
 `ifdef DEBUG
               $display("sniff_arb: got backdoor_req without pending slave xfer");
 `endif
           end
-          if (backdoor_req && (slave_wr_strb || slave_rd_strb)) begin
+          if (backdoor_req && (slave_wr_strb_masked || slave_rd_strb)) begin
               arb_sel <= SLAVE_WAIT;
 `ifdef DEBUG
               $display("sniff_arb: got backdoor_req with pending slave xfer");
@@ -302,7 +305,7 @@ generate if (ENABLE == 1) begin: qdr_enabled
   assign slave_ack    = arb_sel == SLAVE;
   assign backdoor_ack = arb_sel == BACKDOOR;
 
-  assign master_wr_strb = slave_wr_strb && slave_ack || backdoor_w && backdoor_ack;
+  assign master_wr_strb = slave_wr_strb_masked && slave_ack || backdoor_w && backdoor_ack;
   assign master_rd_strb = slave_rd_strb && slave_ack || backdoor_r && backdoor_ack;
   assign master_addr    = slave_ack ? slave_addr[QDR_ADDR_WIDTH - 1:0]  : backdoor_addr[QDR_ADDR_WIDTH - 1:0];
   assign master_wr_data = arb_sel == SLAVE || arb_sel == SLAVE_WAIT ? slave_wr_data : backdoor_d;
@@ -322,7 +325,7 @@ end else begin : qdr_disabled
   assign Sl_DBus    = 32'b0;
 
   assign master_addr    = slave_addr[QDR_ADDR_WIDTH - 1:0];
-  assign master_wr_strb = slave_wr_strb;
+  assign master_wr_strb = slave_wr_strb_masked;
   assign master_wr_data = slave_wr_data;
   assign master_wr_be   = slave_wr_be;
   assign master_rd_strb = slave_rd_strb;
@@ -361,6 +364,7 @@ end endgenerate
     .OPB_seqAddr (OPB_seqAddr_config),
 
     .dly_extra_clk (dly_extra_clk),
+    .disable_fabric(disable_fabric),
     .dly_clk       (dly_clk),
     .dly_en_i      (dly_en_i),
     .dly_en_o      (dly_en_o),
