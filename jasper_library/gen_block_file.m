@@ -173,8 +173,22 @@ for n = 1:length(gateway_ins)
     end
 end 
 for n = 1:length(gateway_outs)
-    if ~any(strcmp(dummy_parents, get_param(gateway_outs{n},'Parent')))
-        fprintf(fid,'      - %s\n',get_param(gateway_outs{n},'Name'));
+    % if the gateway out is tagged to not be an HDL port, ignore it.
+    if strcmp(get_param(gateway_outs{n}, 'hdl_port'), 'on')
+        found_xps_tag = 0;
+        parent = get_param(gateway_outs{n}, 'parent');
+        while ~strcmp(parent, '')
+            parent_tag = char(get_param(parent, 'tag'));
+            if ~isempty(regexp(parent_tag, '^xps:', 'ONCE')),
+                found_xps_tag = 1;
+            end
+            parent = get_param(parent,'parent');
+        end
+        if found_xps_tag
+            if ~any(strcmp(dummy_parents, get_param(gateway_outs{n},'Parent')))
+                fprintf(fid,'      - %s\n',get_param(gateway_outs{n},'Name'));
+            end
+        end
     end
 end 
 
