@@ -130,7 +130,6 @@ else
 end
 
 xlsetparam(xsg_blk, 'clock_loc', 'd7hack')
-xlsetparam(xsg_blk, 'directory', ['./' bdroot])
 
 switch clk_src
     case {'sys_clk' 'sys_clk2x'}
