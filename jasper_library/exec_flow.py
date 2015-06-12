@@ -26,8 +26,8 @@ parser.add_option("--skipbe", dest="skipbe", action='store_false', default='True
                   help="skip backend compilation")
 parser.add_option("--be", dest="be", type='string', default='vivado',
                   help="Backend to use. Default: vivado")
-parser.add_option("--jobs", dest="jobs", type='int', default=1,
-                  help="Number of cores to run compiles with. Default=1")
+parser.add_option("--jobs", dest="jobs", type='int', default=4,
+                  help="Number of cores to run compiles with. Default=4")
 parser.add_option("-m", "--model", dest="model", type='string',
                   default='/tools/mlib_devel/jasper_library/test_models/test.slx',
                   help="model to compile")
