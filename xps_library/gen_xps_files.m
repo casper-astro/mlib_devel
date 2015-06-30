@@ -550,6 +550,9 @@ if run_edkgen,
         end
         clear newline tline;
         fclose(fid);
+        % add git info to the design
+        git_write_info(kcpfpg_fid, git_info(sys));
+        % close off the file
         fprintf(kcpfpg_fid, '?quit\n');
         fclose(kcpfpg_fid);
     end
