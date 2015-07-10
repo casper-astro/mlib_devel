@@ -1,5 +1,6 @@
-module tengbaser_infrastructure
-  (
+module tengbaser_infrastructure #(
+  parameter USE_GTH = "FALSE"
+  )(
   input           refclk_p,
   input           refclk_n,
   input           txclk322,
@@ -53,8 +54,9 @@ module tengbaser_infrastructure
 
   // Instantiate the 10GBASE-R Block Level
 
-  tengbaser_support ten_gig_eth_pcs_pma_core_support_layer_i
-  (
+  tengbaser_support #( 
+    .USE_GTH(USE_GTH)
+  ) ten_gig_eth_pcs_pma_core_support_layer_i (
     .refclk_p(refclk_p),
     .refclk_n(refclk_n),
     .dclk(dclk),

@@ -7,6 +7,8 @@ class tengbe_v2(YellowBlock):
     def factory(blk, plat, hdl_root=None):
         if plat.fpga.startswith('xc7k'):
             return tengbaser_xilinx_k7(blk, plat, hdl_root)
+        elif plat.fpga.startswith('xc7v'):
+            return tengbaser_xilinx_k7(blk, plat, hdl_root, use_gth=plat.name=='mx175')
         else:
             return tengbe_v2_xilinx_v6(blk, plat, hdl_root)
 
@@ -183,6 +185,9 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
         return cons
 
 class tengbaser_xilinx_k7(tengbe_v2):
+    def __init__(self, blk, plat, hdl_root, use_gth=False):
+        self.use_gth = use_gth
+        tengbe_v2.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.exc_requirements = ['tge%d'%self.slot]
         self.add_source('kat_ten_gb_eth')
@@ -205,6 +210,18 @@ class tengbaser_xilinx_k7(tengbe_v2):
         self.port = self.port_r1
         self.infrastructure_id = self.port // 4
 
+    def gen_children(self):
+        """
+        The mx175 clocks the gth from a clock which is passed through the FPGA and through
+        a jitter cleaner (si5324) back into the GTH clock port. The first ten gig core
+        needs to make sure this pass through is instantiated.
+        """
+        if self.i_am_the_first:
+            pt = YellowBlock.make_block({'tag':'xps:clock_passthrough', 'fullpath':'%s/clock_passthrough'%self.name, 'name':'clock_passthrough'}, self.platform)
+            return [pt]
+        else:
+            return []
+
     def modify_top(self,top):
         # An infrastructure instance is good for 4 SFPs. Assuming the ports are numbered
         # so that instance0 serves ports 0-3, instance1 serves ports 4-7, etc. decide
@@ -219,6 +236,8 @@ class tengbaser_xilinx_k7(tengbe_v2):
 
     def instantiate_infra(self, top, num):
         infra = top.get_instance('tengbaser_infrastructure', 'tengbaser_infra%d_inst'%num)
+        if self.use_gth:
+            infra.add_parameter('USE_GTH', '"TRUE"') #verilog module defaults to false
         infra.add_port('refclk_n', 'ref_clk_n%d'%num, parent_port=True, dir='in')
         infra.add_port('refclk_p', 'ref_clk_p%d'%num, parent_port=True, dir='in')
         infra.add_port('reset', 'sys_reset', parent_sig=False) #no parent sig -- the wire is declared in top.v

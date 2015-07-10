@@ -58,8 +58,9 @@
 `timescale 1ns / 1ps
 
 (* DowngradeIPIdentifiedWarnings="yes" *)
-module tengbaser_support
-  (
+module tengbaser_support #(
+  parameter USE_GTH ="FALSE"
+  )(
   input           refclk_p,
   input           refclk_n,
   output          core_clk156_out,
@@ -137,9 +138,9 @@ module tengbaser_support
 
   // Instantiate the 10GBASER/KR GT Common block
   ten_gig_pcs_pma_5_gt_common # (
-      .WRAPPER_SIM_GTRESET_SPEEDUP("TRUE") ) //Does not affect hardware
-  ten_gig_eth_pcs_pma_gt_common_block
-    (
+      .WRAPPER_SIM_GTRESET_SPEEDUP("TRUE"), //Does not affect hardware
+      .USE_GTH(USE_GTH)                     //Else use GTX
+    ) ten_gig_eth_pcs_pma_gt_common_block (
      .refclk(refclk),
      .qpllreset(qpllreset_int),
      .qplllock(qplllock),

@@ -56,7 +56,8 @@
 `timescale 1ns / 1ps
 
 module  ten_gig_pcs_pma_5_gt_common # (
-  parameter WRAPPER_SIM_GTRESET_SPEEDUP = "false" ) //Does not affect hardware
+  parameter WRAPPER_SIM_GTRESET_SPEEDUP = "false", //Does not affect hardware
+  parameter USE_GTH = "FALSE")
     (
      input  refclk,
      input  qpllreset,
@@ -115,24 +116,20 @@ module  ten_gig_pcs_pma_5_gt_common # (
     assign qplloutclk = gt0_qplloutclk_i;
     assign qplloutrefclk = gt0_qplloutrefclk_i;
    
-
-    //_________________________________________________________________________
-    //_________________________________________________________________________
-    //_________________________GTXE2_COMMON____________________________________
-
-    GTXE2_COMMON #
-    (
+    generate
+    if (USE_GTH == "TRUE") begin
+        // Copied from Rick's MX165 design
+        GTHE2_COMMON #
+        (
             // Simulation attributes
             .SIM_RESET_SPEEDUP   (WRAPPER_SIM_GTRESET_SPEEDUP),
             .SIM_QPLLREFCLK_SEL  (3'b001),
-            .SIM_VERSION         ("4.0"),
-
-
-           //----------------COMMON BLOCK Attributes---------------
-            .BIAS_CFG                               (64'h0000040000001000),
-            .COMMON_CFG                             (32'h00000000),
-            .QPLL_CFG                               (27'h0680181),
-            .QPLL_CLKOUT_CFG                        (4'b0000),
+            .SIM_VERSION         ("2.0"),
+            //----------------COMMON BLOCK Attributes---------------
+            .BIAS_CFG                               (64'h0000040000001050),
+            .COMMON_CFG                             (32'h0000001C),
+            .QPLL_CFG                               (27'h04801C7),
+            .QPLL_CLKOUT_CFG                        (4'b1111),
             .QPLL_COARSE_FREQ_OVRD                  (6'b010000),
             .QPLL_COARSE_FREQ_OVRD_EN               (1'b0),
             .QPLL_CP                                (10'b0000011111),
@@ -142,55 +139,138 @@ module  ten_gig_pcs_pma_5_gt_common # (
             .QPLL_FBDIV_MONITOR_EN                  (1'b0),
             .QPLL_FBDIV_RATIO                       (QPLL_FBDIV_RATIO),
             .QPLL_INIT_CFG                          (24'h000006),
-            .QPLL_LOCK_CFG                          (16'h21E8),
+            .QPLL_LOCK_CFG                          (16'h05E8),
             .QPLL_LPF                               (4'b1111),
-            .QPLL_REFCLK_DIV                        (1)
+            .QPLL_REFCLK_DIV                        (1),
+            .RSVD_ATTR0                             (16'h0000),
+            .RSVD_ATTR1                             (16'h0000),
+            .QPLL_RP_COMP                           (1'b0),
+            .QPLL_VTRL_RESET                        (2'b00),
+            .RCAL_CFG                               (2'b00)
+        )
+        gthe2_common_0_i
+        (
+            //----------- Common Block  - Dynamic Reconfiguration Port (DRP) -----------
+            .DRPADDR                        (tied_to_ground_vec_i[7:0]),
+            .DRPCLK                         (tied_to_ground_i),
+            .DRPDI                          (tied_to_ground_vec_i[15:0]),
+            .DRPDO                          (),
+            .DRPEN                          (tied_to_ground_i),
+            .DRPRDY                         (),
+            .DRPWE                          (tied_to_ground_i),
+            //-------------------- Common Block  - Ref Clock Ports ---------------------
+            .GTGREFCLK                      (tied_to_ground_i),
+            .GTNORTHREFCLK0                 (tied_to_ground_i),
+            .GTNORTHREFCLK1                 (tied_to_ground_i),
+            .GTREFCLK0                      (gt0_gtrefclk0_common_in),
+            .GTREFCLK1                      (tied_to_ground_i),
+            .GTSOUTHREFCLK0                 (tied_to_ground_i),
+            .GTSOUTHREFCLK1                 (tied_to_ground_i),
+            //--------------------- Common Block - Clocking Ports ----------------------
+            .QPLLOUTCLK                     (gt0_qplloutclk_i),
+            .QPLLOUTREFCLK                  (gt0_qplloutrefclk_i),
+            .REFCLKOUTMONITOR               (),
+            //----------------------- Common Block - QPLL Ports ------------------------
+            .BGRCALOVRDENB                  (tied_to_vcc_i),
+            .PMARSVDOUT                     (),
+            .QPLLDMONITOR                   (),
+            .QPLLFBCLKLOST                  (),
+            .QPLLLOCK                       (gt0_qplllock_out),
+            .QPLLLOCKDETCLK                 (1'b0),
+            .QPLLLOCKEN                     (tied_to_vcc_i),
+            .QPLLOUTRESET                   (tied_to_ground_i),
+            .QPLLPD                         (tied_to_ground_i),
+            .QPLLREFCLKLOST                 (),
+            .QPLLREFCLKSEL                  (3'b001),
+            .QPLLRESET                      (gt0_qpllreset_in),
+            .QPLLRSVD1                      (16'b0000000000000000),
+            .QPLLRSVD2                      (5'b11111),
+            //------------------------------- QPLL Ports -------------------------------
+            .BGBYPASSB                      (tied_to_vcc_i),
+            .BGMONITORENB                   (tied_to_vcc_i),
+            .BGPDB                          (tied_to_vcc_i),
+            .BGRCALOVRD                     (5'b00000),
+            .PMARSVD                        (8'b00000000),
+            .RCALENB                        (tied_to_vcc_i)
+        );
+    end else begin
+        //_________________________________________________________________________
+        //_________________________________________________________________________
+        //_________________________GTXE2_COMMON____________________________________
 
-    )
-    gtxe2_common_0_i
-    (
-        //----------- Common Block  - Dynamic Reconfiguration Port (DRP) -----------
-        .DRPADDR                        (tied_to_ground_vec_i[7:0]),
-        .DRPCLK                         (tied_to_ground_i),
-        .DRPDI                          (tied_to_ground_vec_i[15:0]),
-        .DRPDO                          (),
-        .DRPEN                          (tied_to_ground_i),
-        .DRPRDY                         (),
-        .DRPWE                          (tied_to_ground_i),
-        //-------------------- Common Block  - Ref Clock Ports ---------------------
-        .GTGREFCLK                      (tied_to_ground_i),
-        .GTNORTHREFCLK0                 (tied_to_ground_i),
-        .GTNORTHREFCLK1                 (tied_to_ground_i),
-        .GTREFCLK0                      (gt0_gtrefclk0_common_in),
-        .GTREFCLK1                      (tied_to_ground_i),
-        .GTSOUTHREFCLK0                 (tied_to_ground_i),
-        .GTSOUTHREFCLK1                 (tied_to_ground_i),
-        //--------------------- Common Block - Clocking Ports ----------------------
-        .QPLLOUTCLK                     (gt0_qplloutclk_i),
-        .QPLLOUTREFCLK                  (gt0_qplloutrefclk_i),
-        .REFCLKOUTMONITOR               (),
-        //----------------------- Common Block - QPLL Ports ------------------------
-        .QPLLDMONITOR                   (),
-        .QPLLFBCLKLOST                  (),
-        .QPLLLOCK                       (gt0_qplllock_out),
-        .QPLLLOCKDETCLK                 (1'b0),
-        .QPLLLOCKEN                     (tied_to_vcc_i),
-        .QPLLOUTRESET                   (tied_to_ground_i),
-        .QPLLPD                         (tied_to_ground_i),
-        .QPLLREFCLKLOST                 (),
-        .QPLLREFCLKSEL                  (3'b001),
-        .QPLLRESET                      (gt0_qpllreset_in),
-        .QPLLRSVD1                      (16'b0000000000000000),
-        .QPLLRSVD2                      (5'b11111),
-        //------------------------------- QPLL Ports -------------------------------
-        .BGBYPASSB                      (tied_to_vcc_i),
-        .BGMONITORENB                   (tied_to_vcc_i),
-        .BGPDB                          (tied_to_vcc_i),
-        .BGRCALOVRD                     (5'b00000),
-        .PMARSVD                        (8'b00000000),
-        .RCALENB                        (tied_to_vcc_i)
+        GTXE2_COMMON #
+        (
+                // Simulation attributes
+                .SIM_RESET_SPEEDUP   (WRAPPER_SIM_GTRESET_SPEEDUP),
+                .SIM_QPLLREFCLK_SEL  (3'b001),
+                .SIM_VERSION         ("4.0"),
 
-    );
+
+               //----------------COMMON BLOCK Attributes---------------
+                .BIAS_CFG                               (64'h0000040000001000),
+                .COMMON_CFG                             (32'h00000000),
+                .QPLL_CFG                               (27'h0680181),
+                .QPLL_CLKOUT_CFG                        (4'b0000),
+                .QPLL_COARSE_FREQ_OVRD                  (6'b010000),
+                .QPLL_COARSE_FREQ_OVRD_EN               (1'b0),
+                .QPLL_CP                                (10'b0000011111),
+                .QPLL_CP_MONITOR_EN                     (1'b0),
+                .QPLL_DMONITOR_SEL                      (1'b0),
+                .QPLL_FBDIV                             (QPLL_FBDIV_IN),
+                .QPLL_FBDIV_MONITOR_EN                  (1'b0),
+                .QPLL_FBDIV_RATIO                       (QPLL_FBDIV_RATIO),
+                .QPLL_INIT_CFG                          (24'h000006),
+                .QPLL_LOCK_CFG                          (16'h21E8),
+                .QPLL_LPF                               (4'b1111),
+                .QPLL_REFCLK_DIV                        (1)
+
+        )
+        gtxe2_common_0_i
+        (
+            //----------- Common Block  - Dynamic Reconfiguration Port (DRP) -----------
+            .DRPADDR                        (tied_to_ground_vec_i[7:0]),
+            .DRPCLK                         (tied_to_ground_i),
+            .DRPDI                          (tied_to_ground_vec_i[15:0]),
+            .DRPDO                          (),
+            .DRPEN                          (tied_to_ground_i),
+            .DRPRDY                         (),
+            .DRPWE                          (tied_to_ground_i),
+            //-------------------- Common Block  - Ref Clock Ports ---------------------
+            .GTGREFCLK                      (tied_to_ground_i),
+            .GTNORTHREFCLK0                 (tied_to_ground_i),
+            .GTNORTHREFCLK1                 (tied_to_ground_i),
+            .GTREFCLK0                      (gt0_gtrefclk0_common_in),
+            .GTREFCLK1                      (tied_to_ground_i),
+            .GTSOUTHREFCLK0                 (tied_to_ground_i),
+            .GTSOUTHREFCLK1                 (tied_to_ground_i),
+            //--------------------- Common Block - Clocking Ports ----------------------
+            .QPLLOUTCLK                     (gt0_qplloutclk_i),
+            .QPLLOUTREFCLK                  (gt0_qplloutrefclk_i),
+            .REFCLKOUTMONITOR               (),
+            //----------------------- Common Block - QPLL Ports ------------------------
+            .QPLLDMONITOR                   (),
+            .QPLLFBCLKLOST                  (),
+            .QPLLLOCK                       (gt0_qplllock_out),
+            .QPLLLOCKDETCLK                 (1'b0),
+            .QPLLLOCKEN                     (tied_to_vcc_i),
+            .QPLLOUTRESET                   (tied_to_ground_i),
+            .QPLLPD                         (tied_to_ground_i),
+            .QPLLREFCLKLOST                 (),
+            .QPLLREFCLKSEL                  (3'b001),
+            .QPLLRESET                      (gt0_qpllreset_in),
+            .QPLLRSVD1                      (16'b0000000000000000),
+            .QPLLRSVD2                      (5'b11111),
+            //------------------------------- QPLL Ports -------------------------------
+            .BGBYPASSB                      (tied_to_vcc_i),
+            .BGMONITORENB                   (tied_to_vcc_i),
+            .BGPDB                          (tied_to_vcc_i),
+            .BGRCALOVRD                     (5'b00000),
+            .PMARSVD                        (8'b00000000),
+            .RCALENB                        (tied_to_vcc_i)
+
+        );
+    end
+    endgenerate;
 
 
 
