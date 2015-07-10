@@ -4,7 +4,11 @@ def to_int_list(s):
     and return a list of integers
     '''
     s = str(s)
-    return map(int,s.rstrip(']').lstrip('[').split(','))
+
+    try:
+        return map(int,s.rstrip(']').lstrip('[').split(','))
+    except ValueError:
+        return map(int,s.rstrip(']').lstrip('[').split())
 
 def write_file(fn,str):
     '''
