@@ -1,5 +1,6 @@
 import os
 import logging
+from glob import glob
 
 class YellowBlock(object):
     """
@@ -221,9 +222,12 @@ class YellowBlock(object):
             fullpath = path
         else:
             fullpath = self.hdl_root + '/' + path
-        if not os.path.exists(fullpath):
-            self.throw_error("path %s does not exist"%path)
-        self.sources.append(fullpath)
+        print path, glob(fullpath)
+        for fname in glob(fullpath):
+            self.sources.append(fname)
+        #if not os.path.exists(fullpath):
+        #    self.throw_error("path %s does not exist"%path)
+        #self.sources.append(fullpath)
 
     def throw_error(self,message):
         """
