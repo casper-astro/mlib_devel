@@ -56,8 +56,6 @@ pins:
   uart_rxd:
     iostd: LVCMOS18
     loc: AV40
-  TENGB_TXN:
-    loc: BA1
   iic_scl_io:
     iostd: LVCMOS18
     loc: AW39
@@ -76,9 +74,6 @@ pins:
     loc: AR38
   si5324_out_n:
     iostd: LVDS
-  TX_DISABLE:
-    iostd: LVCMOS18
-    loc: AP12
   TXN_OUT:
     loc:
       - AE1
@@ -91,8 +86,6 @@ pins:
       - AN1
   diff_clock_rtl_clk_n:
     iostd: LVDS
-  TENGB_TXP:
-    loc: BA2
   led:
     iostd: LVCMOS18
     loc:
@@ -102,10 +95,10 @@ pins:
       - A29
       - C27
       - C28
+      - C29
+      - C30
   user_clock_n:
     iostd: LVDS
-  TENGB_RXP:
-    loc: BA6
   gpio_adc_control_tri_o:
     iostd: LVCMOS18
     loc:
@@ -115,8 +108,6 @@ pins:
       - F4
       - D4
       - E4
-  TENGB_RXN:
-    loc: BA5
   RXN_IN:
     loc:
       - AE5
@@ -133,11 +124,83 @@ pins:
   uart_txd:
     iostd: LVCMOS18
     loc: AW40
-  TX_FAULT:
+  gpioa:
     iostd: LVCMOS18
-    loc: AM10
-  TENGREFCLK_P:
+    loc: 
+      - T26
+      - R26
+      - R29
+      - P29
+      - P26
+      - P27
+      - N27
+      - K28
+  gpiob:
+    iostd: LVCMOS18
+    loc: 
+      - H27
+      - D27
+      - E27
+      - K29
+      - L29
+      - K27
+      - J27
+      - J29
+  gpioc:
+    iostd: LVCMOS18
+    loc: 
+      - N28
+      - H28
+      - G27
+      - G28
+      - M28
+      - L28
+      - F29
+      - E29
+
+  # 10GbE / SFP nets
+  eth_clk_p:
     loc: AY8
+  eth_clk_n:
+    loc: AY7
+  mgt_rx_n:
+    loc: 
+      - BA5
+      - AY3
+      - BC5
+      - BD7
+  mgt_rx_p:
+    loc:
+      - BA6
+      - AY4
+      - BC6
+      - BD8
+  mgt_tx_n:
+    loc: 
+      - BA1
+      - AW1
+      - BB3
+      - BD3
+  mgt_tx_p:
+    loc: 
+      - BA2
+      - AW2
+      - BB4
+      - BD4
+  sfp_disable:
+    iostd: LVCMOS18
+    loc: 
+      - AP12
+      - AP11
+      - AB10
+      - AY13
+  tx_fault:
+    iostd: LVCMOS18
+    loc: 
+      - AM10
+      - AT13
+      - AB12
+      - AY11
   iic_sda_io:
     iostd: LVCMOS18
     loc: AV39
