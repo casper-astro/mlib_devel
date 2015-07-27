@@ -16,7 +16,7 @@ if {[catch {exec git describe --always --dirty} proj_name]} {
 }
 puts "project name is $proj_name"
 
-set proj_dir [file normalize [file join [info script] {../planahead}]]
+set proj_dir [file normalize [file join [info script] {../../planahead}]]
 puts "project dir is $proj_dir"
 
 create_project -force $proj_name $proj_dir -part xc6vsx475tff1759-1
