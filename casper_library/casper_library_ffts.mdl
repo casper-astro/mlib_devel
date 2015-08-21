@@ -838,7 +838,7 @@ Library {
       MaskIconRotate	      "none"
       MaskIconUnits	      "autoscale"
       MaskValueString	      "1|-1|2|18|-1|18|off|on|1|2|2|1|Round  (unbiased: +/- Inf)|Saturate|8|9|on|on|on|1|25|4|2|"
-      "off|19|off||off"
+      "off|19|off|[]|off"
       MaskTabNameString	      "Basic,Basic,Basic,Basic,Basic,Basic,Basic,Basic,Latency,Latency,Latency,Latency,Impleme"
       "ntation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation"
       ",Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implementation,Implem"
