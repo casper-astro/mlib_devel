@@ -207,12 +207,21 @@ else
     fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/*.ngc']));
 end
 
-for n = 1:length(xps_pcore_blks)
-    fprintf(fid,'      - %s\n',GetFullPath(get_param(xps_pcore_blks{n},'pcore_path')));
-end
+%for n = 1:length(xps_pcore_blks)
+%    pcore_name = get_param(xps_pcore_blks{n},'pcore_path');
+%    pcore_path = GetFullPath(pcore_name);
+%    fprintf(fid,sprintf('      - %s\n',[pcore_path '/hdl_netlist/' pcore_name '.srcs/sources_1/imports/sysgen']));
+%    fprintf(fid,sprintf('      - %s\n',[pcore_path '/hdl_netlist/' pcore_name '.srcs/sources_1/ip/*.coe']));
+%    fprintf(fid,sprintf('      - %s\n',[pcore_path '/hdl_netlist/' pcore_name '.srcs/sources_1/ip/*/*.xci']));
+%end
 
 fprintf(fid,'    tcl_sources:\n'); 
 if xlver > 14.7
+    for n = 1:length(xps_pcore_blks)
+        pcore_name = get_param(xps_pcore_blks{n},'pcore_path');
+        pcore_path = GetFullPath(pcore_name);
+        fprintf(fid,sprintf('      - %s\n',[pcore_path]));
+    end
     %fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/sysgen/vivado_ip.tcl']));
 end
 
