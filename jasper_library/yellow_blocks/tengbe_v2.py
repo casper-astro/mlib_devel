@@ -190,7 +190,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         tengbe_v2.__init__(self, blk, plat, hdl_root)
     def initialize(self):
         self.exc_requirements = ['tge%d'%self.slot]
-        self.add_source('kat_ten_gb_eth')
+        self.add_source('kat_ten_gb_eth/*')
         self.add_source('tengbaser_phy/tengbaser_phy.v')
         self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xci')
         self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xdc')
@@ -216,7 +216,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         a jitter cleaner (si5324) back into the GTH clock port. The first ten gig core
         needs to make sure this pass through is instantiated.
         """
-        if self.i_am_the_first:
+        if self.i_am_the_first and (self.name == 'mx175'):
             pt = YellowBlock.make_block({'tag':'xps:clock_passthrough', 'fullpath':'%s/clock_passthrough'%self.name, 'name':'clock_passthrough'}, self.platform)
             return [pt]
         else:
@@ -320,6 +320,15 @@ class tengbaser_xilinx_k7(tengbe_v2):
         cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sysclk200] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
         cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] 3'%(num,num)))
         cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] -hold 2'%(num,num)))
+        cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_rx_inst/app_overrun_ack_reg/C] -to [get_pins %s/tge_rx_inst/overrun_ackR_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_tx_inst/tx_overflow_latch_reg/C] -to [get_pins %s/tge_tx_inst/app_overflowR_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[0]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins %s/macr_state_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[1]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins {%s/rx_stretch_reg[25]/C}] -to [get_pins %s/led_rx_reg_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins %s/mac_resetRR_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins {%s/tx_stretch_reg[25]/C}] -to [get_pins %s/led_tx_reg_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_false_path -from [get_pins {%s/down_stretch_reg[25]/C}] -to [get_pins %s/led_up_reg_reg/D]'%(self.fullname, self.fullname)))
 
         return cons
         
