@@ -1,70 +1,60 @@
-function git_info_struct = git_info(sysname)
+function [git_result, git_info_struct] = git_info(sysname)
 
-git_info_struct = -1;
+git_info_struct = struct();
 
 % do linux check
 [status, ~] = system('uname');
 if status ~= 0,
     warning('git_info only supported in Linux.');
+    git_info_struct.error_str = 'git_info\_only\_supported\_in\_Linux.';
+    git_result = -1;
     return;
 end
 
 % do git check
-[status, ~] = system('git');
-if status ~= 1,
+[status, ~] = system('which git');
+if status ~= 0,
     warning('git not found.');
+    git_info_struct.error_str = 'git\_not\_found';
+    git_result = -2;
+    return;
+end
+
+% do python check
+[status, ~] = system('which python2.7');
+if status ~= 0,
+    warning('python2.7 not found.');
+    git_info_struct.error_str = 'python2.7\_not\_found';
+    git_result = -3;
+    return;
+end
+
+python_script = [getenv('MLIB_DEVEL_PATH'), '/xps_library/get_git_info.py'];
+if exist(python_script, 'file') ~= 2,
+    warning('python get_git_info.py script not found.');
+    git_info_struct.error_str = 'python\_script\_get_git_info.py\_not\_found';
+    git_result = -4;
     return;
 end
 
 % get the full path of the current system
 path_and_filename = get_param(sysname, 'filename');
-slashindexes = strfind(path_and_filename, '/');
-fpath = path_and_filename(1:slashindexes(end)-1);
-fname = path_and_filename(slashindexes(end)+1:end);
-original_path = pwd;
-cd(fpath);
 
-% last commit hash
-[status, result] = system(sprintf('git log -n 1 -- %s | more', fname));
-if isempty(result) || (status ~= 0),
-    cd(original_path);
-    warning('Could not execute git log command - problems.');
-    return;
-end
-git_commit_hash = result(strfind(result, 'commit') + 7 : strfind(result, 'Author') - 2);
-if length(git_commit_hash) ~= 40,
-    cd(original_path);
-    warning('Git commit hash is an odd length. Expected 40, got %i.', length(git_commit_hash));
-    return;
-end
-
-% status
-[status, result] = system(sprintf('git status --porcelain -- %s | more', fname));
+% get the git info for the system slx file
+[status, result] = system(['python ', python_script,' --fpgstring ', path_and_filename]);
 if status ~= 0,
-    cd(original_path);
-    warning('Could not execute git status command - problems.');
-    return;
+    warning(['Could not get GIT info for system: ', path_and_filename]);
 end
-git_status = result(1:end-1);
-if isempty(git_status),
-    git_status = 'unmodified';
-end
+git_info_struct.sys_info = result;
 
-% config
-[status, result] = system('git config -l');
+% get the git info for the casper library
+[status, result] = system(['python ', python_script,' --fpgstring ', getenv('MLIB_DEVEL_PATH')]);
 if status ~= 0,
-    cd(original_path);
-    warning('Could not execute git config command - problems.');
-    return;
+    warning(['Could not get GIT info for mlib_devel: ', getenv('MLIB_DEVEL_PATH')]);
 end
-toks = textscan(result, '%s', 'Delimiter', '\n');
+git_info_struct.mlib_info = result;
 
-% make the return structure
-git_info_struct.commit_hash = git_commit_hash;
-git_info_struct.status = git_status;
-git_info_struct.config = toks{1};
-
-cd(original_path);
+git_result = 0;
 
 end
 % end
