@@ -162,7 +162,7 @@ architecture adc_unit_arc of adc_unit is
                                           & adc_iserdes_data_a_pipelined( 7 downto  0)
                                           & adc_iserdes_data_b_pipelined( 7 downto  0);
 
-           when others => adc_iserdes_data <= adc_iserdes_data_a_pipelined;
+           when others => adc_iserdes_data <= adc_iserdes_data_b_pipelined;
          end case;
        end if;
      end process;
