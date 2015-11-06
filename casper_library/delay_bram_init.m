@@ -34,9 +34,12 @@ function delay_bram_init(blk, varargin)
     return;
   end
   
-  if (DelayLen <= bram_latency)
-    clog('delay value must be greater than BRAM Latency',{'error', 'delay_bram_init_debug'});
-    error('delay_bram_init: delay value must be greater than BRAM Latency');
+  % Check delay is at least 2 greater than bram latency.
+  % 1 greater is not allowed because it results in a counter
+  % driving the bram with max value of zero.
+  if (DelayLen <= bram_latency + 1)
+    clog('delay value must be greater than BRAM Latency + 1',{'error', 'delay_bram_init_debug'});
+    error('delay_bram_init: delay value must be greater than BRAM Latency + 1');
   end
   
   %input ports
