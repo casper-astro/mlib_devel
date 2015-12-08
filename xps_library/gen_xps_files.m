@@ -551,6 +551,9 @@ if run_edkgen,
         end
         clear newline tline;
         fclose(fid);
+        % add git info to the design
+        git_write_info(kcpfpg_fid, sys);
+        % close off the file
         fprintf(kcpfpg_fid, '?quit\n');
         fclose(kcpfpg_fid);
     end
@@ -681,6 +684,7 @@ if run_edk,
     eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
+        edit 'implementation/system.twr';
         cd(simulink_path);
         error('XPS failed.');
     else
