@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [0.0, 25.0, 1920.0, 1055.0]
+      Location		      [1920.0, 0.0, 1920.0, 1080.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1884.0, 892.0]
+	Extents			[1884.0, 917.0]
 	ZoomFactor		[1.0]
 	Offset			[-8.125, 0.0]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Oct 15 11:03:02 2014"
-  RTWModifiedTimeStamp	  335271777
-  ModelVersionFormat	  "1.%<AutoIncrement:521>"
+  LastModifiedDate	  "Mon Feb 01 13:49:45 2016"
+  RTWModifiedTimeStamp	  376235376
+  ModelVersionFormat	  "1.%<AutoIncrement:522>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,7 +802,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [0, 25, 1920, 1080]
+    Location		    [1920, 0, 3840, 1080]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -58480,15 +58480,6 @@ Library {
 	    Name		    "bitwidths"
 	    Prompt		    "Bitwidth:"
 	    Value		    "32"
-	    Callback		    "swreg_maskcheck(gcb);\n% blk = gcb;\n% mode = get_param(blk, 'mode');\n% current_widths = eval(get"
-	    "_param(blk, 'bitwidths'));\n% if (strcmp(mode, 'one value') || strcmp(mode, 'fields of equal size')) && (length(c"
-	    "urrent_widths) > 1),\n%     error('Only one width may be specified for this mode.');\n% elseif strcmp(mode, 'fiel"
-	    "ds of arbitrary size')\n%     current_names = textscan(strtrim(strrep(strrep(get_param(blk, 'names'), ']', ''), '"
-	    "[', '')), '%s');\n%     current_names = current_names{1};\n%     numios = length(current_names);\n%     if length"
-	    "(current_widths) ~= numios,\n%         error('%d field names specified, but %d widths?', numios, length(current_w"
-	    "idths));\n%     end\n% end\n% total_width = 0;\n% for ctr = 1 : length(current_widths),\n%     total_width = tota"
-	    "l_width + current_widths(ctr);\n% end\n% if total_width > 32,\n%     error('Total width must be 32 or less, set t"
-	    "o %d.', total_width);\n% end"
 	    TabName		    "Setup"
 	  }
 	  Object {
@@ -58497,15 +58488,6 @@ Library {
 	    Name		    "arith_types"
 	    Prompt		    "Type (ufix=0, fix=1, bool=2):"
 	    Value		    "0"
-	    Callback		    "[numios, ~, ~, ~, current_types] = swreg_maskcheck(gcb);\n% blk = gcb;\n% mode = get_param(blk, 'm"
-	    "ode');\n% current_types = eval(get_param(blk, 'arith_types'));\n% numios = length(current_types);\n% if (strcmp(m"
-	    "ode, 'one value') || strcmp(mode, 'fields of equal size')) && (length(current_types) > 1),\n%     error('Only one"
-	    " type may be specified for this mode.');\n% elseif strcmp(mode, 'fields of arbitrary size')\n%     current_names "
-	    "= textscan(strtrim(strrep(strrep(get_param(blk, 'names'), ']', ''), '[', '')), '%s');\n%     current_names = curr"
-	    "ent_names{1};\n%     numios = length(current_names);\n%     if length(current_types) ~= numios,\n%         error("
-	    "'%d field names specified, but %d types?', numios, length(current_types));\n%     end\n% end\nproblem = 0;\nfor c"
-	    "tr = 1 : numios,\n    t = current_types(ctr);\n    if (t < 0) || (t > 2),\n        problem = t;\n        ctr = nu"
-	    "mios + 1;\n    end\nend\nif problem ~= 0,\n    error('Type cannot be %i, must be 0, 1 or 2.', problem);\nend"
 	    TabName		    "Setup"
 	  }
 	  Object {
@@ -58514,13 +58496,6 @@ Library {
 	    Name		    "bin_pts"
 	    Prompt		    "Binary pt:"
 	    Value		    "0"
-	    Callback		    "swreg_maskcheck(gcb);\n% blk = gcb;\n% mode = get_param(blk, 'mode');\n% current_bins = eval(get_p"
-	    "aram(blk, 'bin_pts'));\n% if (strcmp(mode, 'one value') || strcmp(mode, 'fields of equal size')) && (length(curre"
-	    "nt_bins) > 1),\n%     error('Only one binary pt may be specified for this mode.');\n% elseif strcmp(mode, 'fields"
-	    " of arbitrary size')\n%     current_names = textscan(strtrim(strrep(strrep(get_param(blk, 'names'), ']', ''), '['"
-	    ", '')), '%s');\n%     current_names = current_names{1};\n%     numios = length(current_names);\n%     if length(c"
-	    "urrent_bins) ~= numios,\n%         error('%d field names specified, but %d binary pts?', numios, length(current_b"
-	    "ins));\n%     end\n% end"
 	    TabName		    "Setup"
 	  }
 	  Object {
@@ -58559,7 +58534,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6832"
+	SIDHighWatermark	"6842"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58571,10 +58546,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6831"
+	  SID			  "332:6841"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6776
+	  ZOrder		  6786
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58609,10 +58584,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6829"
+	  SID			  "332:6839"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6774
+	  ZOrder		  6784
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58647,10 +58622,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6828"
+	  SID			  "332:6838"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6773
+	  ZOrder		  6783
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58678,10 +58653,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6832"
+	  SID			  "332:6842"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6777
+	  ZOrder		  6787
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58709,10 +58684,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6830"
+	  SID			  "332:6840"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6775
+	  ZOrder		  6785
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"

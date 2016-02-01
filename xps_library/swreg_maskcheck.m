@@ -38,9 +38,23 @@ function [numios, current_names, current_widths, current_bins, current_types] = 
         current_widths = ones(1, numios) * current_widths;
     end
     
+    % check the types specified
+    problem = 0;
+    for ctr = 1 : numios,
+        t = current_types(ctr);
+        if (t < 0) || (t > 2),
+            problem = t;
+            break;
+        end
+    end
+    if problem ~= 0,
+        error('Type cannot be %i, must be 0, 1 or 2.', problem);
+    end
+    
     % check the width of the fields add up to less than or equal to 32
     total_width = sum(current_widths);
     if total_width > 32,
         error('Total width must be 32 or less, set to %d. The top bits will be truncated.', total_width);
     end
+    
 end
