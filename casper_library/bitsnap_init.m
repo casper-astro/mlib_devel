@@ -44,38 +44,22 @@ snap_offset =       get_param(blk, 'snap_offset');
 snap_value =        get_param(blk, 'snap_value');
 snap_use_dsp48 =    get_param(blk, 'snap_use_dsp48');
 snap_delay =        eval(get_param(blk, 'snap_delay'));
-io_names =          get_param(blk, 'io_names');
-io_widths =         eval(get_param(blk, 'io_widths'));
-io_bps =            eval(get_param(blk, 'io_bps'));
-io_types =          eval(get_param(blk, 'io_types'));
-extra_names =       get_param(blk, 'extra_names');
-extra_widths =      eval(get_param(blk, 'extra_widths'));
-extra_bps =         eval(get_param(blk, 'extra_bps'));
-extra_types =       eval(get_param(blk, 'extra_types'));
 
-io_names = textscan(strtrim(strrep(strrep(strrep(strrep(io_names, ']', ''), '[', ''), ',', ' '), '  ', ' ')), '%s');
-io_names = io_names{1};
-extra_names = textscan(strtrim(strrep(strrep(strrep(strrep(extra_names, ']', ''), '[', ''), ',', ' '), '  ', ' ')), '%s');
-extra_names = extra_names{1};
+mode = 'fields of arbitrary size';
+blktype = 2;
+fld_nms = 'io_names';
+fld_bps = 'io_bps';
+fld_wid = 'io_widths';
+fld_typ = 'io_types';
+[io_numios, io_current_names, io_current_widths, io_current_bins, io_current_types] = bitfield_maskcheck(blk, blktype, mode, fld_nms, fld_typ, fld_bps, fld_wid);
 
-% check lengths and whatnot
-if (numel(io_names) ~= numel(io_widths)) || (numel(io_names) ~= numel(io_bps)) || (numel(io_names) ~= numel(io_types)) || (numel(io_names) < 1),
-    error('Lengths of IO fields must match and be >0.');
-end
-num_ios = numel(io_names);
-% check that the widths of the inputs are not greater than the snap width
-if sum(io_widths) > snap_data_width,
-    error('%i-bit wide snapshot chosen, but %i bit inputs specified.', snap_data_width, sum(io_widths));
-end
-% extra vars
-if (numel(extra_names) ~= numel(extra_widths)) || (numel(extra_names) ~= numel(extra_bps)) || (numel(extra_names) ~= numel(extra_types)) || (numel(extra_names) < 1),
-    error('Lengths of Extra fields must match and be >0.');
-end
-num_extras = numel(extra_names);
-
-% check that the widths of the extras are not greater than the extra register width
-if sum(extra_widths) > 32,
-    error('%i bit extras specified do not fit into 32-bit wide extra value register.', sum(extra_widths), 32);
+if strcmp(snap_value, 'on'),
+    blktype = 3;
+    fld_nms = 'extra_names';
+    fld_bps = 'extra_bps';
+    fld_wid = 'extra_widths';
+    fld_typ = 'extra_types';
+    [extra_numios, extra_current_names, extra_current_widths, extra_current_bins, extra_current_types] = bitfield_maskcheck(blk, blktype, mode, fld_nms, fld_typ, fld_bps, fld_wid);
 end
 
 munge_block(blk);
@@ -89,18 +73,16 @@ y_pos =     100;
 
 % the bus create block
 reuse_block(blk, 'buscreate', 'casper_library_flow_control/bus_create', ...
-        'Position', [x_start + (x_size * 2), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 2) + x_size, y_pos + (y_size * (num_ios + 5.5))], ...
-        'inputNum', num2str(num_ios));
+        'Position', [x_start + (x_size * 2), y_pos + (y_size * (io_numios - 0.5)), x_start + (x_size * 2) + x_size, y_pos + (y_size * (io_numios + 5.5))], ...
+        'inputNum', num2str(io_numios));
 
 if snap_delay > 0,
-    %reuse_block(blk, 'io_delay', 'xbsIndex_r4/Delay', 'latency', num2str(snap_delay), 'reg_retiming', 'on', ...
-    %        'Position', [x_start + (x_size * 3.5), y_pos - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + (y_size * 0.5)]);   
     reuse_block(blk, 'io_delay', 'casper_library_delays/pipeline', 'latency', num2str(snap_delay), ...
             'Position', [x_start + (x_size * 3.5), y_pos - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + (y_size * 0.5)]);
 end
     
 % the snapshot block
-%'Position', [x_start + (x_size * 5), y_pos + (y_size * (num_ios - 0.5)), x_start + (x_size * 5) + x_size, y_pos + (y_size * 10)], ...
+%'Position', [x_start + (x_size * 5), y_pos + (y_size * (io_numios - 0.5)), x_start + (x_size * 5) + x_size, y_pos + (y_size * 10)], ...
 reuse_block(blk, 'ss', 'casper_library_scopes/snapshot', ...
         'storage', snap_storage, ...
         'dram_dimm', num2str(snap_dram_dimm), ...
@@ -136,11 +118,11 @@ end
 
 % io ports and assert blocks
 y_pos_row = y_pos;
-for p = 1 : num_ios,
+for p = 1 : io_numios,
     x_start =   80;
-    in_name = sprintf('in_%s', char(io_names(p)));
-    assert_name = sprintf('assert_%s', char(io_names(p)));
-    if io_types(p) == 2
+    in_name = sprintf('in_%s', char(io_current_names(p)));
+    assert_name = sprintf('assert_%s', char(io_current_names(p)));
+    if io_current_types(p) == 2
         gddtype = 'Boolean';
     else
         gddtype = 'Fixed-point';
@@ -151,9 +133,9 @@ for p = 1 : num_ios,
     x_start = x_start + (x_size*1.5);
     reuse_block(blk, assert_name, 'xbsIndex_r4/Assert', ...
             'showname', 'off', 'assert_type', 'on', ...
-            'type_source', 'Explicitly', 'arith_type', type_to_string(io_types(p)), ...
-            'bin_pt', num2str(io_bps(p)), 'gui_display_data_type', gddtype, ...
-            'n_bits', num2str(io_widths(p)), ...
+            'type_source', 'Explicitly', 'arith_type', type_to_string(io_current_types(p)), ...
+            'bin_pt', num2str(io_current_bins(p)), 'gui_display_data_type', gddtype, ...
+            'n_bits', num2str(io_current_widths(p)), ...
             'Position', [x_start, y_pos_row, x_start + (x_size/2), y_pos_row + y_size]);
     add_line(blk, [in_name, '/1'], [assert_name, '/1']);
     add_line(blk, [assert_name, '/1'], ['buscreate/', num2str(p)]);
@@ -161,7 +143,7 @@ for p = 1 : num_ios,
 end
 
 % we
-portnum = num_ios + 1;
+portnum = io_numios + 1;
 snapport = 2;
 y1 = 165;
 reuse_block(blk, 'we', 'built-in/inport', ...
@@ -210,25 +192,33 @@ end
 if strcmp(snap_value, 'on'),
     % buscreate block
     reuse_block(blk, 'extracreate', 'casper_library_flow_control/bus_create', ...
-        'Position', [x_start + (x_size * 1), y_pos + 500 + (y_size * (num_extras - 0.5)), x_start + (x_size * 1) + x_size, y_pos + 500 + (y_size * (num_extras + 5.5))], ...
-        'inputNum', num2str(num_extras));
+        'Position', [x_start + (x_size * 1), y_pos + 500 + (y_size * (extra_numios - 0.5)), x_start + (x_size * 1) + x_size, y_pos + 500 + (y_size * (extra_numios + 5.5))], ...
+        'inputNum', num2str(extra_numios));
+    % delay
     if snap_delay > 0,
         reuse_block(blk, 'extra_delay', 'casper_library_delays/pipeline', 'latency', num2str(snap_delay), ...
-                'Position', [x_start + (x_size * 3.5), y_pos + 500 - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + 500 + (y_size * 0.5)]);
+            'Position', [x_start + (x_size * 3.5), y_pos + 500 - (y_size * 0.5), x_start + (x_size * 3.5) + x_size, y_pos + 500 + (y_size * 0.5)]);
     end
+    % cast the output of the buscreate to 32-bits for the snap extra val
+    reuse_block(blk, 'extracast', 'xbsIndex_r4/Convert', 'arith_type', 'Unsigned', 'n_bits', '32', 'bin_pt', '0', ...
+        'Position', [x_start + (x_size * 6), y_pos + 500 - (y_size * 0.5), x_start + (x_size * 6) + x_size, y_pos + 500 + (y_size * 0.5)]);
+    
+    % connect them
     snapport = snapport + 1;
     if snap_delay > 0,
         add_line(blk, 'extracreate/1', 'extra_delay/1');
-        add_line(blk, 'extra_delay/1', ['ss/', num2str(snapport)]);
+        add_line(blk, 'extra_delay/1', 'extracast/1');
     else
-        add_line(blk, 'extracreate/1', ['ss/', num2str(snapport)]);
+        add_line(blk, 'extracreate/1', 'extracast/1');
     end
+    add_line(blk, 'extracast/1', ['ss/', num2str(snapport)]);
+    
     % draw an input port for each field for the extra value
-    for p = 1 : num_extras,
+    for p = 1 : extra_numios,
         x_start =   100;
-        in_name = sprintf('extra_%s', char(extra_names(p)));
-        assert_name = sprintf('assextra_%s', char(extra_names(p)));
-        if extra_types(p) == 2
+        in_name = sprintf('extra_%s', char(extra_current_names(p)));
+        assert_name = sprintf('assextra_%s', char(extra_current_names(p)));
+        if extra_current_types(p) == 2
             gddtype = 'Boolean';
         else
             gddtype = 'Fixed-point';
@@ -239,9 +229,9 @@ if strcmp(snap_value, 'on'),
         x_start = x_start + (x_size*1.5);
         reuse_block(blk, assert_name, 'xbsIndex_r4/Assert', ...
             'showname', 'off', 'assert_type', 'on', ...
-            'type_source', 'Explicitly', 'arith_type', type_to_string(extra_types(p)), ...
-            'bin_pt', num2str(extra_bps(p)), 'gui_display_data_type', gddtype, ...
-            'n_bits', num2str(extra_widths(p)), ...
+            'type_source', 'Explicitly', 'arith_type', type_to_string(extra_current_types(p)), ...
+            'bin_pt', num2str(extra_current_bins(p)), 'gui_display_data_type', gddtype, ...
+            'n_bits', num2str(extra_current_widths(p)), ...
             'Position', [x_start, y_pos_row + 500, x_start + (x_size/2), y_pos_row + 500 + y_size]);
         add_line(blk, [in_name, '/1'], [assert_name, '/1']);
         add_line(blk, [assert_name, '/1'], ['extracreate/', num2str(p)]);
@@ -252,6 +242,48 @@ end
 
 % remove unconnected blocks
 clean_blocks(blk);
+
+% update format string so we know what's going on with this block
+try
+    show_format = get_param(blk, 'show_format');
+catch ex
+    show_format = 'off';
+end
+
+function display_string = format_string(prefix)
+    numios = eval(strcat(prefix, '_numios'));
+    wids = eval(strcat(prefix, '_current_widths'));
+    typs = eval(strcat(prefix, '_current_types'));
+    bins = eval(strcat(prefix, '_current_bins'));
+    if numios == 1,
+        display_string = '(1)';
+    else
+        display_string = sprintf('(%d)', numios);
+    end
+    config_string = '';
+    for ctr = 1 : numios,
+        switch typs(ctr),
+            case 1 
+                config_string = strcat(config_string, sprintf('f%i.%i,', wids(ctr), bins(ctr)));
+            case 2
+                config_string = strcat(config_string, 'b,');
+            otherwise 
+                config_string = strcat(config_string, sprintf('uf%i.%i,', wids(ctr), bins(ctr)));
+        end
+    end
+    display_string = strcat(display_string, ': ', config_string);
+    display_string = regexprep(display_string, ',$', '');
+end
+
+display_string = '';
+if strcmp(show_format, 'on'),
+    display_string = strcat('snap', format_string('io'));
+    if strcmp(snap_value, 'on'),
+        extrastr = strcat('extra', format_string('extra'));
+        display_string = strcat(display_string, '\n', extrastr);
+    end
+end
+set_param(blk, 'AttributesFormatString', display_string);
 
 %save_state(blk, 'defaults', defaults, varargin{:});  % Save and back-populate mask parameter values
 

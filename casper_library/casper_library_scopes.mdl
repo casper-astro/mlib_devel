@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1920.0, 0.0, 1280.0, 1024.0]
+      Location		      [1920.0, 0.0, 1284.0, 1076.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1244.0, 861.0]
+	Extents			[1246.0, 909.0]
 	ZoomFactor		[1.0]
 	Offset			[0.0, 0.0]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Feb 27 11:15:25 2014"
-  RTWModifiedTimeStamp	  315400519
-  ModelVersionFormat	  "1.%<AutoIncrement:96>"
+  LastModifiedDate	  "Mon Feb 01 15:53:29 2016"
+  RTWModifiedTimeStamp	  376242797
+  ModelVersionFormat	  "1.%<AutoIncrement:98>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -830,7 +830,7 @@ Library {
   }
   System {
     Name		    "casper_library_scopes"
-    Location		    [1920, 0, 3200, 1024]
+    Location		    [1920, 0, 3204, 1076]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -854,6 +854,7 @@ Library {
       Position		      [290, 367, 350, 483]
       ZOrder		      54
       BackgroundColor	      "[0.502000, 1.000000, 0.502000]"
+      AttributesFormatString  "snap(2):uf16.14,b\\nextra(2):uf30.0,uf2.0"
       UserDataPersistent      on
       UserData		      "DataTag0"
       MinAlgLoopOccurrences   off
@@ -873,7 +874,7 @@ Library {
 	Initialization		"bitsnap_init(gcb);"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  18
+	  Dimension		  19
 	  Object {
 	    $ObjectID		    18
 	    Type		    "edit"
@@ -887,7 +888,7 @@ Library {
 	    $ObjectID		    19
 	    Type		    "edit"
 	    Name		    "io_widths"
-	    Prompt		    "Widths [msb...lsb]"
+	    Prompt		    "Bitwidths [msb...lsb]"
 	    Value		    "[16 1]"
 	    TabName		    "Inputs"
 	  }
@@ -909,6 +910,15 @@ Library {
 	  }
 	  Object {
 	    $ObjectID		    22
+	    Type		    "checkbox"
+	    Name		    "show_format"
+	    Prompt		    "Print format string?"
+	    Value		    "on"
+	    Evaluate		    "off"
+	    TabName		    "Inputs"
+	  }
+	  Object {
+	    $ObjectID		    23
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -925,7 +935,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    23
+	    $ObjectID		    24
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -944,7 +954,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    24
+	    $ObjectID		    25
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -964,7 +974,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    25
+	    $ObjectID		    26
 	    Type		    "edit"
 	    Name		    "snap_nsamples"
 	    Prompt		    "Number of Samples (2^?)"
@@ -972,7 +982,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    26
+	    $ObjectID		    27
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -991,7 +1001,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    27
+	    $ObjectID		    28
 	    Type		    "checkbox"
 	    Name		    "snap_offset"
 	    Prompt		    "Start delay support "
@@ -1000,7 +1010,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    28
+	    $ObjectID		    29
 	    Type		    "checkbox"
 	    Name		    "snap_circap"
 	    Prompt		    "Circular capture support"
@@ -1009,7 +1019,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    29
+	    $ObjectID		    30
 	    Type		    "checkbox"
 	    Name		    "snap_value"
 	    Prompt		    "Extra value capture support"
@@ -1019,7 +1029,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    30
+	    $ObjectID		    31
 	    Type		    "checkbox"
 	    Name		    "snap_use_dsp48"
 	    Prompt		    "Use DSP48s to implement counters"
@@ -1028,7 +1038,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    31
+	    $ObjectID		    32
 	    Type		    "edit"
 	    Name		    "snap_delay"
 	    Prompt		    "Pre-snapshot delay"
@@ -1036,7 +1046,7 @@ Library {
 	    TabName		    "Snapshot"
 	  }
 	  Object {
-	    $ObjectID		    32
+	    $ObjectID		    33
 	    Type		    "edit"
 	    Name		    "extra_names"
 	    Prompt		    "Names [msb...lsb]"
@@ -1045,7 +1055,7 @@ Library {
 	    TabName		    "Extra Value"
 	  }
 	  Object {
-	    $ObjectID		    33
+	    $ObjectID		    34
 	    Type		    "edit"
 	    Name		    "extra_widths"
 	    Prompt		    "Widths [msb...lsb]"
@@ -1053,7 +1063,7 @@ Library {
 	    TabName		    "Extra Value"
 	  }
 	  Object {
-	    $ObjectID		    34
+	    $ObjectID		    35
 	    Type		    "edit"
 	    Name		    "extra_bps"
 	    Prompt		    "Binary pts [msb...lsb]"
@@ -1061,7 +1071,7 @@ Library {
 	    TabName		    "Extra Value"
 	  }
 	  Object {
-	    $ObjectID		    35
+	    $ObjectID		    36
 	    Type		    "edit"
 	    Name		    "extra_types"
 	    Prompt		    "Data types [msb...lsb], ufix=0, fix=1, bool=2"
@@ -1321,13 +1331,13 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    36
+	    $ObjectID		    37
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "bus_create"
 	    Initialization	    "bus_create_init(gcb,...\n    'inputNum', inputNum);"
 	    Object {
 	      $PropName		      "Parameters"
-	      $ObjectID		      37
+	      $ObjectID		      38
 	      $ClassName	      "Simulink.MaskParameter"
 	      Type		      "edit"
 	      Name		      "inputNum"
@@ -1521,13 +1531,13 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    38
+	    $ObjectID		    39
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "bus_create"
 	    Initialization	    "bus_create_init(gcb,...\n    'inputNum', inputNum);"
 	    Object {
 	      $PropName		      "Parameters"
-	      $ObjectID		      39
+	      $ObjectID		      40
 	      $ClassName	      "Simulink.MaskParameter"
 	      Type		      "edit"
 	      Name		      "inputNum"
@@ -1725,7 +1735,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    40
+	    $ObjectID		    41
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "snapshot"
 	    Description		    "Standard snap block, but with the following optional extras;\n 1) Optionally delay the fabric t"
@@ -1742,7 +1752,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      9
 	      Object {
-		$ObjectID		41
+		$ObjectID		42
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -1758,7 +1768,7 @@ Library {
 		Callback		"snapshot_callback();"
 	      }
 	      Object {
-		$ObjectID		42
+		$ObjectID		43
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -1776,7 +1786,7 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		43
+		$ObjectID		44
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -1795,14 +1805,14 @@ Library {
 		Visible			"off"
 	      }
 	      Object {
-		$ObjectID		44
+		$ObjectID		45
 		Type			"edit"
 		Name			"nsamples"
 		Prompt			"Number of Samples (2^?)"
 		Value			"10"
 	      }
 	      Object {
-		$ObjectID		45
+		$ObjectID		46
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -1820,7 +1830,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		46
+		$ObjectID		47
 		Type			"checkbox"
 		Name			"offset"
 		Prompt			"Start delay support "
@@ -1828,7 +1838,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		47
+		$ObjectID		48
 		Type			"checkbox"
 		Name			"circap"
 		Prompt			"Circular capture support"
@@ -1836,7 +1846,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		48
+		$ObjectID		49
 		Type			"checkbox"
 		Name			"value"
 		Prompt			"Extra value capture support"
@@ -1844,7 +1854,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		49
+		$ObjectID		50
 		Type			"checkbox"
 		Name			"use_dsp48"
 		Prompt			"Use DSP48s to implement counters"
@@ -1965,7 +1975,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		50
+		$ObjectID		51
 		$ClassName		"Simulink.Mask"
 		Initialization		"set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/add_gen']"
 		",'implementation','DSP48');\nelse\n    set_param([gcb,'/add_gen'],'implementation','Fabric');\nend"
@@ -1973,35 +1983,35 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  5
 		  Object {
-		    $ObjectID		    51
+		    $ObjectID		    52
 		    Type		    "edit"
 		    Name		    "counter_size"
 		    Prompt		    "Address counter size (2^?)"
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    52
+		    $ObjectID		    53
 		    Type		    "edit"
 		    Name		    "increment"
 		    Prompt		    "Address counter increment"
 		    Value		    "4"
 		  }
 		  Object {
-		    $ObjectID		    53
+		    $ObjectID		    54
 		    Type		    "edit"
 		    Name		    "nsamples"
 		    Prompt		    "Number of samples (2^?)"
 		    Value		    "10"
 		  }
 		  Object {
-		    $ObjectID		    54
+		    $ObjectID		    55
 		    Type		    "edit"
 		    Name		    "burst_size"
 		    Prompt		    "Burst size (2^?)"
 		    Value		    "0"
 		  }
 		  Object {
-		    $ObjectID		    55
+		    $ObjectID		    56
 		    Type		    "checkbox"
 		    Name		    "use_dsp48"
 		    Prompt		    "dsp48 counter/s"
@@ -2827,7 +2837,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    56
+		    $ObjectID		    57
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "edge_detect"
 		    Description		    "Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or "
@@ -2846,7 +2856,7 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    6
 		    Object {
-		    $ObjectID		    57
+		    $ObjectID		    58
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -2862,7 +2872,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    58
+		    $ObjectID		    59
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -2877,7 +2887,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    59
+		    $ObjectID		    60
 		    Type		    "edit"
 		    Name		    "x_in"
 		    Prompt		    "Input X Positions"
@@ -2886,7 +2896,7 @@ Library {
 		    Visible		    "off"
 		    }
 		    Object {
-		    $ObjectID		    60
+		    $ObjectID		    61
 		    Type		    "edit"
 		    Name		    "y_in"
 		    Prompt		    "Input Y Positions"
@@ -2895,7 +2905,7 @@ Library {
 		    Visible		    "off"
 		    }
 		    Object {
-		    $ObjectID		    61
+		    $ObjectID		    62
 		    Type		    "edit"
 		    Name		    "x_out"
 		    Prompt		    "Output X Positions"
@@ -2904,7 +2914,7 @@ Library {
 		    Visible		    "off"
 		    }
 		    Object {
-		    $ObjectID		    62
+		    $ObjectID		    63
 		    Type		    "edit"
 		    Name		    "y_out"
 		    Prompt		    "Output Y Positions"
@@ -3576,14 +3586,14 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		63
+		$ObjectID		64
 		$ClassName		"Simulink.Mask"
 		Initialization		"set_param(gcb,'LinkStatus','inactive');\nset_param([gcb,'/dram_munge'], 'dram', dram);\n\n"
 		Array {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  2
 		  Object {
-		    $ObjectID		    64
+		    $ObjectID		    65
 		    Type		    "checkbox"
 		    Name		    "dram"
 		    Prompt		    "dram"
@@ -3591,7 +3601,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    65
+		    $ObjectID		    66
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
@@ -4122,7 +4132,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    66
+		    $ObjectID		    67
 		    $ClassName		    "Simulink.Mask"
 		    Initialization	    "set_param(gcb,'LinkStatus','inactive');\nif strcmp(dram,'on'),\n    set_param([gcb,'/dram'],"
 		    " 'const', '1');\nelse,\n    set_param([gcb,'/dram'], 'const', '0');\nend\nset_param([gcb,'/data_choice'], ...\n "
@@ -4132,7 +4142,7 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    2
 		    Object {
-		    $ObjectID		    67
+		    $ObjectID		    68
 		    Type		    "checkbox"
 		    Name		    "dram"
 		    Prompt		    "dram"
@@ -4140,7 +4150,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    68
+		    $ObjectID		    69
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
@@ -6241,7 +6251,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		69
+		$ObjectID		70
 		$ClassName		"Simulink.Mask"
 		Initialization		"shared_bram_mask;"
 		SelfModifiable		"on"
@@ -6250,7 +6260,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  9
 		  Object {
-		    $ObjectID		    70
+		    $ObjectID		    71
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -6265,14 +6275,14 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    71
+		    $ObjectID		    72
 		    Type		    "edit"
 		    Name		    "addr_width"
 		    Prompt		    "Address width"
 		    Value		    "10"
 		  }
 		  Object {
-		    $ObjectID		    72
+		    $ObjectID		    73
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -6289,21 +6299,21 @@ Library {
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    73
+		    $ObjectID		    74
 		    Type		    "checkbox"
 		    Name		    "reg_prim_output"
 		    Prompt		    "Register Primitive Output"
 		    Value		    "on"
 		  }
 		  Object {
-		    $ObjectID		    74
+		    $ObjectID		    75
 		    Type		    "checkbox"
 		    Name		    "reg_core_output"
 		    Prompt		    "Register Core Output"
 		    Value		    "on"
 		  }
 		  Object {
-		    $ObjectID		    75
+		    $ObjectID		    76
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -6317,21 +6327,21 @@ Library {
 		    Value		    "Minimum_Area"
 		  }
 		  Object {
-		    $ObjectID		    76
+		    $ObjectID		    77
 		    Type		    "edit"
 		    Name		    "data_bin_pt"
 		    Prompt		    "Data Binary Point"
 		    Value		    "0"
 		  }
 		  Object {
-		    $ObjectID		    77
+		    $ObjectID		    78
 		    Type		    "edit"
 		    Name		    "init_vals"
 		    Prompt		    "Initial values (simulation only)"
 		    Value		    "[0:2^10-1]"
 		  }
 		  Object {
-		    $ObjectID		    78
+		    $ObjectID		    79
 		    Type		    "edit"
 		    Name		    "sample_rate"
 		    Prompt		    "Sample rate"
@@ -6398,27 +6408,27 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    79
+		    $ObjectID		    80
 		    $ClassName		    "Simulink.Mask"
 		    Array {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    3
 		    Object {
-		    $ObjectID		    80
+		    $ObjectID		    81
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    81
+		    $ObjectID		    82
 		    Type		    "edit"
 		    Name		    "addr_width"
 		    Prompt		    "address width"
 		    Value		    "10"
 		    }
 		    Object {
-		    $ObjectID		    82
+		    $ObjectID		    83
 		    Type		    "edit"
 		    Name		    "sample_rate"
 		    Prompt		    "sample rate"
@@ -7058,27 +7068,27 @@ Library {
 		    MaskHideContents	    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    83
+		    $ObjectID		    84
 		    $ClassName		    "Simulink.Mask"
 		    Array {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    3
 		    Object {
-		    $ObjectID		    84
+		    $ObjectID		    85
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    85
+		    $ObjectID		    86
 		    Type		    "edit"
 		    Name		    "addr_width"
 		    Prompt		    "address width"
 		    Value		    "10"
 		    }
 		    Object {
-		    $ObjectID		    86
+		    $ObjectID		    87
 		    Type		    "edit"
 		    Name		    "sample_rate"
 		    Prompt		    "sample rate"
@@ -7697,7 +7707,7 @@ Library {
 		    MaskHideContents	    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    87
+		    $ObjectID		    88
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -7708,28 +7718,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    88
+		    $ObjectID		    89
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    89
+		    $ObjectID		    90
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    90
+		    $ObjectID		    91
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    91
+		    $ObjectID		    92
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -7745,7 +7755,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    92
+		    $ObjectID		    93
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -7853,7 +7863,7 @@ Library {
 		    MaskHideContents	    off
 		    Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    93
+		    $ObjectID		    94
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -7864,28 +7874,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    94
+		    $ObjectID		    95
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    95
+		    $ObjectID		    96
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    96
+		    $ObjectID		    97
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    97
+		    $ObjectID		    98
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -7901,7 +7911,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    98
+		    $ObjectID		    99
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -8143,7 +8153,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    99
+		    $ObjectID		    100
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -8154,28 +8164,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    100
+		    $ObjectID		    101
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    101
+		    $ObjectID		    102
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    102
+		    $ObjectID		    103
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    103
+		    $ObjectID		    104
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -8191,7 +8201,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    104
+		    $ObjectID		    105
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -8299,7 +8309,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    105
+		    $ObjectID		    106
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -8310,28 +8320,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    106
+		    $ObjectID		    107
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    107
+		    $ObjectID		    108
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    108
+		    $ObjectID		    109
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    109
+		    $ObjectID		    110
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -8347,7 +8357,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    110
+		    $ObjectID		    111
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -8771,7 +8781,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		111
+		$ObjectID		112
 		$ClassName		"Simulink.Mask"
 		Type			"swreg"
 		Initialization		"swreg_init(gcb)"
@@ -8780,7 +8790,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  10
 		  Object {
-		    $ObjectID		    112
+		    $ObjectID		    113
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -8798,7 +8808,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    113
+		    $ObjectID		    114
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -8817,7 +8827,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    114
+		    $ObjectID		    115
 		    Type		    "edit"
 		    Name		    "io_delay"
 		    Prompt		    "I/O delay"
@@ -8825,7 +8835,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    115
+		    $ObjectID		    116
 		    Type		    "edit"
 		    Name		    "sample_period"
 		    Prompt		    "Sample period"
@@ -8834,7 +8844,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    116
+		    $ObjectID		    117
 		    Type		    "edit"
 		    Name		    "names"
 		    Prompt		    "Name:"
@@ -8843,7 +8853,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    117
+		    $ObjectID		    118
 		    Type		    "edit"
 		    Name		    "bitwidths"
 		    Prompt		    "Bitwidth:"
@@ -8860,7 +8870,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    118
+		    $ObjectID		    119
 		    Type		    "edit"
 		    Name		    "arith_types"
 		    Prompt		    "Type (ufix=0, fix=1, bool=2):"
@@ -8877,7 +8887,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    119
+		    $ObjectID		    120
 		    Type		    "edit"
 		    Name		    "bin_pts"
 		    Prompt		    "Binary pt:"
@@ -8891,7 +8901,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    120
+		    $ObjectID		    121
 		    Type		    "checkbox"
 		    Name		    "sim_port"
 		    Prompt		    "Provide sim input/output?"
@@ -8900,7 +8910,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    121
+		    $ObjectID		    122
 		    Type		    "checkbox"
 		    Name		    "show_format"
 		    Prompt		    "Print format string?"
@@ -9168,7 +9178,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		122
+		$ObjectID		123
 		$ClassName		"Simulink.Mask"
 		Initialization		"set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/counter']"
 		",'implementation','DSP48');\nelse\n    set_param([gcb,'/counter'],'implementation','Fabric');\nend"
@@ -9176,7 +9186,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  2
 		  Object {
-		    $ObjectID		    123
+		    $ObjectID		    124
 		    Type		    "checkbox"
 		    Name		    "use_dsp48"
 		    Prompt		    "dsp48 counter/s"
@@ -9184,7 +9194,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    124
+		    $ObjectID		    125
 		    Type		    "edit"
 		    Name		    "word_size"
 		    Prompt		    "word byte size?"
@@ -10137,7 +10147,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		125
+		$ObjectID		126
 		$ClassName		"Simulink.Mask"
 		Type			"swreg"
 		Initialization		"swreg_init(gcb)"
@@ -10146,7 +10156,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  10
 		  Object {
-		    $ObjectID		    126
+		    $ObjectID		    127
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -10164,7 +10174,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    127
+		    $ObjectID		    128
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -10183,7 +10193,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    128
+		    $ObjectID		    129
 		    Type		    "edit"
 		    Name		    "io_delay"
 		    Prompt		    "I/O delay"
@@ -10191,7 +10201,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    129
+		    $ObjectID		    130
 		    Type		    "edit"
 		    Name		    "sample_period"
 		    Prompt		    "Sample period"
@@ -10200,7 +10210,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    130
+		    $ObjectID		    131
 		    Type		    "edit"
 		    Name		    "names"
 		    Prompt		    "Name:"
@@ -10209,7 +10219,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    131
+		    $ObjectID		    132
 		    Type		    "edit"
 		    Name		    "bitwidths"
 		    Prompt		    "Bitwidth:"
@@ -10226,7 +10236,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    132
+		    $ObjectID		    133
 		    Type		    "edit"
 		    Name		    "arith_types"
 		    Prompt		    "Type (ufix=0, fix=1, bool=2):"
@@ -10243,7 +10253,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    133
+		    $ObjectID		    134
 		    Type		    "edit"
 		    Name		    "bin_pts"
 		    Prompt		    "Binary pt:"
@@ -10257,7 +10267,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    134
+		    $ObjectID		    135
 		    Type		    "checkbox"
 		    Name		    "sim_port"
 		    Prompt		    "Provide sim input/output?"
@@ -10266,7 +10276,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    135
+		    $ObjectID		    136
 		    Type		    "checkbox"
 		    Name		    "show_format"
 		    Prompt		    "Print format string?"
@@ -10552,7 +10562,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		136
+		$ObjectID		137
 		$ClassName		"Simulink.Mask"
 		Type			"swreg"
 		Initialization		"swreg_init(gcb)"
@@ -10561,7 +10571,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  10
 		  Object {
-		    $ObjectID		    137
+		    $ObjectID		    138
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -10579,7 +10589,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    138
+		    $ObjectID		    139
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -10598,7 +10608,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    139
+		    $ObjectID		    140
 		    Type		    "edit"
 		    Name		    "io_delay"
 		    Prompt		    "I/O delay"
@@ -10606,7 +10616,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    140
+		    $ObjectID		    141
 		    Type		    "edit"
 		    Name		    "sample_period"
 		    Prompt		    "Sample period"
@@ -10615,7 +10625,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    141
+		    $ObjectID		    142
 		    Type		    "edit"
 		    Name		    "names"
 		    Prompt		    "Name:"
@@ -10624,7 +10634,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    142
+		    $ObjectID		    143
 		    Type		    "edit"
 		    Name		    "bitwidths"
 		    Prompt		    "Bitwidth:"
@@ -10641,7 +10651,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    143
+		    $ObjectID		    144
 		    Type		    "edit"
 		    Name		    "arith_types"
 		    Prompt		    "Type (ufix=0, fix=1, bool=2):"
@@ -10658,7 +10668,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    144
+		    $ObjectID		    145
 		    Type		    "edit"
 		    Name		    "bin_pts"
 		    Prompt		    "Binary pt:"
@@ -10672,7 +10682,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    145
+		    $ObjectID		    146
 		    Type		    "checkbox"
 		    Name		    "sim_port"
 		    Prompt		    "Provide sim input/output?"
@@ -10681,7 +10691,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    146
+		    $ObjectID		    147
 		    Type		    "checkbox"
 		    Name		    "show_format"
 		    Prompt		    "Print format string?"
@@ -10956,7 +10966,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		147
+		$ObjectID		148
 		$ClassName		"Simulink.Mask"
 		Type			"swreg"
 		Initialization		"swreg_init(gcb)"
@@ -10965,7 +10975,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  10
 		  Object {
-		    $ObjectID		    148
+		    $ObjectID		    149
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -10983,7 +10993,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    149
+		    $ObjectID		    150
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -11002,7 +11012,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    150
+		    $ObjectID		    151
 		    Type		    "edit"
 		    Name		    "io_delay"
 		    Prompt		    "I/O delay"
@@ -11010,7 +11020,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    151
+		    $ObjectID		    152
 		    Type		    "edit"
 		    Name		    "sample_period"
 		    Prompt		    "Sample period"
@@ -11019,7 +11029,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    152
+		    $ObjectID		    153
 		    Type		    "edit"
 		    Name		    "names"
 		    Prompt		    "Name:"
@@ -11028,7 +11038,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    153
+		    $ObjectID		    154
 		    Type		    "edit"
 		    Name		    "bitwidths"
 		    Prompt		    "Bitwidth:"
@@ -11045,7 +11055,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    154
+		    $ObjectID		    155
 		    Type		    "edit"
 		    Name		    "arith_types"
 		    Prompt		    "Type (ufix=0, fix=1, bool=2):"
@@ -11062,7 +11072,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    155
+		    $ObjectID		    156
 		    Type		    "edit"
 		    Name		    "bin_pts"
 		    Prompt		    "Binary pt:"
@@ -11076,7 +11086,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    156
+		    $ObjectID		    157
 		    Type		    "checkbox"
 		    Name		    "sim_port"
 		    Prompt		    "Provide sim input/output?"
@@ -11085,7 +11095,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    157
+		    $ObjectID		    158
 		    Type		    "checkbox"
 		    Name		    "show_format"
 		    Prompt		    "Print format string?"
@@ -11323,7 +11333,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		158
+		$ObjectID		159
 		$ClassName		"Simulink.Mask"
 		Type			"swreg"
 		Initialization		"swreg_init(gcb)"
@@ -11332,7 +11342,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  10
 		  Object {
-		    $ObjectID		    159
+		    $ObjectID		    160
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -11350,7 +11360,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    160
+		    $ObjectID		    161
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -11369,7 +11379,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    161
+		    $ObjectID		    162
 		    Type		    "edit"
 		    Name		    "io_delay"
 		    Prompt		    "I/O delay"
@@ -11377,7 +11387,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    162
+		    $ObjectID		    163
 		    Type		    "edit"
 		    Name		    "sample_period"
 		    Prompt		    "Sample period"
@@ -11386,7 +11396,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    163
+		    $ObjectID		    164
 		    Type		    "edit"
 		    Name		    "names"
 		    Prompt		    "Name:"
@@ -11395,7 +11405,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    164
+		    $ObjectID		    165
 		    Type		    "edit"
 		    Name		    "bitwidths"
 		    Prompt		    "Bitwidth:"
@@ -11412,7 +11422,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    165
+		    $ObjectID		    166
 		    Type		    "edit"
 		    Name		    "arith_types"
 		    Prompt		    "Type (ufix=0, fix=1, bool=2):"
@@ -11429,7 +11439,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    166
+		    $ObjectID		    167
 		    Type		    "edit"
 		    Name		    "bin_pts"
 		    Prompt		    "Binary pt:"
@@ -11443,7 +11453,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    167
+		    $ObjectID		    168
 		    Type		    "checkbox"
 		    Name		    "sim_port"
 		    Prompt		    "Provide sim input/output?"
@@ -11452,7 +11462,7 @@ Library {
 		    TabName		    "Setup"
 		  }
 		  Object {
-		    $ObjectID		    168
+		    $ObjectID		    169
 		    Type		    "checkbox"
 		    Name		    "show_format"
 		    Prompt		    "Print format string?"
@@ -12039,73 +12049,9 @@ Library {
 	  }
 	}
 	Line {
-	  SrcBlock		  "assextra_d"
+	  SrcBlock		  "buscreate"
 	  SrcPort		  1
-	  DstBlock		  "extracreate"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "extra_d"
-	  SrcPort		  1
-	  DstBlock		  "assextra_d"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "assextra_c"
-	  SrcPort		  1
-	  DstBlock		  "extracreate"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "extra_c"
-	  SrcPort		  1
-	  DstBlock		  "assextra_c"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "extracreate"
-	  SrcPort		  1
-	  Points		  [130, 0; 0, -405]
 	  DstBlock		  "ss"
-	  DstPort		  5
-	}
-	Line {
-	  SrcBlock		  "stop"
-	  SrcPort		  1
-	  Points		  [40, 0]
-	  DstBlock		  "ss"
-	  DstPort		  4
-	}
-	Line {
-	  SrcBlock		  "trig"
-	  SrcPort		  1
-	  Points		  [40, -9]
-	  DstBlock		  "ss"
-	  DstPort		  3
-	}
-	Line {
-	  SrcBlock		  "we"
-	  SrcPort		  1
-	  Points		  [40, 4]
-	  DstBlock		  "ss"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "assert_b"
-	  SrcPort		  1
-	  DstBlock		  "buscreate"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "in_b"
-	  SrcPort		  1
-	  DstBlock		  "assert_b"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "assert_a"
-	  SrcPort		  1
-	  DstBlock		  "buscreate"
 	  DstPort		  1
 	}
 	Line {
@@ -12115,11 +12061,70 @@ Library {
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "buscreate"
+	  SrcBlock		  "assert_a"
 	  SrcPort		  1
-	  Points		  [175, -44]
-	  DstBlock		  "ss"
+	  DstBlock		  "buscreate"
 	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "in_b"
+	  SrcPort		  1
+	  DstBlock		  "assert_b"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "assert_b"
+	  SrcPort		  1
+	  DstBlock		  "buscreate"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "we"
+	  SrcPort		  1
+	  DstBlock		  "ss"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "trig"
+	  SrcPort		  1
+	  DstBlock		  "ss"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "stop"
+	  SrcPort		  1
+	  DstBlock		  "ss"
+	  DstPort		  4
+	}
+	Line {
+	  SrcBlock		  "extracreate"
+	  SrcPort		  1
+	  DstBlock		  "ss"
+	  DstPort		  5
+	}
+	Line {
+	  SrcBlock		  "extra_c"
+	  SrcPort		  1
+	  DstBlock		  "assextra_c"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "assextra_c"
+	  SrcPort		  1
+	  DstBlock		  "extracreate"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "extra_d"
+	  SrcPort		  1
+	  DstBlock		  "assextra_d"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "assextra_d"
+	  SrcPort		  1
+	  DstBlock		  "extracreate"
+	  DstPort		  2
 	}
       }
     }
@@ -12141,7 +12146,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		169
+	$ObjectID		170
 	$ClassName		"Simulink.Mask"
 	Type			"data_capture"
 	Description		"This block is useful for capturing parallel data streams\nsimultaneously and sending the data in struct"
@@ -12155,7 +12160,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  2
 	  Object {
-	    $ObjectID		    170
+	    $ObjectID		    171
 	    Type		    "edit"
 	    Name		    "stream_name"
 	    Prompt		    "Stream Name"
@@ -12163,7 +12168,7 @@ Library {
 	    Evaluate		    "off"
 	  }
 	  Object {
-	    $ObjectID		    171
+	    $ObjectID		    172
 	    Type		    "edit"
 	    Name		    "nsimult_streams"
 	    Prompt		    "Number Of Simultaneous Streams"
@@ -12424,7 +12429,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		172
+	$ObjectID		173
 	$ClassName		"Simulink.Mask"
 	Type			"dsp_scope"
 	Description		"This block provides a convenient interface to plotting waveforms\nof blocks with serial data output in "
@@ -12438,28 +12443,28 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  4
 	  Object {
-	    $ObjectID		    173
+	    $ObjectID		    174
 	    Type		    "edit"
 	    Name		    "n_inputs"
 	    Prompt		    "Number of inputs"
 	    Value		    "4"
 	  }
 	  Object {
-	    $ObjectID		    174
+	    $ObjectID		    175
 	    Type		    "edit"
 	    Name		    "slice_width"
 	    Prompt		    "Width of each input"
 	    Value		    "18"
 	  }
 	  Object {
-	    $ObjectID		    175
+	    $ObjectID		    176
 	    Type		    "edit"
 	    Name		    "bin_pt"
 	    Prompt		    "Output Binary Point"
 	    Value		    "17"
 	  }
 	  Object {
-	    $ObjectID		    176
+	    $ObjectID		    177
 	    Type		    "edit"
 	    Name		    "arith_type"
 	    Prompt		    "Output Arithmetic Type (0=Unsigned, 1 = Signed)"
@@ -12607,7 +12612,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		177
+	$ObjectID		178
 	$ClassName		"Simulink.Mask"
 	Type			"sc"
 	Description		"The 'sc' block is a modified version of the 'snap' block in \nthe same library.  The modification inten"
@@ -12622,14 +12627,14 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  2
 	  Object {
-	    $ObjectID		    178
+	    $ObjectID		    179
 	    Type		    "edit"
 	    Name		    "nsamples"
 	    Prompt		    "No. of samples(2^?)"
 	    Value		    "11"
 	  }
 	  Object {
-	    $ObjectID		    179
+	    $ObjectID		    180
 	    Type		    "edit"
 	    Name		    "offset"
 	    Prompt		    "Parallel Bus Offset"
@@ -13154,7 +13159,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		180
+	$ObjectID		181
 	$ClassName		"Simulink.Mask"
 	Type			"snap"
 	Description		"The <i>snap</i> block provides a packaged solution to capturing data from\nthe FPGA fabric and making i"
@@ -13165,7 +13170,7 @@ Library {
 	"t block instead', 'snap');"
 	Object {
 	  $PropName		  "Parameters"
-	  $ObjectID		  181
+	  $ObjectID		  182
 	  $ClassName		  "Simulink.MaskParameter"
 	  Type			  "edit"
 	  Name			  "nsamples"
@@ -14089,7 +14094,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		182
+	$ObjectID		183
 	$ClassName		"Simulink.Mask"
 	Type			"snap64"
 	Description		"The <i>snap</i> block provides a packaged solution to capturing data from\nthe FPGA fabric and making i"
@@ -14100,7 +14105,7 @@ Library {
 	"hot block instead', 'snap64');"
 	Object {
 	  $PropName		  "Parameters"
-	  $ObjectID		  183
+	  $ObjectID		  184
 	  $ClassName		  "Simulink.MaskParameter"
 	  Type			  "edit"
 	  Name			  "nsamples"
@@ -15232,7 +15237,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		184
+	$ObjectID		185
 	$ClassName		"Simulink.Mask"
 	Type			"snap_10gbe_rx"
 	Description		"This snap block provides a packaged solution to capturing a 10GbE datastream from the FPGA fabric and m"
@@ -15243,7 +15248,7 @@ Library {
 	"e snapshot block instead', 'snap_10gbe_rx');"
 	Object {
 	  $PropName		  "Parameters"
-	  $ObjectID		  185
+	  $ObjectID		  186
 	  $ClassName		  "Simulink.MaskParameter"
 	  Type			  "edit"
 	  Name			  "nsamples"
@@ -17550,7 +17555,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		186
+	$ObjectID		187
 	$ClassName		"Simulink.Mask"
 	Type			"snap_10gbe_tx"
 	Description		"This snap block provides a packaged solution to capturing a 10GbE datastream from the FPGA fabric and m"
@@ -17561,7 +17566,7 @@ Library {
 	"e snapshot block instead', 'snap_10gbe_tx');"
 	Object {
 	  $PropName		  "Parameters"
-	  $ObjectID		  187
+	  $ObjectID		  188
 	  $ClassName		  "Simulink.MaskParameter"
 	  Type			  "edit"
 	  Name			  "nsamples"
@@ -19474,7 +19479,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		188
+	$ObjectID		189
 	$ClassName		"Simulink.Mask"
 	Type			"snap_32n"
 	Description		"Like the snap64 block, this block contains multiple sub-cores \nthat each have a separate bram.  The pu"
@@ -19487,14 +19492,14 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  2
 	  Object {
-	    $ObjectID		    189
+	    $ObjectID		    190
 	    Type		    "edit"
 	    Name		    "nsamples"
 	    Prompt		    "Number of Samples (2^"
 	    Value		    "11"
 	  }
 	  Object {
-	    $ObjectID		    190
+	    $ObjectID		    191
 	    Type		    "edit"
 	    Name		    "width"
 	    Prompt		    "Input Bus Width (32x"
@@ -20000,7 +20005,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		191
+	$ObjectID		192
 	$ClassName		"Simulink.Mask"
 	Type			"snap_circ"
 	Description		"Backwards compatible with the normal snap block, but with the following upgrades:\n 1) Ability to offse"
@@ -20013,7 +20018,7 @@ Library {
 	"apshot block instead', 'snap_circ');"
 	Object {
 	  $PropName		  "Parameters"
-	  $ObjectID		  192
+	  $ObjectID		  193
 	  $ClassName		  "Simulink.MaskParameter"
 	  Type			  "edit"
 	  Name			  "nsamples"
@@ -22824,7 +22829,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    193
+	    $ObjectID		    194
 	    $ClassName		    "Simulink.Mask"
 	    Initialization	    "shared_bram_mask;"
 	    SelfModifiable	    "on"
@@ -22833,7 +22838,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      9
 	      Object {
-		$ObjectID		194
+		$ObjectID		195
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -22848,14 +22853,14 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		195
+		$ObjectID		196
 		Type			"edit"
 		Name			"addr_width"
 		Prompt			"Address width"
 		Value			"nsamples"
 	      }
 	      Object {
-		$ObjectID		196
+		$ObjectID		197
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -22872,21 +22877,21 @@ Library {
 		Value			"32"
 	      }
 	      Object {
-		$ObjectID		197
+		$ObjectID		198
 		Type			"checkbox"
 		Name			"reg_prim_output"
 		Prompt			"Register Primitive Output"
 		Value			"on"
 	      }
 	      Object {
-		$ObjectID		198
+		$ObjectID		199
 		Type			"checkbox"
 		Name			"reg_core_output"
 		Prompt			"Register Core Output"
 		Value			"on"
 	      }
 	      Object {
-		$ObjectID		199
+		$ObjectID		200
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -22900,21 +22905,21 @@ Library {
 		Value			"Minimum_Area"
 	      }
 	      Object {
-		$ObjectID		200
+		$ObjectID		201
 		Type			"edit"
 		Name			"data_bin_pt"
 		Prompt			"Data Binary Point"
 		Value			"0"
 	      }
 	      Object {
-		$ObjectID		201
+		$ObjectID		202
 		Type			"edit"
 		Name			"init_vals"
 		Prompt			"Initial values (simulation only)"
 		Value			"0"
 	      }
 	      Object {
-		$ObjectID		202
+		$ObjectID		203
 		Type			"edit"
 		Name			"sample_rate"
 		Prompt			"Sample rate"
@@ -22982,27 +22987,27 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		203
+		$ObjectID		204
 		$ClassName		"Simulink.Mask"
 		Array {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  3
 		  Object {
-		    $ObjectID		    204
+		    $ObjectID		    205
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    205
+		    $ObjectID		    206
 		    Type		    "edit"
 		    Name		    "addr_width"
 		    Prompt		    "address width"
 		    Value		    "10"
 		  }
 		  Object {
-		    $ObjectID		    206
+		    $ObjectID		    207
 		    Type		    "edit"
 		    Name		    "sample_rate"
 		    Prompt		    "sample rate"
@@ -23801,27 +23806,27 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    207
+		    $ObjectID		    208
 		    $ClassName		    "Simulink.Mask"
 		    Array {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    3
 		    Object {
-		    $ObjectID		    208
+		    $ObjectID		    209
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    209
+		    $ObjectID		    210
 		    Type		    "edit"
 		    Name		    "addr_width"
 		    Prompt		    "address width"
 		    Value		    "10"
 		    }
 		    Object {
-		    $ObjectID		    210
+		    $ObjectID		    211
 		    Type		    "edit"
 		    Name		    "sample_rate"
 		    Prompt		    "sample rate"
@@ -24424,7 +24429,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    211
+		    $ObjectID		    212
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -24435,28 +24440,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    212
+		    $ObjectID		    213
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    213
+		    $ObjectID		    214
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    214
+		    $ObjectID		    215
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    215
+		    $ObjectID		    216
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -24472,7 +24477,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    216
+		    $ObjectID		    217
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -24580,7 +24585,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    217
+		    $ObjectID		    218
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -24591,28 +24596,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    218
+		    $ObjectID		    219
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    219
+		    $ObjectID		    220
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    220
+		    $ObjectID		    221
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    221
+		    $ObjectID		    222
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -24628,7 +24633,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    222
+		    $ObjectID		    223
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -24866,7 +24871,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		223
+		$ObjectID		224
 		$ClassName		"Simulink.Mask"
 		Type			"munge"
 		Description		"Splits an input bus into the specified number of divisions and then recombines them in the order speci"
@@ -24877,28 +24882,28 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  5
 		  Object {
-		    $ObjectID		    224
+		    $ObjectID		    225
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		  }
 		  Object {
-		    $ObjectID		    225
+		    $ObjectID		    226
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    226
+		    $ObjectID		    227
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		  }
 		  Object {
-		    $ObjectID		    227
+		    $ObjectID		    228
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -24914,7 +24919,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    228
+		    $ObjectID		    229
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -25022,7 +25027,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		229
+		$ObjectID		230
 		$ClassName		"Simulink.Mask"
 		Type			"munge"
 		Description		"Splits an input bus into the specified number of divisions and then recombines them in the order speci"
@@ -25033,28 +25038,28 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  5
 		  Object {
-		    $ObjectID		    230
+		    $ObjectID		    231
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		  }
 		  Object {
-		    $ObjectID		    231
+		    $ObjectID		    232
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    232
+		    $ObjectID		    233
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		  }
 		  Object {
-		    $ObjectID		    233
+		    $ObjectID		    234
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -25070,7 +25075,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    234
+		    $ObjectID		    235
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -26522,7 +26527,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		235
+	$ObjectID		236
 	$ClassName		"Simulink.Mask"
 	Type			"snapshot"
 	Description		"Standard snap block, but with the following optional extras;\n 1) Optionally delay the fabric trigger b"
@@ -26539,7 +26544,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  9
 	  Object {
-	    $ObjectID		    236
+	    $ObjectID		    237
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -26555,7 +26560,7 @@ Library {
 	    Callback		    "snapshot_callback();"
 	  }
 	  Object {
-	    $ObjectID		    237
+	    $ObjectID		    238
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -26573,7 +26578,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    238
+	    $ObjectID		    239
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -26592,14 +26597,14 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    239
+	    $ObjectID		    240
 	    Type		    "edit"
 	    Name		    "nsamples"
 	    Prompt		    "Number of Samples (2^?)"
 	    Value		    "10"
 	  }
 	  Object {
-	    $ObjectID		    240
+	    $ObjectID		    241
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -26617,7 +26622,7 @@ Library {
 	    Evaluate		    "off"
 	  }
 	  Object {
-	    $ObjectID		    241
+	    $ObjectID		    242
 	    Type		    "checkbox"
 	    Name		    "offset"
 	    Prompt		    "Start delay support "
@@ -26625,7 +26630,7 @@ Library {
 	    Evaluate		    "off"
 	  }
 	  Object {
-	    $ObjectID		    242
+	    $ObjectID		    243
 	    Type		    "checkbox"
 	    Name		    "circap"
 	    Prompt		    "Circular capture support"
@@ -26633,7 +26638,7 @@ Library {
 	    Evaluate		    "off"
 	  }
 	  Object {
-	    $ObjectID		    243
+	    $ObjectID		    244
 	    Type		    "checkbox"
 	    Name		    "value"
 	    Prompt		    "Extra value capture support"
@@ -26641,7 +26646,7 @@ Library {
 	    Evaluate		    "off"
 	  }
 	  Object {
-	    $ObjectID		    244
+	    $ObjectID		    245
 	    Type		    "checkbox"
 	    Name		    "use_dsp48"
 	    Prompt		    "Use DSP48s to implement counters"
@@ -26758,7 +26763,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    245
+	    $ObjectID		    246
 	    $ClassName		    "Simulink.Mask"
 	    Initialization	    "set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/add"
 	    "_gen'],'implementation','DSP48');\nelse\n    set_param([gcb,'/add_gen'],'implementation','Fabric');\nend"
@@ -26766,35 +26771,35 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      5
 	      Object {
-		$ObjectID		246
+		$ObjectID		247
 		Type			"edit"
 		Name			"counter_size"
 		Prompt			"Address counter size (2^?)"
 		Value			"32"
 	      }
 	      Object {
-		$ObjectID		247
+		$ObjectID		248
 		Type			"edit"
 		Name			"increment"
 		Prompt			"Address counter increment"
 		Value			"4"
 	      }
 	      Object {
-		$ObjectID		248
+		$ObjectID		249
 		Type			"edit"
 		Name			"nsamples"
 		Prompt			"Number of samples (2^?)"
 		Value			"10"
 	      }
 	      Object {
-		$ObjectID		249
+		$ObjectID		250
 		Type			"edit"
 		Name			"burst_size"
 		Prompt			"Burst size (2^?)"
 		Value			"0"
 	      }
 	      Object {
-		$ObjectID		250
+		$ObjectID		251
 		Type			"checkbox"
 		Name			"use_dsp48"
 		Prompt			"dsp48 counter/s"
@@ -27631,7 +27636,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		251
+		$ObjectID		252
 		$ClassName		"Simulink.Mask"
 		Type			"edge_detect"
 		Description		"Output is active for one-cycle after each edge of the specified type (i.e. rising, falling or both)."
@@ -27649,7 +27654,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  6
 		  Object {
-		    $ObjectID		    252
+		    $ObjectID		    253
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -27665,7 +27670,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    253
+		    $ObjectID		    254
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -27680,7 +27685,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    254
+		    $ObjectID		    255
 		    Type		    "edit"
 		    Name		    "x_in"
 		    Prompt		    "Input X Positions"
@@ -27689,7 +27694,7 @@ Library {
 		    Visible		    "off"
 		  }
 		  Object {
-		    $ObjectID		    255
+		    $ObjectID		    256
 		    Type		    "edit"
 		    Name		    "y_in"
 		    Prompt		    "Input Y Positions"
@@ -27698,7 +27703,7 @@ Library {
 		    Visible		    "off"
 		  }
 		  Object {
-		    $ObjectID		    256
+		    $ObjectID		    257
 		    Type		    "edit"
 		    Name		    "x_out"
 		    Prompt		    "Output X Positions"
@@ -27707,7 +27712,7 @@ Library {
 		    Visible		    "off"
 		  }
 		  Object {
-		    $ObjectID		    257
+		    $ObjectID		    258
 		    Type		    "edit"
 		    Name		    "y_out"
 		    Prompt		    "Output Y Positions"
@@ -28377,14 +28382,14 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    258
+	    $ObjectID		    259
 	    $ClassName		    "Simulink.Mask"
 	    Initialization	    "set_param(gcb,'LinkStatus','inactive');\nset_param([gcb,'/dram_munge'], 'dram', dram);\n\n"
 	    Array {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      2
 	      Object {
-		$ObjectID		259
+		$ObjectID		260
 		Type			"checkbox"
 		Name			"dram"
 		Prompt			"dram"
@@ -28392,7 +28397,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		260
+		$ObjectID		261
 		Type			"edit"
 		Name			"data_width"
 		Prompt			"data width"
@@ -28927,7 +28932,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		261
+		$ObjectID		262
 		$ClassName		"Simulink.Mask"
 		Initialization		"set_param(gcb,'LinkStatus','inactive');\nif strcmp(dram,'on'),\n    set_param([gcb,'/dram'], 'const"
 		"', '1');\nelse,\n    set_param([gcb,'/dram'], 'const', '0');\nend\nset_param([gcb,'/data_choice'], ...\n        'pre"
@@ -28937,7 +28942,7 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  2
 		  Object {
-		    $ObjectID		    262
+		    $ObjectID		    263
 		    Type		    "checkbox"
 		    Name		    "dram"
 		    Prompt		    "dram"
@@ -28945,7 +28950,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    263
+		    $ObjectID		    264
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
@@ -31040,7 +31045,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    264
+	    $ObjectID		    265
 	    $ClassName		    "Simulink.Mask"
 	    Initialization	    "shared_bram_mask;"
 	    SelfModifiable	    "on"
@@ -31049,7 +31054,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      9
 	      Object {
-		$ObjectID		265
+		$ObjectID		266
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -31064,14 +31069,14 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		266
+		$ObjectID		267
 		Type			"edit"
 		Name			"addr_width"
 		Prompt			"Address width"
 		Value			"10"
 	      }
 	      Object {
-		$ObjectID		267
+		$ObjectID		268
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -31088,21 +31093,21 @@ Library {
 		Value			"32"
 	      }
 	      Object {
-		$ObjectID		268
+		$ObjectID		269
 		Type			"checkbox"
 		Name			"reg_prim_output"
 		Prompt			"Register Primitive Output"
 		Value			"on"
 	      }
 	      Object {
-		$ObjectID		269
+		$ObjectID		270
 		Type			"checkbox"
 		Name			"reg_core_output"
 		Prompt			"Register Core Output"
 		Value			"on"
 	      }
 	      Object {
-		$ObjectID		270
+		$ObjectID		271
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -31116,21 +31121,21 @@ Library {
 		Value			"Minimum_Area"
 	      }
 	      Object {
-		$ObjectID		271
+		$ObjectID		272
 		Type			"edit"
 		Name			"data_bin_pt"
 		Prompt			"Data Binary Point"
 		Value			"0"
 	      }
 	      Object {
-		$ObjectID		272
+		$ObjectID		273
 		Type			"edit"
 		Name			"init_vals"
 		Prompt			"Initial values (simulation only)"
 		Value			"[0:2^10-1]"
 	      }
 	      Object {
-		$ObjectID		273
+		$ObjectID		274
 		Type			"edit"
 		Name			"sample_rate"
 		Prompt			"Sample rate"
@@ -31197,27 +31202,27 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		274
+		$ObjectID		275
 		$ClassName		"Simulink.Mask"
 		Array {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  3
 		  Object {
-		    $ObjectID		    275
+		    $ObjectID		    276
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    276
+		    $ObjectID		    277
 		    Type		    "edit"
 		    Name		    "addr_width"
 		    Prompt		    "address width"
 		    Value		    "10"
 		  }
 		  Object {
-		    $ObjectID		    277
+		    $ObjectID		    278
 		    Type		    "edit"
 		    Name		    "sample_rate"
 		    Prompt		    "sample rate"
@@ -31858,27 +31863,27 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    278
+		    $ObjectID		    279
 		    $ClassName		    "Simulink.Mask"
 		    Array {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    3
 		    Object {
-		    $ObjectID		    279
+		    $ObjectID		    280
 		    Type		    "edit"
 		    Name		    "data_width"
 		    Prompt		    "data width"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    280
+		    $ObjectID		    281
 		    Type		    "edit"
 		    Name		    "addr_width"
 		    Prompt		    "address width"
 		    Value		    "10"
 		    }
 		    Object {
-		    $ObjectID		    281
+		    $ObjectID		    282
 		    Type		    "edit"
 		    Name		    "sample_rate"
 		    Prompt		    "sample rate"
@@ -32497,7 +32502,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    282
+		    $ObjectID		    283
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -32508,28 +32513,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    283
+		    $ObjectID		    284
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    284
+		    $ObjectID		    285
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    285
+		    $ObjectID		    286
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    286
+		    $ObjectID		    287
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -32545,7 +32550,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    287
+		    $ObjectID		    288
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -32653,7 +32658,7 @@ Library {
 		  MaskHideContents	  off
 		  Object {
 		    $PropName		    "MaskObject"
-		    $ObjectID		    288
+		    $ObjectID		    289
 		    $ClassName		    "Simulink.Mask"
 		    Type		    "munge"
 		    Description		    "Splits an input bus into the specified number of divisions and then recombines them in the ord"
@@ -32664,28 +32669,28 @@ Library {
 		    Type		    "Simulink.MaskParameter"
 		    Dimension		    5
 		    Object {
-		    $ObjectID		    289
+		    $ObjectID		    290
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		    }
 		    Object {
-		    $ObjectID		    290
+		    $ObjectID		    291
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		    }
 		    Object {
-		    $ObjectID		    291
+		    $ObjectID		    292
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		    }
 		    Object {
-		    $ObjectID		    292
+		    $ObjectID		    293
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -32701,7 +32706,7 @@ Library {
 		    Evaluate		    "off"
 		    }
 		    Object {
-		    $ObjectID		    293
+		    $ObjectID		    294
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -32943,7 +32948,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		294
+		$ObjectID		295
 		$ClassName		"Simulink.Mask"
 		Type			"munge"
 		Description		"Splits an input bus into the specified number of divisions and then recombines them in the order speci"
@@ -32954,28 +32959,28 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  5
 		  Object {
-		    $ObjectID		    295
+		    $ObjectID		    296
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		  }
 		  Object {
-		    $ObjectID		    296
+		    $ObjectID		    297
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    297
+		    $ObjectID		    298
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		  }
 		  Object {
-		    $ObjectID		    298
+		    $ObjectID		    299
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -32991,7 +32996,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    299
+		    $ObjectID		    300
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -33099,7 +33104,7 @@ Library {
 	      MaskHideContents	      off
 	      Object {
 		$PropName		"MaskObject"
-		$ObjectID		300
+		$ObjectID		301
 		$ClassName		"Simulink.Mask"
 		Type			"munge"
 		Description		"Splits an input bus into the specified number of divisions and then recombines them in the order speci"
@@ -33110,28 +33115,28 @@ Library {
 		  Type			  "Simulink.MaskParameter"
 		  Dimension		  5
 		  Object {
-		    $ObjectID		    301
+		    $ObjectID		    302
 		    Type		    "edit"
 		    Name		    "divisions"
 		    Prompt		    "Number of divisions"
 		    Value		    "1"
 		  }
 		  Object {
-		    $ObjectID		    302
+		    $ObjectID		    303
 		    Type		    "edit"
 		    Name		    "div_size"
 		    Prompt		    "Division size (bits)"
 		    Value		    "32"
 		  }
 		  Object {
-		    $ObjectID		    303
+		    $ObjectID		    304
 		    Type		    "edit"
 		    Name		    "order"
 		    Prompt		    "Division packing order"
 		    Value		    "[0]"
 		  }
 		  Object {
-		    $ObjectID		    304
+		    $ObjectID		    305
 		    Type		    "popup"
 		    Array {
 		    Type		    "Cell"
@@ -33147,7 +33152,7 @@ Library {
 		    Evaluate		    "off"
 		  }
 		  Object {
-		    $ObjectID		    305
+		    $ObjectID		    306
 		    Type		    "edit"
 		    Name		    "bin_pt_out"
 		    Prompt		    "Output binary point"
@@ -33570,7 +33575,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    306
+	    $ObjectID		    307
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "swreg"
 	    Initialization	    "swreg_init(gcb)"
@@ -33579,7 +33584,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      10
 	      Object {
-		$ObjectID		307
+		$ObjectID		308
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -33597,7 +33602,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		308
+		$ObjectID		309
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -33615,7 +33620,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		309
+		$ObjectID		310
 		Type			"edit"
 		Name			"io_delay"
 		Prompt			"I/O delay"
@@ -33623,7 +33628,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		310
+		$ObjectID		311
 		Type			"edit"
 		Name			"sample_period"
 		Prompt			"Sample period"
@@ -33632,7 +33637,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		311
+		$ObjectID		312
 		Type			"edit"
 		Name			"names"
 		Prompt			"Name:"
@@ -33641,7 +33646,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		312
+		$ObjectID		313
 		Type			"edit"
 		Name			"bitwidths"
 		Prompt			"Bitwidth:"
@@ -33658,7 +33663,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		313
+		$ObjectID		314
 		Type			"edit"
 		Name			"arith_types"
 		Prompt			"Type (ufix=0, fix=1, bool=2):"
@@ -33674,7 +33679,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		314
+		$ObjectID		315
 		Type			"edit"
 		Name			"bin_pts"
 		Prompt			"Binary pt:"
@@ -33688,7 +33693,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		315
+		$ObjectID		316
 		Type			"checkbox"
 		Name			"sim_port"
 		Prompt			"Provide sim input/output?"
@@ -33697,7 +33702,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		316
+		$ObjectID		317
 		Type			"checkbox"
 		Name			"show_format"
 		Prompt			"Print format string?"
@@ -33963,7 +33968,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    317
+	    $ObjectID		    318
 	    $ClassName		    "Simulink.Mask"
 	    Initialization	    "set_param(gcb,'LinkStatus','inactive');\nif strcmp(use_dsp48,'on'),\n    set_param([gcb,'/cou"
 	    "nter'],'implementation','DSP48');\nelse\n    set_param([gcb,'/counter'],'implementation','Fabric');\nend"
@@ -33971,7 +33976,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      2
 	      Object {
-		$ObjectID		318
+		$ObjectID		319
 		Type			"checkbox"
 		Name			"use_dsp48"
 		Prompt			"dsp48 counter/s"
@@ -33979,7 +33984,7 @@ Library {
 		Evaluate		"off"
 	      }
 	      Object {
-		$ObjectID		319
+		$ObjectID		320
 		Type			"edit"
 		Name			"word_size"
 		Prompt			"word byte size?"
@@ -34944,7 +34949,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    320
+	    $ObjectID		    321
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "swreg"
 	    Initialization	    "swreg_init(gcb)"
@@ -34953,7 +34958,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      10
 	      Object {
-		$ObjectID		321
+		$ObjectID		322
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -34971,7 +34976,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		322
+		$ObjectID		323
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -34989,7 +34994,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		323
+		$ObjectID		324
 		Type			"edit"
 		Name			"io_delay"
 		Prompt			"I/O delay"
@@ -34997,7 +35002,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		324
+		$ObjectID		325
 		Type			"edit"
 		Name			"sample_period"
 		Prompt			"Sample period"
@@ -35006,7 +35011,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		325
+		$ObjectID		326
 		Type			"edit"
 		Name			"names"
 		Prompt			"Name:"
@@ -35015,7 +35020,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		326
+		$ObjectID		327
 		Type			"edit"
 		Name			"bitwidths"
 		Prompt			"Bitwidth:"
@@ -35032,7 +35037,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		327
+		$ObjectID		328
 		Type			"edit"
 		Name			"arith_types"
 		Prompt			"Type (ufix=0, fix=1, bool=2):"
@@ -35048,7 +35053,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		328
+		$ObjectID		329
 		Type			"edit"
 		Name			"bin_pts"
 		Prompt			"Binary pt:"
@@ -35062,7 +35067,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		329
+		$ObjectID		330
 		Type			"checkbox"
 		Name			"sim_port"
 		Prompt			"Provide sim input/output?"
@@ -35071,7 +35076,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		330
+		$ObjectID		331
 		Type			"checkbox"
 		Name			"show_format"
 		Prompt			"Print format string?"
@@ -36089,7 +36094,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    331
+	    $ObjectID		    332
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "swreg"
 	    Initialization	    "swreg_init(gcb)"
@@ -36098,7 +36103,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      10
 	      Object {
-		$ObjectID		332
+		$ObjectID		333
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -36116,7 +36121,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		333
+		$ObjectID		334
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -36134,7 +36139,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		334
+		$ObjectID		335
 		Type			"edit"
 		Name			"io_delay"
 		Prompt			"I/O delay"
@@ -36142,7 +36147,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		335
+		$ObjectID		336
 		Type			"edit"
 		Name			"sample_period"
 		Prompt			"Sample period"
@@ -36151,7 +36156,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		336
+		$ObjectID		337
 		Type			"edit"
 		Name			"names"
 		Prompt			"Name:"
@@ -36160,7 +36165,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		337
+		$ObjectID		338
 		Type			"edit"
 		Name			"bitwidths"
 		Prompt			"Bitwidth:"
@@ -36177,7 +36182,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		338
+		$ObjectID		339
 		Type			"edit"
 		Name			"arith_types"
 		Prompt			"Type (ufix=0, fix=1, bool=2):"
@@ -36193,7 +36198,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		339
+		$ObjectID		340
 		Type			"edit"
 		Name			"bin_pts"
 		Prompt			"Binary pt:"
@@ -36207,7 +36212,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		340
+		$ObjectID		341
 		Type			"checkbox"
 		Name			"sim_port"
 		Prompt			"Provide sim input/output?"
@@ -36216,7 +36221,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		341
+		$ObjectID		342
 		Type			"checkbox"
 		Name			"show_format"
 		Prompt			"Print format string?"
@@ -36493,7 +36498,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    342
+	    $ObjectID		    343
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "swreg"
 	    Initialization	    "swreg_init(gcb)"
@@ -36502,7 +36507,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      10
 	      Object {
-		$ObjectID		343
+		$ObjectID		344
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -36520,7 +36525,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		344
+		$ObjectID		345
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -36538,7 +36543,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		345
+		$ObjectID		346
 		Type			"edit"
 		Name			"io_delay"
 		Prompt			"I/O delay"
@@ -36546,7 +36551,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		346
+		$ObjectID		347
 		Type			"edit"
 		Name			"sample_period"
 		Prompt			"Sample period"
@@ -36555,7 +36560,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		347
+		$ObjectID		348
 		Type			"edit"
 		Name			"names"
 		Prompt			"Name:"
@@ -36564,7 +36569,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		348
+		$ObjectID		349
 		Type			"edit"
 		Name			"bitwidths"
 		Prompt			"Bitwidth:"
@@ -36581,7 +36586,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		349
+		$ObjectID		350
 		Type			"edit"
 		Name			"arith_types"
 		Prompt			"Type (ufix=0, fix=1, bool=2):"
@@ -36597,7 +36602,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		350
+		$ObjectID		351
 		Type			"edit"
 		Name			"bin_pts"
 		Prompt			"Binary pt:"
@@ -36611,7 +36616,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		351
+		$ObjectID		352
 		Type			"checkbox"
 		Name			"sim_port"
 		Prompt			"Provide sim input/output?"
@@ -36620,7 +36625,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		352
+		$ObjectID		353
 		Type			"checkbox"
 		Name			"show_format"
 		Prompt			"Print format string?"
@@ -36859,7 +36864,7 @@ Library {
 	  MaskHideContents	  off
 	  Object {
 	    $PropName		    "MaskObject"
-	    $ObjectID		    353
+	    $ObjectID		    354
 	    $ClassName		    "Simulink.Mask"
 	    Type		    "swreg"
 	    Initialization	    "swreg_init(gcb)"
@@ -36868,7 +36873,7 @@ Library {
 	      Type		      "Simulink.MaskParameter"
 	      Dimension		      10
 	      Object {
-		$ObjectID		354
+		$ObjectID		355
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -36886,7 +36891,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		355
+		$ObjectID		356
 		Type			"popup"
 		Array {
 		  Type			  "Cell"
@@ -36904,7 +36909,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		356
+		$ObjectID		357
 		Type			"edit"
 		Name			"io_delay"
 		Prompt			"I/O delay"
@@ -36912,7 +36917,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		357
+		$ObjectID		358
 		Type			"edit"
 		Name			"sample_period"
 		Prompt			"Sample period"
@@ -36921,7 +36926,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		358
+		$ObjectID		359
 		Type			"edit"
 		Name			"names"
 		Prompt			"Name:"
@@ -36930,7 +36935,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		359
+		$ObjectID		360
 		Type			"edit"
 		Name			"bitwidths"
 		Prompt			"Bitwidth:"
@@ -36947,7 +36952,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		360
+		$ObjectID		361
 		Type			"edit"
 		Name			"arith_types"
 		Prompt			"Type (ufix=0, fix=1, bool=2):"
@@ -36963,7 +36968,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		361
+		$ObjectID		362
 		Type			"edit"
 		Name			"bin_pts"
 		Prompt			"Binary pt:"
@@ -36977,7 +36982,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		362
+		$ObjectID		363
 		Type			"checkbox"
 		Name			"sim_port"
 		Prompt			"Provide sim input/output?"
@@ -36986,7 +36991,7 @@ Library {
 		TabName			"Setup"
 	      }
 	      Object {
-		$ObjectID		363
+		$ObjectID		364
 		Type			"checkbox"
 		Name			"show_format"
 		Prompt			"Print format string?"

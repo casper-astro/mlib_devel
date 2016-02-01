@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Feb 01 13:49:45 2016"
-  RTWModifiedTimeStamp	  376235376
-  ModelVersionFormat	  "1.%<AutoIncrement:522>"
+  LastModifiedDate	  "Mon Feb 01 15:54:38 2016"
+  RTWModifiedTimeStamp	  376242859
+  ModelVersionFormat	  "1.%<AutoIncrement:524>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -58469,7 +58469,7 @@ Library {
 	    $ObjectID		    269
 	    Type		    "edit"
 	    Name		    "names"
-	    Prompt		    "Name:"
+	    Prompt		    "Name"
 	    Value		    "reg"
 	    Evaluate		    "off"
 	    TabName		    "Setup"
@@ -58478,23 +58478,23 @@ Library {
 	    $ObjectID		    270
 	    Type		    "edit"
 	    Name		    "bitwidths"
-	    Prompt		    "Bitwidth:"
+	    Prompt		    "Bitwidth"
 	    Value		    "32"
 	    TabName		    "Setup"
 	  }
 	  Object {
 	    $ObjectID		    271
 	    Type		    "edit"
-	    Name		    "arith_types"
-	    Prompt		    "Type (ufix=0, fix=1, bool=2):"
+	    Name		    "bin_pts"
+	    Prompt		    "Binary pt"
 	    Value		    "0"
 	    TabName		    "Setup"
 	  }
 	  Object {
 	    $ObjectID		    272
 	    Type		    "edit"
-	    Name		    "bin_pts"
-	    Prompt		    "Binary pt:"
+	    Name		    "arith_types"
+	    Prompt		    "Data type, ufix=0, fix=1, bool=2"
 	    Value		    "0"
 	    TabName		    "Setup"
 	  }
@@ -58534,7 +58534,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6842"
+	SIDHighWatermark	"6882"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58546,10 +58546,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6841"
+	  SID			  "332:6881"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6786
+	  ZOrder		  6826
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58584,10 +58584,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6839"
+	  SID			  "332:6879"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6784
+	  ZOrder		  6824
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58622,10 +58622,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6838"
+	  SID			  "332:6878"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6783
+	  ZOrder		  6823
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58653,10 +58653,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6842"
+	  SID			  "332:6882"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6787
+	  ZOrder		  6827
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58684,10 +58684,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6840"
+	  SID			  "332:6880"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6785
+	  ZOrder		  6825
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
