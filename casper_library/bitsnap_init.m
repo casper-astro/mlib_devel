@@ -45,13 +45,12 @@ snap_value =        get_param(blk, 'snap_value');
 snap_use_dsp48 =    get_param(blk, 'snap_use_dsp48');
 snap_delay =        eval(get_param(blk, 'snap_delay'));
 
-mode = 'fields of arbitrary size';
 blktype = 2;
 fld_nms = 'io_names';
 fld_bps = 'io_bps';
 fld_wid = 'io_widths';
 fld_typ = 'io_types';
-[io_numios, io_current_names, io_current_widths, io_current_bins, io_current_types] = bitfield_maskcheck(blk, blktype, mode, fld_nms, fld_typ, fld_bps, fld_wid);
+[io_numios, io_current_names, io_current_widths, io_current_bins, io_current_types] = bitfield_maskcheck(blk, blktype, fld_nms, fld_typ, fld_bps, fld_wid);
 
 if strcmp(snap_value, 'on'),
     blktype = 3;
@@ -59,7 +58,7 @@ if strcmp(snap_value, 'on'),
     fld_bps = 'extra_bps';
     fld_wid = 'extra_widths';
     fld_typ = 'extra_types';
-    [extra_numios, extra_current_names, extra_current_widths, extra_current_bins, extra_current_types] = bitfield_maskcheck(blk, blktype, mode, fld_nms, fld_typ, fld_bps, fld_wid);
+    [extra_numios, extra_current_names, extra_current_widths, extra_current_bins, extra_current_types] = bitfield_maskcheck(blk, blktype, fld_nms, fld_typ, fld_bps, fld_wid);
 end
 
 munge_block(blk);

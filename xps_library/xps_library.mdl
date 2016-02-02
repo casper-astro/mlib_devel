@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1920.0, 0.0, 1920.0, 1080.0]
+      Location		      [0.0, 25.0, 1920.0, 1055.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1884.0, 917.0]
+	Extents			[1884.0, 892.0]
 	ZoomFactor		[1.0]
 	Offset			[-8.125, 0.0]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Feb 01 15:54:38 2016"
-  RTWModifiedTimeStamp	  376242859
-  ModelVersionFormat	  "1.%<AutoIncrement:524>"
+  LastModifiedDate	  "Tue Feb 02 15:44:13 2016"
+  RTWModifiedTimeStamp	  376328449
+  ModelVersionFormat	  "1.%<AutoIncrement:526>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,7 +802,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [1920, 0, 3840, 1080]
+    Location		    [0, 25, 1920, 1080]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -58393,7 +58393,7 @@ Library {
       Position		      [920, 427, 1020, 453]
       ZOrder		      5229
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
-      AttributesFormatString  "1output"
+      AttributesFormatString  "1output:uf32.0"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -58406,31 +58406,15 @@ Library {
 	$ObjectID		264
 	$ClassName		"Simulink.Mask"
 	Type			"swreg"
+	Description		"A 32-bit software-accessible register. Can be divided into bitfields of varying widths and types using "
+	"the fields in the block mask."
 	Initialization		"swreg_init(gcb)"
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
-	  Dimension		  10
+	  Dimension		  9
 	  Object {
 	    $ObjectID		    265
-	    Type		    "popup"
-	    Array {
-	      Type		      "Cell"
-	      Dimension		      3
-	      Cell		      "one value"
-	      Cell		      "fields of equal size"
-	      Cell		      "fields of arbitrary size"
-	      PropName		      "TypeOptions"
-	    }
-	    Name		    "mode"
-	    Prompt		    "Mode:"
-	    Value		    "one value"
-	    Evaluate		    "off"
-	    Callback		    "swreg_cb(gcb);"
-	    TabName		    "Setup"
-	  }
-	  Object {
-	    $ObjectID		    266
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -58449,7 +58433,7 @@ Library {
 	    TabName		    "Setup"
 	  }
 	  Object {
-	    $ObjectID		    267
+	    $ObjectID		    266
 	    Type		    "edit"
 	    Name		    "io_delay"
 	    Prompt		    "I/O delay"
@@ -58457,7 +58441,7 @@ Library {
 	    TabName		    "Setup"
 	  }
 	  Object {
-	    $ObjectID		    268
+	    $ObjectID		    267
 	    Type		    "edit"
 	    Name		    "sample_period"
 	    Prompt		    "Sample period"
@@ -58466,40 +58450,40 @@ Library {
 	    TabName		    "Setup"
 	  }
 	  Object {
-	    $ObjectID		    269
+	    $ObjectID		    268
 	    Type		    "edit"
 	    Name		    "names"
-	    Prompt		    "Name"
+	    Prompt		    "Bitfield names [msb...lsb]"
 	    Value		    "reg"
 	    Evaluate		    "off"
 	    TabName		    "Setup"
 	  }
 	  Object {
-	    $ObjectID		    270
+	    $ObjectID		    269
 	    Type		    "edit"
 	    Name		    "bitwidths"
-	    Prompt		    "Bitwidth"
+	    Prompt		    "Bitfield widths"
 	    Value		    "32"
+	    TabName		    "Setup"
+	  }
+	  Object {
+	    $ObjectID		    270
+	    Type		    "edit"
+	    Name		    "bin_pts"
+	    Prompt		    "Bitfield binary pts"
+	    Value		    "0"
 	    TabName		    "Setup"
 	  }
 	  Object {
 	    $ObjectID		    271
 	    Type		    "edit"
-	    Name		    "bin_pts"
-	    Prompt		    "Binary pt"
+	    Name		    "arith_types"
+	    Prompt		    "Bitfield types, ufix=0, fix=1, bool=2"
 	    Value		    "0"
 	    TabName		    "Setup"
 	  }
 	  Object {
 	    $ObjectID		    272
-	    Type		    "edit"
-	    Name		    "arith_types"
-	    Prompt		    "Data type, ufix=0, fix=1, bool=2"
-	    Value		    "0"
-	    TabName		    "Setup"
-	  }
-	  Object {
-	    $ObjectID		    273
 	    Type		    "checkbox"
 	    Name		    "sim_port"
 	    Prompt		    "Provide sim input/output?"
@@ -58508,11 +58492,11 @@ Library {
 	    TabName		    "Setup"
 	  }
 	  Object {
-	    $ObjectID		    274
+	    $ObjectID		    273
 	    Type		    "checkbox"
 	    Name		    "show_format"
 	    Prompt		    "Print format string?"
-	    Value		    "off"
+	    Value		    "on"
 	    Evaluate		    "off"
 	    TabName		    "Setup"
 	  }
@@ -58534,7 +58518,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6882"
+	SIDHighWatermark	"6942"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58546,10 +58530,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6881"
+	  SID			  "332:6941"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6826
+	  ZOrder		  6886
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58584,10 +58568,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6879"
+	  SID			  "332:6939"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6824
+	  ZOrder		  6884
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58622,10 +58606,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6878"
+	  SID			  "332:6938"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6823
+	  ZOrder		  6883
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58653,10 +58637,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6882"
+	  SID			  "332:6942"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6827
+	  ZOrder		  6887
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58684,10 +58668,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6880"
+	  SID			  "332:6940"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6825
+	  ZOrder		  6885
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
@@ -58780,7 +58764,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		275
+	$ObjectID		274
 	$ClassName		"Simulink.Mask"
 	Initialization		"register_mask;"
 	SelfModifiable		"on"
@@ -58788,7 +58772,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  6
 	  Object {
-	    $ObjectID		    276
+	    $ObjectID		    275
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -58802,7 +58786,7 @@ Library {
 	    Value		    "To Processor"
 	  }
 	  Object {
-	    $ObjectID		    277
+	    $ObjectID		    276
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -58816,7 +58800,7 @@ Library {
 	    Value		    "Unsigned"
 	  }
 	  Object {
-	    $ObjectID		    278
+	    $ObjectID		    277
 	    Type		    "edit"
 	    Name		    "bitwidth"
 	    Prompt		    "Data bitwidth"
@@ -58824,21 +58808,21 @@ Library {
 	    Enabled		    "off"
 	  }
 	  Object {
-	    $ObjectID		    279
+	    $ObjectID		    278
 	    Type		    "edit"
 	    Name		    "bin_pt"
 	    Prompt		    "Data binary point"
 	    Value		    "0"
 	  }
 	  Object {
-	    $ObjectID		    280
+	    $ObjectID		    279
 	    Type		    "edit"
 	    Name		    "sample_period"
 	    Prompt		    "Sample period"
 	    Value		    "1"
 	  }
 	  Object {
-	    $ObjectID		    281
+	    $ObjectID		    280
 	    Type		    "edit"
 	    Name		    "gw_name"
 	    Prompt		    "Mask Parameter 6:"
@@ -58988,7 +58972,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		282
+	$ObjectID		281
 	$ClassName		"Simulink.Mask"
 	Type			"ten_GbE"
 	Description		"This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-dete"
@@ -59001,7 +58985,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  11
 	  Object {
-	    $ObjectID		    283
+	    $ObjectID		    282
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -59018,7 +59002,7 @@ Library {
 	    Tunable		    "off"
 	  }
 	  Object {
-	    $ObjectID		    284
+	    $ObjectID		    283
 	    Type		    "checkbox"
 	    Name		    "mac_lite"
 	    Prompt		    "Use light-weight MAC: Warning --> it DOES NOT check any CRC on receive"
@@ -59026,14 +59010,14 @@ Library {
 	    Tunable		    "off"
 	  }
 	  Object {
-	    $ObjectID		    285
+	    $ObjectID		    284
 	    Type		    "checkbox"
 	    Name		    "open_phy"
 	    Prompt		    "Use KAT open XAUI PHY"
 	    Value		    "off"
 	  }
 	  Object {
-	    $ObjectID		    286
+	    $ObjectID		    285
 	    Type		    "checkbox"
 	    Name		    "show_param"
 	    Prompt		    "---------------------- Show Implementation Parameters ----------------------------------------------"
@@ -59046,7 +59030,7 @@ Library {
 	    "es', {'on','on','on','on','off','off','off','off','off','off','off'});\nend"
 	  }
 	  Object {
-	    $ObjectID		    287
+	    $ObjectID		    286
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -59064,7 +59048,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    288
+	    $ObjectID		    287
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -59083,7 +59067,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    289
+	    $ObjectID		    288
 	    Type		    "checkbox"
 	    Name		    "fab_en"
 	    Prompt		    "Enable fabric on startup"
@@ -59092,7 +59076,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    290
+	    $ObjectID		    289
 	    Type		    "edit"
 	    Name		    "fab_mac"
 	    Prompt		    "Fabric MAC Address"
@@ -59101,7 +59085,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    291
+	    $ObjectID		    290
 	    Type		    "edit"
 	    Name		    "fab_ip"
 	    Prompt		    "Fabric IP Address"
@@ -59110,7 +59094,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    292
+	    $ObjectID		    291
 	    Type		    "edit"
 	    Name		    "fab_udp"
 	    Prompt		    "Fabric UDP Port"
@@ -59119,7 +59103,7 @@ Library {
 	    Visible		    "off"
 	  }
 	  Object {
-	    $ObjectID		    293
+	    $ObjectID		    292
 	    Type		    "edit"
 	    Name		    "fab_gate"
 	    Prompt		    "Fabric Gateway"
@@ -60748,7 +60732,7 @@ Library {
       MaskHideContents	      off
       Object {
 	$PropName		"MaskObject"
-	$ObjectID		294
+	$ObjectID		293
 	$ClassName		"Simulink.Mask"
 	Type			"ten_GbE_v2"
 	Description		"This block sends and receives UDP frames (packets). It accepts a 64 bit wide data stream with user-dete"
@@ -60761,7 +60745,7 @@ Library {
 	  Type			  "Simulink.MaskParameter"
 	  Dimension		  39
 	  Object {
-	    $ObjectID		    295
+	    $ObjectID		    294
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60778,7 +60762,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    296
+	    $ObjectID		    295
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60793,7 +60777,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    297
+	    $ObjectID		    296
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60811,7 +60795,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    298
+	    $ObjectID		    297
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60828,7 +60812,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    299
+	    $ObjectID		    298
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60845,7 +60829,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    300
+	    $ObjectID		    299
 	    Type		    "checkbox"
 	    Name		    "rx_dist_ram"
 	    Prompt		    "Shallow RX Fifo (Beware overruns!)"
@@ -60853,7 +60837,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    301
+	    $ObjectID		    300
 	    Type		    "checkbox"
 	    Name		    "large_frames"
 	    Prompt		    "Enable Large TX Frames (8k+512)"
@@ -60861,7 +60845,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    302
+	    $ObjectID		    301
 	    Type		    "checkbox"
 	    Name		    "show_param"
 	    Prompt		    "---------------------- Show Implementation Parameters ----------------------------------------------"
@@ -60873,7 +60857,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    303
+	    $ObjectID		    302
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60904,7 +60888,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    304
+	    $ObjectID		    303
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60923,7 +60907,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    305
+	    $ObjectID		    304
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60963,7 +60947,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    306
+	    $ObjectID		    305
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -60986,7 +60970,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    307
+	    $ObjectID		    306
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61017,7 +61001,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    308
+	    $ObjectID		    307
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61037,7 +61021,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    309
+	    $ObjectID		    308
 	    Type		    "checkbox"
 	    Name		    "fab_en"
 	    Prompt		    "Enable fabric on startup"
@@ -61047,7 +61031,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    310
+	    $ObjectID		    309
 	    Type		    "edit"
 	    Name		    "fab_mac"
 	    Prompt		    "Fabric MAC Address"
@@ -61056,7 +61040,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    311
+	    $ObjectID		    310
 	    Type		    "edit"
 	    Name		    "fab_ip"
 	    Prompt		    "Fabric IP Address"
@@ -61065,7 +61049,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    312
+	    $ObjectID		    311
 	    Type		    "edit"
 	    Name		    "fab_udp"
 	    Prompt		    "Fabric UDP Port"
@@ -61074,7 +61058,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    313
+	    $ObjectID		    312
 	    Type		    "edit"
 	    Name		    "fab_gate"
 	    Prompt		    "Fabric Gateway"
@@ -61083,7 +61067,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    314
+	    $ObjectID		    313
 	    Type		    "checkbox"
 	    Name		    "cpu_rx_en"
 	    Prompt		    "Enable CPU RX"
@@ -61093,7 +61077,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    315
+	    $ObjectID		    314
 	    Type		    "checkbox"
 	    Name		    "cpu_tx_en"
 	    Prompt		    "Enable CPU TX"
@@ -61103,7 +61087,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    316
+	    $ObjectID		    315
 	    Type		    "edit"
 	    Name		    "ttl"
 	    Prompt		    "TTL"
@@ -61113,7 +61097,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    317
+	    $ObjectID		    316
 	    Type		    "checkbox"
 	    Name		    "promisc_mode"
 	    Prompt		    "Promiscuous mode"
@@ -61123,7 +61107,7 @@ Library {
 	    TabName		    "Core"
 	  }
 	  Object {
-	    $ObjectID		    318
+	    $ObjectID		    317
 	    Type		    "edit"
 	    Name		    "debug_ctr_width"
 	    Prompt		    "Debug counter width"
@@ -61131,7 +61115,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    319
+	    $ObjectID		    318
 	    Type		    "checkbox"
 	    Name		    "txctr"
 	    Prompt		    "TX - core_txctr"
@@ -61140,7 +61124,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    320
+	    $ObjectID		    319
 	    Type		    "checkbox"
 	    Name		    "txerrctr"
 	    Prompt		    "TX packet length error - core_txerrctr"
@@ -61153,7 +61137,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    321
+	    $ObjectID		    320
 	    Type		    "edit"
 	    Name		    "txerrctr_len"
 	    Prompt		    "    -- expected TX packet length"
@@ -61162,7 +61146,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    322
+	    $ObjectID		    321
 	    Type		    "checkbox"
 	    Name		    "txofctr"
 	    Prompt		    "TX overflow - core_txofctr"
@@ -61171,7 +61155,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    323
+	    $ObjectID		    322
 	    Type		    "checkbox"
 	    Name		    "txfullctr"
 	    Prompt		    "TX full - core_txfullctr"
@@ -61180,7 +61164,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    324
+	    $ObjectID		    323
 	    Type		    "checkbox"
 	    Name		    "txvldctr"
 	    Prompt		    "TX valid cycle - core_txvldctr"
@@ -61189,7 +61173,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    325
+	    $ObjectID		    324
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"
@@ -61210,7 +61194,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    326
+	    $ObjectID		    325
 	    Type		    "checkbox"
 	    Name		    "rxctr"
 	    Prompt		    "RX - core_rxctr"
@@ -61219,7 +61203,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    327
+	    $ObjectID		    326
 	    Type		    "checkbox"
 	    Name		    "rxerrctr"
 	    Prompt		    "RX packet length error - core_rxerrctr"
@@ -61232,7 +61216,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    328
+	    $ObjectID		    327
 	    Type		    "edit"
 	    Name		    "rxerrctr_len"
 	    Prompt		    "    -- expected RX packet length"
@@ -61241,7 +61225,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    329
+	    $ObjectID		    328
 	    Type		    "checkbox"
 	    Name		    "rxofctr"
 	    Prompt		    "RX overflow - core_rxofctr"
@@ -61250,7 +61234,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    330
+	    $ObjectID		    329
 	    Type		    "checkbox"
 	    Name		    "rxbadctr"
 	    Prompt		    "RX bad - core_rxbadctr"
@@ -61259,7 +61243,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    331
+	    $ObjectID		    330
 	    Type		    "checkbox"
 	    Name		    "rxvldctr"
 	    Prompt		    "RX valid cycle - core_rxvldctr"
@@ -61268,7 +61252,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    332
+	    $ObjectID		    331
 	    Type		    "checkbox"
 	    Name		    "rxeofctr"
 	    Prompt		    "RX eof - core_rxeofctr"
@@ -61277,7 +61261,7 @@ Library {
 	    TabName		    "Debug counters"
 	  }
 	  Object {
-	    $ObjectID		    333
+	    $ObjectID		    332
 	    Type		    "popup"
 	    Array {
 	      Type		      "Cell"

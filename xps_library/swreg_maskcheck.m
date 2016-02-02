@@ -7,6 +7,5 @@ function [numios, current_names, current_widths, current_bins, current_types] = 
     fld_bps = 'bin_pts';
     fld_wid = 'bitwidths';
     fld_typ = 'arith_types';
-    mode = get_param(blk, 'mode');
-    [numios, current_names, current_widths, current_bins, current_types] = bitfield_maskcheck(blk, blktype, mode, fld_nms, fld_typ, fld_bps, fld_wid);    
+    [numios, current_names, current_widths, current_bins, current_types] = bitfield_maskcheck(blk, blktype, fld_nms, fld_typ, fld_bps, fld_wid);    
 end
