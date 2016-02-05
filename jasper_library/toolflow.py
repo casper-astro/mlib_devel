@@ -11,6 +11,7 @@ import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
 from constraints import PortConstraint, ClockConstraint, RawConstraint
+import castro
 import helpers
 import yaml
 import glob
@@ -29,7 +30,7 @@ class Toolflow(object):
     vendor-specific platform and compiled. At least, that's the plan...
     '''
     
-    def __init__(self, frontend='simulink', backend='vivado', compile_dir='/tmp', frontend_target='/tmp/test.slx', jobs=8):
+    def __init__(self, frontend='simulink', compile_dir='/tmp', frontend_target='/tmp/test.slx', jobs=8):
         '''
         Initialize the toolflow.
          
@@ -47,7 +48,6 @@ class Toolflow(object):
 
         self.logger.info('Starting Toolflow!')
         self.logger.info('Frontend is %s'%frontend)
-        self.logger.info('Backend is %s'%backend)
 
         self.compile_dir = compile_dir.rstrip('/')
         self.output_dir = self.compile_dir + '/outputs'
@@ -61,8 +61,6 @@ class Toolflow(object):
         self.periph_file = self.compile_dir + '/jasper.per'
         self.frontend_target = frontend_target
         self.frontend_target_base = os.path.basename(frontend_target)
-        self.output = self.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof'%(self.start_time.tm_year, self.start_time.tm_mon, self.start_time.tm_mday,
-            self.start_time.tm_hour, self.start_time.tm_min)
 
         if frontend == 'simulink':
             self.frontend = SimulinkFrontend(compile_dir=self.compile_dir, target=frontend_target)
@@ -70,19 +68,19 @@ class Toolflow(object):
             self.logger.error("Unsupported toolflow frontent: %s"%frontend)
             raise Exception("Unsupported toolflow frontend: %s"%frontend)
 
-        if backend == 'vivado':
-            self.backend = VivadoBackend(compile_dir=self.compile_dir)
-        elif backend == 'ise':
-            self.backend = ISEBackend(compile_dir=self.compile_dir)
-        else:
-            self.logger.error("Unsupported toolflow backend: %s"%backend)
-            raise Exception("Unsupported toolflow backend: %s"%backend)
+        #if backend == 'vivado':
+        #    self.backend = VivadoBackend(compile_dir=self.compile_dir)
+        #elif backend == 'ise':
+        #    self.backend = ISEBackend(compile_dir=self.compile_dir)
+        #else:
+        #    self.logger.error("Unsupported toolflow backend: %s"%backend)
+        #    raise Exception("Unsupported toolflow backend: %s"%backend)
 
         self.sources= []
         self.tcl_sources= []
         self.const_files = []
 
-    def exec_flow(self, gen_per=True, frontend_compile=True, backend_compile=True):
+    def exec_flow(self, gen_per=True, frontend_compile=True):
         '''
         Execute a compile.
         
@@ -112,8 +110,10 @@ class Toolflow(object):
         self.generate_consts()
         # Generate software cores file
         self.write_core_info()
-        print 'Initializing backend project'
-        self.backend.initialize(self.plat)
+        #print 'Initializing backend project'
+        #self.backend.initialize(self.plat)
+        
+        self.constraints_rule_check()
         
         if frontend_compile:
             # Run system generator (maybe flow-wise
@@ -128,21 +128,13 @@ class Toolflow(object):
             print 'frontend complete'
         
         
-        # Backend compile
-        # Generate a vivado spec constraints file from the
-        # constraints extracted from yellow blocks
-        if backend_compile:
-            self.add_sources_to_be()
-            self.backend.gen_constraint_file(self.constraints)
-            self._add_external_tcl()
-            # launch vivado via the generated .tcl file
-            self.backend.compile(cores=self.jobs)
+        self.dump_castro(self.compile_dir+'/castro.yml')
 
-        binary = self.backend.binary_loc
-        os.system('cp %s %s/top.bin'%(binary, self.compile_dir))
-        mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), self.output_dir, self.output, self.compile_dir, self.compile_dir)
-        os.system(mkbof_cmd)
-        self.logger.info(mkbof_cmd)
+        #binary = self.backend.binary_loc
+        #os.system('cp %s %s/top.bin'%(binary, self.compile_dir))
+        #mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), self.output_dir, self.output, self.compile_dir, self.compile_dir)
+        #os.system(mkbof_cmd)
+        #self.logger.info(mkbof_cmd)
 
     def check_attr_exists(self, thing, generator):
         """
@@ -217,7 +209,7 @@ class Toolflow(object):
             if self.peripherals[key]['tag'] == 'xps:xsg':
                 #self.plat = platform.Platform.get_loader(self.peripherals[key]['hw_sys'])
                 self.plat = platform.Platform(self.peripherals[key]['hw_sys'].split(':')[0])
-                self.backend.set_plat(self.plat)
+                #self.backend.plat = self.plat
                 self.clk_src = self.peripherals[key]['clk_src']
                 self.clk_rate = float(self.peripherals[key]['clk_rate']) #in MHz
                 return
@@ -273,18 +265,15 @@ class Toolflow(object):
         Constructs an associated VerilogModule instance ready to be
         modified.
         """
-        basetopfile = os.getenv('HDL_ROOT') + '/%s/top.v'%self.plat.name
-        baseconstfile = os.getenv('HDL_ROOT') + '/%s/top.%s'%(self.plat.name,self.backend.const_file_ext)
-        if not os.path.isfile(basetopfile):
-            self.logger.error("Template top.v file %s doesn't exist!"%basetopfile)
-            raise Exception("Template top.v file %s doesn't exist!"%basetopfile)
         self.topfile = self.compile_dir+'/top.v'
-        os.system('cp %s %s'%(basetopfile,self.topfile))
+        #os.system('cp %s %s'%(basetopfile,self.topfile))
         self.sources.append(self.topfile)
         for source in self.plat.sources:
             self.sources.append(os.getenv('HDL_ROOT')+'/'+source)
-        self.const_files.append(baseconstfile)
-        self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
+        for source in self.plat.consts:
+            self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s'%(self.plat.name, source))
+        #self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
+        self.top = verilog.VerilogModule(name='top')
 
 
     def gen_periph_objs(self):
@@ -303,6 +292,7 @@ class Toolflow(object):
             self.logger.debug('Generating Yellow Block: %s'%pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(self.peripherals[pk], self.plat))
 
+        self.periph_objs.append(yellow_block.YellowBlock.make_block({'tag':'xps:'+self.plat.name}, self.plat))
         self._expand_children(self.periph_objs)
 
         self._drc()
@@ -397,30 +387,7 @@ class Toolflow(object):
         code for yellow block instances.
         '''
         self.top.wb_compute()
-        self.top.gen_module_file()
-
-    def add_sources_to_be(self):
-        '''
-        Add all sources in the current toolflow list
-        to the backend, after de-duplicating.
-        '''
-        existing_sources = []
-        for source in self.sources:
-            if source not in existing_sources:
-                existing_sources.append(source)
-                if not os.path.exists(source):
-                    self.logger.error("sourcefile %s doesn't exist!"%source)
-                    raise Exception("sourcefile %s doesn't exist!"%source)
-                self.backend.add_source(source)
-        existing_sources = []
-        for source in self.const_files:
-            if source not in existing_sources:
-                existing_sources.append(source)
-                if not os.path.exists(source):
-                    self.logger.error("sourcefile %s doesn't exist!"%source)
-                    raise Exception("sourcefile %s doesn't exist!"%source)
-                self.backend.add_const_file(source)
-            
+        print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
 
     def generate_consts(self):
         '''
@@ -447,9 +414,74 @@ class Toolflow(object):
         ## check for any funny business
         #used_pins = []
         #for constraint in self.constraints:
+
+    def constraints_rule_check(self):
+        """
+        Check pin constraints against top level signals.
+        Warn about missing constraints.
+        """
+        port_constraints = []
+        for const in self.constraints:
+            if isinstance(const, PortConstraint):
+                port_constraints += [const.portname]
+        for port in self.top.ports:
+            if port not in port_constraints:
+                self.logger.warning("Port %s has no constraints!"%port)
             
 
+    def dump_castro(self, filename):
+        """
+        Build a "standard" Castro object, which is the
+        interface between the toolflow and the backends.
+        """
+        import castro
+        platform = self.plat.name
+        
+        c = castro.Castro('top', self.sources)
 
+        # build castro standard pin constraints
+        pin_constraints = []
+        clk_constraints = []
+
+        for const in self.constraints:
+            if isinstance(const, PortConstraint):
+                pin_constraints += [castro.PinConstraint(
+                    portname = const.portname,
+                    symbolic_name = const.iogroup,
+                    portname_indices = const.port_index,
+                    symbolic_indices = const.iogroup_index,
+                    io_standard = const.iostd,
+                    location = const.loc
+                    )]
+            elif isinstance(const, ClockConstraint):
+                clk_constraints += [castro.ClkConstraint(
+                    portname = const.signal,
+                    freq_mhz = const.freq,
+                    period_ns = const.period
+                    )]
+
+        c.synthesis = castro.Synthesis()
+        c.synthesis.pin_constraints = pin_constraints
+        c.synthesis.clk_constraints = clk_constraints
+        c.synthesis.platform_name = self.plat.name
+        c.synthesis.fpga_manufacturer = self.plat.manufacturer
+        c.synthesis.fpga_model = self.plat.fpga
+        c.synthesis.pin_map = self.plat._pins
+
+        mm_slaves = []
+        for dev in self.top.wb_devices:
+            if dev.mode == 'rw':
+                mode = 3
+            elif dev.mode == 'r':
+                mode = 1
+            elif dev.mode == 'w':
+                mode = 2
+            mm_slaves += [castro.mm_slave(dev.regname, mode, dev.base_addr, dev.nbytes)]
+            
+        c.mm_slaves = mm_slaves
+        
+        with open(filename, 'w') as fh:
+            fh.write(yaml.dump(c))
         
 
 
@@ -488,17 +520,46 @@ class ToolflowFrontend(object):
         raise NotImplementedError()
 
 class ToolflowBackend(object):
-    def __init__(self,compile_dir='/tmp'):
+    def __init__(self, plat=None, compile_dir='/tmp'):
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
-    def set_plat(self,plat):
+        self.output_dir = compile_dir + '/outputs'
         self.plat = plat
-    def set_proj_root_dir(self,dir):
-        self.proj_root_dir = dir.rstrip('/')
-    def copy_base_package(self):
-        raise NotImplementedError()
+        if plat:
+            self.initialize(plat)
+
     def compile(self):
         raise NotImplementedError()
+
+    def import_from_castro(self, filename):
+        import castro
+        self.castro = castro.Castro.load(filename)
+        existing_sources = []
+        for source in self.castro.src_files:
+            if source not in existing_sources:
+                existing_sources.append(source)
+                if not os.path.exists(source):
+                    self.logger.error("sourcefile %s doesn't exist!"%source)
+                    raise Exception("sourcefile %s doesn't exist!"%source)
+                self.add_source(source)
+        existing_sources = []
+        for source in self.castro.synthesis.vendor_constraints_files:
+            if source not in existing_sources:
+                existing_sources.append(source)
+                if not os.path.exists(source):
+                    self.logger.error("sourcefile %s doesn't exist!"%source)
+                    raise Exception("sourcefile %s doesn't exist!"%source)
+                self.add_const_file(source)
+       
+        # elaborate pin constraints
+        for const in self.castro.synthesis.pin_constraints:
+            pins = self.plat.get_pins(const.symbolic_name, const.symbolic_indices)
+            const.location = [pins[i].loc for i in range(len(const.symbolic_indices))]
+            const.io_standard = [pins[i].iostd for i in range(len(const.symbolic_indices))]
+            const.is_vector = const.portname_indices != []
+
+        self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints)
+        
 
 class SimulinkFrontend(ToolflowFrontend):
     def __init__(self,compile_dir='/tmp',target='/tmp/test.slx'):
@@ -548,24 +609,24 @@ class SimulinkFrontend(ToolflowFrontend):
 
 
 class VivadoBackend(ToolflowBackend):
-    def __init__(self,compile_dir='/tmp'):
-        ToolflowBackend.__init__(self, compile_dir=compile_dir)
+    def __init__(self, plat=None, compile_dir='/tmp'):
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
         self.const_file_ext = 'xdc'
+        self.manufacturer = 'xilinx'
+        self.project_name = 'myproj'
+        self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin'%(self.compile_dir,self.project_name,self.project_name)
+        self.name = 'vivado'
+        ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
 
     def initialize(self,plat):
-        self.plat = plat
-        self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin'%(self.compile_dir,self.plat.name,self.plat.name)
-        self.name = 'vivado'
-        self.manufacturer = 'xilinx'
         self.tcl_cmd = ''
         if plat.manufacturer != self.manufacturer:
             self.logger.error('Trying to compile a %s FPGA using %s %s'
                   %(plat.manufacturer,self.manufacturer,self.name))
 
         self.add_tcl_cmd('puts "Starting tcl script"')
-        self.add_tcl_cmd('create_project -f %s %s/%s -part %s'%(plat.name, self.compile_dir, plat.name, plat.fpga))
+        self.add_tcl_cmd('create_project -f %s %s/%s -part %s'%(self.project_name, self.compile_dir, self.project_name, plat.fpga))
         #for source in plat.sources:
         #    self.add_source(os.getenv('HDL_ROOT')+'/'+source)
         #self.add_source(self.compile_dir+'/top.v')
@@ -621,7 +682,9 @@ class VivadoBackend(ToolflowBackend):
         # write tcl command to file
         tcl_file = self.compile_dir+'/gogogo.tcl'
         helpers.write_file(tcl_file,self.tcl_cmd)
-        os.system('vivado -jou %s/vivado.jou -log %s/vivado.log -mode batch -source %s'%(self.compile_dir,self.compile_dir,tcl_file))
+        rv = os.system('vivado -jou %s/vivado.jou -log %s/vivado.log -mode batch -source %s'%(self.compile_dir,self.compile_dir,tcl_file))
+        if rv:
+            raise Exception("Vivado failed!")
 
     def get_tcl_const(self,const):
         '''
@@ -630,27 +693,27 @@ class VivadoBackend(ToolflowBackend):
         to a vivado project.
         '''
         user_const = ''
-        if isinstance(const, PortConstraint):
-            self.logger.debug('New PortConstraint instance found: %s -> %s'%(const.portname, const.iogroup))
-            for i,p in enumerate(const.port_index):
+        if isinstance(const, castro.PinConstraint):
+            self.logger.debug('New PortConstraint instance found: %s -> %s'%(const.portname, const.symbolic_name))
+            for i,p in enumerate(const.symbolic_indices):
                 self.logger.debug('Getting loc for port index %d'%i)
-                if const.loc[i] is not None:
-                    self.logger.debug('LOC constraint found at %s'%const.loc[i])
-                    if const.is_vector:
-                        user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname, index=p)
+                if const.location[i] is not None:
+                    self.logger.debug('LOC constraint found at %s'%const.location[i])
+                    if const.portname_indices != []:
+                        user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname, index=p)
                     else:
-                        user_const += self.format_const('PACKAGE_PIN', const.loc[i], const.portname)
+                        user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname)
 
-            for i,p in enumerate(const.port_index):
+            for i,p in enumerate(const.symbolic_indices):
                 self.logger.debug('Getting iostd for port index %d'%i)
-                if const.iostd[i] is not None:
-                    self.logger.debug('IOSTD constraint found: %s'%const.iostd[i])
-                    if const.is_vector:
-                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=p)
+                if const.io_standard[i] is not None:
+                    self.logger.debug('IOSTD constraint found: %s'%const.io_standard[i])
+		    if const.portname_indices != []:
+                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname, index=p)
                     else:
-                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname)
+                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname)
 
-        if isinstance(const, ClockConstraint):
+        if isinstance(const, castro.ClkConstraint):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
 
@@ -661,7 +724,7 @@ class VivadoBackend(ToolflowBackend):
         return user_const
 
     def format_clock_const(self, c):
-        return 'create_clock -period %f -name %s [get_ports {%s}]\n'%(c.period, c.name, c.signal)
+        return 'create_clock -period %f -name %s [get_ports {%s}]\n'%(c.period_ns, c.portname+'_CLK', c.portname)
 
     def format_const(self, attribute, val, port, index=None):
         '''
