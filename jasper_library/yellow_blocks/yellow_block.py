@@ -105,11 +105,15 @@ class YellowBlock(object):
         self.platform_support = 'all' #override this in subclasses
         self.blk = blk
         self.platform = platform
+        self.name = self.blk['tag'] + '%d'%self.inst_id #this can get overwritten by copy_attrs
         self.copy_attrs()
         try:
             self.fullname = self.fullpath.replace('/','_')
-            self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
+	    self.unique_name = self.fullpath.split('/',1)[1].replace('/','_')
         except AttributeError:
+            self.fullpath = self.tag + '%d'%self.inst_id
+            self.fullname = self.tag + '%d'%self.inst_id
+            self.unique_name = self.tag + '%d'%self.inst_id
             self.logger.warning("%r doesn't have an attribute 'fullpath'"%self)
         self.initialize()
         self.check_support()
