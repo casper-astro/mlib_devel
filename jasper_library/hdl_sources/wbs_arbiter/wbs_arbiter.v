@@ -8,7 +8,7 @@ module wbs_arbiter(
     /*wbs signals*/
     wbs_cyc_o, wbs_stb_o, wbs_we_o, wbs_sel_o,
     wbs_adr_o, wbs_dat_o, wbs_dat_i,
-    wbs_ack_i
+    wbs_ack_i, wbs_err_i
   );
   parameter NUM_SLAVES = 14;
   parameter SLAVE_ADDR = 0;
@@ -35,6 +35,7 @@ module wbs_arbiter(
   output [31:0] wbs_dat_o;
   input  [NUM_SLAVES*32 - 1:0] wbs_dat_i;
   input  [NUM_SLAVES - 1:0] wbs_ack_i;
+  input  [NUM_SLAVES - 1:0] wbs_err_i;
 
   /************************* Function Defines **************************/
   function [NUM_SLAVES-1:0] encode;
