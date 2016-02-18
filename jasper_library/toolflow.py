@@ -272,8 +272,10 @@ class Toolflow(object):
             self.sources.append(os.getenv('HDL_ROOT')+'/'+source)
         for source in self.plat.consts:
             self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s'%(self.plat.name, source))
-        #self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
-        self.top = verilog.VerilogModule(name='top')
+        if os.path.exists(self.topfile):
+            self.top = verilog.VerilogModule(name='top',topfile=self.topfile)
+        else:
+            self.top = verilog.VerilogModule(name='top')
 
 
     def gen_periph_objs(self):
