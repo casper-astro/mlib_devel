@@ -41,4 +41,4 @@ update_model = 0;
 start_sysgen_compile(modelpath, builddir, update_model);
 
 disp('Complete');
-disp(sprintf('Run ''exec_flow.py -m %s --skipyb --skipfe'' to finish flow', modelpath));
+disp(sprintf('Run ''exec_flow.py -m %s --middleware --backend --software'' to finish flow', modelpath));
