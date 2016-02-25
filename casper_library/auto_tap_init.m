@@ -10,15 +10,15 @@ function auto_tap_init(blk, varargin)
 % use_ded_mult = Use dedicated cores for multiplying (otherwise, use
 % slices).
 
-defaults={
-    'n_ants'            '4' ,...
-    'n_bits'            '4' ,...
-    'acc_len'           '32',...
-    'add_latency'       '1' ,...
-    'mult_latency'      '2' ,...
-    'bram_latency'      '2' ,...
-    'mult_type'         '1' ,...
-    'use_bram_delay'    '1' ,...
+defaults = {
+    'n_ants'            '4' , ...
+    'n_bits'            '4' , ...
+    'acc_len'           '32', ...
+    'add_latency'       '1' , ...
+    'mult_latency'      '2' , ...
+    'bram_latency'      '2' , ...
+    'mult_type'         '1' , ...
+    'use_bram_delay'    '1' , ...
 };
 
 if same_state(blk, varargin{:}), return, end
@@ -36,12 +36,11 @@ n_ants= eval(get_var('n_ants', 'defaults', defaults, varargin{:}));
 %fprintf('%s',mult_latency)
 %fprintf('%i',mult_latency)
 %return
+
 fix_pnt_pos = (n_bits-1)*2;
 bit_growth = ceil(log2(acc_len));
 ant_bits = ceil(log2(n_ants));
 n_bits_out = (2*n_bits + 1 + bit_growth);
-
-
 
 reuse_block(blk,'dual_pol_cmac','casper_library_correlator/dual_pol_cmac',...
             'mult_latency',num2str(mult_latency),...            
@@ -55,20 +54,22 @@ if mult_type==2,
     set_param([blk,'/dual_pol_cmac'],'multiplier_implementation','standard core');
 elseif mult_type==1,
     set_param([blk,'/dual_pol_cmac'],'multiplier_implementation','embedded multiplier core');
-else,
+else
     set_param([blk,'/dual_pol_cmac'],'multiplier_implementation','behavioral HDL');
 end
 
+delay_value = (acc_len-1) * ceil(n_ants/2) + ceil(n_ants/2) - floor(n_ants/2);
 if use_bram_delay,
-    replace_block(blk,'Name','delay','casper_library_delays/delay_bram','noprompt');
-    set_param([blk,'/delay'],'LinkStatus','inactive');    
-    set_param([blk,'/delay'],'bram_latency',num2str(bram_latency));
-else,
-    replace_block(blk,'Name','delay','casper_library_delays/delay_slr','noprompt');
-    set_param([blk,'/delay'],'LinkStatus','inactive');     
+    replace_block(blk, 'Name', 'delay', 'casper_library_delays/delay_bram', 'noprompt');
+else
+    replace_block(blk, 'Name', 'delay', 'casper_library_delays/delay_slr', 'noprompt');
 end
-set_param([blk,'/delay'],'DelayLen',num2str((acc_len - 1)*ceil(n_ants/2) + ceil(n_ants/2)-floor(n_ants/2)));   
-set_param([blk,'/sync_delay'],'DelayLen',num2str(add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1));   
+set_param([blk, '/delay'], 'LinkStatus', 'inactive');
+set_param([blk, '/delay'], 'DelayLen', num2str(delay_value));
+if use_bram_delay,
+    set_param([blk, '/delay'], 'bram_latency', num2str(bram_latency));
+end
+set_param([blk, '/sync_delay'], 'DelayLen', num2str(add_latency + mult_latency + acc_len + floor(n_ants/2 + 1) + 1));
 
 %set_param([blk,'/Counter'],'cnt_type','Count Limited');    
 %set_param([blk,'/Counter'],'cnt_to',num2str(acc_len-1));    
