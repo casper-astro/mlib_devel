@@ -138,7 +138,7 @@ misc_ports.fabric_clk_180 = {1 'out'  'adc0_clk180'};
 misc_ports.fabric_clk_270 = {1 'out'  'adc0_clk270'};
 
 misc_ports.reset            = {1 'in'  'adc16_reset'};
-misc_ports.iserdes_bitslip  = {8 'in'  'adc16_iserdes_bitslip'};
+misc_ports.iserdes_bitslip  = {64 'in'  'adc16_iserdes_bitslip'};
 misc_ports.demux_mode       = {2 'in'  'adc16_demux_mode'};
 
 misc_ports.delay_rst   = {32 'in'  'adc16_delay_rst'};

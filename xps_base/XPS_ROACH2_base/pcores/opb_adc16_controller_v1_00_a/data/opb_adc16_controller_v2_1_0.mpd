@@ -59,7 +59,7 @@ PORT adc1_adc3wire_csn3   = "", DIR = O
 PORT adc1_adc3wire_csn4   = "", DIR = O
 
 PORT adc16_reset   = "", DIR = O
-PORT adc16_iserdes_bitslip   = "", DIR = O, VEC = [7:0]
+PORT adc16_iserdes_bitslip   = "", DIR = O, VEC = [63:0]
 PORT adc16_demux_mode   = "", DIR = O, VEC = [1:0]
 
 PORT adc16_delay_rst   = "", DIR = O, VEC = [63:0]

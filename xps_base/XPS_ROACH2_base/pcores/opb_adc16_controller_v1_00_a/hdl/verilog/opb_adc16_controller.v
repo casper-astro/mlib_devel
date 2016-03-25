@@ -34,7 +34,7 @@ module opb_adc16_controller(
     output        adc1_adc3wire_sclk,
 
     output        adc16_reset,
-    output        [0:7] adc16_iserdes_bitslip,
+    output        [0:63] adc16_iserdes_bitslip,
 
     output        [0:63] adc16_delay_rst,
     output        [0:4] adc16_delay_tap,
@@ -51,11 +51,15 @@ module opb_adc16_controller(
   parameter C_OPB_DWIDTH  = 32;
   parameter C_FAMILY      = "";
 
+  localparam CONTROLLER_REV = 2'b01;
+
   /********* Global Signals *************/
 
   wire [0:31] adc16_adc3wire_wire;
   wire [0:31] adc16_ctrl_wire;
   wire [0:63] adc16_delay_strobe_wire;
+  wire [0:7] adc16_iserdes_bitslip_chip_sel;
+  wire [0:3] adc16_iserdes_bitslip_lane_sel;
 
   /************ OPB Logic ***************/
 
@@ -76,6 +80,7 @@ module opb_adc16_controller(
   /* ZZ = ZDOK Pinout Revision               */
   /* LL = Clock locked bits                  */
   /* NNNN = Number of ADC chips supported    */
+  /* VV = Controller Version                 */
   /* RR = ROACH2 revision expected/required  */
   /* C = SCLK                                */
   /* D = SDATA                               */
@@ -94,7 +99,7 @@ module opb_adc16_controller(
   /* --ZZ ---- ---- ---- ---- ---- ---- ---- */
   /* ---- --LL ---- ---- ---- ---- ---- ---- */
   /* ---- ---- NNNN ---- ---- ---- ---- ---- */
-  /* ---- ---- ---- --RR ---- ---- ---- ---- */
+  /* ---- ---- ---- VVRR ---- ---- ---- ---- */
   /* ---- ---- ---- ---- ---- --C- ---- ---- */
   /* ---- ---- ---- ---- ---- ---D ---- ---- */
   /* ---- ---- ---- ---- ---- ---- 7654 3210 */
@@ -134,7 +139,7 @@ module opb_adc16_controller(
   /* ======================================= */
   /* ADC0 Control Register (word 1)          */
   /* ======================================= */
-  /* W  = Deux write-enable                  */
+  /* W  = Demux write-enable                 */
   /* MM = Demux mode                         */ 
   /* R  = Reset                              */
   /* S  = Snap Request                       */
@@ -146,6 +151,7 @@ module opb_adc16_controller(
   /* C  = ISERDES Bit Slip Chip C            */
   /* B  = ISERDES Bit Slip Chip B            */
   /* A  = ISERDES Bit Slip Chip A            */
+  /* XXX = ISERDES Bit Slip Lane Select      */
   /* T  = Delay Tap                          */
   /* ======================================= */
   /* |<-- MSb                       LSb -->| */
@@ -155,7 +161,7 @@ module opb_adc16_controller(
   /* ---- ---- ---R ---- ---- ---- ---- ---- */
   /* ---- ---- ---- ---S ---- ---- ---- ---- */
   /* ---- ---- ---- ---- HGFE DCBA ---- ---- */
-  /* ---- ---- ---- ---- ---- ---- ---T TTTT */
+  /* ---- ---- ---- ---- ---- ---- XXXT TTTT */
   /* ======================================= */
   /* NOTE: W enables writing the MM bits.    */
   /*       Some of the other bits in this    */
@@ -178,8 +184,9 @@ module opb_adc16_controller(
   assign adc16_demux_mode      = adc16_ctrl_wire[ 6: 7];
   assign adc16_reset           = adc16_ctrl_wire[11   ];
   assign adc16_snap_req        = adc16_ctrl_wire[15   ];
-  assign adc16_iserdes_bitslip = adc16_ctrl_wire[16:23];
   assign adc16_delay_tap       = adc16_ctrl_wire[27:31];
+  assign adc16_iserdes_bitslip_chip_sel = adc16_ctrl_wire[16:23];
+  assign adc16_iserdes_bitslip_lane_sel = adc16_ctrl_wire[24:26];
 
   /* ADC0 Delay Strobe Register */
   reg [0:63] adc16_delay_strobe_reg;
@@ -304,7 +311,7 @@ module opb_adc16_controller(
                    opb_data_out[27:26] <= 2'b00;
                    opb_data_out[25:24] <= adc16_locked;
                    opb_data_out[23:20] <= adc16_num_units;
-                   opb_data_out[19:18] <= 2'b00;
+                   opb_data_out[19:18] <= CONTROLLER_REV;
                    opb_data_out[17:16] <= adc16_roach2_rev;
                    opb_data_out[15:0 ] <= adc16_adc3wire_reg[16:31];
                end
@@ -333,5 +340,15 @@ module opb_adc16_controller(
   assign Sl_retry    = 1'b0;
   assign Sl_toutSup  = 1'b0;
   assign Sl_xferAck  = opb_ack;
+
+  /* Bitslip Decode */
+  opb_adc16_onehot_encoder #(
+      .N_CHIPS(8)
+  ) onehot_encoder_inst (
+      .clk(OPB_Clk),
+      .chip_sel(adc16_iserdes_bitslip_chip_sel),
+      .lane_sel(adc16_iserdes_bitslip_lane_sel),
+      .onehot(adc16_iserdes_bitslip)
+  );
 
 endmodule

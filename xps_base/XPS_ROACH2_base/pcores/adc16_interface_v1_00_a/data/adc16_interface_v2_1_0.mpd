@@ -75,7 +75,7 @@ PORT h4 = "", VEC = [7:0], DIR = O
 PORT reset = "", DIR = I
 
 # Control
-PORT iserdes_bitslip = "", VEC = [7:0], DIR = I
+PORT iserdes_bitslip = "", VEC = [63:0], DIR = I
 PORT demux_mode = "", VEC = [1:0], DIR = I
 PORT delay_rst = "", VEC = [63:0], DIR = I
 PORT delay_tap = "", VEC = [4:0], DIR = I

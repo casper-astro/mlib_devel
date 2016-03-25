@@ -21,7 +21,7 @@ entity  adc_unit  is
                ser_b_n       :  in  std_logic_vector(3 downto 0);
 
                -- ISERDES Controller
-               iserdes_bitslip  :  in  std_logic;
+               iserdes_bitslip  :  in  std_logic_vector(7 downto 0);
                p_data           :  out std_logic_vector(31 downto 0);
                absel            :  in std_logic;
                demux_mode       :  in  std_logic_vector(1 downto 0);
@@ -163,7 +163,7 @@ architecture adc_unit_arc of adc_unit is
      adc_iserdes_a_inst : ADC_ISERDES
      PORT MAP (
                reset      => reset,
-               bitslip    => iserdes_bitslip,
+               bitslip    => iserdes_bitslip(2*i),
                clkin      => line_clk,
                clkdiv     => frame_clk,
                s_data     => delay_a_out(i),
@@ -173,7 +173,7 @@ architecture adc_unit_arc of adc_unit is
      adc_iserdes_b_inst : ADC_ISERDES
      PORT MAP (
                reset      => reset,
-               bitslip    => iserdes_bitslip,
+               bitslip    => iserdes_bitslip(2*i+1),
                clkin      => line_clk,
                clkdiv     => frame_clk,
                s_data     => delay_b_out(i),
