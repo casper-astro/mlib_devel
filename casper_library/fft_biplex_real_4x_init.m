@@ -138,7 +138,10 @@ clear temp;
 
 % Derive useful values.
 
-if (2^(FFTSize-1) * 2*input_bit_width * n_inputs >= 2^delays_bit_limit) && (2^(FFTSize-1) >= bram_latency),
+% The delay to be implemented (2^(FFTSize-1)) must be at least 2 greater than
+% the bram latency to be implemented with a bram delay. Otherwise the
+% counter on the bram delay block ends up with a width of zero bits
+if (2^(FFTSize-1) * 2*input_bit_width * n_inputs >= 2^delays_bit_limit) && (2^(FFTSize-1) >= (bram_latency+2)),
     bram_delays = 'on';
 else
     bram_delays = 'off';

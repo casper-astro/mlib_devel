@@ -174,7 +174,7 @@ architecture Structural of adc_mkid_interface is
             BANDWIDTH          : string  := "OPTIMIZED"; -- Jitter programming ("HIGH","LOW","OPTIMIZED")
             CLKFBOUT_MULT_F    : integer := 8;           -- Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
             CLKFBOUT_PHASE     : real    := 0.0;
-            CLKIN1_PERIOD      : real    := 5.0;
+            CLKIN1_PERIOD      : real    := 4.0;
             CLKOUT0_DIVIDE_F   : integer := 4;           -- Divide amount for CLKOUT0 (1.000-128.000).
             CLKOUT0_DUTY_CYCLE : real    := 0.5; 
             CLKOUT1_DUTY_CYCLE : real    := 0.5;
@@ -198,7 +198,7 @@ architecture Structural of adc_mkid_interface is
             CLKOUT6_DIVIDE     : integer := 1;
             CLKOUT4_CASCADE    : string  := "FALSE";
             CLOCK_HOLD         : string  := "FALSE";
-            DIVCLK_DIVIDE      : integer := 1;            -- Master division value (1-80)
+            DIVCLK_DIVIDE      : integer := 2;            -- Master division value (1-80)
             REF_JITTER1        : real    := 0.0;
             STARTUP_WAIT       : string  := "FALSE"
         );
@@ -259,7 +259,7 @@ begin
       port map (
         Q1 => data_rise_i(j),
         Q2 => data_fall_i(j),
-        C => clk,
+        C => clk90,
         CE => '1',
         D => data_i(j),
         R => '0',
@@ -287,7 +287,7 @@ begin
       port map (
         Q1 => data_rise_q(j),
         Q2 => data_fall_q(j),
-        C => clk,
+        C => clk90,
         CE => '1',
         D => data_q(j),
         R => '0',
@@ -440,10 +440,10 @@ begin
 		MMCM_adc : MMCM_BASE
     		generic map(
         		BANDWIDTH          => "OPTIMIZED", -- Jitter programming ("HIGH","LOW","OPTIMIZED")
-        		CLKFBOUT_MULT_F    => 5,           -- Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
+        		CLKFBOUT_MULT_F    => 8,           -- Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
         		CLKFBOUT_PHASE     => 0.0,
-        		CLKIN1_PERIOD      => 1.9536,
-        		CLKOUT0_DIVIDE_F   => 5,           -- Divide amount for CLKOUT0 (1.000-128.000).
+        		CLKIN1_PERIOD      => 4.0,
+        		CLKOUT0_DIVIDE_F   => 4,           -- Divide amount for CLKOUT0 (1.000-128.000).
         		CLKOUT0_DUTY_CYCLE => 0.5,
         		CLKOUT1_DUTY_CYCLE => 0.5,
         		CLKOUT2_DUTY_CYCLE => 0.5,
@@ -458,15 +458,15 @@ begin
         		CLKOUT4_PHASE      => 0.0,
         		CLKOUT5_PHASE      => 0.0,
         		CLKOUT6_PHASE      => 0.0,
-        		CLKOUT1_DIVIDE     => 5,            -- THIS IS THE DIVISOR
-        		CLKOUT2_DIVIDE     => 5,
-        		CLKOUT3_DIVIDE     => 5,
+        		CLKOUT1_DIVIDE     => 4,            -- THIS IS THE DIVISOR
+        		CLKOUT2_DIVIDE     => 4,
+        		CLKOUT3_DIVIDE     => 4,
         		CLKOUT4_DIVIDE     => 1,
         		CLKOUT5_DIVIDE     => 1,
         		CLKOUT6_DIVIDE     => 1,
         		CLKOUT4_CASCADE    => "FALSE",
         		CLOCK_HOLD         => "FALSE",
-        		DIVCLK_DIVIDE      => 1,            -- Master division value (1-80)
+        		DIVCLK_DIVIDE      => 2,            -- Master division value (1-80)
         		REF_JITTER1        => 0.0,
         		STARTUP_WAIT       => "FALSE")
     		port map(
