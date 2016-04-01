@@ -12,7 +12,7 @@ defaults = {'n_ants',8,...
             'add_latency', 1,...
             'mult_latency', 1,...   
             'bram_latency', 2,...   
-            'acc_len',128};
+            'acc_len', 128};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 check_mask_type(blk, 'xeng');
 munge_block(blk, varargin{:});
@@ -136,11 +136,9 @@ reuse_block(blk, 'Constant1', 'xbsIndex_r4/Constant', 'Position', [15,124,85,156
             'period','1',...
             'n_bits','1');
         
-            
 reuse_block(blk, 'window_delay', 'casper_library_delays/window_delay',...
             'Position', [135, 200, x-135+95, 230], ...
             'delay',num2str(xeng_delay));
-        
 
 % Add ending terminators
 reuse_block(blk, 'Term1', 'built-in/Terminator', 'Position', [x, 25, x + 20, 45]);
@@ -148,9 +146,9 @@ reuse_block(blk, 'Term2', 'built-in/Terminator', 'Position', [x, 65, x + 20, 85]
 reuse_block(blk, 'Term3', 'built-in/Terminator', 'Position', [x, 130, x + 20, 150]);
      
 % Set output port positions
-reuse_block(blk, 'acc', 'built-in/outport','Position', [x + 400, 100, x + 430, 114]);
-reuse_block(blk, 'valid', 'built-in/outport','Position', [x + 400, 130, x + 430, 144]);
 reuse_block(blk, 'sync_out', 'built-in/outport','Position', [x + 400, 160, x + 430, 174]);
+reuse_block(blk, 'valid', 'built-in/outport','Position', [x + 400, 130, x + 430, 144]);
+reuse_block(blk, 'acc', 'built-in/outport','Position', [x + 400, 100, x + 430, 114]);
 reuse_block(blk, 'mcnt_out', 'built-in/outport','Position', [x + 400, 190, x + 430, 204]);
 
 % Set input port positions
@@ -158,7 +156,6 @@ reuse_block(blk, 'sync_in', 'built-in/inport','Position', [55,178,85,192]);
 reuse_block(blk, 'ant', 'built-in/inport','Position', [55,53,85,67]);
 reuse_block(blk, 'window_valid', 'built-in/inport','Position', [55,223,85,237]);
 reuse_block(blk, 'mcnt_in', 'built-in/inport','Position', [55,293,85,307]);
-
 
 last_baseline_tap = ['baseline_tap', num2str(floor(n_ants/2))];
 

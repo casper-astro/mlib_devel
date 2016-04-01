@@ -48,21 +48,21 @@ function fft_biplex_init(blk, varargin)
 clog('entering fft_biplex_init','trace');
 
 % If we are in a library, do nothing
-if is_library_block(blk)
+if is_library_block(blk),
   clog('exiting fft_biplex_init (library block)','trace');
   return
 end
 
 % If FFTSize is passed as 0, do nothing
-if get_var('FFTSize', varargin{:}) == 0
+if get_var('FFTSize', varargin{:}) == 0,
   clog('exiting fft_biplex_init (FFTSize==0)','trace');
-  return
+  error('FFTSize cannot be zero');
 end
 
 % If n_inputs is passed as 0, do nothing
-if get_var('n_inputs', varargin{:}) == 0
+if get_var('n_inputs', varargin{:}) == 0,
   clog('exiting fft_biplex_init (n_inputs==0)','trace');
-  return
+  error('n_inputs cannot be zero');
 end
 
 % Make sure block is not too old for current init script
@@ -121,7 +121,7 @@ clog('fft_biplex_init post same_state', {'trace', 'fft_biplex_init_debug'});
 check_mask_type(blk, 'fft_biplex');
 munge_block(blk, varargin{:});
 
-% Retrieve values from mask fields.
+% retrieve values from mask fields.
 n_streams         = get_var('n_streams', 'defaults', defaults, varargin{:});
 n_inputs          = get_var('n_inputs', 'defaults', defaults, varargin{:});
 FFTSize           = get_var('FFTSize', 'defaults', defaults, varargin{:});
@@ -158,53 +158,56 @@ ytick = 60;
 delete_lines(blk);
 
 % check the per-stage multiplier specification
-[temp, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
-clear temp;
+[~, mult_spec] = multiplier_specification(mult_spec, FFTSize, blk);
+clear ~;
 
 %
 % prepare bus creators
 %
+busnum = n_inputs*n_streams;
 
 reuse_block(blk, 'even_bussify', 'casper_library_flow_control/bus_create', ...
-  'inputNum', num2str(n_inputs*n_streams), 'Position', [150 74 210 116+(((n_streams*n_inputs)-1)*ytick)]); 
+  'inputNum', num2str(busnum), 'Position', [150 74 210 116+(((busnum)-1)*ytick)]); 
 
 reuse_block(blk, 'odd_bussify', 'casper_library_flow_control/bus_create', ...
-  'inputNum', num2str(n_inputs*n_streams), 'Position', [150 74+((n_streams*n_inputs)*ytick) 210 116+((((n_streams*n_inputs)*2)-1)*ytick)]); 
+  'inputNum', num2str(busnum), 'Position', [150 74+((busnum)*ytick) 210 116+((((busnum)*2)-1)*ytick)]); 
 
 %
 % prepare bus splitters
 %
 
-if strcmp(bitgrowth,'on'), n_bits_out = min(input_bit_width+FFTSize, max_bits);
-else n_bits_out = input_bit_width;
+if strcmp(bitgrowth, 'on'),
+    n_bits_out = min(input_bit_width+FFTSize, max_bits);
+else
+    n_bits_out = input_bit_width;
 end
 
 for index = 0:1,
-  reuse_block(blk, ['pol',num2str(index),'_debus'], 'casper_library_flow_control/bus_expand', ...
-    'mode', 'divisions of equal size', 'outputNum', num2str(n_inputs*n_streams), ...
+  reuse_block(blk, ['pol', num2str(index), '_debus'], 'casper_library_flow_control/bus_expand', ...
+    'mode', 'divisions of equal size', 'outputNum', num2str(busnum), ...
     'outputWidth', num2str(n_bits_out*2), 'outputBinaryPt', '0', 'outputArithmeticType', '0', ...
-    'Position', [490 49+((n_streams*n_inputs)*index)*ytick 580 81+(((n_streams*n_inputs)*(index+1))-1)*ytick]);
+    'Position', [490 49+((busnum)*index)*ytick 580 81+(((busnum)*(index+1))-1)*ytick]);
 end %for
 
-%input ports
+% input ports
 reuse_block(blk, 'sync', 'built-in/inport', 'Position', [15 13 45 27], 'Port', '1');
 reuse_block(blk, 'shift', 'built-in/inport', 'Position', [15 43 45 57], 'Port', '2');
 reuse_block(blk, 'sync_out', 'built-in/outport', 'Position', [635 25 665 39], 'Port', '1');
-reuse_block(blk, 'of', 'built-in/outport', 'Position', [400 150 430 164], 'Port', num2str(1+((n_streams*n_inputs)*2)+1));
+reuse_block(blk, 'of', 'built-in/outport', 'Position', [400 150 430 164], 'Port', num2str(1+((busnum)*2)+1));
 
 if strcmp(async, 'on'),
   reuse_block(blk, 'en', 'built-in/inport', ...
-    'Position', [180 73+(((n_streams*n_inputs*2)+1)*ytick) 210 87+(((n_streams*n_inputs*2)+1)*ytick)], 'Port', num2str(2+(n_streams*n_inputs*2)+1));
+    'Position', [180 73+(((busnum*2)+1)*ytick) 210 87+(((busnum*2)+1)*ytick)], 'Port', num2str(2+(busnum*2)+1));
   reuse_block(blk, 'dvalid', 'built-in/outport', ...
-    'Position', [490 73+(((n_streams*n_inputs*2)+1)*ytick) 520 87+(((n_streams*n_inputs*2)+1)*ytick)], 'Port', num2str(1+(n_streams*n_inputs*2)+1+1));
+    'Position', [490 73+(((busnum*2)+1)*ytick) 520 87+(((busnum*2)+1)*ytick)], 'Port', num2str(1+(busnum*2)+1+1));
 end
 
-%data inputs, outputs, connections to bus creation and expansion blocks
+% data inputs, outputs, connections to bus creation and expansion blocks
 mult = 2;
 for s = 0:n_streams-1,
   base = s*(n_inputs*mult);
   for n = 0:(n_inputs*mult)-1,
-    in = ['pol',num2str(s),num2str(n),'_in'];
+    in = ['pol', num2str(s), num2str(n), '_in'];
     reuse_block(blk, in, 'built-in/inport', ...
       'Position', [15 73+((base+n)*ytick) 45 87+((base+n)*ytick)], ...
       'Port', num2str(3+base+n));
@@ -214,13 +217,15 @@ for s = 0:n_streams-1,
       'Position', [635 53+((base+n)*ytick) 665 67+((base+n)*ytick)], ...
       'Port', num2str(2+base+n));
 
-    %connect inputs to bus creators
-    if mod(n,mult) == 0, bussify_target = 'even';
-    else bussify_target = 'odd';
+    % connect inputs to bus creators
+    if mod(n,mult) == 0,
+        bussify_target = 'even';
+    else
+        bussify_target = 'odd';
     end
     add_line(blk, [in,'/1'], [bussify_target, '_bussify/', num2str(floor((base+n)/mult)+1)]);
 
-    %connect debus outputs to output
+    % connect debus outputs to output
     add_line(blk, ['pol', num2str(mod((base+n),mult)), '_debus/', num2str(floor((base+n)/mult)+1)], [out,'/1']); 
   end %for n
 end %for s

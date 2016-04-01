@@ -83,7 +83,7 @@ catch
 		else
 			error('Unsupported block type');
 		end
-	end
+    end
 
 	result = eval(param_str);
 
