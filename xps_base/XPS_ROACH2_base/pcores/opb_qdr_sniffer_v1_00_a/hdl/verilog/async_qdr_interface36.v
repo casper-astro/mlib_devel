@@ -76,7 +76,7 @@ module async_qdr_interface36 #(
   reg qdr_inputs_valid;
   /* Insert parity bits to pad to 36 bits */
   //wire [35:0] host_data_parity_ext = {1'b0, host_datai_reg[31:24], 1'b0, host_datai_reg[23:16], 1'b0, host_datai_reg[15:8], 1'b0, host_datai_reg[7:0]};
-  wire [35:0] host_data_parity_ext = {4'b0000, host_datai_reg[31:0]};
+//  wire [35:0] host_data_parity_ext = {4'b0000, host_datai_reg[31:0]};
   always @(posedge qdr_clk) begin
     //if (qdr_rst) begin
     //  write_buffer <= 144'b0;
@@ -84,16 +84,20 @@ module async_qdr_interface36 #(
       if (!host_rnw_reg) begin //only update the output registers on a write operation
         case (host_addr_reg[3:2])
           2'd0: begin
-          write_buffer[ 35:0  ] <= host_data_parity_ext;
+          write_buffer[ 71:32 ] <= {4'b0,host_datai_reg};		
+//          write_buffer[ 35:0  ] <= host_data_parity_ext;
           end
           2'd1: begin
-            write_buffer[ 71:36 ] <= host_data_parity_ext;
+            write_buffer[ 31:0  ] <= host_datai_reg;
+//            write_buffer[ 71:36 ] <= host_data_parity_ext;
           end
           2'd2: begin
-            write_buffer[107:72 ] <= host_data_parity_ext;
+            write_buffer[143:104 ] <= {4'b0,host_datai_reg};
+//            write_buffer[107:72 ] <= host_data_parity_ext;
           end
           2'd3: begin
-            write_buffer[143:108] <= host_data_parity_ext;
+            write_buffer[103:72 ] <= host_datai_reg;
+//            write_buffer[143:108] <= host_data_parity_ext;
           end
         endcase
       end
@@ -309,16 +313,16 @@ module async_qdr_interface36 #(
     case (resp_state)
       COLLECT: begin
         if(!word_id[0]) begin
-          host_datao_reg <= {qdr_q[31:0]};
+          host_datao_reg <= {qdr_q[63:32]};
         end else begin
-          host_datao_reg <= {qdr_q[67:36]};
+          host_datao_reg <= {qdr_q[31:0]};
         end
       end
       FINAL: begin
         if(!word_id[0]) begin
-          host_datao_reg <= {qdr_q[31:0]};
+          host_datao_reg <= {qdr_q[63:32]};
         end else begin
-          host_datao_reg <= {qdr_q[67:36]};
+          host_datao_reg <= {qdr_q[31:0]};
         end
       end
     endcase
