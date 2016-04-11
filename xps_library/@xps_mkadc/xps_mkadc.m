@@ -49,7 +49,7 @@ s.gray_en          = num2str(strcmp(get_param(blk_name, 'gray_en'), 'on'));
 parameters.G_GRAY_EN        = s.gray_en;
 
 switch s.hw_sys
-    case 'ROACH2', 'MKDIG'
+    case {'ROACH2', 'MKDIG'}
         if ~isempty(find(strcmp(s.hw_adc, {'adc0', 'adc1'})))
             s.adc_str = s.hw_adc;
         else
@@ -92,7 +92,7 @@ misc_ports.ctrl_clk180_out  = {1 'out' [s.adc_str,'_clk180']};
 misc_ports.ctrl_clk270_out  = {1 'out' [s.adc_str,'_clk270']};
 misc_ports.power_on_rst     = {1 'in'  ['power_on_rst']};
 switch s.hw_sys
-    case 'ROACH2', 'MKDIG'
+    case {'ROACH2', 'MKDIG'}
         misc_ports.ctrl_mmcm_locked  = {1 'out' [s.adc_str,'_mmcm_locked']};
         misc_ports.mmcm_reset        = {1 'in'  [s.adc_str,'_mmcm_reset']};
         misc_ports.mmcm_psdone       = {1 'out' [s.adc_str,'_psdone']};

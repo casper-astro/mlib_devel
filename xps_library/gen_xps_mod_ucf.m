@@ -116,7 +116,7 @@ function gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash)
             for n = 1:length(user_ucf_files)
                 file_path = fullfile(user_ucf_path, user_ucf_files(n).name);
                 fprintf(ucf_fid, '\n\n### BEGIN %s\n\n', file_path);
-                fprintf(ucf_fid, fileread(file_path));
+                fprintf(ucf_fid, '%s', fileread(file_path));
                 fprintf(ucf_fid, '\n\n### END %s\n\n', file_path);
             end
             
