@@ -7,7 +7,7 @@ clog('entering swreg_cb', 'trace');
 
 check_mask_type(blk, 'swreg');
 
-warning('Deprecated - update your software registers from the library')
+warning('Deprecated - %s - update your software registers from the library', blk)
 return
 
 % % get current mask information
