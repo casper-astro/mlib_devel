@@ -151,6 +151,9 @@ flow_vec.elab     = get(handles.run_elab    ,'Value');
 flow_vec.software = get(handles.run_software,'Value');
 flow_vec.edk      = get(handles.run_edk     ,'Value');
 
+% Clear any previously dumped exceptions
+dump_exception('');
+
 try
     [time_total, time_struct] = gen_xps_files(design_name,flow_vec);
     disp('===================================================================');
@@ -166,9 +169,9 @@ try
     disp(['    EDK/ISE backend..........',datestr(time_struct.edk     ,13)]);
     disp('===================================================================');
     msgbox(['CASPER XPS run successfully completed in ',datestr(time_total,13),'!']);
-catch
-    disp(lasterr);
-    errordlg('Error detected running CASPER XPS, please check Matlab command window for error messages');
+catch ex
+    dump_exception(ex);
+    errordlg(sprintf('Error detected running CASPER XPS:\n%s', ex.message));
 end
 
 
