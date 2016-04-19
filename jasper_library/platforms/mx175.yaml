@@ -1,0 +1,206 @@
+name: mx175
+manufacturer: Xilinx
+fpga: xc7vx690tffg1930-2
+config_voltage: 2.5
+cfgbvs: VCCO
+sources:
+  - infrastructure
+  - spi_wb_bridge
+  - wbs_arbiter
+  - sys_block
+constraints:
+  - mx175.xdc
+  - mx175.ucf
+provides:
+  - sfp0
+  - sfp1
+  - sfp2
+  - sfp3
+  - hmc5831_0
+  - hmc5831_1
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+pins:  
+  Q8_CLK1_GTREFCLK_PAD_P_IN:
+    loc: AF8
+  diff_clock_rtl_clk_p:
+    iostd: LVDS
+    loc: AR21
+  clk_200mhz_p:
+    iostd: LVDS
+    loc: AR21
+  TRACK_DATA_OUT:
+    iostd: LVCMOS18
+    loc: T26
+  reset_rtl:
+    iostd: LVCMOS18
+    loc: T28
+  TXP_OUT:
+    loc:
+      - AE2
+      - AL2
+      - AF4
+      - AJ2
+      - AC2
+      - AG2
+      - AK4
+      - AN2
+  FLASH1:
+    iostd: LVCMOS18
+    loc: C29
+  FLASH2:
+    iostd: LVCMOS18
+    loc: C30
+  uart_rxd:
+    iostd: LVCMOS18
+    loc: AV40
+  iic_scl_io:
+    iostd: LVCMOS18
+    loc: AW39
+  RXP_IN:
+    loc:
+      - AE6
+      - AL6
+      - AH4
+      - AJ6
+      - AC6
+      - AG6
+      - AM4
+      - AN6
+  si5324_out_p:
+    iostd: LVDS
+    loc: AR38
+  si5324_out_n:
+    iostd: LVDS
+  TXN_OUT:
+    loc:
+      - AE1
+      - AL1
+      - AF3
+      - AJ1
+      - AC1
+      - AG1
+      - AK3
+      - AN1
+  diff_clock_rtl_clk_n:
+    iostd: LVDS
+  led:
+    iostd: LVCMOS18
+    loc:
+      - D29
+      - D30
+      - A28
+      - A29
+      - C27
+      - C28
+      - C29
+      - C30
+  user_clock_n:
+    iostd: LVDS
+  gpio_adc_control_tri_o:
+    iostd: LVCMOS18
+    loc:
+      - E2
+      - E3
+      - F3
+      - F4
+      - D4
+      - E4
+  RXN_IN:
+    loc:
+      - AE5
+      - AL5
+      - AH3
+      - AJ5
+      - AC5
+      - AG5
+      - AM3
+      - AN5
+  user_clock_p:
+    iostd: LVDS
+    loc: AP21
+  uart_txd:
+    iostd: LVCMOS18
+    loc: AW40
+  gpioa:
+    iostd: LVCMOS18
+    loc: 
+      - T26
+      - R26
+      - R29
+      - P29
+      - P26
+      - P27
+      - N27
+      - K28
+  gpiob:
+    iostd: LVCMOS18
+    loc: 
+      - H27
+      - D27
+      - E27
+      - K29
+      - L29
+      - K27
+      - J27
+      - J29
+  gpioc:
+    iostd: LVCMOS18
+    loc: 
+      - N28
+      - H28
+      - G27
+      - G28
+      - M28
+      - L28
+      - F29
+      - E29
+
+  # 10GbE / SFP nets
+  eth_clk_p:
+    loc: AY8
+  eth_clk_n:
+    loc: AY7
+  mgt_rx_n:
+    loc: 
+      - BA5
+      - AY3
+      - BC5
+      - BD7
+  mgt_rx_p:
+    loc:
+      - BA6
+      - AY4
+      - BC6
+      - BD8
+  mgt_tx_n:
+    loc: 
+      - BA1
+      - AW1
+      - BB3
+      - BD3
+  mgt_tx_p:
+    loc: 
+      - BA2
+      - AW2
+      - BB4
+      - BD4
+  sfp_disable:
+    iostd: LVCMOS18
+    loc: 
+      - AP12
+      - AP11
+      - AB10
+      - AY13
+  tx_fault:
+    iostd: LVCMOS18
+    loc: 
+      - AM10
+      - AT13
+      - AB12
+      - AY11
+  iic_sda_io:
+    iostd: LVCMOS18
+    loc: AV39
