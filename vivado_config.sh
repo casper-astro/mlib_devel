@@ -1,7 +1,7 @@
 export XILINX_PATH=/opt/Xilinx/Vivado/2015.4
 export USE_VIVADO_RUNTIME_FOR_MATLAB=1
 export MATLAB_PATH=/opt/matlab/R2015b
-export MLIB_DEVEL_PATH=/data/casper/jasper
+export MLIB_DEVEL_PATH=/data/casper/mlib_devel_uptodate
 export PLATFORM=lin64
 
 export SYSGEN_SCRIPT=$MLIB_DEVEL_PATH/startsg
