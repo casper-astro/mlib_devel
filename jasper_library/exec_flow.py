@@ -32,6 +32,8 @@ parser.add_option("--be", dest="be", type='string', default='vivado',
                   help="Backend to use. Default: vivado")
 parser.add_option("--jobs", dest="jobs", type='int', default=4,
                   help="Number of cores to run compiles with. Default=4")
+parser.add_option("--nonprojectmode", dest="nonprojectmode", action='store_false', default=True,
+                  help="Project Mode is enabled by default/Non Project Mode is disabled by Default (NB: Vivado Only)")
 parser.add_option("-m", "--model", dest="model", type='string',
                   default='/tools/mlib_devel/jasper_library/test_models/test.slx',
                   help="model to compile")
@@ -85,6 +87,9 @@ if opts.middleware:
 if opts.frontend:
     tf.frontend.compile_user_ip(update=True)
 
+#Project Mode assignment (True = Project Mode, False = Non-Project Mode)
+projectmode = opts.nonprojectmode
+
 
 if opts.backend or opts.software:
     try:
@@ -93,14 +98,14 @@ if opts.backend or opts.software:
         platform = None
 
     if platform.backend_target == 'vivado':
-        backend = toolflow.VivadoBackend(plat=platform, compile_dir=tf.compile_dir)
+        backend = toolflow.VivadoBackend(plat=platform, prjmode=projectmode, compile_dir=tf.compile_dir)
     else:
         backend = IseBackend(platform=platform, compile_dir=tf.compile_dir)
 
 if opts.backend:
-    backend.import_from_castro(backend.compile_dir+'/castro.yml')
+    backend.import_from_castro(backend.compile_dir+'/castro.yml', prjmode=projectmode)
     # launch vivado via the generated .tcl file
-    backend.compile(cores=opts.jobs)
+    backend.compile(cores=opts.jobs, prjmode=projectmode, plat=platform)
 
     backend.output = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof'%(tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
