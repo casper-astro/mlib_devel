@@ -647,11 +647,11 @@ class VivadoBackend(ToolflowBackend):
         self.add_tcl_cmd('puts "Starting tcl script"')
         #Create Vivado Project in project mode only 
         if prjmode:
-	    self.add_tcl_cmd('create_project -f %s %s/%s -part %s'%(self.project_name, self.compile_dir, self.project_name, plat.fpga))
-	#Create the part in non-project mode (project runs in memory only)
-	else:
-	    self.add_tcl_cmd('file mkdir %s/%s'%(self.compile_dir,self.project_name))	  
-	    self.add_tcl_cmd('set_part %s'%plat.fpga)
+            self.add_tcl_cmd('create_project -f %s %s/%s -part %s'%(self.project_name, self.compile_dir, self.project_name, plat.fpga))
+        #Create the part in non-project mode (project runs in memory only)
+        else:
+            self.add_tcl_cmd('file mkdir %s/%s'%(self.compile_dir,self.project_name))
+            self.add_tcl_cmd('set_part %s'%plat.fpga)
 	    
         #for source in plat.sources:
         #    self.add_source(os.getenv('HDL_ROOT')+'/'+source)
@@ -659,90 +659,87 @@ class VivadoBackend(ToolflowBackend):
 
     def add_source(self, source, prjmode):
         '''
-        Add a sourcefile to the project. Via a tcl incantation.
-        '''       
+       Add a sourcefile to the project. Via a tcl incantation.
+        '''
         self.logger.debug('Adding source file: %s'%source)
         #Project Mode is enabled
         if prjmode:
-	    self.add_tcl_cmd('import_files -force %s'%(source))
+            self.add_tcl_cmd('import_files -force %s'%(source))
         #Non-Project Mode is enabled
-        else: 
-	    if os.path.basename(source) == 'top.v':
-	      #Convert from string to Lists and extract filenames from the directory source
-	      self.npm_sources = os.path.basename(source).split()
-	    #extract file names from the directories listed in the source
-	    else:  
-	      self.npm_sources = os.listdir(source)
+        else:
+            if os.path.basename(source) == 'top.v':
+                #Convert from string to Lists and extract filenames from the directory source
+                self.npm_sources = os.path.basename(source).split()
+            #extract file names from the directories listed in the source
+            else:
+                self.npm_sources = os.listdir(source)
 
-	    print 'source %s'%source
-	    print 'npm_sources %s'%str(self.npm_sources)
-	    for item in self.npm_sources:	    
-	      ext = item.split('.')[-1]
-	      current_source = item
-	      print 'extension: %s'%ext
-	      print 'current_source: %s'%current_source
-	      #VHDL File
-	      if ext == self.src_file_vhdl_ext: 
-                self.add_tcl_cmd('read_vhdl %s/%s'%(source,current_source))
-              #Verilog File  
-              if ext == self.src_file_verilog_ext:
-	        #system verilog file (exception to the rule - should be *.sv file)
-	        if os.path.basename(source) == 'sockit_own.v':
-                  self.add_tcl_cmd('read_verilog -sv %s/%s'%(source,current_source))
-                else:
-		  #only read from source when reading the top.v file
-		  if os.path.basename(source) == 'top.v':
-                    self.add_tcl_cmd('read_verilog %s'%source)
+                self.logger.debug('source %s'%source)
+                self.logger.debug('npm_sources %s'%self.npm_sources)
+            for item in self.npm_sources:
+                ext = item.split('.')[-1]
+                current_source = item
+                self.logger.debug('extension: %s'%ext)
+                self.logger.debug('current_source: %s'%current_source)
+                #VHDL File
+                if ext == self.src_file_vhdl_ext:
+                    self.add_tcl_cmd('read_vhdl %s/%s'%(source,current_source))
+                #Verilog File
+                if ext == self.src_file_verilog_ext:
+                  #system verilog file (exception to the rule - should be *.sv file)
+                  if os.path.basename(source) == 'sockit_own.v':
+                    self.add_tcl_cmd('read_verilog -sv %s/%s'%(source,current_source))
                   else:
-                    self.add_tcl_cmd('read_verilog %s/%s'%(source,current_source))		    
-              #System Verilog File  
-              if ext == self.src_file_sys_verilog_ext:
-                  self.add_tcl_cmd('read_verilog -sv %s/%s'%(source,current_source))		
-              #IP File  
-              if ext == self.src_file_ip_ext:
-                self.add_tcl_cmd('read_ip %s/%s'%(source,current_source))
-              #Block Diagram File
-              if ext == self.src_file_block_diagram_ext:
-                self.add_tcl_cmd('read_bd %s/%s'%(source,current_source))
-              #ELF Microblaze File
-              if ext == self.src_file_elf_ext:
-                self.add_tcl_cmd('add_files %s/%s'%(source,current_source))
-              #Coefficient BRAM File
-              if ext == self.src_file_coe_ext:
-                self.add_tcl_cmd('add_files %s/%s'%(source,current_source))              
+                    #only read from source when reading the top.v file
+                    if os.path.basename(source) == 'top.v':
+                      self.add_tcl_cmd('read_verilog %s'%source)
+                    else:
+                      self.add_tcl_cmd('read_verilog %s/%s'%(source,current_source))
+                #System Verilog File
+                if ext == self.src_file_sys_verilog_ext:
+                  self.add_tcl_cmd('read_verilog -sv %s/%s'%(source,current_source))
+                #IP File
+                if ext == self.src_file_ip_ext:
+                  self.add_tcl_cmd('read_ip %s/%s'%(source,current_source))
+                #Block Diagram File
+                if ext == self.src_file_block_diagram_ext:
+                  self.add_tcl_cmd('read_bd %s/%s'%(source,current_source))
+                #ELF Microblaze File
+                if ext == self.src_file_elf_ext:
+                  self.add_tcl_cmd('add_files %s/%s'%(source,current_source))
+                #Coefficient BRAM File
+                if ext == self.src_file_coe_ext:
+                  self.add_tcl_cmd('add_files %s/%s'%(source,current_source))
 	  
     def add_const_file(self, constfile, prjmode):
         '''
-        Add a constraint file to the project. via a tcl incantation.        
+       Add a constraint file to the project. via a tcl incantation.
         '''
         if constfile.split('.')[-1] == self.const_file_ext:
             self.logger.debug('Adding constraint file: %s'%constfile)
             #Project Mode is enabled
             if prjmode:
-	      #setup cell referenced constraints
-	      if os.path.basename(constfile) == self.const_file_att1: 
-                self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
-                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att1, constfile))                
+              self.add_tcl_cmd('import_files -force -fileset constrs_1 %s' % constfile)
+              #setup cell referenced constraints
+              if os.path.basename(constfile) == self.const_file_att1:
+                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att1, constfile))
                 self.add_tcl_cmd('set_property processing_order LATE [get_files %s]'%constfile)
               elif os.path.basename(constfile) == self.const_file_att2:
-                self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
-                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att2, constfile))                
+                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att2, constfile))
                 self.add_tcl_cmd('set_property processing_order LATE [get_files %s]'%constfile)
               elif os.path.basename(constfile) == self.const_file_att3:
-                self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
-                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att3, constfile))                
+                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att3, constfile))
                 self.add_tcl_cmd('set_property processing_order LATE [get_files %s]'%constfile)
               elif os.path.basename(constfile) == self.const_file_att4:
-                self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
-                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att4, constfile))                
+                self.add_tcl_cmd('set_property SCOPED_TO_REF %s [get_files -all %s]'%(self.const_file_att4, constfile))
                 self.add_tcl_cmd('set_property processing_order LATE [get_files %s]'%constfile)
-              #setup global constraints
               else:
-                self.add_tcl_cmd('import_files -force -fileset constrs_1 %s'%constfile)
+                #Do nothing
+                pass
             #Non-Project Mode is enabled
             else:
-	      #setup cell referenced constraints
-	      if os.path.basename(constfile) == self.const_file_att1: 
+            #setup cell referenced constraints
+              if os.path.basename(constfile) == self.const_file_att1:
                 self.add_tcl_cmd('read_xdc -ref %s %s'%(self.const_file_att1, constfile))
                 self.add_tcl_cmd('set_property processing_order LATE [get_files %s]'%constfile)
               elif os.path.basename(constfile) == self.const_file_att2:
@@ -757,7 +754,7 @@ class VivadoBackend(ToolflowBackend):
               #setup global constraints
               else:
                 self.add_tcl_cmd('read_xdc %s'%constfile)
-				
+
         else:
             self.logger.debug('Ignore constraint file: %s, with wrong file extension'%constfile)
 
@@ -777,47 +774,47 @@ class VivadoBackend(ToolflowBackend):
         '''
         #Project Mode is enabled
         if prjmode:
-	    self.add_tcl_cmd('set_property top top [current_fileset]')
-	    self.add_tcl_cmd('update_compile_order -fileset sources_1')
-	    self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
-	    self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]')        
-	    #self.add_tcl_cmd('upgrade_ip [get_ips *]')
-	    self.add_tcl_cmd('reset_run synth_1')
-	    self.add_tcl_cmd('launch_runs synth_1 -jobs %d'%cores)
-	    self.add_tcl_cmd('wait_on_run synth_1')        
-	    self.add_tcl_cmd('launch_runs impl_1 -jobs %d'%cores)
-	    self.add_tcl_cmd('wait_on_run impl_1')
-	    self.add_tcl_cmd('open_run impl_1') 
-	    #self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [get_designs impl_1]'%self.plat.conf['config_voltage'])
-	    #self.add_tcl_cmd('set_property CFGBVS %s [get_designs impl_1]'%self.plat.conf['cfgbvs'])
-	    self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
-	    self.add_tcl_cmd('wait_on_run impl_1')
-	#Non-Project mode is enabled
-	#Options can be added to the *_design commands to change strategies or meet timing 
-	else:
-	    self.add_tcl_cmd('synth_design -top top -part %s'%plat.fpga)
-	    self.add_tcl_cmd('write_checkpoint -force %s/%s/post_synth.dcp'%(self.compile_dir, self.project_name))
-	    self.add_tcl_cmd('report_timing_summary -file %s/%s/post_synth_timing_summary.rpt'%(self.compile_dir,self.project_name))
-	    self.add_tcl_cmd('report_utilization -file %s/%s/post_synth_timing_summary.rpt'%(self.compile_dir, self.project_name))
-	    self.add_tcl_cmd('opt_design')
-	    self.add_tcl_cmd('place_design')
-	    self.add_tcl_cmd('report_clock_utilization -file %s/%s/clock_util.rpt'%(self.compile_dir, self.project_name))
-	    self.add_tcl_cmd('if { [get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup] ] < 0 } {')
-	    self.add_tcl_cmd('puts "Found setup timing violations => running physical optimization" ')
-	    self.add_tcl_cmd('power_opt_design')
-	    self.add_tcl_cmd('phys_opt_design')
-	    self.add_tcl_cmd('}')
-	    self.add_tcl_cmd('write_checkpoint -force %s/%s/post_place.dcp'%(self.compile_dir, self.project_name))
-	    self.add_tcl_cmd('report_utilization -file %s/%s/post_place_util.rpt'%(self.compile_dir, self.project_name))
-	    self.add_tcl_cmd('report_timing_summary -file %s/%s/post_place_timing_summary.rpt'%(self.compile_dir,self.project_name))
-	    self.add_tcl_cmd('route_design')
-	    self.add_tcl_cmd('write_checkpoint -force %s/%s/post_route.dcp'%(self.compile_dir, self.project_name))
-	    self.add_tcl_cmd('report_route_status -file %s/%s/post_route_status.rpt'%(self.compile_dir, self.project_name))
-	    self.add_tcl_cmd('report_timing_summary -file %s/%s/post_route_timing_summary.rpt'%(self.compile_dir,self.project_name))
-	    self.add_tcl_cmd('report_power -file %s/%s/post_route_power.rpt'%(self.compile_dir,self.project_name))
-	    self.add_tcl_cmd('report_drc -file %s/%s/post_imp_drc.rpt'%(self.compile_dir,self.project_name))
-	    self.add_tcl_cmd('set_property SEVERITY {Warning} [get_drc_checks UCIO-1]')
-	    self.add_tcl_cmd('write_bitstream -force %s/%s/top.bit'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('set_property top top [current_fileset]')
+          self.add_tcl_cmd('update_compile_order -fileset sources_1')
+          self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
+          self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]')
+          #self.add_tcl_cmd('upgrade_ip [get_ips *]')
+          self.add_tcl_cmd('reset_run synth_1')
+          self.add_tcl_cmd('launch_runs synth_1 -jobs %d'%cores)
+          self.add_tcl_cmd('wait_on_run synth_1')
+          self.add_tcl_cmd('launch_runs impl_1 -jobs %d'%cores)
+          self.add_tcl_cmd('wait_on_run impl_1')
+          self.add_tcl_cmd('open_run impl_1')
+          #self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [get_designs impl_1]'%self.plat.conf['config_voltage'])
+          #self.add_tcl_cmd('set_property CFGBVS %s [get_designs impl_1]'%self.plat.conf['cfgbvs'])
+          self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
+          self.add_tcl_cmd('wait_on_run impl_1')
+        #Non-Project mode is enabled
+        #Options can be added to the *_design commands to change strategies or meet timing
+        else:
+          self.add_tcl_cmd('synth_design -top top -part %s'%plat.fpga)
+          self.add_tcl_cmd('write_checkpoint -force %s/%s/post_synth.dcp'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('report_timing_summary -file %s/%s/post_synth_timing_summary.rpt'%(self.compile_dir,self.project_name))
+          self.add_tcl_cmd('report_utilization -file %s/%s/post_synth_timing_summary.rpt'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('opt_design')
+          self.add_tcl_cmd('place_design')
+          self.add_tcl_cmd('report_clock_utilization -file %s/%s/clock_util.rpt'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('if { [get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup] ] < 0 } {')
+          self.add_tcl_cmd('puts "Found setup timing violations => running physical optimization" ')
+          self.add_tcl_cmd('power_opt_design')
+          self.add_tcl_cmd('phys_opt_design')
+          self.add_tcl_cmd('}')
+          self.add_tcl_cmd('write_checkpoint -force %s/%s/post_place.dcp'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('report_utilization -file %s/%s/post_place_util.rpt'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('report_timing_summary -file %s/%s/post_place_timing_summary.rpt'%(self.compile_dir,self.project_name))
+          self.add_tcl_cmd('route_design')
+          self.add_tcl_cmd('write_checkpoint -force %s/%s/post_route.dcp'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('report_route_status -file %s/%s/post_route_status.rpt'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('report_timing_summary -file %s/%s/post_route_timing_summary.rpt'%(self.compile_dir,self.project_name))
+          self.add_tcl_cmd('report_power -file %s/%s/post_route_power.rpt'%(self.compile_dir,self.project_name))
+          self.add_tcl_cmd('report_drc -file %s/%s/post_imp_drc.rpt'%(self.compile_dir,self.project_name))
+          self.add_tcl_cmd('set_property SEVERITY {Warning} [get_drc_checks UCIO-1]')
+          self.add_tcl_cmd('write_bitstream -force %s/%s/top.bit'%(self.compile_dir, self.project_name))
 
     def compile(self, cores, prjmode, plat):
         self.add_compile_cmds(cores=cores, prjmode=prjmode, plat=plat)
@@ -830,7 +827,7 @@ class VivadoBackend(ToolflowBackend):
 
     def get_tcl_const(self,const):
         '''
-        Pass a single toolflow-standard PortConstraint,
+       Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
         to a vivado project.
         '''
@@ -850,7 +847,7 @@ class VivadoBackend(ToolflowBackend):
                 self.logger.debug('Getting iostd for port index %d'%i)
                 if const.io_standard[i] is not None:
                     self.logger.debug('IOSTD constraint found: %s'%const.io_standard[i])
-		    if const.portname_indices != []:
+                    if const.portname_indices != []:
                         user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname, index=p)
                     else:
                         user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname)
