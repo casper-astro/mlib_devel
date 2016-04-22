@@ -531,7 +531,16 @@ class ToolflowBackend(object):
         self.output_dir = compile_dir + '/outputs'
         self.plat = plat
         if plat:
-            self.initialize(plat, prjmode)
+            #if vivado
+            if plat.backend_target == 'vivado':
+                self.initialize(plat, prjmode)
+            #if ISE
+            elif plat.backend_target == 'ise':
+                self.initialize(plat)
+            #Default vivado
+            else:
+                self.initialize(plat, prjmode)
+
 
     def compile(self):
         raise NotImplementedError()
@@ -633,7 +642,13 @@ class VivadoBackend(ToolflowBackend):
         self.const_file_att4 = 'IEEE802_3_XL_PHY'   
         self.manufacturer = 'xilinx'
         self.project_name = 'myproj'
-        self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin'%(self.compile_dir,self.project_name,self.project_name)
+        #if project mode is enabled
+        if prjmode:
+          self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin'%(self.compile_dir,self.project_name,self.project_name)
+        #if non-project mode is enabled
+        else:
+          self.binary_loc = '%s/%s/top.bin' % (self.compile_dir, self.project_name)
+
         self.name = 'vivado'
         self.npm_sources= []
         ToolflowBackend.__init__(self, plat=plat, prjmode=prjmode, compile_dir=compile_dir)
@@ -814,7 +829,7 @@ class VivadoBackend(ToolflowBackend):
           self.add_tcl_cmd('report_power -file %s/%s/post_route_power.rpt'%(self.compile_dir,self.project_name))
           self.add_tcl_cmd('report_drc -file %s/%s/post_imp_drc.rpt'%(self.compile_dir,self.project_name))
           self.add_tcl_cmd('set_property SEVERITY {Warning} [get_drc_checks UCIO-1]')
-          self.add_tcl_cmd('write_bitstream -force %s/%s/top.bit'%(self.compile_dir, self.project_name))
+          self.add_tcl_cmd('write_bitstream -force -bin_file %s/%s/top.bit'%(self.compile_dir, self.project_name))
 
     def compile(self, cores, prjmode, plat):
         self.add_compile_cmds(cores=cores, prjmode=prjmode, plat=plat)
@@ -890,15 +905,36 @@ class VivadoBackend(ToolflowBackend):
             user_const += self.get_tcl_const(constraint)
         print user_const
         helpers.write_file(constfile,user_const)
-        print 'writen constraint file', constfile
+        print 'written constraint file', constfile
         self.add_const_file(constfile, prjmode)
 
 class ISEBackend(VivadoBackend):
-    def __init__(self,compile_dir='/tmp'):
-        ToolflowBackend.__init__(self, compile_dir=compile_dir)
+    def __init__(self, plat=None, compile_dir='/tmp'):
         self.logger = logging.getLogger('jasper.toolflow.backend')
+        #These parameters are reserved for the SKARAB, but may be useful for ISE as well...
+        self.const_file_att1 = 'IEEE802_3_XL_PCS'
+        self.const_file_att2 = 'DATA_FREQUENCY_DIVIDER'
+        self.const_file_att3 = 'DATA_FREQUENCY_MULTIPLIER'
+        self.const_file_att4 = 'IEEE802_3_XL_PHY'
         self.compile_dir = compile_dir
         self.const_file_ext = 'ucf'
+        self.manufacturer = 'xilinx'
+        self.project_name = 'myproj'
+        self.name = 'ise'
+        self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin' % (self.compile_dir, self.project_name, self.project_name)
+        # ToolflowBackend.__init__(self, compile_dir=compile_dir)
+        ToolflowBackend.__init__(self, plat=plat, compile_dir=compile_dir)
+
+    def initialize(self, plat):
+        self.tcl_cmd = ''
+        if plat.manufacturer != self.manufacturer:
+            self.logger.error('Trying to compile a %s FPGA using %s %s'
+                              % (plat.manufacturer, self.manufacturer, self.name))
+
+        self.add_tcl_cmd('puts "Starting tcl script"')
+        self.add_tcl_cmd('create_project -f %s %s/%s -part %s' % (
+        self.project_name, self.compile_dir, self.project_name, plat.fpga))
+
 
     def add_compile_cmds(self):
         '''
@@ -940,48 +976,52 @@ class ISEBackend(VivadoBackend):
         """
         constfile = '%s/user_const.ucf'%self.compile_dir
         user_const = ''
+        print 'constraints %s'%constraints
         for constraint in constraints:
             print 'parsing constraint', constraint
             user_const += self.get_ucf_const(constraint)
         print user_const
         helpers.write_file(constfile,user_const)
-        print 'writen constraint file', constfile
+        print 'written constraint file', constfile
         self.add_const_file(constfile, prjmode)
 
-    def get_ucf_const(self,const):
+    def get_ucf_const(self, const):
         '''
-        Pass a single toolflow-standard PortConstraint,
+       Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
         to a vivado project.
         '''
         user_const = ''
-        if isinstance(const, PortConstraint):
-            self.logger.debug('New PortConstraint instance found %s -> %s'%(const.portname, const.iogroup))
-            for i in range(const.width):
-                if const.loc[i] is not None:
-                    self.logger.debug('LOC constraint found')
-                    if const.is_vector:
-                        user_const += self.format_const('LOC', const.loc[i], const.portname, index=const.port_index[i])
+        if isinstance(const, castro.PinConstraint):
+            self.logger.debug('New PortConstraint instance found: %s -> %s' % (const.portname, const.symbolic_name))
+            for i, p in enumerate(const.symbolic_indices):
+                self.logger.debug('Getting loc for port index %d' % i)
+                if const.location[i] is not None:
+                    self.logger.debug('LOC constraint found at %s' % const.location[i])
+                    if const.portname_indices != []:
+                        user_const += self.format_const('LOC', const.location[i], const.portname, index=p)
                     else:
-                        user_const += self.format_const('LOC', const.loc[i], const.portname)
+                        user_const += self.format_const('LOC', const.location[i], const.portname)
 
-            for i in range(const.width):
-                if const.iostd[i] is not None:
-                    self.logger.debug('IOSTD constraint found')
-                    if const.is_vector:
-                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname, index=const.port_index[i])
+            for i, p in enumerate(const.symbolic_indices):
+                self.logger.debug('Getting iostd for port index %d' % i)
+                if const.io_standard[i] is not None:
+                    self.logger.debug('IOSTD constraint found: %s' % const.io_standard[i])
+                    if const.portname_indices != []:
+                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname, index=p)
                     else:
-                        user_const += self.format_const('IOSTANDARD', const.iostd[i], const.portname)
+                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname)
 
-        if isinstance(const, ClockConstraint):
+        if isinstance(const, castro.ClkConstraint):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
 
         if isinstance(const, RawConstraint):
+            self.logger.debug('New Raw constraint found')
             user_const += const.raw
 
         return user_const
 
     def format_clock_const(self, c):
-        return 'NET %s TNM_NET = %s;\nTIMESPEC TS_%s = PERIOD %s %f MHz;\n'%(
-               c.signal, c.signal, c.name, c.signal, c.freq) 
+        return 'NET "%s" TNM_NET = "%s";\nTIMESPEC "TS_%s" = PERIOD "%s" %f ns HIGH 50 %s;\n'%(
+               c.portname, c.portname + '_grp', c.portname, c.portname + '_grp', c.period_ns, '%')

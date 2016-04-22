@@ -66,8 +66,11 @@ logger.info('Starting compile')
 
 if opts.be == 'vivado':
     os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg'
+    logger.debug('Vivado compile has been executed')
+
 if opts.be == 'ise':
     os.environ['SYSGEN_SCRIPT'] = os.environ['MLIB_DEVEL_PATH']+'/startsg_ise'
+    logger.debug('ISE compile has been executed')
 
 # initialise the toolflow
 tf = toolflow.Toolflow(frontend='simulink', compile_dir=builddir, frontend_target=opts.model, jobs=opts.jobs)
@@ -97,15 +100,30 @@ if opts.backend or opts.software:
     except AttributeError:
         platform = None
 
+    #If vivado is selected to compile
+    if opts.be == 'vivado':
+        platform.backend_target = 'vivado'
+    #if ISE is selected to compile
+    elif opts.be == 'ise':
+        platform.backend_target = 'ise'
+    #Default to vivado for compile
+    else:
+        platform.backend_target = 'vivado'
+
+
     if platform.backend_target == 'vivado':
         backend = toolflow.VivadoBackend(plat=platform, prjmode=projectmode, compile_dir=tf.compile_dir)
     else:
-        backend = IseBackend(platform=platform, compile_dir=tf.compile_dir)
+        backend = toolflow.ISEBackend(plat=platform, compile_dir=tf.compile_dir)
 
 if opts.backend:
     backend.import_from_castro(backend.compile_dir+'/castro.yml', prjmode=projectmode)
     # launch vivado via the generated .tcl file
-    backend.compile(cores=opts.jobs, prjmode=projectmode, plat=platform)
+    if platform.backend_target == 'vivado':
+        backend.compile(cores=opts.jobs, prjmode=projectmode, plat=platform)
+    else:
+        backend.compile()
+
 
     backend.output = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof'%(tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
