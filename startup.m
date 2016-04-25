@@ -4,12 +4,13 @@ warning off Simulink:Engine:SaveWithParameterizedLinks_Warning
 warning off Simulink:Engine:SaveWithDisabledLinks_Warning
 warning off Simulink:Commands:LoadMdlParameterizedLink
 
-if length(getenv('XILINX_PATH')) == 0
-  setenv('XILINX_PATH', regexprep(getenv('XILINX'),'/ISE$',''));
-end
+%if length(getenv('XILINX_PATH')) == 0
+%  setenv('XILINX_PATH', regexprep(getenv('XILINX'),'/ISE$',''));
+%end
 
 %if vivado is to be used
-if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == 1
+if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == '1'
+  disp('Starting Vivado Sysgen')
   %addpath([getenv('XILINX_PATH'), '/ISE/sysgen/util/']);
   %addpath([getenv('XILINX_PATH'), '/ISE/sysgen/bin/lin64']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
@@ -19,6 +20,7 @@ if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == 1
   %sysgen_startup
 %if ISE is to be used  
 else
+  disp('Starting ISE Sysgen')
   addpath([getenv('XILINX_PATH'), '/ISE/sysgen/util/']);
   addpath([getenv('XILINX_PATH'), '/ISE/sysgen/bin/lin64']);
   addpath([getenv('MLIB_DEVEL_PATH'), '/casper_library']);
