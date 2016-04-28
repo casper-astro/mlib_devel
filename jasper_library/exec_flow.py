@@ -6,6 +6,8 @@ import toolflow
 import time
 
 # A straight lift from StackOverflow...
+
+
 def shell_source(script):
     """Sometime you want to emulate the action of "source" in bash,
     settings some environment variables. Here is a way to do it."""
@@ -14,7 +16,6 @@ def shell_source(script):
     output = pipe.communicate()[0]
     env = dict((line.split("=", 1) for line in output.splitlines()))
     os.environ.update(env)
-
 
 from optparse import OptionParser
 parser = OptionParser()
@@ -48,11 +49,11 @@ parser.add_option("-c", "--builddir", dest="builddir", type='string',
 builddir = opts.builddir or opts.model[:-4]
 
 # logging stuff...
-os.system('mkdir -p %s'%builddir)
+os.system('mkdir -p %s' % builddir)
 logger = logging.getLogger('jasper')
 logger.setLevel(logging.DEBUG)
 
-handler = logging.FileHandler('%s/jasper.log'%builddir, mode='w')
+handler = logging.FileHandler('%s/jasper.log' % builddir, mode='w')
 handler.setLevel(logging.DEBUG)
 format = logging.Formatter('%(levelname)s - %(asctime)s - %(name)s - %(message)s')
 handler.setFormatter(format)
@@ -78,6 +79,9 @@ tf = toolflow.Toolflow(frontend='simulink', compile_dir=builddir, frontend_targe
 if opts.perfile:
     tf.frontend.gen_periph_file(tf.periph_file)
 
+if opts.frontend:
+    tf.frontend.compile_user_ip(update=True)
+
 if opts.middleware:
     tf.gen_periph_objs()
     tf.build_top()
@@ -87,49 +91,48 @@ if opts.middleware:
     tf.constraints_rule_check()
     tf.dump_castro(tf.compile_dir+'/castro.yml')
 
-if opts.frontend:
-    tf.frontend.compile_user_ip(update=True)
-
-#Project Mode assignment (True = Project Mode, False = Non-Project Mode)
-projectmode = opts.nonprojectmode
-
-
 if opts.backend or opts.software:
     try:
         platform = tf.plat
     except AttributeError:
         platform = None
 
-    #If vivado is selected to compile
+    # if vivado is selected to compile
     if opts.be == 'vivado':
         platform.backend_target = 'vivado'
-    #if ISE is selected to compile
+        # Project Mode assignment (True = Project Mode, False = Non-Project Mode)
+        platform.project_mode = opts.nonprojectmode
+        backend = toolflow.VivadoBackend(plat=platform, compile_dir=tf.compile_dir)
+        backend.import_from_castro(backend.compile_dir + '/castro.yml')
+        # launch vivado via the generated .tcl file
+        backend.compile(cores=opts.jobs, plat=platform)
+
+    # if ISE is selected to compile
     elif opts.be == 'ise':
         platform.backend_target = 'ise'
-    #Default to vivado for compile
+        # Project Mode assignment (True = Project Mode, False = Non-Project Mode). Not used in ISE.
+        platform.project_mode = opts.nonprojectmode
+        backend = toolflow.ISEBackend(plat=platform, compile_dir=tf.compile_dir)
+        backend.import_from_castro(backend.compile_dir + '/castro.yml')
+        # launch ISE via the generated .tcl file
+        backend.compile()
+    # Default to vivado for compile
     else:
         platform.backend_target = 'vivado'
+        # Project Mode assignment (True = Project Mode, False = Non-Project Mode)
+        platform.project_mode = opts.nonprojectmode
+        backend = toolflow.VivadoBackend(plat=platform, compile_dir=tf.compile_dir)
+        backend.import_from_castro(backend.compile_dir + '/castro.yml')
+        # launch vivado via the generated .tcl file
+        backend.compile(cores=opts.jobs, plat=platform)
 
+    backend.output = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof' % (
+                     tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                     tf.start_time.tm_hour, tf.start_time.tm_min)
 
-    if platform.backend_target == 'vivado':
-        backend = toolflow.VivadoBackend(plat=platform, prjmode=projectmode, compile_dir=tf.compile_dir)
-    else:
-        backend = toolflow.ISEBackend(plat=platform, compile_dir=tf.compile_dir)
-
-if opts.backend:
-    backend.import_from_castro(backend.compile_dir+'/castro.yml', prjmode=projectmode)
-    # launch vivado via the generated .tcl file
-    if platform.backend_target == 'vivado':
-        backend.compile(cores=opts.jobs, prjmode=projectmode, plat=platform)
-    else:
-        backend.compile()
-
-
-    backend.output = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof'%(tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
-            tf.start_time.tm_hour, tf.start_time.tm_min)
-
-if opts.software:
-    binary = backend.binary_loc
-    os.system('cp %s %s/top.bin'%(binary, backend.compile_dir))
-    mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin'%(os.getenv('MLIB_DEVEL_PATH'), backend.output_dir, backend.output, backend.compile_dir, backend.compile_dir)
-    os.system(mkbof_cmd)
+    if opts.software:
+        binary = backend.binary_loc
+        os.system('cp %s %s/top.bin'%(binary, backend.compile_dir))
+        mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin' % \
+            (os.getenv('MLIB_DEVEL_PATH'), backend.output_dir, backend.output, backend.compile_dir, backend.compile_dir)
+        os.system(mkbof_cmd)
