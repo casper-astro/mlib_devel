@@ -1,20 +1,56 @@
 function [numios, current_names, current_widths, current_bins, current_types] = bitfield_maskcheck(blk, blktype, fld_nms, fld_typ, fld_bps, fld_wid)
     % blktype 1 = register, 2 = snap, 3 = snap_extraval
 
-    % get the params from the mask
-    current_names = get_param(blk, fld_nms);
-    current_names = strrep(current_names, ']', '');
-    current_names = strrep(current_names, '[', '');
-    current_names = strrep(current_names, ',', ' ');
-    current_names = strrep(current_names, '  ', ' ');
-    current_names = strtrim(current_names);
-    current_names = textscan(current_names, '%s');
-    current_names = current_names{1};
-    numios = length(current_names);
-    current_types = eval(get_param(blk, fld_typ));
-    current_bins = eval(get_param(blk, fld_bps));
-    current_widths = eval(get_param(blk, fld_wid));
+    function clist = str_to_cell_list(cstr)
+        % convert a cell list in a string to a cell list
+        cstr = strrep(cstr, ']', '');
+        cstr = strrep(cstr, '[', '');
+        cstr = strrep(cstr, ',', ' ');
+        while ~isempty(strfind(cstr, '  '))
+            cstr = strrep(cstr, '  ', ' ');
+        end
+        cstr = strtrim(cstr);
+        cstr = textscan(cstr, '%s');
+        clist = cstr{1};
+    end
     
+    function nlist = mixed_list_to_nums(mlist)
+        % convert a mixed list, received as a string, to a list of
+        % numbers by searching the base workspace for variables given.
+        mlist = str_to_cell_list(mlist);
+        mlist_len = length(mlist);
+        nlist = zeros(1, mlist_len);
+        for ictr = 1 : mlist_len,
+            itm = mlist{ictr};
+            try
+                nlist(ictr) = eval(itm);
+            catch err_eval
+                nlist(ictr) = evalin('base', itm);
+            end
+        end
+    end
+
+    % get the params from the mask
+    current_names = str_to_cell_list(get_param(blk, fld_nms));
+    numios = length(current_names);
+    try
+        current_types = eval(get_param(blk, fld_typ));
+    catch err_typ
+        current_types = mixed_list_to_nums(get_param(blk, fld_typ));
+    end
+    
+    try
+        current_bins = eval(get_param(blk, fld_bps));
+    catch err_bps
+        current_bins = mixed_list_to_nums(get_param(blk, fld_bps));
+    end
+    
+    try
+        current_widths = eval(get_param(blk, fld_wid));
+    catch err_wid
+        current_widths = mixed_list_to_nums(get_param(blk, fld_wid));
+    end
+        
     if length(current_widths) == 1,
         current_widths = ones(1, numios) * current_widths;
     elseif numios ~= length(current_widths),
