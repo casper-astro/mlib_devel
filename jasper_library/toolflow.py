@@ -586,10 +586,19 @@ class SimulinkFrontend(ToolflowFrontend):
         self.logger.info('Generating yellow block description file : %s' % fname)
         # The command to start matlab with appropriate libraries
         matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
+
         # The matlab script responsible for generating the peripheral file
-        script = 'gen_block_file'
+        # each script represents a matlab function
+        script1 = 'load_system'
+        script2 = 'set_param'
+        script3 = 'gen_block_file'
         # The matlab syntax to call this script with appropriate args
-        ml_cmd = "%s('%s','%s','%s',1);" % (script, self.compile_dir, fname, self.modelpath)
+        # This scripts runs load_system(), set_param() and finally gen_block_file().
+        # if load_system() and set_param() are not run then the peripheral names will
+        # be incorrectly generated and the design will not compile. Everything is run
+        # on a single matlab terminal line
+        ml_cmd = "%s('%s');sys=gcs;%s(sys,'SimulationCommand','update');%s('%s','%s');exit" \
+                 % (script1, self.modelpath, script2, script3, self.compile_dir, fname)
         # Complete command to run on terminal
         term_cmd = matlab_start_cmd + ' -nodisplay -nosplash -r "%s"' % ml_cmd
         self.logger.info('Running terminal command: %s' % term_cmd)
@@ -608,8 +617,8 @@ class SimulinkFrontend(ToolflowFrontend):
         # matlab_start_cmd = os.getenv('MLIB_DEVEL_PATH') + '/startsg'
         matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
         # The matlab syntax to start a compile with appropriate args
-        ml_cmd = "start_sysgen_compile('%s','%s',%d);" % (self.modelpath,self.compile_dir, int(update))
-        term_cmd = matlab_start_cmd + ' -nosplash -r "%s"' % ml_cmd
+        ml_cmd = "start_sysgen_compile('%s','%s',%d);exit" % (self.modelpath,self.compile_dir, int(update))
+        term_cmd = matlab_start_cmd + ' -nodesktop -nosplash -r "%s"' % ml_cmd
         self.logger.info('Running terminal command: %s' % term_cmd)
         os.system(term_cmd)
         # return the name of the top module of the user ip
@@ -764,6 +773,14 @@ class VivadoBackend(ToolflowBackend):
             # self.add_tcl_cmd('set_property CFGBVS %s [get_designs impl_1]' % self.plat.conf['cfgbvs'])
             self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
             self.add_tcl_cmd('wait_on_run impl_1')
+            # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
+            # configuring the FPGA
+            if plat.name == 'skarab':
+                self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
+                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s/%s/%s.runs/impl_1/top_skarab.bin'
+                                 % (self.compile_dir, self.project_name, self.project_name, self.compile_dir,
+                                    self.project_name, self.project_name))
+
             # Determine if the design meets timing or not
             # Look for Worst Negative Slack
             self.add_tcl_cmd('if { [get_property STATS.WNS [get_runs impl_1] ] < 0 } {')
@@ -838,6 +855,12 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('report_drc -file %s/%s/post_imp_drc.rpt' % (self.compile_dir, self.project_name))
             self.add_tcl_cmd('set_property SEVERITY {Warning} [get_drc_checks UCIO-1]')
             self.add_tcl_cmd('write_bitstream -force -bin_file %s/%s/top.bit' % (self.compile_dir, self.project_name))
+            # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
+            # configuring the FPGA
+            if plat.name == 'skarab':
+                self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
+                                 '%s/%s/top.bit" -file %s/%s/top_skarab.bin'
+                                 % (self.compile_dir, self.project_name, self.compile_dir, self.project_name))
             # Determine if the design meets timing or not
             # Check for setup timing violations
             self.add_tcl_cmd('if { [get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup] ] < 0 } {')
