@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [0.0, 25.0, 1920.0, 1055.0]
+      Location		      [1920.0, 0.0, 1920.0, 1080.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,7 +43,7 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1884.0, 892.0]
+	Extents			[1884.0, 917.0]
 	ZoomFactor		[1.0]
 	Offset			[-8.125, 0.0]
       }
@@ -55,9 +55,9 @@ Library {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "paulp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Feb 02 15:44:13 2016"
-  RTWModifiedTimeStamp	  376328449
-  ModelVersionFormat	  "1.%<AutoIncrement:526>"
+  LastModifiedDate	  "Fri Apr 29 13:03:53 2016"
+  RTWModifiedTimeStamp	  383835827
+  ModelVersionFormat	  "1.%<AutoIncrement:527>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,7 +802,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [0, 25, 1920, 1080]
+    Location		    [1920, 0, 3840, 1080]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -58408,7 +58408,8 @@ Library {
 	Type			"swreg"
 	Description		"A 32-bit software-accessible register. Can be divided into bitfields of varying widths and types using "
 	"the fields in the block mask."
-	Initialization		"swreg_init(gcb)"
+	Initialization		"try\n    swreg_init(gcb)\ncatch ex\n    disp(sprintf('%s: %s', gcb, ex.message))\n    errordlg(ex.me"
+	"ssage)\nend"
 	SelfModifiable		"on"
 	Array {
 	  Type			  "Simulink.MaskParameter"
@@ -58518,7 +58519,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6942"
+	SIDHighWatermark	"6952"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58530,10 +58531,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6941"
+	  SID			  "332:6951"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6886
+	  ZOrder		  6896
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58568,10 +58569,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6939"
+	  SID			  "332:6949"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6884
+	  ZOrder		  6894
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58606,10 +58607,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6938"
+	  SID			  "332:6948"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6883
+	  ZOrder		  6893
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58637,10 +58638,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6942"
+	  SID			  "332:6952"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6887
+	  ZOrder		  6897
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58668,10 +58669,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6940"
+	  SID			  "332:6950"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6885
+	  ZOrder		  6895
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"

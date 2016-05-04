@@ -23,6 +23,7 @@ try
         simport = false;
     end
 catch ex
+    % fall through to old default, adding the sim ports
 end
 
 % add the inputs, outputs and gateway out blocks, drawing lines between them
