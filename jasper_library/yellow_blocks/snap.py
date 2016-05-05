@@ -18,7 +18,7 @@ class snap(YellowBlock):
 
         top.add_signal('sys_clk90')
         top.assign_signal('sys_clk90', '~sys_clk270')
-    
+
     def gen_children(self):
         return [
             YellowBlock.make_block({'tag':'xps:spi_wb_bridge'}, self.platform),

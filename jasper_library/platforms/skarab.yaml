@@ -1,0 +1,108 @@
+name: skarab
+manufacturer: Xilinx
+fpga: xc7vx690tffg1927-2
+config_voltage: 2.5
+cfgbvs: VCCO
+backend_target: vivado
+sources: []
+constraints:
+  - skarab.xdc
+provides:
+  - sys_clk
+  - sys_clk90
+  - sys_clk180
+  - sys_clk270
+pins:
+  sys_clk_p:
+    loc: E10
+    iostd: LVDS_25
+  sys_clk_n:
+    loc: D10
+    iostd: LVDS_25
+  led:
+    iostd: LVCMOS18
+    loc:
+      - A29
+      - B29
+      - C29
+      - D29
+      - E29
+      - F29
+  mezz0:
+    iostd: LVCMOS25
+    loc:
+      - AA23
+      - AB24
+      - Y25
+      - Y26
+      - U24
+      - AC43
+      - AC44
+      - Y37
+      - Y38
+      - AD41
+      - AD42
+      - AA39
+      - AA40
+      - AE43
+      - AE44
+      - AC39
+      - AC40
+      - AF41
+      - AF42
+      - AD37
+      - AD38
+      - U35
+      - U36
+      - W43
+      - W44
+      - T37
+      - T38
+      - Y41
+      - Y42
+      - U39
+      - U40
+      - AA43
+      - AA44
+      - V37
+      - V38
+      - AB41
+      - AB42
+      - W39
+      - W40
+      - N35
+      - N36
+      - R43
+      - R44
+      - M37
+      - M38
+      - T41
+      - T42
+      - N39
+      - N40
+      - U43
+      - U44
+      - P37
+      - P38
+      - V41
+      - V42
+      - R39
+      - R40
+      - J35
+      - J36
+      - L43
+      - L44
+      - H37
+      - H38
+      - M41
+      - M42
+      - J39
+      - J40
+      - N43
+      - N44
+      - K37
+      - K38
+      - P41
+      - P42
+      - L39
+      - L40

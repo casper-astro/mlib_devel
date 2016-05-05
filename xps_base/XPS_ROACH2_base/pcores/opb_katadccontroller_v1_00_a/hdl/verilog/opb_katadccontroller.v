@@ -364,8 +364,8 @@ module opb_katadccontroller(
   assign clk1_done = clk1_counter == 4'b1111;
   assign clk1_en   = adc1_state != CONFIG_IDLE;
 
-  assign adc1_adc3wire_strobe = adc1_state == CONFIG_DATA;
+  assign adc1_adc3wire_strobe = !(adc1_state == CONFIG_DATA);
   assign adc1_adc3wire_data   = adc1_config_data_shift[31];
-  assign adc1_adc3wire_clk    = clk0_counter[3];
+  assign adc1_adc3wire_clk    = clk1_counter[3];
 
 endmodule

@@ -1,4 +1,8 @@
-function delete_block_lines(block)
+function delete_block_lines(block, varargin)
+numvarargs = length(varargin);
+if numvarargs == 0,
+    dump_exception = true;
+end
 try
     ph = get_param(block, 'PortHandles');
     for op = 1 : length(ph.Outport),
@@ -14,6 +18,10 @@ try
         end
     end
 catch ex
-    dump_and_rethrow(ex);
+    if dump_exception,
+        dump_and_rethrow(ex);
+    else
+        rethrow(ex);
+    end
 end
 end

@@ -45,6 +45,7 @@ class YellowBlock(object):
             # This seems a little dubious
             # Import the yellow block from the same package
             # that this YellowBlock class lives
+            print blk['tag'][4:]
             clsfile = __import__(__package__+'.'+blk['tag'][4:])
             cls = clsfile.__getattribute__(blk['tag'][4:])
             cls = cls.__getattribute__(blk['tag'][4:]) # don't understand

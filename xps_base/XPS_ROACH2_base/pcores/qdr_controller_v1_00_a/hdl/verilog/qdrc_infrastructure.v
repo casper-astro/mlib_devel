@@ -430,12 +430,20 @@ module qdrc_infrastructure(
     qdr_q_fall_intR_high   <= qdr_q_fall_int [35:18];
     qdr_q_rise_intRR_high  <= qdr_q_rise_intR_high;
     qdr_q_fall_intRR_high  <= qdr_q_fall_intR_high;
-    qdr_q_rise_intRRR_high <= qdr_q_rise_intRR_high;
-    qdr_q_fall_intRRR_high <= qdr_q_fall_intRR_high;
+    //qdr_q_rise_intRRR_high <= qdr_q_rise_intRR_high;
+    //qdr_q_fall_intRRR_high <= qdr_q_fall_intRR_high;
     qdr_q_rise_intR_low    <= qdr_q_rise_int  [17:0];
     qdr_q_fall_intR_low    <= qdr_q_fall_int  [17:0];
     qdr_q_rise_intRR_low   <= qdr_q_rise_intR_low;
     qdr_q_fall_intRR_low   <= qdr_q_fall_intR_low;
+    //qdr_q_rise_intRRR_low  <= qdr_q_rise_intRR_low;
+    //qdr_q_fall_intRRR_low  <= qdr_q_fall_intRR_low;
+  end
+
+  //cross clock domain
+  always @(posedge clk0) begin
+    qdr_q_rise_intRRR_high <= qdr_q_rise_intRR_high;
+    qdr_q_fall_intRRR_high <= qdr_q_fall_intRR_high;
     qdr_q_rise_intRRR_low  <= qdr_q_rise_intRR_low;
     qdr_q_fall_intRRR_low  <= qdr_q_fall_intRR_low;
   end

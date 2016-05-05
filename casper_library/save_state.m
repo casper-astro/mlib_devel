@@ -31,17 +31,17 @@
 %                                                                             %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function save_state(blk,varargin)
+function save_state(blk, varargin)
 
-%check varargin contains even number of variables
-if( mod(length(varargin),2) ~= 0 ) disp('save_state.m: Non-even parameter list'); return; end;
+% check varargin contains even number of variables
+if (mod(length(varargin), 2) ~= 0), disp('save_state.m: Non-even parameter list'); return; end;
 	
 struct.state = hashcell(varargin);
 struct.parameters = [];
-% Construct struct of parameter values
+% construct struct of parameter values
 for j = 1:length(varargin)/2,
-	struct.parameters = setfield( struct.parameters, varargin{j*2-1}, varargin{j*2} );
+	struct.parameters = setfield(struct.parameters, varargin{j*2-1}, varargin{j*2});
 end
 
-set_param(blk,'UserData',struct);
+set_param(blk,'UserData', struct);
 set_param(blk,'UserDataPersistent','on');

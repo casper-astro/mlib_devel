@@ -21,6 +21,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [result,msg] = drc(blk_obj, xps_objs)
+
 result = 0;
 msg = '';
 
@@ -31,35 +32,34 @@ else
     error('XPS block must be on the same level as the Xilinx SysGen block');
 end
 
-hw_sys=get(xps_objs{1},'hw_sys');
+hw_sys = get(xps_objs{1}, 'hw_sys');
 
 addr_width = blk_obj.addr_width;
 data_width = blk_obj.data_width;
 
 switch hw_sys
-  case 'ROACH2', 'MKDIG'
-    if addr_width < 2
-      msg = 'Shared BRAM address width cannot be less than 2 on on ROACH boards';
-	    result = 1;
-    end
+    case {'ROACH2', 'MKDIG'}
+        if addr_width < 2
+            msg = 'Shared BRAM address width cannot be less than 2 on on ROACH boards';
+            result = 1;
+        end
   case 'ROACH'
-    if (addr_width + ceil(log2(data_width))) < 15,   
-      msg = ['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards'];
-	    result = 1;
-    end
-  otherwise
-    if addr_width < 11
-      msg = 'Shared BRAM address width cannot be less than 11 on unknown platform';
-	    result = 1;
-    end
+        if (addr_width + ceil(log2(data_width))) < 15,
+            msg = ['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards'];
+            result = 1;
+        end
+    otherwise
+        if addr_width < 11
+            msg = 'Shared BRAM address width cannot be less than 11 on unknown platform';
+            result = 1;
+        end
 end
 if addr_width > 16
     msg = 'Shared BRAM address width cannot be greater than 16';
-	result = 1;
+    result = 1;
 end
 
 if isempty(find([8 16 32 64 128] == data_width))
     msg = 'Shared BRAM data width can only be 8,16,32,64 or 128';
-	result = 1;
+    result = 1;
 end
-

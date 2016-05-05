@@ -8,6 +8,7 @@ module kat_ten_gb_eth #(
     parameter FABRIC_IP         = 32'hffff_ffff,
     parameter FABRIC_PORT       = 16'hffff,
     parameter FABRIC_GATEWAY    = 8'd0,
+    parameter FABRIC_NETMASK    = 32'hFFFF_FF00,
     parameter FABRIC_ENABLE     = 0,
     parameter FABRIC_MC_RECV_IP      = 32'hffff_ffff,
     parameter FABRIC_MC_RECV_IP_MASK = 32'hffff_ffff,
@@ -20,7 +21,8 @@ module kat_ten_gb_eth #(
     parameter CPU_RX_ENABLE     = 1,
     parameter RX_DIST_RAM       = 0,
     parameter LARGE_PACKETS     = 0,
-    parameter TTL               = 1
+    parameter TTL               = 1,
+    parameter PROMISC_MODE      = 0
   ) (
     input         clk,
     input         rst,
@@ -144,6 +146,7 @@ module kat_ten_gb_eth #(
   wire [31:0] local_mc_recv_ip;
   wire [31:0] local_mc_recv_ip_mask;
   wire  [7:0] local_gateway;
+  wire [31:0] local_netmask;
 
   // CPU Arp Cache signals;
   wire  [7:0] arp_cache_addr;
@@ -177,6 +180,7 @@ module kat_ten_gb_eth #(
     .FABRIC_IP       (FABRIC_IP),
     .FABRIC_PORT     (FABRIC_PORT),
     .FABRIC_GATEWAY  (FABRIC_GATEWAY),
+    .FABRIC_NETMASK  (FABRIC_NETMASK),
     .FABRIC_ENABLE   (FABRIC_ENABLE),
     .MC_RECV_IP      (FABRIC_MC_RECV_IP),
     .MC_RECV_IP_MASK (FABRIC_MC_RECV_IP_MASK),
@@ -223,6 +227,7 @@ module kat_ten_gb_eth #(
     .local_ip              (local_ip),
     .local_port            (local_port),
     .local_gateway         (local_gateway),
+    .local_netmask         (local_netmask),
     .local_mc_recv_ip      (local_mc_recv_ip),
     .local_mc_recv_ip_mask (local_mc_recv_ip_mask),
     //software tge reset (app_reset only)
@@ -255,6 +260,7 @@ module kat_ten_gb_eth #(
     .local_ip            (local_ip),
     .local_port          (local_port),
     .local_gateway       (local_gateway),
+    .local_netmask       (local_netmask),
     // CPU Arp Cache signals;
     .arp_cache_addr      (arp_cache_addr),
     .arp_cache_rd_data   (arp_cache_rd_data),

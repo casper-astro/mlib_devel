@@ -84,6 +84,7 @@ if strcmp(show_format, 'on'),
         end
     end
     display_string = strcat(display_string, ': ', config_string);
+    display_string = regexprep(display_string, ',$', '');
 end
 set_param(blk, 'AttributesFormatString', display_string);
 

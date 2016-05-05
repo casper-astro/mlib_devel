@@ -33,6 +33,7 @@ Program map
 -detail;
 -ol high;
 -xe n;
+-mt 2;
 -register_duplication;
 #-global_opt on;            # Try uncommenting if timing is an issue
 -o <design>_map.ncd;        # Output Mapped ncd file
@@ -66,6 +67,7 @@ Program par
 #-xe n;
 -w;                         # Overwrite existing placed and routed ncd
 #-ol high;                   # Overall effort level
+-mt 4;                      # Number of multi-threads
 <inputdir><design>_map.ncd; # Input mapped NCD file
 <design>.ncd;               # Output placed and routed NCD
 <inputdir><design>.pcf;     # Input physical constraints file

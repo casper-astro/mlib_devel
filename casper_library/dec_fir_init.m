@@ -7,6 +7,7 @@
 % n_inputs = The number of parallel input samples.
 % coeff = The FIR coefficients, top-to-bottom.
 % n_bits = Bit width out.
+% n_bits_bp = Binary point of output
 % quantization = Quantization behavior [Truncate, Round (unbiased: +/- Inf),
 %    or Round (unbiased: Even Values)]
 % add_latency = The latency of adders.
@@ -16,6 +17,8 @@
 % coeff_bin_pt = Number of bits after binary point in coefficients
 % absorb_adders = Attempt to absorb adders following multipliers into DSP 
 %   slices by making them be implemented at behavioral HDL
+% pre_conv_shift = How many bits to shift left before final output
+%   conversion.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                             %
@@ -51,8 +54,8 @@ clog('entering dec_fir_init', 'trace');
 
 % Declare any default values for arguments you might like.
 % Added defaults and fixed the quatization default for 10.1 tools AWL
-defaults = {'n_inputs', 1, 'n_bits', 8, ...
-    'coeff', 0.1, ...
+defaults = {'n_inputs', 1, 'n_bits', 8, 'n_bits_bp', 7, ...
+    'coeff', 0.1, 'lshift', 1, ...
     'quantization', 'Round  (unbiased: +/- Inf)', ...
     'add_latency', 1, 'mult_latency', 2, 'conv_latency', 2, ...
     'coeff_bit_width', 25, 'coeff_bin_pt', 24, ...
@@ -75,6 +78,20 @@ coeff_bit_width = get_var('coeff_bit_width', 'defaults', defaults, varargin{:});
 coeff_bin_pt = get_var('coeff_bin_pt', 'defaults', defaults, varargin{:}); 
 absorb_adders = get_var('absorb_adders', 'defaults', defaults, varargin{:});
 adder_imp = get_var('adder_imp', 'defaults', defaults, varargin{:});
+
+try
+    get_param(blk, 'lshift');
+    lshift = get_var('lshift', 'defaults', defaults, varargin{:});
+catch err_inf,
+    lshift = 1;
+end
+
+try
+    get_param(blk, 'n_bits_bp');
+    n_bits_bp = get_var('n_bits_bp', 'defaults', defaults, varargin{:});
+catch err_inf,
+    n_bits_bp = n_bits - 1;
+end
 
 %default library state
 if n_inputs == 0,
@@ -170,14 +187,14 @@ for i=1:num_fir_col,
 end
 
 reuse_block(blk, 'shift1', 'xbsIndex_r4/Shift', ...
-    'shift_dir', 'Left', 'shift_bits', '1', ...
+    'shift_dir', 'Left', 'shift_bits', num2str(lshift), ...
     'Position', [200*num_fir_col+500 300 200*num_fir_col+530 315]);
 reuse_block(blk, 'shift2', 'xbsIndex_r4/Shift', ...
-    'shift_dir', 'Left', 'shift_bits', '1', ...
+    'shift_dir', 'Left', 'shift_bits', num2str(lshift), ...
     'Position', [200*num_fir_col+500 500 200*num_fir_col+530 515]);
 reuse_block(blk, 'convert1', 'xbsIndex_r4/Convert', ...
     'Position', [200*num_fir_col+560 300 200*num_fir_col+590 315], ...
-    'n_bits', num2str(n_bits), 'bin_pt', num2str(n_bits-1), 'arith_type', 'Signed  (2''s comp)', ...
+    'n_bits', num2str(n_bits), 'bin_pt', num2str(n_bits_bp), 'arith_type', 'Signed  (2''s comp)', ...
     'latency', num2str(conv_latency), 'quantization', quantization);
 reuse_block(blk, 'convert2', 'xbsIndex_r4/Convert', ...
     'Position', [200*num_fir_col+560 500 200*num_fir_col+590 515], ...
@@ -250,7 +267,7 @@ end
 clean_blocks(blk);
 
 % Set attribute format string (block annotation)
-annotation=sprintf('%d taps\n%d_%d r/i', length(coeff), n_bits, n_bits-1);
+annotation=sprintf('%d taps\n%d_%d r/i', length(coeff), n_bits, n_bits_bp);
 set_param(blk,'AttributesFormatString',annotation);
 
 save_state(blk, 'defaults', defaults, varargin{:});

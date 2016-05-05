@@ -51,6 +51,7 @@ s.fab_gate       = ['0x', dec2hex(eval(get_param(blk_name, 'fab_gate'))) ];
 s.fab_en         = num2str(strcmp(get_param(blk_name, 'fab_en'),'on'));
 s.large_packets  = num2str(strcmp(get_param(blk_name, 'large_frames'),'on'));
 s.ttl            = ['0x', dec2hex(eval(get_param(blk_name, 'ttl')))   ];
+s.promisc_mode   = num2str(strcmp(get_param(blk_name, 'promisc_mode'),'on'));
 
 %convert (more intuitive) mask values to defines to be passed on if using ROACH2
 switch s.hw_sys
@@ -129,11 +130,17 @@ parameters.CPU_TX_ENABLE  = s.cpu_tx_enable;
 parameters.TTL            = s.ttl;
 
 switch s.hw_sys
-  case {'ROACH2','MKDIG'}, 
+  case {'MKDIG'}, 
     parameters.PREEMPHASIS    = s.preemph_r2; 
     parameters.POSTEMPHASIS   = s.postemph_r2;
     parameters.DIFFCTRL       = s.swing_r2;
     parameters.RXEQMIX        = s.rxeqmix_r2;
+  case {'ROACH2'}, 
+    parameters.PREEMPHASIS    = s.preemph_r2; 
+    parameters.POSTEMPHASIS   = s.postemph_r2;
+    parameters.DIFFCTRL       = s.swing_r2;
+    parameters.RXEQMIX        = s.rxeqmix_r2;
+    parameters.PROMISC_MODE   = s.promisc_mode;
   otherwise,
     s.swing          = get_param(blk_name, 'swing');
     parameters.SWING          = s.swing;
