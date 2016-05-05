@@ -589,18 +589,18 @@ class SimulinkFrontend(ToolflowFrontend):
 
         # The matlab script responsible for generating the peripheral file
         # each script represents a matlab function
-        script1 = 'load_system'
+        script1 = 'open_system'
         script2 = 'set_param'
         script3 = 'gen_block_file'
         # The matlab syntax to call this script with appropriate args
-        # This scripts runs load_system(), set_param() and finally gen_block_file().
-        # if load_system() and set_param() are not run then the peripheral names will
+        # This scripts runs open_system(), set_param() and finally gen_block_file().
+        # if open_system() and set_param() are not run then the peripheral names will
         # be incorrectly generated and the design will not compile. Everything is run
         # on a single matlab terminal line
         ml_cmd = "%s('%s');sys=gcs;%s(sys,'SimulationCommand','update');%s('%s','%s');exit" \
                  % (script1, self.modelpath, script2, script3, self.compile_dir, fname)
         # Complete command to run on terminal
-        term_cmd = matlab_start_cmd + ' -nodisplay -nosplash -r "%s"' % ml_cmd
+        term_cmd = matlab_start_cmd + ' -nodesktop -nosplash -r "%s"' % ml_cmd
         self.logger.info('Running terminal command: %s' % term_cmd)
         os.system(term_cmd)
 

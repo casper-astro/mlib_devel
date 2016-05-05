@@ -1,13 +1,9 @@
 #!/bin/bash
 ##############################################
-source vivado_config.sh
+source $MLIB_DEVEL_PATH/vivado_config.sh
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
-#source $XILINX_PATH/settings64.sh
-#export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}:${MATLAB_PATH}/bin
 export PATH=${MATLAB_PATH}/bin:$PATH
 echo $PATH
-#export MATLAB=$MATLAB_PATH
-#$MATLAB/bin/matlab
 echo "EXECUTING: ${XILINX_PATH}/bin/sysgen $@"
 ${XILINX_PATH}/bin/sysgen $@

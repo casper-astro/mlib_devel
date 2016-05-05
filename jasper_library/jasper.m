@@ -5,6 +5,7 @@ if nargin > 0
 end
 
 sys = gcs;
+
 modelpath = get_param(sys, 'filename');
 
 [modeldir, modelname, modelext] = fileparts(modelpath);
@@ -42,4 +43,9 @@ update_model = 0;
 start_sysgen_compile(modelpath, builddir, update_model);
 
 disp('Complete');
-disp(sprintf('Run ''exec_flow.py -m %s --middleware --backend --software'' to finish flow', modelpath));
+%if vivado is to be used
+if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == '1'
+    disp(sprintf('Run ''exec_flow.py -m %s --middleware --backend --software'' to finish flow', modelpath));
+else
+   disp(sprintf('Run ''exec_flow.py -m %s --middleware --backend --software --be ise'' to finish flow', modelpath)); 
+end    

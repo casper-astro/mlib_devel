@@ -1,15 +1,10 @@
 #!/bin/bash
 ##############################################
-source ise_config.sh
+source $MLIB_DEVEL_PATH/ise_config.sh
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
-#source $XILINX_PATH/settings64.sh
-#export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}:${MATLAB_PATH}/bin
 export PATH=${PATH}:${XILINX}/ISE/bin/${PLATFORM}:${XILINX_PATH}/ISE/sysgen/bin/${PLATFORM}
 export PATH=${MATLAB_PATH}/bin:$PATH
 echo $PATH
-#export MATLAB=$MATLAB_PATH
-#$MATLAB/bin/matlab
-#echo "EXECUTING: ${XILINX_PATH}/bin/sysgen $@"
-#${XILINX_PATH}/bin/sysgen $@
-$MATLAB/bin/matlab
+echo "EXECUTING: ${MATLAB_PATH}/bin/matlab $@"
+${MATLAB_PATH}/bin/matlab $@
