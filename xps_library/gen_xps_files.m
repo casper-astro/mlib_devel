@@ -683,7 +683,9 @@ if run_edk,
     eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
-        edit 'implementation/system.twr';
+        if exist('implementation/system.twr', 'file') == 2,
+            edit 'implementation/system.twr';
+        end
         cd(simulink_path);
         error('XPS failed.');
     else

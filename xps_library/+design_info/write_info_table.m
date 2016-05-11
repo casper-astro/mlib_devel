@@ -7,7 +7,7 @@ function write_info_table(filename, sysname, blks)
 
     % the virtual info blocks we're populating
     info_blocks = {};
-
+    
     % process the blocks
     tags = {};
     for b = 1 : numel(blks),
@@ -27,6 +27,20 @@ function write_info_table(filename, sysname, blks)
     info_blocks = [info_blocks, design_info.InfoBlock('system', sysname, '77777', '77777')];
     info_blocks = [info_blocks, design_info.InfoBlock('builddate', datestr(now), '77777', '77777')];
     
+    % workspace variables
+    base_vars = evalin('base', 'whos');
+    num_bvars = length(base_vars);
+    for ctr = 1 : num_bvars,
+        tmp.name = base_vars(ctr).name;
+        tmp.value = evalin('base', base_vars(ctr).name);
+        if isnumeric(tmp.value),
+            tmp.value = num2str(tmp.value);
+        end
+        if ischar(tmp.value),
+            info_blocks = [info_blocks, design_info.InfoBlock(tmp.name, tmp.value, '77777', '77777')];
+        end
+    end
+
     % write the file
     try
         fid = fopen(filename, 'w');
