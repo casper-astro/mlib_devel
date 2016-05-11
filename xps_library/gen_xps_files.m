@@ -522,7 +522,11 @@ if run_edkgen,
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
     % add extra register and snapshot info from the design
-    gen_xps_add_design_info(sys, mssge_paths, slash);
+    try
+        gen_xps_add_design_info(sys, mssge_paths, slash);
+    catch exc
+        disp('WARNING WARNING PAIN SUFFERING ALARUM ALARUM - adding design info failed for some reason.');
+    end
 
     % shanly and mark's new format - generated from core_info and design_info
     if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'MKDIG'),
