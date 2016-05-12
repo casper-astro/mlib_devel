@@ -522,7 +522,11 @@ if run_edkgen,
     gen_xps_mod_ucf(xsg_obj, xps_objs, mssge_proj, mssge_paths, slash);
 
     % add extra register and snapshot info from the design
-    gen_xps_add_design_info(sys, mssge_paths, slash);
+    try
+        gen_xps_add_design_info(sys, mssge_paths, slash);
+    catch exc
+        disp('WARNING WARNING PAIN SUFFERING ALARUM ALARUM - adding design info failed for some reason.');
+    end
 
     % shanly and mark's new format - generated from core_info and design_info
     if strcmp(hw_sys, 'ROACH') || strcmp(hw_sys, 'ROACH2') || strcmp(hw_sys, 'MKDIG'),
@@ -683,7 +687,9 @@ if run_edk,
     eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
-        edit 'implementation/system.twr';
+        if exist('implementation/system.twr', 'file') == 2,
+            edit 'implementation/system.twr';
+        end
         cd(simulink_path);
         error('XPS failed.');
     else
