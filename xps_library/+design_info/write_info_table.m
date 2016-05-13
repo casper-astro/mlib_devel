@@ -37,7 +37,16 @@ function write_info_table(filename, sysname, blks)
             tmp.value = num2str(tmp.value);
         end
         if ischar(tmp.value),
-            info_blocks = [info_blocks, design_info.InfoBlock(tmp.name, tmp.value, '77777', '77777')];
+            tmp.value = strtrim(tmp.value);
+            if strcmp(tmp.value, '\n') == 1,
+                tmp.value = '';
+            end
+            if strcmp(tmp.value, '\t') == 1,
+                tmp.value = '';
+            end
+            if isempty(tmp.value) == 0,
+                info_blocks = [info_blocks, design_info.InfoBlock(tmp.name, tmp.value, '77777', '77777')];
+            end
         end
     end
 
