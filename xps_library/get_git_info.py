@@ -43,8 +43,9 @@ def get_commit_hash(file_or_dir):
         raise GitInfoError('%s: error running git log:\n\t%s' %
                            (file_or_dir, err))
     commit_hash = output.replace('commit ', '')
-    if commit_hash.find('\n') != 40:
-        raise GitInfoError('%s: hash length incorrect' % file_or_dir)
+    hashlen = commit_hash.find('\n')
+    if hashlen != 40:
+        raise GitInfoError('%s: hash length incorrect, wanted 40, got %i' % (file_or_dir, hashlen))
     commit_hash = commit_hash[0:40]
     return commit_hash
 
