@@ -70,12 +70,12 @@ pins:
   led:
     iostd: LVCMOS25
     loc:
-      - D13
-      - D14
-      - E12
-      - E13
       - C13
       - C14
+      - D13
+      - D14 
+      - E12
+      - E13
   eth_clk_p:
     loc:
       - K6
