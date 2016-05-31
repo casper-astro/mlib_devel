@@ -38,7 +38,7 @@ module wb_adc16_controller#(
     output        [G_NUM_SCLK_LINES - 1 : 0] adc1_adc3wire_sclk,
 
     output        adc16_reset,
-    output        [7:0] adc16_iserdes_bitslip,
+    output        [63:0] adc16_iserdes_bitslip,
 
     output        [63:0] adc16_delay_rst,
     output        [4:0] adc16_delay_tap,
@@ -46,6 +46,8 @@ module wb_adc16_controller#(
     output  [1:0] adc16_demux_mode,
     input   [1:0] adc16_locked
   );
+
+  localparam CONTROLLER_REV = 2'b01;
 
   /********* Global Signals *************/
 
@@ -89,7 +91,7 @@ module wb_adc16_controller#(
   /* --ZZ ---- ---- ---- ---- ---- ---- ---- */
   /* ---- --LL ---- ---- ---- ---- ---- ---- */
   /* ---- ---- NNNN ---- ---- ---- ---- ---- */
-  /* ---- ---- ---- --RR ---- ---- ---- ---- */
+  /* ---- ---- ---- VVRR ---- ---- ---- ---- */
   /* ---- ---- ---- ---- ---- --C- ---- ---- */
   /* ---- ---- ---- ---- ---- ---D ---- ---- */
   /* ---- ---- ---- ---- ---- ---- 7654 3210 */
@@ -161,7 +163,7 @@ module wb_adc16_controller#(
   /* ---- ---- ---R ---- ---- ---- ---- ---- */
   /* ---- ---- ---- ---S ---- ---- ---- ---- */
   /* ---- ---- ---- ---- HGFE DCBA ---- ---- */
-  /* ---- ---- ---- ---- ---- ---- ---T TTTT */
+  /* ---- ---- ---- ---- ---- ---- XXXT TTTT */
   /* ======================================= */
   /* NOTE: W enables writing the MM bits.    */
   /*       Some of the other bits in this    */
@@ -184,8 +186,9 @@ module wb_adc16_controller#(
   assign adc16_demux_mode      = adc16_ctrl_wire[25:24];
   assign adc16_reset           = adc16_ctrl_wire[20  ];
   assign adc16_snap_req        = adc16_ctrl_wire[16  ];
-  assign adc16_iserdes_bitslip = adc16_ctrl_wire[15:8];
   assign adc16_delay_tap       = adc16_ctrl_wire[4:0 ];
+  assign adc16_iserdes_bitslip_chip_sel = adc16_ctrl_wire[15:8];
+  assign adc16_iserdes_bitslip_lane_sel = adc16_ctrl_wire[7:5];
 
   /* ADC0 Delay Strobe Register */
   reg [63:0] adc16_delay_strobe_reg;
@@ -309,7 +312,7 @@ module wb_adc16_controller#(
                    wb_data_out_reg[27:26] <= 2'b00;
                    wb_data_out_reg[25:24] <= adc16_locked;
                    wb_data_out_reg[23:20] <= G_NUM_UNITS;
-                   wb_data_out_reg[19:18] <= 2'b00;
+                   wb_data_out_reg[19:18] <= CONTROLLER_REV;
                    wb_data_out_reg[17:16] <= G_ROACH2_REV;
                    wb_data_out_reg[15:0 ] <= adc16_adc3wire_reg[15:0];
                end
@@ -336,6 +339,15 @@ module wb_adc16_controller#(
   assign wb_dat_o     = wb_ack_o ? wb_data_out_reg : 32'b0;
   assign wb_err_o   = 1'b0;
   assign wb_ack_o  = wb_ack;
+
+  wb_adc16_onehot_encoder #(
+      .N_CHIPS(8)
+  ) onehot_encoder_inst (
+      .clk(wb_clk),
+      .chip_sel(adc16_iserdes_bitslip_chip_sel),
+      .lane_sel(adc16_iserdes_bitslip_lane_sel),
+      .onehot(adc16_iserdes_bitslip)
+  );
 
 endmodule
 
