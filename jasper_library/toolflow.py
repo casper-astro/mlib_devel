@@ -761,7 +761,9 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('update_compile_order -fileset sources_1')
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]')
-            # self.add_tcl_cmd('upgrade_ip [get_ips *]')
+            # Hack to get the System generator RAMs to see their coefficient files.
+            self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/')
+            self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]')
             self.add_tcl_cmd('reset_run synth_1')
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores)
             self.add_tcl_cmd('wait_on_run synth_1')
