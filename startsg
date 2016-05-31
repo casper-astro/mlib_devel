@@ -1,6 +1,5 @@
 #!/bin/bash
 ##############################################
-source $MLIB_DEVEL_PATH/vivado_config.sh
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
 export PATH=${MATLAB_PATH}/bin:$PATH
