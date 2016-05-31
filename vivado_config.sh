@@ -1,7 +1,7 @@
-export XILINX_PATH=/media/overflow/Xilinx/Vivado/2014.4
+export XILINX_PATH=/opt/Xilinx/Vivado/2014.3.1
 export USE_VIVADO_RUNTIME_FOR_MATLAB=1
-export MATLAB_PATH=/tools/MATLAB/R2013a
-export MLIB_DEVEL_PATH=/home/jack/github/jack-h/mlib_devel
+export MATLAB_PATH=/opt/Matlab/R2015b
+export MLIB_DEVEL_PATH=~/work/git_work/ska_sa/projects/mlib_devel
 export PLATFORM=lin64
 
 export SYSGEN_SCRIPT=$MLIB_DEVEL_PATH/startsg

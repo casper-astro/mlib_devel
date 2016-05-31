@@ -1,11 +1,47 @@
 function spead_unpack_init(block)
 
+function rvname = get_port_name(counter)
+    if counter == 1,
+        rvname = 'hdr_heap_id';
+    elseif counter == 2,
+        rvname = 'hdr_heap_size';
+    elseif counter == 3,
+        rvname = 'hdr_heap_offset';
+    elseif counter == 4,
+        rvname = 'hdr_pkt_len';
+    else
+        if bitand(header_direct_mask, header_ids(counter)) == 0,
+            rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x', header_ids(counter))];
+        else
+            rvname = ['hdr', num2str(counter), '_', sprintf('0x%04x_DIR', bitand(header_ids(counter), header_direct_mask-1))];
+        end
+    end
+end
+
 set_param(block, 'LinkStatus', 'inactive');
+
+hdrs = get_param(block, 'header_ids');
+hdrs_ind = get_param(block, 'header_ind_ids');
+spead_msw = eval(get_param(block, 'spead_msw'));
+spead_lsw = eval(get_param(block, 'spead_lsw'));
+header_width_bits = spead_msw - spead_lsw;
+header_direct_mask = pow2(header_width_bits-1);
+
+% add a ONE on the MSb for the directly addressed headers
+header_ids = spead_process_header_string(hdrs);
+header_ids = [1,2,3,4,header_ids];
+for ctr = 1 : length(header_ids),
+    thisval = header_ids(ctr);
+    newval = thisval + header_direct_mask;
+    %fprintf('%i - %i -> %i\n', ctr, header_ids(ctr), newval);
+    header_ids(ctr) = newval;
+end
+% add the indirect ones
+header_ind_ids = spead_process_header_string(hdrs_ind);
+header_ids = [header_ids, header_ind_ids];
 
 combine_errors = strcmp(get_param(block, 'combine_errors'), 'on');
 current_consts = find_system(block, 'FollowLinks', 'on', 'LookUnderMasks', 'all', 'RegExp' ,'on', 'name', '.*header_const[0-9]');
-hdrs = get_param(block, 'header_ids');
-header_ids = eval(hdrs);
 num_headers = length(header_ids);
 if length(current_consts) == num_headers,
     headers_match = true;
@@ -32,13 +68,15 @@ if (headers_match == true) && (error_change == false),
     return
 end
 
-if num_headers < 1,
-    error('Must have at least one header!');
+if num_headers < 5,
+    error('Must have at least compulsory headers and data!');
 end
+num_total_hdrs = num2str(num_headers+1);
+total_hdrs_bits = num2str(ceil(log2(num_headers+2)));
 set_param([block, '/num_item_pts'], 'const', num2str(num_headers));
-set_param([block, '/num_headers'], 'const', num2str(num_headers+1));
-set_param([block, '/num_headers'], 'n_bits', num2str(ceil(log2(num_headers))+1));
-set_param([block, '/hdr_ctr'], 'n_bits', num2str(ceil(log2(num_headers))+1));
+set_param([block, '/num_headers'], 'const', num_total_hdrs);
+set_param([block, '/num_headers'], 'n_bits', total_hdrs_bits);
+set_param([block, '/hdr_ctr'], 'n_bits', total_hdrs_bits);
 delay = 1;
 
 showname = 'off';
@@ -64,7 +102,7 @@ if combine_errors == 1,
     try delete_block([block, '/err_pktlen']); catch eid, end
     reuse_block(block, 'error_or', 'xbsIndex_r4/Logical', ...
         'showname', showname, 'logical_function', 'OR', ...
-        'inputs', num2str(2 + length(header_ids)), ...
+        'inputs', num2str(2 + num_headers), ...
         'Position', [1665, 150 + ((num_headers+1) * 75), 1720, 150 + ((num_headers+1) * 75) + ((num_headers+1) * 10)]);
     reuse_block(block, 'eof_out_from', 'built-in/from', ...
         'GotoTag', 'eof_out', 'showname', showname, ...
@@ -96,7 +134,7 @@ else
 end
 
 % draw the blocks
-for ctr = 1 : length(header_ids),
+for ctr = 1 : num_headers,
     this_ctr = num2str(ctr);
     name_from = ['header_from', this_ctr];
     name_reg = ['header_reg', this_ctr];
@@ -106,7 +144,7 @@ for ctr = 1 : length(header_ids),
     name_relational = ['header_rel', this_ctr];
     name_error = ['err_hdr', this_ctr];
     name_constant = ['header_const', this_ctr];
-    name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
+    name_out = get_port_name(ctr);
     row_y = 70 + (ctr * 75);
     row_x = 1500 - (ctr * 50);
     reuse_block(block, name_from, 'built-in/from', ...
@@ -152,7 +190,7 @@ for ctr = 1 : length(header_ids),
 end
 
 % connect them
-for ctr = 1 : length(header_ids),
+for ctr = 1 : num_headers,
     this_ctr = num2str(ctr);
     name_from = ['header_from', this_ctr];
     name_reg = ['header_reg', this_ctr];
@@ -162,8 +200,8 @@ for ctr = 1 : length(header_ids),
     name_relational = ['header_rel', this_ctr];
     name_error = ['err_hdr', this_ctr];
     name_constant = ['header_const', this_ctr];
-    name_out = ['hdr', this_ctr, '_', sprintf('0x%04x', header_ids(ctr))];
-    if ctr == length(header_ids),
+    name_out = get_port_name(ctr);
+    if ctr == num_headers,
         add_line(block, ['from_gbe_data',  '/1'], [name_reg, '/1'], 'autorouting', 'on');
     else
         last_reg = ['header_reg', num2str(ctr+1)];
@@ -193,6 +231,7 @@ for ctr = 1 : length(header_ids),
     ph = get_param([block, '/', name_constant], 'PortHandles');
     set_param(ph.Outport(1), 'name', ['exp', this_ctr]);
 end
+add_line(block, 'header_delay4/1', 'check_datalen/2', 'autorouting', 'on');
 
 clean_blocks(block);
 

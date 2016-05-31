@@ -55,7 +55,7 @@ proc generate_bram {mhsinst} {
   lappend lines "SET vhdlsim = False"
   lappend lines "# END Project Options"
   lappend lines "# BEGIN Select"
-  lappend lines "SELECT Block_Memory_Generator xilinx.com:ip:blk_mem_gen:6.1"
+  lappend lines "SELECT Block_Memory_Generator xilinx.com:ip:blk_mem_gen:7.3"
   lappend lines "# END Select"
   lappend lines "# BEGIN Parameters"
   lappend lines "CSET additional_inputs_for_power_estimation=false"

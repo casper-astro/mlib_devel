@@ -55,14 +55,6 @@ module top (
     wb_rstRR <= wb_rstR;
   end
   
-  reg [27:0] led_ctr;
-  reg cs_reg;
-  always @(posedge sys_clk) begin
-      led_ctr <= led_ctr + 1;
-      cs_reg <= cs_n;
-  end
-
-  
 
   assign wb_clk_i = sys_clk;
   assign wb_rst_i = wb_rstRR;

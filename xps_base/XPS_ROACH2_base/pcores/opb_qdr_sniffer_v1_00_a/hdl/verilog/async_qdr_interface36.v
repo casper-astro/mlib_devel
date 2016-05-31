@@ -43,6 +43,7 @@ module async_qdr_interface36 #(
   reg  [3:0] host_be_reg;
   reg host_rnw_reg;
 
+  reg [31:0] host_datao_pre;
   reg [31:0] host_datao_reg;
   
   reg second_cycle;  
@@ -60,10 +61,6 @@ module async_qdr_interface36 #(
   assign qdr_be = (second_cycle && word_id[1]) || (!second_cycle && !word_id[1]) ?
                      extended_host_be_reg : 8'b0;
 
-  assign host_datao = host_datao_reg;
-  reg host_ack_reg;
-  assign host_ack = host_ack_reg;
-
   /* Everything involving the write_buffer register is an almighty hack to make
    * the ROACH2 QDR CPU interface work without changing any katcp
    * code. The ROACH2 does not have access to the QDR byte-enable pins
@@ -79,34 +76,48 @@ module async_qdr_interface36 #(
   reg qdr_inputs_valid;
   /* Insert parity bits to pad to 36 bits */
   //wire [35:0] host_data_parity_ext = {1'b0, host_datai_reg[31:24], 1'b0, host_datai_reg[23:16], 1'b0, host_datai_reg[15:8], 1'b0, host_datai_reg[7:0]};
-  wire [35:0] host_data_parity_ext = {4'b0000, host_datai_reg[31:0]};
+//  wire [35:0] host_data_parity_ext = {4'b0000, host_datai_reg[31:0]};
   always @(posedge qdr_clk) begin
-    if (qdr_rst) begin
-      write_buffer <= 144'b0;
-    end else if (qdr_inputs_valid) begin
+    //if (qdr_rst) begin
+    //  write_buffer <= 144'b0;
+    //end else if (qdr_inputs_valid) begin
       if (!host_rnw_reg) begin //only update the output registers on a write operation
         case (host_addr_reg[3:2])
           2'd0: begin
-          write_buffer[ 35:0  ] <= host_data_parity_ext;
+          write_buffer[ 71:32 ] <= {4'b0,host_datai_reg};		
+//          write_buffer[ 35:0  ] <= host_data_parity_ext;
           end
           2'd1: begin
-            write_buffer[ 71:36 ] <= host_data_parity_ext;
+            write_buffer[ 31:0  ] <= host_datai_reg;
+//            write_buffer[ 71:36 ] <= host_data_parity_ext;
           end
           2'd2: begin
-            write_buffer[107:72 ] <= host_data_parity_ext;
+            write_buffer[143:104 ] <= {4'b0,host_datai_reg};
+//            write_buffer[107:72 ] <= host_data_parity_ext;
           end
           2'd3: begin
-            write_buffer[143:108] <= host_data_parity_ext;
+            write_buffer[103:72 ] <= host_datai_reg;
+//            write_buffer[143:108] <= host_data_parity_ext;
           end
         endcase
       end
-    end
+    //end
   end
 
   assign qdr_d[71:0] = (second_cycle==1'b1) ? write_buffer[143:72] : write_buffer[71:0];
 
+  reg [31:0] host_addr_reg_pre;
+  reg [31:0] host_datai_reg_pre;
+  reg [3:0] host_be_reg_pre;
+  reg host_rnw_reg_pre;
 
-
+  //register on inputs 
+  always @(posedge host_clk) begin
+      host_addr_reg_pre  <= host_addr;
+      host_datai_reg_pre <= host_datai;
+      host_be_reg_pre    <= host_be;
+      host_rnw_reg_pre   <= host_rnw;
+  end
 
   /* foo */
 
@@ -125,7 +136,6 @@ module async_qdr_interface36 #(
   //synthesis attribute HU_SET of resp_regRR is SET0
   //synthesis attribute RLOC   of resp_regR  is X0Y0
   //synthesis attribute RLOC   of resp_regRR is X0Y1
-
 
   reg wait_clear;
 
@@ -155,12 +165,22 @@ module async_qdr_interface36 #(
     end
   end
 
-  reg qdr_trans_strb, qdr_resp_ready;
-  reg [1:0] hshake_state;
+  //cross clock domain
+  always @(posedge qdr_clk) begin
+    if (trans_regRR) begin
+      host_addr_reg  <= host_addr_reg_pre;
+      host_datai_reg <= host_datai_reg_pre;
+      host_be_reg    <= host_be_reg_pre;
+      host_rnw_reg   <= host_rnw_reg_pre;
+    end
+  end
 
-  localparam RESP_IDLE       = 2'd0;
-  localparam RESP_PREP_WRITE = 2'd1;
-  localparam RESP_BUSY       = 2'd2;
+  reg qdr_trans_strb, qdr_resp_ready;
+  reg [2:0] hshake_state;
+
+  localparam RESP_IDLE       = 3'b001;
+  localparam RESP_PREP_WRITE = 3'b010;
+  localparam RESP_BUSY       = 3'b100;
 
   always @(posedge qdr_clk) begin
     qdr_trans_strb <= 1'b0;
@@ -177,10 +197,10 @@ module async_qdr_interface36 #(
           if (trans_regRR) begin
             //qdr_trans_strb <= 1'b1;
             qdr_inputs_valid <= 1'b1;
-            host_addr_reg  <= host_addr;
-            host_datai_reg <= host_datai;
-            host_be_reg    <= host_be;
-            host_rnw_reg   <= host_rnw;
+            //host_addr_reg  <= host_addr;
+            //host_datai_reg <= host_datai;
+            //host_be_reg    <= host_be;
+            //host_rnw_reg   <= host_rnw;
             hshake_state   <= RESP_PREP_WRITE;
             //hshake_state   <= RESP_BUSY;
           end
@@ -204,22 +224,25 @@ module async_qdr_interface36 #(
       endcase
     end
   end
-
+  
   /* Response Collection State Machine */
 
   reg [QDR_LATENCY - 1:0] qvld_shifter;
 
-  reg [1:0] resp_state;
-  localparam IDLE    = 2'd0;
-  localparam WAIT    = 2'd1;
-  localparam COLLECT = 2'd2;
-  localparam FINAL   = 2'd3;
+  reg [3:0] resp_state;
+  localparam IDLE    = 4'b0001;
+  localparam WAIT    = 4'b0010;
+  localparam COLLECT = 4'b0100;
+  localparam FINAL   = 4'b1000;
   reg sniffer_latch;
+
+  always @(posedge qdr_clk) begin
+    qvld_shifter   <= {qvld_shifter[QDR_LATENCY - 2:0], resp_state == WAIT && qdr_ack};
+  end
 
   always @(posedge qdr_clk) begin
     qdr_resp_ready <= 1'b0;
     second_cycle   <= 1'b0;
-    qvld_shifter   <= {qvld_shifter[QDR_LATENCY - 2:0], resp_state == WAIT && qdr_ack};
     sniffer_latch  <= 1'b0;
 
     if (qdr_rst) begin
@@ -246,11 +269,11 @@ module async_qdr_interface36 #(
               resp_state <= IDLE;
               if(!word_id[0]) begin
                   //host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
-                  host_datao_reg <= {qdr_q[31:0]};
+                  //host_datao_reg <= {qdr_q[31:0]};
                   sniffer_latch  <= 1'b1;
               end else begin
                   //host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
-                  host_datao_reg <= {qdr_q[67:36]};
+                  //host_datao_reg <= {qdr_q[67:36]};
                   sniffer_latch  <= 1'b1;
               end
               qdr_resp_ready <= 1'b1;
@@ -263,11 +286,11 @@ module async_qdr_interface36 #(
           qdr_resp_ready <= 1'b1;
           if(!word_id[0]) begin
               //host_datao_reg <= {qdr_q[34:27], qdr_q[25:18], qdr_q[16:9], qdr_q[7:0]};
-              host_datao_reg <= {qdr_q[31:0]};
+              //host_datao_reg <= {qdr_q[31:0]};
               sniffer_latch  <= 1'b1;
           end else begin
               //host_datao_reg <= {qdr_q[70:63], qdr_q[61:54], qdr_q[52:45], qdr_q[43:36]};
-              host_datao_reg <= {qdr_q[67:36]};
+              //host_datao_reg <= {qdr_q[67:36]};
               sniffer_latch  <= 1'b1;
           end
           resp_state <= IDLE;
@@ -276,6 +299,35 @@ module async_qdr_interface36 #(
     end
   end
 
+//  assign host_datao = host_datao_reg;
+  assign host_datao = host_datao_pre;
+  reg host_ack_reg;
+  assign host_ack = host_ack_reg;
+
+  //cross clock domain
+  always @(posedge host_clk) begin
+    host_datao_pre <= host_datao_reg;
+  end
+ 
+  always @(posedge qdr_clk) begin
+    case (resp_state)
+      COLLECT: begin
+        if(!word_id[0]) begin
+          host_datao_reg <= {qdr_q[63:32]};
+        end else begin
+          host_datao_reg <= {qdr_q[31:0]};
+        end
+      end
+      FINAL: begin
+        if(!word_id[0]) begin
+          host_datao_reg <= {qdr_q[63:32]};
+        end else begin
+          host_datao_reg <= {qdr_q[31:0]};
+        end
+      end
+    endcase
+  end
+ 
   assign qdr_req = qdr_trans_strb || resp_state == WAIT;
   assign sniffer_latch_out = sniffer_latch;
 

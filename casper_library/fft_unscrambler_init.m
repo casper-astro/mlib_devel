@@ -185,7 +185,7 @@ add_line(blk, 'sync/1', 'square_transposer/1');
 
 % if we have a 'large' buffer, add appropriate input delay
 % based on a rough approximation of the number of BRAMs required from bit width and buffer depth
-fanout_latency = max(0, (FFTSize-n_inputs) + ceil(log2(n_bits_in * n_inputs * 2)) - 15);
+fanout_latency = max(0, (FFTSize-n_inputs) + ceil(log2(n_bits_in * n_inputs * 2)) - 15 + 2);
 
 reuse_block(blk, 'reorder', 'casper_library_reorder/reorder', ...
   'Position', [365 30 460 ((2^n_inputs+2)*ytick)+30], ...

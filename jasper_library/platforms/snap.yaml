@@ -3,14 +3,9 @@ manufacturer: Xilinx
 fpga: xc7k160tffg676-2
 config_voltage: 2.5
 cfgbvs: VCCO
-sources:
-  - infrastructure
-  - spi_wb_bridge
-  - wbs_arbiter
-  - sys_block
-constraints:
-  - snap.xdc
-  - snap.ucf
+backend_target: vivado
+sources: []
+constraints: []
 provides:
   - sfp0
   - sfp1
@@ -24,18 +19,24 @@ provides:
   - HAD1511_2
   - lmx2581
 pins:
+  sys_clk_p:
+    loc: E10
+    iostd: LVDS_25
+  sys_clk_n:
+    loc: D10
+    iostd: LVDS_25
   miso:
-    loc: AA27
-    iostd: LVCMOS25
-  miso:
-    loc: AB28
-    iostd: LVCMOS25
+    loc: K20
+    iostd: LVCMOS33
+  mosi:
+    loc: J20
+    iostd: LVCMOS33
   sclk:
-    loc: AA25
-    iostd: LVCMOS25
+    loc: E17
+    iostd: LVCMOS33
   cs_n:
-    loc: AB25
-    iostd: LVCMOS25
+    loc: G19
+    iostd: LVCMOS33
   gpio:
     iostd: LVCMOS25
     loc:

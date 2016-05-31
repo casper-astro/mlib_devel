@@ -74,6 +74,33 @@ class Signal(ImmutableWithComments):
         for kw, val in kwargs.items():
             self.__setattr__(kw, val)
 
+def instantiate_wb_arb_module(module, n_slaves):
+    inst = module.get_instance('wbs_arbiter', 'wbs_arbiter_inst')
+    inst.add_parameter('NUM_SLAVES', 'N_WB_SLAVES')
+    inst.add_parameter('SLAVE_ADDR', 'SLAVE_BASE')
+    inst.add_parameter('SLAVE_HIGH', 'SLAVE_HIGH')
+    inst.add_parameter('TIMEOUT', 1024)
+    inst.add_port('wb_clk_i' , 'wb_clk_i' , width=0)
+    inst.add_port('wb_rst_i ', 'wb_rst_i' , width=0)
+    inst.add_port('wbm_cyc_i', 'wbm_cyc_o', width=0)
+    inst.add_port('wbm_stb_i', 'wbm_stb_o', width=0)
+    inst.add_port('wbm_we_i ', 'wbm_we_o' , width=0)
+    inst.add_port('wbm_sel_i', 'wbm_sel_o', width=4)
+    inst.add_port('wbm_adr_i', 'wbm_adr_o', width=32)
+    inst.add_port('wbm_dat_i', 'wbm_dat_o', width=32)
+    inst.add_port('wbm_dat_o', 'wbm_dat_i', width=32)
+    inst.add_port('wbm_ack_o', 'wbm_ack_i', width=0)
+    inst.add_port('wbm_err_o', 'wbm_err_i', width=0)
+    inst.add_port('wbs_cyc_o', 'wbs_cyc_o', width=n_slaves)
+    inst.add_port('wbs_stb_o', 'wbs_stb_o', width=n_slaves)
+    inst.add_port('wbs_we_o ', 'wbs_we_o' , width=0)
+    inst.add_port('wbs_sel_o', 'wbs_sel_o', width=4)
+    inst.add_port('wbs_adr_o', 'wbs_adr_o', width=32)
+    inst.add_port('wbs_dat_o', 'wbs_dat_o', width=32)
+    inst.add_port('wbs_dat_i', 'wbs_dat_i', width=32*n_slaves)
+    inst.add_port('wbs_ack_i', 'wbs_ack_i', width=n_slaves)
+    inst.add_port('wbs_err_i', 'wbs_err_i', width=n_slaves)
+
 
 class VerilogModule(object):
     def __init__(self, name='', topfile=None, comment=''):
@@ -211,6 +238,27 @@ class VerilogModule(object):
                 base_addr = wb_dev.high_addr + 1
                 self.n_wb_slaves += 1
                 self.wb_devices += [wb_dev]
+        # If we are starting a file from scratch, we need the wishbone parameters
+        # otherwise we assume they are in the file and rewrite_module_file will
+        # modify them.
+        if self.topfile is None:
+            self.add_localparam('N_WB_SLAVES', self.n_wb_slaves)
+            base_addrs = '{\n'
+            high_addrs = '{\n'
+            for sn, slave in enumerate(self.wb_devices[::-1]):
+                if sn < len(self.wb_devices) - 1:
+                    base_addrs += "    32'h%08x, // %s\n"%(slave.base_addr, slave.regname)
+                    high_addrs += "    32'h%08x, // %s\n"%(slave.high_addr, slave.regname)
+                else:
+                    base_addrs += "    32'h%08x // %s\n"%(slave.base_addr, slave.regname)
+                    high_addrs += "    32'h%08x // %s\n"%(slave.high_addr, slave.regname)
+            base_addrs += '    }'
+            high_addrs += '    }'
+            self.add_localparam('SLAVE_BASE', base_addrs)
+            self.add_localparam('SLAVE_HIGH', high_addrs)
+            instantiate_wb_arb_module(self, self.n_wb_slaves)
+            
+
 
     def get_base_wb_slaves(self):
         '''
@@ -343,14 +391,14 @@ class VerilogModule(object):
     def add_raw_string(self,s):
         self.raw_str += s
 
-    def gen_module_file(self):
+    def gen_module_file(self, filename=None):
         self.instantiate_child_ports()
         if self.topfile is None:
-            self.write_new_module_file()
+            return self.write_new_module_file(filename=filename)
         else:
-            self.rewrite_module_file()
+            return self.rewrite_module_file(filename=filename)
 
-    def rewrite_module_file(self):
+    def rewrite_module_file(self, filename=None):
         '''
         Rewrite the intially supplied verilog file to
         include instance, signals, ports, assignments and
@@ -358,9 +406,9 @@ class VerilogModule(object):
         The initial verilog file is backed up with a '.base'
         extension.
         '''
-        os.system('mv %s %s.base'%(self.topfile,self.topfile))
+        os.system('cp %s %s.base'%(self.topfile,self.topfile))
         fh_base = open('%s.base'%self.topfile,'r')
-        fh_new = open('%s'%self.topfile, 'w')
+        fh_new = open('%s'%(filename or self.topfile), 'w')
         fh_new.write('// %s, AUTOMATICALLY MODIFIED BY PYTHON\n\n'%self.topfile)
         while(True):
             line = fh_base.readline()
@@ -370,6 +418,7 @@ class VerilogModule(object):
                 logger.debug('Found module declaration')
                 fh_new.write(line)
                 fh_new.write(self.gen_port_list())
+                fh_new.write(',\n')
             elif line.lstrip(' ').startswith('localparam N_WB_SLAVES'):
                 logger.debug('Found N_WB_SLAVES declaration: %s'%line)
                 declaration = line.split('//')[0]
@@ -394,7 +443,7 @@ class VerilogModule(object):
         fh_new.close()
         fh_base.close()
 
-    def write_new_module_file(self):
+    def write_new_module_file(self, filename=None):
         '''
         Write a verilog file from scratch, based on the
         programmatic additions of instances / signals / etc.
@@ -413,31 +462,34 @@ class VerilogModule(object):
         inst_dec       = self.gen_instances_dec_str()
         assignments    = self.gen_assignments_str()
         endmod         = self.gen_endmod_str()
-        fh = open('%s.v'%self.name, 'w')
-        fh.write('// MODULE %s, AUTOMATICALLY GENERATED BY PYTHON\n\n'%self.name)
-        fh.write('/*')
-        fh.write(self.comment)
-        fh.write('*/')
-        fh.write('\n')
-        fh.write('\n')
-        fh.write(mod_dec)
-        fh.write('\n')
-        fh.write(port_dec)
-        fh.write('\n')
-        fh.write(param_dec)
-        fh.write('\n')
-        fh.write(localparam_dec)
-        fh.write('\n')
-        fh.write(sig_dec)
-        fh.write('\n')
-        fh.write(inst_dec)
-        fh.write('\n')
-        fh.write(assignments)
-        fh.write('\n')
-        fh.write(self.raw_str)
-        fh.write('\n')
-        fh.write(endmod)
-        fh.close()
+        s = ''
+        s += '// MODULE %s, AUTOMATICALLY GENERATED BY PYTHON\n\n'%self.name
+        s += '/*'
+        s += self.comment
+        s += '*/'
+        s += '\n'
+        s += '\n'
+        s += mod_dec
+        s += '\n'
+        s += port_dec
+        s += '\n'
+        s += param_dec
+        s += '\n'
+        s += localparam_dec
+        s += '\n'
+        s += sig_dec
+        s += '\n'
+        s += inst_dec
+        s += '\n'
+        s += assignments
+        s += '\n'
+        s += self.raw_str
+        s += '\n'
+        s += endmod
+        if filename is not None:
+            with open(filename, 'w') as fh:
+                fh.write(s)
+        return s
 
     def gen_top_mod(self):
         """
@@ -478,17 +530,7 @@ class VerilogModule(object):
         """
         kwm = {'in':'input','out':'output','inout':'inout'}
         s = 'module %s (\n'%self.name
-        n_ports = len(self.ports)
-        for pn,port in enumerate(self.ports):
-            if port.width == 0:
-                s += '    %s %s'%(kwm[port.dir],port.name)
-            else:
-                s += '    %s [%d:0] %s'%(kwm[port.dir], (port.width-1), port.name)
-            if pn != (n_ports-1):
-                s += ','
-            if hasattr(port, 'comment'):
-                s += ' // %s'%port.comment
-            s += '\n'
+        s += self.gen_port_list()
         s += '  );\n'
         return s
 
@@ -525,16 +567,20 @@ class VerilogModule(object):
         """
         s = ''
         kwm = {'in':'input','out':'output','inout':'inout'}
-        print self.ports
+        n_ports = len(self.ports.keys())
+        i = 1
         for name, port in self.ports.items():
             logger.debug('Generating port %s'%port.name)
             if port.width == 0:
-                s += '    %s %s,'%(kwm[port.dir],port.name)
+                s += '    %s %s'%(kwm[port.dir],port.name)
             else:
-                s += '    %s [%d:0] %s,'%(kwm[port.dir], (port.width-1), port.name)
+                s += '    %s [%d:0] %s'%(kwm[port.dir], (port.width-1), port.name)
+            if i < n_ports:
+                s += ','
             if hasattr(port, 'comment'):
                 s += ' // %s'%port.comment
             s += '\n'
+            i += 1
         return s
 
     def gen_ports_dec_str(self):

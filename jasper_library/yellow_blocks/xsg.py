@@ -16,6 +16,10 @@ class xsg(YellowBlock):
         self.provides.append('user_clk270')
 
     def modify_top(self,top):
+        top.add_signal('user_clk')
+        top.add_signal('user_clk90')
+        top.add_signal('user_clk180')
+        top.add_signal('user_clk270')
         top.assign_signal('user_clk',   self.clk_src)
         top.assign_signal('user_clk90', self.clk_src+'90')
         top.assign_signal('user_clk180',self.clk_src+'180')

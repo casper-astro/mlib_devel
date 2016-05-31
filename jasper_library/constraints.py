@@ -8,7 +8,7 @@ class PortConstraint(object):
      which can later be translated into physical constraints by providing
      information about a target platform.
      '''
-     def __init__(self, portname, iogroup, port_index=None, iogroup_index=[0], loc=None, iostd=None):
+     def __init__(self, portname, iogroup, port_index=[], iogroup_index=[0], loc=None, iostd=None):
          '''
          Construct a PortConstraint instance.
 
@@ -34,9 +34,8 @@ class PortConstraint(object):
          logger.debug('  loc: %s'%loc)
          logger.debug('  iostd: %s'%iostd)
 
-         if port_index is None:
+         if port_index == []:
              self.is_vector = False
-             port_index = [0]
          else:
              self.is_vector = True
 
@@ -51,9 +50,9 @@ class PortConstraint(object):
          self.iogroup_index = iogroup_index
          self.loc = loc
          self.iostd = iostd
-         self.width = len(port_index)
+         self.width = len(iogroup_index)
 
-         if len(port_index) != len(iogroup_index):
+         if (port_index != []) and (len(port_index) != len(iogroup_index)):
              raise ValueError("Tried to constrain a multidimensional signal with iogroup  with different dimensions!")
 
          if self.loc == [None]:
@@ -94,14 +93,14 @@ class ClockConstraint(object):
     A clock constraint -- simply holds the name of the clock
     signal and the corresponding clock freq and period.
     '''
-    def __init__(self, clocksig, name=None, freq=None, period=None):
+    def __init__(self, signal, name=None, freq=None, period=None):
         logger.debug('New clock constraint')
-        logger.debug('  clocksig: %s'%clocksig)
+        logger.debug('  clock signal: %s'%signal)
         logger.debug('  name: %s'%name)
         logger.debug('  freq: %s'%freq)
         logger.debug('  period: %s'%period)
-        self.signal = clocksig
-        self.name = name or clocksig
+        self.signal = signal
+        self.name = name or signal
         if not (bool(freq) ^ bool(period)):
             raise ValueError('Enter one of either freq or period')
 

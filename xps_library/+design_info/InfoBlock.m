@@ -48,15 +48,23 @@ classdef InfoBlock
             node.setAttribute('owner_tag', obj.parent_tag);
         end
         
-        function str = to_table_row(obj)
+        function rstr = to_table_row(obj)
             % Return the InfoBlock information in string form for the
             % information table.
-            str = '';
-            str = [str, design_info.strip_system_from_name(obj.parent_block), '\t'];
-            str = [str, obj.parent_tag, '\t'];
-            str = [str, regexprep(obj.block, '.*/', ''), '\t'];
+            rstr = '';
+            rstr = [rstr, design_info.strip_system_from_name(obj.parent_block), '\t'];
+            rstr = [rstr, obj.parent_tag, '\t'];
+            rstr = [rstr, regexprep(obj.block, '.*/', ''), '\t'];
             replace_spaces = strrep(obj.info, ' ', '\\_');
-            str = [str, replace_spaces, '\n'];
+            %replace_spaces = strrep(replace_spaces, char(10), '');
+            if isempty(regexp(replace_spaces, '\n$', 'ONCE')) == 1,
+                rstr = [rstr, replace_spaces, '\n'];
+            else
+                rstr = [rstr, replace_spaces];
+            end
+            if isempty(strtrim(rstr)) == 1,
+                error('Big problem, empty string!');
+            end
         end
     end
     

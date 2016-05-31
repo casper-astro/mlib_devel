@@ -48,12 +48,12 @@ function delay_slr_init(blk, varargin)
 
   %delay
  
-  reuse_block(blk, 'delay', 'xbsIndex_r4/Delay', ...
+  reuse_block(blk, 'dly', 'xbsIndex_r4/Delay', ...
     'latency', 'DelayLen', 'en', en, ...
     'reg_retiming', 'on', ...
     'Position', [80 20 140 80]);
-  add_line(blk, 'din/1', 'delay/1');
-  add_line(blk, 'delay/1', 'dout/1');
+  add_line(blk, 'din/1', 'dly/1');
+  add_line(blk, 'dly/1', 'dout/1');
 
   if strcmp(async, 'on'),
     add_line(blk, 'dvi/1', 'delay/2');
