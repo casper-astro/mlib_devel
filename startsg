@@ -2,6 +2,14 @@
 ##############################################
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
+if [ -f vivado_config.local ];
+then
+    echo "Using configuration: $DIR/vivado_config.local"
+    source vivado_config.local
+else
+    echo "Using default configuration: $DIR/vivado_config.sh"
+    source vivado_config.sh
+fi
 export PATH=${MATLAB_PATH}/bin:$PATH
 echo $PATH
 echo "EXECUTING: ${XILINX_PATH}/bin/sysgen $@"
