@@ -100,7 +100,6 @@ set_param(insert_parity_blk, 'bitexpr', input_parity_map);
 set_param(extract_parity_blk, 'bitexpr', output_parity_map);
 
 
-set_param([myname, '/qdr_sim_model/sim_data_in'], 'n_bits', num2str(data_width));
 set_param([myname, '/convert_data_in'], 'n_bits', num2str(data_width));
 set_param([myname, '/convert_data_in1'], 'n_bits', num2str(data_width));
 set_param([myname, '/convert_be'], 'n_bits', num2str(be_width));
