@@ -762,7 +762,11 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]')
             # Hack to get the System generator RAMs to see their coefficient files.
+            # Vivado (2016.1) doesn't seem to import the .coe and ram .xci files in the
+            # correct relative directories as configured by System Generator.
+            self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {')
             self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/')
+            self.add_tcl_cmd('}')
             self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]')
             self.add_tcl_cmd('reset_run synth_1')
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores)
