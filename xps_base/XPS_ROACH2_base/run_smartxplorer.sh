@@ -4,7 +4,6 @@ cd implementation
 
 # do some things the makefile would do
 cp ../data/system.ucf .
-ngdbuild -p xc6vsx475tff1759-1 -nt timestamp -sd ../pcores -uc system.ucf system.ngc system.ngd
 
 # run smartxplorer
 smartxplorer -p xc6vsx475t-1-ff1759 -ucf system.ucf -wd smartxplorer system.ngc -l smartxplorer_hosts.txt -m 12 -bo "off"
