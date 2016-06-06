@@ -20,3 +20,5 @@ jasper_library/SysgenFeatureReport.htm
 jasper_library/test_toolflow
 jasper_library/test_toolflow_bram
 jasper_library/vivado_pid17107.str
+*.local
+vivado_pid*.str
