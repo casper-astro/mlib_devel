@@ -1,7 +1,5 @@
 *_sysgen.log
 *_sysgen_error.log
-./jasper_library/*_sysgen.log
-./jasper_library/*_sysgen_error.log
 *.asv
 *.log
 *.jou
@@ -15,10 +13,5 @@ casper_library/casper_library_downconverter.*
 tags
 xps_base/XPS_ROACH2_base/system.xmp.sx475t.updated
 xps_base/XPS_ROACH2_base/system.xmp.updated
-vivado.sh
-jasper_library/SysgenFeatureReport.htm
-jasper_library/test_toolflow
-jasper_library/test_toolflow_bram
-jasper_library/vivado_pid17107.str
 *.local
 vivado_pid*.str
