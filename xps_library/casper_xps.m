@@ -23,7 +23,7 @@
 function varargout = casper_xps(varargin)
 % CASPER_XPS CASPER Xilinx ISE Batch Tools GUI
 
-% Last Modified by GUIDE v2.5 09-Oct-2012 12:36:59
+% Last Modified by GUIDE v2.5 06-Jun-2016 10:24:57
 
 if nargin == 0  % LAUNCH GUI
 
@@ -141,15 +141,17 @@ function varargout = run_Callback(h, eventdata, handles, varargin)
 design_name = get(handles.design_name,'String');
 xsg_version = get(handles.xsg_version,'Value');
 
-flow_vec.update   = get(handles.run_update  ,'Value');
-flow_vec.drc      = get(handles.run_drc     ,'Value');
-flow_vec.xsg      = get(handles.run_xsg     ,'Value');
-flow_vec.copy     = get(handles.run_copy    ,'Value');
-flow_vec.ip       = get(handles.run_ip      ,'Value');
-flow_vec.edkgen   = get(handles.run_edkgen  ,'Value');
-flow_vec.elab     = get(handles.run_elab    ,'Value');
-flow_vec.software = get(handles.run_software,'Value');
-flow_vec.edk      = get(handles.run_edk     ,'Value');
+flow_vec.update = get(handles.run_update , 'Value');
+flow_vec.drc = get(handles.run_drc , 'Value');
+flow_vec.xsg = get(handles.run_xsg , 'Value');
+flow_vec.copy = get(handles.run_copy , 'Value');
+flow_vec.ip = get(handles.run_ip , 'Value');
+flow_vec.edkgen = get(handles.run_edkgen , 'Value');
+flow_vec.elab = get(handles.run_elab , 'Value');
+flow_vec.software = get(handles.run_software , 'Value');
+flow_vec.edk = get(handles.run_edk , 'Value');
+flow_vec.smartxplorer = get(handles.use_smartxplorer, 'Value');
+flow_vec.smartxplorer_num = get(handles.smartxplorer_num, 'Value');
 
 % Clear any previously dumped exceptions
 dump_exception('');
@@ -417,3 +419,35 @@ function run_update_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of run_update
+
+
+% --- Executes on selection change in smartxplorer_num.
+function smartxplorer_num_Callback(hObject, eventdata, handles)
+% hObject    handle to smartxplorer_num (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns smartxplorer_num contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from smartxplorer_num
+
+
+% --- Executes during object creation, after setting all properties.
+function smartxplorer_num_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to smartxplorer_num (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in use_smartxplorer.
+function use_smartxplorer_Callback(hObject, eventdata, handles)
+% hObject    handle to use_smartxplorer (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of use_smartxplorer

@@ -47,6 +47,13 @@ if nargin == 2 && isstruct(flow_vec),
     run_elab     = flow_vec.elab    ;
     run_software = flow_vec.software;
     run_edk      = flow_vec.edk     ;
+    try
+        run_smartxplorer = flow_vec.smartxplorer;
+        num_smartxplorer = flow_vec.smartxplorer_num;
+    catch
+        run_smartxplorer = -1;
+        num_smartxplorer = 0;
+    end
 else
     run_update   = 1;
     run_drc      = 1;
@@ -57,6 +64,8 @@ else
     run_elab     = 1;
     run_software = 1;
     run_edk      = 1;
+    run_smartxplorer = 0;
+    num_smartxplorer = 0;
 end
 
 slash = '\';
@@ -524,7 +533,7 @@ if run_edkgen,
     % add extra register and snapshot info from the design
     try
         gen_xps_add_design_info(sys, mssge_paths, slash);
-    catch exc
+    catch
         disp('WARNING WARNING PAIN SUFFERING ALARUM ALARUM - adding design info failed for some reason.');
     end
 
@@ -676,7 +685,11 @@ if run_edk,
             fprintf(fid, 'run bits\n');
         % end case 'powerpc440_ext'
         case {'ROACH2', 'MKDIG'}
-            fprintf(fid, 'run bits\n');
+            if run_smartxplorer,
+                fprintf(fid, 'run netlist\n');
+            else
+                fprintf(fid, 'run bits\n');
+            end
         % end case 'powerpc440_ext'
         otherwise
             fprintf(fid, 'run init_bram\n');
@@ -684,6 +697,7 @@ if run_edk,
     end % switch hw_sys
     fprintf(fid, 'exit\n');
     fclose(fid);
+
     eval(['cd ', xps_path]);
     status = system('xps -nw -scr run_xps.tcl system.xmp');
     if status ~= 0,
@@ -692,25 +706,42 @@ if run_edk,
         end
         cd(simulink_path);
         error('XPS failed.');
-    else
+    end
+    
+    if run_smartxplorer,
+        disp('###############################################');
+        disp('## Running Smartxplorer - this can take LONG ##');
+        disp('###############################################');
+        
         if (strcmp(slash, '\')),
             % Windows case
-            [status, ~] = dos('gen_prog_files.bat');
-            if status ~= 0,
-                cd(simulink_path);
-                error('Programation files generation failed, EDK compilation probably also failed.');
-            end % if dos('gen_prog_files.bat')
-        else
-            % Linux case
-            [~, ~] = unix('chmod +x gen_prog_files');
-            [status, message] = unix('./gen_prog_files');
-            if status ~= 0,
-                cd(simulink_path);
-                disp(message);
-                error('Programation files generation failed, EDK compilation probably also failed.');
-            end % if unix('gen_prog_files.bat')
-        end %if (strcmp(slash, '\'))
-    end % if(dos(['xps -nw -scr run_xps.tcl system.xmp']))
+            error('Cannot run this on Windows at the present. Sorry.');
+        end
+        
+        [status, message] = gen_xps_run_smartxplorer(num_smartxplorer, xps_path, slash);
+        if status ~= 0,
+            cd(simulink_path);
+            error(['Smartxplorer failed: ', num2str(status), ' - ', message]);
+        end % /run_smartxplorer
+    end
+    
+    if (strcmp(slash, '\')),
+        % Windows case
+        [status, ~] = dos('gen_prog_files.bat');
+        if status ~= 0,
+            cd(simulink_path);
+            error('Programation files generation failed, EDK compilation probably also failed.');
+        end % if dos('gen_prog_files.bat')
+    else
+        % Linux case
+        [~, ~] = unix('chmod +x gen_prog_files');
+        [status, message] = unix('./gen_prog_files');
+        if status ~= 0,
+            cd(simulink_path);
+            disp(message);
+            error('Programation files generation failed, EDK compilation probably also failed.');
+        end % if unix('gen_prog_files.bat')
+    end %if (strcmp(slash, '\'))
     cd(simulink_path);
 end % if run_edk
 time_edk = now - start_time;

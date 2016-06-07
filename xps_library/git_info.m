@@ -44,7 +44,7 @@ path_and_filename = get_param(sysname, 'filename');
 [status, result] = system(['python ', python_script,' --fpgstring ', path_and_filename]);
 if status ~= 0,
     warning(['Could not get GIT info for system: ', path_and_filename]);
-    git_info_struct.sys_info = ['#giterror: could not get GIT info for system "', sysname,'": ', path_and_filename];
+    git_info_struct.sys_info = ['#giterror: could not get GIT info for system "', sysname,'": ', path_and_filename, '\n'];
 else
     git_info_struct.sys_info = result;
 end
@@ -54,7 +54,7 @@ end
 [status, result] = system(['python ', python_script,' --fpgstring ', getenv('MLIB_DEVEL_PATH')]);
 if status ~= 0,
     warning(['Could not get GIT info for mlib_devel: ', getenv('MLIB_DEVEL_PATH')]);
-    git_info_struct.mlib_info = ['#giterror: Could not get GIT info for mlib_devel: ', getenv('MLIB_DEVEL_PATH')];
+    git_info_struct.mlib_info = ['#giterror: Could not get GIT info for mlib_devel: ', getenv('MLIB_DEVEL_PATH'), '\n'];
 else
     git_info_struct.mlib_info = result;
 end
