@@ -91,7 +91,7 @@ module tengbaser_phy(
   .rxrecclk_out(rxrecclk_out),
   .txusrclk(txusrclk),
   .txusrclk2(txusrclk2),
-  .txoutclk(txoutclk),
+  .txoutclk(txclk322),
   .areset(areset),
   .areset_coreclk(areset_clk156),
   .gttxreset(gttxreset),
