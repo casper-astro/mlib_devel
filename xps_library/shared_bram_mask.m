@@ -52,7 +52,7 @@ switch fpga_arch
       errordlg('Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards');
     end
   otherwise
-    if addr_width < 11 
+    if addr_width < 10 
       errordlg('Shared BRAM address width cannot be less than 11 on unknown board');
     end
 end
@@ -65,7 +65,7 @@ end
 
 try
   set_param([c_sys, '/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
-  set_param([c_sys, '/mem/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
+  %set_param([c_sys, '/mem/calc_add'], 'data_width', num2str(data_width), 'addr_width', num2str(addr_width));
 catch
   warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
 end
@@ -95,47 +95,8 @@ for i =1:length(gateway_outs)
   end
 end
 
-set_param([c_sys, '/mem/sim_data_in'], ...
-  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
+%set_param([c_sys, '/mem/sim_data_in'], ...
+%  'arith_type', 'Unsigned', 'bin_pt', num2str(data_bin_pt), 'n_bits', num2str(data_width));
 
 %set up simulation memory
 
-latency = 1;
-if strcmp(get_param(c_sys, 'reg_prim_output'), 'on')
-  latency = latency + 1;
-end
-if strcmp(get_param(c_sys, 'reg_core_output'), 'on')
-  latency = latency + 1;
-end
-set_param([c_sys, '/mem/ram'], 'latency', num2str(latency));
-
-%set up various munge blocks (which may have to redraw, so disable library link first)
-
-set_param(c_sys,'LinkStatus','inactive');
-
-divisions = ceil(data_width/32);
-for name = {'munge_in', 'mem/sim_munge_out'},
-  try
-    set_param([c_sys, '/', name{1}], ... 
-      'divisions', num2str(divisions), ...
-      'div_size', mat2str(repmat(min(32, data_width),1,divisions)), ...
-      'order', ['[',num2str([divisions-1:-1:0]),']'], ...
-      'arith_type_out', 'Unsigned', ...
-      'bin_pt_out', num2str(data_bin_pt));
-  catch
-    warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
-  end
-end %for
-
-for name = {'mem/sim_munge_in', 'munge_out'},
-  try
-  set_param([c_sys, '/', name{1}], ... 
-    'divisions', num2str(divisions), ...
-    'div_size', mat2str(repmat(min(32, data_width),1,divisions)), ...
-    'order', ['[',num2str([divisions-1:-1:0]),']'], ...
-    'arith_type_out', arith_type, ...
-    'bin_pt_out', num2str(data_bin_pt));
-  catch
-    warning('Shared BRAM block "%s" is out of date (needs its link restored)', c_sys);
-  end
-end

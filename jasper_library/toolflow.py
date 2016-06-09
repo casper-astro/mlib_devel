@@ -370,15 +370,22 @@ class Toolflow(object):
         basefile = '%s/%s/core_info.tab' % (os.getenv('HDL_ROOT'), self.plat.name)
         newfile = '%s/core_info.tab' % self.compile_dir
         self.logger.debug('Opening %s' % basefile)
-        with open(basefile, 'r') as fh:
-            s = fh.read()
         modemap = {'rw': 3, 'r': 1, 'w': 2}
+        try:
+            with open(basefile, 'r') as fh:
+               s = fh.read()
+        # If there isn't a basefile, just plow on
+        except IOError:
+            s = ''
         if len(self.cores) != 0:
             longest_name = max([len(core.regname) for core in self.cores])
             format_str = '{0:%d} {1:1} {2:<16x} {3:<16x}\n' % longest_name
         for core in self.cores:
             self.logger.debug('Adding core_info.tab entry for %s' % core.regname)
             s += format_str.format(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
+            # add aliases if the WB Devices have them
+            for reg in core.memory_map:
+                s += format_str.format(reg.name, modemap[reg.mode], core.base_addr + reg.offset, reg.nbytes)
             # s += '%s\t%d\t%x\t%x\n'%(core.regname, modemap[core.mode], core.base_addr, core.nbytes)
         self.logger.debug('Opening %s' % basefile)
         with open(newfile, 'w') as fh:
@@ -445,6 +452,7 @@ class Toolflow(object):
         # build castro standard pin constraints
         pin_constraints = []
         clk_constraints = []
+        raw_constraints = []
 
         for const in self.constraints:
             if isinstance(const, PortConstraint):
@@ -462,10 +470,14 @@ class Toolflow(object):
                     freq_mhz=const.freq,
                     period_ns=const.period
                     )]
+            elif isinstance(const, RawConstraint):
+                raw_constraints += [castro.RawConstraint(
+                    const.raw)]
 
         c.synthesis = castro.Synthesis()
         c.synthesis.pin_constraints = pin_constraints
         c.synthesis.clk_constraints = clk_constraints
+        c.synthesis.raw_constraints = raw_constraints
         c.synthesis.platform_name = self.plat.name
         c.synthesis.fpga_manufacturer = self.plat.manufacturer
         c.synthesis.fpga_model = self.plat.fpga
@@ -575,7 +587,7 @@ class ToolflowBackend(object):
             const.io_standard = [pins[i].iostd for i in range(len(const.symbolic_indices))]
             const.is_vector = const.portname_indices != []
 
-        self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints,
+        self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints + self.castro.synthesis.raw_constraints,
                                  self.plat)
 
     def mkfpg(self, filename_bin, filename_fpg):
@@ -864,7 +876,13 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('update_compile_order -fileset sources_1')
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]')
-            # self.add_tcl_cmd('upgrade_ip [get_ips *]')
+            # Hack to get the System generator RAMs to see their coefficient files.
+            # Vivado (2016.1) doesn't seem to import the .coe and ram .xci files in the
+            # correct relative directories as configured by System Generator.
+            self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {')
+            self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/')
+            self.add_tcl_cmd('}')
+            self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]')
             self.add_tcl_cmd('reset_run synth_1')
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores)
             self.add_tcl_cmd('wait_on_run synth_1')
@@ -1026,7 +1044,7 @@ class VivadoBackend(ToolflowBackend):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
 
-        if isinstance(const, RawConstraint):
+        if isinstance(const, castro.RawConstraint):
             self.logger.debug('New Raw constraint found')
             user_const += const.raw
 

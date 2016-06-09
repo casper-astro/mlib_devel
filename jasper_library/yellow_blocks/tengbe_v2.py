@@ -36,7 +36,7 @@ class tengbe_v2(YellowBlock):
             ktge.add_port('xaui_clk', 'xaui_clk')
         else:
             ktge.add_port('xaui_clk', 'core_clk_156_%d'%num)
-        ktge.add_port('xaui_reset', 'sys_reset', parent_sig=False)
+        ktge.add_port('xaui_reset', 'sys_rst', parent_sig=False)
         ktge.add_port('xgmii_txd', 'xgmii_txd%d'%self.port, width=64)
         ktge.add_port('xgmii_txc', 'xgmii_txc%d'%self.port, width=8)
         ktge.add_port('xgmii_rxd', 'xgmii_rxd%d'%self.port, width=64)
@@ -141,7 +141,7 @@ class tengbe_v2_xilinx_v6(tengbe_v2):
         #### XAUI PHY
         # XAUI SYS interface
         xp = top.get_instance('xaui_phy', 'xaui_phy_inst%d'%self.port)
-        xp.add_port('reset', 'sys_reset', parent_sig=False)
+        xp.add_port('reset', 'sys_rst', parent_sig=False)
         xp.add_port('xaui_clk', 'xaui_clk')
         xp.add_port('mgt_tx_reset    ', 'mgt_tx_rst%d        '%self.port, width=1)
         xp.add_port('mgt_rx_reset    ', 'mgt_rx_rst%d        '%self.port, width=1)
@@ -193,7 +193,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
         self.add_source('kat_ten_gb_eth/*')
         self.add_source('tengbaser_phy/tengbaser_phy.v')
         self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xci')
-        self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xdc')
+        #self.add_source('tengbaser_phy/ten_gig_pcs_pma_5.xdc')
         self.add_source('tengbaser_infrastructure')
 
         # the use of multiple platform dependent parameters to
@@ -240,7 +240,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
             infra.add_parameter('USE_GTH', '"TRUE"') #verilog module defaults to false
         infra.add_port('refclk_n', 'ref_clk_n%d'%num, parent_port=True, dir='in')
         infra.add_port('refclk_p', 'ref_clk_p%d'%num, parent_port=True, dir='in')
-        infra.add_port('reset', 'sys_reset', parent_sig=False) #no parent sig -- the wire is declared in top.v
+        infra.add_port('reset', 'sys_rst', parent_sig=False) #no parent sig -- the wire is declared in top.v
 
         infra.add_port('dclk', 'dclk%d'%num)
         infra.add_port('core_clk156_out', 'core_clk_156_%d'%num)
@@ -262,7 +262,7 @@ class tengbaser_xilinx_k7(tengbe_v2):
 
         phy = top.get_instance('tengbaser_phy', 'tengbaser_phy%d'%self.port)
 
-        phy.add_port('areset', 'sys_reset')
+        phy.add_port('areset', 'sys_rst')
 
         # sigs from infrastructure
         phy.add_port('dclk', 'dclk%d'%num)
@@ -317,18 +317,18 @@ class tengbaser_xilinx_k7(tengbe_v2):
 
         cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
 
-        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sysclk200] -group [get_clocks -include_generated_clocks ethclk%d]'%(num,num)))
-        cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] 3'%(num,num)))
-        cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] -hold 2'%(num,num)))
-        cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_rx_inst/app_overrun_ack_reg/C] -to [get_pins %s/tge_rx_inst/overrun_ackR_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_tx_inst/tx_overflow_latch_reg/C] -to [get_pins %s/tge_tx_inst/app_overflowR_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[0]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins %s/macr_state_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[1]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins {%s/rx_stretch_reg[25]/C}] -to [get_pins %s/led_rx_reg_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins %s/mac_resetRR_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins {%s/tx_stretch_reg[25]/C}] -to [get_pins %s/led_tx_reg_reg/D]'%(self.fullname, self.fullname)))
-        cons.append(RawConstraint('set_false_path -from [get_pins {%s/down_stretch_reg[25]/C}] -to [get_pins %s/led_up_reg_reg/D]'%(self.fullname, self.fullname)))
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]'%(num,num)))
+        #cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] 3'%(num,num)))
+        #cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] -hold 2'%(num,num)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_rx_inst/app_overrun_ack_reg/C] -to [get_pins %s/tge_rx_inst/overrun_ackR_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_tx_inst/tx_overflow_latch_reg/C] -to [get_pins %s/tge_tx_inst/app_overflowR_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[0]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins %s/macr_state_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[1]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/rx_stretch_reg[25]/C}] -to [get_pins %s/led_rx_reg_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins %s/mac_resetRR_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tx_stretch_reg[25]/C}] -to [get_pins %s/led_tx_reg_reg/D]'%(self.fullname, self.fullname)))
+        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/down_stretch_reg[25]/C}] -to [get_pins %s/led_up_reg_reg/D]'%(self.fullname, self.fullname)))
 
         return cons
         

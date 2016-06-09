@@ -32,8 +32,8 @@ entity  adc16_interface  is
                ser_b_p       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
                ser_b_n       :  in  std_logic_vector(4*G_NUM_UNITS-1 downto 0);
 
-               -- ISERDES Controller (always 8 bits even if G_NUM_UNITS=4)
-               iserdes_bitslip  :  in  std_logic_vector(7 downto 0);
+               -- ISERDES Controller (always 64 bits even if G_NUM_UNITS=4)
+               iserdes_bitslip  :  in  std_logic_vector(63 downto 0);
 
                -- Parallel outputs
                a1  :  out std_logic_vector(7 downto 0);
@@ -106,7 +106,7 @@ architecture adc16_interface_arc of adc16_interface is
                ser_b_n       :  in  std_logic_vector(3 downto 0);
 
                -- ISERDES Controller
-               iserdes_bitslip  :  in  std_logic;
+               iserdes_bitslip  :  in  std_logic_vector(7 downto 0);
                p_data           :  out std_logic_vector(31 downto 0);
                absel            :  in std_logic;
                demux_mode       :  in  std_logic_vector(1 downto 0);
@@ -164,6 +164,7 @@ architecture adc16_interface_arc of adc16_interface is
 
      type  i4_v1  is array (0 to G_NUM_UNITS-1) of std_logic;
      type  i4_v4  is array (0 to G_NUM_UNITS-1) of std_logic_vector(3 downto 0);
+     type  i4_v8  is array (0 to G_NUM_UNITS-1) of std_logic_vector(7 downto 0);
      type  i4_v20 is array (0 to G_NUM_UNITS-1) of std_logic_vector(19 downto 0);
      type  i4_v32 is array (0 to G_NUM_UNITS-1) of std_logic_vector(31 downto 0);
 
@@ -197,7 +198,7 @@ architecture adc16_interface_arc of adc16_interface is
      signal s_ser_b_n : i4_v4;
 
      -- ISERDES Controller
-     signal s_iserdes_bitslip : i4_v1;
+     signal s_iserdes_bitslip : i4_v8;
      signal s_p_data : i4_v32;
      signal s_p_data0 : i4_v32;
 
@@ -424,7 +425,7 @@ architecture adc16_interface_arc of adc16_interface is
        s_ser_b_n(i) <= ser_b_n(4*i+3 downto 4*i);
 
        -- ISERDES Controller
-       s_iserdes_bitslip(i) <= iserdes_bitslip(i);
+       s_iserdes_bitslip(i) <= iserdes_bitslip(8*i+7 downto 8*i);
 
        -- Delay Controller (lower half is for "a"; upper half is for "b")
        s_delay_rst_a(i) <= delay_rst_edge(4*i+3    downto 4*i);
