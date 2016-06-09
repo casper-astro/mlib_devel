@@ -709,9 +709,11 @@ if run_edk,
     end
     
     if run_smartxplorer,
-        disp('###############################################');
-        disp('## Running Smartxplorer - this can take LONG ##');
-        disp('###############################################');
+        href_path = [xps_path, slash, 'implementation', slash, 'smartxplorer', slash, 'smartxplorer.html'];
+        disp('################################################');
+        disp('## Running Smartxplorer - this can take LONG. ##');
+        disp(['## Updates can be found here: ', href_path,' ##']);
+        disp('################################################');
         
         if (strcmp(slash, '\')),
             % Windows case
