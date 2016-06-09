@@ -443,6 +443,7 @@ class Toolflow(object):
         # build castro standard pin constraints
         pin_constraints = []
         clk_constraints = []
+        raw_constraints = []
 
         for const in self.constraints:
             if isinstance(const, PortConstraint):
@@ -460,10 +461,14 @@ class Toolflow(object):
                     freq_mhz=const.freq,
                     period_ns=const.period
                     )]
+            elif isinstance(const, RawConstraint):
+                raw_constraints += [castro.RawConstraint(
+                    const.raw)]
 
         c.synthesis = castro.Synthesis()
         c.synthesis.pin_constraints = pin_constraints
         c.synthesis.clk_constraints = clk_constraints
+        c.synthesis.raw_constraints = raw_constraints
         c.synthesis.platform_name = self.plat.name
         c.synthesis.fpga_manufacturer = self.plat.manufacturer
         c.synthesis.fpga_model = self.plat.fpga
@@ -563,7 +568,7 @@ class ToolflowBackend(object):
             const.io_standard = [pins[i].iostd for i in range(len(const.symbolic_indices))]
             const.is_vector = const.portname_indices != []
 
-        self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints,
+        self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints + self.castro.synthesis.raw_constraints,
                                  self.plat)
         
 
@@ -926,7 +931,7 @@ class VivadoBackend(ToolflowBackend):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
 
-        if isinstance(const, RawConstraint):
+        if isinstance(const, castro.RawConstraint):
             self.logger.debug('New Raw constraint found')
             user_const += const.raw
 
