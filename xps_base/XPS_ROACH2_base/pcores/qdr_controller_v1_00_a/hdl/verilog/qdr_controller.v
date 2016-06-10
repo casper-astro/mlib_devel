@@ -144,7 +144,7 @@ module qdr_controller (
     .qdr_dll_off_n_buf (qdr_dll_off_n_buf),
     /* phy training signals */
     .dly_clk         (dly_clk),
-	 .dly_rst         (reset),
+	  .dly_rst         (~idelay_rdy),
     .dly_en_i        (dly_en_i),
     .dly_en_o        (dly_en_o),
     .dly_inc_dec     (dly_inc_dec),
