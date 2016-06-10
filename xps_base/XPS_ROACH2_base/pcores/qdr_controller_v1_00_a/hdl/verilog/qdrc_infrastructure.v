@@ -422,7 +422,7 @@ module qdrc_infrastructure(
     .INIT_Q2 (1'b0),
     .SRTYPE ("SYNC")
   ) IDDR_qdr_q [DATA_WIDTH - 1:0] (
-    .C  (clk270),//(clk180),
+    .C  (clk180),
     .CE (1'b1),
     .D  (qdr_q_iodelay),
     .R  (1'b0),
