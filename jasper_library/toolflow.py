@@ -949,7 +949,7 @@ class VivadoBackend(ToolflowBackend):
                 if const.location[i] is not None:
                     self.logger.debug('LOC constraint found at %s' % const.location[i])
                     if const.portname_indices != []:
-                        user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname, index=p)
+                        user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname, index=const.portname_indices[i])
                     else:
                         user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname)
 
@@ -958,7 +958,7 @@ class VivadoBackend(ToolflowBackend):
                 if const.io_standard[i] is not None:
                     self.logger.debug('IOSTD constraint found: %s' % const.io_standard[i])
                     if const.portname_indices != []:
-                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname, index=p)
+                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname, index=const.portname_indices[i])
                     else:
                         user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname)
 
