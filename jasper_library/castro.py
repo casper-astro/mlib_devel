@@ -4,13 +4,15 @@ class Castro(object):
     '''
     Stores complete generic structure design information
     '''
-    def __init__(self, design_name, src_files, mm_slaves=[], temp_fpga_model=''):
+    def __init__(self, design_name, src_files, ips=[], mm_slaves=[], temp_fpga_model=''):
         # the version of this class
         self.version = '0.0.0'
         # the name of the design
         self.design_name = design_name
         # a list of all hdl files used in the design
         self.src_files = src_files
+        # a list of all IPs, a list of [ip path, ip name] pairs
+        self.ips = ips
         # a list of mm_slave objects
         self.mm_slaves = mm_slaves
 

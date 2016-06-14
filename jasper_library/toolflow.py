@@ -79,6 +79,7 @@ class Toolflow(object):
         #    raise Exception("Unsupported toolflow backend: %s"%backend)
 
         self.sources= []
+        self.ips = []
         self.tcl_sources= []
         self.const_files = []
 
@@ -339,6 +340,7 @@ class Toolflow(object):
             self.logger.debug('modifying top for obj %s' % obj.name)
             obj.modify_top(self.top)
             self.sources += obj.sources    
+            self.ips += obj.ips
     
     def _instantiate_user_ip(self):
         """
@@ -361,9 +363,9 @@ class Toolflow(object):
             if module['sources'] is not None:
                 for source in module['sources']:
                     self.sources += glob.glob(source)
-            if module['tcl_sources'] is not None:
-                for source in module['tcl_sources']:
-                    self.tcl_sources += glob.glob(source)
+            #if module['tcl_sources'] is not None:
+            #    for source in module['tcl_sources']:
+            #        self.tcl_sources += glob.glob(source)
 
     def write_core_info(self):
         self.cores = self.top.wb_devices
@@ -447,7 +449,7 @@ class Toolflow(object):
         """
         import castro
         
-        c = castro.Castro('top', self.sources)
+        c = castro.Castro('top', self.sources, self.ips)
 
         # build castro standard pin constraints
         pin_constraints = []
@@ -579,6 +581,18 @@ class ToolflowBackend(object):
                     self.logger.error("sourcefile %s doesn't exist!" % source)
                     raise Exception("sourcefile %s doesn't exist!" % source)
                 self.add_const_file(source, self.plat)
+
+        existing_ips = {}
+        for ip in self.castro.ips:
+             library_loc = ip[0]
+             ip_name = ip[1]
+             if existing_ips.has_key(library_loc):
+                 if ip_name not in existing_ips[library_loc]:
+                     existing_ips[library_loc] += [ip_name]
+             else:
+                 existing_ips[library_loc] = [ip_name]
+        for library, ips in existing_ips.iteritems():
+            self.add_ips(library, ips)
        
         # elaborate pin constraints
         for const in self.castro.synthesis.pin_constraints:
@@ -784,6 +798,20 @@ class VivadoBackend(ToolflowBackend):
         # for source in plat.sources:
         #  self.add_source(os.getenv('HDL_ROOT')+'/'+source)
         #  self.add_source(self.compile_dir+'/top.v')
+
+    def add_ips(self, library_path, ips):
+        """
+        Add an ip core from a library at <library_path>/ip
+        """
+        #if self.plat.project_mode:
+        self.add_tcl_cmd('set repos [get_property ip_repo_paths [current_project]]')
+	self.add_tcl_cmd('set_property ip_repo_paths "$repos %s/ip" [current_project]' % library_path)
+	self.add_tcl_cmd('update_ip_catalog')
+        for ip in ips:
+	    self.add_tcl_cmd('create_ip -name %s -vendor User_Company -library SysGen -version 1.0 -module_name %s_ip' % (ip, ip))
+        #else:
+        #    # TODO: validate for non-project mode flow
+        #    pass
 
     def add_source(self, source, plat):
         """
@@ -1027,7 +1055,7 @@ class VivadoBackend(ToolflowBackend):
                 if const.location[i] is not None:
                     self.logger.debug('LOC constraint found at %s' % const.location[i])
                     if const.portname_indices != []:
-                        user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname, index=p)
+                        user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname, index=const.portname_indices[i])
                     else:
                         user_const += self.format_const('PACKAGE_PIN', const.location[i], const.portname)
 
@@ -1036,7 +1064,7 @@ class VivadoBackend(ToolflowBackend):
                 if const.io_standard[i] is not None:
                     self.logger.debug('IOSTD constraint found: %s' % const.io_standard[i])
                     if const.portname_indices != []:
-                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname, index=p)
+                        user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname, index=const.portname_indices[i])
                     else:
                         user_const += self.format_const('IOSTANDARD', const.io_standard[i], const.portname)
 

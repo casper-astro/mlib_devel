@@ -101,6 +101,7 @@ class YellowBlock(object):
         self.provides = []
         self.requires = []
         self.sources = []
+        self.ips = []
         self.exc_requires = []
         self.wb_id = 0
         self.platform_support = 'all' #override this in subclasses

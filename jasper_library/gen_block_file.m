@@ -59,7 +59,6 @@ xps_xsg_blks    = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', '
 % end 
 
 
-xps_pcore_blks  = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',                    'Tag', 'xps:pcore')
 sysgen_blk      = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','SearchDepth', 1,   'Tag', 'genX');
 casper_blks     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all','RegExp','on',      'Tag', '^casper:');
 gateway_ins     = find_system(this_sys, 'FollowLinks', 'on', 'LookUnderMasks', 'all',     'MaskType', 'Xilinx Gateway In Block')
@@ -205,24 +204,6 @@ if xlver > 14.7
 else
     fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/' bdroot '.vhd']));
     fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/*.ngc']));
-end
-
-%for n = 1:length(xps_pcore_blks)
-%    pcore_name = get_param(xps_pcore_blks{n},'pcore_path');
-%    pcore_path = GetFullPath(pcore_name);
-%    fprintf(fid,sprintf('      - %s\n',[pcore_path '/hdl_netlist/' pcore_name '.srcs/sources_1/imports/sysgen']));
-%    fprintf(fid,sprintf('      - %s\n',[pcore_path '/hdl_netlist/' pcore_name '.srcs/sources_1/ip/*.coe']));
-%    fprintf(fid,sprintf('      - %s\n',[pcore_path '/hdl_netlist/' pcore_name '.srcs/sources_1/ip/*/*.xci']));
-%end
-
-fprintf(fid,'    tcl_sources:\n'); 
-if xlver > 14.7
-    for n = 1:length(xps_pcore_blks)
-        pcore_name = get_param(xps_pcore_blks{n},'pcore_path');
-        pcore_path = GetFullPath(pcore_name);
-        fprintf(fid,sprintf('      - %s\n',[pcore_path]));
-    end
-    %fprintf(fid,sprintf('      - %s\n',[compile_dir '/sysgen/sysgen/vivado_ip.tcl']));
 end
 
 disp(sprintf('Closing output file: %s',output_fname));
