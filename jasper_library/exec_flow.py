@@ -78,6 +78,7 @@ tf = toolflow.Toolflow(frontend='simulink', compile_dir=builddir, frontend_targe
 
 if opts.perfile:
     tf.frontend.gen_periph_file(tf.periph_file)
+    tf.frontend.write_git_info_file()
 
 if opts.frontend:
     tf.frontend.compile_user_ip(update=True)
@@ -126,13 +127,24 @@ if opts.backend or opts.software:
         # launch vivado via the generated .tcl file
         backend.compile(cores=opts.jobs, plat=platform)
 
-    backend.output = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof' % (
-                     tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
-                     tf.start_time.tm_hour, tf.start_time.tm_min)
-
     if opts.software:
         binary = backend.binary_loc
-        os.system('cp %s %s/top.bin'%(binary, backend.compile_dir))
-        mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin' % \
-            (os.getenv('MLIB_DEVEL_PATH'), backend.output_dir, backend.output, backend.compile_dir, backend.compile_dir)
-        os.system(mkbof_cmd)
+        # Do not generate a bof file if SKARAB platform is selected. Need to generate an fpg file for SKARAB
+        output_fpg = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.fpg' % (
+            tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+            tf.start_time.tm_hour, tf.start_time.tm_min)
+
+        if platform.name == 'skarab':
+            backend.mkfpg(binary, output_fpg)
+        # Generate bof file, fpg file for ROACH and use normal binary file.
+        else:
+            backend.output_bof = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof' % (
+                             tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
+                             tf.start_time.tm_hour, tf.start_time.tm_min)
+            os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
+            mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin' % \
+                (os.getenv('MLIB_DEVEL_PATH'), backend.output_dir, backend.output_bof, backend.compile_dir,
+                    backend.compile_dir)
+            os.system(mkbof_cmd)
+            if platform.name == 'roach' or platform.name == 'roach2' or platform.name == 'mkdig':
+                backend.mkfpg(binary, output_fpg)

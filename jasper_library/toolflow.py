@@ -60,6 +60,7 @@ class Toolflow(object):
         # compile parameters which can be set straight away
         self.start_time = time.localtime()
         self.periph_file = self.compile_dir + '/jasper.per'
+        self.git_info_file = self.compile_dir + '/git_info.tab'
         self.frontend_target = frontend_target
         self.frontend_target_base = os.path.basename(frontend_target)
 
@@ -96,6 +97,7 @@ class Toolflow(object):
 
         if gen_per:
             self.frontend.gen_periph_file(fname=self.periph_file)
+            self.frontend.write_git_info_file(fname=self.git_info_file)
 
         # Have the toolflow parse the information from the
         # frontend and generate the YellowBlock objects
@@ -499,7 +501,7 @@ class Toolflow(object):
         
         with open(filename, 'w') as fh:
             fh.write(yaml.dump(c))
-        
+
 
 class ToolflowFrontend(object):
     def __init__(self, compile_dir='/tmp', target='/tmp/test.slx'):
@@ -524,6 +526,16 @@ class ToolflowFrontend(object):
         (useful for debugging, and future use cases
         where a user only wants to run certain
         steps of a compile)
+        """
+        raise NotImplementedError()
+
+    def write_git_info_file(self,fname='git_info.tab'):
+        """
+        Call upon the frontend to generate a
+        git info file, which contains the
+        git repo information, which is used for
+        the header for the fpg file. This function is
+        overwritten by the SimulinkFrontEnd Class
         """
         raise NotImplementedError()
 
@@ -591,7 +603,67 @@ class ToolflowBackend(object):
 
         self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints + self.castro.synthesis.raw_constraints,
                                  self.plat)
-        
+
+    def mkfpg(self, filename_bin, filename_fpg):
+        """
+        This function makes the fpg file header and the final fpg file, which consists of the fpg file header
+        (core_info.tab, design_info.tab and git_info.tab) and the compressed binary file. The fpg file is used
+        to configure the ROACH, ROACH2, MKDIG and SKARAB boards.
+
+        :param filename_bin: This is the path and binary file (top.bin) that contains the FPGA programming data.
+        :type filename_bin: str
+        :param filename_fpg: This is the output time stamped fpg file name
+        :type filename_fpg: str
+        """
+
+        # Files to read from (core_info.tab, design_info.tab and git_info.tab)
+        basefile_core = '%s/core_info.tab' % self.compile_dir
+        basefile_design = '%s/design_info.tab' % self.compile_dir
+        basefile_git = '%s/git_info.tab' % self.compile_dir
+
+        # File, which represents the fpg file header only
+        extended_info = '%s/extended_info.kcpfpg' % self.compile_dir
+
+        self.logger.debug('Opening core_info.tab file %s' % basefile_core)
+        self.logger.debug('Opening design_info.tab file %s' % basefile_design)
+        self.logger.debug('Opening git_info.tab file %s' % basefile_git)
+
+        # read base files and write to fpg header file in correct format
+        with open(extended_info, 'w') as fh4:
+            fh4.write('#!/bin/kcpfpg\n')
+            fh4.write('?uploadbin\n')
+            fh1 = open(basefile_core, 'r')
+            for row in fh1:
+                col1, col2, col3, col4 = row.split()
+                fh4.write("?register "+col1+" 0x"+col3+" 0x"+col4+"\n")
+            fh2 = open(basefile_design, 'r')
+            line = fh2.readline()
+            while line:
+                fh4.write("?meta " + line)
+                line = fh2.readline()
+            fh3 = open(basefile_git, 'r')
+            line = fh3.readline()
+            while line:
+                fh4.write(line)
+                line = fh3.readline()
+            fh4.write('?quit\n')
+            fh4.close()
+            fh1.close()
+            fh2.close()
+            fh3.close()
+            # Copy binary file from binary file location and rename to system.bin
+            mkfpg_cmd1 = 'cp %s %s/system.bin' % (filename_bin, self.compile_dir)
+            os.system(mkfpg_cmd1)
+            # Compress binary file in new location
+            mkfpg_cmd2 = 'gzip -c %s/system.bin > %s/system.bin.gz' % (self.compile_dir, self.compile_dir)
+            os.system(mkfpg_cmd2)
+            # Append the compressed binary file to the extended_info.kcpfpg file
+            mkfpg_cmd3 = 'cat %s/system.bin.gz >> %s/extended_info.kcpfpg' % (self.compile_dir, self.compile_dir)
+            os.system(mkfpg_cmd3)
+            # Copy extended_info.kcpfpg and rename to time stamped file and place in output directory with the bof file
+            mkfpg_cmd4 = 'cp %s/extended_info.kcpfpg %s/%s' % (self.compile_dir, self.output_dir, filename_fpg)
+            os.system(mkfpg_cmd4)
+
 
 class SimulinkFrontend(ToolflowFrontend):
     def __init__(self, compile_dir='/tmp', target='/tmp/test.slx'):
@@ -604,7 +676,8 @@ class SimulinkFrontend(ToolflowFrontend):
     def gen_periph_file(self, fname='jasper.per'):
         """
         generate the peripheral file. i.e., the list of yellow blocks
-        and their parameters.
+        and their parameters. It also generates the design_info.tab file
+        which is used to populate the fpg file header
 
         :param fname: The full path and name to give the peripheral file.
         :type fname: str
@@ -618,13 +691,43 @@ class SimulinkFrontend(ToolflowFrontend):
         script1 = 'open_system'
         script2 = 'set_param'
         script3 = 'gen_block_file'
+        script4 = 'gen_xps_add_design_info'
+
         # The matlab syntax to call this script with appropriate args
-        # This scripts runs open_system(), set_param() and finally gen_block_file().
+        # This scripts runs open_system(), set_param(), gen_block_file() and gen_xps_add_design_info().
         # if open_system() and set_param() are not run then the peripheral names will
         # be incorrectly generated and the design will not compile. Everything is run
         # on a single matlab terminal line
-        ml_cmd = "%s('%s');sys=gcs;%s(sys,'SimulationCommand','update');%s('%s','%s');exit" \
-                 % (script1, self.modelpath, script2, script3, self.compile_dir, fname)
+        ml_cmd = "%s('%s');sys=gcs;%s(sys,'SimulationCommand','update');%s('%s','%s');mssge.xps_path='%s';" \
+                 "%s(sys,mssge,'/');exit" % (script1, self.modelpath, script2, script3, self.compile_dir, fname,
+                                             self.compile_dir, script4)
+        # Complete command to run on terminal
+        term_cmd = matlab_start_cmd + ' -nodesktop -nosplash -r "%s"' % ml_cmd
+        self.logger.info('Running terminal command: %s' % term_cmd)
+        os.system(term_cmd)
+
+    def write_git_info_file(self, fname='git_info.tab'):
+        """
+        generates the git info file. i.e., this function creates a file with the relevant git info.
+        The 'git_info.tab' file is used for the *.fpg file
+
+        :param fname: The full path and name to give the git info file.
+        :type fname: str
+        """
+        self.logger.info('Generating git info description file : %s' % fname)
+        # The command to start matlab with appropriate libraries
+        matlab_start_cmd = os.getenv('SYSGEN_SCRIPT')
+
+        # The matlab script responsible for generating the git info file
+        # each script represents a matlab function
+        script1 = 'load_system'
+        script2 = 'fopen'
+        script3 = 'git_write_info'
+        script4 = 'fclose'
+        # The matlab syntax to call this script with appropriate args
+        # This scripts runs load_system(), fopen(), git_write_info() and flcose()
+        ml_cmd = "%s('%s');sys=gcs;gitinfo_id=%s(['%s/%s'],'w');%s(gitinfo_id,sys);%s(gitinfo_id);exit" \
+                 % (script1, self.modelpath, script2, self.compile_dir, fname, script3, script4)
         # Complete command to run on terminal
         term_cmd = matlab_start_cmd + ' -nodesktop -nosplash -r "%s"' % ml_cmd
         self.logger.info('Running terminal command: %s' % term_cmd)
@@ -811,21 +914,20 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('reset_run synth_1')
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores)
             self.add_tcl_cmd('wait_on_run synth_1')
+            # self.add_tcl_cmd('open_run synth_1')
+            # self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [current_design]' % self.plat.conf['config_voltage'])
+            # self.add_tcl_cmd('set_property CFGBVS %s [current_design]' % self.plat.conf['cfgbvs'])
             self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores)
             self.add_tcl_cmd('wait_on_run impl_1')
             self.add_tcl_cmd('open_run impl_1')
-            # self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [get_designs impl_1]'
-            # % self.plat.conf['config_voltage'])
-            # self.add_tcl_cmd('set_property CFGBVS %s [get_designs impl_1]' % self.plat.conf['cfgbvs'])
             self.add_tcl_cmd('launch_runs impl_1 -to_step write_bitstream')
             self.add_tcl_cmd('wait_on_run impl_1')
             # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
             # configuring the FPGA
             if plat.name == 'skarab':
                 self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
-                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s/%s/%s.runs/impl_1/top_skarab.bin'
-                                 % (self.compile_dir, self.project_name, self.project_name, self.compile_dir,
-                                    self.project_name, self.project_name))
+                                 '%s/%s/%s.runs/impl_1/top.bit" -file %s'
+                                 % (self.compile_dir, self.project_name, self.project_name, self.binary_loc))
 
             # Determine if the design meets timing or not
             # Look for Worst Negative Slack
@@ -865,6 +967,8 @@ class VivadoBackend(ToolflowBackend):
         # Options can be added to the *_design commands to change strategies or meet timing
         else:
             self.add_tcl_cmd('synth_design -top top -part %s' % plat.fpga)
+            # self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [current_design]' % self.plat.conf['config_voltage'])
+            # self.add_tcl_cmd('set_property CFGBVS %s [current_design]' % self.plat.conf['cfgbvs'])
             self.add_tcl_cmd('write_checkpoint -force %s/%s/post_synth.dcp' % (self.compile_dir, self.project_name))
             self.add_tcl_cmd('report_timing_summary -file %s/%s/post_synth_timing_summary.rpt'
                              % (self.compile_dir,self.project_name))
@@ -905,8 +1009,8 @@ class VivadoBackend(ToolflowBackend):
             # configuring the FPGA
             if plat.name == 'skarab':
                 self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
-                                 '%s/%s/top.bit" -file %s/%s/top_skarab.bin'
-                                 % (self.compile_dir, self.project_name, self.compile_dir, self.project_name))
+                                 '%s/%s/top.bit" -file %s'
+                                 % (self.compile_dir, self.project_name, self.binary_loc))
             # Determine if the design meets timing or not
             # Check for setup timing violations
             self.add_tcl_cmd('if { [get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup] ] < 0 } {')
@@ -935,7 +1039,7 @@ class VivadoBackend(ToolflowBackend):
         if rv:
             raise Exception("Vivado failed!")
 
-    def get_tcl_const(self,const):
+    def get_tcl_const(self, const):
         """
         Pass a single toolflow-standard PortConstraint,
         and get back a tcl command to add the constraint
@@ -944,6 +1048,8 @@ class VivadoBackend(ToolflowBackend):
         user_const = ''
         if isinstance(const, castro.PinConstraint):
             self.logger.debug('New PortConstraint instance found: %s -> %s' % (const.portname, const.symbolic_name))
+            user_const += self.format_cfg_const('CONFIG_VOLTAGE', self.plat.conf['config_voltage'])
+            user_const += self.format_cfg_const('CFGBVS', self.plat.conf['cfgbvs'])
             for i,p in enumerate(const.symbolic_indices):
                 self.logger.debug('Getting loc for port index %d' % i)
                 if const.location[i] is not None:
@@ -984,6 +1090,12 @@ class VivadoBackend(ToolflowBackend):
             return 'set_property %s %s [get_ports %s]\n' % (attribute, val, port)
         else:
             return 'set_property %s %s [get_ports %s[%d]]\n' % (attribute, val, port, index)
+
+    def format_cfg_const(self, attribute, val):
+        """
+        Generate a configuration tcl syntax command from an attribute and value
+        """
+        return 'set_property %s %s [current_design]\n' % (attribute, val)
 
     def gen_constraint_file(self, constraints, plat):
         """
