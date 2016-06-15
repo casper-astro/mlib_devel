@@ -9,100 +9,361 @@ constraints:
   - skarab.xdc
 provides:
   - sys_clk
-  - sys_clk90
-  - sys_clk180
-  - sys_clk270
+  - mezz_3
 pins:
-  sys_clk_p:
-    loc: E10
-    iostd: LVDS_25
-  sys_clk_n:
-    loc: D10
-    iostd: LVDS_25
-  led:
+  FLASH_DQ:
+    iostd: LVCMOS18
+    loc:
+      - BC27
+      - BD27
+      - BD29
+      - BD30
+      - BB30
+      - BC30
+      - BC28
+      - BC29
+      - BA30
+      - AW29
+      - AY29
+      - AW27
+      - AY27
+      - BA31
+      - AY28
+      - BA28
+  ONE_GBE_INT_N:
+    iostd: LVCMOS18
+    loc: BB12
+  FPGA_RESET_N:
+    iostd: LVCMOS18
+    loc: BD35
+  FLASH_WE_N:
+    iostd: LVCMOS18
+    loc: AL25
+  FPGA_EMCCLK2:
+    iostd: LVCMOS18
+    loc: AV27
+  MEZ_REFCLK_0_P:
+    loc: J10
+  MEZZANINE_3_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: B13
+  MEZ_REFCLK_0_N:
+    loc: J9
+  MEZZANINE_3_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: A14
+  EMCCLK_FIX:
+    iostd: LVCMOS18
+    loc: BB27
+  PCIE_RST_N:
+    iostd: LVCMOS18
+    loc: C18
+  ONE_WIRE_EEPROM:
+    iostd: LVCMOS18
+    loc: BD17
+  CONFIG_IO_11:
+    iostd: LVCMOS18
+    loc: BC23
+  CONFIG_IO_10:
+    iostd: LVCMOS18
+    loc: BB23
+  CONFIG_IO_9:
+    iostd: LVCMOS18
+    loc: BA23
+  CONFIG_IO_8:
+    iostd: LVCMOS18
+    loc: AY23
+  CONFIG_IO_7:
+    iostd: LVCMOS18
+    loc: BD24
+  CONFIG_IO_6:
+    iostd: LVCMOS18
+    loc: BC24
+  CONFIG_IO_5:
+    iostd: LVCMOS18
+    loc: BA24
+  CONFIG_IO_4:
+    iostd: LVCMOS18
+    loc: AY24
+  CONFIG_IO_3:
+    iostd: LVCMOS18
+    loc: BD25
+  CONFIG_IO_2:
+    iostd: LVCMOS18
+    loc: BC25
+  CONFIG_IO_1:
+    iostd: LVCMOS18
+    loc: BB25
+  CONFIG_IO_0:
+    iostd: LVCMOS18
+    loc: BB26
+  I2C_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: BB18
+  FPGA_REFCLK_BUF0_N:
+    iostd: LVDS
+  FPGA_REFCLK_BUF0_P:
+    iostd: LVDS
+    loc: AU15
+  FPGA_REFCLK_BUF1_N:
+    iostd: LVDS
+  FPGA_REFCLK_BUF1_P:
+    iostd: LVDS
+    loc: AT18
+  ONE_GBE_LINK:
+    iostd: LVCMOS18
+    loc: BC12
+  SPI_CLK:
+    iostd: LVCMOS18
+    loc: BB21
+  MEZZANINE_3_INT_N:
+    iostd: LVCMOS18
+    loc: B15
+  SPI_MISO:
+    iostd: LVCMOS18
+    loc: BB20
+  MEZZANINE_3_PRESENT_N:
+    iostd: LVCMOS18
+    loc: C13
+  SPI_CSB:
+    iostd: LVCMOS18
+    loc: BD21
+  SPI_MOSI:
+    iostd: LVCMOS18
+    loc: BC20
+  USB_I2C_CTRL:
+    iostd: LVCMOS18
+    loc: AY13
+  DEBUG_UART_RX:
+    iostd: LVCMOS18
+    loc: AV13
+  USB_UART_RXD:
+    iostd: LVCMOS18
+    loc: BB16
+  FAN_CONT_RST_N:
+    iostd: LVCMOS18
+    loc: BB22
+  CPU_SUS_S3_N:
+    iostd: LVCMOS18
+    loc: A19
+  MEZZANINE_COMBINED_FAULT:
+    iostd: LVCMOS18
+    loc: BA20
+  EMCCLK:
+    iostd: LVCMOS18
+    loc: BB28
+  MONITOR_ALERT_N:
+    iostd: LVCMOS18
+    loc: BB13
+  I2C_RESET_FPGA:
+    iostd: LVCMOS18
+    loc: BC19
+  I2C_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: BC18
+  MEZZANINE_3_FAULT_N:
+    iostd: LVCMOS18
+    loc: AV14
+  FAN_CONT_ALERT_N:
+    iostd: LVCMOS18
+    loc: BD22
+  FLASH_CS_N:
+    iostd: LVCMOS18
+    loc: BA29
+  ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: BC17
+  CPU_SUS_STAT_N:
+    iostd: LVCMOS18
+    loc: B18
+  ONE_GBE_SGMII_RX_P:
+    loc: A6
+  USB_UART_TXD:
+    iostd: LVCMOS18
+    loc: BA13
+  FLASH_ADV_N:
+    iostd: LVCMOS18
+    loc: AN24
+  FAN_CONT_FAULT_N:
+    iostd: LVCMOS18
+    loc: BC22
+  CPU_PWR_OK:
+    iostd: LVCMOS18
+    loc: A18
+  MEZZANINE_3_ENABLE_N:
+    loc: C12
+    iostd: LVCMOS18
+  DEBUG_UART_TX:
+    iostd: LVCMOS18
+    loc: BD20
+  SPARTAN_CLK:
+    iostd: LVCMOS18
+    loc: BA26
+  MEZ_PHY11_LANE_TX_N:
+    loc:
+      - P3
+      - N1
+      - M3
+      - L1
+  MEZZANINE_3_RESET:
+    iostd: LVCMOS18
+    loc: E12
+  ONE_GBE_SGMII_RX_N:
+    loc: A5
+  USB_FPGA:
+    iostd: LVCMOS18
+    loc:
+      - E14
+      - F14
+      - E13
+      - F13
+  MEZZANINE_3_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: A15
+  FPGA_GPIO:
     iostd: LVCMOS18
     loc:
       - A29
-      - B29
       - C29
       - D29
       - E29
-      - F29
-  mezz0:
-    iostd: LVCMOS25
+      - A28
+      - B28
+      - C28
+      - E28
+      - BC35
+      - BB35
+      - BA34
+      - AY34
+      - AW34
+      - BB33
+      - BA33
+      - AY33
+  CPU_SUS_S4_N:
+    iostd: LVCMOS18
+    loc: B16
+  AUX_CLK_N:
+    iostd: LVDS
+    loc: AV19
+  ONE_GBE_SGMII_TX_P:
+    loc: B4
+  ONE_GBE_MGTREFCLK_N:
+    loc: A9
+  MEZ_PHY11_LANE_RX_P:
     loc:
-      - AA23
-      - AB24
-      - Y25
-      - Y26
-      - U24
-      - AC43
-      - AC44
-      - Y37
-      - Y38
-      - AD41
-      - AD42
-      - AA39
-      - AA40
-      - AE43
-      - AE44
-      - AC39
-      - AC40
-      - AF41
-      - AF42
-      - AD37
-      - AD38
-      - U35
-      - U36
-      - W43
-      - W44
-      - T37
-      - T38
-      - Y41
-      - Y42
-      - U39
-      - U40
-      - AA43
-      - AA44
-      - V37
-      - V38
-      - AB41
-      - AB42
-      - W39
-      - W40
-      - N35
-      - N36
-      - R43
-      - R44
-      - M37
-      - M38
-      - T41
-      - T42
-      - N39
-      - N40
-      - U43
-      - U44
-      - P37
-      - P38
-      - V41
-      - V42
-      - R39
-      - R40
-      - J35
-      - J36
-      - L43
-      - L44
-      - H37
-      - H38
-      - M41
-      - M42
-      - J39
-      - J40
-      - N43
-      - N44
-      - K37
-      - K38
-      - P41
-      - P42
-      - L39
-      - L40
+      - L6
+      - K8
+      - J6
+      - H8
+  MEZ_PHY11_LANE_RX_N:
+    loc:
+      - L5
+      - K7
+      - J5
+      - H7
+  ONE_GBE_MGTREFCLK_P:
+    loc: A10
+  GND:
+    iostd: LVCMOS18
+    loc:
+      - AY31
+      - AW30
+      - AW31
+      - AV28
+      - AV29
+      - AN27
+      - AP27
+      - AT28
+      - AK27
+      - AW26
+      - AY26
+      - AV25
+      - AW25
+      - AW24
+      - AT25
+      - AK23
+  FLASH_WAIT:
+    iostd: LVCMOS18
+    loc: BD26
+  ONE_GBE_SGMII_TX_N:
+    loc: B3
+  AUX_CLK_P:
+    iostd: LVDS
+  AUX_SYNCO_P:
+    iostd: LVDS
+  FPGA_ATX_PSU_KILL:
+    iostd: LVCMOS18
+    loc: BD10
+  AUX_SYNCI_N:
+    iostd: LVDS
+    loc: AU21
+  CPU_PWR_BTN_N:
+    iostd: LVCMOS18
+    loc: BD11
+  MEZ_PHY11_LANE_TX_P:
+    loc:
+      - P4
+      - N2
+      - M4
+      - L2
+  AUX_SYNCI_P:
+    iostd: LVDS
+  AUX_SYNCO_N:
+    iostd: LVDS
+    loc: AY21
+  FLASH_OE_N:
+    iostd: LVCMOS18
+    loc: AL24
+  ONE_GBE_RESET_N:
+    iostd: LVCMOS18
+    loc: BD12
+  MEZZANINE_3_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: A13
+  FLASH_A:
+    iostd: LVCMOS18
+    loc:
+      - AL29
+      - AL28
+      - AK29
+      - AJ29
+      - AM28
+      - AM27
+      - AK28
+      - AN30
+      - AM30
+      - AN29
+      - AN28
+      - AR29
+      - AR28
+      - AP30
+      - AP29
+      - AT29
+      - AL26
+      - AK26
+      - AK24
+      - AM26
+      - AM25
+      - AM23
+      - AL23
+      - AP26
+      - AN25
+      - AP25
+      - AP24
+      - AU27
+      - AT26
+  FLASH_RS1:
+    iostd: LVCMOS18
+    loc: AJ25
+  FLASH_RS0:
+    iostd: LVCMOS18
+    loc: AJ26
+  CPU_SYS_RESET_N:
+    iostd: LVCMOS18
+    loc: BC10
+  MEZZANINE_3_CLK_SEL:
+    loc: B12
+    iostd: LVCMOS18
+  CPU_SUS_S5_N:
+    iostd: LVCMOS18
+    loc: B17
