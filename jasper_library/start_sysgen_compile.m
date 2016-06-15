@@ -40,6 +40,9 @@ disp(sprintf('Setting output directory to: %s',xsg_path));
 xsg_blk
 
 xlsetparam(xsg_blk,'directory',xsg_path); %must be xlsetparam and not MATLAB built-in set_param
+xlsetparam(xsg_blk,'compilation_display','HDL Netlist');
+xlsetparam(xsg_blk,'compilation','HDL Netlist');
+
 
 if update == 1
     % update the current system
