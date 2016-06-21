@@ -41,26 +41,6 @@ try
   fpga_arch = xlgetparam(xsg_blk, 'xilinxfamily');
 end
 
-switch fpga_arch
-  case {'virtex6', 'Virtex6', 'virtex5', 'Virtex5'}
-    %if addressing less than 32k bytes
-    if (addr_width + ceil(log2(data_width))) < 15,   
-      errordlg(['Shared BRAM address width cannot be less than ',num2str(15-ceil(log2(data_width))),' when using a data width of ',num2str(data_width),' on Virtex-5 boards']);
-    end
-  case 'virtex2p'
-    if addr_width < 11 
-      errordlg('Shared BRAM address width cannot be less than 11 on Virtex-II Pro boards');
-    end
-  otherwise
-    if addr_width < 10 
-      errordlg('Shared BRAM address width cannot be less than 11 on unknown board');
-    end
-end
-
-if addr_width > 16,
-  errordlg('Shared BRAM address width cannot be greater than 16');
-end
-
 %set up address manipulation blocks
 
 try
