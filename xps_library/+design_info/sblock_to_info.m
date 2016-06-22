@@ -34,7 +34,7 @@ function infoblocks = sblock_to_info(block)
                 while isempty(strfind(tmpstr, '  ')) == 0,
                     tmpstr = strrep(tmpstr, '  ', ' ');
                 end
-                if length(tmpstr) < 100,
+                if (~isempty(tmpstr)) && (length(tmpstr) < 100),
                     value = tmpstr;
                 end
             catch exc
