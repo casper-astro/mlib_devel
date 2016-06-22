@@ -30,7 +30,7 @@ use work.parameter.all;
 
 entity forty_gbe is
     port(
-        sys_clk_o : out std_logic;
+        user_clk_o : out std_logic;
 
         FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
