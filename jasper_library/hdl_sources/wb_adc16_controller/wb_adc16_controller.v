@@ -187,8 +187,8 @@ module wb_adc16_controller#(
   assign adc16_reset           = adc16_ctrl_wire[20  ];
   assign adc16_snap_req        = adc16_ctrl_wire[16  ];
   assign adc16_delay_tap       = adc16_ctrl_wire[4:0 ];
-  assign adc16_iserdes_bitslip_chip_sel = adc16_ctrl_wire[15:8];
-  assign adc16_iserdes_bitslip_lane_sel = adc16_ctrl_wire[7:5];
+  wire [7:0] adc16_iserdes_bitslip_chip_sel = adc16_ctrl_wire[15:8];
+  wire [2:0] adc16_iserdes_bitslip_lane_sel = adc16_ctrl_wire[7:5];
 
   /* ADC0 Delay Strobe Register */
   reg [63:0] adc16_delay_strobe_reg;
@@ -343,7 +343,7 @@ module wb_adc16_controller#(
   wb_adc16_onehot_encoder #(
       .N_CHIPS(8)
   ) onehot_encoder_inst (
-      .clk(wb_clk),
+      .clk(wb_clk_i),
       .chip_sel(adc16_iserdes_bitslip_chip_sel),
       .lane_sel(adc16_iserdes_bitslip_lane_sel),
       .onehot(adc16_iserdes_bitslip)
