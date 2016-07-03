@@ -130,7 +130,7 @@ if opts.backend or opts.software:
     if opts.software:
         binary = backend.binary_loc
         # Do not generate a bof file if SKARAB platform is selected. Need to generate an fpg file for SKARAB
-        output_fpg = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.fpg' % (
+        output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
             tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
 
@@ -138,7 +138,7 @@ if opts.backend or opts.software:
             backend.mkfpg(binary, output_fpg)
         # Generate bof file, fpg file for ROACH and use normal binary file.
         else:
-            backend.output_bof = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.bof' % (
+            backend.output_bof = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.bof' % (
                              tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                              tf.start_time.tm_hour, tf.start_time.tm_min)
             os.system('cp %s %s/top.bin' % (binary, backend.compile_dir))
