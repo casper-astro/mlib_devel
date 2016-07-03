@@ -145,6 +145,7 @@ if opts.backend or opts.software:
             mkbof_cmd = '%s/jasper_library/mkbof_64 -o %s/%s -s %s/core_info.tab -t 3 %s/top.bin' % \
                 (os.getenv('MLIB_DEVEL_PATH'), backend.output_dir, backend.output_bof, backend.compile_dir,
                     backend.compile_dir)
-            os.system(mkbof_cmd)
+            if os.system(mkbof_cmd) == 0:
+                print 'Created %s/%s' % (backend.output_dir, backend.output_bof)
             if platform.name == 'roach' or platform.name == 'roach2' or platform.name == 'mkdig':
                 backend.mkfpg(binary, output_fpg)
