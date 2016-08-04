@@ -62,7 +62,7 @@ class snap_adc(YellowBlock):
         inst.add_port('fabric_clk_270', 'adc0_clk270')
 
         inst.add_port('reset', 'adc16_reset')
-        inst.add_port('iserdes_bitslip', 'adc16_iserdes_bitslip', width=8)
+        inst.add_port('iserdes_bitslip', 'adc16_iserdes_bitslip', width=64)
 
         inst.add_port('delay_rst', 'adc16_delay_rst', width=64)
         inst.add_port('delay_tap', 'adc16_delay_tap', width=5)
@@ -127,7 +127,7 @@ class snap_adc(YellowBlock):
         # internal connections to the adc controller. We have already declared the corresponding
         # signals earlier.
         wbctrl.add_port('adc16_reset','adc16_reset')
-        wbctrl.add_port('adc16_iserdes_bitslip','adc16_iserdes_bitslip', width=8)
+        wbctrl.add_port('adc16_iserdes_bitslip','adc16_iserdes_bitslip', width=64)
         wbctrl.add_port('adc16_delay_rst', 'adc16_delay_rst', width=64)
         wbctrl.add_port('adc16_delay_tap', 'adc16_delay_tap', width=5)
         wbctrl.add_port('adc16_snap_req',  'adc16_snap_req')

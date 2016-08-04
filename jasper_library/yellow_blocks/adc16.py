@@ -116,7 +116,7 @@ class adc16(YellowBlock):
         inst.add_port('reset', 'adc16_reset')
         inst.add_port('iserdes_bitslip', 'adc16_iserdes_bitslip')
         top.add_signal('adc16_reset')
-        top.add_signal('adc16_iserdes_bitslip', width=8)
+        top.add_signal('adc16_iserdes_bitslip', width=64)
 
         inst.add_port('delay_rst', 'adc16_delay_rst')
         inst.add_port('delay_tap', 'adc16_delay_tap')

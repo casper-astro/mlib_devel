@@ -38,8 +38,10 @@ end
 disp(sprintf('Setting output directory to: %s',xsg_path));
 
 xsg_blk
+% Use xlsetparam rather than set_param to configure Sysgen block properties
+% Set compilation type *before* compile directory location
+xlsetparam(xsg_blk, 'compilation_display','HDL Netlist', 'compilation', 'HDL Netlist', 'directory', xsg_path);
 
-xlsetparam(xsg_blk,'directory',xsg_path); %must be xlsetparam and not MATLAB built-in set_param
 
 if update == 1
     % update the current system

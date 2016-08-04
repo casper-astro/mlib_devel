@@ -25,6 +25,10 @@ pins:
   sys_clk_n:
     loc: D10
     iostd: LVDS_25
+  eth_clk_125_p:
+    loc: H6
+  eth_clk_125_n:
+    loc: H5
   miso:
     loc: K20
     iostd: LVCMOS33

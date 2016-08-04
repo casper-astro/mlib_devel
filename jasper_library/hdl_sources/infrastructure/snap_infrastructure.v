@@ -100,7 +100,7 @@ module snap_infrastructure(
   reg sys_rst_reg_z;
   reg sys_rst_reg;
   reg [15:0] sys_rst_counter;
-  always @(posedge sys_clk_ds) begin
+  always @(posedge sys_clk0) begin
     sys_rst_reg_z <= sys_rst_reg;
     if (!pll_lock) begin
       sys_rst_reg     <= 1'b0;
@@ -116,7 +116,7 @@ module snap_infrastructure(
     end
 
   end
-  assign sys_rst = sys_rst_reg_z;
+  assign sys_rst = sys_rst_reg_z & pll_lock;
 
   /* io delay reset */
 
