@@ -55,6 +55,7 @@ defaults = { ...
   'fanout_latency', 0, ...
   'n_inputs', 1, ...
   'double_buffer', 0, ...
+  'software_controlled', 'off', ...
   'bram_map', 'on'};
 if same_state(blk, 'defaults', defaults, varargin{:}), return, end
 
@@ -69,6 +70,7 @@ fanout_latency  = get_var('fanout_latency', 'defaults', defaults, varargin{:});
 n_inputs        = get_var('n_inputs', 'defaults', defaults, varargin{:});
 double_buffer   = get_var('double_buffer', 'defaults', defaults, varargin{:});
 bram_map        = get_var('bram_map', 'defaults', defaults, varargin{:});
+software_controlled = get_var('software_controlled', 'defaults', defaults, varargin{:});
 mux_latency     = 1;
 
 yinc = 20;
@@ -84,6 +86,11 @@ end %if
 
 map_length = length(map);
 map_bits = ceil(log2(map_length));
+software_controlled
+if strcmp('on', software_controlled),
+    double_buffer = 1;
+    map_latency = 3; %turn on full shared bram pipeline options
+end
 if double_buffer == 1, order = 2;
 else, order = compute_order(map);
 end
@@ -294,7 +301,6 @@ elseif double_buffer == 0,
     % Add Maps
     for cnt=1:order-1,
         mapname = ['map', num2str(cnt)];
-
         reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
             'depth', num2str(map_length), 'initVector', 'map', 'latency', num2str(map_latency), ...
             'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', 'optimize', optimize, ...
@@ -436,12 +442,34 @@ else, %TODO fanout for signals into wr_addr and rw_mode for many inputs not hand
 
     % Add Maps
     mapname = 'map1';
-    reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
-        'depth', num2str(map_length), 'initVector', 'map', 'latency', num2str(map_latency), ...
-        'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', ...
-        'distributed_mem', map_memory_type, 'Position', [230  base+15+70   270    base+35+70]);
+    if strcmp('on', software_controlled),
+        reuse_block(blk, mapname, 'xps_library/Shared_BRAM', ...
+            'addr_width', num2str(ceil(log2(map_length))), 'init_vals', 'map', 'reg_prim_output', 'on', ...
+            'reg_core_output', 'on', 'addr_width', num2str(map_bits), 'data_width', '16', ...
+            'arith_type', 'Unsigned', 'data_bin_pt', '0', 'Position', [230  base+15+70   300    base+70+70]);
+        reuse_block(blk, 'never', 'xbsIndex_r4/Constant', ...
+            'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
+            'Position', [230-50  base+15+70+20   270-50    base+35+70+20]);
+        reuse_block(blk, 'zero', 'xbsIndex_r4/Constant', ...
+            'arith_type', 'Unsigned', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
+            'n_bits', '16', 'bin_pt', '0', ...
+            'Position', [230-50  base+15+70+40   270-50    base+35+70+40]);
+        add_line(blk, 'never/1', [mapname '/2']);
+        add_line(blk, 'zero/1', [mapname '/3']);
+        reuse_block(blk, 'sw_bram_slice', 'xbsIndex_r4/Slice', ...
+            'Position', [330  base+15+70+20   360    base+35+70+20], ...
+            'boolean_output', 'off', 'nbits', num2str(map_bits), ...
+            'mode', 'Lower Bit Location + Width', 'base0', 'LSB of Input', 'bit0', '0');
+        add_line(blk, 'map1/1', 'sw_bram_slice/1');
+        add_line(blk, 'sw_bram_slice/1', 'addr_replicate/1');
+    else,
+        reuse_block(blk, mapname, 'xbsIndex_r4/ROM', ...
+            'depth', num2str(map_length), 'initVector', 'map', 'latency', num2str(map_latency), ...
+            'arith_type', 'Unsigned', 'n_bits', num2str(map_bits), 'bin_pt', '0', ...
+            'distributed_mem', map_memory_type, 'Position', [230  base+15+70   270    base+35+70]);
+        add_line(blk, 'map1/1', 'addr_replicate/1');
+    end
     add_line(blk, 'Slice2/1', 'map1/1');
-    add_line(blk, 'map1/1', 'addr_replicate/1');
 
     % Add dynamic wires
     for cnt=1:n_inputs
@@ -455,7 +483,7 @@ else, %TODO fanout for signals into wr_addr and rw_mode for many inputs not hand
     end
 end
 
-clean_blocks(blk);
+%clean_blocks(blk);
 
 fmtstr = sprintf('order=%d', order);
 set_param(blk, 'AttributesFormatString', fmtstr);
