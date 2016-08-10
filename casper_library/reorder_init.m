@@ -86,7 +86,6 @@ end %if
 
 map_length = length(map);
 map_bits = ceil(log2(map_length));
-software_controlled
 if strcmp('on', software_controlled),
     double_buffer = 1;
     map_latency = 3; %turn on full shared bram pipeline options
@@ -449,13 +448,13 @@ else, %TODO fanout for signals into wr_addr and rw_mode for many inputs not hand
             'arith_type', 'Unsigned', 'data_bin_pt', '0', 'Position', [230  base+15+70   300    base+70+70]);
         reuse_block(blk, 'never', 'xbsIndex_r4/Constant', ...
             'arith_type', 'Boolean', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
-            'Position', [230-50  base+15+70+20   270-50    base+35+70+20]);
+            'Position', [230-50  base+15+70+40   270-50    base+35+70+40]);
         reuse_block(blk, 'zero', 'xbsIndex_r4/Constant', ...
             'arith_type', 'Unsigned', 'const', '0', 'explicit_period', 'on', 'period', '1', ...
             'n_bits', '16', 'bin_pt', '0', ...
-            'Position', [230-50  base+15+70+40   270-50    base+35+70+40]);
-        add_line(blk, 'never/1', [mapname '/2']);
-        add_line(blk, 'zero/1', [mapname '/3']);
+            'Position', [230-50  base+15+70+20   270-50    base+35+70+20]);
+        add_line(blk, 'never/1', [mapname '/3']);
+        add_line(blk, 'zero/1', [mapname '/2']);
         reuse_block(blk, 'sw_bram_slice', 'xbsIndex_r4/Slice', ...
             'Position', [330  base+15+70+20   360    base+35+70+20], ...
             'boolean_output', 'off', 'nbits', num2str(map_bits), ...
@@ -483,7 +482,7 @@ else, %TODO fanout for signals into wr_addr and rw_mode for many inputs not hand
     end
 end
 
-%clean_blocks(blk);
+clean_blocks(blk);
 
 fmtstr = sprintf('order=%d', order);
 set_param(blk, 'AttributesFormatString', fmtstr);
