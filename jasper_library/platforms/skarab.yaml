@@ -4,6 +4,10 @@ fpga: xc7vx690tffg1927-2
 config_voltage: 2.5
 cfgbvs: VCCO
 backend_target: vivado
+# the skarab platform expects a bin file with a particular ordering of the bits per byte.
+# each byte from the bit file is reversed. It is anyones guess why perallex designed it this way.
+# this flag tells the toolflow to add the bpix8 flag to the write_cfgmem tcl command
+bit_reversal: true
 sources: []
 constraints:
   - skarab.xdc

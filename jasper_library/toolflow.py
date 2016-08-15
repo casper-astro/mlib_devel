@@ -924,10 +924,14 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('wait_on_run impl_1')
             # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
             # configuring the FPGA
-            if plat.name == 'skarab':
-                self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
+            try:
+                if plat.conf['bit_reversal'] == True:
+                    self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
                                  '%s/%s/%s.runs/impl_1/top.bit" -file %s'
                                  % (self.compile_dir, self.project_name, self.project_name, self.binary_loc))
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
 
             # Determine if the design meets timing or not
             # Look for Worst Negative Slack
@@ -1007,10 +1011,15 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('write_bitstream -force -bin_file %s/%s/top.bit' % (self.compile_dir, self.project_name))
             # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
             # configuring the FPGA
-            if plat.name == 'skarab':
-                self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
-                                 '%s/%s/top.bit" -file %s'
-                                 % (self.compile_dir, self.project_name, self.binary_loc))
+            try:
+                if plat.conf['bit_reversal'] == True:
+                    self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
+                                     '%s/%s/top.bit" -file %s'
+                                     % (self.compile_dir, self.project_name, self.binary_loc))
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
+
             # Determine if the design meets timing or not
             # Check for setup timing violations
             self.add_tcl_cmd('if { [get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup] ] < 0 } {')
