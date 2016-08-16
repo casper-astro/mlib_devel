@@ -19,8 +19,16 @@ class skarab(YellowBlock):
 
     def gen_constraints(self):
         return [
+            RawConstraint('set_property CONFIG_MODE BPI16 [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.EXTMASTERCCLK_EN DIV-2 [current_design]'),
             RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
             RawConstraint('set_property CFGBVS GND [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.BPI_SYNC_MODE TYPE1 [current_design]'),
+            RawConstraint('set_property BITSTREAM.STARTUP.STARTUPCLK CCLK [current_design]'),
+            RawConstraint('set_property LOC ICAP_X0Y1 [get_cells wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]'),
+            RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]'),
+            RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 0X00040000 [current_design]')
             #PortConstraint('sys_clk_n', 'sys_clk_n'),
             #PortConstraint('sys_clk_p', 'sys_clk_p'),
             #ClockConstraint('sys_clk_p', period=5.0)

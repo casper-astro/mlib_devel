@@ -16,7 +16,7 @@ class forty_gbe(YellowBlock):
         # IPython.embed()
 
         inst = top.get_instance('forty_gbe', 'forty_gbe_inst')
-        inst.add_port('sys_clk_o', 'sys_clk', dir='out')
+        inst.add_port('user_clk_o', 'sys_clk', dir='out')
 
         inst.add_port('FPGA_RESET_N',       'FPGA_RESET_N',       parent_port=True, dir='in')
         inst.add_port('FPGA_REFCLK_BUF0_P', 'FPGA_REFCLK_BUF0_P', parent_port=True, dir='in')

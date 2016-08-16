@@ -1,7 +1,7 @@
 name: skarab
 manufacturer: Xilinx
 fpga: xc7vx690tffg1927-2
-config_voltage: 2.5
+config_voltage: 1.8
 cfgbvs: VCCO
 backend_target: vivado
 # the skarab platform expects a bin file with a particular ordering of the bits per byte.

@@ -959,7 +959,7 @@ begin
 -- RESETS
 ---------------------------------------------------------------------------
     sys_clk   <= refclk_0;
-    sys_clk_o <= refclk_0;
+    user_clk_o <= refclk_0;
 
     WB_SLV_DAT_I_top <= WB_SLV_DAT_I(11);
     WB_SLV_DAT_O(11) <= WB_SLV_DAT_O_top;
