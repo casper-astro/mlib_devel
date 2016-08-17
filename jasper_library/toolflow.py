@@ -1057,8 +1057,8 @@ class VivadoBackend(ToolflowBackend):
         user_const = ''
         if isinstance(const, castro.PinConstraint):
             self.logger.debug('New PortConstraint instance found: %s -> %s' % (const.portname, const.symbolic_name))
-            user_const += self.format_cfg_const('CONFIG_VOLTAGE', self.plat.conf['config_voltage'])
-            user_const += self.format_cfg_const('CFGBVS', self.plat.conf['cfgbvs'])
+            # user_const += self.format_cfg_const('CONFIG_VOLTAGE', self.plat.conf['config_voltage'])
+            # user_const += self.format_cfg_const('CFGBVS', self.plat.conf['cfgbvs'])
             for i,p in enumerate(const.symbolic_indices):
                 self.logger.debug('Getting loc for port index %d' % i)
                 if const.location[i] is not None:
