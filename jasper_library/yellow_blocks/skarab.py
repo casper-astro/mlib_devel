@@ -21,11 +21,8 @@ class skarab(YellowBlock):
         return [
             RawConstraint('set_property CONFIG_MODE BPI16 [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.EXTMASTERCCLK_EN DIV-2 [current_design]'),
-            RawConstraint('set_property CONFIG_VOLTAGE 1.8 [current_design]'),
-            # Need to get platform information through to this method so that we can assign it in the raw constraint
-            # self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [current_design]' % self.plat.conf['config_voltage'])
-            # self.add_tcl_cmd('set_property CFGBVS %s [current_design]' % self.plat.conf['cfgbvs'])
-            RawConstraint('set_property CFGBVS GND [current_design]'),
+            RawConstraint('set_property CONFIG_VOLTAGE %.1f [current_design]' % self.platform.conf['config_voltage']),
+            RawConstraint('set_property CFGBVS %s [current_design]' % self.platform.conf['cfgbvs']),
             RawConstraint('set_property BITSTREAM.CONFIG.BPI_SYNC_MODE TYPE1 [current_design]'),
             RawConstraint('set_property BITSTREAM.STARTUP.STARTUPCLK CCLK [current_design]'),
             RawConstraint('set_property LOC ICAP_X0Y1 [get_cells wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]'),

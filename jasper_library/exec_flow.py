@@ -103,7 +103,7 @@ if opts.backend or opts.software:
         platform.backend_target = 'vivado'
         # Project Mode assignment (True = Project Mode, False = Non-Project Mode)
         platform.project_mode = opts.nonprojectmode
-        backend = toolflow.VivadoBackend(plat=platform, compile_dir=tf.compile_dir)
+        backend = toolflow.VivadoBackend(plat=platform, compile_dir=tf.compile_dir, periph_objs=tf.periph_objs)
         backend.import_from_castro(backend.compile_dir + '/castro.yml')
         # launch vivado via the generated .tcl file
         backend.compile(cores=opts.jobs, plat=platform)
