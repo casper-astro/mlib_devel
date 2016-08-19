@@ -25,7 +25,7 @@ class skarab(YellowBlock):
             RawConstraint('set_property CFGBVS %s [current_design]' % self.platform.conf['cfgbvs']),
             RawConstraint('set_property BITSTREAM.CONFIG.BPI_SYNC_MODE TYPE1 [current_design]'),
             RawConstraint('set_property BITSTREAM.STARTUP.STARTUPCLK CCLK [current_design]'),
-            RawConstraint('set_property LOC ICAP_X0Y1 [get_cells wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]'),
+            RawConstraint('set_property LOC ICAP_X0Y1 [get_cells forty_gbe_inst/wishbone_flash_sdram_interface_0/icape_controller_0/ICAPE2_0]'),
             RawConstraint('set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]'),
             RawConstraint('set_property BITSTREAM.CONFIG.TIMER_CFG 0X00040000 [current_design]')

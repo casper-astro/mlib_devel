@@ -307,12 +307,12 @@ class forty_gbe(YellowBlock):
         cons.append(PortConstraint('CONFIG_IO_10','CONFIG_IO_10'))
         cons.append(PortConstraint('CONFIG_IO_11','CONFIG_IO_11'))
 
-        cons.append(RawConstraint('create_clock -period 2.800  -name AUX_CLK_P -waveform {0.000 1.400} [get_ports AUX_CLK_P]'))
+        #cons.append(RawConstraint('create_clock -period 2.800  -name AUX_CLK_P -waveform {0.000 1.400} [get_ports AUX_CLK_P]'))
         cons.append(RawConstraint('create_clock -period 6.400  -name FPGA_REFCLK_BUF0_P -waveform {0.000 3.200} [get_ports FPGA_REFCLK_BUF0_P]'))
         cons.append(RawConstraint('create_clock -period 6.400  -name ONE_GBE_MGTREFCLK_P -waveform {0.000 3.200} [get_ports ONE_GBE_MGTREFCLK_P]'))
         cons.append(RawConstraint('create_clock -period 16.666 -name FPGA_EMCCLK2 -waveform {0.000 8.333} [get_ports FPGA_EMCCLK2]'))
         
-        cons.append(RawConstraint('# create_generated_clock -name wishbone_flash_sdram_interface_0/icape_controller_0/CLK -source [get_pins {wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C}] -divide_by 16 [get_pins {wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q}]'))
+        cons.append(RawConstraint('# create_generated_clock -name forty_gbe_inst/wishbone_flash_sdram_interface_0/icape_controller_0/CLK -source [get_pins {forty_gbe_inst/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C}] -divide_by 16 [get_pins {forty_gbe_inst/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q}]'))
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -2.500 [get_ports {FLASH_A[*]}]'))
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -max -add_delay -3.000 [get_ports {FLASH_A[*]}]'))
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -2.500 [get_ports {FLASH_DQ[*]}]'))
@@ -349,16 +349,16 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -2.500 [get_ports CONFIG_IO_9]'))
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -max -add_delay -2.500 [get_ports CONFIG_IO_9]'))
 
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks clkout0] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks clkout0]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks clkout0] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks clkout0]'))
 
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks AUX_CLK_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks AUX_CLK_P]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks AUX_CLK_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks AUX_CLK_P]'))
 
         cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ_REFCLK_0_P]'))
         cons.append(RawConstraint('create_pblock MEZ_PHY11_QSFP'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list generate_IEEE802_3_XL_PHY_ROACH3.IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list generate_IEEE802_3_XL_PHY_ROACH3.IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list forty_gbe_inst/generate_IEEE802_3_XL_PHY_ROACH3.IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list forty_gbe_inst/generate_IEEE802_3_XL_PHY_ROACH3.IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC]]'))
         cons.append(RawConstraint('resize_pblock [get_pblocks MEZ_PHY11_QSFP] -add {CLOCKREGION_X1Y7:CLOCKREGION_X1Y7}'))
 
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_0]'))
