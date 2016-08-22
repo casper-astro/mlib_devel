@@ -349,8 +349,8 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -2.500 [get_ports CONFIG_IO_9]'))
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -max -add_delay -2.500 [get_ports CONFIG_IO_9]'))
 
-        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks clkout0] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
-        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks clkout0]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks clkout0] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks clkout0]'))
 
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks AUX_CLK_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks AUX_CLK_P]'))
