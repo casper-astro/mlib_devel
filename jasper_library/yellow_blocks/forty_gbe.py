@@ -351,9 +351,11 @@ class forty_gbe(YellowBlock):
 
         cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks clkout0] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
         cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks clkout0]'))
-
+        cons.append(RawConstraint('set_false_path -to [get_pins forty_gbe_inst/FPGA_DNA_CHECKER_inst/FPGA_DNA_O_reg[*]/D]'))
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks AUX_CLK_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks AUX_CLK_P]'))
+
+
 
         cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ_REFCLK_0_P]'))
         cons.append(RawConstraint('create_pblock MEZ_PHY11_QSFP'))
