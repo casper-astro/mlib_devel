@@ -129,7 +129,6 @@ if opts.backend or opts.software:
 
     if opts.software:
         binary = backend.binary_loc
-        # Do not generate a bof file if SKARAB platform is selected. Need to generate an fpg file for SKARAB
         output_fpg = tf.frontend_target_base[:-4] + '_%d-%d-%d_%.2d%.2d.fpg' % (
             tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
