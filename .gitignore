@@ -1,7 +1,6 @@
 *_sysgen.log
 *_sysgen_error.log
 *.asv
-*.log
 *.jou
 *.pyc
 casper_library/Tests/*_output.mat

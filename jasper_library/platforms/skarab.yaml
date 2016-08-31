@@ -1,9 +1,13 @@
 name: skarab
 manufacturer: Xilinx
 fpga: xc7vx690tffg1927-2
-config_voltage: 2.5
-cfgbvs: VCCO
+config_voltage: 1.8
+cfgbvs: GND
 backend_target: vivado
+# the skarab platform expects a bin file with a particular ordering of the bits per byte.
+# each byte from the bit file is reversed. It is anyones guess why perallex designed it this way.
+# this flag tells the toolflow to add the bpix8 flag to the write_cfgmem tcl command
+bit_reversal: true
 sources: []
 constraints:
   - skarab.xdc
@@ -199,12 +203,6 @@ pins:
   SPARTAN_CLK:
     iostd: LVCMOS18
     loc: BA26
-  MEZ_PHY11_LANE_TX_N:
-    loc:
-      - P3
-      - N1
-      - M3
-      - L1
   MEZZANINE_3_RESET:
     iostd: LVCMOS18
     loc: E12
@@ -249,6 +247,12 @@ pins:
     loc: B4
   ONE_GBE_MGTREFCLK_N:
     loc: A9
+  MEZ_PHY11_LANE_TX_N:
+    loc:
+      - P3
+      - N1
+      - M3
+      - L1
   MEZ_PHY11_LANE_RX_P:
     loc:
       - L6
@@ -261,6 +265,12 @@ pins:
       - K7
       - J5
       - H7
+  MEZ_PHY11_LANE_TX_P:
+    loc:
+      - P4
+      - N2
+      - M4
+      - L2
   ONE_GBE_MGTREFCLK_P:
     loc: A10
   GND:
@@ -300,12 +310,6 @@ pins:
   CPU_PWR_BTN_N:
     iostd: LVCMOS18
     loc: BD11
-  MEZ_PHY11_LANE_TX_P:
-    loc:
-      - P4
-      - N2
-      - M4
-      - L2
   AUX_SYNCI_P:
     iostd: LVDS
   AUX_SYNCO_N:

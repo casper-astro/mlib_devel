@@ -184,6 +184,13 @@ class YellowBlock(object):
         """
         return []
 
+    def gen_tcl_cmds(self):
+        """
+        This method is designed to be overridden by subclasses. It should
+        return a list of Strings.
+        """
+        return []
+
     #def add_resource(self, thing):
     #    """
     #    Use this method in a block's initialize() method to add

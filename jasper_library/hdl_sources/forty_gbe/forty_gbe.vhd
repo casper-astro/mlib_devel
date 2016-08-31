@@ -30,7 +30,7 @@ use work.parameter.all;
 
 entity forty_gbe is
     port(
-        sys_clk_o : out std_logic;
+        user_clk_o : out std_logic;
 
         FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
@@ -907,6 +907,12 @@ begin
 
     EMCCLK_FIX <= EMCCLK;
 
+    -- These signals are not used but kept in for completeness sake.
+    -- They are for the com express, which is not populated on the SKA boards
+    CPU_PWR_BTN_N   <= '1';
+    CPU_PWR_OK      <= '0';
+    CPU_SYS_RESET_N <= '0';
+
     generate_GND_ROACH3 : if C_DEV_PLATFORM = false generate
         GND <= (others => '0');
     end generate generate_GND_ROACH3;
@@ -959,7 +965,7 @@ begin
 -- RESETS
 ---------------------------------------------------------------------------
     sys_clk   <= refclk_0;
-    sys_clk_o <= refclk_0;
+    user_clk_o <= refclk_0;
 
     WB_SLV_DAT_I_top <= WB_SLV_DAT_I(11);
     WB_SLV_DAT_O(11) <= WB_SLV_DAT_O_top;
@@ -1234,9 +1240,9 @@ begin
         FPGA_GPIO(10) <= '0';
         FPGA_GPIO(11) <= '0';
         FPGA_GPIO(12) <= '0';
-        FPGA_GPIO(13) <= aux_synco;
-        FPGA_GPIO(14) <= aux_synci;
-        --FPGA_GPIO(15) <= aux_clk;
+        FPGA_GPIO(13) <= '0';
+        FPGA_GPIO(14) <= '0';
+        FPGA_GPIO(15) <= '0';
     end generate generate_GPIO_ROACH3;
 
 ---------------------------------------------------------------------------

@@ -754,7 +754,7 @@ class SimulinkFrontend(ToolflowFrontend):
 
 
 class VivadoBackend(ToolflowBackend):
-    def __init__(self, plat=None, compile_dir='/tmp'):
+    def __init__(self, plat=None, compile_dir='/tmp', periph_objs=None):
         self.logger = logging.getLogger('jasper.toolflow.backend')
         self.compile_dir = compile_dir
         self.const_file_ext = 'xdc'
@@ -768,6 +768,7 @@ class VivadoBackend(ToolflowBackend):
         self.src_file_coe_ext = 'coe'
         self.manufacturer = 'xilinx'
         self.project_name = 'myproj'
+        self.periph_objs = periph_objs
         # if project mode is enabled
         if plat.project_mode:
             self.binary_loc = '%s/%s/%s.runs/impl_1/top.bin' % (self.compile_dir, self.project_name, self.project_name)
@@ -805,10 +806,10 @@ class VivadoBackend(ToolflowBackend):
         """
         #if self.plat.project_mode:
         self.add_tcl_cmd('set repos [get_property ip_repo_paths [current_project]]')
-	self.add_tcl_cmd('set_property ip_repo_paths "$repos %s/ip" [current_project]' % library_path)
-	self.add_tcl_cmd('update_ip_catalog')
+        self.add_tcl_cmd('set_property ip_repo_paths "$repos %s/ip" [current_project]' % library_path)
+        self.add_tcl_cmd('update_ip_catalog')
         for ip in ips:
-	    self.add_tcl_cmd('create_ip -name %s -vendor User_Company -library SysGen -version 1.0 -module_name %s_ip' % (ip, ip))
+            self.add_tcl_cmd('create_ip -name %s -vendor User_Company -library SysGen -version 1.0 -module_name %s_ip' % (ip, ip))
         #else:
         #    # TODO: validate for non-project mode flow
         #    pass
@@ -901,6 +902,7 @@ class VivadoBackend(ToolflowBackend):
         # Project Mode is enabled
         if plat.project_mode:
             self.add_tcl_cmd('set_property top top [current_fileset]')
+            self.gen_yellowblock_tcl_cmds()
             self.add_tcl_cmd('update_compile_order -fileset sources_1')
             self.add_tcl_cmd('set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]')
             self.add_tcl_cmd('set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]')
@@ -915,8 +917,6 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores)
             self.add_tcl_cmd('wait_on_run synth_1')
             # self.add_tcl_cmd('open_run synth_1')
-            # self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [current_design]' % self.plat.conf['config_voltage'])
-            # self.add_tcl_cmd('set_property CFGBVS %s [current_design]' % self.plat.conf['cfgbvs'])
             self.add_tcl_cmd('launch_runs impl_1 -jobs %d' % cores)
             self.add_tcl_cmd('wait_on_run impl_1')
             self.add_tcl_cmd('open_run impl_1')
@@ -924,10 +924,14 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('wait_on_run impl_1')
             # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
             # configuring the FPGA
-            if plat.name == 'skarab':
-                self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
+            try:
+                if plat.conf['bit_reversal'] == True:
+                    self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
                                  '%s/%s/%s.runs/impl_1/top.bit" -file %s'
                                  % (self.compile_dir, self.project_name, self.project_name, self.binary_loc))
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
 
             # Determine if the design meets timing or not
             # Look for Worst Negative Slack
@@ -967,8 +971,6 @@ class VivadoBackend(ToolflowBackend):
         # Options can be added to the *_design commands to change strategies or meet timing
         else:
             self.add_tcl_cmd('synth_design -top top -part %s' % plat.fpga)
-            # self.add_tcl_cmd('set_property CONFIG_VOLTAGE %.1f [current_design]' % self.plat.conf['config_voltage'])
-            # self.add_tcl_cmd('set_property CFGBVS %s [current_design]' % self.plat.conf['cfgbvs'])
             self.add_tcl_cmd('write_checkpoint -force %s/%s/post_synth.dcp' % (self.compile_dir, self.project_name))
             self.add_tcl_cmd('report_timing_summary -file %s/%s/post_synth_timing_summary.rpt'
                              % (self.compile_dir,self.project_name))
@@ -1007,10 +1009,15 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('write_bitstream -force -bin_file %s/%s/top.bit' % (self.compile_dir, self.project_name))
             # Generate a binary file for SKARAB where the bits are reversed per byte. This is used by casperfpga for
             # configuring the FPGA
-            if plat.name == 'skarab':
-                self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
-                                 '%s/%s/top.bit" -file %s'
-                                 % (self.compile_dir, self.project_name, self.binary_loc))
+            try:
+                if plat.conf['bit_reversal'] == True:
+                    self.add_tcl_cmd('write_cfgmem -force -format bin -interface bpix8 -size 128 -loadbit "up 0x0 '
+                                     '%s/%s/top.bit" -file %s'
+                                     % (self.compile_dir, self.project_name, self.binary_loc))
+            # just ignore if key is not present as only some platforms will have the key.
+            except KeyError:
+                s = ""
+
             # Determine if the design meets timing or not
             # Check for setup timing violations
             self.add_tcl_cmd('if { [get_property SLACK [get_timing_paths -max_paths 1 -nworst 1 -setup] ] < 0 } {')
@@ -1048,8 +1055,6 @@ class VivadoBackend(ToolflowBackend):
         user_const = ''
         if isinstance(const, castro.PinConstraint):
             self.logger.debug('New PortConstraint instance found: %s -> %s' % (const.portname, const.symbolic_name))
-            user_const += self.format_cfg_const('CONFIG_VOLTAGE', self.plat.conf['config_voltage'])
-            user_const += self.format_cfg_const('CFGBVS', self.plat.conf['cfgbvs'])
             for i,p in enumerate(const.symbolic_indices):
                 self.logger.debug('Getting loc for port index %d' % i)
                 if const.location[i] is not None:
@@ -1096,6 +1101,20 @@ class VivadoBackend(ToolflowBackend):
         Generate a configuration tcl syntax command from an attribute and value
         """
         return 'set_property %s %s [current_design]\n' % (attribute, val)
+
+    def gen_yellowblock_tcl_cmds(self):
+        """
+        Compose a list of tcl commands from each yellow block.
+        To be added to the final tcl script.
+        """
+        self.logger.info('Extracting yellow block tcl commands from peripherals')
+        self.tcl_cmds = []
+
+        for obj in self.periph_objs:
+            c = obj.gen_tcl_cmds()
+            if c is not None:
+                for o in c:
+                    self.add_tcl_cmd(o)
 
     def gen_constraint_file(self, constraints, plat):
         """
