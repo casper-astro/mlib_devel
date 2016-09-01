@@ -44,9 +44,9 @@ class PortConstraint(object):
          if type(loc) != list: loc = [loc]
          if type(iostd) != list: iostd = [iostd]
 
-         self.portname = portname
+         self.portname = portname.strip(' ') #clear out whitespace
          self.port_index = port_index
-         self.iogroup = iogroup 
+         self.iogroup = iogroup.strip(' ') 
          self.iogroup_index = iogroup_index
          self.loc = loc
          self.iostd = iostd
