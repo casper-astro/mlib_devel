@@ -69,7 +69,45 @@ module wbs_arbiter(
     .clk(wb_clk_i), .reset(wb_rst_i | timeout_reset),
     .timeout(timeout)
   );
-
+  
+    /************************ ILA Monitoring **************************/
+ 
+  //wire [9:0] masterwbcntrl;
+  //wire [9:0] slavewb1;
+  //wire [31:0] wbm_dat_in;
+  //wire [31:0] wbm_dat_out;
+  //wire [31:0] wbm_add_in;
+  //wire [31:0] wbs_dat_in;
+  //wire [31:0] wbs_dat_out;
+  //wire [31:0] wbs_add_out;
+  //wire [31:0] slavewb2;
+  //wire [31:0] temp2;
+ 
+  //ila_0 ila_0_inst(
+  //.clk(wb_clk_i),
+  //.probe0(masterwbcntrl), //10 bit input
+  //.probe1(wbm_dat_in), //32 bit input
+  //.probe2(wbm_dat_out), //32 bit input
+  //.probe3(wbm_add_in), //32 bit input
+  //.probe4(slavewb1), //10 bit input
+  //.probe5(wbs_dat_in), //32 bit input
+  //.probe6(wbs_dat_out), //32 bit input
+  //.probe7(wbs_add_out), //32 bit input
+  //.probe8(slavewb2), //32 bit input
+  //.probe9(temp2) //32 bit input 
+  //);
+  
+  //assign masterwbcntrl = {wbm_err_o, wbm_ack_o,wbm_sel_i[3:0], wbm_we_i, wbm_stb_i, wbm_cyc_i, wb_rst_i};
+  //assign slavewb1 = {4'b0, wbs_sel_o[3:0], wbs_we_o, wb_rst_i};
+  //assign wbm_dat_in = wbm_dat_i;
+  //assign wbm_dat_out = wbm_dat_o;
+  //assign wbm_add_in = wbm_adr_i;
+  //assign wbs_dat_in = wbs_dat_i[31:0];
+  //assign wbs_dat_out = wbs_dat_o;
+  //assign wbs_add_out = wbs_adr_o;
+  //assign slavewb2 = {8'b0 ,wbs_stb_o[12:0], wbs_cyc_o[12:0]};
+  //assign temp2 = wbs_adr_o_diff;
+    
   /*********************** WB Slave Arbitration **************************/
   assign wbs_sel_o = wbm_sel_i;
  

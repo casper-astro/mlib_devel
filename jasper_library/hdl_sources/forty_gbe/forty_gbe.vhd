@@ -167,13 +167,15 @@ entity forty_gbe is
         rx_overrun      : out std_logic;
         rx_overrun_ack  : in  std_logic;
         rx_ack          : in  std_logic;
-
-        WB_SLV_DAT_I_top : out ST_WB_DATA;
-        WB_SLV_DAT_O_top : in  ST_WB_DATA;
+        
+        WB_SLV_CLK_I_top : out std_logic;
+        WB_SLV_RST_I_top:  out std_logic; 
+        WB_SLV_DAT_I_top : out std_logic_vector(31 downto 0);--ST_WB_DATA;
+        WB_SLV_DAT_O_top : in  std_logic_vector(31 downto 0);--ST_WB_DATA;
         WB_SLV_ACK_O_top : in  std_logic;
-        WB_SLV_ADR_I_top : out ST_SLAVE_WB_ADDRESS;
+        WB_SLV_ADR_I_top : out std_logic_vector(31 downto 0);--ST_SLAVE_WB_ADDRESS;
         WB_SLV_CYC_I_top : out std_logic;
-        WB_SLV_SEL_I_top : out ST_WB_SEL;
+        WB_SLV_SEL_I_top : out std_logic_vector(3 downto 0);--ST_WB_SEL;
         WB_SLV_STB_I_top : out std_logic;
         WB_SLV_WE_I_top  : out std_logic);
 
@@ -630,8 +632,8 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal brd_user_read_regs : T_REGISTER_BLOCK;
     signal brd_user_write_regs : T_REGISTER_BLOCK;
-    signal dsp_user_read_regs : T_REGISTER_BLOCK;
-    signal dsp_user_write_regs : T_REGISTER_BLOCK;
+    --signal dsp_user_read_regs : T_REGISTER_BLOCK;
+    --signal dsp_user_write_regs : T_REGISTER_BLOCK;
 
     signal WB_MST_ACK_I : std_logic;
     signal WB_MST_ADR_O : std_logic_vector(19 downto 0);
@@ -966,15 +968,18 @@ begin
 ---------------------------------------------------------------------------
     sys_clk   <= refclk_0;
     user_clk_o <= refclk_0;
+    
+    WB_SLV_CLK_I_top <= sys_clk;
+    WB_SLV_RST_I_top <= sys_rst;
 
-    WB_SLV_DAT_I_top <= WB_SLV_DAT_I(11);
-    WB_SLV_DAT_O(11) <= WB_SLV_DAT_O_top;
-    WB_SLV_ACK_O(11) <= WB_SLV_ACK_O_top;
-    WB_SLV_ADR_I_top <= WB_SLV_ADR_I(11)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
-    WB_SLV_CYC_I_top <= WB_SLV_CYC_I(11);
-    WB_SLV_SEL_I_top <= WB_SLV_SEL_I(11);
-    WB_SLV_STB_I_top <= WB_SLV_STB_I(11);
-    WB_SLV_WE_I_top  <= WB_SLV_WE_I (11);
+    WB_SLV_DAT_I_top <= WB_SLV_DAT_I(1);
+    WB_SLV_DAT_O(1) <= WB_SLV_DAT_O_top;
+    WB_SLV_ACK_O(1) <= WB_SLV_ACK_O_top;
+    WB_SLV_ADR_I_top <= x"0000"& '1' & WB_SLV_ADR_I(1)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
+    WB_SLV_CYC_I_top <= WB_SLV_CYC_I(1);
+    WB_SLV_SEL_I_top <= WB_SLV_SEL_I(1);
+    WB_SLV_STB_I_top <= WB_SLV_STB_I(1);
+    WB_SLV_WE_I_top  <= WB_SLV_WE_I(1);
 
 
     gen_sys_rst : process(fpga_reset, sys_clk)
@@ -1359,21 +1364,21 @@ begin
         user_read_regs    => brd_user_read_regs,
         user_write_regs   => brd_user_write_regs);
 
-    -- WISHBONE SLAVE 1 - BOARD READ/WRITE REGISTERS
-    wishbone_register_1 : wishbone_register
-    port map(
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
-        DAT_I => WB_SLV_DAT_I(1),
-        DAT_O => WB_SLV_DAT_O(1),
-        ACK_O => WB_SLV_ACK_O(1),
-        ADR_I => WB_SLV_ADR_I(1)((C_NUM_REGISTER_ADDRESS_BITS + 1) downto 0),
-        CYC_I => WB_SLV_CYC_I(1),
-        SEL_I => WB_SLV_SEL_I(1),
-        STB_I => WB_SLV_STB_I(1),
-        WE_I  => WB_SLV_WE_I(1),
-        user_read_regs    => dsp_user_read_regs,
-        user_write_regs   => dsp_user_write_regs);
+    -- WISHBONE SLAVE 1 - DSP READ/WRITE REGISTERS
+    --wishbone_register_1 : wishbone_register
+    --port map(
+    --    CLK_I => sys_clk,
+    --    RST_I => sys_rst,
+    --    DAT_I => WB_SLV_DAT_I(1),
+    --    DAT_O => WB_SLV_DAT_O(1),
+    --    ACK_O => WB_SLV_ACK_O(1),
+    --    ADR_I => WB_SLV_ADR_I(1)((C_NUM_REGISTER_ADDRESS_BITS + 1) downto 0),
+    --    CYC_I => WB_SLV_CYC_I(1),
+    --    SEL_I => WB_SLV_SEL_I(1),
+    --    STB_I => WB_SLV_STB_I(1),
+    --    WE_I  => WB_SLV_WE_I(1),
+    --    user_read_regs    => dsp_user_read_regs,
+    --    user_write_regs   => dsp_user_write_regs);
 
     -- WISHBONE SLAVE 2 - FLASH/SDRAM RECONFIGURATION
 --    generate_FLASH_A_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
