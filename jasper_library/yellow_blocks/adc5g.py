@@ -7,6 +7,7 @@ from math import ceil, floor
 class adc5g(YellowBlock):
     def initialize(self):
         self.add_source('adc5g')
+        self.add_source('adc5g/fifo_generator_0.xci')
         self.add_source('wb_adc5g_controller')
         
         self.zdok_num = int(self.adc_brd[-1]) # The block has an zdok_num variable of the form "ZDOK 0"
@@ -169,7 +170,7 @@ class adc5g(YellowBlock):
         inst = top.get_instance(entity='wb_adc5g_controller', name='wb_adc5g_controller', comment=self.fullname)
         inst.add_wb_interface(nbytes=512, regname='adc5g_controller', mode='rw')
 
-        inst.add_parameter('INITIAL_CONFIG_MORE_%d' % self.zdok_num, '%d' % self.ctrl_mode)
+        inst.add_parameter('INITIAL_CONFIG_MODE_%d' % self.zdok_num, '%d' % self.ctrl_mode)
 
         inst.add_port('adc%d_adc3wire_clk    ' % self.zdok_num, self.fullname+'_adc3wire_clk    ', parent_port=True, dir='out')
         inst.add_port('adc%d_adc3wire_data   ' % self.zdok_num, self.fullname+'_adc3wire_data   ', parent_port=True, dir='out')
@@ -185,7 +186,7 @@ class adc5g(YellowBlock):
         inst.add_port('adc%d_psen            ' % self.zdok_num, self.fullname+'_dcm_psen        ')
         inst.add_port('adc%d_psincdec        ' % self.zdok_num, self.fullname+'_dcm_psincdec    ')
         inst.add_port('adc%d_psdone          ' % self.zdok_num, self.fullname+'_dcm_psdone      ')
-        inst.add_port('adc%d_clk             ' % self.zdok_num, self.fullname+'_clk             ')
+        inst.add_port('adc%d_clk             ' % self.zdok_num, 'adc0_clk             ')
         inst.add_port('adc%d_tap_rst         ' % self.zdok_num, self.fullname+'_tap_rst         ')
         inst.add_port('adc%d_datain_pin      ' % self.zdok_num, self.fullname+'_datain_pin      ', width=5)
         inst.add_port('adc%d_datain_tap      ' % self.zdok_num, self.fullname+'_datain_tap      ', width=5)

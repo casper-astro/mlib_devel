@@ -346,15 +346,10 @@ begin
       o=> adc_clk
       );
 
-  DIVBUF: BUFR
-    generic map (
-      BUFR_DIVIDE => bufr_div_str
-      )
+  bug_inst: BUFG
     port map (
-      CE  => '1',
-      CLR => ctrl_reset,
-      O   => adc_clk_div,
-      I   => adc_clk
+      I   => adc_clk,
+      O   => adc_clk_div
       );
   
   MMCM0: MMCM_ADV
