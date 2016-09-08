@@ -44,7 +44,7 @@ jasper_python = [getenv('MLIB_DEVEL_PATH') '/jasper_library/exec_flow.py'];
 
 disp('Launching jasper flow middleware');
 % rv = system([jasper_python ' -m' modelpath ' -c' builddir ' --skipyb --skipfe --skipbe']);
-rv = system([jasper_python ' -m' modelpath ' -c' builddir '']);
+rv = system(['python ' jasper_python ' -m' modelpath ' -c' builddir '']);
 
 if rv ~= 0
     disp(sprintf('ERROR: see %s/jasper.log for details', builddir));
@@ -61,4 +61,4 @@ if getenv('USE_VIVADO_RUNTIME_FOR_MATLAB') == '1'
     disp(sprintf('Run ''exec_flow.py -m %s --middleware --backend --software'' to finish flow', modelpath));
 else
     disp(sprintf('Run ''exec_flow.py -m %s --middleware --backend --software --be ise'' to finish flow', modelpath)); 
-end    
+end
