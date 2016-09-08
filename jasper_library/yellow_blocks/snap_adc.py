@@ -212,11 +212,12 @@ class snap_adc(YellowBlock):
         cons.append(PortConstraint('adc_pd', 'adc_pd', port_index=range(3), iogroup_index=range(3)))
         
         # clock constraint with variable period
-        cons.append(ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq*self.n_inputs/2.))
+        clkconst = ClockConstraint('adc16_clk_line_p', name='adc_clk', freq=self.clock_freq*self.n_inputs/2.)
+        cons.append(clkconst)
 
-        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks adc_clk] -group [get_clocks -include_generated_clocks sys_clk0_dcm]'))
-        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks adc_clk] -to [get_clocks -include_generated_clocks sys_clk0_dcm] 3'))
-        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks adc_clk] -to [get_clocks -include_generated_clocks sys_clk0_dcm] -hold 2'))
+        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s_CLK] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.signal))
+        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s_CLK] -to [get_clocks -include_generated_clocks sys_clk0_dcm] 3' % clkconst.signal))
+        cons.append(RawConstraint('set_multicycle_path -from [get_clocks -include_generated_clocks %s_CLK] -to [get_clocks -include_generated_clocks sys_clk0_dcm] -hold 2' % clkconst.signal))
 
         return cons
 
