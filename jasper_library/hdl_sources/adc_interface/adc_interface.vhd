@@ -136,6 +136,7 @@ architecture IMP of adc_interface is
     signal fifo_dout            : std_logic_vector(71 downto 0);
     signal fifo_rd_en           : std_logic := '0';
     signal fifo_empty           : std_logic;
+    signal fifo_full            : std_logic;
 
     ----------------------------------------
     -- Clock signals
@@ -162,6 +163,9 @@ architecture IMP of adc_interface is
     -- Input differential buffer
     ----------------------------------------
     component IBUFDS
+        generic (
+            DIFF_TERM : boolean := TRUE
+        );
         port (
             I  : in  std_logic;
             IB : in  std_logic;
@@ -214,7 +218,7 @@ architecture IMP of adc_interface is
             BANDWIDTH          : string  := "OPTIMIZED"; -- Jitter programming ("HIGH","LOW","OPTIMIZED")
             CLKFBOUT_MULT_F    : integer := 5;           -- Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
             CLKFBOUT_PHASE     : real    := 0.0;
-            CLKIN1_PERIOD      : real    := 4.4;
+            CLKIN1_PERIOD      : real    := 2.5;
             CLKOUT0_DIVIDE_F   : integer := 5;           -- Divide amount for CLKOUT0 (1.000-128.000).
             CLKOUT0_DUTY_CYCLE : real    := 0.5; 
             CLKOUT1_DUTY_CYCLE : real    := 0.5;
@@ -495,9 +499,9 @@ user_sync0         <= fifo_dout(3);
 ADC_ASYNC_FIFO : adc_fifo
     port map (
         wr_clk => adc_clk,
-        wr_en  => '1',
+        wr_en  => not ctrl_reset,
         din    => fifo_din,
-        full   => open,
+        full   => fifo_full,
 
         rd_clk => ctrl_clk_in,
         rd_en  => fifo_rd_en,
@@ -523,6 +527,7 @@ OBUFDS_ADC_DDRB : OBUFDS
 ----------------------------------------
 
 IBUFDS_SYNC : IBUFDS
+    generic map (DIFF_TERM => TRUE)
     port map ( I => adc_sync_p, IB => adc_sync_n, O => adc_sync);
 
 ----------------------------------------
@@ -530,8 +535,10 @@ IBUFDS_SYNC : IBUFDS
 ----------------------------------------
 
 IBUFDS_OUTOFRANGEI : IBUFDS
+    generic map (DIFF_TERM => TRUE)
     port map ( I => adc_outofrangei_p, IB => adc_outofrangei_n, O => adc_outofrangei);
 IBUFDS_OUTOFRANGEQ : IBUFDS
+    generic map (DIFF_TERM => TRUE)
     port map ( I  => adc_outofrangeq_p, IB => adc_outofrangeq_n, O => adc_outofrangeq);
 
 ----------------------------------------
@@ -540,28 +547,44 @@ IBUFDS_OUTOFRANGEQ : IBUFDS
 
 IBUFDC_DATA: for i in adc_dataeveni'range generate
     -- Even samples, Channel I
-    IBUFDS_DATAEVENI : IBUFDS port map (
+    IBUFDS_DATAEVENI : IBUFDS 
+    generic map (
+        DIFF_TERM => TRUE
+    )
+    port map (
         I  => adc_dataeveni_p(i),
         IB => adc_dataeveni_n(i),
         O  => adc_dataeveni(i)
     );
 
     -- Odd samples, Channel I
-    IBUFDS_DATAODDI : IBUFDS port map (
+    IBUFDS_DATAODDI : IBUFDS
+    generic map (
+        DIFF_TERM => TRUE
+    )
+    port map (
         I  => adc_dataoddi_p(i),
         IB => adc_dataoddi_n(i),
         O  => adc_dataoddi(i)
     );
 
     -- Even samples, Channel Q
-    IBUFDS_DATAEVENQ : IBUFDS port map (
+    IBUFDS_DATAEVENQ : IBUFDS
+    generic map (
+        DIFF_TERM => TRUE
+    )
+    port map (
         I  => adc_dataevenq_p(i),
         IB => adc_dataevenq_n(i),
         O  => adc_dataevenq(i)
     );
 
     -- Odd samples, Channel Q
-    IBUFDS_DATAODDQ : IBUFDS port map (
+    IBUFDS_DATAODDQ : IBUFDS
+    generic map (
+        DIFF_TERM => TRUE
+    )
+    port map (
         I  => adc_dataoddq_p(i),
         IB => adc_dataoddq_n(i),
         O  => adc_dataoddq(i)
@@ -573,6 +596,7 @@ end generate;
 ----------------------------------------
 
 IBUFDS_CLK : IBUFDS
+    generic map (DIFF_TERM => TRUE)
     port map ( I => adc_clk_p, IB => adc_clk_n, O => adc_clk_buf);
 
 CLK_CLKBUF : BUFG
@@ -598,7 +622,7 @@ CLKSHIFT_MMCM : MMCM_BASE
         BANDWIDTH          => "OPTIMIZED", -- Jitter programming ("HIGH","LOW","OPTIMIZED")
         CLKFBOUT_MULT_F    => 5,           -- Multiply value for all CLKOUT (5.0-64.0). THIS IS THE MULTIPLIER
         CLKFBOUT_PHASE     => 0.0,
-        CLKIN1_PERIOD      => 4.4,
+        CLKIN1_PERIOD      => 4.0,
         CLKOUT0_DIVIDE_F   => 5,           -- Divide amount for CLKOUT0 (1.000-128.000).
         CLKOUT0_DUTY_CYCLE => 0.5,
         CLKOUT1_DUTY_CYCLE => 0.5,

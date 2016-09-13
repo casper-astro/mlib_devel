@@ -17,76 +17,81 @@ class adc(YellowBlock):
         inst = top.get_instance(entity=module, name=self.fullname, comment=self.fullname)
         
         # External ports
-        inst.add_port('adc_clk_p',  self.fullname+'adc_clk_p', dir='in', parent_port=True)
-        inst.add_port('adc_clk_n',  self.fullname+'adc_clk_n', dir='in', parent_port=True)
-        inst.add_port('adc_sync_p', self.fullname+'adc_sync_p', dir='in', parent_port=True)
-        inst.add_port('adc_sync_n', self.fullname+'adc_sync_n', dir='in', parent_port=True)
+        inst.add_port('adc_clk_p',  self.fullname+'_adc_clk_p', dir='in', parent_port=True)
+        inst.add_port('adc_clk_n',  self.fullname+'_adc_clk_n', dir='in', parent_port=True)
+        inst.add_port('adc_sync_p', self.fullname+'_adc_sync_p', dir='in', parent_port=True)
+        inst.add_port('adc_sync_n', self.fullname+'_adc_sync_n', dir='in', parent_port=True)
 
-        inst.add_port('adc_outofrangei_p', self.fullname+'adc_outofrangei_p', dir='in', parent_port=True)
-        inst.add_port('adc_outofrangei_n', self.fullname+'adc_outofrangei_n', dir='in', parent_port=True)
-        inst.add_port('adc_outofrangeq_p', self.fullname+'adc_outofrangeq_p', dir='in', parent_port=True)
-        inst.add_port('adc_outofrangeq_n', self.fullname+'adc_outofrangeq_n', dir='in', parent_port=True)
+        inst.add_port('adc_outofrangei_p', self.fullname+'_adc_outofrangei_p', dir='in', parent_port=True)
+        inst.add_port('adc_outofrangei_n', self.fullname+'_adc_outofrangei_n', dir='in', parent_port=True)
+        inst.add_port('adc_outofrangeq_p', self.fullname+'_adc_outofrangeq_p', dir='in', parent_port=True)
+        inst.add_port('adc_outofrangeq_n', self.fullname+'_adc_outofrangeq_n', dir='in', parent_port=True)
 
-        inst.add_port('adc_dataeveni_p', self.fullname+'adc_dataeveni_p', dir='in', parent_port=True, width=8)
-        inst.add_port('adc_dataeveni_n', self.fullname+'adc_dataeveni_n', dir='in', parent_port=True, width=8)
-        inst.add_port('adc_dataoddi_p',  self.fullname+'adc_dataoddi_p',  dir='in', parent_port=True, width=8)
-        inst.add_port('adc_dataoddi_n',  self.fullname+'adc_dataoddi_n',  dir='in', parent_port=True, width=8)
-        inst.add_port('adc_dataevenq_p', self.fullname+'adc_dataevenq_p', dir='in', parent_port=True, width=8)
-        inst.add_port('adc_dataevenq_n', self.fullname+'adc_dataevenq_n', dir='in', parent_port=True, width=8)
-        inst.add_port('adc_dataoddq_p',  self.fullname+'adc_dataoddq_p',  dir='in', parent_port=True, width=8)
-        inst.add_port('adc_dataoddq_n',  self.fullname+'adc_dataoddq_n',  dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataeveni_p', self.fullname+'_adc_dataeveni_p', dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataeveni_n', self.fullname+'_adc_dataeveni_n', dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataoddi_p',  self.fullname+'_adc_dataoddi_p',  dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataoddi_n',  self.fullname+'_adc_dataoddi_n',  dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataevenq_p', self.fullname+'_adc_dataevenq_p', dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataevenq_n', self.fullname+'_adc_dataevenq_n', dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataoddq_p',  self.fullname+'_adc_dataoddq_p',  dir='in', parent_port=True, width=8)
+        inst.add_port('adc_dataoddq_n',  self.fullname+'_adc_dataoddq_n',  dir='in', parent_port=True, width=8)
 
-        inst.add_port('adc_ddrb_p', self.fullname+'adc_ddrb_p', dir='out', parent_port=True)
-        inst.add_port('adc_ddrb_n', self.fullname+'adc_ddrb_n', dir='out', parent_port=True)
+        inst.add_port('adc_ddrb_p', self.fullname+'_adc_ddrb_p', dir='out', parent_port=True)
+        inst.add_port('adc_ddrb_n', self.fullname+'_adc_ddrb_n', dir='out', parent_port=True)
 
         # ports going to the user interface
-        inst.add_port('user_datai0', self.fullname+'user_datai0', width=8)
-        inst.add_port('user_datai1', self.fullname+'user_datai1', width=8)
-        inst.add_port('user_datai2', self.fullname+'user_datai2', width=8)
-        inst.add_port('user_datai3', self.fullname+'user_datai3', width=8)
-        inst.add_port('user_dataq0', self.fullname+'user_dataq0', width=8)
-        inst.add_port('user_dataq1', self.fullname+'user_dataq1', width=8)
-        inst.add_port('user_dataq2', self.fullname+'user_dataq2', width=8)
-        inst.add_port('user_dataq3', self.fullname+'user_dataq3', width=8)
+        inst.add_port('user_datai0', self.fullname+'_user_datai0', width=8)
+        inst.add_port('user_datai1', self.fullname+'_user_datai1', width=8)
+        inst.add_port('user_datai2', self.fullname+'_user_datai2', width=8)
+        inst.add_port('user_datai3', self.fullname+'_user_datai3', width=8)
+        inst.add_port('user_dataq0', self.fullname+'_user_dataq0', width=8)
+        inst.add_port('user_dataq1', self.fullname+'_user_dataq1', width=8)
+        inst.add_port('user_dataq2', self.fullname+'_user_dataq2', width=8)
+        inst.add_port('user_dataq3', self.fullname+'_user_dataq3', width=8)
 
-        inst.add_port('user_sync0', self.fullname+'user_sync0')
-        inst.add_port('user_sync1', self.fullname+'user_sync1')
-        inst.add_port('user_sync2', self.fullname+'user_sync2')
-        inst.add_port('user_sync3', self.fullname+'user_sync3')
+        inst.add_port('user_outofrangei0', self.fullname+'_user_outofrangei0')
+        inst.add_port('user_outofrangei1', self.fullname+'_user_outofrangei1')
+        inst.add_port('user_outofrangeq0', self.fullname+'_user_outofrangeq0')
+        inst.add_port('user_outofrangeq1', self.fullname+'_user_outofrangeq1')
+
+        inst.add_port('user_sync0', self.fullname+'_user_sync0')
+        inst.add_port('user_sync1', self.fullname+'_user_sync1')
+        inst.add_port('user_sync2', self.fullname+'_user_sync2')
+        inst.add_port('user_sync3', self.fullname+'_user_sync3')
         
-        inst.add_port('user_data_valid', self.fullname+'user_data_valid')
+        inst.add_port('user_data_valid', self.fullname+'_user_data_valid')
 
         # internal ports
-        inst.add_port('mmcm_reset', self.fullname+'mmcm_reset')
-        inst.add_port('ctrl_reset', self.fullname+'ctrl_reset')
-        inst.add_port('ctrl_clk_in', self.fullname+'ctrl_clk_in')
-        inst.add_port('ctrl_clk_out'    , 'adc%d_clk' % self.adc_brd)
+        inst.add_port('mmcm_reset', self.fullname+'_mmcm_reset')
+        inst.add_port('ctrl_reset', self.fullname+'_ctrl_reset')
+        inst.add_port('ctrl_clk_in'    , 'user_clk') 
+        inst.add_port('ctrl_clk_out'   , 'adc%d_clk' % self.adc_brd)
         inst.add_port('ctrl_clk90_out' , 'adc%d_clk90' % self.adc_brd)
         inst.add_port('ctrl_clk180_out', 'adc%d_clk180' % self.adc_brd)
         inst.add_port('ctrl_clk270_out', 'adc%d_clk270' % self.adc_brd)
         inst.add_port('ctrl_dcm_locked', self.fullname+'ctrl_dcm_locked')
 
-        inst.add_port('dcm_psclk', self.fullname+'dcm_psclk')
-        inst.add_port('dcm_psen', self.fullname+'dcm_psen')
-        inst.add_port('dcm_psincdec', self.fullname+'dcm_psincdec')
-        inst.add_port('mmcm_psdone', self.fullname+'mmcm_psdone')
+        inst.add_port('dcm_psclk', self.fullname+'_dcm_psclk')
+        inst.add_port('dcm_psen', self.fullname+'_dcm_psen')
+        inst.add_port('dcm_psincdec', self.fullname+'_dcm_psincdec')
+        inst.add_port('mmcm_psdone', self.fullname+'_mmcm_psdone')
 
 
         # Now the ADC controller
         module = 'wb_adccontroller'
         inst = top.get_instance(entity=module, name='adc%d_wb_controller' % self.adc_brd, comment=self.fullname)
         inst.add_wb_interface(regname='iadc%d_controller' % self.adc_brd, nbytes=0x10, mode='rw')
-        inst.add_port('adc3wire_clk   ', self.fullname+'adc3wire_clk   ', dir='out', parent_port=True)
-        inst.add_port('adc3wire_data  ', self.fullname+'adc3wire_data  ', dir='out', parent_port=True)
-        inst.add_port('adc3wire_strobe', self.fullname+'adc3wire_strobe', dir='out', parent_port=True)
-        inst.add_port('modepin        ', self.fullname+'modepin        ', dir='out', parent_port=True)
-        inst.add_port('ddrb           ', self.fullname+'ddrb           ')
-        inst.add_port('mmcm_reset     ', self.fullname+'mmcm_reset     ')
-        inst.add_port('psclk          ', self.fullname+'psclk          ')
-        inst.add_port('psen           ', self.fullname+'psen           ')
-        inst.add_port('psincdec       ', self.fullname+'psincdec       ')
-        inst.add_port('psdone         ', self.fullname+'psdone         ')
-        inst.add_port('clk            ', self.fullname+'clk            ')
+        inst.add_port('adc3wire_clk   ', self.fullname+'_adc3wire_clk   ', dir='out', parent_port=True)
+        inst.add_port('adc3wire_data  ', self.fullname+'_adc3wire_data  ', dir='out', parent_port=True)
+        inst.add_port('adc3wire_strobe', self.fullname+'_adc3wire_strobe', dir='out', parent_port=True)
+        inst.add_port('modepin        ', self.fullname+'_modepin        ', dir='out', parent_port=True)
+        inst.add_port('ddrb           ', self.fullname+'_ctrl_reset     ')
+        inst.add_port('mmcm_reset     ', self.fullname+'_mmcm_reset     ')
+        inst.add_port('psclk          ', self.fullname+'_dcm_psclk      ')
+        inst.add_port('psen           ', self.fullname+'_dcm_psen       ')
+        inst.add_port('psincdec       ', self.fullname+'_dcm_psincdec   ')
+        inst.add_port('psdone         ', self.fullname+'_mmcm_psdone    ')
+        #inst.add_port('clk            ', self.fullname+'_clk            ')
 
 
     def gen_constraints(self):
@@ -95,7 +100,7 @@ class adc(YellowBlock):
         adcport = 'zdok%d' % self.adc_brd
         adcportp = 'zdok%d_p' % self.adc_brd
         adcportn = 'zdok%d_n' % self.adc_brd
-        adcstr = self.fullname
+        adcstr = self.fullname + '_'
         
         cons.append(PortConstraint(adcstr + 'adc_clk_p', adcportp, iogroup_index=39))
         cons.append(PortConstraint(adcstr + 'adc_clk_n', adcportn, iogroup_index=39))
@@ -126,6 +131,16 @@ class adc(YellowBlock):
         clkconst = ClockConstraint(adcstr + 'adc_clk_p', adcstr + '_clk', freq = self.adc_clk_rate / 4.)
         cons.append(clkconst)
         cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % (clkconst.signal+'_CLK')))
+
+        cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_clk_p]' % adcstr))
+        cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_sync_p]' % adcstr))
+        cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_outofrangei_p]' % adcstr))
+        cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_outofrangeq_p]' % adcstr))
+        for i in range(8):
+            cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_dataeveni_p[%d]]' % (adcstr, i)))
+            cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_dataoddi_p[%d]]' % (adcstr, i)))
+            cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_dataevenq_p[%d]]' % (adcstr,i)))
+            cons.append(RawConstraint('set_property DIFF_TERM TRUE [get_ports %sadc_dataoddq_p[%d]]' % (adcstr,i)))
 
         return cons
 

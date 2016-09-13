@@ -21,8 +21,8 @@ module wb_adccontroller#(
     output       psclk,           
     output       psen,            
     output       psincdec,        
-    input        psdone,          
-    input        clk             
+    input        psdone          
+    //input        clk             
   );
 
 
@@ -31,16 +31,18 @@ module wb_adccontroller#(
   /*** Registers ****/
 
   // CPU -> adc controller register
-  reg [31:0] wb_reg;
-  assign adc3wire_clk    = wb_reg[0];
-  assign adc3wire_data   = wb_reg[1];
-  assign adc3wire_strobe = wb_reg[2];
-  assign modepin         = wb_reg[3];
-  assign ddrb            = wb_reg[4];
-  assign mmcm_reset      = wb_reg[5];
-  assign psclk           = wb_reg[6];
-  assign psen            = wb_reg[7];
-  assign psincdec        = wb_reg[8];
+  reg [31:0] wb_reg_3wire;
+  assign adc3wire_clk    = wb_reg_3wire[0];
+  assign adc3wire_data   = wb_reg_3wire[1];
+  assign adc3wire_strobe = wb_reg_3wire[2];
+  assign modepin         = wb_reg_3wire[3];
+  reg [31:0] wb_reg_ddrb;
+  assign ddrb            = wb_reg_ddrb[0];
+  reg [31:0] wb_reg_mmcm;
+  assign mmcm_reset      = wb_reg_mmcm[0];
+  assign psclk           = wb_reg_mmcm[1];
+  assign psen            = wb_reg_mmcm[2];
+  assign psincdec        = wb_reg_mmcm[3];
 
   // adc controller -> CPU register
   reg [31:0] wb_data_out_reg;
@@ -48,7 +50,9 @@ module wb_adccontroller#(
   always @(posedge wb_clk_i) begin
     wb_ack <= 1'b0;
     if (wb_rst_i) begin
-    wb_reg <= 32'b0;
+    wb_reg_3wire <= 32'b0;
+    wb_reg_ddrb  <= 32'b0;
+    wb_reg_mmcm  <= 32'b0;
     wb_data_out_reg <= 32'b0;
     end else begin
       if (wb_stb_i && wb_cyc_i && !wb_ack) begin
@@ -57,16 +61,19 @@ module wb_adccontroller#(
            0:  begin
                 wb_ack <= 1'b1;
                 if (wb_sel_i[0]) begin
-                    wb_reg[7:0] <= wb_dat_i[7:0];
+                    wb_reg_3wire[7:0] <= wb_dat_i[7:0];
                 end
-                if (wb_sel_i[1]) begin
-                    wb_reg[15:8] <= wb_dat_i[15:8];
+           end
+           1:  begin
+                wb_ack <= 1'b1;
+                if (wb_sel_i[0]) begin
+                    wb_reg_ddrb[7:0] <= wb_dat_i[7:0];
                 end
-                if (wb_sel_i[2]) begin
-                    wb_reg[23:16] <= wb_dat_i[23:16];
-                end
-                if (wb_sel_i[3]) begin
-                    wb_reg[31:24] <= wb_dat_i[31:24];
+           end
+           2:  begin
+                wb_ack <= 1'b1;
+                if (wb_sel_i[0]) begin
+                    wb_reg_mmcm[7:0] <= wb_dat_i[7:0];
                 end
            end
           endcase
