@@ -104,7 +104,7 @@
           <spirit:wire>
             <spirit:direction>out</spirit:direction>
             <spirit:vector>
-              <spirit:left>19</spirit:left>
+              <spirit:left>31</spirit:left>
               <spirit:right>0</spirit:right>
             </spirit:vector>
           </spirit:wire>
@@ -255,6 +255,7 @@
         <spirit:componentRef spirit:library="user" spirit:name="axi_slave_wishbone_classic_master" spirit:vendor="peralex.com" spirit:version="1.0"/>
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">cont_microblaze_axi_slave_wishbone_classic_master_0_0</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_S_AXI_ADDR_WIDTH">32</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>
     </spirit:componentInstances>
@@ -2286,12 +2287,6 @@
             <spirit:range>64K</spirit:range>
           </spirit:segment>
           <spirit:segment>
-            <spirit:name>SEG_dlmb_bram_if_cntlr_Mem</spirit:name>
-            <spirit:displayName>/microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem</spirit:displayName>
-            <spirit:addressOffset>0x0</spirit:addressOffset>
-            <spirit:range>128K</spirit:range>
-          </spirit:segment>
-          <spirit:segment>
             <spirit:name>SEG_microblaze_0_axi_intc_Reg</spirit:name>
             <spirit:displayName>/microblaze_0_axi_intc/s_axi/Reg</spirit:displayName>
             <spirit:addressOffset>0x41200000</spirit:addressOffset>
@@ -2300,8 +2295,14 @@
           <spirit:segment>
             <spirit:name>SEG_axi_slave_wishbone_classic_master_0_reg0</spirit:name>
             <spirit:displayName>/axi_slave_wishbone_classic_master_0/S_AXI/reg0</spirit:displayName>
-            <spirit:addressOffset>0x44A00000</spirit:addressOffset>
-            <spirit:range>1M</spirit:range>
+            <spirit:addressOffset>0x80000000</spirit:addressOffset>
+            <spirit:range>2G</spirit:range>
+          </spirit:segment>
+          <spirit:segment>
+            <spirit:name>SEG_dlmb_bram_if_cntlr_Mem</spirit:name>
+            <spirit:displayName>/microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem</spirit:displayName>
+            <spirit:addressOffset>0x0</spirit:addressOffset>
+            <spirit:range>128K</spirit:range>
           </spirit:segment>
         </spirit:segments>
       </spirit:addressSpace>

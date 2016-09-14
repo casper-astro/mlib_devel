@@ -53,7 +53,7 @@ class Platform(object):
         try:
             self.dsp_wb_base_address = self.conf['dsp_wb_base_address']
         except KeyError:
-            self.dsp_wb_base_address = 0x10000
+            self.dsp_wb_base_address = 0x00010000
         #: This represents the DSP wishbone base address alignment
         try:
             self.dsp_wb_base_address_alignment = self.conf['dsp_wb_base_address_alignment']

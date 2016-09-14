@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -58,7 +58,7 @@ COMPONENT cont_microblaze_axi_slave_wishbone_classic_master_0_0
     DAT_O : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     DAT_I : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     ACK_I : IN STD_LOGIC;
-    ADR_O : OUT STD_LOGIC_VECTOR(19 DOWNTO 0);
+    ADR_O : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
     CYC_O : OUT STD_LOGIC;
     SEL_O : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     STB_O : OUT STD_LOGIC;
@@ -66,7 +66,7 @@ COMPONENT cont_microblaze_axi_slave_wishbone_classic_master_0_0
     S_AXI_ACLK : IN STD_LOGIC;
     S_AXI_ARESETN : IN STD_LOGIC;
     S_AXI_AWID : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    S_AXI_AWADDR : IN STD_LOGIC_VECTOR(19 DOWNTO 0);
+    S_AXI_AWADDR : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     S_AXI_AWLEN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     S_AXI_AWSIZE : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     S_AXI_AWBURST : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -90,7 +90,7 @@ COMPONENT cont_microblaze_axi_slave_wishbone_classic_master_0_0
     S_AXI_BVALID : OUT STD_LOGIC;
     S_AXI_BREADY : IN STD_LOGIC;
     S_AXI_ARID : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    S_AXI_ARADDR : IN STD_LOGIC_VECTOR(19 DOWNTO 0);
+    S_AXI_ARADDR : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
     S_AXI_ARLEN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     S_AXI_ARSIZE : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
     S_AXI_ARBURST : IN STD_LOGIC_VECTOR(1 DOWNTO 0);

@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -216,7 +216,7 @@ BEGIN
       C_HIGHADDR => X"0001FFFF",
       C_BASEADDR => X"00000000",
       C_NUM_LMB => 1,
-      C_MASK => X"40000000",
+      C_MASK => X"c0000000",
       C_MASK1 => X"00800000",
       C_MASK2 => X"00800000",
       C_MASK3 => X"00800000",
