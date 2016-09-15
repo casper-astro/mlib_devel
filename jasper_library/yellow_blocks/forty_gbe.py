@@ -180,7 +180,7 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/arp_cache/arp_cache.coe")
         self.add_source("forty_gbe/cont_microblaze/ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.upgrade_log")
 
-        self.add_source("forty_gbe/ila_0/*.xci")
+        self.add_source("ila_0/*.xci")
         self.add_source("forty_gbe/gmii_to_sgmii/*.xci")
         self.add_source("forty_gbe/isp_spi_buffer/*.xci")
         self.add_source("forty_gbe/cross_clock_fifo_67x16/*.xci")
