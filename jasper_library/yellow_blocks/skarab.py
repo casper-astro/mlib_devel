@@ -13,8 +13,8 @@ class skarab(YellowBlock):
 
     def gen_children(self):
         return [
-            # YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'12', 'rev_maj':'12', 'rev_min':'0', 'rev_rcs':'32'}, self.platform),
-            # YellowBlock.make_block({'tag': 'xps:forty_gbe'}, self.platform)
+             YellowBlock.make_block({'tag': 'xps:sys_block', 'board_id': '3', 'rev_maj': '2', 'rev_min': '0', 'rev_rcs': '1'}, self.platform)
+             #YellowBlock.make_block({'tag': 'xps:forty_gbe'}, self.platform)
             ]
 
     def gen_constraints(self):

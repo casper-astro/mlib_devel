@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -193,7 +193,7 @@ ARCHITECTURE cont_microblaze_dlmb_bram_if_cntlr_0_arch OF cont_microblaze_dlmb_b
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_dlmb_bram_if_cntlr_0_arch : ARCHITECTURE IS "cont_microblaze_dlmb_bram_if_cntlr_0,lmb_bram_if_cntlr,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_dlmb_bram_if_cntlr_0_arch: ARCHITECTURE IS "cont_microblaze_dlmb_bram_if_cntlr_0,lmb_bram_if_cntlr,{x_ipProduct=Vivado 2014.3.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_bram_if_cntlr,x_ipVersion=4.0,x_ipCoreRevision=5,x_ipLanguage=VHDL,C_FAMILY=virtex7,C_HIGHADDR=0x0001FFFF,C_BASEADDR=0x00000000,C_NUM_LMB=1,C_MASK=0x40000000,C_MASK1=0x00800000,C_MASK2=0x00800000,C_MASK3=0x00800000,C_LMB_AWIDTH=32,C_LMB_DWIDTH=32,C_ECC=0,C_INTERCONNECT=0,C_FAULT_INJECT=0,C_CE_FAILING_REGISTERS=0,C_UE_FAILING_REGISTERS=0,C_ECC_STATUS_REGISTERS=0,C_ECC_ONOFF_REGISTER=0,C_ECC_ONOFF_RESET_VALUE=1,C_CE_COUNTER_WIDTH=0,C_WRITE_ACCESS=2,C_S_AXI_CTRL_ADDR_WIDTH=32,C_S_AXI_CTRL_DATA_WIDTH=32}";
+  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_dlmb_bram_if_cntlr_0_arch: ARCHITECTURE IS "cont_microblaze_dlmb_bram_if_cntlr_0,lmb_bram_if_cntlr,{x_ipProduct=Vivado 2014.3.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_bram_if_cntlr,x_ipVersion=4.0,x_ipCoreRevision=5,x_ipLanguage=VHDL,C_FAMILY=virtex7,C_HIGHADDR=0x0001FFFF,C_BASEADDR=0x00000000,C_NUM_LMB=1,C_MASK=0xc0000000,C_MASK1=0x00800000,C_MASK2=0x00800000,C_MASK3=0x00800000,C_LMB_AWIDTH=32,C_LMB_DWIDTH=32,C_ECC=0,C_INTERCONNECT=0,C_FAULT_INJECT=0,C_CE_FAILING_REGISTERS=0,C_UE_FAILING_REGISTERS=0,C_ECC_STATUS_REGISTERS=0,C_ECC_ONOFF_REGISTER=0,C_ECC_ONOFF_RESET_VALUE=1,C_CE_COUNTER_WIDTH=0,C_WRITE_ACCESS=2,C_S_AXI_CTRL_ADDR_WIDTH=32,C_S_AXI_CTRL_DATA_WIDTH=32}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF LMB_Clk: SIGNAL IS "xilinx.com:signal:clock:1.0 CLK.LMB_Clk CLK";
   ATTRIBUTE X_INTERFACE_INFO OF LMB_Rst: SIGNAL IS "xilinx.com:signal:reset:1.0 RST.LMB_Rst RST";
@@ -222,7 +222,7 @@ BEGIN
       C_HIGHADDR => X"0001FFFF",
       C_BASEADDR => X"00000000",
       C_NUM_LMB => 1,
-      C_MASK => X"40000000",
+      C_MASK => X"c0000000",
       C_MASK1 => X"00800000",
       C_MASK2 => X"00800000",
       C_MASK3 => X"00800000",

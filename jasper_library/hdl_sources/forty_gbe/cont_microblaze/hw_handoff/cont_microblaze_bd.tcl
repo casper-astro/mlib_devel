@@ -221,7 +221,7 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set ACK_I [ create_bd_port -dir I ACK_I ]
-  set ADR_O [ create_bd_port -dir O -from 19 -to 0 ADR_O ]
+  set ADR_O [ create_bd_port -dir O -from 31 -to 0 ADR_O ]
   set CYC_O [ create_bd_port -dir O CYC_O ]
   set Clk [ create_bd_port -dir I -type clk Clk ]
   set_property -dict [ list CONFIG.FREQ_HZ {156250000}  ] $Clk
@@ -236,6 +236,7 @@ proc create_root_design { parentCell } {
 
   # Create instance: axi_slave_wishbone_classic_master_0, and set properties
   set axi_slave_wishbone_classic_master_0 [ create_bd_cell -type ip -vlnv peralex.com:user:axi_slave_wishbone_classic_master:1.0 axi_slave_wishbone_classic_master_0 ]
+  set_property -dict [ list CONFIG.C_S_AXI_ADDR_WIDTH {32}  ] $axi_slave_wishbone_classic_master_0
 
   # Create instance: axi_timebase_wdt_0, and set properties
   set axi_timebase_wdt_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_timebase_wdt:2.0 axi_timebase_wdt_0 ]
@@ -311,7 +312,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net xlconcat_0_dout [get_bd_pins microblaze_0_axi_intc/intr] [get_bd_pins xlconcat_0/dout]
 
   # Create address segments
-  create_bd_addr_seg -range 0x100000 -offset 0x44A00000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_slave_wishbone_classic_master_0/S_AXI/reg0] SEG_axi_slave_wishbone_classic_master_0_reg0
+  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_slave_wishbone_classic_master_0/S_AXI/reg0] SEG_axi_slave_wishbone_classic_master_0_reg0
   create_bd_addr_seg -range 0x10000 -offset 0x41A00000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timebase_wdt_0/S_AXI/Reg] SEG_axi_timebase_wdt_0_Reg
   create_bd_addr_seg -range 0x10000 -offset 0x41C00000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_timer_0/S_AXI/Reg] SEG_axi_timer_0_Reg
   create_bd_addr_seg -range 0x10000 -offset 0x40600000 [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg

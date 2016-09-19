@@ -144,6 +144,17 @@ class forty_gbe(YellowBlock):
         inst.add_port('rx_overrun_ack',  self.fullname+'_rx_overrun_ack',  width=1,  dir='in')
         inst.add_port('rx_ack',          self.fullname+'_rx_ack',          width=1,  dir='in')
 
+        inst.add_port('WB_SLV_CLK_I_top', 'wb_clk_i', width=0, dir='out')
+        inst.add_port('WB_SLV_RST_I_top', 'wb_rst_i', width=0, dir='out')
+        inst.add_port('WB_SLV_DAT_I_top', 'wbm_dat_o', width=32, dir='out')
+        inst.add_port('WB_SLV_DAT_O_top', 'wbm_dat_i', width=32, dir='in')
+        inst.add_port('WB_SLV_ACK_O_top', 'wbm_ack_i', width=0, dir='in')
+        inst.add_port('WB_SLV_ADR_I_top', 'wbm_adr_o', width=32, dir='out')
+        inst.add_port('WB_SLV_CYC_I_top', 'wbm_cyc_o', width=0, dir='out')
+        inst.add_port('WB_SLV_SEL_I_top', 'wbm_sel_o', width=4, dir='out')
+        inst.add_port('WB_SLV_STB_I_top', 'wbm_stb_o', width=0, dir='out')
+        inst.add_port('WB_SLV_WE_I_top', 'wbm_we_o', width=0, dir='out')
+
 
         #inst.add_port('fabric_clk_270', 'adc0_clk270')
         #top.add_signal('adc0_clk')
@@ -169,6 +180,7 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/arp_cache/arp_cache.coe")
         self.add_source("forty_gbe/cont_microblaze/ip/cont_microblaze_axi_slave_wishbone_classic_master_0_0/cont_microblaze_axi_slave_wishbone_classic_master_0_0.upgrade_log")
 
+        self.add_source("ila_0/*.xci")
         self.add_source("forty_gbe/gmii_to_sgmii/*.xci")
         self.add_source("forty_gbe/isp_spi_buffer/*.xci")
         self.add_source("forty_gbe/cross_clock_fifo_67x16/*.xci")

@@ -921,7 +921,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>e670ea2b</spirit:value>
+            <spirit:value>a0f8e1a8</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>customizationCRCversion</spirit:name>
@@ -929,7 +929,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 24 09:15:21 UTC 2014</spirit:value>
+            <spirit:value>Tue Sep 13 10:50:35 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -948,7 +948,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>e670ea2b</spirit:value>
+            <spirit:value>a0f8e1a8</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>customizationCRCversion</spirit:name>
@@ -956,7 +956,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 24 09:15:21 UTC 2014</spirit:value>
+            <spirit:value>Tue Sep 13 10:50:35 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -975,7 +975,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>e670ea2b</spirit:value>
+            <spirit:value>a0f8e1a8</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>customizationCRCversion</spirit:name>
@@ -983,7 +983,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 24 09:15:21 UTC 2014</spirit:value>
+            <spirit:value>Tue Sep 13 10:50:35 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -1002,7 +1002,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>33e1e3a8</spirit:value>
+            <spirit:value>ddb64d49</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>customizationCRCversion</spirit:name>
@@ -1010,7 +1010,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 24 09:15:21 UTC 2014</spirit:value>
+            <spirit:value>Tue Sep 13 10:50:35 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -1029,7 +1029,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>33e1e3a8</spirit:value>
+            <spirit:value>ddb64d49</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>customizationCRCversion</spirit:name>
@@ -1037,7 +1037,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 24 09:15:21 UTC 2014</spirit:value>
+            <spirit:value>Tue Sep 13 10:50:35 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -1055,7 +1055,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>e670ea2b</spirit:value>
+            <spirit:value>a0f8e1a8</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>customizationCRCversion</spirit:name>
@@ -1063,7 +1063,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Nov 24 09:15:21 UTC 2014</spirit:value>
+            <spirit:value>Tue Sep 13 10:50:35 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -2862,7 +2862,7 @@
       <spirit:modelParameter spirit:dataType="std_logic_vector(0 to 31)">
         <spirit:name>C_MASK</spirit:name>
         <spirit:displayName>SLMB Address Decode Mask</spirit:displayName>
-        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_MASK" spirit:bitStringLength="32">0x40000000</spirit:value>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_MASK" spirit:bitStringLength="32">0xc0000000</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="std_logic_vector(0 to 31)">
         <spirit:name>C_MASK1</spirit:name>
@@ -3197,57 +3197,57 @@
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/lmb_bram_if_funcs.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/lmb_bram_if_funcs.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/xor18.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/xor18.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/parity.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/parity.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/parityenable.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/parityenable.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/checkbit_handler.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/checkbit_handler.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/correct_one_bit.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/correct_one_bit.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/pselect.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/pselect.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/pselect_mask.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/pselect_mask.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/axi_interface.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/axi_interface.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/lmb_mux.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/lmb_mux.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/lmb_bram_if_cntlr.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/lmb_bram_if_cntlr.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
@@ -3263,57 +3263,57 @@
     <spirit:fileSet>
       <spirit:name>xilinx_vhdlbehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/lmb_bram_if_funcs.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/lmb_bram_if_funcs.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/xor18.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/xor18.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/parity.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/parity.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/parityenable.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/parityenable.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/checkbit_handler.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/checkbit_handler.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/correct_one_bit.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/correct_one_bit.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/pselect.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/pselect.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/pselect_mask.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/pselect_mask.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/axi_interface.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/axi_interface.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/lmb_mux.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/lmb_mux.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>lmb_bram_if_cntlr_v4_0/hdl/vhdl/lmb_bram_if_cntlr.vhd</spirit:name>
+        <spirit:name>../ipshared/xilinx.com/lmb_bram_if_cntlr_v4_0/ed8e0b57/hdl/vhdl/lmb_bram_if_cntlr.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
         <spirit:logicalName>lmb_bram_if_cntlr_v4_0</spirit:logicalName>
       </spirit:file>
@@ -3349,7 +3349,7 @@
     <spirit:parameter>
       <spirit:name>C_MASK</spirit:name>
       <spirit:displayName>SLMB Address Decode Mask</spirit:displayName>
-      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.C_MASK" spirit:order="1300" spirit:configGroups="1 Addresses" spirit:bitStringLength="32">0x40000000</spirit:value>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.C_MASK" spirit:order="1300" spirit:configGroups="1 Addresses" spirit:bitStringLength="32">0xc0000000</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C_MASK1</spirit:name>

@@ -78,10 +78,10 @@ package parameter is
     constant C_WR_NUM_PACKETS_TO_GENERATE_ADDR   : integer := 31;
 
     -- WISHBONE SPECIFIC CONSTANTS AND TYPE DEFINES
-    constant C_WB_MST_ADDRESS_BITS : integer := 20;
-    constant C_WB_SLV_ADDRESS_BITS : integer := 15;
-    constant C_WB_NUM_SLAVES : integer := 14;
-    constant C_WB_MAX_NUM_SLAVES : integer := 32;
+    constant C_WB_MST_ADDRESS_BITS : integer := 32;
+    constant C_WB_SLV_ADDRESS_BITS : integer := 32;
+    constant C_WB_NUM_SLAVES : integer := 15;
+    constant C_WB_MAX_NUM_SLAVES : integer := 16;
 
     subtype ST_WB_DATA is std_logic_vector(31 downto 0);
     type T_SLAVE_WB_DATA is array (0 to (C_WB_NUM_SLAVES - 1)) of ST_WB_DATA;

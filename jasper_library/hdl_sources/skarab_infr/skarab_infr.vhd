@@ -30,140 +30,168 @@ use work.parameter.all;
 
 entity skarab_infr is
     port(
-        FPGA_RESET_N : in std_logic;
+        user_clk_o : out std_logic;
+
+        FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
         FPGA_REFCLK_BUF0_N : in std_logic;
         FPGA_REFCLK_BUF1_P : in std_logic;
         FPGA_REFCLK_BUF1_N : in std_logic;
 
         -- MEZZANINE GTH SIGNALS
-        MEZ_REFCLK_0_P  : in std_logic;
-        MEZ_REFCLK_0_N  : in std_logic;
-        MEZ_PHY11_LANE_RX_P : in std_logic_vector(3 downto 0);
-        MEZ_PHY11_LANE_RX_N : in std_logic_vector(3 downto 0);
+        MEZ_REFCLK_0_P      : in  std_logic;
+        MEZ_REFCLK_0_N      : in  std_logic;
+        MEZ_PHY11_LANE_RX_P : in  std_logic_vector(3 downto 0);
+        MEZ_PHY11_LANE_RX_N : in  std_logic_vector(3 downto 0);
         MEZ_PHY11_LANE_TX_P : out std_logic_vector(3 downto 0);
         MEZ_PHY11_LANE_TX_N : out std_logic_vector(3 downto 0);
 
         -- MEZZANINE 3 SIDEBAND SIGNALS
-        MEZZANINE_3_PRESENT_N : in std_logic;
-        MEZZANINE_3_ENABLE_N : out std_logic;
-        MEZZANINE_3_RESET : out std_logic;
-        MEZZANINE_3_FAULT_N : in std_logic;
-        MEZZANINE_3_ONE_WIRE : inout std_logic;
+        MEZZANINE_3_PRESENT_N : in    std_logic;
+        MEZZANINE_3_ENABLE_N  : out   std_logic;
+        MEZZANINE_3_RESET     : out   std_logic;
+        MEZZANINE_3_FAULT_N   : in    std_logic;
+        MEZZANINE_3_ONE_WIRE  : inout std_logic;
         MEZZANINE_3_ONE_WIRE_STRONG_PULLUP_EN_N : out std_logic;
-        MEZZANINE_3_CLK_SEL : out std_logic;
-        MEZZANINE_3_SCL_FPGA : inout std_logic;
-        MEZZANINE_3_SDA_FPGA : inout std_logic;
-        MEZZANINE_3_INT_N : in std_logic;
+        MEZZANINE_3_CLK_SEL   : out   std_logic;
+        MEZZANINE_3_SCL_FPGA  : inout std_logic;
+        MEZZANINE_3_SDA_FPGA  : inout std_logic;
+        MEZZANINE_3_INT_N     : in    std_logic;
 
         -- 1GBE SIGNALS
-        ONE_GBE_SGMII_TX_P : out std_logic;
-        ONE_GBE_SGMII_TX_N : out std_logic;
-        ONE_GBE_SGMII_RX_P : in std_logic;
-        ONE_GBE_SGMII_RX_N : in std_logic;
-        ONE_GBE_MGTREFCLK_P : in std_logic;
-        ONE_GBE_MGTREFCLK_N : in std_logic;
+        ONE_GBE_SGMII_TX_P  : out std_logic;
+        ONE_GBE_SGMII_TX_N  : out std_logic;
+        ONE_GBE_SGMII_RX_P  : in  std_logic;
+        ONE_GBE_SGMII_RX_N  : in  std_logic;
+        ONE_GBE_MGTREFCLK_P : in  std_logic;
+        ONE_GBE_MGTREFCLK_N : in  std_logic;
 
         -- 1GBE SIDEBAND SIGNALS
         ONE_GBE_RESET_N : out std_logic;
-        ONE_GBE_INT_N : in std_logic;
-        ONE_GBE_LINK : in std_logic;
+        ONE_GBE_INT_N   : in  std_logic;
+        ONE_GBE_LINK    : in  std_logic;
 
         -- MOTHERBOARD ONE WIRE EEPROM
         ONE_WIRE_EEPROM : inout std_logic;
         ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N : out std_logic;
 
         -- I2C INTERFACE AND MONITORING
-        I2C_SCL_FPGA : inout std_logic;
-        I2C_SDA_FPGA : inout std_logic;
-        I2C_RESET_FPGA : out std_logic;
-        FAN_CONT_RST_N : out std_logic;
-        FAN_CONT_ALERT_N : in std_logic;
-        FAN_CONT_FAULT_N : in std_logic;
-        MONITOR_ALERT_N : in std_logic;
-        MEZZANINE_COMBINED_FAULT : out std_logic;
-        FPGA_ATX_PSU_KILL : out std_logic;
+        I2C_SCL_FPGA             : inout std_logic;
+        I2C_SDA_FPGA             : inout std_logic;
+        I2C_RESET_FPGA           : out   std_logic;
+        FAN_CONT_RST_N           : out   std_logic;
+        FAN_CONT_ALERT_N         : in    std_logic;
+        FAN_CONT_FAULT_N         : in    std_logic;
+        MONITOR_ALERT_N          : in    std_logic;
+        MEZZANINE_COMBINED_FAULT : out   std_logic;
+        FPGA_ATX_PSU_KILL        : out   std_logic;
 
         -- USB INTERFACE
-        USB_FPGA : in std_logic_vector(3 downto 0);
-        USB_I2C_CTRL : in std_logic;
+        USB_FPGA     : in  std_logic_vector(3 downto 0);
+        USB_I2C_CTRL : in  std_logic;
         USB_UART_RXD : out std_logic;
-        USB_UART_TXD : in std_logic;
+        USB_UART_TXD : in  std_logic;
 
-        PCIE_RST_N : in std_logic;
-        CPU_PWR_BTN_N : out std_logic;
-        CPU_PWR_OK : out std_logic;
+        PCIE_RST_N      : in  std_logic;
+        CPU_PWR_BTN_N   : out std_logic;
+        CPU_PWR_OK      : out std_logic;
         CPU_SYS_RESET_N : out std_logic;
-        CPU_SUS_S3_N : in std_logic;
-        CPU_SUS_S4_N : in std_logic;
-        CPU_SUS_S5_N : in std_logic;
-        CPU_SUS_STAT_N : in std_logic;
+        CPU_SUS_S3_N    : in  std_logic;
+        CPU_SUS_S4_N    : in  std_logic;
+        CPU_SUS_S5_N    : in  std_logic;
+        CPU_SUS_STAT_N  : in  std_logic;
 
         -- FLASH CONFIGURATION INTERFACE
-        EMCCLK : in std_logic;
-        FPGA_EMCCLK2 : in std_logic;
-        FLASH_DQ : inout std_logic_vector(15 downto 0);
-        FLASH_A : out std_logic_vector(28 downto 0);
-        FLASH_CS_N : out std_logic;
-        FLASH_OE_N : out std_logic;
-        FLASH_WE_N : out std_logic;
-        FLASH_ADV_N : out std_logic;
-        FLASH_RS0 : out std_logic;
-        FLASH_RS1 : out std_logic;
-        FLASH_WAIT : in std_logic;
+        EMCCLK       : in    std_logic;
+        FPGA_EMCCLK2 : in    std_logic;
+        FLASH_DQ     : inout std_logic_vector(15 downto 0);
+        FLASH_A      : out   std_logic_vector(28 downto 0);
+        FLASH_CS_N   : out   std_logic;
+        FLASH_OE_N   : out   std_logic;
+        FLASH_WE_N   : out   std_logic;
+        FLASH_ADV_N  : out   std_logic;
+        FLASH_RS0    : out   std_logic;
+        FLASH_RS1    : out   std_logic;
+        FLASH_WAIT   : in    std_logic;
 
         -- SPARTAN CONFIGURATION FPGA INTERFACE
-        SPARTAN_CLK : out std_logic;
-        CONFIG_IO_0 : out std_logic;
-        CONFIG_IO_1 : out std_logic;
-        CONFIG_IO_2 : in std_logic;
-        CONFIG_IO_3 : out std_logic;
-        CONFIG_IO_4 : out std_logic;
-        CONFIG_IO_5 : in std_logic;
-        CONFIG_IO_6 : out std_logic;
-        CONFIG_IO_7 : out std_logic;
-        CONFIG_IO_8 : out std_logic;
-        CONFIG_IO_9 : out std_logic;
+        SPARTAN_CLK :  out std_logic;
+        CONFIG_IO_0 :  out std_logic;
+        CONFIG_IO_1 :  out std_logic;
+        CONFIG_IO_2 :  in  std_logic;
+        CONFIG_IO_3 :  out std_logic;
+        CONFIG_IO_4 :  out std_logic;
+        CONFIG_IO_5 :  in  std_logic;
+        CONFIG_IO_6 :  out std_logic;
+        CONFIG_IO_7 :  out std_logic;
+        CONFIG_IO_8 :  out std_logic;
+        CONFIG_IO_9 :  out std_logic;
         CONFIG_IO_10 : out std_logic;
         CONFIG_IO_11 : out std_logic;
 
         -- SPARTAN INTERNAL SPI FLASH
-        SPI_MISO : in std_logic;
+        SPI_MISO : in  std_logic;
         SPI_MOSI : out std_logic;
         SPI_CSB  : out std_logic;
         SPI_CLK  : out std_logic;
 
         -- GPIO
-        FPGA_GPIO : out std_logic_vector(15 downto 0);
+        FPGA_GPIO     : out std_logic_vector(15 downto 0);
         DEBUG_UART_TX : out std_logic;
-        DEBUG_UART_RX : in std_logic;
+        DEBUG_UART_RX : in  std_logic;
 
         -- AUX CONNECTIONS
-        AUX_CLK_P : in std_logic;
-        AUX_CLK_N : in std_logic;
-        AUX_SYNCI_P : in std_logic;
-        AUX_SYNCI_N : in std_logic;
-        AUX_SYNCO_P : out std_logic;
-        AUX_SYNCO_N : out std_logic;
+        --AUX_CLK_P   : in  std_logic;
+        --AUX_CLK_N   : in  std_logic;
+        --AUX_SYNCI_P : in  std_logic;
+        --AUX_SYNCI_N : in  std_logic;
+        --AUX_SYNCO_P : out std_logic;
+        --AUX_SYNCO_N : out std_logic;
 
         EMCCLK_FIX : out std_logic;
-        GND : out std_logic_vector(15 downto 0));
+        GND        : out std_logic_vector(15 downto 0);
 
-end frm123701u1r1;
+        tx_valid        : in  std_logic;
+        tx_end_of_frame : in  std_logic;
+        tx_data         : in  std_logic_vector(63 downto 0);
+        tx_dest_ip      : in  std_logic_vector(31 downto 0);
+        tx_dest_port    : in  std_logic_vector(15 downto 0);
+        tx_overflow     : out std_logic;
+        tx_afull        : out std_logic;
+        rx_valid        : out std_logic;
+        rx_end_of_frame : out std_logic;
+        rx_data         : out std_logic_vector(63 downto 0);
+        rx_source_ip    : out std_logic_vector(31 downto 0);
+        rx_source_port  : out std_logic_vector(15 downto 0);
+        rx_bad_frame    : out std_logic;
+        rx_overrun      : out std_logic;
+        rx_overrun_ack  : in  std_logic;
+        rx_ack          : in  std_logic;
+        
+        WB_SLV_CLK_I_top : out std_logic;
+        WB_SLV_RST_I_top:  out std_logic; 
+        WB_SLV_DAT_I_top : out std_logic_vector(31 downto 0);--ST_WB_DATA;
+        WB_SLV_DAT_O_top : in  std_logic_vector(31 downto 0);--ST_WB_DATA;
+        WB_SLV_ACK_O_top : in  std_logic;
+        WB_SLV_ADR_I_top : out std_logic_vector(31 downto 0);--ST_SLAVE_WB_ADDRESS;
+        WB_SLV_CYC_I_top : out std_logic;
+        WB_SLV_SEL_I_top : out std_logic_vector(3 downto 0);--ST_WB_SEL;
+        WB_SLV_STB_I_top : out std_logic;
+        WB_SLV_WE_I_top  : out std_logic);
+
+end skarab_infr;
 
 --}} End of automatically maintained section
 
-architecture arch_frm123701u1r1 of frm123701u1r1 is
+architecture arch_skarab_infr of skarab_infr is
 
     constant C_IDLE_TXD : std_logic_vector(255 downto 0):= X"0707070707070707070707070707070707070707070707070707070707070707";
     constant C_IDLE_TXC : std_logic_vector(31 downto 0) := "11111111111111111111111111111111";
 
-    constant C_DEV_PLATFORM : boolean := false;
-
     component cont_microblaze_wrapper
     port (
         ACK_I       : in std_logic;
-        ADR_O       : out std_logic_vector( 19 downto 0 );
+        ADR_O       : out std_logic_vector( 31 downto 0 );
         CYC_O       : out std_logic;
         Clk         : in std_logic;
         DAT_I       : in std_logic_vector( 31 downto 0 );
@@ -177,14 +205,14 @@ architecture arch_frm123701u1r1 of frm123701u1r1 is
         WE_O        : out std_logic);
     end component;
 
-    component mezzanine_enable_delay
-    port(
-        clk : in std_logic;
-        rst : in std_logic;
-        second_toggle                    : in std_logic;
-        mezzanine_enable                 : in std_logic;
-        mezzanine_fault_checking_enable  : out std_logic);
-    end component;
+    --component mezzanine_enable_delay
+    --port(
+    --    clk : in std_logic;
+    --    rst : in std_logic;
+    --    second_toggle                    : in std_logic;
+    --    mezzanine_enable                 : in std_logic;
+    --    mezzanine_fault_checking_enable  : out std_logic);
+    --end component;
 
     component wishbone_interconnect
     port (
@@ -602,11 +630,11 @@ architecture arch_frm123701u1r1 of frm123701u1r1 is
 
     signal brd_user_read_regs : T_REGISTER_BLOCK;
     signal brd_user_write_regs : T_REGISTER_BLOCK;
-    signal dsp_user_read_regs : T_REGISTER_BLOCK;
-    signal dsp_user_write_regs : T_REGISTER_BLOCK;
+    --signal brd_user_read_regs_2 : T_REGISTER_BLOCK;
+    --signal brd_user_write_regs_2 : T_REGISTER_BLOCK;
 
     signal WB_MST_ACK_I : std_logic;
-    signal WB_MST_ADR_O : std_logic_vector(19 downto 0);
+    signal WB_MST_ADR_O : std_logic_vector(31 downto 0);
     signal WB_MST_CYC_O : std_logic;
     signal WB_MST_DAT_I : std_logic_vector(31 downto 0);
     signal WB_MST_DAT_O : std_logic_vector(31 downto 0);
@@ -622,7 +650,7 @@ architecture arch_frm123701u1r1 of frm123701u1r1 is
     signal WB_SLV_CYC_I : std_logic_vector(0 to (C_WB_NUM_SLAVES - 1));
     signal WB_SLV_SEL_I : T_SLAVE_WB_SEL;
     signal WB_SLV_STB_I : std_logic_vector(0 to (C_WB_NUM_SLAVES - 1));
-    signal WB_SLV_WE_I : std_logic_vector(0 to (C_WB_NUM_SLAVES - 1));
+    signal WB_SLV_WE_I  : std_logic_vector(0 to (C_WB_NUM_SLAVES - 1));
 
     signal gmii_tx_valid : std_logic;
     signal gmii_tx_end_of_frame : std_logic;
@@ -811,133 +839,6 @@ architecture arch_frm123701u1r1 of frm123701u1r1 is
     signal qsfp_gtrefclk : std_logic;
     signal qsfp_gtrefclk_pb : std_logic;
 
--------------------------------------------------------------------------
--- TEST COMPONENTS AND SIGNALS
--------------------------------------------------------------------------
-
-    signal select_one_gbe_ramp_checker : std_logic;
-    signal one_gbe_ip_fault : std_logic;
-    signal one_gbe_ramp_fault : std_logic;
-    signal one_gbe_packets_checked : std_logic;
-    signal one_gbe_num_packets_checked : std_logic_vector(23 downto 0);
-    signal one_gbe_num_packets_checked_z1 : std_logic_vector(23 downto 0);
-    signal gmii_ramp_source_stall : std_logic;
-    signal second_toggle : std_logic;
-    signal aux_clk_frequency : std_logic_vector(31 downto 0);
-    signal xlgmii_ip_fault : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_ramp_fault : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_packets_checked : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
-    signal xlgmii_num_packets_checked : T_40GBE_XLGMII_NUM_PACKETS_CHECKED;
-    signal xlgmii_num_packets_checked_z1 : T_40GBE_XLGMII_NUM_PACKETS_CHECKED;
-    signal xlgmii_num_fcs_error_packets : T_40GBE_XLGMII_NUM_PACKETS_CHECKED;
-    signal num_packets_to_generate : std_logic_vector(23 downto 0);
-    signal packet_idle_period : std_logic_vector(7 downto 0);
-
-    component ska_ten_gb_eth_ramp_source
-    port (
-        clk : in std_logic;
-        rst : in std_logic;
-        enable_packet_generation    : in std_logic;
-        num_packets_to_generate     : in std_logic_vector(23 downto 0);
-        packet_idle_period          : in std_logic_vector(7 downto 0);
-        destination_ip_address      : in std_logic_vector(31 downto 0);
-        payload_words               : in std_logic_vector(10 downto 0);
-        tx_valid            : out std_logic;
-        tx_end_of_frame     : out std_logic;
-        tx_data             : out std_logic_vector(63 downto 0);
-        tx_dest_ip          : out std_logic_vector(31 downto 0);
-        tx_dest_port        : out std_logic_vector(15 downto 0);
-        tx_overflow         : in std_logic;
-        tx_afull            : in std_logic);
-    end component;
-
-    component ska_ten_gb_eth_ramp_checker
-    port (
-        clk : in std_logic;
-        rst : in std_logic;
-        rx_valid            : in std_logic;
-        rx_end_of_frame     : in std_logic;
-        rx_data             : in std_logic_vector(63 downto 0);
-        rx_source_ip        : in std_logic_vector(31 downto 0);
-        rx_source_port      : in std_logic_vector(15 downto 0);
-        rx_bad_frame        : in std_logic;
-        rx_overrun          : in std_logic;
-        rx_overrun_ack      : out std_logic;
-        rx_ack              : out std_logic;
-        source_ip_address           : in std_logic_vector(31 downto 0);
-        enable_packet_generation    : in std_logic;
-        packets_checked             : out std_logic;
-        ip_fault                    : out std_logic;
-        ramp_fault                  : out std_logic;
-        num_packets_checked         : out std_logic_vector(23 downto 0));
-    end component;
-
-    component second_gen
-    port(
-        clk : in std_logic;
-        rst : in std_logic;
-        second_toggle : out std_logic);
-    end component;
-
-    component clock_frequency_measure
-    port(
-        clk : in std_logic;
-        rst : in std_logic;
-        second_toggle   : in std_logic;
-        measure_freq    : out std_logic_vector(31 downto 0));
-    end component;
-
-    component aux_sync_gen
-    port(
-        clk : in std_logic;
-        rst : in std_logic;
-        aux_sync_out    : out std_logic);
-    end component;
-
-    component ska_forty_gb_eth_ramp_source
-    generic (
-        TEST_COUNT_INC    : in std_logic_vector(15 downto 0));
-    port (
-        clk : in std_logic;
-        rst : in std_logic;
-        enable_packet_generation    : in std_logic;
-        num_packets_to_generate     : in std_logic_vector(23 downto 0);
-        packet_idle_period          : in std_logic_vector(7 downto 0);
-        payload_words               : in std_logic_vector(10 downto 0);
-        lane_up                     : in std_logic;
-        destination_ip_address      : in std_logic_vector(31 downto 0);
-        tx_valid            : out std_logic_vector(3 downto 0);
-        tx_end_of_frame     : out std_logic;
-        tx_data             : out std_logic_vector(255 downto 0);
-        tx_dest_ip          : out std_logic_vector(31 downto 0);
-        tx_dest_port        : out std_logic_vector(15 downto 0);
-        tx_overflow         : in std_logic;
-        tx_afull            : in std_logic);
-    end component;
-
-    component ska_forty_gb_eth_ramp_checker
-    port (
-        clk : in std_logic;
-        rst : in std_logic;
-        lane_up             : in std_logic;
-        rx_valid            : in std_logic_vector(3 downto 0);
-        rx_end_of_frame     : in std_logic;
-        rx_data             : in std_logic_vector(255 downto 0);
-        rx_source_ip        : in std_logic_vector(31 downto 0);
-        rx_source_port      : in std_logic_vector(15 downto 0);
-        rx_bad_frame        : in std_logic;
-        rx_overrun          : in std_logic;
-        rx_overrun_ack      : out std_logic;
-        rx_ack              : out std_logic;
-        source_ip_address   : in std_logic_vector(31 downto 0);
-        enable_packet_generation    : in std_logic;
-        packets_checked             : out std_logic;
-        ip_fault                    : out std_logic;
-        ramp_fault                  : out std_logic;
-        num_packets_checked         : out std_logic_vector(23 downto 0);
-        num_fcs_error_packets       : out std_logic_vector(23 downto 0));
-    end component;
-
     signal mezzanine_fault_override : std_logic;
 
     signal src_packets_sent : std_logic_vector(15 downto 0);
@@ -979,6 +880,9 @@ architecture arch_frm123701u1r1 of frm123701u1r1 is
     signal rx_start_count_2 : std_logic_vector(15 downto 0);
     signal rx_start_count_3 : std_logic_vector(15 downto 0);
 
+    --signal second_toggle : std_logic;
+    signal aux_clk_frequency : std_logic_vector(31 downto 0);
+
     signal ramp_source_destination_ip_address_0 : std_logic_vector(31 downto 0);
     signal ramp_checker_source_ip_address_0 : std_logic_vector(31 downto 0);
     signal ramp_source_destination_ip_address_1 : std_logic_vector(31 downto 0);
@@ -997,64 +901,49 @@ architecture arch_frm123701u1r1 of frm123701u1r1 is
     -- MB 08/10/2015 ADDED SUPPORT FOR READING FPGA DNA
     signal fpga_dna : std_logic_vector(63 downto 0);
 
+    signal select_one_gbe_ramp_checker : std_logic;
+
 begin
 
     EMCCLK_FIX <= EMCCLK;
 
-    generate_GND_ROACH3 : if C_DEV_PLATFORM = false generate
-        GND <= (others => '0');
-    end generate generate_GND_ROACH3;
-
-    generate_fpga_reset_ROACH3 : if C_DEV_PLATFORM = false generate
-        fpga_reset <= not FPGA_RESET_N;
-
-        FAN_CONT_RST_N <= FPGA_RESET_N;
-    end generate generate_fpga_reset_ROACH3;
-
---    generate_fpga_reset_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
---        fpga_reset <= not FPGA_USER_PB;
---    end generate generate_fpga_reset_DEV_PLATFORM;
+    -- These signals are not used but kept in for completeness sake.
+    -- They are for the com express, which is not populated on the SKA boards
+    CPU_PWR_BTN_N   <= '1';
+    CPU_PWR_OK      <= '0';
+    CPU_SYS_RESET_N <= '0';
+    
+    GND <= (others => '0');
+    fpga_reset <= not FPGA_RESET_N;
+    FAN_CONT_RST_N <= FPGA_RESET_N;
 
 ---------------------------------------------------------------------------
 -- REFCLK CONNECTIONS
 ---------------------------------------------------------------------------
 
-    generate_refclk_ROACH3 : if C_DEV_PLATFORM = false generate
 
-        refclk_0_ibufgds : IBUFGDS
-        generic map (
-            DIFF_TERM => TRUE)
-        port map (
-            I  => FPGA_REFCLK_BUF0_P,
-            IB => FPGA_REFCLK_BUF0_N,
-            O  => refclk_0);
+    refclk_0_ibufgds : IBUFGDS
+    generic map (
+        DIFF_TERM => TRUE)
+    port map (
+        I  => FPGA_REFCLK_BUF0_P,
+        IB => FPGA_REFCLK_BUF0_N,
+        O  => refclk_0);
 
-        refclk_1_ibufgds : IBUFGDS
-        generic map (
-            DIFF_TERM => TRUE)
-        port map (
-            I  => FPGA_REFCLK_BUF1_P,
-            IB => FPGA_REFCLK_BUF1_N,
-            O  => refclk_1);
-
-    end generate generate_refclk_ROACH3;
-
---    generate_refclk_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
-
---        refclk_ibufgds_0 : IBUFGDS
---        port map (
---            I  => REFCLK_P,
---            IB => REFCLK_N,
---            O  => refclk_0);
-
---    end generate generate_refclk_DEV_PLATFORM;
+    refclk_1_ibufgds : IBUFGDS
+    generic map (
+        DIFF_TERM => TRUE)
+    port map (
+        I  => FPGA_REFCLK_BUF1_P,
+        IB => FPGA_REFCLK_BUF1_N,
+        O  => refclk_1);
 
 ---------------------------------------------------------------------------
 -- RESETS
 ---------------------------------------------------------------------------
-
-    sys_clk <= refclk_0;
-
+    sys_clk   <= refclk_0;
+    user_clk_o <= refclk_0;
+    
     gen_sys_rst : process(fpga_reset, sys_clk)
     begin
         if (fpga_reset = '1')then
@@ -1145,45 +1034,45 @@ begin
 
     brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(0) <= gmii_reset_done;
 
-    generate_C_RD_BRD_CTL_STAT_0_ADDR_ROACH3 : if C_DEV_PLATFORM = false generate
-        brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(1) <= not MONITOR_ALERT_N;
-        brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(2) <= not FAN_CONT_ALERT_N;
-        brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(3) <= not FAN_CONT_FAULT_N;
-        brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(4) <= ONE_GBE_LINK;
-        brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(5) <= ONE_GBE_INT_N;
-    end generate generate_C_RD_BRD_CTL_STAT_0_ADDR_ROACH3;
 
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(6) <= one_gbe_packets_checked;
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(7) <= one_gbe_ramp_fault;
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(8) <= one_gbe_ip_fault;
+    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(1) <= not MONITOR_ALERT_N;
+    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(2) <= not FAN_CONT_ALERT_N;
+    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(3) <= not FAN_CONT_FAULT_N;
+    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(4) <= ONE_GBE_LINK;
+    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(5) <= ONE_GBE_INT_N;
 
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(9) <= xlgmii_packets_checked(0);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(10) <= xlgmii_ramp_fault(0);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(11) <= xlgmii_ip_fault(0);
 
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(12) <= xlgmii_packets_checked(1);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(13) <= xlgmii_ramp_fault(1);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(14) <= xlgmii_ip_fault(1);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(6) <= one_gbe_packets_checked;
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(7) <= one_gbe_ramp_fault;
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(8) <= one_gbe_ip_fault;
 
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(15) <= xlgmii_packets_checked(2);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(16) <= xlgmii_ramp_fault(2);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(17) <= xlgmii_ip_fault(2);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(9) <= xlgmii_packets_checked(0);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(10) <= xlgmii_ramp_fault(0);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(11) <= xlgmii_ip_fault(0);
 
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(18) <= xlgmii_packets_checked(3);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(19) <= xlgmii_ramp_fault(3);
-    brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(20) <= xlgmii_ip_fault(3);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(12) <= xlgmii_packets_checked(1);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(13) <= xlgmii_ramp_fault(1);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(14) <= xlgmii_ip_fault(1);
+
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(15) <= xlgmii_packets_checked(2);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(16) <= xlgmii_ramp_fault(2);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(17) <= xlgmii_ip_fault(2);
+
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(18) <= xlgmii_packets_checked(3);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(19) <= xlgmii_ramp_fault(3);
+    --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(20) <= xlgmii_ip_fault(3);
 
     brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(31 downto 21) <= (others => '0');
 
     select_one_gbe_ramp_checker <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(1);
     mezzanine_fault_override <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(2);
-    enable_1gbe_packet_generation <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(3);
-    enable_40gbe_packet_generation <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(7 downto 4);
+    --enable_1gbe_packet_generation <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(3);
+    --enable_40gbe_packet_generation <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(7 downto 4);
     timer_link <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(29 downto 27);
     host_reset_req <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(30);
-    generate_C_WR_BRD_CTL_STAT_0_ADDR_ROACH3 : if C_DEV_PLATFORM = false generate
-        FPGA_ATX_PSU_KILL <= (brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(31) and brd_user_write_regs(C_WR_BRD_CTL_STAT_1_ADDR)(31));
-    end generate generate_C_WR_BRD_CTL_STAT_0_ADDR_ROACH3;
+    
+    FPGA_ATX_PSU_KILL <= (brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(31) and brd_user_write_regs(C_WR_BRD_CTL_STAT_1_ADDR)(31));
+    
 
     brd_user_read_regs(C_RD_LOOPBACK_ADDR) <= brd_user_write_regs(C_WR_LOOPBACK_ADDR);
 
@@ -1223,106 +1112,66 @@ begin
         end if;
     end process;
 
-    generate_C_RD_MEZZANINE_STAT_ADDR_ROACH3 : if C_DEV_PLATFORM = false generate
-
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(7 downto 4) <= (others => '0');
-
-        mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1') else '0';
-        mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1') else '0';
-        mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1') else '0';
-        mezzanine_3_fault <= (not MEZZANINE_3_FAULT_N) when (mezzanine_3_fault_checking_enable = '1') else '0';
-
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(8) <= mezzanine_0_fault;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(9) <= mezzanine_1_fault;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(10) <= mezzanine_2_fault;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(11) <= mezzanine_3_fault;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(15 downto 12) <= (others => '0');
-
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(16) <= not MEZZANINE_0_INT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(17) <= not MEZZANINE_1_INT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(18) <= not MEZZANINE_2_INT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(19) <= not MEZZANINE_3_INT_N;
-        brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(31 downto 20) <= (others => '0');
-
-        mezzanine_0_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(0);
-        mezzanine_1_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(1);
-        mezzanine_2_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(2);
-        mezzanine_3_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(3);
-
-        mezzanine_enable_delay_0 : mezzanine_enable_delay
-        port map(
-            clk => sys_clk,
-            rst => sys_rst,
-            second_toggle                    => second_toggle,
-            mezzanine_enable                 => mezzanine_0_enable,
-            mezzanine_fault_checking_enable  => mezzanine_0_fault_checking_enable);
-
-        mezzanine_enable_delay_1 : mezzanine_enable_delay
-        port map(
-            clk => sys_clk,
-            rst => sys_rst,
-            second_toggle                    => second_toggle,
-            mezzanine_enable                 => mezzanine_1_enable,
-            mezzanine_fault_checking_enable  => mezzanine_1_fault_checking_enable);
-
-        mezzanine_enable_delay_2 : mezzanine_enable_delay
-        port map(
-            clk => sys_clk,
-            rst => sys_rst,
-            second_toggle                    => second_toggle,
-            mezzanine_enable                 => mezzanine_2_enable,
-            mezzanine_fault_checking_enable  => mezzanine_2_fault_checking_enable);
-
-        mezzanine_enable_delay_3 : mezzanine_enable_delay
-        port map(
-            clk => sys_clk,
-            rst => sys_rst,
-            second_toggle                    => second_toggle,
-            mezzanine_enable                 => mezzanine_3_enable,
-            mezzanine_fault_checking_enable  => mezzanine_3_fault_checking_enable);
-
-        MEZZANINE_0_ENABLE_N <= not mezzanine_0_enable;
-        MEZZANINE_1_ENABLE_N <= not mezzanine_1_enable;
-        MEZZANINE_2_ENABLE_N <= not mezzanine_2_enable;
-        MEZZANINE_3_ENABLE_N <= not mezzanine_3_enable;
-
-        MEZZANINE_0_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(8) or sys_rst;
-        MEZZANINE_1_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(9) or sys_rst;
-        MEZZANINE_2_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(10) or sys_rst;
-        MEZZANINE_3_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(11) or sys_rst;
-
-        MEZZANINE_0_CLK_SEL <= not brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(16); -- DEFAULT '1' = MEZZANINE CLOCK
-        MEZZANINE_1_CLK_SEL <= not brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(17); -- DEFAULT '1' = MEZZANINE CLOCK
-        MEZZANINE_2_CLK_SEL <= not brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(18); -- DEFAULT '1' = MEZZANINE CLOCK
-        MEZZANINE_3_CLK_SEL <= not brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(19); -- DEFAULT '1' = MEZZANINE CLOCK
-
-        MEZZANINE_COMBINED_FAULT <= mezzanine_fault_override or mezzanine_0_fault or mezzanine_1_fault or mezzanine_2_fault or mezzanine_3_fault;
-
-        brd_user_read_regs(C_RD_USB_STAT_ADDR)(3 downto 0) <= USB_FPGA;
-        brd_user_read_regs(C_RD_USB_STAT_ADDR)(7 downto 4) <= (others => '0');
-        brd_user_read_regs(C_RD_USB_STAT_ADDR)(8) <= USB_I2C_CTRL;
-        brd_user_read_regs(C_RD_USB_STAT_ADDR)(31 downto 9) <= (others => '0');
-
-        USB_UART_RXD <= microblaze_uart_txd;
-        -- USB SERIAL CURRENTLY NOT USED FOR RECEIVING
-        --USB_UART_TXD
-
-        brd_user_read_regs(C_RD_AUX_CLK_FREQ_ADDR) <= aux_clk_frequency;
 
 
-    end generate generate_C_RD_MEZZANINE_STAT_ADDR_ROACH3;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(7 downto 4) <= (others => '0');
+
+    --mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1') else '0';
+    --mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1') else '0';
+    --mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1') else '0';
+    mezzanine_3_fault <= (not MEZZANINE_3_FAULT_N) when (mezzanine_3_fault_checking_enable = '1') else '0';
+
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(8) <= mezzanine_0_fault;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(9) <= mezzanine_1_fault;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(10) <= mezzanine_2_fault;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(11) <= mezzanine_3_fault;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(15 downto 12) <= (others => '0');
+
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(16) <= not MEZZANINE_0_INT_N;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(17) <= not MEZZANINE_1_INT_N;
+    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(18) <= not MEZZANINE_2_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(19) <= not MEZZANINE_3_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(31 downto 20) <= (others => '0');
+
+    --mezzanine_0_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(0);
+    --mezzanine_1_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(1);
+    --mezzanine_2_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(2);
+    mezzanine_3_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(3);
+
+    --mezzanine_enable_delay_3 : mezzanine_enable_delay
+    --port map(
+    --    clk => sys_clk,
+    --    rst => sys_rst,
+    --    second_toggle                    => second_toggle,
+    --    mezzanine_enable                 => mezzanine_3_enable,
+    --    mezzanine_fault_checking_enable  => mezzanine_3_fault_checking_enable);
+
+    MEZZANINE_3_ENABLE_N <= not mezzanine_3_enable;
+
+    MEZZANINE_3_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(11) or sys_rst;
+
+    MEZZANINE_3_CLK_SEL <= not brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(19); -- DEFAULT '1' = MEZZANINE CLOCK
+
+    MEZZANINE_COMBINED_FAULT <= mezzanine_fault_override or mezzanine_3_fault;
+
+    brd_user_read_regs(C_RD_USB_STAT_ADDR)(3 downto 0) <= USB_FPGA;
+    brd_user_read_regs(C_RD_USB_STAT_ADDR)(7 downto 4) <= (others => '0');
+    brd_user_read_regs(C_RD_USB_STAT_ADDR)(8) <= USB_I2C_CTRL;
+    brd_user_read_regs(C_RD_USB_STAT_ADDR)(31 downto 9) <= (others => '0');
+
+    USB_UART_RXD <= microblaze_uart_txd;
+    -- USB SERIAL CURRENTLY NOT USED FOR RECEIVING
+    --USB_UART_TXD
+
+    --brd_user_read_regs(C_RD_AUX_CLK_FREQ_ADDR) <= aux_clk_frequency;
 
     brd_user_read_regs(C_RD_MEZZANINE_CLK_FREQ_ADDR) <= qsfp_xl_tx_clk_156m25_frequency;
 
     brd_user_read_regs(C_RD_CONFIG_CLK_FREQ_ADDR) <= fpga_emcclk2_frequency;
-
---    generate_USB_STAT_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
---        brd_user_read_regs(C_RD_USB_STAT_ADDR) <= (others => '0');
---    end generate generate_USB_STAT_DEV_PLATFORM;
 
     USR_ACCESSE2_0 : USR_ACCESSE2
     port map (
@@ -1337,67 +1186,67 @@ begin
 -- GPIOS (FRONT PANEL LEDS)
 ---------------------------------------------------------------------------
 
-    generate_GPIO_ROACH3 : if C_DEV_PLATFORM = false generate
-        FPGA_GPIO(0) <= '1'; --AI: Set to high to always be disabled --not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0); -- LOW TO TURN ON
-        FPGA_GPIO(1) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(1); -- LOW TO TURN ON
-        FPGA_GPIO(2) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(2); -- LOW TO TURN ON
-        FPGA_GPIO(3) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(3); -- LOW TO TURN ON
-        FPGA_GPIO(4) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(4); -- LOW TO TURN ON
-        FPGA_GPIO(5) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(5); -- LOW TO TURN ON
-        FPGA_GPIO(6) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(6); -- LOW TO TURN ON
-        FPGA_GPIO(7) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(7); -- LOW TO TURN ON
-        FPGA_GPIO(8) <= '1';
-        FPGA_GPIO(9) <= '0';
-        FPGA_GPIO(10) <= '0';
-        FPGA_GPIO(11) <= '0';
-        FPGA_GPIO(12) <= '0';
-        FPGA_GPIO(13) <= aux_synco;
-        FPGA_GPIO(14) <= aux_synci;
-        FPGA_GPIO(15) <= aux_clk;
-    end generate generate_GPIO_ROACH3;
+    
+    FPGA_GPIO(0) <= '1'; --AI: Set to high to always be disabled --not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0); -- LOW TO TURN ON
+    FPGA_GPIO(1) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(1); -- LOW TO TURN ON
+    FPGA_GPIO(2) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(2); -- LOW TO TURN ON
+    FPGA_GPIO(3) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(3); -- LOW TO TURN ON
+    FPGA_GPIO(4) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(4); -- LOW TO TURN ON
+    FPGA_GPIO(5) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(5); -- LOW TO TURN ON
+    FPGA_GPIO(6) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(6); -- LOW TO TURN ON
+    FPGA_GPIO(7) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(7); -- LOW TO TURN ON
+    FPGA_GPIO(8) <= '1';
+    FPGA_GPIO(9) <= '0';
+    FPGA_GPIO(10) <= '0';
+    FPGA_GPIO(11) <= '0';
+    FPGA_GPIO(12) <= '0';
+    FPGA_GPIO(13) <= '0';
+    FPGA_GPIO(14) <= '0';
+    FPGA_GPIO(15) <= '0';
+    
 
 ---------------------------------------------------------------------------
 -- AUX CONNECTIONS
 ---------------------------------------------------------------------------
 
-    generate_AUX_ROACH3 : if C_DEV_PLATFORM = false generate
+    
 
-        aux_clk_ibufds : IBUFDS
-        generic map (
-            DIFF_TERM => TRUE)
-        port map (
-            O  => aux_clk,
-            I  => AUX_CLK_P,
-            IB => AUX_CLK_N);
+    --aux_clk_ibufds : IBUFDS
+    --generic map (
+    --    DIFF_TERM => TRUE)
+    --port map (
+    --    O  => aux_clk,
+    --    I  => AUX_CLK_P,
+    --    IB => AUX_CLK_N);
 
-        aux_synci_ibufds : IBUFDS
-        generic map (
-            DIFF_TERM => TRUE)
-        port map (
-            O  => aux_synci,
-            I  => AUX_SYNCI_P,
-            IB => AUX_SYNCI_N);
+    --aux_synci_ibufds : IBUFDS
+    --generic map (
+    --    DIFF_TERM => TRUE)
+    --port map (
+    --    O  => aux_synci,
+    --    I  => AUX_SYNCI_P,
+    --    IB => AUX_SYNCI_N);
 
-        aux_sync_gen_0 : aux_sync_gen
-        port map(
-            clk => sys_clk,
-            rst => sys_rst,
-            aux_sync_out    => aux_synco);
+    --aux_sync_gen_0 : aux_sync_gen
+    --port map(
+    --    clk => sys_clk,
+    --    rst => sys_rst,
+    --    aux_sync_out    => aux_synco);
 
-        aux_synco_obufds : OBUFDS
-        port map (
-            I  => aux_synco,
-            O  => AUX_SYNCO_P,
-            OB => AUX_SYNCO_N);
+    --aux_synco_obufds : OBUFDS
+    --port map (
+    --    I  => aux_synco,
+    --    O  => AUX_SYNCO_P,
+    --    OB => AUX_SYNCO_N);
 
-        clock_frequency_measure_0 : clock_frequency_measure
-        port map(
-            clk => aux_clk,
-            rst => fpga_reset,
-            second_toggle   => second_toggle,
-            measure_freq    => aux_clk_frequency);
+    --clock_frequency_measure_0 : clock_frequency_measure
+    --port map(
+    --    clk => aux_clk,
+    --    rst => fpga_reset,
+    --    second_toggle   => second_toggle,
+    --    measure_freq    => aux_clk_frequency);
 
-    end generate generate_AUX_ROACH3;
+    
 
 ---------------------------------------------------------------------------
 -- BLOCK DESIGN WRAPPER
@@ -1419,15 +1268,9 @@ begin
         UART_txd    => microblaze_uart_txd,
         WE_O        => WB_MST_WE_O);
 
-    generate_UART_ROACH3 : if C_DEV_PLATFORM = false generate
-        microblaze_uart_rxd <= DEBUG_UART_RX;
-        DEBUG_UART_TX <= microblaze_uart_txd;
-    end generate generate_UART_ROACH3;
 
---    generate_UART_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
---        microblaze_uart_rxd <= UART_TXD;
---        UART_RXD <= microblaze_uart_txd;
---    end generate generate_UART_DEV_PLATFORM;
+    microblaze_uart_rxd <= DEBUG_UART_RX;
+    DEBUG_UART_TX <= microblaze_uart_txd;
 
 ----------------------------------------------------------------------------
 -- WISHBONE SLAVES
@@ -1454,7 +1297,7 @@ begin
         SLV_STB_I => WB_SLV_STB_I,
         SLV_WE_I  => WB_SLV_WE_I);
 
-    -- WISHBONE SLAVE 0 - BOARD READ/WRITE REGISTERS
+    -- WISHBONE SLAVE 0 - BOARD READ/WRITE REGISTERS 1
     wishbone_register_0 : wishbone_register
     port map(
         CLK_I => sys_clk,
@@ -1470,30 +1313,24 @@ begin
         user_read_regs    => brd_user_read_regs,
         user_write_regs   => brd_user_write_regs);
 
-    -- WISHBONE SLAVE 1 - BOARD READ/WRITE REGISTERS
-    wishbone_register_1 : wishbone_register
-    port map(
-        CLK_I => sys_clk,
-        RST_I => sys_rst,
-        DAT_I => WB_SLV_DAT_I(1),
-        DAT_O => WB_SLV_DAT_O(1),
-        ACK_O => WB_SLV_ACK_O(1),
-        ADR_I => WB_SLV_ADR_I(1)((C_NUM_REGISTER_ADDRESS_BITS + 1) downto 0),
-        CYC_I => WB_SLV_CYC_I(1),
-        SEL_I => WB_SLV_SEL_I(1),
-        STB_I => WB_SLV_STB_I(1),
-        WE_I  => WB_SLV_WE_I(1),
-        user_read_regs    => dsp_user_read_regs,
-        user_write_regs   => dsp_user_write_regs);
+    -- WISHBONE SLAVE 1 - BOARD READ/WRITE REGISTERS 2
+    --wishbone_register_1 : wishbone_register
+    --port map(
+    --    CLK_I => sys_clk,
+    --    RST_I => sys_rst,
+    --    DAT_I => WB_SLV_DAT_I(1),
+    --    DAT_O => WB_SLV_DAT_O(1),
+    --    ACK_O => WB_SLV_ACK_O(1),
+    --    ADR_I => WB_SLV_ADR_I(1)((C_NUM_REGISTER_ADDRESS_BITS + 1) downto 0),
+    --    CYC_I => WB_SLV_CYC_I(1),
+    --    SEL_I => WB_SLV_SEL_I(1),
+    --    STB_I => WB_SLV_STB_I(1),
+    --    WE_I  => WB_SLV_WE_I(1),
+    --    user_read_regs    => brd_user_read_regs_2,
+    --    user_write_regs   => brd_user_write_regs_2);
 
     -- WISHBONE SLAVE 2 - FLASH/SDRAM RECONFIGURATION
---    generate_FLASH_A_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
---        FLASH_A <= flash_a_i(25 downto 0);
---    end generate generate_FLASH_A_DEV_PLATFORM;
-
-    generate_FLASH_A_ROACH3 : if C_DEV_PLATFORM = false generate
-        FLASH_A <= flash_a_i(28 downto 0) when (flash_output_enable = '1') else (others => 'Z');
-    end generate generate_FLASH_A_ROACH3;
+    FLASH_A <= flash_a_i(28 downto 0) when (flash_output_enable = '1') else (others => 'Z');
 
     FLASH_DQ <= flash_dq_out when ((flash_dq_out_en = '1')and(flash_output_enable = '1')) else (others => 'Z');
 
@@ -1560,8 +1397,6 @@ begin
         FLASH_WE_N <= flash_we_n_i when (flash_output_enable = '1') else 'Z';
         FLASH_ADV_N <= flash_adv_n_i when (flash_output_enable = '1') else 'Z';
 
-    generate_CONFIG_IO_SPI_ROACH3 : if C_DEV_PLATFORM = false generate
-
         SPARTAN_CLK <= spartan_clk_i;
         CONFIG_IO_0 <= config_io_0_i;
         CONFIG_IO_1 <= config_io_1_i;
@@ -1580,8 +1415,6 @@ begin
         SPI_MOSI <= spi_mosi_i;
         SPI_CSB  <= spi_csb_i;
         SPI_CLK  <= spi_clk_i;
-
-    end generate generate_CONFIG_IO_SPI_ROACH3;
 
     -- WISHBONE SLAVE 3 - ONE WIRE INTERFACES
     wishbone_one_wire_0 : wishbone_one_wire
@@ -1605,27 +1438,24 @@ begin
     ONE_WIRE_EEPROM <= '0' when ((one_wire_pull_down_enable(0) = '1')and(one_wire_strong_pull_up_enable_i(0) = '0'))else 'Z';
     one_wire_in(0) <= ONE_WIRE_EEPROM;
 
-    generate_MEZZANINE_ONE_WIRE : if C_DEV_PLATFORM = false generate
 
-        ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(0);
+    ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(0);
 
-        MEZZANINE_0_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(1) = '1')and(one_wire_strong_pull_up_enable_i(1) = '0')) else 'Z';
-        one_wire_in(1) <= MEZZANINE_0_ONE_WIRE;
-        MEZZANINE_0_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(1);
+    --MEZZANINE_0_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(1) = '1')and(one_wire_strong_pull_up_enable_i(1) = '0')) else 'Z';
+    --one_wire_in(1) <= MEZZANINE_0_ONE_WIRE;
+    --MEZZANINE_0_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(1);
 
-        MEZZANINE_1_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(2) = '1')and(one_wire_strong_pull_up_enable_i(2) = '0')) else 'Z';
-        one_wire_in(2) <= MEZZANINE_1_ONE_WIRE;
-        MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(2);
+    --MEZZANINE_1_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(2) = '1')and(one_wire_strong_pull_up_enable_i(2) = '0')) else 'Z';
+    --one_wire_in(2) <= MEZZANINE_1_ONE_WIRE;
+    --MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(2);
 
-        MEZZANINE_2_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(3) = '1')and(one_wire_strong_pull_up_enable_i(3) = '0')) else 'Z';
-        one_wire_in(3) <= MEZZANINE_2_ONE_WIRE;
-        MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(3);
+    --MEZZANINE_2_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(3) = '1')and(one_wire_strong_pull_up_enable_i(3) = '0')) else 'Z';
+    --one_wire_in(3) <= MEZZANINE_2_ONE_WIRE;
+    --MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(3);
 
-        MEZZANINE_3_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(4) = '1')and(one_wire_strong_pull_up_enable_i(4) = '0')) else 'Z';
-        one_wire_in(4) <= MEZZANINE_3_ONE_WIRE;
-        MEZZANINE_3_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(4);
-
-    end generate generate_MEZZANINE_ONE_WIRE;
+    MEZZANINE_3_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(4) = '1')and(one_wire_strong_pull_up_enable_i(4) = '0')) else 'Z';
+    one_wire_in(4) <= MEZZANINE_3_ONE_WIRE;
+    MEZZANINE_3_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(4);
 
     -- WISHBONE SLAVE 4, 5, 6, 7, 8 - I2C INTERFACES
     generate_I2C_0_to_4 : for a in 0 to 4 generate
@@ -1650,36 +1480,37 @@ begin
     end generate generate_I2C_0_to_4;
 
 
-        I2C_RESET_FPGA <= fpga_reset;
 
-        I2C_SCL_FPGA <= i2c_scl_pad_o(0) when (i2c_scl_padoen_o(0) = '0') else 'Z';
-        I2C_SDA_FPGA <= i2c_sda_pad_o(0) when (i2c_sda_padoen_o(0) = '0') else 'Z';
-        i2c_scl_pad_i(0) <= I2C_SCL_FPGA;
-        i2c_sda_pad_i(0) <= I2C_SDA_FPGA;
+    I2C_RESET_FPGA <= fpga_reset;
 
---AI Start: Only need one I2C bus for Mezzanine Site 3
-        --MEZZANINE_0_SCL_FPGA <= i2c_scl_pad_o(1) when (i2c_scl_padoen_o(1) = '0') else 'Z';
-        --MEZZANINE_0_SDA_FPGA <= i2c_sda_pad_o(1) when (i2c_sda_padoen_o(1) = '0') else 'Z';
-        --i2c_scl_pad_i(1) <= MEZZANINE_0_SCL_FPGA;
-        --i2c_sda_pad_i(1) <= MEZZANINE_0_SDA_FPGA;
+    I2C_SCL_FPGA <= i2c_scl_pad_o(0) when (i2c_scl_padoen_o(0) = '0') else 'Z';
+    I2C_SDA_FPGA <= i2c_sda_pad_o(0) when (i2c_sda_padoen_o(0) = '0') else 'Z';
+    i2c_scl_pad_i(0) <= I2C_SCL_FPGA;
+    i2c_sda_pad_i(0) <= I2C_SDA_FPGA;
 
-        --MEZZANINE_1_SCL_FPGA <= i2c_scl_pad_o(2) when (i2c_scl_padoen_o(2) = '0') else 'Z';
-        --MEZZANINE_1_SDA_FPGA <= i2c_sda_pad_o(2) when (i2c_sda_padoen_o(2) = '0') else 'Z';
-        --i2c_scl_pad_i(2) <= MEZZANINE_1_SCL_FPGA;
-        --i2c_sda_pad_i(2) <= MEZZANINE_1_SDA_FPGA;
+    --AI Start: Only need one I2C bus for Mezzanine Site 3
+    --MEZZANINE_0_SCL_FPGA <= i2c_scl_pad_o(1) when (i2c_scl_padoen_o(1) = '0') else 'Z';
+    --MEZZANINE_0_SDA_FPGA <= i2c_sda_pad_o(1) when (i2c_sda_padoen_o(1) = '0') else 'Z';
+    --i2c_scl_pad_i(1) <= MEZZANINE_0_SCL_FPGA;
+    --i2c_sda_pad_i(1) <= MEZZANINE_0_SDA_FPGA;
 
-        --MEZZANINE_2_SCL_FPGA <= i2c_scl_pad_o(3) when (i2c_scl_padoen_o(3) = '0') else 'Z';
-        --MEZZANINE_2_SDA_FPGA <= i2c_sda_pad_o(3) when (i2c_sda_padoen_o(3) = '0') else 'Z';
-        --i2c_scl_pad_i(3) <= MEZZANINE_2_SCL_FPGA;
-        --i2c_sda_pad_i(3) <= MEZZANINE_2_SDA_FPGA;
---AI End: Only need one I2C bus for Mezzanine Site 3
+    --MEZZANINE_1_SCL_FPGA <= i2c_scl_pad_o(2) when (i2c_scl_padoen_o(2) = '0') else 'Z';
+    --MEZZANINE_1_SDA_FPGA <= i2c_sda_pad_o(2) when (i2c_sda_padoen_o(2) = '0') else 'Z';
+    --i2c_scl_pad_i(2) <= MEZZANINE_1_SCL_FPGA;
+    --i2c_sda_pad_i(2) <= MEZZANINE_1_SDA_FPGA;
 
-        MEZZANINE_3_SCL_FPGA <= i2c_scl_pad_o(4) when (i2c_scl_padoen_o(4) = '0') else 'Z';
-        MEZZANINE_3_SDA_FPGA <= i2c_sda_pad_o(4) when (i2c_sda_padoen_o(4) = '0') else 'Z';
-        i2c_scl_pad_i(4) <= MEZZANINE_3_SCL_FPGA;
-        i2c_sda_pad_i(4) <= MEZZANINE_3_SDA_FPGA;
+    --MEZZANINE_2_SCL_FPGA <= i2c_scl_pad_o(3) when (i2c_scl_padoen_o(3) = '0') else 'Z';
+    --MEZZANINE_2_SDA_FPGA <= i2c_sda_pad_o(3) when (i2c_sda_padoen_o(3) = '0') else 'Z';
+    --i2c_scl_pad_i(3) <= MEZZANINE_2_SCL_FPGA;
+    --i2c_sda_pad_i(3) <= MEZZANINE_2_SDA_FPGA;
+    --AI En: Only need one I2C bus for Mezzanine Site 3
 
-    end generate generate_I2C_ROACH3;
+    MEZZANINE_3_SCL_FPGA <= i2c_scl_pad_o(4) when (i2c_scl_padoen_o(4) = '0') else 'Z';
+    MEZZANINE_3_SDA_FPGA <= i2c_sda_pad_o(4) when (i2c_sda_padoen_o(4) = '0') else 'Z';
+    i2c_scl_pad_i(4) <= MEZZANINE_3_SCL_FPGA;
+    i2c_sda_pad_i(4) <= MEZZANINE_3_SDA_FPGA;
+
+
 
     -- WISHBONE SLAVE 9 - 1GBE MAC
     kat_ten_gb_eth_0 : kat_ten_gb_eth
@@ -1894,8 +1725,6 @@ begin
         end if;
     end process;
 
-    generate_40GBE_MAC_1_TO_3_ROACH3 : if C_DEV_PLATFORM = false generate
-
 --AI Start: Single 40GbE Core Needed (Other 3 commented out)
         -- WISHBONE SLAVE 11 - 40GBE MAC 1
 --        ska_forty_gb_eth_1 : ska_forty_gb_eth
@@ -1961,33 +1790,33 @@ begin
 --            debug_out   => open,
 --            debug_led   => open);
 --AI End: Single 40GbE Core Needed (Other 3 commented out)
-            gen_tx_start_count_1 : process(sys_rst, sys_clk)
-            begin
-                if (sys_rst = '1')then
-                    tx_start_count_1 <= (others => '0');
-                elsif (rising_edge(sys_clk))then
-                    if (((xlgmii_txc_reg(1)(0) = '1')and(xlgmii_txd_reg(1)(7 downto 0) = X"FB"))or
-                    ((xlgmii_txc_reg(1)(8) = '1')and(xlgmii_txd_reg(1)(71 downto 64) = X"FB"))or
-                    ((xlgmii_txc_reg(1)(16) = '1')and(xlgmii_txd_reg(1)(135 downto 128) = X"FB"))or
-                    ((xlgmii_txc_reg(1)(24) = '1')and(xlgmii_txd_reg(1)(199 downto 192) = X"FB")))then
-                        tx_start_count_1 <= tx_start_count_1 + X"0001";
-                    end if;
-                end if;
-            end process;
+    gen_tx_start_count_1 : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            tx_start_count_1 <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            if (((xlgmii_txc_reg(1)(0) = '1')and(xlgmii_txd_reg(1)(7 downto 0) = X"FB"))or
+            ((xlgmii_txc_reg(1)(8) = '1')and(xlgmii_txd_reg(1)(71 downto 64) = X"FB"))or
+            ((xlgmii_txc_reg(1)(16) = '1')and(xlgmii_txd_reg(1)(135 downto 128) = X"FB"))or
+            ((xlgmii_txc_reg(1)(24) = '1')and(xlgmii_txd_reg(1)(199 downto 192) = X"FB")))then
+                tx_start_count_1 <= tx_start_count_1 + X"0001";
+            end if;
+        end if;
+    end process;
 
-            gen_rx_start_count_1 : process(sys_rst, sys_clk)
-            begin
-                if (sys_rst = '1')then
-                    rx_start_count_1 <= (others => '0');
-                elsif (rising_edge(sys_clk))then
-                    if (((xlgmii_rxc_reg(1)(0) = '1')and(xlgmii_rxd_reg(1)(7 downto 0) = X"FB"))or
-                    ((xlgmii_rxc_reg(1)(8) = '1')and(xlgmii_rxd_reg(1)(71 downto 64) = X"FB"))or
-                    ((xlgmii_rxc_reg(1)(16) = '1')and(xlgmii_rxd_reg(1)(135 downto 128) = X"FB"))or
-                    ((xlgmii_rxc_reg(1)(24) = '1')and(xlgmii_rxd_reg(1)(199 downto 192) = X"FB")))then
-                        rx_start_count_1 <= rx_start_count_1 + X"0001";
-                    end if;
-                end if;
-            end process;
+    gen_rx_start_count_1 : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            rx_start_count_1 <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            if (((xlgmii_rxc_reg(1)(0) = '1')and(xlgmii_rxd_reg(1)(7 downto 0) = X"FB"))or
+            ((xlgmii_rxc_reg(1)(8) = '1')and(xlgmii_rxd_reg(1)(71 downto 64) = X"FB"))or
+            ((xlgmii_rxc_reg(1)(16) = '1')and(xlgmii_rxd_reg(1)(135 downto 128) = X"FB"))or
+            ((xlgmii_rxc_reg(1)(24) = '1')and(xlgmii_rxd_reg(1)(199 downto 192) = X"FB")))then
+                rx_start_count_1 <= rx_start_count_1 + X"0001";
+            end if;
+        end if;
+    end process;
 
 --AI Start: Single 40GbE Core Needed (Other 3 commented out)
         -- WISHBONE SLAVE 12 - 40GBE MAC 2
@@ -2055,34 +1884,34 @@ begin
 --            debug_led   => open);
 --AI End: Single 40GbE Core Needed (Other 3 commented out)
 
-            gen_tx_start_count_2 : process(sys_rst, sys_clk)
-            begin
-                if (sys_rst = '1')then
-                    tx_start_count_2 <= (others => '0');
-                elsif (rising_edge(sys_clk))then
-                    if (((xlgmii_txc_reg(2)(0) = '1')and(xlgmii_txd_reg(2)(7 downto 0) = X"FB"))or
-                    ((xlgmii_txc_reg(2)(8) = '1')and(xlgmii_txd_reg(2)(71 downto 64) = X"FB"))or
-                    ((xlgmii_txc_reg(2)(16) = '1')and(xlgmii_txd_reg(2)(135 downto 128) = X"FB"))or
-                    ((xlgmii_txc_reg(2)(24) = '1')and(xlgmii_txd_reg(2)(199 downto 192) = X"FB")))then
-                        tx_start_count_2 <= tx_start_count_2 + X"0001";
-                    end if;
-                end if;
-            end process;
-
-            gen_rx_start_count_2 : process(sys_rst, sys_clk)
-            begin
-                if (sys_rst = '1')then
-                    rx_start_count_2 <= (others => '0');
-                elsif (rising_edge(sys_clk))then
-                    if (((xlgmii_rxc_reg(2)(0) = '1')and(xlgmii_rxd_reg(2)(7 downto 0) = X"FB"))or
-                    ((xlgmii_rxc_reg(2)(8) = '1')and(xlgmii_rxd_reg(2)(71 downto 64) = X"FB"))or
-                    ((xlgmii_rxc_reg(2)(16) = '1')and(xlgmii_rxd_reg(2)(135 downto 128) = X"FB"))or
-                    ((xlgmii_rxc_reg(2)(24) = '1')and(xlgmii_rxd_reg(2)(199 downto 192) = X"FB")))then
-                        rx_start_count_2 <= rx_start_count_2 + X"0001";
-                    end if;
-                end if;
-            end process;
-
+    gen_tx_start_count_2 : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            tx_start_count_2 <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            if (((xlgmii_txc_reg(2)(0) = '1')and(xlgmii_txd_reg(2)(7 downto 0) = X"FB"))or
+            ((xlgmii_txc_reg(2)(8) = '1')and(xlgmii_txd_reg(2)(71 downto 64) = X"FB"))or
+            ((xlgmii_txc_reg(2)(16) = '1')and(xlgmii_txd_reg(2)(135 downto 128) = X"FB"))or
+            ((xlgmii_txc_reg(2)(24) = '1')and(xlgmii_txd_reg(2)(199 downto 192) = X"FB")))then
+                tx_start_count_2 <= tx_start_count_2 + X"0001";
+            end if;
+        end if;
+    end process;
+    
+    gen_rx_start_count_2 : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            rx_start_count_2 <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            if (((xlgmii_rxc_reg(2)(0) = '1')and(xlgmii_rxd_reg(2)(7 downto 0) = X"FB"))or
+            ((xlgmii_rxc_reg(2)(8) = '1')and(xlgmii_rxd_reg(2)(71 downto 64) = X"FB"))or
+            ((xlgmii_rxc_reg(2)(16) = '1')and(xlgmii_rxd_reg(2)(135 downto 128) = X"FB"))or
+            ((xlgmii_rxc_reg(2)(24) = '1')and(xlgmii_rxd_reg(2)(199 downto 192) = X"FB")))then
+                rx_start_count_2 <= rx_start_count_2 + X"0001";
+            end if;
+        end if;
+    end process;
+    
 --AI Start: Single 40GbE Core Needed (Other 3 commented out)
         -- WISHBONE SLAVE 13 - 40GBE MAC 3
 --        ska_forty_gb_eth_3 : ska_forty_gb_eth
@@ -2149,36 +1978,35 @@ begin
 --            debug_led   => open);
 --AI End: Single 40GbE Core Needed (Other 3 commented out)
 
-            gen_tx_start_count_3 : process(sys_rst, sys_clk)
-            begin
-                if (sys_rst = '1')then
-                    tx_start_count_3 <= (others => '0');
-                elsif (rising_edge(sys_clk))then
-                    if (((xlgmii_txc_reg(3)(0) = '1')and(xlgmii_txd_reg(3)(7 downto 0) = X"FB"))or
-                    ((xlgmii_txc_reg(3)(8) = '1')and(xlgmii_txd_reg(3)(71 downto 64) = X"FB"))or
-                    ((xlgmii_txc_reg(3)(16) = '1')and(xlgmii_txd_reg(3)(135 downto 128) = X"FB"))or
-                    ((xlgmii_txc_reg(3)(24) = '1')and(xlgmii_txd_reg(3)(199 downto 192) = X"FB")))then
-                        tx_start_count_3 <= tx_start_count_3 + X"0001";
-                    end if;
-                end if;
-            end process;
+    gen_tx_start_count_3 : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            tx_start_count_3 <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            if (((xlgmii_txc_reg(3)(0) = '1')and(xlgmii_txd_reg(3)(7 downto 0) = X"FB"))or
+            ((xlgmii_txc_reg(3)(8) = '1')and(xlgmii_txd_reg(3)(71 downto 64) = X"FB"))or
+            ((xlgmii_txc_reg(3)(16) = '1')and(xlgmii_txd_reg(3)(135 downto 128) = X"FB"))or
+            ((xlgmii_txc_reg(3)(24) = '1')and(xlgmii_txd_reg(3)(199 downto 192) = X"FB")))then
+                tx_start_count_3 <= tx_start_count_3 + X"0001";
+            end if;
+        end if;
+    end process;
 
-            gen_rx_start_count_3 : process(sys_rst, sys_clk)
-            begin
-                if (sys_rst = '1')then
-                    rx_start_count_3 <= (others => '0');
-                elsif (rising_edge(sys_clk))then
-                    if (((xlgmii_rxc_reg(3)(0) = '1')and(xlgmii_rxd_reg(3)(7 downto 0) = X"FB"))or
-                    ((xlgmii_rxc_reg(3)(8) = '1')and(xlgmii_rxd_reg(3)(71 downto 64) = X"FB"))or
-                    ((xlgmii_rxc_reg(3)(16) = '1')and(xlgmii_rxd_reg(3)(135 downto 128) = X"FB"))or
-                    ((xlgmii_rxc_reg(3)(24) = '1')and(xlgmii_rxd_reg(3)(199 downto 192) = X"FB")))then
-                        rx_start_count_3 <= rx_start_count_3 + X"0001";
-                    end if;
-                end if;
-            end process;
-
-    end generate generate_40GBE_MAC_1_TO_3_ROACH3;
-
+    gen_rx_start_count_3 : process(sys_rst, sys_clk)
+    begin
+        if (sys_rst = '1')then
+            rx_start_count_3 <= (others => '0');
+        elsif (rising_edge(sys_clk))then
+            if (((xlgmii_rxc_reg(3)(0) = '1')and(xlgmii_rxd_reg(3)(7 downto 0) = X"FB"))or
+            ((xlgmii_rxc_reg(3)(8) = '1')and(xlgmii_rxd_reg(3)(71 downto 64) = X"FB"))or
+            ((xlgmii_rxc_reg(3)(16) = '1')and(xlgmii_rxd_reg(3)(135 downto 128) = X"FB"))or
+            ((xlgmii_rxc_reg(3)(24) = '1')and(xlgmii_rxd_reg(3)(199 downto 192) = X"FB")))then
+                rx_start_count_3 <= rx_start_count_3 + X"0001";
+            end if;
+        end if;
+    end process;
+    
+    
 ----------------------------------------------------------------------------
 -- 1GBE INTERFACE
 ----------------------------------------------------------------------------
@@ -2247,68 +2075,19 @@ begin
         end if;
     end process;
 
---    generate_SGMII_TO_GMII_DEV_BOARD : if C_DEV_PLATFORM = true generate
 
---        S0_TX_DIS_F <= '0';
-
---        gmii_to_sgmii_refclk_p <= SFP_CLK_MGT_P;
---        gmii_to_sgmii_refclk_n <= SFP_CLK_MGT_N;
-
---        SFP0_TX_P <= gmii_to_sgmii_txp;
---        SFP0_TX_N <= gmii_to_sgmii_txn;
---        gmii_to_sgmii_rxp <= SFP0_RX_P;
---        gmii_to_sgmii_rxn <= SFP0_RX_N;
-
---        -- ~3 SECOND DELAY TO ALLOW Si570 TO BE CONFIGURED FOR 125MHz
---        gen_sfp_reset_delay_low : process(sys_rst, sys_clk)
---        begin
---            if (sys_rst = '1')then
---                sfp_reset_delay_low <= (others => '0');
---                sfp_reset_delay_low_over <= '0';
---            elsif (rising_edge(sys_clk))then
---                sfp_reset_delay_low_over <= '0';
---                if (sfp_reset_delay_low = X"FFFF")then
---                    sfp_reset_delay_low <= (others => '0');
---                    sfp_reset_delay_low_over <= '1';
---                else
---                    sfp_reset_delay_low <= sfp_reset_delay_low + X"0001";
---                end if;
---            end if;
---        end process;
-
---        gen_sfp_reset_delay_high : process(sys_rst, sys_clk)
---        begin
---            if (sys_rst = '1')then
---                gmii_to_sgmii_reset <= '1';
---                sfp_reset_delay_high <= (others => '0');
---            elsif (rising_edge(sys_clk))then
---                if (sfp_reset_delay_low_over = '1')then
---                    if (sfp_reset_delay_high = "1111111111111")then
---                        gmii_to_sgmii_reset <= '0';
---                    else
---                        sfp_reset_delay_high <= sfp_reset_delay_high + "0000000000001";
---                    end if;
---                end if;
---            end if;
---        end process;
-
---    end generate generate_SGMII_TO_GMII_DEV_BOARD;
-
-    generate_SGMII_TO_GMII_ROACH3 : if C_DEV_PLATFORM = false generate
-
-        ONE_GBE_RESET_N <= not fpga_reset;
-
-        gmii_to_sgmii_reset <= fpga_reset;
-
-        gmii_to_sgmii_refclk_p <= ONE_GBE_MGTREFCLK_P;
-        gmii_to_sgmii_refclk_n <= ONE_GBE_MGTREFCLK_N;
-
-        ONE_GBE_SGMII_TX_P <= gmii_to_sgmii_txp;
-        ONE_GBE_SGMII_TX_N <= gmii_to_sgmii_txn;
-        gmii_to_sgmii_rxp <= ONE_GBE_SGMII_RX_P;
-        gmii_to_sgmii_rxn <= ONE_GBE_SGMII_RX_N;
-
-    end generate generate_SGMII_TO_GMII_ROACH3;
+    --SGMII TO GMII
+    ONE_GBE_RESET_N <= not fpga_reset;
+    
+    gmii_to_sgmii_reset <= fpga_reset;
+    
+    gmii_to_sgmii_refclk_p <= ONE_GBE_MGTREFCLK_P;
+    gmii_to_sgmii_refclk_n <= ONE_GBE_MGTREFCLK_N;
+    
+    ONE_GBE_SGMII_TX_P <= gmii_to_sgmii_txp;
+    ONE_GBE_SGMII_TX_N <= gmii_to_sgmii_txn;
+    gmii_to_sgmii_rxp <= ONE_GBE_SGMII_RX_P;
+    gmii_to_sgmii_rxn <= ONE_GBE_SGMII_RX_N;
 
     gen_gmii_reset_done_z : process (gmii_clk)
     begin
@@ -2395,41 +2174,6 @@ begin
             O => qsfp_gtrefclk,
             I => qsfp_gtrefclk_pb);
 
-
-
---    generate_IEEE802_3_XL_PHY_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
---        IEEE802_3_XL_PHY_0 : IEEE802_3_XL_PHY
---        port map(
---            SYS_CLK_I           => sys_clk,
---            SYS_CLK_RST_I       => sys_rst,
---            XL_TX_CLK_156M25_I  => qsfp_xl_tx_clk_156m25,
---            XL_TX_CLK_161M133_I => qsfp_xl_tx_clk_161m133,
---            XL_TX_CLK_322M266_I => qsfp_xl_tx_clk_322m266,
---            XL_TX_CLK_625M_I    => qsfp_xl_tx_clk_625m,
---            XL_TX_CLK_RST_I     => qsfp_xl_tx_clk_rst,
---            XL_TX_CLK_LOCKED_I  => qsfp_xl_tx_clk_locked,
---            GTREFCLK_PAD_N_I    => QSFP_GTREFCLK_PAD_N_I,
---            GTREFCLK_PAD_P_I    => QSFP_GTREFCLK_PAD_P_I,
---          GTREFCLK_O          => qsfp_gtrefclk_pb,
---            GT0_TXOUTCLK_OUT    => qsfp_gt0_txoutclk_pb,
---            GT_TXOUTCLK_RST_O   => qsfp_gt_txoutclk_rst,
---            RXN_I                => QSFP_RXN_I,
---            RXP_I                => QSFP_RXP_I,
---            TXN_O                => QSFP_TXN_O,
---            TXP_O                => QSFP_TXP_O,
---            GT_TX_READY_O       => open,
---            GT_RX_READY_O       => open,
---            XLGMII_X4_TX_I      => xlgmii_x4_tx_0,
---            XLGMII_X4_RX_O      => xlgmii_x4_rx_0,
---            BLOCK_LOCK_O        => qsfp_block_lock_0,
---            AM_LOCK_O           => qsfp_am_lock_0,
---            ALIGN_STATUS_O      => qsfp_align_status(0),
---            TEST_PATTERN_EN_I         => '0',
---            TEST_PATTERN_ERROR_QUAD_O => open);
---    end generate generate_IEEE802_3_XL_PHY_DEV_PLATFORM;
-
-    generate_IEEE802_3_XL_PHY_ROACH3 : if C_DEV_PLATFORM = false generate
-
     IEEE802_3_XL_PHY_0 : component IEEE802_3_XL_PHY_top
         port map(
             SYS_CLK_I            => sys_clk,
@@ -2514,469 +2258,38 @@ begin
 --          TEST_PATTERN_ERROR_O => open
 --      );
 --AI End: Single 40GbE Core Needed (Other 3 commented out)
-    end generate generate_IEEE802_3_XL_PHY_ROACH3;
-
-----------------------------------------------------------------------------
--- 1GBE INTERFACE TEST COMPONENTS - FABRIC RAMP DATA SOURCE AND CHECK
-----------------------------------------------------------------------------
-
-    num_packets_to_generate <= brd_user_write_regs(C_WR_NUM_PACKETS_TO_GENERATE_ADDR)(23 downto 0);
-    packet_idle_period <= brd_user_write_regs(C_WR_NUM_PACKETS_TO_GENERATE_ADDR)(31 downto 24);
-    payload_words <= brd_user_write_regs(C_WR_RAMP_SOURCE_PAYLOAD_WORDS_ADDR)(10 downto 0);
-
-    ramp_source_destination_ip_address_0 <= brd_user_write_regs(C_WR_RAMP_SOURCE_DESTINATION_IP_0_ADDR);
-    ramp_checker_source_ip_address_0 <= brd_user_write_regs(C_WR_RAMP_CHECKER_SOURCE_IP_0_ADDR);
-    ramp_source_destination_ip_address_1 <= brd_user_write_regs(C_WR_RAMP_SOURCE_DESTINATION_IP_1_ADDR);
-    ramp_checker_source_ip_address_1 <= brd_user_write_regs(C_WR_RAMP_CHECKER_SOURCE_IP_1_ADDR);
-    ramp_source_destination_ip_address_2 <= brd_user_write_regs(C_WR_RAMP_SOURCE_DESTINATION_IP_2_ADDR);
-    ramp_checker_source_ip_address_2 <= brd_user_write_regs(C_WR_RAMP_CHECKER_SOURCE_IP_2_ADDR);
-    ramp_source_destination_ip_address_3 <= brd_user_write_regs(C_WR_RAMP_SOURCE_DESTINATION_IP_3_ADDR);
-    ramp_checker_source_ip_address_3 <= brd_user_write_regs(C_WR_RAMP_CHECKER_SOURCE_IP_3_ADDR);
-
-    gmii_ramp_source_stall <= gmii_xaui_almost_full or gmii_tx_afull;
-
-    ska_ten_gb_eth_ramp_source_0 : ska_ten_gb_eth_ramp_source
-    port map(
-        clk => sys_clk,
-        rst => sys_rst,
-        enable_packet_generation    => enable_1gbe_packet_generation,
-        num_packets_to_generate     => num_packets_to_generate,
-        packet_idle_period          => packet_idle_period,
-        destination_ip_address      => ramp_source_destination_ip_address_0,
-        payload_words               => payload_words,
-        tx_valid            => gmii_tx_valid,
-        tx_end_of_frame     => gmii_tx_end_of_frame,
-        tx_data             => gmii_tx_data,
-        tx_dest_ip          => gmii_tx_dest_ip,
-        tx_dest_port        => gmii_tx_dest_port,
-        tx_overflow         => gmii_tx_overflow,
-        tx_afull            => gmii_ramp_source_stall);
-
-    gen_src_packets_sent : process(sys_rst, sys_clk)
-    begin
-        if (sys_rst = '1')then
-            src_packets_sent <= (others => '0');
-        elsif (rising_edge(sys_clk))then
-            if ((gmii_tx_valid = '1')and(gmii_tx_end_of_frame = '1'))then
-                src_packets_sent <= src_packets_sent + X"0001";
-            end if;
-        end if;
-    end process;
-
-    ska_ten_gb_eth_ramp_checker_0 : ska_ten_gb_eth_ramp_checker
-    port map(
-        clk => sys_clk,
-        rst => sys_rst,
-        rx_valid            => gmii_rx_valid_ramp_checker,
-        rx_end_of_frame     => gmii_rx_end_of_frame_ramp_checker,
-        rx_data             => gmii_rx_data,
-        rx_source_ip        => gmii_rx_source_ip,
-        rx_source_port      => gmii_rx_source_port,
-        rx_bad_frame        => gmii_rx_bad_frame,
-        rx_overrun          => gmii_rx_overrun,
-        rx_overrun_ack      => gmii_rx_overrun_ack_ramp_checker,
-        rx_ack              => gmii_rx_ack_ramp_checker,
-        source_ip_address           => ramp_checker_source_ip_address_0,
-        enable_packet_generation    => enable_1gbe_packet_generation,
-        packets_checked             => one_gbe_packets_checked,
-        ip_fault                    => one_gbe_ip_fault,
-        ramp_fault                  => one_gbe_ramp_fault,
-        num_packets_checked         => one_gbe_num_packets_checked);
-
-    brd_user_read_regs(C_RD_NUM_PACKETS_CHECKED_0_ADDR) <= X"00" & one_gbe_num_packets_checked;
-
-----------------------------------------------------------------------------
--- 40GBE INTERFACE TEST COMPONENTS - FABRIC RAMP DATA SOURCE AND CHECK
-----------------------------------------------------------------------------
-
-    brd_user_read_regs(C_RD_NUM_PACKETS_CHECKED_1_ADDR) <= X"00" & xlgmii_num_packets_checked(0);
-    brd_user_read_regs(C_RD_NUM_PACKETS_CHECKED_2_ADDR) <= X"00" & xlgmii_num_packets_checked(1);
-    brd_user_read_regs(C_RD_NUM_PACKETS_CHECKED_3_ADDR) <= X"00" & xlgmii_num_packets_checked(2);
-    brd_user_read_regs(C_RD_NUM_PACKETS_CHECKED_4_ADDR) <= X"00" & xlgmii_num_packets_checked(3);
-
-    ska_forty_gb_eth_ramp_source_0 : ska_forty_gb_eth_ramp_source
-    generic map(
-        TEST_COUNT_INC    => X"0001")
-    port map(
-        clk => sys_clk,
-        rst => sys_rst,
-        enable_packet_generation    => enable_40gbe_packet_generation(0),
-        num_packets_to_generate     => num_packets_to_generate,
-        packet_idle_period          => packet_idle_period,
-        lane_up                     => phy_rx_up_cpu(0),
-        destination_ip_address      => ramp_source_destination_ip_address_0,
-        payload_words               => payload_words,
-        tx_valid            => xlgmii_tx_valid(0),
-        tx_end_of_frame     => xlgmii_tx_end_of_frame(0),
-        tx_data             => xlgmii_tx_data(0),
-        tx_dest_ip          => xlgmii_tx_dest_ip(0),
-        tx_dest_port        => xlgmii_tx_dest_port(0),
-        tx_overflow         => xlgmii_tx_overflow(0),
-        tx_afull            => xlgmii_tx_afull(0));
-
-    ska_forty_gb_eth_ramp_checker_0 : ska_forty_gb_eth_ramp_checker
-    port map(
-        clk => sys_clk,
-        rst => sys_rst,
-        lane_up             => phy_rx_up_cpu(0),
-        rx_valid            => xlgmii_rx_valid(0),
-        rx_end_of_frame     => xlgmii_rx_end_of_frame(0),
-        rx_data             => xlgmii_rx_data(0),
-        rx_source_ip        => xlgmii_rx_source_ip(0),
-        rx_source_port      => xlgmii_rx_source_port(0),
-        rx_bad_frame        => xlgmii_rx_bad_frame(0),
-        rx_overrun          => xlgmii_rx_overrun(0),
-        rx_overrun_ack      => xlgmii_rx_overrun_ack(0),
-        rx_ack              => xlgmii_rx_ack(0),
-        source_ip_address           => ramp_checker_source_ip_address_0,
-        enable_packet_generation    => enable_40gbe_packet_generation(0),
-        packets_checked             => xlgmii_packets_checked(0),
-        ip_fault                    => xlgmii_ip_fault(0),
-        ramp_fault                  => xlgmii_ramp_fault(0),
-        num_packets_checked         => xlgmii_num_packets_checked(0),
-        num_fcs_error_packets       => xlgmii_num_fcs_error_packets(0));
-
---    SKARAB_DSP_BLOCK_0 : SKARAB_DSP_BLOCK
---    port map(
---        clk             => sys_clk,
---        rst             => sys_rst,
---        rx_valid        => xlgmii_rx_valid(0),
---        rx_end_of_frame => xlgmii_rx_end_of_frame(0),
---        rx_data         => xlgmii_rx_data(0)
---    );
-
-    brd_user_read_regs(14)(23 downto 0) <= xlgmii_num_fcs_error_packets(0);
-    brd_user_read_regs(14)(31 downto 24) <= (others => '0');
-    brd_user_read_regs(15)(23 downto 0) <= xlgmii_num_fcs_error_packets(1);
-    brd_user_read_regs(15)(31 downto 24) <= (others => '0');
-    brd_user_read_regs(16)(23 downto 0) <= xlgmii_num_fcs_error_packets(2);
-    brd_user_read_regs(16)(31 downto 24) <= (others => '0');
-    brd_user_read_regs(17)(23 downto 0) <= xlgmii_num_fcs_error_packets(3);
-    brd_user_read_regs(17)(31 downto 24) <= (others => '0');
-
-    brd_user_read_regs(18)(15 downto 0) <= tx_start_count_0;
-    brd_user_read_regs(18)(31 downto 16) <= tx_start_count_1;
-
-    brd_user_read_regs(12)(15 downto 0) <= tx_start_count_2;
-    brd_user_read_regs(12)(31 downto 16) <= tx_start_count_3;
-
-    brd_user_read_regs(19)(15 downto 0) <= rx_start_count_0;
-    brd_user_read_regs(19)(31 downto 16) <= rx_start_count_1;
-
-    brd_user_read_regs(13)(15 downto 0) <= rx_start_count_2;
-    brd_user_read_regs(13)(31 downto 16) <= rx_start_count_3;
-
---    generate_40GBE_SOURCE_CHECKER_1_TO_3_ROACH3 : if C_DEV_PLATFORM = false generate
---        ska_forty_gb_eth_ramp_source_1 : ska_forty_gb_eth_ramp_source
---        generic map(
---            TEST_COUNT_INC    => X"0002")
---        port map(
---            clk => sys_clk,
---            rst => sys_rst,
---            enable_packet_generation    => enable_40gbe_packet_generation(1),
---            num_packets_to_generate     => num_packets_to_generate,
---            packet_idle_period          => packet_idle_period,
---            lane_up                     => phy_rx_up_cpu(1),
---            destination_ip_address      => ramp_source_destination_ip_address_1,
---            payload_words               => payload_words,
---            tx_valid            => xlgmii_tx_valid(1),
---            tx_end_of_frame     => xlgmii_tx_end_of_frame(1),
---            tx_data             => xlgmii_tx_data(1),
---            tx_dest_ip          => xlgmii_tx_dest_ip(1),
---            tx_dest_port        => xlgmii_tx_dest_port(1),
---            tx_overflow         => xlgmii_tx_overflow(1),
---            tx_afull            => xlgmii_tx_afull(1));
---
---        ska_forty_gb_eth_ramp_checker_1 : ska_forty_gb_eth_ramp_checker
---        port map(
---            clk => sys_clk,
---            rst => sys_rst,
---            lane_up             => phy_rx_up_cpu(1),
---            rx_valid            => xlgmii_rx_valid(1),
---            rx_end_of_frame     => xlgmii_rx_end_of_frame(1),
---            rx_data             => xlgmii_rx_data(1),
---            rx_source_ip        => xlgmii_rx_source_ip(1),
---            rx_source_port      => xlgmii_rx_source_port(1),
---            rx_bad_frame        => xlgmii_rx_bad_frame(1),
---            rx_overrun          => xlgmii_rx_overrun(1),
---            rx_overrun_ack      => xlgmii_rx_overrun_ack(1),
---            rx_ack              => xlgmii_rx_ack(1),
---            source_ip_address           => ramp_checker_source_ip_address_1,
---            enable_packet_generation    => enable_40gbe_packet_generation(1),
---            packets_checked             => xlgmii_packets_checked(1),
---            ip_fault                    => xlgmii_ip_fault(1),
---            ramp_fault                  => xlgmii_ramp_fault(1),
---            num_packets_checked         => xlgmii_num_packets_checked(1),
---            num_fcs_error_packets       => xlgmii_num_fcs_error_packets(1));
---
---        ska_forty_gb_eth_ramp_source_2 : ska_forty_gb_eth_ramp_source
---        generic map(
---            TEST_COUNT_INC    => X"0003")
---        port map(
---            clk => sys_clk,
---            rst => sys_rst,
---            enable_packet_generation    => enable_40gbe_packet_generation(2),
---            num_packets_to_generate     => num_packets_to_generate,
---            packet_idle_period          => packet_idle_period,
---            lane_up                     => phy_rx_up_cpu(2),
---            destination_ip_address      => ramp_source_destination_ip_address_2,
---            payload_words               => payload_words,
---            tx_valid            => xlgmii_tx_valid(2),
---            tx_end_of_frame     => xlgmii_tx_end_of_frame(2),
---            tx_data             => xlgmii_tx_data(2),
---            tx_dest_ip          => xlgmii_tx_dest_ip(2),
---            tx_dest_port        => xlgmii_tx_dest_port(2),
---            tx_overflow         => xlgmii_tx_overflow(2),
---            tx_afull            => xlgmii_tx_afull(2));
---
---        ska_forty_gb_eth_ramp_checker_2 : ska_forty_gb_eth_ramp_checker
---        port map(
---            clk => sys_clk,
---            rst => sys_rst,
---            lane_up             => phy_rx_up_cpu(2),
---            rx_valid            => xlgmii_rx_valid(2),
---            rx_end_of_frame     => xlgmii_rx_end_of_frame(2),
---            rx_data             => xlgmii_rx_data(2),
---            rx_source_ip        => xlgmii_rx_source_ip(2),
---            rx_source_port      => xlgmii_rx_source_port(2),
---            rx_bad_frame        => xlgmii_rx_bad_frame(2),
---            rx_overrun          => xlgmii_rx_overrun(2),
---            rx_overrun_ack      => xlgmii_rx_overrun_ack(2),
---            rx_ack              => xlgmii_rx_ack(2),
---            source_ip_address           => ramp_checker_source_ip_address_2,
---            enable_packet_generation    => enable_40gbe_packet_generation(2),
---            packets_checked             => xlgmii_packets_checked(2),
---            ip_fault                    => xlgmii_ip_fault(2),
---            ramp_fault                  => xlgmii_ramp_fault(2),
---            num_packets_checked         => xlgmii_num_packets_checked(2),
---            num_fcs_error_packets       => xlgmii_num_fcs_error_packets(2));
---
---        ska_forty_gb_eth_ramp_source_3 : ska_forty_gb_eth_ramp_source
---        generic map(
---            TEST_COUNT_INC    => X"0004")
---        port map(
---            clk => sys_clk,
---            rst => sys_rst,
---            enable_packet_generation    => enable_40gbe_packet_generation(3),
---            num_packets_to_generate     => num_packets_to_generate,
---            packet_idle_period          => packet_idle_period,
---            lane_up                     => phy_rx_up_cpu(3),
---            destination_ip_address      => ramp_source_destination_ip_address_3,
---            payload_words               => payload_words,
---            tx_valid            => xlgmii_tx_valid(3),
---            tx_end_of_frame     => xlgmii_tx_end_of_frame(3),
---            tx_data             => xlgmii_tx_data(3),
---            tx_dest_ip          => xlgmii_tx_dest_ip(3),
---            tx_dest_port        => xlgmii_tx_dest_port(3),
---            tx_overflow         => xlgmii_tx_overflow(3),
---            tx_afull            => xlgmii_tx_afull(3));
---
---        ska_forty_gb_eth_ramp_checker_3 : ska_forty_gb_eth_ramp_checker
---        port map(
---            clk => sys_clk,
---            rst => sys_rst,
---            lane_up             => phy_rx_up_cpu(3),
---            rx_valid            => xlgmii_rx_valid(3),
---            rx_end_of_frame     => xlgmii_rx_end_of_frame(3),
---            rx_data             => xlgmii_rx_data(3),
---            rx_source_ip        => xlgmii_rx_source_ip(3),
---            rx_source_port      => xlgmii_rx_source_port(3),
---            rx_bad_frame        => xlgmii_rx_bad_frame(3),
---            rx_overrun          => xlgmii_rx_overrun(3),
---            rx_overrun_ack      => xlgmii_rx_overrun_ack(3),
---            rx_ack              => xlgmii_rx_ack(3),
---            source_ip_address           => ramp_checker_source_ip_address_3,
---            enable_packet_generation    => enable_40gbe_packet_generation(3),
---            packets_checked             => xlgmii_packets_checked(3),
---            ip_fault                    => xlgmii_ip_fault(3),
---            ramp_fault                  => xlgmii_ramp_fault(3),
---            num_packets_checked         => xlgmii_num_packets_checked(3),
---            num_fcs_error_packets       => xlgmii_num_fcs_error_packets(3));
---
---    end generate generate_40GBE_SOURCE_CHECKER_1_TO_3_ROACH3;
-
-----------------------------------------------------------------------------
--- DEV PLATFORM SPECIFIC CODE
-----------------------------------------------------------------------------
-
---    generate_OTHER_CODE_DEV_PLATFORM : if C_DEV_PLATFORM = true generate
-
---        UART_RST_N <= PCIE_PERST_N_F;
-
---        UART_CTS <= 'Z';
---        UART_DCD <= 'Z';
---        UART_DSR <= 'Z';
---        UART_RI <= 'Z';
-
---        UART_GPIO0 <= 'Z';
---        UART_GPIO1 <= 'Z';
---        UART_GPIO2 <= 'Z';
---        UART_GPIO3 <= 'Z';
-
---        I2C_MAIN0_RST_N   <= '0';
---        I2C_MAIN1_RST_N   <= '0';
---        I2C_MAIN2_RST_N   <= '0';
-
---    end generate generate_OTHER_CODE_DEV_PLATFORM;
-
--------------------------------------------------------------------------
--- COM EXPRESS NOT POPULATED
--------------------------------------------------------------------------
-
-    generate_COM_EXPRESS_ROACH3 : if C_DEV_PLATFORM = false generate
-
-        CPU_PWR_BTN_N <= '1';
-        CPU_PWR_OK <= '0';
-        CPU_SYS_RESET_N <= '0';
-
-        --PCIE_RST_N
-        --CPU_SUS_S3_N
-        --CPU_SUS_S4_N
-        --CPU_SUS_S5_N
-        --CPU_SUS_STAT_N
-
-    end generate generate_COM_EXPRESS_ROACH3;
 
 -------------------------------------------------------------------------
 -- CREATE SIGNAL THAT TOGGLES ONCE/SECOND
 -------------------------------------------------------------------------
 
-    second_gen_0 : second_gen
-    port map(
-        clk => sys_clk,
-        rst => sys_rst,
-        second_toggle => second_toggle);
-
--------------------------------------------------------------------------
--- CREATE TIMER FOR MEASURING THROUGHPUT
--------------------------------------------------------------------------
-
-    gen_timer_counter_low : process(sys_rst, sys_clk)
-    begin
-        if (sys_rst = '1')then
-            timer_counter_low <= (others => '0');
-            timer_counter_low_over <= '0';
-        elsif (rising_edge(sys_clk))then
-            timer_counter_low_over <= '0';
-            if (timer_counter_reset = '1')then
-                timer_counter_low <= (others => '0');
-            else
-                if (timer_counter_low = X"FFFF")then
-                    timer_counter_low <= (others => '0');
-                    timer_counter_low_over <= '1';
-                else
-                    timer_counter_low <= timer_counter_low + X"0001";
-                end if;
-            end if;
-        end if;
-    end process;
-
-    gen_timer_counter_high : process(sys_rst, sys_clk)
-    begin
-        if (sys_rst = '1')then
-            timer_counter_high <= (others => '0');
-        elsif (rising_edge(sys_clk))then
-            if (timer_counter_reset = '1')then
-                timer_counter_high <= (others => '0');
-            else
-                if (timer_counter_low_over = '1')then
-                    if (timer_counter_high /= X"FFFF")then
-                        timer_counter_high <= timer_counter_high + X"0001";
-                    end if;
-                end if;
-            end if;
-        end if;
-    end process;
-
-    gen_enable_packet_generation_z1 : process(sys_rst, sys_clk)
-    begin
-        if (sys_rst = '1')then
-            enable_40gbe_packet_generation_z1 <= (others => '0');
-            enable_1gbe_packet_generation_z1 <= '0';
-        elsif (rising_edge(sys_clk))then
-            enable_40gbe_packet_generation_z1 <= enable_40gbe_packet_generation;
-            enable_1gbe_packet_generation_z1 <= enable_1gbe_packet_generation;
-        end if;
-    end process;
-
-    gen_timer_counter_reset : process(sys_clk)
-    begin
-        if (rising_edge(sys_clk))then
-            if (((enable_40gbe_packet_generation(0) = '1')and(enable_40gbe_packet_generation_z1(0) = '0'))
-            or((enable_1gbe_packet_generation = '1')and(enable_1gbe_packet_generation_z1 = '0')))then
-                timer_counter_reset <= '1';
-            else
-                timer_counter_reset <= '0';
-            end if;
-        end if;
-    end process;
-
-    -- REGISTER NUMBER OF PACKETS CHECKED TO PROVIDE MORE ISOLATION BETWEEN 1GBE AND 40GBE
-    gen_num_packets_checked_z1 : process(sys_clk)
-    begin
-        if (rising_edge(sys_clk))then
-            one_gbe_num_packets_checked_z1 <= one_gbe_num_packets_checked;
-
-            for a in 0 to (C_NUM_40GBE_MAC - 1) loop
-                xlgmii_num_packets_checked_z1(a) <= xlgmii_num_packets_checked(a);
-            end loop;
-        end if;
-    end process;
-
-    gen_timer_counter_stop : process(sys_rst, sys_clk)
-    begin
-        if (sys_rst = '1')then
-            timer_counter_stop <= '0';
-            timer_counter_stop_z1 <= '0';
-        elsif (rising_edge(sys_clk))then
-            if ((timer_link = "000")and(num_packets_to_generate = one_gbe_num_packets_checked_z1))then
-                timer_counter_stop <= '1';
-            elsif ((timer_link = "001")and(num_packets_to_generate = xlgmii_num_packets_checked_z1(0)))then
-                timer_counter_stop <= '1';
-            else
-                timer_counter_stop <= '0';
-            end if;
-
-            timer_counter_stop_z1 <= timer_counter_stop;
-        end if;
-    end process;
-
-    gen_timer_counter_low_high_latched : process(sys_rst, sys_clk)
-    begin
-        if (sys_rst = '1')then
-            timer_counter_low_latched <= (others => '0');
-            timer_counter_high_latched <= (others => '0');
-        elsif (rising_edge(sys_clk))then
-            if ((timer_counter_stop = '1')and(timer_counter_stop_z1 = '0'))then
-                timer_counter_low_latched <= timer_counter_low;
-                timer_counter_high_latched <= timer_counter_high;
-            end if;
-        end if;
-    end process;
-
-    brd_user_read_regs(C_RD_THROUGHPUT_COUNTER_ADDR) <= timer_counter_high_latched & timer_counter_low_latched;
+    --second_gen_0 : second_gen
+    --port map(
+    --    clk => sys_clk,
+    --    rst => sys_rst,
+    --    second_toggle => second_toggle);
 
 -------------------------------------------------------------------------
 -- MEASURE FREQUENCY OF GTH CLOCK
 -------------------------------------------------------------------------
 
-    clock_frequency_measure_1 : clock_frequency_measure
-    port map(
-        clk => qsfp_gtrefclk,
-        rst => fpga_reset,
-        second_toggle   => second_toggle,
-        measure_freq    => qsfp_xl_tx_clk_156m25_frequency);
+    --clock_frequency_measure_1 : clock_frequency_measure
+    --port map(
+    --    clk => qsfp_gtrefclk,
+    --    rst => fpga_reset,
+    --    second_toggle   => second_toggle,
+    --    measure_freq    => qsfp_xl_tx_clk_156m25_frequency);
 
 -------------------------------------------------------------------------
 -- MEASURE FREQUENCY OF CONFIG CLOCK
 -------------------------------------------------------------------------
 
-    clock_frequency_measure_2 : clock_frequency_measure
-    port map(
-        clk => FPGA_EMCCLK2,
-        rst => fpga_reset,
-        second_toggle   => second_toggle,
-        measure_freq    => fpga_emcclk2_frequency);
+    --clock_frequency_measure_2 : clock_frequency_measure
+    --port map(
+    --    clk => FPGA_EMCCLK2,
+    --    rst => fpga_reset,
+    --    second_toggle   => second_toggle,
+    --    measure_freq    => fpga_emcclk2_frequency);
 
 
 -------------------------------------------------------------------------
@@ -2992,4 +2305,21 @@ begin
             FPGA_DNA_MATCH_O => open
         );
 
-end arch_frm123701u1r1;
+-------------------------------------------------------------------------
+-- Wishbone DSP Registers
+-------------------------------------------------------------------------
+                
+    -- WISHBONE SLAVE 14 - DSP Registers
+    WB_SLV_CLK_I_top <= sys_clk;
+    WB_SLV_RST_I_top <= sys_rst;
+    WB_SLV_DAT_I_top <= WB_SLV_DAT_I(14);
+    WB_SLV_DAT_O(14) <= WB_SLV_DAT_O_top;
+    WB_SLV_ACK_O(14) <= WB_SLV_ACK_O_top;
+    WB_SLV_ADR_I_top <= WB_SLV_ADR_I(14)((C_WB_SLV_ADDRESS_BITS - 1) downto 0);
+    WB_SLV_CYC_I_top <= WB_SLV_CYC_I(14);
+    WB_SLV_SEL_I_top <= WB_SLV_SEL_I(14);
+    WB_SLV_STB_I_top <= WB_SLV_STB_I(14);
+    WB_SLV_WE_I_top  <= WB_SLV_WE_I(14);    
+        
+
+end arch_skarab_infr;

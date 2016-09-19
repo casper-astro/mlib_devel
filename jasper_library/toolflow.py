@@ -219,6 +219,8 @@ class Toolflow(object):
                 return
         raise Exception("self.peripherals does not contain anything tagged xps:xsg")
 
+
+
     def _drc(self):
         """
         Get the provisions of the active platform and yellow blocks
@@ -282,7 +284,8 @@ class Toolflow(object):
         if os.path.exists(self.topfile):
             self.top = verilog.VerilogModule(name='top', topfile=self.topfile)
         else:
-            self.top = verilog.VerilogModule(name='top')   
+            self.top = verilog.VerilogModule(name='top')
+
 
     def gen_periph_objs(self):
         """
@@ -299,7 +302,6 @@ class Toolflow(object):
         for pk in self.peripherals.keys():
             self.logger.debug('Generating Yellow Block: %s'%pk)
             self.periph_objs.append(yellow_block.YellowBlock.make_block(self.peripherals[pk], self.plat))
-
         self.periph_objs.append(yellow_block.YellowBlock.make_block({'tag': 'xps:'+self.plat.name}, self.plat))
         self._expand_children(self.periph_objs)
         self._drc()
@@ -339,7 +341,7 @@ class Toolflow(object):
         for obj in self.periph_objs:
             self.logger.debug('modifying top for obj %s' % obj.name)
             obj.modify_top(self.top)
-            self.sources += obj.sources    
+            self.sources += obj.sources
             self.ips += obj.ips
     
     def _instantiate_user_ip(self):
@@ -363,7 +365,7 @@ class Toolflow(object):
             if module['sources'] is not None:
                 for source in module['sources']:
                     self.sources += glob.glob(source)
-            #if module['tcl_sources'] is not None:
+            # if module['tcl_sources'] is not None:
             #    for source in module['tcl_sources']:
             #        self.tcl_sources += glob.glob(source)
 
@@ -400,7 +402,7 @@ class Toolflow(object):
         interconnect / addressing and generating new
         code for yellow block instances.
         """
-        self.top.wb_compute()   
+        self.top.wb_compute(self.plat.dsp_wb_base_address, self.plat.dsp_wb_base_address_alignment)
         print self.top.gen_module_file(filename=self.compile_dir+'/top.v')
 
     def generate_consts(self):
@@ -913,6 +915,8 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/')
             self.add_tcl_cmd('}')
             self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]')
+            # Add in if ILA is being used to prevent signal names from changing during synthesis
+            #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
             self.add_tcl_cmd('reset_run synth_1')
             self.add_tcl_cmd('launch_runs synth_1 -jobs %d' % cores)
             self.add_tcl_cmd('wait_on_run synth_1')

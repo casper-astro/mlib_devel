@@ -1,8 +1,8 @@
 --Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
---Tool Version: Vivado v.2014.3.1 (win64) Build 1056140 Thu Oct 30 17:03:40 MDT 2014
---Date        : Mon Nov 24 12:56:02 2014
---Host        : gavin-win7 running 64-bit Service Pack 1  (build 7601)
+--Tool Version: Vivado v.2014.3.1 (lin64) Build 1056140 Thu Oct 30 16:30:39 MDT 2014
+--Date        : Tue Sep 13 12:50:33 2016
+--Host        : adam-cm running 64-bit Ubuntu 14.04.4 LTS
 --Command     : generate_target cont_microblaze_wrapper.bd
 --Design      : cont_microblaze_wrapper
 --Purpose     : IP block netlist
@@ -14,7 +14,7 @@ use UNISIM.VCOMPONENTS.ALL;
 entity cont_microblaze_wrapper is
   port (
     ACK_I : in STD_LOGIC;
-    ADR_O : out STD_LOGIC_VECTOR ( 19 downto 0 );
+    ADR_O : out STD_LOGIC_VECTOR ( 31 downto 0 );
     CYC_O : out STD_LOGIC;
     Clk : in STD_LOGIC;
     DAT_I : in STD_LOGIC_VECTOR ( 31 downto 0 );
@@ -37,7 +37,7 @@ architecture STRUCTURE of cont_microblaze_wrapper is
     ACK_I : in STD_LOGIC;
     DAT_I : in STD_LOGIC_VECTOR ( 31 downto 0 );
     Reset : in STD_LOGIC;
-    ADR_O : out STD_LOGIC_VECTOR ( 19 downto 0 );
+    ADR_O : out STD_LOGIC_VECTOR ( 31 downto 0 );
     CYC_O : out STD_LOGIC;
     DAT_O : out STD_LOGIC_VECTOR ( 31 downto 0 );
     RST_O : out STD_LOGIC;
@@ -51,7 +51,7 @@ begin
 cont_microblaze_i: component cont_microblaze
     port map (
       ACK_I => ACK_I,
-      ADR_O(19 downto 0) => ADR_O(19 downto 0),
+      ADR_O(31 downto 0) => ADR_O(31 downto 0),
       CYC_O => CYC_O,
       Clk => Clk,
       DAT_I(31 downto 0) => DAT_I(31 downto 0),

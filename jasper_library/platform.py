@@ -49,6 +49,17 @@ class Platform(object):
         #: Default set to true, so project mode is enabled by default (not read from YAML file,
         #: as it is up to the user to select which mode must be used)
         self.project_mode = True
+        #: This represents the DSP wishbone base address - useful if certain base addresses are important
+        try:
+            self.dsp_wb_base_address = self.conf['dsp_wb_base_address']
+        except KeyError:
+            self.dsp_wb_base_address = 0x00010000
+        #: This represents the DSP wishbone base address alignment
+        try:
+            self.dsp_wb_base_address_alignment = self.conf['dsp_wb_base_address_alignment']
+        except KeyError:
+            self.dsp_wb_base_address_alignment = 4
+
 
     def add_pins(self, name, iostd, loc):
         """
