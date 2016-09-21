@@ -19,7 +19,7 @@ Library {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1920.0, 0.0, 1920.0, 1080.0]
+      Location		      [1.0, 28.0, 1680.0, 989.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -43,9 +43,9 @@ Library {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1884.0, 917.0]
+	Extents			[1644.0, 809.0]
 	ZoomFactor		[1.0]
-	Offset			[-8.125, 0.0]
+	Offset			[-8.125, 24.999999999999943]
       }
     }
   }
@@ -53,11 +53,11 @@ Library {
   Creator		  "hchen05"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "paulp"
+  LastModifiedBy	  "andrew"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Apr 29 13:03:53 2016"
-  RTWModifiedTimeStamp	  383835827
-  ModelVersionFormat	  "1.%<AutoIncrement:527>"
+  LastModifiedDate	  "Thu Sep 08 15:11:20 2016"
+  RTWModifiedTimeStamp	  395248268
+  ModelVersionFormat	  "1.%<AutoIncrement:531>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -802,7 +802,7 @@ Library {
   }
   System {
     Name		    "xps_library"
-    Location		    [1920, 0, 3840, 1080]
+    Location		    [1, 28, 1681, 1017]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -27074,7 +27074,7 @@ Library {
       SID		      "114"
       Tag		      "xps:xaui"
       Ports		      [5, 7]
-      Position		      [725, 366, 865, 534]
+      Position		      [930, 371, 1070, 539]
       ZOrder		      -6
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -40012,7 +40012,7 @@ Library {
       SID		      "119"
       Tag		      "xps:dram"
       Ports		      [8, 5]
-      Position		      [535, 364, 675, 616]
+      Position		      [740, 369, 880, 621]
       ZOrder		      -11
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -52693,7 +52693,7 @@ Library {
       SID		      "318"
       Tag		      "xps:onegbe"
       Ports		      [8, 11]
-      Position		      [535, 54, 670, 316]
+      Position		      [740, 59, 875, 321]
       ZOrder		      -15
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -58390,7 +58390,7 @@ Library {
       SID		      "332"
       Tag		      "xps:sw_reg"
       Ports		      [1, 1]
-      Position		      [920, 427, 1020, 453]
+      Position		      [1125, 512, 1225, 538]
       ZOrder		      5229
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       AttributesFormatString  "1output:uf32.0"
@@ -58519,7 +58519,7 @@ Library {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"6952"
+	SIDHighWatermark	"6972"
 	Block {
 	  BlockType		  Inport
 	  Name			  "out_reg"
@@ -58531,10 +58531,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "assert_reg"
-	  SID			  "332:6951"
+	  SID			  "332:6971"
 	  Ports			  [1, 1]
 	  Position		  [200, 100, 250, 120]
-	  ZOrder		  6896
+	  ZOrder		  6916
 	  ShowName		  off
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Assert"
@@ -58569,10 +58569,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "cast_gw"
-	  SID			  "332:6949"
+	  SID			  "332:6969"
 	  Ports			  [1, 1]
 	  Position		  [700, 100, 750, 120]
-	  ZOrder		  6894
+	  ZOrder		  6914
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Convert"
 	  SourceType		  "Xilinx Type Converter Block"
@@ -58607,10 +58607,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "io_delay"
-	  SID			  "332:6948"
+	  SID			  "332:6968"
 	  Ports			  [1, 1]
 	  Position		  [600, 100, 650, 120]
-	  ZOrder		  6893
+	  ZOrder		  6913
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Delay"
 	  SourceType		  "Xilinx Delay Block"
@@ -58638,10 +58638,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "reint1"
-	  SID			  "332:6952"
+	  SID			  "332:6972"
 	  Ports			  [1, 1]
 	  Position		  [300, 100, 350, 120]
-	  ZOrder		  6897
+	  ZOrder		  6917
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Reinterpret"
 	  SourceType		  "Xilinx Type Reinterpreter Block"
@@ -58669,10 +58669,10 @@ Library {
 	Block {
 	  BlockType		  Reference
 	  Name			  "xps_library_software register_user_data_in"
-	  SID			  "332:6950"
+	  SID			  "332:6970"
 	  Ports			  [1, 1]
 	  Position		  [900, 100, 950, 120]
-	  ZOrder		  6895
+	  ZOrder		  6915
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway Out"
 	  SourceType		  "Xilinx Gateway Out Block"
@@ -58753,7 +58753,7 @@ Library {
       SID		      "324"
       Tag		      "xps:sw_reg_old"
       Ports		      [1, 1]
-      Position		      [920, 370, 1020, 400]
+      Position		      [1125, 455, 1225, 485]
       ZOrder		      -21
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -58961,7 +58961,7 @@ Library {
       SID		      "325"
       Tag		      "xps:tengbe"
       Ports		      [8, 10]
-      Position		      [725, 51, 865, 314]
+      Position		      [930, 56, 1070, 319]
       ZOrder		      -22
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -60720,8 +60720,8 @@ Library {
       Name		      "ten_Gbe_v2"
       SID		      "337"
       Tag		      "xps:tengbe_v2"
-      Ports		      [8, 12]
-      Position		      [920, 38, 1065, 337]
+      Ports		      [8, 14]
+      Position		      [1125, 60, 1270, 360]
       ZOrder		      5235
       BackgroundColor	      "[1.000000, 1.000000, 0.000000]"
       MinAlgLoopOccurrences   off
@@ -61287,7 +61287,7 @@ Library {
       }
       System {
 	Name			"ten_Gbe_v2"
-	Location		[0, 25, 1920, 1080]
+	Location		[1, 28, 1681, 1017]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -61299,8 +61299,8 @@ Library {
 	TiledPaperMargins	[1.270000, 1.270000, 1.270000, 1.270000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"52"
-	SIDHighWatermark	"1252"
+	ZoomFactor		"112"
+	SIDHighWatermark	"1260"
 	SIDPrevWatermark	"565"
 	Block {
 	  BlockType		  Inport
@@ -61377,7 +61377,7 @@ Library {
 	  BlockType		  Constant
 	  Name			  "Constant1"
 	  SID			  "337:9"
-	  Position		  [700, 630, 725, 650]
+	  Position		  [700, 725, 725, 745]
 	  ZOrder		  -9
 	  ShowName		  off
 	  Value			  "0"
@@ -61411,6 +61411,24 @@ Library {
 	}
 	Block {
 	  BlockType		  Constant
+	  Name			  "Constant13"
+	  SID			  "337:1253"
+	  Position		  [700, 680, 725, 700]
+	  ZOrder		  5298
+	  ShowName		  off
+	  Value			  "0"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant14"
+	  SID			  "337:1254"
+	  Position		  [700, 635, 725, 655]
+	  ZOrder		  5297
+	  ShowName		  off
+	  Value			  "0"
+	}
+	Block {
+	  BlockType		  Constant
 	  Name			  "Constant2"
 	  SID			  "337:13"
 	  Position		  [700, 225, 725, 245]
@@ -61422,7 +61440,7 @@ Library {
 	  BlockType		  Constant
 	  Name			  "Constant3"
 	  SID			  "337:14"
-	  Position		  [700, 675, 725, 695]
+	  Position		  [700, 770, 725, 790]
 	  ZOrder		  -14
 	  ShowName		  off
 	  Value			  "0"
@@ -61431,7 +61449,7 @@ Library {
 	  BlockType		  Constant
 	  Name			  "Constant4"
 	  SID			  "337:15"
-	  Position		  [700, 715, 725, 735]
+	  Position		  [700, 810, 725, 830]
 	  ZOrder		  -15
 	  ShowName		  off
 	  Value			  "0"
@@ -61557,7 +61575,7 @@ Library {
 	  BlockType		  Goto
 	  Name			  "Goto16"
 	  SID			  "337:625"
-	  Position		  [915, 619, 995, 631]
+	  Position		  [915, 714, 995, 726]
 	  ZOrder		  5290
 	  ShowName		  off
 	  GotoTag		  "grx_led_up"
@@ -61566,7 +61584,7 @@ Library {
 	  BlockType		  Goto
 	  Name			  "Goto17"
 	  SID			  "337:626"
-	  Position		  [915, 664, 995, 676]
+	  Position		  [915, 759, 995, 771]
 	  ZOrder		  5291
 	  ShowName		  off
 	  GotoTag		  "grx_led_rx"
@@ -61575,10 +61593,19 @@ Library {
 	  BlockType		  Goto
 	  Name			  "Goto18"
 	  SID			  "337:627"
-	  Position		  [915, 704, 995, 716]
+	  Position		  [915, 799, 995, 811]
 	  ZOrder		  5292
 	  ShowName		  off
 	  GotoTag		  "grx_led_tx"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto19"
+	  SID			  "337:1255"
+	  Position		  [915, 624, 995, 636]
+	  ZOrder		  5299
+	  ShowName		  off
+	  GotoTag		  "grx_dest_ip"
 	}
 	Block {
 	  BlockType		  Goto
@@ -61588,6 +61615,15 @@ Library {
 	  ZOrder		  5276
 	  ShowName		  off
 	  GotoTag		  "gtx_dest_ip"
+	}
+	Block {
+	  BlockType		  Goto
+	  Name			  "Goto20"
+	  SID			  "337:1256"
+	  Position		  [915, 669, 995, 681]
+	  ZOrder		  5300
+	  ShowName		  off
+	  GotoTag		  "grx_dest_port"
 	}
 	Block {
 	  BlockType		  Goto
@@ -62033,7 +62069,7 @@ Library {
 	  Name			  "xps_library_ten_Gbe_v2_led_rx"
 	  SID			  "337:37"
 	  Ports			  [1, 1]
-	  Position		  [755, 677, 855, 693]
+	  Position		  [755, 772, 855, 788]
 	  ZOrder		  -37
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62079,7 +62115,7 @@ Library {
 	  Name			  "xps_library_ten_Gbe_v2_led_tx"
 	  SID			  "337:38"
 	  Ports			  [1, 1]
-	  Position		  [755, 717, 855, 733]
+	  Position		  [755, 812, 855, 828]
 	  ZOrder		  -38
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62125,7 +62161,7 @@ Library {
 	  Name			  "xps_library_ten_Gbe_v2_led_up"
 	  SID			  "337:39"
 	  Ports			  [1, 1]
-	  Position		  [755, 632, 855, 648]
+	  Position		  [755, 727, 855, 743]
 	  ZOrder		  -39
 	  LibraryVersion	  "1.2"
 	  SourceBlock		  "xbsIndex_r4/Gateway In"
@@ -62332,6 +62368,100 @@ Library {
 	}
 	Block {
 	  BlockType		  Reference
+	  Name			  "xps_library_ten_Gbe_v2_rx_dest_ip"
+	  SID			  "337:1257"
+	  Ports			  [1, 1]
+	  Position		  [755, 637, 855, 653]
+	  ZOrder		  5296
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to  Xilinx"
+	  " fixed-point or floating-point data type.<br><br>Hardware notes:  In hardware these blocks become top level input p"
+	  "orts."
+	  gui_display_data_type	  "Fixed-point"
+	  arith_type		  "Unsigned"
+	  n_bits		  "32"
+	  bin_pt		  "0"
+	  preci_type		  "Single"
+	  exp_width		  "8"
+	  frac_width		  "24"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  period		  "1"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
+	  xl_use_area		  off
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
+	  hdl_port		  "on"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "11,40,464,769"
+	  block_type		  "gatewayin"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,1,00d3666e,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 0 ],[0 0 16 16 0 ],[0.95 0.93 0."
+	  "65 ]);\nplot([0 100 100 0 0 ],[0 0 16 16 0 ]);\npatch([45.55 48.44 50.44 52.44 54.44 50.44 47.55 45.55 ],[10.22 10."
+	  "22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([47.55 50.44 48.44 45.55 47.55 ],[8.22 8.22 10.22 10.22 "
+	  "8.22 ],[0.985 0.979 0.895 ]);\npatch([45.55 48.44 50.44 47.55 45.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch"
+	  "([47.55 54.44 52.44 50.44 48.44 45.55 47.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.985 0.979 0.895 ]);\nfprintf"
+	  "('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\"
+	  "fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon"
+	  " text');"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "xps_library_ten_Gbe_v2_rx_dest_port"
+	  SID			  "337:1258"
+	  Ports			  [1, 1]
+	  Position		  [755, 682, 855, 698]
+	  ZOrder		  5295
+	  LibraryVersion	  "1.2"
+	  SourceBlock		  "xbsIndex_r4/Gateway In"
+	  SourceType		  "Xilinx Gateway In Block"
+	  infoedit		  "Gateway in block.  Converts inputs of type Simulink integer, single, double and fixed-point to  Xilinx"
+	  " fixed-point or floating-point data type.<br><br>Hardware notes:  In hardware these blocks become top level input p"
+	  "orts."
+	  gui_display_data_type	  "Fixed-point"
+	  arith_type		  "Unsigned"
+	  n_bits		  "16"
+	  bin_pt		  "0"
+	  preci_type		  "Single"
+	  exp_width		  "8"
+	  frac_width		  "24"
+	  quantization		  "Truncate"
+	  overflow		  "Wrap"
+	  period		  "1"
+	  dbl_ovrd		  off
+	  timing_constraint	  "None"
+	  locs_specified	  off
+	  LOCs			  "{}"
+	  UseAsADC		  off
+	  ADCChannel		  "'1'"
+	  xl_use_area		  off
+	  xl_area		  "[0, 0, 0, 0, 0, 0, 0]"
+	  inherit_from_input	  off
+	  hdl_port		  "on"
+	  has_advanced_control	  "0"
+	  sggui_pos		  "11,40,464,769"
+	  block_type		  "gatewayin"
+	  block_version		  "9.1.01"
+	  sg_icon_stat		  "100,16,1,1,white,yellow,1,00d3666e,right,,[ ],[ ]"
+	  sg_mask_display	  "fprintf('','COMMENT: begin icon graphics');\npatch([0 100 100 0 0 ],[0 0 16 16 0 ],[0.95 0.93 0."
+	  "65 ]);\nplot([0 100 100 0 0 ],[0 0 16 16 0 ]);\npatch([45.55 48.44 50.44 52.44 54.44 50.44 47.55 45.55 ],[10.22 10."
+	  "22 12.22 10.22 12.22 12.22 12.22 10.22 ],[1 1 1 ]);\npatch([47.55 50.44 48.44 45.55 47.55 ],[8.22 8.22 10.22 10.22 "
+	  "8.22 ],[0.985 0.979 0.895 ]);\npatch([45.55 48.44 50.44 47.55 45.55 ],[6.22 6.22 8.22 8.22 6.22 ],[1 1 1 ]);\npatch"
+	  "([47.55 54.44 52.44 50.44 48.44 45.55 47.55 ],[4.22 4.22 6.22 4.22 6.22 6.22 4.22 ],[0.985 0.979 0.895 ]);\nfprintf"
+	  "('','COMMENT: end icon graphics');\nfprintf('','COMMENT: begin icon text');\ncolor('black');port_label('input',1,'\\"
+	  "fontsize{11pt}\\bf In ','texmode','on');\ncolor('black');port_label('output',1,' ');\nfprintf('','COMMENT: end icon"
+	  " text');"
+	}
+	Block {
+	  BlockType		  Reference
 	  Name			  "xps_library_ten_Gbe_v2_rx_end_of_frame"
 	  SID			  "337:44"
 	  Ports			  [1, 1]
@@ -62491,7 +62621,7 @@ Library {
 	  inherit_from_input	  off
 	  hdl_port		  "on"
 	  has_advanced_control	  "0"
-	  sggui_pos		  "20,50,419,481"
+	  sggui_pos		  "11,42,464,769"
 	  block_type		  "gatewayin"
 	  block_version		  "9.1.01"
 	  sg_icon_stat		  "100,16,1,1,white,yellow,1,00d3666e,right,,[ ],[ ]"
@@ -62872,7 +63002,7 @@ Library {
 	  BlockType		  Outport
 	  Name			  "led_up"
 	  SID			  "337:57"
-	  Position		  [1025, 632, 1055, 648]
+	  Position		  [1025, 727, 1055, 743]
 	  ZOrder		  -57
 	  IconDisplay		  "Port number"
 	}
@@ -62880,7 +63010,7 @@ Library {
 	  BlockType		  Outport
 	  Name			  "led_rx"
 	  SID			  "337:58"
-	  Position		  [1025, 677, 1055, 693]
+	  Position		  [1025, 772, 1055, 788]
 	  ZOrder		  -58
 	  Port			  "2"
 	  IconDisplay		  "Port number"
@@ -62889,7 +63019,7 @@ Library {
 	  BlockType		  Outport
 	  Name			  "led_tx"
 	  SID			  "337:59"
-	  Position		  [1025, 717, 1055, 733]
+	  Position		  [1025, 812, 1055, 828]
 	  ZOrder		  -59
 	  Port			  "3"
 	  IconDisplay		  "Port number"
@@ -62973,6 +63103,24 @@ Library {
 	  Position		  [1025, 587, 1055, 603]
 	  ZOrder		  -68
 	  Port			  "12"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "rx_dest_ip"
+	  SID			  "337:1259"
+	  Position		  [1025, 637, 1055, 653]
+	  ZOrder		  5294
+	  Port			  "13"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "rx_dest_port"
+	  SID			  "337:1260"
+	  Position		  [1025, 682, 1055, 698]
+	  ZOrder		  5293
+	  Port			  "14"
 	  IconDisplay		  "Port number"
 	}
 	Line {
@@ -63411,6 +63559,46 @@ Library {
 	  }
 	  Branch {
 	    DstBlock		    "led_tx"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant13"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_dest_port"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_dest_port"
+	  SrcPort		  1
+	  Points		  [34, 0]
+	  Branch {
+	    DstBlock		    "rx_dest_port"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto20"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Constant14"
+	  SrcPort		  1
+	  DstBlock		  "xps_library_ten_Gbe_v2_rx_dest_ip"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "xps_library_ten_Gbe_v2_rx_dest_ip"
+	  SrcPort		  1
+	  Points		  [34, 0]
+	  Branch {
+	    DstBlock		    "rx_dest_ip"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, -15]
+	    DstBlock		    "Goto19"
 	    DstPort		    1
 	  }
 	}
