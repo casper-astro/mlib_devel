@@ -371,8 +371,8 @@ class forty_gbe(YellowBlock):
 
         cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ_REFCLK_0_P]'))
         cons.append(RawConstraint('create_pblock MEZ_PHY11_QSFP'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list forty_gbe_inst/generate_IEEE802_3_XL_PHY_ROACH3.IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC]]'))
-        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list forty_gbe_inst/generate_IEEE802_3_XL_PHY_ROACH3.IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list forty_gbe_inst/IEEE802_3_XL_PHY_0/PHY_inst/RX_CLK_RCC]]'))
+        cons.append(RawConstraint('add_cells_to_pblock [get_pblocks MEZ_PHY11_QSFP] [get_cells -quiet [list forty_gbe_inst/IEEE802_3_XL_PHY_0/PHY_inst/TX_CLK_RCC]]'))
         cons.append(RawConstraint('resize_pblock [get_pblocks MEZ_PHY11_QSFP] -add {CLOCKREGION_X1Y7:CLOCKREGION_X1Y7}'))
 
         cons.append(RawConstraint('set_property OFFCHIP_TERM NONE [get_ports CONFIG_IO_0]'))
