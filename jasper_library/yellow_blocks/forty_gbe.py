@@ -201,6 +201,7 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/ska_rx_packet_ctrl_fifo/*.xci")
         self.add_source("forty_gbe/ska_cpu_buffer/*.xci")
         self.add_source("forty_gbe/cross_clock_fifo_36x16/*.xci")
+        self.add_source("forty_gbe/cross_clock_fifo_259x16/*.xci")
         self.add_source("forty_gbe/overlap_buffer/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/IEEE802_3_XL_PMA.srcs/sources_1/ip/XLAUI/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/sources_1/ip/fifo_dual_clk/*.xci")

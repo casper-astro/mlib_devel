@@ -274,6 +274,19 @@ architecture arch_forty_gbe of forty_gbe is
         gbe_rx_overrun          : in std_logic;
         gbe_rx_overrun_ack      : out std_logic;
         gbe_rx_ack              : out std_logic;
+        --AI Start: Add fortygbe interface for configuration
+        fgbe_config_en           : in std_logic;  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
+        fgbe_app_clk             : in std_logic;
+        fgbe_rx_valid            : in std_logic_vector(3 downto 0);
+        fgbe_rx_end_of_frame     : in std_logic;
+        fgbe_rx_data             : in std_logic_vector(255 downto 0);
+        fgbe_rx_source_ip        : in std_logic_vector(31 downto 0);
+        fgbe_rx_source_port      : in std_logic_vector(15 downto 0);
+        fgbe_rx_bad_frame        : in std_logic;
+        fgbe_rx_overrun          : in std_logic;
+        fgbe_rx_overrun_ack      : out std_logic;
+        fgbe_rx_ack              : out std_logic;
+        --AI End: Add fortygbe interface for configuration         
         fpga_emcclk     : in std_logic;
         fpga_emcclk2    : in std_logic;
         flash_dq_in     : in std_logic_vector(15 downto 0);
@@ -287,7 +300,7 @@ architecture arch_forty_gbe of forty_gbe is
         flash_rs0       : out std_logic;
         flash_rs1       : out std_logic;
         flash_wait      : in std_logic;
-        flash_output_enable : out std_logic;
+        flash_output_enable : out std_logic;        
         spartan_clk : out std_logic;
         config_io_0 : out std_logic;
         config_io_1 : out std_logic;
@@ -301,7 +314,7 @@ architecture arch_forty_gbe of forty_gbe is
         config_io_9 : out std_logic;
         config_io_10 : out std_logic;
         config_io_11 : out std_logic;
-        spi_miso : in std_logic;
+        spi_miso : in std_logic; 
         spi_mosi : out std_logic;
         spi_csb  : out std_logic;
         spi_clk  : out std_logic;
@@ -756,11 +769,29 @@ architecture arch_forty_gbe of forty_gbe is
     signal gmii_rx_end_of_frame_flash_sdram_controller : std_logic;
     signal gmii_rx_overrun_ack_flash_sdram_controller : std_logic;
     signal gmii_rx_ack_flash_sdram_controller : std_logic;
+    
+    --AI start: Add fortygbe config interface 
+    signal select_forty_gbe_ramp_checker : std_logic;
+    signal fgbe_config_en : std_logic; 
+    signal fgbe_link_status : std_logic;  --status of the 40GbE links for auto-sensing the configuration interface
+    signal fgbe_reg_sel : std_logic;      --this is a register that can override the auto-sensing function if need be  
+    signal xlgmii_rx_valid_flash_sdram_controller :  T_40GBE_DATA_VALID;
+    signal xlgmii_rx_end_of_frame_flash_sdram_controller : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    signal xlgmii_rx_overrun_ack_flash_sdram_controller : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    signal xlgmii_rx_ack_flash_sdram_controller : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --AI end: Add fortygbe config interface         
 
     signal gmii_rx_valid_ramp_checker : std_logic;
     signal gmii_rx_end_of_frame_ramp_checker : std_logic;
     signal gmii_rx_overrun_ack_ramp_checker : std_logic;
     signal gmii_rx_ack_ramp_checker : std_logic;
+    
+    --AI start: Add fortygbe config interface 
+    signal xlgmii_rx_valid_ramp_checker : T_40GBE_DATA_VALID;
+    signal xlgmii_rx_end_of_frame_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    signal xlgmii_rx_overrun_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    signal xlgmii_rx_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --AI end: Add fortygbe config interface         
 
     signal microblaze_uart_rxd : std_logic;
     signal microblaze_uart_txd : std_logic;
@@ -1099,6 +1130,21 @@ begin
     qsfp_soft_reset(1) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(2);
     qsfp_soft_reset(2) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(3);
     qsfp_soft_reset(3) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4);
+    
+    --AI start: Add fortygbe config interface
+    select_forty_gbe_ramp_checker <= brd_user_write_regs(C_WR_BRD_CTL_STAT_1_ADDR)(1);
+    
+    --This is part of the configuration link auto-sensing function. If any of the 40GbE links are up then configuration
+    --defaults to the 40GbE interface else it defaults to the 1GbE interface 
+    fgbe_link_status <= phy_rx_up_cpu(0) or phy_rx_up_cpu(1) or phy_rx_up_cpu(2) or phy_rx_up_cpu(3);
+    --Select whether configuration via forty_gbe interface or via 1GbE interface (0 = 1GbE, 1 = 40GbE)
+    --This will override the auto-sensing select function (default is 40GbE)
+    --Obviously if there is no 40GbE this will have no effect, as fbe_link_status will be '0' and hence, 1GbE will
+    --be selected 
+    fgbe_reg_sel <= not(brd_user_write_regs(C_WR_BRD_CTL_STAT_1_ADDR)(2)); --(0 = 1GbE, 1 = 40GbE)
+    --Final Selection whether configuration via forty_gbe interface or via 1GbE interface (0 = 1GbE, 1 = 40GbE)
+    fgbe_config_en <= fgbe_link_status and fgbe_reg_sel;
+    --AI end: Add fortygbe config interface            
 
     -- MOVE 40GBE LINK UP TO sys_clk CLOCK DOMAIN
     gen_phy_rx_up_cpu : process(sys_clk)
@@ -1346,7 +1392,7 @@ begin
         SEL_I => WB_SLV_SEL_I(2),
         STB_I => WB_SLV_STB_I(2),
         WE_I  => WB_SLV_WE_I(2),
-        gbe_app_clk             => sys_clk,
+		gbe_app_clk             => sys_clk,
         gbe_rx_valid            => gmii_rx_valid_flash_sdram_controller,
         gbe_rx_end_of_frame     => gmii_rx_end_of_frame_flash_sdram_controller,
         gbe_rx_data             => gmii_rx_data,
@@ -1356,6 +1402,19 @@ begin
         gbe_rx_overrun          => gmii_rx_overrun,
         gbe_rx_overrun_ack      => gmii_rx_overrun_ack_flash_sdram_controller,
         gbe_rx_ack              => gmii_rx_ack_flash_sdram_controller,
+        --AI Start: Added fortygbe interface for configuration
+        fgbe_config_en          => fgbe_config_en,  -- if '1' SDRAM/Flash configuration is done via forty GbE else via 1 GbE
+        fgbe_app_clk            => sys_clk,
+        fgbe_rx_valid           => xlgmii_rx_valid_flash_sdram_controller(0), --xlgmii_rx_valid(0),
+        fgbe_rx_end_of_frame    => xlgmii_rx_end_of_frame_flash_sdram_controller(0),--xlgmii_rx_end_of_frame(0),
+        fgbe_rx_data            => xlgmii_rx_data(0),
+        fgbe_rx_source_ip       => xlgmii_rx_source_ip(0),
+        fgbe_rx_source_port     => xlgmii_rx_source_port(0),
+        fgbe_rx_bad_frame       => xlgmii_rx_bad_frame(0),
+        fgbe_rx_overrun         => xlgmii_rx_overrun(0),
+        fgbe_rx_overrun_ack     => xlgmii_rx_overrun_ack_flash_sdram_controller(0),--xlgmii_rx_overrun_ack(0),
+        fgbe_rx_ack             => xlgmii_rx_ack_flash_sdram_controller(0),--xlgmii_rx_ack(0),               
+        --AI End: Added fortygbe interface for configuration        
         fpga_emcclk     => '0',
         fpga_emcclk2    => '0',
         flash_dq_in     => FLASH_DQ,
@@ -1367,9 +1426,9 @@ begin
         flash_we_n      => flash_we_n_i,
         flash_adv_n     => flash_adv_n_i,
         flash_rs0       => flash_rs0_i,
-        flash_rs1       => flash_rs1_i,
+        flash_rs1       => flash_rs1_i, 
         flash_wait      => '0',
-        flash_output_enable => flash_output_enable,
+        flash_output_enable => flash_output_enable,        
         spartan_clk => spartan_clk_i,
         config_io_0 => config_io_0_i,
         config_io_1 => config_io_1_i,
@@ -1383,7 +1442,7 @@ begin
         config_io_9 => config_io_9_i,
         config_io_10 => config_io_10_i,
         config_io_11 => config_io_11_i,
-        spi_miso => spi_miso_i,
+        spi_miso => spi_miso_i, 
         spi_mosi => spi_mosi_i,
         spi_csb  => spi_csb_i,
         spi_clk  => spi_clk_i,
@@ -1607,7 +1666,9 @@ begin
         end if;
     end process;
 
-    -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND RAMP CHECKER
+    --AI Start: Added fortygbe config interface
+    -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 1GbE RAMP CHECKER
+    --NB: Ramp Checkers are not used, but the mux has been left in just in case testing is necessary
     gmii_rx_valid_flash_sdram_controller <= gmii_rx_valid when (select_one_gbe_ramp_checker = '0') else '0';
     gmii_rx_end_of_frame_flash_sdram_controller <= gmii_rx_end_of_frame when (select_one_gbe_ramp_checker = '0') else '0';
 
@@ -1616,6 +1677,18 @@ begin
 
     gmii_rx_overrun_ack <= gmii_rx_overrun_ack_flash_sdram_controller when (select_one_gbe_ramp_checker = '0') else gmii_rx_overrun_ack_ramp_checker;
     gmii_rx_ack <= gmii_rx_ack_flash_sdram_controller when (select_one_gbe_ramp_checker = '0') else gmii_rx_ack_ramp_checker;
+
+    -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 40GbE RAMP CHECKER 0
+    --NB: Ramp Checkers are not used, but the mux has been left in just in case testing is necessary
+    xlgmii_rx_valid_flash_sdram_controller(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_ramp_checker = '0') else "0000";
+    xlgmii_rx_end_of_frame_flash_sdram_controller(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_ramp_checker = '0') else '0';
+
+    xlgmii_rx_valid_ramp_checker(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_ramp_checker = '1') else "0000";
+    xlgmii_rx_end_of_frame_ramp_checker(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_ramp_checker = '1') else '0';
+
+    xlgmii_rx_overrun_ack(0) <= xlgmii_rx_overrun_ack_flash_sdram_controller(0) when (select_forty_gbe_ramp_checker = '0') else xlgmii_rx_overrun_ack_ramp_checker(0);
+    xlgmii_rx_ack(0) <= xlgmii_rx_ack_flash_sdram_controller(0) when (select_forty_gbe_ramp_checker = '0') else xlgmii_rx_ack_ramp_checker(0);
+    --AI End: Added fortygbe config interface
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
     ska_forty_gb_eth_0 : ska_forty_gb_eth
