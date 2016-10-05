@@ -914,7 +914,9 @@ class VivadoBackend(ToolflowBackend):
             self.add_tcl_cmd('if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {')
             self.add_tcl_cmd('file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/')
             self.add_tcl_cmd('}')
-            self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]')
+            # the upgrade command is removed as it isnt entirely needed.
+            # It does upgrade some skarab IP even though the IP is locked.
+            #self.add_tcl_cmd('upgrade_ip -quiet [get_ips *]')
             # Add in if ILA is being used to prevent signal names from changing during synthesis
             #self.add_tcl_cmd('set_property STEPS.SYNTH_DESIGN.ARGS.FLATTEN_HIERARCHY none [get_runs synth_1]')
             self.add_tcl_cmd('reset_run synth_1')
