@@ -771,7 +771,7 @@ architecture arch_forty_gbe of forty_gbe is
     signal gmii_rx_ack_flash_sdram_controller : std_logic;
     
     --AI start: Add fortygbe config interface 
-    signal select_forty_gbe_ramp_checker : std_logic;
+    signal select_forty_gbe_data_sel : std_logic;
     signal fgbe_config_en : std_logic; 
     signal fgbe_link_status : std_logic;  --status of the 40GbE links for auto-sensing the configuration interface
     signal fgbe_reg_sel : std_logic;      --this is a register that can override the auto-sensing function if need be  
@@ -781,14 +781,14 @@ architecture arch_forty_gbe of forty_gbe is
     signal xlgmii_rx_ack_flash_sdram_controller : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
     --AI end: Add fortygbe config interface         
 
-    signal gmii_rx_valid_ramp_checker : std_logic;
-    signal gmii_rx_end_of_frame_ramp_checker : std_logic;
+    --signal gmii_rx_valid_ramp_checker : std_logic;
+    --signal gmii_rx_end_of_frame_ramp_checker : std_logic;
     signal gmii_rx_overrun_ack_ramp_checker : std_logic;
     signal gmii_rx_ack_ramp_checker : std_logic;
     
     --AI start: Add fortygbe config interface 
-    signal xlgmii_rx_valid_ramp_checker : T_40GBE_DATA_VALID;
-    signal xlgmii_rx_end_of_frame_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
+    --signal xlgmii_rx_valid_ramp_checker : T_40GBE_DATA_VALID;
+    --signal xlgmii_rx_end_of_frame_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
     signal xlgmii_rx_overrun_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
     signal xlgmii_rx_ack_ramp_checker : std_logic_vector(0 to (C_NUM_40GBE_MAC - 1));
     --AI end: Add fortygbe config interface         
@@ -932,7 +932,7 @@ architecture arch_forty_gbe of forty_gbe is
     -- MB 08/10/2015 ADDED SUPPORT FOR READING FPGA DNA
     signal fpga_dna : std_logic_vector(63 downto 0);
 
-    signal select_one_gbe_ramp_checker : std_logic;
+    signal select_one_gbe_data_sel  : std_logic;
 
 begin
 
@@ -1094,8 +1094,9 @@ begin
     --brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(20) <= xlgmii_ip_fault(3);
 
     brd_user_read_regs(C_RD_BRD_CTL_STAT_0_ADDR)(31 downto 21) <= (others => '0');
-
-    select_one_gbe_ramp_checker <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(1);
+    
+    --1GbE data select (1 = 1 GbE data select, 0 = 1 GbE configuration only)
+    select_one_gbe_data_sel  <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(1);
     mezzanine_fault_override <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(2);
     --enable_1gbe_packet_generation <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(3);
     --enable_40gbe_packet_generation <= brd_user_write_regs(C_WR_BRD_CTL_STAT_0_ADDR)(7 downto 4);
@@ -1132,7 +1133,8 @@ begin
     qsfp_soft_reset(3) <= brd_user_write_regs(C_WR_ETH_IF_CTL_ADDR)(4);
     
     --AI start: Add fortygbe config interface
-    select_forty_gbe_ramp_checker <= brd_user_write_regs(C_WR_BRD_CTL_STAT_1_ADDR)(1);
+    --fortygbe data select (1 = 40 GbE data select, 0 = 40 GbE configuration only)
+    select_forty_gbe_data_sel  <= brd_user_write_regs(C_WR_BRD_CTL_STAT_1_ADDR)(1);
     
     --This is part of the configuration link auto-sensing function. If any of the 40GbE links are up then configuration
     --defaults to the 40GbE interface else it defaults to the 1GbE interface 
@@ -1233,7 +1235,7 @@ begin
 ---------------------------------------------------------------------------
 
     
-    FPGA_GPIO(0) <= '1'; --AI: Set to high to always be disabled --not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0); -- LOW TO TURN ON
+    FPGA_GPIO(0) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0); -- LOW TO TURN ON   --AI: Set to high to always be disabled --not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0); -- LOW TO TURN ON
     FPGA_GPIO(1) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(1); -- LOW TO TURN ON
     FPGA_GPIO(2) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(2); -- LOW TO TURN ON
     FPGA_GPIO(3) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(3); -- LOW TO TURN ON
@@ -1667,27 +1669,25 @@ begin
     end process;
 
     --AI Start: Added fortygbe config interface
-    -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 1GbE RAMP CHECKER
-    --NB: Ramp Checkers are not used, but the mux has been left in just in case testing is necessary
-    gmii_rx_valid_flash_sdram_controller <= gmii_rx_valid when (select_one_gbe_ramp_checker = '0') else '0';
-    gmii_rx_end_of_frame_flash_sdram_controller <= gmii_rx_end_of_frame when (select_one_gbe_ramp_checker = '0') else '0';
+    -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 1GbE Data Streaming
+    gmii_rx_valid_flash_sdram_controller <= gmii_rx_valid when (select_one_gbe_data_sel  = '0') else '0';
+    gmii_rx_end_of_frame_flash_sdram_controller <= gmii_rx_end_of_frame when (select_one_gbe_data_sel  = '0') else '0';
 
-    gmii_rx_valid_ramp_checker <= gmii_rx_valid when (select_one_gbe_ramp_checker = '1') else '0';
-    gmii_rx_end_of_frame_ramp_checker <= gmii_rx_end_of_frame when (select_one_gbe_ramp_checker = '1') else '0';
+    --gmii_rx_valid_ramp_checker <= gmii_rx_valid when (select_one_gbe_data_sel  = '1') else '0';
+    --gmii_rx_end_of_frame_ramp_checker <= gmii_rx_end_of_frame when (select_one_gbe_data_sel  = '1') else '0';
 
-    gmii_rx_overrun_ack <= gmii_rx_overrun_ack_flash_sdram_controller when (select_one_gbe_ramp_checker = '0') else gmii_rx_overrun_ack_ramp_checker;
-    gmii_rx_ack <= gmii_rx_ack_flash_sdram_controller when (select_one_gbe_ramp_checker = '0') else gmii_rx_ack_ramp_checker;
+    gmii_rx_overrun_ack <= gmii_rx_overrun_ack_flash_sdram_controller when (select_one_gbe_data_sel  = '0') else gmii_rx_overrun_ack_ramp_checker;
+    gmii_rx_ack <= gmii_rx_ack_flash_sdram_controller when (select_one_gbe_data_sel  = '0') else gmii_rx_ack_ramp_checker;
 
-    -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 40GbE RAMP CHECKER 0
-    --NB: Ramp Checkers are not used, but the mux has been left in just in case testing is necessary
-    xlgmii_rx_valid_flash_sdram_controller(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_ramp_checker = '0') else "0000";
-    xlgmii_rx_end_of_frame_flash_sdram_controller(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_ramp_checker = '0') else '0';
+    -- MUX BETWEEN FLASH_SDRAM CONTROLLER AND 40GbE Data Streaming on link 1 (Eth 0)
+    xlgmii_rx_valid_flash_sdram_controller(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_data_sel  = '0') else "0000";
+    xlgmii_rx_end_of_frame_flash_sdram_controller(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_data_sel  = '0') else '0';
 
-    xlgmii_rx_valid_ramp_checker(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_ramp_checker = '1') else "0000";
-    xlgmii_rx_end_of_frame_ramp_checker(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_ramp_checker = '1') else '0';
+    --xlgmii_rx_valid_ramp_checker(0) <= xlgmii_rx_valid(0) when (select_forty_gbe_data_sel  = '1') else "0000";
+    --xlgmii_rx_end_of_frame_ramp_checker(0) <= xlgmii_rx_end_of_frame(0) when (select_forty_gbe_data_sel  = '1') else '0';
 
-    xlgmii_rx_overrun_ack(0) <= xlgmii_rx_overrun_ack_flash_sdram_controller(0) when (select_forty_gbe_ramp_checker = '0') else xlgmii_rx_overrun_ack_ramp_checker(0);
-    xlgmii_rx_ack(0) <= xlgmii_rx_ack_flash_sdram_controller(0) when (select_forty_gbe_ramp_checker = '0') else xlgmii_rx_ack_ramp_checker(0);
+    xlgmii_rx_overrun_ack(0) <= xlgmii_rx_overrun_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else xlgmii_rx_overrun_ack_ramp_checker(0);
+    xlgmii_rx_ack(0) <= xlgmii_rx_ack_flash_sdram_controller(0) when (select_forty_gbe_data_sel  = '0') else xlgmii_rx_ack_ramp_checker(0);
     --AI End: Added fortygbe config interface
 
     -- WISHBONE SLAVE 10 - 40GBE MAC 0
