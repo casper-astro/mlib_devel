@@ -318,17 +318,14 @@ class tengbaser_xilinx_k7(tengbe_v2):
         cons.append(ClockConstraint('ref_clk_p%d'%num, name='ethclk%d'%num, freq=156.25))
 
         cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d -asynchronous -group [get_clocks -include_generated_clocks sys_clk_p_CLK] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]'%(num,num)))
-        #cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] 3'%(num,num)))
-        #cons.append(RawConstraint('set_multicycle_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg[*]/PRE}] -hold 2'%(num,num)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_rx_inst/app_overrun_ack_reg/C] -to [get_pins %s/tge_rx_inst/overrun_ackR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/tge_tx_inst/tx_overflow_latch_reg/C] -to [get_pins %s/tge_tx_inst/app_overflowR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[0]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/macr_state_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tge_rx_inst/app_state_reg[1]/C}] -to [get_pins %s/tge_rx_inst/overrunR_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/rx_stretch_reg[25]/C}] -to [get_pins %s/led_rx_reg_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins %s/mac_resetRR_reg/C] -to [get_pins %s/app_rst_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/tx_stretch_reg[25]/C}] -to [get_pins %s/led_tx_reg_reg/D]'%(self.fullname, self.fullname)))
-        #cons.append(RawConstraint('set_false_path -from [get_pins {%s/down_stretch_reg[25]/C}] -to [get_pins %s/led_up_reg_reg/D]'%(self.fullname, self.fullname)))
+
+        cons.append(RawConstraint('set_false_path -from [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/reset_pulse_reg[0]/C}] -to [get_pins {tengbaser_infra%d_inst/ten_gig_eth_pcs_pma_core_support_layer_i/ten_gig_eth_pcs_pma_shared_clock_reset_block/gttxreset_txusrclk2_sync_i/sync1_r_reg*/PRE}]' % (num, num)))
+
+        # make the ethernet core clock async relative to whatever the user is using as user_clk
+        # Find the clock of *clk_counter* to determine what source user_clk comes from. This is fragile.
+        cons.append(RawConstraint('set_clock_groups -name asyncclocks_eth%d_usr_clk -asynchronous -group [get_clocks -of_objects [get_cells -hierarchical -filter {name=~*clk_counter*}]] -group [get_clocks -include_generated_clocks ref_clk_p%d_CLK]' % (num, num)))
+
+
 
         return cons
         
