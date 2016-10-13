@@ -37,7 +37,7 @@ class Synthesis(object):
     '''
     A class to specify all the synthesis specific attributes of the design
     '''
-    def __init__(self, platform_name='', fpga_manufacturer='', fpga_model='', synth_tool='', pin_map=[], vendor_constraints_files='', pin_constraints=[], clk_constraints=[], raw_constraints=[], temp_fpga_model='', temp_quartus_qsf_files=[]): 
+    def __init__(self, platform_name='', fpga_manufacturer='', fpga_model='', synth_tool='', pin_map=[], vendor_constraints_files='', pin_constraints=[], clk_constraints=[], raw_constraints=[], temp_fpga_model='', temp_quartus_qsf_files=[]):
         # name of the platform Roach, Snap, Uniboard, ..
         self.platform_name = platform_name  # Roach, Snap, UniBoard, ..
         # name of the fpga manufacturer Xilinx/Altera
@@ -56,7 +56,7 @@ class Synthesis(object):
         self.clk_constraints = clk_constraints
         # a list of raw_constraint objects
         self.raw_constraints = raw_constraints
-        # Temporary attribs required for RadioHDL backend. 
+        # Temporary attribs required for RadioHDL backend.
         self.temp_fpga_model = temp_fpga_model
         self.temp_quartus_qsf_files = temp_quartus_qsf_files
 

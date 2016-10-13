@@ -5,6 +5,7 @@ class xsg(YellowBlock):
         '''
         Things the toolflow has to know. eg, clocks needed/provided
         '''
+        self.platform.user_clk_rate = self.clk_rate
         if self.platform.name == 'skarab':
             self.requires.append(self.clk_src)  # we need something to provide the clock we plan to use
             self.provides.append('user_clk')

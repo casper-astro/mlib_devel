@@ -29,6 +29,10 @@ use unisim.vcomponents.all;
 use work.parameter.all;
 
 entity forty_gbe is
+    generic (
+        MULTIPLY : REAL    := 6.0;
+        DIVIDE   : REAL    := 6.0;
+        DIVCLK   : INTEGER := 1);
     port(
         user_clk_o : out std_logic;
 
@@ -167,9 +171,9 @@ entity forty_gbe is
         rx_overrun      : out std_logic;
         rx_overrun_ack  : in  std_logic;
         rx_ack          : in  std_logic;
-        
+
         WB_SLV_CLK_I_top : out std_logic;
-        WB_SLV_RST_I_top:  out std_logic; 
+        WB_SLV_RST_I_top:  out std_logic;
         WB_SLV_DAT_I_top : out std_logic_vector(31 downto 0);--ST_WB_DATA;
         WB_SLV_DAT_O_top : in  std_logic_vector(31 downto 0);--ST_WB_DATA;
         WB_SLV_ACK_O_top : in  std_logic;
@@ -300,7 +304,7 @@ architecture arch_forty_gbe of forty_gbe is
         flash_rs0       : out std_logic;
         flash_rs1       : out std_logic;
         flash_wait      : in std_logic;
-        flash_output_enable : out std_logic;        
+        flash_output_enable : out std_logic;
         spartan_clk : out std_logic;
         config_io_0 : out std_logic;
         config_io_1 : out std_logic;
@@ -314,7 +318,7 @@ architecture arch_forty_gbe of forty_gbe is
         config_io_9 : out std_logic;
         config_io_10 : out std_logic;
         config_io_11 : out std_logic;
-        spi_miso : in std_logic; 
+        spi_miso : in std_logic;
         spi_mosi : out std_logic;
         spi_csb  : out std_logic;
         spi_clk  : out std_logic;
@@ -618,6 +622,8 @@ architecture arch_forty_gbe of forty_gbe is
     signal aux_synci : std_logic;
     signal aux_synco : std_logic;
 
+    signal user_clk : std_logic;
+    signal user_clk_mmcm : std_logic;
     signal sys_clk : std_logic;
     signal sys_rst : std_logic;
     signal sys_rst_i : std_logic;
@@ -934,6 +940,8 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal select_one_gbe_data_sel  : std_logic;
 
+    signal CLKFB : std_logic;
+
 begin
 
     EMCCLK_FIX <= EMCCLK;
@@ -943,7 +951,7 @@ begin
     CPU_PWR_BTN_N   <= '1';
     CPU_PWR_OK      <= '0';
     CPU_SYS_RESET_N <= '0';
-    
+
     GND <= (others => '0');
     fpga_reset <= not FPGA_RESET_N;
     FAN_CONT_RST_N <= FPGA_RESET_N;
@@ -951,7 +959,6 @@ begin
 ---------------------------------------------------------------------------
 -- REFCLK CONNECTIONS
 ---------------------------------------------------------------------------
-
 
     refclk_0_ibufgds : IBUFGDS
     generic map (
@@ -969,11 +976,49 @@ begin
         IB => FPGA_REFCLK_BUF1_N,
         O  => refclk_1);
 
+
+---------------------------------------------------------------------------
+-- system clock mmcm
+---------------------------------------------------------------------------
+
+    SYS_CLK_MMCM_inst : MMCME2_BASE
+    generic map (
+        BANDWIDTH        => "OPTIMIZED", -- Jitter programming (OPTIMIZED, HIGH, LOW)
+        CLKFBOUT_MULT_F  => MULTIPLY,    -- Multiply value for all CLKOUT (2.000-64.000).
+        CLKFBOUT_PHASE   => 0.0,         -- Phase offset in degrees of CLKFB (-360.000-360.000).
+        CLKIN1_PERIOD    => 6.4,         -- 156.25MHz Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
+        -- CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
+        CLKOUT0_DIVIDE_F => DIVIDE,      -- Divide amount for CLKOUT0 (1.000-128.000).
+        CLKOUT1_DIVIDE   => 5,
+        CLKOUT2_DIVIDE   => 5,
+        DIVCLK_DIVIDE    => DIVCLK,      -- Master division value (1-106)
+        REF_JITTER1      => 0.0,         -- Reference input jitter in UI (0.000-0.999).
+        STARTUP_WAIT     => FALSE        -- Delays DONE until MMCM is locked (FALSE, TRUE)
+    )
+    port map (
+        CLKOUT0   => user_clk_mmcm,
+        --CLKOUT1   => sys_clk_mmcm,
+        --CLKOUT2   => wb_clk_mmcm,
+        CLKFBOUT  => CLKFB,  -- Feedback clock output
+        --LOCKED    => LOCKED,
+        CLKIN1    => refclk_1, -- Main clock input
+        PWRDWN    => '0',
+        RST       => fpga_reset,
+        CLKFBIN   => CLKFB   -- Feedback clock input
+    );
+
+    user_clk_BUFG_inst : BUFG
+    port map (
+        I => user_clk_mmcm, -- Clock input
+        O => user_clk       -- Clock output
+    );
+
+    sys_clk    <= refclk_0;
+    user_clk_o <= user_clk;
+
 ---------------------------------------------------------------------------
 -- RESETS
 ---------------------------------------------------------------------------
-    sys_clk   <= refclk_0;
-    user_clk_o <= refclk_0;
 
     gen_sys_rst : process(fpga_reset, sys_clk)
     begin
@@ -1394,7 +1439,7 @@ begin
         SEL_I => WB_SLV_SEL_I(2),
         STB_I => WB_SLV_STB_I(2),
         WE_I  => WB_SLV_WE_I(2),
-		gbe_app_clk             => sys_clk,
+        gbe_app_clk             => sys_clk,
         gbe_rx_valid            => gmii_rx_valid_flash_sdram_controller,
         gbe_rx_end_of_frame     => gmii_rx_end_of_frame_flash_sdram_controller,
         gbe_rx_data             => gmii_rx_data,
@@ -1428,9 +1473,9 @@ begin
         flash_we_n      => flash_we_n_i,
         flash_adv_n     => flash_adv_n_i,
         flash_rs0       => flash_rs0_i,
-        flash_rs1       => flash_rs1_i, 
+        flash_rs1       => flash_rs1_i,
         flash_wait      => '0',
-        flash_output_enable => flash_output_enable,        
+        flash_output_enable => flash_output_enable,
         spartan_clk => spartan_clk_i,
         config_io_0 => config_io_0_i,
         config_io_1 => config_io_1_i,
@@ -1444,7 +1489,7 @@ begin
         config_io_9 => config_io_9_i,
         config_io_10 => config_io_10_i,
         config_io_11 => config_io_11_i,
-        spi_miso => spi_miso_i, 
+        spi_miso => spi_miso_i,
         spi_mosi => spi_mosi_i,
         spi_csb  => spi_csb_i,
         spi_clk  => spi_clk_i,

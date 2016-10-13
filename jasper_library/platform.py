@@ -45,6 +45,8 @@ class Platform(object):
         self.fpga = self.conf['fpga']
         #: backend target -- used to decide what compiler to use
         self.backend_target = self.conf['backend_target']
+        self.user_clk_rate = 100
+        self.user_clk = 'user_clk'
         #: project mode -- used to decide what Vivado compiler project mode to use
         #: Default set to true, so project mode is enabled by default (not read from YAML file,
         #: as it is up to the user to select which mode must be used)

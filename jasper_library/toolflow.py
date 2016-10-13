@@ -450,7 +450,7 @@ class Toolflow(object):
         interface between the toolflow and the backends.
         """
         import castro
-        
+
         c = castro.Castro('top', self.sources, self.ips)
 
         # build castro standard pin constraints
