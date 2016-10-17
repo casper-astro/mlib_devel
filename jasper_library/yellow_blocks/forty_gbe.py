@@ -1,6 +1,7 @@
 from yellow_block import YellowBlock
 from constraints import PortConstraint, ClockConstraint, RawConstraint
 from itertools import count
+from clk_factors import clk_factors
 
 
 class forty_gbe(YellowBlock):
@@ -12,10 +13,13 @@ class forty_gbe(YellowBlock):
 
         # Wishbone memory for status registers / ARP table
         #fgbe.add_wb_interface(self.unique_name, mode='rw', nbytes=0x4000) # as in matlab code
-        # import IPython
-        # IPython.embed()
+
+        multiply, divide, divclk = clk_factors(156.25, self.platform.user_clk_rate)
 
         inst = top.get_instance('forty_gbe', 'forty_gbe_inst')
+        inst.add_parameter('MULTIPLY', multiply)
+        inst.add_parameter('DIVIDE',   divide)
+        inst.add_parameter('DIVCLK',   divclk)
         inst.add_port('user_clk_o', 'sys_clk', dir='out')
 
         inst.add_port('GND', 'GND', parent_port=True, dir='out', width=16)
@@ -322,9 +326,10 @@ class forty_gbe(YellowBlock):
 
         #cons.append(RawConstraint('create_clock -period 2.800  -name AUX_CLK_P -waveform {0.000 1.400} [get_ports AUX_CLK_P]'))
         cons.append(RawConstraint('create_clock -period 6.400  -name FPGA_REFCLK_BUF0_P -waveform {0.000 3.200} [get_ports FPGA_REFCLK_BUF0_P]'))
+        cons.append(RawConstraint('create_clock -period 6.400  -name FPGA_REFCLK_BUF1_P -waveform {0.000 3.200} [get_ports FPGA_REFCLK_BUF1_P]'))
         cons.append(RawConstraint('create_clock -period 6.400  -name ONE_GBE_MGTREFCLK_P -waveform {0.000 3.200} [get_ports ONE_GBE_MGTREFCLK_P]'))
         cons.append(RawConstraint('create_clock -period 16.666 -name FPGA_EMCCLK2 -waveform {0.000 8.333} [get_ports FPGA_EMCCLK2]'))
-        
+
         cons.append(RawConstraint('# create_generated_clock -name forty_gbe_inst/wishbone_flash_sdram_interface_0/icape_controller_0/CLK -source [get_pins {forty_gbe_inst/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/C}] -divide_by 16 [get_pins {forty_gbe_inst/wishbone_flash_sdram_interface_0/icape_controller_0/icape_clk_count_reg[3]/Q}]'))
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -min -add_delay -2.500 [get_ports {FLASH_A[*]}]'))
         cons.append(RawConstraint('set_output_delay -clock [get_clocks FPGA_REFCLK_BUF0_P] -max -add_delay -3.000 [get_ports {FLASH_A[*]}]'))
@@ -364,7 +369,12 @@ class forty_gbe(YellowBlock):
 
         cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks clkout0] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
         cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks clkout0]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks clkout0] -group [get_clocks FPGA_REFCLK_BUF1_P]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF1_P] -group [get_clocks clkout0]'))
         cons.append(RawConstraint('set_false_path -to [get_pins forty_gbe_inst/FPGA_DNA_CHECKER_inst/FPGA_DNA_O_reg[*]/D]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks {FPGA_REFCLK_BUF1_P I}] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks {FPGA_REFCLK_BUF1_P I}]'))
+
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks AUX_CLK_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
         #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks AUX_CLK_P]'))
 
