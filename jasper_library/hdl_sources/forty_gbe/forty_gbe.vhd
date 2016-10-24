@@ -35,6 +35,7 @@ entity forty_gbe is
         DIVCLK   : INTEGER := 1);
     port(
         user_clk_o : out std_logic;
+        user_rst_o : out std_logic;
 
         FPGA_RESET_N       : in std_logic;
         FPGA_REFCLK_BUF0_P : in std_logic;
@@ -43,12 +44,48 @@ entity forty_gbe is
         FPGA_REFCLK_BUF1_N : in std_logic;
 
         -- MEZZANINE GTH SIGNALS
-        MEZ_REFCLK_0_P      : in  std_logic;
-        MEZ_REFCLK_0_N      : in  std_logic;
-        MEZ_PHY11_LANE_RX_P : in  std_logic_vector(3 downto 0);
-        MEZ_PHY11_LANE_RX_N : in  std_logic_vector(3 downto 0);
-        MEZ_PHY11_LANE_TX_P : out std_logic_vector(3 downto 0);
-        MEZ_PHY11_LANE_TX_N : out std_logic_vector(3 downto 0);
+        MEZ3_REFCLK_0_P      : in  std_logic;
+        MEZ3_REFCLK_0_N      : in  std_logic;
+        MEZ3_PHY11_LANE_RX_P : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY11_LANE_RX_N : in  std_logic_vector(3 downto 0);
+        MEZ3_PHY11_LANE_TX_P : out std_logic_vector(3 downto 0);
+        MEZ3_PHY11_LANE_TX_N : out std_logic_vector(3 downto 0);
+        
+		-- MEZZANINE 0 SIDEBAND SIGNALS
+        MEZZANINE_0_PRESENT_N : in std_logic;
+        MEZZANINE_0_ENABLE_N : out std_logic;
+        --MEZZANINE_0_RESET : out std_logic;   --this is moved to the top.v now
+        MEZZANINE_0_FAULT_N : in std_logic;
+        MEZZANINE_0_ONE_WIRE : inout std_logic;
+        MEZZANINE_0_ONE_WIRE_STRONG_PULLUP_EN_N : out std_logic;
+        --MEZZANINE_0_CLK_SEL : out std_logic; --this is moved to the top.v now
+        MEZZANINE_0_SCL_FPGA : inout std_logic;
+        MEZZANINE_0_SDA_FPGA : inout std_logic;
+        MEZZANINE_0_INT_N : in std_logic;
+        
+        -- MEZZANINE 1 SIDEBAND SIGNALS
+        MEZZANINE_1_PRESENT_N : in std_logic;
+        MEZZANINE_1_ENABLE_N : out std_logic;
+        --MEZZANINE_1_RESET : out std_logic;   --this is moved to the top.v now
+        MEZZANINE_1_FAULT_N : in std_logic;
+        MEZZANINE_1_ONE_WIRE : inout std_logic;
+        MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N : out std_logic;
+        --MEZZANINE_1_CLK_SEL : out std_logic; --this is moved to the top.v now
+        MEZZANINE_1_SCL_FPGA : inout std_logic;
+        MEZZANINE_1_SDA_FPGA : inout std_logic;
+        MEZZANINE_1_INT_N : in std_logic;
+
+        -- MEZZANINE 2 SIDEBAND SIGNALS
+        MEZZANINE_2_PRESENT_N : in std_logic;
+        MEZZANINE_2_ENABLE_N : out std_logic;
+        --MEZZANINE_2_RESET : out std_logic;
+        MEZZANINE_2_FAULT_N : in std_logic;
+        MEZZANINE_2_ONE_WIRE : inout std_logic;
+        MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N : out std_logic;
+        --MEZZANINE_2_CLK_SEL : out std_logic;
+        MEZZANINE_2_SCL_FPGA : inout std_logic;
+        MEZZANINE_2_SDA_FPGA : inout std_logic;
+        MEZZANINE_2_INT_N : in std_logic;        
 
         -- MEZZANINE 3 SIDEBAND SIGNALS
         MEZZANINE_3_PRESENT_N : in    std_logic;
@@ -61,7 +98,28 @@ entity forty_gbe is
         MEZZANINE_3_SCL_FPGA  : inout std_logic;
         MEZZANINE_3_SDA_FPGA  : inout std_logic;
         MEZZANINE_3_INT_N     : in    std_logic;
+        
+        --HMC Mezzanine 0 Signals
+        HMC_MEZZ0_SCL_OUT : out std_logic;
+        HMC_MEZZ0_SDA_OUT : out std_logic;
+        HMC_MEZZ0_SCL_IN : in std_logic;
+        HMC_MEZZ0_SDA_IN : in std_logic;
+        HMC_MEZZ0_INIT_DONE : in std_logic;
 
+        --HMC Mezzanine 1 Signals
+        HMC_MEZZ1_SCL_OUT : out std_logic;
+        HMC_MEZZ1_SDA_OUT : out std_logic;
+        HMC_MEZZ1_SCL_IN : in std_logic;
+        HMC_MEZZ1_SDA_IN : in std_logic;
+        HMC_MEZZ1_INIT_DONE : in std_logic;
+        
+        --HMC Mezzanine 2 Signals
+        HMC_MEZZ2_SCL_OUT : out std_logic;
+        HMC_MEZZ2_SDA_OUT : out std_logic;
+        HMC_MEZZ2_SCL_IN : in std_logic;
+        HMC_MEZZ2_SDA_IN : in std_logic;
+        HMC_MEZZ2_INIT_DONE : in std_logic;
+        
         -- 1GBE SIGNALS
         ONE_GBE_SGMII_TX_P  : out std_logic;
         ONE_GBE_SGMII_TX_N  : out std_logic;
@@ -171,7 +229,8 @@ entity forty_gbe is
         rx_overrun      : out std_logic;
         rx_overrun_ack  : in  std_logic;
         rx_ack          : in  std_logic;
-
+        
+        --DSP Wishbone Arbiter Interface
         WB_SLV_CLK_I_top : out std_logic;
         WB_SLV_RST_I_top:  out std_logic;
         WB_SLV_DAT_I_top : out std_logic_vector(31 downto 0);--ST_WB_DATA;
@@ -208,15 +267,30 @@ architecture arch_forty_gbe of forty_gbe is
         UART_txd    : out std_logic;
         WE_O        : out std_logic);
     end component;
-
-    --component mezzanine_enable_delay
-    --port(
-    --    clk : in std_logic;
-    --    rst : in std_logic;
-    --    second_toggle                    : in std_logic;
-    --    mezzanine_enable                 : in std_logic;
-    --    mezzanine_fault_checking_enable  : out std_logic);
-    --end component;
+    
+    component mezzanine_enable_delay
+    port(
+        clk : in std_logic;
+        rst : in std_logic;
+        second_toggle                    : in std_logic;
+        mezzanine_enable                 : in std_logic;
+        mezzanine_fault_checking_enable  : out std_logic);
+    end component;    
+    
+    component second_gen
+    port(
+        clk : in std_logic;
+        rst : in std_logic;
+        second_toggle : out std_logic);
+    end component; 
+    
+    component clock_frequency_measure
+    port(
+        clk : in std_logic;
+        rst : in std_logic;
+        second_toggle   : in std_logic;
+        measure_freq    : out std_logic_vector(31 downto 0));
+    end component;       
 
     component wishbone_interconnect
     port (
@@ -917,7 +991,7 @@ architecture arch_forty_gbe of forty_gbe is
     signal rx_start_count_2 : std_logic_vector(15 downto 0);
     signal rx_start_count_3 : std_logic_vector(15 downto 0);
 
-    --signal second_toggle : std_logic;
+    signal second_toggle : std_logic;
     signal aux_clk_frequency : std_logic_vector(31 downto 0);
 
     signal ramp_source_destination_ip_address_0 : std_logic_vector(31 downto 0);
@@ -941,6 +1015,25 @@ architecture arch_forty_gbe of forty_gbe is
     signal select_one_gbe_data_sel  : std_logic;
 
     signal CLKFB : std_logic;
+    
+    --HMC I2C Mezzanine 0 Signals
+    signal shmc_mezz0_scl_out : std_logic;
+    signal shmc_mezz0_sda_out : std_logic;
+    signal shmc_mezz0_scl_in : std_logic;
+    signal shmc_mezz0_sda_in : std_logic;
+
+    --HMC I2C Mezzanine 1 Signals
+    signal shmc_mezz1_scl_out : std_logic;
+    signal shmc_mezz1_sda_out : std_logic;
+    signal shmc_mezz1_scl_in : std_logic;
+    signal shmc_mezz1_sda_in : std_logic;
+    
+    --HMC I2C Mezzanine 2 Signals
+    signal shmc_mezz2_scl_out : std_logic;
+    signal shmc_mezz2_sda_out : std_logic;
+    signal shmc_mezz2_scl_in : std_logic;
+    signal shmc_mezz2_sda_in : std_logic;
+    
 
 begin
 
@@ -1015,6 +1108,8 @@ begin
 
     sys_clk    <= refclk_0;
     user_clk_o <= user_clk;
+    --AI: Todo: To be connected to user reset at some point.
+    user_rst_o <= sys_rst;
 
 ---------------------------------------------------------------------------
 -- RESETS
@@ -1207,49 +1302,83 @@ begin
 
 
 
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(0) <= not MEZZANINE_0_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(1) <= not MEZZANINE_1_PRESENT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(2) <= not MEZZANINE_2_PRESENT_N;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(3) <= not MEZZANINE_3_PRESENT_N;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(7 downto 4) <= (others => '0');
 
-    --mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1') else '0';
-    --mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1') else '0';
-    --mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1') else '0';
+    mezzanine_0_fault <= (not MEZZANINE_0_FAULT_N) when (mezzanine_0_fault_checking_enable = '1') else '0';
+    mezzanine_1_fault <= (not MEZZANINE_1_FAULT_N) when (mezzanine_1_fault_checking_enable = '1') else '0';
+    mezzanine_2_fault <= (not MEZZANINE_2_FAULT_N) when (mezzanine_2_fault_checking_enable = '1') else '0';
     mezzanine_3_fault <= (not MEZZANINE_3_FAULT_N) when (mezzanine_3_fault_checking_enable = '1') else '0';
 
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(8) <= mezzanine_0_fault;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(9) <= mezzanine_1_fault;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(10) <= mezzanine_2_fault;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(11) <= mezzanine_3_fault;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(15 downto 12) <= (others => '0');
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(8) <= mezzanine_0_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(9) <= mezzanine_1_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(10) <= mezzanine_2_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(11) <= mezzanine_3_fault;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(15 downto 12) <= (others => '0');
 
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(16) <= not MEZZANINE_0_INT_N;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(17) <= not MEZZANINE_1_INT_N;
-    --brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(18) <= not MEZZANINE_2_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(16) <= not MEZZANINE_0_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(17) <= not MEZZANINE_1_INT_N;
+    brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(18) <= not MEZZANINE_2_INT_N;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(19) <= not MEZZANINE_3_INT_N;
     brd_user_read_regs(C_RD_MEZZANINE_STAT_ADDR)(31 downto 20) <= (others => '0');
 
-    --mezzanine_0_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(0);
-    --mezzanine_1_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(1);
-    --mezzanine_2_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(2);
+    mezzanine_0_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(0);
+    mezzanine_1_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(1);
+    mezzanine_2_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(2);
     mezzanine_3_enable <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(3);
+    
+    mezzanine_enable_delay_0 : mezzanine_enable_delay
+    port map(
+        clk => sys_clk,
+        rst => sys_rst,
+        second_toggle                    => second_toggle,
+        mezzanine_enable                 => mezzanine_0_enable,
+        mezzanine_fault_checking_enable  => mezzanine_0_fault_checking_enable);
 
-    --mezzanine_enable_delay_3 : mezzanine_enable_delay
-    --port map(
-    --    clk => sys_clk,
-    --    rst => sys_rst,
-    --    second_toggle                    => second_toggle,
-    --    mezzanine_enable                 => mezzanine_3_enable,
-    --    mezzanine_fault_checking_enable  => mezzanine_3_fault_checking_enable);
+    mezzanine_enable_delay_1 : mezzanine_enable_delay
+    port map(
+        clk => sys_clk,
+        rst => sys_rst,
+        second_toggle                    => second_toggle,
+        mezzanine_enable                 => mezzanine_1_enable,
+        mezzanine_fault_checking_enable  => mezzanine_1_fault_checking_enable);
 
+    mezzanine_enable_delay_2 : mezzanine_enable_delay
+    port map(
+        clk => sys_clk,
+        rst => sys_rst,
+        second_toggle                    => second_toggle,
+        mezzanine_enable                 => mezzanine_2_enable,
+        mezzanine_fault_checking_enable  => mezzanine_2_fault_checking_enable);
+
+    mezzanine_enable_delay_3 : mezzanine_enable_delay
+    port map(
+        clk => sys_clk,
+        rst => sys_rst,
+        second_toggle                    => second_toggle,
+        mezzanine_enable                 => mezzanine_3_enable,
+        mezzanine_fault_checking_enable  => mezzanine_3_fault_checking_enable);
+
+    MEZZANINE_0_ENABLE_N <= not mezzanine_0_enable;
+    MEZZANINE_1_ENABLE_N <= not mezzanine_1_enable;
+    MEZZANINE_2_ENABLE_N <= not mezzanine_2_enable;
     MEZZANINE_3_ENABLE_N <= not mezzanine_3_enable;
 
+    --MEZZANINE_3_ENABLE_N <= not mezzanine_3_enable;
+    --MEZZANINE_0_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(8) or sys_rst;
+    --MEZZANINE_1_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(9) or sys_rst;
+    --MEZZANINE_2_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(10) or sys_rst;    
     MEZZANINE_3_RESET <= brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(11) or sys_rst;
 
     MEZZANINE_3_CLK_SEL <= not brd_user_write_regs(C_WR_MEZZANINE_CTL_ADDR)(19); -- DEFAULT '1' = MEZZANINE CLOCK
 
-    MEZZANINE_COMBINED_FAULT <= mezzanine_fault_override or mezzanine_3_fault;
+    --MEZZANINE_COMBINED_FAULT <= mezzanine_fault_override or mezzanine_3_fault;
+    
+    MEZZANINE_COMBINED_FAULT <= mezzanine_fault_override or mezzanine_0_fault or mezzanine_1_fault or mezzanine_2_fault or mezzanine_3_fault;
+
 
     brd_user_read_regs(C_RD_USB_STAT_ADDR)(3 downto 0) <= USB_FPGA;
     brd_user_read_regs(C_RD_USB_STAT_ADDR)(7 downto 4) <= (others => '0');
@@ -1547,17 +1676,17 @@ begin
 
     ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(0);
 
-    --MEZZANINE_0_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(1) = '1')and(one_wire_strong_pull_up_enable_i(1) = '0')) else 'Z';
-    --one_wire_in(1) <= MEZZANINE_0_ONE_WIRE;
-    --MEZZANINE_0_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(1);
+    MEZZANINE_0_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(1) = '1')and(one_wire_strong_pull_up_enable_i(1) = '0')) else 'Z';
+    one_wire_in(1) <= MEZZANINE_0_ONE_WIRE;
+    MEZZANINE_0_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(1);
 
-    --MEZZANINE_1_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(2) = '1')and(one_wire_strong_pull_up_enable_i(2) = '0')) else 'Z';
-    --one_wire_in(2) <= MEZZANINE_1_ONE_WIRE;
-    --MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(2);
+    MEZZANINE_1_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(2) = '1')and(one_wire_strong_pull_up_enable_i(2) = '0')) else 'Z';
+    one_wire_in(2) <= MEZZANINE_1_ONE_WIRE;
+    MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(2);
 
-    --MEZZANINE_2_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(3) = '1')and(one_wire_strong_pull_up_enable_i(3) = '0')) else 'Z';
-    --one_wire_in(3) <= MEZZANINE_2_ONE_WIRE;
-    --MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(3);
+    MEZZANINE_2_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(3) = '1')and(one_wire_strong_pull_up_enable_i(3) = '0')) else 'Z';
+    one_wire_in(3) <= MEZZANINE_2_ONE_WIRE;
+    MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N <= not one_wire_strong_pull_up_enable_i(3);
 
     MEZZANINE_3_ONE_WIRE <= '0' when ((one_wire_pull_down_enable(4) = '1')and(one_wire_strong_pull_up_enable_i(4) = '0')) else 'Z';
     one_wire_in(4) <= MEZZANINE_3_ONE_WIRE;
@@ -1615,8 +1744,47 @@ begin
     MEZZANINE_3_SDA_FPGA <= i2c_sda_pad_o(4) when (i2c_sda_padoen_o(4) = '0') else 'Z';
     i2c_scl_pad_i(4) <= MEZZANINE_3_SCL_FPGA;
     i2c_sda_pad_i(4) <= MEZZANINE_3_SDA_FPGA;
+    
+    -- HMC IIC MUX
+    MEZZANINE_0_SCL_FPGA <= shmc_mezz0_scl_out when (HMC_MEZZ0_INIT_DONE = '0') else i2c_scl_pad_o(1) when (i2c_scl_padoen_o(1) = '0') else 'Z';
+    MEZZANINE_0_SDA_FPGA <= shmc_mezz0_sda_out when (HMC_MEZZ0_INIT_DONE = '0') else i2c_sda_pad_o(1) when (i2c_sda_padoen_o(1) = '0') else 'Z';
+    i2c_scl_pad_i(1) <= MEZZANINE_0_SCL_FPGA;
+    i2c_sda_pad_i(1) <= MEZZANINE_0_SDA_FPGA;
+    shmc_mezz0_scl_in <= MEZZANINE_0_SCL_FPGA;
+    shmc_mezz0_sda_in <= MEZZANINE_0_SDA_FPGA; 
 
+    MEZZANINE_1_SCL_FPGA <= shmc_mezz1_scl_out when (HMC_MEZZ1_INIT_DONE = '0') else i2c_scl_pad_o(2) when (i2c_scl_padoen_o(2) = '0') else 'Z';
+    MEZZANINE_1_SDA_FPGA <= shmc_mezz1_sda_out when (HMC_MEZZ1_INIT_DONE = '0') else i2c_sda_pad_o(2) when (i2c_sda_padoen_o(2) = '0') else 'Z';
+    i2c_scl_pad_i(2) <= MEZZANINE_1_SCL_FPGA;
+    i2c_sda_pad_i(2) <= MEZZANINE_1_SDA_FPGA;
+    shmc_mezz1_scl_in <= MEZZANINE_1_SCL_FPGA;
+    shmc_mezz1_sda_in <= MEZZANINE_1_SDA_FPGA; 
 
+    MEZZANINE_2_SCL_FPGA <= shmc_mezz2_scl_out when (HMC_MEZZ2_INIT_DONE = '0') else  i2c_scl_pad_o(3) when (i2c_scl_padoen_o(3) = '0') else 'Z';
+    MEZZANINE_2_SDA_FPGA <= shmc_mezz2_sda_out when (HMC_MEZZ2_INIT_DONE = '0') else  i2c_sda_pad_o(3) when (i2c_sda_padoen_o(3) = '0') else 'Z';
+    i2c_scl_pad_i(3) <= MEZZANINE_2_SCL_FPGA;
+    i2c_sda_pad_i(3) <= MEZZANINE_2_SDA_FPGA;
+    shmc_mezz2_scl_in <= MEZZANINE_2_SCL_FPGA;
+    shmc_mezz2_sda_in <= MEZZANINE_2_SDA_FPGA; 
+    
+    --HMC Mezzanine 0 signal assignments 
+    shmc_mezz0_scl_out <= HMC_MEZZ0_SCL_IN;
+    shmc_mezz0_sda_out <= HMC_MEZZ0_SDA_IN;
+    HMC_MEZZ0_SCL_OUT <= shmc_mezz0_scl_in; 
+    HMC_MEZZ0_SDA_OUT <= shmc_mezz0_sda_in; 
+      
+    --HMC Mezzanine 1 signal assignments
+    
+    shmc_mezz1_scl_out <= HMC_MEZZ1_SCL_IN;
+    shmc_mezz1_sda_out <= HMC_MEZZ1_SDA_IN;
+    HMC_MEZZ1_SCL_OUT <= shmc_mezz1_scl_in; 
+    HMC_MEZZ1_SDA_OUT <= shmc_mezz1_sda_in;     
+    
+    --HMC Mezzanine 2 signal assignments
+    shmc_mezz2_scl_out <= HMC_MEZZ2_SCL_IN;
+    shmc_mezz2_sda_out <= HMC_MEZZ2_SDA_IN;
+    HMC_MEZZ2_SCL_OUT <= shmc_mezz2_scl_in; 
+    HMC_MEZZ2_SDA_OUT <= shmc_mezz2_sda_in; 
 
     -- WISHBONE SLAVE 9 - 1GBE MAC
     kat_ten_gb_eth_0 : kat_ten_gb_eth
@@ -2295,13 +2463,13 @@ begin
         port map(
             SYS_CLK_I            => sys_clk,
             SYS_CLK_RST_I        => sys_rst,
-            GTREFCLK_PAD_N_I     => MEZ_REFCLK_0_N,
-            GTREFCLK_PAD_P_I     => MEZ_REFCLK_0_P,
+            GTREFCLK_PAD_N_I     => MEZ3_REFCLK_0_N,
+            GTREFCLK_PAD_P_I     => MEZ3_REFCLK_0_P,
             GTREFCLK_O           => qsfp_gtrefclk_pb,
-            TXN_O                => MEZ_PHY11_LANE_TX_N,
-            TXP_O                => MEZ_PHY11_LANE_TX_P,
-            RXN_I                => MEZ_PHY11_LANE_RX_N,
-            RXP_I                => MEZ_PHY11_LANE_RX_P,
+            TXN_O                => MEZ3_PHY11_LANE_TX_N,
+            TXP_O                => MEZ3_PHY11_LANE_TX_P,
+            RXN_I                => MEZ3_PHY11_LANE_RX_N,
+            RXP_I                => MEZ3_PHY11_LANE_RX_P,
             SOFT_RESET_I         => qsfp_soft_reset(0),
             LINK_UP_O            => phy_rx_up(0),
             XLGMII_X4_TXC_I      => xlgmii_txc(0),
@@ -2316,13 +2484,13 @@ begin
 --      port map(
 --          SYS_CLK_I            => sys_clk,
 --          SYS_CLK_RST_I        => sys_rst,
---          GTREFCLK_PAD_N_I     => MEZ_REFCLK_1_N,
---          GTREFCLK_PAD_P_I     => MEZ_REFCLK_1_P,
+--          GTREFCLK_PAD_N_I     => MEZ3_REFCLK_1_N,
+--          GTREFCLK_PAD_P_I     => MEZ3_REFCLK_1_P,
 --          GTREFCLK_O           => open,
---          TXN_O                => MEZ_PHY12_LANE_TX_N,
---          TXP_O                => MEZ_PHY12_LANE_TX_P,
---          RXN_I                => MEZ_PHY12_LANE_RX_N,
---          RXP_I                => MEZ_PHY12_LANE_RX_P,
+--          TXN_O                => MEZ3_PHY12_LANE_TX_N,
+--          TXP_O                => MEZ3_PHY12_LANE_TX_P,
+--          RXN_I                => MEZ3_PHY12_LANE_RX_N,
+--          RXP_I                => MEZ3_PHY12_LANE_RX_P,
 --          SOFT_RESET_I         => qsfp_soft_reset(1),
 --          LINK_UP_O            => phy_rx_up(1),
 --          XLGMII_X4_TXC_I      => xlgmii_txc(1),
@@ -2337,13 +2505,13 @@ begin
 --      port map(
 --          SYS_CLK_I            => sys_clk,
 --          SYS_CLK_RST_I        => sys_rst,
---          GTREFCLK_PAD_N_I     => MEZ_REFCLK_2_N,
---          GTREFCLK_PAD_P_I     => MEZ_REFCLK_2_P,
+--          GTREFCLK_PAD_N_I     => MEZ3_REFCLK_2_N,
+--          GTREFCLK_PAD_P_I     => MEZ3_REFCLK_2_P,
 --          GTREFCLK_O           => open,
---          TXN_O                => MEZ_PHY21_LANE_TX_N,
---          TXP_O                => MEZ_PHY21_LANE_TX_P,
---          RXN_I                => MEZ_PHY21_LANE_RX_N,
---          RXP_I                => MEZ_PHY21_LANE_RX_P,
+--          TXN_O                => MEZ3_PHY21_LANE_TX_N,
+--          TXP_O                => MEZ3_PHY21_LANE_TX_P,
+--          RXN_I                => MEZ3_PHY21_LANE_RX_N,
+--          RXP_I                => MEZ3_PHY21_LANE_RX_P,
 --          SOFT_RESET_I         => qsfp_soft_reset(2),
 --          LINK_UP_O            => phy_rx_up(2),
 --          XLGMII_X4_TXC_I      => xlgmii_txc(2),
@@ -2358,13 +2526,13 @@ begin
 --      port map(
 --          SYS_CLK_I            => sys_clk,
 --          SYS_CLK_RST_I        => sys_rst,
---          GTREFCLK_PAD_N_I     => MEZ_REFCLK_3_N,
---          GTREFCLK_PAD_P_I     => MEZ_REFCLK_3_P,
+--          GTREFCLK_PAD_N_I     => MEZ3_REFCLK_3_N,
+--          GTREFCLK_PAD_P_I     => MEZ3_REFCLK_3_P,
 --          GTREFCLK_O           => open,
---          TXN_O                => MEZ_PHY22_LANE_TX_N,
---          TXP_O                => MEZ_PHY22_LANE_TX_P,
---          RXN_I                => MEZ_PHY22_LANE_RX_N,
---          RXP_I                => MEZ_PHY22_LANE_RX_P,
+--          TXN_O                => MEZ3_PHY22_LANE_TX_N,
+--          TXP_O                => MEZ3_PHY22_LANE_TX_P,
+--          RXN_I                => MEZ3_PHY22_LANE_RX_N,
+--          RXP_I                => MEZ3_PHY22_LANE_RX_P,
 --          SOFT_RESET_I         => qsfp_soft_reset(3),
 --          LINK_UP_O            => phy_rx_up(3),
 --          XLGMII_X4_TXC_I      => xlgmii_txc(3),
@@ -2380,33 +2548,33 @@ begin
 -- CREATE SIGNAL THAT TOGGLES ONCE/SECOND
 -------------------------------------------------------------------------
 
-    --second_gen_0 : second_gen
-    --port map(
-    --    clk => sys_clk,
-    --    rst => sys_rst,
-    --    second_toggle => second_toggle);
+    second_gen_0 : second_gen
+    port map(
+        clk => sys_clk,
+        rst => sys_rst,
+        second_toggle => second_toggle);
 
 -------------------------------------------------------------------------
 -- MEASURE FREQUENCY OF GTH CLOCK
 -------------------------------------------------------------------------
 
-    --clock_frequency_measure_1 : clock_frequency_measure
-    --port map(
-    --    clk => qsfp_gtrefclk,
-    --    rst => fpga_reset,
-    --    second_toggle   => second_toggle,
-    --    measure_freq    => qsfp_xl_tx_clk_156m25_frequency);
+    clock_frequency_measure_1 : clock_frequency_measure
+    port map(
+        clk => qsfp_gtrefclk,
+        rst => fpga_reset,
+        second_toggle   => second_toggle,
+        measure_freq    => qsfp_xl_tx_clk_156m25_frequency);
 
 -------------------------------------------------------------------------
 -- MEASURE FREQUENCY OF CONFIG CLOCK
 -------------------------------------------------------------------------
 
-    --clock_frequency_measure_2 : clock_frequency_measure
-    --port map(
-    --    clk => FPGA_EMCCLK2,
-    --    rst => fpga_reset,
-    --    second_toggle   => second_toggle,
-    --    measure_freq    => fpga_emcclk2_frequency);
+    clock_frequency_measure_2 : clock_frequency_measure
+    port map(
+        clk => FPGA_EMCCLK2,
+        rst => fpga_reset,
+        second_toggle   => second_toggle,
+        measure_freq    => fpga_emcclk2_frequency);
 
 
 -------------------------------------------------------------------------

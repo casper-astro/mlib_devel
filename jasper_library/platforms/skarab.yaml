@@ -163,10 +163,96 @@ pins:
   ONE_WIRE_EEPROM_STRONG_PULLUP_EN_N:
     iostd: LVCMOS18
     loc: BC17
-  MEZ_REFCLK_0_P:
-    loc: J10
-  MEZ_REFCLK_0_N:
-    loc: J9
+  MEZZANINE_0_CLK_SEL:
+    iostd: LVCMOS18
+    loc: A33 
+  MEZZANINE_0_RESET:
+    iostd: LVCMOS18
+    loc: C33  
+  MEZZANINE_0_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: B32 
+  MEZZANINE_0_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: C32 
+  MEZZANINE_0_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: A31
+  MEZZANINE_0_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: A30
+  MEZZANINE_0_INT_N:
+    iostd: LVCMOS18
+    loc: B31 
+  MEZZANINE_0_PRESENT_N:
+    iostd: LVCMOS18
+    loc: D32 
+  MEZZANINE_0_ENABLE_N:
+    iostd: LVCMOS18
+    loc: B33    
+  MEZZANINE_0_FAULT_N:
+    iostd: LVCMOS18
+    loc: BA14       
+  MEZZANINE_1_CLK_SEL:
+    iostd: LVCMOS18
+    loc: D17
+  MEZZANINE_1_RESET:
+    iostd: LVCMOS18
+    loc: C15  
+  MEZZANINE_1_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: BC34
+  MEZZANINE_1_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: BD34 
+  MEZZANINE_1_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: BD32
+  MEZZANINE_1_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: BD31  
+  MEZZANINE_1_INT_N:
+    iostd: LVCMOS18
+    loc: BC33
+  MEZZANINE_1_PRESENT_N:
+    iostd: LVCMOS18
+    loc: BA35
+  MEZZANINE_1_ENABLE_N:
+    iostd: LVCMOS18
+    loc: C17 
+  MEZZANINE_1_FAULT_N:
+    iostd: LVCMOS18
+    loc: AY14      
+  MEZZANINE_2_CLK_SEL:
+    iostd: LVCMOS18
+    loc: E16
+  MEZZANINE_2_RESET:
+    iostd: LVCMOS18
+    loc: D15    
+  MEZZANINE_2_ONE_WIRE:
+    iostd: LVCMOS18
+    loc: BB10
+  MEZZANINE_2_ONE_WIRE_STRONG_PULLUP_EN_N:
+    iostd: LVCMOS18
+    loc: BA10  
+  MEZZANINE_2_SCL_FPGA:
+    iostd: LVCMOS18
+    loc: BD14    
+  MEZZANINE_2_SDA_FPGA:
+    iostd: LVCMOS18
+    loc: BC14 
+  MEZZANINE_2_INT_N:
+    iostd: LVCMOS18
+    loc: BC13    
+  MEZZANINE_2_PRESENT_N:
+    iostd: LVCMOS18
+    loc: BA11
+  MEZZANINE_2_ENABLE_N:
+    iostd: LVCMOS18
+    loc: E17
+  MEZZANINE_2_FAULT_N:
+    iostd: LVCMOS18
+    loc: AW14  
   MEZZANINE_3_CLK_SEL:
     loc: B12
     iostd: LVCMOS18
@@ -200,30 +286,394 @@ pins:
   MEZZANINE_COMBINED_FAULT:
     iostd: LVCMOS18
     loc: BA20
-  MEZ_PHY11_LANE_TX_N:
+  MEZ0_REFCLK_0_P:
+    loc:
+      - AA35
+  MEZ0_REFCLK_0_N:
+    loc:
+      - AA36
+  MEZ0_PHY11_LANE_TX_P:
+    loc:
+      - AC43
+      - AD41
+      - AE43
+      - AF41
+  MEZ0_PHY11_LANE_TX_N:
+    loc:
+      - AC44
+      - AD42
+      - AE44
+      - AF42
+  MEZ0_PHY11_LANE_RX_P:
+    loc:
+      - Y37
+      - AA39
+      - AC39
+      - AD37
+  MEZ0_PHY11_LANE_RX_N:
+    loc:
+      - Y38
+      - AA40
+      - AC40
+      - AD38
+  MEZ0_REFCLK_1_P:
+    loc:
+      - U35
+  MEZ0_REFCLK_1_N:
+    loc:
+      - U36
+  MEZ0_PHY12_LANE_TX_P:
+    loc:
+      - W43
+      - Y41
+      - AA43
+      - AB41
+  MEZ0_PHY12_LANE_TX_N:
+    loc:
+      - W44
+      - Y42
+      - AA44
+      - AB42
+  MEZ0_PHY12_LANE_RX_P:
+    loc:
+      - T37
+      - U39
+      - V37
+      - W39
+  MEZ0_PHY12_LANE_RX_N:
+    loc:
+      - T38
+      - U40
+      - V38
+      - W40
+  MEZ0_REFCLK_2_P:
+    loc:
+      - N35
+  MEZ0_REFCLK_2_N:
+    loc:
+      - N36
+  MEZ0_PHY21_LANE_TX_P:
+    loc:
+      - R43
+      - T41
+      - U43
+      - V41
+  MEZ0_PHY21_LANE_TX_N:
+    loc:
+      - R44
+      - T42
+      - U44
+      - V42
+  MEZ0_PHY21_LANE_RX_P:
+    loc:
+      - M37
+      - N39
+      - P37
+      - R39
+  MEZ0_PHY21_LANE_RX_N:
+    loc:
+      - M38
+      - N40
+      - P38
+      - R40
+  MEZ0_REFCLK_3_P:
+    loc:
+      - J35
+  MEZ0_REFCLK_3_N:
+    loc:
+      - J36
+  MEZ0_PHY22_LANE_TX_P:
+    loc:
+      - L43
+      - M41
+      - N43
+      - P41
+  MEZ0_PHY22_LANE_TX_N:
+    loc:
+      - L44
+      - M42
+      - N44
+      - P42
+  MEZ0_PHY22_LANE_RX_P:
+    loc:
+      - H37
+      - J39
+      - K37
+      - L39
+  MEZ0_PHY22_LANE_RX_N:
+    loc:
+      - H38
+      - J40
+      - K38
+      - L40
+  MEZ1_REFCLK_0_P:
+    loc:
+      - AY37
+  MEZ1_REFCLK_0_N:
+    loc:
+      - AY38
+  MEZ1_PHY11_LANE_TX_P:
+    loc:
+      - AY41
+      - BA43
+      - BB41
+      - BD41
+  MEZ1_PHY11_LANE_TX_N:
+    loc:
+      - AY42
+      - BA44
+      - BB42
+      - BD42
+  MEZ1_PHY11_LANE_RX_P:
+    loc:
+      - AW39
+      - BA39
+      - BC39
+      - BD37
+  MEZ1_PHY11_LANE_RX_N:
+    loc:
+      - AW40
+      - BA40
+      - BC40
+      - BD38
+  MEZ1_REFCLK_1_P:
+    loc:
+      - AR35
+  MEZ1_REFCLK_1_N:
+    loc:
+      - AR36
+  MEZ1_PHY12_LANE_TX_P:
+    loc:
+      - AT41
+      - AU43
+      - AV41
+      - AW43
+  MEZ1_PHY12_LANE_TX_N:
+    loc:
+      - AT42
+      - AU44
+      - AV42
+      - AW44
+  MEZ1_PHY12_LANE_RX_P:
+    loc:
+      - AP37
+      - AR39
+      - AU39
+      - AV37
+  MEZ1_PHY12_LANE_RX_N:
+    loc:
+      - AP38
+      - AR40
+      - AU40
+      - AV38
+  MEZ1_REFCLK_2_P:
+    loc:
+      - AL35
+  MEZ1_REFCLK_2_N:
+    loc:
+      - AL36
+  MEZ1_PHY21_LANE_TX_P:
+    loc:
+      - AL43
+      - AN43
+      - AP41
+      - AR43
+  MEZ1_PHY21_LANE_TX_N:
+    loc:
+      - AL44
+      - AN44
+      - AP42
+      - AR44
+  MEZ1_PHY21_LANE_RX_P:
+    loc:
+      - AL39
+      - AM37
+      - AM41
+      - AN39
+  MEZ1_PHY21_LANE_RX_N:
+    loc:
+      - AL40
+      - AM38
+      - AM42
+      - AN40
+  MEZ1_REFCLK_3_P:
+    loc:
+      - AF37
+  MEZ1_REFCLK_3_N:
+    loc:
+      - AF38
+  MEZ1_PHY22_LANE_TX_P:
+    loc:
+      - AG43
+      - AH41
+      - AJ43
+      - AK41
+  MEZ1_PHY22_LANE_TX_N:
+    loc:
+      - AG44
+      - AH42
+      - AJ44
+      - AK42
+  MEZ1_PHY22_LANE_RX_P:
+    loc:
+      - AE39
+      - AG39
+      - AJ39
+      - AK37
+  MEZ1_PHY22_LANE_RX_N:
+    loc:
+      - AE40
+      - AG40
+      - AJ40
+      - AK38
+  MEZ2_REFCLK_0_P:
+    loc:
+      - AF8
+  MEZ2_REFCLK_0_N:
+    loc:
+      - AF7
+  MEZ2_PHY11_LANE_TX_P:
+    loc:
+      - AK4
+      - AJ2
+      - AH4
+      - AG2
+  MEZ2_PHY11_LANE_TX_N:
+    loc:
+      - AK3
+      - AJ1
+      - AH3
+      - AG1
+  MEZ2_PHY11_LANE_RX_P:
+    loc:
+      - AK8
+      - AJ6
+      - AG6
+      - AE6
+  MEZ2_PHY11_LANE_RX_N:
+    loc:
+      - AK7
+      - AJ5
+      - AG5
+      - AE5
+  MEZ2_REFCLK_1_P:
+    loc:
+      - AL10
+  MEZ2_REFCLK_1_N:
+    loc:
+      - AL9
+  MEZ2_PHY12_LANE_TX_P:
+    loc:
+      - AR2
+      - AP4
+      - AN2
+      - AL2
+  MEZ2_PHY12_LANE_TX_N:
+    loc:
+      - AR1
+      - AP3
+      - AN1
+      - AL1
+  MEZ2_PHY12_LANE_RX_P:
+    loc:
+      - AN6
+      - AM4
+      - AM8
+      - AL6
+  MEZ2_PHY12_LANE_RX_N:
+    loc:
+      - AN5
+      - AM3
+      - AM7
+      - AL5
+  MEZ2_REFCLK_2_P:
+    loc:
+      - AR10
+  MEZ2_REFCLK_2_N:
+    loc:
+      - AR9
+  MEZ2_PHY21_LANE_TX_P:
+    loc:
+      - AW2
+      - AV4
+      - AU2
+      - AT4
+  MEZ2_PHY21_LANE_TX_N:
+    loc:
+      - AW1
+      - AV3
+      - AU1
+      - AT3
+  MEZ2_PHY21_LANE_RX_P:
+    loc:
+      - AV8
+      - AU6
+      - AR6
+      - AP8
+  MEZ2_PHY21_LANE_RX_N:
+    loc:
+      - AV7
+      - AU5
+      - AR5
+      - AP7
+  MEZ2_REFCLK_3_P:
+    loc:
+      - AY8
+  MEZ2_REFCLK_3_N:
+    loc:
+      - AY7
+  MEZ2_PHY22_LANE_TX_P:
+    loc:
+      - BD4
+      - BB4
+      - BA2
+      - AY4
+  MEZ2_PHY22_LANE_TX_N:
+    loc:
+      - BD3
+      - BB3
+      - BA1
+      - AY3
+  MEZ2_PHY22_LANE_RX_P:
+    loc:
+      - BD8
+      - BC6
+      - BA6
+      - AW6
+  MEZ2_PHY22_LANE_RX_N:
+    loc:
+      - BD7
+      - BC5
+      - BA5
+      - AW5
+  MEZ3_REFCLK_0_P:
+    loc: J10
+  MEZ3_REFCLK_0_N:
+    loc: J9    
+  MEZ3_PHY11_LANE_TX_N:
     loc:
       - P3
       - N1
       - M3
       - L1
-  MEZ_PHY11_LANE_RX_P:
+  MEZ3_PHY11_LANE_RX_P:
     loc:
       - L6
       - K8
       - J6
       - H8
-  MEZ_PHY11_LANE_TX_P:
+  MEZ3_PHY11_LANE_TX_P:
     loc:
       - P4
       - N2
       - M4
       - L2
-  MEZ_PHY11_LANE_RX_N:
+  MEZ3_PHY11_LANE_RX_N:
     loc:
       - L5
       - K7
       - J5
-      - H7
+      - H7            
   I2C_RESET_FPGA:
     iostd: LVCMOS18
     loc: BC19
@@ -372,4 +822,4 @@ pins:
       - AW25
       - AW24
       - AT25
-      - AK23
+      - AK23      
