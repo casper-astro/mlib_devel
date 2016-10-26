@@ -82,7 +82,7 @@ BEGIN
           scl_clk <= '0';
           data_clk <= '1';
         WHEN divider*2 TO divider*3-1 => --third 1/4 cycle of clocking
-          scl_clk <= 'Z';                --release scl
+          scl_clk <= '1';--'Z';                --release scl
           IF(scl = '0') THEN             --detect if slave is stretching clock
             stretch <= '1';
           ELSE
@@ -90,7 +90,7 @@ BEGIN
           END IF;
           data_clk <= '1';
         WHEN OTHERS =>                   --last 1/4 cycle of clocking
-          scl_clk <= 'Z';
+          scl_clk <= '1';--Z';
           data_clk <= '0';
       END CASE;
     END IF;
