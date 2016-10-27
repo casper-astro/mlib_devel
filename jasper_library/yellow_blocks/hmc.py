@@ -10,6 +10,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
     def instantiate_hmcc(self, top, num=None):
         
         hmcc = top.get_instance(name=self.fullname, entity='hmc', comment=self.fullname)
+
         #import IPython
         #IPython.embed()
         hmcc.add_port('USER_CLK', 'sys_clk', dir='in')
@@ -18,7 +19,9 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('SCL_OUT', 'mez%s_scl_out' % self.mez, dir='out')
         hmcc.add_port('SDA_IN',  'mez%s_sda_in' % self.mez, dir='in')
         hmcc.add_port('SCL_IN',  'mez%s_scl_in' % self.mez, dir='in')
-        hmcc.add_port('INIT_DONE', 'mez%s_init_done' % self.mez, dir='out')
+        #hmcc.add_port('INIT_DONE', 'mez%s_init_done' % self.mez, dir='out')
+        hmcc.add_port('INIT_DONE', '%s_init_done' % self.fullname, dir='out')
+
         hmcc.add_port('HMC_MEZZ_RESET', 'MEZZANINE_%s_RESET' % self.mez, parent_port=True, dir='out')
         hmcc.add_port('MEZZ_CLK_SEL', 'MEZZANINE_%s_CLK_SEL' % self.mez, parent_port=True, dir='out')
         hmcc.add_port('PHY11_LANE_RX_P', 'MEZ%s_PHY11_LANE_RX_P' % self.mez, parent_port=True, dir='in', width=4)
@@ -60,9 +63,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         hmcc.add_port('DATA_VALID', '%s_data_valid' % self.fullname, dir='out')
         hmcc.add_port('POST_OK', '%s_post_ok' % self.fullname, dir='out')
         hmcc.add_port('RD_READY', '%s_rd_ready' % self.fullname, dir='out')
-        hmcc.assign_signal('mez%s_init_done' % self.mez, '%s_init_done' % self.name)
         hmcc.add_port('WR_READY', '%s_wr_ready' % self.fullname, dir='out')
-
 
     #----------------------------------------------------------------------------------------------------
 
@@ -78,6 +79,7 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
     def modify_top(self,top):
 
         self.instantiate_hmcc(top)
+        top.assign_signal('mez%s_init_done' % self.mez, '%s_init_done' % self.fullname)
 
     def gen_constraints(self):
         #import IPython
