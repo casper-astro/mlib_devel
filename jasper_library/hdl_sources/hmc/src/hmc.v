@@ -501,6 +501,8 @@ flit_gen_link2_inst (
   .DATA_RX_FLIT_CNT(data_rx_flit_cnt_link2),
   .DATA_RX_ERR_FLIT_CNT(data_rx_err_flit_cnt_link2),
   .DATA_ERR_DETECT(data_err_detect_link2),
+  .POST_DONE_IN(post_done_latch),
+  .POST_DONE_OUT(post_done_link2),
   //----------------------------------
   //----Connect AXI Ports
   //----------------------------------
@@ -535,6 +537,8 @@ flit_gen_link3_inst (
   .DATA_RX_FLIT_CNT(data_rx_flit_cnt_link3),
   .DATA_RX_ERR_FLIT_CNT(data_rx_err_flit_cnt_link3),
   .DATA_ERR_DETECT(data_err_detect_link3),
+  .POST_DONE_IN(post_done_latch),
+  .POST_DONE_OUT(post_done_link3),
   //----------------------------------
   //----Connect AXI Ports
   //----------------------------------
@@ -565,7 +569,7 @@ flit_gen_user #(
 flit_gen_user_link2_inst (
   .CLK(USER_CLK),
   .RST(USER_RST),
-  .OPEN_HMC_INIT_DONE(post_done_latch),
+  .POST_DONE(post_done_link2),
   //----------------------------------
   //----Connect AXI Ports
   //----------------------------------
@@ -610,7 +614,7 @@ flit_gen_user #(
 flit_gen_user_link3_inst (
   .CLK(USER_CLK),
   .RST(USER_RST),
-  .OPEN_HMC_INIT_DONE(post_done_latch),
+  .POST_DONE(post_done_link3),
   //----------------------------------
   //----Connect AXI Ports
   //----------------------------------
@@ -644,9 +648,9 @@ flit_gen_user_link3_inst (
 // AXI Mux between POST & User FLIT Generation
 
 // Link 2 MUX
-assign s_axis_tx_TVALID_link2 = (post_done_latch == 1'b0) ? post_flit_s_axis_tx_TVALID_link2 : user_flit_s_axis_tx_TVALID_link2;
-assign s_axis_tx_TDATA_link2  = (post_done_latch == 1'b0) ? post_flit_s_axis_tx_TDATA_link2 : user_flit_s_axis_tx_TDATA_link2;
-assign s_axis_tx_TUSER_link2  = (post_done_latch == 1'b0) ? post_flit_s_axis_tx_TUSER_link2 : user_flit_s_axis_tx_TUSER_link2;
+assign s_axis_tx_TVALID_link2 = (post_done_link2 == 1'b0) ? post_flit_s_axis_tx_TVALID_link2 : user_flit_s_axis_tx_TVALID_link2;
+assign s_axis_tx_TDATA_link2  = (post_done_link2 == 1'b0) ? post_flit_s_axis_tx_TDATA_link2 : user_flit_s_axis_tx_TDATA_link2;
+assign s_axis_tx_TUSER_link2  = (post_done_link2 == 1'b0) ? post_flit_s_axis_tx_TUSER_link2 : user_flit_s_axis_tx_TUSER_link2;
 assign post_flit_s_axis_tx_TREADY_link2 = s_axis_tx_TREADY_link2;
 assign user_flit_s_axis_tx_TREADY_link2 = s_axis_tx_TREADY_link2;
 
@@ -656,12 +660,12 @@ assign post_flit_m_axis_rx_TDATA_link2  = m_axis_rx_TDATA_link2;
 assign user_flit_m_axis_rx_TDATA_link2  = m_axis_rx_TDATA_link2;
 assign post_flit_m_axis_rx_TUSER_link2  = m_axis_rx_TUSER_link2;
 assign user_flit_m_axis_rx_TUSER_link2  = m_axis_rx_TUSER_link2;
-assign m_axis_rx_TREADY_link2 = (post_done_latch == 1'b0) ? post_flit_m_axis_rx_TREADY_link2 : user_flit_m_axis_rx_TREADY_link2;
+assign m_axis_rx_TREADY_link2 = (post_done_link2 == 1'b0) ? post_flit_m_axis_rx_TREADY_link2 : user_flit_m_axis_rx_TREADY_link2;
 
 // Link 3 MUX
-assign s_axis_tx_TVALID_link3 = (post_done_latch == 1'b0) ? post_flit_s_axis_tx_TVALID_link3 : user_flit_s_axis_tx_TVALID_link3;
-assign s_axis_tx_TDATA_link3  = (post_done_latch == 1'b0) ? post_flit_s_axis_tx_TDATA_link3 : user_flit_s_axis_tx_TDATA_link3;
-assign s_axis_tx_TUSER_link3  = (post_done_latch == 1'b0) ? post_flit_s_axis_tx_TUSER_link3 : user_flit_s_axis_tx_TUSER_link3;
+assign s_axis_tx_TVALID_link3 = (post_done_link3 == 1'b0) ? post_flit_s_axis_tx_TVALID_link3 : user_flit_s_axis_tx_TVALID_link3;
+assign s_axis_tx_TDATA_link3  = (post_done_link3 == 1'b0) ? post_flit_s_axis_tx_TDATA_link3 : user_flit_s_axis_tx_TDATA_link3;
+assign s_axis_tx_TUSER_link3  = (post_done_link3 == 1'b0) ? post_flit_s_axis_tx_TUSER_link3 : user_flit_s_axis_tx_TUSER_link3;
 assign post_flit_s_axis_tx_TREADY_link3 = s_axis_tx_TREADY_link3;
 assign user_flit_s_axis_tx_TREADY_link3 = s_axis_tx_TREADY_link3;
 
@@ -671,7 +675,7 @@ assign post_flit_m_axis_rx_TDATA_link3  = m_axis_rx_TDATA_link3;
 assign user_flit_m_axis_rx_TDATA_link3  = m_axis_rx_TDATA_link3;
 assign post_flit_m_axis_rx_TUSER_link3  = m_axis_rx_TUSER_link3;
 assign user_flit_m_axis_rx_TUSER_link3  = m_axis_rx_TUSER_link3;
-assign m_axis_rx_TREADY_link3 = (post_done_latch == 1'b0) ? post_flit_m_axis_rx_TREADY_link3 : user_flit_m_axis_rx_TREADY_link3;
+assign m_axis_rx_TREADY_link3 = (post_done_link3 == 1'b0) ? post_flit_m_axis_rx_TREADY_link3 : user_flit_m_axis_rx_TREADY_link3;
 
 
 endmodule

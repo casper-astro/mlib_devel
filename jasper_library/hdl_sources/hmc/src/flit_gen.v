@@ -34,6 +34,9 @@ module flit_gen #(
     output wire [63:0] DATA_RX_FLIT_CNT,
     output wire [63:0] DATA_RX_ERR_FLIT_CNT,
     output wire DATA_ERR_DETECT,
+
+    input  wire POST_DONE_IN,
+    output wire POST_DONE_OUT,
     //----------------------------------
     //----Connect AXI Ports
     //----------------------------------
@@ -236,9 +239,11 @@ module flit_gen #(
   // Write state machine 
   // Issues posted WR128 and RD128 request FLITs
   // ***************************************************************************************************************************************************************************************
+  reg post_done_out_i;
+
   always @(posedge CLK) begin : wr_flit
   reg [1023:0] wr_data;
-
+  
   if (RST) begin
     wr_flit_state <= STATE_IDLE;
     addr <= 27'd0; // request addr {2'b00,addr,4b000} [33:32] reserved = "00", 16byte addr, [3:0] reserved 0 (min 16 byte transactions) 
@@ -249,6 +254,7 @@ module flit_gen #(
     wait_for_NULL_FLITS_to_complete_cnt <= 16'd0;
     wr_cnt <= 2'd0;
     flit_retry <= 1'b0;
+    post_done_out_i <= 1'b0;
 
   end else begin
       s_axis_tx_TVALID_i <= 1'b0;
@@ -275,7 +281,7 @@ module flit_gen #(
         end
         // State: Request WR128 header, followed by write data (WR_REQ_DATA[447:0])
         STATE_WR_RD_DATA: begin
-          if (s_axis_tx_TREADY == 1'b1) begin // Make sure AXI TX FIFO is not FULL         
+          if (s_axis_tx_TREADY == 1'b1 && POST_DONE_IN == 1'b0) begin // Make sure AXI TX FIFO is not FULL         
             s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO
             //                      WR_REQ_DATA[447:320](s_axis_tx_TDATA_i[511:384]),  WR_REQ_DATA[319:64] (s_axis_tx_TDATA_i[383:128])  , WR_REQ_DATA[63:0] (s_axis_tx_TDATA_i[127:64]),   WR REQ Header (s_axis_tx_TDATA_i[63:0])      
             //s_axis_tx_TDATA_i  <= {{wr_data[127:0],                                    wr_data[255:0],                                     7'd0,tag,7'd0,tag,7'd0,tag,7'd0,tag},            {3'd0,3'd0,{2'd0,addr,4'd0},tag, 4'd9, 4'd9, 1'b0, 6'b011111}}; // posted write req
@@ -289,6 +295,9 @@ module flit_gen #(
             if (flit_retry == 1'b0) begin // Uh-oh: The AXI TX FIFO was FULL - FLITS  NOT accepted
               wr_flit_state <= STATE_WR_RD_DATA2; // FIFO was full retry previous write 
               flit_retry <= 1'b1; // issue retry for previous FLITs
+            end
+            if (POST_DONE_IN == 1'b1) begin
+              post_done_out_i <= 1'b1;            
             end
           end
         end
@@ -334,6 +343,8 @@ module flit_gen #(
       endcase
     end    
   end
+
+  assign POST_DONE_OUT = post_done_out_i;
 
 
   // ***************************************************************************************************************************************************************************************

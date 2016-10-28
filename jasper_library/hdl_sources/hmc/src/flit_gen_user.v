@@ -29,7 +29,7 @@ module flit_gen_user #(
   )  (
     input  wire CLK,
     input  wire RST,
-    input  wire OPEN_HMC_INIT_DONE,
+    input  wire POST_DONE,
     //----------------------------------
     //----Connect AXI Ports
     //----------------------------------
@@ -198,7 +198,7 @@ module flit_gen_user #(
 
 
   // State machine state vector elements
-  localparam STATE_IDLE         = 4'd0; // Default state: enter on power up or reset, exit on OPEN_HMC_INIT_DONE == 1'b1
+  localparam STATE_IDLE         = 4'd0; // Default state: enter on power up or reset, exit on POST_DONE == 1'b1
   localparam WAIT_AXI_TX_RDY    = 4'd1; // Wait for AXI TX bus to become available
   localparam STATE_WR_RD_DATA   = 4'd2; // Issue WR32 Request header + write data [255:0] or RD32 Requests
   localparam STATE_CHK_RD_DATA  = 4'd5; // Wait for RX AXI bus to present valid return data and then check it for errors
@@ -226,7 +226,7 @@ module flit_gen_user #(
         // State: Entry to state machine (from reset)
         STATE_IDLE: begin
           wr_flit_state <= STATE_IDLE;
-          if (OPEN_HMC_INIT_DONE == 1'b1) begin // We cannot issue any FLITs if the HMC and the openHMC is not initialized!
+          if (POST_DONE == 1'b1) begin // We cannot issue any FLITs if the HMC and the openHMC is not initialized!
             wait_for_NULL_FLITS_to_complete_cnt <= wait_for_NULL_FLITS_to_complete_cnt + 1'b1; // Give some time after the openHMC and HMC have initialize before bomming it with FLITs
           end
           if (wait_for_NULL_FLITS_to_complete_cnt[8] == 1'b1) begin
@@ -262,8 +262,8 @@ module flit_gen_user #(
     end    
   end
 
-  assign WR_READY = s_axis_tx_TREADY;
-  assign RD_READY = s_axis_tx_TREADY;
+  assign WR_READY = (POST_DONE == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+  assign RD_READY = (POST_DONE == 1'b1) ? s_axis_tx_TREADY : 1'b0;
 
   // ***************************************************************************************************************************************************************************************
   // Read state machine 
@@ -303,7 +303,7 @@ module flit_gen_user #(
         // State: Entry to state machine (from reset)
         STATE_IDLE: begin
           rd_flit_state <= STATE_IDLE;
-          if (OPEN_HMC_INIT_DONE == 1'b1) begin
+          if (POST_DONE == 1'b1) begin
             rd_flit_state <= STATE_CHK_RD_DATA;
           end
         end
