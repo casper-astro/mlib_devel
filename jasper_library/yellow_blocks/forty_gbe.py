@@ -456,8 +456,8 @@ class forty_gbe(YellowBlock):
         cons.append(RawConstraint('set_false_path -to [get_pins {forty_gbe_inst/clock_frequency_measure_2/clk_count_high_reg_reg[*]/D}]'))
 
 
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks {FPGA_REFCLK_BUF1_P I}] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks {FPGA_REFCLK_BUF1_P I}]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks FPGA_REFCLK_BUF1_P] -group [get_clocks FPGA_REFCLK_BUF0_P]'))
+        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks -include_generated_clocks FPGA_REFCLK_BUF1_P]'))
         cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks {FPGA_EMCCLK2}]'))
         cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks FPGA_REFCLK_BUF0_P] -group [get_clocks {MEZ3_REFCLK_0_P}]'))
 
