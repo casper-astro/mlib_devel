@@ -245,14 +245,14 @@ module flit_gen_user #(
             if (WR_REQ == 1'b1) begin        
               s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO
               //                      WR_REQ_DATA[447:320](s_axis_tx_TDATA_i[511:384]),  WR_REQ_DATA[319:64] (s_axis_tx_TDATA_i[383:128])  , WR_REQ_DATA[63:0] (s_axis_tx_TDATA_i[127:64]),   WR REQ Header (s_axis_tx_TDATA_i[63:0])      
-              s_axis_tx_TDATA_i  <= {128'd0, 64'd0, DATA_IN,                  {3'd0,3'd0,{2'd0,WR_ADDRESS,5'd0},tag, 4'd9, 4'd9, 1'b0, 6'b011001}}; // posted write req 32 bytes
+              s_axis_tx_TDATA_i  <= {128'd0, 64'd0, DATA_IN,                  {3'd0,3'd0,{2'd0,WR_ADDRESS,5'd0},tag, 4'd3, 4'd3, 1'b0, 6'b011001}}; // posted write req 32 bytes
               s_axis_tx_TUSER_i[11:0]  <= 12'b0100_0001_0111; // No tails, Header on FLIT0, all FLITS 3-0 valid   
             end
             if (RD_REQ == 1'b1) begin        
               s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO
               //                      WR_REQ_DATA[447:320](s_axis_tx_TDATA_i[511:384]),  WR_REQ_DATA[319:64] (s_axis_tx_TDATA_i[383:128])  , WR_REQ_DATA[63:0] (s_axis_tx_TDATA_i[127:64]),   WR REQ Header (s_axis_tx_TDATA_i[63:0])      
               //                                                                                               RD_ADDRESS[8:0] = tag
-              s_axis_tx_TDATA_i  <= {128'd0, 64'd0, 256'd0,                  {3'd0,3'd0,{2'd0,RD_ADDRESS,5'd0},TAG_IN, 4'd9, 4'd9, 1'b0, 6'b110001}}; // red req 32 bytes
+              s_axis_tx_TDATA_i  <= {128'd0, 64'd0, 256'd0,                  {3'd0,3'd0,{2'd0,RD_ADDRESS,5'd0},TAG_IN, 4'd1, 4'd1, 1'b0, 6'b110001}}; // red req 32 bytes
               s_axis_tx_TUSER_i[11:0]  <= 12'b0001_0001_0001; // Only FLIT0 (Header & Tail)    
             end
           end 
