@@ -261,7 +261,6 @@ class forty_gbe(YellowBlock):
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PMA/IEEE802_3_XL_PMA.srcs/sources_1/ip/XLAUI/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/sources_1/ip/fifo_dual_clk/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/sources_1/ip/XGMII_FIFO_DUAL_SYNC/*.xci")
-        self.add_source("forty_gbe/rx_packet_fifo_dist/*.xci")
         self.add_source("forty_gbe/cpu_rx_packet_size/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PCS/IEEE802_3_XL_PCS.srcs/sources_1/ip/RS256_FIFO/*.xci")
         self.add_source("forty_gbe/SKA_40GbE_PHY/IEEE802_3_XL_PHY/IEEE802_3_XL_PHY.srcs/sources_1/ip/IEEE802_3_XL_VIO/*.xci")
