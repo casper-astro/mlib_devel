@@ -203,7 +203,7 @@ module flit_gen_user #(
   localparam STATE_WR_RD_DATA   = 4'd2; // Issue WR32 Request header + write data [255:0] or RD32 Requests
   localparam STATE_CHK_RD_DATA  = 4'd5; // Wait for RX AXI bus to present valid return data and then check it for errors
 
-
+  reg req_rdy;
 
   // ***************************************************************************************************************************************************************************************
   // Request State Machine: Issue either write or read request for 256bit (32byte) 
@@ -218,6 +218,7 @@ module flit_gen_user #(
     s_axis_tx_TUSER_i  <= {NUM_DATA_BYTES{1'b0}};
     tag <= 9'd1; // Tag is used to deal with out of order return sequences 
     wait_for_NULL_FLITS_to_complete_cnt <= 16'd0;
+    req_rdy <= 1'b0;
 
   end else begin
       s_axis_tx_TVALID_i <= 1'b0;
@@ -241,7 +242,8 @@ module flit_gen_user #(
         end
         // State: Request WR128 header, followed by write data (WR_REQ_DATA[447:0])
         STATE_WR_RD_DATA: begin
-          if (s_axis_tx_TREADY == 1'b1) begin // Make sure AXI TX FIFO is not FULL 
+          req_rdy <= 1'b1;
+          if (s_axis_tx_TREADY == 1'b1) begin // Make sure AXI TX FIFO is not FULL             
             if (WR_REQ == 1'b1) begin        
               s_axis_tx_TVALID_i <= 1'b1; // Issue a write to TX AXI FIFO
               //                      WR_REQ_DATA[447:320](s_axis_tx_TDATA_i[511:384]),  WR_REQ_DATA[319:64] (s_axis_tx_TDATA_i[383:128])  , WR_REQ_DATA[63:0] (s_axis_tx_TDATA_i[127:64]),   WR REQ Header (s_axis_tx_TDATA_i[63:0])      
@@ -262,8 +264,8 @@ module flit_gen_user #(
     end    
   end
 
-  assign WR_READY = (POST_DONE == 1'b1) ? s_axis_tx_TREADY : 1'b0;
-  assign RD_READY = (POST_DONE == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+  assign WR_READY = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
+  assign RD_READY = (req_rdy == 1'b1) ? s_axis_tx_TREADY : 1'b0;
 
   // ***************************************************************************************************************************************************************************************
   // Read state machine 
