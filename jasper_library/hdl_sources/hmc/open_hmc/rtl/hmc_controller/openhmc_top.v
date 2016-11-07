@@ -231,8 +231,9 @@ openhmc_async_fifo #(
     //From AXI-4 TX IF
     .d_in({s_axis_tx_TUSER[(FPW*3)-1:0],s_axis_tx_TDATA}),
     .shift_in(s_axis_tx_TVALID && s_axis_tx_TREADY),
-    .full(s_axis_tx_TREADY_n),
-    .almost_full(),
+    // Mod Henno: Move TX ready to FIFO almost full - must accept last write
+    .full(),//.full(s_axis_tx_TREADY_n),
+    .almost_full(s_axis_tx_TREADY_n), //.almost_full(),
 
     //To TX Link Logic
     .d_out({tx_d_in_ctrl,tx_d_in_data}),
