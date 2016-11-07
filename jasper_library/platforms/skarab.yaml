@@ -135,7 +135,7 @@ pins:
     loc: AT18
   FPGA_REFCLK_BUF1_N:
     iostd: LVDS
-  FPGA_GPIO:
+  gpio:
     iostd: LVCMOS18
     loc:
       - A29
@@ -822,4 +822,4 @@ pins:
       - AW25
       - AW24
       - AT25
-      - AK23      
+      - AK23

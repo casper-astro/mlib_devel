@@ -198,7 +198,6 @@ entity forty_gbe is
         SPI_CLK  : out std_logic;
 
         -- GPIO
-        FPGA_GPIO     : out std_logic_vector(15 downto 0);
         DEBUG_UART_TX : out std_logic;
         DEBUG_UART_RX : in  std_logic;
 
@@ -1405,33 +1404,8 @@ begin
     brd_user_read_regs(C_RD_FPGA_DNA_HIGH_ADDR) <= fpga_dna(63 downto 32);
 
 ---------------------------------------------------------------------------
--- GPIOS (FRONT PANEL LEDS)
----------------------------------------------------------------------------
-
-    
-    FPGA_GPIO(0) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0); -- LOW TO TURN ON   --AI: Set to high to always be disabled --not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(0); -- LOW TO TURN ON
-    FPGA_GPIO(1) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(1); -- LOW TO TURN ON
-    FPGA_GPIO(2) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(2); -- LOW TO TURN ON
-    FPGA_GPIO(3) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(3); -- LOW TO TURN ON
-    FPGA_GPIO(4) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(4); -- LOW TO TURN ON
-    FPGA_GPIO(5) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(5); -- LOW TO TURN ON
-    FPGA_GPIO(6) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(6); -- LOW TO TURN ON
-    FPGA_GPIO(7) <= not brd_user_write_regs(C_WR_FRONT_PANEL_STAT_LED_ADDR)(7); -- LOW TO TURN ON
-    FPGA_GPIO(8) <= '1';
-    FPGA_GPIO(9) <= '0';
-    FPGA_GPIO(10) <= '0';
-    FPGA_GPIO(11) <= '0';
-    FPGA_GPIO(12) <= '0';
-    FPGA_GPIO(13) <= '0';
-    FPGA_GPIO(14) <= '0';
-    FPGA_GPIO(15) <= '0';
-    
-
----------------------------------------------------------------------------
 -- AUX CONNECTIONS
 ---------------------------------------------------------------------------
-
-    
 
     --aux_clk_ibufds : IBUFDS
     --generic map (
