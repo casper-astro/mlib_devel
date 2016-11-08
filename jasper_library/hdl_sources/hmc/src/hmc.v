@@ -101,9 +101,14 @@ module hmc #(
 );
 
 wire soft_reset_link2,soft_reset_link3;
+reg [31:0] time_out_cnt;
+reg time_out_cnt_rst;
+wire soft_reset;
 
-assign soft_reset_link2 = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1);
-assign soft_reset_link3 = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1);
+assign soft_reset_link2 = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
+assign soft_reset_link3 = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
+assign soft_reset = (soft_reset_link2 == 1'b1 || soft_reset_link3 == 1'b1);
+
 
 assign MEZZ_CLK_SEL = 1'b0;
 //assign HMC_MEZZ_RESET = USER_RST;//~P_RST_N;
@@ -292,18 +297,28 @@ always @(posedge USER_CLK or posedge USER_RST) begin
   if (USER_RST == 1'b1) begin
     post_ok_latch <= 1'b0;
     post_okR <= 2'b00;
+    time_out_cnt <= 32'd0;
+    time_out_cnt_rst <= 1'b0;
   end else begin
     post_okR <= {post_okR[0],post_ok};
+    time_out_cnt <= time_out_cnt + 1'b1;
+    time_out_cnt_rst <= time_out_cnt[30];
     if (post_okR == 2'b01) begin
       post_ok_latch <= 1'b1;
     end
+    if (hmc_reset == 1'b1) begin
+      time_out_cnt <= 32'd0;
+    end 
+    if (open_hmc_done_link2 == 1'b1 && open_hmc_done_link3 == 1'b1) begin
+      time_out_cnt <= 32'd0;
+    end 
   end
 end
 
 hmc_iic_init 
 hmc_iic_init_inst (
   .CLK         (USER_CLK),
-  .RST         (USER_RST),// As soon as the clock is stable 
+  .RST         (soft_reset),//(USER_RST),// As soon as the clock is stable 
   .IIC_ACK_ERR (iic_err),
   .IIC_BUSY    (iic_busy),
   .HMC_IIC_INIT_DONE (hmc_iic_init_done),
@@ -365,7 +380,7 @@ hmc_ska_sa_top_link2_inst(
   //----------------------------------
   .SOFT_RESET_IN(soft_reset_link2),
   .clk_user(USER_CLK),
-  .res_n_user(~USER_RST),
+  .res_n_user(~soft_reset_link2),
   .clk_hmc_out(),
   .hmc_reset_out(),
   .QPLL_LOCK(qpll_lock_link2),
@@ -445,7 +460,7 @@ hmc_ska_sa_top_link3_inst(
   //----------------------------------
   .SOFT_RESET_IN(soft_reset_link3),
   .clk_user(USER_CLK),
-  .res_n_user(~USER_RST),
+  .res_n_user(~soft_reset_link3),
   .clk_hmc_out(),
   .hmc_reset_out(),
   .QPLL_LOCK(qpll_lock_link3),
@@ -496,7 +511,7 @@ flit_gen #(
   ) 
 flit_gen_link2_inst (
   .CLK(USER_CLK),
-  .RST(USER_RST),
+  .RST(soft_reset_link2),
   .OPEN_HMC_INIT_DONE(open_hmc_done_link2),
   .DATA_RX_FLIT_CNT(data_rx_flit_cnt_link2),
   .DATA_RX_ERR_FLIT_CNT(data_rx_err_flit_cnt_link2),
@@ -532,7 +547,7 @@ flit_gen #(
   ) 
 flit_gen_link3_inst (
   .CLK(USER_CLK),
-  .RST(USER_RST),
+  .RST(soft_reset_link3),
   .OPEN_HMC_INIT_DONE(open_hmc_done_link3),
   .DATA_RX_FLIT_CNT(data_rx_flit_cnt_link3),
   .DATA_RX_ERR_FLIT_CNT(data_rx_err_flit_cnt_link3),
@@ -568,7 +583,7 @@ flit_gen_user #(
   ) 
 flit_gen_user_link2_inst (
   .CLK(USER_CLK),
-  .RST(USER_RST),
+  .RST(soft_reset),
   .POST_DONE(post_done_link2),
   //----------------------------------
   //----Connect AXI Ports
@@ -613,7 +628,7 @@ flit_gen_user #(
   ) 
 flit_gen_user_link3_inst (
   .CLK(USER_CLK),
-  .RST(USER_RST),
+  .RST(soft_reset),
   .POST_DONE(post_done_link3),
   //----------------------------------
   //----Connect AXI Ports
