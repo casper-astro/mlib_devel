@@ -1,4 +1,4 @@
-export XILINX_PATH=/opt/Xilinx/Vivado/2014.3.1
+export XILINX_PATH=/opt/Xilinx/Vivado/2016.2
 export USE_VIVADO_RUNTIME_FOR_MATLAB=1
 export MATLAB_PATH=/opt/Matlab/R2015b
 export MLIB_DEVEL_PATH=~/work/git_work/ska_sa/projects/mlib_devel

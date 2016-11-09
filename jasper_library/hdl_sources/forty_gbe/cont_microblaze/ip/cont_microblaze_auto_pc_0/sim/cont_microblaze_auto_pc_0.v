@@ -48,7 +48,7 @@
 
 
 // IP VLNV: xilinx.com:ip:axi_protocol_converter:2.1
-// IP Revision: 3
+// IP Revision: 9
 
 `timescale 1ns/1ps
 
@@ -225,7 +225,7 @@ input wire m_axi_rvalid;
 (* X_INTERFACE_INFO = "xilinx.com:interface:aximm:1.0 M_AXI RREADY" *)
 output wire m_axi_rready;
 
-  axi_protocol_converter_v2_1_axi_protocol_converter #(
+  axi_protocol_converter_v2_1_9_axi_protocol_converter #(
     .C_FAMILY("virtex7"),
     .C_M_AXI_PROTOCOL(0),
     .C_S_AXI_PROTOCOL(2),
@@ -249,7 +249,7 @@ output wire m_axi_rready;
     .s_axi_awaddr(s_axi_awaddr),
     .s_axi_awlen(8'H00),
     .s_axi_awsize(3'H0),
-    .s_axi_awburst(2'H0),
+    .s_axi_awburst(2'H1),
     .s_axi_awlock(1'H0),
     .s_axi_awcache(4'H0),
     .s_axi_awprot(s_axi_awprot),
@@ -274,7 +274,7 @@ output wire m_axi_rready;
     .s_axi_araddr(s_axi_araddr),
     .s_axi_arlen(8'H00),
     .s_axi_arsize(3'H0),
-    .s_axi_arburst(2'H0),
+    .s_axi_arburst(2'H1),
     .s_axi_arlock(1'H0),
     .s_axi_arcache(4'H0),
     .s_axi_arprot(s_axi_arprot),

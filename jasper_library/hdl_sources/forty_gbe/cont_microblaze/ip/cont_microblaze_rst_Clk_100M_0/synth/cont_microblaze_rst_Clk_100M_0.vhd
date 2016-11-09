@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,11 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:proc_sys_reset:5.0
--- IP Revision: 6
+-- IP Revision: 9
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
-
-LIBRARY proc_sys_reset_v5_0;
-USE proc_sys_reset_v5_0.proc_sys_reset;
 
 ENTITY cont_microblaze_rst_Clk_100M_0 IS
   PORT (
@@ -72,9 +69,8 @@ ENTITY cont_microblaze_rst_Clk_100M_0 IS
 END cont_microblaze_rst_Clk_100M_0;
 
 ARCHITECTURE cont_microblaze_rst_Clk_100M_0_arch OF cont_microblaze_rst_Clk_100M_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_rst_Clk_100M_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT proc_sys_reset IS
     GENERIC (
       C_FAMILY : STRING;
@@ -101,11 +97,11 @@ ARCHITECTURE cont_microblaze_rst_Clk_100M_0_arch OF cont_microblaze_rst_Clk_100M
     );
   END COMPONENT proc_sys_reset;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF cont_microblaze_rst_Clk_100M_0_arch: ARCHITECTURE IS "proc_sys_reset,Vivado 2014.3.1";
+  ATTRIBUTE X_CORE_INFO OF cont_microblaze_rst_Clk_100M_0_arch: ARCHITECTURE IS "proc_sys_reset,Vivado 2016.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_rst_Clk_100M_0_arch : ARCHITECTURE IS "cont_microblaze_rst_Clk_100M_0,proc_sys_reset,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_rst_Clk_100M_0_arch: ARCHITECTURE IS "cont_microblaze_rst_Clk_100M_0,proc_sys_reset,{x_ipProduct=Vivado 2014.3.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=proc_sys_reset,x_ipVersion=5.0,x_ipCoreRevision=6,x_ipLanguage=VHDL,C_FAMILY=virtex7,C_EXT_RST_WIDTH=4,C_AUX_RST_WIDTH=1,C_EXT_RESET_HIGH=1,C_AUX_RESET_HIGH=1,C_NUM_BUS_RST=1,C_NUM_PERP_RST=1,C_NUM_INTERCONNECT_ARESETN=1,C_NUM_PERP_ARESETN=1}";
+  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_rst_Clk_100M_0_arch: ARCHITECTURE IS "cont_microblaze_rst_Clk_100M_0,proc_sys_reset,{x_ipProduct=Vivado 2016.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=proc_sys_reset,x_ipVersion=5.0,x_ipCoreRevision=9,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=virtex7,C_EXT_RST_WIDTH=4,C_AUX_RST_WIDTH=1,C_EXT_RESET_HIGH=1,C_AUX_RESET_HIGH=1,C_NUM_BUS_RST=1,C_NUM_PERP_RST=1,C_NUM_INTERCONNECT_ARESETN=1,C_NUM_PERP_ARESETN=1}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF slowest_sync_clk: SIGNAL IS "xilinx.com:signal:clock:1.0 clock CLK";
   ATTRIBUTE X_INTERFACE_INFO OF ext_reset_in: SIGNAL IS "xilinx.com:signal:reset:1.0 ext_reset RST";

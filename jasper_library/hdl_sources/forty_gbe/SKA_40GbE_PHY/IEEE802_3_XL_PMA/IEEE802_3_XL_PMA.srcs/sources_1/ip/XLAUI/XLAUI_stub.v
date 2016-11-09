@@ -1,8 +1,8 @@
-// Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2014.3.1 (lin64) Build 1056140 Thu Oct 30 16:30:39 MDT 2014
-// Date        : Thu Mar 24 14:01:44 2016
-// Host        : adam-cm running 64-bit Ubuntu 14.04.4 LTS
+// Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
+// Date        : Mon Nov  7 14:25:02 2016
+// Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 // Command     : write_verilog -force -mode synth_stub
 //               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/Source/SKA_40GbE_PHY/IEEE802_3_XL_PMA/IEEE802_3_XL_PMA.srcs/sources_1/ip/XLAUI/XLAUI_stub.v
 // Design      : XLAUI

@@ -114,9 +114,8 @@ ENTITY cont_microblaze_axi_slave_wishbone_classic_master_0_0 IS
 END cont_microblaze_axi_slave_wishbone_classic_master_0_0;
 
 ARCHITECTURE cont_microblaze_axi_slave_wishbone_classic_master_0_0_arch OF cont_microblaze_axi_slave_wishbone_classic_master_0_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_axi_slave_wishbone_classic_master_0_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT axi_slave_wishbone_classic_master IS
     GENERIC (
       C_S_AXI_ID_WIDTH : INTEGER;

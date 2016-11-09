@@ -1,6 +1,6 @@
 
 ################################################################################
-# (c) Copyright 2012 - 2013 Xilinx, Inc. All rights reserved.
+# (c) Copyright 2012 - 2015 Xilinx, Inc. All rights reserved.
 # 
 # This file contains confidential and proprietary information
 # of Xilinx, Inc. and is protected under U.S. and
@@ -49,12 +49,10 @@
 ################################################################################
 # This constraints file contains default clock frequencies to be used during 
 # out-of-context flows such as OOC Synthesis and Hierarchical Designs. 
-# For best results the frequencies should be modified# to match the target 
-# frequencies. 
-# This constraints file is not used in normal top-down synthesis (the default flow of Vivado)
+# This constraints file is not used in normal top-down synthesis (the default
+# flow of Vivado).
 
-#list of all the clock needed for AXI Intc v4.1 core
+# List of all the clock needed for AXI Intc v4.1 core
 
-	create_clock -name s_axi_aclk -period 10 [get_ports s_axi_aclk] 
-
-################################################################################
+create_clock -name s_axi_aclk -period 6.400 [get_ports s_axi_aclk]
+set_property HD.CLK_SRC BUFGCTRL_X0Y0 [get_ports s_axi_aclk]

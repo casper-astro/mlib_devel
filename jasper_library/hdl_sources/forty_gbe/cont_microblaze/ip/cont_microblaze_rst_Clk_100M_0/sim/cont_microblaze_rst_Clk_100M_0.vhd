@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:proc_sys_reset:5.0
--- IP Revision: 6
+-- IP Revision: 9
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY proc_sys_reset_v5_0;
-USE proc_sys_reset_v5_0.proc_sys_reset;
+LIBRARY proc_sys_reset_v5_0_9;
+USE proc_sys_reset_v5_0_9.proc_sys_reset;
 
 ENTITY cont_microblaze_rst_Clk_100M_0 IS
   PORT (
@@ -72,9 +72,8 @@ ENTITY cont_microblaze_rst_Clk_100M_0 IS
 END cont_microblaze_rst_Clk_100M_0;
 
 ARCHITECTURE cont_microblaze_rst_Clk_100M_0_arch OF cont_microblaze_rst_Clk_100M_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_rst_Clk_100M_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT proc_sys_reset IS
     GENERIC (
       C_FAMILY : STRING;

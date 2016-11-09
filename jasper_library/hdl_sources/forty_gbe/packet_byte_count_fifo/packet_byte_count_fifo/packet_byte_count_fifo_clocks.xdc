@@ -54,7 +54,8 @@ set wr_clock          [get_clocks -of_objects [get_ports wr_clk]]
 set rd_clock          [get_clocks -of_objects [get_ports rd_clk]]
 
 # Ignore paths from the write clock to the read data registers for Asynchronous Distributed RAM based FIFO
-set_false_path -from [filter [all_fanout -from [get_ports wr_clk] -flat -endpoints_only] {IS_LEAF}] -to [get_cells inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.mem/gdm.dm/gpr1.dout_i_reg[*]]
+set_false_path -from [filter [all_fanout -from [get_ports wr_clk] -flat -endpoints_only] {IS_LEAF}] -to [get_cells -hierarchical -filter {NAME =~ *mem*/*dout_i_reg[*]}]
+
 
 # Set max delay on cross clock domain path for Block/Distributed RAM based FIFO
 

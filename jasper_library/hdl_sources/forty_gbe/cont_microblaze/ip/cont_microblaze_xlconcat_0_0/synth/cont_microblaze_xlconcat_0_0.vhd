@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,7 +47,7 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:xlconcat:2.1
--- IP Revision: 0
+-- IP Revision: 2
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -65,9 +65,8 @@ ENTITY cont_microblaze_xlconcat_0_0 IS
 END cont_microblaze_xlconcat_0_0;
 
 ARCHITECTURE cont_microblaze_xlconcat_0_0_arch OF cont_microblaze_xlconcat_0_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_xlconcat_0_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT xlconcat IS
     GENERIC (
       IN0_WIDTH : INTEGER;
@@ -142,11 +141,12 @@ ARCHITECTURE cont_microblaze_xlconcat_0_0_arch OF cont_microblaze_xlconcat_0_0 I
     );
   END COMPONENT xlconcat;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF cont_microblaze_xlconcat_0_0_arch: ARCHITECTURE IS "xlconcat,Vivado 2014.3.1";
+  ATTRIBUTE X_CORE_INFO OF cont_microblaze_xlconcat_0_0_arch: ARCHITECTURE IS "xlconcat,Vivado 2016.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_xlconcat_0_0_arch : ARCHITECTURE IS "cont_microblaze_xlconcat_0_0,xlconcat,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_xlconcat_0_0_arch: ARCHITECTURE IS "cont_microblaze_xlconcat_0_0,xlconcat,{x_ipProduct=Vivado 2014.3.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=xlconcat,x_ipVersion=2.1,x_ipCoreRevision=0,x_ipLanguage=VHDL,IN0_WIDTH=1,IN1_WIDTH=1,IN2_WIDTH=1,IN3_WIDTH=1,IN4_WIDTH=1,IN5_WIDTH=1,IN6_WIDTH=1,IN7_WIDTH=1,IN8_WIDTH=1,IN9_WIDTH=1,IN10_WIDTH=1,IN11_WIDTH=1,IN12_WIDTH=1,IN13_WIDTH=1,IN14_WIDTH=1,IN15_WIDTH=1,IN16_WIDTH=1,IN17_WIDTH=1,IN18_WIDTH=1,IN19_WIDTH=1,IN20_WIDTH=1,IN21_WIDTH=1,IN22_WIDTH=1,IN23_WIDTH=1,IN24_WIDTH=1,IN25_WIDTH=1,IN26_WIDTH=1,IN27_WIDTH=1,IN28_WIDTH=1,IN29_WIDTH=1,IN30_WIDTH=1,IN31_WIDTH=1,dout_width=2,NUM_PORTS=2}";
+  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_xlconcat_0_0_arch: ARCHITECTURE IS "cont_microblaze_xlconcat_0_0,xlconcat,{x_ipProduct=Vivado 2016.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=xlconcat,x_ipVersion=2.1,x_ipCoreRevision=2,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,IN0_WIDTH=1,IN1_WIDTH=1,IN2_WIDTH=1,IN3_WIDTH=1,IN4_WIDTH=1,IN5_WIDTH=1,IN6_WIDTH=1,IN7_WIDTH=1,IN8_WIDTH=1,IN9_WIDTH=1,IN10_WIDTH=1,IN11_WIDTH=1,IN12_WIDTH=1,IN13_WIDTH=1,IN14_WIDTH=1,IN15_WIDTH=1,IN16_WIDTH=1,IN17_WIDTH=1,IN18_WIDTH=1,IN19_WIDTH=1,IN20_WIDTH=1,IN21_WIDTH=1,IN22_WIDTH=1,IN23_WIDTH=1,IN2" & 
+"4_WIDTH=1,IN25_WIDTH=1,IN26_WIDTH=1,IN27_WIDTH=1,IN28_WIDTH=1,IN29_WIDTH=1,IN30_WIDTH=1,IN31_WIDTH=1,dout_width=2,NUM_PORTS=2}";
 BEGIN
   U0 : xlconcat
     GENERIC MAP (

@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:lmb_v10:3.0
--- IP Revision: 4
+-- IP Revision: 8
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY lmb_v10_v3_0;
-USE lmb_v10_v3_0.lmb_v10;
+LIBRARY lmb_v10_v3_0_8;
+USE lmb_v10_v3_0_8.lmb_v10;
 
 ENTITY cont_microblaze_dlmb_v10_0 IS
   PORT (
@@ -87,9 +87,8 @@ ENTITY cont_microblaze_dlmb_v10_0 IS
 END cont_microblaze_dlmb_v10_0;
 
 ARCHITECTURE cont_microblaze_dlmb_v10_0_arch OF cont_microblaze_dlmb_v10_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_dlmb_v10_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT lmb_v10 IS
     GENERIC (
       C_LMB_NUM_SLAVES : INTEGER;
@@ -127,6 +126,7 @@ ARCHITECTURE cont_microblaze_dlmb_v10_0_arch OF cont_microblaze_dlmb_v10_0 IS
   END COMPONENT lmb_v10;
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF LMB_Clk: SIGNAL IS "xilinx.com:signal:clock:1.0 CLK.LMB_Clk CLK";
+  ATTRIBUTE X_INTERFACE_INFO OF SYS_Rst: SIGNAL IS "xilinx.com:signal:reset:1.0 RST.SYS_Rst RST";
   ATTRIBUTE X_INTERFACE_INFO OF LMB_Rst: SIGNAL IS "xilinx.com:interface:lmb:1.0 LMB_Sl_0 RST, xilinx.com:interface:lmb:1.0 LMB_M RST";
   ATTRIBUTE X_INTERFACE_INFO OF M_ABus: SIGNAL IS "xilinx.com:interface:lmb:1.0 LMB_M ABUS";
   ATTRIBUTE X_INTERFACE_INFO OF M_ReadStrobe: SIGNAL IS "xilinx.com:interface:lmb:1.0 LMB_M READSTROBE";

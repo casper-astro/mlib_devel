@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:mdm:3.2
--- IP Revision: 0
+-- IP Revision: 6
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY mdm_v3_2;
-USE mdm_v3_2.MDM;
+LIBRARY mdm_v3_2_6;
+USE mdm_v3_2_6.MDM;
 
 ENTITY cont_microblaze_mdm_1_0 IS
   PORT (
@@ -71,9 +71,8 @@ ENTITY cont_microblaze_mdm_1_0 IS
 END cont_microblaze_mdm_1_0;
 
 ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_mdm_1_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT MDM IS
     GENERIC (
       C_FAMILY : STRING;
@@ -102,6 +101,8 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
     );
     PORT (
       Config_Reset : IN STD_LOGIC;
+      Scan_Reset : IN STD_LOGIC;
+      Scan_Reset_Sel : IN STD_LOGIC;
       S_AXI_ACLK : IN STD_LOGIC;
       S_AXI_ARESETN : IN STD_LOGIC;
       M_AXI_ACLK : IN STD_LOGIC;
@@ -1073,11 +1074,12 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
     );
   END COMPONENT MDM;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF cont_microblaze_mdm_1_0_arch: ARCHITECTURE IS "MDM,Vivado 2014.3.1";
+  ATTRIBUTE X_CORE_INFO OF cont_microblaze_mdm_1_0_arch: ARCHITECTURE IS "MDM,Vivado 2016.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_mdm_1_0_arch : ARCHITECTURE IS "cont_microblaze_mdm_1_0,MDM,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_mdm_1_0_arch: ARCHITECTURE IS "cont_microblaze_mdm_1_0,MDM,{x_ipProduct=Vivado 2014.3.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=mdm,x_ipVersion=3.2,x_ipCoreRevision=0,x_ipLanguage=VHDL,C_FAMILY=virtex7,C_JTAG_CHAIN=2,C_USE_BSCAN=0,C_USE_CONFIG_RESET=0,C_INTERCONNECT=2,C_MB_DBG_PORTS=1,C_USE_UART=0,C_DBG_REG_ACCESS=0,C_DBG_MEM_ACCESS=0,C_USE_CROSS_TRIGGER=0,C_TRACE_OUTPUT=0,C_TRACE_DATA_WIDTH=32,C_TRACE_CLK_FREQ_HZ=200000000,C_TRACE_CLK_OUT_PHASE=90,C_S_AXI_ADDR_WIDTH=32,C_S_AXI_DATA_WIDTH=32,C_S_AXI_ACLK_FREQ_HZ=100000000,C_M_AXI_ADDR_WIDTH=32,C_M_AXI_DATA_WIDTH=32,C_M_AXI_THREAD_ID_WIDTH=1,C_DATA_SIZE=32,C_M_AXIS_DATA_WIDTH=32,C_M_AXIS_ID_WIDTH=7}";
+  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_mdm_1_0_arch: ARCHITECTURE IS "cont_microblaze_mdm_1_0,MDM,{x_ipProduct=Vivado 2016.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=mdm,x_ipVersion=3.2,x_ipCoreRevision=6,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=virtex7,C_JTAG_CHAIN=2,C_USE_BSCAN=0,C_USE_CONFIG_RESET=0,C_INTERCONNECT=2,C_MB_DBG_PORTS=1,C_USE_UART=0,C_DBG_REG_ACCESS=0,C_DBG_MEM_ACCESS=0,C_USE_CROSS_TRIGGER=0,C_TRACE_OUTPUT=0,C_TRACE_DATA_WIDTH=32,C_TRACE_CLK_FREQ_HZ=200000000,C_TRACE_CLK_OUT_PHASE=90,C_S_AXI_ADDR_WIDTH=32,C_S_AXI_DATA_WIDTH=32,C_S_AXI_" & 
+"ACLK_FREQ_HZ=100000000,C_M_AXI_ADDR_WIDTH=32,C_M_AXI_DATA_WIDTH=32,C_M_AXI_THREAD_ID_WIDTH=1,C_DATA_SIZE=32,C_M_AXIS_DATA_WIDTH=32,C_M_AXIS_ID_WIDTH=7}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF Debug_SYS_Rst: SIGNAL IS "xilinx.com:signal:reset:1.0 RST.Debug_SYS_Rst RST";
   ATTRIBUTE X_INTERFACE_INFO OF Dbg_Clk_0: SIGNAL IS "xilinx.com:interface:mbdebug:3.0 MBDEBUG_0 CLK";
@@ -1117,6 +1119,8 @@ BEGIN
     )
     PORT MAP (
       Config_Reset => '0',
+      Scan_Reset => '0',
+      Scan_Reset_Sel => '0',
       S_AXI_ACLK => '0',
       S_AXI_ARESETN => '0',
       M_AXI_ACLK => '0',

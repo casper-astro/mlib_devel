@@ -64,7 +64,7 @@
 	set_false_path -from [get_cells -hierarchical -filter { NAME =~  "*Hold_probe_in*" &&  IS_SEQUENTIAL } ] -to [get_cells -hierarchical -filter { NAME =~  "*PROBE_IN_INST/probe_in_reg*" && IS_SEQUENTIAL} ]
 	set_false_path -from [get_cells -hierarchical -filter { NAME =~  "*PROBE_IN_INST/probe_in_reg*" &&  IS_SEQUENTIAL} ] -to [get_cells -hierarchical -filter { NAME =~  "*data_int_sync1*" && IS_SEQUENTIAL }  ]
 
-	set_false_path -from [get_cells -hierarchical -filter { NAME =~  "*committ_int*" && IS_SEQUENTIAL}] -to [get_cells -hierarchical -filter { NAME =~  "*Probe_out*" &&  IS_SEQUENTIAL} ]
+	set_false_path -from [get_cells -hierarchical -filter { NAME =~  "*committ_int*" && IS_SEQUENTIAL}] -to [get_cells -hierarchical -filter { NAME =~  "*Committ_1*" &&  IS_SEQUENTIAL} ]
 	set_false_path -from [get_cells -hierarchical -filter { NAME =~  "*clear_int*" && IS_SEQUENTIAL}] -to [get_cells -hierarchical -filter { NAME =~  "*Probe_out*" && IS_SEQUENTIAL}] 
 	set_false_path -from [get_cells -hierarchical -filter { NAME =~  "*clear_int*" && IS_SEQUENTIAL }] -to [get_cells -hierarchical -filter { NAME =~  "*PROBE_OUT_ALL_INST/G_PROBE_OUT[*].PROBE_OUT0_INST/data_int*" && IS_SEQUENTIAL}]
 	set_false_path -from [get_cells -hierarchical -filter { NAME =~  "*data_int_*" && IS_SEQUENTIAL } ] -to [get_cells -hierarchical -filter { NAME =~  "*Probe_out_*" && IS_SEQUENTIAL} ]

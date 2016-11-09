@@ -1,8 +1,8 @@
 // Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2014.3.1 (lin64) Build 1056140 Thu Oct 30 16:30:39 MDT 2014
-// Date        : Thu Mar 24 14:01:45 2016
-// Host        : adam-cm running 64-bit Ubuntu 14.04.4 LTS
+// Date        : Tue Oct 11 13:47:45 2016
+// Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 // Command     : write_verilog -force -mode funcsim
 //               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/Source/SKA_40GbE_PHY/IEEE802_3_XL_PMA/IEEE802_3_XL_PMA.srcs/sources_1/ip/XLAUI/XLAUI_funcsim.v
 // Design      : XLAUI
@@ -732,7 +732,7 @@ module XLAUI
   wire gt3_txusrclk2_in;
   wire gt3_txusrclk_in;
 
-XLAUIXLAUI_init__parameterized0 U0
+XLAUI_XLAUI_init__parameterized0 U0
        (.DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .GT0_DATA_VALID_IN(GT0_DATA_VALID_IN),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
@@ -963,7 +963,7 @@ XLAUIXLAUI_init__parameterized0 U0
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_GT" *) 
-module XLAUIXLAUI_GT__parameterized0
+module XLAUI_XLAUI_GT__parameterized0
    (gt0_drprdy_out,
     gt0_eyescandataerror_out,
     gt0_gthtxn_out,
@@ -1744,7 +1744,7 @@ module XLAUIXLAUI_GT__parameterized0
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_GT" *) 
-module XLAUIXLAUI_GT__parameterized0_65
+module XLAUI_XLAUI_GT__parameterized0_65
    (gt1_drprdy_out,
     gt1_eyescandataerror_out,
     gt1_gthtxn_out,
@@ -2525,7 +2525,7 @@ module XLAUIXLAUI_GT__parameterized0_65
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_GT" *) 
-module XLAUIXLAUI_GT__parameterized0_66
+module XLAUI_XLAUI_GT__parameterized0_66
    (gt2_drprdy_out,
     gt2_eyescandataerror_out,
     gt2_gthtxn_out,
@@ -3306,7 +3306,7 @@ module XLAUIXLAUI_GT__parameterized0_66
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_GT" *) 
-module XLAUIXLAUI_GT__parameterized0_67
+module XLAUI_XLAUI_GT__parameterized0_67
    (gt3_drprdy_out,
     gt3_eyescandataerror_out,
     gt3_gthtxn_out,
@@ -4087,7 +4087,7 @@ module XLAUIXLAUI_GT__parameterized0_67
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_RX_STARTUP_FSM" *) 
-module XLAUIXLAUI_RX_STARTUP_FSM__parameterized0
+module XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0
    (SR,
     GT0_RX_MMCM_RESET_OUT,
     GT0_RX_FSM_RESET_DONE_OUT,
@@ -4898,7 +4898,7 @@ FDRE #(
         .D(rxresetdone_s2),
         .Q(rxresetdone_s3),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0_56 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0_56 sync_QPLLLOCK
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_5_sync_data_valid),
         .I2(n_1_sync_rxpmaresetdone),
@@ -4909,11 +4909,11 @@ XLAUIXLAUI_sync_block__parameterized0_56 sync_QPLLLOCK
         .SYSCLK_IN(SYSCLK_IN),
         .out(rx_state[3:1]),
         .rxresetdone_s3(rxresetdone_s3));
-XLAUIXLAUI_sync_block__parameterized0_57 sync_RXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_57 sync_RXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(rxresetdone_s2),
         .gt0_rxresetdone_out(gt0_rxresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_58 sync_data_valid
+XLAUI_XLAUI_sync_block__parameterized0_58 sync_data_valid
        (.D({n_1_sync_data_valid,n_2_sync_data_valid,n_3_sync_data_valid}),
         .DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .E(n_4_sync_data_valid),
@@ -4936,7 +4936,7 @@ XLAUIXLAUI_sync_block__parameterized0_58 sync_data_valid
         .rx_state16_out(rx_state16_out),
         .rxresetdone_s3(rxresetdone_s3),
         .time_out_wait_bypass_s3(time_out_wait_bypass_s3));
-XLAUIXLAUI_sync_block__parameterized0_59 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_59 sync_mmcm_lock_reclocked
        (.GT0_RX_MMCM_LOCK_IN(GT0_RX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4__3 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -4944,15 +4944,15 @@ XLAUIXLAUI_sync_block__parameterized0_59 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_60 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_60 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(run_phase_alignment_int_s2),
         .gt0_rxusrclk_in(gt0_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_61 sync_rx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_61 sync_rx_fsm_reset_done_int
        (.GT0_RX_FSM_RESET_DONE_OUT(GT0_RX_FSM_RESET_DONE_OUT),
         .data_out(rx_fsm_reset_done_int_s2),
         .gt0_rxusrclk_in(gt0_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_62 sync_rxpmaresetdone
+XLAUI_XLAUI_sync_block__parameterized0_62 sync_rxpmaresetdone
        (.GT0_RX_MMCM_RESET_OUT(GT0_RX_MMCM_RESET_OUT),
         .I1(I1),
         .O1(n_0_sync_rxpmaresetdone),
@@ -4961,11 +4961,11 @@ XLAUIXLAUI_sync_block__parameterized0_62 sync_rxpmaresetdone
         .data_in(rxpmaresetdone_i),
         .mmcm_lock_reclocked(mmcm_lock_reclocked),
         .out(rx_state));
-XLAUIXLAUI_sync_block__parameterized0_63 sync_rxpmaresetdone_rx_s
+XLAUI_XLAUI_sync_block__parameterized0_63 sync_rxpmaresetdone_rx_s
        (.RXOUTCLK(RXOUTCLK),
         .data_in(data_in),
         .data_out(n_0_sync_rxpmaresetdone_rx_s));
-XLAUIXLAUI_sync_block__parameterized0_64 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_64 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
@@ -5904,7 +5904,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_RX_STARTUP_FSM" *) 
-module XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0
+module XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_0
    (SR,
     GT1_RX_MMCM_RESET_OUT,
     GT1_RX_FSM_RESET_DONE_OUT,
@@ -6715,7 +6715,7 @@ FDRE #(
         .D(rxresetdone_s2),
         .Q(rxresetdone_s3),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0_41 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0_41 sync_QPLLLOCK
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_5_sync_data_valid),
         .I2(n_1_sync_rxpmaresetdone),
@@ -6726,11 +6726,11 @@ XLAUIXLAUI_sync_block__parameterized0_41 sync_QPLLLOCK
         .SYSCLK_IN(SYSCLK_IN),
         .out(rx_state[3:1]),
         .rxresetdone_s3(rxresetdone_s3));
-XLAUIXLAUI_sync_block__parameterized0_42 sync_RXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_42 sync_RXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(rxresetdone_s2),
         .gt1_rxresetdone_out(gt1_rxresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_43 sync_data_valid
+XLAUI_XLAUI_sync_block__parameterized0_43 sync_data_valid
        (.D({n_1_sync_data_valid,n_2_sync_data_valid,n_3_sync_data_valid}),
         .DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .E(n_4_sync_data_valid),
@@ -6753,7 +6753,7 @@ XLAUIXLAUI_sync_block__parameterized0_43 sync_data_valid
         .rx_state16_out(rx_state16_out),
         .rxresetdone_s3(rxresetdone_s3),
         .time_out_wait_bypass_s3(time_out_wait_bypass_s3));
-XLAUIXLAUI_sync_block__parameterized0_44 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_44 sync_mmcm_lock_reclocked
        (.GT1_RX_MMCM_LOCK_IN(GT1_RX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4__4 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -6761,15 +6761,15 @@ XLAUIXLAUI_sync_block__parameterized0_44 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_45 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_45 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(run_phase_alignment_int_s2),
         .gt1_rxusrclk_in(gt1_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_46 sync_rx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_46 sync_rx_fsm_reset_done_int
        (.GT1_RX_FSM_RESET_DONE_OUT(GT1_RX_FSM_RESET_DONE_OUT),
         .data_out(rx_fsm_reset_done_int_s2),
         .gt1_rxusrclk_in(gt1_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_47 sync_rxpmaresetdone
+XLAUI_XLAUI_sync_block__parameterized0_47 sync_rxpmaresetdone
        (.GT1_RX_MMCM_RESET_OUT(GT1_RX_MMCM_RESET_OUT),
         .I1(I1),
         .O1(n_0_sync_rxpmaresetdone),
@@ -6778,11 +6778,11 @@ XLAUIXLAUI_sync_block__parameterized0_47 sync_rxpmaresetdone
         .data_in(rxpmaresetdone_i),
         .mmcm_lock_reclocked(mmcm_lock_reclocked),
         .out(rx_state));
-XLAUIXLAUI_sync_block__parameterized0_48 sync_rxpmaresetdone_rx_s
+XLAUI_XLAUI_sync_block__parameterized0_48 sync_rxpmaresetdone_rx_s
        (.RXOUTCLK(RXOUTCLK),
         .data_in(data_in),
         .data_out(n_0_sync_rxpmaresetdone_rx_s));
-XLAUIXLAUI_sync_block__parameterized0_49 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_49 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
@@ -7719,7 +7719,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_RX_STARTUP_FSM" *) 
-module XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2
+module XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_2
    (SR,
     GT2_RX_MMCM_RESET_OUT,
     GT2_RX_FSM_RESET_DONE_OUT,
@@ -8530,7 +8530,7 @@ FDRE #(
         .D(rxresetdone_s2),
         .Q(rxresetdone_s3),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0_26 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0_26 sync_QPLLLOCK
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_5_sync_data_valid),
         .I2(n_1_sync_rxpmaresetdone),
@@ -8541,11 +8541,11 @@ XLAUIXLAUI_sync_block__parameterized0_26 sync_QPLLLOCK
         .SYSCLK_IN(SYSCLK_IN),
         .out(rx_state[3:1]),
         .rxresetdone_s3(rxresetdone_s3));
-XLAUIXLAUI_sync_block__parameterized0_27 sync_RXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_27 sync_RXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(rxresetdone_s2),
         .gt2_rxresetdone_out(gt2_rxresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_28 sync_data_valid
+XLAUI_XLAUI_sync_block__parameterized0_28 sync_data_valid
        (.D({n_1_sync_data_valid,n_2_sync_data_valid,n_3_sync_data_valid}),
         .DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .E(n_4_sync_data_valid),
@@ -8568,7 +8568,7 @@ XLAUIXLAUI_sync_block__parameterized0_28 sync_data_valid
         .rx_state16_out(rx_state16_out),
         .rxresetdone_s3(rxresetdone_s3),
         .time_out_wait_bypass_s3(time_out_wait_bypass_s3));
-XLAUIXLAUI_sync_block__parameterized0_29 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_29 sync_mmcm_lock_reclocked
        (.GT2_RX_MMCM_LOCK_IN(GT2_RX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4__5 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -8576,15 +8576,15 @@ XLAUIXLAUI_sync_block__parameterized0_29 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_30 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_30 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(run_phase_alignment_int_s2),
         .gt2_rxusrclk_in(gt2_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_31 sync_rx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_31 sync_rx_fsm_reset_done_int
        (.GT2_RX_FSM_RESET_DONE_OUT(GT2_RX_FSM_RESET_DONE_OUT),
         .data_out(rx_fsm_reset_done_int_s2),
         .gt2_rxusrclk_in(gt2_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_32 sync_rxpmaresetdone
+XLAUI_XLAUI_sync_block__parameterized0_32 sync_rxpmaresetdone
        (.GT2_RX_MMCM_RESET_OUT(GT2_RX_MMCM_RESET_OUT),
         .I1(I1),
         .O1(n_0_sync_rxpmaresetdone),
@@ -8593,11 +8593,11 @@ XLAUIXLAUI_sync_block__parameterized0_32 sync_rxpmaresetdone
         .data_in(rxpmaresetdone_i),
         .mmcm_lock_reclocked(mmcm_lock_reclocked),
         .out(rx_state));
-XLAUIXLAUI_sync_block__parameterized0_33 sync_rxpmaresetdone_rx_s
+XLAUI_XLAUI_sync_block__parameterized0_33 sync_rxpmaresetdone_rx_s
        (.RXOUTCLK(RXOUTCLK),
         .data_in(data_in),
         .data_out(n_0_sync_rxpmaresetdone_rx_s));
-XLAUIXLAUI_sync_block__parameterized0_34 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_34 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
@@ -9536,7 +9536,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_RX_STARTUP_FSM" *) 
-module XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4
+module XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_4
    (SR,
     GT3_RX_MMCM_RESET_OUT,
     GT3_RX_FSM_RESET_DONE_OUT,
@@ -10347,7 +10347,7 @@ FDRE #(
         .D(rxresetdone_s2),
         .Q(rxresetdone_s3),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0_11 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0_11 sync_QPLLLOCK
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_5_sync_data_valid),
         .I2(n_1_sync_rxpmaresetdone),
@@ -10358,11 +10358,11 @@ XLAUIXLAUI_sync_block__parameterized0_11 sync_QPLLLOCK
         .SYSCLK_IN(SYSCLK_IN),
         .out(rx_state[3:1]),
         .rxresetdone_s3(rxresetdone_s3));
-XLAUIXLAUI_sync_block__parameterized0_12 sync_RXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_12 sync_RXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(rxresetdone_s2),
         .gt3_rxresetdone_out(gt3_rxresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_13 sync_data_valid
+XLAUI_XLAUI_sync_block__parameterized0_13 sync_data_valid
        (.D({n_1_sync_data_valid,n_2_sync_data_valid,n_3_sync_data_valid}),
         .DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .E(n_4_sync_data_valid),
@@ -10385,7 +10385,7 @@ XLAUIXLAUI_sync_block__parameterized0_13 sync_data_valid
         .rx_state16_out(rx_state16_out),
         .rxresetdone_s3(rxresetdone_s3),
         .time_out_wait_bypass_s3(time_out_wait_bypass_s3));
-XLAUIXLAUI_sync_block__parameterized0_14 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_14 sync_mmcm_lock_reclocked
        (.GT3_RX_MMCM_LOCK_IN(GT3_RX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4__6 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -10393,15 +10393,15 @@ XLAUIXLAUI_sync_block__parameterized0_14 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_15 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_15 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(run_phase_alignment_int_s2),
         .gt3_rxusrclk_in(gt3_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_16 sync_rx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_16 sync_rx_fsm_reset_done_int
        (.GT3_RX_FSM_RESET_DONE_OUT(GT3_RX_FSM_RESET_DONE_OUT),
         .data_out(rx_fsm_reset_done_int_s2),
         .gt3_rxusrclk_in(gt3_rxusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_17 sync_rxpmaresetdone
+XLAUI_XLAUI_sync_block__parameterized0_17 sync_rxpmaresetdone
        (.GT3_RX_MMCM_RESET_OUT(GT3_RX_MMCM_RESET_OUT),
         .I1(I1),
         .O1(n_0_sync_rxpmaresetdone),
@@ -10410,11 +10410,11 @@ XLAUIXLAUI_sync_block__parameterized0_17 sync_rxpmaresetdone
         .data_in(rxpmaresetdone_i),
         .mmcm_lock_reclocked(mmcm_lock_reclocked),
         .out(rx_state));
-XLAUIXLAUI_sync_block__parameterized0_18 sync_rxpmaresetdone_rx_s
+XLAUI_XLAUI_sync_block__parameterized0_18 sync_rxpmaresetdone_rx_s
        (.RXOUTCLK(RXOUTCLK),
         .data_in(data_in),
         .data_out(n_0_sync_rxpmaresetdone_rx_s));
-XLAUIXLAUI_sync_block__parameterized0_19 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_19 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
@@ -11353,7 +11353,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_TX_STARTUP_FSM" *) 
-module XLAUIXLAUI_TX_STARTUP_FSM__parameterized0
+module XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0
    (GTTXRESET,
     GT0_TX_MMCM_RESET_OUT,
     GT0_QPLLRESET_OUT,
@@ -12138,7 +12138,7 @@ FDRE #(
         .D(data_out),
         .Q(run_phase_alignment_int_s3),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0_50 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0_50 sync_QPLLLOCK
        (.E(n_1_sync_QPLLLOCK),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_0_init_wait_done_reg),
@@ -12154,11 +12154,11 @@ XLAUIXLAUI_sync_block__parameterized0_50 sync_QPLLLOCK
         .reset_time_out(reset_time_out),
         .txresetdone_s3(txresetdone_s3),
         .wait_time_done(wait_time_done));
-XLAUIXLAUI_sync_block__parameterized0_51 sync_TXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_51 sync_TXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(txresetdone_s2),
         .gt0_txresetdone_out(gt0_txresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_52 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_52 sync_mmcm_lock_reclocked
        (.GT0_TX_MMCM_LOCK_IN(GT0_TX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -12166,15 +12166,15 @@ XLAUIXLAUI_sync_block__parameterized0_52 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_53 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_53 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(data_out),
         .gt0_txusrclk_in(gt0_txusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_54 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_54 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
-XLAUIXLAUI_sync_block__parameterized0_55 sync_tx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_55 sync_tx_fsm_reset_done_int
        (.GT0_TX_FSM_RESET_DONE_OUT(GT0_TX_FSM_RESET_DONE_OUT),
         .data_out(tx_fsm_reset_done_int_s2),
         .gt0_txusrclk_in(gt0_txusrclk_in));
@@ -13060,7 +13060,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_TX_STARTUP_FSM" *) 
-module XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1
+module XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_1
    (O1,
     GT1_TX_MMCM_RESET_OUT,
     GT1_TX_FSM_RESET_DONE_OUT,
@@ -13824,7 +13824,7 @@ FDRE #(
         .D(data_out),
         .Q(n_0_run_phase_alignment_int_s3_reg),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0_35 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0_35 sync_QPLLLOCK
        (.E(n_1_sync_QPLLLOCK),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_0_init_wait_done_reg),
@@ -13840,11 +13840,11 @@ XLAUIXLAUI_sync_block__parameterized0_35 sync_QPLLLOCK
         .out(tx_state),
         .txresetdone_s3(txresetdone_s3),
         .wait_time_done(wait_time_done));
-XLAUIXLAUI_sync_block__parameterized0_36 sync_TXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_36 sync_TXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(txresetdone_s2),
         .gt1_txresetdone_out(gt1_txresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_37 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_37 sync_mmcm_lock_reclocked
        (.GT1_TX_MMCM_LOCK_IN(GT1_TX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4__0 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -13852,15 +13852,15 @@ XLAUIXLAUI_sync_block__parameterized0_37 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_38 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_38 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(data_out),
         .gt1_txusrclk_in(gt1_txusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_39 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_39 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
-XLAUIXLAUI_sync_block__parameterized0_40 sync_tx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_40 sync_tx_fsm_reset_done_int
        (.GT1_TX_FSM_RESET_DONE_OUT(GT1_TX_FSM_RESET_DONE_OUT),
         .data_out(tx_fsm_reset_done_int_s2),
         .gt1_txusrclk_in(gt1_txusrclk_in));
@@ -14754,7 +14754,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_TX_STARTUP_FSM" *) 
-module XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3
+module XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_3
    (O1,
     GT2_TX_MMCM_RESET_OUT,
     GT2_TX_FSM_RESET_DONE_OUT,
@@ -15517,7 +15517,7 @@ FDRE #(
         .D(data_out),
         .Q(n_0_run_phase_alignment_int_s3_reg),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0_20 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0_20 sync_QPLLLOCK
        (.E(n_1_sync_QPLLLOCK),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_0_init_wait_done_reg),
@@ -15533,11 +15533,11 @@ XLAUIXLAUI_sync_block__parameterized0_20 sync_QPLLLOCK
         .out(tx_state),
         .txresetdone_s3(txresetdone_s3),
         .wait_time_done(wait_time_done));
-XLAUIXLAUI_sync_block__parameterized0_21 sync_TXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_21 sync_TXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(txresetdone_s2),
         .gt2_txresetdone_out(gt2_txresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_22 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_22 sync_mmcm_lock_reclocked
        (.GT2_TX_MMCM_LOCK_IN(GT2_TX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4__1 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -15545,15 +15545,15 @@ XLAUIXLAUI_sync_block__parameterized0_22 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_23 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_23 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(data_out),
         .gt2_txusrclk_in(gt2_txusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_24 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_24 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
-XLAUIXLAUI_sync_block__parameterized0_25 sync_tx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_25 sync_tx_fsm_reset_done_int
        (.GT2_TX_FSM_RESET_DONE_OUT(GT2_TX_FSM_RESET_DONE_OUT),
         .data_out(tx_fsm_reset_done_int_s2),
         .gt2_txusrclk_in(gt2_txusrclk_in));
@@ -16439,7 +16439,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_TX_STARTUP_FSM" *) 
-module XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5
+module XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_5
    (O1,
     GT3_TX_MMCM_RESET_OUT,
     GT3_TX_FSM_RESET_DONE_OUT,
@@ -17202,7 +17202,7 @@ FDRE #(
         .D(data_out),
         .Q(n_0_run_phase_alignment_int_s3_reg),
         .R(1'b0));
-XLAUIXLAUI_sync_block__parameterized0 sync_QPLLLOCK
+XLAUI_XLAUI_sync_block__parameterized0 sync_QPLLLOCK
        (.E(n_1_sync_QPLLLOCK),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .I1(n_0_init_wait_done_reg),
@@ -17218,11 +17218,11 @@ XLAUIXLAUI_sync_block__parameterized0 sync_QPLLLOCK
         .out(tx_state),
         .txresetdone_s3(txresetdone_s3),
         .wait_time_done(wait_time_done));
-XLAUIXLAUI_sync_block__parameterized0_6 sync_TXRESETDONE
+XLAUI_XLAUI_sync_block__parameterized0_6 sync_TXRESETDONE
        (.SYSCLK_IN(SYSCLK_IN),
         .data_out(txresetdone_s2),
         .gt3_txresetdone_out(gt3_txresetdone_out));
-XLAUIXLAUI_sync_block__parameterized0_7 sync_mmcm_lock_reclocked
+XLAUI_XLAUI_sync_block__parameterized0_7 sync_mmcm_lock_reclocked
        (.GT3_TX_MMCM_LOCK_IN(GT3_TX_MMCM_LOCK_IN),
         .I1(\n_0_mmcm_lock_count[7]_i_4__2 ),
         .O1(n_1_sync_mmcm_lock_reclocked),
@@ -17230,15 +17230,15 @@ XLAUIXLAUI_sync_block__parameterized0_7 sync_mmcm_lock_reclocked
         .SR(n_0_sync_mmcm_lock_reclocked),
         .SYSCLK_IN(SYSCLK_IN),
         .mmcm_lock_reclocked(mmcm_lock_reclocked));
-XLAUIXLAUI_sync_block__parameterized0_8 sync_run_phase_alignment_int
+XLAUI_XLAUI_sync_block__parameterized0_8 sync_run_phase_alignment_int
        (.data_in(n_0_run_phase_alignment_int_reg),
         .data_out(data_out),
         .gt3_txusrclk_in(gt3_txusrclk_in));
-XLAUIXLAUI_sync_block__parameterized0_9 sync_time_out_wait_bypass
+XLAUI_XLAUI_sync_block__parameterized0_9 sync_time_out_wait_bypass
        (.SYSCLK_IN(SYSCLK_IN),
         .data_in(n_0_time_out_wait_bypass_reg),
         .data_out(time_out_wait_bypass_s2));
-XLAUIXLAUI_sync_block__parameterized0_10 sync_tx_fsm_reset_done_int
+XLAUI_XLAUI_sync_block__parameterized0_10 sync_tx_fsm_reset_done_int
        (.GT3_TX_FSM_RESET_DONE_OUT(GT3_TX_FSM_RESET_DONE_OUT),
         .data_out(tx_fsm_reset_done_int_s2),
         .gt3_txusrclk_in(gt3_txusrclk_in));
@@ -18124,7 +18124,7 @@ FDSE \wait_time_cnt_reg[6]
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_init" *) 
-module XLAUIXLAUI_init__parameterized0
+module XLAUI_XLAUI_init__parameterized0
    (gt0_drprdy_out,
     gt0_eyescandataerror_out,
     gt0_gthtxn_out,
@@ -18865,7 +18865,7 @@ module XLAUIXLAUI_init__parameterized0
   wire n_3_gt3_rxresetfsm_i;
   wire n_3_gt3_txresetfsm_i;
 
-XLAUIXLAUI_multi_gt__parameterized0 XLAUI_i
+XLAUI_XLAUI_multi_gt__parameterized0 XLAUI_i
        (.GT0_QPLLOUTCLK_IN(GT0_QPLLOUTCLK_IN),
         .GT0_QPLLOUTREFCLK_IN(GT0_QPLLOUTREFCLK_IN),
         .GT0_RXPMARESETDONE_OUT(RXPMARESETDONE),
@@ -19300,7 +19300,7 @@ FDRE gt0_rx_cdrlocked_reg
         .D(n_0_gt0_rx_cdrlocked_i_1),
         .Q(n_0_gt0_rx_cdrlocked_reg),
         .R(GTRXRESET));
-XLAUIXLAUI_RX_STARTUP_FSM__parameterized0 gt0_rxresetfsm_i
+XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0 gt0_rxresetfsm_i
        (.DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .GT0_DATA_VALID_IN(GT0_DATA_VALID_IN),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
@@ -19316,7 +19316,7 @@ XLAUIXLAUI_RX_STARTUP_FSM__parameterized0 gt0_rxresetfsm_i
         .data_in(RXPMARESETDONE),
         .gt0_rxresetdone_out(gt0_rxresetdone_out),
         .gt0_rxusrclk_in(gt0_rxusrclk_in));
-XLAUIXLAUI_TX_STARTUP_FSM__parameterized0 gt0_txresetfsm_i
+XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0 gt0_txresetfsm_i
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .GT0_QPLLRESET_OUT(GT0_QPLLRESET_OUT),
         .GT0_TX_FSM_RESET_DONE_OUT(GT0_TX_FSM_RESET_DONE_OUT),
@@ -19548,7 +19548,7 @@ FDRE gt1_rx_cdrlocked_reg
         .D(n_0_gt1_rx_cdrlocked_i_1),
         .Q(n_0_gt1_rx_cdrlocked_reg),
         .R(n_0_gt1_rxresetfsm_i));
-XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0 gt1_rxresetfsm_i
+XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_0 gt1_rxresetfsm_i
        (.DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .GT1_DATA_VALID_IN(GT1_DATA_VALID_IN),
@@ -19564,7 +19564,7 @@ XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0 gt1_rxresetfsm_i
         .data_in(n_128_XLAUI_i),
         .gt1_rxresetdone_out(gt1_rxresetdone_out),
         .gt1_rxusrclk_in(gt1_rxusrclk_in));
-XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1 gt1_txresetfsm_i
+XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_1 gt1_txresetfsm_i
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .GT1_TX_FSM_RESET_DONE_OUT(GT1_TX_FSM_RESET_DONE_OUT),
         .GT1_TX_MMCM_LOCK_IN(GT1_TX_MMCM_LOCK_IN),
@@ -19795,7 +19795,7 @@ FDRE gt2_rx_cdrlocked_reg
         .D(n_0_gt2_rx_cdrlocked_i_1),
         .Q(n_0_gt2_rx_cdrlocked_reg),
         .R(n_0_gt2_rxresetfsm_i));
-XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2 gt2_rxresetfsm_i
+XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_2 gt2_rxresetfsm_i
        (.DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .GT2_DATA_VALID_IN(GT2_DATA_VALID_IN),
@@ -19811,7 +19811,7 @@ XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2 gt2_rxresetfsm_i
         .data_in(n_251_XLAUI_i),
         .gt2_rxresetdone_out(gt2_rxresetdone_out),
         .gt2_rxusrclk_in(gt2_rxusrclk_in));
-XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3 gt2_txresetfsm_i
+XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_3 gt2_txresetfsm_i
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .GT2_TX_FSM_RESET_DONE_OUT(GT2_TX_FSM_RESET_DONE_OUT),
         .GT2_TX_MMCM_LOCK_IN(GT2_TX_MMCM_LOCK_IN),
@@ -20042,7 +20042,7 @@ FDRE gt3_rx_cdrlocked_reg
         .D(n_0_gt3_rx_cdrlocked_i_1),
         .Q(n_0_gt3_rx_cdrlocked_reg),
         .R(n_0_gt3_rxresetfsm_i));
-XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4 gt3_rxresetfsm_i
+XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_4 gt3_rxresetfsm_i
        (.DONT_RESET_ON_DATA_ERROR_IN(DONT_RESET_ON_DATA_ERROR_IN),
         .GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .GT3_DATA_VALID_IN(GT3_DATA_VALID_IN),
@@ -20058,7 +20058,7 @@ XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4 gt3_rxresetfsm_i
         .data_in(n_374_XLAUI_i),
         .gt3_rxresetdone_out(gt3_rxresetdone_out),
         .gt3_rxusrclk_in(gt3_rxusrclk_in));
-XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5 gt3_txresetfsm_i
+XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_5 gt3_txresetfsm_i
        (.GT0_QPLLLOCK_IN(GT0_QPLLLOCK_IN),
         .GT3_TX_FSM_RESET_DONE_OUT(GT3_TX_FSM_RESET_DONE_OUT),
         .GT3_TX_MMCM_LOCK_IN(GT3_TX_MMCM_LOCK_IN),
@@ -20076,7 +20076,7 @@ XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5 gt3_txresetfsm_i
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_multi_gt" *) 
-module XLAUIXLAUI_multi_gt__parameterized0
+module XLAUI_XLAUI_multi_gt__parameterized0
    (gt0_drprdy_out,
     gt0_eyescandataerror_out,
     gt0_gthtxn_out,
@@ -20721,7 +20721,7 @@ module XLAUIXLAUI_multi_gt__parameterized0
   wire gt3_txusrclk2_in;
   wire gt3_txusrclk_in;
 
-XLAUIXLAUI_GT__parameterized0 gt0_XLAUI_i
+XLAUI_XLAUI_GT__parameterized0 gt0_XLAUI_i
        (.GT0_QPLLOUTCLK_IN(GT0_QPLLOUTCLK_IN),
         .GT0_QPLLOUTREFCLK_IN(GT0_QPLLOUTREFCLK_IN),
         .GT0_RXPMARESETDONE_OUT(GT0_RXPMARESETDONE_OUT),
@@ -20777,7 +20777,7 @@ XLAUIXLAUI_GT__parameterized0 gt0_XLAUI_i
         .gt0_txuserrdy_in(gt0_txuserrdy_in),
         .gt0_txusrclk2_in(gt0_txusrclk2_in),
         .gt0_txusrclk_in(gt0_txusrclk_in));
-XLAUIXLAUI_GT__parameterized0_65 gt1_XLAUI_i
+XLAUI_XLAUI_GT__parameterized0_65 gt1_XLAUI_i
        (.GT0_QPLLOUTCLK_IN(GT0_QPLLOUTCLK_IN),
         .GT0_QPLLOUTREFCLK_IN(GT0_QPLLOUTREFCLK_IN),
         .GT1_RXPMARESETDONE_OUT(GT1_RXPMARESETDONE_OUT),
@@ -20833,7 +20833,7 @@ XLAUIXLAUI_GT__parameterized0_65 gt1_XLAUI_i
         .gt1_txuserrdy_in(gt1_txuserrdy_in),
         .gt1_txusrclk2_in(gt1_txusrclk2_in),
         .gt1_txusrclk_in(gt1_txusrclk_in));
-XLAUIXLAUI_GT__parameterized0_66 gt2_XLAUI_i
+XLAUI_XLAUI_GT__parameterized0_66 gt2_XLAUI_i
        (.GT0_QPLLOUTCLK_IN(GT0_QPLLOUTCLK_IN),
         .GT0_QPLLOUTREFCLK_IN(GT0_QPLLOUTREFCLK_IN),
         .GT2_RXPMARESETDONE_OUT(GT2_RXPMARESETDONE_OUT),
@@ -20889,7 +20889,7 @@ XLAUIXLAUI_GT__parameterized0_66 gt2_XLAUI_i
         .gt2_txuserrdy_in(gt2_txuserrdy_in),
         .gt2_txusrclk2_in(gt2_txusrclk2_in),
         .gt2_txusrclk_in(gt2_txusrclk_in));
-XLAUIXLAUI_GT__parameterized0_67 gt3_XLAUI_i
+XLAUI_XLAUI_GT__parameterized0_67 gt3_XLAUI_i
        (.GT0_QPLLOUTCLK_IN(GT0_QPLLOUTCLK_IN),
         .GT0_QPLLOUTREFCLK_IN(GT0_QPLLOUTREFCLK_IN),
         .GT3_RXPMARESETDONE_OUT(GT3_RXPMARESETDONE_OUT),
@@ -20948,7 +20948,7 @@ XLAUIXLAUI_GT__parameterized0_67 gt3_XLAUI_i
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0
+module XLAUI_XLAUI_sync_block__parameterized0
    (O1,
     E,
     out,
@@ -21146,7 +21146,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_10
+module XLAUI_XLAUI_sync_block__parameterized0_10
    (data_out,
     GT3_TX_FSM_RESET_DONE_OUT,
     gt3_txusrclk_in);
@@ -21238,7 +21238,7 @@ module XLAUIXLAUI_sync_block__parameterized0_10
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_11
+module XLAUI_XLAUI_sync_block__parameterized0_11
    (O1,
     O2,
     out,
@@ -21381,7 +21381,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_12
+module XLAUI_XLAUI_sync_block__parameterized0_12
    (data_out,
     gt3_rxresetdone_out,
     SYSCLK_IN);
@@ -21473,7 +21473,7 @@ module XLAUIXLAUI_sync_block__parameterized0_12
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_13
+module XLAUI_XLAUI_sync_block__parameterized0_13
    (O1,
     D,
     E,
@@ -21752,7 +21752,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_14
+module XLAUI_XLAUI_sync_block__parameterized0_14
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -21873,7 +21873,7 @@ module XLAUIXLAUI_sync_block__parameterized0_14
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_15
+module XLAUI_XLAUI_sync_block__parameterized0_15
    (data_out,
     data_in,
     gt3_rxusrclk_in);
@@ -21965,7 +21965,7 @@ module XLAUIXLAUI_sync_block__parameterized0_15
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_16
+module XLAUI_XLAUI_sync_block__parameterized0_16
    (data_out,
     GT3_RX_FSM_RESET_DONE_OUT,
     gt3_rxusrclk_in);
@@ -22057,7 +22057,7 @@ module XLAUIXLAUI_sync_block__parameterized0_16
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_17
+module XLAUI_XLAUI_sync_block__parameterized0_17
    (O1,
     O2,
     out,
@@ -22195,7 +22195,7 @@ LUT5 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_18
+module XLAUI_XLAUI_sync_block__parameterized0_18
    (data_out,
     data_in,
     RXOUTCLK);
@@ -22287,7 +22287,7 @@ module XLAUIXLAUI_sync_block__parameterized0_18
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_19
+module XLAUI_XLAUI_sync_block__parameterized0_19
    (data_out,
     data_in,
     SYSCLK_IN);
@@ -22379,7 +22379,7 @@ module XLAUIXLAUI_sync_block__parameterized0_19
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_20
+module XLAUI_XLAUI_sync_block__parameterized0_20
    (O1,
     E,
     out,
@@ -22577,7 +22577,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_21
+module XLAUI_XLAUI_sync_block__parameterized0_21
    (data_out,
     gt2_txresetdone_out,
     SYSCLK_IN);
@@ -22669,7 +22669,7 @@ module XLAUIXLAUI_sync_block__parameterized0_21
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_22
+module XLAUI_XLAUI_sync_block__parameterized0_22
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -22790,7 +22790,7 @@ module XLAUIXLAUI_sync_block__parameterized0_22
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_23
+module XLAUI_XLAUI_sync_block__parameterized0_23
    (data_out,
     data_in,
     gt2_txusrclk_in);
@@ -22882,7 +22882,7 @@ module XLAUIXLAUI_sync_block__parameterized0_23
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_24
+module XLAUI_XLAUI_sync_block__parameterized0_24
    (data_out,
     data_in,
     SYSCLK_IN);
@@ -22974,7 +22974,7 @@ module XLAUIXLAUI_sync_block__parameterized0_24
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_25
+module XLAUI_XLAUI_sync_block__parameterized0_25
    (data_out,
     GT2_TX_FSM_RESET_DONE_OUT,
     gt2_txusrclk_in);
@@ -23066,7 +23066,7 @@ module XLAUIXLAUI_sync_block__parameterized0_25
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_26
+module XLAUI_XLAUI_sync_block__parameterized0_26
    (O1,
     O2,
     out,
@@ -23209,7 +23209,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_27
+module XLAUI_XLAUI_sync_block__parameterized0_27
    (data_out,
     gt2_rxresetdone_out,
     SYSCLK_IN);
@@ -23301,7 +23301,7 @@ module XLAUIXLAUI_sync_block__parameterized0_27
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_28
+module XLAUI_XLAUI_sync_block__parameterized0_28
    (O1,
     D,
     E,
@@ -23580,7 +23580,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_29
+module XLAUI_XLAUI_sync_block__parameterized0_29
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -23701,7 +23701,7 @@ module XLAUIXLAUI_sync_block__parameterized0_29
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_30
+module XLAUI_XLAUI_sync_block__parameterized0_30
    (data_out,
     data_in,
     gt2_rxusrclk_in);
@@ -23793,7 +23793,7 @@ module XLAUIXLAUI_sync_block__parameterized0_30
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_31
+module XLAUI_XLAUI_sync_block__parameterized0_31
    (data_out,
     GT2_RX_FSM_RESET_DONE_OUT,
     gt2_rxusrclk_in);
@@ -23885,7 +23885,7 @@ module XLAUIXLAUI_sync_block__parameterized0_31
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_32
+module XLAUI_XLAUI_sync_block__parameterized0_32
    (O1,
     O2,
     out,
@@ -24023,7 +24023,7 @@ LUT5 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_33
+module XLAUI_XLAUI_sync_block__parameterized0_33
    (data_out,
     data_in,
     RXOUTCLK);
@@ -24115,7 +24115,7 @@ module XLAUIXLAUI_sync_block__parameterized0_33
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_34
+module XLAUI_XLAUI_sync_block__parameterized0_34
    (data_out,
     data_in,
     SYSCLK_IN);
@@ -24207,7 +24207,7 @@ module XLAUIXLAUI_sync_block__parameterized0_34
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_35
+module XLAUI_XLAUI_sync_block__parameterized0_35
    (O1,
     E,
     out,
@@ -24405,7 +24405,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_36
+module XLAUI_XLAUI_sync_block__parameterized0_36
    (data_out,
     gt1_txresetdone_out,
     SYSCLK_IN);
@@ -24497,7 +24497,7 @@ module XLAUIXLAUI_sync_block__parameterized0_36
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_37
+module XLAUI_XLAUI_sync_block__parameterized0_37
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -24618,7 +24618,7 @@ module XLAUIXLAUI_sync_block__parameterized0_37
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_38
+module XLAUI_XLAUI_sync_block__parameterized0_38
    (data_out,
     data_in,
     gt1_txusrclk_in);
@@ -24710,7 +24710,7 @@ module XLAUIXLAUI_sync_block__parameterized0_38
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_39
+module XLAUI_XLAUI_sync_block__parameterized0_39
    (data_out,
     data_in,
     SYSCLK_IN);
@@ -24802,7 +24802,7 @@ module XLAUIXLAUI_sync_block__parameterized0_39
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_40
+module XLAUI_XLAUI_sync_block__parameterized0_40
    (data_out,
     GT1_TX_FSM_RESET_DONE_OUT,
     gt1_txusrclk_in);
@@ -24894,7 +24894,7 @@ module XLAUIXLAUI_sync_block__parameterized0_40
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_41
+module XLAUI_XLAUI_sync_block__parameterized0_41
    (O1,
     O2,
     out,
@@ -25037,7 +25037,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_42
+module XLAUI_XLAUI_sync_block__parameterized0_42
    (data_out,
     gt1_rxresetdone_out,
     SYSCLK_IN);
@@ -25129,7 +25129,7 @@ module XLAUIXLAUI_sync_block__parameterized0_42
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_43
+module XLAUI_XLAUI_sync_block__parameterized0_43
    (O1,
     D,
     E,
@@ -25408,7 +25408,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_44
+module XLAUI_XLAUI_sync_block__parameterized0_44
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -25529,7 +25529,7 @@ module XLAUIXLAUI_sync_block__parameterized0_44
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_45
+module XLAUI_XLAUI_sync_block__parameterized0_45
    (data_out,
     data_in,
     gt1_rxusrclk_in);
@@ -25621,7 +25621,7 @@ module XLAUIXLAUI_sync_block__parameterized0_45
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_46
+module XLAUI_XLAUI_sync_block__parameterized0_46
    (data_out,
     GT1_RX_FSM_RESET_DONE_OUT,
     gt1_rxusrclk_in);
@@ -25713,7 +25713,7 @@ module XLAUIXLAUI_sync_block__parameterized0_46
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_47
+module XLAUI_XLAUI_sync_block__parameterized0_47
    (O1,
     O2,
     out,
@@ -25851,7 +25851,7 @@ LUT5 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_48
+module XLAUI_XLAUI_sync_block__parameterized0_48
    (data_out,
     data_in,
     RXOUTCLK);
@@ -25943,7 +25943,7 @@ module XLAUIXLAUI_sync_block__parameterized0_48
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_49
+module XLAUI_XLAUI_sync_block__parameterized0_49
    (data_out,
     data_in,
     SYSCLK_IN);
@@ -26035,7 +26035,7 @@ module XLAUIXLAUI_sync_block__parameterized0_49
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_50
+module XLAUI_XLAUI_sync_block__parameterized0_50
    (O1,
     E,
     out,
@@ -26233,7 +26233,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_51
+module XLAUI_XLAUI_sync_block__parameterized0_51
    (data_out,
     gt0_txresetdone_out,
     SYSCLK_IN);
@@ -26325,7 +26325,7 @@ module XLAUIXLAUI_sync_block__parameterized0_51
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_52
+module XLAUI_XLAUI_sync_block__parameterized0_52
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -26446,7 +26446,7 @@ module XLAUIXLAUI_sync_block__parameterized0_52
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_53
+module XLAUI_XLAUI_sync_block__parameterized0_53
    (data_out,
     data_in,
     gt0_txusrclk_in);
@@ -26538,7 +26538,7 @@ module XLAUIXLAUI_sync_block__parameterized0_53
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_54
+module XLAUI_XLAUI_sync_block__parameterized0_54
    (data_out,
     data_in,
     SYSCLK_IN);
@@ -26630,7 +26630,7 @@ module XLAUIXLAUI_sync_block__parameterized0_54
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_55
+module XLAUI_XLAUI_sync_block__parameterized0_55
    (data_out,
     GT0_TX_FSM_RESET_DONE_OUT,
     gt0_txusrclk_in);
@@ -26722,7 +26722,7 @@ module XLAUIXLAUI_sync_block__parameterized0_55
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_56
+module XLAUI_XLAUI_sync_block__parameterized0_56
    (O1,
     O2,
     out,
@@ -26865,7 +26865,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_57
+module XLAUI_XLAUI_sync_block__parameterized0_57
    (data_out,
     gt0_rxresetdone_out,
     SYSCLK_IN);
@@ -26957,7 +26957,7 @@ module XLAUIXLAUI_sync_block__parameterized0_57
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_58
+module XLAUI_XLAUI_sync_block__parameterized0_58
    (O1,
     D,
     E,
@@ -27236,7 +27236,7 @@ LUT6 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_59
+module XLAUI_XLAUI_sync_block__parameterized0_59
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -27357,7 +27357,7 @@ module XLAUIXLAUI_sync_block__parameterized0_59
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_6
+module XLAUI_XLAUI_sync_block__parameterized0_6
    (data_out,
     gt3_txresetdone_out,
     SYSCLK_IN);
@@ -27449,7 +27449,7 @@ module XLAUIXLAUI_sync_block__parameterized0_6
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_60
+module XLAUI_XLAUI_sync_block__parameterized0_60
    (data_out,
     data_in,
     gt0_rxusrclk_in);
@@ -27541,7 +27541,7 @@ module XLAUIXLAUI_sync_block__parameterized0_60
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_61
+module XLAUI_XLAUI_sync_block__parameterized0_61
    (data_out,
     GT0_RX_FSM_RESET_DONE_OUT,
     gt0_rxusrclk_in);
@@ -27633,7 +27633,7 @@ module XLAUIXLAUI_sync_block__parameterized0_61
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_62
+module XLAUI_XLAUI_sync_block__parameterized0_62
    (O1,
     O2,
     out,
@@ -27771,7 +27771,7 @@ LUT5 #(
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_63
+module XLAUI_XLAUI_sync_block__parameterized0_63
    (data_out,
     data_in,
     RXOUTCLK);
@@ -27863,7 +27863,7 @@ module XLAUIXLAUI_sync_block__parameterized0_63
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_64
+module XLAUI_XLAUI_sync_block__parameterized0_64
    (data_out,
     data_in,
     SYSCLK_IN);
@@ -27955,7 +27955,7 @@ module XLAUIXLAUI_sync_block__parameterized0_64
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_7
+module XLAUI_XLAUI_sync_block__parameterized0_7
    (SR,
     O1,
     mmcm_lock_reclocked,
@@ -28076,7 +28076,7 @@ module XLAUIXLAUI_sync_block__parameterized0_7
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_8
+module XLAUI_XLAUI_sync_block__parameterized0_8
    (data_out,
     data_in,
     gt3_txusrclk_in);
@@ -28168,7 +28168,7 @@ module XLAUIXLAUI_sync_block__parameterized0_8
 endmodule
 
 (* ORIG_REF_NAME = "XLAUI_sync_block" *) 
-module XLAUIXLAUI_sync_block__parameterized0_9
+module XLAUI_XLAUI_sync_block__parameterized0_9
    (data_out,
     data_in,
     SYSCLK_IN);

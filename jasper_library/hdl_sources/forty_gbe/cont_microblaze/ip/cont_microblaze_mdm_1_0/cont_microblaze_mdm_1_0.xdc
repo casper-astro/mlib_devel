@@ -1,5 +1,5 @@
 # file: cont_microblaze_mdm_1_0.xdc
-# (c) Copyright 2013-2014 Xilinx, Inc. All rights reserved.
+# (c) Copyright 2013-2015 Xilinx, Inc. All rights reserved.
 # 
 # This file contains confidential and proprietary information
 # of Xilinx, Inc. and is protected under U.S. and
@@ -49,4 +49,9 @@ create_clock -period 33.333 [get_pins {Use*.BSCAN*/DRCK}]
 create_clock -period 33.333 [get_pins {Use*.BSCAN*/UPDATE}]
 set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins "Use*.BSCAN*/DRCK"]]
 set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins "Use*.BSCAN*/UPDATE"]]
+set_false_path -through [get_pins "Use*.BSCAN*/CAPTURE"]
+set_false_path -through [get_pins "Use*.BSCAN*/SEL"]
+set_false_path -through [get_pins "Use*.BSCAN*/SHIFT"]
+set_false_path -through [get_pins "Use*.BSCAN*/TDI"]
 set_clock_groups -logically_exclusive  -group [get_clocks -of_objects [get_pins "Use*.BSCAN*/DRCK"]] -group [get_clocks -of_objects [get_pins "Use*.BSCAN*/UPDATE"]]
+set_ip_msg_config -idlist { CDC-1 CDCM-1 REQP-1851 TIMING-2 TIMING-4 TIMING-9 TIMING-10 TIMING-14 }

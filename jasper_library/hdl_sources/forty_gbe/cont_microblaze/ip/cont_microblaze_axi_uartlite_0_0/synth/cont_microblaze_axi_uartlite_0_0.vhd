@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:axi_uartlite:2.0
--- IP Revision: 6
+-- IP Revision: 13
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY axi_uartlite_v2_0;
-USE axi_uartlite_v2_0.axi_uartlite;
+LIBRARY axi_uartlite_v2_0_13;
+USE axi_uartlite_v2_0_13.axi_uartlite;
 
 ENTITY cont_microblaze_axi_uartlite_0_0 IS
   PORT (
@@ -84,9 +84,8 @@ ENTITY cont_microblaze_axi_uartlite_0_0 IS
 END cont_microblaze_axi_uartlite_0_0;
 
 ARCHITECTURE cont_microblaze_axi_uartlite_0_0_arch OF cont_microblaze_axi_uartlite_0_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_axi_uartlite_0_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT axi_uartlite IS
     GENERIC (
       C_FAMILY : STRING;
@@ -124,15 +123,15 @@ ARCHITECTURE cont_microblaze_axi_uartlite_0_0_arch OF cont_microblaze_axi_uartli
     );
   END COMPONENT axi_uartlite;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF cont_microblaze_axi_uartlite_0_0_arch: ARCHITECTURE IS "axi_uartlite,Vivado 2014.3.1";
+  ATTRIBUTE X_CORE_INFO OF cont_microblaze_axi_uartlite_0_0_arch: ARCHITECTURE IS "axi_uartlite,Vivado 2016.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_axi_uartlite_0_0_arch : ARCHITECTURE IS "cont_microblaze_axi_uartlite_0_0,axi_uartlite,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_axi_uartlite_0_0_arch: ARCHITECTURE IS "cont_microblaze_axi_uartlite_0_0,axi_uartlite,{x_ipProduct=Vivado 2014.3.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_uartlite,x_ipVersion=2.0,x_ipCoreRevision=6,x_ipLanguage=VHDL,C_FAMILY=virtex7,C_S_AXI_ACLK_FREQ_HZ=156000000,C_S_AXI_ADDR_WIDTH=4,C_S_AXI_DATA_WIDTH=32,C_BAUDRATE=115200,C_DATA_BITS=8,C_USE_PARITY=0,C_ODD_PARITY=0}";
+  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_axi_uartlite_0_0_arch: ARCHITECTURE IS "cont_microblaze_axi_uartlite_0_0,axi_uartlite,{x_ipProduct=Vivado 2016.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_uartlite,x_ipVersion=2.0,x_ipCoreRevision=13,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=virtex7,C_S_AXI_ACLK_FREQ_HZ=156250000,C_S_AXI_ADDR_WIDTH=4,C_S_AXI_DATA_WIDTH=32,C_BAUDRATE=115200,C_DATA_BITS=8,C_USE_PARITY=0,C_ODD_PARITY=0}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF s_axi_aclk: SIGNAL IS "xilinx.com:signal:clock:1.0 ACLK CLK";
   ATTRIBUTE X_INTERFACE_INFO OF s_axi_aresetn: SIGNAL IS "xilinx.com:signal:reset:1.0 ARESETN RST";
-  ATTRIBUTE X_INTERFACE_INFO OF interrupt: SIGNAL IS "xilinx.com:signal:interrupt:1.0 INTERRUPT interrupt";
+  ATTRIBUTE X_INTERFACE_INFO OF interrupt: SIGNAL IS "xilinx.com:signal:interrupt:1.0 INTERRUPT INTERRUPT";
   ATTRIBUTE X_INTERFACE_INFO OF s_axi_awaddr: SIGNAL IS "xilinx.com:interface:aximm:1.0 S_AXI AWADDR";
   ATTRIBUTE X_INTERFACE_INFO OF s_axi_awvalid: SIGNAL IS "xilinx.com:interface:aximm:1.0 S_AXI AWVALID";
   ATTRIBUTE X_INTERFACE_INFO OF s_axi_awready: SIGNAL IS "xilinx.com:interface:aximm:1.0 S_AXI AWREADY";
@@ -156,7 +155,7 @@ BEGIN
   U0 : axi_uartlite
     GENERIC MAP (
       C_FAMILY => "virtex7",
-      C_S_AXI_ACLK_FREQ_HZ => 156000000,
+      C_S_AXI_ACLK_FREQ_HZ => 156250000,
       C_S_AXI_ADDR_WIDTH => 4,
       C_S_AXI_DATA_WIDTH => 32,
       C_BAUDRATE => 115200,

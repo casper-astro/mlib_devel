@@ -1,8 +1,8 @@
---Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+--Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
---Tool Version: Vivado v.2014.3.1 (lin64) Build 1056140 Thu Oct 30 16:30:39 MDT 2014
---Date        : Tue Sep 13 12:50:33 2016
---Host        : adam-cm running 64-bit Ubuntu 14.04.4 LTS
+--Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
+--Date        : Tue Nov  8 10:51:00 2016
+--Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 --Command     : generate_target cont_microblaze_wrapper.bd
 --Design      : cont_microblaze_wrapper
 --Purpose     : IP block netlist
@@ -49,7 +49,7 @@ architecture STRUCTURE of cont_microblaze_wrapper is
   end component cont_microblaze;
 begin
 cont_microblaze_i: component cont_microblaze
-    port map (
+     port map (
       ACK_I => ACK_I,
       ADR_O(31 downto 0) => ADR_O(31 downto 0),
       CYC_O => CYC_O,

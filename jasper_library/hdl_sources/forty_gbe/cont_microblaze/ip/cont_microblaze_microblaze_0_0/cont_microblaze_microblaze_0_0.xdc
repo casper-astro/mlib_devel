@@ -1,1 +1,2 @@
-set_false_path -to [get_pins {MicroBlaze_Core_I/reset_temp_reg*/D}]
+set_false_path -through [get_ports "Reset"]
+set_ip_msg_config -idlist { DPOP-3 PDCN-1569 CDC-1 CDC-4 CDC-7 TIMING-9 TIMING-10 }

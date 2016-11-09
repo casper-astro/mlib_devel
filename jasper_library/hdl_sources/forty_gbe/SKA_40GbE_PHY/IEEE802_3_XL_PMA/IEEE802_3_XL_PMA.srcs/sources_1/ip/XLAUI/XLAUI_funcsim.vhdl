@@ -1,8 +1,8 @@
 -- Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2014.3.1 (lin64) Build 1056140 Thu Oct 30 16:30:39 MDT 2014
--- Date        : Thu Mar 24 14:01:45 2016
--- Host        : adam-cm running 64-bit Ubuntu 14.04.4 LTS
+-- Date        : Tue Oct 11 13:47:45 2016
+-- Host        : adam-cm running 64-bit Ubuntu 14.04.5 LTS
 -- Command     : write_vhdl -force -mode funcsim
 --               /home/aisaacson/work/git_work/ska_sa/projects/skarab_bsp_firmware/firmware/FRM123701U1R1/Vivado/Source/SKA_40GbE_PHY/IEEE802_3_XL_PMA/IEEE802_3_XL_PMA.srcs/sources_1/ip/XLAUI/XLAUI_funcsim.vhdl
 -- Design      : XLAUI
@@ -14,7 +14,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_GT__parameterized0\ is
+entity \XLAUI_XLAUI_GT__parameterized0\ is
   port (
     gt0_drprdy_out : out STD_LOGIC;
     gt0_eyescandataerror_out : out STD_LOGIC;
@@ -73,10 +73,10 @@ entity \XLAUIXLAUI_GT__parameterized0\ is
     gt0_drpaddr_in : in STD_LOGIC_VECTOR ( 8 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_GT__parameterized0\ : entity is "XLAUI_GT";
-end \XLAUIXLAUI_GT__parameterized0\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_GT__parameterized0\ : entity is "XLAUI_GT";
+end \XLAUI_XLAUI_GT__parameterized0\;
 
-architecture STRUCTURE of \XLAUIXLAUI_GT__parameterized0\ is
+architecture STRUCTURE of \XLAUI_XLAUI_GT__parameterized0\ is
   signal n_50_gthe2_i : STD_LOGIC;
   signal NLW_gthe2_i_CPLLFBCLKLOST_UNCONNECTED : STD_LOGIC;
   signal NLW_gthe2_i_CPLLLOCK_UNCONNECTED : STD_LOGIC;
@@ -864,7 +864,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_GT__parameterized0_65\ is
+entity \XLAUI_XLAUI_GT__parameterized0_65\ is
   port (
     gt1_drprdy_out : out STD_LOGIC;
     gt1_eyescandataerror_out : out STD_LOGIC;
@@ -923,10 +923,10 @@ entity \XLAUIXLAUI_GT__parameterized0_65\ is
     gt1_drpaddr_in : in STD_LOGIC_VECTOR ( 8 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_GT__parameterized0_65\ : entity is "XLAUI_GT";
-end \XLAUIXLAUI_GT__parameterized0_65\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_GT__parameterized0_65\ : entity is "XLAUI_GT";
+end \XLAUI_XLAUI_GT__parameterized0_65\;
 
-architecture STRUCTURE of \XLAUIXLAUI_GT__parameterized0_65\ is
+architecture STRUCTURE of \XLAUI_XLAUI_GT__parameterized0_65\ is
   signal n_50_gthe2_i : STD_LOGIC;
   signal NLW_gthe2_i_CPLLFBCLKLOST_UNCONNECTED : STD_LOGIC;
   signal NLW_gthe2_i_CPLLLOCK_UNCONNECTED : STD_LOGIC;
@@ -1714,7 +1714,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_GT__parameterized0_66\ is
+entity \XLAUI_XLAUI_GT__parameterized0_66\ is
   port (
     gt2_drprdy_out : out STD_LOGIC;
     gt2_eyescandataerror_out : out STD_LOGIC;
@@ -1773,10 +1773,10 @@ entity \XLAUIXLAUI_GT__parameterized0_66\ is
     gt2_drpaddr_in : in STD_LOGIC_VECTOR ( 8 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_GT__parameterized0_66\ : entity is "XLAUI_GT";
-end \XLAUIXLAUI_GT__parameterized0_66\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_GT__parameterized0_66\ : entity is "XLAUI_GT";
+end \XLAUI_XLAUI_GT__parameterized0_66\;
 
-architecture STRUCTURE of \XLAUIXLAUI_GT__parameterized0_66\ is
+architecture STRUCTURE of \XLAUI_XLAUI_GT__parameterized0_66\ is
   signal n_50_gthe2_i : STD_LOGIC;
   signal NLW_gthe2_i_CPLLFBCLKLOST_UNCONNECTED : STD_LOGIC;
   signal NLW_gthe2_i_CPLLLOCK_UNCONNECTED : STD_LOGIC;
@@ -2564,7 +2564,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_GT__parameterized0_67\ is
+entity \XLAUI_XLAUI_GT__parameterized0_67\ is
   port (
     gt3_drprdy_out : out STD_LOGIC;
     gt3_eyescandataerror_out : out STD_LOGIC;
@@ -2623,10 +2623,10 @@ entity \XLAUIXLAUI_GT__parameterized0_67\ is
     gt3_drpaddr_in : in STD_LOGIC_VECTOR ( 8 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_GT__parameterized0_67\ : entity is "XLAUI_GT";
-end \XLAUIXLAUI_GT__parameterized0_67\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_GT__parameterized0_67\ : entity is "XLAUI_GT";
+end \XLAUI_XLAUI_GT__parameterized0_67\;
 
-architecture STRUCTURE of \XLAUIXLAUI_GT__parameterized0_67\ is
+architecture STRUCTURE of \XLAUI_XLAUI_GT__parameterized0_67\ is
   signal n_50_gthe2_i : STD_LOGIC;
   signal NLW_gthe2_i_CPLLFBCLKLOST_UNCONNECTED : STD_LOGIC;
   signal NLW_gthe2_i_CPLLLOCK_UNCONNECTED : STD_LOGIC;
@@ -3414,7 +3414,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0\ is
   port (
     O1 : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
@@ -3433,10 +3433,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -3632,17 +3632,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_10\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_10\ is
   port (
     data_out : out STD_LOGIC;
     GT3_TX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt3_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_10\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_10\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_10\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_10\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_10\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_10\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -3748,7 +3748,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_11\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_11\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -3762,10 +3762,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_11\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_11\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_11\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_11\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_11\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_11\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_11\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -3910,17 +3910,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_12\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_12\ is
   port (
     data_out : out STD_LOGIC;
     gt3_rxresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_12\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_12\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_12\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_12\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_12\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_12\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -4026,7 +4026,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_13\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_13\ is
   port (
     O1 : out STD_LOGIC;
     D : out STD_LOGIC_VECTOR ( 2 downto 0 );
@@ -4052,10 +4052,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_13\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_13\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_13\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_13\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_13\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_13\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_13\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -4330,7 +4330,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_14\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_14\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -4341,10 +4341,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_14\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_14\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_14\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_14\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_14\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_14\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_14\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -4474,17 +4474,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_15\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_15\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt3_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_15\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_15\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_15\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_15\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_15\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_15\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -4590,17 +4590,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_16\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_16\ is
   port (
     data_out : out STD_LOGIC;
     GT3_RX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt3_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_16\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_16\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_16\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_16\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_16\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_16\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -4706,7 +4706,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_17\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_17\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -4718,10 +4718,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_17\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_17\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_17\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_17\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_17\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_17\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_17\ is
   signal data_out : STD_LOGIC;
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
@@ -4867,17 +4867,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_18\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_18\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     RXOUTCLK : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_18\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_18\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_18\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_18\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_18\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_18\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -4983,17 +4983,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_19\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_19\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_19\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_19\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_19\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_19\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_19\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_19\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -5099,7 +5099,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_20\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_20\ is
   port (
     O1 : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
@@ -5118,10 +5118,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_20\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_20\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_20\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_20\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_20\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_20\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_20\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -5317,17 +5317,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_21\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_21\ is
   port (
     data_out : out STD_LOGIC;
     gt2_txresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_21\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_21\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_21\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_21\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_21\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_21\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -5433,7 +5433,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_22\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_22\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -5444,10 +5444,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_22\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_22\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_22\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_22\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_22\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_22\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_22\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -5577,17 +5577,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_23\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_23\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt2_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_23\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_23\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_23\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_23\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_23\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_23\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -5693,17 +5693,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_24\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_24\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_24\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_24\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_24\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_24\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_24\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_24\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -5809,17 +5809,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_25\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_25\ is
   port (
     data_out : out STD_LOGIC;
     GT2_TX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt2_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_25\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_25\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_25\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_25\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_25\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_25\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -5925,7 +5925,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_26\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_26\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -5939,10 +5939,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_26\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_26\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_26\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_26\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_26\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_26\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_26\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -6087,17 +6087,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_27\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_27\ is
   port (
     data_out : out STD_LOGIC;
     gt2_rxresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_27\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_27\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_27\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_27\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_27\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_27\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -6203,7 +6203,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_28\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_28\ is
   port (
     O1 : out STD_LOGIC;
     D : out STD_LOGIC_VECTOR ( 2 downto 0 );
@@ -6229,10 +6229,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_28\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_28\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_28\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_28\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_28\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_28\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_28\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -6507,7 +6507,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_29\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_29\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -6518,10 +6518,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_29\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_29\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_29\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_29\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_29\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_29\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_29\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -6651,17 +6651,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_30\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_30\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt2_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_30\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_30\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_30\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_30\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_30\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_30\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -6767,17 +6767,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_31\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_31\ is
   port (
     data_out : out STD_LOGIC;
     GT2_RX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt2_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_31\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_31\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_31\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_31\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_31\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_31\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -6883,7 +6883,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_32\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_32\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -6895,10 +6895,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_32\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_32\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_32\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_32\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_32\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_32\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_32\ is
   signal data_out : STD_LOGIC;
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
@@ -7044,17 +7044,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_33\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_33\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     RXOUTCLK : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_33\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_33\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_33\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_33\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_33\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_33\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -7160,17 +7160,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_34\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_34\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_34\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_34\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_34\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_34\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_34\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_34\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -7276,7 +7276,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_35\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_35\ is
   port (
     O1 : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
@@ -7295,10 +7295,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_35\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_35\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_35\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_35\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_35\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_35\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_35\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -7494,17 +7494,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_36\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_36\ is
   port (
     data_out : out STD_LOGIC;
     gt1_txresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_36\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_36\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_36\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_36\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_36\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_36\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -7610,7 +7610,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_37\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_37\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -7621,10 +7621,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_37\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_37\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_37\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_37\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_37\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_37\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_37\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -7754,17 +7754,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_38\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_38\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt1_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_38\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_38\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_38\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_38\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_38\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_38\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -7870,17 +7870,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_39\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_39\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_39\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_39\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_39\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_39\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_39\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_39\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -7986,17 +7986,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_40\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_40\ is
   port (
     data_out : out STD_LOGIC;
     GT1_TX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt1_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_40\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_40\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_40\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_40\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_40\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_40\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -8102,7 +8102,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_41\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_41\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -8116,10 +8116,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_41\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_41\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_41\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_41\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_41\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_41\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_41\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -8264,17 +8264,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_42\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_42\ is
   port (
     data_out : out STD_LOGIC;
     gt1_rxresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_42\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_42\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_42\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_42\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_42\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_42\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -8380,7 +8380,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_43\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_43\ is
   port (
     O1 : out STD_LOGIC;
     D : out STD_LOGIC_VECTOR ( 2 downto 0 );
@@ -8406,10 +8406,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_43\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_43\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_43\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_43\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_43\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_43\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_43\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -8684,7 +8684,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_44\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_44\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -8695,10 +8695,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_44\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_44\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_44\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_44\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_44\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_44\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_44\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -8828,17 +8828,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_45\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_45\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt1_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_45\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_45\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_45\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_45\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_45\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_45\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -8944,17 +8944,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_46\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_46\ is
   port (
     data_out : out STD_LOGIC;
     GT1_RX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt1_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_46\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_46\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_46\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_46\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_46\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_46\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -9060,7 +9060,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_47\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_47\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -9072,10 +9072,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_47\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_47\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_47\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_47\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_47\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_47\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_47\ is
   signal data_out : STD_LOGIC;
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
@@ -9221,17 +9221,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_48\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_48\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     RXOUTCLK : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_48\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_48\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_48\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_48\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_48\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_48\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -9337,17 +9337,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_49\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_49\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_49\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_49\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_49\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_49\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_49\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_49\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -9453,7 +9453,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_50\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_50\ is
   port (
     O1 : out STD_LOGIC;
     E : out STD_LOGIC_VECTOR ( 0 to 0 );
@@ -9472,10 +9472,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_50\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_50\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_50\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_50\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_50\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_50\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_50\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -9671,17 +9671,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_51\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_51\ is
   port (
     data_out : out STD_LOGIC;
     gt0_txresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_51\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_51\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_51\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_51\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_51\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_51\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -9787,7 +9787,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_52\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_52\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -9798,10 +9798,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_52\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_52\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_52\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_52\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_52\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_52\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_52\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -9931,17 +9931,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_53\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_53\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt0_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_53\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_53\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_53\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_53\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_53\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_53\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -10047,17 +10047,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_54\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_54\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_54\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_54\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_54\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_54\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_54\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_54\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -10163,17 +10163,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_55\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_55\ is
   port (
     data_out : out STD_LOGIC;
     GT0_TX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt0_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_55\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_55\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_55\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_55\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_55\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_55\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -10279,7 +10279,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_56\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_56\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -10293,10 +10293,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_56\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_56\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_56\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_56\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_56\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_56\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_56\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -10441,17 +10441,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_57\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_57\ is
   port (
     data_out : out STD_LOGIC;
     gt0_rxresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_57\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_57\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_57\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_57\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_57\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_57\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -10557,7 +10557,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_58\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_58\ is
   port (
     O1 : out STD_LOGIC;
     D : out STD_LOGIC_VECTOR ( 2 downto 0 );
@@ -10583,10 +10583,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_58\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_58\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_58\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_58\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_58\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_58\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_58\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -10861,7 +10861,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_59\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_59\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -10872,10 +10872,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_59\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_59\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_59\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_59\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_59\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_59\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_59\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -11005,17 +11005,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_6\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_6\ is
   port (
     data_out : out STD_LOGIC;
     gt3_txresetdone_out : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_6\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_6\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_6\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_6\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_6\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_6\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -11121,17 +11121,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_60\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_60\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt0_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_60\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_60\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_60\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_60\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_60\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_60\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -11237,17 +11237,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_61\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_61\ is
   port (
     data_out : out STD_LOGIC;
     GT0_RX_FSM_RESET_DONE_OUT : in STD_LOGIC;
     gt0_rxusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_61\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_61\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_61\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_61\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_61\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_61\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -11353,7 +11353,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_62\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_62\ is
   port (
     O1 : out STD_LOGIC;
     O2 : out STD_LOGIC;
@@ -11365,10 +11365,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_62\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_62\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_62\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_62\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_62\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_62\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_62\ is
   signal data_out : STD_LOGIC;
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
@@ -11514,17 +11514,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_63\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_63\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     RXOUTCLK : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_63\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_63\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_63\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_63\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_63\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_63\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -11630,17 +11630,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_64\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_64\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_64\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_64\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_64\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_64\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_64\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_64\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -11746,7 +11746,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_7\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_7\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     O1 : out STD_LOGIC;
@@ -11757,10 +11757,10 @@ entity \XLAUIXLAUI_sync_block__parameterized0_7\ is
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_7\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_7\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_7\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_7\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_7\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_7\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -11890,17 +11890,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_8\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_8\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     gt3_txusrclk_in : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_8\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_8\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_8\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_8\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_8\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_8\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -12006,17 +12006,17 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_sync_block__parameterized0_9\ is
+entity \XLAUI_XLAUI_sync_block__parameterized0_9\ is
   port (
     data_out : out STD_LOGIC;
     data_in : in STD_LOGIC;
     SYSCLK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_sync_block__parameterized0_9\ : entity is "XLAUI_sync_block";
-end \XLAUIXLAUI_sync_block__parameterized0_9\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_sync_block__parameterized0_9\ : entity is "XLAUI_sync_block";
+end \XLAUI_XLAUI_sync_block__parameterized0_9\;
 
-architecture STRUCTURE of \XLAUIXLAUI_sync_block__parameterized0_9\ is
+architecture STRUCTURE of \XLAUI_XLAUI_sync_block__parameterized0_9\ is
   signal data_sync1 : STD_LOGIC;
   signal data_sync2 : STD_LOGIC;
   signal data_sync3 : STD_LOGIC;
@@ -12122,7 +12122,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0\ is
+entity \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     GT0_RX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -12141,10 +12141,10 @@ entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0\ is
     I1 : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0\ : entity is "XLAUI_RX_STARTUP_FSM";
-end \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0\ : entity is "XLAUI_RX_STARTUP_FSM";
+end \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0\;
 
-architecture STRUCTURE of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0\ is
+architecture STRUCTURE of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0\ is
   signal D : STD_LOGIC;
   signal \^gt0_rx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt0_rx_mmcm_reset_out\ : STD_LOGIC;
@@ -13126,7 +13126,7 @@ rxresetdone_s3_reg: unisim.vcomponents.FDRE
       Q => rxresetdone_s3,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_56\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0_56\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       I1 => n_5_sync_data_valid,
@@ -13139,13 +13139,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_56\
       \out\(2 downto 0) => rx_state(3 downto 1),
       rxresetdone_s3 => rxresetdone_s3
     );
-sync_RXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_57\
+sync_RXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_57\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => rxresetdone_s2,
       gt0_rxresetdone_out => gt0_rxresetdone_out
     );
-sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_58\
+sync_data_valid: entity work.\XLAUI_XLAUI_sync_block__parameterized0_58\
     port map (
       D(2) => n_1_sync_data_valid,
       D(1) => n_2_sync_data_valid,
@@ -13172,7 +13172,7 @@ sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_58\
       rxresetdone_s3 => rxresetdone_s3,
       time_out_wait_bypass_s3 => time_out_wait_bypass_s3
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_59\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_59\
     port map (
       GT0_RX_MMCM_LOCK_IN => GT0_RX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4__3\,
@@ -13182,19 +13182,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_59\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_60\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_60\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => run_phase_alignment_int_s2,
       gt0_rxusrclk_in => gt0_rxusrclk_in
     );
-sync_rx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_61\
+sync_rx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_61\
     port map (
       GT0_RX_FSM_RESET_DONE_OUT => \^gt0_rx_fsm_reset_done_out\,
       data_out => rx_fsm_reset_done_int_s2,
       gt0_rxusrclk_in => gt0_rxusrclk_in
     );
-sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_62\
+sync_rxpmaresetdone: entity work.\XLAUI_XLAUI_sync_block__parameterized0_62\
     port map (
       GT0_RX_MMCM_RESET_OUT => \^gt0_rx_mmcm_reset_out\,
       I1 => I1,
@@ -13205,13 +13205,13 @@ sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_62\
       mmcm_lock_reclocked => mmcm_lock_reclocked,
       \out\(3 downto 0) => rx_state(3 downto 0)
     );
-sync_rxpmaresetdone_rx_s: entity work.\XLAUIXLAUI_sync_block__parameterized0_63\
+sync_rxpmaresetdone_rx_s: entity work.\XLAUI_XLAUI_sync_block__parameterized0_63\
     port map (
       RXOUTCLK => RXOUTCLK,
       data_in => data_in,
       data_out => n_0_sync_rxpmaresetdone_rx_s
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_64\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_64\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
@@ -14649,7 +14649,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0\ is
+entity \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_0\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     GT1_RX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -14668,10 +14668,10 @@ entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0\ is
     I1 : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0\ : entity is "XLAUI_RX_STARTUP_FSM";
-end \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_0\ : entity is "XLAUI_RX_STARTUP_FSM";
+end \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_0\;
 
-architecture STRUCTURE of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0\ is
+architecture STRUCTURE of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_0\ is
   signal D : STD_LOGIC;
   signal \^gt1_rx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt1_rx_mmcm_reset_out\ : STD_LOGIC;
@@ -15651,7 +15651,7 @@ rxresetdone_s3_reg: unisim.vcomponents.FDRE
       Q => rxresetdone_s3,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_41\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0_41\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       I1 => n_5_sync_data_valid,
@@ -15664,13 +15664,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_41\
       \out\(2 downto 0) => rx_state(3 downto 1),
       rxresetdone_s3 => rxresetdone_s3
     );
-sync_RXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_42\
+sync_RXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_42\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => rxresetdone_s2,
       gt1_rxresetdone_out => gt1_rxresetdone_out
     );
-sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_43\
+sync_data_valid: entity work.\XLAUI_XLAUI_sync_block__parameterized0_43\
     port map (
       D(2) => n_1_sync_data_valid,
       D(1) => n_2_sync_data_valid,
@@ -15697,7 +15697,7 @@ sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_43\
       rxresetdone_s3 => rxresetdone_s3,
       time_out_wait_bypass_s3 => time_out_wait_bypass_s3
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_44\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_44\
     port map (
       GT1_RX_MMCM_LOCK_IN => GT1_RX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4__4\,
@@ -15707,19 +15707,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_44\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_45\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_45\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => run_phase_alignment_int_s2,
       gt1_rxusrclk_in => gt1_rxusrclk_in
     );
-sync_rx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_46\
+sync_rx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_46\
     port map (
       GT1_RX_FSM_RESET_DONE_OUT => \^gt1_rx_fsm_reset_done_out\,
       data_out => rx_fsm_reset_done_int_s2,
       gt1_rxusrclk_in => gt1_rxusrclk_in
     );
-sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_47\
+sync_rxpmaresetdone: entity work.\XLAUI_XLAUI_sync_block__parameterized0_47\
     port map (
       GT1_RX_MMCM_RESET_OUT => \^gt1_rx_mmcm_reset_out\,
       I1 => I1,
@@ -15730,13 +15730,13 @@ sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_47\
       mmcm_lock_reclocked => mmcm_lock_reclocked,
       \out\(3 downto 0) => rx_state(3 downto 0)
     );
-sync_rxpmaresetdone_rx_s: entity work.\XLAUIXLAUI_sync_block__parameterized0_48\
+sync_rxpmaresetdone_rx_s: entity work.\XLAUI_XLAUI_sync_block__parameterized0_48\
     port map (
       RXOUTCLK => RXOUTCLK,
       data_in => data_in,
       data_out => n_0_sync_rxpmaresetdone_rx_s
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_49\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_49\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
@@ -17174,7 +17174,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2\ is
+entity \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_2\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     GT2_RX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -17193,10 +17193,10 @@ entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2\ is
     I1 : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2\ : entity is "XLAUI_RX_STARTUP_FSM";
-end \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_2\ : entity is "XLAUI_RX_STARTUP_FSM";
+end \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_2\;
 
-architecture STRUCTURE of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2\ is
+architecture STRUCTURE of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_2\ is
   signal D : STD_LOGIC;
   signal \^gt2_rx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt2_rx_mmcm_reset_out\ : STD_LOGIC;
@@ -18178,7 +18178,7 @@ rxresetdone_s3_reg: unisim.vcomponents.FDRE
       Q => rxresetdone_s3,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_26\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0_26\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       I1 => n_5_sync_data_valid,
@@ -18191,13 +18191,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_26\
       \out\(2 downto 0) => rx_state(3 downto 1),
       rxresetdone_s3 => rxresetdone_s3
     );
-sync_RXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_27\
+sync_RXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_27\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => rxresetdone_s2,
       gt2_rxresetdone_out => gt2_rxresetdone_out
     );
-sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_28\
+sync_data_valid: entity work.\XLAUI_XLAUI_sync_block__parameterized0_28\
     port map (
       D(2) => n_1_sync_data_valid,
       D(1) => n_2_sync_data_valid,
@@ -18224,7 +18224,7 @@ sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_28\
       rxresetdone_s3 => rxresetdone_s3,
       time_out_wait_bypass_s3 => time_out_wait_bypass_s3
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_29\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_29\
     port map (
       GT2_RX_MMCM_LOCK_IN => GT2_RX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4__5\,
@@ -18234,19 +18234,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_29\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_30\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_30\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => run_phase_alignment_int_s2,
       gt2_rxusrclk_in => gt2_rxusrclk_in
     );
-sync_rx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_31\
+sync_rx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_31\
     port map (
       GT2_RX_FSM_RESET_DONE_OUT => \^gt2_rx_fsm_reset_done_out\,
       data_out => rx_fsm_reset_done_int_s2,
       gt2_rxusrclk_in => gt2_rxusrclk_in
     );
-sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_32\
+sync_rxpmaresetdone: entity work.\XLAUI_XLAUI_sync_block__parameterized0_32\
     port map (
       GT2_RX_MMCM_RESET_OUT => \^gt2_rx_mmcm_reset_out\,
       I1 => I1,
@@ -18257,13 +18257,13 @@ sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_32\
       mmcm_lock_reclocked => mmcm_lock_reclocked,
       \out\(3 downto 0) => rx_state(3 downto 0)
     );
-sync_rxpmaresetdone_rx_s: entity work.\XLAUIXLAUI_sync_block__parameterized0_33\
+sync_rxpmaresetdone_rx_s: entity work.\XLAUI_XLAUI_sync_block__parameterized0_33\
     port map (
       RXOUTCLK => RXOUTCLK,
       data_in => data_in,
       data_out => n_0_sync_rxpmaresetdone_rx_s
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_34\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_34\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
@@ -19701,7 +19701,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4\ is
+entity \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_4\ is
   port (
     SR : out STD_LOGIC_VECTOR ( 0 to 0 );
     GT3_RX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -19720,10 +19720,10 @@ entity \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4\ is
     I1 : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4\ : entity is "XLAUI_RX_STARTUP_FSM";
-end \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_4\ : entity is "XLAUI_RX_STARTUP_FSM";
+end \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_4\;
 
-architecture STRUCTURE of \XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4\ is
+architecture STRUCTURE of \XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_4\ is
   signal D : STD_LOGIC;
   signal \^gt3_rx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt3_rx_mmcm_reset_out\ : STD_LOGIC;
@@ -20705,7 +20705,7 @@ rxresetdone_s3_reg: unisim.vcomponents.FDRE
       Q => rxresetdone_s3,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_11\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0_11\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       I1 => n_5_sync_data_valid,
@@ -20718,13 +20718,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_11\
       \out\(2 downto 0) => rx_state(3 downto 1),
       rxresetdone_s3 => rxresetdone_s3
     );
-sync_RXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_12\
+sync_RXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_12\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => rxresetdone_s2,
       gt3_rxresetdone_out => gt3_rxresetdone_out
     );
-sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_13\
+sync_data_valid: entity work.\XLAUI_XLAUI_sync_block__parameterized0_13\
     port map (
       D(2) => n_1_sync_data_valid,
       D(1) => n_2_sync_data_valid,
@@ -20751,7 +20751,7 @@ sync_data_valid: entity work.\XLAUIXLAUI_sync_block__parameterized0_13\
       rxresetdone_s3 => rxresetdone_s3,
       time_out_wait_bypass_s3 => time_out_wait_bypass_s3
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_14\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_14\
     port map (
       GT3_RX_MMCM_LOCK_IN => GT3_RX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4__6\,
@@ -20761,19 +20761,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_14\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_15\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_15\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => run_phase_alignment_int_s2,
       gt3_rxusrclk_in => gt3_rxusrclk_in
     );
-sync_rx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_16\
+sync_rx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_16\
     port map (
       GT3_RX_FSM_RESET_DONE_OUT => \^gt3_rx_fsm_reset_done_out\,
       data_out => rx_fsm_reset_done_int_s2,
       gt3_rxusrclk_in => gt3_rxusrclk_in
     );
-sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_17\
+sync_rxpmaresetdone: entity work.\XLAUI_XLAUI_sync_block__parameterized0_17\
     port map (
       GT3_RX_MMCM_RESET_OUT => \^gt3_rx_mmcm_reset_out\,
       I1 => I1,
@@ -20784,13 +20784,13 @@ sync_rxpmaresetdone: entity work.\XLAUIXLAUI_sync_block__parameterized0_17\
       mmcm_lock_reclocked => mmcm_lock_reclocked,
       \out\(3 downto 0) => rx_state(3 downto 0)
     );
-sync_rxpmaresetdone_rx_s: entity work.\XLAUIXLAUI_sync_block__parameterized0_18\
+sync_rxpmaresetdone_rx_s: entity work.\XLAUI_XLAUI_sync_block__parameterized0_18\
     port map (
       RXOUTCLK => RXOUTCLK,
       data_in => data_in,
       data_out => n_0_sync_rxpmaresetdone_rx_s
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_19\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_19\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
@@ -22228,7 +22228,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0\ is
+entity \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0\ is
   port (
     GTTXRESET : out STD_LOGIC;
     GT0_TX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -22243,10 +22243,10 @@ entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0\ is
     GT0_QPLLLOCK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0\ : entity is "XLAUI_TX_STARTUP_FSM";
-end \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0\ : entity is "XLAUI_TX_STARTUP_FSM";
+end \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0\;
 
-architecture STRUCTURE of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0\ is
+architecture STRUCTURE of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0\ is
   signal \^gt0_qpllreset_out\ : STD_LOGIC;
   signal \^gt0_tx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt0_tx_mmcm_reset_out\ : STD_LOGIC;
@@ -23217,7 +23217,7 @@ run_phase_alignment_int_s3_reg: unisim.vcomponents.FDRE
       Q => run_phase_alignment_int_s3,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_50\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0_50\
     port map (
       E(0) => n_1_sync_QPLLLOCK,
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
@@ -23235,13 +23235,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_50\
       txresetdone_s3 => txresetdone_s3,
       wait_time_done => wait_time_done
     );
-sync_TXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_51\
+sync_TXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_51\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => txresetdone_s2,
       gt0_txresetdone_out => gt0_txresetdone_out
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_52\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_52\
     port map (
       GT0_TX_MMCM_LOCK_IN => GT0_TX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4\,
@@ -23251,19 +23251,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_52\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_53\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_53\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => data_out,
       gt0_txusrclk_in => gt0_txusrclk_in
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_54\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_54\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
       data_out => time_out_wait_bypass_s2
     );
-sync_tx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_55\
+sync_tx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_55\
     port map (
       GT0_TX_FSM_RESET_DONE_OUT => \^gt0_tx_fsm_reset_done_out\,
       data_out => tx_fsm_reset_done_int_s2,
@@ -24609,7 +24609,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1\ is
+entity \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_1\ is
   port (
     O1 : out STD_LOGIC;
     GT1_TX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -24623,10 +24623,10 @@ entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1\ is
     GT0_QPLLLOCK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1\ : entity is "XLAUI_TX_STARTUP_FSM";
-end \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_1\ : entity is "XLAUI_TX_STARTUP_FSM";
+end \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_1\;
 
-architecture STRUCTURE of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1\ is
+architecture STRUCTURE of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_1\ is
   signal \^gt1_tx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt1_tx_mmcm_reset_out\ : STD_LOGIC;
   signal \^o1\ : STD_LOGIC;
@@ -25571,7 +25571,7 @@ run_phase_alignment_int_s3_reg: unisim.vcomponents.FDRE
       Q => n_0_run_phase_alignment_int_s3_reg,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_35\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0_35\
     port map (
       E(0) => n_1_sync_QPLLLOCK,
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
@@ -25589,13 +25589,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_35\
       txresetdone_s3 => txresetdone_s3,
       wait_time_done => wait_time_done
     );
-sync_TXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_36\
+sync_TXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_36\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => txresetdone_s2,
       gt1_txresetdone_out => gt1_txresetdone_out
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_37\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_37\
     port map (
       GT1_TX_MMCM_LOCK_IN => GT1_TX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4__0\,
@@ -25605,19 +25605,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_37\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_38\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_38\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => data_out,
       gt1_txusrclk_in => gt1_txusrclk_in
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_39\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_39\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
       data_out => time_out_wait_bypass_s2
     );
-sync_tx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_40\
+sync_tx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_40\
     port map (
       GT1_TX_FSM_RESET_DONE_OUT => \^gt1_tx_fsm_reset_done_out\,
       data_out => tx_fsm_reset_done_int_s2,
@@ -26974,7 +26974,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3\ is
+entity \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_3\ is
   port (
     O1 : out STD_LOGIC;
     GT2_TX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -26988,10 +26988,10 @@ entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3\ is
     GT0_QPLLLOCK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3\ : entity is "XLAUI_TX_STARTUP_FSM";
-end \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_3\ : entity is "XLAUI_TX_STARTUP_FSM";
+end \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_3\;
 
-architecture STRUCTURE of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3\ is
+architecture STRUCTURE of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_3\ is
   signal \^gt2_tx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt2_tx_mmcm_reset_out\ : STD_LOGIC;
   signal \^o1\ : STD_LOGIC;
@@ -27935,7 +27935,7 @@ run_phase_alignment_int_s3_reg: unisim.vcomponents.FDRE
       Q => n_0_run_phase_alignment_int_s3_reg,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_20\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0_20\
     port map (
       E(0) => n_1_sync_QPLLLOCK,
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
@@ -27953,13 +27953,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0_20\
       txresetdone_s3 => txresetdone_s3,
       wait_time_done => wait_time_done
     );
-sync_TXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_21\
+sync_TXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_21\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => txresetdone_s2,
       gt2_txresetdone_out => gt2_txresetdone_out
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_22\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_22\
     port map (
       GT2_TX_MMCM_LOCK_IN => GT2_TX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4__1\,
@@ -27969,19 +27969,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_22\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_23\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_23\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => data_out,
       gt2_txusrclk_in => gt2_txusrclk_in
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_24\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_24\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
       data_out => time_out_wait_bypass_s2
     );
-sync_tx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_25\
+sync_tx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_25\
     port map (
       GT2_TX_FSM_RESET_DONE_OUT => \^gt2_tx_fsm_reset_done_out\,
       data_out => tx_fsm_reset_done_int_s2,
@@ -29327,7 +29327,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5\ is
+entity \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_5\ is
   port (
     O1 : out STD_LOGIC;
     GT3_TX_MMCM_RESET_OUT : out STD_LOGIC;
@@ -29341,10 +29341,10 @@ entity \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5\ is
     GT0_QPLLLOCK_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5\ : entity is "XLAUI_TX_STARTUP_FSM";
-end \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_5\ : entity is "XLAUI_TX_STARTUP_FSM";
+end \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_5\;
 
-architecture STRUCTURE of \XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5\ is
+architecture STRUCTURE of \XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_5\ is
   signal \^gt3_tx_fsm_reset_done_out\ : STD_LOGIC;
   signal \^gt3_tx_mmcm_reset_out\ : STD_LOGIC;
   signal \^o1\ : STD_LOGIC;
@@ -30288,7 +30288,7 @@ run_phase_alignment_int_s3_reg: unisim.vcomponents.FDRE
       Q => n_0_run_phase_alignment_int_s3_reg,
       R => '0'
     );
-sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0\
+sync_QPLLLOCK: entity work.\XLAUI_XLAUI_sync_block__parameterized0\
     port map (
       E(0) => n_1_sync_QPLLLOCK,
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
@@ -30306,13 +30306,13 @@ sync_QPLLLOCK: entity work.\XLAUIXLAUI_sync_block__parameterized0\
       txresetdone_s3 => txresetdone_s3,
       wait_time_done => wait_time_done
     );
-sync_TXRESETDONE: entity work.\XLAUIXLAUI_sync_block__parameterized0_6\
+sync_TXRESETDONE: entity work.\XLAUI_XLAUI_sync_block__parameterized0_6\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_out => txresetdone_s2,
       gt3_txresetdone_out => gt3_txresetdone_out
     );
-sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_7\
+sync_mmcm_lock_reclocked: entity work.\XLAUI_XLAUI_sync_block__parameterized0_7\
     port map (
       GT3_TX_MMCM_LOCK_IN => GT3_TX_MMCM_LOCK_IN,
       I1 => \n_0_mmcm_lock_count[7]_i_4__2\,
@@ -30322,19 +30322,19 @@ sync_mmcm_lock_reclocked: entity work.\XLAUIXLAUI_sync_block__parameterized0_7\
       SYSCLK_IN => SYSCLK_IN,
       mmcm_lock_reclocked => mmcm_lock_reclocked
     );
-sync_run_phase_alignment_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_8\
+sync_run_phase_alignment_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_8\
     port map (
       data_in => n_0_run_phase_alignment_int_reg,
       data_out => data_out,
       gt3_txusrclk_in => gt3_txusrclk_in
     );
-sync_time_out_wait_bypass: entity work.\XLAUIXLAUI_sync_block__parameterized0_9\
+sync_time_out_wait_bypass: entity work.\XLAUI_XLAUI_sync_block__parameterized0_9\
     port map (
       SYSCLK_IN => SYSCLK_IN,
       data_in => n_0_time_out_wait_bypass_reg,
       data_out => time_out_wait_bypass_s2
     );
-sync_tx_fsm_reset_done_int: entity work.\XLAUIXLAUI_sync_block__parameterized0_10\
+sync_tx_fsm_reset_done_int: entity work.\XLAUI_XLAUI_sync_block__parameterized0_10\
     port map (
       GT3_TX_FSM_RESET_DONE_OUT => \^gt3_tx_fsm_reset_done_out\,
       data_out => tx_fsm_reset_done_int_s2,
@@ -31680,7 +31680,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_multi_gt__parameterized0\ is
+entity \XLAUI_XLAUI_multi_gt__parameterized0\ is
   port (
     gt0_drprdy_out : out STD_LOGIC;
     gt0_eyescandataerror_out : out STD_LOGIC;
@@ -31898,12 +31898,12 @@ entity \XLAUIXLAUI_multi_gt__parameterized0\ is
     gt3_drpaddr_in : in STD_LOGIC_VECTOR ( 8 downto 0 )
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_multi_gt__parameterized0\ : entity is "XLAUI_multi_gt";
-end \XLAUIXLAUI_multi_gt__parameterized0\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_multi_gt__parameterized0\ : entity is "XLAUI_multi_gt";
+end \XLAUI_XLAUI_multi_gt__parameterized0\;
 
-architecture STRUCTURE of \XLAUIXLAUI_multi_gt__parameterized0\ is
+architecture STRUCTURE of \XLAUI_XLAUI_multi_gt__parameterized0\ is
 begin
-gt0_XLAUI_i: entity work.\XLAUIXLAUI_GT__parameterized0\
+gt0_XLAUI_i: entity work.\XLAUI_XLAUI_GT__parameterized0\
     port map (
       GT0_QPLLOUTCLK_IN => GT0_QPLLOUTCLK_IN,
       GT0_QPLLOUTREFCLK_IN => GT0_QPLLOUTREFCLK_IN,
@@ -31961,7 +31961,7 @@ gt0_XLAUI_i: entity work.\XLAUIXLAUI_GT__parameterized0\
       gt0_txusrclk2_in => gt0_txusrclk2_in,
       gt0_txusrclk_in => gt0_txusrclk_in
     );
-gt1_XLAUI_i: entity work.\XLAUIXLAUI_GT__parameterized0_65\
+gt1_XLAUI_i: entity work.\XLAUI_XLAUI_GT__parameterized0_65\
     port map (
       GT0_QPLLOUTCLK_IN => GT0_QPLLOUTCLK_IN,
       GT0_QPLLOUTREFCLK_IN => GT0_QPLLOUTREFCLK_IN,
@@ -32019,7 +32019,7 @@ gt1_XLAUI_i: entity work.\XLAUIXLAUI_GT__parameterized0_65\
       gt1_txusrclk2_in => gt1_txusrclk2_in,
       gt1_txusrclk_in => gt1_txusrclk_in
     );
-gt2_XLAUI_i: entity work.\XLAUIXLAUI_GT__parameterized0_66\
+gt2_XLAUI_i: entity work.\XLAUI_XLAUI_GT__parameterized0_66\
     port map (
       GT0_QPLLOUTCLK_IN => GT0_QPLLOUTCLK_IN,
       GT0_QPLLOUTREFCLK_IN => GT0_QPLLOUTREFCLK_IN,
@@ -32077,7 +32077,7 @@ gt2_XLAUI_i: entity work.\XLAUIXLAUI_GT__parameterized0_66\
       gt2_txusrclk2_in => gt2_txusrclk2_in,
       gt2_txusrclk_in => gt2_txusrclk_in
     );
-gt3_XLAUI_i: entity work.\XLAUIXLAUI_GT__parameterized0_67\
+gt3_XLAUI_i: entity work.\XLAUI_XLAUI_GT__parameterized0_67\
     port map (
       GT0_QPLLOUTCLK_IN => GT0_QPLLOUTCLK_IN,
       GT0_QPLLOUTREFCLK_IN => GT0_QPLLOUTREFCLK_IN,
@@ -32140,7 +32140,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM;
 use UNISIM.VCOMPONENTS.ALL;
-entity \XLAUIXLAUI_init__parameterized0\ is
+entity \XLAUI_XLAUI_init__parameterized0\ is
   port (
     gt0_drprdy_out : out STD_LOGIC;
     gt0_eyescandataerror_out : out STD_LOGIC;
@@ -32371,10 +32371,10 @@ entity \XLAUIXLAUI_init__parameterized0\ is
     DONT_RESET_ON_DATA_ERROR_IN : in STD_LOGIC
   );
   attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of \XLAUIXLAUI_init__parameterized0\ : entity is "XLAUI_init";
-end \XLAUIXLAUI_init__parameterized0\;
+  attribute ORIG_REF_NAME of \XLAUI_XLAUI_init__parameterized0\ : entity is "XLAUI_init";
+end \XLAUI_XLAUI_init__parameterized0\;
 
-architecture STRUCTURE of \XLAUIXLAUI_init__parameterized0\ is
+architecture STRUCTURE of \XLAUI_XLAUI_init__parameterized0\ is
   signal GTRXRESET : STD_LOGIC;
   signal GTTXRESET : STD_LOGIC;
   signal RXOUTCLK : STD_LOGIC;
@@ -32486,7 +32486,7 @@ begin
   gt2_txresetdone_out <= \^gt2_txresetdone_out\;
   gt3_rxresetdone_out <= \^gt3_rxresetdone_out\;
   gt3_txresetdone_out <= \^gt3_txresetdone_out\;
-XLAUI_i: entity work.\XLAUIXLAUI_multi_gt__parameterized0\
+XLAUI_i: entity work.\XLAUI_XLAUI_multi_gt__parameterized0\
     port map (
       GT0_QPLLOUTCLK_IN => GT0_QPLLOUTCLK_IN,
       GT0_QPLLOUTREFCLK_IN => GT0_QPLLOUTREFCLK_IN,
@@ -32992,7 +32992,7 @@ gt0_rx_cdrlocked_reg: unisim.vcomponents.FDRE
       Q => n_0_gt0_rx_cdrlocked_reg,
       R => GTRXRESET
     );
-gt0_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0\
+gt0_rxresetfsm_i: entity work.\XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0\
     port map (
       DONT_RESET_ON_DATA_ERROR_IN => DONT_RESET_ON_DATA_ERROR_IN,
       GT0_DATA_VALID_IN => GT0_DATA_VALID_IN,
@@ -33010,7 +33010,7 @@ gt0_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0\
       gt0_rxresetdone_out => \^gt0_rxresetdone_out\,
       gt0_rxusrclk_in => gt0_rxusrclk_in
     );
-gt0_txresetfsm_i: entity work.\XLAUIXLAUI_TX_STARTUP_FSM__parameterized0\
+gt0_txresetfsm_i: entity work.\XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       GT0_QPLLRESET_OUT => GT0_QPLLRESET_OUT,
@@ -33313,7 +33313,7 @@ gt1_rx_cdrlocked_reg: unisim.vcomponents.FDRE
       Q => n_0_gt1_rx_cdrlocked_reg,
       R => n_0_gt1_rxresetfsm_i
     );
-gt1_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0\
+gt1_rxresetfsm_i: entity work.\XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_0\
     port map (
       DONT_RESET_ON_DATA_ERROR_IN => DONT_RESET_ON_DATA_ERROR_IN,
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
@@ -33331,7 +33331,7 @@ gt1_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_0\
       gt1_rxresetdone_out => \^gt1_rxresetdone_out\,
       gt1_rxusrclk_in => gt1_rxusrclk_in
     );
-gt1_txresetfsm_i: entity work.\XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_1\
+gt1_txresetfsm_i: entity work.\XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_1\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       GT1_TX_FSM_RESET_DONE_OUT => GT1_TX_FSM_RESET_DONE_OUT,
@@ -33633,7 +33633,7 @@ gt2_rx_cdrlocked_reg: unisim.vcomponents.FDRE
       Q => n_0_gt2_rx_cdrlocked_reg,
       R => n_0_gt2_rxresetfsm_i
     );
-gt2_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2\
+gt2_rxresetfsm_i: entity work.\XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_2\
     port map (
       DONT_RESET_ON_DATA_ERROR_IN => DONT_RESET_ON_DATA_ERROR_IN,
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
@@ -33651,7 +33651,7 @@ gt2_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_2\
       gt2_rxresetdone_out => \^gt2_rxresetdone_out\,
       gt2_rxusrclk_in => gt2_rxusrclk_in
     );
-gt2_txresetfsm_i: entity work.\XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_3\
+gt2_txresetfsm_i: entity work.\XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_3\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       GT2_TX_FSM_RESET_DONE_OUT => GT2_TX_FSM_RESET_DONE_OUT,
@@ -33953,7 +33953,7 @@ gt3_rx_cdrlocked_reg: unisim.vcomponents.FDRE
       Q => n_0_gt3_rx_cdrlocked_reg,
       R => n_0_gt3_rxresetfsm_i
     );
-gt3_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4\
+gt3_rxresetfsm_i: entity work.\XLAUI_XLAUI_RX_STARTUP_FSM__parameterized0_4\
     port map (
       DONT_RESET_ON_DATA_ERROR_IN => DONT_RESET_ON_DATA_ERROR_IN,
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
@@ -33971,7 +33971,7 @@ gt3_rxresetfsm_i: entity work.\XLAUIXLAUI_RX_STARTUP_FSM__parameterized0_4\
       gt3_rxresetdone_out => \^gt3_rxresetdone_out\,
       gt3_rxusrclk_in => gt3_rxusrclk_in
     );
-gt3_txresetfsm_i: entity work.\XLAUIXLAUI_TX_STARTUP_FSM__parameterized0_5\
+gt3_txresetfsm_i: entity work.\XLAUI_XLAUI_TX_STARTUP_FSM__parameterized0_5\
     port map (
       GT0_QPLLLOCK_IN => GT0_QPLLLOCK_IN,
       GT3_TX_FSM_RESET_DONE_OUT => GT3_TX_FSM_RESET_DONE_OUT,
@@ -34253,7 +34253,7 @@ end XLAUI;
 
 architecture STRUCTURE of XLAUI is
 begin
-U0: entity work.\XLAUIXLAUI_init__parameterized0\
+U0: entity work.\XLAUI_XLAUI_init__parameterized0\
     port map (
       DONT_RESET_ON_DATA_ERROR_IN => DONT_RESET_ON_DATA_ERROR_IN,
       GT0_DATA_VALID_IN => GT0_DATA_VALID_IN,

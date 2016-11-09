@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:mdm:3.2
--- IP Revision: 0
+-- IP Revision: 6
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY mdm_v3_2;
-USE mdm_v3_2.MDM;
+LIBRARY mdm_v3_2_6;
+USE mdm_v3_2_6.MDM;
 
 ENTITY cont_microblaze_mdm_1_0 IS
   PORT (
@@ -71,9 +71,8 @@ ENTITY cont_microblaze_mdm_1_0 IS
 END cont_microblaze_mdm_1_0;
 
 ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_mdm_1_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT MDM IS
     GENERIC (
       C_FAMILY : STRING;
@@ -102,6 +101,8 @@ ARCHITECTURE cont_microblaze_mdm_1_0_arch OF cont_microblaze_mdm_1_0 IS
     );
     PORT (
       Config_Reset : IN STD_LOGIC;
+      Scan_Reset : IN STD_LOGIC;
+      Scan_Reset_Sel : IN STD_LOGIC;
       S_AXI_ACLK : IN STD_LOGIC;
       S_AXI_ARESETN : IN STD_LOGIC;
       M_AXI_ACLK : IN STD_LOGIC;
@@ -1111,6 +1112,8 @@ BEGIN
     )
     PORT MAP (
       Config_Reset => '0',
+      Scan_Reset => '0',
+      Scan_Reset_Sel => '0',
       S_AXI_ACLK => '0',
       S_AXI_ARESETN => '0',
       M_AXI_ACLK => '0',

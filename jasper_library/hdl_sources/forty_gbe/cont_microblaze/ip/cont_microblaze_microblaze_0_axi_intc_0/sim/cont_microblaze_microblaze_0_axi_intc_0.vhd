@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:axi_intc:4.1
--- IP Revision: 2
+-- IP Revision: 7
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY axi_intc_v4_1;
-USE axi_intc_v4_1.axi_intc;
+LIBRARY axi_intc_v4_1_7;
+USE axi_intc_v4_1_7.axi_intc;
 
 ENTITY cont_microblaze_microblaze_0_axi_intc_0 IS
   PORT (
@@ -87,9 +87,8 @@ ENTITY cont_microblaze_microblaze_0_axi_intc_0 IS
 END cont_microblaze_microblaze_0_axi_intc_0;
 
 ARCHITECTURE cont_microblaze_microblaze_0_axi_intc_0_arch OF cont_microblaze_microblaze_0_axi_intc_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_microblaze_0_axi_intc_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT axi_intc IS
     GENERIC (
       C_FAMILY : STRING;
@@ -144,6 +143,7 @@ ARCHITECTURE cont_microblaze_microblaze_0_axi_intc_0_arch OF cont_microblaze_mic
       irq : OUT STD_LOGIC;
       processor_ack : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       interrupt_address : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      irq_in : IN STD_LOGIC;
       interrupt_address_in : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       processor_ack_out : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
     );
@@ -229,6 +229,7 @@ BEGIN
       irq => irq,
       processor_ack => processor_ack,
       interrupt_address => interrupt_address,
+      irq_in => '0',
       interrupt_address_in => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32))
     );
 END cont_microblaze_microblaze_0_axi_intc_0_arch;

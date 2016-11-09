@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:axi_intc:4.1
--- IP Revision: 2
+-- IP Revision: 7
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY axi_intc_v4_1;
-USE axi_intc_v4_1.axi_intc;
+LIBRARY axi_intc_v4_1_7;
+USE axi_intc_v4_1_7.axi_intc;
 
 ENTITY cont_microblaze_microblaze_0_axi_intc_0 IS
   PORT (
@@ -87,9 +87,8 @@ ENTITY cont_microblaze_microblaze_0_axi_intc_0 IS
 END cont_microblaze_microblaze_0_axi_intc_0;
 
 ARCHITECTURE cont_microblaze_microblaze_0_axi_intc_0_arch OF cont_microblaze_microblaze_0_axi_intc_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_microblaze_0_axi_intc_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT axi_intc IS
     GENERIC (
       C_FAMILY : STRING;
@@ -144,16 +143,18 @@ ARCHITECTURE cont_microblaze_microblaze_0_axi_intc_0_arch OF cont_microblaze_mic
       irq : OUT STD_LOGIC;
       processor_ack : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       interrupt_address : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      irq_in : IN STD_LOGIC;
       interrupt_address_in : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
       processor_ack_out : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
     );
   END COMPONENT axi_intc;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF cont_microblaze_microblaze_0_axi_intc_0_arch: ARCHITECTURE IS "axi_intc,Vivado 2014.3.1";
+  ATTRIBUTE X_CORE_INFO OF cont_microblaze_microblaze_0_axi_intc_0_arch: ARCHITECTURE IS "axi_intc,Vivado 2016.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF cont_microblaze_microblaze_0_axi_intc_0_arch : ARCHITECTURE IS "cont_microblaze_microblaze_0_axi_intc_0,axi_intc,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_microblaze_0_axi_intc_0_arch: ARCHITECTURE IS "cont_microblaze_microblaze_0_axi_intc_0,axi_intc,{x_ipProduct=Vivado 2014.3.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_intc,x_ipVersion=4.1,x_ipCoreRevision=2,x_ipLanguage=VHDL,C_FAMILY=virtex7,C_INSTANCE=axi_intc_inst,C_S_AXI_ADDR_WIDTH=9,C_S_AXI_DATA_WIDTH=32,C_NUM_INTR_INPUTS=2,C_NUM_SW_INTR=0,C_KIND_OF_INTR=0xfffffffd,C_KIND_OF_EDGE=0xffffffff,C_KIND_OF_LVL=0xffffffff,C_ASYNC_INTR=0xFFFFFFFC,C_NUM_SYNC_FF=2,C_IVAR_RESET_VALUE=0x00000010,C_ENABLE_ASYNC=0,C_HAS_IPR=1,C_HAS_SIE=1,C_HAS_CIE=1,C_HAS_IVR=1,C_HAS_ILR=0,C_IRQ_IS_LEVEL=1,C_IRQ_ACTIVE=0x1,C_DISABLE_SYNCHRONIZERS=1,C_MB_CLK_NOT_CONNECTED=1,C_HAS_FAST=1,C_EN_CASCADE_MODE=0,C_CASCADE_MASTER=0}";
+  ATTRIBUTE CORE_GENERATION_INFO OF cont_microblaze_microblaze_0_axi_intc_0_arch: ARCHITECTURE IS "cont_microblaze_microblaze_0_axi_intc_0,axi_intc,{x_ipProduct=Vivado 2016.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_intc,x_ipVersion=4.1,x_ipCoreRevision=7,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=virtex7,C_INSTANCE=axi_intc_inst,C_S_AXI_ADDR_WIDTH=9,C_S_AXI_DATA_WIDTH=32,C_NUM_INTR_INPUTS=2,C_NUM_SW_INTR=0,C_KIND_OF_INTR=0xfffffffd,C_KIND_OF_EDGE=0xffffffff,C_KIND_OF_LVL=0xffffffff,C_ASYNC_INTR=0xFFFFFFFC,C_NUM_SYNC_FF=2,C_IVAR_RESET_VALUE=0x00000010,C_ENABLE_ASYNC=0,C_HAS_IPR" & 
+"=1,C_HAS_SIE=1,C_HAS_CIE=1,C_HAS_IVR=1,C_HAS_ILR=0,C_IRQ_IS_LEVEL=1,C_IRQ_ACTIVE=0x1,C_DISABLE_SYNCHRONIZERS=1,C_MB_CLK_NOT_CONNECTED=1,C_HAS_FAST=1,C_EN_CASCADE_MODE=0,C_CASCADE_MASTER=0}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF s_axi_aclk: SIGNAL IS "xilinx.com:signal:clock:1.0 s_axi_aclk CLK";
   ATTRIBUTE X_INTERFACE_INFO OF s_axi_aresetn: SIGNAL IS "xilinx.com:signal:reset:1.0 s_resetn RST";
@@ -235,6 +236,7 @@ BEGIN
       irq => irq,
       processor_ack => processor_ack,
       interrupt_address => interrupt_address,
+      irq_in => '0',
       interrupt_address_in => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 32))
     );
 END cont_microblaze_microblaze_0_axi_intc_0_arch;

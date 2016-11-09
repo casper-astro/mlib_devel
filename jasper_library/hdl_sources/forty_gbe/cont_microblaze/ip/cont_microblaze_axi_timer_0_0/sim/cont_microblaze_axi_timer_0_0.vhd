@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2014 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:axi_timer:2.0
--- IP Revision: 6
+-- IP Revision: 11
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY axi_timer_v2_0;
-USE axi_timer_v2_0.axi_timer;
+LIBRARY axi_timer_v2_0_11;
+USE axi_timer_v2_0_11.axi_timer;
 
 ENTITY cont_microblaze_axi_timer_0_0 IS
   PORT (
@@ -88,9 +88,8 @@ ENTITY cont_microblaze_axi_timer_0_0 IS
 END cont_microblaze_axi_timer_0_0;
 
 ARCHITECTURE cont_microblaze_axi_timer_0_0_arch OF cont_microblaze_axi_timer_0_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF cont_microblaze_axi_timer_0_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT axi_timer IS
     GENERIC (
       C_FAMILY : STRING;

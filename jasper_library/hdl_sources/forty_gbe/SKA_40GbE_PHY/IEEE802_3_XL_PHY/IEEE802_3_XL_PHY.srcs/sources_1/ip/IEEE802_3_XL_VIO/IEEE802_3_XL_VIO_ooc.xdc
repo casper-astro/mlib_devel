@@ -1,5 +1,4 @@
-################################################################################
-# (c) Copyright 2012 - 2013 Xilinx, Inc. All rights reserved.
+# (c) Copyright 2012-2016 Xilinx, Inc. All rights reserved.
 # 
 # This file contains confidential and proprietary information
 # of Xilinx, Inc. and is protected under U.S. and
@@ -44,24 +43,15 @@
 # 
 # THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 # PART OF THIS FILE AT ALL TIMES.
-
-################################################################################
-
-# This XDC is used only for OOC mode of synthesis, implementation
-# User should update the correct clock period before proceeding further
-# This constraints file contains default clock frequencies to be used during 
-# out-of-context flows such as OOC Synthesis and Hierarchical Designs. 
-# For best results the frequencies should be modified# to match the target 
-# frequencies. 
-# This constraints file is not used in normal top-down synthesis (the default flow of Vivado)
-################################################################################
-#create_clock -name clock_name -period 10 [get_ports clock_name] 
-################################################################################
-
-#list of all the clock needed for VIO core
+# 
+# DO NOT MODIFY THIS FILE.
+# #########################################################
+#
+# This XDC is used only in OOC mode for synthesis, implementation
+#
+# #########################################################
 
 
-        
-	create_clock -name VIO_CLK -period 10 [get_ports clk]
+create_clock -period 10 -name clk [get_ports clk]
 
-################################################################################
+

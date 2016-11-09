@@ -1,5 +1,4 @@
-################################################################################
-# (c) Copyright 2012 - 2013 Xilinx, Inc. All rights reserved.
+# (c) Copyright 2012-2016 Xilinx, Inc. All rights reserved.
 # 
 # This file contains confidential and proprietary information
 # of Xilinx, Inc. and is protected under U.S. and
@@ -44,22 +43,15 @@
 # 
 # THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS
 # PART OF THIS FILE AT ALL TIMES.
+# 
+# DO NOT MODIFY THIS FILE.
+# #########################################################
+#
+# This XDC is used only in OOC mode for synthesis, implementation
+#
+# #########################################################
 
-################################################################################
 
-# This XDC is used only for OOC mode of synthesis, implementation
-# User should update the correct clock period before proceeding further
-# This constraints file contains default clock frequencies to be used during 
-# out-of-context flows such as OOC Synthesis and Hierarchical Designs. 
-# For best results the frequencies should be modified# to match the target 
-# frequencies. 
-# This constraints file is not used in normal top-down synthesis (the default flow of Vivado)
-################################################################################
-#create_clock -name clock_name -period 10 [get_ports clock_name] 
-################################################################################
+create_clock -period 6.400 -name slowest_sync_clk [get_ports slowest_sync_clk]
 
-#list of all the clock needed for Proc Sys Reset core
 
-create_clock -name slowest_sync_clk -period 10 [get_ports slowest_sync_clk] 
-
-################################################################################
