@@ -208,8 +208,12 @@ localparam IIC_IO_EXPANDER_CONFIG = 16'b000_0011_1001_0111; //Port Configuration
   localparam IIC_IO_EXPANDER_SETUP3 = 8'd2;
   localparam IIC_IO_EXPANDER_SETUP4 = 8'd3;
   localparam IIC_IO_EXPANDER_SETUP5 = 8'd4;
+  localparam IIC_IO_EXPANDER_SETUP6 = 8'd5;
+  localparam IIC_IO_EXPANDER_SETUP7 = 8'd6;
+  localparam IIC_IO_EXPANDER_SETUP8 = 8'd7;
+  localparam IIC_IO_EXPANDER_SETUP9 = 8'd8;
 
-  localparam HMC_CUBE_SETUP_OFFSET = IIC_IO_EXPANDER_SETUP5;
+  localparam HMC_CUBE_SETUP_OFFSET = IIC_IO_EXPANDER_SETUP9;
 
   localparam ADDR_CONF_REG = HMC_CUBE_SETUP_OFFSET + 8'd1;
 
@@ -307,7 +311,16 @@ localparam IIC_IO_EXPANDER_CONFIG = 16'b000_0011_1001_0111; //Port Configuration
                 // Mezz 2
                 IIC_IO_EXPANDER_SETUP4: begin wr_data_shift <= {IIC_IO_EXPANDER_CONFIG,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+2; end
                 // mezz 3
-                IIC_IO_EXPANDER_SETUP5: begin wr_data_shift <= {IIC_IO_EXPANDER_CONFIG,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+3; init_time_set <= 32'd78000000; hmc_reset <= 1'b0;end
+                IIC_IO_EXPANDER_SETUP5: begin wr_data_shift <= {IIC_IO_EXPANDER_CONFIG,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+3; end
+
+                // Mezz 0
+                IIC_IO_EXPANDER_SETUP6: begin wr_data_shift <= {16'b000_0001_1111_1111,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR; end
+                // Mezz 1
+                IIC_IO_EXPANDER_SETUP7: begin wr_data_shift <= {16'b000_0001_1111_1111,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+1; end
+                // Mezz 2
+                IIC_IO_EXPANDER_SETUP8: begin wr_data_shift <= {16'b000_0001_1111_1111,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+2; end
+                // mezz 3
+                IIC_IO_EXPANDER_SETUP9: begin wr_data_shift <= {16'b000_0001_1111_1111,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+3; init_time_set <= 32'd78000000; hmc_reset <= 1'b0;end
 
 
                 // HMC Cube Setup
@@ -341,7 +354,7 @@ localparam IIC_IO_EXPANDER_CONFIG = 16'b000_0011_1001_0111; //Port Configuration
                 POST_DONE4: begin wr_data_shift <= {16'b000_0001_1011_1111,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+3; end
                 // mezz 3
                 POST_DONE5: begin wr_data_shift <= {16'b000_0001_1011_1111,48'd0}; iic_num_bytes_i <= 8'h1; iic_addr <= IO_EXP_IIC_ADDR+3; post_done_latch <= 1'b1; end
-
+                                                       
               endcase
             // No more instructions to process => HMC IIC init done
             end else begin

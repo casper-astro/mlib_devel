@@ -245,7 +245,7 @@ endgenerate
     assign hmc_reset_out = ~res_n;
 
 hmc_gth hmc_gth_inst(
-    .SOFT_RESET_IN(1'b0),
+    .SOFT_RESET_IN(SOFT_RESET_IN),//(1'b0),
 
     .REFCLK_PAD_N_IN_0(REFCLK_PAD_N_IN_0),
     .REFCLK_PAD_P_IN_0(REFCLK_PAD_P_IN_0),

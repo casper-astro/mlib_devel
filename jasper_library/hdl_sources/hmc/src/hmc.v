@@ -100,10 +100,10 @@ module hmc #(
     output wire INIT_DONE
 );
 
-wire soft_reset_link2,soft_reset_link3;
-reg [31:0] time_out_cnt;
-reg time_out_cnt_rst;
-wire soft_reset;
+(* mark_debug = "true" *) wire soft_reset_link2,soft_reset_link3;
+(* mark_debug = "true" *) reg [31:0] time_out_cnt;
+(* mark_debug = "true" *) reg time_out_cnt_rst;
+(* mark_debug = "true" *) wire soft_reset;
 
 assign soft_reset_link2 = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
 assign soft_reset_link3 = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
@@ -187,9 +187,9 @@ wire                         rf_read_en_link2,rf_read_en_link3;
 wire                         rf_write_en_link2,rf_write_en_link3;
 wire  [HMC_RF_WWIDTH-1:0]    rf_write_data_link2,rf_write_data_link3;
 
-wire open_hmc_done_link2,open_hmc_done_link3;
-wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
-wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
+(* mark_debug = "true" *) wire open_hmc_done_link2,open_hmc_done_link3;
+(* mark_debug = "true" *) wire [63:0] data_rx_flit_cnt_link2,data_rx_flit_cnt_link3;
+(* mark_debug = "true" *) wire [63:0] data_rx_err_flit_cnt_link2,data_rx_err_flit_cnt_link3;
 wire data_err_detect_link2,data_err_detect_link3;
 wire [15:0] rx_crc_err_cnt_link2,rx_crc_err_cnt_link3;
 
@@ -292,6 +292,8 @@ wire post_ok = ((data_rx_err_flit_cnt_link3 == 64'd0) && (data_rx_err_flit_cnt_l
 
 reg [1:0] post_okR;
 reg post_ok_latch;
+reg [15:0] reset_cnt;
+reg issue_retry_rst;
 
 always @(posedge USER_CLK or posedge USER_RST) begin 
   if (USER_RST == 1'b1) begin
@@ -299,10 +301,25 @@ always @(posedge USER_CLK or posedge USER_RST) begin
     post_okR <= 2'b00;
     time_out_cnt <= 32'd0;
     time_out_cnt_rst <= 1'b0;
+    reset_cnt <= 16'd0;
+    issue_retry_rst <= 1'b0;
   end else begin
     post_okR <= {post_okR[0],post_ok};
     time_out_cnt <= time_out_cnt + 1'b1;
-    time_out_cnt_rst <= time_out_cnt[30];
+
+    if (time_out_cnt[30] == 1'b1) begin
+      time_out_cnt_rst <= 1'b1;      
+    end     
+    
+    if (time_out_cnt_rst == 1'b1) begin
+      reset_cnt <= reset_cnt + 1'b1;
+    end 
+    
+    if (reset_cnt[15] == 1'b1) begin
+      reset_cnt <= 16'd0;
+      time_out_cnt_rst <= 1'b0;
+    end    
+
     if (post_okR == 2'b01) begin
       post_ok_latch <= 1'b1;
     end
