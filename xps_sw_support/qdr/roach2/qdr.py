@@ -166,6 +166,7 @@ class Qdr(object):
 
     def qdr_cal_check(self,verbosity=0):
         "checks calibration on a qdr. Raises an exception if it failed."
+        self.disable_fabric() #disable the simulink write interface
         patfail=0
         for pattern in CAL_DATA:
             self.parent.blindwrite(self.memory,struct.pack('>%iL'%len(pattern),*pattern), offset=2**22)
@@ -370,6 +371,7 @@ class Qdr(object):
         self.apply_cals(in_delays,
                         out_delays=[out_delay for bit in range(36)],
                         clk_delay=out_delay,extra_clk=extra_clk, verbosity=verbosity)
+
         cal = self.qdr_cal_check(verbosity)
 
         if self.qdr_cal_check(verbosity):
