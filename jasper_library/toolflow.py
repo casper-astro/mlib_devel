@@ -584,17 +584,10 @@ class ToolflowBackend(object):
                     raise Exception("sourcefile %s doesn't exist!" % source)
                 self.add_const_file(source, self.plat)
 
-        existing_ips = {}
         for ip in self.castro.ips:
-             library_loc = ip[0]
-             ip_name = ip[1]
-             if existing_ips.has_key(library_loc):
-                 if ip_name not in existing_ips[library_loc]:
-                     existing_ips[library_loc] += [ip_name]
-             else:
-                 existing_ips[library_loc] = [ip_name]
-        for library, ips in existing_ips.iteritems():
-            self.add_ips(library, ips)
+            self.add_library(ip['path'])
+            if ip.has_key('module_name'):
+                self.add_ip(ip)
        
         # elaborate pin constraints
         for const in self.castro.synthesis.pin_constraints:
@@ -802,16 +795,19 @@ class VivadoBackend(ToolflowBackend):
         #  self.add_source(os.getenv('HDL_ROOT')+'/'+source)
         #  self.add_source(self.compile_dir+'/top.v')
 
-    def add_ips(self, library_path, ips):
+    def add_library(self, path):
         """
-        Add an ip core from a library at <library_path>/ip
+        Add a library at <path>
         """
-        #if self.plat.project_mode:
         self.add_tcl_cmd('set repos [get_property ip_repo_paths [current_project]]')
-        self.add_tcl_cmd('set_property ip_repo_paths "$repos %s/ip" [current_project]' % library_path)
+        self.add_tcl_cmd('set_property ip_repo_paths "$repos %s" [current_project]' % path)
         self.add_tcl_cmd('update_ip_catalog')
-        for ip in ips:
-            self.add_tcl_cmd('create_ip -name %s -vendor User_Company -library SysGen -version 1.0 -module_name %s_ip' % (ip, ip))
+
+    def add_ip(self, ip):
+        """
+        Add an ip core from a library
+        """
+        self.add_tcl_cmd('create_ip -name %s -vendor %s -library %s -version %s -module_name %s' % (ip['name'], ip['vendor'], ip['library'], ip['version'], ip['module_name']))
         #else:
         #    # TODO: validate for non-project mode flow
         #    pass

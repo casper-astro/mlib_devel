@@ -11,7 +11,7 @@ class Castro(object):
         self.design_name = design_name
         # a list of all hdl files used in the design
         self.src_files = src_files
-        # a list of all IPs, a list of [ip path, ip name] pairs
+        # a list of all IPs, a list of {path, name, vendor, library, version} dictionaries pairs
         self.ips = ips
         # a list of mm_slave objects
         self.mm_slaves = mm_slaves
