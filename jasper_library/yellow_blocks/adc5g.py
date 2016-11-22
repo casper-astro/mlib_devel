@@ -214,7 +214,9 @@ class adc5g(YellowBlock):
         cons.append(PortConstraint(self.fullname+'_reset           ', 'zdok%d' % self.zdok_num, iogroup_index=37))
 
         # clock constraint with variable period
-        cons.append(ClockConstraint(self.fullname+'_adc_clk_p_i', name=self.fullname+'_adc5g_clk', freq=self.bitclk_rate))
+        clkconst = ClockConstraint(self.fullname+'_adc_clk_p_i', name=self.fullname+'_adc5g_clk', freq=self.bitclk_rate)
+        cons.append(clkconst)
+        cons.append(RawConstraint('set_clock_groups -name async_sysclk_adcclk -asynchronous -group [get_clocks -include_generated_clocks %s_CLK] -group [get_clocks -include_generated_clocks sys_clk0_dcm]' % clkconst.signal))
 
         return cons
 
