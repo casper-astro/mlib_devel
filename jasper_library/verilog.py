@@ -304,9 +304,16 @@ class VerilogModule(object):
         param 'comment': Use this to add a comment string which will end up in the generated verilog
         """
         name = name.rstrip(' ')
-        if signal == '':
+        # Catch cases where we don't want to infer either a parent port or signal declaration
+        if (signal == '') or (signal is None):
+            # port is not connected
             parent_port = False
             parent_sig = False
+        elif signal[0].isdigit():
+            # port is connected to a constant
+            parent_port = False
+            parent_sig = False
+            
         logger.debug('Attempting to add port "%s" (parent sig: %s, parent port: %s)'%(name,parent_sig,parent_port))
         if name not in self.ports.keys():
             logger.debug('  Port "%s" is new'%name)
