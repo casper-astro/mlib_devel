@@ -400,5 +400,9 @@ pins:
   lmx2581_be:
     iostd: LVCMOS33
     loc: F15
+  xadc_p:
+    loc: N12
+  xadc_n:
+    loc: P11
 
 
