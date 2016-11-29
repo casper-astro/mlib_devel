@@ -16,11 +16,11 @@ LSCRIPT := -Tlscript.ld
 
 CURRENT_DIR = $(shell pwd)
 DEPFILES := $(patsubst %.o, %.d, $(OBJS))
-LIBS := hello_world_bsp/microblaze_0/lib/libxil.a
+LIBS := main_bsp/microblaze_0/lib/libxil.a
 EXEC := executable.elf
 
-INCLUDEPATH := -Ihello_world_bsp/microblaze_0/include -I.
-LIBPATH := -Lhello_world_bsp/microblaze_0/lib
+INCLUDEPATH := -Imain_bsp/microblaze_0/include -I.
+LIBPATH := -Lmain_bsp/microblaze_0/lib
 
 all: $(EXEC)
 
@@ -28,7 +28,7 @@ $(EXEC): $(LIBS) $(OBJS) $(INCLUDES)
 	$(CC) -o $@ $(OBJS) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT)
 
 $(LIBS):
-	$(MAKE) -C hello_world_bsp
+	$(MAKE) -C main_bsp
 
 %.o:%.c
 	$(CC) $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
