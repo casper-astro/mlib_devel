@@ -1,0 +1,9 @@
+*.d
+*.o
+
+/executable.elf
+
+/main_bsp/microblaze_0/include/*.h
+!/main_bsp/microblaze_0/include/xparameters.h
+
+/main_bsp/microblaze_0/lib/libxil.a
