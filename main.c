@@ -46,15 +46,25 @@
  */
 
 #include <stdio.h>
+
 #include "platform.h"
 #include "xil_printf.h"
+#include "sleep.h"
 
 
 int main()
 {
+    char s[4] = {'\x80', '\x00', '\x00', '\x00'};
+    int i = *((int *)&s);
+
     init_platform();
 
-    print("Hello World\n\r");
+    while(1) {
+        fpga_temp = get_fpga_temp();
+        printf("Hello %s endian world\r\n",
+            i < 0 ? "BIG" : "little");
+        sleep(1);
+    }
 
     cleanup_platform();
     return 0;
