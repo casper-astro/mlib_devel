@@ -38,45 +38,20 @@
 *******************************************************************/
 
 #include "xparameters.h"
-#include "xintc.h"
-
-
-extern void XNullHandler (void *);
+#include "xsysmon.h"
 
 /*
-* The configuration table for devices
-*/
+ * The configuration table for devices
+ */
 
-XIntc_Config XIntc_ConfigTable[] =
+XSysMon_Config XSysMon_ConfigTable[] =
 {
 	{
-		XPAR_MICROBLAZE_0_AXI_INTC_DEVICE_ID,
-		XPAR_MICROBLAZE_0_AXI_INTC_BASEADDR,
-		XPAR_MICROBLAZE_0_AXI_INTC_KIND_OF_INTR,
-		XPAR_MICROBLAZE_0_AXI_INTC_HAS_FAST,
-		XPAR_MICROBLAZE_0_AXI_INTC_IVAR_RESET_VALUE,
-		XPAR_MICROBLAZE_0_AXI_INTC_NUM_INTR_INPUTS,
-		XIN_SVC_SGL_ISR_OPTION,
-		XPAR_MICROBLAZE_0_AXI_INTC_TYPE,
-		{
-			{
-				XNullHandler,
-				(void *) XNULL
-			},
-			{
-				XNullHandler,
-				(void *) XNULL
-			},
-			{
-				XNullHandler,
-				(void *) XNULL
-			},
-			{
-				XNullHandler,
-				(void *) XNULL
-			}
-		}
-
+		XPAR_SYSMON_0_DEVICE_ID,
+		XPAR_SYSMON_0_BASEADDR,
+		XPAR_SYSMON_0_INCLUDE_INTR,
+		XPAR_SYSMON_0_IP_TYPE
 	}
 };
+
 

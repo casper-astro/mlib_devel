@@ -38,45 +38,26 @@
 *******************************************************************/
 
 #include "xparameters.h"
-#include "xintc.h"
-
-
-extern void XNullHandler (void *);
+#include "xspi.h"
 
 /*
 * The configuration table for devices
 */
 
-XIntc_Config XIntc_ConfigTable[] =
+XSpi_Config XSpi_ConfigTable[] =
 {
 	{
-		XPAR_MICROBLAZE_0_AXI_INTC_DEVICE_ID,
-		XPAR_MICROBLAZE_0_AXI_INTC_BASEADDR,
-		XPAR_MICROBLAZE_0_AXI_INTC_KIND_OF_INTR,
-		XPAR_MICROBLAZE_0_AXI_INTC_HAS_FAST,
-		XPAR_MICROBLAZE_0_AXI_INTC_IVAR_RESET_VALUE,
-		XPAR_MICROBLAZE_0_AXI_INTC_NUM_INTR_INPUTS,
-		XIN_SVC_SGL_ISR_OPTION,
-		XPAR_MICROBLAZE_0_AXI_INTC_TYPE,
-		{
-			{
-				XNullHandler,
-				(void *) XNULL
-			},
-			{
-				XNullHandler,
-				(void *) XNULL
-			},
-			{
-				XNullHandler,
-				(void *) XNULL
-			},
-			{
-				XNullHandler,
-				(void *) XNULL
-			}
-		}
-
+		XPAR_SPI_0_DEVICE_ID,
+		XPAR_SPI_0_BASEADDR,
+		XPAR_SPI_0_FIFO_EXIST,
+		XPAR_SPI_0_SPI_SLAVE_ONLY,
+		XPAR_SPI_0_NUM_SS_BITS,
+		XPAR_SPI_0_NUM_TRANSFER_BITS,
+		XPAR_SPI_0_SPI_MODE,
+		XPAR_SPI_0_TYPE_OF_AXI4_INTERFACE,
+		XPAR_SPI_0_AXI4_BASEADDR,
+		XPAR_SPI_0_XIP_MODE,
+		XPAR_SPI_0_USE_STARTUP
 	}
 };
 
