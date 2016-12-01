@@ -39,7 +39,12 @@ $(LIBS):
 %.o:%.s
 	$(CC) $(CC_FLAGS) $(CFLAGS) -c $< -o $@ $(INCLUDEPATH)
 
+tags:
+	ctags -R
+
 clean:
-	rm -rf $(OBJS) $(LIBS) $(EXEC) *.o
+	rm -rf $(OBJS) $(LIBS) $(EXEC) *.o tags
+
+.PHONY: clean tags
 
 -include $(DEPFILES)
