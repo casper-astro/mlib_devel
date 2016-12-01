@@ -3,7 +3,7 @@
 
 /executable.elf
 
-/main_bsp/microblaze_0/include/*.h
-!/main_bsp/microblaze_0/include/xparameters.h
+/bsp/microblaze_0/include/*.h
+!/bsp/microblaze_0/include/xparameters.h
 
-/main_bsp/microblaze_0/lib/libxil.a
+/bsp/microblaze_0/lib/libxil.a
