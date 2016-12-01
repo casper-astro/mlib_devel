@@ -38,4 +38,5 @@
 void init_platform();
 void cleanup_platform();
 
+float get_fpga_temp();
 #endif

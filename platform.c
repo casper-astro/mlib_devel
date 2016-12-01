@@ -32,6 +32,7 @@
 
 #include "xparameters.h"
 #include "xil_cache.h"
+#include "xsysmon.h"
 
 #include "platform_config.h"
 
@@ -82,6 +83,17 @@ init_uart()
     /* Bootrom/BSP configures PS7/PSU UART to 115200 bps */
 }
 
+static XSysMon xsysmon;
+
+void
+init_sysmon()
+{
+    XSysMon_Config *cfg_ptr = XSysMon_LookupConfig(0);
+
+    XSysMon_CfgInitialize(&xsysmon, cfg_ptr, cfg_ptr->BaseAddress);
+    XSysMon_SetAvg(&xsysmon, XSM_AVG_256_SAMPLES);
+}
+
 void
 init_platform()
 {
@@ -96,10 +108,17 @@ init_platform()
     /* psu_init();*/
     enable_caches();
     init_uart();
+    init_sysmon();
 }
 
 void
 cleanup_platform()
 {
     disable_caches();
+}
+
+float
+get_fpga_temp() {
+    u16 adc_data = XSysMon_GetAdcData(&xsysmon, XSM_CH_TEMP);
+    return XSysMon_RawToTemperature(adc_data);
 }

@@ -56,13 +56,15 @@ int main()
 {
     char s[4] = {'\x80', '\x00', '\x00', '\x00'};
     int i = *((int *)&s);
+    float fpga_temp;
 
     init_platform();
 
     while(1) {
         fpga_temp = get_fpga_temp();
-        printf("Hello %s endian world\r\n",
-            i < 0 ? "BIG" : "little");
+        printf("Hello %s endian world at %.1f C\r\n",
+            i < 0 ? "BIG" : "little",
+            fpga_temp);
         sleep(1);
     }
 
