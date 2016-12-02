@@ -34,6 +34,8 @@
 #include "xil_cache.h"
 #include "xsysmon.h"
 
+#include "spi.h"
+
 #include "platform_config.h"
 
 /*
@@ -88,7 +90,7 @@ static XSysMon xsysmon;
 void
 init_sysmon()
 {
-    XSysMon_Config *cfg_ptr = XSysMon_LookupConfig(0);
+    XSysMon_Config *cfg_ptr = XSysMon_LookupConfig(XPAR_SYSMON_0_DEVICE_ID);
 
     XSysMon_CfgInitialize(&xsysmon, cfg_ptr, cfg_ptr->BaseAddress);
     XSysMon_SetAvg(&xsysmon, XSM_AVG_256_SAMPLES);
@@ -109,6 +111,9 @@ init_platform()
     enable_caches();
     init_uart();
     init_sysmon();
+    init_spi();
+    print("After init_spi:\n");
+    dump_spi();
 }
 
 void
