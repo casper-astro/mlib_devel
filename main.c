@@ -51,19 +51,52 @@
 #include "xil_printf.h"
 #include "sleep.h"
 
+#include "spi.h"
 
 int main()
 {
     char s[4] = {'\x80', '\x00', '\x00', '\x00'};
-    int i = *((int *)&s);
+    int endian = *((int *)&s);
+    int i;
     float fpga_temp;
+    u8 buf[128];
+    u32 len;
 
     init_platform();
 
+    print("SPI read identification (RDID)\n");
+    test_spi(0x9e, 8);
+
+    print("SPI read identification (RDID)\n");
+    print("got ");
+    buf[0] = 0x9e;
+    len = 4;
+    send_spi(buf, buf, len, SEND_SPI_MORE);
+    for(i=0; i<len; i++) {
+      xil_printf(" %02x", buf[i]);
+    }
+    send_spi(buf, buf, len, 0);
+    for(i=0; i<len; i++) {
+      xil_printf(" %02x", buf[i]);
+    }
+    print("\n");
+
+    print("SPI read status register (RDSR)\n");
+    test_spi(0x05, 3);
+
+    print("SPI read non-volatile config register (RDNVCR)\n");
+    test_spi(0xb5, 4);
+
+    print("SPI read volatile config register (RDVCR)\n");
+    test_spi(0x85, 3);
+
+    print("SPI read enhanced volatile config register (RDEVCR)\n");
+    test_spi(0x65, 3);
+
     while(1) {
         fpga_temp = get_fpga_temp();
-        printf("Hello %s endian world at %.1f C\r\n",
-            i < 0 ? "BIG" : "little",
+        printf("Hello %s endian world at %.1f C\n",
+            endian < 0 ? "BIG" : "little",
             fpga_temp);
         sleep(1);
     }
