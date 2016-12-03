@@ -7,6 +7,5 @@ void init_spi();
 u32 send_spi(u8 *src, u8 *dst, u32 len, u32 opt);
 
 void dump_spi();
-void test_spi(u8 opcode, u8 txlen);
 
 #endif // _SPI_H_

@@ -38,10 +38,16 @@ init_spi()
     // Clear slave mode error bit
     XSpi_IntrClear(&xspi, XSP_INTR_SLAVE_MODE_ERR_MASK);
 
-    // "Start" the core
-    XSpi_Start(&xspi);
+    // Ensure the core is disabled
+    XSpi_Disable(&xspi);
 
-    // Disable interrupt generation and just use polling
+    // Reset fifos
+    XSpi_SetControlReg(&xspi,
+        XSpi_GetControlReg(&xspi) |
+        XSP_CR_TXFIFO_RESET_MASK  |
+        XSP_CR_RXFIFO_RESET_MASK);
+
+    // Ensure interrupt generation is disabled and just use polling
     XSpi_IntrGlobalDisable(&xspi);
 }
 
@@ -143,65 +149,4 @@ dump_spi()
                 XSpi_IsIntrGlobalEnabled(&xspi) ? XSP_GINTR_ENABLE_MASK : 0);
   xil_printf("  IPISR  %08x\n", XSpi_IntrGetStatus(&xspi));
   xil_printf("  IPIER  %08x\n", XSpi_IntrGetEnabled(&xspi));
-}
-
-// SPI test function
-void
-test_spi(u8 opcode, u8 txlen)
-{
-  int i;
-
-  // Enable (take pins out of tri-state and allow master transactions)
-  XSpi_Enable(&xspi);
-
-  // Select slave.  Be sure to use the "...Reg()" form of the setter since we
-  // are not using the higher level XSpi functions.
-	XSpi_SetSlaveSelectReg(&xspi, ~1);
-
-  // Load command and "response" bytes (and any "extra" bytes) into FIFO
-  print("sent");
-  XSpi_WriteReg(xspi.BaseAddr, XSP_DTR_OFFSET, opcode);
-  xil_printf(" %02x", opcode);
-  for(i=0; i<txlen-1; i++) {
-    xil_printf(" %02x", 0xff);
-    XSpi_WriteReg(xspi.BaseAddr, XSP_DTR_OFFSET, 0xff);
-  }
-  xil_printf("\n");
-
-  // Loop many time or until until TX fifo is empty
-  for(i=0; i<100000; i++) {
-    if(XSpi_GetStatusReg(&xspi) & XSP_SR_TX_EMPTY_MASK) {
-      break;
-    }
-  }
-
-  // Print some details
-  xil_printf("looped %d times waiting for tx fifo empty\n", i);
-  // Show SPI registers
-  dump_spi();
-
-  // Read up to txlen values or until RX fifo is empty
-  xil_printf("got ");
-  for(i=0; i<txlen; i++) {
-    if(XSpi_GetStatusReg(&xspi) & XSP_SR_RX_EMPTY_MASK) {
-      break;
-    }
-    xil_printf(" %02x", XSpi_ReadReg(xspi.BaseAddr, XSP_DRR_OFFSET) & 0xff);
-  }
-  if(XSpi_GetStatusReg(&xspi) & XSP_SR_RX_EMPTY_MASK) {
-    print(" --"); // Indicate RX fifo was emptied
-  } else {
-    print(" ++"); // Indicate RX fifo was NOT emptied
-  }
-  xil_printf("\n");
-
-  // Show SPI registers
-  dump_spi();
-
-  // De-select slave.  Be sure to use the "...Reg()" form of the setter since
-  // we are not using the higher level XSpi functions.
-	XSpi_SetSlaveSelectReg(&xspi, ~0);
-
-  // Enable (tri-state pins)
-  XSpi_Disable(&xspi);
 }

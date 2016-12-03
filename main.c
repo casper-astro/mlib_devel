@@ -57,41 +57,86 @@ int main()
 {
     char s[4] = {'\x80', '\x00', '\x00', '\x00'};
     int endian = *((int *)&s);
-    int i;
+    int i, j;
     float fpga_temp;
     u8 buf[128];
     u32 len;
 
     init_platform();
 
-    print("SPI read identification (RDID)\n");
-    test_spi(0x9e, 8);
+    print("\n# JAM starting\n\n");
 
-    print("SPI read identification (RDID)\n");
-    print("got ");
+    print("## SPI Flash Info\n");
+
     buf[0] = 0x9e;
-    len = 4;
+    len = 5;
     send_spi(buf, buf, len, SEND_SPI_MORE);
-    for(i=0; i<len; i++) {
+    print("RDID:  ");
+    for(i=1; i<len; i++) { // skip munged opcode byte
       xil_printf(" %02x", buf[i]);
     }
+    print("\n       ");
+    // Read rest of UID using length from last byte
+    len = buf[--i];
     send_spi(buf, buf, len, 0);
     for(i=0; i<len; i++) {
       xil_printf(" %02x", buf[i]);
     }
     print("\n");
 
-    print("SPI read status register (RDSR)\n");
-    test_spi(0x05, 3);
+    buf[0] = 0x05;
+    len = 2;
+    send_spi(buf, buf, len, 0);
+    print("RDSR:  ");
+    for(i=1; i<len; i++) { // skip munged opcode byte
+      xil_printf(" %02x", buf[i]);
+    }
+    print("\n");
 
-    print("SPI read non-volatile config register (RDNVCR)\n");
-    test_spi(0xb5, 4);
+    buf[0] = 0xb5;
+    len = 3;
+    send_spi(buf, buf, len, 0);
+    print("RDNVCR:");
+    for(i=1; i<len; i++) { // skip munged opcode byte
+      xil_printf(" %02x", buf[i]);
+    }
+    print("\n");
 
-    print("SPI read volatile config register (RDVCR)\n");
-    test_spi(0x85, 3);
+    buf[0] = 0x85;
+    len = 2;
+    send_spi(buf, buf, len, 0);
+    print("RDVCR: ");
+    for(i=1; i<len; i++) { // skip munged opcode byte
+      xil_printf(" %02x", buf[i]);
+    }
+    print("\n");
 
-    print("SPI read enhanced volatile config register (RDEVCR)\n");
-    test_spi(0x65, 3);
+    buf[0] = 0x65;
+    len = 2;
+    send_spi(buf, buf, len, 0);
+    print("RDEVCR:");
+    for(i=1; i<len; i++) { // skip munged opcode byte
+      xil_printf(" %02x", buf[i]);
+    }
+    print("\n");
+
+    buf[0] = 0x5a; // opcode
+    buf[1] = 0x00; // address
+    buf[2] = 0x00; // address
+    buf[3] = 0x00; // address
+    buf[4] = 0x00; // dummy
+    send_spi(buf, buf, 5, SEND_SPI_MORE);
+    len = 128;
+    send_spi(buf, buf, len, 0);
+    for(i=0; i<len/16; i++) {
+      print(i == 0 ? "RDSFDP:" : "       ");
+      for(j=0; j<16; j++) {
+        xil_printf(" %02x", buf[16*i+j]);
+      }
+      print("\n");
+    }
+    print("\n");
+
 
     while(1) {
         fpga_temp = get_fpga_temp();

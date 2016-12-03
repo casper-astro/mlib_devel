@@ -112,8 +112,6 @@ init_platform()
     init_uart();
     init_sysmon();
     init_spi();
-    print("After init_spi:\n");
-    dump_spi();
 }
 
 void
