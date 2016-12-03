@@ -137,6 +137,90 @@ int main()
     }
     print("\n");
 
+    // Unicast ARP packet.  The packet format is based this tcpdump capture of
+    // a unicast ARP packet:
+    //
+    // 00:25:90:9d:aa:41 > 0c:c4:7a:aa:8a:fb, ethertype ARP (0x0806), length 60:
+    // Request who-has 10.0.1.1 tell 10.0.100.49, length 46
+    //      0x0000:  0cc4 7aaa 8afb 0025 909d aa41 0806 0001
+    //      0x0010:  0800 0604 0001 0025 909d aa41 0a00 6431
+    //      0x0020:  0000 0000 0000 0a00 0101 0000 0000 0000
+    //      0x0030:  0000 0000 0000 0000 0000 0000
+    //
+    // The packet sent here has these changes:
+    //
+    // Replace src MAC with 02:02:0a:0a:0a:0a, src IP with 10.10.10.10
+    // Replace dst MAC with 02:02:0a:14:1e:28, dst IP with 10.20.30.40
+    // Add 4 bytes of padding since core requires multiple of 8 bytes
+    int pktlen = 64;
+    char pkt[64] = {
+      0x02, 0x02, 0x0a, 0x14, 0x1e, 0x28, 0x02, 0x02, 0x0a, 0x0a, 0x0a, 0x0a, 0x08, 0x06, 0x00, 0x01,
+      0x08, 0x00, 0x06, 0x04, 0x00, 0x01, 0x02, 0x02, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x14, 0x1e, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    // Create a u32 poitner to packet
+    u32 *pkt32 = (u32 *)pkt;
+
+// From core_info.tab
+#define ETH0_WB_OFFSET (0x292f8)
+#define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + ETH0_WB_OFFSET)
+// From Ethernet MAC
+#define ETH_MAC_BUFFER_LEVEL_OFFSET   (0x18)
+#define ETH_MAC_TX_BUF_OFFSET       (0x4000)
+
+    print("## eth0 memory as u8:\n");
+    for(i=0; i<4; i++) {
+      xil_printf("%02x:", 16*i);
+      for(j=0; j<16; j++) {
+        xil_printf(" %02x", *(((u8 *)ETH0_BASE_ADDRESS) + 16*i+j));
+      }
+      print("\n");
+    }
+    print("\n");
+
+    print("## eth0 memory as u16:\n");
+    for(i=0; i<4; i++) {
+      xil_printf("%02x:", 16*i);
+      for(j=0; j<8; j++) {
+        xil_printf(" %04x", *(((u16 *)ETH0_BASE_ADDRESS) + 8*i+j));
+      }
+      print("\n");
+    }
+    print("\n");
+
+    print("## eth0 memory as u32:\n");
+    for(i=0; i<4; i++) {
+      xil_printf("%02x:", 16*i);
+      for(j=0; j<4; j++) {
+        xil_printf(" %08x", *(((u32 *)ETH0_BASE_ADDRESS) + 4*i+j));
+      }
+      print("\n");
+    }
+    print("\n");
+
+#if 1
+    // Copy packet to 10 GbE buffer
+    // Xil_Out32(XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + uAddressOffset + ETH_MAC_CPU_TRANSMIT_BUFFER_LOW_ADDRESS + 4*uIndex, puTransmitPacket[uIndex]);
+    //memcpy((void *)(ETH0_BASE_ADDRESS + ETH_MAC_TX_BUF_OFFSET), pkt, 64);
+    for(i=0; i<16; i++) {
+      Xil_Out32(ETH0_BASE_ADDRESS + ETH_MAC_TX_BUF_OFFSET + i, Xil_Htonl(pkt32[i]));
+    }
+
+    // Set TX buffer level to 60 to send packet
+    *((u16 *)((ETH0_BASE_ADDRESS+ETH_MAC_BUFFER_LEVEL_OFFSET+2)^2)) = Xil_Htons(64/8);
+
+    // Loop a bunch of times waiting for packet to send
+    for(i=0; i<10000; i++) {
+      // If length is zero, then packet was sent
+      if(!*((u16 *)((ETH0_BASE_ADDRESS+ETH_MAC_BUFFER_LEVEL_OFFSET+2)^2))) break;
+    }
+
+    xil_printf("looped %d times while packet was sending\n", i);
+#endif
+
+    print("\n");
 
     while(1) {
         fpga_temp = get_fpga_temp();
