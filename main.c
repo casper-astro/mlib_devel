@@ -52,12 +52,13 @@
 #include "sleep.h"
 
 #include "spi.h"
+#include "casper_eth.h"
 
 int main()
 {
     char s[4] = {'\x80', '\x00', '\x00', '\x00'};
     int endian = *((int *)&s);
-    int i, j;
+    int i, j, rx_size;
     float fpga_temp;
     u8 buf[128];
     u32 len;
@@ -137,8 +138,71 @@ int main()
     }
     print("\n");
 
-    // Unicast ARP packet.  The packet format is based this tcpdump capture of
-    // a unicast ARP packet:
+// From core_info.tab
+#define WB_SYS_CLKCOUNTER (0x1402c)
+#define WB_ETH0_OFFSET (0x292f8)
+#define SYS_CLKCOUNTER_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_SYS_CLKCOUNTER)
+#define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_ETH0_OFFSET)
+
+    s32 tic = *(u32 *)SYS_CLKCOUNTER_ADDRESS;
+    sleep(1);
+    s32 toc = *(u32 *)SYS_CLKCOUNTER_ADDRESS;
+    xil_printf("fabric clock running at %d Hz\n\n", toc-tic);
+
+    // Make various pointers to eth0 memory
+    volatile u32 *eth0_ptr32 = (u32 *)(ETH0_BASE_ADDRESS);
+    volatile u16 *eth0_ptr16 = (u16 *)(ETH0_BASE_ADDRESS);
+    volatile u8  *eth0_ptr8  = (u8  *)(ETH0_BASE_ADDRESS);
+
+    // Arithmetic on pointers to u32 is done in units of u32
+    // Scale OFFSETs accordingly!
+    volatile u32 *eth0_txbuf = eth0_ptr32 + ETH_MAC_TX_BUFFER_OFFSET/sizeof(u32);
+    volatile u32 *eth0_rxbuf = eth0_ptr32 + ETH_MAC_RX_BUFFER_OFFSET/sizeof(u32);
+
+#if 0
+    // Reset eth0
+    eth0_ptr8[ETH_MAC_REG8_RESET] = 1;
+    for(i=0; i<1000; i++) {
+      if(!eth0_ptr8[ETH_MAC_REG8_RESET]) break;
+    }
+    xil_printf("looped %d times waiting for reset to complete\n", i);
+
+    print("## eth0 memory as u8:\n");
+    for(i=0; i<4; i++) {
+      xil_printf("%02x:", 16*i);
+      for(j=0; j<16; j++) {
+        //xil_printf(" %02x", *(((u8 *)ETH0_BASE_ADDRESS) + 16*i+j));
+        xil_printf(" %02x", eth0_ptr8[16*i+j]);
+      }
+      print("\n");
+    }
+    print("\n");
+
+    print("## eth0 memory as u16:\n");
+    for(i=0; i<4; i++) {
+      xil_printf("%02x:", 16*i);
+      for(j=0; j<8; j++) {
+        //xil_printf(" %04x", *(((u16 *)ETH0_BASE_ADDRESS) + 8*i+j));
+        xil_printf(" %04x", eth0_ptr16[8*i+j]);
+      }
+      print("\n");
+    }
+    print("\n");
+
+    print("## eth0 memory as u32:\n");
+    for(i=0; i<4; i++) {
+      xil_printf("%02x:", 16*i);
+      for(j=0; j<4; j++) {
+        //xil_printf(" %08x", *(((u32 *)ETH0_BASE_ADDRESS) + 4*i+j));
+        xil_printf(" %08x", eth0_ptr32[4*i+j]);
+      }
+      print("\n");
+    }
+    print("\n");
+#endif
+
+    // Broadcast ARP packet.  The packet format is based this tcpdump capture
+    // of a unicast ARP packet:
     //
     // 00:25:90:9d:aa:41 > 0c:c4:7a:aa:8a:fb, ethertype ARP (0x0806), length 60:
     // Request who-has 10.0.1.1 tell 10.0.100.49, length 46
@@ -150,83 +214,59 @@ int main()
     // The packet sent here has these changes:
     //
     // Replace src MAC with 02:02:0a:0a:0a:0a, src IP with 10.10.10.10
-    // Replace dst MAC with 02:02:0a:14:1e:28, dst IP with 10.20.30.40
-    // Add 4 bytes of padding since core requires multiple of 8 bytes
-    int pktlen = 64;
-    char pkt[64] = {
-      0x02, 0x02, 0x0a, 0x14, 0x1e, 0x28, 0x02, 0x02, 0x0a, 0x0a, 0x0a, 0x0a, 0x08, 0x06, 0x00, 0x01,
-      0x08, 0x00, 0x06, 0x04, 0x00, 0x01, 0x02, 0x02, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x14, 0x1e, 0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    // Replace dst MAC with ff:ff:ff:ff:ff:ff, dst IP with 10.20.30.40
+    // Added 4 bytes of padding since core requires multiple of 8 bytes
+    int pktlen32 = 16;
+    u32 pkt32[] = {
+      0xffffffff, 0xffff0202, 0x0a0a0a0a, 0x08060001,
+      0x08000604, 0x00010202, 0x0a0a0a0a, 0x0a0a0a0a,
+      0x00000000, 0x00000a14, 0x1e280000, 0x00000000,
+      0x00000000, 0x00000000, 0x00000000, 0x00000000
     };
 
-    // Create a u32 poitner to packet
-    u32 *pkt32 = (u32 *)pkt;
-
-// From core_info.tab
-#define ETH0_WB_OFFSET (0x292f8)
-#define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + ETH0_WB_OFFSET)
-// From Ethernet MAC
-#define ETH_MAC_BUFFER_LEVEL_OFFSET   (0x18)
-#define ETH_MAC_TX_BUF_OFFSET       (0x4000)
-
-    print("## eth0 memory as u8:\n");
-    for(i=0; i<4; i++) {
-      xil_printf("%02x:", 16*i);
-      for(j=0; j<16; j++) {
-        xil_printf(" %02x", *(((u8 *)ETH0_BASE_ADDRESS) + 16*i+j));
-      }
-      print("\n");
-    }
-    print("\n");
-
-    print("## eth0 memory as u16:\n");
-    for(i=0; i<4; i++) {
-      xil_printf("%02x:", 16*i);
-      for(j=0; j<8; j++) {
-        xil_printf(" %04x", *(((u16 *)ETH0_BASE_ADDRESS) + 8*i+j));
-      }
-      print("\n");
-    }
-    print("\n");
-
-    print("## eth0 memory as u32:\n");
-    for(i=0; i<4; i++) {
-      xil_printf("%02x:", 16*i);
-      for(j=0; j<4; j++) {
-        xil_printf(" %08x", *(((u32 *)ETH0_BASE_ADDRESS) + 4*i+j));
-      }
-      print("\n");
-    }
-    print("\n");
-
-#if 1
-    // Copy packet to 10 GbE buffer
-    // Xil_Out32(XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + uAddressOffset + ETH_MAC_CPU_TRANSMIT_BUFFER_LOW_ADDRESS + 4*uIndex, puTransmitPacket[uIndex]);
-    //memcpy((void *)(ETH0_BASE_ADDRESS + ETH_MAC_TX_BUF_OFFSET), pkt, 64);
-    for(i=0; i<16; i++) {
-      Xil_Out32(ETH0_BASE_ADDRESS + ETH_MAC_TX_BUF_OFFSET + i, Xil_Htonl(pkt32[i]));
-    }
-
-    // Set TX buffer level to 60 to send packet
-    *((u16 *)((ETH0_BASE_ADDRESS+ETH_MAC_BUFFER_LEVEL_OFFSET+2)^2)) = Xil_Htons(64/8);
-
-    // Loop a bunch of times waiting for packet to send
+    // Loop a bunch of times waiting for TX buffer to be free
+    // (indicated by size going to 0)
     for(i=0; i<10000; i++) {
-      // If length is zero, then packet was sent
-      if(!*((u16 *)((ETH0_BASE_ADDRESS+ETH_MAC_BUFFER_LEVEL_OFFSET+2)^2))) break;
+      // If length is zero, then TX buffer is free
+      if(!eth0_ptr16[ETH_MAC_REG16_TX_BUFFER_SIZE]) break;
     }
 
-    xil_printf("looped %d times while packet was sending\n", i);
-#endif
+    if(i > 0) {
+      xil_printf("looped %d times waiting for TX buffer\n\n", i);
+    }
 
-    print("\n");
+    // Copy packet to TX buffer
+    for(i=0; i<pktlen32; i++) {
+      eth0_txbuf[i] = pkt32[i];
+    }
+
+    // Set TX buffer level to number of 8 byte words to send packet
+    eth0_ptr16[ETH_MAC_REG16_TX_BUFFER_SIZE] = pktlen32/2;
 
     while(1) {
+        // Get RX buffer size
+        rx_size = eth0_ptr16[ETH_MAC_REG16_RX_BUFFER_SIZE];
+        // Show packet contents if non-zero
+        if(rx_size != 0) {
+          // Double rx_size to get number of 32 bit words
+          rx_size <<= 1;
+          xil_printf("got packet with %d bytes\n", (rx_size<<2));
+          for(i=0; i<rx_size; i++) {
+            if((i & 3) == 0) xil_printf("%04x:", (i<<2));
+            xil_printf(" %08x", eth0_rxbuf[i]);
+            if((i & 3) == 3) print("\n");
+          }
+          if((i & 3) != 0) print("\n");
+
+          // Ack the packet
+          eth0_ptr16[ETH_MAC_REG16_RX_BUFFER_SIZE] = 0;
+        }
+
         fpga_temp = get_fpga_temp();
         printf("Hello %s endian world at %.1f C\n",
             endian < 0 ? "BIG" : "little",
             fpga_temp);
+
         sleep(1);
     }
 
