@@ -51,6 +51,7 @@
 #include "xil_printf.h"
 #include "sleep.h"
 
+#include "tmrctr.h"
 #include "spi.h"
 #include "casper_eth.h"
 
@@ -62,10 +63,27 @@ int main()
     float fpga_temp;
     u8 buf[128];
     u32 len;
+    u64 time0, time1;
+    u32 tick0, tick1;
 
     init_platform();
 
     print("\n# JAM starting\n\n");
+
+#ifdef JAM_TEST_TMRCTR
+    dump_tmrctr();
+    dump_tmrctr();
+    time0 = read_tmrctr();
+    time1 = read_tmrctr();
+    xil_printf("%08x%08x\n", (u32)(time0>>32), (u32)(time0 & 0xffffffff));
+    xil_printf("%08x%08x %d\n", (u32)(time1>>32), (u32)(time1 & 0xffffffff),
+        (u32)(time1 - time0));
+    tick0 = tick_tmrctr();
+    tick1 = tick_tmrctr();
+    xil_printf("%08x\n", tick0);
+    xil_printf("%08x %d\n", tick1, tick1 - tick0);
+    print("\n");
+#endif
 
     print("## SPI Flash Info\n");
 
@@ -263,9 +281,9 @@ int main()
         }
 
         fpga_temp = get_fpga_temp();
-        printf("Hello %s endian world at %.1f C\n",
+        printf("Hello %s endian world at %.1f C [tick %d]\n",
             endian < 0 ? "BIG" : "little",
-            fpga_temp);
+            fpga_temp, tick_tmrctr());
 
         sleep(1);
     }

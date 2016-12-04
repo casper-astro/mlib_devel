@@ -34,6 +34,7 @@
 #include "xil_cache.h"
 #include "xsysmon.h"
 
+#include "tmrctr.h"
 #include "spi.h"
 
 #include "platform_config.h"
@@ -109,6 +110,7 @@ init_platform()
     /* ps7_init();*/
     /* psu_init();*/
     enable_caches();
+    init_tmrctr();
     init_uart();
     init_sysmon();
     init_spi();
