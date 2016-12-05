@@ -6,7 +6,8 @@ CFLAGS := -ffunction-sections -fdata-sections
 LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group \
             -Wl,--gc-sections \
             -Wl,-Map=map \
-            -Wl,--strip-debug
+            -Wl,--strip-debug \
+            -Wl,--defsym=_HEAP_SIZE=0x10000
 
 c_SOURCES := $(wildcard *.c)
 S_SOURCES := $(wildcard *.S)
