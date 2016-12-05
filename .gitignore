@@ -7,5 +7,6 @@
 !/bsp/microblaze_0/include/xparameters.h
 
 /bsp/microblaze_0/lib/libxil.a
-
+/map
+/symbols
 /tags
