@@ -49,82 +49,8 @@
  *
  */
 
-#ifndef __SYS_XILINX_ARCH_H__
-#define __SYS_XILINX_ARCH_H__
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "lwipopts.h"
-
-#ifdef OS_IS_XILKERNEL
-
-#include "arch/cc.h"
-#include "semaphore.h"
-#include "os_config.h"
-
-#define SYS_MBOX_NULL NULL
-#define SYS_SEM_NULL  NULL
-#define SYS_MBOX_SIZE   500
-#define SYS_SEM_MAX     MAX_SEM
-#define SYS_MBOX_MAX    (MAX_SEM/2)
-#define SYS_THREAD_MAX  MAX_PTHREADS
-
-#define SEM_FREE   0xffffffff
-#define TID_FREE   0xffffffff
-
-struct sys_mbox_msg {
-	struct sys_mbox_msg *next;
-	void *msg;
-};
-
-struct sys_mbox_s {
-	u8_t  used;
-	u16_t first, last;
-	void *msgs[SYS_MBOX_SIZE];
-	sem_t mail;
-	sem_t mutex;
-};
+#ifndef __SYS_ARCH_H__
+#define __SYS_ARCH_H__
 
 
-typedef sem_t sys_sem_t;
-
-struct sys_mbox_s;
-typedef struct sys_mbox_s sys_mbox_t;
-
-struct sys_thread;
-typedef struct sys_thread *sys_thread_t;
-
-typedef u32_t sys_prot_t;
-#endif
-
-#ifdef OS_IS_FREERTOS
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "semphr.h"
-#include "timers.h"
-
-#define SYS_MBOX_NULL					( ( xQueueHandle ) NULL )
-#define SYS_SEM_NULL					( ( xSemaphoreHandle ) NULL )
-#define SYS_DEFAULT_THREAD_STACK_DEPTH	configMINIMAL_STACK_SIZE
-
-typedef xSemaphoreHandle sys_sem_t;
-typedef xSemaphoreHandle sys_mutex_t;
-typedef xQueueHandle sys_mbox_t;
-typedef xTaskHandle sys_thread_t;
-
-typedef unsigned long sys_prot_t;
-
-#define sys_mbox_valid( x ) ( ( ( *x ) == NULL) ? pdFALSE : pdTRUE )
-#define sys_mbox_set_invalid( x ) ( ( *x ) = NULL )
-#define sys_sem_valid( x ) ( ( ( *x ) == NULL) ? pdFALSE : pdTRUE )
-#define sys_sem_set_invalid( x ) ( ( *x ) = NULL )
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* __SYS_XILINX_ARCH_H__ */
+#endif /* __SYS_ARCH_H__ */

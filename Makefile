@@ -7,9 +7,26 @@ LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group \
             -Wl,--gc-sections \
             -Wl,-Map=map \
             -Wl,--strip-debug \
-            -Wl,--defsym=_HEAP_SIZE=0x10000
+            -Wl,--defsym=_HEAP_SIZE=0xa000
 
 c_SOURCES := $(wildcard *.c)
+
+# Add just the LwIP sources that we need
+c_SOURCES += lwip/src/core/init.c          \
+             lwip/src/core/inet_chksum.c   \
+             lwip/src/core/mem.c           \
+             lwip/src/core/memp.c          \
+             lwip/src/core/netif.c         \
+             lwip/src/core/pbuf.c          \
+             lwip/src/core/stats.c         \
+             lwip/src/core/timeouts.c      \
+             lwip/src/core/udp.c           \
+             lwip/src/core/ipv4/dhcp.c     \
+             lwip/src/core/ipv4/etharp.c   \
+             lwip/src/core/ipv4/ip4.c      \
+             lwip/src/core/ipv4/ip4_addr.c \
+             lwip/src/netif/ethernet.c
+
 S_SOURCES := $(wildcard *.S)
 s_SOURCES := $(wildcard *.s)
 INCLUDES := $(wildcard *.h)
@@ -23,7 +40,7 @@ DEPFILES := $(patsubst %.o, %.d, $(OBJS))
 LIBS := bsp/microblaze_0/lib/libxil.a
 EXEC := executable.elf
 
-INCLUDEPATH := -Ibsp/microblaze_0/include -I.
+INCLUDEPATH := -Ibsp/microblaze_0/include -I. -Ijam_lwip/include -Ilwip/src/include
 LIBPATH := -Lbsp/microblaze_0/lib
 
 export CFLAGS

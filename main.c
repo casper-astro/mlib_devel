@@ -47,6 +47,8 @@
 
 #include <stdio.h>
 
+#include "lwip/init.h"
+
 #include "platform.h"
 #include "xil_printf.h"
 #include "sleep.h"
@@ -67,6 +69,7 @@ int main()
     u32 tick0, tick1;
 
     init_platform();
+    lwip_init();
 
     print("\n# JAM starting\n\n");
 
