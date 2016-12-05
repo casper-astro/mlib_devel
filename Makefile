@@ -2,7 +2,7 @@
 
 CC := mb-gcc
 CC_FLAGS := -MMD -MP -mlittle-endian -mxl-soft-mul -mcpu=v10.0
-CFLAGS := 
+CFLAGS := -ffunction-sections -fdata-sections
 LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group \
             -Wl,--gc-sections \
             -Wl,-Map=map \
@@ -24,6 +24,8 @@ EXEC := executable.elf
 
 INCLUDEPATH := -Ibsp/microblaze_0/include -I.
 LIBPATH := -Lbsp/microblaze_0/lib
+
+export CFLAGS
 
 all: symbols
 
@@ -49,6 +51,7 @@ tags:
 	ctags -R
 
 clean:
+	$(MAKE) -C bsp clean
 	rm -rf $(OBJS) $(LIBS) $(EXEC) *.o tags
 
 .PHONY: clean tags
