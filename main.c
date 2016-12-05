@@ -60,7 +60,7 @@ int main()
     char s[4] = {'\x80', '\x00', '\x00', '\x00'};
     int endian = *((int *)&s);
     int i, j, rx_size;
-    float fpga_temp;
+    int fpga_temp;
     u8 buf[128];
     u32 len;
     u64 time0, time1;
@@ -280,10 +280,10 @@ int main()
           eth0_ptr16[ETH_MAC_REG16_RX_BUFFER_SIZE] = 0;
         }
 
-        fpga_temp = get_fpga_temp();
-        printf("Hello %s endian world at %.1f C [tick %d]\n",
+        fpga_temp = (int)(10*get_fpga_temp());
+        xil_printf("Hello %s endian world at %d.%d C [tick %d]\n",
             endian < 0 ? "BIG" : "little",
-            fpga_temp, tick_tmrctr());
+            fpga_temp / 10, fpga_temp % 10, tick_tmrctr());
 
         sleep(1);
     }
