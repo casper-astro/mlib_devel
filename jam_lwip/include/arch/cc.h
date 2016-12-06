@@ -55,6 +55,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <xenv.h>
+
 #include "lwipopts.h"
 
 #define sys_now(x) tick_tmrctr()
@@ -64,22 +66,7 @@
 #define LWIP_TIMEVAL_PRIVATE 0
 #include <sys/time.h>
 
-#ifdef PROCESSOR_LITTLE_ENDIAN
 #define BYTE_ORDER LITTLE_ENDIAN
-#else
-#define BYTE_ORDER BIG_ENDIAN
-#endif
-
-#if 0
-typedef unsigned   char    u8_t;
-typedef signed     char    s8_t;
-typedef unsigned   short   u16_t;
-typedef signed     short   s16_t;
-typedef unsigned   int    u32_t;
-typedef signed     int    s32_t;
-typedef unsigned   long long    u64_t;
-typedef signed     long long    s64_t;
-#endif
 
 #define S16_F "d"
 #define U16_F "d"
@@ -93,10 +80,6 @@ typedef signed     long long    s64_t;
 
 #define LWIP_RAND rand
 
-#if 0
-typedef unsigned long mem_ptr_t;
-#endif
-
 #define PACK_STRUCT_FIELD(x) x
 #define PACK_STRUCT_STRUCT __attribute__((packed))
 #define PACK_STRUCT_BEGIN
@@ -104,5 +87,7 @@ typedef unsigned long mem_ptr_t;
 
 #define LWIP_PLATFORM_ASSERT(x)
 #define LWIP_PLATFORM_DIAG(x) do { xil_printf x; } while(0)
+
+#define lwip_htonl(x) mb_swapb(x)
 
 #endif /* __ARCH_CC_H__ */
