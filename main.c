@@ -47,8 +47,6 @@
 
 #include <stdio.h>
 
-#include "lwip/init.h"
-
 #include "platform.h"
 #include "xil_printf.h"
 #include "sleep.h"
@@ -69,9 +67,10 @@ int main()
     u32 tick0, tick1;
 
     init_platform();
-    lwip_init();
 
     print("\n# JAM starting\n\n");
+
+    casper_lwip_init();
 
 #ifdef JAM_TEST_TMRCTR
     dump_tmrctr();
@@ -161,14 +160,17 @@ int main()
 
 // From core_info.tab
 #define WB_SYS_CLKCOUNTER (0x1402c)
-#define WB_ETH0_OFFSET (0x292f8)
 #define SYS_CLKCOUNTER_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_SYS_CLKCOUNTER)
-#define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_ETH0_OFFSET)
 
     s32 tic = *(u32 *)SYS_CLKCOUNTER_ADDRESS;
     sleep(1);
     s32 toc = *(u32 *)SYS_CLKCOUNTER_ADDRESS;
     xil_printf("fabric clock running at %d Hz\n\n", toc-tic);
+
+#if 0
+// From core_info.tab
+#define WB_ETH0_OFFSET (0x292f8)
+#define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_ETH0_OFFSET)
 
     // Make various pointers to eth0 memory
     volatile u32 *eth0_ptr32 = (u32 *)(ETH0_BASE_ADDRESS);
@@ -179,6 +181,7 @@ int main()
     // Scale OFFSETs accordingly!
     volatile u32 *eth0_txbuf = eth0_ptr32 + ETH_MAC_TX_BUFFER_OFFSET/sizeof(u32);
     volatile u32 *eth0_rxbuf = eth0_ptr32 + ETH_MAC_RX_BUFFER_OFFSET/sizeof(u32);
+#endif
 
 #if 0
     // Reset eth0
@@ -222,6 +225,7 @@ int main()
     print("\n");
 #endif
 
+#if 0
     // Broadcast ARP packet.  The packet format is based this tcpdump capture
     // of a unicast ARP packet:
     //
@@ -263,8 +267,11 @@ int main()
 
     // Set TX buffer level to number of 8 byte words to send packet
     eth0_ptr16[ETH_MAC_REG16_TX_BUFFER_SIZE] = pktlen32/2;
+#endif
 
     while(1) {
+      casper_lwip_handler();
+#if 0
         // Get RX buffer size
         rx_size = eth0_ptr16[ETH_MAC_REG16_RX_BUFFER_SIZE];
         // Show packet contents if non-zero
@@ -282,6 +289,7 @@ int main()
           // Ack the packet
           eth0_ptr16[ETH_MAC_REG16_RX_BUFFER_SIZE] = 0;
         }
+#endif
 
         fpga_temp = (int)(10*get_fpga_temp());
         xil_printf("Hello %s endian world at %d.%d C [tick %d]\n",

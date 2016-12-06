@@ -40,8 +40,9 @@
  *    4 byte alignment -> \#define MEM_ALIGNMENT 4
  *    2 byte alignment -> \#define MEM_ALIGNMENT 2
  */
-// I think microblaze is 4 byte aligned.
-#define MEM_ALIGNMENT                   4
+// I think microblaze is 4 byte aligned, but set it to 8 since the CASPER
+// ethernet core uses 8 byte alignment.
+#define MEM_ALIGNMENT                   8
 
 /**
  * MEM_SIZE: the size of the heap memory. If the application will send
@@ -186,14 +187,15 @@
 /**
  * PBUF_POOL_SIZE: the number of buffers in the pbuf pool.
  */
-#define PBUF_POOL_SIZE                  8
+#define PBUF_POOL_SIZE                  6
 
-/** ETH_PAD_SIZE: number of bytes added before the ethernet header to ensure
- * alignment of payload after that header. Since the header is 14 bytes long,
- * without this padding e.g. addresses in the IP header will not be aligned
- * on a 32-bit boundary, so setting this to 2 can speed up 32-bit-platforms.
+/**
+ * PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. The default is
+ * designed to accommodate single full size TCP frame in one pbuf, including
+ * TCP_MSS, IP header, and link header.
  */
-#define ETH_PAD_SIZE                    2
+// Size to include an entire MTU of 1500
+#define PBUF_POOL_BUFSIZE               1500
 
 /**
  * IP_REASSEMBLY==1: Reassemble incoming fragmented IP packets. Note that

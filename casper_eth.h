@@ -1,3 +1,11 @@
+// casper_eth.h - Macro definitions and declarations for interfacing with the
+//                CASPER Ethernet core.
+
+#ifndef _CASPER_ETH_H_
+#define _CASPER_ETH_H_
+
+#include "lwip/netif.h"
+
 // Useful constants for working with CASPER Ethernet devices via an
 // AXI/Wishbone gateway.  The AXI (e.g. Microblaze) side is little endian and
 // the WB side is big endian.  The AXI/WB gateway does a sensible job of
@@ -102,3 +110,17 @@
 
 // CPU subnet mask
 #define ETH_MAC_REG32_MC_RECV_IP_MASK (0x0d)
+
+// LwIP related macros and functions
+
+#ifndef ETHERNET_MTU
+#define ETHERNET_MTU 1500
+#endif
+
+// Called before main loop to initialize LwIP system
+err_t casper_lwip_init();
+
+// Called from main loop to handle LwIP related tasks
+void casper_lwip_handler();
+
+#endif // _CASPER_ETH_H_
