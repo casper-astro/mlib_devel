@@ -59,7 +59,7 @@
 
 #include "lwipopts.h"
 
-#define sys_now(x) tick_tmrctr()
+#define sys_now(x) ms_tmrctr()
 
 /** if you want to use the struct timeval provided
  * by your system, set this to 0 and include <sys/time.h> in cc.h */

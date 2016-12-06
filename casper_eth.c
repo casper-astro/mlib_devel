@@ -52,8 +52,8 @@ casper_netif_output(struct netif *netif, struct pbuf *p)
   // Calc number of 32 bit words in packet (rounding up)
   size32 = (p->len+3) >> 2;
 
-  xil_printf("send pkt %u bytes %u words [tick %u]\n",
-      p->len, size32, tick_tmrctr());
+  xil_printf("send pkt %u bytes %u words [ms %u]\n",
+      p->len, size32, ms_tmrctr());
 
 //#if 0
   for(i=0; i<size32; i++) {
@@ -178,8 +178,8 @@ casper_netif_output(struct netif *netif, struct pbuf *p)
   // up).
   *TX_BUF_SIZE_PTR(ifstate.ptr) = ((total_size32+1) >> 1);
 
-  xil_printf("sent pkt %u longwords [tick %u]\n",
-      ((total_size32+1) >> 1), tick_tmrctr());
+  xil_printf("sent pkt %u longwords [ms %u]\n",
+      ((total_size32+1) >> 1), ms_tmrctr());
 
 
 //#endif

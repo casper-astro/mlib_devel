@@ -71,7 +71,13 @@ read_tmrctr()
 u32
 tick_tmrctr()
 {
-  return (u32)((read_tmrctr() >> 16) & 0xffffffff);
+  return (u32)((read_tmrctr() >> 15) & 0xffffffff);
+}
+
+u32
+ms_tmrctr()
+{
+  return tick_tmrctr() / 3;
 }
 
 // Dump contents of TmrCtr registers

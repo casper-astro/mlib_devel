@@ -292,9 +292,9 @@ int main()
 #endif
 
         fpga_temp = (int)(10*get_fpga_temp());
-        xil_printf("Hello %s endian world at %d.%d C [tick %d]\n",
+        xil_printf("Hello %s endian world at %d.%d C [ms %d]\n",
             endian < 0 ? "BIG" : "little",
-            fpga_temp / 10, fpga_temp % 10, tick_tmrctr());
+            fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
 
         sleep(1);
     }
