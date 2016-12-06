@@ -75,6 +75,7 @@ casper_netif_output(struct netif *netif, struct pbuf *p)
     // Core still busy sending previous packets.  Not sure this is the most
     // approprite error code to return, but at least it's not ERR_OK.
     xil_printf("error: previous tx still in progress\n");
+    LINK_STATS_INC(link.drop);
     return ERR_INPROGRESS;
   }
 
@@ -87,6 +88,7 @@ casper_netif_output(struct netif *netif, struct pbuf *p)
     // we set MEM_ALIGNMENT to 8.
     if(p->next && (p->len & 3)) {
       xil_printf("error: not last pbuf has %u words\n", p->len);
+      LINK_STATS_INC(link.lenerr);
       return ERR_BUF;
     }
 
@@ -180,6 +182,7 @@ casper_netif_output(struct netif *netif, struct pbuf *p)
 
   xil_printf("sent pkt %u longwords [ms %u]\n",
       ((total_size32+1) >> 1), ms_tmrctr());
+  LINK_STATS_INC(link.xmit);
 
 
 //#endif
