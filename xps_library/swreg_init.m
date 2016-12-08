@@ -74,6 +74,7 @@ else
 end
 if strcmp(show_format, 'on'),
     config_string = '';
+    totalbits = 0;
     for ctr = 1 : numios,
         switch current_types(ctr),
             case 1 
@@ -83,9 +84,11 @@ if strcmp(show_format, 'on'),
             otherwise 
                 config_string = strcat(config_string, sprintf('uf%i.%i,', current_widths(ctr), current_bins(ctr)));
         end
+        totalbits = totalbits + current_widths(ctr);
     end
     display_string = strcat(display_string, ': ', config_string);
     display_string = regexprep(display_string, ',$', '');
+    display_string = sprintf('%s = %i bits', display_string, totalbits);
 end
 set_param(blk, 'AttributesFormatString', display_string);
 
