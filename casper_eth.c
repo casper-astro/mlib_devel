@@ -15,8 +15,10 @@
 #define WB_ETH0_OFFSET (0x292f8)
 #define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_ETH0_OFFSET)
 
-static struct netif netif_e0;
+// Array of one (for now)
+static struct netif netif_en[1];
 
+// This should be an array as well
 static struct {
   void *ptr;
   uint8_t last_link_state;
@@ -52,30 +54,18 @@ static struct {
 #define casper_netif_output casper_netif_output_impl
 #endif
 
+// Function prototypes
+static void casper_monitor_links();
+
 static
 err_t
 casper_netif_output_impl(struct netif *netif, struct pbuf *p)
 {
-#if 0
-  uint16_t size32 = 0;
-  uint16_t sent_size32 = 0;
-  uint16_t total_size32 = 0;
-  uint32_t *inbuf32;
-  uint32_t in_word, out_word;
-  int first = 1;
-#endif
   uint16_t i, len;
   uint16_t bytes_sent = 0;
-  uint16_t words_sent = 0;
   uint8_t *outbuf8;
+  uint16_t words_sent = 0;
   uint32_t *outbuf32;
-
-#if 0
-  // Calc number of 32 bit words in first pbuf (rounding up)
-  size32 = (p->len+3) >> 2;
-  // Calc total number of 32 bit words in packet (rounding up)
-  total_size32 = (p->tot_len+3) >> 2;
-#endif
 
   xil_printf("send %u bytes as %u longwords from addr %p [ms %u]\n",
       p->tot_len, ((p->tot_len+7)>>3), p->payload, ms_tmrctr());
@@ -107,41 +97,10 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   }
   else xil_printf("looped %d times waiting for previous tx to finish\n", i);
 
-#if 0
-  sent_size32 = 0;
-  out_word = 0;
-#endif
   outbuf8 = TX_BUF_PTR8(ifstate.ptr);
 
   // Potentially could have chain of pbufs that contain a single packet's data
   while(p) {
-#if 0
-    // If this is not the last pbuf, it must have a multiple of four bytes
-    // (because I am lasy and don't want to write the codfe to carry over the
-    // extra bytes to the next pbuf), otherwise return an error.
-    if(p->tot_len > p->len && (p->len & 3)) {
-      xil_printf("error: not last pbuf has %u words\n", p->len);
-
-      while(p) {
-        xil_printf("pbuf %x, tot_len %u, len %u, next %x\n",
-            p, p->tot_len, p->len, p->next);
-        for(i=0; i<8; i++) {
-          if((i & 3) == 0) xil_printf("%04x:", (i<<2));
-          xil_printf(" %08x", ((uint32_t *)p->payload)[i]);
-          if((i & 3) == 3) print("\n");
-        }
-        if((i & 3) != 0) print("\n");
-        p = p->next;
-      }
-      print("\n");
-
-      LINK_STATS_INC(link.lenerr);
-      LINK_STATS_INC(link.drop);
-      return ERR_BUF;
-    }
-#endif
-
-#if 1
     // Because p->len has been shown (during development) to be "wrong" (way
     // too big) when MEM_ALIGNMENT is "wrong" (e.g. 1 instead of 4), we have
     // this sanity check here.  If you ever see the "YIKES" message, the
@@ -159,78 +118,6 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     memcpy(outbuf8, p->payload, len);
     outbuf8 += len;
     bytes_sent += len;
-
-//  // Byte swap 32 bit words and output them.
-//  for(i=0; i<size32; i++) {
-//    *outbuf32++ = mb_swapb(*inbuf32++);
-//  }
-
-//  sent_size32 += size32;
-#else
-    // Calc number of 32 bit words in current pbuf (rounding up).  I think the
-    // rounding part is not strictly needed because we set MEM_ALIGNMENT to 8.
-    size32 = (p->len+3) >> 2;
-
-    // Copy pbuf payload to TX buffer.  This is not so trivial.  Due to the way
-    // the ethernet header gets packed by the compiler, the packet data is
-    // offset by 2 bytes in the payload.  The bytes in memory are arranged as:
-    //
-    //     PP PP 00 01 02 03 04 05 06 07 .. ..
-    //
-    // where PP is a padding(?)/packing(?) byte and the other bytes are
-    // numbered in the order they should go out on the link.  Because we are on
-    // a 32-bit system, the most efficient way to access the data is as
-    // unint32_t values.  Because this is a little endian system, these
-    // uint32_t values appear in the payload of the first PBUF as:
-    //
-    //     0x0100PPPP 0x05040302 0x09080706 ...
-    //
-    // We cannot send the PP bytes to the ethernet TX buffer.  To further
-    // complicate things, the 32 bit words that we write to the TX buffer get
-    // byte swapped along the way due to how the AXI/Wishbone interface is
-    // wired in the FPGA.  We therefore have to send the data to the TX buffer
-    // as:
-    //
-    //     0x00010203 0x04050607 0x....0908 ...
-    //     
-    // Here's how to perform this permutation.  Data bytes are numbered in
-    // transmit sequence.  Intermediate zero-values bytes are shown as "__".
-    // Some steps can be combined, but are shown separately for clarity.
-    // Operations that happen only for the first word of the first PBUF are
-    // marked with "[first]".
-    //
-    //      out_word   in_word   operation
-    //     ========== ========== ==============
-    //     0x0100PPPP            [first] load value from pbuf
-    //     0xPPPP0001            [first] swap bytes
-    //     0x0001____            [first] shift left 16 bits
-    //                0x05040302 load next value from pbuf
-    //                0x03020504 swap half-words
-    //                0x04050203 swap bytes
-    //     0x00010203            bit-or low half of in_word into out_word
-    //                           write out_word to tx buffer
-    //     0x04050203            move in_word to out_word
-    //     0x0405____            mask off low half of in_word
-    //                           repeat non-first steps for all words in all pbufs.
-    //                           finally output final word
-    //
-    inbuf = (uint32_t *)p->payload;
-    i = 0;
-    if(first) {
-      first = 0;
-      out_word = mb_swapb(*inbuf++) << 16;
-      i++;
-    }
-    for(; i<size32; i++) {
-      // Read word from inbuf and massage it
-      in_word = mb_swapb(mb_swaph(*inbuf++));
-      // Output combined half-words
-      *outbuf++ = out_word | (in_word & 0x0000ffff);
-      sent_size32++;
-      // Move in_word to out_word and mask off low half
-      out_word = in_word & 0xffff0000;
-    }
-#endif
 
     // Break out if this is the last pbuf of packet.  p->tot_len should "never"
     // be less than p->len, but that would certianly be an exit condition!
@@ -259,12 +146,6 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     outbuf32++;
   }
 
-#if 0
-  // Finally output final word
-  *outbuf++ = out_word;
-  sent_size32++;
-#endif
-
   // Ensure we meet minimum packet size (avoid runt frames)
   while(words_sent < 16) {
     *outbuf32++ = 0;
@@ -279,8 +160,7 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
 
 #ifndef DEBUG_PKT_TX
   outbuf32 = TX_BUF_PTR32(ifstate.ptr);
-  xil_printf("TX device buf %08x:\n", outbuf32);
-  //for(i=0; i<sent_size32; i++) {
+  xil_printf("TX device buf %p:\n", outbuf32);
   for(i=0; i<8; i++) {
     if((i & 3) == 0) xil_printf("%04x:", (i<<2));
     xil_printf(" %08x", outbuf32[i]);
@@ -297,6 +177,9 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
       4*words_sent, (words_sent >> 1), ms_tmrctr());
   LINK_STATS_INC(link.xmit);
 
+  // Probably over conservative to check for TX completion here and upon
+  // entrance to this function, but better safe than sorry.
+  //
   // Loop a bunch of times waiting for TX buffer to be free
   // (indicated by size going to 0)
   for(i=0; i<1000; i++) {
@@ -398,153 +281,212 @@ casper_lwip_init()
   lwip_init();
 
   // Set interface name before adding interface to LwIP
-  netif_e0.name[0] = 'e';
-  netif_e0.name[1] = 'n';
+  netif_en[0].name[0] = 'e';
+  netif_en[0].name[1] = 'n';
 
-  netif_add(&netif_e0,
+  netif_add(&netif_en[0],
       IP4_ADDR_ANY, IP4_ADDR_ANY, IP4_ADDR_ANY,
       &ifstate, casper_netif_init, netif_input);
 
-  netif_set_default(&netif_e0);
-  netif_set_up(&netif_e0);
+  netif_set_default(&netif_en[0]);
+  netif_set_up(&netif_en[0]);
 
   // Start DHCP
-  dhcp_start(&netif_e0);
+  dhcp_start(&netif_en[0]);
 
   return ERR_OK;
 }
 
+static
 void
-casper_lwip_handler()
+casper_monitor_links()
 {
-  uint16_t i, size64, size32;
-  uint32_t *inbuf, *outbuf;
-#if 0
-  uint32_t in_word, out_word;
-#endif
-  struct pbuf *p;
   uint32_t link_state;
 
   // Get link state
   link_state = get_link_state();
+
   // Check whether it changed
   if(ifstate.last_link_state != link_state) {
     ifstate.last_link_state = link_state;
     xil_printf("link is %s\n", link_state ? "UP" : "DOWN");
     if(link_state) {
-      netif_set_link_up(&netif_e0);
+      netif_set_link_up(&netif_en[0]);
     } else {
-      netif_set_link_down(&netif_e0);
+      netif_set_link_down(&netif_en[0]);
     }
   }
+}
+
+// Ideally we could do the required byte swap in-place in the RX buffer before
+// copying the bytes into pbuf payload(s), but it appears that currently the RX
+// buffer is read-only.  Not sure why it is restricted in that way.
+static uint32_t rx_swapb[1520>>2];
+
+static
+void
+casper_rx_packet()
+{
+  int i;
+  uint16_t size64;
+  uint16_t size32;
+  uint16_t bytes_remaining;
+  uint8_t *inbuf8;
+  volatile uint32_t *inbuf32;
+  struct pbuf *p, *q;
 
   // Check for received frames, feed them to lwIP
-  if((size64 = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
-    // Get pbuf from pool
-    p = pbuf_alloc(PBUF_RAW, (size64<<3)+2, PBUF_POOL);
+  if(!(size64 = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
+    // No packets received, nothing to do
+    return;
+  }
 
-    // If we got NULL or not a single PBUF
-    if(!p || p->tot_len > p->len) {
-      // Ack packet so we'll receive more packets
-      *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
-      LINK_STATS_INC(link.memerr);
-      LINK_STATS_INC(link.drop);
-      xil_printf("bad pbuf for %d bytes [ms %u]\n",
-          (size64<<3)+2, ms_tmrctr());
-    } else {
-      LINK_STATS_INC(link.recv);
-      inbuf = RX_BUF_PTR32(ifstate.ptr);
-      outbuf = (uint32_t *)p->payload;
-      size32 = size64 << 1;
-      xil_printf("rx pkt %u words [ms %u]\n", size32, ms_tmrctr());
+  // Work with words
+  size32 = size64 << 1;
 
-#ifdef DEBUG_PKT_RX
-      print("RX device buf:\n");
-      for(i=0; i<size32; i++) {
-        if((i & 3) == 0) xil_printf("%04x:", (i<<2));
-        xil_printf(" %08x", inbuf[i]);
-        if((i & 3) == 3) print("\n");
-      }
-      if((i & 3) != 0) print("\n");
-      print("\n");
+  // If packet oo large
+  if(size32 > sizeof(rx_swapb)) {
+    // Ack packet so we'll receive more packets
+    *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
+    LINK_STATS_INC(link.memerr);
+    LINK_STATS_INC(link.drop);
+    xil_printf("pkt too big %u > %u words [ms %u]\n",
+        size32, sizeof(rx_swapb), ms_tmrctr());
+    // Nothing more to do here
+    return;
+  }
+
+  // Get pbuf from pool
+  p = pbuf_alloc(PBUF_RAW, (size32<<2), PBUF_POOL);
+
+  // If we got NULL
+  if(!p) {
+    // Ack packet so we'll receive more packets
+    *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
+    LINK_STATS_INC(link.memerr);
+    LINK_STATS_INC(link.drop);
+    xil_printf("bad pbuf for %d bytes [ms %u]\n",
+        (size32<<2), ms_tmrctr());
+    // Nothing more to do here
+    return;
+  }
+
+  // OK, got one or more pbufs to hold our packet data
+  LINK_STATS_INC(link.recv);
+  size32 = size64 << 1;
+  xil_printf("read %u bytes as %u longwords to addr %p [ms %u]\n",
+      (size32<<2), size64, p->payload, ms_tmrctr());
+
+#ifndef DEBUG_PKT_RX
+  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
+  xil_printf("RX device buf %p:\n", inbuf32);
+  for(i=0; i<8; i++) {
+    if((i & 3) == 0) xil_printf("%04x:", (i<<2));
+    xil_printf(" %08x", inbuf32[i]);
+    if((i & 3) == 3) print("\n");
+  }
+  if((i & 3) != 0) print("\n");
+  print("\n");
 #endif // DEBUG_PKT_RX
 
-      // Copy packet from the RX buffer.  This is not so trivial.  The packet
-      // data, when accessed as type uint32_t, appear in the RX buffer as:
-      //
-      //     0x00010203 0x04050607 ...
-      //
-      // Due to the way the PBUF ethernet header gets packed by the compiler, the
-      // packet data needs to be offset by 2 bytes in the PBUF.  The bytes in the
-      // PBUF need to be are arranged as:
-      //
-      //     PP PP 00 01 02 03 04 05 06 07 .. ..
-      //
-      // where PP is a padding/packing byte and the other bytes are numbered in
-      // network byte order.  Because we are on a 32-bit system, the most
-      // efficient way to access the data is as unint32_t values.  Because this
-      // is a little endian system, these uint32_t values need to appear in the
-      // payload of the PBUF as:
-      //
-      //     0x0100PPPP 0x05040302 0x....0706
-      //
-      // Here's how to perform this permutation.  Data bytes are numbered in
-      // network byte order.  Intermediate zero-values bytes are shown as "__".
-      // Some steps can be combined, but are shown separately for clarity.
-      // Operations that happen only for the first word of the PBUF are marked
-      // with "[first]".
-      //
-      //      out_word   in_word   operation
-      //     ========== ========== ==============
-      //     0x________            [first] init out_word to 0
-      //                0x00010203 load value from rx buffer
-      //                0x03020100 swap bytes
-      //                0x01000302 swap half words
-      //     0x0100____            bit-or high half of in_word into out_word
-      //                           write out_word to pbuf payload
-      //     0x01000302            move in_word to out_word
-      //     0x____0302            mask off high half of in_word
-      //                           repeat non-first steps for all words in all pbufs.
-      //                           finally output final word
-      //
-#if 0
-      out_word = 0;
-#endif
-      for(i=0; i<size32; i++) {
-#if 1
-        // Output combined half-words
-        *outbuf++ = mb_swapb(*inbuf++);
+  // Need to byte swap 32 bit words in RX buffer due to how AXI/Wishbone
+  // interface orders bytes.  We do this in-place because the RX buffer is
+  // guaranteed to be 4-byte aligned.
+  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
+#ifdef PKT_RX_SWAPB_INPLACE
+  xil_printf("byte swapping %u words in rx buf\n", size32);
+  for(i=0; i<size32; i++) {
+    *inbuf32 = mb_swapb(*inbuf32);
+    inbuf32++;
+  }
 #else
-        // Read word from inbuf and massage it
-        in_word = mb_swaph(mb_swapb(*inbuf++));
-        // Output combined half-words
-        *outbuf++ = out_word | (in_word & 0xffff0000);
-        // Move in_word to out_word and mask off high half
-        out_word = in_word & 0x0000ffff;
+  xil_printf("byte swapping %u words to rx_swapb\n", size32);
+  for(i=0; i<size32; i++) {
+    rx_swapb[i] = mb_swapb(*inbuf32++);
+  }
 #endif
-      }
 
-      // Done with RX buffer, so ack the packet
-      *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
-
-#ifdef DEBUG_PKT_RX
-      outbuf = (uint32_t *)p->payload;
-      for(i=0; i<size32; i++) {
-        if((i & 3) == 0) xil_printf("%04x:", (i<<2));
-        xil_printf(" %08x", outbuf[i]);
-        if((i & 3) == 3) print("\n");
-      }
-      if((i & 3) != 0) print("\n");
-      print("\n");
+#ifndef DEBUG_PKT_RX
+#ifdef PKT_RX_SWAPB_INPLACE
+  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
+#else
+  inbuf32 = rx_swapb;
+#endif // PKT_RX_SWAPB_INPLACE
+  xil_printf("RX device buf %p:\n", inbuf32);
+  for(i=0; i<8; i++) {
+    if((i & 3) == 0) xil_printf("%04x:", (i<<2));
+    xil_printf(" %08x", inbuf32[i]);
+    if((i & 3) == 3) print("\n");
+  }
+  if((i & 3) != 0) print("\n");
+  print("\n");
 #endif // DEBUG_PKT_RX
 
-      // Pass PBUF to input function
-      if(netif_e0.input(p, &netif_e0) != ERR_OK) {
-        pbuf_free(p);
+  // Copy packet from the 4-byte aligned RX buffer to possibly unalinged
+  // pbuf(s), so do it using memcpy.  Use q to walk the pbufs.
+#ifdef PKT_RX_SWAPB_INPLACE
+  inbuf8 = RX_BUF_PTR8(ifstate.ptr);
+#else
+  inbuf8 = (uint8_t *)rx_swapb;
+#endif // PKT_RX_SWAPB_INPLACE
+  bytes_remaining = (size32<<2);
+  q = p;
+  while(q) {
+    // Determine how many bytes to copy
+    if(bytes_remaining <= q->len) {
+      // This will be last pbuf
+      q->len     = bytes_remaining;
+      q->tot_len = bytes_remaining;
+      // If this is not the first pbuf
+      if(q != p) {
+        // TODO adjust tot_len of earlier pbufs.
+        print("YIKES pkt rx truncating non-first pbuf!\n");
       }
     }
+    // Copy bytes
+    memcpy(q->payload, inbuf8, q->len);
+    // Adjust pointer and bytes remaining counter
+    inbuf8 += q->len;
+    bytes_remaining -= q->len;
 
+    // Break out if this is the last pbuf of packet.  q->tot_len should "never"
+    // be less than q->len, but that would certianly be an exit condition!
+    if(q->tot_len <= q->len) {
+      break;
+    }
+
+    // Go to next pbuf (if any)
+    q = q->next;
   }
+
+  // Done with RX buffer, so ack the packet
+  *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
+
+#ifndef DEBUG_PKT_RX
+  // Print first 32 bytes of first pbuf
+  for(i=0; i<32; i++) {
+    if((i & 15) == 0) xil_printf("%04x:", (i<<2));
+    xil_printf(" %02x", ((uint8_t *)p->payload)[i]);
+    if((i & 15) == 15) print("\n");
+  }
+  if((i & 15) != 0) print("\n");
+  print("\n");
+#endif // DEBUG_PKT_RX
+
+  // Pass PBUF to input function
+  if(netif_en[0].input(p, &netif_en[0]) != ERR_OK) {
+    pbuf_free(p);
+  }
+}
+
+void
+casper_lwip_handler()
+{
+  // Monitor links (TODO handle more than one link)
+  casper_monitor_links();
+
+  // Receive newly arrive packet, if any
+  casper_rx_packet();
 
   // Cyclic LwIP timers check
   sys_check_timeouts();

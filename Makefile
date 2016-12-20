@@ -2,7 +2,7 @@
 
 # Reduce HEAP_SIZE while diagnostic messages are enabled
 #HEAP_SIZE = 0x5000
-HEAP_SIZE = 0x3000
+HEAP_SIZE = 0x2800
 
 CC := mb-gcc
 CC_FLAGS := -MMD -MP -mlittle-endian -mxl-soft-mul -mcpu=v10.0
