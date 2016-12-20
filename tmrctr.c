@@ -10,8 +10,6 @@
 
 #include "tmrctr.h"
 
-static XTmrCtr xtmrctr;
-
 void
 init_tmrctr()
 {

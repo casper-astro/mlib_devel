@@ -57,20 +57,32 @@
 
 int main()
 {
-    char s[4] = {'\x80', '\x00', '\x00', '\x00'};
-    int endian = *((int *)&s);
-    int i, j, rx_size;
+    char s[4] = {'\x80', '\x00', '\x01', '\x02'};
+    int endian = *((int *)s);
+    int i, j;
+#if 0
+    int rx_size;
+#endif
     int fpga_temp;
     u8 buf[128];
     u32 len;
+#ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
     u32 tick0, tick1;
+#endif // JAM_TEST_TMRCTR
 
     init_platform();
 
     print("\n# JAM starting\n\n");
 
     casper_lwip_init();
+
+#ifdef JAM_SEND_TEST_PACKET
+    for(i=0; i<3; i++) {
+      send_test_packet();
+    }
+    print("\n");
+#endif // JAM_SEND_TEST_PACKET
 
 #ifdef JAM_TEST_TMRCTR
     dump_tmrctr();
@@ -85,7 +97,7 @@ int main()
     xil_printf("%08x\n", tick0);
     xil_printf("%08x %d\n", tick1, tick1 - tick0);
     print("\n");
-#endif
+#endif // JAM_TEST_TMRCTR
 
     print("## SPI Flash Info\n");
 

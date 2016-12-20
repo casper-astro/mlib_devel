@@ -123,4 +123,9 @@ err_t casper_lwip_init();
 // Called from main loop to handle LwIP related tasks
 void casper_lwip_handler();
 
+#ifdef JAM_SEND_TEST_PACKET
+// Send a canned test packet (an ARP packet in this case)
+void send_test_packet();
+#endif // JAM_SEND_TEST_PACKET
+
 #endif // _CASPER_ETH_H_

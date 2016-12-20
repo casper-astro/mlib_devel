@@ -4,6 +4,8 @@
 #ifndef LWIPOPT_H
 #define LWIPOPT_H
 
+#include "lwip/pbuf.h"
+
 /**
  * NO_SYS==1: Use lwIP without OS-awareness (no thread, semaphores, mutexes or
  * mboxes). This means threaded APIs cannot be used (socket, netconn,
@@ -40,15 +42,16 @@
  *    4 byte alignment -> \#define MEM_ALIGNMENT 4
  *    2 byte alignment -> \#define MEM_ALIGNMENT 2
  */
-// I think microblaze is 4 byte aligned, but set it to 8 since the CASPER
-// ethernet core uses 8 byte alignment.
-#define MEM_ALIGNMENT                   8
+// Microblaze is 4 byte aligned.  Strange things happen when this is left at
+// the default value of 1.  (e.g. p->len is sometimes (way) greater than
+// p->tot_len, which is "impossible").
+#define MEM_ALIGNMENT                   4
 
 /**
  * MEM_SIZE: the size of the heap memory. If the application will send
  * a lot of data that needs to be copied, this should be set high.
  */
-#define MEM_SIZE                        16384
+#define MEM_SIZE                        8192
 
 /**
  * MEM_USE_POOLS==1: Use an alternative to malloc() by allocating from a set
@@ -194,8 +197,15 @@
  * designed to accommodate single full size TCP frame in one pbuf, including
  * TCP_MSS, IP header, and link header.
  */
-// Size to include an entire MTU of 1500
-#define PBUF_POOL_BUFSIZE               1500
+// Sized for 1500 byte MTU (all rounded up to a multiple of MEM_ALIGNMENT).
+#define PBUF_POOL_BUFSIZE \
+  LWIP_MEM_ALIGN_SIZE( \
+    PBUF_LINK_ENCAPSULATION_HLEN + \
+    PBUF_LINK_HLEN + \
+    PBUF_IP_HLEN + \
+    PBUF_TRANSPORT_HLEN + \
+    1500 \
+  )
 
 /**
  * IP_REASSEMBLY==1: Reassemble incoming fragmented IP packets. Note that
@@ -217,12 +227,22 @@
 #define LWIP_DHCP                       1
 
 /**
+ * DHCP_DEBUG: Enable debugging in dhcp.c.
+ */
+#define LWIP_DEBUG                      LWIP_DBG_ON
+#define DHCP_DEBUG                      LWIP_DBG_ON
+#define ETHARP_DEBUG                    LWIP_DBG_ON
+#define NETIF_DEBUG                     LWIP_DBG_ON
+#define PBUF_DEBUG                      LWIP_DBG_ON
+
+
+/**
  * LWIP_DHCP_CHECK_LINK_UP==1: dhcp_start() only really starts if the netif has
  * NETIF_FLAG_LINK_UP set in its flags. As this is only an optimization and
  * netif drivers might not set this flag, the default is off. If enabled,
  * netif_set_link_up() must be called to continue dhcp starting.
  */
-#define LWIP_DHCP_CHECK_LINK_UP         0
+#define LWIP_DHCP_CHECK_LINK_UP         1
 
 /**
  * LWIP_NETBUF_RECVINFO==1: append destination addr and port to every netbuf.
