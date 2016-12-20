@@ -230,7 +230,7 @@ class adc16(YellowBlock):
             wbram.add_port('user_dout','')
             top.add_instance(wbram)
 
-    def gen_constraints(self):
+    def gen_constraints(self, peripherals=None):
         cons = []
         # ADC SPI interface
         cons.append(PortConstraint('adc0_adc3wire_csn1',  'zdok0', iogroup_index=21))

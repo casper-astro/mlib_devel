@@ -689,6 +689,9 @@ architecture arch_forty_gbe of forty_gbe is
     end component FPGA_DNA_CHECKER;
 
     signal fpga_reset : std_logic;
+    signal gmii_fpga_rst : std_logic;
+    signal qsfp_fpga_rst : std_logic;
+    signal emcclk_fpga_rst : std_logic;    
     signal refclk_0 : std_logic;
     signal refclk_1 : std_logic;
     signal aux_clk : std_logic;
@@ -697,6 +700,33 @@ architecture arch_forty_gbe of forty_gbe is
 
     signal user_clk : std_logic;
     signal user_clk_mmcm : std_logic;
+    --Reset Synchroniser and user reset signals
+    signal sync_user_rst : std_logic;
+    signal sync_user_rst2 : std_logic;
+    signal sync_user_rst3 : std_logic;
+    attribute ASYNC_REG : string;
+    attribute ASYNC_REG of sync_user_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_user_rst2: signal is "TRUE";
+    attribute ASYNC_REG of sync_user_rst3: signal is "TRUE";    
+    signal sync_gmii_fpga_rst : std_logic;
+    signal sync_gmii_fpga_rst2 : std_logic;
+    signal sync_gmii_fpga_rst3 : std_logic;    
+    attribute ASYNC_REG of sync_gmii_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_gmii_fpga_rst2: signal is "TRUE";
+    attribute ASYNC_REG of sync_gmii_fpga_rst3: signal is "TRUE";     
+    signal sync_qsfp_fpga_rst : std_logic;
+    signal sync_qsfp_fpga_rst2 : std_logic;
+    signal sync_qsfp_fpga_rst3 : std_logic;    
+    attribute ASYNC_REG of sync_qsfp_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_qsfp_fpga_rst2: signal is "TRUE";
+    attribute ASYNC_REG of sync_qsfp_fpga_rst3: signal is "TRUE";     
+    signal sync_emcclk_fpga_rst : std_logic;
+    signal sync_emcclk_fpga_rst2 : std_logic;
+    signal sync_emcclk_fpga_rst3 : std_logic;    
+    attribute ASYNC_REG of sync_emcclk_fpga_rst: signal is "TRUE";
+    attribute ASYNC_REG of sync_emcclk_fpga_rst2: signal is "TRUE";
+    attribute ASYNC_REG of sync_emcclk_fpga_rst3: signal is "TRUE";                
+    signal user_rst : std_logic;     
     signal sys_clk : std_logic;
     signal sys_rst : std_logic;
     signal sys_rst_i : std_logic;
@@ -1033,7 +1063,6 @@ architecture arch_forty_gbe of forty_gbe is
     signal shmc_mezz2_scl_in : std_logic;
     signal shmc_mezz2_sda_in : std_logic;
     
-
 begin
 
     EMCCLK_FIX <= EMCCLK;
@@ -1107,13 +1136,49 @@ begin
 
     sys_clk    <= refclk_0;
     user_clk_o <= user_clk;
-    --AI: Todo: To be connected to user reset at some point.
-    user_rst_o <= sys_rst;
-
+    --AI: Sys reset is synchronised with the user clock.
+    user_rst_o <= user_rst;
+    
 ---------------------------------------------------------------------------
 -- RESETS
 ---------------------------------------------------------------------------
 
+    pUserResetSynchroniser: process(user_clk)
+    begin
+        if (rising_edge(user_clk) ) then
+            sync_user_rst3 <= sync_user_rst2;
+            sync_user_rst2 <= sync_user_rst;
+            sync_user_rst <= sys_rst;
+        end if;
+    end process pUserResetSynchroniser;
+    
+    pFpgaResetGmiiSynchroniser: process(gmii_clk)
+    begin
+        if (rising_edge(gmii_clk) ) then
+            sync_gmii_fpga_rst3 <= sync_gmii_fpga_rst2;
+            sync_gmii_fpga_rst2 <= sync_gmii_fpga_rst;
+            sync_gmii_fpga_rst <= fpga_reset;
+        end if;
+    end process pFpgaResetGmiiSynchroniser;
+    
+    pFpgaResetQsfpSynchroniser: process(qsfp_gtrefclk)
+    begin
+        if (rising_edge(qsfp_gtrefclk) ) then
+            sync_qsfp_fpga_rst3 <= sync_qsfp_fpga_rst2;
+            sync_qsfp_fpga_rst2 <= sync_qsfp_fpga_rst;
+            sync_qsfp_fpga_rst <= fpga_reset;
+        end if;
+    end process pFpgaResetQsfpSynchroniser;
+    
+    pFpgaResetEmcclkSynchroniser: process(FPGA_EMCCLK2)
+    begin
+        if (rising_edge(FPGA_EMCCLK2) ) then
+            sync_emcclk_fpga_rst3 <= sync_emcclk_fpga_rst2;
+            sync_emcclk_fpga_rst2 <= sync_emcclk_fpga_rst;
+            sync_emcclk_fpga_rst <= fpga_reset;
+        end if;
+    end process pFpgaResetEmcclkSynchroniser;    
+     
     gen_sys_rst : process(fpga_reset, sys_clk)
     begin
         if (fpga_reset = '1')then
@@ -1140,10 +1205,30 @@ begin
     port map (
         I  => sys_rst_i,
         O  => sys_rst);
+        
+    user_rst_bufg : BUFG
+    port map (
+        I  => sync_user_rst3,
+        O  => user_rst);
 
-    gen_gmii_rst : process(fpga_reset, gmii_clk)
+    fpga_gmii_rst_bufg : BUFG
+    port map (
+        I  => sync_gmii_fpga_rst3,
+        O  => gmii_fpga_rst); 
+
+    fpga_qsfp_rst_bufg : BUFG
+    port map (
+        I  => sync_qsfp_fpga_rst3,
+        O  => qsfp_fpga_rst);  
+        
+    fpga_emcclk_rst_bufg : BUFG
+        port map (
+            I  => sync_emcclk_fpga_rst3,
+            O  => emcclk_fpga_rst);                                                          
+
+    gen_gmii_rst : process(gmii_fpga_rst, gmii_clk)
     begin
-        if (fpga_reset = '1')then
+        if (gmii_fpga_rst = '1')then
             gmii_rst <= '1';
             gmii_rst_z <= '1';
             gmii_rst_z2 <= '1';
@@ -2310,9 +2395,9 @@ begin
         gt0_qplloutrefclk_out  => open);
 
     -- GT 04/06/2015 SPEED SELECTION CONTROL
-    gen_gmii_speed : process(fpga_reset, gmii_clk)
+    gen_gmii_speed : process(gmii_fpga_rst, gmii_clk)
     begin
-        if (fpga_reset = '1')then
+        if (gmii_fpga_rst = '1')then
             gmii_speed_is_10_100 <= '0';
             gmii_speed_is_100 <= '0';
         elsif (rising_edge(gmii_clk))then
@@ -2535,7 +2620,7 @@ begin
     clock_frequency_measure_1 : clock_frequency_measure
     port map(
         clk => qsfp_gtrefclk,
-        rst => fpga_reset,
+        rst => qsfp_fpga_rst,
         second_toggle   => second_toggle,
         measure_freq    => qsfp_xl_tx_clk_156m25_frequency);
 
@@ -2546,7 +2631,7 @@ begin
     clock_frequency_measure_2 : clock_frequency_measure
     port map(
         clk => FPGA_EMCCLK2,
-        rst => fpga_reset,
+        rst => emcclk_fpga_rst,
         second_toggle   => second_toggle,
         measure_freq    => fpga_emcclk2_frequency);
 

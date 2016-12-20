@@ -1,5 +1,7 @@
 from yellow_block import YellowBlock
-from constraints import PortConstraint, ClockConstraint, RawConstraint
+from constraints import PortConstraint, ClockConstraint, ClockGroupConstraint, MultiCycleConstraint, \
+    OutputDelayConstraint
+
 from itertools import count
 
 class hmc(YellowBlock): # class hmc inherits from yellowblock.py
@@ -79,11 +81,17 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         self.instantiate_hmcc(top)
         top.assign_signal('mez%s_init_done' % self.mez, '%s_init_done' % self.fullname)
 
-    def gen_constraints(self):
+    def gen_constraints(self, peripherals=None):
 
-        cons = []
+        for key in peripherals.keys():
+            if peripherals[key]['tag'] == 'xps:forty_gbe':
+                fortygbefullname = peripherals[key]['fullpath'].replace('/', '_')
+                print('bsp name %s' % fortygbefullname)
         #import IPython
         #IPython.embed()
+
+        cons = []
+
         cons.append(PortConstraint('MEZZANINE_%s_RESET' % self.mez,'MEZZANINE_%s_RESET' % self.mez))
         cons.append(PortConstraint('MEZZANINE_%s_CLK_SEL' % self.mez, 'MEZZANINE_%s_CLK_SEL' % self.mez))
         cons.append(PortConstraint('MEZ%s_REFCLK_0_P' % self.mez, 'MEZ%s_REFCLK_0_P' % self.mez))
@@ -108,10 +116,14 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         cons.append(PortConstraint('MEZ%s_PHY22_LANE_RX_N' % self.mez, 'MEZ%s_PHY22_LANE_RX_N' % self.mez, port_index=range(4), iogroup_index=range(4)))
 
         # GTH Clock Constraints
-        cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_0_P]' % self.mez))
-        cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_1_P]' % self.mez))
-        cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_2_P]' % self.mez))
-        cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_3_P]' % self.mez))
+        #cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_0_P]' % self.mez))
+        cons.append(ClockConstraint('MEZ%s_REFCLK_0_P' % self.mez,'MEZ%s_REFCLK_0_P' % self.mez, period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
+        #cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_1_P]' % self.mez))
+        cons.append(ClockConstraint('MEZ%s_REFCLK_1_P' % self.mez,'MEZ%s_REFCLK_1_P' % self.mez, period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
+        #cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_2_P]' % self.mez))
+        cons.append(ClockConstraint('MEZ%s_REFCLK_2_P' % self.mez,'MEZ%s_REFCLK_2_P' % self.mez, period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
+        #cons.append(RawConstraint('create_clock -period 6.400 -waveform {0.000 3.200} [get_ports MEZ%s_REFCLK_3_P]' % self.mez))
+        cons.append(ClockConstraint('MEZ%s_REFCLK_3_P' % self.mez,'MEZ%s_REFCLK_3_P' % self.mez, period=6.4, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=3.2))
 
 
         # *******************************************************************************************************
@@ -119,73 +131,153 @@ class hmc(YellowBlock): # class hmc inherits from yellowblock.py
         # *******************************************************************************************************
 
         # GTH Tx Clock Constraints (This clock is the reference clock for the TX side of all 8 GTHs)
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/TXOUTCLK]'))
-        
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/TXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/TXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False,  waveform_min=0.0, waveform_max=1.6))
+
         # GTH Rx Clock Constraints (Rx clock phase is unique for each receiver => generate a constraint for each GTH)
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
 
         # cut paths between GTH Tx Clock and GTH Rx Clocks (async fifo crossing) from Rx to Tx clock
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
 
         # cut paths between GTH Tx Clock and GTH Rx Clocks (async fifo crossing) from Tx to Rx clock
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+
+        #Cut clocks between HMC and forty_gbe clocks
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname,'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+
+        #Cut paths between HMC Link 2 and Link 3 clocks
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+
+        #Cut paths between FPGA_REFCLK_BUF0_P and HMC Link 2 clocks
+        cons.append(ClockGroupConstraint('FPGA_REFCLK_BUF0_P', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+
+        #Cut paths between VIRTUAL_clkout0_1 and HMC Link 2 clocks
+        cons.append(ClockGroupConstraint('VIRTUAL_clkout0_1', '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+
 
         # *******************************************************************************************************
         # HMC Link3 Timing Constraints
         # *******************************************************************************************************
 
         # GTH Tx Clock Constraints (This clock is the reference clock for the TX side of all 8 GTHs)
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/TXOUTCLK]'))
-        
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/TXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/TXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+
         # GTH Rx Clock Constraints (Rx clock phase is unique for each receiver => generate a constraint for each GTH)
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gthe2_i/RXOUTCLK]'))
-        cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
+        #cons.append(RawConstraint('create_clock -period 3.200 -name '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i -waveform {0.000 1.600} [get_pins '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gthe2_i/RXOUTCLK]'))
+        cons.append(ClockConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gthe2_i/RXOUTCLK'% self.fullname,'%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, period=3.2, port_en=False, virtual_en=False, waveform_min=0.0, waveform_max=1.6))
 
         # cut paths between GTH Tx Clock and GTH Rx Clocks (async fifo crossing) from Rx to Tx clock
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i] -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i]'))
+        cons.append(ClockGroupConstraint('%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i' % self.fullname, '-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname,'asynchronous'))
 
         # cut paths between GTH Tx Clock and GTH Rx Clocks (async fifo crossing) from Tx to Rx clock
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i]'))
-        cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i]'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt1_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt2_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt3_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt4_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt5_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt6_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+        #cons.append(RawConstraint('set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i] -group [get_clocks '+self.fullname+'/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i]'))
+        cons.append(ClockGroupConstraint('-include_generated_clocks %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt0_txoutclk_i' % self.fullname, '%s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/gt7_hmc_gth_i/gt0_rxoutclk_i' % self.fullname,'asynchronous'))
+
+        #Cut paths between HMC and forty_gbe clocks
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname,'asynchronous'))
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+
+        #Cut paths between HMC Link 3 and HMC Link 2 clocks
+        cons.append(ClockGroupConstraint('-of_objects [get_pins %s/hmc_ska_sa_top_link3_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname, '-of_objects [get_pins %s/hmc_ska_sa_top_link2_inst/hmc_gth_inst/txoutclk_mmcm0_inst/mmcm_adv_inst/CLKOUT0]' % self.fullname,'asynchronous'))
+
+        #Timing Constraints
+        #Output Constraints
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, consttype='min', constdelay_ns=1.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+        cons.append(OutputDelayConstraint(clkname='-of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, consttype='max', constdelay_ns=2.0, add_delay_en=True, portname='MEZZANINE_%s_RESET' % self.mez))
+
+        #multi-cycle constraints
+        cons.append(MultiCycleConstraint(multicycletype='setup',sourcepath='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=4))
+        cons.append(MultiCycleConstraint(multicycletype='hold',sourcepath='get_clocks -of_objects [get_pins %s/SYS_CLK_MMCM_inst/CLKOUT0]' % fortygbefullname, destpath='get_ports MEZZANINE_%s_RESET' % self.mez, multicycledelay=3))
 
         return cons

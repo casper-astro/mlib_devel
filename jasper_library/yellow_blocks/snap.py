@@ -24,7 +24,7 @@ class snap(YellowBlock):
             YellowBlock.make_block({'tag':'xps:spi_wb_bridge'}, self.platform),
             YellowBlock.make_block({'tag':'xps:sys_block', 'board_id':'12', 'rev_maj':'12', 'rev_min':'0', 'rev_rcs':'32'}, self.platform),
             ]
-    def gen_constraints(self):
+    def gen_constraints(self, peripherals=None):
         return [
             PortConstraint('sys_clk_n', 'sys_clk_n'),
             PortConstraint('sys_clk_p', 'sys_clk_p'),

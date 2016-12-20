@@ -19,7 +19,7 @@ class lmx2581(YellowBlock):
         inst.add_port('lmx_muxout', 'lmx_muxout', dir='in', parent_port='True')
         inst.add_wb_interface(nbytes=4, regname='lmx_ctrl', mode='rw')
 
-    def gen_constraints(self):
+    def gen_constraints(self, peripherals=None):
         cons = []
         cons.append(PortConstraint('lmx_clk', 'lmx2581_clk'))
         cons.append(PortConstraint('lmx_data', 'lmx2581_data'))

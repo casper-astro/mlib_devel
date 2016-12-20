@@ -14,7 +14,7 @@ class clock_passthrough(YellowBlock):
         inst.add_port('clock_out_p', 'pt_clk_out_p', dir='out', parent_port=True)
         inst.add_port('clock_out_n', 'pt_clk_out_n', dir='out', parent_port=True)
 
-    def gen_constraints(self):
+    def gen_constraints(self, peripherals=None):
         cons = []
         if self.platform.name == 'mx175':
             cons.append(PortConstraint('pt_clk_in_p', 'user_clock_p'))

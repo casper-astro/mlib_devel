@@ -100,18 +100,75 @@ module hmc #(
     output wire INIT_DONE
 );
 
+//(* mark_debug = "true" *)
 (* mark_debug = "true" *) wire soft_reset_link2,soft_reset_link3;
 (* mark_debug = "true" *) reg [31:0] time_out_cnt;
 (* mark_debug = "true" *) reg time_out_cnt_rst;
 (* mark_debug = "true" *) wire soft_reset;
 
-assign soft_reset_link2 = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
-assign soft_reset_link3 = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
-assign soft_reset = (soft_reset_link2 == 1'b1 || soft_reset_link3 == 1'b1);
+wire soft_reset_link2_async,soft_reset_link3_async;
+wire soft_reset_async,user_rst;
 
+assign soft_reset_link2_async = (qpll_lock_link2 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
+assign soft_reset_link3_async = (qpll_lock_link3 == 1'b0 || USER_RST == 1'b1 || time_out_cnt_rst == 1'b1);
+assign soft_reset_async = (soft_reset_link2_async == 1'b1 || soft_reset_link3_async == 1'b1);
+
+// USER_CLK domain sync's
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg soft_reset_link2R,soft_reset_link2RR,soft_reset_link2RRR,soft_reset_link2RRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg soft_reset_link3R,soft_reset_link3RR,soft_reset_link3RRR,soft_reset_link3RRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg user_rstR,user_rstRR,user_rstRRR,user_rstRRRR;
+
+
+wire open_hmc_done_link2_i,open_hmc_done_link3_i;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link2R,open_hmc_done_link2RR,open_hmc_done_link2RRR,open_hmc_done_link2RRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg open_hmc_done_link3R,open_hmc_done_link3RR,open_hmc_done_link3RRR,open_hmc_done_link3RRRR;
+
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg soft_resetR,soft_resetRR,soft_resetRRR,soft_resetRRRR;
+
+always @(posedge USER_CLK) begin 
+   
+  user_rstR <= USER_RST;
+  user_rstRR <= user_rstR;
+  user_rstRRR <= user_rstRR;
+  user_rstRRRR <= user_rstRRR;
+
+  soft_resetR    <= soft_reset_async;
+  soft_resetRR   <= soft_resetR;
+  soft_resetRRR  <= soft_resetRR;
+  soft_resetRRRR <= soft_resetRRR;
+  
+  soft_reset_link2R    <= soft_reset_link2_async;
+  soft_reset_link2RR   <= soft_reset_link2R;
+  soft_reset_link2RRR  <= soft_reset_link2RR;
+  soft_reset_link2RRRR <= soft_reset_link2RRR;
+
+  soft_reset_link3R    <= soft_reset_link3_async;
+  soft_reset_link3RR   <= soft_reset_link3R;
+  soft_reset_link3RRR  <= soft_reset_link3RR;
+  soft_reset_link3RRRR <= soft_reset_link3RRR;
+
+  open_hmc_done_link2R    <= open_hmc_done_link2_i;
+  open_hmc_done_link2RR   <= open_hmc_done_link2R;
+  open_hmc_done_link2RRR  <= open_hmc_done_link2RR;
+  open_hmc_done_link2RRRR <= open_hmc_done_link2RRR;
+
+  open_hmc_done_link3R    <= open_hmc_done_link3_i;
+  open_hmc_done_link3RR   <= open_hmc_done_link3R;
+  open_hmc_done_link3RRR  <= open_hmc_done_link3RR;
+  open_hmc_done_link3RRRR <= open_hmc_done_link3RRR;
+
+end
+
+assign user_rst = user_rstRRRR;
+assign soft_reset = soft_resetRRRR;
+assign soft_reset_link2 = soft_reset_link2RRRR;
+assign soft_reset_link3 = soft_reset_link3RRRR;
+
+assign open_hmc_done_link3 = open_hmc_done_link3RRRR;
+assign open_hmc_done_link2 = open_hmc_done_link2RRRR;
 
 assign MEZZ_CLK_SEL = 1'b0;
-//assign HMC_MEZZ_RESET = USER_RST;//~P_RST_N;
+//assign HMC_MEZZ_RESET = user_rst;//~P_RST_N;
 wire                         s_axis_tx_TVALID_link2;
 wire                         s_axis_tx_TREADY_link2;
 wire [DWIDTH-1:0]            s_axis_tx_TDATA_link2;
@@ -287,24 +344,34 @@ assign PHY22_LANE_TX_N[0] = GT_GTHTXN_OUT_LINK2[7];
 // This state machine must first setup the HMC chip before the openHMC core can proceed with link  
 
 // wait for POST to run successfuly for 100s before declaring POST done
-wire post_done = ((data_rx_flit_cnt_link2[25] == 1'b1) && (data_rx_flit_cnt_link3[25] == 1'b1));
-wire post_ok = ((data_rx_err_flit_cnt_link3 == 64'd0) && (data_rx_err_flit_cnt_link2 == 64'd0) && (data_rx_flit_cnt_link2[25] == 1'b1) && (data_rx_flit_cnt_link3[25] == 1'b1));
+wire post_done_i = ((data_rx_flit_cnt_link2[25] == 1'b1) && (data_rx_flit_cnt_link3[25] == 1'b1));
+reg post_done_reg;
+wire post_ok_i = ((data_rx_err_flit_cnt_link3 == 64'd0) && (data_rx_err_flit_cnt_link2 == 64'd0) && (data_rx_flit_cnt_link2[25] == 1'b1) && (data_rx_flit_cnt_link3[25] == 1'b1));
 
-reg [1:0] post_okR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg post_okR,post_okRR,post_okRRR,post_okRRRR;
 reg post_ok_latch;
 reg [15:0] reset_cnt;
 reg issue_retry_rst;
 
-always @(posedge USER_CLK or posedge USER_RST) begin 
-  if (USER_RST == 1'b1) begin
+wire hmc_reset_i;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_resetR,hmc_resetRR,hmc_resetRRR,hmc_resetRRRR;
+
+always @(posedge USER_CLK) begin 
+  if (user_rst == 1'b1) begin
     post_ok_latch <= 1'b0;
-    post_okR <= 2'b00;
+    post_okR <= 1'b0;
+    post_okRR <= 1'b0;
+    post_okRRR <= 1'b0;
+    post_okRRRR <= 1'b0;
     time_out_cnt <= 32'd0;
     time_out_cnt_rst <= 1'b0;
     reset_cnt <= 16'd0;
     issue_retry_rst <= 1'b0;
   end else begin
-    post_okR <= {post_okR[0],post_ok};
+    post_okR    <= post_ok_i;
+    post_okRR   <= post_okR;
+    post_okRRR  <= post_okRR;
+    post_okRRRR <= post_okRRR; 
     time_out_cnt <= time_out_cnt + 1'b1;
 
     if (time_out_cnt[30] == 1'b1) begin
@@ -320,10 +387,10 @@ always @(posedge USER_CLK or posedge USER_RST) begin
       time_out_cnt_rst <= 1'b0;
     end    
 
-    if (post_okR == 2'b01) begin
+    if ({post_okRRRR,post_okRRR} == 2'b01) begin
       post_ok_latch <= 1'b1;
     end
-    if (hmc_reset == 1'b1) begin
+    if (hmc_resetRRRR == 1'b1) begin
       time_out_cnt <= 32'd0;
     end 
     if (open_hmc_done_link2 == 1'b1 && open_hmc_done_link3 == 1'b1) begin
@@ -332,27 +399,97 @@ always @(posedge USER_CLK or posedge USER_RST) begin
   end
 end
 
+
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg soft_reset_syncR,soft_reset_syncRR,soft_reset_syncRRR,soft_reset_syncRRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg hmc_iic_init_doneR,hmc_iic_init_doneRR,hmc_iic_init_doneRRR,hmc_iic_init_doneRRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg SCL_INR,SCL_INRR,SCL_INRRR,SCL_INRRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg SDA_INR,SDA_INRR,SDA_INRRR,SDA_INRRRR;
+wire clk_hmc_out_link2,clk_hmc_out_link3,hmc_iic_init_done_i;
+
+
+
+always @(posedge clk_hmc_out_link2) begin
+  soft_reset_syncR <= soft_reset;
+  soft_reset_syncRR <= soft_reset_syncR;
+  soft_reset_syncRRR <= soft_reset_syncRR;
+  soft_reset_syncRRRR <= soft_reset_syncRRR;
+end
+
+always @(posedge clk_hmc_out_link2) begin
+  SCL_INR <= SCL_IN;
+  SCL_INRR <= SCL_INR;
+  SCL_INRRR <= SCL_INRR;
+  SCL_INRRRR <= SCL_INRRR;
+  
+  SDA_INR <= SDA_IN;
+  SDA_INRR <= SDA_INR;
+  SDA_INRRR <= SDA_INRR;
+  SDA_INRRRR <= SDA_INRRR;  
+end
+
+assign SCL_IN_sync = SCL_INRRRR;
+assign SDA_IN_sync = SDA_INRRRR;
+
+always @(posedge clk_hmc_out_link3) begin
+  hmc_iic_init_doneR    <= hmc_iic_init_done_i;
+  hmc_iic_init_doneRR   <= hmc_iic_init_doneR;
+  hmc_iic_init_doneRRR  <= hmc_iic_init_doneRR;
+  hmc_iic_init_doneRRRR <= hmc_iic_init_doneRRR;
+end
+
+assign soft_reset_sync = soft_reset_syncRRRR;
+
+wire post_done_latch,post_done_latch_i,post_done;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg post_done_latchR,post_done_latchRR,post_done_latchRRR,post_done_latchRRRR;
+(* ASYNC_REG = "true" *)(* DONT_TOUCH = "true" *) reg post_doneR,post_doneRR,post_doneRRR,post_doneRRRR;
+
+always @(posedge USER_CLK) begin
+  post_done_latchR    <= post_done_latch_i;
+  post_done_latchRR   <= post_done_latchR;
+  post_done_latchRRR  <= post_done_latchRR;
+  post_done_latchRRRR <= post_done_latchRRR;
+
+  hmc_resetR    <= hmc_reset_i;
+  hmc_resetRR   <= hmc_resetR;
+  hmc_resetRRR  <= hmc_resetRR;
+  hmc_resetRRRR <= hmc_resetRRR;
+end
+
+always @(posedge USER_CLK) begin
+  post_done_reg <= post_done_i;
+end
+
+always @(posedge clk_hmc_out_link2) begin
+  post_doneR    <= post_done_reg;
+  post_doneRR   <= post_doneR;
+  post_doneRRR  <= post_doneRR;
+  post_doneRRRR <= post_doneRRR;
+end
+
+assign post_done_latch = post_done_latchRRRR;
+assign post_done = post_doneRRRR;
+
 hmc_iic_init 
 hmc_iic_init_inst (
-  .CLK         (USER_CLK),
-  .RST         (soft_reset),//(USER_RST),// As soon as the clock is stable 
+  .CLK         (clk_hmc_out_link2),
+  .RST         (soft_reset_sync),//(user_rst),// As soon as the clock is stable 
   .IIC_ACK_ERR (iic_err),
   .IIC_BUSY    (iic_busy),
-  .HMC_IIC_INIT_DONE (hmc_iic_init_done),
+  .HMC_IIC_INIT_DONE (hmc_iic_init_done_i),
   .HMC_POST_DONE (post_done),
-  .POST_DONE_LATCH(post_done_latch),
-  .HMC_RESET   (hmc_reset),
+  .POST_DONE_LATCH(post_done_latch_i),
+  .HMC_RESET   (hmc_reset_i),
 //  .SDA         (SDA),
 //  .SCL         (SCL) 
   .SDA_OUT(SDA_OUT),
   .SCL_OUT(SCL_OUT),
-  .SCL_IN(SCL_IN),
-  .SDA_IN(SDA_IN)  
+  .SCL_IN(SCL_IN_sync),
+  .SDA_IN(SDA_IN_sync)  
 );
 
 assign POST_OK = post_ok_latch;
 assign INIT_DONE = post_done_latch;
-assign HMC_MEZZ_RESET = hmc_reset;//~P_RST_N; 
+assign HMC_MEZZ_RESET = hmc_resetRRRR;//~P_RST_N; 
 
 // Instantiate core for HMC link2
 hmc_ska_sa_top #(
@@ -398,7 +535,7 @@ hmc_ska_sa_top_link2_inst(
   .SOFT_RESET_IN(soft_reset_link2),
   .clk_user(USER_CLK),
   .res_n_user(~soft_reset_link2),
-  .clk_hmc_out(),
+  .clk_hmc_out(clk_hmc_out_link2),
   .hmc_reset_out(),
   .QPLL_LOCK(qpll_lock_link2),
   //----------------------------------
@@ -429,8 +566,8 @@ hmc_ska_sa_top_link2_inst(
   //----------------------------------
   .P_RST_N(),
   .FERR_N(1'b1), //Not connected
-  .OPEN_HMC_INIT_DONE(open_hmc_done_link2),
-  .HMC_IIC_INIT_DONE(hmc_iic_init_done),
+  .OPEN_HMC_INIT_DONE(open_hmc_done_link2_i),
+  .HMC_IIC_INIT_DONE(hmc_iic_init_done_i),
   .RX_CRC_ERR_CNT(rx_crc_err_cnt_link2)
 );
 
@@ -478,7 +615,7 @@ hmc_ska_sa_top_link3_inst(
   .SOFT_RESET_IN(soft_reset_link3),
   .clk_user(USER_CLK),
   .res_n_user(~soft_reset_link3),
-  .clk_hmc_out(),
+  .clk_hmc_out(clk_hmc_out_link3),
   .hmc_reset_out(),
   .QPLL_LOCK(qpll_lock_link3),
   //----------------------------------
@@ -509,8 +646,8 @@ hmc_ska_sa_top_link3_inst(
   //----------------------------------
   .P_RST_N(),
   .FERR_N(), //Not connected
-  .OPEN_HMC_INIT_DONE(open_hmc_done_link3),
-  .HMC_IIC_INIT_DONE(hmc_iic_init_done),
+  .OPEN_HMC_INIT_DONE(open_hmc_done_link3_i),
+  .HMC_IIC_INIT_DONE(hmc_iic_init_doneRRRR),
   .RX_CRC_ERR_CNT(rx_crc_err_cnt_link3)
 );
 

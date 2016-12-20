@@ -10,7 +10,8 @@ import os
 import platform
 import yellow_blocks.yellow_block as yellow_block
 import verilog
-from constraints import PortConstraint, ClockConstraint, RawConstraint
+from constraints import PortConstraint, ClockConstraint, GenClockConstraint, ClockGroupConstraint, InputDelayConstraint\
+    , OutputDelayConstraint, FalsePathConstraint, MultiCycleConstraint, RawConstraint
 import castro
 import helpers
 import yaml
@@ -414,9 +415,13 @@ class Toolflow(object):
         self.logger.info('Extracting constraints from peripherals')
         self.check_attr_exists('periph_objs', 'gen_periph_objs()')
         self.constraints = []
+        peripherals=self.peripherals
+        #import IPython
+        #IPython.embed()
+
 
         for obj in self.periph_objs:
-            c = obj.gen_constraints()
+            c = obj.gen_constraints(peripherals)
             if c is not None:
                 self.constraints += c
 
@@ -456,6 +461,12 @@ class Toolflow(object):
         # build castro standard pin constraints
         pin_constraints = []
         clk_constraints = []
+        gen_clk_constraints = []
+        clk_grp_constraints = []
+        input_delay_constraints = []
+        output_delay_constraints = []
+        false_path_constraints = []
+        multi_cycle_constraints = []
         raw_constraints = []
 
         for const in self.constraints:
@@ -472,8 +483,54 @@ class Toolflow(object):
                 clk_constraints += [castro.ClkConstraint(
                     portname=const.signal,
                     freq_mhz=const.freq,
-                    period_ns=const.period
+                    period_ns=const.period,
+                    clkname=const.name,
+                    waveform_min_ns=const.waveform_min,
+                    waveform_max_ns=const.waveform_max,
+                    port_en=const.port_en,
+                    virtual_en=const.virtual_en
                     )]
+            elif isinstance(const, GenClockConstraint):
+                gen_clk_constraints += [castro.GenClkConstraint(
+                    pinname=const.signal,
+                    clkname=const.name,
+                    divide_by=const.divide_by,
+                    clksource=const.clock_source
+                    )]
+            elif isinstance(const, ClockGroupConstraint):
+                clk_grp_constraints += [castro.ClkGrpConstraint(
+                    clknamegrp1=const.clock_name_group_1,
+                    clknamegrp2=const.clock_name_group_2,
+                    clkdomaintype=const.clock_domain_relationship
+                    )]
+            elif isinstance(const, InputDelayConstraint):
+                input_delay_constraints += [castro.InDelayConstraint(
+                    clkname=const.clkname,
+                    consttype=const.consttype,
+                    constdelay_ns=const.constdelay_ns,
+                    add_delay_en=const.add_delay_en,
+                    portname=const.portname
+                )]
+            elif isinstance(const, OutputDelayConstraint):
+                output_delay_constraints += [castro.OutDelayConstraint(
+                    clkname=const.clkname,
+                    consttype=const.consttype,
+                    constdelay_ns=const.constdelay_ns,
+                    add_delay_en=const.add_delay_en,
+                    portname=const.portname
+                )]
+            elif isinstance(const, FalsePathConstraint):
+                false_path_constraints += [castro.FalsePthConstraint(
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath
+                )]
+            elif isinstance(const, MultiCycleConstraint):
+                multi_cycle_constraints += [castro.MultiCycConstraint(
+                    multicycletype=const.multicycletype,
+                    sourcepath=const.sourcepath,
+                    destpath=const.destpath,
+                    multicycledelay=const.multicycledelay
+                )]
             elif isinstance(const, RawConstraint):
                 raw_constraints += [castro.RawConstraint(
                     const.raw)]
@@ -481,6 +538,12 @@ class Toolflow(object):
         c.synthesis = castro.Synthesis()
         c.synthesis.pin_constraints = pin_constraints
         c.synthesis.clk_constraints = clk_constraints
+        c.synthesis.gen_clk_constraints = gen_clk_constraints
+        c.synthesis.clk_grp_constraints = clk_grp_constraints
+        c.synthesis.input_delay_constraints = input_delay_constraints
+        c.synthesis.output_delay_constraints = output_delay_constraints
+        c.synthesis.false_path_constraints = false_path_constraints
+        c.synthesis.multi_cycle_constraints = multi_cycle_constraints
         c.synthesis.raw_constraints = raw_constraints
         c.synthesis.platform_name = self.plat.name
         c.synthesis.fpga_manufacturer = self.plat.manufacturer
@@ -603,7 +666,13 @@ class ToolflowBackend(object):
             const.io_standard = [pins[i].iostd for i in range(len(const.symbolic_indices))]
             const.is_vector = const.portname_indices != []
 
-        self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints + self.castro.synthesis.raw_constraints,
+        self.gen_constraint_file(self.castro.synthesis.pin_constraints + self.castro.synthesis.clk_constraints +
+                                 self.castro.synthesis.gen_clk_constraints + self.castro.synthesis.clk_grp_constraints
+                                 + self.castro.synthesis.input_delay_constraints +
+                                 self.castro.synthesis.output_delay_constraints +
+                                 self.castro.synthesis.false_path_constraints +
+                                 self.castro.synthesis.multi_cycle_constraints +
+                                 self.castro.synthesis.raw_constraints,
                                  self.plat)
 
     def mkfpg(self, filename_bin, filename_fpg):
@@ -1083,6 +1152,30 @@ class VivadoBackend(ToolflowBackend):
             self.logger.debug('New Clock constraint found')
             user_const += self.format_clock_const(const)
 
+        if isinstance(const, castro.GenClkConstraint):
+            self.logger.debug('New Generated Clock constraint found')
+            user_const += self.format_gen_clock_const(const)
+
+        if isinstance(const, castro.ClkGrpConstraint):
+            self.logger.debug('New Clock group constraint found')
+            user_const += self.format_clock_group_const(const)
+
+        if isinstance(const, castro.InDelayConstraint):
+            self.logger.debug('New Input delay constraint found')
+            user_const += self.format_input_delay_const(const)
+
+        if isinstance(const, castro.OutDelayConstraint):
+            self.logger.debug('New Output delay constraint found')
+            user_const += self.format_output_delay_const(const)
+
+        if isinstance(const, castro.FalsePthConstraint):
+            self.logger.debug('New False Path constraint found')
+            user_const += self.format_false_path_const(const)
+
+        if isinstance(const, castro.MultiCycConstraint):
+            self.logger.debug('New Multi Cycle constraint found')
+            user_const += self.format_multi_cycle_const(const)
+
         if isinstance(const, castro.RawConstraint):
             self.logger.debug('New Raw constraint found')
             user_const += const.raw
@@ -1090,7 +1183,42 @@ class VivadoBackend(ToolflowBackend):
         return user_const
 
     def format_clock_const(self, c):
-        return 'create_clock -period %f -name %s [get_ports {%s}]\n' % (c.period_ns, c.portname+'_CLK', c.portname)
+
+        if c.virtual_en == True:
+            return 'create_clock -period %4.3f -name %s -waveform {%4.3f %4.3f}\n' % (c.period_ns, c.clkname, c.waveform_min_ns, c.waveform_max_ns)
+        elif c.port_en == True:
+            return 'create_clock -period %4.3f -name %s -waveform {%4.3f %4.3f} [get_ports {%s}]\n' % (c.period_ns, c.clkname, c.waveform_min_ns, c.waveform_max_ns, c.portname)
+        else:
+            return 'create_clock -period %4.3f -name %s -waveform {%4.3f %4.3f} [get_pins {%s}]\n' % (c.period_ns, c.clkname, c.waveform_min_ns, c.waveform_max_ns, c.portname)
+
+    def format_gen_clock_const(self, c):
+        return 'create_generated_clock -name %s -source [get_pins {%s}] -divide_by %d [get_pins {%s}]\n' % (c.clkname, c.clksource, c.divide_by, c.pinname)
+
+    def format_clock_group_const(self, c):
+        return 'set_clock_groups -%s -group [get_clocks %s] -group [get_clocks %s]\n' % (c.clkdomaintype, c.clknamegrp1, c.clknamegrp2)
+
+    def format_input_delay_const(self, c):
+        if c.add_delay_en == True:
+           return 'set_input_delay -clock [get_clocks %s] -%s -add_delay %4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype, c.constdelay_ns, c.portname)
+        else:
+           return 'set_input_delay -clock [get_clocks %s] -%s %4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype, c.constdelay_ns, c.portname)
+
+    def format_output_delay_const(self, c):
+        if c.add_delay_en == True:
+           return 'set_output_delay -clock [get_clocks %s] -%s -add_delay %4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype, c.constdelay_ns, c.portname)
+        else:
+           return 'set_output_delay -clock [get_clocks %s] -%s %4.3f [get_ports {%s}]\n' % (c.clkname, c.consttype, c.constdelay_ns, c.portname)
+
+    def format_false_path_const(self, c):
+        if c.sourcepath == None:
+          return 'set_false_path -to %s\n' % (c.destpath)
+        elif c.destpath == None:
+          return 'set_false_path -from %s\n' % (c.sourcepath)
+        else:
+          return 'set_false_path -from %s -to %s\n' % (c.sourcepath, c.destpath)
+
+    def format_multi_cycle_const(self, c):
+        return 'set_multicycle_path -%s -from [%s] -to [%s] %d\n' % (c.multicycletype, c.sourcepath, c.destpath, c.multicycledelay)
 
     def format_const(self, attribute, val, port, index=None):
         """

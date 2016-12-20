@@ -177,7 +177,7 @@ class YellowBlock(object):
         """
         pass
 
-    def gen_constraints(self):
+    def gen_constraints(self, peripherals=None):
         """
         This method is designed to be overridden by subclasses. It should
         return a list of PortConstraint instances.
