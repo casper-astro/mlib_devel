@@ -4,8 +4,6 @@
 #ifndef LWIPOPT_H
 #define LWIPOPT_H
 
-#include "lwip/pbuf.h"
-
 /**
  * NO_SYS==1: Use lwIP without OS-awareness (no thread, semaphores, mutexes or
  * mboxes). This means threaded APIs cannot be used (socket, netconn,
@@ -226,15 +224,16 @@
  */
 #define LWIP_DHCP                       1
 
+#if 1
 /**
  * DHCP_DEBUG: Enable debugging in dhcp.c.
  */
-#define LWIP_DEBUG                      LWIP_DBG_ON
-#define DHCP_DEBUG                      LWIP_DBG_ON
-#define ETHARP_DEBUG                    LWIP_DBG_ON
-#define NETIF_DEBUG                     LWIP_DBG_ON
-#define PBUF_DEBUG                      LWIP_DBG_ON
-
+#define LWIP_DEBUG                      LWIP_DBG_OFF
+#define DHCP_DEBUG                      LWIP_DBG_OFF
+#define ETHARP_DEBUG                    LWIP_DBG_OFF
+#define NETIF_DEBUG                     LWIP_DBG_OFF
+#define PBUF_DEBUG                      LWIP_DBG_OFF
+#endif
 
 /**
  * LWIP_DHCP_CHECK_LINK_UP==1: dhcp_start() only really starts if the netif has

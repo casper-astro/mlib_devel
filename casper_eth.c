@@ -70,7 +70,7 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   xil_printf("send %u bytes as %u longwords from addr %p [ms %u]\n",
       p->tot_len, ((p->tot_len+7)>>3), p->payload, ms_tmrctr());
 
-#ifndef DEBUG_PKT_TX
+#ifdef DEBUG_PKT_TX
   // Print first 32 bytes of packet
   for(i=0; i<32; i++) {
     if((i & 15) == 0) xil_printf("%04x:", (i<<2));
@@ -158,7 +158,7 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     words_sent++;
   }
 
-#ifndef DEBUG_PKT_TX
+#ifdef DEBUG_PKT_TX
   outbuf32 = TX_BUF_PTR32(ifstate.ptr);
   xil_printf("TX device buf %p:\n", outbuf32);
   for(i=0; i<8; i++) {
@@ -377,36 +377,33 @@ casper_rx_packet()
   xil_printf("read %u bytes as %u longwords to addr %p [ms %u]\n",
       (size32<<2), size64, p->payload, ms_tmrctr());
 
-#ifndef DEBUG_PKT_RX
-  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
-  xil_printf("RX device buf %p:\n", inbuf32);
-  for(i=0; i<8; i++) {
-    if((i & 3) == 0) xil_printf("%04x:", (i<<2));
-    xil_printf(" %08x", inbuf32[i]);
-    if((i & 3) == 3) print("\n");
-  }
-  if((i & 3) != 0) print("\n");
-  print("\n");
-#endif // DEBUG_PKT_RX
 
   // Need to byte swap 32 bit words in RX buffer due to how AXI/Wishbone
-  // interface orders bytes.  We do this in-place because the RX buffer is
-  // guaranteed to be 4-byte aligned.
-  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
+  // interface orders bytes.
 #ifdef PKT_RX_SWAPB_INPLACE
+  // If we could do this in-place in the RX buffer it would be great because
+  // that buffer is guaranteed to be 4-byte aligned and doesn't occupy any of
+  // our precious system memory.  But, alas, the RX buffer is read-only for
+  // some reason or other that escapes my understanding.
+  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
   xil_printf("byte swapping %u words in rx buf\n", size32);
   for(i=0; i<size32; i++) {
     *inbuf32 = mb_swapb(*inbuf32);
     inbuf32++;
   }
 #else
+  // Since we can't do this in-place in the RX buffer (because it is read-only
+  // for some reason or other that escapes my understanding), we do it to a
+  // 4-byte aligned buffer in the system memory.
+  // TODO Try the crazy idea of storing byte-swapped data in the TX buffer!
+  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
   xil_printf("byte swapping %u words to rx_swapb\n", size32);
   for(i=0; i<size32; i++) {
     rx_swapb[i] = mb_swapb(*inbuf32++);
   }
 #endif
 
-#ifndef DEBUG_PKT_RX
+#ifdef DEBUG_PKT_RX
 #ifdef PKT_RX_SWAPB_INPLACE
   inbuf32 = RX_BUF_PTR32(ifstate.ptr);
 #else
@@ -462,7 +459,7 @@ casper_rx_packet()
   // Done with RX buffer, so ack the packet
   *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
 
-#ifndef DEBUG_PKT_RX
+#ifdef DEBUG_PKT_RX
   // Print first 32 bytes of first pbuf
   for(i=0; i<32; i++) {
     if((i & 15) == 0) xil_printf("%04x:", (i<<2));
