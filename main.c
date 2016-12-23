@@ -66,6 +66,8 @@ int main()
     int fpga_temp;
     u8 buf[128];
     u32 len;
+    uint32_t next_ms = 0;
+    uint32_t curr_ms;
 #ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
     u32 tick0, tick1;
@@ -303,14 +305,21 @@ int main()
         }
 #endif
 
-        fpga_temp = (int)(10*get_fpga_temp());
-        xil_printf("Hello %s endian world at %d.%d C [ms %d]\n",
-            endian < 0 ? "BIG" : "little",
-            fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
+        curr_ms = ms_tmrctr();
+        if(next_ms <= curr_ms) {
+          next_ms = curr_ms + 1000;
 
-        sleep(1);
+          fpga_temp = (int)(10*get_fpga_temp());
+          xil_printf("Hello %s endian world at %d.%d C [ms %d]\n",
+              endian < 0 ? "BIG" : "little",
+              fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
+        }
+
+        // Sleep for a short time (TODO why sleep at all really?)
+        usleep(100);
     }
 
+    // Should "never" get here
     cleanup_platform();
     return 0;
 }
