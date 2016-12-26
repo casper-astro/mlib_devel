@@ -24,30 +24,6 @@ static struct {
   uint8_t last_link_state;
 } ifstate;
 
-// Can be used as pointer to RX buffer itself (as uint8_t)
-#define RX_BUF_PTR8(p) \
-  ((uint8_t *)(p + ETH_MAC_RX_BUFFER_OFFSET))
-
-// Can be used as pointer to RX buffer itself (as uint32_t)
-#define RX_BUF_PTR32(p) \
-  ((uint32_t *)(p + ETH_MAC_RX_BUFFER_OFFSET))
-
-// Can be used as pointer to RX buffer size (as uint16_t)
-#define RX_BUF_SIZE_PTR16(p) \
-  (((uint16_t *)p) + ETH_MAC_REG16_RX_BUFFER_SIZE)
-
-// Can be used as pointer to TX buffer itself (as uint8_t)
-#define TX_BUF_PTR8(p) \
-  ((uint8_t *)(p + ETH_MAC_TX_BUFFER_OFFSET))
-
-// Can be used as pointer to TX buffer itself (as uint32_t)
-#define TX_BUF_PTR32(p) \
-  ((uint32_t *)(p + ETH_MAC_TX_BUFFER_OFFSET))
-
-// Can be used as pointer to TX buffer size (as uint16_t)
-#define TX_BUF_SIZE_PTR16(p) \
-  (((uint16_t *)p) + ETH_MAC_REG16_TX_BUFFER_SIZE)
-
 #ifdef DEBUG_LOOP_TX
 #define casper_netif_output casper_netif_output_loop
 #else
@@ -332,7 +308,8 @@ casper_rx_packet()
   uint16_t size32;
   uint16_t bytes_remaining;
   uint8_t *inbuf8;
-  volatile uint32_t *inbuf32;
+  uint32_t *inbuf32;
+  uint32_t *nibuf32; // byte swapped buffer ("ni" is byte swapped "in" :))
   struct pbuf *p, *q;
 
   // Check for received frames, feed them to lwIP
@@ -380,52 +357,33 @@ casper_rx_packet()
 
   // Need to byte swap 32 bit words in RX buffer due to how AXI/Wishbone
   // interface orders bytes.
-#ifdef PKT_RX_SWAPB_INPLACE
-  // If we could do this in-place in the RX buffer it would be great because
-  // that buffer is guaranteed to be 4-byte aligned and doesn't occupy any of
-  // our precious system memory.  But, alas, the RX buffer is read-only for
-  // some reason or other that escapes my understanding.
-  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
-  xil_printf("byte swapping %u words in rx buf\n", size32);
-  for(i=0; i<size32; i++) {
-    *inbuf32 = mb_swapb(*inbuf32);
-    inbuf32++;
-  }
-#else
   // Since we can't do this in-place in the RX buffer (because it is read-only
   // for some reason or other that escapes my understanding), we do it to a
   // 4-byte aligned buffer in the system memory.
   // TODO Try the crazy idea of storing byte-swapped data in the TX buffer!
   inbuf32 = RX_BUF_PTR32(ifstate.ptr);
+  nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
   xil_printf("byte swapping %u words to rx_swapb\n", size32);
   for(i=0; i<size32; i++) {
-    rx_swapb[i] = mb_swapb(*inbuf32++);
+    *nibuf32++ = mb_swapb(*inbuf32++);
   }
-#endif
 
 #ifdef DEBUG_PKT_RX
-#ifdef PKT_RX_SWAPB_INPLACE
-  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
-#else
-  inbuf32 = rx_swapb;
-#endif // PKT_RX_SWAPB_INPLACE
-  xil_printf("RX device buf %p:\n", inbuf32);
+  nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
+  xil_printf("RX byte-swapped buf %p:\n", nibuf32);
   for(i=0; i<8; i++) {
     if((i & 3) == 0) xil_printf("%04x:", (i<<2));
-    xil_printf(" %08x", inbuf32[i]);
+    xil_printf(" %08x", nibuf32[i]);
     if((i & 3) == 3) print("\n");
   }
   if((i & 3) != 0) print("\n");
   print("\n");
 #endif // DEBUG_PKT_RX
 
-  // Copy packet from the 4-byte aligned RX buffer to possibly unalinged
-  // pbuf(s), so do it using memcpy.  Use q to walk the pbufs.
-#ifdef PKT_RX_SWAPB_INPLACE
-  inbuf8 = RX_BUF_PTR8(ifstate.ptr);
-#else
-  inbuf8 = (uint8_t *)rx_swapb;
-#endif // PKT_RX_SWAPB_INPLACE
+  // Copy packet from the 4-byte aligned RX byte-swapped buffer (i.e. TX
+  // buffer, see comments above) to possibly unalinged pbuf(s), so do it using
+  // memcpy.  Use q to walk the pbufs.
+  inbuf8 = SWAPB_BUF_PTR8(ifstate.ptr);
   bytes_remaining = (size32<<2);
   q = p;
   while(q) {

@@ -111,6 +111,49 @@
 // CPU subnet mask
 #define ETH_MAC_REG32_MC_RECV_IP_MASK (0x0d)
 
+//
+// Macros to get pointers to various TX/RX parts of the core whose base address
+// is passed as a parameter.
+//
+
+// Can be used as pointer to RX buffer itself (as uint8_t)
+#define RX_BUF_PTR8(p) \
+  ((uint8_t *)(p + ETH_MAC_RX_BUFFER_OFFSET))
+
+// Can be used as pointer to RX buffer itself (as uint32_t)
+#define RX_BUF_PTR32(p) \
+  ((uint32_t *)(p + ETH_MAC_RX_BUFFER_OFFSET))
+
+// Can be used as pointer to RX buffer size (as uint16_t)
+#define RX_BUF_SIZE_PTR16(p) \
+  (((uint16_t *)p) + ETH_MAC_REG16_RX_BUFFER_SIZE)
+
+// Can be used as pointer to TX buffer itself (as uint8_t)
+#define TX_BUF_PTR8(p) \
+  ((uint8_t *)(p + ETH_MAC_TX_BUFFER_OFFSET))
+
+// Can be used as pointer to TX buffer itself (as uint32_t)
+#define TX_BUF_PTR32(p) \
+  ((uint32_t *)(p + ETH_MAC_TX_BUFFER_OFFSET))
+
+// Can be used as pointer to TX buffer size (as uint16_t)
+#define TX_BUF_SIZE_PTR16(p) \
+  (((uint16_t *)p) + ETH_MAC_REG16_TX_BUFFER_SIZE)
+
+// The data received in the RX buffer needs to be 4-byte byte-swapped into
+// another region of 4-byte aligned memory.  If the RX buffer were writable, we
+// could do the byte swap in-place, but it is not so we need to write the byte
+// swapped values somewhere else.  In early development, we did this to a
+// 4-byte aligned buffer that we statically declared in this file, but since we
+// are a single threaded program and the byte-swapped data is transient (it is
+// immediately copied to byte-aligned buffers in pbufs), we can utilize the TX
+// buffer to hold the byte-swapped RX data!  This trick of using the TX buffer
+// for other byte-swapped transient data is also useful for other purposes as
+// well.
+#define SWAPB_BUF_PTR8(x)  TX_BUF_PTR8(x)
+#define SWAPB_BUF_PTR32(x) TX_BUF_PTR32(x)
+
+
 // LwIP related macros and functions
 
 #ifndef ETHERNET_MTU
