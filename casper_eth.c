@@ -221,21 +221,25 @@ casper_netif_init(struct netif *netif)
 err_t
 casper_lwip_init()
 {
-  int i, j;
+#ifdef DEBUG_ETH0_MEM
+  int i;
+  int j;
+#endif // DEBUG_ETH0_MEM
 
   // Init local ifstate
   ifstate.ptr = (void *)ETH0_BASE_ADDRESS;
   ifstate.last_link_state = -1;
 
+#ifdef DEBUG_ETH0_MEM
   print("## eth0 memory as uint32_t:\n");
   for(i=0; i<4; i++) {
     xil_printf("%02x:", 16*i);
     for(j=0; j<4; j++) {
-      //xil_printf(" %08x", *(((uint32_t *)ETH0_BASE_ADDRESS) + 4*i+j));
       xil_printf(" %08x", ((uint32_t *)ifstate.ptr)[4*i+j]);
     }
     print("\n");
   }
+#endif // DEBUG_ETH0_MEM
 
   // TODO Get MAC address from somewhere (e.g. serial number stored in flash)
   // Needs to be stored in hardware core as:
@@ -243,15 +247,16 @@ casper_lwip_init()
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_1] = 0x00000203;
   ((uint32_t *)ifstate.ptr)[ETH_MAC_REG32_LOCAL_MAC_0] = 0x04050607;
 
+#ifdef DEBUG_ETH0_MEM
   print("## eth0 memory as uint32_t:\n");
   for(i=0; i<4; i++) {
     xil_printf("%02x:", 16*i);
     for(j=0; j<4; j++) {
-      //xil_printf(" %08x", *(((uint32_t *)ETH0_BASE_ADDRESS) + 4*i+j));
       xil_printf(" %08x", ((uint32_t *)ifstate.ptr)[4*i+j]);
     }
     print("\n");
   }
+#endif // DEBUG_ETH0_MEM
 
   // Now initialize LwIP
   lwip_init();
