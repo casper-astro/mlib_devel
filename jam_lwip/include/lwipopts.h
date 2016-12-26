@@ -83,7 +83,7 @@
  * If the application sends a lot of data out of ROM (or other static memory),
  * this should be set high.
  */
-#define MEMP_NUM_PBUF                   8
+#define MEMP_NUM_PBUF                   0
 
 /**
  * MEMP_NUM_RAW_PCB: Number of raw connection PCBs
