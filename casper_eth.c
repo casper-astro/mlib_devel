@@ -270,6 +270,9 @@ casper_lwip_init()
   // Start DHCP
   dhcp_start(&netif_en[0]);
 
+  // Check links
+  casper_monitor_links();
+
   return ERR_OK;
 }
 
