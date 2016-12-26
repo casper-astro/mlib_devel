@@ -190,6 +190,13 @@ casper_netif_output_loop(struct netif *netif, struct pbuf *p)
 #endif // DEBUG_LOOP_TX
 
 static
+void
+casper_netif_status_callback(struct netif *netif)
+{
+  xil_printf("casper_netif_status_callback()\n");
+}
+
+static
 err_t
 casper_netif_init(struct netif *netif)
 {
@@ -211,6 +218,9 @@ casper_netif_init(struct netif *netif)
   mac16 = ((uint16_t *)ifstate.ptr)[ETH_MAC_REG16_LOCAL_MAC_LO];
   netif->hwaddr[4] = (mac16 >> 8) & 0xff;
   netif->hwaddr[5] = (mac16     ) & 0xff;
+
+  // Add status callback
+  netif->status_callback = casper_netif_status_callback;
 
   return ERR_OK;
 }

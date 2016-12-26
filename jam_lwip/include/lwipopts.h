@@ -271,6 +271,12 @@
 #define LWIP_NETIF_HOSTNAME             1
 
 /**
+ * LWIP_NETIF_STATUS_CALLBACK==1: Support a callback function whenever an interface
+ * changes its up/down status (i.e., due to DHCP IP acquisition)
+ */
+#define LWIP_NETIF_STATUS_CALLBACK      1
+
+/**
  * LWIP_NETCONN==1: Enable Netconn API (require to use api_lib.c)
  */
 #define LWIP_NETCONN                    0
