@@ -8,6 +8,7 @@
 #include "lwip/timeouts.h"
 
 #include "casper_eth.h"
+#include "casper_tftp.h"
 #include "tmrctr.h"
 
 // From core_info.tab
@@ -193,7 +194,23 @@ static
 void
 casper_netif_status_callback(struct netif *netif)
 {
+  err_t rc;
+
   xil_printf("casper_netif_status_callback()\n");
+  xil_printf("IP %08X/%08X  GW %08X\n",
+      mb_swapb(netif->ip_addr.addr),
+      mb_swapb(netif->netmask.addr),
+      mb_swapb(netif->gw.addr));
+
+  if(netif->ip_addr.addr != 0) {
+    if((rc = casper_tftp_init()) == ERR_OK) {
+      xil_printf("casper_tftp_init() OK :)\n");
+    } else {
+      xil_printf("casper_tftp_init() failed %d :(\n", rc);
+    }
+  } else {
+    print("no ip address, NOT starting tftp\n");
+  }
 }
 
 static
