@@ -307,7 +307,7 @@ int main()
 
         curr_ms = ms_tmrctr();
         if(next_ms <= curr_ms) {
-          next_ms = curr_ms + 1000;
+          next_ms = curr_ms + 10000;
 
           fpga_temp = (int)(10*get_fpga_temp());
           xil_printf("Hello %s endian world at %d.%d C [ms %d]\n",
