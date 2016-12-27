@@ -30,8 +30,10 @@ static
 int
 casper_tftp_read_error(void *handle, void *buf, int bytes)
 {
+#ifdef VERBOSE_TFTP_IMPL
   xil_printf("casper_tftp_read_error(%p, %p, %d) = -1\n",
       handle, buf, bytes);
+#endif // VERBOSE_TFTP_IMPL
 
   return -1;
 }
@@ -50,8 +52,10 @@ static
 int
 casper_tftp_write_error(void *handle, struct pbuf *p)
 {
+#ifdef VERBOSE_TFTP_IMPL
   xil_printf("casper_tftp_write_error(%p, %p [%u/%u]) = -1\n",
       handle, p, p->len, p->tot_len);
+#endif // VERBOSE_TFTP_IMPL
 
   return -1;
 }
@@ -116,8 +120,10 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
 #endif
   }
 
+#ifdef VERBOSE_TFTP_IMPL
   xil_printf("casper_tftp_open(%s, %s, %u) = %p\n",
       fname, mode, write, handle);
+#endif // VERBOSE_TFTP_IMPL
 
   return handle;
 }
@@ -130,7 +136,9 @@ casper_tftp_close(void *handle)
 {
   struct tapcp_state *state = (struct tapcp_state*)handle;
 
+#ifdef VERBOSE_TFTP_IMPL
   xil_printf("casper_tftp_close(%p)\n", handle);
+#endif // VERBOSE_TFTP_IMPL
 
   casper_tftp_context.read = casper_tftp_read_error;
   casper_tftp_context.write = casper_tftp_write_error;

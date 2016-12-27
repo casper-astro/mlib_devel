@@ -297,4 +297,9 @@
 // needs so let's go with 256 until it needs to be bigger.
 #define TFTP_MAX_FILENAME_LEN 256
 
+/**
+ * Disable TFTP debug messages
+ */
+#define TFTP_DEBUG            LWIP_DBG_OFF
+
 #endif /* LWIPOPT_H */

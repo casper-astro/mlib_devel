@@ -89,8 +89,11 @@ int
 casper_tapcp_read_help(struct tapcp_state *state, void *buf, int bytes)
 {
   int len = bytes < state->nleft ? bytes : state->nleft;
+
+#ifdef VERBOSE_TAPCP_IMPL
   xil_printf("casper_tapcp_read_help(%p, %p, %d) = %d/%d\n",
       state, buf, bytes, len, state->nleft);
+#endif // VERBOSE_TAPCP_IMPL
 
   memcpy(buf, state->ptr, len);
   state->ptr   += len;
