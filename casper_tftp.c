@@ -90,7 +90,7 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
   // If filename is exactly "temp" and not writing
   } else if(!strcmp("temp", fname) && !write) {
     tapcp_state.cmd = CASPER_TAPCP_CMD_TEMP;
-    handle = NULL; // TODO
+    handle = casper_tapcp_open_temp(&tapcp_state);
 
   // If filename starts with "dev/"
   } else if(!strncmp("dev/", fname, sizeof("dev/"))) {

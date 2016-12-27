@@ -68,6 +68,7 @@
 // terminal).  Reading with these commands in octet mode will return the
 // requested data in binary form in network byte order (big endian).
 
+#include "platform.h"
 #include "lwip/apps/tftp_server.h"
 #include "casper_tftp.h"
 #include "casper_tapcp.h"
@@ -101,6 +102,57 @@ casper_tapcp_read_help(struct tapcp_state *state, void *buf, int bytes)
   return len;
 }
 
+static
+int
+casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
+{
+  // We send "d.d\n", "dd.d\n", or "ddd.d\n" (4 to 6 bytes) in ascii mode.
+  // We send 4 byte big endian single precision float in binary mode.
+  // In any case, bytes is almost certainly larger than 6, but we check anyway.
+  if(bytes < 6) {
+    return -1;
+  }
+
+  int len = 0;
+  float fpga_temp = get_fpga_temp();
+
+  if(state->binary) {
+    //*(uint32_t *)buf = mb_swapb(*(uint32_t *)&fpga_temp);
+    *(uint32_t *)buf = mb_swapb(fpga_temp);
+    len = 4;
+  } else {
+    char * bbuf = (char *)buf;
+    // t is integer temp in deci-degrees
+    int t = (int)(10 * fpga_temp);
+    // Hundreds place
+    if(t > 1000) {
+      *bbuf++ = '0' + (t/1000) % 10;
+      len++;
+    }
+    // Tens place
+    if(t > 100) {
+      *bbuf++ = '0' + (t/100) % 10;
+      len++;
+    }
+    // Ones place
+    *bbuf++ = '0' + (t/10) % 10;
+    // Decimal point
+    *bbuf++ = '.';
+    // Tenths place
+    *bbuf++ = '0' + t % 10;
+    // Newline
+    *bbuf++ = '\n';
+    len += 4;
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("casper_tapcp_temp_help(%p, %p, %d) = %d\n",
+      state, buf, bytes, len);
+#endif // VERBOSE_TAPCP_IMPL
+
+  return len;
+}
+
 // Write helpers
 
 // Open helpers
@@ -112,5 +164,14 @@ casper_tapcp_open_help(struct tapcp_state *state)
   state->ptr = tapcp_help_msg;
   state->nleft = sizeof(tapcp_help_msg) - 1;
   set_tftp_read((tftp_read_f)casper_tapcp_read_help);
+  return state;
+}
+
+void *
+casper_tapcp_open_temp(struct tapcp_state *state)
+{
+  // Setup tapcp state
+  state->cmd = CASPER_TAPCP_CMD_TEMP;
+  set_tftp_read((tftp_read_f)casper_tapcp_read_temp);
   return state;
 }

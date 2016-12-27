@@ -28,5 +28,6 @@ struct tapcp_state {
 
 // Open functions
 void * casper_tapcp_open_help(struct tapcp_state *state);
+void * casper_tapcp_open_temp(struct tapcp_state *state);
 
 #endif // _CASPER_TAPCP_H_
