@@ -297,11 +297,4 @@
 // needs so let's go with 256 until it needs to be bigger.
 #define TFTP_MAX_FILENAME_LEN 256
 
-/**
- * Max. length of TFTP mode
- */
-// Defaults of 7 is just wrong!  strlen("NETASCII") == 8 and TFTP_MAX_MODE_LEN
-// also needs to include the terminating NUL, so it must be 9.
-#define TFTP_MAX_MODE_LEN     9
-
 #endif /* LWIPOPT_H */
