@@ -44,8 +44,10 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   uint16_t words_sent = 0;
   uint32_t *outbuf32;
 
+#ifdef VERBOSE_ETH_IMPL
   xil_printf("send %u bytes as %u longwords from addr %p [ms %u]\n",
       p->tot_len, ((p->tot_len+7)>>3), p->payload, ms_tmrctr());
+#endif // VERBOSE_ETH_IMPL
 
 #ifdef DEBUG_PKT_TX
   // Print first 32 bytes of packet
@@ -72,7 +74,9 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     LINK_STATS_INC(link.drop);
     return ERR_INPROGRESS;
   }
+#ifdef VERBOSE_ETH_IMPL
   else xil_printf("looped %d times waiting for previous tx to finish\n", i);
+#endif // VERBOSE_ETH_IMPL
 
   outbuf8 = TX_BUF_PTR8(ifstate.ptr);
 
@@ -90,8 +94,10 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
     }
 
     // Copy byte aligned data to 4-byte aligned TX buffer
+#ifdef VERBOSE_ETH_IMPL
     xil_printf("copying %u of %u bytes from pbuf %p payload %p to tx buf %p\n",
         len, p->tot_len, p, p->payload, outbuf8);
+#endif // VERBOSE_ETH_IMPL
     memcpy(outbuf8, p->payload, len);
     outbuf8 += len;
     bytes_sent += len;
@@ -150,8 +156,10 @@ casper_netif_output_impl(struct netif *netif, struct pbuf *p)
   // Set TX buffer level to number of 8 byte words to send packet
   *TX_BUF_SIZE_PTR16(ifstate.ptr) = (words_sent >> 1);
 
+#ifdef VERBOSE_ETH_IMPL
   xil_printf("sent pkt %u bytes as %u longwords [ms %u]\n",
       4*words_sent, (words_sent >> 1), ms_tmrctr());
+#endif // VERBOSE_ETH_IMPL
   LINK_STATS_INC(link.xmit);
 
   // Probably over conservative to check for TX completion here and upon
@@ -196,21 +204,24 @@ casper_netif_status_callback(struct netif *netif)
 {
   err_t rc;
 
+#ifdef VERBOSE_ETH_IMPL
   xil_printf("casper_netif_status_callback()\n");
-  xil_printf("IP %08X/%08X  GW %08X\n",
+#endif // VERBOSE_ETH_IMPL
+  xil_printf("IP %08X  NM %08X  GW %08X\n",
       mb_swapb(netif->ip_addr.addr),
       mb_swapb(netif->netmask.addr),
       mb_swapb(netif->gw.addr));
 
   if(netif->ip_addr.addr != 0) {
-    if((rc = casper_tftp_init()) == ERR_OK) {
-      xil_printf("casper_tftp_init() OK :)\n");
-    } else {
+    if((rc = casper_tftp_init()) != ERR_OK) {
       xil_printf("casper_tftp_init() failed %d :(\n", rc);
+    } else {
+      xil_printf("casper_tftp_init() OK :)\n");
     }
-  } else {
-    print("no ip address, NOT starting tftp\n");
   }
+#ifdef VERBOSE_ETH_IMPL
+  else print("no ip address, NOT starting tftp\n");
+#endif // VERBOSE_ETH_IMPL
 }
 
 static
@@ -356,7 +367,7 @@ casper_rx_packet()
   // Work with words
   size32 = size64 << 1;
 
-  // If packet oo large
+  // If packet too large
   if(size32 > sizeof(rx_swapb)) {
     // Ack packet so we'll receive more packets
     *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
@@ -386,8 +397,10 @@ casper_rx_packet()
   // OK, got one or more pbufs to hold our packet data
   LINK_STATS_INC(link.recv);
   size32 = size64 << 1;
+#ifdef VERBOSE_ETH_IMPL
   xil_printf("read %u bytes as %u longwords to addr %p [ms %u]\n",
       (size32<<2), size64, p->payload, ms_tmrctr());
+#endif // VERBOSE_ETH_IMPL
 
 
   // Need to byte swap 32 bit words in RX buffer due to how AXI/Wishbone
@@ -398,7 +411,9 @@ casper_rx_packet()
   // TODO Try the crazy idea of storing byte-swapped data in the TX buffer!
   inbuf32 = RX_BUF_PTR32(ifstate.ptr);
   nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
+#ifdef VERBOSE_ETH_IMPL
   xil_printf("byte swapping %u words to rx_swapb\n", size32);
+#endif // VERBOSE_ETH_IMPL
   for(i=0; i<size32; i++) {
     *nibuf32++ = mb_swapb(*inbuf32++);
   }
