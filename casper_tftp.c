@@ -1,52 +1,46 @@
 // casper_tftp.c - CASPER handlers for LwIP TFTP server.
-// These handlers implement the CASPER TFTP access protocol
-// (which is in dire need of a better name and acronym).
+//
+// These handlers provide the interface between LwIP's TFTP server and the
+// CASPER TAPCP implementation.
 
 #include "lwip/apps/tftp_server.h"
-#include "casper_eth.h"
+#include "casper_tftp.h"
+#include "casper_tapcp.h"
 
-// Counter for dummy handle generator
-static uint32_t handle_gen = 0;
+// Because LwIp only supports a maximum of one active transfer at any given
+// time, we can use a single file-scope static structure to maintain state
+// during the transfer.  The "handle" returned by `casper_tftp_open()`
+// indicates the "command" being processed.  It is expected to be one of the
+// `CASPER_TAPCP_CMD_...` values.
 
-// Open file for read/write.
-// `fname` Filename
-// `mode` Mode string from TFTP RFC 1350 (netascii, octet, mail)
-// `write` Flag indicating read (0) or write (!= 0) access
-// Returns Non-zero handle supplied to other functions; 0 on error
-static
-void*
-casper_tftp_open(const char* fname, const char* mode, u8_t write)
-{
-  void *handle = (void *)handle_gen++;
-  xil_printf("casper_tftp_open(%s, %s, %u) = %p\n",
-      fname, mode, write);
-  return handle;
-}
+static struct tapcp_state tapcp_state = {0};
 
-// Close file handle
-// `handle` Handle returned by open()
-static
-void
-casper_tftp_close(void* handle)
-{
-  xil_printf("casper_tftp_close(%u)\n", handle);
-}
+static struct tftp_context casper_tftp_context;
 
-// Read from file 
+// This is the default TFTP read function.  It always returns an error.
+// casper_tftp_open() sets the read function pointer in the tftp_context
+// structure to this function, but various "open helpers" invoked by
+// casper_tftp_open() can point to a different function.
+//
 // `handle` Handle returned by open()
 // `buf` Target buffer to copy read data to
 // `bytes` Number of bytes to copy to buf
 // Returns Number of bytes copied on success; -1 on error
 static
 int
-casper_tftp_read(void* handle, void* buf, int bytes)
+casper_tftp_read_error(void *handle, void *buf, int bytes)
 {
-  xil_printf("casper_tftp_read(%p, %p, %d) = 0\n",
+  xil_printf("casper_tftp_read_error(%p, %p, %d) = -1\n",
       handle, buf, bytes);
-  return 0;
+
+  return -1;
 }
 
-// Write to file
+// This is the default TFTP write function.  It always returns an error.
+// casper_tftp_open() sets the wriate function pointer in the tftp_context
+// structure to this function, but various "open helpers" invoked by
+// casper_tftp_open() can point to a different function if writing is allowed.
+//
 // `handle` Handle returned by open()
 // `pbuf` PBUF adjusted such that payload pointer points
 //        to the beginning of write data. In other words,
@@ -54,22 +48,118 @@ casper_tftp_read(void* handle, void* buf, int bytes)
 // Returns Number of bytes copied on success; -1 on error
 static
 int
-casper_tftp_write(void* handle, struct pbuf* p)
+casper_tftp_write_error(void *handle, struct pbuf *p)
 {
-  xil_printf("casper_tftp_read(%p, %p) = %d\n",
-      handle, p, p->tot_len);
-  return p->tot_len;
+  xil_printf("casper_tftp_write_error(%p, %p [%u/%u]) = -1\n",
+      handle, p, p->len, p->tot_len);
+
+  return -1;
 }
 
-static struct tftp_context casper_tftp_context = {
-  .open  = casper_tftp_open,
-  .close = casper_tftp_close,
-  .read  = casper_tftp_read,
-  .write = casper_tftp_write
-};
+// Open file for read/write.
+// `fname` Filename
+// `mode` Mode string from TFTP RFC 1350 (netascii, octet, mail)
+// `write` Flag indicating read (0) or write (!= 0) access
+// Returns Non-zero handle supplied to other functions; 0 on error
+static
+void *
+casper_tftp_open(const char *fname, const char *mode, u8_t write)
+{
+  void *handle = NULL;
+
+  // If mode starts with 'o' assume it's "octet"
+  tapcp_state.binary = (mode[0] == 'o');
+//tapcp_state.write = write;
+  // Set default read/write functions to ones that return error.
+  casper_tftp_context.read = casper_tftp_read_error;
+  casper_tftp_context.write = casper_tftp_write_error;
+
+  // If filename is exactly "help" and not writing
+  if(!strcmp("help", fname) && !write) {
+    handle = casper_tapcp_open_help(&tapcp_state);
+
+  // If filename is exactly "listdev" and not writing
+  } else if(!strcmp("listdev", fname) && !write) {
+    tapcp_state.cmd = CASPER_TAPCP_CMD_LISTDEV;
+    handle = NULL; // TODO
+
+  // If filename is exactly "temp" and not writing
+  } else if(!strcmp("temp", fname) && !write) {
+    tapcp_state.cmd = CASPER_TAPCP_CMD_TEMP;
+    handle = NULL; // TODO
+
+  // If filename starts with "dev/"
+  } else if(!strncmp("dev/", fname, sizeof("dev/"))) {
+    tapcp_state.cmd = CASPER_TAPCP_CMD_MEM;
+    handle = NULL; // TODO
+
+  // If filename starts with "fpga/"
+  } else if(!strncmp("fpga/", fname, sizeof("fpga/"))) {
+    tapcp_state.cmd = CASPER_TAPCP_CMD_MEM;
+    handle = NULL; // TODO
+
+  // If filename starts with "cpu/" and not writing
+  } else if(!strncmp("cpu/", fname, sizeof("cpu/")) && !write) {
+    tapcp_state.cmd = CASPER_TAPCP_CMD_MEM;
+    handle = NULL; // TODO
+
+#if 0 // TODO
+  // If filename starts with "progdev/"
+  } else if(!strncmp("progdev/", fname, sizeof("progdev/"))) {
+    tapcp_state.cmd = CASPER_TAPCP_CMD_PROGDEV;
+    handle = NULL; // TODO
+
+  // If filename starts with "flash/"
+  } else if(!strncmp("flash/", fname, sizeof("flash/"))) {
+    tapcp_state.cmd = CASPER_TAPCP_CMD_FLASH;
+    handle = NULL; // TODO
+#endif
+  }
+
+  xil_printf("casper_tftp_open(%s, %s, %u) = %p\n",
+      fname, mode, write, handle);
+
+  return handle;
+}
+
+// Close file handle
+// `handle` Handle returned by open()
+static
+void
+casper_tftp_close(void *handle)
+{
+  struct tapcp_state *state = (struct tapcp_state*)handle;
+
+  xil_printf("casper_tftp_close(%p)\n", handle);
+
+  casper_tftp_context.read = casper_tftp_read_error;
+  casper_tftp_context.write = casper_tftp_write_error;
+
+  if(state) {
+    state->cmd = CASPER_TAPCP_CMD_NONE;
+    state->ptr = NULL;
+    state->nleft = 0;
+  }
+}
 
 err_t
 casper_tftp_init()
 {
+  casper_tftp_context.open  = casper_tftp_open;
+  casper_tftp_context.close = casper_tftp_close;
+  casper_tftp_context.read  = casper_tftp_read_error;
+  casper_tftp_context.write = casper_tftp_write_error;
   return tftp_init(&casper_tftp_context);
+}
+
+void
+set_tftp_read(tftp_read_f read_func)
+{
+  casper_tftp_context.read = read_func;
+}
+
+void
+set_tftp_write(tftp_write_f write_func)
+{
+  casper_tftp_context.write = write_func;
 }
