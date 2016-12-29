@@ -85,7 +85,7 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
   // If filename is exactly "listdev" and not writing
   } else if(!strcmp("listdev", fname) && !write) {
     tapcp_state.cmd = CASPER_TAPCP_CMD_LISTDEV;
-    handle = NULL; // TODO
+    handle = casper_tapcp_open_listdev(&tapcp_state);
 
   // If filename is exactly "temp" and not writing
   } else if(!strcmp("temp", fname) && !write) {

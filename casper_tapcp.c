@@ -85,6 +85,8 @@ static char tapcp_help_msg[] =
 ;
 
 // core_info data
+// TODO Make this always external and link with either user core_info.bin or
+// dummy core_info.bin.
 #if defined(EXTERN_CORE_INFO) && EXTERN_CORE_INFO > 0
 extern const unsigned char _binary_core_info_bin_start;
 #define CORE_INFO (&_binary_core_info_bin_start)
@@ -98,7 +100,7 @@ static const unsigned char core_info[] = {"\x00\x00"};
 // Convert ASCII hex digits to uint32_t.
 static
 uint8_t *
-hex2u32(uint8_t *p, uint32_t *u32)
+hex_to_u32(uint8_t *p, uint32_t *u32)
 {
   uint8_t i;
   uint8_t c;
@@ -124,6 +126,29 @@ hex2u32(uint8_t *p, uint32_t *u32)
   return p;
 }
 
+// Convert uint32_t to ASCII hex digits (no leading 0's)
+static
+uint8_t *
+u32_to_hex(const uint32_t u32, uint8_t *p, uint8_t do_zeros)
+{
+  uint8_t i;
+  uint8_t c;
+
+  for(i=0; i<8; i++) {
+    c = (u32 >> (28 - (i<<2))) & 0xf;
+    if(c || do_zeros || i == 7) {
+      if(c > 9) {
+        *p++ = c - 10 + 'A';
+      } else {
+        *p++ = c      + '0';
+      }
+      do_zeros |= c;
+    }
+  }
+
+  return p;
+}
+
 // Read functions.
 static
 int
@@ -134,7 +159,7 @@ casper_tapcp_read_help(struct tapcp_state *state, void *buf, int bytes)
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("casper_tapcp_read_help(%p, %p, %d) = %d/%d\n",
       state, buf, bytes, len, state->nleft);
-#endif // VERBOSE_TAPCP_IMPL
+#endif
 
   memcpy(buf, state->ptr, len);
   state->ptr   += len;
@@ -188,7 +213,100 @@ casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("casper_tapcp_temp_help(%p, %p, %d) = %d\n",
       state, buf, bytes, len);
-#endif // VERBOSE_TAPCP_IMPL
+#endif
+
+  return len;
+}
+
+static
+int
+casper_tapcp_read_listdev(struct tapcp_state *state, void *buf, int bytes)
+{
+  // We don't know how long our lines will be so we unpack and buffer them
+  // locally (in a static buffer) before sending them.  Since we have to fill
+  // the output buffer completely excepot to signal end of data, we will often
+  // have to split lines across two calls.  state->nleft stores the number of
+  // bytes already output, zero if there is no pending line, or -1 if this is
+  // the first line.  state->ptr points to the next core info entry.
+  //
+  // Output lines (and max lengths) are:
+  //
+  //     DEV_NAME "\t" MODE "\t" OFFSET "\t" SIZE "\t" TYPE "\n"
+  //       255     1    1    1     8     1     8   1    2    1
+
+  static uint8_t line_buf[256+2+9+9+3];
+  uint8_t *plb;
+  int len = 0;
+  uint32_t n;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("casper_tapcp_read_listdev(%p, %p, %d) = %d/%d\n",
+      state, buf, bytes, len, state->nleft);
+#endif
+
+  while(len < bytes) {
+    // If need to start a new line
+    if(state->nleft <= 0) {
+      // Init
+      plb = line_buf;
+      // If not first line, reuse characters
+      if(state->nleft == 0) {
+        plb += *(uint8_t *)state->ptr;
+      }
+      state->ptr++;
+      state->nleft = 0;
+      // Get tail length
+      n = *(uint8_t *)state->ptr++;
+      // If tail is 0, all done!
+      if(n == 0) {
+        return len;
+      }
+      // Copy tail
+      memcpy(plb, state->ptr, n);
+      state->ptr += n;
+      plb += n;
+      *plb++ = '\t';
+      // Read offset
+      n  = (*(uint8_t *)state->ptr++ & 0xff) << 24;
+      n |= (*(uint8_t *)state->ptr++ & 0xff) << 16;
+      n |= (*(uint8_t *)state->ptr++ & 0xff) <<  8;
+      n |= (*(uint8_t *)state->ptr++ & 0xff);
+      // Output mode to buffer
+      *plb++ = (n&1) ? '1' : '3';
+      *plb++ = '\t';
+      // Output offset (masking off two LSbs) to buffer
+      plb = u32_to_hex(n & ~3, plb, 0);
+      *plb++ = '\t';
+      // Read length
+      n  = (*(uint8_t *)state->ptr++ & 0xff) << 24;
+      n |= (*(uint8_t *)state->ptr++ & 0xff) << 16;
+      n |= (*(uint8_t *)state->ptr++ & 0xff) <<  8;
+      n |= (*(uint8_t *)state->ptr++ & 0xff);
+      // Output length to buffer
+      plb = u32_to_hex(n, plb, 0);
+      *plb++ = '\t';
+      // Read and output type to buffer
+      plb = u32_to_hex(*(uint8_t *)state->ptr++, plb, 0);
+      *plb++ = '\n';
+    }
+
+    // Copy data to buf
+    plb = line_buf + state->nleft;
+    while(len < bytes) {
+      // Copy byte
+      *(uint8_t *)buf++ = *plb;
+      // Increment len
+      len++;
+      // If end of line
+      if(*plb == '\n') {
+        state->nleft = 0;
+        break;
+      } else {
+        state->nleft++;
+      }
+      plb++;
+    }
+  }
 
   return len;
 }
@@ -216,9 +334,16 @@ casper_tapcp_open_temp(struct tapcp_state *state)
   return state;
 }
 
-#ifndef VERBOSE_TAPCP_IMPL
-#define VERBOSE_TAPCP_IMPL
-#endif
+void *
+casper_tapcp_open_listdev(struct tapcp_state *state)
+{
+  // Setup tapcp state
+  state->cmd = CASPER_TAPCP_CMD_LISTDEV;
+  state->ptr = (void *)CORE_INFO;
+  state->nleft = -1;
+  set_tftp_read((tftp_read_f)casper_tapcp_read_listdev);
+  return state;
+}
 
 void *
 casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
@@ -253,7 +378,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   // If device not found, return error
   if(!cip) {
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("did not find device in core info\n");
+    xil_printf("did not find device in core info\n");
 #endif
     return NULL;
   }
@@ -274,10 +399,10 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   // If slash, parse offset (and length)
   if(p && *p) {
     // Read hex value into cmd_off
-    p = hex2u32(p, &cmd_off);
+    p = hex_to_u32(p, &cmd_off);
     // If not at end of string
     if(*p) {
-      p = hex2u32(++p, &cmd_len);
+      p = hex_to_u32(++p, &cmd_len);
     }
   }
 #ifdef VERBOSE_TAPCP_IMPL
@@ -287,7 +412,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   // Bounds check
   if(cmd_off + cmd_len > (wb_len >> 2)) {
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("request too long\n");
+    xil_printf("request too long\n");
 #endif
     return NULL;
   }
