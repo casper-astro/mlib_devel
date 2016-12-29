@@ -44,6 +44,14 @@ OBJS += $(patsubst %.S, %.o, $(S_SOURCES))
 OBJS += $(patsubst %.s, %.o, $(s_SOURCES))
 LSCRIPT := -Tlscript.ld
 
+# Variables related to core_info data
+OBJCOPY = mb-objcopy
+OBJFMT = elf32-microblazeel
+OBJARCH = MicroBlaze
+core_info_BINARY = $(wildcard core_info.bin)
+OBJS += $(patsubst %.bin, %.o, $(core_info_BINARY))
+CFLAGS += -DEXTERN_CORE_INFO=$(words $(core_info_BINARY))
+
 CURRENT_DIR = $(shell pwd)
 DEPFILES := $(patsubst %.o, %.d, $(OBJS))
 LIBS := bsp/microblaze_0/lib/libxil.a
@@ -70,6 +78,9 @@ $(LIBS):
 
 %.o:%.s
 	$(CC) $(CC_FLAGS) $(CFLAGS) $(CFLAGS_PEDANTIC) -c $< -o $@ $(INCLUDEPATH)
+
+core_info.o: core_info.bin
+	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) $< $@
 
 symbols: $(EXEC)
 	mb-readelf -s $< | sort -rnk3 > $@

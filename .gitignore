@@ -2,6 +2,8 @@
 *.o
 
 /executable.elf
+core_info.tab
+core_info.bin
 
 /bsp/microblaze_0/include/*.h
 !/bsp/microblaze_0/include/xparameters.h
