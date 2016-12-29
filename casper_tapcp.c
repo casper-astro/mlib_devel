@@ -19,39 +19,37 @@
 //
 // Supported commands are (or will eventually be):
 //
-//   - `help` Returns a list of top level commands.  Format is the same
+//   - `help` [RO] Returns a list of top level commands.  Format is the same
 //     regardless of file transfer mode [TODO Do we want to send CRLF line
 //     terminators in netascii mode?].
 //
-//   - `listdev` Lists all devices supported by the currently running gateware
-//     design.  The offset, length, and type of each device is included in this
-//     listing.  In netascii mode this listing is returned as a human readable
-//     table.  In octet mode this listing is returned in the binary
-//     compressed/compiled form that is stored in memory.
+//   - `listdev` [RO] Lists all devices supported by the currently running
+//     gateware design.  The offset, length, and type of each device is
+//     included in this listing.  In netascii mode this listing is returned as
+//     a human readable table.  In octet mode this listing is returned in the
+//     binary compressed/compiled form that is stored in memory.
 //
-//   - `temp`  Sends the temperature of the FPGA.  In ascii mode this returns
-//     the temperature rounded down to the nearest tenth of a degree C.  In
-//     binary mode this returns a 4 byte single precision float in network byte
-//     order (big endian).
+//   - `temp` [RO] Sends the temperature of the FPGA.  In ascii mode this
+//     returns the temperature rounded down to the nearest tenth of a degree C.
+//     In binary mode this returns a 4 byte single precision float in network
+//     byte order (big endian).
 //
-//   - `dev/DEV_NAME[/OFFSET[/LENGTH]]` Accesses memory associated with
+//   - `dev/DEV_NAME[/OFFSET[/LENGTH]]`  Accesses memory associated with
 //     gateware device `DEV_NAME`.  `OFFSET` and `LENGTH`, when given, are
-//     in hexadecimal.  `OFFSET` defaults to 0.  `LENGTH` defaults to 4 for
-//     read and to length of data for write.  If they are not a multiple of 4,
-//     OFFSET is rounded down to the previous multiple of 4 and LENGTH is
-//     rounded up.
+//     in hexadecimal.  `OFFSET` is in 4-byte words and defaults to 0.
+//     `LENGTH` is a count of 4-byte words and defaults to 1 for read and
+//     to the length of data for write.
 //
-//   - `fpga/OFFSET[/LENGTH]]`  Accesses memory in the FPGA (i.e.
-//     AXI/Wishbone) address space.  `OFFSET` and `LENGTH`, when given, are in
-//     hexadecimal.  `LENGTH` defaults to 4 for read and to length of data for
-//     write.  If they are not a multiple of 4, OFFSET is rounded down to the
-//     previous multiple of 4 and LENGTH is rounded up.
+//   - `fpga/OFFSET[/LENGTH]]`  Accesses memory in the FPGA (i.e. AXI/Wishbone)
+//     address space.  `OFFSET` and `LENGTH`, when given, are in hexadecimal.
+//     `OFFSET` is in 4-byte words and defaults to 0.  `LENGTH` is a count of
+//     4-byte words and defaults to 1 for read and to the length of data for
+//     write.
 //
-//   - `cpu/OFFSET[/LENGTH]]`  Accesses memory in the CPU address space.
-//     `OFFSET` and `LENGTH` are always given in hexadecimal.  `LENGTH`
-//     defaults to 4 for read and to length of data for write.  If they are not
-//     a multiple of 4, OFFSET is rounded down to the previous multiple of 4
-//     and LENGTH is rounded up.
+//   - `cpu/ADDR[/LENGTH]]` [RO] Accesses memory in the CPU address space.
+//     `OFFSET` and `LENGTH`, when given, are in hexadecimal.  `ADDR` is a
+//     word address and defaults to 0.  `LENGTH` is a count of 4-byte words
+//     and defaults to 1 for read and to the length of data for write.
 //
 //   - `progdev/[TBD]`  A future command will be added to allow uploading a new
 //     bitstream.  The exact details are under development.
