@@ -82,6 +82,9 @@ $(LIBS):
 core_info.o: core_info.bin
 	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) $< $@
 
+core_info.bin: core_info.tab
+	ruby ./util/cit2bin.rb $< > $@
+
 symbols: $(EXEC)
 	mb-readelf -s $< | sort -rnk3 > $@
 
