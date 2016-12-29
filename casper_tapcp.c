@@ -66,10 +66,12 @@
 // terminal).  Reading with these commands in octet mode will return the
 // requested data in binary form in network byte order (big endian).
 
+#include <ctype.h>
 #include "platform.h"
 #include "lwip/apps/tftp_server.h"
 #include "casper_tftp.h"
 #include "casper_tapcp.h"
+#include "csl.h"
 
 // Help message
 static char tapcp_help_msg[] =
@@ -81,6 +83,46 @@ static char tapcp_help_msg[] =
 "  fpga/OFFSET[/LENGTH] - access FPGA memory space\n"
 "  cpu/OFFSET[/LENGTH]  - access CPU memory space\n"
 ;
+
+// core_info data
+#if defined(EXTERN_CORE_INFO) && EXTERN_CORE_INFO > 0
+extern const unsigned char _binary_core_info_bin_start;
+#define CORE_INFO (&_binary_core_info_bin_start)
+#else
+static const unsigned char core_info[] = {"\x00\x00"};
+#define CORE_INFO (core_info)
+#endif
+
+// Utility functions
+
+// Convert ASCII hex digits to uint32_t.
+static
+uint8_t *
+hex2u32(uint8_t *p, uint32_t *u32)
+{
+  uint8_t i;
+  uint8_t c;
+  if(p && *p) {
+    *u32 = 0;
+    // Process up to 8 hex digits
+    for(i=0; i<8; i++) {
+      c = *p;
+      if(!isxdigit(c)) {
+        return p;
+      }
+      *u32 <<= 4;
+      if(isdigit(c)) {
+        *u32 |= c - '0';
+      } else {
+        // Ensure c is lower case
+        c |= 0x20;
+        *u32 |= c - 'a' + 10;
+      }
+      p++;
+    }
+  }
+  return p;
+}
 
 // Read functions.
 static
@@ -171,5 +213,105 @@ casper_tapcp_open_temp(struct tapcp_state *state)
   // Setup tapcp state
   state->cmd = CASPER_TAPCP_CMD_TEMP;
   set_tftp_read((tftp_read_f)casper_tapcp_read_temp);
+  return state;
+}
+
+#ifndef VERBOSE_TAPCP_IMPL
+#define VERBOSE_TAPCP_IMPL
+#endif
+
+void *
+casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
+{
+  uint8_t i;
+  uint8_t *p = NULL;
+  const uint8_t *cip = NULL; // core_info payload
+  uint32_t wb_off  = 0; // From payload
+  uint32_t wb_len  = 0; // From payload
+  uint32_t cmd_off = 0; // From command line
+  uint32_t cmd_len = 1; // From command line
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("casper_tapcp_open_dev fname '%s'\n", fname);
+#endif
+
+  // Parse "command line"
+  //
+  // Look for slash
+  p = (uint8_t *)strchr(fname, '/');
+  if(p) {
+    // NUL terminate fname (violates const, temporarily)
+    *p = '\0';
+  }
+  // Look for device name
+  cip = find_key(CORE_INFO, (const uint8_t *)fname, NULL);
+  if(p) {
+    // Restore '/' (and const-ness)
+    *p++ = '/';
+  }
+
+  // If device not found, return error
+  if(!cip) {
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("did not find device in core info\n");
+#endif
+    return NULL;
+  }
+
+  // Get wb_offset and wb_len from payload
+  for(i=0; i<4; i++) {
+    wb_off <<= 8;
+    wb_off |= (*cip++ & 0xff);
+  }
+  for(i=0; i<4; i++) {
+    wb_len <<= 8;
+    wb_len |= (*cip++ & 0xff);
+  }
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("wb_off=%p wb_len=%x\n", wb_off, wb_len);
+#endif
+
+  // If slash, parse offset (and length)
+  if(p && *p) {
+    // Read hex value into cmd_off
+    p = hex2u32(p, &cmd_off);
+    // If not at end of string
+    if(*p) {
+      p = hex2u32(++p, &cmd_len);
+    }
+  }
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("cmd_off=%p cmd_len=%x\n", cmd_off, cmd_len);
+#endif
+
+  // Bounds check
+  if(cmd_off + cmd_len > (wb_len >> 2)) {
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("request too long\n");
+#endif
+    return NULL;
+  }
+
+  // Setup tapcp state
+  state->cmd = CASPER_TAPCP_CMD_MEM;
+  // Treat all pointer terms as ints, then cast result to pointer.
+  state->ptr = (uint32_t *)(
+      XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR +
+      (wb_off & ~3) + (cmd_off << 2));
+  // nleft is in bytes
+  state->nleft = cmd_len << 2;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("ptr=%p\n", state->ptr);
+#endif
+
+#if 0
+  if(!state->write) {
+    set_tftp_read((tftp_read_f)casper_tapcp_read_mem);
+  } else if(!(wb_off & 1)) {
+    set_tftp_write((tftp_read_f)casper_tapcp_write_mem);
+  }
+#endif
+
   return state;
 }

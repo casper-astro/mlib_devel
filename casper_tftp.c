@@ -95,7 +95,7 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
   // If filename starts with "dev/"
   } else if(!strncmp("dev/", fname, strlen("dev/"))) {
     tapcp_state.cmd = CASPER_TAPCP_CMD_MEM;
-    handle = NULL; // TODO
+    handle = casper_tapcp_open_dev(&tapcp_state, fname+strlen("dev/"));
 
   // If filename starts with "fpga/"
   } else if(!strncmp("fpga/", fname, strlen("fpga/"))) {
