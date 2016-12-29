@@ -20,7 +20,7 @@
 
 struct tapcp_state {
   uint8_t binary; // Flag indicating octect/binary mode
-//uint8_t write;  // Flag indicating a write operation 
+  uint8_t write;  // Flag indicating a write operation
   uint8_t cmd;    // Command type being processed
   void *ptr;      // Pointer to next location being accessed
   size_t nleft;   // Number of values still to access (cmd specific interp)

@@ -73,7 +73,7 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
 
   // If mode starts with 'o' assume it's "octet"
   tapcp_state.binary = (mode[0] == 'o');
-//tapcp_state.write = write;
+  tapcp_state.write = write;
   // Set default read/write functions to ones that return error.
   casper_tftp_context.read = casper_tftp_read_error;
   casper_tftp_context.write = casper_tftp_write_error;
