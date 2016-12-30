@@ -48,9 +48,14 @@ LSCRIPT := -Tlscript.ld
 OBJCOPY = mb-objcopy
 OBJFMT = elf32-microblazeel
 OBJARCH = MicroBlaze
-core_info_BINARY = $(wildcard core_info.bin)
-OBJS += $(patsubst %.bin, %.o, $(core_info_BINARY))
-CFLAGS += -DEXTERN_CORE_INFO=$(words $(core_info_BINARY))
+
+# Use core_info if .bin or .tab exists, otherwise use dummy_info.bin
+core_info_BINARY = $(word 1, \
+									 $(wildcard core_info.bin core_info.tab) \
+									 dummy_info.bin)
+
+OBJS += $(patsubst %.bin, %.o, \
+				$(patsubst %.tab, %.o, $(core_info_BINARY)))
 
 CURRENT_DIR = $(shell pwd)
 DEPFILES := $(patsubst %.o, %.d, $(OBJS))
@@ -82,6 +87,11 @@ $(LIBS):
 %.o:%.s
 	$(CC) $(CC_FLAGS) $(CFLAGS) $(CFLAGS_PEDANTIC) -c $< -o $@ $(INCLUDEPATH)
 
+dummy_info.o: dummy_info.bin
+	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) --redefine-sym \
+		_binary_dummy_info_bin_start=_binary_core_info_bin_start \
+		$< $@
+
 core_info.o: core_info.bin
 	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) $< $@
 
@@ -93,6 +103,9 @@ symbols: $(EXEC)
 
 tags:
 	ctags -R
+
+foo:
+	echo = $(wildcard core_info.bin core_info.tab) dummy_info.bin
 
 clean:
 	$(MAKE) -C bsp clean

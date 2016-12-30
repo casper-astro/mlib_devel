@@ -84,16 +84,9 @@ static char tapcp_help_msg[] =
 "  cpu/OFFSET[/LENGTH]  - access CPU memory space\n"
 ;
 
-// core_info data
-// TODO Make this always external and link with either user core_info.bin or
-// dummy core_info.bin.
-#if defined(EXTERN_CORE_INFO) && EXTERN_CORE_INFO > 0
+// Externally linked core_info data
 extern const unsigned char _binary_core_info_bin_start;
 #define CORE_INFO (&_binary_core_info_bin_start)
-#else
-static const unsigned char core_info[] = {"\x00\x00"};
-#define CORE_INFO (core_info)
-#endif
 
 // Utility functions
 

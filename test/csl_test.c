@@ -2,21 +2,8 @@
 
 #include "csl.h"
 
-#if defined(EXTERN_CORE_INFO) && EXTERN_CORE_INFO > 0
 extern unsigned char _binary_core_info_bin_start;
 #define CORE_INFO (&_binary_core_info_bin_start)
-#else
-static unsigned char core_info[] = {
-"\x01\x0D" "adc16_wb_ram1" "\x01"
-"\x0C\x01"             "2" "\x02"
-"\x00\x09" "eq_0_gain"     "\x03"
-"\x03\x06"    "1_gain"     "\x04"
-"\x01\x0C"  "th_0_bframes" "\x05"
-"\x06\x04"       "core"    "\x06"
-"\x00\x00"
-};
-#define CORE_INFO (core_info)
-#endif
 
 int
 main(int argc, char *argv[])
