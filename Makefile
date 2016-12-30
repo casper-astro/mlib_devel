@@ -61,6 +61,7 @@ CURRENT_DIR = $(shell pwd)
 DEPFILES := $(patsubst %.o, %.d, $(OBJS))
 LIBS := bsp/microblaze_0/lib/libxil.a
 EXEC := executable.elf
+MEM = $(patsubst %.elf, %.mem, $(EXEC))
 
 INCLUDEPATH := -Ibsp/microblaze_0/include -I. -Ijam_lwip/include -Ilwip/src/include
 LIBPATH := -Lbsp/microblaze_0/lib
@@ -71,6 +72,9 @@ all: symbols
 
 $(EXEC): $(LIBS) $(OBJS) $(INCLUDES)
 	$(CC) -o $@ $(OBJS) $(CC_FLAGS) $(CFLAGS) $(LN_FLAGS) $(LIBPATH) $(LSCRIPT)
+
+$(MEM): $(EXEC)
+	data2mem -bd $< -der -o m $@
 
 $(LIBS):
 	$(MAKE) -C bsp

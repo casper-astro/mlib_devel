@@ -1,4 +1,5 @@
 *.d
+*.mem
 *.o
 
 /executable.elf
