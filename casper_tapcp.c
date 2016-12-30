@@ -126,7 +126,8 @@ hex_to_u32(uint8_t *p, uint32_t *u32)
   return p;
 }
 
-// Convert uint32_t to ASCII hex digits (no leading 0's)
+// Convert uint32_t to ASCII hex digits.
+// Leading zeros are included if do_zeros is non-zero.
 static
 uint8_t *
 u32_to_hex(const uint32_t u32, uint8_t *p, uint8_t do_zeros)
@@ -220,14 +221,17 @@ casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
 
 static
 int
-casper_tapcp_read_listdev(struct tapcp_state *state, void *buf, int bytes)
+casper_tapcp_read_listdev_ascii(
+    struct tapcp_state *state, void *buf, int bytes)
 {
   // We don't know how long our lines will be so we unpack and buffer them
   // locally (in a static buffer) before sending them.  Since we have to fill
-  // the output buffer completely excepot to signal end of data, we will often
-  // have to split lines across two calls.  state->nleft stores the number of
-  // bytes already output, zero if there is no pending line, or -1 if this is
-  // the first line.  state->ptr points to the next core info entry.
+  // the output buffer completely except to signal end of data, we will often
+  // have to split lines across two calls.
+  //
+  // state->nleft stores the number of bytes already output, zero if there is
+  // no pending line, or -1 if this is the first line.  state->ptr points to
+  // the next core info entry.
   //
   // Output lines (and max lengths) are:
   //
@@ -240,7 +244,7 @@ casper_tapcp_read_listdev(struct tapcp_state *state, void *buf, int bytes)
   uint32_t n;
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("casper_tapcp_read_listdev(%p, %p, %d) = %d/%d\n",
+  xil_printf("casper_tapcp_read_listdev_ascii(%p, %p, %d) = %d/%d\n",
       state, buf, bytes, len, state->nleft);
 #endif
 
@@ -311,6 +315,51 @@ casper_tapcp_read_listdev(struct tapcp_state *state, void *buf, int bytes)
   return len;
 }
 
+static
+int
+casper_tapcp_read_listdev_binary(
+    struct tapcp_state *state, void *buf, int bytes)
+{
+  // state->nleft stores the number of bytes remaining in current entry, zero
+  // if no bytes remain, or -1 if this is the first entry.  state->ptr points
+  // to the next core info byte to send.
+  uint8_t payload_len = *CORE_INFO;
+  uint8_t done = 0;
+  int len = 0;
+
+  while(len < bytes && !done) {
+    // If we need to start a new entry
+    if(state->nleft <= 0) {
+      // Calc num bytes to end for this entry, which could be the last one
+      state->nleft = 2;
+      // If tail is non-zero
+      if(((uint8_t *)state->ptr)[1]) {
+        // Add its length and the payload length
+        state->nleft += ((uint8_t *)state->ptr)[1] + payload_len;
+      } else {
+        // After this we're done!
+        done = 1;
+      }
+    }
+
+    // Copy data to buf
+    while(len < bytes && state->nleft) {
+      // Copy byte
+      *(uint8_t *)buf++ = *(uint8_t *)state->ptr++;
+      // Adjust len and nleft
+      len++;
+      state->nleft--;
+    }
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("casper_tapcp_read_listdev_binary(%p, %p, %d) = %d\n",
+      state, buf, bytes, len);
+#endif
+
+  return len;
+}
+
 // Write helpers
 
 // Open helpers
@@ -341,7 +390,11 @@ casper_tapcp_open_listdev(struct tapcp_state *state)
   state->cmd = CASPER_TAPCP_CMD_LISTDEV;
   state->ptr = (void *)CORE_INFO;
   state->nleft = -1;
-  set_tftp_read((tftp_read_f)casper_tapcp_read_listdev);
+  if(state->binary) {
+    set_tftp_read((tftp_read_f)casper_tapcp_read_listdev_binary);
+  } else {
+    set_tftp_read((tftp_read_f)casper_tapcp_read_listdev_ascii);
+  }
   return state;
 }
 
