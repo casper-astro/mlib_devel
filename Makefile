@@ -73,6 +73,9 @@ $(LIBS):
 %.o:%.c
 	$(CC) $(CC_FLAGS) $(CFLAGS) $(CFLAGS_PEDANTIC) -c $< -o $@ $(INCLUDEPATH)
 
+%.i:%.c
+	$(CC) $(CC_FLAGS) $(CFLAGS) $(CFLAGS_PEDANTIC) -E $< -o $@ $(INCLUDEPATH)
+
 %.o:%.S
 	$(CC) $(CC_FLAGS) $(CFLAGS) $(CFLAGS_PEDANTIC) -c $< -o $@ $(INCLUDEPATH)
 
