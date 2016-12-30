@@ -15,9 +15,20 @@ _HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x800;
 
 /* Define Memories in the system */
 
+/*
+ * Memory map:
+ *
+ *     START   END   Description (size)
+ *     =====  =====  ==================
+ *     00000  0004F  Reserved (80 bytes)
+ *     00050  1EFFF  Main Memory (128 KB - 4KB - 80)
+ *     1F000  1FFFF  Core info area (4 KB)
+ */
+
 MEMORY
 {
-   microblaze_0_local_memory_ilmb_bram_if_cntlr_Mem_microblaze_0_local_memory_dlmb_bram_if_cntlr_Mem : ORIGIN = 0x50, LENGTH = 0x1FFB0
+   microblaze_0_local_memory_ilmb_bram_if_cntlr_Mem_microblaze_0_local_memory_dlmb_bram_if_cntlr_Mem : ORIGIN = 0x00050, LENGTH = 0x1EFB0
+   core_info_mem :     ORIGIN = 0x1F000, LENGTH = 0x01000
 }
 
 /* Specify the default entry point to the program */
@@ -208,5 +219,11 @@ _SDA2_BASE_ = __sdata2_start + ((__sbss2_end - __sdata2_start) / 2 );
 } > microblaze_0_local_memory_ilmb_bram_if_cntlr_Mem_microblaze_0_local_memory_dlmb_bram_if_cntlr_Mem
 
 _end = .;
-}
 
+.core_info ORIGIN(core_info_mem) : {
+   _core_info_size_be = .;
+   _core_info = . + 2;
+   *(.core_info)
+} > core_info_mem
+
+}

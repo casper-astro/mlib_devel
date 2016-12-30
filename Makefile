@@ -88,12 +88,22 @@ $(LIBS):
 	$(CC) $(CC_FLAGS) $(CFLAGS) $(CFLAGS_PEDANTIC) -c $< -o $@ $(INCLUDEPATH)
 
 dummy_info.o: dummy_info.bin
-	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) --redefine-sym \
-		_binary_dummy_info_bin_start=_binary_core_info_bin_start \
+	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) \
+		--redefine-sym \
+		_binary_dummy_info_bin_start=_core_info \
+		-N _binary_dummy_info_bin_end \
+		-N _binary_dummy_info_bin_size \
+		--rename-section .data=.core_info \
 		$< $@
 
 core_info.o: core_info.bin
-	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) $< $@
+	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) \
+		--redefine-sym \
+		_binary_core_info_bin_start=_core_info \
+		-N _binary_core_info_bin_end \
+		-N _binary_core_info_bin_size \
+		--rename-section .data=.core_info \
+		$< $@
 
 core_info.bin: core_info.tab
 	ruby ./util/cit2bin.rb $< > $@

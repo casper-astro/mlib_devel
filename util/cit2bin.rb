@@ -43,7 +43,8 @@ lines.map! do |l|
   [dev, [offset, length, type]]
 end
 
-csl = StringIO.new
+cslio = StringIO.new
+cslio.set_encoding('binary')
 
 payload_length = [0,0,0].pack('NNc').length
 
@@ -61,15 +62,16 @@ lines.each do |dev, entry|
   tail = dev[reuse..-1]
   entry.unshift(tail)
   entry.unshift(tail.length)
-  entry.unshift(csl.pos > 0 ? reuse : payload_length)
-  csl.print entry.pack('cca*NNc')
+  entry.unshift(cslio.pos > 0 ? reuse : payload_length)
+  cslio.print entry.pack('cca*NNc')
   #STDERR.puts entry.inspect
 
   prev[reuse..-1] = tail
 end
 
 # Output list terminator
-csl.print "\0\0"
+cslio.print "\0\0"
 
 # Output CSL
-print csl.string
+print [cslio.length].pack('n')
+print cslio.string

@@ -85,8 +85,8 @@ static char tapcp_help_msg[] =
 ;
 
 // Externally linked core_info data
-extern const unsigned char _binary_core_info_bin_start;
-#define CORE_INFO (&_binary_core_info_bin_start)
+extern const unsigned char _core_info;
+#define CORE_INFO (&_core_info)
 
 // Utility functions
 
