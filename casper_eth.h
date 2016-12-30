@@ -126,7 +126,7 @@
 
 // Can be used as pointer to RX buffer size (as uint16_t)
 #define RX_BUF_SIZE_PTR16(p) \
-  (((uint16_t *)p) + ETH_MAC_REG16_RX_BUFFER_SIZE)
+  (((volatile uint16_t *)p) + ETH_MAC_REG16_RX_BUFFER_SIZE)
 
 // Can be used as pointer to TX buffer itself (as uint8_t)
 #define TX_BUF_PTR8(p) \
@@ -138,7 +138,7 @@
 
 // Can be used as pointer to TX buffer size (as uint16_t)
 #define TX_BUF_SIZE_PTR16(p) \
-  (((uint16_t *)p) + ETH_MAC_REG16_TX_BUFFER_SIZE)
+  (((volatile uint16_t *)p) + ETH_MAC_REG16_TX_BUFFER_SIZE)
 
 // The data received in the RX buffer needs to be 4-byte byte-swapped into
 // another region of 4-byte aligned memory.  If the RX buffer were writable, we

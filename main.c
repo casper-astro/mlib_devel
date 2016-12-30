@@ -57,8 +57,11 @@
 
 int main()
 {
-    char s[4] = {'\x80', '\x00', '\x01', '\x02'};
-    int endian = *((int *)s);
+    const union {
+      unsigned char s[4];
+      int32_t i;
+    } endian = { { 0x80, 0, 1, 2 } };
+
     int i, j;
 #if 0
     int rx_size;
@@ -311,7 +314,7 @@ int main()
 
           fpga_temp = (int)(10*get_fpga_temp());
           xil_printf("Hello %s endian world at %d.%d C [ms %d]\n",
-              endian < 0 ? "BIG" : "little",
+              endian.i < 0 ? "BIG" : "little",
               fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
         }
 
