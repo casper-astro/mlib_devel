@@ -214,13 +214,13 @@ casper_netif_status_callback(struct netif *netif)
 
   if(netif->ip_addr.addr != 0) {
     if((rc = casper_tftp_init()) != ERR_OK) {
-      xil_printf("casper_tftp_init() failed %d :(\n", rc);
+      xil_printf("TAPCP server startup failed (%d)\n", rc);
     } else {
-      xil_printf("casper_tftp_init() OK :)\n");
+      xil_printf("TAPCP server ready\n");
     }
   }
 #ifdef VERBOSE_ETH_IMPL
-  else print("no ip address, NOT starting tftp\n");
+  else print("no ip address, NOT starting TAPCP\n");
 #endif // VERBOSE_ETH_IMPL
 }
 
