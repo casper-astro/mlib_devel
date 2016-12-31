@@ -1,5 +1,7 @@
 // casper_tapcp.c - CASPER TAPCP server implementation.
 //
+// TAPCP is an acronym for "TFTP Access for Program and Control Protocol".
+//
 // A CASPER TAPCP server is a TFTP server that exposes various aspects of its
 // memory space and other services to TFTP clients.  This is done by mapping
 // the memory and other services into a virtual filesystem that is amenable to
@@ -34,22 +36,25 @@
 //     In binary mode this returns a 4 byte single precision float in network
 //     byte order (big endian).
 //
-//   - `dev/DEV_NAME[/OFFSET[/LENGTH]]`  Accesses memory associated with
-//     gateware device `DEV_NAME`.  `OFFSET` and `LENGTH`, when given, are
-//     in hexadecimal.  `OFFSET` is in 4-byte words and defaults to 0.
-//     `LENGTH` is a count of 4-byte words and defaults to 1 for read and
-//     to the length of data for write.
+//   - `dev/DEV_NAME[/WORD_OFFSET[/NWORDS]]`  Accesses memory associated with
+//     gateware device `DEV_NAME`.  `WORD_OFFSET` and `NWORDS`, when given, are
+//     in hexadecimal.  `WORD_OFFSET` is in 4-byte words and defaults to 0.
+//     `NWORDS` is a count of 4-byte words to read and defaults to 1.  `NWORDS`
+//     is ignored on writes because the amount of data written is determined by
+//     the amount of data sent by the client.
 //
-//   - `fpga/OFFSET[/LENGTH]]`  Accesses memory in the FPGA (i.e. AXI/Wishbone)
-//     address space.  `OFFSET` and `LENGTH`, when given, are in hexadecimal.
-//     `OFFSET` is in 4-byte words and defaults to 0.  `LENGTH` is a count of
-//     4-byte words and defaults to 1 for read and to the length of data for
-//     write.
+//   - `fpga/WORD_OFFSET[/NWORDS]]`  Accesses memory in the FPGA gateware (i.e.
+//     AXI/Wishbone) address space.  `WORD_OFFSET` and `NWORDS`, when given,
+//     are in hexadecimal.  `WORD_OFFSET` is in 4-byte words.  `NWORDS` is a
+//     count of 4-byte words to read and defaults to 1.  `NWORDS` is ignored on
+//     writes because the amount of data written is determined by the amount of
+//     data sent by the client.
 //
-//   - `cpu/ADDR[/LENGTH]]` [RO] Accesses memory in the CPU address space.
-//     `OFFSET` and `LENGTH`, when given, are in hexadecimal.  `ADDR` is a
-//     word address and defaults to 0.  `LENGTH` is a count of 4-byte words
-//     and defaults to 1 for read and to the length of data for write.
+//   - `cpu/BYTE_ADDR[/NBYTES]]` [RO] Accesses memory in the CPU address space.
+//     `BYTE_ADDR` and `NBYTES`, when given, are in hexadecimal.  `BYTE_ADDR`
+//     is a byte address.  `NBYTES` is a count of bytes to read and defaults to
+//     1.  `NBYTES` is ignored on writes because the amount of data written is
+//     determined by the amount of data sent by the client.
 //
 //   - `progdev/[TBD]`  A future command will be added to allow uploading a new
 //     bitstream.  The exact details are under development.
@@ -57,11 +62,11 @@
 //   - `flash/[TBD]` A future command will be added to access the FLASH device
 //     attached to the FPGA.
 //
-// The `help`, `listdev`, and `temp` commands are read-only and can only be
-// used with "get" operations.  Trying to "put" to them will result in an error
-// being returned to the client.
+// The `help`, `listdev`, `temp`, and `cpu` commands are read-only and can only
+// be used with "get" operations.  Trying to "put" to them will result in an
+// error being returned to the client.
 //
-// Reading with the `dev`, `wb`, and `mem` commands in netascii mode will
+// Reading with the `dev`, `fpga`, and `mem` commands in netascii mode will
 // return data in a hex dump like format (i.e. suitable for display in a
 // terminal).  Reading with these commands in octet mode will return the
 // requested data in binary form in network byte order (big endian).
