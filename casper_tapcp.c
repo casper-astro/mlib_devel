@@ -155,7 +155,7 @@ casper_tapcp_read_help(struct tapcp_state *state, void *buf, int bytes)
   int len = bytes < state->nleft ? bytes : state->nleft;
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("casper_tapcp_read_help(%p, %p, %d) = %d/%d\n",
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
       state, buf, bytes, len, state->nleft);
 #endif
 
@@ -209,7 +209,7 @@ casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
   }
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("casper_tapcp_temp_help(%p, %p, %d) = %d\n",
+  xil_printf("%s(%p, %p, %d) = %d\n", __FUNCTION__,
       state, buf, bytes, len);
 #endif
 
@@ -241,7 +241,7 @@ casper_tapcp_read_listdev_ascii(
   uint32_t n;
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("casper_tapcp_read_listdev_ascii(%p, %p, %d) = %d/%d\n",
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
       state, buf, bytes, len, state->nleft);
 #endif
 
@@ -326,7 +326,7 @@ casper_tapcp_read_mem_bytes_binary(
   }
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("casper_tapcp_read_mem_bytes_binary(%p, %p, %d) = %d/%d\n",
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
       state, buf, bytes, len, state->nleft);
 #endif
 
@@ -385,7 +385,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   uint32_t cmd_len = 1; // From command line
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("casper_tapcp_open_dev fname '%s'\n", fname);
+  xil_printf("%s fname '%s'\n", __FUNCTION__, fname);
 #endif
 
   // Parse "command line"
