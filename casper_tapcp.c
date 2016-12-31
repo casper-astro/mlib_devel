@@ -333,6 +333,40 @@ casper_tapcp_read_mem_bytes_binary(
   return len;
 }
 
+// Sends wishbone words from state->ptr until len == bytes or
+// state->nleft == 0.  This is distinct from `..._read_mem_bytes_binary`
+// because reads from FPGA devices are always word aligned so we can read a
+// word at a time and because the wishbone bus currently byte swaps the 32 bit
+// data for us so we need to undo this byte swap.
+static
+int
+casper_tapcp_read_wb_words_binary(
+    struct tapcp_state *state, void *buf, int bytes)
+{
+  static uint32_t word = 0;
+  int len = 0;
+
+  while(len < bytes && state->nleft > 0) {
+    switch(state->nleft & 3) {
+      case 0: word = *(uint32_t *)state->ptr; // Read next word to send
+              state->ptr += sizeof(uint32_t); // Advance pointer
+              *(uint8_t *)buf++ = (word >> 24) & 0xff; break;
+      case 3: *(uint8_t *)buf++ = (word >> 16) & 0xff; break;
+      case 2: *(uint8_t *)buf++ = (word >>  8) & 0xff; break;
+      case 1: *(uint8_t *)buf++ = (word      ) & 0xff; break;
+    }
+    state->nleft--;
+    len++;
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
+      state, buf, bytes, len, state->nleft);
+#endif
+
+  return len;
+}
+
 // Write helpers
 
 // Open helpers
@@ -393,11 +427,13 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   // Look for slash
   p = (uint8_t *)strchr(fname, '/');
   if(p) {
-    // NUL terminate fname (violates const, temporarily)
+    // NUL terminate fname (violate const, temporarily)
     *p = '\0';
   }
+
   // Look for device name
   cip = find_key(CORE_INFO, (const uint8_t *)fname, NULL);
+
   if(p) {
     // Restore '/' (and const-ness)
     *p++ = '/';
@@ -424,7 +460,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   xil_printf("wb_off=%p wb_len=%x\n", wb_off, wb_len);
 #endif
 
-  // If slash, parse offset (and length)
+  // If slash was found and characters follow, parse offset (and length)
   if(p && *p) {
     // Read hex value into cmd_off
     p = hex_to_u32(p, &cmd_off);
@@ -454,8 +490,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 
   // Setup tapcp state
   state->cmd = CASPER_TAPCP_CMD_MEM;
-  // Treat all pointer terms as ints, then cast result to pointer.
-  state->ptr = (uint32_t *)(
+  // Treat all terms as ints, then cast result to pointer.
+  state->ptr = (void *)(
       XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR +
       (wb_off & ~3) + (cmd_off << 2));
   // nleft is in bytes
@@ -465,13 +501,15 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   xil_printf("ptr=%p\n", state->ptr);
 #endif
 
-#if 0
   if(!state->write) {
-    set_tftp_read((tftp_read_f)casper_tapcp_read_mem);
+    set_tftp_read((tftp_read_f)casper_tapcp_read_wb_words_binary);
   } else if(!(wb_off & 1)) {
+#if 1 // TODO
+    return NULL;
+#else
     set_tftp_write((tftp_read_f)casper_tapcp_write_mem);
-  }
 #endif
+  }
 
   return state;
 }
