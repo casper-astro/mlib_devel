@@ -128,6 +128,37 @@ hex_to_u32(uint8_t *p, uint32_t *u32)
   return p;
 }
 
+// Convert uint8_t `u8` to ASCII hex digits in buffer pointed to by `p`.
+// Leading zero included if (do_zeros >> 4) is non-zero.
+// Trailing zero included if leading digit or (do_zeros & 0xf) is non-zero.
+static
+uint8_t *
+u8_to_hex(const uint8_t u8, uint8_t *p, uint8_t do_zeros)
+{
+  uint8_t c;
+
+  c = (u8 >> 4) & 0xf;
+  if(c || (do_zeros >> 4)) {
+    if(c > 9) {
+      *p++ = c - 10 + 'A';
+    } else {
+      *p++ = c      + '0';
+    }
+    do_zeros |= c;
+  }
+
+  c = u8 & 0xf;
+  if(c || (do_zeros & 0xf)) {
+    if(c > 9) {
+      *p++ = c - 10 + 'A';
+    } else {
+      *p++ = c      + '0';
+    }
+  }
+
+  return p;
+}
+
 // Convert uint32_t to ASCII hex digits.
 // Leading zeros are included if do_zeros is non-zero.
 static
@@ -137,16 +168,10 @@ u32_to_hex(const uint32_t u32, uint8_t *p, uint8_t do_zeros)
   uint8_t i;
   uint8_t c;
 
-  for(i=0; i<8; i++) {
-    c = (u32 >> (28 - (i<<2))) & 0xf;
-    if(c || do_zeros || i == 7) {
-      if(c > 9) {
-        *p++ = c - 10 + 'A';
-      } else {
-        *p++ = c      + '0';
-      }
-      do_zeros |= c;
-    }
+  for(i=0; i<4; i++) {
+    c = (u32 >> (24 - (i<<3))) & 0xff;
+    p = u8_to_hex(c, p, (do_zeros ? 0x11 : (i == 3 ? 1 : 0)));
+    do_zeros |= c;
   }
 
   return p;
