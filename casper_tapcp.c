@@ -221,6 +221,13 @@ casper_tapcp_read_temp(struct tapcp_state *state, void *buf, int bytes)
   return len;
 }
 
+// Buffer for ASCII output lines.
+// Size is set by max length of ASCII listdev:
+//
+//     DEV_NAME "\t" MODE "\t" OFFSET "\t" SIZE "\t" TYPE "\n"
+//       255     1    1    1     8     1     8   1    2    1
+static uint8_t line_buf[256+2+9+9+3];
+
 static
 int
 casper_tapcp_read_listdev_ascii(
@@ -231,36 +238,30 @@ casper_tapcp_read_listdev_ascii(
   // the output buffer completely except to signal end of data, we will often
   // have to split lines across two calls.
   //
-  // state->nleft stores the number of bytes already output, zero if there is
-  // no pending line, or -1 if this is the first line.  state->ptr points to
-  // the next core info entry.
-  //
-  // Output lines (and max lengths) are:
-  //
-  //     DEV_NAME "\t" MODE "\t" OFFSET "\t" SIZE "\t" TYPE "\n"
-  //       255     1    1    1     8     1     8   1    2    1
+  // state->lidx stores the number of line_buf bytes already output, zero if
+  // there is no pending line, or -1 if this is the first line.  state->ptr
+  // points to the next core info entry.
 
-  static uint8_t line_buf[256+2+9+9+3];
   uint8_t *plb;
   int len = 0;
   uint32_t n;
 
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
-      state, buf, bytes, len, state->nleft);
+      state, buf, bytes, len, state->lidx);
 #endif
 
   while(len < bytes) {
     // If need to start a new line
-    if(state->nleft <= 0) {
+    if(state->lidx <= 0) {
       // Init
       plb = line_buf;
       // If not first line, reuse characters
-      if(state->nleft == 0) {
+      if(state->lidx == 0) {
         plb += *(uint8_t *)state->ptr;
       }
       state->ptr++;
-      state->nleft = 0;
+      state->lidx = 0;
       // Get tail length
       n = *(uint8_t *)state->ptr++;
       // If tail is 0, all done!
@@ -297,7 +298,7 @@ casper_tapcp_read_listdev_ascii(
     }
 
     // Copy data to buf
-    plb = line_buf + state->nleft;
+    plb = line_buf + state->lidx;
     while(len < bytes) {
       // Copy byte
       *(uint8_t *)buf++ = *plb;
@@ -305,10 +306,10 @@ casper_tapcp_read_listdev_ascii(
       len++;
       // If end of line
       if(*plb == '\n') {
-        state->nleft = 0;
+        state->lidx = 0;
         break;
       } else {
-        state->nleft++;
+        state->lidx++;
       }
       plb++;
     }
@@ -403,7 +404,7 @@ casper_tapcp_open_listdev(struct tapcp_state *state)
     set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_binary);
   } else {
     state->ptr = (void *)CORE_INFO;
-    state->nleft = -1;
+    state->lidx = -1;
     set_tftp_read((tftp_read_f)casper_tapcp_read_listdev_ascii);
   }
   return state;

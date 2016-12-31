@@ -11,6 +11,7 @@ struct tapcp_state {
   uint8_t write;  // Flag indicating a write operation
   void *ptr;      // Pointer to next location being accessed
   int nleft;      // Number of values still to access (cmd specific interp)
+  int16_t lidx;   // Index of next byte in line buffer (cmd specific interp)
 };
 
 // Open functions
