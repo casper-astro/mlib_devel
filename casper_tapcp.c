@@ -39,9 +39,10 @@
 //   - `dev/DEV_NAME[/WORD_OFFSET[/NWORDS]]`  Accesses memory associated with
 //     gateware device `DEV_NAME`.  `WORD_OFFSET` and `NWORDS`, when given, are
 //     in hexadecimal.  `WORD_OFFSET` is in 4-byte words and defaults to 0.
-//     `NWORDS` is a count of 4-byte words to read and defaults to 1.  `NWORDS`
-//     is ignored on writes because the amount of data written is determined by
-//     the amount of data sent by the client.
+//     `NWORDS` is a count of 4-byte words to read and defaults to 0, meaning
+//     read all words from `WORD_OFFSET` to end of the given device's memory.
+//     `NWORDS` is ignored on writes because the amount of data written is
+//     determined by the amount of data sent by the client.
 //
 //   - `fpga/WORD_OFFSET[/NWORDS]]`  Accesses memory in the FPGA gateware (i.e.
 //     AXI/Wishbone) address space.  `WORD_OFFSET` and `NWORDS`, when given,
@@ -514,7 +515,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   uint32_t fpga_off  = 0; // From payload
   uint32_t fpga_len  = 0; // From payload
   uint32_t cmd_off = 0; // From command line
-  uint32_t cmd_len = 1; // From command line
+  uint32_t cmd_len = 0; // From command line
 
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("%s fname '%s'\n", __FUNCTION__, fname);
@@ -567,6 +568,18 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
       p = hex_to_u32(++p, &cmd_len);
     }
   }
+
+  // Zero or not given length means all of it starting from cmd_offset
+  if(cmd_len == 0) {
+    cmd_len = (fpga_len >> 2) - cmd_off;
+    // If nothing left after cmd_offset
+    if(cmd_len == 0) {
+#ifdef VERBOSE_TAPCP_IMPL
+      xil_printf("request too short\n");
+#endif
+    }
+  }
+
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("cmd_off=%p cmd_len=%x\n", cmd_off, cmd_len);
 #endif
@@ -575,13 +588,6 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   if(cmd_off + cmd_len > (fpga_len >> 2)) {
 #ifdef VERBOSE_TAPCP_IMPL
     xil_printf("request too long\n");
-#endif
-    return NULL;
-  }
-
-  if(cmd_len == 0) {
-#ifdef VERBOSE_TAPCP_IMPL
-    xil_printf("request too short\n");
 #endif
     return NULL;
   }
