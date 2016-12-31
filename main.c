@@ -57,11 +57,6 @@
 
 int main()
 {
-    const union {
-      unsigned char s[4];
-      int32_t i;
-    } endian = { { 0x80, 0, 1, 2 } };
-
     int i, j;
 #if 0
     int rx_size;
@@ -313,13 +308,9 @@ int main()
           next_ms = curr_ms + 10000;
 
           fpga_temp = (int)(10*get_fpga_temp());
-          xil_printf("Hello %s endian world at %d.%d C [ms %d]\n",
-              endian.i < 0 ? "BIG" : "little",
+          xil_printf("FPGA at %d.%d C [ms %d]\n",
               fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
         }
-
-        // Sleep for a short time (TODO why sleep at all really?)
-        usleep(100);
     }
 
     // Should "never" get here
