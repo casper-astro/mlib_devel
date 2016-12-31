@@ -36,7 +36,7 @@
 //     In binary mode this returns a 4 byte single precision float in network
 //     byte order (big endian).
 //
-//   - `dev/DEV_NAME[/WORD_OFFSET[/NWORDS]]`  Accesses memory associated with
+//   - `dev/DEV_NAME[.WORD_OFFSET[.NWORDS]]`  Accesses memory associated with
 //     gateware device `DEV_NAME`.  `WORD_OFFSET` and `NWORDS`, when given, are
 //     in hexadecimal.  `WORD_OFFSET` is in 4-byte words and defaults to 0.
 //     `NWORDS` is a count of 4-byte words to read and defaults to 0, meaning
@@ -44,23 +44,23 @@
 //     `NWORDS` is ignored on writes because the amount of data written is
 //     determined by the amount of data sent by the client.
 //
-//   - `fpga/WORD_OFFSET[/NWORDS]]`  Accesses memory in the FPGA gateware (i.e.
-//     AXI/Wishbone) address space.  `WORD_OFFSET` and `NWORDS`, when given,
-//     are in hexadecimal.  `WORD_OFFSET` is in 4-byte words.  `NWORDS` is a
-//     count of 4-byte words to read and defaults to 1.  `NWORDS` is ignored on
-//     writes because the amount of data written is determined by the amount of
-//     data sent by the client.
+//   - `fpga.WORD_OFFSET[.NWORDS]`  Accesses memory in the FPGA gateware device
+//     address space.  `WORD_OFFSET` and `NWORDS`, when given, are in
+//     hexadecimal.  `WORD_OFFSET` is in 4-byte words.  `NWORDS` is a count of
+//     4-byte words to read and defaults to 1.  `NWORDS` is ignored on writes
+//     because the amount of data written is determined by the amount of data
+//     sent by the client.
 //
-//   - `cpu/BYTE_ADDR[/NBYTES]]` [RO] Accesses memory in the CPU address space.
+//   - `cpu.BYTE_ADDR[.NBYTES]` [RO] Accesses memory in the CPU address space.
 //     `BYTE_ADDR` and `NBYTES`, when given, are in hexadecimal.  `BYTE_ADDR`
 //     is a byte address.  `NBYTES` is a count of bytes to read and defaults to
 //     1.  `NBYTES` is ignored on writes because the amount of data written is
 //     determined by the amount of data sent by the client.
 //
-//   - `progdev/[TBD]`  A future command will be added to allow uploading a new
+//   - `progdev[TBD]`  A future command will be added to allow uploading a new
 //     bitstream.  The exact details are under development.
 //
-//   - `flash/[TBD]` A future command will be added to access the FLASH device
+//   - `flash[TBD]` A future command will be added to access the FLASH device
 //     attached to the FPGA.
 //
 // The `help`, `listdev`, `temp`, and `cpu` commands are read-only and can only
@@ -523,8 +523,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 
   // Parse "command line"
   //
-  // Look for slash
-  p = (uint8_t *)strchr(fname, '/');
+  // Look for dot
+  p = (uint8_t *)strchr(fname, '.');
   if(p) {
     // NUL terminate fname (violate const, temporarily)
     *p = '\0';
@@ -534,8 +534,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   cip = find_key(CORE_INFO, (const uint8_t *)fname, NULL);
 
   if(p) {
-    // Restore '/' (and const-ness)
-    *p++ = '/';
+    // Restore dot (and const-ness) and advance p
+    *p++ = '.';
   }
 
   // If device not found, return error
@@ -559,7 +559,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   xil_printf("fpga_off=%p fpga_len=%x\n", fpga_off, fpga_len);
 #endif
 
-  // If slash was found and characters follow, parse offset (and length)
+  // If dot was found and characters follow, parse offset (and length)
   if(p && *p) {
     // Read hex value into cmd_off
     p = hex_to_u32(p, &cmd_off);
