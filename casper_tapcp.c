@@ -379,7 +379,6 @@ void *
 casper_tapcp_open_help(struct tapcp_state *state)
 {
   // Setup tapcp state
-  state->cmd = CASPER_TAPCP_CMD_HELP;
   state->ptr = tapcp_help_msg;
   state->nleft = sizeof(tapcp_help_msg) - 1;
   set_tftp_read((tftp_read_f)casper_tapcp_read_help);
@@ -390,7 +389,6 @@ void *
 casper_tapcp_open_temp(struct tapcp_state *state)
 {
   // Setup tapcp state
-  state->cmd = CASPER_TAPCP_CMD_TEMP;
   set_tftp_read((tftp_read_f)casper_tapcp_read_temp);
   return state;
 }
@@ -399,7 +397,6 @@ void *
 casper_tapcp_open_listdev(struct tapcp_state *state)
 {
   // Setup tapcp state
-  state->cmd = CASPER_TAPCP_CMD_LISTDEV;
   if(state->binary) {
     state->ptr = (void *)(CORE_INFO - 2);
     state->nleft = Xil_Ntohs(_core_info_size_be) + 2;
@@ -494,7 +491,6 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   }
 
   // Setup tapcp state
-  state->cmd = CASPER_TAPCP_CMD_MEM;
   // Treat all terms as ints, then cast result to pointer.
   state->ptr = (void *)(
       XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR +

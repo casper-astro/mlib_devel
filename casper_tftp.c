@@ -94,38 +94,31 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
 
   // If filename is exactly "listdev" and not writing
   } else if(!strcmp("listdev", fname) && !write) {
-    tapcp_state.cmd = CASPER_TAPCP_CMD_LISTDEV;
     handle = casper_tapcp_open_listdev(&tapcp_state);
 
   // If filename is exactly "temp" and not writing
   } else if(!strcmp("temp", fname) && !write) {
-    tapcp_state.cmd = CASPER_TAPCP_CMD_TEMP;
     handle = casper_tapcp_open_temp(&tapcp_state);
 
   // If filename starts with "dev/"
   } else if(!strncmp("dev/", fname, strlen("dev/"))) {
-    tapcp_state.cmd = CASPER_TAPCP_CMD_MEM;
     handle = casper_tapcp_open_dev(&tapcp_state, fname+strlen("dev/"));
 
   // If filename starts with "fpga/"
   } else if(!strncmp("fpga/", fname, strlen("fpga/"))) {
-    tapcp_state.cmd = CASPER_TAPCP_CMD_MEM;
     handle = NULL; // TODO
 
   // If filename starts with "cpu/" and not writing
   } else if(!strncmp("cpu/", fname, strlen("cpu/")) && !write) {
-    tapcp_state.cmd = CASPER_TAPCP_CMD_MEM;
     handle = NULL; // TODO
 
 #if 0 // TODO
   // If filename starts with "progdev/"
   } else if(!strncmp("progdev/", fname, sizeof("progdev/"))) {
-    tapcp_state.cmd = CASPER_TAPCP_CMD_PROGDEV;
     handle = NULL; // TODO
 
   // If filename starts with "flash/"
   } else if(!strncmp("flash/", fname, sizeof("flash/"))) {
-    tapcp_state.cmd = CASPER_TAPCP_CMD_FLASH;
     handle = NULL; // TODO
 #endif
   }
@@ -154,7 +147,6 @@ casper_tftp_close(void *handle)
   casper_tftp_context.write = casper_tftp_write_error;
 
   if(state) {
-    state->cmd = CASPER_TAPCP_CMD_NONE;
     state->ptr = NULL;
     state->nleft = 0;
   }
