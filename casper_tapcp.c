@@ -445,6 +445,13 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
     return NULL;
   }
 
+  if(cmd_len == 0) {
+#ifdef VERBOSE_TAPCP_IMPL
+    xil_printf("request too short\n");
+#endif
+    return NULL;
+  }
+
   // Setup tapcp state
   state->cmd = CASPER_TAPCP_CMD_MEM;
   // Treat all pointer terms as ints, then cast result to pointer.
