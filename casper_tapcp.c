@@ -398,6 +398,76 @@ casper_tapcp_read_fpga_words_binary(
   return len;
 }
 
+// This command outputs a simple ASCII hex dump, 16 bytes per line arranged as
+// 4 groups of four bytes each:
+//
+//     01234567 89ABCDEF 01234567 89ABCDEF
+//     12345678 9ABCDEF0 12345678 9ABCDEF0
+//     23456789 ABCDEF01 23456789 ABCDEF01
+//     [...]
+static
+int
+casper_tapcp_read_fpga_words_ascii(
+    struct tapcp_state *state, void *buf, int bytes)
+{
+  // state->ptr is pointer to next FPGA word
+  // state->lindex is index of next line_buf byte to send
+  // state->nleft is number of bytes left to retrieve from FPGA
+
+  int i;
+  int len = 0;
+  uint8_t *plb;
+  uint32_t word;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
+      state, buf, bytes, len, state->lidx);
+#endif
+
+  while(len < bytes && state->nleft > 0) {
+    // If need to start a new line
+    if(state->lidx == 0) {
+      // Init
+      plb = line_buf;
+      // Loop to read four words for the line
+      for(i=0; i<4; i++) {
+        word = *(uint32_t *)state->ptr;
+        state->ptr += sizeof(uint32_t);
+        state->nleft -= sizeof(uint32_t);
+        if(i > 0) {
+          *plb++ = ' ';
+        }
+        plb = u32_to_hex(word, plb, 1);
+        // All done?
+        if(state->nleft == 0) {
+          break;
+        }
+      }
+      // Terminate line
+      *plb++ = '\n';
+    }
+
+    // Copy data to buf
+    plb = line_buf + state->lidx;
+    while(len < bytes) {
+      // Copy byte
+      *(uint8_t *)buf++ = *plb;
+      // Increment len
+      len++;
+      // If end of line
+      if(*plb == '\n') {
+        state->lidx = 0;
+        break;
+      } else {
+        state->lidx++;
+      }
+      plb++;
+    }
+  }
+
+  return len;
+}
+
 // Write helpers
 
 // Open helpers
@@ -529,7 +599,12 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 #endif
 
   if(!state->write) {
-    set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
+    if(state->binary) {
+      set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
+    } else {
+      state->lidx = 0;
+      set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_ascii);
+    }
   } else if(!(fpga_off & 1)) {
 #if 1 // TODO
     return NULL;
