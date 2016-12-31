@@ -67,6 +67,7 @@
 // requested data in binary form in network byte order (big endian).
 
 #include <ctype.h>
+#include "xil_io.h"
 #include "platform.h"
 #include "lwip/apps/tftp_server.h"
 #include "casper_tftp.h"
@@ -85,7 +86,8 @@ static char tapcp_help_msg[] =
 ;
 
 // Externally linked core_info data
-extern const unsigned char _core_info;
+extern const uint16_t _core_info_size_be;
+extern const uint8_t _core_info;
 #define CORE_INFO (&_core_info)
 
 // Utility functions
@@ -308,46 +310,22 @@ casper_tapcp_read_listdev_ascii(
   return len;
 }
 
+// Sends bytes from state->ptr until len == bytes or state->nleft == 0.
 static
 int
-casper_tapcp_read_listdev_binary(
+casper_tapcp_read_mem_bytes_binary(
     struct tapcp_state *state, void *buf, int bytes)
 {
-  // state->nleft stores the number of bytes remaining in current entry, zero
-  // if no bytes remain, or -1 if this is the first entry.  state->ptr points
-  // to the next core info byte to send.
-  uint8_t payload_len = *CORE_INFO;
-  uint8_t done = 0;
   int len = 0;
-
-  while(len < bytes && !done) {
-    // If we need to start a new entry
-    if(state->nleft <= 0) {
-      // Calc num bytes to end for this entry, which could be the last one
-      state->nleft = 2;
-      // If tail is non-zero
-      if(((uint8_t *)state->ptr)[1]) {
-        // Add its length and the payload length
-        state->nleft += ((uint8_t *)state->ptr)[1] + payload_len;
-      } else {
-        // After this we're done!
-        done = 1;
-      }
-    }
-
-    // Copy data to buf
-    while(len < bytes && state->nleft) {
-      // Copy byte
-      *(uint8_t *)buf++ = *(uint8_t *)state->ptr++;
-      // Adjust len and nleft
-      len++;
-      state->nleft--;
-    }
+  while(len < bytes && state->nleft > 0) {
+    *(uint8_t *)buf++ = *(uint8_t *)state->ptr++;
+    state->nleft--;
+    len++;
   }
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("casper_tapcp_read_listdev_binary(%p, %p, %d) = %d\n",
-      state, buf, bytes, len);
+  xil_printf("casper_tapcp_read_mem_bytes_binary(%p, %p, %d) = %d/%d\n",
+      state, buf, bytes, len, state->nleft);
 #endif
 
   return len;
@@ -381,11 +359,13 @@ casper_tapcp_open_listdev(struct tapcp_state *state)
 {
   // Setup tapcp state
   state->cmd = CASPER_TAPCP_CMD_LISTDEV;
-  state->ptr = (void *)CORE_INFO;
-  state->nleft = -1;
   if(state->binary) {
-    set_tftp_read((tftp_read_f)casper_tapcp_read_listdev_binary);
+    state->ptr = (void *)(CORE_INFO - 2);
+    state->nleft = Xil_Ntohs(_core_info_size_be) + 2;
+    set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_binary);
   } else {
+    state->ptr = (void *)CORE_INFO;
+    state->nleft = -1;
     set_tftp_read((tftp_read_f)casper_tapcp_read_listdev_ascii);
   }
   return state;
