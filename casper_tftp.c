@@ -71,12 +71,22 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
 {
   void *handle = NULL;
 
+  // Ensure fname and mode are non-null
+  if(!fname || !mode) {
+    return NULL;
+  }
+
   // If mode starts with 'o' assume it's "octet"
   tapcp_state.binary = (mode[0] == 'o');
   tapcp_state.write = write;
   // Set default read/write functions to ones that return error.
   casper_tftp_context.read = casper_tftp_read_error;
   casper_tftp_context.write = casper_tftp_write_error;
+
+  // Ignore leading slash on fname
+  if(fname[0] == '/') {
+    fname++;
+  }
 
   // If filename is exactly "help" and not writing
   if(!strcmp("help", fname) && !write) {

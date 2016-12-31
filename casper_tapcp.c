@@ -65,6 +65,8 @@
 // return data in a hex dump like format (i.e. suitable for display in a
 // terminal).  Reading with these commands in octet mode will return the
 // requested data in binary form in network byte order (big endian).
+//
+// A leading slash is not required and will be ignored if provided.
 
 #include <ctype.h>
 #include "xil_io.h"
