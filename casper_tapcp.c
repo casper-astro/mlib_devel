@@ -339,14 +339,14 @@ casper_tapcp_read_mem_bytes_binary(
   return len;
 }
 
-// Sends wishbone words from state->ptr until len == bytes or
-// state->nleft == 0.  This is distinct from `..._read_mem_bytes_binary`
-// because reads from FPGA devices are always word aligned so we can read a
-// word at a time and because the wishbone bus currently byte swaps the 32 bit
-// data for us so we need to undo this byte swap.
+// Sends FPGA words from state->ptr until len == bytes or state->nleft == 0.
+// This is distinct from `..._read_mem_bytes_binary` because reads from FPGA
+// devices are always word aligned so we can read a word at a time and because
+// the wishbone bus currently byte swaps the 32 bit data for us so we need to
+// undo this byte swap.
 static
 int
-casper_tapcp_read_wb_words_binary(
+casper_tapcp_read_fpga_words_binary(
     struct tapcp_state *state, void *buf, int bytes)
 {
   static uint32_t word = 0;
@@ -416,8 +416,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   uint8_t i;
   uint8_t *p = NULL;
   const uint8_t *cip = NULL; // core_info payload
-  uint32_t wb_off  = 0; // From payload
-  uint32_t wb_len  = 0; // From payload
+  uint32_t fpga_off  = 0; // From payload
+  uint32_t fpga_len  = 0; // From payload
   uint32_t cmd_off = 0; // From command line
   uint32_t cmd_len = 1; // From command line
 
@@ -450,17 +450,17 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
     return NULL;
   }
 
-  // Get wb_offset and wb_len from payload
+  // Get fpga_offset and fpga_len from payload
   for(i=0; i<4; i++) {
-    wb_off <<= 8;
-    wb_off |= (*cip++ & 0xff);
+    fpga_off <<= 8;
+    fpga_off |= (*cip++ & 0xff);
   }
   for(i=0; i<4; i++) {
-    wb_len <<= 8;
-    wb_len |= (*cip++ & 0xff);
+    fpga_len <<= 8;
+    fpga_len |= (*cip++ & 0xff);
   }
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("wb_off=%p wb_len=%x\n", wb_off, wb_len);
+  xil_printf("fpga_off=%p fpga_len=%x\n", fpga_off, fpga_len);
 #endif
 
   // If slash was found and characters follow, parse offset (and length)
@@ -477,7 +477,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 #endif
 
   // Bounds check
-  if(cmd_off + cmd_len > (wb_len >> 2)) {
+  if(cmd_off + cmd_len > (fpga_len >> 2)) {
 #ifdef VERBOSE_TAPCP_IMPL
     xil_printf("request too long\n");
 #endif
@@ -495,7 +495,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   // Treat all terms as ints, then cast result to pointer.
   state->ptr = (void *)(
       XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR +
-      (wb_off & ~3) + (cmd_off << 2));
+      (fpga_off & ~3) + (cmd_off << 2));
   // nleft is in bytes
   state->nleft = cmd_len << 2;
 
@@ -504,8 +504,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 #endif
 
   if(!state->write) {
-    set_tftp_read((tftp_read_f)casper_tapcp_read_wb_words_binary);
-  } else if(!(wb_off & 1)) {
+    set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
+  } else if(!(fpga_off & 1)) {
 #if 1 // TODO
     return NULL;
 #else
