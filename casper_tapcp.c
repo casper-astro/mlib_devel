@@ -90,6 +90,57 @@
 //
 // The label of the first line is always "00000000" regardless of the offset or
 // address requested.
+//
+// Writes using the 'dev', 'fpga', and 'mem' commands in netascii mode
+// accept data formatted as a hexdump.  The hex dump produced by netascii mode
+// reads is valid input for netascii mode writes, but other formats are also
+// valid.  The following statements describe valid hexdump formats more
+// generally:
+//
+//   1. The hexdump lines must be terminated with a newline character ('\n').
+//
+//   2. Any data before the first colon of the line is considered a label
+//      (e.g. address) and ignored.
+//
+//   3. One or more whitespace characters separate groups of hexadecimal
+//      digits.  Non-numeric hexadecimal digits may be uppercase or lowercase.
+//
+//   4. Each group of hex digits is treated as a concatenation of 8 digit
+//      (32 bit) values.  The last value of a group of hex digits may have
+//      fewer than 8 digits (leading zeros assumed).
+//
+//   5. Other than the first colon of a line, the first character that is
+//      neither whitespace nor a hexadecimal digit and all characters that
+//      follow it are ignored.
+//
+// Note that each whitespace separated group of hex digits is treated as at
+// least one 32 bit value.  The following three lines are equivalent:
+//
+//     label: 00 11 22 33
+//
+//     00000000 00000011 00000022 00000033
+//
+//     00000000000000110000002233 # first three have 8 digits, last has 2
+//
+// Watch out for these errors:
+//
+//     00000000 00000011 00000022 00000033 # error: first colon after data
+//
+//     00000000 00000011 00000022 00000033 comment looks like data
+//
+// The first is an error because the colon in the comment is the first colon on
+// the line.  Detection of the first colon happens while buffering the line
+// (i.e. before processing the line) so this "first colon" will still be
+// detected a label terminator and everything before it will be ignored.
+//
+// The second is an error because the first character of the comment is a 'c'
+// which is a valid hex digit and will be treated as the fifth 32 bit value of
+// the line.
+//
+// The format for netascii writes was chosen to be easy to parse and compatible
+// with the format output by netascii reads.  The output of the command line
+// utilities `xxd` and `hexdump` is generally NOT compatible by default, but
+// can be massaged fairly easily into a compatible format.
 
 #include <ctype.h>
 #include "xil_io.h"
@@ -570,7 +621,7 @@ casper_tapcp_read_fpga_words_ascii(
 // Writes to CPU memory are disallowed as too dangerous.
 static
 int
-casper_tapcp_write_fpga_bytes_binary(
+casper_tapcp_write_fpga_words_binary(
     struct tapcp_state *state, struct pbuf *pbuf)
 {
   // state->ptr is pointer to next FPGA word
@@ -591,7 +642,7 @@ casper_tapcp_write_fpga_bytes_binary(
       // If we have a bound on how many bytes to write,
       // make sure we are not about to exceed it.
       if(state->nleft == 0) {
-        return NULL;
+        return -1; // Error!
       }
       // Read byte into word
       word <<= 8;
@@ -606,6 +657,118 @@ casper_tapcp_write_fpga_bytes_binary(
         state->nleft--;
       }
     }
+
+    // If last pbuf in chain
+    if(pbuf->tot_len <= pbuf->len) {
+      break;
+    }
+
+    // Setup for next pbuf, if any
+    pbuf = pbuf->next;
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, [%u/%u]) = %d\n", __FUNCTION__,
+      state, pbuf, pbuf->len, pbuf->tot_len, tot_len);
+#endif
+
+  return tot_len;
+}
+
+// Reads hex formatted text from pbuf and writes them to FPGA.
+// Writes to CPU memory are disallowed as too dangerous.
+static
+int
+casper_tapcp_write_fpga_words_ascii(
+    struct tapcp_state *state, struct pbuf *pbuf)
+{
+  // state->ptr is pointer to next FPGA word
+  // state->nleft, if non-negative, is max number of bytes allowed to write
+  // state->lidx is index of next line_buf location
+  // state->u32 is a flag that is set on a line's first colon
+
+  uint8_t c;
+  uint8_t *p;
+  uint8_t *plb = line_buf + state->lidx;
+  int len = 0;
+  int tot_len = 0;
+  static uint32_t word;
+
+  // While we have pbufs
+  while(pbuf) {
+
+    // Copy pbuf payload data into line_buf
+    p = pbuf->payload;
+    for(len = 0; len < pbuf->len; len++) {
+      // Make sure we don't overflow line_buf
+      if(state->lidx >= sizeof(line_buf)) {
+        return -1; // Error!
+      }
+      // Get byte from pbuf
+      c = *p++;
+      // If leading white space, ignore
+      if(state->lidx == 0 && isspace(c)) {
+        continue;
+      }
+      // If first colon (label terminator), just reset plb and lidx
+      if(c == ':' && !state->u32) {
+        plb = line_buf;
+        state->lidx = 0;
+        state->u32 = 1;
+        continue;
+      }
+      // Store in line_buf
+      *plb++ = c;
+      state->lidx++;
+      // If newline, process line
+      if(c == '\n') {
+#ifdef VERBOSE_TAPCP_IMPL
+        // NUL terminate
+        *--plb = '\0';
+        print(__FUNCTION__);
+        print(" got line: ");
+        print((char *)line_buf);
+        print("\n");
+        *plb++ = '\n';
+#endif
+        // Start at beginning and go until newline
+        plb = line_buf;
+        while(*plb != '\n') {
+          // Skip whitespace
+          if(isspace(*plb)) {
+            plb++;
+            continue;
+          }
+          // If not a hex digit, done with line
+          if(!isxdigit(*plb)) {
+            break;
+          }
+          // Parse possibly contiguous words
+          while(isxdigit(*plb)) {
+            // If we have a bound on how many bytes to write,
+            // make sure we are not about to exceed it.
+            if(0 <= state->nleft && state->nleft < 4) {
+              return -1; // Error!
+            }
+            // Get word value
+            plb = hex_to_u32(plb, &word);
+#ifdef VERBOSE_TAPCP_IMPL
+        xil_printf("%s: got word %08x\n", __FUNCTION__, word);
+#endif
+            // Write word to FPGA
+            *(uint32_t *)state->ptr = word;
+            state->ptr += sizeof(uint32_t);
+            // Decrement nleft, if positive
+            if(state->nleft > 0) {
+              state->nleft -= sizeof(uint32_t);
+            }
+          }
+        } // End of line
+        // Setup for next line
+        state->lidx = 0;
+        state->u32 = 0;
+      } // line processed
+    } // pbuf processed
 
     // If last pbuf in chain
     if(pbuf->tot_len <= pbuf->len) {
@@ -782,12 +945,11 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   } else { // Already disallowed dev writes to read-only devices above
     if(state->binary) {
       state->u32 = 0; // Used to track total bytes written
-      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_bytes_binary);
-#if 1 // TODO
-#else
+      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_words_binary);
     } else {
-      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_ascii);
-#endif
+      state->lidx = 0;
+      state->u32 = 0; // Used to detect line labels
+      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_words_ascii);
     }
   }
 
@@ -898,12 +1060,11 @@ casper_tapcp_open_mem(
   } else { // Already disallowed writes to CPU memory above
     if(state->binary) {
       state->u32 = 0; // Used to track total bytes written
-      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_bytes_binary);
-#if 1 // TODO
-#else
+      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_words_binary);
     } else {
-      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_ascii);
-#endif
+      state->lidx = 0;
+      state->u32 = 0; // Used to detect line labels
+      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_words_ascii);
     }
   }
 
