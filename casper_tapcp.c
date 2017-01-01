@@ -401,7 +401,7 @@ casper_tapcp_read_mem_bytes_ascii(
   // state->ptr is pointer to next byte
   // state->lindex is index of next line_buf byte to send
   // state->nleft is number of bytes left to retrieve from memory
-  // state->label is value for label of next line
+  // state->u32 is value for label of next line
 
   int i;
   int len = 0;
@@ -411,8 +411,8 @@ casper_tapcp_read_mem_bytes_ascii(
     // If need to start a new line
     if(state->lidx == 0) {
       // Init with label
-      plb = u32_to_hex(state->label, line_buf, 1);
-      state->label += 16;
+      plb = u32_to_hex(state->u32, line_buf, 1);
+      state->u32 += 16;
       *plb++ = ':';
       *plb++ = ' ';
       // Loop to read up to 16 bytes for the line
@@ -505,7 +505,7 @@ casper_tapcp_read_fpga_words_ascii(
   // state->ptr is pointer to next FPGA word
   // state->lindex is index of next line_buf byte to send
   // state->nleft is number of bytes left to retrieve from FPGA
-  // state->label is value for label of next line
+  // state->u32 is value for label of next line
 
   int i;
   int len = 0;
@@ -521,8 +521,8 @@ casper_tapcp_read_fpga_words_ascii(
     // If need to start a new line
     if(state->lidx == 0) {
       // Init with label
-      plb = u32_to_hex(state->label, line_buf, 1);
-      state->label += 16;
+      plb = u32_to_hex(state->u32, line_buf, 1);
+      state->u32 += 16;
       *plb++ = ':';
       *plb++ = ' ';
       // Loop to read up to four words for the line
@@ -566,6 +566,64 @@ casper_tapcp_read_fpga_words_ascii(
 
 // Write helpers
 
+// Reads bytes from pbuf and writes them to FPGA.
+// Writes to CPU memory are disallowed as too dangerous.
+static
+int
+casper_tapcp_write_fpga_bytes_binary(
+    struct tapcp_state *state, struct pbuf *pbuf)
+{
+  // state->ptr is pointer to next FPGA word
+  // state->nleft, if non-negative, is max number of bytes allowed to write
+  // state->u32 is number of bytes already written
+
+  uint8_t *p;
+  int len = 0;
+  int tot_len = 0;
+  static uint32_t word;
+
+  // While we have pbufs
+  while(pbuf) {
+
+    // Copy pbuf payload data
+    p = pbuf->payload;
+    for(len = 0; len < pbuf->len; len++) {
+      // If we have a bound on how many bytes to write,
+      // make sure we are not about to exceed it.
+      if(state->nleft == 0) {
+        return NULL;
+      }
+      // Read byte into word
+      word <<= 8;
+      word |= *p++ & 0xff;
+      // If word is full, write it to FPGA
+      if((++state->u32 & 3) == 0) {
+        *(uint32_t *)state->ptr = word;
+        state->ptr += sizeof(uint32_t);
+      }
+      // Decrement nleft, if positive
+      if(state->nleft > 0) {
+        state->nleft--;
+      }
+    }
+
+    // If last pbuf in chain
+    if(pbuf->tot_len <= pbuf->len) {
+      break;
+    }
+
+    // Setup for next pbuf, if any
+    pbuf = pbuf->next;
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, [%u/%u]) = %d\n", __FUNCTION__,
+      state, pbuf, pbuf->len, pbuf->tot_len, tot_len);
+#endif
+
+  return tot_len;
+}
+
 // Open helpers
 void *
 casper_tapcp_open_help(struct tapcp_state *state)
@@ -607,8 +665,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   uint8_t i;
   uint8_t *p = NULL;
   const uint8_t *cip = NULL; // core_info payload
-  uint32_t fpga_off  = 0; // From payload
-  uint32_t fpga_len  = 0; // From payload
+  uint32_t fpga_off  = 0; // From core_info
+  uint32_t fpga_len  = 0; // From core_info
   uint32_t cmd_off = 0; // From command line
   uint32_t cmd_len = 0; // From command line
 
@@ -647,7 +705,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
     return NULL;
   }
 
-  // Get fpga_offset and fpga_len from payload
+  // Get fpga_offset and fpga_len from core_info
   for(i=0; i<4; i++) {
     fpga_off <<= 8;
     fpga_off |= (*cip++ & 0xff);
@@ -660,13 +718,19 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   xil_printf("fpga_off=%p fpga_len=%x\n", fpga_off, fpga_len);
 #endif
 
+  // Disallow writes to read only devices
+  if(state->write && (fpga_off & 1)) {
+    return NULL;
+  }
+
   // If dot was found and characters follow, parse offset (and length)
   if(p && *p) {
     // Read hex value into cmd_off
     p = hex_to_u32(p, &cmd_off);
-    // If not at end of string
-    if(*p) {
-      // Read length
+    // If reading and not at end of string
+    // (ignore client supplied length on writes)
+    if(!state->write && *p) {
+      // Read length info cmd_len
       p = hex_to_u32(++p, &cmd_len);
     }
   }
@@ -687,8 +751,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   xil_printf("cmd_off=%p cmd_len=%x\n", cmd_off, cmd_len);
 #endif
 
-  // Bounds check
-  if(cmd_off + cmd_len > (fpga_len >> 2)) {
+  // Bounds check on reads only
+  if(!state->write && cmd_off + cmd_len > (fpga_len >> 2)) {
 #ifdef VERBOSE_TAPCP_IMPL
     xil_printf("request too long\n");
 #endif
@@ -712,20 +776,19 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
       set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
     } else {
       state->lidx = 0;
-      state->label = 0;
+      state->u32 = 0; // Used for line labels
       set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_ascii);
     }
-  } else if(!(fpga_off & 1)) { // Disallow dev writes to read-only devices
+  } else { // Already disallowed dev writes to read-only devices above
+    if(state->binary) {
+      state->u32 = 0; // Used to track total bytes written
+      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_bytes_binary);
 #if 1 // TODO
 #else
-    if(state->binary) {
-      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_binary);
     } else {
       set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_ascii);
-    }
 #endif
-  } else {
-    return NULL;
+    }
   }
 
   return state;
@@ -754,7 +817,8 @@ casper_tapcp_open_mem(
     fname += strlen("fpga.");
     baseaddr = FPGA_BASEADDR;
     nbytes = FPGA_NBYTES;
-  } else if(!strncmp("cpu.", fname, strlen("cpu."))) {
+  // Only allow cpu read access
+  } else if(!state->write && !strncmp("cpu.", fname, strlen("cpu."))) {
     fname += strlen("cpu.");
   } else {
     return NULL;
@@ -767,9 +831,10 @@ casper_tapcp_open_mem(
   }
   // Read hex value into cmd_off
   p = hex_to_u32(p, &cmd_off);
-  // If not at end of string
-  if(*p) {
-    // Read length
+  // If reading and not at end of string
+  // (ignore client supplied length on writes)
+  if(!state->write && *p) {
+    // Read hex value into cmd_len
     p = hex_to_u32(++p, &cmd_len);
   }
   // Word align the input
@@ -781,28 +846,32 @@ casper_tapcp_open_mem(
   xil_printf("cmd_off=%p cmd_len=%x\n", cmd_off, cmd_len);
 #endif
 
-  // Bounds check
+  // Bounds check on read only
   //
-  if(cmd_len == 0) {
+  if(!state->write) {
+    if(cmd_len == 0) {
 #ifdef VERBOSE_TAPCP_IMPL
-    xil_printf("request too short\n");
+      xil_printf("request too short\n");
 #endif
-    return NULL;
-  }
-  // TODO How to handle wrap-around CPU read requests?
-  // For now, only bounds check for long FPGA reads.
-  if(baseaddr == FPGA_BASEADDR && cmd_off + cmd_len > nbytes) {
+      return NULL;
+    }
+    // TODO How to handle wrap-around CPU read requests?
+    // For now, only bounds check for long FPGA reads.
+    if(baseaddr == FPGA_BASEADDR && cmd_off + cmd_len > nbytes) {
 #ifdef VERBOSE_TAPCP_IMPL
-    xil_printf("request too long\n");
+      xil_printf("request too long\n");
 #endif
-    return NULL;
+      return NULL;
+    }
   }
 
   // Setup tapcp state
   // Treat all terms as ints, then cast result to pointer.
   state->ptr = (void *)(baseaddr + cmd_off);
-  // nleft is a byte count
-  state->nleft = cmd_len;
+  // nleft is a byte count.  On reads, use client specified (or default)
+  // length.  On writes (fpga only!), nleft is an upper bound on how many bytes
+  // are permitted to be written.
+  state->nleft = state->write ? FPGA_NBYTES - cmd_off : cmd_len;
 
 #ifdef VERBOSE_TAPCP_IMPL
   xil_printf("ptr=%p nleft=%u\n", state->ptr, state->nleft);
@@ -814,7 +883,7 @@ casper_tapcp_open_mem(
         set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
       } else {
         state->lidx = 0;
-        state->label = 0;
+        state->u32 = 0; // Used for line labels
         set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_ascii);
       }
     } else {
@@ -822,21 +891,20 @@ casper_tapcp_open_mem(
         set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_binary);
       } else {
         state->lidx = 0;
-        state->label = 0;
+        state->u32 = 0; // Used for line labels
         set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_ascii);
       }
     }
-  } else if(baseaddr == FPGA_BASEADDR) { // Only allow writes to FPGA space
+  } else { // Already disallowed writes to CPU memory above
+    if(state->binary) {
+      state->u32 = 0; // Used to track total bytes written
+      set_tftp_write((tftp_write_f)casper_tapcp_write_fpga_bytes_binary);
 #if 1 // TODO
 #else
-    if(state->binary) {
-      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_binary);
     } else {
       set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_ascii);
-    }
 #endif
-  } else {
-    return NULL;
+    }
   }
 
   return state;
