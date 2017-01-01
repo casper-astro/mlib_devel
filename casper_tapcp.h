@@ -4,8 +4,10 @@
 #ifndef _CASPER_TAPCP_H_
 #define _CASPER_TAPCP_H_
 
+#include "platform.h"
 #include "lwip/pbuf.h"
 
+// State structure for tapcp transfer
 struct tapcp_state {
   uint8_t binary; // Flag indicating octect/binary mode
   uint8_t write;  // Flag indicating a write operation
@@ -19,5 +21,6 @@ void * casper_tapcp_open_help(struct tapcp_state *state);
 void * casper_tapcp_open_listdev(struct tapcp_state *state);
 void * casper_tapcp_open_temp(struct tapcp_state *state);
 void * casper_tapcp_open_dev(struct tapcp_state *state, const char *fname);
+void * casper_tapcp_open_mem(struct tapcp_state *state, const char *fname);
 
 #endif // _CASPER_TAPCP_H_

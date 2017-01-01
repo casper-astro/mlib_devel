@@ -44,17 +44,21 @@
 //     `NWORDS` is ignored on writes because the amount of data written is
 //     determined by the amount of data sent by the client.
 //
-//   - `fpga.WORD_OFFSET[.NWORDS]`  Accesses memory in the FPGA gateware device
-//     address space.  `WORD_OFFSET` and `NWORDS`, when given, are in
-//     hexadecimal.  `WORD_OFFSET` is in 4-byte words.  `NWORDS` is a count of
-//     4-byte words to read and defaults to 1.  `NWORDS` is ignored on writes
-//     because the amount of data written is determined by the amount of data
-//     sent by the client.
+//   - `fpga.BYTE_OFFSET[.NBYTES]`  Accesses memory in the FPGA gateware device
+//     address space.  `BYTE_OFFSET` and `NBYTES`, when given, are in
+//     hexadecimal.  `BYTE_OFFSET` is in bytes and will be rounded down, if
+//     necessary, to the closest multiple of 4.  `NBYTES` is a count of bytes
+//     to read and will be rounded up, if necssary, to the closest multiple of
+//     4.  `NBYTES` defaults to 4.  `NBYTES` is ignored on writes because the
+//     amount of data written is determined by the amount of data sent by the
+//     client.
 //
 //   - `cpu.BYTE_ADDR[.NBYTES]` [RO] Accesses memory in the CPU address space.
 //     `BYTE_ADDR` and `NBYTES`, when given, are in hexadecimal.  `BYTE_ADDR`
-//     is a byte address.  `NBYTES` is a count of bytes to read and defaults to
-//     1.  `NBYTES` is ignored on writes because the amount of data written is
+//     is a byte address and will be rounded down, if necessary, to the closest
+//     multiple of 4.  `NBYTES` is a count of bytes to read and will be rounded
+//     up, if necessary, to the closest multiple of 4.  `NBYTES` defaults to 4.
+//     `NBYTES` is ignored on writes because the amount of data written is
 //     determined by the amount of data sent by the client.
 //
 //   - `progdev[TBD]`  A future command will be added to allow uploading a new
@@ -76,11 +80,15 @@
 
 #include <ctype.h>
 #include "xil_io.h"
-#include "platform.h"
 #include "lwip/apps/tftp_server.h"
 #include "casper_tftp.h"
 #include "casper_tapcp.h"
 #include "csl.h"
+
+// FPGA memory space macros
+#define FPGA_BASEADDR XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR
+#define FPGA_HIGHADDR XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_HIGHADDR
+#define FPGA_NBYTES (FPGA_HIGHADDR - FPGA_BASEADDR + 1)
 
 // Help message
 static char tapcp_help_msg[] =
@@ -365,6 +373,73 @@ casper_tapcp_read_mem_bytes_binary(
   return len;
 }
 
+// This command outputs a simple ASCII hex dump, 16 bytes per line arranged as
+// four groups of four bytes each:
+//
+//     01234567 89ABCDEF 01234567 89ABCDEF
+//     12345678 9ABCDEF0 12345678 9ABCDEF0
+//     23456789 ABCDEF01 23456789 ABCDEF01
+//     [...]
+static
+int
+casper_tapcp_read_mem_bytes_ascii(
+    struct tapcp_state *state, void *buf, int bytes)
+{
+  // state->ptr is pointer to next byte
+  // state->lindex is index of next line_buf byte to send
+  // state->nleft is number of bytes left to retrieve from memory
+
+  int i;
+  int len = 0;
+  uint8_t *plb;
+
+  while(len < bytes && state->nleft > 0) {
+    // If need to start a new line
+    if(state->lidx == 0) {
+      // Init
+      plb = line_buf;
+      // Loop to read up to 16 bytes for the line
+      for(i=0; i<16; i++) {
+        plb = u8_to_hex(*(uint32_t *)state->ptr++, plb, 0x11);
+        state->nleft--;
+        if((i & 3) == 3 && i != 15) {
+          *plb++ = ' ';
+        }
+        // All done?
+        if(state->nleft == 0) {
+          break;
+        }
+      }
+      // Terminate line
+      *plb++ = '\n';
+    }
+
+    // Copy data to buf
+    plb = line_buf + state->lidx;
+    while(len < bytes) {
+      // Copy byte
+      *(uint8_t *)buf++ = *plb;
+      // Increment len
+      len++;
+      // If end of line
+      if(*plb == '\n') {
+        state->lidx = 0;
+        break;
+      } else {
+        state->lidx++;
+      }
+      plb++;
+    }
+  }
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s(%p, %p, %d) = %d/%d\n", __FUNCTION__,
+      state, buf, bytes, len, state->nleft);
+#endif
+
+  return len;
+}
+
 // Sends FPGA words from state->ptr until len == bytes or state->nleft == 0.
 // This is distinct from `..._read_mem_bytes_binary` because reads from FPGA
 // devices are always word aligned so we can read a word at a time and because
@@ -379,15 +454,14 @@ casper_tapcp_read_fpga_words_binary(
   int len = 0;
 
   while(len < bytes && state->nleft > 0) {
-    switch(state->nleft & 3) {
-      case 0: word = *(uint32_t *)state->ptr; // Read next word to send
+    switch(--state->nleft & 3) {
+      case 3: word = *(uint32_t *)state->ptr; // Read next word to send
               state->ptr += sizeof(uint32_t); // Advance pointer
               *(uint8_t *)buf++ = (word >> 24) & 0xff; break;
-      case 3: *(uint8_t *)buf++ = (word >> 16) & 0xff; break;
-      case 2: *(uint8_t *)buf++ = (word >>  8) & 0xff; break;
-      case 1: *(uint8_t *)buf++ = (word      ) & 0xff; break;
+      case 2: *(uint8_t *)buf++ = (word >> 16) & 0xff; break;
+      case 1: *(uint8_t *)buf++ = (word >>  8) & 0xff; break;
+      case 0: *(uint8_t *)buf++ = (word      ) & 0xff; break;
     }
-    state->nleft--;
     len++;
   }
 
@@ -400,7 +474,7 @@ casper_tapcp_read_fpga_words_binary(
 }
 
 // This command outputs a simple ASCII hex dump, 16 bytes per line arranged as
-// 4 groups of four bytes each:
+// four groups of four bytes each:
 //
 //     01234567 89ABCDEF 01234567 89ABCDEF
 //     12345678 9ABCDEF0 12345678 9ABCDEF0
@@ -430,7 +504,7 @@ casper_tapcp_read_fpga_words_ascii(
     if(state->lidx == 0) {
       // Init
       plb = line_buf;
-      // Loop to read four words for the line
+      // Loop to read up to four words for the line
       for(i=0; i<4; i++) {
         word = *(uint32_t *)state->ptr;
         state->ptr += sizeof(uint32_t);
@@ -523,6 +597,12 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 
   // Parse "command line"
   //
+  // Advance fname past leading "dev/"
+  if(!strncmp("dev/", fname, strlen("dev/"))) {
+    fname += strlen("dev/");
+  } else {
+    return NULL;
+  }
   // Look for dot
   p = (uint8_t *)strchr(fname, '.');
   if(p) {
@@ -565,6 +645,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
     p = hex_to_u32(p, &cmd_off);
     // If not at end of string
     if(*p) {
+      // Read length
       p = hex_to_u32(++p, &cmd_len);
     }
   }
@@ -577,6 +658,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 #ifdef VERBOSE_TAPCP_IMPL
       xil_printf("request too short\n");
 #endif
+      return NULL;
     }
   }
 
@@ -597,7 +679,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   state->ptr = (void *)(
       XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR +
       (fpga_off & ~3) + (cmd_off << 2));
-  // nleft is in bytes
+  // nleft is a byte count
   state->nleft = cmd_len << 2;
 
 #ifdef VERBOSE_TAPCP_IMPL
@@ -611,12 +693,126 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
       state->lidx = 0;
       set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_ascii);
     }
-  } else if(!(fpga_off & 1)) {
+  } else if(!(fpga_off & 1)) { // Disallow dev writes to read-only devices
 #if 1 // TODO
-    return NULL;
 #else
-    set_tftp_write((tftp_read_f)casper_tapcp_write_mem);
+    if(state->binary) {
+      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_binary);
+    } else {
+      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_ascii);
+    }
 #endif
+  } else {
+    return NULL;
+  }
+
+  return state;
+}
+
+// Used to open `fpga` or `cpu` requests.  The `baseaddr` parameter should be
+// FPGA_BASEADDR for `fpga` requests and CPU_BASEADDR or `cpu` requests.
+// Likewise, the `nbytes` parameter should be FPGA_NBYTES or CPU_NBYTES, resp.
+void *
+casper_tapcp_open_mem(
+    struct tapcp_state *state,
+    const char *fname)
+{
+  uint8_t *p;
+  uint32_t cmd_off = 0; // From command line
+  uint32_t cmd_len = 1; // From command line
+  uint32_t baseaddr = 0;
+  uint32_t nbytes = 0;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("%s fname='%s' baseaddr=%p\n", __FUNCTION__, fname, baseaddr);
+#endif
+
+  // Advance fname past leading "fpga." or "cpu."
+  if(!strncmp("fpga.", fname, strlen("fpga."))) {
+    fname += strlen("fpga.");
+    baseaddr = FPGA_BASEADDR;
+    nbytes = FPGA_NBYTES;
+  } else if(!strncmp("cpu.", fname, strlen("cpu."))) {
+    fname += strlen("cpu.");
+  } else {
+    return NULL;
+  }
+  // Parse "command line"
+  p = (uint8_t *)fname;
+  // Offset is required
+  if(!*p) {
+    return NULL;
+  }
+  // Read hex value into cmd_off
+  p = hex_to_u32(p, &cmd_off);
+  // If not at end of string
+  if(*p) {
+    // Read length
+    p = hex_to_u32(++p, &cmd_len);
+  }
+  // Word align the input
+  cmd_off &= ~3; // align cmd_off downward
+  cmd_len +=  3; // align cmd_len upward
+  cmd_len &= ~3;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("cmd_off=%p cmd_len=%x\n", cmd_off, cmd_len);
+#endif
+
+  // Bounds check
+  //
+  if(cmd_len == 0) {
+#ifdef VERBOSE_TAPCP_IMPL
+    xil_printf("request too short\n");
+#endif
+    return NULL;
+  }
+  // TODO How to handle wrap-around CPU read requests?
+  // For now, only bounds check for long FPGA reads.
+  if(baseaddr == FPGA_BASEADDR && cmd_off + cmd_len > nbytes) {
+#ifdef VERBOSE_TAPCP_IMPL
+    xil_printf("request too long\n");
+#endif
+    return NULL;
+  }
+
+  // Setup tapcp state
+  // Treat all terms as ints, then cast result to pointer.
+  state->ptr = (void *)(baseaddr + cmd_off);
+  // nleft is a byte count
+  state->nleft = cmd_len;
+
+#ifdef VERBOSE_TAPCP_IMPL
+  xil_printf("ptr=%p nleft=%u\n", state->ptr, state->nleft);
+#endif
+
+  if(!state->write) {
+    if(baseaddr == FPGA_BASEADDR) {
+      if(state->binary) {
+        set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
+      } else {
+        state->lidx = 0;
+        set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_ascii);
+      }
+    } else {
+      if(state->binary) {
+        set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_binary);
+      } else {
+        state->lidx = 0;
+        set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_ascii);
+      }
+    }
+  } else if(baseaddr == FPGA_BASEADDR) { // Only allow writes to FPGA space
+#if 1 // TODO
+#else
+    if(state->binary) {
+      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_binary);
+    } else {
+      set_tftp_write((tftp_read_f)casper_tapcp_write_fpga_words_ascii);
+    }
+#endif
+  } else {
+    return NULL;
   }
 
   return state;
