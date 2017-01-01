@@ -71,12 +71,25 @@
 // be used with "get" operations.  Trying to "put" to them will result in an
 // error being returned to the client.
 //
+// For all commands, a leading slash is not required and will be ignored if
+// provided.
+//
 // Reading with the `dev`, `fpga`, and `mem` commands in netascii mode will
 // return data in a hex dump like format (i.e. suitable for display in a
 // terminal).  Reading with these commands in octet mode will return the
 // requested data in binary form in network byte order (big endian).
 //
-// A leading slash is not required and will be ignored if provided.
+// The netascii formatted output is a simple ASCII hex dump with lines
+// consisting of: an eight digit hexadecimal label followed by a colon and then
+// 16 bytes of data arranged as four groups of four bytes each:
+//
+//     00000000: 01234567 89ABCDEF 01234567 89ABCDEF
+//     00000010: 12345678 9ABCDEF0 12345678 9ABCDEF0
+//     00000020: 23456789 ABCDEF01 23456789 ABCDEF01
+//     [...]
+//
+// The label of the first line is always "00000000" regardless of the offset or
+// address requested.
 
 #include <ctype.h>
 #include "xil_io.h"
@@ -373,12 +386,12 @@ casper_tapcp_read_mem_bytes_binary(
   return len;
 }
 
-// This command outputs a simple ASCII hex dump, 16 bytes per line arranged as
-// four groups of four bytes each:
+// This command outputs a simple ASCII hex dump, 8 digit label followed by
+// colon and then 16 bytes per line arranged as four groups of four bytes each:
 //
-//     01234567 89ABCDEF 01234567 89ABCDEF
-//     12345678 9ABCDEF0 12345678 9ABCDEF0
-//     23456789 ABCDEF01 23456789 ABCDEF01
+//     00000000: 01234567 89ABCDEF 01234567 89ABCDEF
+//     00000010: 12345678 9ABCDEF0 12345678 9ABCDEF0
+//     00000020: 23456789 ABCDEF01 23456789 ABCDEF01
 //     [...]
 static
 int
@@ -388,6 +401,7 @@ casper_tapcp_read_mem_bytes_ascii(
   // state->ptr is pointer to next byte
   // state->lindex is index of next line_buf byte to send
   // state->nleft is number of bytes left to retrieve from memory
+  // state->label is value for label of next line
 
   int i;
   int len = 0;
@@ -396,8 +410,11 @@ casper_tapcp_read_mem_bytes_ascii(
   while(len < bytes && state->nleft > 0) {
     // If need to start a new line
     if(state->lidx == 0) {
-      // Init
-      plb = line_buf;
+      // Init with label
+      plb = u32_to_hex(state->label, line_buf, 1);
+      state->label += 16;
+      *plb++ = ':';
+      *plb++ = ' ';
       // Loop to read up to 16 bytes for the line
       for(i=0; i<16; i++) {
         plb = u8_to_hex(*(uint32_t *)state->ptr++, plb, 0x11);
@@ -473,12 +490,12 @@ casper_tapcp_read_fpga_words_binary(
   return len;
 }
 
-// This command outputs a simple ASCII hex dump, 16 bytes per line arranged as
-// four groups of four bytes each:
+// This command outputs a simple ASCII hex dump, 8 digit label followed by
+// colon and then 16 bytes per line arranged as four groups of four bytes each:
 //
-//     01234567 89ABCDEF 01234567 89ABCDEF
-//     12345678 9ABCDEF0 12345678 9ABCDEF0
-//     23456789 ABCDEF01 23456789 ABCDEF01
+//     00000000: 01234567 89ABCDEF 01234567 89ABCDEF
+//     00000010: 12345678 9ABCDEF0 12345678 9ABCDEF0
+//     00000020: 23456789 ABCDEF01 23456789 ABCDEF01
 //     [...]
 static
 int
@@ -488,6 +505,7 @@ casper_tapcp_read_fpga_words_ascii(
   // state->ptr is pointer to next FPGA word
   // state->lindex is index of next line_buf byte to send
   // state->nleft is number of bytes left to retrieve from FPGA
+  // state->label is value for label of next line
 
   int i;
   int len = 0;
@@ -502,8 +520,11 @@ casper_tapcp_read_fpga_words_ascii(
   while(len < bytes && state->nleft > 0) {
     // If need to start a new line
     if(state->lidx == 0) {
-      // Init
-      plb = line_buf;
+      // Init with label
+      plb = u32_to_hex(state->label, line_buf, 1);
+      state->label += 16;
+      *plb++ = ':';
+      *plb++ = ' ';
       // Loop to read up to four words for the line
       for(i=0; i<4; i++) {
         word = *(uint32_t *)state->ptr;
@@ -683,7 +704,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   state->nleft = cmd_len << 2;
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("ptr=%p\n", state->ptr);
+  xil_printf("ptr=%p nleft=%u\n", state->ptr, state->nleft);
 #endif
 
   if(!state->write) {
@@ -691,6 +712,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
       set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
     } else {
       state->lidx = 0;
+      state->label = 0;
       set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_ascii);
     }
   } else if(!(fpga_off & 1)) { // Disallow dev writes to read-only devices
@@ -792,6 +814,7 @@ casper_tapcp_open_mem(
         set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_binary);
       } else {
         state->lidx = 0;
+        state->label = 0;
         set_tftp_read((tftp_read_f)casper_tapcp_read_fpga_words_ascii);
       }
     } else {
@@ -799,6 +822,7 @@ casper_tapcp_open_mem(
         set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_binary);
       } else {
         state->lidx = 0;
+        state->label = 0;
         set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_ascii);
       }
     }

@@ -14,6 +14,7 @@ struct tapcp_state {
   void *ptr;      // Pointer to next location being accessed
   int nleft;      // Number of values still to access (cmd specific interp)
   int16_t lidx;   // Index of next byte in line buffer (cmd specific interp)
+  uint32_t label; // Value for label of next line
 };
 
 // Open functions
