@@ -55,6 +55,8 @@
 #include "spi.h"
 #include "casper_eth.h"
 
+#define HEARTBEAT_MS 10000
+
 int main()
 {
     int i, j;
@@ -64,7 +66,7 @@ int main()
     int fpga_temp;
     u8 buf[128];
     u32 len;
-    uint32_t next_ms = 0;
+    uint32_t next_ms = HEARTBEAT_MS;
     uint32_t curr_ms;
 #ifdef JAM_TEST_TMRCTR
     u64 time0, time1;
@@ -305,7 +307,7 @@ int main()
 
         curr_ms = ms_tmrctr();
         if(next_ms <= curr_ms) {
-          next_ms = curr_ms + 10000;
+          next_ms = curr_ms + HEARTBEAT_MS;
 
           fpga_temp = (int)(10*get_fpga_temp());
           xil_printf("FPGA at %d.%d C [ms %d]\n",
