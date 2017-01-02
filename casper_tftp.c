@@ -79,37 +79,29 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
   // If mode starts with 'o' assume it's "octet"
   tapcp_state.binary = (mode[0] == 'o');
   tapcp_state.write = write;
+
   // Set default read/write functions to ones that return error.
   casper_tftp_context.read = casper_tftp_read_error;
   casper_tftp_context.write = casper_tftp_write_error;
 
-  // Ignore leading slash on fname
-  if(fname[0] == '/') {
-    fname++;
-  }
-
-  // If filename is exactly "help" and not writing
-  if(!strcmp("help", fname) && !write) {
+  // If filename is exactly "/help" and not writing
+  if(!strcmp("/help", fname) && !write) {
     handle = casper_tapcp_open_help(&tapcp_state);
 
-  // If filename is exactly "listdev" and not writing
-  } else if(!strcmp("listdev", fname) && !write) {
+  // If filename is exactly "/listdev" and not writing
+  } else if(!strcmp("/listdev", fname) && !write) {
     handle = casper_tapcp_open_listdev(&tapcp_state);
 
-  // If filename is exactly "temp" and not writing
-  } else if(!strcmp("temp", fname) && !write) {
+  // If filename is exactly "/temp" and not writing
+  } else if(!strcmp("/temp", fname) && !write) {
     handle = casper_tapcp_open_temp(&tapcp_state);
 
-  // If filename starts with "dev/"
-  } else if(!strncmp("dev/", fname, strlen("dev/"))) {
-    handle = casper_tapcp_open_dev(&tapcp_state, fname);
-
-  // If filename starts with "fpga."
-  } else if(!strncmp("fpga.", fname, strlen("fpga."))) {
+  // If filename starts with "/fpga."
+  } else if(!strncmp("/fpga.", fname, strlen("/fpga."))) {
     handle = casper_tapcp_open_mem(&tapcp_state, fname);
 
-  // If filename starts with "cpu." and not writing
-  } else if(!strncmp("cpu.", fname, strlen("cpu.")) && !write) {
+  // If filename starts with "/cpu." and not writing
+  } else if(!strncmp("/cpu.", fname, strlen("/cpu.")) && !write) {
     handle = casper_tapcp_open_mem(&tapcp_state, fname);
 
 #if 0 // TODO
@@ -121,6 +113,10 @@ casper_tftp_open(const char *fname, const char *mode, u8_t write)
   } else if(!strncmp("flash", fname, sizeof("flash"))) {
     handle = NULL; // TODO
 #endif
+
+  // Otherwise, treat as /dev/... request
+  } else {
+    handle = casper_tapcp_open_dev(&tapcp_state, fname);
   }
 
 #ifdef VERBOSE_TFTP_IMPL

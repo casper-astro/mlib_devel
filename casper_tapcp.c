@@ -4,39 +4,41 @@
 //
 // A CASPER TAPCP server is a TFTP server that exposes various aspects of its
 // memory space and other services to TFTP clients.  This is done by mapping
-// the memory and other services into a virtual filesystem that is amenable to
-// access via the TFTP protocol.  TFTP provides two main operations: "get" and
-// "put".  A "get" operation is invoked by the client to read data from the
-// server.  A "put" operation is invoked to write data to the server.  Each
-// operation can be performed in one of two modes: "netascii" (aka "ascii" aka
-// "text") or "octet" (aka "binary").  TAPCP uses these modes to determine how
-// to interpret data being sent by the client (for a put operation) and how to
-// format data being sent to a client (for a get operation).
+// the memory and other services into a virtual filesystem (VFS) that is
+// amenable to access via the TFTP protocol.
+//
+// TFTP provides two main operations: "get" and "put".  A "get" operation is
+// invoked by the client to read data from the server.  A "put" operation is
+// invoked to write data to the server.  Each operation can be performed in one
+// of two modes: "netascii" (aka "ascii" aka "text") or "octet" (aka "binary").
+// TAPCP uses these modes to determine how to interpret data being sent by the
+// client (for a put operation) and how to format data being sent to a client
+// (for a get operation).
 //
 // The CASPER TAPCP virtual filesystem appears as a hierarchical filesystem.
-// The top level of this virtual filesystem can be considered a command name.
-// Some commands accept additional parameters that are given as hierarchical
-// pathname components.  The data being read or written is transferred as the
-// contents of the virtual file.
+// The top (aka root) level of this virtual filesystem can be considered a
+// command name.  Some commands accept additional parameters that are given as
+// hierarchical pathname components or dotted filename extensions.  The data
+// being read or written is transferred as the contents of the virtual file.
 //
-// Supported commands are (or will eventually be):
+// Supported top level commands are (or will eventually be):
 //
-//   - `help` [RO] Returns a list of top level commands.  Format is the same
+//   - `/help` [RO] Returns a list of top level commands.  Format is the same
 //     regardless of file transfer mode [TODO Do we want to send CRLF line
 //     terminators in netascii mode?].
 //
-//   - `listdev` [RO] Lists all devices supported by the currently running
+//   - `/listdev` [RO] Lists all devices supported by the currently running
 //     gateware design.  The offset, length, and type of each device is
 //     included in this listing.  In netascii mode this listing is returned as
 //     a human readable table.  In octet mode this listing is returned in the
 //     binary compressed/compiled form that is stored in memory.
 //
-//   - `temp` [RO] Sends the temperature of the FPGA.  In ascii mode this
+//   - `/temp` [RO] Sends the temperature of the FPGA.  In netascii mode this
 //     returns the temperature rounded down to the nearest tenth of a degree C.
 //     In binary mode this returns a 4 byte single precision float in network
 //     byte order (big endian).
 //
-//   - `dev/DEV_NAME[.WORD_OFFSET[.NWORDS]]`  Accesses memory associated with
+//   - `/dev/DEV_NAME[.WORD_OFFSET[.NWORDS]]`  Accesses memory associated with
 //     gateware device `DEV_NAME`.  `WORD_OFFSET` and `NWORDS`, when given, are
 //     in hexadecimal.  `WORD_OFFSET` is in 4-byte words and defaults to 0.
 //     `NWORDS` is a count of 4-byte words to read and defaults to 0, meaning
@@ -44,16 +46,16 @@
 //     `NWORDS` is ignored on writes because the amount of data written is
 //     determined by the amount of data sent by the client.
 //
-//   - `fpga.BYTE_OFFSET[.NBYTES]`  Accesses memory in the FPGA gateware device
-//     address space.  `BYTE_OFFSET` and `NBYTES`, when given, are in
+//   - `/fpga.BYTE_OFFSET[.NBYTES]`  Accesses memory in the FPGA gateware
+//     device address space.  `BYTE_OFFSET` and `NBYTES`, when given, are in
 //     hexadecimal.  `BYTE_OFFSET` is in bytes and will be rounded down, if
 //     necessary, to the closest multiple of 4.  `NBYTES` is a count of bytes
-//     to read and will be rounded up, if necssary, to the closest multiple of
+//     to read and will be rounded up, if necessary, to the closest multiple of
 //     4.  `NBYTES` defaults to 4.  `NBYTES` is ignored on writes because the
 //     amount of data written is determined by the amount of data sent by the
 //     client.
 //
-//   - `cpu.BYTE_ADDR[.NBYTES]` [RO] Accesses memory in the CPU address space.
+//   - `/cpu.BYTE_ADDR[.NBYTES]` [RO] Accesses memory in the CPU address space.
 //     `BYTE_ADDR` and `NBYTES`, when given, are in hexadecimal.  `BYTE_ADDR`
 //     is a byte address and will be rounded down, if necessary, to the closest
 //     multiple of 4.  `NBYTES` is a count of bytes to read and will be rounded
@@ -61,20 +63,40 @@
 //     `NBYTES` is ignored on writes because the amount of data written is
 //     determined by the amount of data sent by the client.
 //
-//   - `progdev[TBD]`  A future command will be added to allow uploading a new
+//   - `/progdev[TBD]`  A future command will be added to allow uploading a new
 //     bitstream.  The exact details are under development.
 //
-//   - `flash[TBD]` A future command will be added to access the FLASH device
+//   - `/flash[TBD]` A future command will be added to access the FLASH device
 //     attached to the FPGA.
 //
-// The `help`, `listdev`, `temp`, and `cpu` commands are read-only and can only
-// be used with "get" operations.  Trying to "put" to them will result in an
-// error being returned to the client.
+// The `/help`, `/listdev`, `/temp`, and `/cpu` commands are read-only and can
+// only be used with "get" operations.  Trying to "put" to them will result in
+// an error being returned to the client.
 //
-// For all commands, a leading slash is not required and will be ignored if
-// provided.
+// Requested names that do not start with a slash ('/') are considered to be
+// device names relative to the "/dev" command.  For example,
+// `get sys_clkcounter` is equivalent to `get /dev/sys_clkcounter`.
 //
-// Reading with the `dev`, `fpga`, and `mem` commands in netascii mode will
+// ## Tree View of TAPCP VFS
+//
+//     /
+//     |-- cpu.*
+//     |-- dev
+//     |   |-- first_fpga_device*
+//     |   |-- [...]
+//     |   |-- sys_clkcounter*
+//     |   |-- [...]
+//     |   `-- last_fpga_device*
+//     |-- flash.TBD
+//     |-- fpga.*
+//     |-- help
+//     |-- listdev
+//     |-- progdev.TBD
+//     `-- temp
+//
+// ## Read Formats
+//
+// Reads using the `/dev`, `/fpga`, and `/mem` commands in netascii mode will
 // return data in a hex dump like format (i.e. suitable for display in a
 // terminal).  Reading with these commands in octet mode will return the
 // requested data in binary form in network byte order (big endian).
@@ -91,7 +113,9 @@
 // The label of the first line is always "00000000" regardless of the offset or
 // address requested.
 //
-// Writes using the 'dev', 'fpga', and 'mem' commands in netascii mode
+// ## Write Formats
+//
+// Writes using the '/dev', '/fpga', and '/mem' commands in netascii mode
 // accept data formatted as a hexdump.  The hex dump produced by netascii mode
 // reads is valid input for netascii mode writes, but other formats are also
 // valid.  The following statements describe valid hexdump formats more
@@ -156,13 +180,13 @@
 
 // Help message
 static char tapcp_help_msg[] =
-"Available commands:\n"
-"  help    - this message\n"
-"  listdev - list FPGA device info\n"
-"  temp    - get FPGA temperature\n"
-"  dev/DEVNAME[/OFFSET[/LENGTH]] - access DEVNAME\n"
-"  fpga/OFFSET[/LENGTH] - access FPGA memory space\n"
-"  cpu/OFFSET[/LENGTH]  - access CPU memory space\n"
+"Available TAPCP commands:\n"
+"  /help    - this message\n"
+"  /listdev - list FPGA device info\n"
+"  /temp    - get FPGA temperature\n"
+"  [/dev/]DEVNAME[.OFFSET[.LENGTH]] - access DEVNAME\n"
+"  /fpga.OFFSET[.LENGTH] - access FPGA memory space\n"
+"  /cpu.OFFSET[.LENGTH]  - access CPU memory space\n"
 ;
 
 // Externally linked core_info data
@@ -839,11 +863,9 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 
   // Parse "command line"
   //
-  // Advance fname past leading "dev/"
-  if(!strncmp("dev/", fname, strlen("dev/"))) {
-    fname += strlen("dev/");
-  } else {
-    return NULL;
+  // Advance fname past leading "/dev/", if present
+  if(!strncmp("/dev/", fname, strlen("/dev/"))) {
+    fname += strlen("/dev/");
   }
   // Look for dot
   p = (uint8_t *)strchr(fname, '.');
@@ -971,17 +993,17 @@ casper_tapcp_open_mem(
   uint32_t nbytes = 0;
 
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("%s fname='%s' baseaddr=%p\n", __FUNCTION__, fname, baseaddr);
+  xil_printf("%s fname='%s'\n", __FUNCTION__, fname);
 #endif
 
-  // Advance fname past leading "fpga." or "cpu."
-  if(!strncmp("fpga.", fname, strlen("fpga."))) {
-    fname += strlen("fpga.");
+  // Advance fname past leading "/fpga." or "/cpu."
+  if(!strncmp("/fpga.", fname, strlen("/fpga."))) {
+    fname += strlen("/fpga.");
     baseaddr = FPGA_BASEADDR;
     nbytes = FPGA_NBYTES;
   // Only allow cpu read access
-  } else if(!state->write && !strncmp("cpu.", fname, strlen("cpu."))) {
-    fname += strlen("cpu.");
+  } else if(!state->write && !strncmp("/cpu.", fname, strlen("/cpu."))) {
+    fname += strlen("/cpu.");
   } else {
     return NULL;
   }
