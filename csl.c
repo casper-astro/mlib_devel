@@ -11,22 +11,25 @@
 // payload, if any.  The final list entry is followed by two zero values (with
 // no trailing characters and no payload bytes).
 //
-// The first value of a list entry specifies the number of leading characters
-// from the previous list entry are the same in the current list entry.  The
-// second value specifies the number of trailing characters in the current list
-// entry that differ from the previous list entry.  The second value is then
-// followed by those trailing characters, withOUT a terminating NUL character
-// since the exact length is known.  These trailing characters are followed by
-// the fixed length payload, if any.  The contents of the payload are not
-// relevant to the CSL data structure itself.  The payload bytes are opaque
-// data provided by and returned to clients.  The first entry in the list has
-// no previous entry and therefore has no characters to reuse.  The first
-// entry's first value (normally a "reuse" character count) specifies the fixed
-// size of each entry's payload.
+// The first value of a list entry specifies the entry's head size.  The head
+// size is the number of leading characters from the previous list entry that
+// are the same for the current list entry.  The second value specifies the
+// entry's tail size.  The tail size is the number of trailing characters in
+// the current list entry that differ from the previous list entry.  The second
+// value is then followed by those trailing characters, withOUT a terminating
+// NUL character since the exact length is known.  These trailing characters
+// are followed by the fixed length payload, if any.  The contents of the
+// payload are not relevant to the CSL data structure itself.  The payload
+// bytes are opaque data provided by and returned to clients.
+//
+// The first entry in the list has no previous entry and therefore has an
+// implicit head size of 0.  Instead of storing zero there, the first entry's
+// head size field is used to specify the fixed size of each entry's payload.
 //
 // Technically, the list entry strings need not be sorted, but unsorted list
 // entries will reduce the compactness of the CSL so it is highly recommended
-// to sort the list before compacting it into a CSL.
+// to sort the list before compacting it into a CSL.  Furthermore, unsorted
+// entries will break search algorithms that depend on sorted entries.
 //
 // The CSL has certain characteristics that can affect its suitability for a
 // given application.  These are discussed here briefly:
@@ -55,10 +58,10 @@
 //
 // This CSL implementation is designed for embedded systems with limited memory
 // resources, so compactness is favored over generality.  To that end, payload
-// length value, the number of reused characters, and the number of new
-// characters are each stored as a single byte.  This limits the maximum size
-// of the strings and payloads to 255 bytes each.  This is an implementation
-// limit, not an inherent limit of the CSL data structure.
+// length value, the head size, and the tail size are each stored as a single
+// byte.  This limits the maximum size of the strings and payloads to 255 bytes
+// each.  This is an implementation limit, not an inherent limit of the CSL
+// data structure.
 //
 // Example:
 //
@@ -96,29 +99,23 @@
 // Searches the CSL pointed to by `csl` for the string `key`.  If found, the
 // returned pointer is non-null.  If the CSL has non-zero payload length, the
 // non-null pointer points to the first byte of payload corresponding to `key`.
-// If `payload_len` is non-NULL, the payload length is stored in the pointed to
-// location.
 const unsigned char *
-find_key(
+csl_find_key(
     const unsigned char *csl,
-    const unsigned char *key,
-    unsigned char *payload_len)
+    const unsigned char *key)
 {
   unsigned char ntail;
   unsigned char nmatch = 0;
-  unsigned char plen;
+  unsigned char pl_len;
 
   if(!csl) {
     return (unsigned char *)0;
   }
 
   // Save payload length
-  plen = *csl++;
-  if(payload_len) {
-    *payload_len = plen;
-  }
+  pl_len = *csl++;
 
-  // While we have lest entries to process
+  // While we have entries to process
   while((ntail = *csl++)) {
     // While we have characters to match,
     // advance through the matching characters
@@ -127,7 +124,7 @@ find_key(
       printf("matched %c\n", *csl);
 #endif
       csl++; ntail--;
-      key++; //nkey--;
+      key++;
       nmatch++;
     }
 
@@ -150,21 +147,21 @@ find_key(
     // Keep looking...
 
     // Skip to next entry
-    csl += ntail + plen;
+    csl += ntail + pl_len;
 #ifdef DEBUG_CSL
-    printf("next reuse is %u\n", *csl);
+    printf("next head size is %u\n", *csl);
 #endif
 
-    // Skip entries with reuse count greater than nmatch
+    // Skip entries with head size greater than nmatch
     while(*csl > nmatch) {
 #ifdef DEBUG_CSL
-      printf("skipping reuse %u ", *csl);
+      printf("skipping head size %u ", *csl);
 #endif
       csl++;
 #ifdef DEBUG_CSL
       printf("and tail %u\n", *csl);
 #endif
-      csl += *csl + plen;
+      csl += *csl + pl_len;
       csl++;
     }
 
@@ -172,7 +169,7 @@ find_key(
     if(*csl++ < nmatch) {
       // Not found
 #ifdef DEBUG_CSL
-      printf("bailing on reuse %u\n", *--csl);
+      printf("bailing on head size %u\n", *--csl);
 #endif
       return (unsigned char *)0;
     }
@@ -182,5 +179,104 @@ find_key(
 #ifdef DEBUG_CSL
   printf("never matched! ntail=%u\n", ntail);
 #endif
+  return (unsigned char *)0;
+}
+
+// File static (private) static storage for csl_iter_* and find_by_* functions.
+static const unsigned char *csl_pcsl = (const unsigned char )0;
+static unsigned char csl_key[256] = {0};
+static unsigned char csl_pl_len = 0;
+static unsigned char csl_nhead = 0;
+
+// Initialize internal storage to iterate through a CSL
+void
+csl_iter_init(const unsigned char *csl)
+{
+  csl_pcsl = csl;
+  csl_key[0] = '\0';
+  csl_pl_len = *csl_pcsl++;
+  csl_nhead = 0;
+}
+
+// Get the next entry.  Returns pointer to payload of next entry or NULL if no
+// more entries.  If pkey is non-NULL, a pointer to the entry's full key string
+// will be stored in *pkey.
+const unsigned char *
+csl_iter_next(const unsigned char **pkey)
+{
+  unsigned char *pcsl_key;
+  unsigned char ntail;
+  const unsigned char *payload = (const unsigned char *)0;
+
+  // csl_pcsl was left pointing to tail size field of next entry, so we can use
+  // that to tell if we are at the end of the list (i.e. when ntail == 0).
+  if((ntail = *csl_pcsl++)) {
+    // Copy tail
+    pcsl_key = csl_key + csl_nhead;
+    while(ntail--) {
+      *pcsl_key++ = *csl_pcsl++;
+    }
+    *pcsl_key = '\0';
+    // Save payload pointer and key
+    payload = csl_pcsl;
+    if(pkey) {
+      *pkey = csl_key;
+    }
+    // Setup for next iteration (leave csl_pcsl pointing to next entry's tail
+    // size field).
+    csl_pcsl += csl_pl_len;
+    csl_nhead = *csl_pcsl++;
+  }
+
+  return payload;
+}
+
+
+// Searches a CSL for for the next entry whose payload byte `plidx` has value
+// `plval`.  If found, the returned pointer is non-null.  If the CSL has
+// non-zero payload length, this non-null pointer points to the first byte of
+// payload corresponding to `key`.
+//
+// This function is designed to be called iteratively to walk through the
+// entire CSL to find all matching the search criteria.  To start a new search,
+// `csl` should point to the beginning of the CSL to be searched using `plidx`
+// and `plval` as the search criteria.  If a matching entry is found and
+// returned, the next matching entry can be found by passing NULL for `csl` and
+// the desired search criteria for `plidx` and `plval`.  While the most common
+// use case will involve passing the same search criteria every time, the new
+// search criteria are not required to be the same for each call.
+const unsigned char *
+csl_find_by_payload(
+    const unsigned char *csl,
+    const unsigned char plidx,
+    const unsigned char plval,
+    const unsigned char **matched_key)
+{
+  const unsigned char *payload = (const unsigned char *)0;
+
+  // If new search, restart iterator
+  if(csl) {
+    csl_iter_init(csl);
+  }
+
+  // If plidx is out of bounds
+  if(plidx > csl_pl_len) {
+    return (unsigned char *)0;
+  }
+
+  // While we have entries
+  while((payload = csl_iter_next(matched_key))) {
+    // Check for match
+    if(payload[plidx] == plval) {
+      if(matched_key) {
+#ifdef DEBUG_CSL
+        printf("%s returning key '%s'\n", __FUNCTION__, *matched_key);
+#endif
+      }
+      return payload;
+    }
+  }
+
+  // No more matches
   return (unsigned char *)0;
 }

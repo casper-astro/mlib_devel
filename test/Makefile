@@ -19,22 +19,34 @@ core_info_BINARY = $(word 1, \
 OBJS += $(patsubst %.bin, %.o, \
 				$(patsubst %.tab, %.o, $(core_info_BINARY)))
 
-csl_test: csl_test.o csl.o $(OBJS)
+all: csl_find_key_test csl_find_by_payload_test
+
+%_test: %_test.o csl.o $(OBJS)
 	$(CC) -o $@ $^
 
-csl_test.o: csl_test.c ../csl.h
+%_test.o: %_test.c ../csl.h
 	$(CC) -I.. $(CFLAGS) -o $@ -c $<
 
 csl.o: ../csl.c ../csl.h
 	$(CC) -I.. $(CFLAGS) -o $@ -c $<
 
 dummy_info.o: dummy_info.bin
-	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) --redefine-sym \
-		_binary_dummy_info_bin_start=_binary_core_info_bin_start \
+	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) \
+		--redefine-sym \
+		_binary_dummy_info_bin_start=_core_info \
+		-N _binary_dummy_info_bin_end \
+		-N _binary_dummy_info_bin_size \
+		--rename-section .data=.core_info \
 		$< $@
 
 core_info.o: core_info.bin
-	objcopy -I binary -O $(OBJFMT) -B $(OBJARCH) $< $@
+	$(OBJCOPY) -I binary -O $(OBJFMT) -B $(OBJARCH) \
+		--redefine-sym \
+		_binary_core_info_bin_start=_core_info \
+		-N _binary_core_info_bin_end \
+		-N _binary_core_info_bin_size \
+		--rename-section .data=.core_info \
+		$< $@
 
 core_info.bin: core_info.tab
 	ruby ../util/cit2bin.rb $< > $@
@@ -45,6 +57,6 @@ test:
 	@echo OBJARCH=$(OBJARCH)
 
 clean:
-	rm csl_test *.o
+	rm csl_find_key_test csl_find_by_payload_test *.o core_info.bin
 
 .PHONY: test clean

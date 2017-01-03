@@ -360,11 +360,13 @@ casper_tapcp_read_listdev_ascii(
   // the output buffer completely except to signal end of data, we will often
   // have to split lines across two calls.
   //
+  // state->ptr points to the core_info CSL
   // state->lidx stores the number of line_buf bytes already output, zero if
-  // there is no pending line, or -1 if this is the first line.  state->ptr
-  // points to the next core info entry.
+  // there is no pending line, or -1 if this is the first line.
 
   uint8_t *plb;
+  const uint8_t *name;
+  const uint8_t *payload;
   int len = 0;
   uint32_t n;
 
@@ -373,33 +375,33 @@ casper_tapcp_read_listdev_ascii(
       state, buf, bytes, len, state->lidx);
 #endif
 
+  // If first line
+  if(state->lidx == -1) {
+    csl_iter_init(state->ptr);
+    state->lidx = 0;
+  }
+
   while(len < bytes) {
     // If need to start a new line
-    if(state->lidx <= 0) {
-      // Init
-      plb = line_buf;
-      // If not first line, reuse characters
-      if(state->lidx == 0) {
-        plb += *(uint8_t *)state->ptr;
-      }
-      state->ptr++;
-      state->lidx = 0;
-      // Get tail length
-      n = *(uint8_t *)state->ptr++;
-      // If tail is 0, all done!
-      if(n == 0) {
+    if(state->lidx == 0) {
+      // If no more entries
+      if(!(payload = csl_iter_next(&name))) {
+        // All done!
         return len;
       }
-      // Copy tail
-      memcpy(plb, state->ptr, n);
-      state->ptr += n;
-      plb += n;
+
+      // Init
+      plb = line_buf;
+      // Copy name up to, but not including, terminating NUL
+      for(n=0; name[n]; n++) {
+        *plb++ = name[n];
+      }
       *plb++ = '\t';
       // Read offset
-      n  = (*(uint8_t *)state->ptr++ & 0xff) << 24;
-      n |= (*(uint8_t *)state->ptr++ & 0xff) << 16;
-      n |= (*(uint8_t *)state->ptr++ & 0xff) <<  8;
-      n |= (*(uint8_t *)state->ptr++ & 0xff);
+      n  = (*payload++ & 0xff) << 24;
+      n |= (*payload++ & 0xff) << 16;
+      n |= (*payload++ & 0xff) <<  8;
+      n |= (*payload++ & 0xff);
       // Output mode to buffer
       *plb++ = (n&1) ? '1' : '3';
       *plb++ = '\t';
@@ -407,19 +409,19 @@ casper_tapcp_read_listdev_ascii(
       plb = u32_to_hex(n & ~3, plb, 0);
       *plb++ = '\t';
       // Read length
-      n  = (*(uint8_t *)state->ptr++ & 0xff) << 24;
-      n |= (*(uint8_t *)state->ptr++ & 0xff) << 16;
-      n |= (*(uint8_t *)state->ptr++ & 0xff) <<  8;
-      n |= (*(uint8_t *)state->ptr++ & 0xff);
+      n  = (*payload++ & 0xff) << 24;
+      n |= (*payload++ & 0xff) << 16;
+      n |= (*payload++ & 0xff) <<  8;
+      n |= (*payload++ & 0xff);
       // Output length to buffer
       plb = u32_to_hex(n, plb, 0);
       *plb++ = '\t';
       // Read and output type to buffer
-      plb = u32_to_hex(*(uint8_t *)state->ptr++, plb, 0);
+      plb = u32_to_hex(*payload, plb, 0);
       *plb++ = '\n';
     }
 
-    // Copy data to buf
+    // Copy data to output buf
     plb = line_buf + state->lidx;
     while(len < bytes) {
       // Copy byte
@@ -835,6 +837,7 @@ casper_tapcp_open_listdev(struct tapcp_state *state)
 {
   // Setup tapcp state
   if(state->binary) {
+    // Binary outout includes the CSL length
     state->ptr = (void *)(CORE_INFO - 2);
     state->nleft = Xil_Ntohs(_core_info_size_be) + 2;
     set_tftp_read((tftp_read_f)casper_tapcp_read_mem_bytes_binary);
@@ -875,7 +878,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   }
 
   // Look for device name
-  cip = find_key(CORE_INFO, (const uint8_t *)fname, NULL);
+  cip = csl_find_key(CORE_INFO, (const uint8_t *)fname);
 
   if(p) {
     // Restore dot (and const-ness) and advance p
