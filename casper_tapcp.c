@@ -171,6 +171,7 @@
 #include "lwip/apps/tftp_server.h"
 #include "casper_tftp.h"
 #include "casper_tapcp.h"
+#include "casper_devcsl.h"
 #include "csl.h"
 
 // FPGA memory space macros
@@ -852,11 +853,15 @@ casper_tapcp_open_listdev(struct tapcp_state *state)
 void *
 casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 {
-  uint8_t i;
   uint8_t *p = NULL;
+#if 1 // TODO
+#else
+  uint8_t i;
   const uint8_t *cip = NULL; // core_info payload
   uint32_t fpga_off  = 0; // From core_info
   uint32_t fpga_len  = 0; // From core_info
+#endif
+  struct casper_dev_info dev_info;
   uint32_t cmd_off = 0; // From command line
   uint32_t cmd_len = 0; // From command line
 
@@ -877,8 +882,8 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
     *p = '\0';
   }
 
-  // Look for device name
-  cip = csl_find_key(CORE_INFO, (const uint8_t *)fname);
+  // Look for device
+  state->ptr = casper_find_dev(fname, &dev_info);
 
   if(p) {
     // Restore dot (and const-ness) and advance p
@@ -886,28 +891,19 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
   }
 
   // If device not found, return error
-  if(!cip) {
+  if(!state->ptr) {
 #ifdef VERBOSE_TAPCP_IMPL
     xil_printf("did not find device in core info\n");
 #endif
     return NULL;
   }
 
-  // Get fpga_offset and fpga_len from core_info
-  for(i=0; i<4; i++) {
-    fpga_off <<= 8;
-    fpga_off |= (*cip++ & 0xff);
-  }
-  for(i=0; i<4; i++) {
-    fpga_len <<= 8;
-    fpga_len |= (*cip++ & 0xff);
-  }
 #ifdef VERBOSE_TAPCP_IMPL
-  xil_printf("fpga_off=%p fpga_len=%x\n", fpga_off, fpga_len);
+  xil_printf("dev_off=%p dev_len=%x\n", dev_info.offset, dev_info.length);
 #endif
 
   // Disallow writes to read only devices
-  if(state->write && (fpga_off & 1)) {
+  if(state->write && (dev_info.offset & 1)) {
     return NULL;
   }
 
@@ -925,7 +921,7 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 
   // Zero or not given length means all of it starting from cmd_offset
   if(cmd_len == 0) {
-    cmd_len = (fpga_len >> 2) - cmd_off;
+    cmd_len = (dev_info.length >> 2) - cmd_off;
     // If nothing left after cmd_offset
     if(cmd_len == 0) {
 #ifdef VERBOSE_TAPCP_IMPL
@@ -940,18 +936,15 @@ casper_tapcp_open_dev(struct tapcp_state *state, const char *fname)
 #endif
 
   // Bounds check on reads only
-  if(!state->write && cmd_off + cmd_len > (fpga_len >> 2)) {
+  if(!state->write && cmd_off + cmd_len > (dev_info.length >> 2)) {
 #ifdef VERBOSE_TAPCP_IMPL
     xil_printf("request too long\n");
 #endif
     return NULL;
   }
 
-  // Setup tapcp state
-  // Treat all terms as ints, then cast result to pointer.
-  state->ptr = (void *)(
-      XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR +
-      (fpga_off & ~3) + (cmd_off << 2));
+  // Add cmd_off to device pointer
+  state->ptr += cmd_off << 2;
   // nleft is a byte count
   state->nleft = cmd_len << 2;
 
@@ -1042,8 +1035,8 @@ casper_tapcp_open_mem(
 #endif
       return NULL;
     }
-    // TODO How to handle wrap-around CPU read requests?
-    // For now, only bounds check for long FPGA reads.
+    // Only bounds check for long FPGA reads.
+    // Let CPU requests wrap around.
     if(baseaddr == FPGA_BASEADDR && cmd_off + cmd_len > nbytes) {
 #ifdef VERBOSE_TAPCP_IMPL
       xil_printf("request too long\n");

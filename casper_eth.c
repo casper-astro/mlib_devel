@@ -7,14 +7,10 @@
 #include "lwip/init.h"
 #include "lwip/timeouts.h"
 
+#include "casper_devcsl.h"
 #include "casper_eth.h"
 #include "casper_tftp.h"
 #include "tmrctr.h"
-
-// From core_info.tab
-// TODO Get this from in-memory table
-#define WB_ETH0_OFFSET (0x292f8)
-#define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_ETH0_OFFSET)
 
 // Array of one (for now)
 static struct netif netif_en[1];
@@ -259,14 +255,25 @@ casper_netif_init(struct netif *netif)
 err_t
 casper_lwip_init()
 {
+  const uint8_t *core_name;
 #ifdef DEBUG_ETH0_MEM
   int i;
   int j;
 #endif // DEBUG_ETH0_MEM
 
   // Init local ifstate
-  ifstate.ptr = (void *)ETH0_BASE_ADDRESS;
+  ifstate.ptr = (void *)casper_find_dev_by_typecode(
+      CASPER_CORE_INFO_TYPECODE_ETHCORE, 1, NULL, &core_name);
   ifstate.last_link_state = -1;
+
+  if(!ifstate.ptr) {
+    print("No ethernet cores found!\n");
+    return ERR_IF;
+  }
+
+  print("using ethernet core ");
+  print((const char *)core_name);
+  print("\n");
 
 #ifdef DEBUG_ETH0_MEM
   print("## eth0 memory as uint32_t:\n");

@@ -54,13 +54,14 @@
 #include "tmrctr.h"
 #include "spi.h"
 #include "casper_eth.h"
+#include "casper_devcsl.h"
 
 #define HEARTBEAT_MS 10000
 
 int main()
 {
     int i, j;
-#if 0
+#ifdef DEBUG_ETH_0_CORE
     int rx_size;
 #endif
     int fpga_temp;
@@ -72,6 +73,7 @@ int main()
     u64 time0, time1;
     u32 tick0, tick1;
 #endif // JAM_TEST_TMRCTR
+    uint32_t *preg;
 
     init_platform();
 
@@ -172,122 +174,119 @@ int main()
     }
     print("\n");
 
-// From core_info.tab
-#define WB_SYS_CLKCOUNTER (0x1402c)
-#define SYS_CLKCOUNTER_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_SYS_CLKCOUNTER)
+    // Look for sys_clkcounter register
+    if((preg = casper_find_dev("sys_clkcounter", NULL))) {
+      u32 tic = *preg;
+      sleep(1);
+      u32 toc = *preg;
+      xil_printf("fabric clock running at %d Hz\n\n", toc-tic);
+    } else {
+      print("sys_clkcounter not found\n");
+    }
 
-    s32 tic = *(u32 *)SYS_CLKCOUNTER_ADDRESS;
-    sleep(1);
-    s32 toc = *(u32 *)SYS_CLKCOUNTER_ADDRESS;
-    xil_printf("fabric clock running at %d Hz\n\n", toc-tic);
-
-#if 0
-// From core_info.tab
-#define WB_ETH0_OFFSET (0x292f8)
-#define ETH0_BASE_ADDRESS (XPAR_AXI_SLAVE_WISHBONE_CLASSIC_MASTER_0_BASEADDR + WB_ETH0_OFFSET)
-
+#ifdef DEBUG_ETH_0_CORE
     // Make various pointers to eth0 memory
-    volatile u32 *eth0_ptr32 = (u32 *)(ETH0_BASE_ADDRESS);
-    volatile u16 *eth0_ptr16 = (u16 *)(ETH0_BASE_ADDRESS);
-    volatile u8  *eth0_ptr8  = (u8  *)(ETH0_BASE_ADDRESS);
+    u8  *eth0_ptr8 = NULL;
+    u16 *eth0_ptr16 = NULL;
+    u32 *eth0_txbuf = NULL;
+    u32 *eth0_rxbuf = NULL;
 
-    // Arithmetic on pointers to u32 is done in units of u32
-    // Scale OFFSETs accordingly!
-    volatile u32 *eth0_txbuf = eth0_ptr32 + ETH_MAC_TX_BUFFER_OFFSET/sizeof(u32);
-    volatile u32 *eth0_rxbuf = eth0_ptr32 + ETH_MAC_RX_BUFFER_OFFSET/sizeof(u32);
-#endif
+    u32 *eth0_ptr32 = casper_find_dev("eth_0_core", NULL);
+    if(!eth0_ptr32) {
+      print("eth_0_core not found\n");
+    } else {
+      eth0_ptr8  = (u8  *)eth0_ptr32;
+      eth0_ptr16 = (u16 *)eth0_ptr32;
+      eth0_txbuf = TX_BUF_PTR32(eth0_ptr32);
+      eth0_rxbuf = RX_BUF_PTR32(eth0_ptr32);
 
-#if 0
-    // Reset eth0
-    eth0_ptr8[ETH_MAC_REG8_RESET] = 1;
-    for(i=0; i<1000; i++) {
-      if(!eth0_ptr8[ETH_MAC_REG8_RESET]) break;
-    }
-    xil_printf("looped %d times waiting for reset to complete\n", i);
+      // Reset eth0
+      eth0_ptr8[ETH_MAC_REG8_RESET] = 1;
+      for(i=0; i<1000; i++) {
+        if(!eth0_ptr8[ETH_MAC_REG8_RESET]) break;
+      }
+      xil_printf("looped %d times waiting for reset to complete\n", i);
 
-    print("## eth0 memory as u8:\n");
-    for(i=0; i<4; i++) {
-      xil_printf("%02x:", 16*i);
-      for(j=0; j<16; j++) {
-        //xil_printf(" %02x", *(((u8 *)ETH0_BASE_ADDRESS) + 16*i+j));
-        xil_printf(" %02x", eth0_ptr8[16*i+j]);
+      print("## eth0 memory as u8:\n");
+      for(i=0; i<4; i++) {
+        xil_printf("%02x:", 16*i);
+        for(j=0; j<16; j++) {
+          xil_printf(" %02x", eth0_ptr8[16*i+j]);
+        }
+        print("\n");
       }
       print("\n");
-    }
-    print("\n");
 
-    print("## eth0 memory as u16:\n");
-    for(i=0; i<4; i++) {
-      xil_printf("%02x:", 16*i);
-      for(j=0; j<8; j++) {
-        //xil_printf(" %04x", *(((u16 *)ETH0_BASE_ADDRESS) + 8*i+j));
-        xil_printf(" %04x", eth0_ptr16[8*i+j]);
+      print("## eth0 memory as u16:\n");
+      for(i=0; i<4; i++) {
+        xil_printf("%02x:", 16*i);
+        for(j=0; j<8; j++) {
+          xil_printf(" %04x", eth0_ptr16[8*i+j]);
+        }
+        print("\n");
       }
       print("\n");
-    }
-    print("\n");
 
-    print("## eth0 memory as u32:\n");
-    for(i=0; i<4; i++) {
-      xil_printf("%02x:", 16*i);
-      for(j=0; j<4; j++) {
-        //xil_printf(" %08x", *(((u32 *)ETH0_BASE_ADDRESS) + 4*i+j));
-        xil_printf(" %08x", eth0_ptr32[4*i+j]);
+      print("## eth0 memory as u32:\n");
+      for(i=0; i<4; i++) {
+        xil_printf("%02x:", 16*i);
+        for(j=0; j<4; j++) {
+          xil_printf(" %08x", eth0_ptr32[4*i+j]);
+        }
+        print("\n");
       }
       print("\n");
+
+      // Broadcast ARP packet.  The packet format is based this tcpdump capture
+      // of a unicast ARP packet:
+      //
+      // 00:25:90:9d:aa:41 > 0c:c4:7a:aa:8a:fb, ethertype ARP (0x0806), length 60:
+      // Request who-has 10.0.1.1 tell 10.0.100.49, length 46
+      //      0x0000:  0cc4 7aaa 8afb 0025 909d aa41 0806 0001
+      //      0x0010:  0800 0604 0001 0025 909d aa41 0a00 6431
+      //      0x0020:  0000 0000 0000 0a00 0101 0000 0000 0000
+      //      0x0030:  0000 0000 0000 0000 0000 0000
+      //
+      // The packet sent here has these changes:
+      //
+      // Replace src MAC with 02:02:0a:0a:0a:0a, src IP with 10.10.10.10
+      // Replace dst MAC with ff:ff:ff:ff:ff:ff, dst IP with 10.20.30.40
+      // Added 4 bytes of padding since core requires multiple of 8 bytes
+      int pktlen32 = 16;
+      u32 pkt32[] = {
+        0xffffffff, 0xffff0202, 0x0a0a0a0a, 0x08060001,
+        0x08000604, 0x00010202, 0x0a0a0a0a, 0x0a0a0a0a,
+        0x00000000, 0x00000a14, 0x1e280000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000
+      };
+
+      // Loop a bunch of times waiting for TX buffer to be free
+      // (indicated by size going to 0)
+      for(i=0; i<10000; i++) {
+        // If length is zero, then TX buffer is free
+        if(!*TX_BUF_SIZE_PTR16(eth0_ptr16)) break;
+      }
+
+      if(i > 0) {
+        xil_printf("looped %d times waiting for TX buffer\n\n", i);
+      }
+
+      // Copy packet to TX buffer
+      for(i=0; i<pktlen32; i++) {
+        eth0_txbuf[i] = pkt32[i];
+      }
+
+      // Set TX buffer level to number of 8 byte words to send packet
+      *TX_BUF_SIZE_PTR16(eth0_ptr16) = pktlen32/2;
     }
-    print("\n");
-#endif
-
-#if 0
-    // Broadcast ARP packet.  The packet format is based this tcpdump capture
-    // of a unicast ARP packet:
-    //
-    // 00:25:90:9d:aa:41 > 0c:c4:7a:aa:8a:fb, ethertype ARP (0x0806), length 60:
-    // Request who-has 10.0.1.1 tell 10.0.100.49, length 46
-    //      0x0000:  0cc4 7aaa 8afb 0025 909d aa41 0806 0001
-    //      0x0010:  0800 0604 0001 0025 909d aa41 0a00 6431
-    //      0x0020:  0000 0000 0000 0a00 0101 0000 0000 0000
-    //      0x0030:  0000 0000 0000 0000 0000 0000
-    //
-    // The packet sent here has these changes:
-    //
-    // Replace src MAC with 02:02:0a:0a:0a:0a, src IP with 10.10.10.10
-    // Replace dst MAC with ff:ff:ff:ff:ff:ff, dst IP with 10.20.30.40
-    // Added 4 bytes of padding since core requires multiple of 8 bytes
-    int pktlen32 = 16;
-    u32 pkt32[] = {
-      0xffffffff, 0xffff0202, 0x0a0a0a0a, 0x08060001,
-      0x08000604, 0x00010202, 0x0a0a0a0a, 0x0a0a0a0a,
-      0x00000000, 0x00000a14, 0x1e280000, 0x00000000,
-      0x00000000, 0x00000000, 0x00000000, 0x00000000
-    };
-
-    // Loop a bunch of times waiting for TX buffer to be free
-    // (indicated by size going to 0)
-    for(i=0; i<10000; i++) {
-      // If length is zero, then TX buffer is free
-      if(!eth0_ptr16[ETH_MAC_REG16_TX_BUFFER_SIZE]) break;
-    }
-
-    if(i > 0) {
-      xil_printf("looped %d times waiting for TX buffer\n\n", i);
-    }
-
-    // Copy packet to TX buffer
-    for(i=0; i<pktlen32; i++) {
-      eth0_txbuf[i] = pkt32[i];
-    }
-
-    // Set TX buffer level to number of 8 byte words to send packet
-    eth0_ptr16[ETH_MAC_REG16_TX_BUFFER_SIZE] = pktlen32/2;
 #endif
 
     while(1) {
       casper_lwip_handler();
-#if 0
+#ifdef DEBUG_ETH_0_CORE
+      if(eth0_ptr32) {
         // Get RX buffer size
-        rx_size = eth0_ptr16[ETH_MAC_REG16_RX_BUFFER_SIZE];
+        rx_size = *RX_BUF_SIZE_PTR16(eth0_ptr16);
         // Show packet contents if non-zero
         if(rx_size != 0) {
           // Double rx_size to get number of 32 bit words
@@ -301,18 +300,19 @@ int main()
           if((i & 3) != 0) print("\n");
 
           // Ack the packet
-          eth0_ptr16[ETH_MAC_REG16_RX_BUFFER_SIZE] = 0;
+          *RX_BUF_SIZE_PTR16(eth0_ptr16) = 0;
         }
+      }
 #endif
 
-        curr_ms = ms_tmrctr();
-        if(next_ms <= curr_ms) {
-          next_ms = curr_ms + HEARTBEAT_MS;
+      curr_ms = ms_tmrctr();
+      if(next_ms <= curr_ms) {
+        next_ms = curr_ms + HEARTBEAT_MS;
 
-          fpga_temp = (int)(10*get_fpga_temp());
-          xil_printf("FPGA at %d.%d C [ms %d]\n",
-              fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
-        }
+        fpga_temp = (int)(10*get_fpga_temp());
+        xil_printf("FPGA at %d.%d C [ms %d]\n",
+            fpga_temp / 10, fpga_temp % 10, ms_tmrctr());
+      }
     }
 
     // Should "never" get here
