@@ -370,137 +370,135 @@ casper_rx_packet()
   uint32_t *nibuf32; // byte swapped buffer ("ni" is byte swapped "in" :))
   struct pbuf *p, *q;
 
-  // Check for received frames, feed them to lwIP
-  if(!(size64 = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
-    // No packets received, nothing to do
-    return;
-  }
+  // Stay in this function so long as we still have received packets
+  while((size64 = *RX_BUF_SIZE_PTR16(ifstate.ptr))) {
+    // Work with words
+    size32 = size64 << 1;
 
-  // Work with words
-  size32 = size64 << 1;
+    // If packet too large
+    if(size32 > ETHERNET_MTU + SIZEOF_ETH_HDR) {
+      // Ack packet so we'll receive more packets
+      *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
+      LINK_STATS_INC(link.memerr);
+      LINK_STATS_INC(link.drop);
+      xil_printf("pkt too big %u > %u words [ms %u]\n",
+          size32, ETHERNET_MTU + SIZEOF_ETH_HDR, ms_tmrctr());
+      // See if we have any more packets
+      continue;
+    }
 
-  // If packet too large
-  if(size32 > ETHERNET_MTU + SIZEOF_ETH_HDR) {
-    // Ack packet so we'll receive more packets
-    *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
-    LINK_STATS_INC(link.memerr);
-    LINK_STATS_INC(link.drop);
-    xil_printf("pkt too big %u > %u words [ms %u]\n",
-        size32, ETHERNET_MTU + SIZEOF_ETH_HDR, ms_tmrctr());
-    // Nothing more to do here
-    return;
-  }
+    // Get pbuf from pool
+    p = pbuf_alloc(PBUF_RAW, (size32<<2), PBUF_POOL);
 
-  // Get pbuf from pool
-  p = pbuf_alloc(PBUF_RAW, (size32<<2), PBUF_POOL);
+    // If we got NULL
+    if(!p) {
+      // Ack packet so we'll receive more packets
+      *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
+      LINK_STATS_INC(link.memerr);
+      LINK_STATS_INC(link.drop);
+      xil_printf("bad pbuf for %d bytes [ms %u]\n",
+          (size32<<2), ms_tmrctr());
+      // See if we have any more packets
+      continue;
+    }
 
-  // If we got NULL
-  if(!p) {
-    // Ack packet so we'll receive more packets
-    *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
-    LINK_STATS_INC(link.memerr);
-    LINK_STATS_INC(link.drop);
-    xil_printf("bad pbuf for %d bytes [ms %u]\n",
-        (size32<<2), ms_tmrctr());
-    // Nothing more to do here
-    return;
-  }
-
-  // OK, got one or more pbufs to hold our packet data
-  LINK_STATS_INC(link.recv);
-  size32 = size64 << 1;
+    // OK, got one or more pbufs to hold our packet data
+    LINK_STATS_INC(link.recv);
+    size32 = size64 << 1;
 #ifdef VERBOSE_ETH_IMPL
-  xil_printf("read %u bytes as %u longwords to addr %p [ms %u]\n",
-      (size32<<2), size64, p->payload, ms_tmrctr());
+    xil_printf("read %u bytes as %u longwords to addr %p [ms %u]\n",
+        (size32<<2), size64, p->payload, ms_tmrctr());
 #endif // VERBOSE_ETH_IMPL
 
 #if 1 // TODO
 #else // TODO
-  // cheesy tcpdump
-  // last two octets of src mac, ethertype, dst udp port, udp length, tftp opcode, ms
-  // obviously udp and tftp fields are valid only for udp and tftp packet.
-  uint16_t *inbuf16 = (uint16_t *)RX_BUF_PTR32(ifstate.ptr);
-  xil_printf("RX %04x %04x %04x %04x %04x %u\n",
-    inbuf16[5^1], inbuf16[6^1], inbuf16[18^1], inbuf16[19^1], inbuf16[21^1], ms_tmrctr());
+    // cheesy tcpdump
+    // last two octets of src mac, ethertype, dst udp port, udp length, tftp opcode, ms
+    // obviously udp and tftp fields are valid only for udp and tftp packet.
+    uint16_t *inbuf16 = (uint16_t *)RX_BUF_PTR32(ifstate.ptr);
+    xil_printf("RX %04x %04x %04x %04x %04x %u\n",
+      inbuf16[5^1], inbuf16[6^1], inbuf16[18^1], inbuf16[19^1], inbuf16[21^1], ms_tmrctr());
 #endif
 
-  // Need to byte swap 32 bit words in RX buffer due to how AXI/Wishbone
-  // interface orders bytes.
-  // Since we can't do this in-place in the RX buffer (because it is read-only
-  // for some reason or other that escapes my understanding), we do it to a
-  // 4-byte aligned buffer in the system memory.
-  inbuf32 = RX_BUF_PTR32(ifstate.ptr);
-  nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
+    // Need to byte swap 32 bit words in RX buffer due to how AXI/Wishbone
+    // interface orders bytes.  Since we can't do this in-place in the RX
+    // buffer (because it is read-only for some reason or other that escapes my
+    // understanding), we do it the TX buffer since it is unused by the time we
+    // get here (any packet sent was transmitted long ago).
+    inbuf32 = RX_BUF_PTR32(ifstate.ptr);
+    nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
 #ifdef VERBOSE_ETH_IMPL
-  xil_printf("byte swapping %u words to TX buff\n", size32);
+    xil_printf("byte swapping %u words to TX buff\n", size32);
 #endif // VERBOSE_ETH_IMPL
-  for(i=0; i<size32; i++) {
-    *nibuf32++ = mb_swapb(*inbuf32++);
-  }
+    for(i=0; i<size32; i++) {
+      *nibuf32++ = mb_swapb(*inbuf32++);
+    }
 
 #ifdef DEBUG_PKT_RX
-  nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
-  xil_printf("RX byte-swapped buf %p:\n", nibuf32);
-  for(i=0; i<8; i++) {
-    if((i & 3) == 0) xil_printf("%04x:", (i<<2));
-    xil_printf(" %08x", nibuf32[i]);
-    if((i & 3) == 3) print("\n");
-  }
-  if((i & 3) != 0) print("\n");
-  print("\n");
+    nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
+    xil_printf("RX byte-swapped buf %p:\n", nibuf32);
+    for(i=0; i<8; i++) {
+      if((i & 3) == 0) xil_printf("%04x:", (i<<2));
+      xil_printf(" %08x", nibuf32[i]);
+      if((i & 3) == 3) print("\n");
+    }
+    if((i & 3) != 0) print("\n");
+    print("\n");
 #endif // DEBUG_PKT_RX
 
-  // Copy packet from the 4-byte aligned RX byte-swapped buffer (i.e. TX
-  // buffer, see comments above) to possibly unalinged pbuf(s), so do it using
-  // memcpy.  Use q to walk the pbufs.
-  inbuf8 = SWAPB_BUF_PTR8(ifstate.ptr);
-  bytes_remaining = (size32<<2);
-  q = p;
-  while(q) {
-    // Determine how many bytes to copy
-    if(bytes_remaining <= q->len) {
-      // This will be last pbuf
-      q->len     = bytes_remaining;
-      q->tot_len = bytes_remaining;
-      // If this is not the first pbuf
-      if(q != p) {
-        // TODO adjust tot_len of earlier pbufs.
-        print("YIKES pkt rx truncating non-first pbuf!\n");
+    // Copy packet from the 4-byte aligned RX byte-swapped buffer (i.e. TX
+    // buffer, see comments above) to possibly unalinged pbuf(s), so do it
+    // using memcpy.  Use q to walk the pbufs.
+    inbuf8 = SWAPB_BUF_PTR8(ifstate.ptr);
+    bytes_remaining = (size32<<2);
+    q = p;
+    while(q) {
+      // Determine how many bytes to copy
+      if(bytes_remaining <= q->len) {
+        // This will be last pbuf
+        q->len     = bytes_remaining;
+        q->tot_len = bytes_remaining;
+        // If this is not the first pbuf
+        if(q != p) {
+          // TODO adjust tot_len of earlier pbufs.
+          print("YIKES pkt rx truncating non-first pbuf!\n");
+        }
       }
+      // Copy bytes
+      memcpy(q->payload, inbuf8, q->len);
+      // Adjust pointer and bytes remaining counter
+      inbuf8 += q->len;
+      bytes_remaining -= q->len;
+
+      // Break out if this is the last pbuf of packet.  q->tot_len should
+      // "never" be less than q->len, but that would certianly be an exit
+      // condition!
+      if(q->tot_len <= q->len) {
+        break;
+      }
+
+      // Go to next pbuf (if any)
+      q = q->next;
     }
-    // Copy bytes
-    memcpy(q->payload, inbuf8, q->len);
-    // Adjust pointer and bytes remaining counter
-    inbuf8 += q->len;
-    bytes_remaining -= q->len;
 
-    // Break out if this is the last pbuf of packet.  q->tot_len should "never"
-    // be less than q->len, but that would certianly be an exit condition!
-    if(q->tot_len <= q->len) {
-      break;
-    }
-
-    // Go to next pbuf (if any)
-    q = q->next;
-  }
-
-  // Done with RX buffer, so ack the packet
-  *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
+    // Done with RX buffer, so ack the packet
+    *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
 
 #ifdef DEBUG_PKT_RX
-  // Print first 32 bytes of first pbuf
-  for(i=0; i<32; i++) {
-    if((i & 15) == 0) xil_printf("%04x:", (i<<2));
-    xil_printf(" %02x", ((uint8_t *)p->payload)[i]);
-    if((i & 15) == 15) print("\n");
-  }
-  if((i & 15) != 0) print("\n");
-  print("\n");
+    // Print first 32 bytes of first pbuf
+    for(i=0; i<32; i++) {
+      if((i & 15) == 0) xil_printf("%04x:", (i<<2));
+      xil_printf(" %02x", ((uint8_t *)p->payload)[i]);
+      if((i & 15) == 15) print("\n");
+    }
+    if((i & 15) != 0) print("\n");
+    print("\n");
 #endif // DEBUG_PKT_RX
 
-  // Pass PBUF to input function
-  if(netif_en[0].input(p, &netif_en[0]) != ERR_OK) {
-    pbuf_free(p);
+    // Pass PBUF to input function
+    if(netif_en[0].input(p, &netif_en[0]) != ERR_OK) {
+      pbuf_free(p);
+    }
   }
 }
 
