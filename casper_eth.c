@@ -357,11 +357,6 @@ casper_monitor_links()
   }
 }
 
-// Ideally we could do the required byte swap in-place in the RX buffer before
-// copying the bytes into pbuf payload(s), but it appears that currently the RX
-// buffer is read-only.  Not sure why it is restricted in that way.
-static uint32_t rx_swapb[1520>>2];
-
 static
 void
 casper_rx_packet()
@@ -385,13 +380,13 @@ casper_rx_packet()
   size32 = size64 << 1;
 
   // If packet too large
-  if(size32 > sizeof(rx_swapb)) {
+  if(size32 > ETHERNET_MTU + SIZEOF_ETH_HDR) {
     // Ack packet so we'll receive more packets
     *RX_BUF_SIZE_PTR16(ifstate.ptr) = 0;
     LINK_STATS_INC(link.memerr);
     LINK_STATS_INC(link.drop);
     xil_printf("pkt too big %u > %u words [ms %u]\n",
-        size32, sizeof(rx_swapb), ms_tmrctr());
+        size32, ETHERNET_MTU + SIZEOF_ETH_HDR, ms_tmrctr());
     // Nothing more to do here
     return;
   }
@@ -434,11 +429,10 @@ casper_rx_packet()
   // Since we can't do this in-place in the RX buffer (because it is read-only
   // for some reason or other that escapes my understanding), we do it to a
   // 4-byte aligned buffer in the system memory.
-  // TODO Try the crazy idea of storing byte-swapped data in the TX buffer!
   inbuf32 = RX_BUF_PTR32(ifstate.ptr);
   nibuf32 = SWAPB_BUF_PTR32(ifstate.ptr);
 #ifdef VERBOSE_ETH_IMPL
-  xil_printf("byte swapping %u words to rx_swapb\n", size32);
+  xil_printf("byte swapping %u words to TX buff\n", size32);
 #endif // VERBOSE_ETH_IMPL
   for(i=0; i<size32; i++) {
     *nibuf32++ = mb_swapb(*inbuf32++);
