@@ -502,17 +502,30 @@ casper_rx_packet()
   }
 }
 
+#ifndef JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS
+#define JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS 10
+#endif
+
 void
 casper_lwip_handler()
 {
+  static uint32_t next_timeout_check_ms = JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS;
+  uint32_t curr_ms;
+
   // Monitor links (TODO handle more than one link)
   casper_monitor_links();
 
   // Receive newly arrive packet, if any
   casper_rx_packet();
 
-  // Cyclic LwIP timers check
-  sys_check_timeouts();
+  // Only call timeout check every so often (10 ms by default).
+  curr_ms = ms_tmrctr();
+  if(next_timeout_check_ms <= curr_ms) {
+    next_timeout_check_ms = curr_ms + JAM_LWIP_CHECK_TIMEOUTS_INTERVAL_MS;
+
+    // Cyclic LwIP timers check
+    sys_check_timeouts();
+  }
 }
 
 #ifdef JAM_SEND_TEST_PACKET
