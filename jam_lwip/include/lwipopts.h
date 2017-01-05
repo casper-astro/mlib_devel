@@ -137,7 +137,8 @@
  * their destination address) to finish.
  * (requires the ARP_QUEUEING option)
  */
-#define MEMP_NUM_ARP_QUEUE              4
+// TODO 30 is the default, which is probably OK, could even be made larger maybe
+#define MEMP_NUM_ARP_QUEUE             30
 
 /**
  * MEMP_NUM_IGMP_GROUP: The number of multicast groups whose network interfaces
@@ -204,6 +205,26 @@
     PBUF_TRANSPORT_HLEN + \
     1500 \
   )
+
+/**
+ * ARP_TABLE_SIZE: Number of active MAC-IP address pairs cached.
+ */
+#define ARP_TABLE_SIZE                  10
+
+/**
+ * ARP_QUEUEING==1: Multiple outgoing packets are queued during hardware address
+ * resolution. By default, only the most recent packet is queued per IP address.
+ * This is sufficient for most protocols and mainly reduces TCP connection
+ * startup time. Set this to 1 if you know your application sends more than one
+ * packet in a row to an IP address that is not in the ARP cache.
+ */
+#define ARP_QUEUEING                    1
+
+/** The maximum number of packets which may be queued for each
+ *  unresolved address by other network layers. Defaults to 3, 0 means disabled.
+ *  Old packets are dropped, new packets are queued.
+ */
+#define ARP_QUEUE_LEN                   5
 
 /**
  * IP_REASSEMBLY==1: Reassemble incoming fragmented IP packets. Note that
